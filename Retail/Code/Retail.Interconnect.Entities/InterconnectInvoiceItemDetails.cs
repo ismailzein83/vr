@@ -31,6 +31,8 @@ namespace Retail.Interconnect.Entities
         public int CurrencyId { get; set; }
         public string CurrencyIdDescription { get; set; }
         public int NumberOfCalls { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
         public InterconnectInvoiceItemDetails() { }
         public IEnumerable<InterconnectInvoiceItemDetails> GetCustomerInvoiceItemDetailsRDLCSchema()
         {

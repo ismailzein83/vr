@@ -38,7 +38,7 @@ namespace Retail.Interconnect.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount","CountCDRs"};
+            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", };
             List<string> listDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
 
             FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
@@ -148,7 +148,9 @@ namespace Retail.Interconnect.Business
                             RateTypeId = item.RateTypeId,
                             TrafficDirection = item.TrafficDirection,
                             CurrencyId = item.CurrencyId,
-                            NumberOfCalls = item.InvoiceMeasures.NumberOfCalls
+                            NumberOfCalls = item.InvoiceMeasures.NumberOfCalls,
+                            FromDate = item.InvoiceMeasures.FromDate,
+                            ToDate = item.InvoiceMeasures.ToDate,
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -221,7 +223,8 @@ namespace Retail.Interconnect.Business
                     MeasureValue totalBillingDuration = GetMeasureValue(analyticRecord, "TotalBillingDuration");
                     MeasureValue amount = GetMeasureValue(analyticRecord, "Amount");
                     MeasureValue countCDRs = GetMeasureValue(analyticRecord, "CountCDRs");
-
+                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
+                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
 
                     #endregion
 
@@ -233,12 +236,15 @@ namespace Retail.Interconnect.Business
                             DestinationZoneId = Convert.ToInt64(destinationZoneId.Value),
                             OriginationZoneId = Convert.ToInt64(originationZoneId.Value),
                             OperatorId = Convert.ToInt64(operatorId.Value),
+
                             Rate = rate != null ? Convert.ToDecimal(rate.Value) : default(decimal),
                             RateTypeId = rateTypeId != null && rateTypeId.Value != null ? Convert.ToInt32(rateTypeId.Value) : default(int),
                             TrafficDirection = Convert.ToInt32(trafficDirection.Value),
                             CurrencyId = Convert.ToInt32(currency.Value),
                             InvoiceMeasures = new InvoiceMeasures
                             {
+                                FromDate = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
+                                ToDate = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
                                 TotalBillingDuration = Convert.ToDecimal(totalBillingDuration.Value ?? 0.0),
                                 Amount = amountValue,
                                 NumberOfCalls = Convert.ToInt32(countCDRs.Value ?? 00),
@@ -271,6 +277,8 @@ namespace Retail.Interconnect.Business
         }
         public class InvoiceMeasures
         {
+            public DateTime FromDate { get; set; }
+            public DateTime ToDate { get; set; }
             public Decimal TotalBillingDuration { get; set; }
             public decimal Amount { get; set; }
             public int NumberOfCalls { get; set; }
