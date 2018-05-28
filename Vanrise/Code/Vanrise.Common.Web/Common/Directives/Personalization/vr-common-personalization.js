@@ -18,7 +18,8 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         controllerAs: "ctrl",
         bindToController: true,
         template: function (element, attrs) {
-            return '<vr-button type="Personalization" menuactions="ctrl.personalizationMenu" ></vr-button>'
+            return '<vr-button type="PersonalizationSave"  data-onclick="ctrl.savePersonalizationSettings" vr-disabled="ctrl.disabelSaveSettings()"></vr-button>' +
+                    '<vr-button type="PersonalizationReset"  data-onclick="ctrl.resetPersonalizationSettings" vr-disabled="ctrl.disabelResetSettings()" ></vr-button>';
         }
     };
 
@@ -27,83 +28,64 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         this.initializeController = initializeController;
         var context;
         var uniqueKeys;
-        var currentPersonilizationItems;
+        ctrl.currentPersonilizationItems = [];
         var globalPersonilizationItems;
-        ctrl.personalizationMenu = [
-            {
-                name: "Save Settings",
-                clicked: function () {
-                    savePersonalizationSettings(true);
-                }
-            },
-             {
-                 name: "Reset to Default",
-                 clicked: function () {
-                     resetPersonalizationSettings(true);
-                 }
-             },
-            {
-                name: "Save as Global",
-                clicked: function () {
-                    savePersonalizationSettings(false);
-                }
-            },
-            {
-                name: "Reset Global",
-                clicked: function () {
-                    resetPersonalizationSettings(false);
-                },
-                disable: globalPersonilizationItems != undefined && globalPersonilizationItems.length > 0
 
-            }
-        ];
-
-        function savePersonalizationSettings(isUser) {
-            var title = isUser ? "Save User Settings" : "Save Global Settings";
+        ctrl.savePersonalizationSettings = function () {
             var changedItems = getEntityPersonalizationChangedItems();
             if (changedItems.length == 0)
                 VRNotificationService.showInformation("No settings has been changed.");
             else {
-                var onSavePesonilization = function (checkedEntityUniqueNames) {
+                var onSavePesonilization = function (checkedEntityUniqueNames, allUsers) {
                     var checkedItemsSettingsInputs = buildEntityUniqueInputs(checkedEntityUniqueNames);
-                    return UpdateCurrentEntityPersonalization(isUser, checkedItemsSettingsInputs);
+                    return UpdateEntityPersonalization(checkedItemsSettingsInputs, allUsers);
                 };
-                openPersonilizationEditor(title, changedItems, onSavePesonilization);
+                openPersonilizationEditor("Save Settings", changedItems, onSavePesonilization, "Save to All Users");
             }
-        }
+        };
 
-        function resetPersonalizationSettings(isUser) {
-            var title = isUser ? "Reset User Settings" : "Reset Global Settings";
-            var items = getLoadedEntityPersonalizationItems(isUser);
-            if (items.length == 0)
+        ctrl.resetPersonalizationSettings = function () {
+            var itemsObj = getLoadedEntityPersonalizationItems();
+            if (itemsObj.items.length == 0)
                 VRNotificationService.showInformation("No settings has been loaded.");
             else {
-                var onSavePesonilization = function (checkedEntityUniqueNames) {
-                    return ResetCurrentEntityPersonalization(isUser, checkedEntityUniqueNames);
+                var onSavePesonilization = function (checkedEntityUniqueNames, allUsers) {
+                    return ResetEntityPersonalization(checkedEntityUniqueNames, allUsers);
                 };
-                openPersonilizationEditor(title, items, onSavePesonilization);
+                openPersonilizationEditor("Reset to Default", itemsObj.items, onSavePesonilization, "Reset to All Users", itemsObj.justUser);
             }
-        }
+        };
 
-        function openPersonilizationEditor(title, changedItems, onSavePesonilization) {
+        ctrl.disabelSaveSettings = function () {
+            var changedItems = getEntityPersonalizationChangedItems();
+            return changedItems.length == 0;
+        };
+
+        ctrl.disabelResetSettings = function () {
+            var itemsObj = getLoadedEntityPersonalizationItems();
+            return itemsObj.items.length == 0;
+        };
+        function openPersonilizationEditor(title, changedItems, onSavePesonilization, userOptionsLabel, justUser) {
             var settings = {
 
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = title;
-                modalScope.onSavePesonilization = function (checkedEntityUniqueNames) {
+                modalScope.onSavePesonilization = function (checkedEntityUniqueNames, saveAsGlobal) {
                     if (checkedEntityUniqueNames.length == 0)
                         return;
                     else if (onSavePesonilization != undefined && typeof (onSavePesonilization) == 'function') {
-                        onSavePesonilization(checkedEntityUniqueNames);
+                        onSavePesonilization(checkedEntityUniqueNames, saveAsGlobal);
                     }
                 };
             };
             var parameters = {
-                changedItems: changedItems
+                changedItems: changedItems,
+                userOptionsLabel: userOptionsLabel,
+                justUser: justUser
             };
             VRModalService.showModal('/Client/Modules/Common/Directives/Personalization/Templates/PersonilizationEditor.html', parameters, settings);
-        };
+        }
 
 
 
@@ -112,7 +94,8 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         }
 
         function defineAPI() {
-            var api = {};
+            var api = {
+            };
             api.load = function (payload) {
                 if (payload != undefined) {
                     uniqueKeys = payload.uniqueKeys;
@@ -132,35 +115,47 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         function getContext() {
             var currentContext = context;
             if (currentContext == undefined)
-                currentContext = {};
+                currentContext = {
+                };
             return currentContext;
         }
 
         function buildEntityUniqueKeys(uniqueKeys) {
             var entityUniqueKeys = [];
-            for (var i = 0 ; i < uniqueKeys.length ; i++)
+            for (var i = 0; i < uniqueKeys.length; i++)
                 entityUniqueKeys.push(uniqueKeys[i].EntityUniqueName);
             return entityUniqueKeys;
         }
 
-        function UpdateCurrentEntityPersonalization(isUser, checkedItemsSettingsInputs) {
-            var method = isUser ? "UpdateCurrentUserEntityPersonalization" : "UpdateGlobalEntityPersonalization";
-            return VR_Common_EntityPersonalizationAPIService[method](checkedItemsSettingsInputs).then(function (response) {
+        function UpdateEntityPersonalization(checkedItemsSettingsInputs, allUsers) {
+            var input = {
+                EntityPersonalizationInputs: checkedItemsSettingsInputs,
+                AllUsers: allUsers
+            };
+
+            return VR_Common_EntityPersonalizationAPIService.UpdateEntityPersonalization(input).then(function (response) {
                 GetCurrentUserEntityPersonalization(buildEntityUniqueKeys(uniqueKeys));
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, null);
             });
         }
 
-        function ResetCurrentEntityPersonalization(isUser, resetEntityUniqueNames) {
-            var method = isUser ? "DeleteCurrentUserEntityPersonalization" : "DeleteGlobalEntityPersonalization";
-            return VR_Common_EntityPersonalizationAPIService[method](resetEntityUniqueNames).then(function (response) {
+        function ResetEntityPersonalization(resetEntityUniqueNames, allUsers) {
+            var input = {
+                EntityUniqueNames: resetEntityUniqueNames,
+                AllUsers: allUsers
+            };
+            return VR_Common_EntityPersonalizationAPIService.DeleteEntityPersonalization(input).then(function (response) {
                 GetCurrentUserEntityPersonalization(buildEntityUniqueKeys(uniqueKeys));
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, null);
             });
         }
 
         function GetCurrentUserEntityPersonalization(entityUniqueKeys) {
             return VR_Common_EntityPersonalizationAPIService.GetCurrentUserEntityPersonalization(entityUniqueKeys).then(function (response) {
                 var userEntityPersonalizations = [];
-                currentPersonilizationItems = response.UserEntityPersonalizations;
+                ctrl.currentPersonilizationItems = response.UserEntityPersonalizations;
                 globalPersonilizationItems = response.GlobalEntityPersonalizations;
                 if (response != null) {
                     userEntityPersonalizations = response.UserEntityPersonalizations;
@@ -170,21 +165,22 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         }
 
         function buildEntityUniqueInputs(checkedEntityUniqueNames) {
-            var changedItems = getContext().getPersonalizationItems()
+            var changedItems = getContext().getPersonalizationItems();
             var inputs = [];
-            for (var i = 0 ; i < changedItems.length ; i++) {
+            for (var i = 0; i < changedItems.length; i++) {
                 if (checkedEntityUniqueNames.indexOf(changedItems[i].EntityUniqueName) > -1)
                     inputs.push(changedItems[i]);
             }
             return inputs;
         }
 
+
         function getEntityPersonalizationChangedItems() {
             var changedItems = [];
             var newPersonilizationItems = getContext().getPersonalizationItems();
-            for (var i = 0 ; i < uniqueKeys.length ; i++) {
+            for (var i = 0; i < uniqueKeys.length; i++) {
                 var entityUniqueName = uniqueKeys[i].EntityUniqueName;
-                var currentItem = UtilsService.getItemByVal(currentPersonilizationItems, entityUniqueName, "EntityUniqueName");
+                var currentItem = UtilsService.getItemByVal(ctrl.currentPersonilizationItems, entityUniqueName, "EntityUniqueName");
                 var newItem = UtilsService.getItemByVal(newPersonilizationItems, entityUniqueName, "EntityUniqueName");
                 if (currentItem != null && newItem != null)
                     newItem.IsGlobal = currentItem.IsGlobal;
@@ -193,7 +189,7 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                 if (currentItem == null && newItem == null) {
                     continue;
                 }
-                if (currentItem == null && newItem != null) {
+                if (currentItem == null && newItem != null && newItem.ExtendedSetting != null) {
                     changedItems.push(uniqueKeys[i]);
                     continue;
                 }
@@ -213,21 +209,34 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
             return changedItems;
         }
 
-        function getLoadedEntityPersonalizationItems(isUser) {
+        function getLoadedEntityPersonalizationItems() {
+
             var items = [];
-            var filterItems = isUser == true ? currentPersonilizationItems : globalPersonilizationItems;
+            var filterItems = ctrl.currentPersonilizationItems;
+            var hasGlobal = globalPersonilizationItems && globalPersonilizationItems.length > 0;
+            var hasUser;
+
             if (filterItems != undefined && filterItems.length > 0) {
                 for (var i = 0; i < filterItems.length; i++) {
                     var item = UtilsService.getItemByVal(uniqueKeys, filterItems[i].EntityUniqueName, "EntityUniqueName");
                     if (item != null) {
-                        if (isUser == true && filterItems[i].IsGlobal == false)
-                            items.push(item);
-                        else if (isUser == false)
-                            items.push(item);
+                        if (filterItems[i].IsGlobal == false)
+                            hasUser = true;
+                        items.push(item);
                     }
                 }
             }
-            return items;
+
+            var justUser = null;
+            if (hasGlobal == true && !hasUser)
+                justUser = false;
+            if (hasUser == true && !hasGlobal)
+                justUser = true;
+
+            return {
+                items: items,
+                justUser: justUser
+            };
         }
     }
 

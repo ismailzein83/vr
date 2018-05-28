@@ -2,10 +2,12 @@
 
     "use strict";
 
-    personilizationEditorController.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService"];
+    personilizationEditorController.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService", "VR_Common_EntityPersonalizationAPIService"];
 
-    function personilizationEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function personilizationEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Common_EntityPersonalizationAPIService) {
         var changedItems;
+        var userOptionsLabel;
+        var justUser;
         loadParameters();
         defineScope();
         load();
@@ -14,15 +16,27 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 changedItems = parameters.changedItems;
+                userOptionsLabel = parameters.userOptionsLabel;
+                justUser = parameters.justUser;
             }
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.userOptionsLabel = userOptionsLabel;
+            $scope.scopeModel.hasUpdateGlobal = false;
             $scope.scopeModel.changedItems = [];
+            if (justUser == false) {
+                $scope.scopeModel.disabledCheck = true;
+                $scope.scopeModel.allUsers = true;
+            }
+            if (justUser == true) {
+                $scope.scopeModel.hideCheck = true;
+            }
+
             $scope.scopeModel.savePesonilization = function () {
                 var checkedEntityUniqueNames = getCheckedEntityUniqueNames();
                 if ($scope.onSavePesonilization != undefined)
-                    $scope.onSavePesonilization(checkedEntityUniqueNames);
+                    $scope.onSavePesonilization(checkedEntityUniqueNames, $scope.scopeModel.allUsers);
                 $scope.modalContext.closeModal();
             };
             $scope.scopeModel.close = function () {
@@ -37,6 +51,12 @@
                     item.checked = true;
                     $scope.scopeModel.changedItems.push(item);
                 }
+            $scope.scopeModel.isLoading = true;
+            VR_Common_EntityPersonalizationAPIService.DosesUserHaveUpdateGlobalEntityPersonalization().then(function (response) {
+                $scope.scopeModel.hasUpdateGlobal = response;
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
 
