@@ -74,14 +74,14 @@
                                 Width: VRCommon_GridWidthFactorEnum.Normal.value
                             }
                         };
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
 
                     dataItem.onDimensionGridStyleDefinitionReady = function (api) {
                         dataItem.dimensionGridStyleAPI = api;
                         var dataItemPayload;
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridStyleAPI, dataItemPayload, setLoader);
                     };
 
@@ -137,14 +137,14 @@
                                 Width: VRCommon_GridWidthFactorEnum.Normal.value
                             }
                         };
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
 
                     dataItem.onMeasureGridStyleDefinitionReady = function (api) {
                         dataItem.measureGridStyleAPI = api;
                         var dataItemPayload;
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridStyleAPI, dataItemPayload, setLoader);
                     };
                   
@@ -360,7 +360,7 @@
                     dataItem.Title = gridField.payload.Title;
                     dataItem.IsRootDimension = gridField.payload.IsRootDimension;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
-                    stylePayload = { selectedIds: gridField.payload.ColumnStyleId }
+                    stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
                 }
                 dataItem.onDimensionGridWidthFactorEditorReady = function (api) {
                     dataItem.dimensionGridWidthFactorAPI = api;
@@ -394,7 +394,7 @@
                     dataItem.Title = gridField.payload.Title;
                     dataItem.isHidden = gridField.payload.IsHidden;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
-                    stylePayload = { selectedIds: gridField.payload.ColumnStyleId }
+                    stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
                 }
                 dataItem.onMeasureGridWidthFactorEditorReady = function (api) {
                     dataItem.measureGridWidthFactorAPI = api;
