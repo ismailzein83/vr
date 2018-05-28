@@ -307,7 +307,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                  WakeUpTime = switchDate,
                  Destination = code,
                  Preference = priority--,
-                 StateId = 0
+                 StateId = 1
              };
         }
 
