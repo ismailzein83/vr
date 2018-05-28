@@ -83,14 +83,14 @@ namespace Vanrise.Invoice.Business
             {
                 Name = "FromDate",
                 Title = "From Date",
-                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime }
+                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.Date }
             });
 
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
                 Name = "ToDate",
                 Title = "To Date",
-                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime }
+                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.Date}
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
