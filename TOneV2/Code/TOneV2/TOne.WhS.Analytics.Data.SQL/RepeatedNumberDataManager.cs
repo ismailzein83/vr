@@ -123,7 +123,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate AND ({0}.AttemptDateTime<= @ToDate)", alias));
             if (!string.IsNullOrEmpty(phoneNumber))
-                whereBuilder.Append(String.Format(@"And {0}.{1} like '{2}%' ", alias, phoneNumberType, phoneNumber));
+                whereBuilder.Append(String.Format(@"And {0}.{1} like '%{2}%' ", alias, phoneNumberType, phoneNumber));
             groupByBuilder.Append(String.Format(@"SaleZoneID, CustomerID, SupplierID, {0}", phoneNumberType));
             havingBuilder.Append(String.Format(@"HAVING SUM(AttemptDateTime) >= {0} ", repeatedMorethan));
             selectQueryPart.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, Count({0}.AttemptDateTime) AS Attempt,
