@@ -19,12 +19,15 @@ namespace TOne.WhS.Deal.Business
             if(query.Filters != null)
             {
                 var dealDimensionFilter = query.Filters.FirstOrDefault(itm => itm.Dimension == "Deal");
-                filteredDealIds = dealDimensionFilter.FilterValues.Select(itm => Convert.ToInt32(itm)).ToList();
+                if (dealDimensionFilter != null)
+                    filteredDealIds = dealDimensionFilter.FilterValues.Select(itm => Convert.ToInt32(itm)).ToList();
             }
             var swapDealManager = new SPDealManager();
             var filteredDeals = swapDealManager.GetAllSwapDeals().FindAllRecords(deal => (filteredDealIds == null || filteredDealIds.Contains(deal.DealId))
                 && Utilities.AreTimePeriodsOverlapped(deal.Settings.BeginDate, deal.Settings.EndDate, query.FromTime, query.ToTime));
-
+            bool estimationPerZone = query.DimensionFields.Contains("Zone") || query.DimensionFields.Contains("ZoneGroup")
+                || (query.Filters != null && (query.Filters.Any(filter => filter.Dimension == "Zone" || filter.Dimension == "ZoneGroup")));
+            
             if(filteredDeals != null && filteredDeals.Count() > 0)
             {
                 SaleZoneManager saleZoneManager = new SaleZoneManager();
@@ -49,10 +52,10 @@ namespace TOne.WhS.Deal.Business
                         {
                             totalVolume += inbound.Volume;
                         }
-                        Decimal dailyTotalVolume = totalVolume / nbOfDealDays;
+                        Decimal dailyTotalVolume = (decimal)totalVolume / nbOfDealDays;
                         foreach (var inbound in swapDealSettings.Inbounds)
                         {
-                            int dailyGroupVolume = inbound.Volume / nbOfDealDays;
+                            Decimal dailyGroupVolume = (decimal)inbound.Volume / nbOfDealDays;
                             inbound.SaleZones.ThrowIfNull("inbound.SaleZones", deal.DealId);
                             foreach (var saleZone in inbound.SaleZones)
                             {
@@ -61,14 +64,13 @@ namespace TOne.WhS.Deal.Business
 
                                 foreach (var day in dealDays)
                                 {
-                                    RawMemoryRecord record = new RawMemoryRecord { Time = day, FieldValues = new Dictionary<string, dynamic>() };
+                                    RawMemoryRecord record = new RawMemoryRecord { FieldValues = new Dictionary<string, dynamic>() };
                                     record.FieldValues.Add("Day", day);
                                     record.FieldValues.Add("Deal", deal.DealId);
                                     record.FieldValues.Add("IsSale", true);
                                     record.FieldValues.Add("ZoneGroup", inbound.Name);
                                     record.FieldValues.Add("Zone", saleZoneName);
-                                    record.FieldValues.Add("DailyEstimatedZoneGroupVolume", dailyGroupVolume);
-                                    record.FieldValues.Add("DailyEstimatedDealVolume", totalVolume);
+                                    record.FieldValues.Add("DailyEstimatedVolume", estimationPerZone ? dailyGroupVolume : dailyTotalVolume);
                                     records.Add(record);
                                 }
                             }
@@ -81,10 +83,10 @@ namespace TOne.WhS.Deal.Business
                         {
                             totalVolume += outbound.Volume;
                         }
-                        Decimal dailyTotalVolume = totalVolume / nbOfDealDays;
+                        Decimal dailyTotalVolume = (decimal)totalVolume / nbOfDealDays;
                         foreach (var outbound in swapDealSettings.Outbounds)
                         {
-                            int dailyGroupVolume = outbound.Volume / nbOfDealDays;
+                            Decimal dailyGroupVolume = (decimal)outbound.Volume / nbOfDealDays;
                             outbound.SupplierZones.ThrowIfNull("outbound.SupplierZones", deal.DealId);
                             foreach (var supplierZone in outbound.SupplierZones)
                             {
@@ -93,14 +95,13 @@ namespace TOne.WhS.Deal.Business
 
                                 foreach (var day in dealDays)
                                 {
-                                    RawMemoryRecord record = new RawMemoryRecord { Time = day, FieldValues = new Dictionary<string, dynamic>() };
+                                    RawMemoryRecord record = new RawMemoryRecord { FieldValues = new Dictionary<string, dynamic>() };
                                     record.FieldValues.Add("Day", day);
                                     record.FieldValues.Add("Deal", deal.DealId);
                                     record.FieldValues.Add("IsSale", false);
                                     record.FieldValues.Add("ZoneGroup", outbound.Name);
                                     record.FieldValues.Add("Zone", supplierZoneName);
-                                    record.FieldValues.Add("DailyEstimatedZoneGroupVolume", dailyGroupVolume);
-                                    record.FieldValues.Add("DailyEstimatedDealVolume", totalVolume);
+                                    record.FieldValues.Add("DailyEstimatedVolume", estimationPerZone ? dailyGroupVolume : dailyTotalVolume);
                                     records.Add(record);
                                 }
                             }
