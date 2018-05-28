@@ -116,7 +116,7 @@
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                         }
                     }
-                    return data
+                    return data;
                 };
 
                 if (ctrl.onReady != null) {

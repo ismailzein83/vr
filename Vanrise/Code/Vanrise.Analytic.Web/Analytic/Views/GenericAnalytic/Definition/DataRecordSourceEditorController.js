@@ -131,14 +131,14 @@
                             Width: VRCommon_GridWidthFactorEnum.Normal.value
                         }
                     };
-                    var setLoader = function (value) { $scope.isLoadingDirective = value };
+                    var setLoader = function (value) { $scope.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.gridWidthFactorAPI, dataItemPayload, setLoader);
                 };
 
                 dataItem.onDataRecordGridStyleDefinitionReady = function (api) {
                     dataItem.dataRecordGridStyleAPI = api;
                     var dataItemPayload;
-                    var setLoader = function (value) { $scope.isLoadingDirective = value };
+                    var setLoader = function (value) { $scope.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dataRecordGridStyleAPI, dataItemPayload, setLoader);
                 };
 
@@ -239,7 +239,7 @@
 
             $scope.isFieldGridValid = function () {
                 if ($scope.selectedFieldsGrid.length == 0) {
-                    return 'At least one Field must be added.'
+                    return 'At least one Field must be added.';
                 }
                 return null;
             };
@@ -437,7 +437,7 @@
                 if (dataRecordSource != undefined && dataRecordSource.SubviewDefinitions) {
                     for (var index = 0; index < dataRecordSource.SubviewDefinitions.length; index++) {
                         var currentSubviewDefinition = dataRecordSource.SubviewDefinitions[index];
-                        $scope.selectedSubviewDefinitionsGrid.push(currentSubviewDefinition)
+                        $scope.selectedSubviewDefinitionsGrid.push(currentSubviewDefinition);
                     }
                 }
 
@@ -473,7 +473,7 @@
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItemPayload.data = payload.ColumnSettings;
                 dataItem.isHidden = payload.IsHidden;
-                stylePayload = { selectedIds: payload.ColumnStyleId }
+                stylePayload = { selectedIds: payload.ColumnStyleId };
 
             }
             dataItem.onGridWidthFactorSelectorReady = function (api) {

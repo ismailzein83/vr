@@ -60,7 +60,7 @@
 
             $scope.isFieldGridValid = function () {
                 if ($scope.selectedFields.length == 0) {
-                    return 'At least one Field must be added.'
+                    return 'At least one Field must be added.';
                 }
                 return null;
             };
