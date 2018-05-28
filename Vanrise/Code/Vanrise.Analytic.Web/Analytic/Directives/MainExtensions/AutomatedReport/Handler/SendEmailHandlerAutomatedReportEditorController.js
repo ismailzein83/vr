@@ -10,6 +10,7 @@
         var fileGeneratorAPI;
         var fileGeneratorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var context;
 
         loadParameters();
         defineScope();
@@ -20,6 +21,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 attachementGeneratorEntity = parameters.Entity;
+                context = parameters.context;
             }
             isEditMode = (attachementGeneratorEntity != undefined);
         }
@@ -30,7 +32,7 @@
             $scope.scopeModel.onFileGeneratorSelectorReady = function (api) {
                 fileGeneratorAPI = api;
                 fileGeneratorReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.saveAttachementGenerator = function () {
                 if (isEditMode)
@@ -43,14 +45,7 @@
                 $scope.modalContext.closeModal();
             };
 
-            //function getContext() {
-            //    var currentContext = context;
 
-            //    if (currentContext == undefined) {
-            //        currentContext = {};
-            //    }
-            //    return currentContext
-            //}
 
         }
         function load() {
@@ -77,9 +72,9 @@
             function loadFileGeneratorSelector() {
                 var fileGeneratorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 fileGeneratorReadyPromiseDeferred.promise.then(function () {
-
                     var fileGeneratorPayload = {
-                        fileGenerator: attachementGeneratorEntity != undefined && attachementGeneratorEntity.Settings != undefined ? attachementGeneratorEntity.Settings : undefined
+                        fileGenerator: attachementGeneratorEntity != undefined && attachementGeneratorEntity.Settings != undefined ? attachementGeneratorEntity.Settings : undefined,
+                        context : getContext()
                     };
                     VRUIUtilsService.callDirectiveLoad(fileGeneratorAPI, fileGeneratorPayload, fileGeneratorLoadPromiseDeferred);
                 });
@@ -115,6 +110,13 @@
             if ($scope.onAttachementGeneratorUpdated != undefined && typeof ($scope.onAttachementGeneratorUpdated) == 'function')
                 $scope.onAttachementGeneratorUpdated(Object);
             $scope.modalContext.closeModal();
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
     appControllers.controller('VRAnalytic_SendEmailHandlerAutomatedReportEditorController', sendEmailHandlerAutomatedReportEditorController);
