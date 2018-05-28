@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceListNew_GetPreviewsResult]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceListNew_GetPreviewsByPricelistId]
 
 	@PriceListID as int,
 	@ZoneName nvarchar(255) = null

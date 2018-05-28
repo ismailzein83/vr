@@ -613,7 +613,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_Exists.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Test.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetPreviewsResult.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetPreviews.sql" />
+    <Build Include="TOneWhS_BE\Tables\PointOfInterconnect.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetPreviewsByProcessInstanceId.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetPreviewsByPricelistId.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\PointOfInterconnectType.sql" />
   </ItemGroup>
 </Project>
