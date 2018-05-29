@@ -302,29 +302,6 @@ when not matched by target then
 	insert([ID],[Name],[ConfigID],[Settings])
 	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
 
---[VR_AccountBalance].[BillingTransactionType]------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[IsCredit],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('D243ADCD-D02A-4EB6-8B0D-206358391C18','Customer Payment',1,'{"ManualAdditionDisabled":false}'),
-('DBEA500E-C85A-4F4A-BB4C-2F6E8CB02F7B','Supplier Voice Usage',1,'{"ManualAdditionDisabled":true}'),
-('7B2BCDF9-70CB-4EE3-8EB7-763BC44CCDD6','Supplier Payment',0,'{"ManualAdditionDisabled":false}'),
-('ACD5923A-8057-4C21-9E7B-EBC76B9CE1DF','Customer Voice Usage',0,'{"ManualAdditionDisabled":true}'),
-('3a9a321f-754f-40ae-a8f8-e06f299607f4','Customer Invoice',0,'{"ManualAdditionDisabled":true}'),
-('56cd572c-3815-4dfb-b1ed-ab8a550d5862','Supplier Invoice',1,'{"ManualAdditionDisabled":true}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[IsCredit],[Settings]))
-merge	[VR_AccountBalance].[BillingTransactionType] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[IsCredit] = s.[IsCredit],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[IsCredit],[Settings])
-	values(s.[ID],s.[Name],s.[IsCredit],s.[Settings]);
 
 --[sec].[Module]---------------------------1301 to 1400---------------------------------------------------------
 begin
