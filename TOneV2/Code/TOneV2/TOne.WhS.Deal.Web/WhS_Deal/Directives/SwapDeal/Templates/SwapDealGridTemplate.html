@@ -5,21 +5,31 @@
              pagingtype="'PagingOnScroll'"
              idfield="Entity.DealId" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.DealId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'TypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Contract'" field="'ContractDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Carrier'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" field="'Entity.Settings.BeginDate'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'Entity.Settings.EndDate'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Grace Period'" field="'Entity.Settings.GracePeriod'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Selling Amount'" field="'SellingAmount'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Selling Volume'" field="'SellingVolume'" type="'Number'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Buying Amount'" field="'BuyingAmount'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Selling Amount'" field="'SellingAmount'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Buying Volume'" field="'BuyingVolume'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Buying Amount'" field="'BuyingAmount'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbole'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Grace Period'" field="'Entity.Settings.GracePeriod'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'">
         <span ng-show="{{dataItem.IsEffective}}"><vr-icon icontype="dataItem.IsEffective"></vr-icon></span>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Deal Type'" field="'TypeDescription'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Deal Contract'" field="'ContractDescription'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbole'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.Settings.BeginDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.Settings.EndDate'" type="'Date'"></vr-datagridcolumn>
+   
+   
+    
+    
+    
+   
+    
+   
+    
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

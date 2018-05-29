@@ -62,7 +62,20 @@ namespace TOne.WhS.Deal.Business
         {
             return CarrierAccountId;
         }
-
+        public override string GetSaleZoneGroupName(int dealGroupNumber)
+        {
+            var inbound = Inbounds.FindRecord(x=>x.ZoneGroupNumber == dealGroupNumber);
+            if (inbound == null)
+                throw new NullReferenceException();
+            return inbound.Name;
+        }
+        public override string GetSupplierZoneGroupName(int dealGroupNumber)
+        {
+            var outbound = Outbounds.FindRecord(x => x.ZoneGroupNumber == dealGroupNumber);
+            if (outbound == null)
+                throw new NullReferenceException();
+            return outbound.Name;
+        }
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
             SwapDealManager swapDealManager = new SwapDealManager();

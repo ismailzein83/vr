@@ -10,6 +10,7 @@ namespace TOne.WhS.Deal.Entities
     {
         
         public string TypeDescription { get; set; }
+        public string StatusDescription { get; set; }
 
         public string ContractDescription { get; set; }
 

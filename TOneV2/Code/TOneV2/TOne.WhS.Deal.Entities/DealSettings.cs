@@ -1,9 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public enum DealStatus { Active, Inactive, Draft }
+    public enum DealStatus
+    {
+        [Description("Active")]
+        Active = 0,
+        [Description("Inactive")]
+        Inactive = 1,
+        [Description("Draft")]
+        Draft = 2
+    }
     public enum DealZoneGroupPart { Both, Sale, Cost }
 	public abstract class DealSettings
 	{
@@ -17,6 +26,8 @@ namespace TOne.WhS.Deal.Entities
         public abstract List<long> GetDealSaleZoneIds();
         public abstract List<long> GetDealSupplierZoneIds();
 		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
+        public abstract string GetSaleZoneGroupName(int dealGroupNumber);
+        public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
 	}
 
 	public interface IDealGetZoneGroupsContext

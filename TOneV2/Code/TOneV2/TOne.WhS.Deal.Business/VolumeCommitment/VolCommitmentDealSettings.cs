@@ -28,6 +28,24 @@ namespace TOne.WhS.Deal.Business
         {
             return CarrierAccountId;
         }
+         public override string GetSaleZoneGroupName(int dealGroupNumber)
+        {
+            if (DealType == VolCommitmentDealType.Buy)
+                return null;
+            var item = Items.FindRecord(x => x.ZoneGroupNumber == dealGroupNumber);
+            if (item == null)
+                throw new NullReferenceException();
+            return item.Name;
+        }
+        public override string GetSupplierZoneGroupName(int dealGroupNumber)
+        {
+            if (DealType == VolCommitmentDealType.Sell)
+                return null;
+            var item = Items.FindRecord(x => x.ZoneGroupNumber == dealGroupNumber);
+            if (item == null)
+                throw new NullReferenceException();
+            return item.Name;
+        }
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
