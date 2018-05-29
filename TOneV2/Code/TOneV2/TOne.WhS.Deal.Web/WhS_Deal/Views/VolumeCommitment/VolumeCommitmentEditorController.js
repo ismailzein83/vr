@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum) {
 
         var isEditMode;
 
@@ -45,7 +45,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
-
+            $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value };
@@ -56,7 +56,7 @@
                 if (!carrierAccountSelectedPromise)
                     $scope.scopeModel.description = undefined;
             };
-
+            $scope.scopeModel.selectedDealStatus = WhS_Deal_DealStatusTypeEnum.Draft;
             $scope.scopeModel.onCurrencySelectReady = function (api) {
                 currencyDirectiveAPI = api;
                 currencyDirectiveReadyPromiseDeferred.resolve();
@@ -77,7 +77,7 @@
                             volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
                         };
                         volumeCommitmenetItemsAPI.load(payload);
-                        updateDescription()
+                        updateDescription();
                     }
                 }
 
@@ -100,9 +100,26 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
+            $scope.scopeModel.isInactiveStatus = function () {
+                if ($scope.scopeModel.selectedDealStatus != undefined)
+                    return ($scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value);
+            };
             $scope.scopeModel.validateDatesRange = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            };
+            $scope.scopeModel.validateDealStatusDate = function () {
+                var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
+                var beginDate = UtilsService.createDateFromString($scope.scopeModel.beginDate);
+                var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate);
+                if (date < beginDate)
+                    return "Deactivation date must be greater than deal BED";
+                if (date > endDate)
+                    return "Deactivation date must be less than deal EED";
+                return null;
+            };
+            $scope.scopeModel.onDealStatusChanged = function () {
+                if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
+                    $scope.scopeModel.deActivationDate = undefined;
             };
         };
         function load() {
@@ -168,6 +185,8 @@
             $scope.scopeModel.description = volumeCommitmentEntity.Name;
             $scope.scopeModel.beginDate = volumeCommitmentEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EndDate;
+            $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, volumeCommitmentEntity.Settings.Status, 'value');
+            $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
             //$scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
         };
@@ -277,7 +296,9 @@
                     EndDate: $scope.scopeModel.endDate,
                     Items: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.volumeCommitmentItems : undefined,
                     LastGroupNumber: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.lastGroupNumber : undefined,
-                    CurrencyId: currencyDirectiveAPI.getSelectedIds()
+                    CurrencyId: currencyDirectiveAPI.getSelectedIds(),
+                    Status: $scope.scopeModel.selectedDealStatus.value,
+                    DeActivationDate: $scope.scopeModel.deActivationDate
                 }
             };
             return obj;
