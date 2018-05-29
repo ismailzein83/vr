@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.Deal.Entities
 {
+    public enum DealStatus { Active, Inactive, Draft }
+    public enum DealZoneGroupPart { Both, Sale, Cost }
 	public abstract class DealSettings
 	{
 		public abstract Guid ConfigId { get; }
-        public DateTime? DeActivationDate { get; set; }
         public DealStatus Status { get; set; }
+        public DateTime? DeActivationDate { get; set; }
 		public DateTime BeginDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public abstract int GetCarrierAccountId();
@@ -16,8 +18,6 @@ namespace TOne.WhS.Deal.Entities
         public abstract List<long> GetDealSupplierZoneIds();
 		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
 	}
-    public enum DealStatus { Active, Inactive, Draft }
-	public enum DealZoneGroupPart { Both, Sale, Cost }
 
 	public interface IDealGetZoneGroupsContext
 	{
