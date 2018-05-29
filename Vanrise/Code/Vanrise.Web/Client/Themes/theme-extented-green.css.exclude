@@ -168,6 +168,9 @@
 .action-bar {
     background-color: #01A082;   
 }
+.action-bar .vr-half-circle {   
+    background-color: #01A082;   
+}
 .btncustom {
   border-radius: 0px;
   border-color: transparent;

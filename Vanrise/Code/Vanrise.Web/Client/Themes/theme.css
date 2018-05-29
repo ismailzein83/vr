@@ -242,6 +242,9 @@ f79624
 .action-bar {
     background-color: #e22337;   
 }
+.action-bar .vr-half-circle {   
+    background-color: #e22337;
+}
 .btncustom {
   border-radius: 0px;
   border-color: transparent;

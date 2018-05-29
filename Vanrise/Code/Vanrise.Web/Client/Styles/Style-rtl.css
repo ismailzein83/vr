@@ -253,6 +253,35 @@
     padding-right: 2px;
 }
 
+
+.rtl .vr-menu-list{
+    text-align: right !important
+}
+.rtl .action-bar .vr-menu-box {
+    left: unset;
+    right:-14px;  
+}
+
+.rtl .action-bar .vr-half-circle {  
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+
+.rtl .action-bar .vr-action-menu-dote {
+    display: inline-block;    
+    transform: scaleX(-1);
+    left:unset;
+    right:1px;
+}
+
+.rtl .action-bar.include-personalization {
+    border-radius: 15px 0px 0px 15px;
+    margin-right: 15px;
+}
+
 /* end action-bar*/
 
 /* strat vr-select*/
@@ -699,3 +728,6 @@
     float:left !important;
 }
 /*end vr-generic-filter*/
+
+
+

@@ -28,12 +28,15 @@
     padding: 0px 0px 0px 30px !important;
     color: #333;
 }
-.spaced-item{
-    margin-right : 10px;
+
+.spaced-item {
+    margin-right: 10px;
 }
-.spaced-item>span:first-of-type{
-    padding-right : 5px;
-}
+
+    .spaced-item > span:first-of-type {
+        padding-right: 5px;
+    }
+
 .pin-icon {
     font-size: 17px;
     margin: 6px 4px;
@@ -135,9 +138,11 @@
     .vr-container div[ng-view] {
         padding: 0px 5px;
     }
-.flex-user-menu{
-    display:flex !important;
+
+.flex-user-menu {
+    display: flex !important;
 }
+
 .vr-user-label {
     font-weight: bold;
     color: #635F5F;
@@ -357,11 +362,11 @@ vr-button .btn.active {
     box-shadow: none;
 }
 
-vr-button .btn:focus, vr-button .btn:active:focus, vr-button .btn.active:focus, vr-button .btn.focus, vr-button .btn:active.focus, vr-button .btn.active.focus {
-    outline: none;
-    outline: none;
-    outline-offset: 0px;
-}
+    vr-button .btn:focus, vr-button .btn:active:focus, vr-button .btn.active:focus, vr-button .btn.focus, vr-button .btn:active.focus, vr-button .btn.active.focus {
+        outline: none;
+        outline: none;
+        outline-offset: 0px;
+    }
 
 vr-button[type="Add"][standalone] div > span {
     color: #5cb85c;
@@ -370,14 +375,17 @@ vr-button[type="Add"][standalone] div > span {
 vr-button[type="UploadExcel"][standalone] div > span {
     color: #5cb85c;
 }
+
 vr-button[class*="divDisabled"][type="UploadExcel"][standalone] div > span {
     color: #333;
 }
+
 vr-button[standalone] .loading-btn {
-    opacity:0.3;
+    opacity: 0.3;
 }
-vr-button[type="Exclude"] span{
-    transform:scaleX(-1);
+
+vr-button[type="Exclude"] span {
+    transform: scaleX(-1);
 }
 
 
@@ -838,6 +846,10 @@ add padding .left-addon input {
     height: 25px;
 }
 
+.action-bar.include-personalization {  
+    border-radius: 0px 15px 15px 0px;
+    margin-left: 15px;
+}
 .modal-body .panel-body {
     padding: 0px;
 }
@@ -865,8 +877,9 @@ add padding .left-addon input {
     color: #c1c1c1 !important;
     pointer-events: none;
 }
-div[disabled-item="true"]{    
-   cursor:not-allowed;
+
+div[disabled-item="true"] {
+    cursor: not-allowed;
 }
 /*.modal-body  .vr-select-add{
     right : -15px ;
@@ -1762,7 +1775,7 @@ loader .outer-loader {
         background-color: #FFF;
         padding: 0px 5px 0px 0px;
         position: relative;
-        z-index:1;
+        z-index: 1;
     }
 
 .panel-vr.panel-vr-child > .panel-body {
@@ -2089,13 +2102,15 @@ loader .outer-loader {
     top: -7px;
     padding: 5px 2px;
 }
-.gid-cell-menu > li .mark-select:hover {
-    background-color: #D0D0D0 !important;
-    border-color: #D0D0D0 !important;
-    color: #fff !important;
-    cursor: pointer !important;
-    text-decoration: none;
-}
+
+    .gid-cell-menu > li .mark-select:hover {
+        background-color: #D0D0D0 !important;
+        border-color: #D0D0D0 !important;
+        color: #fff !important;
+        cursor: pointer !important;
+        text-decoration: none;
+    }
+
 .his-nav {
     position: fixed;
     z-index: 1050;
@@ -2184,18 +2199,21 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     cursor: pointer !important;
 }
 
-.vr-datagrid-datacells:hover .vr-datagrid-cell-container {
-    background-color: inherit !important;
-}
+    .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
+        background-color: inherit !important;
+    }
+
 .vr-datagrid-row:hover .vr-datagrid-cell-container {
     background-color: inherit !important;
 }
+
 .vr-datagrid-datacells-click {
     background-color: #d7ebee !important;
 }
-.vr-datagrid-datacells-click .vr-datagrid-cell-container {
-    background-color: #d7ebee !important;
-}
+
+    .vr-datagrid-datacells-click .vr-datagrid-cell-container {
+        background-color: #d7ebee !important;
+    }
 
 .vr-datagrid-cell, .vr-datagrid-header-cell {
     display: inline-flex;
@@ -2309,6 +2327,11 @@ vr-switch[class*="divDisabled"] .switch {
     pointer-events: none;
     opacity: 0.5;
     background: #8a8a8a;
+}
+
+.divDisabled vr-check > .main-container {
+    pointer-events: none;
+    opacity: 0.5;
 }
 /**************START Pagination*********/
 
@@ -3374,7 +3397,7 @@ vr-validator[vr-input] > div[validator-section] > div:nth-child(1) {
     min-height: initial !important;
 }
 
-vr-validator[vr-input] > div:nth-child(1) {   
+vr-validator[vr-input] > div:nth-child(1) {
     height: 29px;
     min-height: initial !important;
 }
@@ -3390,9 +3413,10 @@ vr-validator[vr-input] > div:nth-child(1) {
 .vr-datagrid-celltext vr-button[standalone] span[class^="glyphicon"] {
     font-size: 17px !important;
 }
+
 .vr-datagrid-celltext vr-button[standalone][small] span[class^="glyphicon"] {
     font-size: 12px !important;
-    top:2px
+    top: 2px;
 }
 
 .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
@@ -4162,7 +4186,7 @@ vr-datalist .drag-icon {
 }
 
 
-.vr-datagrid[alternative-color] .vr-datagrid-body>div:first-of-type:hover {
+.vr-datagrid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
     background-color: #d7ebee !important;
 }
 
@@ -4172,9 +4196,9 @@ vr-datalist .drag-icon {
     padding: 1px 0px;
 }
 
-.vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
-    border-right: unset;
-}
+    .vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
+        border-right: unset;
+    }
 
 /* end vr-datagrid custom layout */
 
@@ -4190,14 +4214,14 @@ span.option {
 span.clickableoption {
 }
 
-span.clickableoption:hover {
-    text-decoration: underline;
-    /*display: inline-block;
+    span.clickableoption:hover {
+        text-decoration: underline;
+        /*display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;*/
-}
+    }
 
 span.option-blocked {
     color: #FF0000;
@@ -4219,27 +4243,112 @@ span.option-marketprice {
 
 /* start custom style classes */
 
-.green-column-grid{
-  background-color: #D3F4DD;
+.green-column-grid {
+    background-color: #D3F4DD;
 }
 
-.red-column-grid{
-  background-color: #FBE1DB;
+.red-column-grid {
+    background-color: #FBE1DB;
 }
 
-.blue-column-grid{
-     background-color: #DBEAFB;
-}
-.yellow-column-grid{
-     background-color: #fff3cd;
+.blue-column-grid {
+    background-color: #DBEAFB;
 }
 
-.green-font{
-    color:green;
+.yellow-column-grid {
+    background-color: #fff3cd;
 }
 
-.red-font{
-    color:red;
+.green-font {
+    color: green;
+}
+
+.red-font {
+    color: red;
 }
 
 /* end custom style classes */
+
+
+/*start entity personalization*/
+
+.action-bar .vr-menu-box {
+    position: absolute;
+    left: -14px;
+    top: -9px;
+    display: inline-block;
+}
+
+.action-bar .vr-half-circle {
+    height: 25px;
+    width: 13px;
+    position: relative;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    font-size: 12px;
+    display: block;
+    top: 9px;
+    background-color: #e22337;
+}
+
+
+.action-bar .vr-action-menu-dote {
+    color: #FFF;
+    position: relative;
+    display: inline;
+    left: 1px;
+    font-size: 10px;
+    top: -14px;
+}
+
+
+.action-bar .vr-menu-list {
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    min-width: 160px;
+    padding: 5px 0px;
+    margin: 2px 0px 0px;
+    font-size: 14px;
+    text-align: left;
+    list-style: outside none none;
+    background-color: #FFF;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.176);
+    z-index: 1500;
+    font-size: 10px;
+}
+
+.vr-menu-list > li > a {
+    display: block;
+    padding: 3px 5px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.vr-menu-list > li > a:hover {
+    background-color: #D0D0D0 !important;
+    border-color: #D0D0D0 !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    text-decoration: none;
+}
+
+.vr-menu-list > li > a.disabled{
+    background-color: #FFF !important;
+    color: #333 !important;   
+    pointer-events:none !important;
+    opacity:0.7 !important;
+}
+
+
+.vr-menu-list > li > a.disabled:hover {   
+   cursor: not-allowed !important;
+}
