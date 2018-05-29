@@ -62,7 +62,7 @@ app.directive('whsBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsService',
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.getData = function () {
+                api.setData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.RecurringChargePeriod, TOne.WhS.BusinessEntity.Entities",
                         Settings: recurringChargePeriodSelectorAPI.getData()
