@@ -60,7 +60,7 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', 'VRLocalizationServ
               var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">' + label + '</vr-label><div><span ng-model="ctrl.value"  ng-click="ctrl.toogleCheck($event)" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="ctrl.value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
+                return '<vr-label ng-if="withLable">' + label + '</vr-label><div class="main-container"><span ng-model="ctrl.value"  ng-click="ctrl.toogleCheck($event)" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="ctrl.value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
                     + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
                     + '</div>';
             }
