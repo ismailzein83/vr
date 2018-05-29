@@ -110,13 +110,13 @@
                     if (payload != undefined) {
                         if (payload.filter != undefined) {
                             payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
-                           
+
                         }
 
                         else
                             payload.filter = {
                                 CountryIds: [countryDirectiveApi.getSelectedIds()],
-                            }
+                            };
                         if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
                             payload.filter.Filters = [{
                                 $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
