@@ -13,5 +13,14 @@ namespace Vanrise.GenericData.Entities
     }
     public class DataRecordRuleEvaluatorDefinitionInfoFilter
     {
+        public List<IDataRecordRuleEvaluatorDefinitionInfoFilter> Filters { get; set; }
+    }
+    public interface IDataRecordRuleEvaluatorDefinitionInfoFilter
+    {
+        bool IsMatched(IDataRecordRuleEvaluatorDefinitionInfoFilterContext context);
+    }
+    public interface IDataRecordRuleEvaluatorDefinitionInfoFilterContext
+    {
+        Guid DataRecordRuleEvaluatorDefinitionId { get; }
     }
 }

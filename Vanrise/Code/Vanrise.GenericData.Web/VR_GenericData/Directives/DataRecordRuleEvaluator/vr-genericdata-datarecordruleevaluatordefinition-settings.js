@@ -37,6 +37,14 @@
             var alertRuleTypeSelectorAPI;
             var alertRuleTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            
+            var viewPermissionAPI;
+            var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var startInstancePermissionAPI;
+            var startInstancePermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
 
                 $scope.scopeModel = {};
@@ -51,6 +59,15 @@
                     alertRuleTypeSelectorReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onStartInstanceRequiredPermissionReady = function (api) {
+                    startInstancePermissionAPI = api;
+                    startInstancePermissionReadyDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -59,9 +76,12 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    
+                    var settings;
                     if (payload != undefined && payload.componentType != undefined)
+                    {
                         $scope.scopeModel.name = payload.componentType.Name;
+                        settings = payload.componentType.Settings;
+                    }
 
                     promises.push(loadDataRecordStorageSelector());
                     promises.push(loadAlertRuleTypeSelector());
@@ -72,9 +92,9 @@
                         dataRecordStorageSelectorReadyDeferred.promise.then(function () {
                             var dataRecordStorageSelectorPayload;
 
-                            if (payload != undefined && payload.componentType != undefined && payload.componentType.Settings != undefined) {
+                            if (settings != undefined) {
                                 dataRecordStorageSelectorPayload = {
-                                    selectedIds: payload.componentType.Settings.DataRecordStorageIds
+                                    selectedIds: settings.DataRecordStorageIds
                                 };
                             }
 
@@ -90,9 +110,9 @@
                         alertRuleTypeSelectorReadyDeferred.promise.then(function () {
                             var alertRuleTypeSelectorPayload;
 
-                             if (payload != undefined && payload.componentType != undefined && payload.componentType.Settings != undefined) {
+                            if (settings != undefined) {
                                 alertRuleTypeSelectorPayload = {
-                                    selectedIds: payload.componentType.Settings.AlertRuleTypeId
+                                    selectedIds: settings.AlertRuleTypeId
                                 };
                             }
 
@@ -100,6 +120,46 @@
                         });
 
                         return alertRuleTypeSelectorLoadDeferred.promise;
+                    }
+
+                    var loadViewRequiredPermissionPromise = loadViewRequiredPermission();
+                    promises.push(loadViewRequiredPermissionPromise);
+                    function loadViewRequiredPermission() {
+                        var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        viewPermissionReadyDeferred.promise.then(function () {
+                            var viewpayload;
+
+                            if (settings != undefined && settings.Security != undefined && settings.Security.ViewPermission != undefined) {
+                                viewpayload = {
+                                    data: settings.Security.ViewPermission
+                                };
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, viewpayload, viewPermissionLoadDeferred);
+                        });
+
+                        return viewPermissionLoadDeferred.promise;
+                    }
+
+                    var loadAddRequiredPermissionPromise = loadAddRequiredPermission();
+                    promises.push(loadAddRequiredPermissionPromise);
+                    function loadAddRequiredPermission() {
+                        var startInstancePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        startInstancePermissionReadyDeferred.promise.then(function () {
+                            var startInstancePayload;
+
+                            if (settings != undefined && settings.Security != undefined && settings.Security.StartInstancePermission != undefined) {
+                                startInstancePayload = {
+                                    data: settings.Security.StartInstancePermission
+                                };
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(startInstancePermissionAPI, startInstancePayload, startInstancePermissionLoadDeferred);
+                        });
+
+                        return startInstancePermissionLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -111,7 +171,11 @@
                         Settings: {
                             $type: "Vanrise.GenericData.Entities.DataRecordRuleEvaluatorDefinitionSettings, Vanrise.GenericData.Entities",
                             DataRecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
-                            AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds()
+                            AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
+                            Security: {
+                                ViewPermission: viewPermissionAPI.getData(),
+                                StartInstancePermission: startInstancePermissionAPI.getData(),
+                            }
                         }
                     };
                 };

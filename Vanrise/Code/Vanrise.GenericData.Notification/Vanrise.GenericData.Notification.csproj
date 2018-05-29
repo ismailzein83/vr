@@ -73,7 +73,9 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordRuleEvaluationManager.cs" />
+    <Compile Include="DataRecordRuleEvaluatorDefinitionInfoFilterContext.cs" />
     <Compile Include="DataRecordRuleEvaluatorDefinitionManager.cs" />
+    <Compile Include="DataRecordRuleEvaluatorDefinitionStartInstanceFilter.cs" />
     <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleExtendedSettings.cs" />
     <Compile Include="DataRecord\AlertRule\DataRecordAlertRuleTypeSettings.cs" />
     <Compile Include="DataRecord\Actions\DataRecordActionTargetType.cs" />

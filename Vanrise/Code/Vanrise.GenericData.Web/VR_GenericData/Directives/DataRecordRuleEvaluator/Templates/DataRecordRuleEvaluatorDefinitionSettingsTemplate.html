@@ -16,4 +16,20 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
+    <vr-tab header="'Security'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-section title="View">
+                    <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-section title="Start Instance">
+                    <vr-sec-requiredpermission-grid on-ready="scopeModel.onStartInstanceRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
 </vr-tabs>

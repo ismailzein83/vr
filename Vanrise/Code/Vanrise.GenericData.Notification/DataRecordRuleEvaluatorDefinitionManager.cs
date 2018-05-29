@@ -32,11 +32,22 @@ namespace Vanrise.GenericData.Notification
         {
             Dictionary<Guid, DataRecordRuleEvaluatorDefinition> cachedDataRecordRuleEvaluatorDefinitions = GetCachedDataRecordRuleEvaluatorDefinitions();
 
-            Func<DataRecordRuleEvaluatorDefinition, bool> filterExpression = (DataRecordRuleEvaluatorDefinition) =>
+            Func<DataRecordRuleEvaluatorDefinition, bool> filterExpression = (dataRecordRuleEvaluatorDefinition) =>
             {
                 if (filter == null)
                     return true;
-
+                if(filter.Filters != null)
+                {
+                    var context = new DataRecordRuleEvaluatorDefinitionInfoFilterContext
+                    {
+                        DataRecordRuleEvaluatorDefinitionId = dataRecordRuleEvaluatorDefinition.VRComponentTypeId
+                    };
+                    foreach(var filterObj in filter.Filters)
+                    {
+                        if (!filterObj.IsMatched(context))
+                            return false;
+                    }
+                }
                 return true;
             };
 

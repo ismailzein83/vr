@@ -60,7 +60,15 @@ app.directive("vrGenericdataDatarecordruleevaluatorManual", ['UtilsService', 'VR
                     
                     var datarecordruleevaluatordefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     datarecordruleevaluatordefinitionSelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(datarecordruleevaluatordefinitionSelectorAPI, undefined, datarecordruleevaluatordefinitionSelectorLoadDeferred);
+                        var payload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Vanrise.GenericData.Notification.DataRecordRuleEvaluatorDefinitionStartInstanceFilter ,Vanrise.GenericData.Notification"
+                                }]
+                            }
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(datarecordruleevaluatordefinitionSelectorAPI, payload, datarecordruleevaluatordefinitionSelectorLoadDeferred);
                     });
 
                     return datarecordruleevaluatordefinitionSelectorLoadDeferred.promise;
