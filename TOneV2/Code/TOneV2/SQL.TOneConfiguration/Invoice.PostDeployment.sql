@@ -231,3 +231,25 @@ when matched then
 when not matched by target then
 	insert([ID],[UniqueName],[Settings])
 	values(s.[ID],s.[UniqueName],s.[Settings]);
+
+
+	--[sec].[BusinessEntity]-------------------3301 to 3600-------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0f6ff09f-dfb6-4335-87bc-3dc7b7d7660c','VR_Invoice_Processes','Invoice Processes'			,'b6b8f582-4759-43fb-9220-aa7662c366ea',0,'["Start Process","View Process Logs"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+when not matched by target then
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+--------------------------------------------------------------------------------------------------------------
+end

@@ -580,7 +580,7 @@ as (select * from (values
 ('986C3FC1-2FCE-4966-ABF6-900EBCB6306B','WhS_Routing_CostGenerationProcess','Cost Generation'			,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Process Logs", "Start Process", "View Costs"]'),
 
 ('B8074080-DEA8-4BA2-BD13-0620083EA740','VR_Invoice_Supplier','Supplier Invoice'                        ,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Set_Paid","Set_Unpaid","Recreate","Send Email","Delete","Set_Approved"]'),
-('86699A30-0F8C-4F23-8CFC-9EA19297B06B','VR_Invoice_Customer','Customer Invoice'                        ,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Set_Paid","Set_Unpaid","Set_Lock","Set_UnLock","Recreate","Send Email","Set_Approved"]'),
+('86699A30-0F8C-4F23-8CFC-9EA19297B06B','VR_Invoice_Customer','Customer Invoice'                        ,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Set_Paid","Set_Unpaid","Set_Lock","Set_UnLock","Recreate","Send Email","Set_Approved","View_Alerts","Manage_Alert_Rule"]'),
 ('4D88DBB9-7B3E-437C-A362-9ECD721AC01A','VR_Invoice_Settlement','Invoice Settlement'                    ,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Recreate","Set_Lock","Set_UnLock","Send Email","Set_Approved"]'),
 ('D0038A55-A49D-4A63-BC92-1F979D44AF56','FinancialAccount','Financial Account'							,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Add","Edit"]'),
 
