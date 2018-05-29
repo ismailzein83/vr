@@ -13,5 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool IsActive { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }
         public List<Guid> InvoiceTypeIds { get; set; }
+        public  bool IsApplicableToCustomer { get; set; }
+        public  bool IsApplicableToSupplier { get; set; }
     }
 }
