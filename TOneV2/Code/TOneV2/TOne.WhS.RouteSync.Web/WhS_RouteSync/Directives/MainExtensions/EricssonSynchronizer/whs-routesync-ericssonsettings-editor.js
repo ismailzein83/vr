@@ -27,7 +27,6 @@
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.faultCodes = [];
-				$scope.scopeModel.faultCodesA = [];
 				$scope.scopeModel.faultCodeValue = undefined;
 				$scope.scopeModel.disableAddButton = true;
 
@@ -78,7 +77,7 @@
 					if (payload != undefined) {
 						$scope.scopeModel.numberOfRetries = payload.settings.NumberOfRetries;
 						if (payload.settings.FaultCodes != undefined) {
-							$scope.scopeModel.faultCodesA = payload.settings.FaultCodes;
+							$scope.scopeModel.faultCodes = payload.settings.FaultCodes;
 
 						}
 					}
@@ -87,7 +86,7 @@
 					var data = {
 						$type: "TOne.WhS.RouteSync.Ericsson.EricssonSwitchRouteSynchronizerSettings, TOne.WhS.RouteSync.Ericsson",
 						NumberOfRetries: $scope.scopeModel.numberOfRetries,
-						FaultCodes: $scope.scopeModel.faultCodesA,
+						FaultCodes: $scope.scopeModel.faultCodes,
 					};
 					return data;
 				};

@@ -28,7 +28,8 @@
 										 normal-col-num="3" isrequired="true" ismultipleselection>
 			</vr-whs-be-supplier-selector>
 			<vr-columns width="1/4row">
-				<vr-textbox value="scopeModel.firstRCNumber" label="First Route Case Number" type="text" isrequired vr-disabled="scopeModel.isEditMode"></vr-textbox>
+				<vr-textbox value="scopeModel.firstRCNumber" label="First Route Case Number" type="number" decimalprecision="0" minvalue="1"
+							isrequired vr-disabled="scopeModel.isEditMode"></vr-textbox>
 			</vr-columns>
 		</vr-row>
 		<vr-section title="Local Suppliers">
@@ -54,6 +55,6 @@
 		</vr-section>
 	</vr-tab>
 	<vr-tab header="'Carrier Mapping'">
-        <whs-routesync-carrieraccountmapping-ericsson-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-ericsson-grid>
+		<whs-routesync-carrieraccountmapping-ericsson-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-ericsson-grid>
 	</vr-tab>
 </vr-tabs>

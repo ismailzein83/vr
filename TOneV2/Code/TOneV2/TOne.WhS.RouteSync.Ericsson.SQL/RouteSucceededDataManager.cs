@@ -63,18 +63,18 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 			foreach (var routeKVP in routesWithCommandsByBO)
 			{
-				foreach (var route in routeKVP.Value)
+				foreach (var routeWithCommands in routeKVP.Value)
 				{
-					switch (route.ActionType)
+					switch (routeWithCommands.ActionType)
 					{
 						case RouteActionType.Add:
-							WriteRecordToStream(route.Route, dbApplyAddStream);
+							WriteRecordToStream(routeWithCommands.RouteCompareResult.Route, dbApplyAddStream);
 							break;
 						case RouteActionType.Update:
-							WriteRecordToStream(route.Route, dbApplyUpdateStream);
+							WriteRecordToStream(routeWithCommands.RouteCompareResult.Route, dbApplyUpdateStream);
 							break;
 						case RouteActionType.Delete:
-							WriteRecordToStream(route.Route, dbApplyDeleteStream);
+							WriteRecordToStream(routeWithCommands.RouteCompareResult.Route, dbApplyDeleteStream);
 							break;
 						default: break;
 					}

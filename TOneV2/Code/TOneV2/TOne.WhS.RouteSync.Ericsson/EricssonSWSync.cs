@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Collections.Generic;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Rules;
+using Vanrise.GenericData.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
 using TOne.WhS.RouteSync.Ericsson.Business;
-using System.Text;
-using Vanrise.Entities;
-using Vanrise.Rules;
-using Vanrise.GenericData.Entities;
-using System.Threading;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
@@ -19,7 +19,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 	{
 		public override Guid ConfigId { get { return new Guid("94739CBC-00A7-4CEB-9285-B4CB35D7D003"); } }
 
-		const string CommandPrompt = ">";
+		const string CommandPrompt = "<";
 		public int FirstRCNumber { get; set; }
 		public int NumberOfOptions { get; set; }
 		public int MinCodeLength { get; set; }
@@ -58,6 +58,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			CustomerMappingManager customerMappingManager = new CustomerMappingManager();
 			customerMappingManager.Initialize(context.SwitchId, CarrierMappings.Values);
 		}
+
 		public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
 		{
 			if (context.Routes == null || context.Routes.Count == 0 || CarrierMappings == null || CarrierMappings.Count == 0)
@@ -85,13 +86,13 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 				var codeGroupObject = codeGroupManager.GetMatchCodeGroup(route.Code);
 				codeGroupObject.ThrowIfNull(string.Format("No Code Group found for code '{0}'.", route.Code));
+
 				int routeCodeGroupId = codeGroupObject.CodeGroupId;
 				string routeCodeGroup = codeGroupObject.Code;
 
 				EricssonConvertedRoute ericssonConvertedRoute = new EricssonConvertedRoute() { BO = customerMapping.BO, Code = route.Code };
 
 				List<RouteCaseOption> routeCaseOptions = GetRouteCaseOptions(route, routeCodeGroupId, routeCodeGroup, ruleTree);
-				routeCaseOptions = routeCaseOptions.OrderBy(item => item.Priority).ToList();
 				var routeCaseOptionsAsString = Helper.SerializeRouteCaseOptions(routeCaseOptions);
 
 				RouteCase routeCase;
@@ -123,6 +124,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 			context.ConvertedRoutes = convertedRoutes;
 		}
+
 		public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
 		{
 			IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
@@ -134,12 +136,14 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 			return routeDataManager.FinishDBApplyStream(dbApplyStream);
 		}
+
 		public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
 		{
 			IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
 			routeDataManager.SwitchId = context.SwitchId;
 			routeDataManager.ApplyRouteForDB(context.PreparedItemsForApply);
 		}
+
 		public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
 		{
 			#region conditions
@@ -156,19 +160,23 @@ namespace TOne.WhS.RouteSync.Ericsson
 			#region Managers
 			ICustomerMappingSucceededDataManager customerMappingSucceededDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICustomerMappingSucceededDataManager>();
 			customerMappingSucceededDataManager.SwitchId = context.SwitchId;
+
 			IRouteSucceededDataManager routeSucceededDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteSucceededDataManager>();
 			routeSucceededDataManager.SwitchId = context.SwitchId;
+
 			IRouteCaseDataManager routeCaseDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteCaseDataManager>();
 			routeCaseDataManager.SwitchId = context.SwitchId;
+
 			IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
 			routeDataManager.SwitchId = context.SwitchId;
+
 			ICustomerMappingDataManager customerMappingDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICustomerMappingDataManager>();
 			customerMappingDataManager.SwitchId = context.SwitchId;
 			#endregion
 
 			#region Get Commands
 			var routeCasesDictionary = new RouteCaseManager().GetCachedRouteCasesGroupedByOptions(context.SwitchId);
-			var routeCasesToBeAdded = (routeCasesDictionary != null && routeCasesDictionary.Count > 0) ? routeCasesDictionary.FindAllRecords(item => item.Synced == false) : null;
+			var routeCasesToBeAdded = (routeCasesDictionary != null && routeCasesDictionary.Count > 0) ? routeCasesDictionary.FindAllRecords(item => !item.Synced) : null;
 			var routeCasesToBeAddedWithCommands = GetRouteCasesWithCommands(routeCasesToBeAdded);
 
 			Dictionary<string, CustomerMappingWithActionType> customersToDeleteByBO;
@@ -192,12 +200,17 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 			List<CommandResult> commandResults = new List<CommandResult>();
 
-			var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
-			EricssonSwitchRouteSynchronizerSettings switchSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as EricssonSwitchRouteSynchronizerSettings;
-			if (switchSettings == null || switchSettings.FaultCodes == null)
-				throw new NullReferenceException(string.Format("No Switch settings for Ericsson Switch with config id {0}", ConfigId));
-			var faultCodes = switchSettings.FaultCodes;
-			var maxNumberOfRetries = switchSettings.NumberOfRetries;
+			List<string> faultCodes = null;
+			int maxNumberOfRetries = 0;
+			if (sshCommunicator != null)
+			{
+				var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
+				EricssonSwitchRouteSynchronizerSettings switchSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as EricssonSwitchRouteSynchronizerSettings;
+				if (switchSettings == null || switchSettings.FaultCodes == null)
+					throw new NullReferenceException("Ericsson switch settings is not defined. Please go to Route Sync under Component Settings and add related settings.");
+				faultCodes = switchSettings.FaultCodes;
+				maxNumberOfRetries = switchSettings.NumberOfRetries;
+			}
 
 			#region execute and log Customer Mapping
 			List<CustomerMappingWithCommands> succeedCustomerMappingsWithCommands;
@@ -282,11 +295,11 @@ namespace TOne.WhS.RouteSync.Ericsson
 					foreach (var route in failedEricssonRoutesWithCommands.Value)
 					{
 						if (route.ActionType == RouteActionType.Add)
-							failedAdded.Add(route.Route);
+							failedAdded.Add(route.RouteCompareResult.Route);
 						if (route.ActionType == RouteActionType.Update)
-							failedUpdated.Add(route.Route);
+							failedUpdated.Add(route.RouteCompareResult.OriginalValue);
 						if (route.ActionType == RouteActionType.Delete)
-							failedDeleted.Add(route.Route);
+							failedDeleted.Add(route.RouteCompareResult.Route);
 					}
 				}
 				if (failedDeleted != null && failedDeleted.Count > 0)
@@ -296,7 +309,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 					routeDataManager.RemoveRoutesFromTempTable(failedAdded);
 
 				if (failedUpdated != null && failedUpdated.Count > 0)
-					routeDataManager.UpdateRoutesInTempTable(failedUpdated.Select(item => item.OldValue));
+					routeDataManager.UpdateRoutesInTempTable(failedUpdated);
 			}
 
 			routeDataManager.Finalize(new RouteFinalizeContext());
@@ -383,7 +396,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 					groupId++;
 					if (trunkGroup.TrunkTrunkGroups != null && trunkGroup.TrunkTrunkGroups.Count > 0)
 					{
-						foreach (var trunkGroupTrunk in trunkGroup.TrunkTrunkGroups)
+						foreach (var trunkGroupTrunk in trunkGroup.TrunkTrunkGroups.OrderBy(itm => itm.Priority))
 						{
 							routeCaseOptions.Add(GetRouteCaseOption(routeCodeGroup, option.SupplierId, option.Percentage, supplierMapping, trunkGroup, trunkGroupTrunk, groupId));
 							numberOfOptions++;
@@ -410,7 +423,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 							if (backupTrunkGroup.TrunkTrunkGroups != null && backupTrunkGroup.TrunkTrunkGroups.Count > 0)
 							{
-								foreach (var trunkGroupTrunk in backupTrunkGroup.TrunkTrunkGroups)
+								foreach (var trunkGroupTrunk in backupTrunkGroup.TrunkTrunkGroups.OrderBy(itm => itm.Priority))
 								{
 									routeCaseOptions.Add(GetRouteCaseOption(routeCodeGroup, backupOption.SupplierId, null, supplierMapping, backupTrunkGroup, trunkGroupTrunk, groupId));
 									numberOfOptions++;
@@ -440,7 +453,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			routeCaseOption.BNT = 1;
 			routeCaseOption.SP = 1;
 
-			if (routeCodeGroup == LocalCountryCode)
+			if (string.Compare(routeCodeGroup, LocalCountryCode) == 0)
 			{
 				if (trunk.TrunkName.StartsWith(InterconnectGeneralPrefix) || IncomingTrafficSuppliers.Any(item => item.SupplierId.ToString() == supplierId))
 				{
@@ -527,7 +540,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 						{
 							OBACommands = customerMappingToUpdateOBACommands,
 							TrunkCommandsByTrunkId = customerMappingToUpdateTrunksCommands,
-							CustomerMappingWithActionType = new CustomerMappingWithActionType() { CustomerMapping = customerMappingToUpdate, CustomerMappingOldValue = customerMappingOldValue, ActionType = CustomerMappingActionType.Add }
+							CustomerMappingWithActionType = new CustomerMappingWithActionType() { CustomerMapping = customerMappingToUpdate, CustomerMappingOldValue = customerMappingOldValue, ActionType = CustomerMappingActionType.Update }
 						});
 					}
 				}
@@ -660,7 +673,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 					}
 				}
 			}
-			else routeCaseCommands.Add(string.Format("{0}: BR=CL-0&&-9&-11&&-15&TMR-0&-3, P01=1, R=BLK, BNT=1, SP=MM1;", EricssonCommands.ANRSI_Command));
+			else
+			{
+				routeCaseCommands.Add(string.Format("{0}: BR=CL-0&&-9&-11&&-15&TMR-0&-3, P01=1, R=BLK, BNT=1, SP=MM1;", EricssonCommands.ANRSI_Command));
+			}
 
 			routeCaseCommands.Add(string.Format("{0};", EricssonCommands.ANRPE_Command));
 			return routeCaseCommands;
@@ -712,30 +728,30 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 					if (routeDifferences.RoutesToAdd != null && routeDifferences.RoutesToAdd.Count > 0)
 					{
-						foreach (var route in routeDifferences.RoutesToAdd)
+						foreach (var routeCompareResult in routeDifferences.RoutesToAdd)
 						{
-							var commands = GetRouteCommand(carrierMappingByCustomerBo, supplierByOutTrunk, routeCases, route);
-							customerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { Route = route, Commands = commands, ActionType = RouteActionType.Add });
+							var commands = GetRouteCommand(carrierMappingByCustomerBo, supplierByOutTrunk, routeCases, routeCompareResult);
+							customerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Add });
 						}
 					}
 
 					if (routeDifferences.RoutesToUpdate != null && routeDifferences.RoutesToUpdate.Count > 0)
 					{
-						foreach (var route in routeDifferences.RoutesToUpdate)
+						foreach (var routeCompareResult in routeDifferences.RoutesToUpdate)
 						{
-							var commands = GetRouteCommand(carrierMappingByCustomerBo, supplierByOutTrunk, routeCases, route);
-							customerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { Route = route, Commands = commands, ActionType = RouteActionType.Update });
+							var commands = GetRouteCommand(carrierMappingByCustomerBo, supplierByOutTrunk, routeCases, routeCompareResult);
+							customerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Update });
 						}
 					}
 
 					if (routeDifferences.RoutesToDelete != null && routeDifferences.RoutesToDelete.Count > 0)
 					{
-						foreach (var route in routeDifferences.RoutesToDelete)
+						foreach (var routeCompareResult in routeDifferences.RoutesToDelete)
 						{
-							if (!customersToDeleteByBO.ContainsKey(route.BO))
+							if (!customersToDeleteByBO.ContainsKey(routeCompareResult.Route.BO))
 							{
-								var commands = GetDeletedRouteCommands(carrierMappingByCustomerBo, supplierByOutTrunk, routeCases, route);
-								customerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { Route = route, Commands = commands, ActionType = RouteActionType.Delete });
+								var commands = GetDeletedRouteCommands(carrierMappingByCustomerBo, supplierByOutTrunk, routeCases, routeCompareResult);
+								customerEricssonRoutesWithCommands.Add(new EricssonRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Delete });
 							}
 						}
 					}
@@ -743,8 +759,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 			return result;
 		}
-		private List<string> GetDeletedRouteCommands(Dictionary<string, CarrierMapping> carrierMappingByCustomerBo, Dictionary<string, int> supplierByOutTrunk, List<RouteCase> routeCases, EricssonConvertedRoute route)
+		private List<string> GetDeletedRouteCommands(Dictionary<string, CarrierMapping> carrierMappingByCustomerBo, Dictionary<string, int> supplierByOutTrunk, List<RouteCase> routeCases, EricssonConvertedRouteCompareResult routeCompareResult)
 		{
+			var route = routeCompareResult.Route;
 			List<string> deletedRouteCommands = new List<string>();
 
 			var codeGroupObject = new CodeGroupManager().GetMatchCodeGroup(route.Code);
@@ -782,8 +799,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 			return deletedRouteCommands;
 		}
-		private List<string> GetRouteCommand(Dictionary<string, CarrierMapping> carrierMappingByCustomerBo, Dictionary<string, int> supplierByOutTrunk, List<RouteCase> routeCases, EricssonConvertedRoute route)
+		private List<string> GetRouteCommand(Dictionary<string, CarrierMapping> carrierMappingByCustomerBo, Dictionary<string, int> supplierByOutTrunk, List<RouteCase> routeCases, EricssonConvertedRouteCompareResult routeCompareResult)
 		{
+			var route = routeCompareResult.Route;
 			List<string> routeCommands = new List<string>();
 			#region GetCodeGroup
 			var codeGroupObject = new CodeGroupManager().GetMatchCodeGroup(route.Code);
@@ -1448,7 +1466,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				}
 				foreach (var ericssonRouteWithCommands in ericssonRoutesWithCommands)
 				{
-					if (faildRouteCaseNumbers.Contains(ericssonRouteWithCommands.Route.RCNumber))
+					if (faildRouteCaseNumbers.Contains(ericssonRouteWithCommands.RouteCompareResult.Route.RCNumber))
 					{
 						var allFailedRoutesWithCommands = allFailedRoutesWithCommandsByBo.GetOrCreateItem(customerBo);
 						allFailedRoutesWithCommands.Add(ericssonRouteWithCommands);
@@ -1539,6 +1557,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 		private bool IsCommandFailed(string response, IEnumerable<string> faultCodes)
 		{
 			string responseToUpper = response.ToUpper();
+
+			if (string.IsNullOrEmpty(response))
+				return false;
+
 			if (responseToUpper.Contains(EricssonCommands.PROTECTION_PERIOD_ELAPSED) || responseToUpper.Contains(EricssonCommands.PROTECTIVE_PERIOD_ELAPSED) || faultCodes.Any(item => responseToUpper.Contains(item)))
 				return true;
 
@@ -1547,6 +1569,4 @@ namespace TOne.WhS.RouteSync.Ericsson
 		#endregion
 		#endregion
 	}
-
-
 }

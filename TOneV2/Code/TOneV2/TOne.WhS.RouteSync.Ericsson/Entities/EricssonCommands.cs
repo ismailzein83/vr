@@ -66,7 +66,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
 	public class EricssonRouteWithCommands
 	{
-		public EricssonConvertedRoute Route { get; set; }
+		public EricssonConvertedRouteCompareResult RouteCompareResult { get; set; }
 		public List<string> Commands { get; set; }
 		public RouteActionType ActionType { get; set; }
 	}

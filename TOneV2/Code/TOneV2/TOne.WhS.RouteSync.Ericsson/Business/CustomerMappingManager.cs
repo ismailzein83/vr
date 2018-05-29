@@ -15,19 +15,20 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
 
 			dataManager.Initialize(new CustomerMappingInitializeContext());
 
-			var customerMappings = (carrierMappings != null) ? carrierMappings.FindAllRecords(item => item.CustomerMapping != null && !string.IsNullOrEmpty(item.CustomerMapping.BO)) : null;
+			if (carrierMappings == null && !carrierMappings.Any())
+				return;
 
-			if (customerMappings != null && customerMappings.Any())
+			object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+			foreach (var carrierMapping in carrierMappings)
 			{
-				object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
-				foreach (var customerMapping in customerMappings)
+				if (carrierMapping.CustomerMapping != null && !string.IsNullOrEmpty(carrierMapping.CustomerMapping.BO))
 				{
-					CustomerMappingSerialized customerMappingSerialized = new CustomerMappingSerialized() { BO = customerMapping.CustomerMapping.BO, CustomerMappingAsString = Helper.SerializeCustomerMapping(customerMapping.CustomerMapping) };
+					CustomerMappingSerialized customerMappingSerialized = new CustomerMappingSerialized() { BO = carrierMapping.CustomerMapping.BO, CustomerMappingAsString = Helper.SerializeCustomerMapping(carrierMapping.CustomerMapping) };
 					dataManager.WriteRecordToStream(customerMappingSerialized, dbApplyStream);
 				}
-				object obj = dataManager.FinishDBApplyStream(dbApplyStream);
-				dataManager.ApplyCustomerMappingForDB(obj);
 			}
+			object obj = dataManager.FinishDBApplyStream(dbApplyStream);
+			dataManager.ApplyCustomerMappingForDB(obj);
 		}
 	}
 }

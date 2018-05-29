@@ -1,13 +1,11 @@
 ﻿using System;
-using Vanrise.Data.SQL;
-using System.Linq;
-using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.RouteSync.Ericsson.Data;
-using TOne.WhS.RouteSync.Ericsson.Entities;
 using System.Data;
+using System.Linq;
+using System.Data.SqlClient;
 using System.Collections.Generic;
 using Vanrise.Common;
-using System.Data.SqlClient;
+using Vanrise.Data.SQL;
+using TOne.WhS.RouteSync.Ericsson.Data;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -100,10 +98,10 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 					{
 						var singleRouteDifference = differenceKvp.Value[0];
 						if (singleRouteDifference.TableName == RouteTableName)
-							difference.RoutesToDelete.Add(singleRouteDifference.EricssonConvertedRoute);
+							difference.RoutesToDelete.Add(new EricssonConvertedRouteCompareResult() { Route = singleRouteDifference.EricssonConvertedRoute });
 
 						else
-							difference.RoutesToAdd.Add(singleRouteDifference.EricssonConvertedRoute);
+							difference.RoutesToAdd.Add(new EricssonConvertedRouteCompareResult() { Route = singleRouteDifference.EricssonConvertedRoute });
 					}
 					else //routeDifferences.Count = 2
 					{
@@ -112,12 +110,20 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 						if (route != null)
 						{
-							difference.RoutesToUpdate.Add(new EricssonConvertedRoute()
+							difference.RoutesToUpdate.Add(new EricssonConvertedRouteCompareResult()
 							{
-								BO = route.EricssonConvertedRoute.BO,
-								Code = route.EricssonConvertedRoute.Code,
-								RCNumber = route.EricssonConvertedRoute.RCNumber,
-								OldValue = (routeOldValue != null) ? routeOldValue.EricssonConvertedRoute : null,
+								Route = new EricssonConvertedRoute()
+								{
+									BO = route.EricssonConvertedRoute.BO,
+									Code = route.EricssonConvertedRoute.Code,
+									RCNumber = route.EricssonConvertedRoute.RCNumber,
+								},
+								OriginalValue = (routeOldValue != null) ? new EricssonConvertedRoute()
+								{
+									BO = routeOldValue.EricssonConvertedRoute.BO,
+									Code = routeOldValue.EricssonConvertedRoute.Code,
+									RCNumber = routeOldValue.EricssonConvertedRoute.RCNumber,
+								} : null
 							});
 						}
 					}
@@ -175,7 +181,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		{
 			ExecuteNonQueryText(query_EricssonRouteTableType, null);
 			DataTable dtRoutes = BuildRouteTable(routes);
-			string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName, RouteTableName);
+			string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName);
 			ExecuteNonQueryText(query, (cmd) =>
 			{
 				var dtPrm = new SqlParameter("@Routes", SqlDbType.Structured);
@@ -308,12 +314,31 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                     END";
 
 		const string query_SyncWithRouteAddedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
-                                                    BEGIN
-														INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, Code, RCNumber)
-														SELECT BO, Code, RCNumber  FROM WhS_RouteSync_Ericsson_{0}.{2}
+														BEGIN
+														BEGIN TRANSACTION
+															BEGIN TRY
+																INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, Code, RCNumber)
+																SELECT BO, Code, RCNumber  FROM WhS_RouteSync_Ericsson_{0}.{2}
+														
+																DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
+																COMMIT Transaction
+															END TRY
 
-														DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
-                                                    END";
+															BEGIN CATCH
+																If @@TranCount>0
+																	ROLLBACK Transaction;
+																	DECLARE @ErrorMessage NVARCHAR(max);
+																	DECLARE @ErrorSeverity INT;
+																	DECLARE @ErrorState INT;
+
+																	SELECT 
+																		@ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)),
+																		@ErrorSeverity = ERROR_SEVERITY(),
+																		@ErrorState = ERROR_STATE();
+
+																	RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+															END CATCH
+														END";
 
 		const string query_CreateRouteTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
@@ -368,11 +393,10 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 																and route.Code = tempRoute.Code
 																and route.RCNumber = tempRoute.RCNumber";
 
-		const string query_UpdateTempTable = @"UPDATE  tempRoutes 
-														set tempRoutes.RCNumber = routes.RCNumber
+		const string query_UpdateTempTable = @"UPDATE  [WhS_RouteSync_Ericsson_{0}].[{1}] 
+														set tempRoutes.RCNumber = routesToUpdate.RCNumber
                                                     FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
-                                                    JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code
-													JOIN [WhS_RouteSync_Ericsson_{0}].[{2}] as routes on routes.BO = routesToUpdate.BO and routes.Code = routesToUpdate.Code";
+                                                    JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code";
 		#endregion
 	}
 }

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.RouteSync.Ericsson.Data;
-using Vanrise.Data.SQL;
-using Vanrise.Common;
-using TOne.WhS.RouteSync.Ericsson.Entities;
+using System.Data;
 using System.Data.SqlClient;
+using System.Collections.Generic;
+using Vanrise.Common;
+using Vanrise.Data.SQL;
+using TOne.WhS.RouteSync.Ericsson.Data;
+using TOne.WhS.RouteSync.Ericsson.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -284,24 +282,42 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		const string query_SyncWithCustomerMappingSucceededTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
-														DELETE WhS_RouteSync_Ericsson_{0}.{1}
-														FROM WhS_RouteSync_Ericsson_{0}.{1} as cm join WhS_RouteSync_Ericsson_{0}.{2} as cms 
-														ON cm.BO = cms.BO
-														WHERE cms.Action = 2
+													BEGIN TRANSACTION
+														BEGIN TRY
+															DELETE WhS_RouteSync_Ericsson_{0}.{1}
+															FROM WhS_RouteSync_Ericsson_{0}.{1} as cm join WhS_RouteSync_Ericsson_{0}.{2} as cms 
+															ON cm.BO = cms.BO
+															WHERE cms.Action = 2
 
-														MERGE INTO WhS_RouteSync_Ericsson_{0}.{1}  as cm 
-														USING WhS_RouteSync_Ericsson_{0}.{2} as cms
-														ON cm.BO = cms.BO and cms.Action=1
-														WHEN MATCHED THEN
-														UPDATE 
-														SET cm.CustomerMapping = cms.CustomerMapping;
+															MERGE INTO WhS_RouteSync_Ericsson_{0}.{1}  as cm 
+															USING WhS_RouteSync_Ericsson_{0}.{2} as cms
+															ON cm.BO = cms.BO and cms.Action=1
+															WHEN MATCHED THEN
+															UPDATE 
+															SET cm.CustomerMapping = cms.CustomerMapping;
 
-														INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, CustomerMapping)
-														SELECT BO, CustomerMapping FROM WhS_RouteSync_Ericsson_{0}.{2} as cms
-														WHERE cms.Action = 0
+															INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, CustomerMapping)
+															SELECT BO, CustomerMapping FROM WhS_RouteSync_Ericsson_{0}.{2} as cms
+															WHERE cms.Action = 0
 
-														DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
+															DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
+															COMMIT Transaction
+														END TRY
 
+														BEGIN CATCH
+																If @@TranCount>0
+																	ROLLBACK Transaction;
+																	DECLARE @ErrorMessage NVARCHAR(max);
+																	DECLARE @ErrorSeverity INT;
+																	DECLARE @ErrorState INT;
+
+																	SELECT 
+																		@ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)),
+																		@ErrorSeverity = ERROR_SEVERITY(),
+																		@ErrorState = ERROR_STATE();
+
+																	RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+														END CATCH
                                                     END";
 
 		const string query_CreateSucceedCustomerMappingTable = @"CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{1}](

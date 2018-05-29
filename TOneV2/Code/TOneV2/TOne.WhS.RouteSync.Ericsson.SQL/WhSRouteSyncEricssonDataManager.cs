@@ -1,12 +1,10 @@
 ﻿using System;
 using Vanrise.Data.SQL;
 using TOne.WhS.RouteSync.Ericsson.Data;
-using TOne.WhS.RouteSync.Ericsson.Entities;
-
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
-    public class WhSRouteSyncEricssonDataManager : BaseSQLDataManager, IWhSRouteSyncEricssonDataManager
+	public class WhSRouteSyncEricssonDataManager : BaseSQLDataManager, IWhSRouteSyncEricssonDataManager
     {
         public string SwitchId { get; set; }
 
@@ -18,11 +16,11 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
         public void Initialize(IWhSRouteSyncEricssonInitializeContext context)
         {
-            string query = string.Format(query_CreateRouteCaseTable, SwitchId);
+            string query = string.Format(query_CreateSchema, SwitchId);
             ExecuteNonQueryText(query, null);
         }
 
-        const string query_CreateRouteCaseTable = @"IF  NOT EXISTS( SELECT * FROM sys.schemas s WHERE s.name = 'WhS_RouteSync_Ericsson_{0}')
+        const string query_CreateSchema = @"IF  NOT EXISTS( SELECT * FROM sys.schemas s WHERE s.name = 'WhS_RouteSync_Ericsson_{0}')
 		                                            begin
 			                                             EXEC ('CREATE SCHEMA WhS_RouteSync_Ericsson_{0}')
 		                                            end";

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson
@@ -21,20 +18,25 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public string BO { get; set; }
 		public string Code { get; set; }
 		public int RCNumber { get; set; }
-		public EricssonConvertedRoute OldValue { get; set; }
+	}
+
+	public class EricssonConvertedRouteCompareResult
+	{
+		public EricssonConvertedRoute Route { get; set; }
+		public EricssonConvertedRoute OriginalValue { get; set; }
 	}
 
 	public class EricssonConvertedRouteDifferences
 	{
 		public EricssonConvertedRouteDifferences()
 		{
-			RoutesToAdd = new List<EricssonConvertedRoute>();
-			RoutesToUpdate = new List<EricssonConvertedRoute>();
-			RoutesToDelete = new List<EricssonConvertedRoute>();
+			RoutesToAdd = new List<EricssonConvertedRouteCompareResult>();
+			RoutesToUpdate = new List<EricssonConvertedRouteCompareResult>();
+			RoutesToDelete = new List<EricssonConvertedRouteCompareResult>();
 		}
-		public List<EricssonConvertedRoute> RoutesToAdd { get; set; }
-		public List<EricssonConvertedRoute> RoutesToUpdate { get; set; }
-		public List<EricssonConvertedRoute> RoutesToDelete { get; set; }
+		public List<EricssonConvertedRouteCompareResult> RoutesToAdd { get; set; }
+		public List<EricssonConvertedRouteCompareResult> RoutesToUpdate { get; set; }
+		public List<EricssonConvertedRouteCompareResult> RoutesToDelete { get; set; }
 	}
 	public enum EricssonConvertedRouteType
 	{
