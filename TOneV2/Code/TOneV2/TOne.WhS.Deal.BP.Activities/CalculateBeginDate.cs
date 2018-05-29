@@ -63,19 +63,18 @@ namespace TOne.WhS.Deal.BP.Activities
 
 			//Loading DealDetailedProgressBeginDate
 			byte[] lastTimestamp = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.DealDetailedProgressMaxTimestamp : null;
-
 			DateTime? dealDetailedProgressBeginDate = new DealDetailedProgressManager().GetDealEvaluatorBeginDate(lastTimestamp);
 
 			//Loading DealDefinitionBeginDate
 			byte[] lastDealDefinitionTimestamp = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.DealDefinitionMaxTimestamp : null;
 			DateTime? dealDefinitionBeginDate = new DealDefinitionManager().GetDealEvaluatorBeginDate(lastDealDefinitionTimestamp, dealEffectiveAfter);
 
+            //Calculating BeginDate
 			DateTime? beginDate = GetMinimumDate(new List<DateTime?>() { reprocessMinFromTime, dealDetailedProgressBeginDate, dealDefinitionBeginDate });
-
-			context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Calculate Begin Date is done", null);
-
 			this.BeginDate.Set(context, beginDate);
 			this.LastBPInstanceId.Set(context, lastBPInstanceId);
+
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Calculate Begin Date is done", null);
 		}
 
 		public DateTime? GetMinimumDate(IEnumerable<DateTime?> dateTimes)
