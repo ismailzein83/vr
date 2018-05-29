@@ -606,7 +606,7 @@ namespace TOne.WhS.Sales.Business
 				RoutingProductReader = zoneRoutingProductReader,
 				CurrentRateLocator = currentRateLocator,
 				IncludeBlockedSuppliers = input.IncludeBlockedSuppliers,
-				AdditionalCountryIds = additionalCountryBEDsByCountryId.Select(item => item.Key),
+				AdditionalCountryIds = (additionalCountryBEDsByCountryId == null)?null:additionalCountryBEDsByCountryId.Select(item => item.Key),
 			};
 
 			return BuildZoneItems(ratePlanZoneCreationInput);
@@ -820,7 +820,7 @@ namespace TOne.WhS.Sales.Business
 						RoutingProductLocator = routingProductLocator,
 						RoutingProductReader = zoneRoutingProductReader,
 						CurrentRateLocator = currentRateLocator,
-						AdditionalCountryIds = additionalCountryBEDsByCountryId.Select(item => item.Key),
+						AdditionalCountryIds = (additionalCountryBEDsByCountryId == null) ? null : additionalCountryBEDsByCountryId.Select(item => item.Key),
 					};
 
 					zoneItems = BuildZoneItems(ratePlanZoneCreationInput);
