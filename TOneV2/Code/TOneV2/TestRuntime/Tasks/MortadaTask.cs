@@ -129,11 +129,97 @@ namespace TestRuntime.Tasks
                                  MeasureName = "SaleDuration",
                                  MappedMeasures = new List<string> { "SaleDuration"}
                             }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                        {
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                            {
+                                 MeasureName = "SaleAmount",
+                                 MappedMeasures = new List<string> { "SaleNetNotNULL"}
+                            }
+                        }
+                    }
+
+                }
+            };
+            var serializedSaleBillingMeasureExternalSource = Vanrise.Common.Serializer.Serialize(saleBillingMeasureExternalSource);
+
+            var costBillingMeasureExternalSource = new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
+            {
+                ExtendedSettings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource
+                {
+                    AnalyticTableId = new Guid("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                    DimensionMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule>
+                    {
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.ExcludeDimensions 
+                            { 
+                                ExcludedDimensions = new List<string> { "IsSale"}
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Deal",
+                                MappedDimensionName = "OrigCostDeal"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "ZoneGroup",
+                                MappedDimensionName = "OrigCostDealZoneGroupName"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Zone",
+                                MappedDimensionName = "CostZoneName"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Day",
+                                MappedDimensionName = "DayAsDate"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionName 
+                            { 
+                                Type = Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionNameType.AllDimensions
+                            }
+                        }
+                    },
+                    MeasureMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule>
+                    {
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                        {
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                            {
+                                 MeasureName = "CostDuration",
+                                 MappedMeasures = new List<string> { "CostDuration"}
+                            }
+                        },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                        {
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                            {
+                                 MeasureName = "CostAmount",
+                                 MappedMeasures = new List<string> { "CostNetNotNULL"}
+                            }
                         }
                     }
                 }
             };
-            var serializedSaleBillingMeasureExternalSource = Vanrise.Common.Serializer.Serialize(saleBillingMeasureExternalSource);
+            var serializedCostBillingMeasureExternalSource = Vanrise.Common.Serializer.Serialize(costBillingMeasureExternalSource);
         }
 
         

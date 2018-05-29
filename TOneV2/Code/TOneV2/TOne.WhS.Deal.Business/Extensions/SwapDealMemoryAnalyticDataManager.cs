@@ -70,7 +70,12 @@ namespace TOne.WhS.Deal.Business
                                     record.FieldValues.Add("IsSale", true);
                                     record.FieldValues.Add("ZoneGroup", inbound.Name);
                                     record.FieldValues.Add("Zone", saleZoneName);
-                                    record.FieldValues.Add("DailyEstimatedVolume", estimationPerZone ? dailyGroupVolume : dailyTotalVolume);
+
+                                    var estimatedVolume = estimationPerZone ? dailyGroupVolume : dailyTotalVolume;
+                                    var estimatedAmount = estimatedVolume * inbound.Rate;
+
+                                    record.FieldValues.Add("DailyEstimatedVolume", estimatedVolume);
+                                    record.FieldValues.Add("DailyEstimatedAmount", estimatedAmount);
                                     records.Add(record);
                                 }
                             }
@@ -101,7 +106,12 @@ namespace TOne.WhS.Deal.Business
                                     record.FieldValues.Add("IsSale", false);
                                     record.FieldValues.Add("ZoneGroup", outbound.Name);
                                     record.FieldValues.Add("Zone", supplierZoneName);
-                                    record.FieldValues.Add("DailyEstimatedVolume", estimationPerZone ? dailyGroupVolume : dailyTotalVolume);
+                                    
+                                    var estimatedVolume = estimationPerZone ? dailyGroupVolume : dailyTotalVolume;
+                                    var estimatedAmount = estimatedVolume * outbound.Rate;
+
+                                    record.FieldValues.Add("DailyEstimatedVolume", estimatedVolume);
+                                    record.FieldValues.Add("DailyEstimatedAmount", estimatedAmount);
                                     records.Add(record);
                                 }
                             }
