@@ -80,7 +80,7 @@
                             zoneIds.push(swapDealOutboundEntity.SupplierZones[i].ZoneId);
                         }
                     }
-                    var setLoader = function (value) { $scope.isLoadingSelector = value };
+                    var setLoader = function (value) { $scope.isLoadingSelector = value; };
                     var payload = context != undefined ? context.getSupplierZoneSelectorPayload(swapDealOutboundEntity != undefined ? swapDealOutboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.supplierId = supplierId;
@@ -106,9 +106,9 @@
                                 BED: dealBED,
                                 EED: dealEED
                             }]
-                        }
+                        };
 
-                    };
+                    }
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
                 }

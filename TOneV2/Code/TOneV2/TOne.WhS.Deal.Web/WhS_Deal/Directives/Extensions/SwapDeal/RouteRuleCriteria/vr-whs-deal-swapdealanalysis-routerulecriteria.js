@@ -70,7 +70,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                             else {
                                 var saleZoneSelectorPayload = { sellingNumberPlanId: sellingNumberPlanId, availableZoneIds: availableZoneIds };
 
-                                var setLoader = function (value) { $scope.scopeModel.isLoadingSaleZone = value };
+                                var setLoader = function (value) { $scope.scopeModel.isLoadingSaleZone = value; };
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorAPI, saleZoneSelectorPayload, setLoader, undefined);
                             }
                         });
@@ -130,7 +130,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                     });
 
                     return dealDefinitionSelectorLoadPromiseDeferred.promise;
-                };
+                }
 
                 function loadSaleZoneSelectorPromise() {
                     if (routeRuleCriteria == undefined || routeRuleCriteria.SwapDealId == undefined)
@@ -149,7 +149,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                     });
 
                     return saleZoneSelectorLoadPromiseDeferred.promise;
-                };
+                }
 
                 api.getData = function () {
                     return {

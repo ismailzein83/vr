@@ -69,28 +69,28 @@
                         if (payload.QueueActivator.MainOutputStages != undefined) {
                             for (var i = 0; i < payload.QueueActivator.MainOutputStages.length; i++) {
                                 var currentMainOutputStage = payload.QueueActivator.MainOutputStages[i];
-                                $scope.scopeModel.selectedMainOutputStages.push({ stageName: currentMainOutputStage })
+                                $scope.scopeModel.selectedMainOutputStages.push({ stageName: currentMainOutputStage });
                             }
                         }
 
                         if (payload.QueueActivator.BillingOutputStages != undefined) {
                             for (var i = 0; i < payload.QueueActivator.BillingOutputStages.length; i++) {
                                 var currentBillingOutputStage = payload.QueueActivator.BillingOutputStages[i];
-                                $scope.scopeModel.selectedBillingOutputStages.push({ stageName: currentBillingOutputStage })
+                                $scope.scopeModel.selectedBillingOutputStages.push({ stageName: currentBillingOutputStage });
                             }
                         }
 
                         if (payload.QueueActivator.PartialPricedOutputStages != undefined) {
                             for (var i = 0; i < payload.QueueActivator.PartialPricedOutputStages.length; i++) {
                                 var currentPartialPricedOutputStage = payload.QueueActivator.PartialPricedOutputStages[i];
-                                $scope.scopeModel.selectedPartialPricedOutputStages.push({ stageName: currentPartialPricedOutputStage })
+                                $scope.scopeModel.selectedPartialPricedOutputStages.push({ stageName: currentPartialPricedOutputStage });
                             }
                         }
 
                         if (payload.QueueActivator.TrafficOutputStages != undefined) {
                             for (var i = 0; i < payload.QueueActivator.TrafficOutputStages.length; i++) {
                                 var currentTrafficOutputStage = payload.QueueActivator.TrafficOutputStages[i];
-                                $scope.scopeModel.selectedTrafficOutputStages.push({ stageName: currentTrafficOutputStage })
+                                $scope.scopeModel.selectedTrafficOutputStages.push({ stageName: currentTrafficOutputStage });
                             }
                         }
                     }

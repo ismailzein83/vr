@@ -50,7 +50,7 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                        evaluatedRate: evaluatedRate
                    };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
-            }
+            };
         }
         function defineAPI() {
             var api = {};

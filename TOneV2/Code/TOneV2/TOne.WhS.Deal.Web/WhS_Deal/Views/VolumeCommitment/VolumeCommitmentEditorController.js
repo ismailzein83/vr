@@ -42,7 +42,7 @@
             }
 
             isEditMode = (dealId != undefined);
-        };
+        }
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.disabelType = isEditMode;
@@ -50,7 +50,7 @@
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
                 var payload;
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountSelectorAPI, payload, setLoader, carrierAccountSelectorReadyDeferred);
                 var payload = { context: getContext() };
@@ -113,7 +113,7 @@
                 if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
                     $scope.scopeModel.deActivationDate = undefined;
             };
-        };
+        }
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -141,7 +141,7 @@
             else {
                 loadAllControls();
             }
-        };
+        }
 
         function getVolumeCommitmentHistory() {
             return WhS_Deal_VolCommitmentDealAPIService.GetVolumeCommitmentHistoryDetailbyHistoryId(context.historyId).then(function (response) {
@@ -174,7 +174,7 @@
                 volumeCommitmentEntity = response;
                 lastGroupNumber = volumeCommitmentEntity.Settings.LastGroupNumber;
             });
-        };
+        }
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierAccountDealItemsSection, loadCurrencySelector]).catch(function (error) {
@@ -182,7 +182,7 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        };
+        }
         function setTitle() {
             if (isEditMode) {
                 if (volumeCommitmentEntity != undefined)
@@ -190,7 +190,7 @@
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment');
-        };
+        }
         function loadStaticData() {
             if (volumeCommitmentEntity == undefined)
                 return;
@@ -201,7 +201,7 @@
             $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
             //$scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
-        };
+        }
         function loadCarrierAccountDealItemsSection() {
             if (volumeCommitmentEntity == undefined)
                 return;
@@ -246,7 +246,7 @@
                 });
             }
             return UtilsService.waitMultiplePromises(promises);
-        };
+        }
         function updateDescription() {
             setTimeout(function () {
                 $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(VRDateTimeService.getNowDateTime());
@@ -269,7 +269,7 @@
             });
 
             return loadCurrencySelectorPromiseDeferred.promise;
-        };
+        }
 
         function insertVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
@@ -284,7 +284,7 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        };
+        }
         function updateVolumeCommitment() {
             $scope.scopeModel.isLoading = true;
             return WhS_Deal_VolCommitmentDealAPIService.UpdateDeal(buildVolumeCommitmentObjFromScope()).then(function (response) {
@@ -298,7 +298,7 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        };
+        }
 
         function buildVolumeCommitmentObjFromScope() {
             var volumeCommitmenetItemsData = volumeCommitmenetItemsAPI.getData();
@@ -319,7 +319,7 @@
                 }
             };
             return obj;
-        };
+        }
 
         function getContext() {
             var context = {
@@ -401,7 +401,7 @@
 
             };
             return context;
-        };
+        }
         function getSelectedZonesIdsFromItems(includedIds) {
             var ids = getUsedZonesIds();
             var filterdIds;
@@ -415,7 +415,7 @@
                 }
             }
             return filterdIds;
-        };
+        }
         function getUsedZonesIds() {
             var zonesIds;
             var items = volumeCommitmenetItemsAPI.getData();
@@ -430,8 +430,8 @@
                 }
             }
             return zonesIds;
-        };
-    };
+        }
+    }
 
     app.controller('WhS_Deal_VolumeCommitmentEditorController', VolumeCommitmentEditorController);
 

@@ -35,7 +35,7 @@ app.directive("vrWhsDealDealevaluatorProcess", ['UtilsService', 'VRUIUtilsServic
 					if ($scope.dealEffectiveAfter != null && $scope.dealEffectiveAfter > today)
 						return "Date can not be greater than Today.";
 					return null;
-				}
+				};
 			}
 			function defineAPI() {
 

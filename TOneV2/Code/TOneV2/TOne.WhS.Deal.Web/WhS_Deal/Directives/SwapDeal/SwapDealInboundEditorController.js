@@ -59,7 +59,7 @@
                 var country = countryDirectiveApi.getSelectedIds();
 
                 if (country != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingSelector = value };
+                    var setLoader = function (value) { $scope.isLoadingSelector = value; };
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;

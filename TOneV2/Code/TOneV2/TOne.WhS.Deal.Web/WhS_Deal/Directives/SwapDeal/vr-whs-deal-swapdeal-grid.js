@@ -85,7 +85,7 @@
                             name: 'Edit',
                             clicked: editDeal,
                             haspermission: hasEditSwapDealPermission
-                        }
+                        };
                     }
                     menuActions.push(menuAction);
                     return menuActions;

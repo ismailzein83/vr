@@ -287,7 +287,7 @@
         }
         function buildZonesArray(ids) {
             var zones = [];
-            for (var i = 0 ; i < ids.length ; i++)
+            for (var i = 0 ; i < ids.length; i++)
                 zones.push({ ZoneId: ids[i] });
             return zones.length > 0 ? zones : undefined;
         }

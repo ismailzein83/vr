@@ -365,7 +365,7 @@
             });
 
             return loadCurrencySelectorPromiseDeferred.promise;
-        };
+        }
 
         function insertSwapDeal() {
             $scope.scopeModel.isLoading = true;
@@ -481,7 +481,7 @@
                 }
 
             };
-        };
+        }
         function getSelectedSaleZonesIdsFromItems(includedIds) {
             var ids = getUsedSaleZonesIds();
             var filterdIds;
@@ -495,7 +495,7 @@
                 }
             }
             return filterdIds;
-        };
+        }
         function getSelectedSupplierZonesIdsFromItems(includedIds) {
             var ids = getUsedSupplierZonesIds();
             var filterdIds;
@@ -509,7 +509,7 @@
                 }
             }
             return filterdIds;
-        };
+        }
         function getUsedSaleZonesIds() {
             var zonesIds;
             var items = dealInboundAPI.getData();
@@ -524,7 +524,7 @@
                 }
             }
             return zonesIds;
-        };
+        }
         function getUsedSupplierZonesIds() {
             var zonesIds;
             var items = dealOutboundAPI.getData();
@@ -539,7 +539,7 @@
                 }
             }
             return zonesIds;
-        };
+        }
     }
 
     app.controller('WhS_Deal_SwapDealEditorController', SwapDealEditorController);

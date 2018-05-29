@@ -49,8 +49,8 @@ app.directive('vrWhsDealSwapdealBuyrouteruleFixed', ['UtilsService', 'VRUIUtilsS
 
                         if (swapDealBuyRouteRuleExtendedSettings != undefined) {
                             customerId = swapDealBuyRouteRuleExtendedSettings.CustomerId;
-                            $scope.scopeModel.percentage = swapDealBuyRouteRuleExtendedSettings.Percentage
-                        };
+                            $scope.scopeModel.percentage = swapDealBuyRouteRuleExtendedSettings.Percentage;
+                        }
                     }
 
                     //loading CarrierAccount selector

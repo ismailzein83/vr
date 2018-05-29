@@ -49,8 +49,8 @@ app.directive('vrWhsDealSwapdealBuyrouteruleBysaledeal', ['UtilsService', 'VRUIU
 
                         if (swapDealBuyRouteRuleExtendedSettings != undefined) {
                             selectedSwapDealId = swapDealBuyRouteRuleExtendedSettings.SwapDealId;
-                            $scope.scopeModel.percentage = swapDealBuyRouteRuleExtendedSettings.Percentage
-                        };
+                            $scope.scopeModel.percentage = swapDealBuyRouteRuleExtendedSettings.Percentage;
+                        }
                     }
 
                     //loading CarrierAccount selector
@@ -79,7 +79,7 @@ app.directive('vrWhsDealSwapdealBuyrouteruleBysaledeal', ['UtilsService', 'VRUIU
                         });
 
                         return dealDefinitionSelectorLoadPromiseDeferred.promise;
-                    };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
