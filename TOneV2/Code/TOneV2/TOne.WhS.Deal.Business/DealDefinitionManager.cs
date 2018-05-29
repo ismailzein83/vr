@@ -108,11 +108,10 @@ namespace TOne.WhS.Deal.Business
             {
                 foreach (DealSaleZoneGroupWithoutRate dealSaleZoneGroup in dealSaleZoneGroups)
                 {
-                    if (dealSaleZoneGroup.Zones == null)
+                    if (!dealSaleZoneGroup.IsEffective(effectiveDate) || !CheckDealStatus(dealSaleZoneGroup.Status, dealSaleZoneGroup.DeActivationDate, effectiveDate))
                         continue;
 
-                    if (dealSaleZoneGroup.IsEffective(effectiveDate)
-                    && dealSaleZoneGroup.Zones.Any(item => item.ZoneId == saleZoneId && item.IsEffective(effectiveDate)))
+                    if (dealSaleZoneGroup.Zones != null && dealSaleZoneGroup.Zones.Any(item => item.ZoneId == saleZoneId && item.IsEffective(effectiveDate)))
                         return dealSaleZoneGroup;
                 }
             }
@@ -130,11 +129,10 @@ namespace TOne.WhS.Deal.Business
             {
                 foreach (DealSupplierZoneGroupWithoutRate dealSupplierZoneGroup in dealSupplierZoneGroups)
                 {
-                    if (dealSupplierZoneGroup.Zones == null)
+                    if (!dealSupplierZoneGroup.IsEffective(effectiveDate) || !CheckDealStatus(dealSupplierZoneGroup.Status, dealSupplierZoneGroup.DeActivationDate, effectiveDate))
                         continue;
 
-                    if (dealSupplierZoneGroup.IsEffective(effectiveDate)
-                    && dealSupplierZoneGroup.Zones.Any(item => item.ZoneId == supplierZoneId && item.IsEffective(effectiveDate)))
+                    if (dealSupplierZoneGroup.Zones != null && dealSupplierZoneGroup.Zones.Any(item => item.ZoneId == supplierZoneId && item.IsEffective(effectiveDate)))
                         return dealSupplierZoneGroup;
                 }
             }
@@ -274,6 +272,7 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Methods
+
         DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier, decimal rate, int currencyId)
         {
             return new DealZoneGroupTierDetails()
@@ -452,6 +451,28 @@ namespace TOne.WhS.Deal.Business
                 return result.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(item => item.BED));
             });
         }
+
+        private bool CheckDealStatus(DealStatus dealStatus, DateTime? deActivationDate, DateTime effectiveDate)
+        {
+            switch (dealStatus)
+            {
+                case DealStatus.Draft: return false;
+
+                case DealStatus.Active: return true;
+
+                case DealStatus.Inactive:
+                    if (!deActivationDate.HasValue)
+                        throw new NullReferenceException("deActivationDate");
+
+                    if (effectiveDate < deActivationDate.Value)
+                        return true;
+
+                    return false;
+
+                default: throw new NotSupportedException(string.Format("dealStatus '{0}' is not supported", dealStatus));
+            }
+        }
+
         #endregion
 
         #region Mappers
@@ -472,7 +493,7 @@ namespace TOne.WhS.Deal.Business
 
         #endregion
 
-
+        #region IBusinessEntityManager
 
         public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
@@ -513,5 +534,7 @@ namespace TOne.WhS.Deal.Business
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }
