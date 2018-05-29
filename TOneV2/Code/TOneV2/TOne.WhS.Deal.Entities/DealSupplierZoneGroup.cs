@@ -18,6 +18,8 @@ namespace TOne.WhS.Deal.Entities
 		public DateTime BED { get; set; }
 
 		public DateTime? EED { get; set; }
+
+        public DealStatus Status { get; set; }
 	}
 
 	public class DealSupplierZoneGroup : BaseDealSupplierZoneGroup

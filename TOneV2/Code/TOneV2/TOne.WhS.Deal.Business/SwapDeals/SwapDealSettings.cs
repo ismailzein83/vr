@@ -275,7 +275,7 @@ namespace TOne.WhS.Deal.Business
                 dealSaleZoneGroup.DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber;
                 dealSaleZoneGroup.EED = EndDate;
                 dealSaleZoneGroup.Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId));
-
+                dealSaleZoneGroup.Status = Status;
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
             return saleZoneGroups;
@@ -429,7 +429,7 @@ namespace TOne.WhS.Deal.Business
                 dealSupplierZoneGroup.DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber;
                 dealSupplierZoneGroup.EED = EndDate;
                 dealSupplierZoneGroup.Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId));
-
+                dealSupplierZoneGroup.Status = Status;
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }
             return dealSupplierZoneGroups;

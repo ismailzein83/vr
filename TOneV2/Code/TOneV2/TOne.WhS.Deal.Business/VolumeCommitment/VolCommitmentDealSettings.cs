@@ -116,7 +116,7 @@ namespace TOne.WhS.Deal.Business
                             dealSupplierZoneGroup.EED = EndDate;
                             dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                             dealSupplierZoneGroup.Zones = BuildSupplierZones(zoneIds);
-
+                            dealSupplierZoneGroup.Status = Status;
                             dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
                         }
                         context.SupplierZoneGroups = dealSupplierZoneGroups;
@@ -143,7 +143,7 @@ namespace TOne.WhS.Deal.Business
                             dealSaleZoneGroup.EED = EndDate;
                             dealSaleZoneGroup.CustomerId = CarrierAccountId;
                             dealSaleZoneGroup.Zones = BuildSaleZones(zoneIds);
-
+                            dealSaleZoneGroup.Status = Status;
                             dealSaleZoneGroups.Add(dealSaleZoneGroup);
                         }
                         context.SaleZoneGroups = dealSaleZoneGroups;
