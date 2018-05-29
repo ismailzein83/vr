@@ -20,6 +20,8 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
         public string UpdateBalanceRecordList { get; set; }
         public string Classification { get; set; }
 
+        public string TransactionTypeId { get; set; }
+
         //Output
         public string FinancialAccountId { get; set; }
         public string BalanceAccountId { get; set; }
@@ -53,6 +55,8 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.EffectiveOn = {1};", updateBalanceRecordVariableName, EffectiveOn);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Amount = {1};", updateBalanceRecordVariableName, Amount);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.CurrencyId = {1};", updateBalanceRecordVariableName, CurrencyId);
+            if(!String.IsNullOrEmpty(this.TransactionTypeId))
+                context.AddCodeToCurrentInstanceExecutionBlock("{0}.TransactionTypeId = {1};", updateBalanceRecordVariableName, this.TransactionTypeId);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.Add({1});", UpdateBalanceRecordList, updateBalanceRecordVariableName);
 
             context.AddCodeToCurrentInstanceExecutionBlock("}");

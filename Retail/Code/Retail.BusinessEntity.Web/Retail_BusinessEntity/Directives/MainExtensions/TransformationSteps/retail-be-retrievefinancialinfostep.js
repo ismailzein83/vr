@@ -50,6 +50,9 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
             var currencyIdDirectiveReadyAPI;
             var currencyIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var transactionTypeIdDirectiveReadyAPI;
+            var transactionTypeIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var updateBalanceRecordListDirectiveReadyAPI;
             var updateBalanceRecordListDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -87,6 +90,10 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                 $scope.scopeModel.onCurrencyIdReady = function (api) {
                     currencyIdDirectiveReadyAPI = api;
                     currencyIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onTransactionTypeIdReady = function (api) {
+                    transactionTypeIdDirectiveReadyAPI = api;
+                    transactionTypeIdDirectiveReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onUpdateBalanceRecordListReady = function (api) {
                     updateBalanceRecordListDirectiveReadyAPI = api;
@@ -138,6 +145,10 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                     //Loading CurrencyId Directive
                     var currencyIdDirectivePromiseDeferred = getCurrencyIdDirectiveLoadPromiseDeferred();
                     promises.push(currencyIdDirectivePromiseDeferred.promise);
+
+                    //Loading TransactionTypeId Directive
+                    var transactionTypeIdDirectivePromiseDeferred = getTransactionTypeIdDirectiveLoadPromiseDeferred();
+                    promises.push(transactionTypeIdDirectivePromiseDeferred.promise);
 
                     //Loading UpdateBalanceRecordList Directive
                     var updateBalanceRecordListDirectivePromiseDeferred = getUpdateBalanceRecordListDirectivePromiseDeferred();
@@ -226,6 +237,20 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
 
                         return currencyIdDirectiveLoadPromiseDeferred;
                     }
+                    function getTransactionTypeIdDirectiveLoadPromiseDeferred() {
+                        var transactionTypeIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        transactionTypeIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var transactionTypeIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                transactionTypeIdPayload.selectedRecords = payload.stepDetails.TransactionTypeId;
+
+                            VRUIUtilsService.callDirectiveLoad(transactionTypeIdDirectiveReadyAPI, transactionTypeIdPayload, transactionTypeIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return transactionTypeIdDirectiveLoadPromiseDeferred;
+                    }
                     function getUpdateBalanceRecordListDirectivePromiseDeferred() {
                         var updateBalanceRecordListDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -296,6 +321,7 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                         EffectiveOn: effectiveOnDirectiveReadyAPI.getData(),
                         Amount: amountDirectiveReadyAPI.getData(),
                         CurrencyId: currencyIdDirectiveReadyAPI.getData(),
+                        TransactionTypeId: transactionTypeIdDirectiveReadyAPI.getData(),
                         UpdateBalanceRecordList: updateBalanceRecordListDirectiveReadyAPI.getData(),
                         Classification: classificationDirectiveReadyAPI.getData(),
                         FinancialAccountId: financialAccountIdDirectiveReadyAPI.getData(),

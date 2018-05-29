@@ -125,6 +125,11 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
                     FieldName: "CurrencyId",
                     Value: data.CurrencyId
                 });
+                if (data.TransactionTypeId != null)
+                    array.push({
+                        FieldName: "TransactionTypeId",
+                        Value: data.TransactionTypeId
+                    });
                 array.push({
                     FieldName: "UpdateBalanceRecordList",
                     Value: data.UpdateBalanceRecordList
