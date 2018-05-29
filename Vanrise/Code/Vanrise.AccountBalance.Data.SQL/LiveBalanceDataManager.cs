@@ -58,6 +58,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                 cmd.Parameters.Add(new SqlParameter("@Top", query.Top));
                 cmd.Parameters.Add(new SqlParameter("@AccountTypeID", query.AccountTypeId));
                 cmd.Parameters.Add(new SqlParameter("@OrderBy", query.OrderBy));
+                if (query.EffectiveDate.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveDate", query.EffectiveDate.Value));
             });
 
         }
@@ -348,7 +350,11 @@ namespace Vanrise.AccountBalance.Data.SQL
                 whereBuilder.Append(String.Format(@" AND lb.AccountID in ({0})", string.Join<String>(",", query.AccountsIds.Select(x => string.Format("'{0}'", x)))));
 
             if (query.Sign != null)
+            {
+                if (query.Sign.Length > 2)
+                    throw new Exception(String.Format("Invalid Sign argument '{0}'", query.Sign));
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign, query.Balance));
+            }
 
             if (query.Status.HasValue)
                 whereBuilder.Append(String.Format(@" AND  lb.[Status] = {0} ", (int)query.Status.Value));
@@ -357,7 +363,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 whereBuilder.Append(String.Format(@" AND (({0} = 1 and (lb.EED IS NULL or lb.EED >=  GETDATE())) OR  ({0} = 0 and  lb.EED <=  GETDATE())) ", query.IsEffectiveInFuture.Value ? 1 : 0));
 
             if (query.EffectiveDate.HasValue)
-                whereBuilder.Append(String.Format(@" AND ((lb.BED <= '{0}' OR lb.BED IS NULL) AND (lb.EED > '{0}' OR lb.EED IS NULL))", query.EffectiveDate.Value));
+                whereBuilder.Append(@" AND ((lb.BED <= @EffectiveDate OR lb.BED IS NULL) AND (lb.EED > @EffectiveDate OR lb.EED IS NULL))");
 
             StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID ,lb.BED,lb.EED,lb.[Status]
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
