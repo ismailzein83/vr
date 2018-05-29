@@ -163,7 +163,7 @@
                 $scope.onVolumeCommitmentItemTierAdded(parameterObj);
             }
             $scope.modalContext.closeModal();
-        };
+        }
 
         function updateVolumeCommitmentItemTier() {
             var parameterObj = builVolumeCommitmentItemTierObjFromScope();
@@ -176,13 +176,13 @@
         function editVolumeCommitmentItemTierException(dataItem) {
             var onVolumeCommitmentItemTierExRateUpdated = function (updatedItem) {
                 var index = $scope.scopeModel.exceptions.indexOf(dataItem);
-                $scope.scopeModel.exceptions[index] = updatedItem ;
+                $scope.scopeModel.exceptions[index] = updatedItem;
             };
             WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem, onVolumeCommitmentItemTierExRateUpdated, getContext());
-        };
+        }
 
         function buildExceptionZoneRatesDataSource(exceptionZoneRates) {
-            for (var i = 0 ; i < exceptionZoneRates.length ; i++) {
+            for (var i = 0; i < exceptionZoneRates.length; i++) {
                 var obj = filterExceptionsZoneRatesByZonesIds(exceptionZoneRates[i], getContext().getSelectedZonesIds());
                 if (obj && obj.Zones) {
                     obj.ZoneNames = getContext().getZonesNames(UtilsService.getPropValuesFromArray(obj.Zones, "ZoneId"));
@@ -213,7 +213,7 @@
                 }
             }
             return filterdIds;
-        };
+        }
 
         // collect all Zones ids used in exceptions grid
 
@@ -228,7 +228,7 @@
                 }
             }
             return zonesIds;
-        };
+        }
 
         function getPreviousTier() {
             var obj;
@@ -239,7 +239,7 @@
                 obj = tiers[index];
             }
             return obj;
-        };
+        }
 
         function getNextTier() {
             var obj;
@@ -248,7 +248,7 @@
                 obj = tiers[index];
             }
             return obj;
-        };
+        }
 
         //  filtering retro active data source base on previouses tiers.
 
@@ -271,7 +271,7 @@
             var zoneIds = new Array();
             var zonesIds = UtilsService.getPropValuesFromArray(excep.Zones, "ZoneId");
             if (zonesIds != undefined) {
-                for (var i = 0 ; i < zonesIds.length ; i++) {
+                for (var i = 0; i < zonesIds.length; i++) {
                     if (ids.indexOf(zonesIds[i]) > -1)
                         zoneIds.push(zonesIds[i]);
                 }
@@ -287,7 +287,7 @@
         }
         function buildZonesArray(ids) {
             var zones = [];
-            for (var i = 0 ; i < ids.length; i++)
+            for (var i = 0; i < ids.length; i++)
                 zones.push({ ZoneId: ids[i] });
             return zones.length > 0 ? zones : undefined;
         }
