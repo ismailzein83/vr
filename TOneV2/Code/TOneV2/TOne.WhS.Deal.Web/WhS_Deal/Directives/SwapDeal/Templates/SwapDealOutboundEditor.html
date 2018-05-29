@@ -14,22 +14,15 @@
                 <vr-columns width="1/4row">
                     <vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-                <span vr-loader="scopeModel.isLoadingDirective">
-                    <vr-whs-deal-supplierrateevaluator-selective selectedvalues="scopeModel.selectedValue"
-                                                                 on-ready="scopeModel.onrateEvaluatorSelectiveReady"
-                                                                 normal-col-num="3"
-                                                                 isrequired="true">
-                    </vr-whs-deal-supplierrateevaluator-selective>
-                </span>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Rate" value="scopeModel.rate" type="number" isrequired="true"></vr-textbox>
+                </vr-columns>
             </vr-row>
-            <span vr-loader="scopeModel.isLoadingDirective">
-                <vr-whs-deal-salerateevaluator-selective selectedvalues="scopeModel.extraVolumeRateSelectedValue"
-                                                         on-ready="scopeModel.onExtraVolumeRateEvaluatorSelectiveReady"
-                                                         normal-col-num="3"
-                                                         customlabel="Extra Volume Rate Evaluator"
-                                                         hideremoveicon="false">
-                </vr-whs-deal-salerateevaluator-selective>
-            </span>
+            <vr-row>
+                <vr-columns width="1/4row">
+                    <vr-textbox label="Extra Volume Rate" value="scopeModel.extraVolumeRate" type="number"></vr-textbox>
+                </vr-columns>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

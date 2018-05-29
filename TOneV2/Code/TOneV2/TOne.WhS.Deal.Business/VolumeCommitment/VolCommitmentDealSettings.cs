@@ -62,15 +62,15 @@ namespace TOne.WhS.Deal.Business
             else
             {
                 List<long> zoneIds = new List<long>();
-                foreach(var item in Items)
+                foreach (var item in Items)
                 {
                     var zones = item.SaleZones;
-                    foreach(var zone in zones)
+                    foreach (var zone in zones)
                     {
                         zoneIds.Add(zone.ZoneId);
                     }
                 }
-                    return zoneIds;
+                return zoneIds;
             }
         }
 
@@ -230,7 +230,7 @@ namespace TOne.WhS.Deal.Business
             {
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
-                DealEED = EndDate,
+                DealEED = DeActivationDate ?? EndDate,
                 ZoneIds = zoneIds,
                 CurrencyId = CurrencyId
             };
@@ -331,7 +331,7 @@ namespace TOne.WhS.Deal.Business
             var context = new DealSupplierRateEvaluatorContext
             {
                 DealBED = BeginDate,
-                DealEED = EndDate,
+                DealEED = DeActivationDate ?? EndDate,
                 SupplierZoneRateByZoneId = supplierRatesByZoneId,
                 CurrencyId = CurrencyId
             };

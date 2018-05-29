@@ -16,11 +16,6 @@
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var rateEvaluatorSelectiveDirectiveAPI;
-        var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var extraVolumerateEvaluatorSelectiveDirectiveAPI;
-        var extraVolumerateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var carrierAccountId;
 
         var dealId;
@@ -56,53 +51,44 @@
                 return (isEditMode) ? updateSwapDealInbound() : insertSwapDealInbound();
             };
 
-            $scope.scopeModel.onrateEvaluatorSelectiveReady = function (api) {
-                rateEvaluatorSelectiveDirectiveAPI = api;
-                rateEvaluatorReadyPromiseDeferred.resolve();
-            };
-            $scope.scopeModel.onExtraVolumeRateEvaluatorSelectiveReady = function (api) {
-                extraVolumerateEvaluatorSelectiveDirectiveAPI = api;
-                extraVolumerateEvaluatorReadyPromiseDeferred.resolve();
-            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
             $scope.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
-              
+
                 if (country != undefined) {
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
-                        payload.filter.CountryIds= [countryDirectiveApi.getSelectedIds()];
+                        payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
                         payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined;
                         payload.filter.Filters = [{
                             $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
                             CarrierAccountId: carrierAccountId,
                             DealId: dealId,
                             BED: dealBED,
-                            EED:dealEED
+                            EED: dealEED
                         }];
 
                     }
                     else
-                     payload = {
-                        sellingNumberPlanId: sellingNumberPlanId,
-                        filter: {
-                            CountryIds: [countryDirectiveApi.getSelectedIds()],
-                            Filters: [{
-                                $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                                CarrierAccountId: carrierAccountId,
-                                DealId: dealId,
-                                BED: dealBED,
-                                EED: dealEED
-                            }]
-                        },
-                        selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
-                    };
+                        payload = {
+                            sellingNumberPlanId: sellingNumberPlanId,
+                            filter: {
+                                CountryIds: [countryDirectiveApi.getSelectedIds()],
+                                Filters: [{
+                                    $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                                    CarrierAccountId: carrierAccountId,
+                                    DealId: dealId,
+                                    BED: dealBED,
+                                    EED: dealEED
+                                }]
+                            },
+                            selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
+                        };
                     //console.log(payload.excludedZoneIds);
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
@@ -134,44 +120,13 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection, loadRateEvaluatorSelectiveDirective, loadExtraVolumeRateEvaluatorSelectiveDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection]).then(function () {
                 swapDealInboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-        function loadExtraVolumeRateEvaluatorSelectiveDirective() {
-            var extraVolRatePromiseDeferred = UtilsService.createPromiseDeferred();
-
-            extraVolumerateEvaluatorReadyPromiseDeferred.promise.then(function () {
-
-                var payload = undefined;
-                if (swapDealInboundEntity != undefined && swapDealInboundEntity.ExtraVolumeEvaluatedRate != undefined)
-                    payload =
-                    {
-                        evaluatedRate: swapDealInboundEntity.ExtraVolumeEvaluatedRate
-                    };
-                VRUIUtilsService.callDirectiveLoad(extraVolumerateEvaluatorSelectiveDirectiveAPI, payload, extraVolRatePromiseDeferred);
-            });
-            return extraVolRatePromiseDeferred.promise;
-        }
-
-        function loadRateEvaluatorSelectiveDirective() {
-            var loadREWSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-
-            rateEvaluatorReadyPromiseDeferred.promise.then(function () {
-
-                var payload = undefined;
-                if (swapDealInboundEntity != undefined && swapDealInboundEntity.EvaluatedRate != undefined)
-                    payload =
-                    {
-                        evaluatedRate: swapDealInboundEntity.EvaluatedRate
-                    };
-                VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
-            });
-            return loadREWSelectiveDirectivePromiseDeferred.promise;
         }
 
         function loadCountrySaleZoneSection() {
@@ -211,7 +166,7 @@
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
-                        payload.filter.CountryIds= [swapDealInboundEntity.CountryId];
+                        payload.filter.CountryIds = [swapDealInboundEntity.CountryId];
                         payload.selectedIds = zoneIds;
 
                     }
@@ -245,6 +200,8 @@
                 return;
             $scope.scopeModel.name = swapDealInboundEntity.Name;
             $scope.scopeModel.volume = swapDealInboundEntity.Volume;
+            $scope.scopeModel.rate = swapDealInboundEntity.Rate;
+            $scope.scopeModel.extraVolumeRate = swapDealInboundEntity.ExtraVolumeRate;
         }
 
         function insertSwapDealInbound() {
@@ -258,7 +215,7 @@
 
         function updateSwapDealInbound() {
             var swapDealInboundObject = buildSwapDealInboundObjFromScope();
-   
+
             if ($scope.onSwapDealInboundUpdated != undefined)
                 $scope.onSwapDealInboundUpdated(swapDealInboundObject);
             $scope.modalContext.closeModal();
@@ -277,8 +234,8 @@
                 Name: $scope.scopeModel.name,
                 SaleZones: saleZones,
                 Volume: $scope.scopeModel.volume,
-                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
-                ExtraVolumeEvaluatedRate: extraVolumerateEvaluatorSelectiveDirectiveAPI.getData(),
+                Rate: $scope.scopeModel.rate,
+                ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
                 CountryId: countryDirectiveApi.getSelectedIds()
             };
             return obj;

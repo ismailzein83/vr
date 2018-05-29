@@ -16,9 +16,7 @@ namespace TOne.WhS.Deal.Entities
         public int Volume { get; set; }
 
         public Decimal Rate { get; set; }
-
-        public BaseDealRateEvaluator EvaluatedRate { get; set; }
-        public BaseDealRateEvaluator ExtraVolumeEvaluatedRate { get; set; }
+        public Decimal? ExtraVolumeRate { get; set; }
     }
 
     public class SwapSaleZone

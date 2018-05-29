@@ -91,8 +91,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,
-                                EvaluatedRate: currentItem.EvaluatedRate,
-                                ExtraVolumeEvaluatedRate: currentItem.ExtraVolumeEvaluatedRate,
+                                ExtraVolumeRate: currentItem.ExtraVolumeRate,
                                 SaleZones: currentItem.SaleZones,
                                 CountryId: currentItem.CountryId,
                                 ZoneGroupNumber: currentItem.ZoneGroupNumber
