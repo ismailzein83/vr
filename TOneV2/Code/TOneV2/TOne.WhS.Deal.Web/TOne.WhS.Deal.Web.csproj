@@ -166,6 +166,7 @@
     <Content Include="WhS_Deal\Constant\CarrierFilterTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\DealAgreementTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\DealContractTypeEnum.js" />
+    <Content Include="WhS_Deal\Constant\DealStatusTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ModuleConfig.js" />
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
     <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />

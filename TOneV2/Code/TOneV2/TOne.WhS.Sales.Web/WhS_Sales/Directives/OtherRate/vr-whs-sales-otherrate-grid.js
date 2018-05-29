@@ -91,11 +91,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             };
 
             $scope.validateNewRateBED = function () {
-                console.log("in BED");
-                console.log(zoneItem.CurrentRateEED);
                 var currentEED = UtilsService.createDateFromString(zoneItem.CurrentRateEED);
                 if ($scope.NewRateBED != undefined) {
-                    console.log("hi");
                     if (zoneItem.CurrentRateEED != undefined && $scope.NewRateBED < currentEED.getTime() && zoneItem.NewRateBED == undefined) {
                         return "BED of the other rate must be greater than or equal to " + zoneItem.CurrentRateEED + " BED of the  last normal rate of the zone";
                     }

@@ -18,10 +18,10 @@
                             
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()"></vr-datetimepicker>
+                            <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()" onvaluechanged="scopeModel.onBEDChanged"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/3row">
-                            <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()"></vr-datetimepicker>
+                            <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()" onvaluechanged="scopeModel.onEEDChanged"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
@@ -58,7 +58,7 @@
                 </vr-tab>
                 <vr-tab header="'Details'">
                     <vr-row>
-                        <vr-columns width="fullrow" ng-show="scopeModel.carrierAccount !=undefined">
+                        <vr-columns width="fullrow" ng-show="scopeModel.showVolumeItemSection()">
                             <vr-whs-deal-volumecommitment-items on-ready="scopeModel.onVolumeCommitmenetItemsReady"></vr-whs-deal-volumecommitment-items>
                         </vr-columns>
                     </vr-row>

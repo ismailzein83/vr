@@ -26,6 +26,8 @@
         var dealOutboundAPI;
         var dealOutboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var carrierAccountInfo;
+
 
         loadParameters();
         defineScope();
@@ -58,61 +60,22 @@
             };
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
-                var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined) {
-                    var payload = {
-                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
-                        context: getContext(),
-                        dealId: dealId,
-                        bed: $scope.scopeModel.beginDate,
-                        eed: $scope.scopeModel.endDate
-                    };
-                    var payloadOutbound = {
-                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        supplierId: carrierAccountInfo.CarrierAccountId,
-                        context: getContext(),
-                        dealId: dealId,
-                        bed: $scope.scopeModel.beginDate,
-                        eed: $scope.scopeModel.endDate
-                    };
-                    if (carrierAccountSelectedPromise != undefined) {
-                        carrierAccountSelectedPromise.resolve();
-                        oldselectedCarrier = $scope.scopeModel.carrierAcount;
-                    }
-                    else if (oldselectedCarrier != undefined && oldselectedCarrier.CarrierAccountId != carrierAccountInfo.CarrierAccountId) {
-                        if (dealInboundAPI.hasData() || dealOutboundAPI.hasData()) {
-                            VRNotificationService.showConfirmation('Data will be lost,Are you sure you want to continue?').then(function (response) {
-                                if (response) {
-                                    dealInboundAPI.load(payload);
-                                    dealOutboundAPI.load(payloadOutbound);
-                                    oldselectedCarrier = carrierAccountInfo;
-                                }
-                                else {
-                                    $scope.scopeModel.carrierAcount = oldselectedCarrier;
-                                }
-                            });
-                        }
-                        else {
-                            dealInboundAPI.load(payload);
-                            dealOutboundAPI.load(payloadOutbound);
-                        }
-                    }
-                    else if (oldselectedCarrier == undefined) {
-                        oldselectedCarrier = carrierAccountInfo;
-                        dealInboundAPI.load(payload);
-                        dealOutboundAPI.load(payloadOutbound);
-                    }
-                }
+                carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
+                loadBoundSections();
             };
-
+            $scope.scopeModel.onBEDchanged = function () {
+                loadBoundSections();
+            };
+            $scope.scopeModel.onEEDchanged = function () {
+                loadBoundSections();
+            };
             $scope.scopeModel.onCurrencySelectReady = function (api) {
                 currencyDirectiveAPI = api;
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.analyse = function () {
-                WhS_BE_SwapDealAnalysisService.openSwapDealAnalysis(buildSwapDealObjFromScope())
+                WhS_BE_SwapDealAnalysisService.openSwapDealAnalysis(buildSwapDealObjFromScope());
             };
 
             $scope.scopeModel.onSwapDealInboundDirectiveReady = function (api) {
@@ -135,15 +98,18 @@
             };
             $scope.scopeModel.isInactiveStatus = function () {
                 if ($scope.scopeModel.selectedDealStatus != undefined)
-                return ( $scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value)
-            }
+                    return ($scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value);
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
             $scope.scopeModel.validateDealStatusDate = function () {
-                if ($scope.scopeModel.deActivationDate < $scope.scopeModel.beginDate)
+                var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
+                var beginDate = UtilsService.createDateFromString($scope.scopeModel.beginDate);
+                var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate);
+                if (date < beginDate)
                     return "Deactivation date must be greater than deal BED";
-                if ($scope.scopeModel.deActivationDate > $scope.scopeModel.endDate)
+                if (date > endDate)
                     return "Deactivation date must be less than deal EED";
                 return null;
             };
@@ -177,7 +143,10 @@
             $scope.scopeModel.onDealStatusChanged = function () {
                 if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
                     $scope.scopeModel.deActivationDate = undefined;
-            }
+            };
+            $scope.scopeModel.dataForBoundsReady = function () {
+                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -206,7 +175,54 @@
                 loadAllControls();
             }
         }
+        function loadBoundSections() {
 
+            if (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
+                var payload = {
+                    carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                    sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
+                    context: getContext(),
+                    dealId: dealId,
+                    bed: $scope.scopeModel.beginDate,
+                    eed: $scope.scopeModel.endDate
+                };
+                var payloadOutbound = {
+                    carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                    supplierId: carrierAccountInfo.CarrierAccountId,
+                    context: getContext(),
+                    dealId: dealId,
+                    bed: $scope.scopeModel.beginDate,
+                    eed: $scope.scopeModel.endDate
+                };
+                if (carrierAccountSelectedPromise != undefined) {
+                    carrierAccountSelectedPromise.resolve();
+                    oldselectedCarrier = $scope.scopeModel.carrierAcount;
+                }
+                else if (oldselectedCarrier != undefined && oldselectedCarrier.CarrierAccountId != carrierAccountInfo.CarrierAccountId) {
+                    if (dealInboundAPI.hasData() || dealOutboundAPI.hasData()) {
+                        VRNotificationService.showConfirmation('Data will be lost,Are you sure you want to continue?').then(function (response) {
+                            if (response) {
+                                dealInboundAPI.load(payload);
+                                dealOutboundAPI.load(payloadOutbound);
+                                oldselectedCarrier = carrierAccountInfo;
+                            }
+                            else {
+                                $scope.scopeModel.carrierAcount = oldselectedCarrier;
+                            }
+                        });
+                    }
+                    else {
+                        dealInboundAPI.load(payload);
+                        dealOutboundAPI.load(payloadOutbound);
+                    }
+                }
+                else if (oldselectedCarrier == undefined) {
+                    oldselectedCarrier = carrierAccountInfo;
+                    dealInboundAPI.load(payload);
+                    dealOutboundAPI.load(payloadOutbound);
+                }
+            }
+        }
         function getSwapDealHistory() {
             return WhS_Deal_SwapDealAPIService.GetSwapDealHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 dealEntity = response;
@@ -324,12 +340,12 @@
             }
             return WhS_Deal_SwapDealAPIService.GetSwapDealSettingData().then(function (response) {
                 $scope.scopeModel.gracePeriod = response.GracePeriod;
-            })
+            });
 
         }
         function isCommitmentAgreement() {
             if (dealEntity != undefined && dealEntity.Settings != undefined)
-                return (dealEntity.Settings.DealType == WhS_Deal_DealAgreementTypeEnum.Commitment.value)
+                return (dealEntity.Settings.DealType == WhS_Deal_DealAgreementTypeEnum.Commitment.value);
         }
 
         function loadCurrencySelector() {
@@ -387,7 +403,6 @@
         }
 
         function buildSwapDealObjFromScope() {
-            console.log($scope.scopeModel.selectedDealStatus.value);
             var inboundData = dealInboundAPI.getData();
             var outboundData = dealOutboundAPI.getData();
             var obj = {
@@ -465,7 +480,7 @@
                     return payload;
                 }
 
-            }
+            };
         };
         function getSelectedSaleZonesIdsFromItems(includedIds) {
             var ids = getUsedSaleZonesIds();

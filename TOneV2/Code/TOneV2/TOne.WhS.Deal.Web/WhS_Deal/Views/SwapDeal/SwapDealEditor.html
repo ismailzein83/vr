@@ -42,10 +42,10 @@
                     <span vr-disabled="scopeModel.isCommitmentAgreement">
                         <vr-row>
                             <vr-columns width="1/3row">
-                                <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()"></vr-datetimepicker>
+                                <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()" onvaluechanged="scopeModel.onBEDchanged"></vr-datetimepicker>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()"></vr-datetimepicker>
+                                <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateDatesRange()" onvaluechanged="scopeModel.onEEDchanged"></vr-datetimepicker>
                             </vr-columns>
                             <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectReady" isrequired="true" normal-col-num="4"></vr-common-currency-selector>
                             <vr-columns width="1/3row">
@@ -86,7 +86,7 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.validateSwapDealInbounds()">
-                                <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady" ng-show="scopeModel.carrierAccount"></vr-whs-deal-swapdealinbound-grid>
+                                <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady" ng-show="scopeModel.dataForBoundsReady()"></vr-whs-deal-swapdealinbound-grid>
                             </vr-validator>
                         </vr-columns>
                     </vr-row>
@@ -96,7 +96,7 @@
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.validateSwapDealOutbounds()">
 
-                                <vr-whs-deal-swapdealoutbound-grid on-ready="scopeModel.onSwapDealOutboundDirectiveReady" ng-show="scopeModel.carrierAccount"></vr-whs-deal-swapdealoutbound-grid>
+                                <vr-whs-deal-swapdealoutbound-grid on-ready="scopeModel.onSwapDealOutboundDirectiveReady" ng-show="scopeModel.dataForBoundsReady()"></vr-whs-deal-swapdealoutbound-grid>
                             </vr-validator>
                         </vr-columns>
                     </vr-row>

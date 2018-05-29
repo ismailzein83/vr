@@ -25,6 +25,8 @@
         var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();
         var volumeCommitmentType;
 
+        var carrierAccountInfo;
+
         loadParameters();
         defineScope();
         load();
@@ -61,31 +63,17 @@
                 currencyDirectiveAPI = api;
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onBEDChanged = function () {
+                loadVolumeCommitmentItems();
+            };
+            $scope.scopeModel.onEEDChanged = function () {
+                loadVolumeCommitmentItems();
+            };
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
-                var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-                if (carrierAccountInfo != undefined) {
-                    if (carrierAccountSelectedPromise != undefined)
-                        carrierAccountSelectedPromise.resolve();
-                    else {
-                        var payload = {
-                            context: getContext(),
-                            carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                            dealId: dealId,
-                            bed: $scope.scopeModel.beginDate,
-                            eed: $scope.scopeModel.endDate,
-                            volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
-                        };
-                        volumeCommitmenetItemsAPI.load(payload);
-                        updateDescription();
-                    }
-                }
-
-                function updateDescription() {
-                    setTimeout(function () {
-                        $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(VRDateTimeService.getNowDateTime());
-                    });
-                }
+                carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
+                loadVolumeCommitmentItems();
+               
             };
 
             $scope.scopeModel.onVolumeCommitmenetItemsReady = function (api) {
@@ -106,6 +94,10 @@
             };
             $scope.scopeModel.validateDatesRange = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            };
+            $scope.scopeModel.showVolumeItemSection = function ()
+            {
+                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
             };
             $scope.scopeModel.validateDealStatusDate = function () {
                 var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
@@ -156,6 +148,26 @@
                 volumeCommitmentEntity = response;
 
             });
+        }
+        function loadVolumeCommitmentItems()
+        {
+            if (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
+                if (carrierAccountSelectedPromise != undefined)
+                    carrierAccountSelectedPromise.resolve();
+                else {
+                    var payload = {
+                        context: getContext(),
+                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                        dealId: dealId,
+                        bed: $scope.scopeModel.beginDate,
+                        eed: $scope.scopeModel.endDate,
+                        volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
+                    };
+                    console.log(payload);
+                    volumeCommitmenetItemsAPI.load(payload);
+                    updateDescription();
+                }
+            }
         }
         function getVolumeCommitment() {
             return WhS_Deal_VolCommitmentDealAPIService.GetDeal(dealId).then(function (response) {
@@ -235,6 +247,11 @@
             }
             return UtilsService.waitMultiplePromises(promises);
         };
+        function updateDescription() {
+            setTimeout(function () {
+                $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(VRDateTimeService.getNowDateTime());
+            });
+        }
         function loadCurrencySelector() {
             var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 

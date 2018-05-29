@@ -20,7 +20,7 @@ namespace TOne.WhS.Deal.Business
             SwapDealManager swapDealManager = new SwapDealManager();
             if (context.SaleZone == null)
                 throw new ArgumentNullException("SaleZone");
-            return swapDealManager.IsZoneExculded(context.SaleZone.SaleZoneId, BED, EED, CarrierAccountId, DealId);
+            return swapDealManager.IsZoneExcluded(context.SaleZone.SaleZoneId, BED, EED, CarrierAccountId, DealId,true);
         }
     }
 }

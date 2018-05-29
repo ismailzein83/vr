@@ -68,16 +68,20 @@ namespace TOne.WhS.Deal.Business
 
             return insertOperationOutput;
         }
-        public bool IsZoneExculded(long zoneId, DateTime BED, DateTime? EED, int customerId, int? dealId)
+        public bool IsZoneExcluded(long zoneId, DateTime BED, DateTime? EED, int customerId, int? dealId, bool isSale)
         {
+            Dictionary<int, DealZoneInfoByZoneId> cachedDealInfo = new Dictionary<int, DealZoneInfoByZoneId>();
             SwapDealManager swapDealManager = new SwapDealManager();
-            var cachedCustomerDealInfo = GetCachedCustomerDealZoneInfoByCustomerId();
-            if (cachedCustomerDealInfo != null)
+            if (isSale)
+                cachedDealInfo = GetCachedCustomerDealZoneInfoByCustomerId();
+            else
+                cachedDealInfo = GetCachedSupplierDealZoneInfoBySupplierId();
+            if (cachedDealInfo != null)
             {
-                DealZoneInfoByZoneId dealZoneInfo = cachedCustomerDealInfo.GetRecord(customerId);
+                DealZoneInfoByZoneId dealZoneInfo = cachedDealInfo.GetRecord(customerId);
                 if (dealZoneInfo != null)
                 {
-                   var zoneInfos =  dealZoneInfo.GetRecord(zoneId);
+                    var zoneInfos = dealZoneInfo.GetRecord(zoneId);
                     if (zoneInfos != null)
                     {
                         foreach (var zoneInfo in zoneInfos)
@@ -90,13 +94,13 @@ namespace TOne.WhS.Deal.Business
             }
             return false;
         }
-        public List<long> AreZonesExcluded(OverlappedZonesContext context)
+        public List<long> AreZonesExcluded(OverlappedZonesContext context,bool isSale)
         {
             List<long> excludedSaleZones = new List<long>();
             if (context.ZoneIds != null)
                 foreach (var saleZoneId in context.ZoneIds)
                 {
-                    if (IsZoneExculded(saleZoneId, context.BED, context.EED, context.CustomerId, context.DealId))
+                    if (IsZoneExcluded(saleZoneId, context.BED, context.EED, context.CustomerId, context.DealId, isSale))
                         excludedSaleZones.Add(saleZoneId);
                 }
             return excludedSaleZones;
@@ -149,7 +153,7 @@ namespace TOne.WhS.Deal.Business
                 CustomerId = validateBeforeSaveContext.CustomerId,
                 DealId = validateBeforeSaveContext.DealId,
             };
-           return AreZonesExcluded(overlappedSaleZonesContext);
+           return AreZonesExcluded(overlappedSaleZonesContext,true);
         }
         public List<long> GetExcludedSupplierZones(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
@@ -162,7 +166,7 @@ namespace TOne.WhS.Deal.Business
                 CustomerId = validateBeforeSaveContext.CustomerId,
                 DealId = validateBeforeSaveContext.DealId,
             };
-            return AreZonesExcluded(overlappedSupplierZonesContext);
+            return AreZonesExcluded(overlappedSupplierZonesContext,false);
         }
         public T GetDealSettings<T>(int dealId) where T : DealSettings
         {
