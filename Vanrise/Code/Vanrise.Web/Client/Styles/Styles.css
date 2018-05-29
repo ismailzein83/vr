@@ -232,6 +232,10 @@
     right: 140px;
 }
 
+.support-call >a{
+    position:static !important;
+}
+
 .unpined-icon {
     transform: rotate(-45deg);
 }
