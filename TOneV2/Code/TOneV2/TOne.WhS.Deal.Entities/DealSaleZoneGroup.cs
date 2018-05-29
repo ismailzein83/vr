@@ -11,15 +11,17 @@ namespace TOne.WhS.Deal.Entities
 
 		public int DealSaleZoneGroupNb { get; set; }
 
-		public int CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
 		public List<DealSaleZoneGroupZoneItem> Zones { get; set; }
 
-		public DateTime BED { get; set; }
+        public DealStatus Status { get; set; }
+
+        public DateTime? DeActivationDate { get; set; }
+        
+        public DateTime BED { get; set; }
 
 		public DateTime? EED { get; set; }
-
-        public DealStatus Status { get; set; }
 	}
 
 	public class DealSaleZoneGroup : BaseDealSaleZoneGroup

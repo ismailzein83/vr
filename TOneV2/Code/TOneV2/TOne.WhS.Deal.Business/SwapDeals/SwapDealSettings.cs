@@ -19,7 +19,7 @@ namespace TOne.WhS.Deal.Business
 
         [Description("UnBalanced")]
         UnBalanced = 2
-    };
+    }
 
     public enum DealType
     {
@@ -54,6 +54,9 @@ namespace TOne.WhS.Deal.Business
         public int GracePeriod { get; set; }
 
         public int CurrencyId { get; set; }
+
+
+        #region Public Methods
 
         public override int GetCarrierAccountId()
         {
@@ -158,6 +161,7 @@ namespace TOne.WhS.Deal.Business
             }
             return validationResult;
         }
+
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
             switch (context.DealZoneGroupPart)
@@ -178,6 +182,7 @@ namespace TOne.WhS.Deal.Business
                 default: throw new NotSupportedException(string.Format("DealZoneGroupPart {0} not supported.", context.DealZoneGroupPart));
             }
         }
+
         public override List<long> GetDealSaleZoneIds()
         {
             List<long> zoneIds = new List<long>();
@@ -204,6 +209,7 @@ namespace TOne.WhS.Deal.Business
             }
             return zoneIds;
         }
+
         //TODO: ASA Check if inbounds can have null value and throw exception if not
         public decimal? GetSaleAmount()
         {
@@ -227,6 +233,7 @@ namespace TOne.WhS.Deal.Business
             }
             return costAmount;
         }
+
         public int? GetSaleVolume()
         {
             if (Inbounds == null || Inbounds.Count == 0)
@@ -249,6 +256,11 @@ namespace TOne.WhS.Deal.Business
             }
             return costVolume;
         }
+
+        #endregion
+
+        #region Private Methods
+
         private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
         {
             if (Inbounds == null || Inbounds.Count == 0)
@@ -270,16 +282,19 @@ namespace TOne.WhS.Deal.Business
                 }
 
                 dealSaleZoneGroup.DealId = dealId;
-                dealSaleZoneGroup.BED = BeginDate;
-                dealSaleZoneGroup.CustomerId = CarrierAccountId;
                 dealSaleZoneGroup.DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber;
-                dealSaleZoneGroup.EED = EndDate;
+                dealSaleZoneGroup.CustomerId = CarrierAccountId;
                 dealSaleZoneGroup.Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId));
-                dealSaleZoneGroup.Status = Status;
+                dealSaleZoneGroup.Status = base.Status;
+                dealSaleZoneGroup.DeActivationDate = base.DeActivationDate;
+                dealSaleZoneGroup.BED = BeginDate;
+                dealSaleZoneGroup.EED = EndDate;
+
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
             return saleZoneGroups;
         }
+
         private void SetRateLocatorContext(IEnumerable<long> zoneIds, out Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc)
         {
             var carrierAccountManager = new CarrierAccountManager();
@@ -291,6 +306,7 @@ namespace TOne.WhS.Deal.Business
 
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
+
         private List<DealSaleZoneGroupZoneItem> BuildSaleZones(IEnumerable<long> saleZoneIds)
         {
             if (saleZoneIds == null || !saleZoneIds.Any())
@@ -313,7 +329,7 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = 1,
                 VolumeInSeconds = swapDealInbound.Volume * 60
             };
-            
+
             var dealSaleTiers = new List<DealSaleZoneGroupTierWithoutRate>
             {
                 dealSaleZoneGroupTier
@@ -388,6 +404,7 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = 2
             };
         }
+
         private DealSupplierZoneGroupTier BuilSupplierExtraVolumeTier(DealSupplierRateEvaluator extraVolumeEvaluatedRate, List<long> zoneIds, Dictionary<long, SupplierRate> supplierRates)
         {
             var context = new DealSupplierRateEvaluatorContext
@@ -424,12 +441,14 @@ namespace TOne.WhS.Deal.Business
                     dealSupplierZoneGroup = new DealSupplierZoneGroupWithoutRate() { Tiers = BuildSupplierTiersWithoutRate(swapDealOutbound) };
 
                 dealSupplierZoneGroup.DealId = dealId;
-                dealSupplierZoneGroup.BED = BeginDate;
-                dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                 dealSupplierZoneGroup.DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber;
-                dealSupplierZoneGroup.EED = EndDate;
+                dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                 dealSupplierZoneGroup.Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId));
-                dealSupplierZoneGroup.Status = Status;
+                dealSupplierZoneGroup.Status = base.Status;
+                dealSupplierZoneGroup.DeActivationDate = base.DeActivationDate;
+                dealSupplierZoneGroup.BED = BeginDate;
+                dealSupplierZoneGroup.EED = EndDate;
+
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }
             return dealSupplierZoneGroups;
@@ -448,6 +467,7 @@ namespace TOne.WhS.Deal.Business
 
             }).ToList();
         }
+
         private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(SwapDealOutbound swapDealOutbound)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
@@ -490,6 +510,7 @@ namespace TOne.WhS.Deal.Business
 
             return dealSupplierZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
+
         private IOrderedEnumerable<DealSupplierZoneGroupTierWithoutRate> BuildSupplierTiersWithoutRate(SwapDealOutbound swapDealOutbound)
         {
             DealSupplierZoneGroupTierWithoutRate dealSupplierZoneGroupTierWithoutRate = new DealSupplierZoneGroupTierWithoutRate
@@ -513,6 +534,7 @@ namespace TOne.WhS.Deal.Business
 
             return dealSupplierTiers.OrderBy(itm => itm.TierNumber);
         }
-      
+
+        #endregion
     }
 }
