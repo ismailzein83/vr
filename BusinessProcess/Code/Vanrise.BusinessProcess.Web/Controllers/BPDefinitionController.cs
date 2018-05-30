@@ -7,6 +7,7 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
 {
+    [JSONWithType]
     [RoutePrefix(Constants.ROUTE_PREFIX + "BPDefinition")]
     public class BPDefinitionController : BaseAPIController
     {
