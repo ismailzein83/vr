@@ -121,7 +121,7 @@ namespace TOne.WhS.Deal.Business
                 validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following sale zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSaleZoneNames)));
             }
 
-            if(excludedSupplierZones.Count > 0)
+            if (excludedSupplierZones.Count > 0)
             {
                 validationResult = false;
                 var excludedSupplierZoneNames = supplierZoneManager.GetSupplierZoneNames(excludedSupplierZones);
@@ -255,7 +255,7 @@ namespace TOne.WhS.Deal.Business
                     decimal balancedAmount = saleAmount > costAmount
                         ? Math.Abs((saleAmount.Value - costAmount.Value) / saleAmount.Value) * 100
                         : Math.Abs((saleAmount.Value - costAmount.Value) / costAmount.Value) * 100;
-                    if (balancedAmount < Difference.Value)
+                    if (balancedAmount > Difference.Value)
                     {
                         validationResult = false;
                         validateBeforeSaveContext.ValidateMessages.Add("Balanced Amount is less than expected");
@@ -271,7 +271,7 @@ namespace TOne.WhS.Deal.Business
                     decimal balancedVolume = saleVolume > costVolume
                         ? Math.Abs((saleVolume.Value - costVolume.Value) / saleVolume.Value) * 100
                         : Math.Abs((saleVolume.Value - costVolume.Value) / costVolume.Value) * 100;
-                    if (balancedVolume < Difference.Value)
+                    if (balancedVolume > Difference.Value)
                     {
                         validationResult = false;
                         validateBeforeSaveContext.ValidateMessages.Add("Balanced Volume is less than expected");
