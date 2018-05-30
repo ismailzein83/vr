@@ -63,7 +63,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
                         dataRecordTypePayload.partnerFieldTitle = payload.PartnerFieldTitle;
                         $scope.scopeModel.partnerFieldTitle = payload.PartnerFieldTitle;
-                        console.log(payload);
                     }
                     VRUIUtilsService.callDirectiveLoad(dataRecordTypeDirectiveAPI, dataRecordTypePayload.partnerFieldType, loadDataRecordTypePromiseDeferred);
                 });
@@ -73,7 +72,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             };
 
             api.getData = function () {
-                console.log(dataRecordTypeDirectiveAPI.getData());
                 return {
                     $type: "Vanrise.Invoice.Business.InvoiceRecordTypeMainFields, Vanrise.Invoice.Business",
                     PartnerFieldTitle: $scope.scopeModel.partnerFieldTitle,

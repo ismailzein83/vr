@@ -225,7 +225,6 @@
                 }
 
                 function getFilter(filterConfiguration) {
-                    //console.log(filterConfiguration);
                     var dimension = UtilsService.getItemByVal(dimensions, filterConfiguration.DimensionName, 'Name');
                     var filter;
                     var filterEditor;

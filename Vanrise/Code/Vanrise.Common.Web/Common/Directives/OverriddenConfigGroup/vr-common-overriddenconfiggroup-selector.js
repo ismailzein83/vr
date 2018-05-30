@@ -93,8 +93,6 @@ app.directive('vrCommonOverriddenconfiggroupSelector', ['VRCommon_OverriddenConf
             };
 
             $scope.scopeModel.onOKSearch = function (api) {
-                console.log($scope.scopeModel.searchOverriddenConfigurationGroup);
-                console.log($scope.scopeModel.testdate);
 
             };
             $scope.scopeModel.onCancelSearch = function (api) {

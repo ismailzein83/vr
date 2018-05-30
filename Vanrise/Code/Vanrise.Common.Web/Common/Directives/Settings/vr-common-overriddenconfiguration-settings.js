@@ -56,7 +56,6 @@
                     if (value != undefined) {
                         if (selectedPromiseDeferred != undefined) {
                             selectedPromiseDeferred.resolve();
-                            console.log("test1");
                         }
                         else {
                             $scope.scopeModel.name = "";
@@ -65,7 +64,6 @@
                             overriddenData = undefined;
                             settingsAPI = undefined;
                             $scope.scopeModel.showDirectiveSettings = false;
-                            console.log("test2");
                         }
                     }
 

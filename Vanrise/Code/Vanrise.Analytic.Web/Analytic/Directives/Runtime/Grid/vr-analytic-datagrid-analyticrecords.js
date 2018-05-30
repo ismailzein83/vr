@@ -156,9 +156,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_Ana
             // ------- Load Grid ------
 
             function loadGrid(payLoad) {
-
-                //console.log(payLoad);
-
                 var itemActions;
                 var parentDimensions;
 

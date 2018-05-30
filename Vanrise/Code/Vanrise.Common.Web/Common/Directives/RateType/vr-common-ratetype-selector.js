@@ -107,7 +107,6 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
                 return VRUIUtilsService.getIdSelectedIds('RateTypeId', $attrs, ctrl);
             };
             api.load = function (payload) {
-                console.log("in load");
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
