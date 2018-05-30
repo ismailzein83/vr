@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecurityProviderDefinition\LocalSecurityProviderDefinition.cs" />
+    <Compile Include="SecurityProviderDefinition\RemoteSecurityProviderDefinitionExtendedSettings.cs" />
+    <Compile Include="SecurityProviderDefinition\LocalSecurityProviderDefinitionExtendedSettings.cs" />
+    <Compile Include="SecurityProvider\RemoteSecurityProvider.cs" />
     <Compile Include="SecurityProvider\LocalSecurityProvider.cs" />
     <Compile Include="TenantTypes\ApplicationPartTenantType.cs" />
     <Compile Include="TenantTypes\DefaultTenantType.cs" />
