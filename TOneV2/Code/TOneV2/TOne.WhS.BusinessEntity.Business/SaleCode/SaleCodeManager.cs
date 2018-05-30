@@ -39,10 +39,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return allcodes.Select(x => x.ZoneId).Distinct().ToList();
         }
 
-        public IEnumerable<SaleCode> GetEffectiveSaleCodesByCode(int customerId, string codeNumber)
+        public IEnumerable<SaleCode> GetParentsByPlan(int sellingNumberPlanId, string codeNumber)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return  dataManager.GetSaleCodesByCode(codeNumber);
+            return dataManager.GetParentsByPlan(sellingNumberPlanId,codeNumber);
         }
 
         public List<SaleCode> GetSaleCodesByCodeId(IEnumerable<long> codeIds)

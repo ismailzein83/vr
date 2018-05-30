@@ -112,21 +112,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public SupplierZone GetSupplierZoneByCode(int supplierId, string codeNumber)
         {
             SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
-            var supplierCodes = supplierCodeManager.GetEffectiveSupplierCodesByCode(supplierId, codeNumber);
+            var supplierCodes = supplierCodeManager.GetParentsBySupplier(supplierId, codeNumber);
             if (supplierCodes == null || supplierCodes.Count() == 0)
                 return null;
 
-            var supplierZones = GetSupplierZonesBySupplierId(supplierId);
-            if (supplierZones == null || supplierZones.Count() == 0)
-                return null;
-
-            var supplierCodesOfEffectiveZones = supplierCodes.FindAllRecords(x => supplierZones.Any(y => y.SupplierZoneId == x.ZoneId));
-            if (supplierCodesOfEffectiveZones == null || supplierCodesOfEffectiveZones.Count() == 0)
-                return null;
-            var supplierCode = supplierCodesOfEffectiveZones.FirstOrDefault();
+            var orderedSupplierCode = supplierCodes.OrderByDescending(x => x.Code.Length);
+            var supplierCode = orderedSupplierCode.FirstOrDefault();
             if (supplierCode == null)
                 return null;
-
             return GetSupplierZone(supplierCode.ZoneId);
         }
         public string GetSupplierZoneNameBySupplierId(int supplierId, string codeNumber)

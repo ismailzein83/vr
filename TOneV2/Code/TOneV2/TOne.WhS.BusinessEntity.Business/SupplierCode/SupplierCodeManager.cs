@@ -22,10 +22,10 @@ namespace TOne.WhS.BusinessEntity.Business
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
             return dataManager.GetSupplierCodes(from, to);
         }
-        public IEnumerable<SupplierCode> GetEffectiveSupplierCodesByCode(int supplierId, string codeNumber)
+        public IEnumerable<SupplierCode> GetParentsBySupplier(int supplierId, string codeNumber)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            return dataManager.GetSupplierCodesByCode(codeNumber);
+            return dataManager.GetParentsBySupplier(supplierId,codeNumber);
         }
 
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)

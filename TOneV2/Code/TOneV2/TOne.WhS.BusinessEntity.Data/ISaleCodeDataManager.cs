@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query);
 
         List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate);
-
+        IEnumerable<SaleCode> GetParentsByPlan(int sellingNumberPlan, string codeNumber);
         List<SaleCode> GetSaleCodesByCodeGroups(List<int> codeGroupsIds);
         List<SaleCode> GetSaleCodesByCodeId(IEnumerable<long> codeIds);
         List<SaleCode> GetSaleCodesEffectiveByZoneID(long zoneID, DateTime effectiveDate);

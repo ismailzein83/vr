@@ -32,10 +32,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierCode_GetByEffective]", SupplierCodeMapper, from, to);
         }
-        public IEnumerable<SupplierCode> GetSupplierCodesByCode(string codeNumber)
+        public IEnumerable<SupplierCode> GetParentsBySupplier(int supplierId, string codeNumber)
         {
-            return GetItemsSP("TOneWhS_BE.[sp_SupplierCode_GetByCode]", SupplierCodeMapper, codeNumber);
+            return GetItemsSP("TOneWhS_BE.[sp_SupplierCode_GetParentsBySupplier]", SupplierCodeMapper, supplierId, codeNumber);
         }
+
         
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
