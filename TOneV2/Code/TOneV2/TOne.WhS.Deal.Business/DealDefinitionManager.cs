@@ -521,17 +521,23 @@ namespace TOne.WhS.Deal.Business
 
         public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
-            throw new NotImplementedException();
+            int dealId = Convert.ToInt32(context.EntityId);
+            return GetDeal(dealId);
         }
 
         public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            throw new NotImplementedException();
+            int dealId = Convert.ToInt32(context.EntityId);
+            DealDefinition deal = GetDeal(dealId);
+            if (deal != null)
+                return deal.Name;
+            return null;
         }
 
         public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
-            throw new NotImplementedException();
+            var deal = context.Entity as DealDefinition;
+            return deal.DealId;
         }
 
         public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)

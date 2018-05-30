@@ -123,7 +123,7 @@ namespace TOne.WhS.Deal.Business
             return GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId);
         }
 
-        protected DealDefinition GetDeal(long dealId)
+        protected DealDefinition GetDeal(int dealId)
         {
             var deals = GetCachedSwapDeals();
             if (deals != null && deals.Any())
@@ -229,13 +229,13 @@ namespace TOne.WhS.Deal.Business
 
         public override dynamic GetEntity(Vanrise.GenericData.Entities.IBusinessEntityGetByIdContext context)
         {
-            long dealId = Convert.ToInt32(context.EntityId);
+            int dealId = Convert.ToInt32(context.EntityId);
             return GetDeal(dealId);
         }
 
         public override string GetEntityDescription(Vanrise.GenericData.Entities.IBusinessEntityDescriptionContext context)
         {
-            long dealId = Convert.ToInt32(context.EntityId);
+            int dealId = Convert.ToInt32(context.EntityId);
             DealDefinition deal = GetDeal(dealId);
             if (deal != null)
                 return deal.Name;
