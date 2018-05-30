@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService", 
+app.directive("vrWhsBeCarrierprofileGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CarrierProfileAPIService", "WhS_BE_CarrierAccountService",
     "WhS_BE_CarrierProfileService", "VRUIUtilsService", "WhS_BE_CarrierAccountAPIService", "VRCommon_ObjectTrackingService",
 function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService, WhS_BE_CarrierAccountAPIService, VRCommon_ObjectTrackingService) {
 
@@ -42,12 +42,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 function AddCarrierAccountDrillDown() {
                     var drillDownDefinition = {};
 
-                    drillDownDefinition.title = "Carrier Account"; 
+                    drillDownDefinition.title = "Carrier Account";
                     drillDownDefinition.directive = "vr-whs-be-carrieraccount-gridpanel";
 
                     drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
                         carrierProfileItem.carrierAccountGridAPI = directiveAPI;
-                        var payload = {                           
+                        var payload = {
                             carrierProfileId: carrierProfileItem.Entity.CarrierProfileId
                         };
                         return carrierProfileItem.carrierAccountGridAPI.loadPanel(payload);
@@ -100,6 +100,15 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);
                         gridAPI.itemAdded(carrierProfileObject);
 
+                    };
+
+                    directiveAPI.setPersonalizationItem = function (personalization) {
+                        if (personalization != undefined && personalization.BaseGridPersonalization != undefined)
+                            gridAPI.setPersonalizationItem(personalization.BaseGridPersonalization);
+                    };
+
+                    directiveAPI.getPersonalizationItem = function () {
+                        return gridAPI.getPersonalizationItem();
                     };
                     return directiveAPI;
                 }
@@ -154,7 +163,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 if (dataItem.carrierAccountGridAPI != undefined)
                     dataItem.carrierAccountGridAPI.onCarrierAccountAdded(carrierAccountObj);
             };
-           
+
             WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded, dataItem.Entity);
         }
 

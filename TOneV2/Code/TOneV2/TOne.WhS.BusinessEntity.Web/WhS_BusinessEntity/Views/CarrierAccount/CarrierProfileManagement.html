@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="WhS_BE_CarrierProfileManagementController">
 
-    <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+    <vr-form name="formFilter" vr-loader="isLoading">
+        <div ng-hide="filterSectionCollapsed">
             <vr-validation-group validationcontext="validationForm">
                 <vr-row removeline>
                     <vr-columns width="normal">
@@ -14,14 +14,12 @@
 
                     <vr-columns width="normal" haschildcolumns>
                         <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
-                    </vr-columns>
+                    </vr-columns>                    
                 </vr-row>
             </vr-validation-group>
-
         </div>
-
         <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed" showpersonalizationmenu="true" on-ready="onActionBarSettingsReady">
                 <div transclude-to="buttons">
                     <vr-button type="Search" validationcontext="validationForm" data-onclick="searchClicked"></vr-button>
                     <vr-button type="Add" data-onclick="AddNewCarrierProfile" haspermission="hadAddCarrierProfilePermission"></vr-button>

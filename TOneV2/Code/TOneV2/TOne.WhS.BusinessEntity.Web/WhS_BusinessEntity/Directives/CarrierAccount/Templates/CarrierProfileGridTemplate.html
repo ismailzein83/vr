@@ -4,12 +4,12 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Entity.CarrierProfileId" enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.CarrierProfileId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Carrier Profile Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Invoice Type'" field="'InvoiceTypeDescription'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Invoice Setting'" field="'InvoiceSettingName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.CarrierProfileId'" type="'Text'" widthfactor="2" sysname="'CarrierProfileId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Carrier Profile Name'" field="'Entity.Name'" type="'Text'" sysname="'CarrierProfileName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Company'" field="'Entity.Settings.Company'" type="'Text'" sysname="'Company'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'" sysname="'Country'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Invoice Type'" field="'InvoiceTypeDescription'" type="'Text'" sysname="'InvoiceType'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Invoice Setting'" field="'InvoiceSettingName'" type="'Text'" sysname="'InvoiceSetting'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
