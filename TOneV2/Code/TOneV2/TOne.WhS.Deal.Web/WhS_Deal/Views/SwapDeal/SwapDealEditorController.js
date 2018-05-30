@@ -263,7 +263,6 @@
             //if (isCommitmentAgreement())
             //    UtilsService.setContextReadOnly($scope);
             $scope.scopeModel.description = dealEntity.Name;
-            console.log(dealEntity);
             //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
             $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
             $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');

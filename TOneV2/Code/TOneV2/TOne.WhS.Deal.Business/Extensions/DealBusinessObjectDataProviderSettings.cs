@@ -69,7 +69,8 @@ namespace TOne.WhS.Deal.Business
                         DaysTostart = daysToStart,
                         RemainingDaysToEnd = daysToEnd,
                         RemainingDaysToGrace = daysToGrace,
-                        GroupNumber = inbound.ZoneGroupNumber
+                        GroupNumber = inbound.ZoneGroupNumber,
+                        GroupType = 1,
                     };
                     saleProgressByGroupNb.Add(inbound.ZoneGroupNumber, dealInfo);
                 }
@@ -85,7 +86,8 @@ namespace TOne.WhS.Deal.Business
                         DaysTostart = daysToStart,
                         RemainingDaysToEnd = daysToEnd,
                         RemainingDaysToGrace = daysToGrace,
-                        GroupNumber = outbound.ZoneGroupNumber
+                        GroupNumber = outbound.ZoneGroupNumber,
+                        GroupType = 2
                     };
                     costProgressByGroupNb.Add(outbound.ZoneGroupNumber, dealInfo);
                 }
@@ -123,11 +125,11 @@ namespace TOne.WhS.Deal.Business
                         ? (DateTime.Now - dealInfo.DealBED).Days
                         : 0;
 
-                    var expectedVolumeDailyInSeconds = dealInfo.GroupVolumeInMinutes * 60 / dealLength;
-                    var overallExpectedVolumeInSeconds = expectedVolumeDailyInSeconds * dealCurrentDay;
-                    var weeklyExpectedVolumeInSeconds = expectedVolumeDailyInSeconds * 7;
+                    var expectedVolumeDailyInMin = dealInfo.GroupVolumeInMinutes / dealLength;
+                    var overallExpectedVolumeInMin = expectedVolumeDailyInMin * dealCurrentDay;
+                    var weeklyExpectedVolumeInMin = expectedVolumeDailyInMin * 7;
 
-                    dataRecords.Add(new SwapDealProgressDataRecordType
+                    var recordType = new SwapDealProgressDataRecordType
                     {
                         CarrierAccountId = dealInfo.CarrierAccountId,
                         Deal = dealInfo.DealId,
@@ -137,12 +139,14 @@ namespace TOne.WhS.Deal.Business
                         GroupNumber = dealInfo.GroupNumber,
                         GroupType = dealInfo.GroupType,
                         TodayProgressPerc =
-                            expectedVolumeDailyInSeconds > 0 ? (dealInfo.TodayProgressInSeconds / expectedVolumeDailyInSeconds) * 100 : 0,
+                            expectedVolumeDailyInMin > 0 ? (dealInfo.TodayProgressInMinutes / expectedVolumeDailyInMin) * 100 : 0,
                         OverallProgressPerc =
-                            overallExpectedVolumeInSeconds > 0 ? (dealInfo.OverallProgressInSeconds / overallExpectedVolumeInSeconds) * 100 : 0,
+                            overallExpectedVolumeInMin > 0 ? (dealInfo.OverallProgressInMinutes / overallExpectedVolumeInMin) * 100 : 0,
                         WeeklyProgressPerc =
-                            weeklyExpectedVolumeInSeconds > 0 ? (dealInfo.WeeklyProgressInSeconds / weeklyExpectedVolumeInSeconds) * 100 : 0
-                    });
+                            weeklyExpectedVolumeInMin > 0 ? (dealInfo.WeeklyProgressMinutes / weeklyExpectedVolumeInMin) * 100 : 0,
+                        
+                    };
+                    dataRecords.Add(recordType);
                 }
             }
             return dataRecords;
@@ -172,17 +176,17 @@ namespace TOne.WhS.Deal.Business
 
             DateTime dealBED = dealProgress.FromTime;
 
-            swapDealProgress.OverallProgressInSeconds += dealProgress.ReachedDurationInSeconds;
+            swapDealProgress.OverallProgressInMinutes += dealProgress.ReachedDurationInSeconds / 60;
             if (dealBED == DateTime.Today)
-                swapDealProgress.TodayProgressInSeconds += dealProgress.ReachedDurationInSeconds;
+                swapDealProgress.TodayProgressInMinutes += dealProgress.ReachedDurationInSeconds / 60;
             if (dealBED == DateTime.Today.AddDays(-1))
-                swapDealProgress.YesterdayProgressInSeconds += dealProgress.ReachedDurationInSeconds;
+                swapDealProgress.YesterdayProgressInMinutes += dealProgress.ReachedDurationInSeconds / 60;
 
             DateTime toWeekDate = DateTime.Now;
             DateTime fromWeekDate = DateTime.Now.Date.AddDays(-7);
 
             if (dealProgress.FromTime < toWeekDate && dealProgress.FromTime > fromWeekDate)
-                swapDealProgress.WeeklyProgressInSeconds += dealProgress.ReachedDurationInSeconds;
+                swapDealProgress.WeeklyProgressMinutes += dealProgress.ReachedDurationInSeconds / 60;
 
         }
     }
@@ -205,10 +209,10 @@ namespace TOne.WhS.Deal.Business
         public int CarrierAccountId { get; set; }
         public int GroupNumber { get; set; }
         public int GroupVolumeInMinutes { get; set; }
-        public decimal OverallProgressInSeconds { get; set; }
-        public decimal TodayProgressInSeconds { get; set; }
-        public decimal YesterdayProgressInSeconds { get; set; }
-        public decimal WeeklyProgressInSeconds { get; set; }
+        public decimal OverallProgressInMinutes { get; set; }
+        public decimal TodayProgressInMinutes { get; set; }
+        public decimal YesterdayProgressInMinutes { get; set; }
+        public decimal WeeklyProgressMinutes { get; set; }
         public int DaysTostart { get; set; }
         public int RemainingDaysToEnd { get; set; }
         public int RemainingDaysToGrace { get; set; }
@@ -228,7 +232,6 @@ namespace TOne.WhS.Deal.Business
         public int DaysTostart { get; set; }
         public int RemainingDaysToEnd { get; set; }
         public int RemainingDaysToGrace { get; set; }
-
     }
 
     #endregion
