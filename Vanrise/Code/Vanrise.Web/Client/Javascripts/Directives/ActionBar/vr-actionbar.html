@@ -1,5 +1,15 @@
-﻿<div class="action-bar">
-    <div class="btn-group action-bar-left" >
+﻿<div class="action-bar" ng-class="ctrl.showpersonalizationmenu?'include-personalization':''" >
+    <div ng-show="ctrl.showpersonalizationmenu">
+        <div class="vr-menu-box hand-cursor menu-out-div" ng-click="ctrl.toggelOptionMenu($event)">
+            <span class="vr-half-circle hand-cursor"></span>
+            <span class="glyphicon glyphicon-wrench vr-action-menu-dote hand-cursor"></span>
+        </div>
+        <ul class="vr-menu-list out-div" ng-show="ctrl.showMenuOption==true" click-outside="ctrl.toggelOptionMenu($event, false)" outside-if-not="menu-out-div">
+            <li role="presentation"><a ng-click="ctrl.savePersonalizationSettings()">Save Settings</a></li>
+            <li role="presentation"><a ng-click="ctrl.resetPersonalizationSettings()">Reset to Default</a></li>
+        </ul>
+    </div>
+    <div class="btn-group action-bar-left">
         <button ng-show="ctrl.showcollapsebutton" ng-click="ctrl.issectioncollapsed = !ctrl.issectioncollapsed" style="border-bottom-color: transparent; border-color: transparent; border-radius: 15px; background-color: transparent; color: #FFF;z-index: 1; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
             <span ng-hide="ctrl.issectioncollapsed" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
             <span ng-show="ctrl.issectioncollapsed" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
@@ -7,9 +17,9 @@
         <div class="btn-group" transclude-id="leftSection">
         </div>
     </div>
-    
+
     <div class="btn-group" style="position: absolute;width: calc(100% - 15px);">
-        <div  class="buttons-container">
+        <div class="buttons-container">
             <div transclude-id="buttons"></div>
         </div>
     </div>

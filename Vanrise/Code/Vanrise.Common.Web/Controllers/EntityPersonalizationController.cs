@@ -18,41 +18,53 @@ namespace Vanrise.Common.Web.Controllers
         public EntityPersonalizationData GetCurrentUserEntityPersonalization([FromUri] List<string> entityUniqueNames)
         {
             EntityPersonalizationManager manager = new EntityPersonalizationManager();
-            return manager.GetCurrentUserEntityPersonalization(entityUniqueNames); 
+            return manager.GetCurrentUserEntityPersonalization(entityUniqueNames);
+        }
+
+
+        [HttpPost]
+        [Route("UpdateEntityPersonalization")]
+        public object UpdateEntityPersonalization(UpdateEntityPersonalizationInput input)
+        {
+            if (!DosesUserHaveUpdateGlobalEntityPersonalization() && input.AllUsers)
+                return GetUnauthorizedResponse();
+            EntityPersonalizationManager manager = new EntityPersonalizationManager();
+            manager.UpdateEntityPersonalization(input.EntityPersonalizationInputs, input.AllUsers);
+            return null;
         }
 
         [HttpPost]
-        [Route("UpdateCurrentUserEntityPersonalization")]
-        public void UpdateCurrentUserEntityPersonalization(List<EntityPersonalizationInput> inputs)
+        [Route("DeleteEntityPersonalization")]
+        public object DeleteEntityPersonalization(DeleteEntityPersonalizationInput input)
         {
+            if (!DosesUserHaveUpdateGlobalEntityPersonalization() && input.AllUsers)
+                return GetUnauthorizedResponse();
             EntityPersonalizationManager manager = new EntityPersonalizationManager();
-            manager.UpdateCurrentUserEntityPersonalization(inputs);
+            manager.DeleteEntityPersonalization(input.EntityUniqueNames, input.AllUsers);
+            return null;
         }
 
-        [HttpPost]
-        [Route("UpdateGlobalEntityPersonalization")]
-        public void UpdateGlobalEntityPersonalization(List<EntityPersonalizationInput> inputs)
+        [HttpGet]
+        [Route("DosesUserHaveUpdateGlobalEntityPersonalization")]
+        public bool DosesUserHaveUpdateGlobalEntityPersonalization()
         {
             EntityPersonalizationManager manager = new EntityPersonalizationManager();
-            manager.UpdateGlobalEntityPersonalization(inputs);
+            return manager.DosesUserHaveUpdateGlobalEntityPersonalization();
+        }
+        public class UpdateEntityPersonalizationInput
+        {
+            public List<EntityPersonalizationInput> EntityPersonalizationInputs { get; set; }
+
+            public bool AllUsers { get; set; }
         }
 
-        [HttpPost]
-        [Route("DeleteCurrentUserEntityPersonalization")]
-        public void DeleteCurrentUserEntityPersonalization(List<string> entityUniqueNames)
+        public class DeleteEntityPersonalizationInput
         {
-            EntityPersonalizationManager manager = new EntityPersonalizationManager();
-            manager.DeleteCurrentUserEntityPersonalization(entityUniqueNames); 
+            public List<string> EntityUniqueNames { get; set; }
+
+            public bool AllUsers { get; set; }
         }
 
-        [HttpPost]
-        [Route("DeleteGlobalEntityPersonalization")]
-        public void DeleteGlobalEntityPersonalization(List<string> entityUniqueNames)
-        {
-            EntityPersonalizationManager manager = new EntityPersonalizationManager();
-            manager.DeleteGlobalEntityPersonalization(entityUniqueNames); 
-        }
-        
     }
-    
+
 }

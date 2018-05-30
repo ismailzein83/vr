@@ -323,6 +323,22 @@
             return deferred.promise;
         }
 
+        function waitPromiseNode(promiseNode) {
+            var resultPromiseDeferred = createPromiseDeferred();
+            waitMultiplePromises(promiseNode.promises).then(function () {
+                if (promiseNode.getChildNode != undefined && typeof (promiseNode.getChildNode) == 'function') {
+                    var childNodePromise = waitPromiseNode(promiseNode.getChildNode());
+                    linkExistingPromiseToPromiseDeferred(childNodePromise, resultPromiseDeferred);
+                }
+                else {
+                    resultPromiseDeferred.resolve();
+                }
+            }).catch(function (error) {
+                resultPromiseDeferred.reject(error);
+            });
+            return resultPromiseDeferred.promise;
+        }
+
         function PromiseClass() {
             var deferred = $q.defer();
 
@@ -336,6 +352,16 @@
             this.promise = deferred.promise;
             this.resolve = deferred.resolve;
             this.reject = deferred.reject;
+        }
+
+        function linkExistingPromiseToPromiseDeferred(existingPromise, promiseDeferred) {
+            existingPromise
+                .then(function (response) {
+                    promiseDeferred.resolve(response);
+                })
+                .catch(function (error) {
+                    promiseDeferred.reject(error);
+                });
         }
 
         function createPromiseDeferred() {
@@ -944,7 +970,9 @@
             isIntegerValue: isIntegerValue,
             addFloats: addFloats,
             getBaseUrlPrefix: getBaseUrlPrefix,
-            areTimePeriodsOverlapped: areTimePeriodsOverlapped
+            areTimePeriodsOverlapped: areTimePeriodsOverlapped,
+            linkExistingPromiseToPromiseDeferred: linkExistingPromiseToPromiseDeferred,
+            waitPromiseNode: waitPromiseNode
         });
     }
 

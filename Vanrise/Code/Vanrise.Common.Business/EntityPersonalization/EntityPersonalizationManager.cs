@@ -56,75 +56,74 @@ namespace Vanrise.Common.Business
             return GetCachedGlobalEntityPersonalizations().GetRecord(entityUniqueKey);
         }
 
-        public void UpdateCurrentUserEntityPersonalization(List<EntityPersonalizationInput> inputs)
+
+        public void UpdateEntityPersonalization(List<EntityPersonalizationInput> inputs, bool allUsers)
         {
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            var entityPersonalizationsDictionaryByUser = GetCachedEntityPersonalizationsByUser().GetRecord(userId);
             foreach (var input in inputs)
             {
+                if (allUsers)
+                {
+                    var userEntityPersonalization = entityPersonalizationsDictionaryByUser.GetRecord(input.EntityUniqueName);
+                    if (userEntityPersonalization != null && userEntityPersonalization.Setting != null)
+                    {
+                        long entityPersonalizationId = userEntityPersonalization.EntityPersonalizationId;
+                        Delete(entityPersonalizationId);
+                    }
+                }
+
                 EntityPersonalization entity = new EntityPersonalization()
                 {
-                    UserId = userId,
+                    UserId = !allUsers ? userId : (int?)null,
                     EntityUniqueName = input.EntityUniqueName,
                     Setting = input.ExtendedSetting,
                     CreatedBy = userId
                 };
                 SaveEntityPersonalization(entity);
             }
+
         }
 
-
-
-        public void UpdateGlobalEntityPersonalization(List<EntityPersonalizationInput> inputs)
-        {
-            foreach (var input in inputs)
-            {
-                EntityPersonalization entity = new EntityPersonalization()
-                {
-                    EntityUniqueName = input.EntityUniqueName,
-                    Setting = input.ExtendedSetting,
-                    CreatedBy = ContextFactory.GetContext().GetLoggedInUserId()
-                };
-                SaveEntityPersonalization(entity);
-            }
-        }
-
-        public void DeleteCurrentUserEntityPersonalization(List<string> entityUniqueNames)
+        public void DeleteEntityPersonalization(List<string> entityUniqueNames, bool allUsers)
         {
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
             var entityPersonalizationsDictionaryByUser = GetCachedEntityPersonalizationsByUser().GetRecord(userId);
 
+
             foreach (var entityUniqueName in entityUniqueNames)
             {
                 var userEntityPersonalizationUniqueKey = entityPersonalizationsDictionaryByUser.GetRecord(entityUniqueName);
-                if (userEntityPersonalizationUniqueKey != null )
+                if (userEntityPersonalizationUniqueKey != null)
                 {
                     long entityPersonalizationId = userEntityPersonalizationUniqueKey.EntityPersonalizationId;
                     Delete(entityPersonalizationId);
                 }
-            }
-        }
-
-        public void DeleteGlobalEntityPersonalization(List<string> entityUniqueNames)
-        {
-            foreach (var entityUniqueName in entityUniqueNames)
-            {
-                var entity = GetGlobalEntityPersonalization(entityUniqueName);
-                if (entity != null)
+                if (allUsers)
                 {
-                    long entityPersonalizationId = entity.EntityPersonalizationId;
-                    Delete(entityPersonalizationId);
+                    var globalEntityPersonalization = GetGlobalEntityPersonalization(entityUniqueName);
+                    if (globalEntityPersonalization != null)
+                    {
+                        long entityPersonalizationId = globalEntityPersonalization.EntityPersonalizationId;
+                        Delete(entityPersonalizationId);
+                    }
                 }
             }
-           
+
         }
 
-        void SaveEntityPersonalization(EntityPersonalization entity)
+        public bool DosesUserHaveUpdateGlobalEntityPersonalization()
+        {
+            return ContextFactory.GetContext().IsAllowed("VR_System_Administration: Manage", ContextFactory.GetContext().GetLoggedInUserId());
+        }
+        bool SaveEntityPersonalization(EntityPersonalization entity)
         {
             IEntityPersonalizationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IEntityPersonalizationDataManager>();
-            dataManager.Save(entity);
+            bool saveActionSucc = dataManager.Save(entity);
+            return saveActionSucc;
         }
 
-        void Delete(long entityPersonalizationId)
+        bool Delete(long entityPersonalizationId)
         {
             IEntityPersonalizationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IEntityPersonalizationDataManager>();
             bool deleteActionSucc = dataManager.Delete(entityPersonalizationId);
@@ -133,7 +132,7 @@ namespace Vanrise.Common.Business
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
-            
+            return deleteActionSucc;
         }
 
         public Dictionary<string, EntityPersonalization> GetCachedGlobalEntityPersonalizations()

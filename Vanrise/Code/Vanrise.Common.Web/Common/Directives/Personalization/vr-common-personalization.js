@@ -2,8 +2,8 @@
 
 "use strict";
 
-app.directive("vrCommonPersonalization", ["UtilsService", "VRNotificationService", "VR_Common_EntityPersonalizationAPIService", "VRModalService",
-function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAPIService, VRModalService) {
+app.directive("vrCommonPersonalization", ["UtilsService", "VRNotificationService", "VR_Common_EntityPersonalizationAPIService", "VRModalService", "VRLocalizationService",
+function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAPIService, VRModalService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -18,19 +18,85 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         controllerAs: "ctrl",
         bindToController: true,
         template: function (element, attrs) {
-            return '<vr-button type="PersonalizationSave"  data-onclick="ctrl.savePersonalizationSettings" vr-disabled="ctrl.disabelSaveSettings()"></vr-button>' +
-                    '<vr-button type="PersonalizationReset"  data-onclick="ctrl.resetPersonalizationSettings" vr-disabled="ctrl.disabelResetSettings()" ></vr-button>';
+            return ' <div class="vr-menu-box hand-cursor menu-out-div" ng-click="ctrl.toggelOptionMenu($event)">'
+            + '<span class="vr-half-circle hand-cursor"></span>'
+           + ' <span class="glyphicon glyphicon-wrench vr-action-menu-dote hand-cursor"></span>'
+            + '</div>'
+            + '<ul class="vr-menu-list out-div" ng-show="ctrl.showMenuOption==true" click-outside="ctrl.toggelOptionMenu($event, false)" outside-if-not="menu-out-div">'
+                + '<li role="presentation" ><a ng-click="ctrl.savePersonalizationSettings()" ng-class="ctrl.disabelSaveSettings()? \'disabled\' : \'\'" >Save Settings</a></li>'
+                + '<li role="presentation" ><a ng-click="ctrl.resetPersonalizationSettings()"  ng-class="ctrl.disabelResetSettings()? \'disabled\' : \'\'">Reset to Default</a></li>'
+            + '</ul> ';
         }
     };
 
     function Personalization($scope, ctrl, $attrs) {
+
+        ctrl.showMenuOption = false;
+
+        $scope.$on("hide-all-menu", function (event, args) {
+            ctrl.showMenuOption = false;
+            $('.vr-menu-list').removeClass("open-grid-menu");
+            $(document).unbind('click', bindClickOutSidePersonalizationMenu);
+        });
+
+        ctrl.toggelOptionMenu = function (e) {
+            var self = angular.element(e.currentTarget);
+            var menu = self.parent().find('.vr-menu-list')[0];
+            if (ctrl.showMenuOption == false) {
+                setTimeout(function () {
+                    var selfHeight = $(self).height();
+                    var selfOffset = $(self).offset();
+                    $(menu).css({ display: 'block' });
+                    $(menu).addClass("open-option-menu");
+                    var elleft = selfOffset.left - $(window).scrollLeft() + 14;
+                    if (VRLocalizationService.isLocalizationRTL())
+                        elleft = 'auto';
+                    if ($(self).parents('.vr-datagrid-celltext').length > 0)
+                        basetop -= 10;
+
+
+                    $(menu).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: elleft });
+                    ctrl.showMenuOption = true;
+                    $scope.$root.$digest();
+                }, 1);
+                $(document).bind("click", bindClickOutSidePersonalizationMenu);
+
+            }
+            else {
+                ctrl.showMenuOption = false;
+                $(menu).removeClass("open-option-menu");
+                $(document).unbind('click', bindClickOutSidePersonalizationMenu);
+            }
+        };
+
+        function bindClickOutSidePersonalizationMenu(e) {
+            if (!$('menu-out-div').is(e.target) && $('menu-out-div').has(e.target).length === 0 && $('.open-grid-menu').has(e.target).length === 0) {
+                $('menu-out-div').removeClass("open-option-menu");
+                ctrl.showMenuOption = false;
+                $scope.$root.$digest();
+            }
+        }
+
+        setTimeout(function () {
+            $('.vr-menu-list').parents('div').on('scroll', hidePersonalizationMenu);
+            $(window).on('scroll', hidePersonalizationMenu);
+        }, 1);
+
+        function hidePersonalizationMenu() {
+            var menu = $('.vr-menu-list');
+            menu.css({ display: 'none' });
+            $('menu-out-div').removeClass("open-option-menu");
+            if (ctrl.showMenuOption == true) {
+                ctrl.showMenuOption = false;
+                $scope.$root.$digest();
+            }
+        };
 
         this.initializeController = initializeController;
         var context;
         var uniqueKeys;
         ctrl.currentPersonilizationItems = [];
         var globalPersonilizationItems;
-
         ctrl.savePersonalizationSettings = function () {
             var changedItems = getEntityPersonalizationChangedItems();
             if (changedItems.length == 0)
@@ -56,15 +122,6 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
             }
         };
 
-        ctrl.disabelSaveSettings = function () {
-            var changedItems = getEntityPersonalizationChangedItems();
-            return changedItems.length == 0;
-        };
-
-        ctrl.disabelResetSettings = function () {
-            var itemsObj = getLoadedEntityPersonalizationItems();
-            return itemsObj.items.length == 0;
-        };
         function openPersonilizationEditor(title, changedItems, onSavePesonilization, userOptionsLabel, justUser) {
             var settings = {
 
@@ -154,18 +211,16 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
 
         function GetCurrentUserEntityPersonalization(entityUniqueKeys) {
             return VR_Common_EntityPersonalizationAPIService.GetCurrentUserEntityPersonalization(entityUniqueKeys).then(function (response) {
-                var userEntityPersonalizations = [];
-                ctrl.currentPersonilizationItems = response.UserEntityPersonalizations;
-                globalPersonilizationItems = response.GlobalEntityPersonalizations;
                 if (response != null) {
-                    userEntityPersonalizations = response.UserEntityPersonalizations;
+                    ctrl.currentPersonilizationItems = response.UserEntityPersonalizations;
+                    globalPersonilizationItems = response.GlobalEntityPersonalizations;
                 }
-                return userEntityPersonalizations;
+                return buildSettingsDataOutContext();
             });
         }
 
         function buildEntityUniqueInputs(checkedEntityUniqueNames) {
-            var changedItems = getContext().getPersonalizationItems();
+            var changedItems = typeof (getContext().getPersonalizationItems) == 'function' ? getContext().getPersonalizationItems() : [];
             var inputs = [];
             for (var i = 0; i < changedItems.length; i++) {
                 if (checkedEntityUniqueNames.indexOf(changedItems[i].EntityUniqueName) > -1)
@@ -177,7 +232,9 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
 
         function getEntityPersonalizationChangedItems() {
             var changedItems = [];
-            var newPersonilizationItems = getContext().getPersonalizationItems();
+            var newPersonilizationItems = typeof (getContext().getPersonalizationItems) == 'function' ? getContext().getPersonalizationItems() : [];
+            if (uniqueKeys == undefined)
+                return changedItems;
             for (var i = 0; i < uniqueKeys.length; i++) {
                 var entityUniqueName = uniqueKeys[i].EntityUniqueName;
                 var currentItem = UtilsService.getItemByVal(ctrl.currentPersonilizationItems, entityUniqueName, "EntityUniqueName");
@@ -237,6 +294,18 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                 items: items,
                 justUser: justUser
             };
+        }
+        function buildSettingsDataOutContext() {
+            var outContext = {
+                getItemByUniqueName: function (uniqueName) {
+                    var item = null;
+                    var personilizationItemObject = UtilsService.getItemByVal(ctrl.currentPersonilizationItems, uniqueName, "EntityUniqueName");
+                    if (personilizationItemObject != null)
+                        item = personilizationItemObject.ExtendedSetting;
+                    return item;
+                }
+            };
+            return outContext;
         }
     }
 

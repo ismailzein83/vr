@@ -4306,7 +4306,7 @@ span.option-marketprice {
 }
 
 
-.action-bar .vr-menu-list {
+.action-bar .vr-menu-list , vr-common-personalization .vr-menu-list{
     top: 0px;
     left: 0px;
     position: absolute;
@@ -4324,7 +4324,7 @@ span.option-marketprice {
     z-index: 1500;
     font-size: 10px;
 }
-
+ 
 .vr-menu-list > li > a {
     display: block;
     padding: 3px 5px;

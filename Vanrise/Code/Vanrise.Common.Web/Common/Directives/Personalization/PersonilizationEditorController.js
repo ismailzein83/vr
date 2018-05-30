@@ -39,6 +39,37 @@
                     $scope.onSavePesonilization(checkedEntityUniqueNames, $scope.scopeModel.allUsers);
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.deselectAllClicked = function () {
+                for (var i = 0 ; i < $scope.scopeModel.changedItems.length ; i++) {
+                    var item = $scope.scopeModel.changedItems[i];
+                    item.checked = false ;
+                }
+            };
+            $scope.scopeModel.selectAllClicked = function () {
+                for (var i = 0 ; i < $scope.scopeModel.changedItems.length ; i++) {
+                    var item = $scope.scopeModel.changedItems[i];
+                    item.checked = true;
+                }
+            };
+
+            $scope.scopeModel.disableDeselectAll = function () {                
+                for (var i = 0 ; i < $scope.scopeModel.changedItems.length ; i++) {
+                    var item = $scope.scopeModel.changedItems[i];
+                    if (item.checked == true)
+                        return false;
+                }
+                return true;
+            };
+
+            $scope.scopeModel.disableSelectAll = function () {
+                for (var i = 0 ; i < $scope.scopeModel.changedItems.length ; i++) {
+                    var item = $scope.scopeModel.changedItems[i];
+                    if (item.checked == false)
+                        return false;
+                }
+                return true;
+            };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };

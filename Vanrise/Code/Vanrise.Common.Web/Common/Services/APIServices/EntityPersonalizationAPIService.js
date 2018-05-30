@@ -8,13 +8,14 @@
 
         var controllerName = "EntityPersonalization";
 
-        function UpdateCurrentUserEntityPersonalization(inputs) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateCurrentUserEntityPersonalization'), inputs);
+        function UpdateEntityPersonalization(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateEntityPersonalization'), input);
         }
 
-        function UpdateGlobalEntityPersonalization(inputs) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateGlobalEntityPersonalization'), inputs);
+        function DeleteEntityPersonalization(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'DeleteEntityPersonalization'), input);
         }
+
 
         function GetCurrentUserEntityPersonalization(entityUniqueNames) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetCurrentUserEntityPersonalization'), {
@@ -22,20 +23,15 @@
             });
         }
 
-        function DeleteCurrentUserEntityPersonalization(entityUniqueNames) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'DeleteCurrentUserEntityPersonalization'), entityUniqueNames);
-        }
-
-        function DeleteGlobalEntityPersonalization(entityUniqueNames) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'DeleteGlobalEntityPersonalization'), entityUniqueNames);
+        function DosesUserHaveUpdateGlobalEntityPersonalization() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'DosesUserHaveUpdateGlobalEntityPersonalization'));
         }
 
         return ({
-            UpdateCurrentUserEntityPersonalization: UpdateCurrentUserEntityPersonalization,
-            UpdateGlobalEntityPersonalization: UpdateGlobalEntityPersonalization,
+            UpdateEntityPersonalization: UpdateEntityPersonalization,
+            DeleteEntityPersonalization: DeleteEntityPersonalization,
             GetCurrentUserEntityPersonalization: GetCurrentUserEntityPersonalization,
-            DeleteCurrentUserEntityPersonalization: DeleteCurrentUserEntityPersonalization,
-            DeleteGlobalEntityPersonalization: DeleteGlobalEntityPersonalization
+            DosesUserHaveUpdateGlobalEntityPersonalization: DosesUserHaveUpdateGlobalEntityPersonalization
         });
     }
 
