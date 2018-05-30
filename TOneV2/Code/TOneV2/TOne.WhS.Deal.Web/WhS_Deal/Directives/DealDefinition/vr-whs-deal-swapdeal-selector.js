@@ -93,7 +93,6 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService',
                 };
 
                 api.getSelectedValues = function () {
-                    console.log(swapDealDirectiveAPI.getSelectedValues());
                     return swapDealDirectiveAPI.getSelectedValues();
                 };
 

@@ -163,7 +163,6 @@
                         eed: $scope.scopeModel.endDate,
                         volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
                     };
-                    console.log(payload);
                     volumeCommitmenetItemsAPI.load(payload);
                     updateDescription();
                 }

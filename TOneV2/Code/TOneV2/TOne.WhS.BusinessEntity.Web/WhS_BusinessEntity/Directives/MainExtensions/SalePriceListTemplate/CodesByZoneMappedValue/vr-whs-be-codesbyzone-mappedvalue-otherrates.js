@@ -32,7 +32,6 @@ app.directive('vrWhsBeCodesbyzoneMappedvalueOtherrates', ['UtilsService', 'VRUIU
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.onSelectorReady = function (api) {
-                console.log(api);
                 selectorAPI = api;
                 selectorReadyPromiseDeferred.resolve();
                 defineAPI();

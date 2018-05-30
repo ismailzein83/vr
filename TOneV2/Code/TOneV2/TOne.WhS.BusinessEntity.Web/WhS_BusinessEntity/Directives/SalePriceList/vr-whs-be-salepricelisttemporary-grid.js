@@ -58,7 +58,6 @@ function (utilsService, vrNotificationService, fileApiService, WhS_BE_SalePriceL
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_BE_SalePriceListChangeAPIService.GetFilteredTemporarySalePriceLists(dataRetrievalInput)
                     .then(function (response) {
-                        console.log(response);
                         onResponseReady(response);
                     })
                     .catch(function (error) {
