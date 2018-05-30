@@ -19,6 +19,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public List<AdvancedExcelFileGeneratorTableDefinition> TableDefinitions { get; set; }
 
+        public List<AdvancedExcelFileGeneratorMatrixDefinition> MatrixDefinitions { get; set; }
+
         public override VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context)
         {
             if (this.TableDefinitions != null)
@@ -60,5 +62,39 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public int ColumnIndex { get; set; }
 
         public bool UseFieldDescription { get; set; }
+    }
+
+    public class AdvancedExcelFileGeneratorMatrixDefinition
+    {
+        public Guid VRAutomatedReportQueryId { get; set; }
+
+        public string ListName { get; set; }
+
+        public string SheetIndex { get; set; }
+
+        public int RowIndex { get; set; }
+
+        public int ColumnIndex { get; set; }
+
+        public List<AdvancedExcelFileGeneratorMatrixRowField> RowFields { get; set; }
+
+        public List<AdvancedExcelFileGeneratorMatrixColumnField> ColumnFields { get; set; }
+
+        public AdvancedExcelFileGeneratorMatrixDataField DataField { get; set; }
+    }
+
+    public class AdvancedExcelFileGeneratorMatrixRowField
+    {
+        public string FieldName { get; set; }
+    }
+
+    public class AdvancedExcelFileGeneratorMatrixColumnField
+    {
+        public string FieldName { get; set; }
+    }
+
+    public class AdvancedExcelFileGeneratorMatrixDataField
+    {
+        public string FieldName { get; set; }
     }
 }
