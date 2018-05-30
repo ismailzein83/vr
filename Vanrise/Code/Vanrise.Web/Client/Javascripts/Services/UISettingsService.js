@@ -70,11 +70,13 @@
         }
 
         function getGridLayoutOptions() {
-            var layoutOption = {};
+            var layoutOption = {
+                alternativeColor: true
+            };
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
 
                 var horizontalLine = UtilsService.getItemByVal(uiSettings.Parameters, "HorizontalLine", "Name");
-                    layoutOption.horizontalLine = horizontalLine.Value;
+                layoutOption.horizontalLine = horizontalLine.Value;
 
                 var alternativeColor = UtilsService.getItemByVal(uiSettings.Parameters, "AlternativeColor", "Name");
                 layoutOption.alternativeColor = alternativeColor.Value;

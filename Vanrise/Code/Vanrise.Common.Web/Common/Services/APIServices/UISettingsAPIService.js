@@ -10,7 +10,7 @@
 
 
         function GetUIParameters(input) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetUIParameters'));
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetUIParameters'), {}, { useCache: true });
         }
 
        
