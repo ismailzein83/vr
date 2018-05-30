@@ -104,7 +104,7 @@ as (select * from (values
 ('28411d23-ea66-47ac-a323-106be0b9da7e','CustomObject','Custom Object','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-customobject","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
 ('a80260fd-4492-45c9-8e60-41d91dcd4e9e','Attachment','Attachment','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-attachment","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
 ('ebd22f77-6275-4194-8710-7bf3063dcb68','Guid','Guid','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-guid","RuntimeEditor":"vr-genericdata-fieldtype-guid-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-guid-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-guid-rulefiltereditor"}'),
-('aa969bad-225d-4d83-b76c-68bfdbc0f045','DataRecordRuleEvaluatorDefinition','Data Record Rule Evaluator Definition','VR_Common_VRComponentType','{"Editor":"vr-genericdata-datarecordruleevaluatordefinition-settings"}')
+('aa969bad-225d-4d83-b76c-68bfdbc0f045','DataRecordRuleEvaluatorDefinition','Data Record Rule Evaluator','VR_Common_VRComponentType','{"Editor":"vr-genericdata-datarecordruleevaluatordefinition-settings"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
