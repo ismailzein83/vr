@@ -194,7 +194,10 @@ namespace TOne.WhS.Deal.Business
             if (deals == null || !deals.Any())
                 return null;
 
-            var effectiveDeals = deals.Where(item => item.Settings.EndDate != item.Settings.BeginDate && item.Settings.EndDate.VRGreaterThan(effectiveAfter));
+            List<DealDefinition> effectiveDeals = deals.Where(item => item.Settings.EndDate != item.Settings.BeginDate && item.Settings.EndDate.VRGreaterThan(effectiveAfter)).ToList();
+            if (effectiveDeals == null || effectiveDeals.Count == 0)
+                return null;
+
             return effectiveDeals.MinBy(item => item.Settings.BeginDate).Settings.BeginDate;
         }
        
