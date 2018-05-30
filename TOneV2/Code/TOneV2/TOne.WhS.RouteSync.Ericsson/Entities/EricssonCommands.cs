@@ -75,7 +75,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 	{
 		public CustomerMappingWithActionType CustomerMappingWithActionType { get; set; }
 		public List<string> OBACommands { get; set; }
-		public Dictionary<Guid, string> TrunkCommandsByTrunkId { get; set; }
+		//public Dictionary<Guid, string> TrunkCommandsByTrunkId { get; set; }
 	}
 	public class CustomerMappingWithActionType
 	{

@@ -134,17 +134,18 @@ namespace TOne.WhS.RouteSync.Ericsson
 		{
 			if (customerMapping == null)
 				return null;
-			string trunksAsString = null;
-			if (customerMapping.InTrunks != null && customerMapping.InTrunks.Count > 0)
-			{
-				List<string> trunks = new List<string>();
-				foreach (var trunk in customerMapping.InTrunks.OrderBy(item => item.TrunkId))
-				{
-					trunks.Add(string.Format("{1}{0}{2}{0}{3}", CustomerMappingTrunkPropertySeperatorAsString, trunk.TrunkId, trunk.TrunkName, Convert.ToInt32(trunk.TrunkType)));
-				}
-				trunksAsString = string.Join(CustomerMappingTrunkSeperatorAsString, trunks);
-			}
-			return string.Format("{1}{0}{2}{0}{3}{0}{4}", CustomerMappingPropertySeperatorAsString, customerMapping.BO, customerMapping.NationalOBA, customerMapping.InternationalOBA, trunksAsString);
+			//string trunksAsString = null;
+			//if (customerMapping.InTrunks != null && customerMapping.InTrunks.Count > 0)
+			//{
+			//	List<string> trunks = new List<string>();
+			//	foreach (var trunk in customerMapping.InTrunks.OrderBy(item => item.TrunkId))
+			//	{
+			//		trunks.Add(string.Format("{1}{0}{2}{0}{3}", CustomerMappingTrunkPropertySeperatorAsString, trunk.TrunkId, trunk.TrunkName, Convert.ToInt32(trunk.TrunkType)));
+			//	}
+			//	trunksAsString = string.Join(CustomerMappingTrunkSeperatorAsString, trunks);
+			//}
+			//return string.Format("{1}{0}{2}{0}{3}{0}{4}", CustomerMappingPropertySeperatorAsString, customerMapping.BO, customerMapping.NationalOBA, customerMapping.InternationalOBA, trunksAsString);
+			return string.Format("{1}{0}{2}{0}{3}", CustomerMappingPropertySeperatorAsString, customerMapping.BO, customerMapping.NationalOBA, customerMapping.InternationalOBA);
 		}
 
 		public static CustomerMapping DeserializeCustomerMapping(string serializedCustomerMapping)
@@ -153,39 +154,39 @@ namespace TOne.WhS.RouteSync.Ericsson
 				return null;
 
 			string[] customerMappingPropertiesAsString = serializedCustomerMapping.Split(CustomerMappingPropertySeperator);
-			if (customerMappingPropertiesAsString == null || customerMappingPropertiesAsString.Count() != 4)
+			if (customerMappingPropertiesAsString == null || customerMappingPropertiesAsString.Count() != 3)
 				return null;
 
 			CustomerMapping customerMapping = new CustomerMapping();
 			customerMapping.BO = customerMappingPropertiesAsString[0];
 			customerMapping.NationalOBA = customerMappingPropertiesAsString[1];
 			customerMapping.InternationalOBA = customerMappingPropertiesAsString[2];
-			customerMapping.InTrunks = new List<InTrunk>();
+			//customerMapping.InTrunks = new List<InTrunk>();
 
-			string trunksAsString = customerMappingPropertiesAsString[3];
-			if (!string.IsNullOrEmpty(trunksAsString))
-			{
-				string[] trunks = trunksAsString.Split(CustomerMappingTrunkSeperator);
-				if (trunks != null && trunks.Any())
-				{
-					foreach (var trunkAsString in trunks)
-					{
-						if (string.IsNullOrEmpty(trunkAsString))
-							continue;
-						string[] trunkProperties = trunkAsString.Split(CustomerMappingTrunkPropertySeperator);
-						if (trunkProperties == null || !trunkProperties.Any())
-							continue;
-						InTrunk trunk = new InTrunk();
-						trunk.TrunkId = Guid.Parse(trunkProperties[0]);
-						trunk.TrunkName = trunkProperties[1];
-						trunk.TrunkType = (TrunkType)int.Parse(trunkProperties[2]);
-						customerMapping.InTrunks.Add(trunk);
-					}
-				}
-			}
+			//string trunksAsString = customerMappingPropertiesAsString[3];
+			//if (!string.IsNullOrEmpty(trunksAsString))
+			//{
+			//	string[] trunks = trunksAsString.Split(CustomerMappingTrunkSeperator);
+			//	if (trunks != null && trunks.Any())
+			//	{
+			//		foreach (var trunkAsString in trunks)
+			//		{
+			//			if (string.IsNullOrEmpty(trunkAsString))
+			//				continue;
+			//			string[] trunkProperties = trunkAsString.Split(CustomerMappingTrunkPropertySeperator);
+			//			if (trunkProperties == null || !trunkProperties.Any())
+			//				continue;
+			//			InTrunk trunk = new InTrunk();
+			//			trunk.TrunkId = Guid.Parse(trunkProperties[0]);
+			//			trunk.TrunkName = trunkProperties[1];
+			//			trunk.TrunkType = (TrunkType)int.Parse(trunkProperties[2]);
+			//			//customerMapping.InTrunks.Add(trunk);
+			//		}
+			//	}
+			//}
 
-			if (customerMapping.InTrunks.Count == 0)
-				customerMapping.InTrunks = null;
+			//if (customerMapping.InTrunks.Count == 0)
+			//	customerMapping.InTrunks = null;
 
 			return customerMapping;
 		}

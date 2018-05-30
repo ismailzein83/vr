@@ -315,56 +315,58 @@ namespace TOne.WhS.RouteSync.Ericsson
 			routeDataManager.Finalize(new RouteFinalizeContext());
 			#endregion
 
+			LogAllCommands(commandResults, ftpLogger, finalizeTime);
 		}
 
 		public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
 		{
 			if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
 				return true;
+			return true;
 
-			Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>();
+			//Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>();
 
-			foreach (var mapping in this.CarrierMappings.Values)
-			{
-				if (mapping.CustomerMapping != null && mapping.CustomerMapping.InTrunks != null)
-				{
-					foreach (var inTrunk in mapping.CustomerMapping.InTrunks)
-					{
-						List<int> carrierAccountIds = carrierAccountIdsByTrunkName.GetOrCreateItem(inTrunk.TrunkName);
-						carrierAccountIds.Add(mapping.CarrierId);
-					}
-				}
-			}
+			//foreach (var mapping in this.CarrierMappings.Values)
+			//{
+			//	if (mapping.CustomerMapping != null && mapping.CustomerMapping.InTrunks != null)
+			//	{
+			//		foreach (var inTrunk in mapping.CustomerMapping.InTrunks)
+			//		{
+			//			List<int> carrierAccountIds = carrierAccountIdsByTrunkName.GetOrCreateItem(inTrunk.TrunkName);
+			//			carrierAccountIds.Add(mapping.CarrierId);
+			//		}
+			//	}
+			//}
 
-			Dictionary<string, List<int>> duplicatedInTrunks = carrierAccountIdsByTrunkName.Where(itm => itm.Value.Count > 1).ToDictionary(itm => itm.Key, itm => itm.Value);
-			if (duplicatedInTrunks.Count == 0)
-				return true;
+			//Dictionary<string, List<int>> duplicatedInTrunks = carrierAccountIdsByTrunkName.Where(itm => itm.Value.Count > 1).ToDictionary(itm => itm.Key, itm => itm.Value);
+			//if (duplicatedInTrunks.Count == 0)
+			//	return true;
 
-			List<string> validationMessages = new List<string>();
+			//List<string> validationMessages = new List<string>();
 
-			if (duplicatedInTrunks.Count > 0)
-			{
-				CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+			//if (duplicatedInTrunks.Count > 0)
+			//{
+			//	CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
-				foreach (var kvp in duplicatedInTrunks)
-				{
-					string trunkName = kvp.Key;
-					List<int> customerIds = kvp.Value;
+			//	foreach (var kvp in duplicatedInTrunks)
+			//	{
+			//		string trunkName = kvp.Key;
+			//		List<int> customerIds = kvp.Value;
 
-					List<string> carrierAccountNames = new List<string>();
+			//		List<string> carrierAccountNames = new List<string>();
 
-					foreach (var customerId in customerIds)
-					{
-						string customerName = carrierAccountManager.GetCarrierAccountName(customerId);
-						carrierAccountNames.Add(string.Format("'{0}'", customerName));
-					}
+			//		foreach (var customerId in customerIds)
+			//		{
+			//			string customerName = carrierAccountManager.GetCarrierAccountName(customerId);
+			//			carrierAccountNames.Add(string.Format("'{0}'", customerName));
+			//		}
 
-					validationMessages.Add(string.Format("Trunk Name: '{0}' is duplicated at Carrier Accounts: {1}", trunkName, string.Join(", ", carrierAccountNames)));
-				}
-			}
+			//		validationMessages.Add(string.Format("Trunk Name: '{0}' is duplicated at Carrier Accounts: {1}", trunkName, string.Join(", ", carrierAccountNames)));
+			//	}
+			//}
 
-			context.ValidationMessages = validationMessages;
-			return false;
+			//context.ValidationMessages = validationMessages;
+			//return false;
 		}
 
 		#endregion
@@ -512,13 +514,13 @@ namespace TOne.WhS.RouteSync.Ericsson
 					if (customerMappingToAdd != null)
 					{
 						var customerMappingToAddOBACommands = GetCustomerMappingOBACommands(customerMappingToAdd);
-						var customerMappingToAddTrunksCommands = GetCustomerMappingTrunksCommands(customerMappingToAdd);
+						//var customerMappingToAddTrunksCommands = GetCustomerMappingTrunksCommands(customerMappingToAdd);
 
 						customerMappingsWithCommands.Add(new CustomerMappingWithCommands()
 						{
 							CustomerMappingWithActionType = new CustomerMappingWithActionType() { CustomerMapping = customerMappingToAdd, ActionType = CustomerMappingActionType.Add },
 							OBACommands = customerMappingToAddOBACommands,
-							TrunkCommandsByTrunkId = customerMappingToAddTrunksCommands
+							//TrunkCommandsByTrunkId = customerMappingToAddTrunksCommands
 						});
 					}
 				}
@@ -534,12 +536,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 					if (customerMappingToUpdate != null)
 					{
 						var customerMappingToUpdateOBACommands = GetCustomerMappingOBACommands(customerMappingToUpdate);
-						var customerMappingToUpdateTrunksCommands = GetCustomerMappingTrunksCommands(customerMappingToUpdate);
+						//var customerMappingToUpdateTrunksCommands = GetCustomerMappingTrunksCommands(customerMappingToUpdate);
 
 						customerMappingsWithCommands.Add(new CustomerMappingWithCommands()
 						{
 							OBACommands = customerMappingToUpdateOBACommands,
-							TrunkCommandsByTrunkId = customerMappingToUpdateTrunksCommands,
+							//TrunkCommandsByTrunkId = customerMappingToUpdateTrunksCommands,
 							CustomerMappingWithActionType = new CustomerMappingWithActionType() { CustomerMapping = customerMappingToUpdate, CustomerMappingOldValue = customerMappingOldValue, ActionType = CustomerMappingActionType.Update }
 						});
 					}
@@ -576,6 +578,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			customerMappingOBACommands.Add(string.Format("{0}: BO={1}, NAPI=1, BNT=4, OBA={2};", EricssonCommands.PNBSI_Command, customerMappingToAdd.BO, customerMappingToAdd.NationalOBA));
 			return customerMappingOBACommands;
 		}
+		/*
 		private Dictionary<Guid, string> GetCustomerMappingTrunksCommands(CustomerMapping customerMappingToAdd)
 		{
 			var customerMappingTrunksCommands = new Dictionary<Guid, string>();
@@ -591,6 +594,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 			return customerMappingTrunksCommands;
 		}
+		*/
 		private List<string> GetCustomerMappingDeleteCommands(CustomerMapping customerMappingToDelete)
 		{
 			return new List<string>() { string.Format("{0}: B={1};", EricssonCommands.ANBSE_Command, customerMappingToDelete.BO) };
@@ -1059,8 +1063,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 				foreach (var succeedCustomerMappingWithCommands in succeedCustomerMappingsWithCommands)
 				{
 					var obaCommands = string.Join(Environment.NewLine, succeedCustomerMappingWithCommands.OBACommands);
-					var trunkCommands = string.Join(Environment.NewLine, succeedCustomerMappingWithCommands.TrunkCommandsByTrunkId.Values);
-					var commands = string.Join(Environment.NewLine, obaCommands, trunkCommands);
+					//var trunkCommands = string.Join(Environment.NewLine, succeedCustomerMappingWithCommands.TrunkCommandsByTrunkId.Values);
+					//var commands = string.Join(Environment.NewLine, obaCommands, trunkCommands);
+					var commands = string.Join(Environment.NewLine, obaCommands);
 					commandResults.Add(new CommandResult() { Command = commands });
 				}
 				ILogCarrierMappingsContext logRouteCasesContext = new LogCarrierMappingsContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Succeeded, CommandResults = commandResults };
@@ -1073,8 +1078,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 				foreach (var succeedCustomerMappingWithCommands in succeedCustomerMappingsWithCommands)
 				{
 					var obaCommands = string.Join(Environment.NewLine, succeedCustomerMappingWithCommands.OBACommands);
-					var trunkCommands = string.Join(Environment.NewLine, succeedCustomerMappingWithCommands.TrunkCommandsByTrunkId.Values);
-					var commands = string.Join(Environment.NewLine, obaCommands, trunkCommands);
+					//var trunkCommands = string.Join(Environment.NewLine, succeedCustomerMappingWithCommands.TrunkCommandsByTrunkId.Values);
+					//var commands = string.Join(Environment.NewLine, obaCommands, trunkCommands);
+					var commands = string.Join(Environment.NewLine, obaCommands);
 					commandResults.Add(new CommandResult() { Command = commands });
 				}
 				ILogCarrierMappingsContext logRouteCasesContext = new LogCarrierMappingsContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Succeeded, CommandResults = commandResults };
@@ -1096,6 +1102,15 @@ namespace TOne.WhS.RouteSync.Ericsson
 				var commandResults = failedRouteCasesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
 				ILogRouteCasesContext logRouteCasesContext = new LogRouteCasesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Failed, CommandResults = commandResults };
 				ftpLogger.LogRouteCases(logRouteCasesContext);
+			}
+		}
+
+		private static void LogAllCommands(List<CommandResult> allCommands, SwitchLogger ftpLogger, DateTime dateTime)
+		{
+			if (allCommands != null && allCommands.Count > 0)
+			{
+				ILogCommandsContext logRouteCasesContext = new LogCommandsContext() { ExecutionDateTime = dateTime, CommandResults = allCommands };
+				ftpLogger.LogCommands(logRouteCasesContext);
 			}
 		}
 		#endregion
@@ -1179,6 +1194,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 										isCustomerSucceed = false;
 										break;
 									}
+								}
+
+								if (isCustomerSucceed)
+								{
 									customerMappingSucceededWithCommands = new CustomerMappingWithCommands();
 									customerMappingSucceededWithCommands.CustomerMappingWithActionType = new CustomerMappingWithActionType()
 									{
@@ -1187,9 +1206,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 									};
 
 									customerMappingSucceededWithCommands.OBACommands = customerMappingWithCommands.OBACommands;
+									//customerMappingSucceededWithCommands.TrunkCommandsByTrunkId = new Dictionary<Guid, string>();
 								}
 
-								var trunkFailed = false;
+								/*var trunkFailed = false;
 								if (isCustomerSucceed && customerMappingWithCommands.TrunkCommandsByTrunkId != null)
 								{
 									foreach (var trunkCommandKvp in customerMappingWithCommands.TrunkCommandsByTrunkId)
@@ -1200,6 +1220,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 										if (IsCommandSucceed(response))
 										{
+											if (customerMappingSucceededWithCommands.CustomerMappingWithActionType.CustomerMapping.InTrunks == null)
+												customerMappingSucceededWithCommands.CustomerMappingWithActionType.CustomerMapping.InTrunks = new List<InTrunk>();
 											var trunk = customerMappingWithCommands.CustomerMappingWithActionType.CustomerMapping.InTrunks.FindRecord(item => item.TrunkId == trunkCommandKvp.Key);
 											customerMappingSucceededWithCommands.CustomerMappingWithActionType.CustomerMapping.InTrunks.Add(trunk);
 											customerMappingSucceededWithCommands.TrunkCommandsByTrunkId.Add(trunkCommandKvp.Key, trunkCommand);
@@ -1213,12 +1235,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 											customerMappingFailedWithCommands.TrunkCommandsByTrunkId.Add(trunkCommandKvp.Key, trunkCommand);
 										}
 									}
-								}
+								}*/
 
 								if (isCustomerSucceed)
 									succeededCustomerMappingsWithCommands.Add(customerMappingSucceededWithCommands);
-								if (trunkFailed)
-									succeedCustomerMappingsWithFailedTrunk.Add(customerMappingSucceededWithCommands);
+								/*if (trunkFailed)
+									succeedCustomerMappingsWithFailedTrunk.Add(customerMappingSucceededWithCommands);*/
 								if (customerMappingFailedWithCommands != null)
 									failedCustomerMappingsWithCommands.Add(customerMappingFailedWithCommands);
 							}
@@ -1466,7 +1488,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				}
 				foreach (var ericssonRouteWithCommands in ericssonRoutesWithCommands)
 				{
-					if (faildRouteCaseNumbers.Contains(ericssonRouteWithCommands.RouteCompareResult.Route.RCNumber))
+					if (ericssonRouteWithCommands.RouteCompareResult != null && faildRouteCaseNumbers.Contains(ericssonRouteWithCommands.RouteCompareResult.Route.RCNumber))
 					{
 						var allFailedRoutesWithCommands = allFailedRoutesWithCommandsByBo.GetOrCreateItem(customerBo);
 						allFailedRoutesWithCommands.Add(ericssonRouteWithCommands);

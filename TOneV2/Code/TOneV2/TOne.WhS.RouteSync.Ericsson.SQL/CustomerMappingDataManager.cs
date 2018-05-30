@@ -275,10 +275,10 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 																	begin
 																		DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}_old
 																	end
-																EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{1}]', '[WhS_RouteSync_Ericsson_{0}].[{1}]_old';
+																EXEC sp_rename 'WhS_RouteSync_Ericsson_{0}.{1}', '{1}_old';
 														  end
 
-	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '[WhS_RouteSync_Ericsson_{0}].[{1}]';";
+	                                        EXEC sp_rename 'WhS_RouteSync_Ericsson_{0}.{2}', '{1}';";
 
 		const string query_SyncWithCustomerMappingSucceededTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN

@@ -23,52 +23,53 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
             var isFirstLoad = true;
             var context;
 
-            var trunkGridAPI;
-            var trunkGridReadyDeferred = UtilsService.createPromiseDeferred();
+            //var trunkGridAPI;
+            //var trunkGridReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.trunks = [];
+                //$scope.scopeModel.trunks = [];
                 $scope.scopeModel.customerMappingExists = false;
-                $scope.scopeModel.trunkTypes = UtilsService.getArrayEnum(WhS_RouteSync_TrunkTypeEnum);
+                //$scope.scopeModel.trunkTypes = UtilsService.getArrayEnum(WhS_RouteSync_TrunkTypeEnum);
 
-                $scope.scopeModel.onTrunkGridReady = function (api) {
-                    trunkGridAPI = api;
-                    trunkGridReadyDeferred.resolve();
-                };
+                //$scope.scopeModel.onTrunkGridReady = function (api) {
+                //    trunkGridAPI = api;
+                //    trunkGridReadyDeferred.resolve();
+                //};
 
-                $scope.scopeModel.onTrunkAdded = function () {
-                    $scope.scopeModel.trunks.push({
-                        TrunkId: UtilsService.guid(),
-                        TrunkName: undefined,
-                        selectedTrunkType: UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', 0),
-                        //IsRouting: true
-                    });
+                //$scope.scopeModel.onTrunkAdded = function () {
+                //    $scope.scopeModel.trunks.push({
+                //        TrunkId: UtilsService.guid(),
+                //        TrunkName: undefined,
+                //        selectedTrunkType: UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', 0),
+                //        //IsRouting: true
+                //    });
 
-                    $scope.scopeModel.isCustomerMappingExists();
-                };
+                //    $scope.scopeModel.isCustomerMappingExists();
+                //};
 
-                $scope.scopeModel.onTrunkDeleted = function (deleteItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.trunks, deleteItem.TrunkId, 'TrunkId');
-                    $scope.scopeModel.trunks.splice(index, 1);
+                //$scope.scopeModel.onTrunkDeleted = function (deleteItem) {
+                //    var index = UtilsService.getItemIndexByVal($scope.scopeModel.trunks, deleteItem.TrunkId, 'TrunkId');
+                //    $scope.scopeModel.trunks.splice(index, 1);
 
-                    $scope.scopeModel.isCustomerMappingExists();
-                };
+                //    $scope.scopeModel.isCustomerMappingExists();
+                //};
 
                 $scope.scopeModel.isCustomerMappingExists = function () {
                     if (isFirstLoad)
                         return;
 
-                    if ($scope.scopeModel.trunks.length > 0) {
-                        $scope.scopeModel.customerMappingExists = true;
-                    } else {
+					//if ($scope.scopeModel.trunks.length > 0)
+					//{
+                    //    $scope.scopeModel.customerMappingExists = true;
+					//} else{
                         $scope.scopeModel.customerMappingExists = isBOMappingExists();
-                    }
+                    //}
 
                     updateCustomerDescriptions();
                 };
 
-                $scope.scopeModel.isTrunksValid = function () {
+                /*$scope.scopeModel.isTrunksValid = function () {
                     if (!isFirstLoad) {
                         var trunks = $scope.scopeModel.trunks;
                         if (trunks.length == 0) {
@@ -89,7 +90,7 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                         }
                     }
                     return null;
-                };
+                };*/
 
                 defineAPI();
             }
@@ -114,33 +115,33 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                         }
                     }
 
-                    if (customerMapping != undefined && customerMapping.InTrunks != undefined) {
-                        var trunkGridLoadPromise = getTrunkGridLoadPromise(customerMapping.InTrunks);
-                        promises.push(trunkGridLoadPromise);
-                    }
+                    //if (customerMapping != undefined && customerMapping.InTrunks != undefined) {
+                    //    var trunkGridLoadPromise = getTrunkGridLoadPromise(customerMapping.InTrunks);
+                    //    promises.push(trunkGridLoadPromise);
+                    //}
 
-                    function getTrunkGridLoadPromise(trunks) {
-                        var trunkGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //function getTrunkGridLoadPromise(trunks) {
+                    //    var trunkGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        trunkGridReadyDeferred.promise.then(function () {
-                            var _promises = [];
+                    //    trunkGridReadyDeferred.promise.then(function () {
+                    //        var _promises = [];
 
-                            for (var index = 0; index < trunks.length; index++) {
-                                var trunkTypeLoadSelectorDeferred = UtilsService.createPromiseDeferred();
-                                _promises.push(trunkTypeLoadSelectorDeferred.promise);
+                    //        for (var index = 0; index < trunks.length; index++) {
+                    //            var trunkTypeLoadSelectorDeferred = UtilsService.createPromiseDeferred();
+                    //            _promises.push(trunkTypeLoadSelectorDeferred.promise);
 
-                                var currentTrunk = trunks[index];
-                                extendTrunkEntity(currentTrunk, trunkTypeLoadSelectorDeferred);
-                                $scope.scopeModel.trunks.push(currentTrunk);
-                            }
+                    //            var currentTrunk = trunks[index];
+                    //            extendTrunkEntity(currentTrunk, trunkTypeLoadSelectorDeferred);
+                    //            $scope.scopeModel.trunks.push(currentTrunk);
+                    //        }
 
-                            UtilsService.waitMultiplePromises(_promises).then(function () {
-                                trunkGridLoadPromiseDeferred.resolve();
-                            });
-                        });
+                    //        UtilsService.waitMultiplePromises(_promises).then(function () {
+                    //            trunkGridLoadPromiseDeferred.resolve();
+                    //        });
+                    //    });
 
-                        return trunkGridLoadPromiseDeferred.promise;
-                    }
+                    //    return trunkGridLoadPromiseDeferred.promise;
+                    //}
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         isFirstLoad = false;
@@ -155,13 +156,13 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                     ctrl.onReady(api);
             }
 
-            function extendTrunkEntity(trunk, trunkTypeLoadSelectorDeferred) {
-                trunk.onTrunkTypeSelectorReady = function (api) {
-                    //trunk.trunkTypeSelectorGridAPI = api;
-                    trunk.selectedTrunkType = UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', trunk.TrunkType);
-                    trunkTypeLoadSelectorDeferred.resolve();
-                };
-            }
+            //function extendTrunkEntity(trunk, trunkTypeLoadSelectorDeferred) {
+            //    trunk.onTrunkTypeSelectorReady = function (api) {
+            //        //trunk.trunkTypeSelectorGridAPI = api;
+            //        trunk.selectedTrunkType = UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', trunk.TrunkType);
+            //        trunkTypeLoadSelectorDeferred.resolve();
+            //    };
+            //}
 
             function isBOMappingExists() {
                 var bo = $scope.scopeModel.bo;
@@ -210,29 +211,30 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
 
             function getCustomerMappingEntity() {
 
-                function getTrunks() {
-                    var trunks = [];
-                    for (var index = 0; index < $scope.scopeModel.trunks.length; index++) {
-                        var currentTrunk = $scope.scopeModel.trunks[index];
-                        trunks.push({
-                            TrunkId: currentTrunk.TrunkId,
-                            TrunkName: currentTrunk.TrunkName,
-                            TrunkType: currentTrunk.selectedTrunkType.value,
-                            //IsRouting: currentTrunk.IsRouting
-                        });
-                    }
-                    return trunks.length > 0 ? trunks : undefined;
-                }
+                //function getTrunks() {
+                //    var trunks = [];
+                //    for (var index = 0; index < $scope.scopeModel.trunks.length; index++) {
+                //        var currentTrunk = $scope.scopeModel.trunks[index];
+                //        trunks.push({
+                //            TrunkId: currentTrunk.TrunkId,
+                //            TrunkName: currentTrunk.TrunkName,
+                //            TrunkType: currentTrunk.selectedTrunkType.value,
+                //            //IsRouting: currentTrunk.IsRouting
+                //        });
+                //    }
+                //    return trunks.length > 0 ? trunks : undefined;
+                //}
 
-                var inTrunks = getTrunks();
-                if($scope.scopeModel.bo == undefined &&  $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined && inTrunks == undefined)
+                //var inTrunks = getTrunks();
+				//if ($scope.scopeModel.bo == undefined && $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined && inTrunks == undefined)
+                if($scope.scopeModel.bo == undefined &&  $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined)
                     return null;
 
                 return {
                     BO: $scope.scopeModel.bo,
                     NationalOBA: $scope.scopeModel.nationalOBA,
                     InternationalOBA: $scope.scopeModel.internationalOBA,
-                    InTrunks: inTrunks
+                    //InTrunks: inTrunks
                 };
             }
         }
