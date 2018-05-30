@@ -9,7 +9,13 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---[common].[extensionconfiguration]-------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('DFA58374-4249-4526-AB1A-7786AAC6B91B','VR_GenericData_GenericBusinessEntity','Business Entity','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}'),
+--[common].[extensionconfiguration]-------------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('DFA58374-4249-4526-AB1A-7786AAC6B91B','VR_GenericData_GenericBusinessEntity','Business Entity','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html","EnableAdd":false}'),
 ('A3AD3B1D-B56A-49D0-BC25-0F1EF7DFB03D','VR_GenericData_GenericRule','Generic Rule'				,'VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionEditor.html","EnableAdd":false}'),
 ('729BE766-F3D7-4BCC-9678-CCCF57BD4AAD','VR_GenericData_GenericView','Generic Rules View'		,'VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/VR_GenericData/Views/GenericRuleView/GenericRuleViewEditor.html","EnableAdd":true}'),
 
@@ -43,12 +49,40 @@ Post-Deployment Script Template
 ('AE91755C-F573-4ADD-8DBA-7733193384AF','VR_MappingRule','Mapping Rule','VR_GenericData_GenericRuleTypeConfig'													,'{"Editor":"vr-genericdata-genericruledefinitionsettings-mapping","RuntimeEditor":"vr-genericdata-genericrulesettings-mapping-runtimeeditor","RuleTypeFQTN":"Vanrise.GenericData.Transformation.Entities.MappingRule, Vanrise.GenericData.Transformation.Entities","RuleManagerFQTN":"Vanrise.GenericData.Transformation.MappingRuleManager, Vanrise.GenericData.Transformation","FilterEditor":"vr-genericdata-genericrulesettings-mapping-filtereditor"}'),
 ('D2BA0E63-A47D-4F41-93C9-2DF105EDC26C','VR_NormalizationRule','Normalization Rule','VR_GenericData_GenericRuleTypeConfig'										,'{"Editor":"vr-genericdata-genericruledefinitionsettings-normalization","RuntimeEditor":"vr-rules-normalizenumbersettings", "RuleTypeFQTN":"Vanrise.GenericData.Normalization.NormalizationRule, Vanrise.GenericData.Normalization", "RuleManagerFQTN":"Vanrise.GenericData.Normalization.NormalizationRuleManager, Vanrise.GenericData.Normalization"}'),
 ('5969790E-1BD4-45E4-BE39-B8D7FA6A1842','VR_RateTypeRule','Rate Type Rule','VR_GenericData_GenericRuleTypeConfig'												,'{"Editor":"vr-genericdata-genericruledefinitionsettings-ratetype","RuntimeEditor":"vr-rules-pricingrulesettings-ratetype", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.RateTypeRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.RateTypeRuleManager, Vanrise.GenericData.Pricing"}'),
-('B2061C48-A2C9-4494-A707-0E84A195B5E5','VR_TariffRule','Tariff Rule','VR_GenericData_GenericRuleTypeConfig'													,'{"Editor":"vr-genericdata-genericruledefinitionsettings-tariff","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}'),('EBB2BF06-4FD8-4942-8DF4-8892A22AA6FD','VR_BalanceAlert','Balance Action Rule','VR_GenericData_GenericRuleTypeConfig'											,'{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-accountbalance-balancealertrulesettings", "RuleTypeFQTN":"Vanrise.AccountBalance.Entities.BalanceAlertRule, Vanrise.AccountBalance.Entities", "RuleManagerFQTN":" Vanrise.AccountBalance.Business.BalanceAlertRuleManager, Vanrise.AccountBalance.Business"}'),('14950E0B-749A-44D6-9464-F8B1A41D1EDF','VR_TaxRule','Tax Rule','VR_GenericData_GenericRuleTypeConfig'															,'{"Editor":"vr-genericdata-genericruledefinitionsettings-tax","RuntimeEditor":"vr-rules-pricingrulesettings-tax", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TaxRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TaxRuleManager, Vanrise.GenericData.Pricing"}'),('B8712417-83AB-4D4B-9EE1-109D20CEB909','DateTime','DateTime','VR_GenericData_DataRecordFieldType'																,'{"Editor":"vr-genericdata-fieldtype-datetime","RuntimeEditor":"vr-genericdata-fieldtype-datetime-runtimeeditor","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),('3F29315E-B542-43B8-9618-7DE216CD9653','Text','Text','VR_GenericData_DataRecordFieldType'																		,'{"Editor":"vr-genericdata-fieldtype-text","RuntimeEditor":"vr-genericdata-fieldtype-text-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-text-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-text-rulefiltereditor"}'),('75AEF329-27BD-4108-B617-F5CC05FF2AA3','Number','Number','VR_GenericData_DataRecordFieldType'																	,'{"Editor":"vr-genericdata-fieldtype-number","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-number-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-number-rulefiltereditor"}'),('EABC41A9-E332-4120-AC85-F0B7E53C0D0D','Choices','Choices','VR_GenericData_DataRecordFieldType'																,'{"Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),('A77FAD19-D044-40D8-9D04-6362B79B177B','Boolean','Boolean','VR_GenericData_DataRecordFieldType'																,'{"Editor":"vr-genericdata-fieldtype-boolean","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor"}'),('2E16C3D4-837B-4433-B80E-7C02F6D71467','Business Entity','Business Entity','VR_GenericData_DataRecordFieldType'												,'{"Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),('82E04A93-5A3F-4C32-80A4-08E1DAFCF305','Array','Array','VR_GenericData_DataRecordFieldType'																	,'{"Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}'),('414C5C8D-48AD-4343-ABDA-4CD34D570C53','Dictionary','Dictionary','VR_GenericData_DataRecordFieldType'															,'{"Editor":"vr-genericdata-fieldtype-dictionary","RuntimeEditor":"vr-genericdata-fieldtype-dictionary-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-dictionary-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-dictionary-rulefiltereditor"}'),('BBC57155-0412-4371-83E5-1917A8BEA468','VR_GenericData_VRObjectTypes_DataRecordType','Data Record','VR_Common_ObjectType'													,'{"Editor":"vr-genericdata-datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}'),('F663BF74-99DB-4746-8CBC-E74198E1786C','VR_GenericData_VRObjectTypes_DataRecordField','Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator'						,'{"Editor":"vr-genericdata-datarecordobjectfield"}'),
+('B2061C48-A2C9-4494-A707-0E84A195B5E5','VR_TariffRule','Tariff Rule','VR_GenericData_GenericRuleTypeConfig'													,'{"Editor":"vr-genericdata-genericruledefinitionsettings-tariff","RuntimeEditor":"vr-rules-pricingrulesettings-tariff", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TariffRuleManager, Vanrise.GenericData.Pricing"}'),
+('EBB2BF06-4FD8-4942-8DF4-8892A22AA6FD','VR_BalanceAlert','Balance Action Rule','VR_GenericData_GenericRuleTypeConfig'											,'{"Editor":"vr-genericdata-genericruledefinitionsettings-nosettings","RuntimeEditor":"vr-accountbalance-balancealertrulesettings", "RuleTypeFQTN":"Vanrise.AccountBalance.Entities.BalanceAlertRule, Vanrise.AccountBalance.Entities", "RuleManagerFQTN":" Vanrise.AccountBalance.Business.BalanceAlertRuleManager, Vanrise.AccountBalance.Business"}'),
+('14950E0B-749A-44D6-9464-F8B1A41D1EDF','VR_TaxRule','Tax Rule','VR_GenericData_GenericRuleTypeConfig'															,'{"Editor":"vr-genericdata-genericruledefinitionsettings-tax","RuntimeEditor":"vr-rules-pricingrulesettings-tax", "RuleTypeFQTN":"Vanrise.GenericData.Pricing.TaxRule, Vanrise.GenericData.Pricing", "RuleManagerFQTN":"Vanrise.GenericData.Pricing.TaxRuleManager, Vanrise.GenericData.Pricing"}'),
+
+('B8712417-83AB-4D4B-9EE1-109D20CEB909','DateTime','DateTime','VR_GenericData_DataRecordFieldType'																,'{"Editor":"vr-genericdata-fieldtype-datetime","RuntimeEditor":"vr-genericdata-fieldtype-datetime-runtimeeditor","RuleFilterEditor":"vr-genericdata-fieldtype-datetime-rulefiltereditor"}'),
+('3F29315E-B542-43B8-9618-7DE216CD9653','Text','Text','VR_GenericData_DataRecordFieldType'																		,'{"Editor":"vr-genericdata-fieldtype-text","RuntimeEditor":"vr-genericdata-fieldtype-text-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-text-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-text-rulefiltereditor"}'),
+('75AEF329-27BD-4108-B617-F5CC05FF2AA3','Number','Number','VR_GenericData_DataRecordFieldType'																	,'{"Editor":"vr-genericdata-fieldtype-number","RuntimeEditor":"vr-genericdata-fieldtype-number-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-number-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-number-rulefiltereditor"}'),
+('EABC41A9-E332-4120-AC85-F0B7E53C0D0D','Choices','Choices','VR_GenericData_DataRecordFieldType'																,'{"Editor":"vr-genericdata-fieldtype-choices","RuntimeEditor":"vr-genericdata-fieldtype-choices-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-choices-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-choices-rulefiltereditor"}'),
+('A77FAD19-D044-40D8-9D04-6362B79B177B','Boolean','Boolean','VR_GenericData_DataRecordFieldType'																,'{"Editor":"vr-genericdata-fieldtype-boolean","RuleFilterEditor":"vr-genericdata-fieldtype-boolean-rulefiltereditor","RuntimeEditor":"vr-genericdata-fieldtype-boolean-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-boolean-filtereditor"}'),
+('2E16C3D4-837B-4433-B80E-7C02F6D71467','Business Entity','Business Entity','VR_GenericData_DataRecordFieldType'												,'{"Editor":"vr-genericdata-fieldtype-businessentity","RuntimeEditor":"vr-genericdata-fieldtype-businessentity-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-businessentity-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-businessentity-rulefiltereditor"}'),
+('82E04A93-5A3F-4C32-80A4-08E1DAFCF305','Array','Array','VR_GenericData_DataRecordFieldType'																	,'{"Editor":"vr-genericdata-fieldtype-array","RuntimeEditor":"vr-genericdata-fieldtype-array-runtimeeditor", "FilterEditor": "vr-genericdata-fieldtype-array-filtereditor"}'),
+('414C5C8D-48AD-4343-ABDA-4CD34D570C53','Dictionary','Dictionary','VR_GenericData_DataRecordFieldType'															,'{"Editor":"vr-genericdata-fieldtype-dictionary","RuntimeEditor":"vr-genericdata-fieldtype-dictionary-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-dictionary-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-dictionary-rulefiltereditor"}'),
+
+('BBC57155-0412-4371-83E5-1917A8BEA468','VR_GenericData_VRObjectTypes_DataRecordType','Data Record','VR_Common_ObjectType'													,'{"Editor":"vr-genericdata-datarecordobjecttype", "PropertyEvaluatorExtensionType": "VR_GenericData_DataRecordObjectType_PropertyEvaluator"}'),
+('F663BF74-99DB-4746-8CBC-E74198E1786C','VR_GenericData_VRObjectTypes_DataRecordField','Field','VR_GenericData_DataRecordObjectType_PropertyEvaluator'						,'{"Editor":"vr-genericdata-datarecordobjectfield"}'),
 ('FE0EE225-6893-410F-8095-1834DB99D7B7','VR_GenericData_VRObjectTypes_DataRecordFieldComparison','Field Comparison','VR_GenericData_DataRecordObjectType_PropertyEvaluator'	,'{"Editor":"vr-genericdata-datarecordobjectfieldcomparison"}'),
 
-('AAF0C72D-1C8F-47DA-AC11-DD7819B93351','Execute Highest Level','Execute Highest Level','VR_GenericData_DataRecordAlertRuleConfig'													,'{"Editor":"vr-genericdata-datarecordalertrule-recordfilter-management"}'),('434F7B1E-8B93-4144-9150-E24BF3EB4EFB','VR_Notification_VRAlertRuleTypeSettings_DataRecordActionRuleTypeSettings','Data Record Alert','VR_Notification_VRAlertRuleTypeSettings'	,'{"Editor":"vr-genericdata-datarecordalertruletype-settings"}'),('8DC29F02-7197-4C60-8E21-CBDE0C2AE87B','BEDefinitionOverriddenConfiguration','BEDefinition Overridden Configuration','VRCommon_OverriddenConfiguration','{"Editor":"vr-genericdata-overriddenconfiguration-bedefinition"}'),('B2903DAC-1980-4C21-82FB-8DCC72E5068D','GenericRuleDefinitionOverriddenConfiguration','Generic Rule Definition Overridden Configuration','VRCommon_OverriddenConfiguration','{"Editor":"vr-genericdata-overriddenconfiguration-genericruledefinition"}'),('B99B2B0A-9A80-49FC-B68F-C946E1628595','VR_GenericData_GenericBEView','Generic BE','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-genericdata-genericbusinessentity-vieweditor"}'),
+('AAF0C72D-1C8F-47DA-AC11-DD7819B93351','Execute Highest Level','Execute Highest Level','VR_GenericData_DataRecordAlertRuleConfig'													,'{"Editor":"vr-genericdata-datarecordalertrule-recordfilter-management"}'),
+('434F7B1E-8B93-4144-9150-E24BF3EB4EFB','VR_Notification_VRAlertRuleTypeSettings_DataRecordActionRuleTypeSettings','Data Record Alert','VR_Notification_VRAlertRuleTypeSettings'	,'{"Editor":"vr-genericdata-datarecordalertruletype-settings"}'),
+('8DC29F02-7197-4C60-8E21-CBDE0C2AE87B','BEDefinitionOverriddenConfiguration','BEDefinition Overridden Configuration','VRCommon_OverriddenConfiguration','{"Editor":"vr-genericdata-overriddenconfiguration-bedefinition"}'),
+('B2903DAC-1980-4C21-82FB-8DCC72E5068D','GenericRuleDefinitionOverriddenConfiguration','Generic Rule Definition Overridden Configuration','VRCommon_OverriddenConfiguration','{"Editor":"vr-genericdata-overriddenconfiguration-genericruledefinition"}'),
+('B99B2B0A-9A80-49FC-B68F-C946E1628595','VR_GenericData_GenericBEView','Generic BE','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-genericdata-genericbusinessentity-vieweditor"}'),
+
 ('3B904E8C-2AC0-43DB-A4EF-425869D40544','DataRecordSendEmail','Data Record Send Email','VR_Notification_VRActionDefinition'												,'{"Editor":"vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail"}'),
-('E64C51A2-08E0-4B7D-96F0-9FF1848A72FA','VR_GenericData_DataRecordNotificationTypeSettings','Data Record Notification','VR_Notification_VRNotificationTypeSettings'		,'{"Editor" : "vr-genericdata-datarecordnotificationtype-settings"}'),('458EBD88-4537-4B57-B2AB-14AFAB2EF9B6','VR_Generic_DataRecordFieldFormula_NullToBoolean','Null To Boolean','VR_Generic_DataRecordFieldFormula'					,'{"Editor":"vr-genericdata-datarecordtypefields-formula-nulltoboolean"}'),('FC4B69F0-D577-4319-8D10-ED8F95E07441','VR_Generic_DataRecordFieldFormula_ParentBusinessEntity','Parent Business Entity','VR_Generic_DataRecordFieldFormula'	,'{"Editor":"vr-genericdata-datarecordtypefields-formula-parentbusinessentity"}'),('9A9E268C-0DC3-4488-8F11-CBEFF8D70E1D','VR_Generic_DataRecordFieldFormula_DateTimeRound','Date Time Round','VR_Generic_DataRecordFieldFormula'					,'{"Editor":"vr-genericdata-datarecordtypefields-formula-datetimeround"}'),('5B8471BA-3D9A-412D-A158-27BDEC9C4094','VR_Generic_DataRecordFieldFormula_SingleMathOperation','Single Math Operation','VR_Generic_DataRecordFieldFormula'		,'{"Editor":"vr-genericdata-datarecordtypefields-formula-singlemathoperation"}'),('93DD84F4-A750-4577-8173-36E7A653B920','VR_Generic_DataRecordFieldFormula_SwitchCase','Switch Case','VR_Generic_DataRecordFieldFormula'						,'{"Editor":"vr-genericdata-datarecordtypefields-formula-switchcase"}'),('F5B55B95-503D-4B7B-A1BB-7A7BCB52C5DF','VR_Generic_DataRecordFieldFormula_CompareToConstant','Compare To Constant','VR_Generic_DataRecordFieldFormula'			,'{"Editor":"vr-genericdata-datarecordtypefields-formula-comparetoconstant"}'),('c21fe60a-1ac2-4424-9b27-2a6eb237ab12','Send_Email_After_Save','Send Email','VR_GenericData_GenericBEOnAfterSaveHandlerSettings','{"Editor":"vr-genericdata-genericbe-aftersavehandler-sendemail"}'),																	
+('E64C51A2-08E0-4B7D-96F0-9FF1848A72FA','VR_GenericData_DataRecordNotificationTypeSettings','Data Record Notification','VR_Notification_VRNotificationTypeSettings'		,'{"Editor" : "vr-genericdata-datarecordnotificationtype-settings"}'),
+
+('458EBD88-4537-4B57-B2AB-14AFAB2EF9B6','VR_Generic_DataRecordFieldFormula_NullToBoolean','Null To Boolean','VR_Generic_DataRecordFieldFormula'					,'{"Editor":"vr-genericdata-datarecordtypefields-formula-nulltoboolean"}'),
+('FC4B69F0-D577-4319-8D10-ED8F95E07441','VR_Generic_DataRecordFieldFormula_ParentBusinessEntity','Parent Business Entity','VR_Generic_DataRecordFieldFormula'	,'{"Editor":"vr-genericdata-datarecordtypefields-formula-parentbusinessentity"}'),
+('9A9E268C-0DC3-4488-8F11-CBEFF8D70E1D','VR_Generic_DataRecordFieldFormula_DateTimeRound','Date Time Round','VR_Generic_DataRecordFieldFormula'					,'{"Editor":"vr-genericdata-datarecordtypefields-formula-datetimeround"}'),
+('5B8471BA-3D9A-412D-A158-27BDEC9C4094','VR_Generic_DataRecordFieldFormula_SingleMathOperation','Single Math Operation','VR_Generic_DataRecordFieldFormula'		,'{"Editor":"vr-genericdata-datarecordtypefields-formula-singlemathoperation"}'),
+('93DD84F4-A750-4577-8173-36E7A653B920','VR_Generic_DataRecordFieldFormula_SwitchCase','Switch Case','VR_Generic_DataRecordFieldFormula'						,'{"Editor":"vr-genericdata-datarecordtypefields-formula-switchcase"}'),
+('F5B55B95-503D-4B7B-A1BB-7A7BCB52C5DF','VR_Generic_DataRecordFieldFormula_CompareToConstant','Compare To Constant','VR_Generic_DataRecordFieldFormula'			,'{"Editor":"vr-genericdata-datarecordtypefields-formula-comparetoconstant"}'),
+
+('c21fe60a-1ac2-4424-9b27-2a6eb237ab12','Send_Email_After_Save','Send Email','VR_GenericData_GenericBEOnAfterSaveHandlerSettings','{"Editor":"vr-genericdata-genericbe-aftersavehandler-sendemail"}'),																	
 ('3cc1f256-2775-4a08-adf4-b74df4df3f03','Conditional_After_Save','Conditional After Save','VR_GenericData_GenericBEOnAfterSaveHandlerSettings','{"Editor":"vr-genericdata-genericbe-aftersavehandler-conditional"}'),																		
 ('293b2fab-6abe-4be7-ad58-7d9fa0ba9524','Edit_Generic','Edit Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-editgenericaction-definition"}'),																		
 ('6ffb05b7-497b-4303-9cf0-61ca0f965d7d','Time_Filter','Time Filter','VR_GenericData_GenericBEFilterDefinitionSettings','{"Editor":"vr-genericdata-genericbe-filterdefinition-timefilter"}'),		
@@ -65,7 +99,26 @@ Post-Deployment Script Template
 ('39D842AB-7AFB-46EC-B43E-E7F19493CB86','Serial_Number','Serial Number','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-serialnumber"}'),
 ('E1C87C72-9481-4707-A73A-C511E0F35AEA','Generic_Field','Generic Field','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-genericfield"}'),
 ('277816C4-DE23-48E2-971F-46BD0436C1C6','Date_Time','Date Time','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-datetime"}'),
-('16197ED3-F3EF-4C50-9106-61A576789726','Sequence','Sequence','VR_GenericData_GenericBESerialNumberPartSettings	','{"Editor":"vr-genericdata-genericbe-serialnumber-sequence"}')	,('28411d23-ea66-47ac-a323-106be0b9da7e','CustomObject','Custom Object','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-customobject","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,('a80260fd-4492-45c9-8e60-41d91dcd4e9e','Attachment','Attachment','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-attachment","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,('ebd22f77-6275-4194-8710-7bf3063dcb68','Guid','Guid','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-guid","RuntimeEditor":"vr-genericdata-fieldtype-guid-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-guid-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-guid-rulefiltereditor"}'),('aa969bad-225d-4d83-b76c-68bfdbc0f045','DataRecordRuleEvaluatorDefinition','Data Record Rule Evaluator Definition','VR_Common_VRComponentType','{"Editor":"vr-genericdata-datarecordruleevaluatordefinition-settings"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
+('16197ED3-F3EF-4C50-9106-61A576789726','Sequence','Sequence','VR_GenericData_GenericBESerialNumberPartSettings	','{"Editor":"vr-genericdata-genericbe-serialnumber-sequence"}')	,
+
+('28411d23-ea66-47ac-a323-106be0b9da7e','CustomObject','Custom Object','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-customobject","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
+('a80260fd-4492-45c9-8e60-41d91dcd4e9e','Attachment','Attachment','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-attachment","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
+('ebd22f77-6275-4194-8710-7bf3063dcb68','Guid','Guid','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-guid","RuntimeEditor":"vr-genericdata-fieldtype-guid-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-guid-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-guid-rulefiltereditor"}'),
+('aa969bad-225d-4d83-b76c-68bfdbc0f045','DataRecordRuleEvaluatorDefinition','Data Record Rule Evaluator Definition','VR_Common_VRComponentType','{"Editor":"vr-genericdata-datarecordruleevaluatordefinition-settings"}')
+
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
+)c([ID],[Name],[Title],[ConfigType],[Settings]))
+merge	[common].[extensionconfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
 
 --[sec].[Module]---------------------------301 to 400---------------------------------------------------------
 begin
@@ -91,7 +144,8 @@ end
 --[sec].[View]-----------------------------3001 to 4000-------------------------------------------------------
 begin
 set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('1E9577A9-EF49-475B-B32C-585A26063B04','Data Record Types','Data Record Type','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement'																	,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordType/GetFilteredDataRecordTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
 ('A3219A0D-87BA-4CA9-A9A1-BB1FB2BD732F','Generic Rule Definitions','Generic Rule Definition','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement'										,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3),
@@ -104,7 +158,16 @@ set nocount on;
 ('044F280C-F049-4A4E-A8FC-530AA313FDFF','Data Record Field Choice','Data Record Field Choice','#/view/VR_GenericData/Views/DataRecordFieldChoice/DataRecordFieldChoiceManagement'										,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordFieldChoice/GetFilteredDataRecordFieldChoices',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
 ('340746E4-A063-4E7E-BB0B-E30E0A126E64','Generic LKUP','Generic LKUP','#/view/Common/Views/GenericLKUP/GenericLKUPManagement'																							,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VRCommon/GenericLKUP/GetFilteredGenericLKUPItems',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 --------------------------------------------------------------------------------------------------------------
 end
 
@@ -197,7 +260,12 @@ as (select * from (values
 ('VR_GenericData/DataRecordFieldChoice/AddDataRecordFieldChoice','VR_SystemConfiguration: Add'),
 ('VR_GenericData/DataRecordFieldChoice/UpdateDataRecordFieldChoice','VR_SystemConfiguration: Edit'),
 
-('VRCommon/GenericLKUP/GetFilteredGenericLKUPItems','VR_SystemConfiguration: View'),('VRCommon/GenericLKUP/AddGenericLKUPItem','VR_SystemConfiguration: Add'),('VRCommon/GenericLKUP/UpdateGenericLKUPItem','VR_SystemConfiguration: Edit'),('VRCommon/GenericLKUP/GetGenericLKUPItem',null),('VRCommon/GenericLKUP/GetGenericLKUPDefinitionExtendedSetings',null),('VRCommon/GenericLKUP/GetGenericLKUPItemsInfo',null)
+('VRCommon/GenericLKUP/GetFilteredGenericLKUPItems','VR_SystemConfiguration: View'),
+('VRCommon/GenericLKUP/AddGenericLKUPItem','VR_SystemConfiguration: Add'),
+('VRCommon/GenericLKUP/UpdateGenericLKUPItem','VR_SystemConfiguration: Edit'),
+('VRCommon/GenericLKUP/GetGenericLKUPItem',null),
+('VRCommon/GenericLKUP/GetGenericLKUPDefinitionExtendedSetings',null),
+('VRCommon/GenericLKUP/GetGenericLKUPItemsInfo',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -286,7 +354,58 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[logging].[LoggableEntity]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('DF55359B-CDE4-4A8F-866C-DDAEEC613D98','VR_GenericData_GenericRuleDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_GenericRuleDefinition_ViewHistoryItem"}'),('3D801CAF-5426-44AF-87DA-E2361515210D','VR_GenericData_BusinessEntityDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_BusinessEntityDefinition_ViewHistoryItem"}'),('AB285647-868E-4686-B5F2-FE8B427C1C6E','VR_GenericData_BELookupRuleDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_BELookupRuleDefinition_ViewHistoryItem"}'),('02CF382D-C4C2-4102-B815-50D2D0464AE3','VR_GenericData_SummaryTransformationDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_SummaryTransformationDefinition_ViewHistoryItem"}'),('E4195EAE-03A8-4C12-8290-6D6B139F511B','VR_GenericData_DataRecordFieldChoice','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataRecordFieldChoice_ViewHistoryItem"}'),('691CCE99-44CD-42DC-A1B4-91FF66416933','VR_GenericData_DataTransformationDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataTransformationDefinition_ViewHistoryItem"}'),('BF9C4083-292B-4754-A4FB-09D7B9063F66','VR_GenericData_DataRecordStorage','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataRecordStorage_ViewHistoryItem"}'),('B12050CB-2A8C-4653-8B78-36A33ED4F712','VR_GenericData_DataStore','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataStore_ViewHistoryItem"}'),('25A80EC2-C744-4447-9741-BFC94CE3DCC8','VR_GenericData_DataRecordType','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataRecordType_ViewHistoryItem"}'),('04F699F9-41DB-4CBD-A983-5318AE0A28F2','VR_Common_GenericLKUPItem','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_GenericLKUPItem_ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);---update QueueInstance with new structure for QueueActivatorConfig 2017-09-20 to be removed after updating related projectCREATE TABLE #QueueActivatorConfig_temp(
+--[genericdata].[DataStore]-------------------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('d76e65b5-21be-4c0b-92af-d38feab10c68','BusinessObjects','{"$type":"Vanrise.GenericData.Business.BusinessObjectDataStoreSettings, Vanrise.GenericData.Business","ConfigId":"c9fa9112-6d68-490c-bcbf-bd41a912a865","IsRemoteDataStore":false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[genericdata].[DataStore] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
+
+--[logging].[LoggableEntity]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[UniqueName],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('DF55359B-CDE4-4A8F-866C-DDAEEC613D98','VR_GenericData_GenericRuleDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_GenericRuleDefinition_ViewHistoryItem"}'),
+('3D801CAF-5426-44AF-87DA-E2361515210D','VR_GenericData_BusinessEntityDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_BusinessEntityDefinition_ViewHistoryItem"}'),
+('AB285647-868E-4686-B5F2-FE8B427C1C6E','VR_GenericData_BELookupRuleDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_BELookupRuleDefinition_ViewHistoryItem"}'),
+('02CF382D-C4C2-4102-B815-50D2D0464AE3','VR_GenericData_SummaryTransformationDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_SummaryTransformationDefinition_ViewHistoryItem"}'),
+('E4195EAE-03A8-4C12-8290-6D6B139F511B','VR_GenericData_DataRecordFieldChoice','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataRecordFieldChoice_ViewHistoryItem"}'),
+('691CCE99-44CD-42DC-A1B4-91FF66416933','VR_GenericData_DataTransformationDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataTransformationDefinition_ViewHistoryItem"}'),
+('BF9C4083-292B-4754-A4FB-09D7B9063F66','VR_GenericData_DataRecordStorage','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataRecordStorage_ViewHistoryItem"}'),
+('B12050CB-2A8C-4653-8B78-36A33ED4F712','VR_GenericData_DataStore','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataStore_ViewHistoryItem"}'),
+('25A80EC2-C744-4447-9741-BFC94CE3DCC8','VR_GenericData_DataRecordType','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_DataRecordType_ViewHistoryItem"}'),
+
+('04F699F9-41DB-4CBD-A983-5318AE0A28F2','VR_Common_GenericLKUPItem','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_GenericLKUPItem_ViewHistoryItem"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[UniqueName],[Settings]))
+merge	[logging].[LoggableEntity] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[UniqueName],[Settings])
+	values(s.[ID],s.[UniqueName],s.[Settings]);
+
+---update QueueInstance with new structure for QueueActivatorConfig 2017-09-20 to be removed after updating related project
+CREATE TABLE #QueueActivatorConfig_temp(
 	[ID] [int] NULL,
 	[NewID] [uniqueidentifier] NULL,
 	[Name] [varchar](255) NULL)
