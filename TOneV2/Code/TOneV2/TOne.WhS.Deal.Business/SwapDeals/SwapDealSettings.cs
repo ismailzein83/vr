@@ -138,45 +138,6 @@ namespace TOne.WhS.Deal.Business
             return validationResult;
         }
 
-        public bool ValidateSaleAndCost(IValidateBeforeSaveContext validateBeforeSaveContext)
-        {
-            bool validationResult = true;
-            if (DealContract == DealContract.BalancedAmount)
-            {
-                var saleAmount = GetSaleAmount();
-                var costAmount = GetCostAmount();
-                if (saleAmount.HasValue && costAmount.HasValue)
-                {
-                    decimal balancedAmount = saleAmount > costAmount
-                        ? Math.Abs((saleAmount.Value - costAmount.Value) / saleAmount.Value) * 100
-                        : Math.Abs((saleAmount.Value - costAmount.Value) / costAmount.Value) * 100;
-                    if (balancedAmount < Difference.Value)
-                    {
-                        validationResult = false;
-                        validateBeforeSaveContext.ValidateMessages.Add("Balanced Amount is less than expected");
-                    }
-                }
-            }
-            else if (DealContract == DealContract.BalancedDuration)
-            {
-                var saleVolume = GetSaleVolume();
-                var costVolume = GetCostVolume();
-                if (saleVolume.HasValue && costVolume.HasValue)
-                {
-                    decimal balancedVolume = saleVolume > costVolume
-                        ? Math.Abs((saleVolume.Value - costVolume.Value) / saleVolume.Value) * 100
-                        : Math.Abs((saleVolume.Value - costVolume.Value) / costVolume.Value) * 100;
-                    if (balancedVolume < Difference.Value)
-                    {
-                        validationResult = false;
-                        validateBeforeSaveContext.ValidateMessages.Add("Balanced Volume is less than expected");
-                    }
-                }
-
-            }
-            return validationResult;
-        }
-
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
             if (Status == DealStatus.Draft || BeginDate == EndDate)
@@ -278,6 +239,46 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Methods
+
+        private bool ValidateSaleAndCost(IValidateBeforeSaveContext validateBeforeSaveContext)
+        {
+            bool validationResult = true;
+            if (DealContract == DealContract.BalancedAmount)
+            {
+                var saleAmount = GetSaleAmount();
+                var costAmount = GetCostAmount();
+                if (saleAmount.HasValue && costAmount.HasValue)
+                {
+                    decimal balancedAmount = saleAmount > costAmount
+                        ? Math.Abs((saleAmount.Value - costAmount.Value) / saleAmount.Value) * 100
+                        : Math.Abs((saleAmount.Value - costAmount.Value) / costAmount.Value) * 100;
+                    if (balancedAmount < Difference.Value)
+                    {
+                        validationResult = false;
+                        validateBeforeSaveContext.ValidateMessages.Add("Balanced Amount is less than expected");
+                    }
+                }
+            }
+            else if (DealContract == DealContract.BalancedDuration)
+            {
+                var saleVolume = GetSaleVolume();
+                var costVolume = GetCostVolume();
+                if (saleVolume.HasValue && costVolume.HasValue)
+                {
+                    decimal balancedVolume = saleVolume > costVolume
+                        ? Math.Abs((saleVolume.Value - costVolume.Value) / saleVolume.Value) * 100
+                        : Math.Abs((saleVolume.Value - costVolume.Value) / costVolume.Value) * 100;
+                    if (balancedVolume < Difference.Value)
+                    {
+                        validationResult = false;
+                        validateBeforeSaveContext.ValidateMessages.Add("Balanced Volume is less than expected");
+                    }
+                }
+
+            }
+            return validationResult;
+        }
+
 
         private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
         {
