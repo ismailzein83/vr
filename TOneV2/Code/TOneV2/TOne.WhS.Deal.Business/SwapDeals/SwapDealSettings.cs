@@ -62,18 +62,21 @@ namespace TOne.WhS.Deal.Business
         {
             return CarrierAccountId;
         }
+
         public override string GetSaleZoneGroupName(int dealGroupNumber)
         {
-            var inbound = Inbounds.FindRecord(x=>x.ZoneGroupNumber == dealGroupNumber);
+            var inbound = Inbounds.FindRecord(x => x.ZoneGroupNumber == dealGroupNumber);
             inbound.ThrowIfNull("inbound", dealGroupNumber);
             return inbound.Name;
         }
+
         public override string GetSupplierZoneGroupName(int dealGroupNumber)
         {
             var outbound = Outbounds.FindRecord(x => x.ZoneGroupNumber == dealGroupNumber);
             outbound.ThrowIfNull("outbound", dealGroupNumber);
             return outbound.Name;
         }
+
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
             SwapDealManager swapDealManager = new SwapDealManager();
@@ -134,6 +137,7 @@ namespace TOne.WhS.Deal.Business
 
             return validationResult;
         }
+
         public bool ValidateSaleAndCost(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
             bool validationResult = true;
@@ -175,6 +179,9 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
+            if (Status == DealStatus.Draft || BeginDate == EndDate)
+                return;
+
             switch (context.DealZoneGroupPart)
             {
                 case DealZoneGroupPart.Both:
@@ -275,9 +282,6 @@ namespace TOne.WhS.Deal.Business
         private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
         {
             if (Inbounds == null || Inbounds.Count == 0)
-                return null;
-
-            if (Status == DealStatus.Draft)
                 return null;
 
             List<BaseDealSaleZoneGroup> saleZoneGroups = new List<BaseDealSaleZoneGroup>();

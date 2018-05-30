@@ -28,7 +28,8 @@ namespace TOne.WhS.Deal.Business
         {
             return CarrierAccountId;
         }
-         public override string GetSaleZoneGroupName(int dealGroupNumber)
+
+        public override string GetSaleZoneGroupName(int dealGroupNumber)
         {
             if (DealType == VolCommitmentDealType.Buy)
                 return null;
@@ -37,6 +38,7 @@ namespace TOne.WhS.Deal.Business
                 throw new NullReferenceException();
             return item.Name;
         }
+
         public override string GetSupplierZoneGroupName(int dealGroupNumber)
         {
             if (DealType == VolCommitmentDealType.Sell)
@@ -113,6 +115,9 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
+            if (Status == DealStatus.Draft || BeginDate == EndDate)
+                return;
+
             switch (DealType)
             {
                 case VolCommitmentDealType.Buy:
