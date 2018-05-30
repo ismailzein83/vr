@@ -11,7 +11,7 @@ namespace TOne.WhS.Deal.Entities
         public List<long> ZoneIds { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
-        public int CustomerId { get; set; }
+        public int CarrierAccountId { get; set; }
         public int? DealId { get; set; }
     }
 }

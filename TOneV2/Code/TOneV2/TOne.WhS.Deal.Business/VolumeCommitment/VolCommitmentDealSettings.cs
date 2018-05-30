@@ -58,8 +58,8 @@ namespace TOne.WhS.Deal.Business
             validateBeforeSaveContext.ValidateMessages = new List<string>();
             bool validationResult = true;
 
-            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext);
-            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext);
+            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
+            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
 
             if (excludedSaleZones.Count() > 0 || excludedSupplierZones.Count > 0)
             {

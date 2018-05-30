@@ -112,17 +112,21 @@ namespace TOne.WhS.Deal.Business
                 }
 
             }
-            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext);
-            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext);
-            if (excludedSaleZones.Count() > 0 || excludedSupplierZones.Count > 0)
+            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
+            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
+            if (excludedSaleZones.Count() > 0)
             {
-                var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(excludedSaleZones);
-                var excludedSupplierZoneNames = supplierZoneManager.GetSupplierZoneNames(excludedSupplierZones);
                 validationResult = false;
+                var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(excludedSaleZones);
                 validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following sale zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSaleZoneNames)));
-                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
             }
 
+            if(excludedSupplierZones.Count > 0)
+            {
+                validationResult = false;
+                var excludedSupplierZoneNames = supplierZoneManager.GetSupplierZoneNames(excludedSupplierZones);
+                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
+            }
 
             if (GracePeriod > (EndDate.Value - BeginDate).Days)
             {
@@ -132,7 +136,7 @@ namespace TOne.WhS.Deal.Business
 
             if ((Inbounds != null && Inbounds.Count > 0) && (Outbounds != null && Outbounds.Count > 0))
             {
-                validationResult = ValidateSaleAndCost(validateBeforeSaveContext);
+                ValidateSaleAndCost(validateBeforeSaveContext, ref validationResult);
             }
 
             return validationResult;
@@ -240,9 +244,8 @@ namespace TOne.WhS.Deal.Business
 
         #region Private Methods
 
-        private bool ValidateSaleAndCost(IValidateBeforeSaveContext validateBeforeSaveContext)
+        private void ValidateSaleAndCost(IValidateBeforeSaveContext validateBeforeSaveContext, ref bool validationResult)
         {
-            bool validationResult = true;
             if (DealContract == DealContract.BalancedAmount)
             {
                 var saleAmount = GetSaleAmount();
@@ -276,7 +279,6 @@ namespace TOne.WhS.Deal.Business
                 }
 
             }
-            return validationResult;
         }
 
 
