@@ -47,6 +47,7 @@
     <Compile Include="BaseAndDefs\IBaseRDBResolveQueryContext.cs" />
     <Compile Include="BaseRDBDataManager.cs" />
     <Compile Include="BulkInsert\BaseRDBStreamForBulkInsert.cs" />
+    <Compile Include="BulkInsert\RDBBulkInsertQueryWriteRecordContext.cs" />
     <Compile Include="Conditions\BaseRDBCondition.cs" />
     <Compile Include="Conditions\RDBNullOrConditionContext.cs" />
     <Compile Include="DataProvider\BaseRDBDataProvider.cs" />

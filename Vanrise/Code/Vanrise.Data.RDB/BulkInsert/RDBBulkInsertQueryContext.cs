@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBBulkInsertQueryContext : IRDBBulkInsertQueryContext, IRDBBulkInsertTableDefined, IRDBBulkInsertBulkStreamClosed, IRDBBulkInsertBulkApplied
+    public class RDBBulkInsertQueryContext : IRDBBulkInsertQueryContext, IRDBBulkInsertTableDefined, IRDBBulkInsertRecordWritten, IRDBBulkInsertBulkStreamClosed, IRDBBulkInsertBulkApplied
     {
-        BaseRDBQueryContext _queryContext;
+        RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBBulkInsertQueryContext(BaseRDBQueryContext queryContext)
+        public RDBBulkInsertQueryContext(RDBQueryBuilderContext queryBuilderContext)
         {
-            _queryContext = queryContext;
+            _queryBuilderContext = queryBuilderContext;
         }
 
         BaseRDBStreamForBulkInsert _streamForBulkInsertContext;
@@ -20,14 +20,13 @@ namespace Vanrise.Data.RDB
         public IRDBBulkInsertTableDefined IntoTable(string tableName, char fieldSeparator, string[] columnNames)
         {
             var initializeStreamForBulkInsertContext = new RDBDataProviderInitializeStreamForBulkInsertContext(tableName, fieldSeparator, columnNames);
-            _streamForBulkInsertContext = _queryContext.DataProvider.InitializeStreamForBulkInsert(initializeStreamForBulkInsertContext);
+            _streamForBulkInsertContext = _queryBuilderContext.DataProvider.InitializeStreamForBulkInsert(initializeStreamForBulkInsertContext);
             return this;
         }
 
-        public IRDBBulkInsertTableDefined WriteRecord(params Object[] values)
+        public RDBBulkInsertQueryWriteRecordContext<IRDBBulkInsertRecordWritten> WriteRecord()
         {
-            _streamForBulkInsertContext.WriteRecord(values);
-            return this;
+            return new RDBBulkInsertQueryWriteRecordContext<IRDBBulkInsertRecordWritten>(this, _streamForBulkInsertContext);
         }
 
         public IRDBBulkInsertBulkStreamClosed CloseStream()
@@ -53,6 +52,11 @@ namespace Vanrise.Data.RDB
 
     }
 
+    public interface IRDBBulkInsertRecordWritten : IRDBBulkInsertCanInsertRecord, IRDBBulkInsertBulkCanCloseStream
+    {
+
+    }
+
     public interface IRDBBulkInsertBulkStreamClosed : IRDBBulkInsertBulkCanApply
     {
 
@@ -69,8 +73,10 @@ namespace Vanrise.Data.RDB
     }
 
     public interface IRDBBulkInsertCanInsertRecord
-    {
-        IRDBBulkInsertTableDefined WriteRecord(params Object[] values);
+    {       
+
+        RDBBulkInsertQueryWriteRecordContext<IRDBBulkInsertRecordWritten> WriteRecord();
+
     }
     
     public interface IRDBBulkInsertBulkCanCloseStream

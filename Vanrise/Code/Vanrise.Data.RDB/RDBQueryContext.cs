@@ -287,7 +287,7 @@ namespace Vanrise.Data.RDB
 
         public IRDBBulkInsertQueryContext StartBulkInsert()
         {
-            return new RDBBulkInsertQueryContext(this);
+            return new RDBBulkInsertQueryContext(QueryBuilderContext);
         }
     }
 
