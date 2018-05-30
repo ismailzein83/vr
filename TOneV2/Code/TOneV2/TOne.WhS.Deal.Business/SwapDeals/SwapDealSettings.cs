@@ -65,15 +65,13 @@ namespace TOne.WhS.Deal.Business
         public override string GetSaleZoneGroupName(int dealGroupNumber)
         {
             var inbound = Inbounds.FindRecord(x=>x.ZoneGroupNumber == dealGroupNumber);
-            if (inbound == null)
-                throw new NullReferenceException();
+            inbound.ThrowIfNull("inbound", dealGroupNumber);
             return inbound.Name;
         }
         public override string GetSupplierZoneGroupName(int dealGroupNumber)
         {
             var outbound = Outbounds.FindRecord(x => x.ZoneGroupNumber == dealGroupNumber);
-            if (outbound == null)
-                throw new NullReferenceException();
+            outbound.ThrowIfNull("outbound", dealGroupNumber);
             return outbound.Name;
         }
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)

@@ -277,14 +277,14 @@ namespace TOne.WhS.Deal.Business
         {
             var dealDefinition = GetDealDefinition(dealId);
             if (dealDefinition == null)
-                throw new NullReferenceException();
+                throw new DataIntegrityValidationException(string.Format("Cannot find the deal with Id {0}", dealId));
             return dealDefinition.Settings.GetSaleZoneGroupName(groupNumber);
         }
         public string GetDealCostZoneGroupName(int dealId, int groupNumber)
         {
             var dealDefinition = GetDealDefinition(dealId);
             if (dealDefinition == null)
-                throw new NullReferenceException();
+                throw new DataIntegrityValidationException(string.Format("Cannot find the deal with Id {0}", dealId));
             return dealDefinition.Settings.GetSupplierZoneGroupName(groupNumber);
         }
 
