@@ -268,6 +268,25 @@ namespace TOne.WhS.Deal.Business
             }
             return result.Count > 0 ? result : null;
         }
+        public DealDefinition GetDealDefinition(int dealId)
+        {
+            var cachedDealInfos = GetAllCachedDealDefinitions();
+            return cachedDealInfos.GetRecord(dealId);
+        }
+        public string GetDealSaleZoneGroupName(int dealId, int groupNumber)
+        {
+            var dealDefinition = GetDealDefinition(dealId);
+            if (dealDefinition == null)
+                throw new NullReferenceException();
+            return dealDefinition.Settings.GetSaleZoneGroupName(groupNumber);
+        }
+        public string GetDealCostZoneGroupName(int dealId, int groupNumber)
+        {
+            var dealDefinition = GetDealDefinition(dealId);
+            if (dealDefinition == null)
+                throw new NullReferenceException();
+            return dealDefinition.Settings.GetSupplierZoneGroupName(groupNumber);
+        }
 
         #endregion
 
