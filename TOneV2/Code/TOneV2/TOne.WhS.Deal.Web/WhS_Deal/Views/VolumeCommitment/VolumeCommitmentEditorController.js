@@ -64,10 +64,10 @@
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onBEDChanged = function () {
-                loadVolumeCommitmentItems();
+                
             };
             $scope.scopeModel.onEEDChanged = function () {
-                loadVolumeCommitmentItems();
+                
             };
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
@@ -157,11 +157,6 @@
                 else {
                     var payload = {
                         context: getContext(),
-                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        dealId: dealId,
-                        bed: $scope.scopeModel.beginDate,
-                        eed: $scope.scopeModel.endDate,
-                        volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
                     };
                     volumeCommitmenetItemsAPI.load(payload);
                     updateDescription();
@@ -230,11 +225,6 @@
 
                     var payload = {
                         context: getContext(),
-                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        dealId: dealId,
-                        bed: $scope.scopeModel.beginDate,
-                        eed: $scope.scopeModel.endDate,
-                        volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
                     };
                     if (volumeCommitmentEntity != undefined) {
                         payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
@@ -278,6 +268,9 @@
                         $scope.onVolumeCommitmentAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
+                else {
+                    $scope.validationMessages = response.ValidationMessages;
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
@@ -291,6 +284,9 @@
                     if ($scope.onVolumeCommitmentUpdated != undefined)
                         $scope.onVolumeCommitmentUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
+                }
+                else {
+                    $scope.validationMessages = response.ValidationMessages;
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
@@ -356,6 +352,13 @@
                                     payload.filter = {
                                         ExcludedZoneIds: getSelectedZonesIdsFromItems()
                                     };
+                                payload.filter.Filters = [{
+                                    $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                                    DealId: dealId,
+                                    BED: $scope.scopeModel.beginDate,
+                                    EED: $scope.scopeModel.endDate
+                                }];
                                 break;
                             case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
                                 var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
@@ -378,6 +381,13 @@
                                     payload.filter = {
                                         ExcludedZoneIds: getSelectedZonesIdsFromItems()
                                     };
+                                payload.filter.Filters = [{
+                                    $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                                    DealId: dealId,
+                                    BED: $scope.scopeModel.beginDate,
+                                    EED: $scope.scopeModel.endDate
+                                }];
                                 break;
                         }
                         return payload;

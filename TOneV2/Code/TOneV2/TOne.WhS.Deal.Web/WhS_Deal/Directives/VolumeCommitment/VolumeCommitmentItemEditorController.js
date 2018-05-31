@@ -17,12 +17,6 @@
         var countrySelectedPromiseDeferred;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var carrierAccountId;
-
-        var dealId;
-        var dealBED;
-        var dealEED;
-        var volumeCommitmentType;
-
         var zoneDirectiveAPI;
 
         loadParameters();
@@ -35,10 +29,6 @@
                 volumeCommitmentItemEntity = parametersObj.volumeCommitmentItemEntity;
                 context = parametersObj.context;
                 carrierAccountId = parametersObj.carrierAccountId;
-                dealId = parametersObj.dealId;
-                dealBED = parametersObj.dealBED;
-                dealEED = parametersObj.dealEED;
-                volumeCommitmentType = parametersObj.volumeCommitmentType;
                 if (context != undefined)
                     $scope.scopeModel.zoneSelector = context.getZoneSelector();
             }
@@ -117,24 +107,6 @@
                             payload.filter = {
                                 CountryIds: [countryDirectiveApi.getSelectedIds()],
                             };
-                        if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
-                            payload.filter.Filters = [{
-                                $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
-                                CarrierAccountId: carrierAccountId,
-                                DealId: dealId,
-                                BED: dealBED,
-                                EED: dealEED
-                            }];
-                        }
-                        else {
-                            payload.filter.Filters = [{
-                                $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                                CarrierAccountId: carrierAccountId,
-                                DealId: dealId,
-                                BED: dealBED,
-                                EED: dealEED
-                            }];
-                        }
                     }
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 

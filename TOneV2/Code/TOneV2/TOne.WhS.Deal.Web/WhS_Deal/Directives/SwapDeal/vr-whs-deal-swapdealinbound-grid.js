@@ -34,8 +34,6 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
             var context;
             var carrierAccountId;
             var dealId;
-            var dealBED;
-            var dealEED;
 
             function initializeController() {
 
@@ -48,7 +46,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                         addedSwapDealInbound.ZoneGroupNumber = lastInboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealInbound);
                     };
-                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId, context, carrierAccountId, dealId, dealBED, dealEED);
+                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId, context, carrierAccountId, dealId);
                 };
 
                 $scope.onGridReady = function (api) {
@@ -65,8 +63,6 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                     mainPayload = payload;
                     carrierAccountId = mainPayload.carrierAccountId;
                     dealId = mainPayload.dealId;
-                    dealBED = mainPayload.bed;
-                    dealEED = mainPayload.eed;
                     if (mainPayload != undefined)
                         context = mainPayload.context;
                     if (payload != undefined && payload.Inbounds != undefined) {
@@ -142,7 +138,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 };
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
-                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated, context, carrierAccountId,dealId,dealBED,dealEED);
+                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated, context, carrierAccountId,dealId);
             }
 
             function viewSwapDealInbound(dealInboundObj) {

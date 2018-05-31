@@ -34,8 +34,6 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
 
             var carrierAccountId;
             var dealId;
-            var dealBED;
-            var dealEED;
 
             function initializeController() {
 
@@ -48,7 +46,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                         addedSwapDealOutbound.ZoneGroupNumber = lastOutboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealOutbound);
                     };
-                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId, context, carrierAccountId, dealId, dealBED, dealEED);
+                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId, context, carrierAccountId, dealId);
                 };
 
                 defineMenuActions();
@@ -62,8 +60,6 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                     mainPayload = payload;
                     carrierAccountId = mainPayload.carrierAccountId;
                     dealId = mainPayload.dealId;
-                    dealBED = mainPayload.bed;
-                    dealEED = mainPayload.eed;
                     if (mainPayload != undefined)
                         context = mainPayload.context;
                     if (payload != undefined && payload.Outbounds != undefined) {
@@ -137,7 +133,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 };
                 var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
 
-                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated, context, carrierAccountId, dealId, dealBED, dealEED);
+                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated, context, carrierAccountId, dealId);
 
             }
 

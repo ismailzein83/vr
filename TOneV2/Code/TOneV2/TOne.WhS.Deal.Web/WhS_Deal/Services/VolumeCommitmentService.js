@@ -70,7 +70,7 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItem(onVolumeCommitmentItemAdded, context, carrierAccountId, dealId, dealBED, dealEED, volumeCommitmentType) {
+        function addVolumeCommitmentItem(onVolumeCommitmentItemAdded, context) {
             var settings = {
             };
 
@@ -79,17 +79,12 @@
             };
             var parameters = {
                 context: context,
-                carrierAccountId: carrierAccountId,
-                dealId: dealId,
-                dealBED: dealBED,
-                dealEED: dealEED,
-                volumeCommitmentType: volumeCommitmentType
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context, carrierAccountId, dealId, dealBED, dealEED, volumeCommitmentType) {
+        function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
@@ -98,11 +93,6 @@
             var parameters = {
                 volumeCommitmentItemEntity: volumeCommitmentItemEntity,
                 context: context,
-                carrierAccountId: carrierAccountId,
-                dealId: dealId,
-                dealBED: dealBED,
-                dealEED: dealEED,
-                volumeCommitmentType: volumeCommitmentType
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);

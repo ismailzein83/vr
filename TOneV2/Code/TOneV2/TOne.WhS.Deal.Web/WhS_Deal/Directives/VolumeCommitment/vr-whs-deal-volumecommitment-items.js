@@ -31,12 +31,6 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
             var context;
             var lastGroupNumber;
 
-            var carrierAccountId;
-            var dealId;
-            var dealBED;
-            var dealEED;
-            var volumeCommitmentType;
-
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
@@ -53,7 +47,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                         volumeCommitmentItem.ZoneGroupNumber = lastGroupNumber;
                         ctrl.datasource.push({ Entity: volumeCommitmentItem });
                     };
-                    WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext(), carrierAccountId, dealId, dealBED, dealEED, volumeCommitmentType);
+                    WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext());
                 };
 
                 ctrl.removeItem = function (dataItem) {
@@ -94,11 +88,6 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                     if (payload != undefined) {
                         context = payload.context;
                         lastGroupNumber = context.lastGroupNumber;
-                        carrierAccountId = payload.carrierAccountId;
-                        dealId = payload.dealId;
-                        dealBED = payload.bed;
-                        dealEED = payload.eed;
-                        volumeCommitmentType = payload.volumeCommitmentType;
                         if (payload.volumeCommitmentItems != undefined) {
                             for (var i = 0; i < payload.volumeCommitmentItems.length; i++) {
                                 var volumeCommitmentItem = payload.volumeCommitmentItems[i];
@@ -132,7 +121,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                     var index = ctrl.datasource.indexOf(volumeCommitmentItemObj);
                     ctrl.datasource[index] = { Entity: volumeCommitmentItem };
                 };
-                WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext(), carrierAccountId, dealId, dealBED, dealEED, volumeCommitmentType);
+                WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext());
             }
             function getContext() {
                 return context;

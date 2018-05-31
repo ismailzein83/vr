@@ -65,27 +65,12 @@
                         payload.sellingNumberPlanId = sellingNumberPlanId;
                         payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
                         payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined;
-                        payload.filter.Filters = [{
-                            $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                            CarrierAccountId: carrierAccountId,
-                            DealId: dealId,
-                            BED: dealBED,
-                            EED: dealEED
-                        }];
-
                     }
                     else
                         payload = {
                             sellingNumberPlanId: sellingNumberPlanId,
                             filter: {
                                 CountryIds: [countryDirectiveApi.getSelectedIds()],
-                                Filters: [{
-                                    $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                                    CarrierAccountId: carrierAccountId,
-                                    DealId: dealId,
-                                    BED: dealBED,
-                                    EED: dealEED
-                                }]
                             },
                             selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
                         };
