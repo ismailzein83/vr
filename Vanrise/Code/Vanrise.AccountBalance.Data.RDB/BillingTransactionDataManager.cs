@@ -117,8 +117,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public bool Insert(BillingTransaction billingTransaction, long? invoiceId, out long billingTransactionId)
         {
-            Dictionary<string, object> outputParameters;
-            int affectedRecords = new RDBQueryContext(GetDataProvider())
+            billingTransactionId = new RDBQueryContext(GetDataProvider())
                 .Insert()
                 .IntoTable(TABLE_NAME)
                 .GenerateIdAndAssignToParameter("BillingTransactionId")
@@ -134,15 +133,9 @@ namespace Vanrise.AccountBalance.Data.RDB
                 .ColumnValueIf(() => billingTransaction.Settings != null, ctx => ctx.ColumnValue("Settings", Vanrise.Common.Serializer.Serialize(billingTransaction.Settings)))
                 .ColumnValueIf(() => invoiceId.HasValue, ctx => ctx.ColumnValue("CreatedByInvoiceID", invoiceId.Value))
                 .EndInsert()
-                .ExecuteNonQuery(out outputParameters);
-            if (affectedRecords > 0)
-            {
-                billingTransactionId = (int)outputParameters["BillingTransactionId"];
-                return true;
-            }
-
-            billingTransactionId = -1;
-            return false;
+                .ExecuteScalar()
+                .LongValue;
+            return true;
         }
 
         public void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady)

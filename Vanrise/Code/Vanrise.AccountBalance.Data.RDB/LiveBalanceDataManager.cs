@@ -128,39 +128,85 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public LiveBalanceAccountInfo TryAddLiveBalanceAndGet(string accountId, Guid accountTypeId, decimal initialBalance, int currencyId, decimal currentBalance, DateTime? bed, DateTime? eed, VRAccountStatus status, bool isDeleted)
         {
-            return new RDBQueryContext(GetDataProvider())
-                    .StartBatchQuery()
-                    .AddQuery().DeclareParameters().AddParameter("ID", RDBDataType.BigInt).AddParameter("CurrencyIdToReturn", RDBDataType.Int).EndParameterDeclaration()
-                    .AddQuery().Select()
-                                .From(TABLE_NAME, "lv")
-                                .Where().And()
-                                            .EqualsCondition("AccountTypeID", accountTypeId)
-                                            .EqualsCondition("AccountID", accountId)
-                                            .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                        .EndAnd()
-                                .SelectColumns().ColumnToParameter("ID", "ID").ColumnToParameter("CurrencyID", "CurrencyIdToReturn").EndColumns()
-                                .EndSelect()
-                    .AddQuery().If().IfCondition().NullCondition(new RDBParameterExpression { ParameterName = "ID" })
-                                .ThenQuery().StartBatchQuery()
-                                            .AddQuery().Insert()
-                                                        .IntoTable(TABLE_NAME)
-                                                        .GenerateIdAndAssignToParameter("ID")
-                                                        .ColumnValue("AccountTypeID", accountTypeId)
-                                                        .ColumnValue("AccountID", accountId)
-                                                        .ColumnValue("InitialBalance", initialBalance)
-                                                        .ColumnValue("CurrentBalance", currentBalance)
-                                                        .ColumnValue("CurrencyID", currencyId)
-                                                        .ColumnValueIfNotDefaultValue(bed, ctx =>  ctx.ColumnValue("BED", bed.Value))
-                                                        .ColumnValueIfNotDefaultValue(eed, ctx => ctx.ColumnValue("EED", eed.Value))
-                                                        .ColumnValue("Status", (int)status)
-                                                        .ColumnValue("IsDeleted", isDeleted)
-                                                       .EndInsert()
-                                            .AddQuery().SetParameterValues().ParamValue("CurrencyIdToReturn", currencyId).EndParameterValues()
-                                            .EndBatchQuery()
-                                .EndIf()
-                     .AddQuery().Select().FromNoTable().SelectColumns().Parameter("ID", "ID").Parameter("AccountID", "AccountID").EndColumns().EndSelect()
-                    .EndBatchQuery()
-                    .GetItem(LiveBalanceAccountInfoMapper);
+            LiveBalanceAccountInfo liveBalanceInfo = new LiveBalanceAccountInfo
+            {
+                AccountId = accountId,
+                BED = bed,
+                EED = eed,
+                Status = status
+            };
+            bool liveBalanceFound = false;
+            new RDBQueryContext(GetDataProvider()).Select()
+                                                    .From(TABLE_NAME, "lv")
+                                                    .Where().And()
+                                                                .EqualsCondition("AccountTypeID", accountTypeId)
+                                                                .EqualsCondition("AccountID", accountId)
+                                                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                                            .EndAnd()
+                                                    .SelectColumns().Columns("ID", "CurrencyID").EndColumns()
+                                                    .EndSelect()
+                                                    .ExecuteReader((reader) =>
+                                                    {
+                                                        if(reader.Read())
+                                                        {
+                                                            liveBalanceFound = true;
+                                                            liveBalanceInfo.LiveBalanceId = reader.GetLong("ID");
+                                                            liveBalanceInfo.CurrencyId = reader.GetInt("CurrencyID");
+                                                        }
+                                                    });
+            if(!liveBalanceFound)
+            {
+                liveBalanceInfo.LiveBalanceId = new RDBQueryContext(GetDataProvider()).Insert()
+                                                                                        .IntoTable(TABLE_NAME)
+                                                                                        .GenerateIdAndAssignToParameter("ID")
+                                                                                        .ColumnValue("AccountTypeID", accountTypeId)
+                                                                                        .ColumnValue("AccountID", accountId)
+                                                                                        .ColumnValue("InitialBalance", initialBalance)
+                                                                                        .ColumnValue("CurrentBalance", currentBalance)
+                                                                                        .ColumnValue("CurrencyID", currencyId)
+                                                                                        .ColumnValueIfNotDefaultValue(bed, ctx => ctx.ColumnValue("BED", bed.Value))
+                                                                                        .ColumnValueIfNotDefaultValue(eed, ctx => ctx.ColumnValue("EED", eed.Value))
+                                                                                        .ColumnValue("Status", (int)status)
+                                                                                        .ColumnValue("IsDeleted", isDeleted)
+                                                                                       .EndInsert()
+                                                                                       .ExecuteScalar().LongValue;
+                liveBalanceInfo.CurrencyId = currencyId;
+            }
+            return liveBalanceInfo;
+
+            //return new RDBQueryContext(GetDataProvider())
+            //        .StartBatchQuery()
+            //        .AddQuery().DeclareParameters().AddParameter("ID", RDBDataType.BigInt).AddParameter("CurrencyIdToReturn", RDBDataType.Int).EndParameterDeclaration()
+            //        .AddQuery().Select()
+            //                    .From(TABLE_NAME, "lv")
+            //                    .Where().And()
+            //                                .EqualsCondition("AccountTypeID", accountTypeId)
+            //                                .EqualsCondition("AccountID", accountId)
+            //                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+            //                            .EndAnd()
+            //                    .SelectColumns().ColumnToParameter("ID", "ID").ColumnToParameter("CurrencyID", "CurrencyIdToReturn").EndColumns()
+            //                    .EndSelect()
+            //        .AddQuery().If().IfCondition().NullCondition(new RDBParameterExpression { ParameterName = "ID" })
+            //                    .ThenQuery().StartBatchQuery()
+            //                                .AddQuery().Insert()
+            //                                            .IntoTable(TABLE_NAME)
+            //                                            .GenerateIdAndAssignToParameter("ID")
+            //                                            .ColumnValue("AccountTypeID", accountTypeId)
+            //                                            .ColumnValue("AccountID", accountId)
+            //                                            .ColumnValue("InitialBalance", initialBalance)
+            //                                            .ColumnValue("CurrentBalance", currentBalance)
+            //                                            .ColumnValue("CurrencyID", currencyId)
+            //                                            .ColumnValueIfNotDefaultValue(bed, ctx =>  ctx.ColumnValue("BED", bed.Value))
+            //                                            .ColumnValueIfNotDefaultValue(eed, ctx => ctx.ColumnValue("EED", eed.Value))
+            //                                            .ColumnValue("Status", (int)status)
+            //                                            .ColumnValue("IsDeleted", isDeleted)
+            //                                           .EndInsert()
+            //                                .AddQuery().SetParameterValues().ParamValue("CurrencyIdToReturn", currencyId).EndParameterValues()
+            //                                .EndBatchQuery()
+            //                    .EndIf()
+            //         .AddQuery().Select().FromNoTable().SelectColumns().Parameter("ID", "ID").Parameter("CurrencyID", "CurrencyID").EndColumns().EndSelect()
+            //        .EndBatchQuery()
+            //        .GetItem(LiveBalanceAccountInfoMapper);
         }
 
         public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
