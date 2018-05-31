@@ -1,9 +1,11 @@
 ﻿<vr-button type="Add" data-onclick="ctrl.addExecutionFlowStage" standalone></vr-button>
 
 <vr-validator >
-    <vr-datagrid datasource="ctrl.datasource"
+    <vr-datagrid on-ready="onGridReady"
+                 datasource="ctrl.datasource"
                  menuactions="gridMenuActions"
-                 on-ready="onGridReady">
+                 enabledraggablerow="true">
+
         <vr-datagridcolumn headertext="'Stage Name'" field="'StageName'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Queue Template Name'" field="'QueueNameTemplate'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Queue Template Title'" field="'QueueTitleTemplate'"></vr-datagridcolumn>
