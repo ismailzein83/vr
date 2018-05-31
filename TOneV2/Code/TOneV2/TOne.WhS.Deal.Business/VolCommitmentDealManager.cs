@@ -47,6 +47,7 @@ namespace TOne.WhS.Deal.Business
 
             detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
             detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
+            detail.StatusDescription = Utilities.GetEnumAttribute<DealStatus, DescriptionAttribute>(settings.Status).Description;
             detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
             detail.CurrencySymbole = new CurrencyManager().GetCurrencySymbol(settings.CurrencyId);
 

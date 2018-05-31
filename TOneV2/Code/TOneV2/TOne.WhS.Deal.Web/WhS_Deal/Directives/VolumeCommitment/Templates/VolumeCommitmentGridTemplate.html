@@ -5,13 +5,16 @@
              pagingtype="'PagingOnScroll'"
              idfield="Entity.DealId" enableautoexport="true">
     <vr-datagridcolumn headertext="'Id'" field="'Entity.DealId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Type'" field="'TypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Carrier'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbole'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'"><span ng-show="{{dataItem.IsEffective}}"><vr-icon icontype="dataItem.IsEffective"></vr-icon></span> </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.Settings.BeginDate'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'Entity.Settings.EndDate'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'"><span ng-show="{{dataItem.IsEffective}}"><vr-icon icontype="dataItem.IsEffective"></vr-icon></span> </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbole'" type="'Text'"></vr-datagridcolumn>
+   
+ 
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

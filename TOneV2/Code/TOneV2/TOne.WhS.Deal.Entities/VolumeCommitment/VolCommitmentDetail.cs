@@ -9,7 +9,5 @@ namespace TOne.WhS.Deal.Entities
     public class VolCommitmentDetail : DealDefinitionDetail
     {
 
-        public string TypeDescription { get; set; }
-
     }
 }

@@ -15,5 +15,8 @@ namespace TOne.WhS.Deal.Entities
         public bool IsEffective { get; set; }
 
         public string CurrencySymbole { get; set; }
+
+        public string TypeDescription { get; set; }
+        public string StatusDescription { get; set; }
     }
 }

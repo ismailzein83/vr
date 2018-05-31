@@ -8,10 +8,6 @@ namespace TOne.WhS.Deal.Entities
 {
     public class SwapDealDetail : DealDefinitionDetail
     {
-        
-        public string TypeDescription { get; set; }
-        public string StatusDescription { get; set; }
-
         public string ContractDescription { get; set; }
 
         public decimal SellingAmount { set; get; }
