@@ -89,6 +89,14 @@ namespace Vanrise.Data.RDB
                 tableAlias);
         }
 
+        public IRDBSelectQuery<RDBConditionContext<IRDBJoinContextReady<T>>> JoinSelect(RDBJoinType joinType, string inlineQueryAlias)
+        {
+            var selectQuery = new RDBSelectQuery<RDBConditionContext<IRDBJoinContextReady<T>>>(_queryBuilderContext.CreateChildContext());
+            var conditionContext = Join(joinType, selectQuery, inlineQueryAlias);
+            selectQuery.Parent = conditionContext;
+            return selectQuery;
+        }
+
         public RDBConditionContext<IRDBJoinContextReady<T>> Join(RDBJoinType joinType, string tableName, string tableAlias)
         {
             return Join(joinType, new RDBTableDefinitionQuerySource(tableName), tableAlias);
@@ -117,6 +125,8 @@ namespace Vanrise.Data.RDB
         RDBConditionContext<IRDBJoinContextReady<T>> Join(RDBJoinType joinType, IRDBTableQuerySource table, string tableAlias);
         
         RDBConditionContext<IRDBJoinContextReady<T>> Join(RDBJoinType joinType, string tableName, string tableAlias);
+
+        IRDBSelectQuery<RDBConditionContext<IRDBJoinContextReady<T>>> JoinSelect(RDBJoinType joinType, string inlineQueryAlias);
 
         T EndJoin();
     }

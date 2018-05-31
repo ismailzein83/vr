@@ -20,6 +20,7 @@ namespace Vanrise.Data.RDB
 
         public BaseRDBCondition Condition { get; set; }
 
+        internal string _trueQueryText;
 
         RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>> _trueQueryContext;
         IRDBQueryReady _trueQuery;
@@ -70,15 +71,22 @@ namespace Vanrise.Data.RDB
             var conditionContext = new RDBConditionToDBQueryContext(context, _queryBuilderContext);
             queryBuilder.AppendLine(this.Condition.ToDBQuery(conditionContext));
             queryBuilder.AppendLine(" BEGIN ");
-            var trueQueryContext = new RDBQueryGetResolvedQueryContext(context);
-            queryBuilder.Append(this.TrueQuery.GetResolvedQuery(trueQueryContext).QueryText);
+            if (this._trueQueryText != null)
+            {
+                queryBuilder.AppendLine(this._trueQueryText);
+            }
+            else
+            {
+                var trueQueryContext = new RDBQueryGetResolvedQueryContext(context);
+                queryBuilder.AppendLine(this.TrueQuery.GetResolvedQuery(trueQueryContext).QueryText);
+            }
             queryBuilder.AppendLine(" END ");
             if (FalseQuery != null)
             {
                 queryBuilder.AppendLine(" ELSE ");
                 queryBuilder.AppendLine(" BEGIN ");
                 var falseQueryContext = new RDBQueryGetResolvedQueryContext(context);
-                queryBuilder.Append(this.FalseQuery.GetResolvedQuery(falseQueryContext).QueryText);
+                queryBuilder.AppendLine(this.FalseQuery.GetResolvedQuery(falseQueryContext).QueryText);
                 queryBuilder.AppendLine(" END ");
             }
             return new RDBResolvedQuery

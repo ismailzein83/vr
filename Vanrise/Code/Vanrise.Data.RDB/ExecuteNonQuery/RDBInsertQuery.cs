@@ -20,24 +20,13 @@ namespace Vanrise.Data.RDB
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public RDBInsertQuery(RDBInsertQuery<T> original)
-        {
-            this._parent = original._parent;
-            this._queryBuilderContext = original._queryBuilderContext.CreateChildContext();
-            this.Table = original.Table;
-            this.ColumnValues = original.ColumnValues;
-            this.NotExistCondition = original.NotExistCondition;
-            this._notExistConditionTableAlias = original._notExistConditionTableAlias;
-            this._idOutputParameterName = original._idOutputParameterName;
-        }
-
         public IRDBTableQuerySource Table { get; private set; }
 
         public List<RDBInsertColumn> ColumnValues { get; private set; }
 
         public BaseRDBCondition NotExistCondition { get; private set; }
 
-        string _idOutputParameterName;
+        string _generatedIdParameterName;
 
         public IInsertQueryTableDefined<T> IntoTable(IRDBTableQuerySource table)
         {
@@ -57,9 +46,9 @@ namespace Vanrise.Data.RDB
             return new RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
         }
 
-        public IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string outputParameterName)
+        public IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName)
         {
-            _idOutputParameterName = outputParameterName;            
+            _generatedIdParameterName = parameterName;            
             return this;
         }
 
@@ -134,6 +123,7 @@ namespace Vanrise.Data.RDB
 
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
+            RDBResolvedQuery resolvedQuery;
             if (this.NotExistCondition != null)
             {
                 var selectQuery = new RDBSelectQuery<RDBInsertQuery<T>>(this, _queryBuilderContext.CreateChildContext());
@@ -142,20 +132,52 @@ namespace Vanrise.Data.RDB
                 {
                     SelectQuery = selectQuery
                 };
-                var clonedInsertQuery = new RDBInsertQuery<T>(this);
-                clonedInsertQuery.NotExistCondition = null;
                 IRDBQueryReady ifQuery = new RDBIfQuery<RDBInsertQuery<T>>(this, _queryBuilderContext.CreateChildContext())
                 {
                     Condition = rdbNotExistsCondition,
-                    TrueQuery = clonedInsertQuery
+                    _trueQueryText = ResolveInsertQuery(context).QueryText
                 };
-                return ifQuery.GetResolvedQuery(context);
+                resolvedQuery = ifQuery.GetResolvedQuery(context);
             }
             else
             {
-                var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this.Table, this.ColumnValues, _idOutputParameterName, context, _queryBuilderContext);
-                return context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
+                resolvedQuery = ResolveInsertQuery(context);               
             }
+
+            if (!string.IsNullOrEmpty(_generatedIdParameterName))
+            {
+                RDBResolvedQuery selectIdResolvedQuery = new RDBSelectQuery<RDBInsertQuery<T>>(this, _queryBuilderContext.CreateChildContext()).FromNoTable().SelectColumns().
+                    Parameter(_generatedIdParameterName, _generatedIdParameterName).
+                    EndColumns().GetResolvedQuery(context);
+                resolvedQuery.QueryText = string.Concat(resolvedQuery.QueryText, "\n", selectIdResolvedQuery.QueryText);
+            }
+            return resolvedQuery;
+        }
+
+        private RDBResolvedQuery ResolveInsertQuery(IRDBQueryGetResolvedQueryContext context)
+        {
+            RDBResolvedQuery resolvedQuery;
+            string generatedIdDBParameterName = null;
+
+            if (!string.IsNullOrEmpty(_generatedIdParameterName))
+            {
+                generatedIdDBParameterName = context.DataProvider.ConvertToDBParameterName(_generatedIdParameterName);
+                var getIdColumnInfoContext = new RDBTableQuerySourceGetIdColumnInfoContext(context.DataProvider);
+                this.Table.GetIdColumnInfo(getIdColumnInfoContext);
+                getIdColumnInfoContext.IdColumnName.ThrowIfNull("getIdColumnInfoContext.IdColumnName", this.Table.GetUniqueName());
+                getIdColumnInfoContext.IdColumnDefinition.ThrowIfNull("getIdColumnInfoContext.IdColumnDefinition", this.Table.GetUniqueName());
+                context.AddParameter(new RDBParameter
+                {
+                    Name = _generatedIdParameterName,
+                    DBParameterName = generatedIdDBParameterName,
+                    Type = getIdColumnInfoContext.IdColumnDefinition.DataType,
+                    Direction = RDBParameterDirection.Declared
+                });
+            }
+
+            var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this.Table, this.ColumnValues, generatedIdDBParameterName, context, _queryBuilderContext);
+            resolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
+            return resolvedQuery;
         }
         
         public T EndInsert()
@@ -216,7 +238,7 @@ namespace Vanrise.Data.RDB
 
     public interface IInsertQueryCanCallGenerateId<T>
     {
-        IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string outputParameterName);
+        IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName);
     }
 
     public interface IInsertQueryCanAssignColumns<T>

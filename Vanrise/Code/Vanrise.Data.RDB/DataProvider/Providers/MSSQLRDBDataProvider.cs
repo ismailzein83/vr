@@ -221,14 +221,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             queryBuilder.Append(") VALUES (");
             queryBuilder.Append(valueBuilder.ToString());
             queryBuilder.Append(")");
-            if (!String.IsNullOrEmpty(context.IdOutputParameterName))
-            {
-                RDBTableDefinition tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(context.DataProvider, tableAsTableDefinitionQuerySource.TableName);
-                var idColumnDefinition = RDBSchemaManager.Current.GetColumnDefinitionWithValidate(this, tableAsTableDefinitionQuerySource.TableName, tableDefinition.IdColumnName);
-                context.AddOutputParameter(context.IdOutputParameterName, idColumnDefinition.DataType);
-                string sqlParameterName = string.Concat(this.ParameterNamePrefix, context.IdOutputParameterName);
-                queryBuilder.AppendFormat(" SET {0} = SCOPE_IDENTITY() ", sqlParameterName);
-            }
+            queryBuilder.AppendLine();
+            if (!String.IsNullOrEmpty(context.GeneratedIdDBParameterName))
+                queryBuilder.AppendFormat(" SET {0} = SCOPE_IDENTITY() ", context.GeneratedIdDBParameterName);
+
             return new RDBResolvedQuery
             {
                 QueryText = queryBuilder.ToString()
@@ -385,7 +381,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
         {
-            return _dataManager.ExecuteNonQuery(context.ResolvedQuery.QueryText, context.ParameterValues, context.OutputParameters, context.OutputParameterValues);
+            return _dataManager.ExecuteNonQuery(context.ResolvedQuery.QueryText, context.ParameterValues);
         }
 
         public override object ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
@@ -430,9 +426,8 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 });
             }
 
-            public int ExecuteNonQuery(string sqlQuery, Dictionary<string, Object> parameterValues, Dictionary<string, RDBDataType> outputParameters, Dictionary<string, Object> outputParameterValues)
+            public int ExecuteNonQuery(string sqlQuery, Dictionary<string, Object> parameterValues)
             {
-                System.Data.Common.DbParameterCollection sqlParameters = null;
                 var rslt = base.ExecuteNonQueryText(sqlQuery, (cmd) =>
                 {
                     if (parameterValues != null)
@@ -441,34 +436,8 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                         {
                             cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter(prm.Key, prm.Value));
                         }
-                        if (outputParameters != null && outputParameters.Count > 0)
-                        {
-                            sqlParameters = cmd.Parameters;
-                            foreach(var outputParam in outputParameters)
-                            {
-                                SqlParameter sqlParam = new SqlParameter();
-                                sqlParam.ParameterName = outputParam.Key;
-                                sqlParam.Direction = ParameterDirection.Output;
-                                int? size;
-                                byte? precision;
-                                sqlParam.DbType = GetSQLDBType(outputParam.Value, out size, out precision);
-                                if (size.HasValue)
-                                    sqlParam.Size = size.Value;
-                                if (precision.HasValue)
-                                    sqlParam.Precision = precision.Value;
-                                cmd.Parameters.Add(sqlParam);
-                            }
-                        }
                     }
                 });
-                if (outputParameters != null && outputParameters.Count > 0)
-                {
-                    foreach (var outputParam in outputParameters)
-                    {
-                        System.Data.Common.DbParameter sqlParam = sqlParameters[outputParam.Key];
-                        outputParameterValues.Add(outputParam.Key, sqlParam.Value);
-                    }
-                }
                 return rslt;
             }
 
@@ -618,11 +587,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         }
 
         #endregion
-
-        public override string ParameterNamePrefix
-        {
-            get { return "@"; }
-        }
 
         public override string NowDateTimeFunction
         {

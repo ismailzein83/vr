@@ -20,19 +20,6 @@ namespace Vanrise.Data.RDB
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public RDBUpdateQuery(RDBUpdateQuery<T> original)
-        {
-            this._parent = original._parent;
-            this._queryBuilderContext = original._queryBuilderContext.CreateChildContext();
-            this.Table = original.Table;
-            this._tableAlias = original._tableAlias;
-            this.ColumnValues = original.ColumnValues;
-            this.Joins = original.Joins;
-            this.Condition = original.Condition;
-            this.NotExistCondition = original.NotExistCondition;
-            this._notExistConditionTableAlias = original._notExistConditionTableAlias;
-        }
-
         public IRDBTableQuerySource Table { get; set; }
 
         public List<RDBUpdateColumn> ColumnValues { get; private set; }
@@ -130,21 +117,26 @@ namespace Vanrise.Data.RDB
                 {
                     SelectQuery = selectQuery
                 };
-                var clonedUpdateQuery = new RDBUpdateQuery<T>(this);
-                clonedUpdateQuery.NotExistCondition = null;
                 IRDBQueryReady ifQuery = new RDBIfQuery<RDBUpdateQuery<T>>(this, _queryBuilderContext.CreateChildContext())
                 {
                     Condition = rdbNotExistsCondition,
-                    TrueQuery = clonedUpdateQuery
+                    _trueQueryText = ResolveUpdateQuery(context).QueryText
                 };
                 return ifQuery.GetResolvedQuery(context);
             }
             else
             {
-                var resolveUpdateQueryContext = new RDBDataProviderResolveUpdateQueryContext(this.Table, this._tableAlias, this.ColumnValues, this.Condition, this.Joins, context, _queryBuilderContext);
-                return context.DataProvider.ResolveUpdateQuery(resolveUpdateQueryContext);
+                return ResolveUpdateQuery(context);
             }
         }
+
+        private RDBResolvedQuery ResolveUpdateQuery(IRDBQueryGetResolvedQueryContext context)
+        {
+            var resolveUpdateQueryContext = new RDBDataProviderResolveUpdateQueryContext(this.Table, this._tableAlias, this.ColumnValues, this.Condition, this.Joins, context, _queryBuilderContext);
+            return context.DataProvider.ResolveUpdateQuery(resolveUpdateQueryContext);
+        }
+
+
 
         public T EndUpdate()
         {

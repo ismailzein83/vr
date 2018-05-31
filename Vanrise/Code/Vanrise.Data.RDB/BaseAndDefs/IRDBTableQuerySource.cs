@@ -15,6 +15,8 @@ namespace Vanrise.Data.RDB
         string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context);
 
         string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context);
+
+        void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context);
     }
 
     public interface IRDBTableQuerySourceToDBQueryContext : IBaseRDBResolveQueryContext
@@ -49,4 +51,39 @@ namespace Vanrise.Data.RDB
             private set;
         }
     }
+
+    public interface IRDBTableQuerySourceGetIdColumnInfoContext
+    {
+        BaseRDBDataProvider DataProvider { get; }
+
+        string IdColumnName { set; }
+
+        RDBTableColumnDefinition IdColumnDefinition { set; }
+    }
+
+    public class RDBTableQuerySourceGetIdColumnInfoContext : IRDBTableQuerySourceGetIdColumnInfoContext
+    {
+        public RDBTableQuerySourceGetIdColumnInfoContext(BaseRDBDataProvider dataProvider)
+        {
+            this.DataProvider = dataProvider;
+        }
+        public BaseRDBDataProvider DataProvider
+        {
+            get;
+            private set;
+        }
+
+        public string IdColumnName
+        {
+            get;
+            set;
+        }
+
+        public RDBTableColumnDefinition IdColumnDefinition
+        {
+            get;
+            set;
+        }
+    }
+
 }

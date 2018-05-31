@@ -52,5 +52,11 @@ namespace Vanrise.Data.RDB
                 throw new Exception(String.Format("Column '{0}' not found", context.ColumnName));
             return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, context.ColumnName, columnDef);
         }
+
+
+        public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

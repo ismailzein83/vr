@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseAndDefs\IBaseRDBResolveQueryContext.cs" />
+    <Compile Include="BaseAndDefs\RDBFieldValue.cs" />
     <Compile Include="BaseRDBDataManager.cs" />
     <Compile Include="BulkInsert\BaseRDBStreamForBulkInsert.cs" />
     <Compile Include="BulkInsert\RDBBulkInsertQueryWriteRecordContext.cs" />

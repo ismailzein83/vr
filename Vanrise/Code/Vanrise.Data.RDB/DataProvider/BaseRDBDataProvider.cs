@@ -12,8 +12,6 @@ namespace Vanrise.Data.RDB
     {
         public abstract string UniqueName { get; }
 
-        public abstract string ParameterNamePrefix { get; }
-
         public abstract string NowDateTimeFunction { get; }
 
         public abstract string ConvertToDBParameterName(string parameterName);
@@ -180,26 +178,18 @@ namespace Vanrise.Data.RDB
 
         List<RDBInsertColumn> ColumnValues { get;  }
 
-        string IdOutputParameterName { get; }
+        string GeneratedIdDBParameterName { get; }
     }
     public class RDBDataProviderResolveInsertQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveInsertQueryContext
     {
-        //public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idOutputParameterName, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-        //    : base(queryContext, dataProvider, parameterValues)
-        //{
-        //    this.Table = table;
-        //    this.ColumnValues = columnValues;
-        //    this.IdOutputParameterName = idOutputParameterName;
-        //}
-
-        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idOutputParameterName,
+        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idParameterName,
             IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
             : base(parentContext)
         {
             this.QueryBuilderContext = queryBuilderContext;
             this.Table = table;
             this.ColumnValues = columnValues;
-            this.IdOutputParameterName = idOutputParameterName;
+            this.GeneratedIdDBParameterName = idParameterName;
         }
 
         public RDBQueryBuilderContext QueryBuilderContext
@@ -212,7 +202,7 @@ namespace Vanrise.Data.RDB
 
         public List<RDBInsertColumn> ColumnValues { get; private set; }
         
-        public string IdOutputParameterName { get; private set; }
+        public string GeneratedIdDBParameterName { get; private set; }
     }
     public interface IRDBDataProviderResolveUpdateQueryContext : IBaseRDBResolveQueryContext
     {
@@ -318,21 +308,15 @@ namespace Vanrise.Data.RDB
         bool ExecuteTransactional { get; }
 
         Dictionary<string, Object> ParameterValues { get; }
-
-        Dictionary<string, RDBDataType> OutputParameters { get; }
-
-        Dictionary<string, Object> OutputParameterValues { get; }
     }
 
     public abstract class BaseRDBDataProviderExecuteQueryContext : IBaseRDBDataProviderExecuteQueryContext
     {
-        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, object> parameterValues, Dictionary<string, RDBDataType> outputParameters)
+        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, object> parameterValues)
         {
             this.ResolvedQuery = resolvedQuery;
             this.ExecuteTransactional = executeTransactional;
             this.ParameterValues = parameterValues;
-            this.OutputParameters = outputParameters;
-            this.OutputParameterValues = new Dictionary<string, object>();
         }
 
         public RDBResolvedQuery ResolvedQuery
@@ -351,18 +335,6 @@ namespace Vanrise.Data.RDB
         public Dictionary<string, object> ParameterValues
         {
 
-            get;
-            private set;
-        }
-
-        public Dictionary<string, RDBDataType> OutputParameters
-        {
-            get;
-            private set;
-        }
-
-        public Dictionary<string, object> OutputParameterValues
-        {
             get;
             private set;
         }

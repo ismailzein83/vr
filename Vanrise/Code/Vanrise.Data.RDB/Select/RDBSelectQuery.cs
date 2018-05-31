@@ -9,11 +9,24 @@ namespace Vanrise.Data.RDB
     public class RDBSelectQuery<T> : BaseRDBQuery, IRDBSelectQuery<T>, ISelectQueryTableDefined<T>, ISelectQueryJoined<T>, ISelectQueryColumnsSelected<T>, ISelectQueryFiltered<T>, ISelectQueryGroupByDefined<T>, ISelectQueryAggregateColumnsSelected<T>, ISelectQuerySortDefined<T>, IRDBTableQuerySource
     {
          T _parent;
+
+         internal T Parent
+         {
+             set
+             {
+                 _parent = value;
+             }
+         }
          RDBQueryBuilderContext _queryBuilderContext;
 
         public RDBSelectQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
         {
             _parent = parent;
+            _queryBuilderContext = queryBuilderContext;
+        }
+
+        public RDBSelectQuery(RDBQueryBuilderContext queryBuilderContext)            
+        {
             _queryBuilderContext = queryBuilderContext;
         }
 
@@ -62,6 +75,18 @@ namespace Vanrise.Data.RDB
             return From(tableName, tableAlias, null);
         }
 
+        public IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias, long? nbOfRecords)
+        {
+            var selectQuery = new RDBSelectQuery<ISelectQueryTableDefined<T>>(this, _queryBuilderContext.CreateChildContext());
+            From(selectQuery, inlineQueryAlias, nbOfRecords);
+            return selectQuery;
+        }
+
+        public IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias)
+        {
+            return FromSelect(inlineQueryAlias, null);
+        }
+
         public RDBJoinContext<ISelectQueryJoined<T>> Join()
             {
                 this._joins = new List<RDBJoin>();
@@ -103,7 +128,7 @@ namespace Vanrise.Data.RDB
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
         {
             RDBQueryGetResolvedQueryContext getResolvedQueryContext = new RDBQueryGetResolvedQueryContext(context);
-            return GetResolvedQuery(getResolvedQueryContext).QueryText;
+            return string.Concat(" (", GetResolvedQuery(getResolvedQueryContext).QueryText, ") ");
         }
 
         #region Private Classes
@@ -137,6 +162,12 @@ namespace Vanrise.Data.RDB
         public T EndSelect()
         {
             return _parent;
+        }
+
+
+        public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -217,6 +248,10 @@ namespace Vanrise.Data.RDB
         ISelectQueryTableDefined<T> From(string tableName, string tableAlias, long? nbOfRecords);
 
         ISelectQueryTableDefined<T> From(string tableName, string tableAlias);
+
+        IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias, long? nbOfRecords);
+
+        IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias);
     }
     public interface ISelectQueryCanSelectColumns<T>
     {

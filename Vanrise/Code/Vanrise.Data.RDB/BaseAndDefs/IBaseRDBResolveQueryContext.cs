@@ -12,8 +12,6 @@ namespace Vanrise.Data.RDB
 
         Dictionary<string, Object> ParameterValues { get; }
 
-        Dictionary<string, RDBDataType> OutputParameters { get; }
-
         Dictionary<string, RDBParameter> Parameters { get; }
 
         RDBParameter GetParameterWithValidate(string parameterName);
@@ -26,8 +24,6 @@ namespace Vanrise.Data.RDB
 
 
         void AddParameter(RDBParameter parameter);
-
-        void AddOutputParameter(string parameterName, RDBDataType dataType);
     }
 
     public abstract class BaseRDBResolveQueryContext : IBaseRDBResolveQueryContext
@@ -35,12 +31,10 @@ namespace Vanrise.Data.RDB
         BaseRDBDataProvider _dataProvider;
         Dictionary<string, Object> _parameterValues;
         IBaseRDBResolveQueryContext _parentContext;
-        Dictionary<string, RDBDataType> _outputParameters;
 
         public BaseRDBResolveQueryContext(BaseRDBDataProvider dataProvider)
         {
             _dataProvider = dataProvider;
-            _outputParameters = new Dictionary<string, RDBDataType>();
             _parameterValues = new Dictionary<string,object>();
             this.Parameters = new Dictionary<string, RDBParameter>();
         }
@@ -49,7 +43,6 @@ namespace Vanrise.Data.RDB
         {
             _parentContext = parentContext;
             this._dataProvider = parentContext.DataProvider;
-            this._outputParameters = parentContext.OutputParameters;
             this._parameterValues = parentContext.ParameterValues;
             this.Parameters = parentContext.Parameters;
         }
@@ -76,11 +69,6 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        public Dictionary<string, RDBDataType> OutputParameters
-        {
-            get { return _outputParameters; }
-        }
-
         public void AddParameterValue(string parameterName, object value)
         {
             if (_parameterValues.ContainsKey(parameterName))
@@ -94,12 +82,6 @@ namespace Vanrise.Data.RDB
         {
             return this.DataProvider.ConvertToDBParameterName(String.Concat("Prm_", this.PrmIndex++));
         }
-
-        public void AddOutputParameter(string parameterName, RDBDataType dataType)
-        {
-            _outputParameters.Add(this.DataProvider.ConvertToDBParameterName(parameterName), dataType);
-        }
-
 
         public Dictionary<string, RDBParameter> Parameters
         {

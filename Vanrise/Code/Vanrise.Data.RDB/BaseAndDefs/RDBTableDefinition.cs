@@ -51,6 +51,17 @@ namespace Vanrise.Data.RDB
         {
             return this.TableName;
         }
+
+
+        public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
+        {
+            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(context.DataProvider, this.TableName);
+            if(!String.IsNullOrEmpty( tableDefinition.IdColumnName ))
+            {
+                context.IdColumnName = tableDefinition.IdColumnName;
+                context.IdColumnDefinition = RDBSchemaManager.Current.GetColumnDefinitionWithValidate(tableDefinition, this.TableName, tableDefinition.IdColumnName);
+            }
+        }
     }
 
     public class RDBTempPhysicalTableQuerySource : IRDBTableQuerySource
@@ -90,6 +101,12 @@ namespace Vanrise.Data.RDB
             if (!this._tableDefinition.Columns.TryGetValue(columnName, out columnDefinition))
                 throw new Exception(String.Format(" Column '{0}' not found in table '{1}'", columnName, this._tableName));
             return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, columnName, columnDefinition);
+        }
+
+
+        public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }
