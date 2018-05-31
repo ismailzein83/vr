@@ -112,6 +112,8 @@
             $scope.scopeModel.onDealStatusChanged = function () {
                 if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
                     $scope.scopeModel.deActivationDate = undefined;
+                if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.deActivationDate == undefined && $scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value)
+                    $scope.scopeModel.deActivationDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             };
         }
         function load() {
@@ -151,7 +153,7 @@
         }
         function loadVolumeCommitmentItems()
         {
-            if (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
+            if (carrierAccountInfo != undefined ) {
                 if (carrierAccountSelectedPromise != undefined)
                     carrierAccountSelectedPromise.resolve();
                 else {
