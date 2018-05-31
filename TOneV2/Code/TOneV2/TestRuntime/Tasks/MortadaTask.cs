@@ -114,6 +114,22 @@ namespace TestRuntime.Tasks
                         },
                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
                         { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "YearWeek",
+                                MappedDimensionName = "YearWeek"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Month",
+                                MappedDimensionName = "MonthAsDate"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
                             Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionName 
                             { 
                                 Type = Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionNameType.AllDimensions
@@ -188,6 +204,22 @@ namespace TestRuntime.Tasks
                             { 
                                 DimensionName = "Day",
                                 MappedDimensionName = "DayAsDate"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "YearWeek",
+                                MappedDimensionName = "YearWeek"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Month",
+                                MappedDimensionName = "MonthAsDate"
                             }
                         },
                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
