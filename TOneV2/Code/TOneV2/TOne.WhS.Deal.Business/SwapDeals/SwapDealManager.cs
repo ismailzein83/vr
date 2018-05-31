@@ -46,7 +46,7 @@ namespace TOne.WhS.Deal.Business
         {
             var deals = GetCachedSwapDeals();
             return deals.Where(deal => deal.Settings.Status != DealStatus.Draft
-                                       && deal.Settings.BeginDate >= effectiveAfter);
+                                       && (deal.Settings.EndDate.HasValue && deal.Settings.EndDate.Value >= effectiveAfter));
         }
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
