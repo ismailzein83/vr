@@ -20,8 +20,9 @@ BEGIN
 	SELECT ddp.[ID],ddp.[DealID],ddp.[ZoneGroupNb],ddp.[IsSale],ddp.[TierNb],ddp.[RateTierNb],ddp.[FromTime],ddp.[ToTime],ddp.[ReachedDurationInSec],ddp.[CreatedTime]
 	FROM [TOneWhS_Deal].[DealDetailedProgress] ddp  WITH(NOLOCK) 
 	WHERE (@DealIds  is null or ddp.DealID in (select DealID from @DealIDsTable))
-	and (@FromDateLocal is null or ddp.FromTime >= @FromDateLocal)
-	and (@ToDateLocale is null or ddp.ToTime<@ToDateLocale)
+	and (@FromDateLocal is null or ddp.[ToTime] >= @FromDateLocal)
+	and (@ToDateLocale is null or ddp.FromTime<@ToDateLocale)
+
 	and tierNb is not null
 
 END
