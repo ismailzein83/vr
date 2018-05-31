@@ -332,6 +332,7 @@
     <None Include="BatchScripts\FZero\Service_CDRImport.bat" />
     <None Include="BatchScripts\FZero\Service_ClientReport.bat" />
     <None Include="BatchScripts\FZero\Service_DailyReport.bat" />
+    <None Include="BatchScripts\FZero\Service_DailyReportsSummary.bat" />
     <None Include="BatchScripts\FZero\Service_DailySummaryReport.bat" />
     <None Include="BatchScripts\FZero\Service_Mysql.bat" />
     <None Include="BatchScripts\FZero\Service_RecievedMysql.bat" />
