@@ -116,5 +116,6 @@
     <Build Include="TOneWhS_Deal\User Defined Types\DealZoneGroupType.sql" />
     <Build Include="TOneWhS_Deal\User Defined Types\DealProgressType.sql" />
     <Build Include="TOneWhS_Deal\User Defined Types\DealDetailedProgressType.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealDetailedProgress_GetByDealId.sql" />
   </ItemGroup>
 </Project>
