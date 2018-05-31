@@ -12,13 +12,11 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
                 onselectitem: '=',
                 ondeselectitem: '=',
                 isrequired: '=',
-                hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '=',
                 isloading: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
                 ctrl.datasource = [];
 
@@ -28,7 +26,6 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
 
                 var ctor = new VRNotificationTypeSelectorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -109,14 +106,18 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
             if (attrs.hidelabel == undefined)
                 htmlLabel = "label = '" + label + "' ";
 
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined) {
+                hideremoveicon = "hideremoveicon";
+            }
+
             var haschildcolumns = attrs.haschildcolumns != undefined ? " haschildcolumns " : "";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >'
                         + '<span vr-loader="ctrl.isloading">'
                             + '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="Id" isrequired="ctrl.isrequired" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
                                 + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label
-                                + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate" '
-                                + htmlLabel + ' >'
+                                + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate" ' + hideremoveicon + ' ' + htmlLabel + ' >'
                             + '</vr-select>'
                         + '</span>'
                    + '</vr-columns>';
