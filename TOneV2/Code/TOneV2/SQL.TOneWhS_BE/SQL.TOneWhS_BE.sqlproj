@@ -617,5 +617,15 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetPreviewsByProcessInstanceId.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetPreviewsByPricelistId.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\PointOfInterconnectType.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierRecurringChargesType.sql" />
+    <Build Include="TOneWhS_BE\Tables\SupplierRecurringCharges.sql" />
+    <Build Include="TOneWhS_BE\Tables\CustomerRecurringChargesType.sql" />
+    <Build Include="TOneWhS_BE\Tables\CustomerRecurringCharges.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetParentsBySupplier.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetParentsByPlan.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\SupplierRecurringChargesTypeType.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\SupplierRecurringChargesType.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\CustomerRecurringChargesTypeType.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\CustomerRecurringChargesType.sql" />
   </ItemGroup>
 </Project>
