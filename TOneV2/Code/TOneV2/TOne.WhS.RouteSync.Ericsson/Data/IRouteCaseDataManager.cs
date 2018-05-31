@@ -9,13 +9,14 @@ using Vanrise.Data;
 
 namespace TOne.WhS.RouteSync.Ericsson.Data
 {
-    public interface IRouteCaseDataManager : IDataManager, IBulkApplyDataManager<RouteCase>
-    {
-        string SwitchId { get; set; }
-        IEnumerable<RouteCase> GetAllRouteCases();
-        void Initialize(IRouteCaseInitializeContext context);
-        void ApplyRouteCaseForDB(object preparedRouteCase);
-        Dictionary<string, RouteCase> GetRouteCasesAfterRCNumber(int rcNumber);
+	public interface IRouteCaseDataManager : IDataManager, IBulkApplyDataManager<RouteCase>
+	{
+		string SwitchId { get; set; }
+		List<RouteCase> GetAllRouteCases();
+		List<RouteCase> GetNotSyncedRouteCases();
+		void Initialize(IRouteCaseInitializeContext context);
+		void ApplyRouteCaseForDB(object preparedRouteCase);
+		Dictionary<string, RouteCase> GetRouteCasesAfterRCNumber(int rcNumber);
 		void UpdateSyncedRouteCases(IEnumerable<int> rCNumbers);
 	}
 }

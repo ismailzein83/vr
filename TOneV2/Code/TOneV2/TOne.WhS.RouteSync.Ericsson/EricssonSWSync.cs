@@ -12,6 +12,8 @@ using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
 using TOne.WhS.RouteSync.Ericsson.Business;
+using Vanrise.Caching;
+using Vanrise.Runtime;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
@@ -66,7 +68,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 			var convertedRoutes = new List<ConvertedRoute>();
 			var routesToConvertByRCString = new Dictionary<string, List<EricssonConvertedRoute>>();
-			var routeCases = new RouteCaseManager().GetCachedRouteCasesGroupedByOptions(context.SwitchId);
+			var routeCases = GetCachedRouteCasesGroupedByOptions(context.SwitchId);
 			var routeCasesToAdd = new HashSet<string>();
 			CodeGroupManager codeGroupManager = new CodeGroupManager();
 			var ruleTree = new EricssonSWSync().BuildSupplierTrunkGroupTree(CarrierMappings);
@@ -110,7 +112,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 
 			if (routeCasesToAdd.Count > 0)
-				routeCases = new RouteCaseManager().InsertAndGetRouteCases(context.SwitchId, routeCasesToAdd);
+				routeCases = InsertAndGetRouteCases(context.SwitchId, routeCasesToAdd);
 
 			routeCases.ThrowIfNull("routeCases");
 
@@ -175,8 +177,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			#endregion
 
 			#region Get Commands
-			var routeCasesDictionary = new RouteCaseManager().GetCachedRouteCasesGroupedByOptions(context.SwitchId);
-			var routeCasesToBeAdded = (routeCasesDictionary != null && routeCasesDictionary.Count > 0) ? routeCasesDictionary.FindAllRecords(item => !item.Synced) : null;
+			var routeCasesToBeAdded = new RouteCaseManager().GetNotSyncedRouteCases(context.SwitchId);
 			var routeCasesToBeAddedWithCommands = GetRouteCasesWithCommands(routeCasesToBeAdded);
 
 			Dictionary<string, CustomerMappingWithActionType> customersToDeleteByBO;
@@ -691,11 +692,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 		private Dictionary<string, List<EricssonRouteWithCommands>> GetEricssonRoutesWithCommands(string switchId, Dictionary<string, CustomerMappingWithActionType> customersToDeleteByBO,
 		Dictionary<string, List<EricssonRouteWithCommands>> ericssonRoutesToDeleteWithCommands, out Dictionary<string, EricssonConvertedRouteDifferences> routeDifferencesByBO)
 		{
-			var cachedRouteCases = new RouteCaseManager().GetCachedRouteCasesGroupedByOptions(switchId);
-			if (cachedRouteCases == null || cachedRouteCases.Count == 0)
-				throw new VRBusinessException("No Route Cases Found");
+			var routeCases = new RouteCaseManager().GetAllRouteCases(switchId);
+			if (routeCases == null || routeCases.Count == 0)
+				throw new VRBusinessException(string.Format("No route cases found switch with id {0}", switchId));
 
-			var routeCases = cachedRouteCases.Values.ToList();
 			Dictionary<string, List<EricssonRouteWithCommands>> result = ericssonRoutesToDeleteWithCommands != null ? new Dictionary<string, List<EricssonRouteWithCommands>>(ericssonRoutesToDeleteWithCommands) : new Dictionary<string, List<EricssonRouteWithCommands>>();
 
 			Dictionary<string, CarrierMapping> carrierMappingByCustomerBo = new Dictionary<string, CarrierMapping>();
@@ -1195,7 +1195,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 										break;
 									}
 								}
-
+								/*
 								if (isCustomerSucceed)
 								{
 									customerMappingSucceededWithCommands = new CustomerMappingWithCommands();
@@ -1209,7 +1209,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 									//customerMappingSucceededWithCommands.TrunkCommandsByTrunkId = new Dictionary<Guid, string>();
 								}
 
-								/*var trunkFailed = false;
+								var trunkFailed = false;
 								if (isCustomerSucceed && customerMappingWithCommands.TrunkCommandsByTrunkId != null)
 								{
 									foreach (var trunkCommandKvp in customerMappingWithCommands.TrunkCommandsByTrunkId)
@@ -1238,7 +1238,17 @@ namespace TOne.WhS.RouteSync.Ericsson
 								}*/
 
 								if (isCustomerSucceed)
+								{
+									customerMappingSucceededWithCommands = new CustomerMappingWithCommands();
+									customerMappingSucceededWithCommands.CustomerMappingWithActionType = new CustomerMappingWithActionType()
+									{
+										CustomerMapping = new CustomerMapping() { BO = customerMapping.BO, InternationalOBA = customerMapping.InternationalOBA, NationalOBA = customerMapping.NationalOBA },
+										ActionType = customerMappingWithActionType.ActionType
+									};
+
+									customerMappingSucceededWithCommands.OBACommands = customerMappingWithCommands.OBACommands;
 									succeededCustomerMappingsWithCommands.Add(customerMappingSucceededWithCommands);
+								}
 								/*if (trunkFailed)
 									succeedCustomerMappingsWithFailedTrunk.Add(customerMappingSucceededWithCommands);*/
 								if (customerMappingFailedWithCommands != null)
@@ -1289,6 +1299,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (sshCommunication == null)
 			{
 				succeedRouteCaseNumbers = routeCasesWithCommands;
+				routeCaseDataManager.UpdateSyncedRouteCases(succeedRouteCaseNumbers.Select(item => item.RouteCase.RCNumber));
 				return;
 			}
 
@@ -1589,6 +1600,120 @@ namespace TOne.WhS.RouteSync.Ericsson
 			return false;
 		}
 		#endregion
+
+		#region routeCases
+		private Dictionary<string, RouteCase> InsertAndGetRouteCases(string switchId, HashSet<string> routeCaseOptionsToAdd)
+		{
+			int maxLockRetryCount = Int32.MaxValue;
+			TimeSpan lockRetryInterval = new TimeSpan(0, 0, 1);
+			IRouteCaseDataManager dataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteCaseDataManager>();
+			dataManager.SwitchId = switchId;
+
+			string transactionLockName = String.Concat("WhS_Ericsson_{0}.RouteCase", switchId);
+			int retryCount = 0;
+			List<RouteCase> routeCasesToAdd = new List<RouteCase>();
+
+			Dictionary<string, RouteCase> routeCases = GetCachedRouteCasesGroupedByOptions(switchId);
+			int lastCurrentRCNumber = 0;
+			if (routeCases != null)
+				lastCurrentRCNumber = routeCases.Select(itm => itm.Value.RCNumber).Max();
+
+			while (retryCount < maxLockRetryCount)
+			{
+				if (TransactionLocker.Instance.TryLock(transactionLockName, () =>
+				{
+					Dictionary<string, RouteCase> newRouteCasesByOptions = dataManager.GetRouteCasesAfterRCNumber(lastCurrentRCNumber);
+
+					int rcNumber = lastCurrentRCNumber;
+					if (newRouteCasesByOptions != null && newRouteCasesByOptions.Count > 0)
+					{
+						foreach (var newRouteCaseByOptionsKVP in newRouteCasesByOptions)
+						{
+							rcNumber = Math.Max(rcNumber, newRouteCaseByOptionsKVP.Value.RCNumber);
+							routeCases.Add(newRouteCaseByOptionsKVP.Key, newRouteCaseByOptionsKVP.Value);
+						}
+					}
+					rcNumber++;
+
+					Object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
+					foreach (string routeCaseOption in routeCaseOptionsToAdd)
+					{
+						if (newRouteCasesByOptions == null || !newRouteCasesByOptions.ContainsKey(routeCaseOption))
+						{
+							RouteCase routeCaseToAdd = new RouteCase() { RCNumber = rcNumber, RouteCaseOptionsAsString = routeCaseOption };
+							routeCases.Add(routeCaseOption, routeCaseToAdd);
+							dataManager.WriteRecordToStream(routeCaseToAdd, dbApplyStream);
+							rcNumber++;
+						}
+					}
+					object obj = dataManager.FinishDBApplyStream(dbApplyStream);
+					dataManager.ApplyRouteCaseForDB(obj);
+				}))
+				{
+					return routeCases;
+				}
+				else
+				{
+					Thread.Sleep(lockRetryInterval);
+					retryCount++;
+				}
+			}
+			throw new Exception(String.Format("Cannot Lock WhS_Ericsson_{0}.RouteCase", switchId));
+		}
+
+		private struct GetCachedRouteCasesGroupedByOptionsCacheName
+		{
+			public string SwitchId { get; set; }
+		}
+
+		private Dictionary<string, RouteCase> GetCachedRouteCasesGroupedByOptions(string switchId)
+		{
+			var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<RouteCaseCacheManager>();
+			var cacheName = new GetCachedRouteCasesGroupedByOptionsCacheName() { SwitchId = switchId };
+
+			return cacheManager.GetOrCreateObject(cacheName, RouteCaseCacheExpirationChecker.Instance, () =>
+			{
+				Dictionary<string, RouteCase> result = new Dictionary<string, RouteCase>();
+				IRouteCaseDataManager dataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteCaseDataManager>();
+				dataManager.SwitchId = switchId;
+				IEnumerable<RouteCase> routeCases = dataManager.GetAllRouteCases();
+				if (routeCases != null)
+				{
+					foreach (RouteCase routeCase in routeCases)
+						result.Add(routeCase.RouteCaseOptionsAsString, routeCase);
+				}
+				return result;
+			});
+		}
+
+		#region Private Classes
+
+		private class RouteCaseCacheManager : BaseCacheManager
+		{
+
+		}
+
+		private class RouteCaseCacheExpirationChecker : CacheExpirationChecker
+		{
+			static RouteCaseCacheExpirationChecker s_instance = new RouteCaseCacheExpirationChecker();
+			public static RouteCaseCacheExpirationChecker Instance
+			{
+				get
+				{
+					return s_instance;
+				}
+			}
+
+			public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
+			{
+				TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(15);
+				SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new SlidingWindowCacheExpirationChecker(entitiesTimeSpan);
+				return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
+			}
+		}
+		#endregion
+		#endregion
+
 		#endregion
 	}
 }

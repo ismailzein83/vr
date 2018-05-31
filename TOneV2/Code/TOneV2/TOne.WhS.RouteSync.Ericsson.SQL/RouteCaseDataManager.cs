@@ -86,11 +86,28 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			ExecuteNonQueryText(query, null);
 		}
 
-		public IEnumerable<RouteCase> GetAllRouteCases()
+		public List<RouteCase> GetAllRouteCases()
 		{
 			List<RouteCase> routeCases = new List<RouteCase>();
 
 			string query = string.Format(query_GetRouteCases.Replace("#FILTER#", ""), SwitchId);
+			ExecuteReaderText(query, (reader) =>
+			{
+				while (reader.Read())
+				{
+					RouteCase routeCase = RouteCaseMapper(reader);
+					routeCases.Add(routeCase);
+				}
+			}, null);
+
+			return routeCases;
+		}
+
+		public List<RouteCase> GetNotSyncedRouteCases()
+		{
+			List<RouteCase> routeCases = new List<RouteCase>();
+
+			string query = string.Format(query_GetRouteCases.Replace("#FILTER#", " WHERE Synced = 0 "), SwitchId);
 			ExecuteReaderText(query, (reader) =>
 			{
 				while (reader.Read())
@@ -109,7 +126,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			{
 				RCNumber = (int)reader["RCNumber"],
 				RouteCaseOptionsAsString = reader["Options"] as string,
-				Synced = (bool)reader["Synced"]
 			};
 		}
 
@@ -127,7 +143,13 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                         (
 	                                                        [RCNumber] ASC
                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-                                                        ) ON [PRIMARY]
+                                                        ) ON [PRIMARY];
+														
+														CREATE NONCLUSTERED INDEX [IX_WhS_RouteSync_Ericsson_{0}.RouteCase_Synced] ON [WhS_RouteSync_Ericsson_{0}].[RouteCase]
+														(
+															[Synced] ASC
+														)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];
+
 		                                            END
 													IF  NOT EXISTS( SELECT * FROM WhS_RouteSync_Ericsson_{0}.[RouteCase] WHERE RCNumber = {1})
 		                                            begin
