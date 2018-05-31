@@ -134,7 +134,7 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                 foreach (var listDistinctCleanCase in listDistinctCleanCases)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.AppendFormat("{0},{1},{2},{3},{4},{5}", listDistinctCleanCase.ANumber, listDistinctCleanCase.BNumber, listDistinctCleanCase.RecievedCLI, listDistinctCleanCase.AttamptDateTime, listDistinctCleanCase.Duration, listDistinctCleanCase.DifferentCLI);
+                    stringBuilder.AppendFormat("{0},{1},{2},{3},{4}", listDistinctCleanCase.ANumber, listDistinctCleanCase.BNumber, listDistinctCleanCase.RecievedCLI, listDistinctCleanCase.AttamptDateTime, listDistinctCleanCase.Duration);
                 }
 
 

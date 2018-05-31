@@ -97,7 +97,21 @@
                                                 <telerik:RadTextBox ID="nonFruadReportEmail" runat="server"></telerik:RadTextBox>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td class="caption">Enable Daily Reports Summary</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <asp:CheckBox ID="enableDailyReportsSummary" runat="server"></asp:CheckBox>
+                                            </td>
+                                        </tr>
 
+                                        <tr>
+                                            <td class="caption">Daily Reports Summary Email</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadTextBox ID="dailyReportsSummaryEmail" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>

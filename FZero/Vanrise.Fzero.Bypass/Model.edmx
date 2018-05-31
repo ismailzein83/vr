@@ -218,6 +218,8 @@
           <Property Name="IncludeCSVFile" Type="bit" />
           <Property Name="EnableNonFruadReport" Type="bit" />
           <Property Name="NonFruadReportEmail" Type="varchar" MaxLength="50" />
+          <Property Name="EnableDailyReportsSummary" Type="bit" />
+          <Property Name="DailyReportsSummaryEmail" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OriginationNetworks">
           <Key>
@@ -2979,6 +2981,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="IncludeCSVFile" Type="Boolean" />
           <Property Name="EnableNonFruadReport" Type="Boolean" />
           <Property Name="NonFruadReportEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EnableDailyReportsSummary" Type="Boolean" />
+          <Property Name="DailyReportsSummaryEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OriginationNetwork">
           <Key>
@@ -4635,6 +4639,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="MobileOperators">
             <EntityTypeMapping TypeName="Model.MobileOperator">
               <MappingFragment StoreEntitySet="MobileOperators">
+                <ScalarProperty Name="DailyReportsSummaryEmail" ColumnName="DailyReportsSummaryEmail" />
+                <ScalarProperty Name="EnableDailyReportsSummary" ColumnName="EnableDailyReportsSummary" />
                 <ScalarProperty Name="NonFruadReportEmail" ColumnName="NonFruadReportEmail" />
                 <ScalarProperty Name="EnableNonFruadReport" ColumnName="EnableNonFruadReport" />
                 <ScalarProperty Name="IncludeCSVFile" ColumnName="IncludeCSVFile" />

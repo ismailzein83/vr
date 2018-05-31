@@ -138,7 +138,29 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             nonFruadReportEmail.Text = value;
         }
     }
+    public bool EnableDailyReportsSummary
+    {
+        get
+        {
+            return enableDailyReportsSummary.Checked;
+        }
+        set
+        {
+            enableDailyReportsSummary.Checked = value;
+        }
+    }
 
+    public string DailyReportsSummaryEmail
+    {
+        get
+        {
+            return dailyReportsSummaryEmail.Text;
+        }
+        set
+        {
+            dailyReportsSummaryEmail.Text = value;
+        }
+    }
 
     public string Mobile
     {
@@ -447,6 +469,17 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
 
 
+
+        if (string.IsNullOrWhiteSpace(DailyReportsSummaryEmail) && EnableDailyReportsSummary)
+        {
+            return "Daily reports summary email required";
+        }
+        else if (!Manager.IsValidEmail(DailyReportsSummaryEmail) && EnableDailyReportsSummary)
+        {
+            return "Daily reports summary email required";
+        }
+
+
         if (!txtUserNameReadOnly)
         {
             if (string.IsNullOrWhiteSpace(MobileOperatorUserName))
@@ -485,6 +518,14 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         EnableAutoReport = MobileOperator.AutoReport;
         AutoBlockEmail = MobileOperator.AutoBlockEmail;
         SecurityEmail = MobileOperator.AutoReportSecurityEmail;
+
+        DailyReportsSummaryEmail = MobileOperator.DailyReportsSummaryEmail;
+        if (MobileOperator.EnableDailyReportsSummary.HasValue)
+            EnableDailyReportsSummary = MobileOperator.EnableDailyReportsSummary.Value;
+        else
+        {
+            EnableDailyReportsSummary = false;
+        }
 
         NonFruadReportEmail = MobileOperator.NonFruadReportEmail;
         if (MobileOperator.EnableNonFruadReport.HasValue)
@@ -565,6 +606,9 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 
         MobileOperator.EnableNonFruadReport = EnableNonFruadReport;
         MobileOperator.NonFruadReportEmail = NonFruadReportEmail;
+
+        MobileOperator.EnableDailyReportsSummary = EnableDailyReportsSummary;
+        MobileOperator.DailyReportsSummaryEmail = DailyReportsSummaryEmail;
 
         MobileOperator.AutoReportSecurityEmail = SecurityEmail;
         MobileOperator.AutoReportSecurity = EnableSecurity;

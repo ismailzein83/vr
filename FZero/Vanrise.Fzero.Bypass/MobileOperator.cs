@@ -40,6 +40,8 @@ namespace Vanrise.Fzero.Bypass
         public Nullable<bool> IncludeCSVFile { get; set; }
         public Nullable<bool> EnableNonFruadReport { get; set; }
         public string NonFruadReportEmail { get; set; }
+        public Nullable<bool> EnableDailyReportsSummary { get; set; }
+        public string DailyReportsSummaryEmail { get; set; }
     
         public virtual ICollection<EmailCC> EmailCCs { get; set; }
         public virtual User User { get; set; }

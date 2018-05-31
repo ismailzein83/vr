@@ -98,6 +98,8 @@
         <AssociationConnector Association="Model.FK_GeneratedCalls_MobileOperators" />
         <EntityTypeShape EntityType="Model.ViewGeneratedCall" Width="1.5" PointX="12.375" PointY="7.75" />
         <EntityTypeShape EntityType="Model.ViewGeneratedCallsNew" Width="2.25" PointX="14.375" PointY="7.75" />
+        <EntityTypeShape EntityType="Model.EnableDailyReportsSummary" Width="1.5" PointX="13.25" PointY="28.375" />
+        <InheritanceConnector EntityType="Model.EnableDailyReportsSummary" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
