@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="products"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.ProductId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ProductId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Product Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>
