@@ -136,14 +136,6 @@
       <Project>{f6e779c0-8292-4e15-af3b-c713666402f1}</Project>
       <Name>Demo.BestPractices.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Demo.BestPractices.MainExtentions\Demo.BestPractices.MainExtentions.csproj">
-      <Project>{760ef831-102a-40b9-aa3b-a5da7b1f52a3}</Project>
-      <Name>Demo.BestPractices.MainExtentions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Demo.Module.Business\Demo.Module.Business.csproj">
-      <Project>{a0190a8f-95bd-4ce5-b60e-87529661e6e8}</Project>
-      <Name>Demo.Module.Business</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
