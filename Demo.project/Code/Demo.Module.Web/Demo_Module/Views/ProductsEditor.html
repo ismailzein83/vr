@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_ProductsEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formUniversityEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="name" label="Name" isrequired></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formProductEditor" data-onclick="saveProduct"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

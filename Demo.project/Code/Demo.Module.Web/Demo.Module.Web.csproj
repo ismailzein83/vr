@@ -45,8 +45,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -145,6 +144,10 @@
     <Content Include="Demo_Module\Directives\Company\demo-module-company-grid.js" />
     <Content Include="Demo_Module\Directives\Company\demo-module-company-selector.js" />
     <Content Include="Demo_Module\Directives\Company\Templates\CompanyGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Item\demo-module-item-grid.js" />
+    <Content Include="Demo_Module\Directives\Item\Templates\ItemGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
+    <Content Include="Demo_Module\Directives\Product\Templates\ProductGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-setting-selector.js" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-small-setting.js" />
@@ -165,12 +168,16 @@
     <Content Include="Demo_Module\Services\APIServices\CollegeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CollegeInfoConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\ItemAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\ProductAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UniversityAPIService.js" />
     <Content Include="Demo_Module\Services\BranchService.js" />
     <Content Include="Demo_Module\Services\CollegeService.js" />
     <Content Include="Demo_Module\Services\CompanyService.js" />
     <Content Include="Demo_Module\Services\DescriptionService.js" />
+    <Content Include="Demo_Module\Services\ItemService.js" />
+    <Content Include="Demo_Module\Services\ProductService.js" />
     <Content Include="Demo_Module\Services\UniversityService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
     <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
@@ -187,6 +194,12 @@
     <Content Include="Demo_Module\Views\CompanyEditorController.js" />
     <Content Include="Demo_Module\Views\CompanyManagement.html" />
     <Content Include="Demo_Module\Views\CompanyManagementController.js" />
+    <Content Include="Demo_Module\Views\ItemEditor.html" />
+    <Content Include="Demo_Module\Views\ItemEditorController.js" />
+    <Content Include="Demo_Module\Views\ProductsEditor.html" />
+    <Content Include="Demo_Module\Views\ProductsEditorController.js" />
+    <Content Include="Demo_Module\Views\ProductsManagement.html" />
+    <Content Include="Demo_Module\Views\ProductsManagementController.js" />
     <Content Include="Demo_Module\Views\UniversityEditor.html" />
     <Content Include="Demo_Module\Views\UniversityEditorController.js" />
     <Content Include="Demo_Module\Views\UniversityManagement.html" />
@@ -195,12 +208,19 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BranchController.cs" />
+    <Compile Include="Controllers\ItemController.cs" />
     <Compile Include="Controllers\CollegeController.cs" />
     <Compile Include="Controllers\CollegeInfoConfigsController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\VRProductController.cs" />
     <Compile Include="Controllers\SettingConfigsController.cs" />
     <Compile Include="Controllers\UniversityController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\ModuleInitialization.js" />
@@ -218,6 +238,12 @@
       <Project>{7f3a2fab-e969-475d-9eaa-ea742e5222de}</Project>
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

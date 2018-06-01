@@ -51,9 +51,11 @@
   <ItemGroup>
     <Compile Include="DemoModuleFactory.cs" />
     <Compile Include="IBranchDataManager.cs" />
+    <Compile Include="IItemDataManager.cs" />
     <Compile Include="ICollegeDataManager.cs" />
     <Compile Include="ICompanyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IProductDataManager.cs" />
     <Compile Include="IUniversityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

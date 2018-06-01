@@ -72,6 +72,14 @@
     <Compile Include="Company\CompanyQuery.cs" />
     <Compile Include="Branch\Setting\Setting.cs" />
     <Compile Include="Branch\Setting\SettingConfig.cs" />
+    <Compile Include="Item\Item.cs" />
+    <Compile Include="Item\ItemDetails.cs" />
+    <Compile Include="Item\ItemInfo.cs" />
+    <Compile Include="Item\ItemQuery.cs" />
+    <Compile Include="Product\Product.cs" />
+    <Compile Include="Product\ProductDetails.cs" />
+    <Compile Include="Product\ProductInfo.cs" />
+    <Compile Include="Product\ProductQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="University\University.cs" />
     <Compile Include="University\UniversityDetails.cs" />
