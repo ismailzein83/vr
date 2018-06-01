@@ -258,7 +258,7 @@ namespace TOne.WhS.Deal.Business
                     if (balancedAmount > Difference.Value)
                     {
                         validationResult = false;
-                        validateBeforeSaveContext.ValidateMessages.Add("Balanced Amount is less than expected");
+                        validateBeforeSaveContext.ValidateMessages.Add("Amounts should be balanced");
                     }
                 }
             }
@@ -274,7 +274,7 @@ namespace TOne.WhS.Deal.Business
                     if (balancedVolume > Difference.Value)
                     {
                         validationResult = false;
-                        validateBeforeSaveContext.ValidateMessages.Add("Balanced Volume is less than expected");
+                        validateBeforeSaveContext.ValidateMessages.Add("Amounts should be balanced");
                     }
                 }
 
