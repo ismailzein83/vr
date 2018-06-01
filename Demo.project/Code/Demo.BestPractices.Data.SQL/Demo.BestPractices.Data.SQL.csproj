@@ -55,9 +55,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildDataManager.cs" />
+    <Compile Include="ParentDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Demo.BestPractices.Data\Demo.BestPractices.Data.csproj">
+      <Project>{c7540099-cdaa-4f75-9a6d-3b02cf0e3bbb}</Project>
+      <Name>Demo.BestPractices.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Demo.BestPractices.Entities\Demo.BestPractices.Entities.csproj">
       <Project>{f6e779c0-8292-4e15-af3b-c713666402f1}</Project>
       <Name>Demo.BestPractices.Entities</Name>

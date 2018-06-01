@@ -48,6 +48,10 @@
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -57,6 +61,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
@@ -71,30 +79,41 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Net.Http.Formatting">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Http.WebHost">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ChildController.cs" />
+    <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Demo_BestPractices\Elements\ParentChild\Directives\" />
-    <Folder Include="Demo_BestPractices\Elements\ParentChild\Services\APIServices\" />
-    <Folder Include="Demo_BestPractices\Elements\ParentChild\Views\" />
+    <Folder Include="Demo_BestPractices\Elements\Child\Directives\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_BestPractices\Constant\ModuleConfig.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Services\APIServices\ChildAPIService.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Services\ChildService.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Views\ChildEditor.html" />
+    <Content Include="Demo_BestPractices\Elements\Child\Views\ChildEditorController.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Views\ChildManagement.html" />
+    <Content Include="Demo_BestPractices\Elements\Child\Views\ChildManagementController.js" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Directives\demo-bestpractices-parent-grid.js" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Directives\Templates\ParentGridTemplate.html" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Services\APIServices\ParentAPIService.js" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Services\ParentService.js" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Views\ParentEditor.html" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Views\ParentEditorController.js" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Views\ParentManagement.html" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Views\ParentManagementController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

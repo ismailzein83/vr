@@ -8,6 +8,7 @@ using Demo.Module.Data;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Caching;
 
 
 namespace Demo.Module.Business
@@ -26,6 +27,7 @@ namespace Demo.Module.Business
             bool insertActionSuccess = branchDataManager.Insert(branch, out branchId);
             if (insertActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 branch.BranchId = branchId;
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = BranchDetailMapper(branch);
@@ -70,6 +72,7 @@ namespace Demo.Module.Business
             bool updateActionSuccess = branchDataManager.Update(branch);
             if (updateActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = BranchDetailMapper(branch);
             }

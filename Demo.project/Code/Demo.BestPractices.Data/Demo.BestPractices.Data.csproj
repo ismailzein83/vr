@@ -46,6 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BestPracticesFactory.cs" />
+    <Compile Include="IChildDataManager.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="IParentDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
