@@ -60,9 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchDataManager.cs" />
-    <Compile Include="ItemDataManager.cs" />
     <Compile Include="CollegeDataManager.cs" />
     <Compile Include="CompanyDataManager.cs" />
+    <Compile Include="ItemDataManager.cs" />
     <Compile Include="ProductDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UniversityDataManager.cs" />
