@@ -125,6 +125,9 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:Boolean" Name="shouldStop" />
+          </Sequence.Variables>
           <twrba1:GetPartialRouteInfo sap2010:WorkflowViewState.IdRef="GetPartialRouteInfo_1">
             <twrba1:GetPartialRouteInfo.PartialRouteInfo>
               <OutArgument x:TypeArguments="twre:PartialRouteInfo">
@@ -197,211 +200,227 @@
                 <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteRuleId</mca:CSharpValue>
               </InArgument>
             </twrba1:LoadAffectedRules.RouteRuleId>
-          </twrba1:LoadAffectedRules>
-          <twrba1:GetAffectedRoutes sap2010:WorkflowViewState.IdRef="GetAffectedRoutes_1">
-            <twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
-              <OutArgument x:TypeArguments="scg:List(twre:CustomerRouteData)">
-                <mca:CSharpReference x:TypeArguments="scg:List(twre:CustomerRouteData)">affectedCustomerRoutes</mca:CSharpReference>
-              </OutArgument>
-            </twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
-            <twrba1:GetAffectedRoutes.AffectedRouteOptionRules>
-              <InArgument x:TypeArguments="twre:AffectedRouteOptionRules">
-                <mca:CSharpValue x:TypeArguments="twre:AffectedRouteOptionRules">affectedRouteOptionRules</mca:CSharpValue>
-              </InArgument>
-            </twrba1:GetAffectedRoutes.AffectedRouteOptionRules>
-            <twrba1:GetAffectedRoutes.AffectedRouteRules>
-              <InArgument x:TypeArguments="twre:AffectedRouteRules">
-                <mca:CSharpValue x:TypeArguments="twre:AffectedRouteRules">affectedRouteRules</mca:CSharpValue>
-              </InArgument>
-            </twrba1:GetAffectedRoutes.AffectedRouteRules>
-            <twrba1:GetAffectedRoutes.BERouteInfo>
-              <InArgument x:TypeArguments="twre:BERouteInfo">
-                <mca:CSharpValue x:TypeArguments="twre:BERouteInfo">BERouteInfo</mca:CSharpValue>
-              </InArgument>
-            </twrba1:GetAffectedRoutes.BERouteInfo>
-            <twrba1:GetAffectedRoutes.EffectiveDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
-              </InArgument>
-            </twrba1:GetAffectedRoutes.EffectiveDate>
-            <twrba1:GetAffectedRoutes.PartialRouteInfo>
-              <InArgument x:TypeArguments="twre:PartialRouteInfo">
-                <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
-              </InArgument>
-            </twrba1:GetAffectedRoutes.PartialRouteInfo>
-            <twrba1:GetAffectedRoutes.RoutingDatabase>
-              <InArgument x:TypeArguments="twre:RoutingDatabase">
-                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
-              </InArgument>
-            </twrba1:GetAffectedRoutes.RoutingDatabase>
-            <twrba1:GetAffectedRoutes.ShouldTriggerFullRouteProcess>
+            <twrba1:LoadAffectedRules.ShouldStop>
               <OutArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpReference x:TypeArguments="x:Boolean">shouldTriggerFullRouteProcess</mca:CSharpReference>
+                <mca:CSharpReference x:TypeArguments="x:Boolean">shouldStop</mca:CSharpReference>
               </OutArgument>
-            </twrba1:GetAffectedRoutes.ShouldTriggerFullRouteProcess>
-          </twrba1:GetAffectedRoutes>
-          <If sap2010:WorkflowViewState.IdRef="If_3">
+            </twrba1:LoadAffectedRules.ShouldStop>
+          </twrba1:LoadAffectedRules>
+          <If sap2010:WorkflowViewState.IdRef="If_6">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">!shouldTriggerFullRouteProcess</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Boolean">!shouldStop</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-                <If sap2010:WorkflowViewState.IdRef="If_2">
-                  <If.Condition>
-                    <InArgument x:TypeArguments="x:Boolean">
-                      <mca:CSharpValue x:TypeArguments="x:Boolean">affectedCustomerRoutes != null &amp;&amp; affectedCustomerRoutes.Count &gt; 0</mca:CSharpValue>
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+                <twrba1:GetAffectedRoutes sap2010:WorkflowViewState.IdRef="GetAffectedRoutes_1">
+                  <twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
+                    <OutArgument x:TypeArguments="scg:List(twre:CustomerRouteData)">
+                      <mca:CSharpReference x:TypeArguments="scg:List(twre:CustomerRouteData)">affectedCustomerRoutes</mca:CSharpReference>
+                    </OutArgument>
+                  </twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
+                  <twrba1:GetAffectedRoutes.AffectedRouteOptionRules>
+                    <InArgument x:TypeArguments="twre:AffectedRouteOptionRules">
+                      <mca:CSharpValue x:TypeArguments="twre:AffectedRouteOptionRules">affectedRouteOptionRules</mca:CSharpValue>
                     </InArgument>
-                  </If.Condition>
-                  <If.Then>
-                    <local:ApplyAffectedRules sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1">
-                      <local:ApplyAffectedRules.AffectedCustomerRoutes>
-                        <InArgument x:TypeArguments="scg:List(twre:CustomerRouteData)">
-                          <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRouteData)">affectedCustomerRoutes</mca:CSharpValue>
-                        </InArgument>
-                      </local:ApplyAffectedRules.AffectedCustomerRoutes>
-                      <local:ApplyAffectedRules.EffectiveDate>
-                        <InArgument x:TypeArguments="s:DateTime">
-                          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
-                        </InArgument>
-                      </local:ApplyAffectedRules.EffectiveDate>
-                      <local:ApplyAffectedRules.PreviousVersionNumber>
-                        <InArgument x:TypeArguments="x:Int32">
-                          <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
-                        </InArgument>
-                      </local:ApplyAffectedRules.PreviousVersionNumber>
-                      <local:ApplyAffectedRules.RoutingDatabase>
-                        <InArgument x:TypeArguments="twre:RoutingDatabase">
-                          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
-                        </InArgument>
-                      </local:ApplyAffectedRules.RoutingDatabase>
-                      <local:ApplyAffectedRules.UpdatedVersionNumber>
-                        <OutArgument x:TypeArguments="x:Int32">
-                          <mca:CSharpReference x:TypeArguments="x:Int32">currentVersion</mca:CSharpReference>
-                        </OutArgument>
-                      </local:ApplyAffectedRules.UpdatedVersionNumber>
-                      <sap2010:WorkflowViewState.ViewStateManager>
-                        <sap2010:ViewStateManager>
-                          <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-                          <sap2010:ViewStateData Id="LoadPartialCodeMatches_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-                          <sap2010:ViewStateData Id="LoadPartialCustomerZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
-                          <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
-                          <sap2010:ViewStateData Id="BuildPartialCustomerRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
-                          <sap2010:ViewStateData Id="CheckModifiedCustomerRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
-                          <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
-                          <sap2010:ViewStateData Id="Parallel_3" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
-                          <sap2010:ViewStateData Id="Assign_2" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
-                          <sap2010:ViewStateData Id="Assign_4" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
-                          <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
-                          <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
-                          <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
-                        </sap2010:ViewStateManager>
-                      </sap2010:WorkflowViewState.ViewStateManager>
-                    </local:ApplyAffectedRules>
-                  </If.Then>
-                </If>
-                <twrba1:ApplyPartialRouteInfo sap2010:WorkflowViewState.IdRef="ApplyPartialRouteInfo_1">
-                  <twrba1:ApplyPartialRouteInfo.EffectiveDate>
+                  </twrba1:GetAffectedRoutes.AffectedRouteOptionRules>
+                  <twrba1:GetAffectedRoutes.AffectedRouteRules>
+                    <InArgument x:TypeArguments="twre:AffectedRouteRules">
+                      <mca:CSharpValue x:TypeArguments="twre:AffectedRouteRules">affectedRouteRules</mca:CSharpValue>
+                    </InArgument>
+                  </twrba1:GetAffectedRoutes.AffectedRouteRules>
+                  <twrba1:GetAffectedRoutes.BERouteInfo>
+                    <InArgument x:TypeArguments="twre:BERouteInfo">
+                      <mca:CSharpValue x:TypeArguments="twre:BERouteInfo">BERouteInfo</mca:CSharpValue>
+                    </InArgument>
+                  </twrba1:GetAffectedRoutes.BERouteInfo>
+                  <twrba1:GetAffectedRoutes.EffectiveDate>
                     <InArgument x:TypeArguments="s:DateTime">
                       <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
                     </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.EffectiveDate>
-                  <twrba1:ApplyPartialRouteInfo.LastVersionNumber>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
-                    </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.LastVersionNumber>
-                  <twrba1:ApplyPartialRouteInfo.LatestCostRateVersionNumber>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SupplierRateRouteInfo.LatestVersionNumber</mca:CSharpValue>
-                    </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.LatestCostRateVersionNumber>
-                  <twrba1:ApplyPartialRouteInfo.LatestSaleRateVersionNumber>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SaleRateRouteInfo.LatestVersionNumber</mca:CSharpValue>
-                    </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.LatestSaleRateVersionNumber>
-                  <twrba1:ApplyPartialRouteInfo.NextOpenOrCloseRuleTime>
-                    <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                      <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseRuleTime</mca:CSharpValue>
-                    </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.NextOpenOrCloseRuleTime>
-                  <twrba1:ApplyPartialRouteInfo.PartialRouteInfo>
+                  </twrba1:GetAffectedRoutes.EffectiveDate>
+                  <twrba1:GetAffectedRoutes.PartialRouteInfo>
                     <InArgument x:TypeArguments="twre:PartialRouteInfo">
                       <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
                     </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.PartialRouteInfo>
-                  <twrba1:ApplyPartialRouteInfo.RoutingDatabase>
+                  </twrba1:GetAffectedRoutes.PartialRouteInfo>
+                  <twrba1:GetAffectedRoutes.RoutingDatabase>
                     <InArgument x:TypeArguments="twre:RoutingDatabase">
                       <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
                     </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.RoutingDatabase>
-                </twrba1:ApplyPartialRouteInfo>
-                <twrba1:DeleteRouteRuleChanged sap2010:WorkflowViewState.IdRef="DeleteRouteRuleChanged_1">
-                  <twrba1:DeleteRouteRuleChanged.RouteOptionRuleId>
-                    <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-                      <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteOptionRuleId</mca:CSharpValue>
+                  </twrba1:GetAffectedRoutes.RoutingDatabase>
+                  <twrba1:GetAffectedRoutes.ShouldTriggerFullRouteProcess>
+                    <OutArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpReference x:TypeArguments="x:Boolean">shouldTriggerFullRouteProcess</mca:CSharpReference>
+                    </OutArgument>
+                  </twrba1:GetAffectedRoutes.ShouldTriggerFullRouteProcess>
+                </twrba1:GetAffectedRoutes>
+                <If sap2010:WorkflowViewState.IdRef="If_3">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">!shouldTriggerFullRouteProcess</mca:CSharpValue>
                     </InArgument>
-                  </twrba1:DeleteRouteRuleChanged.RouteOptionRuleId>
-                  <twrba1:DeleteRouteRuleChanged.RouteRuleId>
-                    <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-                      <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteRuleId</mca:CSharpValue>
-                    </InArgument>
-                  </twrba1:DeleteRouteRuleChanged.RouteRuleId>
-                </twrba1:DeleteRouteRuleChanged>
-              </Sequence>
-            </If.Then>
-            <If.Else>
-              <Sequence DisplayName="FullRoute_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_6">
-                <Sequence.Variables>
-                  <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="fullRouteProcessEventPayload" />
-                </Sequence.Variables>
-                <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
-                  <vbw:RunProcess.Input>
-                    <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-                      <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RoutingProcessInput()
+                  </If.Condition>
+                  <If.Then>
+                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+                      <If sap2010:WorkflowViewState.IdRef="If_2">
+                        <If.Condition>
+                          <InArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpValue x:TypeArguments="x:Boolean">affectedCustomerRoutes != null &amp;&amp; affectedCustomerRoutes.Count &gt; 0</mca:CSharpValue>
+                          </InArgument>
+                        </If.Condition>
+                        <If.Then>
+                          <local:ApplyAffectedRules sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1">
+                            <local:ApplyAffectedRules.AffectedCustomerRoutes>
+                              <InArgument x:TypeArguments="scg:List(twre:CustomerRouteData)">
+                                <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRouteData)">affectedCustomerRoutes</mca:CSharpValue>
+                              </InArgument>
+                            </local:ApplyAffectedRules.AffectedCustomerRoutes>
+                            <local:ApplyAffectedRules.EffectiveDate>
+                              <InArgument x:TypeArguments="s:DateTime">
+                                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+                              </InArgument>
+                            </local:ApplyAffectedRules.EffectiveDate>
+                            <local:ApplyAffectedRules.PreviousVersionNumber>
+                              <InArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
+                              </InArgument>
+                            </local:ApplyAffectedRules.PreviousVersionNumber>
+                            <local:ApplyAffectedRules.RoutingDatabase>
+                              <InArgument x:TypeArguments="twre:RoutingDatabase">
+                                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                              </InArgument>
+                            </local:ApplyAffectedRules.RoutingDatabase>
+                            <local:ApplyAffectedRules.UpdatedVersionNumber>
+                              <OutArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpReference x:TypeArguments="x:Int32">currentVersion</mca:CSharpReference>
+                              </OutArgument>
+                            </local:ApplyAffectedRules.UpdatedVersionNumber>
+                            <sap2010:WorkflowViewState.ViewStateManager>
+                              <sap2010:ViewStateManager>
+                                <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+                                <sap2010:ViewStateData Id="LoadPartialCodeMatches_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                                <sap2010:ViewStateData Id="LoadPartialCustomerZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                                <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                                <sap2010:ViewStateData Id="BuildPartialCustomerRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                                <sap2010:ViewStateData Id="CheckModifiedCustomerRoutes_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                                <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                                <sap2010:ViewStateData Id="Parallel_3" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+                                <sap2010:ViewStateData Id="Assign_2" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+                                <sap2010:ViewStateData Id="Assign_4" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+                                <sap2010:ViewStateData Id="If_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+                                <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
+                                <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
+                              </sap2010:ViewStateManager>
+                            </sap2010:WorkflowViewState.ViewStateManager>
+                          </local:ApplyAffectedRules>
+                        </If.Then>
+                      </If>
+                      <twrba1:ApplyPartialRouteInfo sap2010:WorkflowViewState.IdRef="ApplyPartialRouteInfo_1">
+                        <twrba1:ApplyPartialRouteInfo.EffectiveDate>
+                          <InArgument x:TypeArguments="s:DateTime">
+                            <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.EffectiveDate>
+                        <twrba1:ApplyPartialRouteInfo.LastVersionNumber>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.LastVersionNumber>
+                        <twrba1:ApplyPartialRouteInfo.LatestCostRateVersionNumber>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SupplierRateRouteInfo.LatestVersionNumber</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.LatestCostRateVersionNumber>
+                        <twrba1:ApplyPartialRouteInfo.LatestSaleRateVersionNumber>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SaleRateRouteInfo.LatestVersionNumber</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.LatestSaleRateVersionNumber>
+                        <twrba1:ApplyPartialRouteInfo.NextOpenOrCloseRuleTime>
+                          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseRuleTime</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.NextOpenOrCloseRuleTime>
+                        <twrba1:ApplyPartialRouteInfo.PartialRouteInfo>
+                          <InArgument x:TypeArguments="twre:PartialRouteInfo">
+                            <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.PartialRouteInfo>
+                        <twrba1:ApplyPartialRouteInfo.RoutingDatabase>
+                          <InArgument x:TypeArguments="twre:RoutingDatabase">
+                            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyPartialRouteInfo.RoutingDatabase>
+                      </twrba1:ApplyPartialRouteInfo>
+                      <twrba1:DeleteRouteRuleChanged sap2010:WorkflowViewState.IdRef="DeleteRouteRuleChanged_1">
+                        <twrba1:DeleteRouteRuleChanged.RouteOptionRuleId>
+                          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteOptionRuleId</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:DeleteRouteRuleChanged.RouteOptionRuleId>
+                        <twrba1:DeleteRouteRuleChanged.RouteRuleId>
+                          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteRuleId</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:DeleteRouteRuleChanged.RouteRuleId>
+                      </twrba1:DeleteRouteRuleChanged>
+                    </Sequence>
+                  </If.Then>
+                  <If.Else>
+                    <Sequence DisplayName="FullRoute_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="fullRouteProcessEventPayload" />
+                      </Sequence.Variables>
+                      <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+                        <vbw:RunProcess.Input>
+                          <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                            <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RoutingProcessInput()
 {
     EffectiveTime = DateTime.Now,
     IsFuture = false,
     RoutingDatabaseType = RoutingDatabaseType.Current,
     RoutingProcessType = RoutingProcessType.CustomerRoute
 }</mca:CSharpValue>
-                    </InArgument>
-                  </vbw:RunProcess.Input>
-                  <vbw:RunProcess.ProcessCompletedEventPayload>
-                    <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
-                      <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">fullRouteProcessEventPayload</mca:CSharpReference>
-                    </OutArgument>
-                  </vbw:RunProcess.ProcessCompletedEventPayload>
-                </vbw:RunProcess>
-                <If sap2010:WorkflowViewState.IdRef="If_5">
-                  <If.Condition>
-                    <InArgument x:TypeArguments="x:Boolean">
-                      <mca:CSharpValue x:TypeArguments="x:Boolean">fullRouteProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
-                    </InArgument>
-                  </If.Condition>
-                  <If.Then>
-                    <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
-                      <TerminateWorkflow.Reason>
-                        <InArgument x:TypeArguments="x:String">
-                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Full Route Build failed due to error: {0}", fullRouteProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
-                        </InArgument>
-                      </TerminateWorkflow.Reason>
-                    </TerminateWorkflow>
-                  </If.Then>
-                  <If.Else>
-                    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Full Route Build process completed">
-                      <vbw:WriteTrackingMessage.Severity>
-                        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-                          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-                        </InArgument>
-                      </vbw:WriteTrackingMessage.Severity>
-                    </vbw:WriteTrackingMessage>
+                          </InArgument>
+                        </vbw:RunProcess.Input>
+                        <vbw:RunProcess.ProcessCompletedEventPayload>
+                          <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                            <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">fullRouteProcessEventPayload</mca:CSharpReference>
+                          </OutArgument>
+                        </vbw:RunProcess.ProcessCompletedEventPayload>
+                      </vbw:RunProcess>
+                      <If sap2010:WorkflowViewState.IdRef="If_5">
+                        <If.Condition>
+                          <InArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpValue x:TypeArguments="x:Boolean">fullRouteProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                          </InArgument>
+                        </If.Condition>
+                        <If.Then>
+                          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                            <TerminateWorkflow.Reason>
+                              <InArgument x:TypeArguments="x:String">
+                                <mca:CSharpValue x:TypeArguments="x:String">String.Format("Full Route Build failed due to error: {0}", fullRouteProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                              </InArgument>
+                            </TerminateWorkflow.Reason>
+                          </TerminateWorkflow>
+                        </If.Then>
+                        <If.Else>
+                          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Full Route Build process completed">
+                            <vbw:WriteTrackingMessage.Severity>
+                              <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                                <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                              </InArgument>
+                            </vbw:WriteTrackingMessage.Severity>
+                          </vbw:WriteTrackingMessage>
+                        </If.Else>
+                      </If>
+                    </Sequence>
                   </If.Else>
                 </If>
               </Sequence>
-            </If.Else>
+            </If.Then>
           </If>
         </Sequence>
       </If.Then>
@@ -422,16 +441,16 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxOTgOqAw4CAQFWC1ZXAgECYAVmIAMBnQVnBXcnAwH1BHgFoQMKAgEeogMFqAMgAgEPYwtjhQEDAZ8FYGBggwEDAZ4FbwtvdAMBkAVqC2psAwGDBXQLdHgDAfYEewt7XwIBH38JlgMUAgE7mQMJnwMkAgEspQMLpQOFAQIBEaIDYKIDgwECARCAAQuLASgDAdoEjAELlwEjAwG/BJgBC6MBFAMBpASkAQvIASYDAcgDyQEL8gEmAwHfAvMBC5UDEAIBPJwDD5wDhQECAS6ZA2SZA4IBAgEtgwERgwF0AwHoBIgBEYgBagMB2wSPARGPAWoDAc0ElAERlAFqAwHABKABEaABcAMBsgSbARGbAWQDAaUEuwERuwFsAwGXBKwBEawBeAMBigTFARHFAWsDAf0DpwERpwGEAQMB8AO2ARG2AXwDAeMDsQERsQFeAwHWA8ABEcABcQMByQPlARHlAWwDAbsDzAERzAGFAQMBrgPWARHWAXADAaED0QER0QF8AwGUA+8BEe8BdQMBhwPbARHbAWIDAfoC4AER4AFeAwHtAuoBEeoBagMB4AL2ARH2AW4CAT36AQ/hAhoDAZcB5AIPkwMaAgFK+wERrwIWAwGPArACEdQCMAMBswHVAhHgAjEDAZgB6AIR+QIiAgF5+gIRkgMWAgFL/gEX/gGjAQMBkAKCAhWtAjADAZ0CvQIXvQKJAQMBggLMAhfMAnIDAfUBxwIXxwJ6AwHoAbgCF7gCYgMB2wGzAhezAmQDAc4B0QIX0QJwAwHBAcICF8IChQEDAbQB3QIX3QJxAwGmAdgCF9gCdwMBmQHrAhfxAhQDAYkB9gIX9gKQAQIBe+gCvQHoAsMBAgF6/QIX/QK/AQIBTIEDFYcDKQIBaooDFZADMAIBWoUCG4UChwEDAdICjwIbjwJmAwHFAooCG4oCaAMBuAKUAhuUAnQDAasCmQIbmQJuAwGeAoQDG4QDxAECAWuNAxuNA5UBAgFcigNwigOUAQIBWw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxSTgO9Aw4CAQFWC1ZXAgECYAVmIAMB5QVnBXcnAwG9BXgFtAMKAgEetQMFuwMgAgEPYwtjhQEDAecFYGBggwEDAeYFbwtvdAMB2AVqC2psAwHLBXQLdHgDAb4Fewt7XwIBH38JqQMUAgE7rAMJsgMkAgEsuAMLuAOFAQIBEbUDYLUDgwECARCDAQuOASgDAaAFjwELmgEjAwGDBZsBC6YBFAMB5gSnAQvQASYDAfUD0QELqAMQAgE8rwMPrwOFAQIBLqwDZKwDggECAS2GARGGAXQDAa8FiwERiwFqAwGhBZIBEZIBagMBkgWXARGXAWoDAYQFowERowFwAwH1BJ4BEZ4BZAMB5wS+ARG+AWwDAdgEzQERzQFiAwHKBK8BEa8BeAMBvATIARHIAWsDAa4EqgERqgGEAQMBoAS5ARG5AXwDAZIEtAERtAFeAwGEBMMBEcMBcQMB9gPUARHUAVsCAT3YAQ+mAxoCAUvZARGCAiwDAYQDgwIRpQMWAgFM9QEX9QFyAwHnA9wBF9wBiwEDAdkD5gEX5gF2AwHLA+EBF+EBggEDAb0D/wEX/wF7AwGvA+sBF+sBaAMBoQPwARfwAWQDAZMD+gEX+gFwAwGFA4YCF4YCdAIBTYoCFfECIAMBrQH0AhWjAyACAVuLAhe/AhwDAa4CwAIX5AI2AwHLAeUCF/ACNwMBrgH4AheJAygDAY0BigMXogMcAgFcjgIdjgKpAQMBrwKSAhu9AjYDAb0CzQIdzQKPAQMBoALcAh3cAngDAZIC1wId1wKAAQMBhALIAh3IAmgDAfYBwwIdwwJqAwHoAeECHeECdgMB2gHSAh3SAosBAwHMAe0CHe0CdwMBvQHoAh3oAn0DAa8B+wIdgQMUAwGeAYYDHYYDlgEDAY8B+ALDAfgCyQEDAY4BjQMdjQPFAQIBXZEDG5cDLwIBfZoDG6ADNgIBbJUCIZUCjQEDAfYCnwIhnwJsAwHoApoCIZoCbgMB2gKkAiGkAnoDAcwCqQIhqQJ0AwG+ApQDIZQDygECAX6dAyGdA5sBAgFumgN2mgOaAQIBbQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="997,22" />
-      <sap2010:ViewStateData Id="GetBERouteInfo_1" sap:VirtualizedContainerService.HintSize="997,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="997,62" />
-      <sap2010:ViewStateData Id="LoadAffectedRules_1" sap:VirtualizedContainerService.HintSize="997,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1391,22" />
+      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="1391,22" />
+      <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="1144,22" />
+      <sap2010:ViewStateData Id="GetBERouteInfo_1" sap:VirtualizedContainerService.HintSize="1144,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1144,62" />
+      <sap2010:ViewStateData Id="LoadAffectedRules_1" sap:VirtualizedContainerService.HintSize="1144,22" />
       <sap2010:ViewStateData Id="GetAffectedRoutes_1" sap:VirtualizedContainerService.HintSize="997,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="794,62" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -475,7 +494,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="997,608" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1019,1082">
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="1019,794">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1144,944" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1166,1356">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -483,16 +510,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1244,1232" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1266,1542">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1391,1506" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1391,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1413,1816">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1306,1622" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1453,1896" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

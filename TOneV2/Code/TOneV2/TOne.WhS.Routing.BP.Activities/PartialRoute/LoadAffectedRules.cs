@@ -6,6 +6,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Rules;
 using Vanrise.Rules.Entities;
 using Vanrise.Common;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -32,6 +33,9 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<DateTime?> NextOpenOrCloseRuleTime { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<bool> ShouldStop { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             DateTime effectiveDate = this.EffectiveDate.Get(context);
@@ -47,13 +51,29 @@ namespace TOne.WhS.Routing.BP.Activities
             List<RuleChangedData<RouteRule>> routeRuleChangedList = null;
             List<RuleChangedData<RouteOptionRule>> routeOptionRuleChangedList = null;
 
+            bool shouldStop = false;
+
             if (routeRuleId.HasValue)
             {
-                routeRuleChangedList = new List<RuleChangedData<RouteRule>>() { routeRuleManager.FillAndGetRuleChangedForProcessing(routeRuleId.Value) };
+                RuleChangedData<RouteRule> routeRule = routeRuleManager.FillAndGetRuleChangedForProcessing(routeRuleId.Value);
+                if (routeRule != null)
+                    routeRuleChangedList = new List<RuleChangedData<RouteRule>>() { routeRule };
+                else
+                {
+                    shouldStop = true;
+                    context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Updating Affected Routes is done.");
+                }
             }
             else if (routeOptionRuleId.HasValue)
             {
-                routeOptionRuleChangedList = new List<RuleChangedData<RouteOptionRule>>() { routeOptionRuleManager.FillAndGetRuleChangedForProcessing(routeOptionRuleId.Value) };
+                RuleChangedData<RouteOptionRule> routeOptionRule = routeOptionRuleManager.FillAndGetRuleChangedForProcessing(routeOptionRuleId.Value);
+                if (routeOptionRule != null)
+                    routeOptionRuleChangedList = new List<RuleChangedData<RouteOptionRule>>() { routeOptionRule };
+                else
+                {
+                    shouldStop = true;
+                    context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Updating Affected Routes is done.");
+                }
             }
             else
             {
@@ -75,6 +95,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 BuildOpenedClosedRouteOptionRules(affectedRouteOptionRules, affectedRouteOptionRuleIds, effectiveDate, partialRouteInfo, ref nextOpenOrCloseRuleTime);
             }
 
+            this.ShouldStop.Set(context, shouldStop);
             this.AffectedRouteRules.Set(context, affectedRouteRules);
             this.AffectedRouteOptionRules.Set(context, affectedRouteOptionRules);
             this.NextOpenOrCloseRuleTime.Set(context, nextOpenOrCloseRuleTime);
