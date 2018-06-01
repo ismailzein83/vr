@@ -91,10 +91,10 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                     CDRPricingDataOutput firstCostCDR = null;
                     CDRPricingDataOutput secondCostCDR = null;
 
+                    DateTime attemptDateTime = record.GetFieldValue(salePropertyNames[PropertyName.AttemptDateTime]);
+
                     int? saleOrigDealId = record.OrigSaleDealId;
                     int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
-
-                    DateTime attemptDateTime = record.GetFieldValue(salePropertyNames[PropertyName.AttemptDateTime]);
                     if (saleOrigDealId.HasValue && saleOrigZoneGroupNb.HasValue)
                     {
                         var saleZoneId = record.GetFieldValue(salePropertyNames[PropertyName.Zone]);
@@ -863,12 +863,9 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
         #region IReprocessStageActivator
 
-        public void CommitChanges(Vanrise.Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
+        public object InitializeStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
         {
-        }
-
-        public void DropStorage(Vanrise.Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
-        {
+            return null;
         }
 
         public void ExecuteStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
@@ -1319,6 +1316,19 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         {
         }
 
+        public int? GetStorageRowCount(Vanrise.Reprocess.Entities.IReprocessStageActivatorGetStorageRowCountContext context)
+        {
+            return null;
+        }
+
+        public void CommitChanges(Vanrise.Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
+        {
+        }
+
+        public void DropStorage(Vanrise.Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
+        {
+        }
+
         public List<string> GetOutputStages(List<string> stageNames)
         {
             if (MainOutputStages == null && PartialPricedOutputStages == null && BillingOutputStages == null && TrafficOutputStages == null)
@@ -1352,16 +1362,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
         }
 
         public List<Vanrise.Reprocess.Entities.BatchRecord> GetStageBatchRecords(Vanrise.Reprocess.Entities.IReprocessStageActivatorPreparingContext context)
-        {
-            return null;
-        }
-
-        public int? GetStorageRowCount(Vanrise.Reprocess.Entities.IReprocessStageActivatorGetStorageRowCountContext context)
-        {
-            return null;
-        }
-
-        public object InitializeStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorInitializingContext context)
         {
             return null;
         }
