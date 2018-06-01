@@ -11,9 +11,9 @@ using Vanrise.Entities;
 
 namespace Demo.Module.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "Branch")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "Building")]
     [JSONWithTypeAttribute]
-    public class Demo_Module_BranchController : BaseAPIController
+    public class Demo_Module_BuildingController : BaseAPIController
     {
     //    BranchManager branchManager = new BranchManager();
        
