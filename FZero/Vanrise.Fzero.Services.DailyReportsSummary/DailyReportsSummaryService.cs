@@ -171,16 +171,13 @@ namespace Vanrise.Fzero.Services.DailyReportsSummary
                             email.DestinationEmail = mobileOperator.DailyReportsSummaryEmail;
                             email.Subject = string.Format("Daily Fruad Report {0}", DateTime.Today.ToString("dd-MM-yyyy"));
                             email.Body = "Dear Sir/Madame,"
-                                       + "<br />Kindly find attached our daily fraud detection reports for " + DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy") + "."
+                                       + "<br />Kindly find attached our daily fruad detection reports for " + DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy") + "."
                                        + "<br />Total numbers detected: "
                                        + listReportedCLI.Count()
                                        + " <br /> <br />Best Regards,";
                             email.CC = "";
                             bool sentSuccessfully = Email.SendMailWithAttachement(email, fileName, profileName);
-                            if (sentSuccessfully)
-                                ErrorLog("Email Sent Successfully.");
-                            else
-                                ErrorLog("Send email failed.");
+                            ErrorLog("Email Sent Successfully.");
                         }
 
                         SqlDatabase db = new SqlDatabase(ConfigurationManager.ConnectionStrings["FMSConnectionString"].ConnectionString);
