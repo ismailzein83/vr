@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsDealSupplierrateevaluatorFixed", ['UtilsService', function (UtilsService) {
+app.directive("vrWhsDealSupplierrateevaluatorFixed", ['UtilsService', 'UISettingsService', function (UtilsService, UISettingsService) {
 
     return {
         restrict: "E",
@@ -23,7 +23,7 @@ app.directive("vrWhsDealSupplierrateevaluatorFixed", ['UtilsService', function (
 
         function initializeController() {
             $scope.scopeModel = {};
-
+            $scope.longPrecision = UISettingsService.getLongPrecision();
             defineAPI();
         }
         function defineAPI() {
