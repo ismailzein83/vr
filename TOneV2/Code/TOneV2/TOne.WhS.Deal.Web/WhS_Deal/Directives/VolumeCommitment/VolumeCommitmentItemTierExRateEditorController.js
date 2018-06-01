@@ -119,7 +119,8 @@
                 Zones: zones,
                 ZoneNames: context.getZonesNames(zoneDirectiveAPI.getSelectedIds()),
                 Rate: $scope.scopeModel.rate,
-                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData()
+                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
+                Description: rateEvaluatorSelectiveDirectiveAPI.getDescription()
             };
         }
 
@@ -138,7 +139,7 @@
             }
             $scope.modalContext.closeModal();
         }
-        
+
     }
     app.controller('WhS_Deal_VolumeCommitmentItemTierExRateEditorController', VolumeCommitmentItemTierExRateEditorController);
 
