@@ -61,7 +61,7 @@ namespace Vanrise.Common
                 Style style = cell.GetStyle();
                 style.Font.Name = "Times New Roman";
                 style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                style.Font.Size = 14;
+                style.Font.Size = 12;
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
                 colIndex++;
@@ -76,7 +76,7 @@ namespace Vanrise.Common
                     Style style = cell.GetStyle();
                     style.Font.Name = "Times New Roman";
                     style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                    style.Font.Size = 14;
+                    style.Font.Size = 12;
                     style.Font.IsBold = true;
                     cell.SetStyle(style);
                     colIndex++;
@@ -172,7 +172,7 @@ namespace Vanrise.Common
                 style.Font.Name = "Times New Roman";
                 style.Font.Color = Color.FromArgb(255, 0, 0);
 
-                style.Font.Size = 14;
+                style.Font.Size = 12;
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
                 colIndex++;
@@ -256,7 +256,7 @@ namespace Vanrise.Common
                 Style style = cell.GetStyle();
                 style.Font.Name = "Times New Roman";
                 style.Font.Color = Color.FromArgb(255, 0, 0); ;
-                style.Font.Size = 14;
+                style.Font.Size = 12;
                 style.Font.IsBold = true;
                 cell.SetStyle(style);
                 colIndex++;
