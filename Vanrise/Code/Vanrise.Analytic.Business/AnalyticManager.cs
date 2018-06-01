@@ -317,7 +317,7 @@ namespace Vanrise.Analytic.Business
             var filterDimensions = analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
             if (filterDimensions != null && filterDimensions.Count > 0)
                 dimensionNamesToCalculate.AddRange(filterDimensions);
-            
+
             dimensionNamesToCalculate = dimensionNamesToCalculate.Where(dimName => !availableDimensions.Contains(dimName)).ToList();
 
             if (dimensionNamesToCalculate.Count > 0)
@@ -341,7 +341,7 @@ namespace Vanrise.Analytic.Business
         private List<string> ResolveDimensionDependencies(List<string> dimensionNamesToCalculate, IAnalyticTableQueryContext analyticTableQueryContext)
         {
             List<string> dimOrderedByDependencies = new List<string>();
-            foreach(var dimName in dimensionNamesToCalculate)
+            foreach (var dimName in dimensionNamesToCalculate)
             {
                 AddDimensionToOrderedByDependencies(analyticTableQueryContext.GetDimensionConfig(dimName), dimOrderedByDependencies, analyticTableQueryContext);
             }
@@ -350,7 +350,7 @@ namespace Vanrise.Analytic.Business
 
         private void AddDimensionToOrderedByDependencies(AnalyticDimension dimConfig, List<string> dimOrderedByDependencies, IAnalyticTableQueryContext analyticTableQueryContext)
         {
-            if(dimConfig.Config.DependentDimensions != null && dimConfig.Config.DependentDimensions.Count > 0)
+            if (dimConfig.Config.DependentDimensions != null && dimConfig.Config.DependentDimensions.Count > 0)
             {
                 foreach (var dependentDimName in dimConfig.Config.DependentDimensions)
                 {
@@ -870,7 +870,7 @@ namespace Vanrise.Analytic.Business
                     if (summary != null)
                     {
                         var totalrow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                        for (int k = 0; k < _query.DimensionFields.Count() ; k++)
+                        for (int k = 0; k < _query.DimensionFields.Count(); k++)
                             totalrow.Cells.Add(new ExportExcelCell() { Value = "" });
 
                         if (_query.MeasureFields != null)
@@ -880,7 +880,13 @@ namespace Vanrise.Analytic.Business
                                 MeasureValue measureValue;
                                 if (!summary.MeasureValues.TryGetValue(measureName, out measureValue))
                                     throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
-                                totalrow.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+
+                                var measure = measures.GetRecord(measureName);
+                                object value = measureValue.Value;
+                                if (measure.Config.FieldType.CanRoundValue)
+                                    value = measure.Config.FieldType.GetRoundedValue(value);
+
+                                totalrow.Cells.Add(new ExportExcelCell { Value = value });
                             }
                         }
                         sheet.Rows.Add(totalrow);
@@ -904,7 +910,13 @@ namespace Vanrise.Analytic.Business
                                 MeasureValue measureValue;
                                 if (!record.MeasureValues.TryGetValue(measureName, out measureValue))
                                     throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
-                                row.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+
+                                var measure = measures.GetRecord(measureName);
+                                object value = measureValue.Value;
+                                if (measure.Config.FieldType.CanRoundValue)
+                                    value = measure.Config.FieldType.GetRoundedValue(value);
+
+                                row.Cells.Add(new ExportExcelCell { Value = value });
                             }
                         }
                     }
