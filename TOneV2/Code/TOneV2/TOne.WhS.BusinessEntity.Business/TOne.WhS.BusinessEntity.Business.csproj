@@ -146,6 +146,7 @@
     <Compile Include="CarrierProfileManager.cs" />
     <Compile Include="CodeManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CountrySoldToCustomerFilter.cs" />
     <Compile Include="Country\CountryNotEmptyFilter.cs" />
     <Compile Include="Country\CountryNotSoldToCustomerFilter.cs" />
     <Compile Include="CustomerSellingProductManager.cs" />
