@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchManager.cs" />
+    <Compile Include="BuildingManager.cs" />
     <Compile Include="CollegeManager.cs" />
     <Compile Include="CompanyManager.cs" />
     <Compile Include="ItemManager.cs" />

@@ -57,6 +57,9 @@
     <Compile Include="Branch\BranchQuery.cs" />
     <Compile Include="Branch\Setting\Dimensions\Dimensions.cs" />
     <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
+    <Compile Include="Building\Building.cs" />
+    <Compile Include="Building\BuildingDetails.cs" />
+    <Compile Include="Building\BuildingQuery.cs" />
     <Compile Include="CollegeInfoType\AdvancedInfo.cs" />
     <Compile Include="CollegeInfoType\Basic.cs" />
     <Compile Include="CollegeInfoType\CollegeInfoType.cs" />

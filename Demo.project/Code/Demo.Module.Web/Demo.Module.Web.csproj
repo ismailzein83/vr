@@ -128,6 +128,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Directives\Building\demo-module-building-grid.js" />
+    <Content Include="Demo_Module\Directives\Building\Templates\BuildingGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Description\demo-module-description.js" />
     <Content Include="Demo_Module\Directives\Description\DescriptionEditorController.js" />
     <Content Include="Demo_Module\Directives\Description\Templates\DescriptionTemplate.html" />
@@ -148,6 +150,7 @@
     <Content Include="Demo_Module\Directives\Item\demo-module-item-grid.js" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
+    <Content Include="Demo_Module\Directives\Product\demo-module-product-selector.js" />
     <Content Include="Demo_Module\Directives\Product\Templates\ProductGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-setting-selector.js" />
@@ -166,6 +169,7 @@
     <Content Include="Demo_Module\Directives\University\Templates\UniversityGridTemplate.html" />
     <Content Include="Demo_Module\Services\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\BranchAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\BuildingAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CollegeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CollegeInfoConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
@@ -174,6 +178,7 @@
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UniversityAPIService.js" />
     <Content Include="Demo_Module\Services\BranchService.js" />
+    <Content Include="Demo_Module\Services\BuildingService.js" />
     <Content Include="Demo_Module\Services\CollegeService.js" />
     <Content Include="Demo_Module\Services\CompanyService.js" />
     <Content Include="Demo_Module\Services\DescriptionService.js" />
@@ -187,6 +192,10 @@
     <Content Include="Demo_Module\Views\BranchEditorController.js" />
     <Content Include="Demo_Module\Views\BranchManagement.html" />
     <Content Include="Demo_Module\Views\BranchManagementController.js" />
+    <Content Include="Demo_Module\Views\BuildingEditor.html" />
+    <Content Include="Demo_Module\Views\BuildingEditorController.js" />
+    <Content Include="Demo_Module\Views\BuildingManagement.html" />
+    <Content Include="Demo_Module\Views\BuildingManagementController.js" />
     <Content Include="Demo_Module\Views\CollegeEditor.html" />
     <Content Include="Demo_Module\Views\CollegeEditorController.js" />
     <Content Include="Demo_Module\Views\CollegeManagement.html" />
@@ -208,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BuildingController.cs" />
     <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\CollegeController.cs" />
     <Compile Include="Controllers\CollegeInfoConfigsController.cs" />
