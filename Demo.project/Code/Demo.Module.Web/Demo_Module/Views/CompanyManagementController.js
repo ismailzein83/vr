@@ -9,10 +9,8 @@
         
         var gridApi;
         defineScope();
-
+        load();
         function defineScope() {
-
-            $scope.companies = [];
 
             $scope.onGridReady = function (api) {
                 var filter = {};
@@ -40,6 +38,11 @@
                 Demo_Module_CompanyService.addCompany(onCompanyAdded);
             };                        
         };
+
+        function load()
+        {
+
+        }
     };
 
 appControllers.controller('Demo_Module_CompanyManagementController', companyManagementController);

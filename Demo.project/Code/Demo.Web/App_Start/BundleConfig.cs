@@ -15,7 +15,8 @@ namespace Demo.Web
                 "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Demo_Module", "*.js", true));
+                "~/Client/Modules/Demo_Module", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/Demo_BestPractices", "*.js", true));
         }
     }
 }

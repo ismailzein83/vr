@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{055CFD09-F0E6-49C1-BDDB-0BBAE2888E9E}"
 EndProject
@@ -35,11 +35,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.Web", "Demo.Mod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Module.MainExtension", "Demo.Module.MainExtension\Demo.Module.MainExtension.csproj", "{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo.BestPractices", "Demo.BestPractices", "{D1274133-415A-4EB0-9AFC-A0C902AD5CBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BestPractices.Business", "Demo.BestPractices.Business\Demo.BestPractices.Business.csproj", "{5AFD4349-A7FE-4D3F-B6FE-6877EF714E36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BestPractices.Entities", "Demo.BestPractices.Entities\Demo.BestPractices.Entities.csproj", "{F6E779C0-8292-4E15-AF3B-C713666402F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BestPractices.Data", "Demo.BestPractices.Data\Demo.BestPractices.Data.csproj", "{C7540099-CDAA-4F75-9A6D-3B02CF0E3BBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BestPractices.Data.SQL", "Demo.BestPractices.Data.SQL\Demo.BestPractices.Data.SQL.csproj", "{1FB51F46-4472-49B2-A7BD-4362129EC2E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BestPractices.Web", "Demo.BestPractices.Web\Demo.BestPractices.Web.csproj", "{ACF74AB5-9AA4-4413-8307-79F707A4D719}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BestPractices.MainExtentions", "Demo.BestPractices.MainExtentions\Demo.BestPractices.MainExtentions.csproj", "{760EF831-102A-40B9-AA3B-A5DA7B1F52A3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = DemoProject.sln
@@ -85,6 +99,30 @@ Global
 		SccProjectTopLevelParentUniqueName11 = DemoProject.sln
 		SccProjectName11 = Demo.Module.MainExtension
 		SccLocalPath11 = Demo.Module.MainExtension
+		SccProjectUniqueName12 = Demo.BestPractices.Business\\Demo.BestPractices.Business.csproj
+		SccProjectTopLevelParentUniqueName12 = DemoProject.sln
+		SccProjectName12 = Demo.BestPractices.Business
+		SccLocalPath12 = Demo.BestPractices.Business
+		SccProjectUniqueName13 = Demo.BestPractices.Entities\\Demo.BestPractices.Entities.csproj
+		SccProjectTopLevelParentUniqueName13 = DemoProject.sln
+		SccProjectName13 = Demo.BestPractices.Entities
+		SccLocalPath13 = Demo.BestPractices.Entities
+		SccProjectUniqueName14 = Demo.BestPractices.Data\\Demo.BestPractices.Data.csproj
+		SccProjectTopLevelParentUniqueName14 = DemoProject.sln
+		SccProjectName14 = Demo.BestPractices.Data
+		SccLocalPath14 = Demo.BestPractices.Data
+		SccProjectUniqueName15 = Demo.BestPractices.Data.SQL\\Demo.BestPractices.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName15 = DemoProject.sln
+		SccProjectName15 = Demo.BestPractices.Data.SQL
+		SccLocalPath15 = Demo.BestPractices.Data.SQL
+		SccProjectUniqueName16 = Demo.BestPractices.Web\\Demo.BestPractices.Web.csproj
+		SccProjectTopLevelParentUniqueName16 = DemoProject.sln
+		SccProjectName16 = Demo.BestPractices.Web
+		SccLocalPath16 = Demo.BestPractices.Web
+		SccProjectUniqueName17 = Demo.BestPractices.MainExtentions\\Demo.BestPractices.MainExtentions.csproj
+		SccProjectTopLevelParentUniqueName17 = DemoProject.sln
+		SccProjectName17 = Demo.BestPractices.MainExtentions
+		SccLocalPath17 = Demo.BestPractices.MainExtentions
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,22 +175,53 @@ Global
 		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AFD4349-A7FE-4D3F-B6FE-6877EF714E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AFD4349-A7FE-4D3F-B6FE-6877EF714E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AFD4349-A7FE-4D3F-B6FE-6877EF714E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AFD4349-A7FE-4D3F-B6FE-6877EF714E36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E779C0-8292-4E15-AF3B-C713666402F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E779C0-8292-4E15-AF3B-C713666402F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E779C0-8292-4E15-AF3B-C713666402F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E779C0-8292-4E15-AF3B-C713666402F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7540099-CDAA-4F75-9A6D-3B02CF0E3BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7540099-CDAA-4F75-9A6D-3B02CF0E3BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7540099-CDAA-4F75-9A6D-3B02CF0E3BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7540099-CDAA-4F75-9A6D-3B02CF0E3BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FB51F46-4472-49B2-A7BD-4362129EC2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FB51F46-4472-49B2-A7BD-4362129EC2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FB51F46-4472-49B2-A7BD-4362129EC2E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FB51F46-4472-49B2-A7BD-4362129EC2E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF74AB5-9AA4-4413-8307-79F707A4D719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF74AB5-9AA4-4413-8307-79F707A4D719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF74AB5-9AA4-4413-8307-79F707A4D719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF74AB5-9AA4-4413-8307-79F707A4D719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{760EF831-102A-40B9-AA3B-A5DA7B1F52A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760EF831-102A-40B9-AA3B-A5DA7B1F52A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760EF831-102A-40B9-AA3B-A5DA7B1F52A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760EF831-102A-40B9-AA3B-A5DA7B1F52A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60} = {055CFD09-F0E6-49C1-BDDB-0BBAE2888E9E}
-		{CD9D68D1-97A9-4FE6-A314-3272DF3757DA} = {150D0608-384E-480D-A86D-7A2732457104}
-		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62} = {BE3991B1-597B-4490-B662-5E54D23B835B}
 		{C527C7B2-A481-4D1D-B25A-4A540E812153} = {B13FE066-3A0F-404A-8BA1-EC40714E9F7F}
 		{3B35C6E1-FD21-4E32-A8BD-F11377A545A0} = {B13FE066-3A0F-404A-8BA1-EC40714E9F7F}
 		{C94F4630-1F25-4FFF-AC76-46544F5E9511} = {B13FE066-3A0F-404A-8BA1-EC40714E9F7F}
+		{42B7DADE-E19B-4B6E-A55E-B7F41646AF60} = {055CFD09-F0E6-49C1-BDDB-0BBAE2888E9E}
+		{AFE22768-64D0-4AF1-ADBB-64BFA4FFCC62} = {BE3991B1-597B-4490-B662-5E54D23B835B}
+		{CD9D68D1-97A9-4FE6-A314-3272DF3757DA} = {150D0608-384E-480D-A86D-7A2732457104}
 		{7F3A2FAB-E969-475D-9EAA-EA742E5222DE} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{415C2A9E-E7D1-4C21-8862-57450E277758} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{6E72DC74-F79D-4F63-A6C1-444EF4EBB4B7} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{A0190A8F-95BD-4CE5-B60E-87529661E6E8} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{99CB64F1-5314-41FD-9F8F-EB435EE7449A} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
 		{7D0273BE-2A89-4CF4-A485-B8475DD5F2D5} = {CD9D68D1-97A9-4FE6-A314-3272DF3757DA}
+		{D1274133-415A-4EB0-9AFC-A0C902AD5CBB} = {150D0608-384E-480D-A86D-7A2732457104}
+		{5AFD4349-A7FE-4D3F-B6FE-6877EF714E36} = {D1274133-415A-4EB0-9AFC-A0C902AD5CBB}
+		{F6E779C0-8292-4E15-AF3B-C713666402F1} = {D1274133-415A-4EB0-9AFC-A0C902AD5CBB}
+		{C7540099-CDAA-4F75-9A6D-3B02CF0E3BBB} = {D1274133-415A-4EB0-9AFC-A0C902AD5CBB}
+		{1FB51F46-4472-49B2-A7BD-4362129EC2E8} = {D1274133-415A-4EB0-9AFC-A0C902AD5CBB}
+		{ACF74AB5-9AA4-4413-8307-79F707A4D719} = {D1274133-415A-4EB0-9AFC-A0C902AD5CBB}
+		{760EF831-102A-40B9-AA3B-A5DA7B1F52A3} = {D1274133-415A-4EB0-9AFC-A0C902AD5CBB}
 	EndGlobalSection
 EndGlobal
