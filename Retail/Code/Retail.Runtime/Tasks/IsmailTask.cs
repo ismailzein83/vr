@@ -31,7 +31,7 @@ namespace Retail.Runtime.Tasks
             //GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
-            //TestRDBSelectQuery();
+            TestRDBSelectQuery();
             //var analyticTableMeasureExternalSource =
             //    new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             //    {
@@ -482,7 +482,17 @@ namespace Retail.Runtime.Tasks
 
         void TestRDBSelectQuery()
         {
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition("User", _userTable);
             var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
+
+            var selectFromSelect = new RDBQueryContext(dataProvider).Select()
+                .FromSelect("mainTable").From("User", "u").SelectColumns().AllTableColumns("u").EndColumns().EndSelect()
+                .Join().JoinSelect(RDBJoinType.Inner, "t2").From("User", "u").SelectColumns().AllTableColumns("u").EndColumns().EndSelect().EqualsCondition("mainTable", "ID", "t2", "ID").EndJoin()
+                .SelectColumns().Column("Email").EndColumns().EndSelect().GetResolvedQuery().QueryText;
+
+            var insertQuery1 = new RDBQueryContext(dataProvider).Insert().IntoTable("User").IfNotExists("u").EqualsCondition("Email", "user@nodomain.com")
+                .GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "user 1").ColumnValue("Email", "user@nodomain.com").EndInsert().GetResolvedQuery().QueryText;
+
             Vanrise.AccountBalance.Entities.BillingTransactionQuery query = new Vanrise.AccountBalance.Entities.BillingTransactionQuery
             {
                 AccountTypeId = new Guid("BB50E990-AFDD-4561-B0A0-973FA79D58B4"),
@@ -644,7 +654,7 @@ namespace Retail.Runtime.Tasks
                                 .ThenQuery().StartBatchQuery()
                                             .AddQuery().Insert()
                                                         .IntoTable(TABLE_NAME)
-                                                        .GenerateIdAndAssignToParameter("ID")
+                                                        .GenerateIdAndAssignToParameter("ID", true, false)
                                                         .ColumnValue("AccountTypeID", accountTypeId)
                                                         .ColumnValue("AccountID", accountId)
                                                         .ColumnValue("InitialBalance", initialBalance)
@@ -660,6 +670,99 @@ namespace Retail.Runtime.Tasks
                                 .EndIf()
                      .AddQuery().Select().FromNoTable().SelectColumns().Parameter("ID", "ID").FixedValue(accountId, "AccountID").EndColumns().EndSelect()
                     .EndBatchQuery().GetResolvedQuery().QueryText;
+
+            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition> 
+            {
+                {"ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt}},
+                {"UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6}}
+            };
+
+            IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate = new List<LiveBalanceToUpdate>
+            {
+                new LiveBalanceToUpdate { LiveBalanceId = 2, Value = 43.4M},
+                new LiveBalanceToUpdate { LiveBalanceId = 4, Value = 34.2M}
+            };
+            var tempTableQuery = new RDBTempTableQuery(tempTableColumns);
+           var updateLiveBalances = new RDBQueryContext(dataProvider)
+                    .StartBatchQuery()
+                .AddQuery().CreateTempTable(tempTableQuery)
+                .Foreach(liveBalancesToUpdate, (lvToUpdate, context) => context.AddQuery().Insert().IntoTable(tempTableQuery).ColumnValue("ID", lvToUpdate.LiveBalanceId).ColumnValue("UpdateValue", lvToUpdate.Value).EndInsert())
+                .AddQuery().Update().FromTable(LiveBalanceDataManager.TABLE_NAME)
+                                    .Join("lv").JoinOnEqualOtherTableColumn(tempTableQuery, "lvToUpdate", "ID", "lv", "ID").EndJoin()
+                                    .ColumnValue("CurrentBalance", new RDBArithmeticExpression
+                                    {
+                                        Operator = RDBArithmeticExpressionOperator.Add,
+                                        Expression1 = new RDBColumnExpression { TableAlias = "lv", ColumnName = "CurrentBalance", DontAppendTableAlias = true },
+                                        Expression2 = new RDBColumnExpression { TableAlias = "lvToUpdate", ColumnName = "UpdateValue" }
+                                    })
+                                    .EndUpdate().EndBatchQuery().GetResolvedQuery().QueryText;
+
+            long balanceUsageQueueId = 5;
+            IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate = new List<AccountUsageToUpdate>
+            {
+                 new AccountUsageToUpdate { AccountUsageId = 3, Value = 45.777M},
+                 new AccountUsageToUpdate { AccountUsageId = 4, Value = 32.734M},
+            };
+
+            Guid? correctionProcessId = Guid.NewGuid();
+
+            var updateTest = new RDBQueryContext(dataProvider).Update().FromTable("User").Where().EqualsCondition("ID", 3).ColumnValue("Name", "User 1").EndUpdate()
+                .GetResolvedQuery().QueryText;
+
+          var  UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue = new RDBQueryContext(dataProvider)
+                .StartBatchQuery()
+                    .UpdateLiveBalances(liveBalancesToUpdate)
+                    .UpdateAccountUsages(accountsUsageToUpdate, correctionProcessId)
+                    .AddQuery().Delete().FromTable(BalanceUsageQueueDataManager.TABLE_NAME).Where().EqualsCondition("ID", balanceUsageQueueId).EndDelete()
+                .EndBatchQuery().GetResolvedQuery().QueryText;
+
+            IEnumerable<long> billingTransactionIds = new List<long> { 3,5};
+                IEnumerable<long> accountUsageIdsToOverride = new List<long> { 35, 66};
+                IEnumerable<AccountUsageOverride> accountUsageOverrides = new List<AccountUsageOverride> {
+                new AccountUsageOverride { AccountTypeId = Guid.NewGuid(), AccountId = "44", AccountUsageOverrideId = 2},
+                new AccountUsageOverride { AccountTypeId = Guid.NewGuid(), AccountId = "66", AccountUsageOverrideId = 2},
+                new AccountUsageOverride { AccountTypeId = Guid.NewGuid(), AccountId = "22", AccountUsageOverrideId = 2}
+            };
+            IEnumerable<long> overridenUsageIdsToRollback = new List<long> { 2,57};
+            IEnumerable<long> deletedTransactionIds = new List<long> { 77, 3 };
+            var UpdateLiveBalancesFromBillingTransactions =
+                   
+            new RDBQueryContext(dataProvider)
+                .StartBatchQuery()
+                .AddQueryIf(() => overridenUsageIdsToRollback != null && overridenUsageIdsToRollback.Count() > 0, 
+                    ctx => ctx.Update()
+                                .FromTable(AccountUsageDataManager.TABLE_NAME)
+                                .Where().ListCondition("ID", RDBListConditionOperator.IN, overridenUsageIdsToRollback)
+                                .ColumnValue("IsOverridden", new RDBNullExpression()).ColumnValue("OverriddenAmount", new RDBNullExpression())
+                              .EndUpdate())
+                .AddQueryIf(() => accountUsageIdsToOverride != null && accountUsageIdsToOverride.Count() > 0,
+                    ctx => ctx.Update()
+                                .FromTable(AccountUsageDataManager.TABLE_NAME)
+                                .Where().ListCondition("ID", RDBListConditionOperator.IN, accountUsageIdsToOverride)
+                                .ColumnValue("IsOverridden", true).ColumnValue("OverriddenAmount", new RDBColumnExpression { ColumnName = "UsageBalance"})
+                              .EndUpdate())
+                .AddQueryIf(()=> deletedTransactionIds != null && deletedTransactionIds.Count() > 0,
+                    ctx => ctx.StartBatchQuery()
+                                .AddQuery().Delete().FromTable(AccountUsageOverrideDataManager.TABLE_NAME).Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds).EndDelete()
+                                .AddQuery().Update().FromTable(BillingTransactionDataManager.TABLE_NAME).Where().ListCondition("ID", RDBListConditionOperator.IN, deletedTransactionIds).ColumnValue("IsSubtractedFromBalance", true).EndUpdate()
+                              .EndBatchQuery())
+                .AddQueryIf(() => accountUsageOverrides != null && accountUsageOverrides.Count() > 0,
+                    ctx => ctx.StartBatchQuery()
+                                .Foreach(accountUsageOverrides, 
+                                    (accountUsageOverride, foreachCtx) => foreachCtx.AddQuery().Insert()
+                                                                                                .IntoTable(AccountUsageOverrideDataManager.TABLE_NAME)
+                                                                                                .ColumnValue("AccountTypeID", accountUsageOverride.AccountTypeId)
+                                                                                                .ColumnValue("AccountID", accountUsageOverride.AccountId)
+                                                                                                .ColumnValue("TransactionTypeID", accountUsageOverride.TransactionTypeId)
+                                                                                                .ColumnValue("PeriodStart", accountUsageOverride.PeriodStart)
+                                                                                                .ColumnValue("PeriodEnd", accountUsageOverride.PeriodEnd)
+                                                                                                .ColumnValue("OverriddenByTransactionID", accountUsageOverride.OverriddenByTransactionId)
+                                                                                               .EndInsert())
+                              .EndBatchQuery())
+                .AddQueryIf(() => billingTransactionIds != null && billingTransactionIds.Count() > 0,
+                    ctx => ctx.Update().FromTable(BillingTransactionDataManager.TABLE_NAME).Where().ListCondition("ID", RDBListConditionOperator.IN, billingTransactionIds).ColumnValue("IsBalanceUpdated", true).EndUpdate())
+                .UpdateLiveBalances(liveBalancesToUpdate)
+                .EndBatchQuery().GetResolvedQuery().QueryText;
 
             Console.ReadKey();
             //RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_User", _userTable);
