@@ -124,6 +124,14 @@
       <Project>{5afd4349-a7fe-4d3f-b6fe-6877ef714e36}</Project>
       <Name>Demo.BestPractices.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.Data.SQL\Demo.BestPractices.Data.SQL.csproj">
+      <Project>{1fb51f46-4472-49b2-a7bd-4362129ec2e8}</Project>
+      <Name>Demo.BestPractices.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.Data\Demo.BestPractices.Data.csproj">
+      <Project>{c7540099-cdaa-4f75-9a6d-3b02cf0e3bbb}</Project>
+      <Name>Demo.BestPractices.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Demo.BestPractices.Entities\Demo.BestPractices.Entities.csproj">
       <Project>{f6e779c0-8292-4e15-af3b-c713666402f1}</Project>
       <Name>Demo.BestPractices.Entities</Name>

@@ -226,6 +226,30 @@
     <Content Include="Demo_Module\ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Demo.BestPractices.Business\Demo.BestPractices.Business.csproj">
+      <Project>{5afd4349-a7fe-4d3f-b6fe-6877ef714e36}</Project>
+      <Name>Demo.BestPractices.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.Data.SQL\Demo.BestPractices.Data.SQL.csproj">
+      <Project>{1fb51f46-4472-49b2-a7bd-4362129ec2e8}</Project>
+      <Name>Demo.BestPractices.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.Data\Demo.BestPractices.Data.csproj">
+      <Project>{c7540099-cdaa-4f75-9a6d-3b02cf0e3bbb}</Project>
+      <Name>Demo.BestPractices.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.Entities\Demo.BestPractices.Entities.csproj">
+      <Project>{f6e779c0-8292-4e15-af3b-c713666402f1}</Project>
+      <Name>Demo.BestPractices.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.MainExtentions\Demo.BestPractices.MainExtentions.csproj">
+      <Project>{760ef831-102a-40b9-aa3b-a5da7b1f52a3}</Project>
+      <Name>Demo.BestPractices.MainExtentions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.BestPractices.Web\Demo.BestPractices.Web.csproj">
+      <Project>{acf74ab5-9aa4-4413-8307-79f707a4d719}</Project>
+      <Name>Demo.BestPractices.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Demo.Module.Business\Demo.Module.Business.csproj">
       <Project>{a0190a8f-95bd-4ce5-b60e-87529661e6e8}</Project>
       <Name>Demo.Module.Business</Name>
