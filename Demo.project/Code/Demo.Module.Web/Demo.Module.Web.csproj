@@ -254,6 +254,10 @@
       <Project>{a0190a8f-95bd-4ce5-b60e-87529661e6e8}</Project>
       <Name>Demo.Module.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Demo.Module.Data.SQL\Demo.Module.Data.SQL.csproj">
+      <Project>{6e72dc74-f79d-4f63-a6c1-444ef4ebb4b7}</Project>
+      <Name>Demo.Module.Data.SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">
       <Project>{415c2a9e-e7d1-4c21-8862-57450e277758}</Project>
       <Name>Demo.Module.Data</Name>
@@ -261,6 +265,10 @@
     <ProjectReference Include="..\Demo.Module.Entities\Demo.Module.Entities.csproj">
       <Project>{7f3a2fab-e969-475d-9eaa-ea742e5222de}</Project>
       <Name>Demo.Module.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.Module.MainExtension\Demo.Module.MainExtension.csproj">
+      <Project>{7d0273be-2a89-4cf4-a485-b8475dd5f2d5}</Project>
+      <Name>Demo.Module.MainExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
