@@ -66,7 +66,7 @@ namespace Vanrise.Fzero.Services.DailyReportsSummary
                 {
                     foreach (MobileOperator i in MobileOperator.GetMobileOperators())
                     {
-                        if (i.EnableDailyReportsSummary.HasValue && i.EnableDailyReportsSummary.Value && i.User.ClientID.HasValue || true)
+                        if (i.EnableDailyReportsSummary.HasValue && i.EnableDailyReportsSummary.Value && i.User.ClientID.HasValue)
                         {
 
 
@@ -115,7 +115,7 @@ namespace Vanrise.Fzero.Services.DailyReportsSummary
         }
         private void ErrorLog(string message)
         {
-            string cs = "Daily Reports Summary Service";
+            string cs = "DailyReportsSummaryService";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {
@@ -168,7 +168,7 @@ namespace Vanrise.Fzero.Services.DailyReportsSummary
                         if (template.IsActive)
                         {
                             Email email = new Email() { EmailTemplateID = ID };
-                            email.DestinationEmail = "shaidar@vanrise.com";//mobileOperator.NonFruadReportEmail;
+                            email.DestinationEmail = mobileOperator.DailyReportsSummaryEmail;
                             email.Subject = string.Format("Daily Fruad Report {0}", DateTime.Today.ToString("dd-MM-yyyy"));
                             email.Body = "Dear Sir/Madame,"
                                        + "<br />Kindly find attached our daily fraud detection reports for " + DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy") + "."

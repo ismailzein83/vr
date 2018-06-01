@@ -38,7 +38,7 @@
             this.serviceProcessInstaller1.Password = null;
             this.serviceProcessInstaller1.Username = null;
 
-            this.ServiceName = "DailyReportsSummaryService";
+            this.ServiceName = "DailyReportsSummaryService1";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             //this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             //this.serviceProcessInstaller1,
