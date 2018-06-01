@@ -66,7 +66,7 @@ namespace Vanrise.Data.RDB
 
         public RDBListConditionOperator Operator { get; set; }
 
-        public List<BaseRDBExpression> Values { get; set; }
+        public IEnumerable<BaseRDBExpression> Values { get; set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {

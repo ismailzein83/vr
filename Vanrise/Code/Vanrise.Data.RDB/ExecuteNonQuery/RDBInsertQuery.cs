@@ -7,7 +7,7 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBInsertQuery<T> : BaseRDBQuery, IInsertQuery<T>, IInsertQueryGenerateIdCalled<T>, IInsertQueryTableDefined<T>, IInsertQueryReady<T>, IInsertQueryColumnsAssigned<T>, IInsertQueryNotExistsConditionDefined<T>
+    public class RDBInsertQuery<T> : BaseRDBQuery, IRDBInsertQuery<T>, IRDBInsertQueryGenerateIdCalled<T>, IRDBInsertQueryTableDefined<T>, IRDBInsertQueryReady<T>, IRDBInsertQueryColumnsAssigned<T>, IRDBInsertQueryNotExistsConditionDefined<T>
     {
         T _parent;
         RDBQueryBuilderContext _queryBuilderContext;
@@ -25,34 +25,43 @@ namespace Vanrise.Data.RDB
         public List<RDBInsertColumn> ColumnValues { get; private set; }
 
         public BaseRDBCondition NotExistCondition { get; private set; }
-
+        
         string _generatedIdParameterName;
+        bool _declareGeneratedIdParameter;
 
-        public IInsertQueryTableDefined<T> IntoTable(IRDBTableQuerySource table)
+        bool _addSelectGeneratedId;
+        string _selectGeneratedIdAlias;
+
+        public IRDBInsertQueryTableDefined<T> IntoTable(IRDBTableQuerySource table)
         {
             this.Table = table;
+            _queryBuilderContext.SetMainQueryTable(table);
             this.ColumnValues = new List<RDBInsertColumn>();
             return this;
         }
 
-        public IInsertQueryTableDefined<T> IntoTable(string tableName)
+        public IRDBInsertQueryTableDefined<T> IntoTable(string tableName)
         {
             return IntoTable(new RDBTableDefinitionQuerySource(tableName));
         }
 
-        public RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
+        public RDBConditionContext<IRDBInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
         {
             this._notExistConditionTableAlias = tableAlias;
-            return new RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
+            return new RDBConditionContext<IRDBInsertQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
         }
 
-        public IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName)
+        public IRDBInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName, bool isParameterAlreadyDeclared = false, bool addSelectQuery = true, bool selectQueryWithAlias = false)
         {
-            _generatedIdParameterName = parameterName;            
+            _generatedIdParameterName = parameterName;
+            _declareGeneratedIdParameter = !isParameterAlreadyDeclared;
+            _addSelectGeneratedId = addSelectQuery;
+            if (selectQueryWithAlias)
+                _selectGeneratedIdAlias = _generatedIdParameterName;
             return this;
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value)
         {
             this.ColumnValues.Add(new RDBInsertColumn
             {
@@ -62,47 +71,47 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, string value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, string value)
         {
             return this.ColumnValue(columnName, new RDBFixedTextExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, int value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, int value)
         {
             return this.ColumnValue(columnName, new RDBFixedIntExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, long value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, long value)
         {
             return this.ColumnValue(columnName, new RDBFixedLongExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value)
         {
             return this.ColumnValue(columnName, new RDBFixedDecimalExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, float value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, float value)
         {
             return this.ColumnValue(columnName, new RDBFixedFloatExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value)
         {
             return this.ColumnValue(columnName, new RDBFixedDateTimeExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value)
         {
             return this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value)
         {
             return this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction, Action<IInsertQueryColumnsAssigned<T>> falseAction)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction, Action<IRDBInsertQueryColumnsAssigned<T>> falseAction)
         {
             if (shouldAddColumnValue())
                 trueAction(this);
@@ -111,12 +120,12 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction)
         {
             return ColumnValueIf(shouldAddColumnValue, trueAction, null);
         }
 
-        public IInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IInsertQueryColumnsAssigned<T>> trueAction)
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction)
         {
             return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
         }
@@ -144,10 +153,10 @@ namespace Vanrise.Data.RDB
                 resolvedQuery = ResolveInsertQuery(context);               
             }
 
-            if (!string.IsNullOrEmpty(_generatedIdParameterName))
+            if (!string.IsNullOrEmpty(_generatedIdParameterName) && _addSelectGeneratedId)
             {
                 RDBResolvedQuery selectIdResolvedQuery = new RDBSelectQuery<RDBInsertQuery<T>>(this, _queryBuilderContext.CreateChildContext()).FromNoTable().SelectColumns().
-                    Parameter(_generatedIdParameterName, _generatedIdParameterName).
+                    Parameter(_generatedIdParameterName, _selectGeneratedIdAlias).
                     EndColumns().GetResolvedQuery(context);
                 resolvedQuery.QueryText = string.Concat(resolvedQuery.QueryText, "\n", selectIdResolvedQuery.QueryText);
             }
@@ -162,17 +171,20 @@ namespace Vanrise.Data.RDB
             if (!string.IsNullOrEmpty(_generatedIdParameterName))
             {
                 generatedIdDBParameterName = context.DataProvider.ConvertToDBParameterName(_generatedIdParameterName);
-                var getIdColumnInfoContext = new RDBTableQuerySourceGetIdColumnInfoContext(context.DataProvider);
-                this.Table.GetIdColumnInfo(getIdColumnInfoContext);
-                getIdColumnInfoContext.IdColumnName.ThrowIfNull("getIdColumnInfoContext.IdColumnName", this.Table.GetUniqueName());
-                getIdColumnInfoContext.IdColumnDefinition.ThrowIfNull("getIdColumnInfoContext.IdColumnDefinition", this.Table.GetUniqueName());
-                context.AddParameter(new RDBParameter
+                if (_declareGeneratedIdParameter)
                 {
-                    Name = _generatedIdParameterName,
-                    DBParameterName = generatedIdDBParameterName,
-                    Type = getIdColumnInfoContext.IdColumnDefinition.DataType,
-                    Direction = RDBParameterDirection.Declared
-                });
+                    var getIdColumnInfoContext = new RDBTableQuerySourceGetIdColumnInfoContext(context.DataProvider);
+                    this.Table.GetIdColumnInfo(getIdColumnInfoContext);
+                    getIdColumnInfoContext.IdColumnName.ThrowIfNull("getIdColumnInfoContext.IdColumnName", this.Table.GetUniqueName());
+                    getIdColumnInfoContext.IdColumnDefinition.ThrowIfNull("getIdColumnInfoContext.IdColumnDefinition", this.Table.GetUniqueName());
+                    context.AddParameter(new RDBParameter
+                    {
+                        Name = _generatedIdParameterName,
+                        DBParameterName = generatedIdDBParameterName,
+                        Type = getIdColumnInfoContext.IdColumnDefinition.DataType,
+                        Direction = RDBParameterDirection.Declared
+                    });
+                }
             }
 
             var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this.Table, this.ColumnValues, generatedIdDBParameterName, context, _queryBuilderContext);
@@ -200,76 +212,76 @@ namespace Vanrise.Data.RDB
         public BaseRDBExpression Value { get; set; }
     }
 
-    public interface IInsertQuery<T> : IInsertQueryCanDefineTable<T>
+    public interface IRDBInsertQuery<T> : IRDBInsertQueryCanDefineTable<T>
     {
     }
 
-    public interface IInsertQueryReady<T> : IRDBQueryReady
+    public interface IRDBInsertQueryReady<T> : IRDBQueryReady
     {
         T EndInsert();
     }
 
-    public interface IInsertQueryTableDefined<T> : IInsertQueryCanAssignColumns<T>, IInsertQueryCanDefineNotExistsCondition<T>, IInsertQueryCanCallGenerateId<T>
+    public interface IRDBInsertQueryTableDefined<T> : IRDBInsertQueryCanAssignColumns<T>, IRDBInsertQueryCanDefineNotExistsCondition<T>, IRDBInsertQueryCanCallGenerateId<T>
     {
 
     }
 
-    public interface IInsertQueryColumnsAssigned<T> : IInsertQueryReady<T>, IInsertQueryCanAssignColumns<T>
+    public interface IRDBInsertQueryColumnsAssigned<T> : IRDBInsertQueryReady<T>, IRDBInsertQueryCanAssignColumns<T>
     {
 
     }
 
-    public interface IInsertQueryNotExistsConditionDefined<T> : IInsertQueryReady<T>, IInsertQueryCanAssignColumns<T>, IInsertQueryCanCallGenerateId<T>
+    public interface IRDBInsertQueryNotExistsConditionDefined<T> : IRDBInsertQueryCanAssignColumns<T>, IRDBInsertQueryCanCallGenerateId<T>
     {
 
     }
 
-    public interface IInsertQueryGenerateIdCalled<T> : IInsertQueryReady<T>, IInsertQueryCanAssignColumns<T>
+    public interface IRDBInsertQueryGenerateIdCalled<T> : IRDBInsertQueryCanAssignColumns<T>
     {
 
     }
 
-    public interface IInsertQueryCanDefineTable<T>
+    public interface IRDBInsertQueryCanDefineTable<T>
     {
-        IInsertQueryTableDefined<T> IntoTable(IRDBTableQuerySource table);
+        IRDBInsertQueryTableDefined<T> IntoTable(IRDBTableQuerySource table);
 
-        IInsertQueryTableDefined<T> IntoTable(string tableName);
+        IRDBInsertQueryTableDefined<T> IntoTable(string tableName);
     }
 
-    public interface IInsertQueryCanCallGenerateId<T>
+    public interface IRDBInsertQueryCanCallGenerateId<T>
     {
-        IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName);
+        IRDBInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName, bool isParameterAlreadyDeclared = false, bool addSelectQuery = true, bool selectQueryWithAlias = false);
     }
 
-    public interface IInsertQueryCanAssignColumns<T>
+    public interface IRDBInsertQueryCanAssignColumns<T>
     {
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, string value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, string value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, int value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, int value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, long value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, long value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, float value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, float value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value);
 
-        IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction, Action<IInsertQueryColumnsAssigned<T>> falseAction);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction, Action<IRDBInsertQueryColumnsAssigned<T>> falseAction);
 
-        IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction);
 
-        IInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IInsertQueryColumnsAssigned<T>> trueAction);
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction);
     }
 
-    public interface IInsertQueryCanDefineNotExistsCondition<T>
+    public interface IRDBInsertQueryCanDefineNotExistsCondition<T>
     {
-        RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias);
+        RDBConditionContext<IRDBInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias);
     }
 }

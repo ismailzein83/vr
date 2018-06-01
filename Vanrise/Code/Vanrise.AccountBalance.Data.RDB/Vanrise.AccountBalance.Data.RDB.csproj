@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountUsageDataManager.cs" />
+    <Compile Include="AccountUsageOverrideDataManager.cs" />
+    <Compile Include="BalanceUsageQueueDataManager.cs" />
     <Compile Include="BillingTransactionDataManager.cs" />
     <Compile Include="BillingTransactionTypeDataManager.cs" />
     <Compile Include="LiveBalanceDataManager.cs" />

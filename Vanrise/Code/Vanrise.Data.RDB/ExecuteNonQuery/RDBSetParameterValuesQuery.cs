@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class SetParameterValuesQuery<T> : BaseRDBQuery, ISetParameterValuesQuery<T>, ISetParameterValuesQueryReady<T>
+    public class RDBSetParameterValuesQuery<T> : BaseRDBQuery, IRDBSetParameterValuesQuery<T>, IRDBSetParameterValuesQueryReady<T>
     { 
         T _parent;
         RDBQueryBuilderContext _queryBuilderContext;
 
-        public SetParameterValuesQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
+        public RDBSetParameterValuesQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
         {
             _parent = parent;
             _queryBuilderContext = queryBuilderContext;
@@ -19,48 +19,48 @@ namespace Vanrise.Data.RDB
 
         Dictionary<string, BaseRDBExpression> _parameterValues = new Dictionary<string, BaseRDBExpression>();
         
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, BaseRDBExpression value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, BaseRDBExpression value)
         {
             _parameterValues.Add(parameterName, value);
             return this;
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, string value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, string value)
         {
             return ParamValue(parameterName, new RDBFixedTextExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, int value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, int value)
         {
             return ParamValue(parameterName, new RDBFixedIntExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, long value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, long value)
         {
             return ParamValue(parameterName, new RDBFixedLongExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, Decimal value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, Decimal value)
         {
             return ParamValue(parameterName, new RDBFixedDecimalExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, float value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, float value)
         {
             return ParamValue(parameterName, new RDBFixedFloatExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, DateTime value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, DateTime value)
         {
             return ParamValue(parameterName, new RDBFixedDateTimeExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, bool value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, bool value)
         {
             return ParamValue(parameterName, new RDBFixedBooleanExpression { Value = value });
         }
 
-        public ISetParameterValuesQueryReady<T> ParamValue(string parameterName, Guid value)
+        public IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, Guid value)
         {
             return ParamValue(parameterName, new RDBFixedGuidExpression { Value = value });
         }
@@ -75,8 +75,12 @@ namespace Vanrise.Data.RDB
             StringBuilder builder = new StringBuilder();
             if (_parameterValues.Count > 0)
                 builder.Append("SELECT ");
+            bool isFirstParameter= true;
             foreach(var prmValueEntry in _parameterValues)
             {
+                if (!isFirstParameter)
+                    builder.Append(",");
+                isFirstParameter = false;
                 builder.Append(context.GetParameterWithValidate(prmValueEntry.Key).DBParameterName);
                 builder.Append(" = ");
                 builder.Append(prmValueEntry.Value.ToDBQuery(new RDBExpressionToDBQueryContext(context, _queryBuilderContext)));
@@ -88,34 +92,34 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public interface ISetParameterValuesQuery<T> : ISetParameterValuesQueryCanAddParameter<T>
+    public interface IRDBSetParameterValuesQuery<T> : IRDBSetParameterValuesQueryCanAddParameter<T>
     {
 
     }
 
-    public interface ISetParameterValuesQueryReady<T> : ISetParameterValuesQueryCanAddParameter<T>
+    public interface IRDBSetParameterValuesQueryReady<T> : IRDBSetParameterValuesQueryCanAddParameter<T>
     {
         T EndParameterValues();
     }
 
-    public interface ISetParameterValuesQueryCanAddParameter<T>
+    public interface IRDBSetParameterValuesQueryCanAddParameter<T>
     {
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, BaseRDBExpression value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, BaseRDBExpression value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, string value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, string value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, int value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, int value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, long value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, long value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, Decimal value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, Decimal value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, float value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, float value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, DateTime value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, DateTime value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, bool value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, bool value);
 
-        ISetParameterValuesQueryReady<T> ParamValue(string parameterName, Guid value);
+        IRDBSetParameterValuesQueryReady<T> ParamValue(string parameterName, Guid value);
     }
 }

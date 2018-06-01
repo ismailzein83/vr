@@ -11,7 +11,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class BillingTransactionDataManager : IBillingTransactionDataManager
     {
-        const string TABLE_NAME = "VR_AccountBalance_BillingTransaction";
+        public static string TABLE_NAME = "VR_AccountBalance_BillingTransaction";
         static BillingTransactionDataManager()
         {
             var columns = new Dictionary<string,RDBTableColumnDefinition>();

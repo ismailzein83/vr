@@ -54,7 +54,8 @@ namespace Vanrise.Data.RDB
 
         public ISelectQueryTableDefined<T> From(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords)
         {
-            this._table = table;
+            this._table = table; 
+            _queryBuilderContext.SetMainQueryTable(table);
             this._tableAlias = tableAlias;
             _queryBuilderContext.AddTableAlias(table, tableAlias);
             this._nbOfRecords = nbOfRecords;

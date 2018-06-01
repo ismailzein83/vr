@@ -7,7 +7,7 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBUpdateQuery<T> : BaseRDBQuery, IUpdateQuery<T>, IUpdateQueryTableDefined<T>, IUpdateQueryFiltered<T>, IUpdateQueryColumnsAssigned<T>, IUpdateQueryNotExistsConditionDefined<T>, IUpdateQueryJoined<T>
+    public class RDBUpdateQuery<T> : BaseRDBQuery, IRDBUpdateQuery<T>, IRDBUpdateQueryTableDefined<T>, IRDBUpdateQueryFiltered<T>, IRDBUpdateQueryColumnsAssigned<T>, IRDBUpdateQueryNotExistsConditionDefined<T>, IRDBUpdateQueryJoined<T>
     {
         T _parent;
         RDBQueryBuilderContext _queryBuilderContext;
@@ -34,26 +34,26 @@ namespace Vanrise.Data.RDB
             private set;
         }
 
-        public IUpdateQueryTableDefined<T> FromTable(string tableName)
+        public IRDBUpdateQueryTableDefined<T> FromTable(string tableName)
         {
             return FromTable(new RDBTableDefinitionQuerySource(tableName));
         }
 
-        public IUpdateQueryTableDefined<T> FromTable(IRDBTableQuerySource table)
+        public IRDBUpdateQueryTableDefined<T> FromTable(IRDBTableQuerySource table)
         {
             this.Table = table;
+            _queryBuilderContext.SetMainQueryTable(table);
             this.ColumnValues = new List<RDBUpdateColumn>();
             return this;
         }
 
-        public RDBConditionContext<IUpdateQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
+        public RDBConditionContext<IRDBUpdateQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
         {
             this._notExistConditionTableAlias = tableAlias;
-            return new RDBConditionContext<IUpdateQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
+            return new RDBConditionContext<IRDBUpdateQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
         }
-
-
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value)
+        
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value)
         {
             this.ColumnValues.Add(new RDBUpdateColumn
             {
@@ -63,50 +63,78 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, string value)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, string value)
         {
             return this.ColumnValue(columnName, new RDBFixedTextExpression { Value = value });
         }
 
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, int value)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, int value)
         {
             return this.ColumnValue(columnName, new RDBFixedIntExpression { Value = value });
         }
 
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, long value)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, long value)
         {
             return this.ColumnValue(columnName, new RDBFixedLongExpression { Value = value });
         }
 
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value)
         {
             return this.ColumnValue(columnName, new RDBFixedDecimalExpression { Value = value });
         }
 
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, float value)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, float value)
         {
             return this.ColumnValue(columnName, new RDBFixedFloatExpression { Value = value });
         }
 
-        public IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value)
         {
             return this.ColumnValue(columnName, new RDBFixedDateTimeExpression { Value = value });
         }
 
-        public RDBJoinContext<IUpdateQueryJoined<T>> Join(string tableAlias)
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, bool value)
+        {
+            return this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value)
+        {
+            return this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction, Action<IRDBUpdateQueryColumnsAssigned<T>> falseAction)
+        {
+            if (shouldUpdateColumnValue())
+                trueAction(this);
+            else if (falseAction != null)
+                falseAction(this);
+            return this;
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction)
+        {
+            return ColumnValueIf(shouldUpdateColumnValue, trueAction, null);
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction)
+        {
+            return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
+        }
+
+        public RDBJoinContext<IRDBUpdateQueryJoined<T>> Join(string tableAlias)
         {
             this._tableAlias = tableAlias;
+            _queryBuilderContext.AddTableAlias(this.Table, tableAlias);
             this.Joins = new List<RDBJoin>();
-            return new RDBJoinContext<IUpdateQueryJoined<T>>(this, _queryBuilderContext, this.Joins);
+            return new RDBJoinContext<IRDBUpdateQueryJoined<T>>(this, _queryBuilderContext, this.Joins);
         }
-
-
-        public RDBConditionContext<IUpdateQueryFiltered<T>> Where()
+        
+        public RDBConditionContext<IRDBUpdateQueryFiltered<T>> Where()
         {
-            return new RDBConditionContext<IUpdateQueryFiltered<T>>(this, (condition) => this.Condition = condition, _tableAlias);
+            return new RDBConditionContext<IRDBUpdateQueryFiltered<T>>(this, (condition) => this.Condition = condition, _tableAlias);
         }
-
-
+        
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             if (this.NotExistCondition != null)
@@ -136,8 +164,6 @@ namespace Vanrise.Data.RDB
             return context.DataProvider.ResolveUpdateQuery(resolveUpdateQueryContext);
         }
 
-
-
         public T EndUpdate()
         {
             return _parent;
@@ -155,74 +181,84 @@ namespace Vanrise.Data.RDB
         public BaseRDBExpression Value { get; set; }
     }
 
-    public interface IUpdateQuery<T> : IUpdateQueryCanDefineTable<T>
+    public interface IRDBUpdateQuery<T> : IRDBUpdateQueryCanDefineTable<T>
     {
     }
 
-    public interface IUpdateQueryTableDefined<T> : IUpdateQueryCanAssignColumns<T>, IUpdateQueryCanFilter<T>, IUpdateQueryCanJoin<T>, IUpdateQueryCanDefineNotExistsCondition<T>
+    public interface IRDBUpdateQueryTableDefined<T> : IRDBUpdateQueryCanAssignColumns<T>, IRDBUpdateQueryCanFilter<T>, IRDBUpdateQueryCanJoin<T>, IRDBUpdateQueryCanDefineNotExistsCondition<T>
     {
 
     }
 
-    public interface IUpdateQueryReady<T> : IRDBQueryReady
+    public interface IRDBUpdateQueryReady<T> : IRDBQueryReady
     {
         T EndUpdate();
     }
 
-    public interface IUpdateQueryColumnsAssigned<T> : IUpdateQueryReady<T>, IUpdateQueryCanAssignColumns<T>
+    public interface IRDBUpdateQueryColumnsAssigned<T> : IRDBUpdateQueryReady<T>, IRDBUpdateQueryCanAssignColumns<T>
     {
 
     }
 
-    public interface IUpdateQueryFiltered<T> : IUpdateQueryReady<T>, IUpdateQueryCanAssignColumns<T>
+    public interface IRDBUpdateQueryFiltered<T> : IRDBUpdateQueryReady<T>, IRDBUpdateQueryCanAssignColumns<T>
     {
 
     }
-    public interface IUpdateQueryNotExistsConditionDefined<T> : IUpdateQueryReady<T>, IUpdateQueryCanFilter<T>, IUpdateQueryCanAssignColumns<T>, IUpdateQueryCanJoin<T>
+    public interface IRDBUpdateQueryNotExistsConditionDefined<T> : IRDBUpdateQueryReady<T>, IRDBUpdateQueryCanFilter<T>, IRDBUpdateQueryCanAssignColumns<T>, IRDBUpdateQueryCanJoin<T>
     {
 
     }
-    public interface IUpdateQueryJoined<T> : IUpdateQueryReady<T>, IUpdateQueryCanFilter<T>, IUpdateQueryCanAssignColumns<T>
+    public interface IRDBUpdateQueryJoined<T> : IRDBUpdateQueryReady<T>, IRDBUpdateQueryCanFilter<T>, IRDBUpdateQueryCanAssignColumns<T>
     {
 
     }
 
-    public interface IUpdateQueryCanDefineTable<T>
+    public interface IRDBUpdateQueryCanDefineTable<T>
     {
-        IUpdateQueryTableDefined<T> FromTable(string tableName);
+        IRDBUpdateQueryTableDefined<T> FromTable(string tableName);
 
-        IUpdateQueryTableDefined<T> FromTable(IRDBTableQuerySource table);
+        IRDBUpdateQueryTableDefined<T> FromTable(IRDBTableQuerySource table);
     }
 
-    public interface IUpdateQueryCanAssignColumns<T>
+    public interface IRDBUpdateQueryCanAssignColumns<T>
     {
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value);
 
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, string value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, string value);
 
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, int value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, int value);
 
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, long value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, long value);
 
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, decimal value);
 
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, float value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, float value);
 
-        IUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value);
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, bool value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction, Action<IRDBUpdateQueryColumnsAssigned<T>> falseAction);
+        
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction);
+        
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction);
     }
 
-    public interface IUpdateQueryCanFilter<T>
+    public interface IRDBUpdateQueryCanFilter<T>
     {
-        RDBConditionContext<IUpdateQueryFiltered<T>> Where();
+        RDBConditionContext<IRDBUpdateQueryFiltered<T>> Where();
     }
 
-    public interface IUpdateQueryCanJoin<T>
+    public interface IRDBUpdateQueryCanJoin<T>
     {
-        RDBJoinContext<IUpdateQueryJoined<T>> Join(string tableAlias);
+        RDBJoinContext<IRDBUpdateQueryJoined<T>> Join(string tableAlias);
     }
 
-    public interface IUpdateQueryCanDefineNotExistsCondition<T>
+    public interface IRDBUpdateQueryCanDefineNotExistsCondition<T>
     {
-        RDBConditionContext<IUpdateQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias);
+        RDBConditionContext<IRDBUpdateQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias);
     }
 }

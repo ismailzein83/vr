@@ -117,8 +117,47 @@ namespace Vanrise.AccountBalance.Data.RDB
         }
 
         public bool UpdateLiveBalancesFromBillingTransactions(IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate, IEnumerable<long> billingTransactionIds, IEnumerable<long> accountUsageIdsToOverride, IEnumerable<AccountUsageOverride> accountUsageOverrides, IEnumerable<long> overridenUsageIdsToRollback, IEnumerable<long> deletedTransactionIds)
-        {
-            throw new NotImplementedException();
+        {            
+            new RDBQueryContext(GetDataProvider())
+                .StartBatchQuery()
+                .AddQueryIf(() => overridenUsageIdsToRollback != null && overridenUsageIdsToRollback.Count() > 0, 
+                    ctx => ctx.Update()
+                                .FromTable(AccountUsageDataManager.TABLE_NAME)
+                                .Where().ListCondition("ID", RDBListConditionOperator.IN, overridenUsageIdsToRollback)
+                                .ColumnValue("IsOverridden", new RDBNullExpression()).ColumnValue("OverriddenAmount", new RDBNullExpression())
+                              .EndUpdate())
+                .AddQueryIf(() => accountUsageIdsToOverride != null && accountUsageIdsToOverride.Count() > 0,
+                    ctx => ctx.Update()
+                                .FromTable(AccountUsageDataManager.TABLE_NAME)
+                                .Where().ListCondition("ID", RDBListConditionOperator.IN, accountUsageIdsToOverride)
+                                .ColumnValue("IsOverridden", true).ColumnValue("OverriddenAmount", new RDBColumnExpression { ColumnName = "UsageBalance"})
+                              .EndUpdate())
+                .AddQueryIf(()=> deletedTransactionIds != null && deletedTransactionIds.Count() > 0,
+                    ctx => ctx.StartBatchQuery()
+                                .AddQuery().Delete().FromTable(AccountUsageOverrideDataManager.TABLE_NAME).Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds).EndDelete()
+                                .AddQuery().Update().FromTable(BillingTransactionDataManager.TABLE_NAME).Where().ListCondition("ID", RDBListConditionOperator.IN, deletedTransactionIds).ColumnValue("IsSubtractedFromBalance", true).EndUpdate()
+                              .EndBatchQuery())
+                .AddQueryIf(() => accountUsageOverrides != null && accountUsageOverrides.Count() > 0,
+                    ctx => ctx.StartBatchQuery()
+                                .Foreach(accountUsageOverrides, 
+                                    (accountUsageOverride, foreachCtx) => foreachCtx.AddQuery().Insert()
+                                                                                                .IntoTable(AccountUsageOverrideDataManager.TABLE_NAME)
+                                                                                                .ColumnValue("AccountTypeID", accountUsageOverride.AccountTypeId)
+                                                                                                .ColumnValue("AccountID", accountUsageOverride.AccountId)
+                                                                                                .ColumnValue("TransactionTypeID", accountUsageOverride.TransactionTypeId)
+                                                                                                .ColumnValue("PeriodStart", accountUsageOverride.PeriodStart)
+                                                                                                .ColumnValue("PeriodEnd", accountUsageOverride.PeriodEnd)
+                                                                                                .ColumnValue("OverriddenByTransactionID", accountUsageOverride.OverriddenByTransactionId)
+                                                                                               .EndInsert())
+                              .EndBatchQuery())
+                .AddQueryIf(() => billingTransactionIds != null && billingTransactionIds.Count() > 0,
+                    ctx => ctx.Update().FromTable(BillingTransactionDataManager.TABLE_NAME).Where().ListCondition("ID", RDBListConditionOperator.IN, billingTransactionIds).ColumnValue("IsBalanceUpdated", true).EndUpdate())
+                .UpdateLiveBalances(liveBalancesToUpdate)
+                .EndBatchQuery()
+                .ExecuteNonQuery(true);
+
+                                        
+            return true;
         }
 
         public IEnumerable<LiveBalanceAccountInfo> GetLiveBalanceAccountsInfo(Guid accountTypeId)
@@ -209,9 +248,16 @@ namespace Vanrise.AccountBalance.Data.RDB
             //        .GetItem(LiveBalanceAccountInfoMapper);
         }
 
-        public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalnacesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
+        public bool UpdateLiveBalanceAndAccountUsageFromBalanceUsageQueue(long balanceUsageQueueId, IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
-            throw new NotImplementedException();
+            new RDBQueryContext(GetDataProvider())
+                .StartBatchQuery()
+                    .UpdateLiveBalances(liveBalancesToUpdate)
+                    .UpdateAccountUsages(accountsUsageToUpdate, correctionProcessId)
+                    .AddQuery().Delete().FromTable(BalanceUsageQueueDataManager.TABLE_NAME).Where().EqualsCondition("ID", balanceUsageQueueId).EndDelete()
+                .EndBatchQuery()
+                .ExecuteNonQuery(true);
+            return true;
         }
 
         public void UpdateBalanceRuleInfos(List<LiveBalanceNextThresholdUpdateEntity> updateEntities)

@@ -303,6 +303,39 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             };
         }
 
+        public override RDBResolvedQuery ResolveDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context)
+        {
+            context.Table.ThrowIfNull("context.Table");
+
+            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
+            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
+
+            StringBuilder queryBuilder = new StringBuilder(" DELETE FROM ");
+            if (context.Joins != null && context.Joins.Count > 0)
+            {
+                AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
+                AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
+            }
+            else
+            {
+                AddTableToDBQueryBuilder(queryBuilder, context.Table, null, context);
+            }
+
+            if (context.Condition != null)
+            {
+                string conditionDBQuery = context.Condition.ToDBQuery(rdbConditionToDBQueryContext);
+                if (!string.IsNullOrEmpty(conditionDBQuery))
+                {
+                    queryBuilder.Append(" WHERE ");
+                    queryBuilder.Append(conditionDBQuery);
+                }
+            }
+            return new RDBResolvedQuery
+            {
+                QueryText = queryBuilder.ToString()
+            };
+        }
+
         public override RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context)
         {
             string tempTableName = String.Concat("#TempTable_", Guid.NewGuid().ToString().Replace("-", ""));
@@ -349,14 +382,21 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 case RDBDataType.DateTime: return "datetime";
                 case RDBDataType.Varchar:
                     if (!size.HasValue)
-                        throw new NullReferenceException(String.Format("Size of '{0}'", columnName));
-                    return String.Format("varchar({0})", size.Value);
+                        return "varchar(max)";
+                    else
+                        return String.Format("varchar({0})", size.Value);
                 case RDBDataType.NVarchar:
                     if (!size.HasValue)
-                        throw new NullReferenceException(String.Format("Size of '{0}'", columnName));
-                    return String.Format("nvarchar({0})", size.Value);
+                        return "nvarchar(max)";
+                    else
+                        return String.Format("nvarchar({0})", size.Value);
                 case RDBDataType.UniqueIdentifier: return "uniqueidentifier";
                 case RDBDataType.Boolean: return "bit";
+                case RDBDataType.VarBinary:
+                    if (!size.HasValue)
+                        return "varbinary(max)";
+                    else
+                        return String.Format("varbinary({0})", size.Value);
                 default:
                     throw new NotSupportedException(String.Format("DataType '{0}'", dataType.ToString()));
             }
@@ -441,27 +481,28 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 return rslt;
             }
 
-            private DbType GetSQLDBType(RDBDataType dataType, out int? size, out byte? precision)
-            {
-                size = null;
-                precision = null;
-                switch (dataType)
-                {
-                    case RDBDataType.Int: return DbType.Int32;
-                    case RDBDataType.BigInt: return DbType.Int64;
-                    case RDBDataType.Decimal:
-                        size = 20;
-                        precision = 8;
-                        return DbType.Decimal;
-                    case RDBDataType.DateTime: return DbType.DateTime;
-                    case RDBDataType.Varchar: return DbType.String;
-                    case RDBDataType.NVarchar: return DbType.String;
-                    case RDBDataType.UniqueIdentifier: return DbType.Guid;
-                    case RDBDataType.Boolean: return DbType.Boolean;
-                    default:
-                        throw new NotSupportedException(String.Format("DataType '{0}'", dataType.ToString()));
-                }
-            }
+            //private DbType GetSQLDBType(RDBDataType dataType, out int? size, out byte? precision)
+            //{
+            //    size = null;
+            //    precision = null;
+            //    switch (dataType)
+            //    {
+            //        case RDBDataType.Int: return DbType.Int32;
+            //        case RDBDataType.BigInt: return DbType.Int64;
+            //        case RDBDataType.Decimal:
+            //            size = 20;
+            //            precision = 8;
+            //            return DbType.Decimal;
+            //        case RDBDataType.DateTime: return DbType.DateTime;
+            //        case RDBDataType.Varchar: return DbType.String;
+            //        case RDBDataType.NVarchar: return DbType.String;
+            //        case RDBDataType.UniqueIdentifier: return DbType.Guid;
+            //        case RDBDataType.Boolean: return DbType.Boolean;
+            //        case RDBDataType.VarBinary: return DbType.Binary;
+            //        default:
+            //            throw new NotSupportedException(String.Format("DataType '{0}'", dataType.ToString()));
+            //    }
+            //}
         }
 
         private class MSSQLRDBDataReader : IRDBDataReader

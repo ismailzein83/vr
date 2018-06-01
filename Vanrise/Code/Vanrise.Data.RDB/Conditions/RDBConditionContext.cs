@@ -369,7 +369,7 @@ namespace Vanrise.Data.RDB
             return NotEndsWithCondition(_tableAlias, columnName, value);
         }
 
-        public T ListCondition(BaseRDBExpression expression, RDBListConditionOperator oper, List<BaseRDBExpression> values)
+        public T ListCondition(BaseRDBExpression expression, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
             return Condition(new RDBListCondition
             {
@@ -379,7 +379,7 @@ namespace Vanrise.Data.RDB
             });
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<BaseRDBExpression> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
             return ListCondition(
                 new RDBColumnExpression
@@ -391,12 +391,12 @@ namespace Vanrise.Data.RDB
                 values);
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<BaseRDBExpression> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<string> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<string> values)
         {
             return ListCondition(
                 tableAlias,
@@ -405,12 +405,12 @@ namespace Vanrise.Data.RDB
                 values.Select<string, BaseRDBExpression>(itm => new RDBFixedTextExpression { Value = itm }).ToList());
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<string> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<string> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<int> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<int> values)
         {
             return ListCondition(
                 tableAlias,
@@ -419,12 +419,12 @@ namespace Vanrise.Data.RDB
                 values.Select<int, BaseRDBExpression>(itm => new RDBFixedIntExpression { Value = itm }).ToList());
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<int> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<int> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<long> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<long> values)
         {
             return ListCondition(
                 tableAlias,
@@ -433,12 +433,12 @@ namespace Vanrise.Data.RDB
                 values.Select<long, BaseRDBExpression>(itm => new RDBFixedLongExpression { Value = itm }).ToList());
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<long> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<long> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<decimal> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<decimal> values)
         {
             return ListCondition(
                 tableAlias,
@@ -447,12 +447,12 @@ namespace Vanrise.Data.RDB
                 values.Select<decimal, BaseRDBExpression>(itm => new RDBFixedDecimalExpression { Value = itm }).ToList());
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<decimal> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<decimal> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<DateTime> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<DateTime> values)
         {
             return ListCondition(
                 tableAlias,
@@ -461,12 +461,12 @@ namespace Vanrise.Data.RDB
                 values.Select<DateTime, BaseRDBExpression>(itm => new RDBFixedDateTimeExpression { Value = itm }).ToList());
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<DateTime> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<DateTime> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }
 
-        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, List<Guid> values)
+        public T ListCondition(string tableAlias, string columnName, RDBListConditionOperator oper, IEnumerable<Guid> values)
         {
             return ListCondition(
                 tableAlias,
@@ -475,7 +475,7 @@ namespace Vanrise.Data.RDB
                 values.Select<Guid, BaseRDBExpression>(itm => new RDBFixedGuidExpression { Value = itm }).ToList());
         }
 
-        public T ListCondition(string columnName, RDBListConditionOperator oper, List<Guid> values)
+        public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<Guid> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
         }

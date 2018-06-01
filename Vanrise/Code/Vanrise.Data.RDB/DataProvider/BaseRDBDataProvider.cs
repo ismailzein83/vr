@@ -24,6 +24,8 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveUpdateQuery(IRDBDataProviderResolveUpdateQueryContext context);
 
+        public abstract RDBResolvedQuery ResolveDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context);
+
         public abstract RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context);
 
         public abstract void ExecuteReader(IRDBDataProviderExecuteReaderContext context);
@@ -258,6 +260,43 @@ namespace Vanrise.Data.RDB
         }
 
         public List<RDBUpdateColumn> ColumnValues { get; private set; }
+
+        public BaseRDBCondition Condition { get; private set; }
+
+        public List<RDBJoin> Joins { get; private set; }
+    }
+
+    public interface IRDBDataProviderResolveDeleteQueryContext : IBaseRDBResolveQueryContext
+    {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
+
+        IRDBTableQuerySource Table { get; }
+
+        string TableAlias { get; }
+
+        BaseRDBCondition Condition { get; }
+
+        List<RDBJoin> Joins { get; }
+    }
+
+    public class RDBDataProviderResolveDeleteQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveDeleteQueryContext
+    {
+        public RDBDataProviderResolveDeleteQueryContext(IRDBTableQuerySource table, string tableAlias, BaseRDBCondition condition,
+            List<RDBJoin> joins, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            : base(parentContext)
+        {
+            this.QueryBuilderContext = queryBuilderContext;
+            this.Table = table;
+            this.TableAlias = tableAlias;
+            this.Condition = condition;
+            this.Joins = joins;
+        }
+
+        public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
+
+        public IRDBTableQuerySource Table { get; private set; }
+
+        public string TableAlias { get; private set; }
 
         public BaseRDBCondition Condition { get; private set; }
 

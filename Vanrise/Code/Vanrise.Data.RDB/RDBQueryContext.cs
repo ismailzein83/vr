@@ -86,7 +86,7 @@ namespace Vanrise.Data.RDB
             }
         
 
-        public IInsertQuery<T> Insert()
+        public IRDBInsertQuery<T> Insert()
             {
                 var query = new RDBInsertQuery<T>(_parent, QueryBuilderContext);
                 this._query = query;
@@ -94,14 +94,20 @@ namespace Vanrise.Data.RDB
             }
         
 
-        public IUpdateQuery<T> Update()
+        public IRDBUpdateQuery<T> Update()
             {
                 var query = new RDBUpdateQuery<T>(_parent, QueryBuilderContext);
                 this._query = query;
                 return query;
             }
-        
 
+        public IRDBDeleteQuery<T> Delete()
+        {
+            var query = new RDBDeleteQuery<T>(_parent, QueryBuilderContext);
+            this._query = query;
+            return query;
+        }
+        
         public IRDBIfQuery<T> If()
             {
                 var query = new RDBIfQuery<T>(_parent, QueryBuilderContext);
@@ -131,9 +137,9 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
-        public ISetParameterValuesQuery<T> SetParameterValues()
+        public IRDBSetParameterValuesQuery<T> SetParameterValues()
         {
-            var query = new SetParameterValuesQuery<T>(_parent, this.QueryBuilderContext);
+            var query = new RDBSetParameterValuesQuery<T>(_parent, this.QueryBuilderContext);
             this._query = query;
             return query;
         }
@@ -287,6 +293,7 @@ namespace Vanrise.Data.RDB
         public BaseRDBDataProvider DataProvider { get; private set; }
 
         Dictionary<string, IRDBTableQuerySource> _tableAliases = new Dictionary<string, IRDBTableQuerySource>();
+        IRDBTableQuerySource _mainQueryTable;
 
         public RDBQueryBuilderContext(BaseRDBDataProvider dataProvider)
         {
@@ -306,6 +313,18 @@ namespace Vanrise.Data.RDB
             if (!_tableAliases.TryGetValue(tableAlias, out table))
                 throw new Exception(String.Format("Table Alias '{0}' not exists", tableAlias));
             return table;
+        }
+
+        public IRDBTableQuerySource GetMainQueryTable()
+        {
+            return _mainQueryTable;
+        }
+
+        public void SetMainQueryTable(IRDBTableQuerySource mainQueryTable)
+        {
+            if (_mainQueryTable != null)
+                throw new Exception("MainQueryTable");
+            _mainQueryTable = mainQueryTable;
         }
 
         public RDBQueryBuilderContext CreateChildContext()

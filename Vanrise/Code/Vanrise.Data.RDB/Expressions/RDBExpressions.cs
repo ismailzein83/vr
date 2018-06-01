@@ -9,17 +9,19 @@ namespace Vanrise.Data.RDB
 {
     public class RDBColumnExpression : BaseRDBExpression
     {
-        //public IRDBTableQuerySource Table { get; set; }
-
         public string TableAlias { get; set; }
 
         public string ColumnName { get; set; }
 
+        public bool DontAppendTableAlias { get; set; }
+
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
+            IRDBTableQuerySource table = this.TableAlias != null ? context.QueryBuilderContext.GetTableFromAlias(this.TableAlias) : context.QueryBuilderContext.GetMainQueryTable();
+            table.ThrowIfNull("table");
             var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context);
-            string dbColumnName = context.QueryBuilderContext.GetTableFromAlias(this.TableAlias).GetDBColumnName(getColumnDBNameContext);
-            if (this.TableAlias != null)
+            string dbColumnName = table.GetDBColumnName(getColumnDBNameContext);
+            if (this.TableAlias != null && !DontAppendTableAlias)
                 return String.Concat(this.TableAlias, ".", dbColumnName);
             else
                 return dbColumnName;

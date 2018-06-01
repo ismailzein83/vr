@@ -53,9 +53,10 @@
     <Compile Include="Conditions\RDBNullOrConditionContext.cs" />
     <Compile Include="DataProvider\BaseRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\MSSQLRDBDataProvider.cs" />
+    <Compile Include="ExecuteNonQuery\RDBDeleteQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />
-    <Compile Include="ExecuteNonQuery\SetParameterValuesQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBSetParameterValuesQuery.cs" />
     <Compile Include="Expressions\BaseRDBExpression.cs" />
     <Compile Include="BaseAndDefs\BaseRDBQuery.cs" />
     <Compile Include="BaseAndDefs\IRDBDataReader.cs" />
