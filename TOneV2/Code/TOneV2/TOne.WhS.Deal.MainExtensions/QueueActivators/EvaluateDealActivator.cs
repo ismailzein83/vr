@@ -42,17 +42,17 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             if (queueItemType == null)
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
-
-            HashSet<DealZoneGroup> saleDealZoneGroups;
-            HashSet<DealZoneGroup> costDealZoneGroups;
-
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
+
             List<dynamic> mainCDRs;
             List<dynamic> partialPricedCDRs;
-            List<dynamic> billingRecords = new List<dynamic>();// for billing stats and traffic stats
-            List<dynamic> trafficRecords = new List<dynamic>();// for traffic stats
+            List<dynamic> billingRecords = new List<dynamic>(); //for billing stats and traffic stats
+            List<dynamic> trafficRecords = new List<dynamic>(); //for traffic stats
 
-            DateTime minAttemptDateTime; DateTime maxAttemptDateTime;
+            DateTime minAttemptDateTime;
+            DateTime maxAttemptDateTime;
+            HashSet<DealZoneGroup> saleDealZoneGroups; 
+            HashSet<DealZoneGroup> costDealZoneGroups;
             PrepareLists(batchRecords, out saleDealZoneGroups, out costDealZoneGroups, out mainCDRs, out partialPricedCDRs, out minAttemptDateTime, out maxAttemptDateTime);
 
             if (saleDealZoneGroups.Count > 0 || costDealZoneGroups.Count > 0)
@@ -828,34 +828,25 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             if (mainTransformedBatch != null && mainTransformedBatch.GetRecordCount() > 0 && this.MainOutputStages != null)
             {
                 foreach (var mainOutputStage in this.MainOutputStages)
-                {
                     context.OutputItems.Add(mainOutputStage, mainTransformedBatch);
-                }
             }
 
             if (partialPricedTransformedBatch != null && partialPricedTransformedBatch.GetRecordCount() > 0 && this.PartialPricedOutputStages != null)
             {
                 foreach (var partialPricedOutputStage in this.PartialPricedOutputStages)
-                {
                     context.OutputItems.Add(partialPricedOutputStage, partialPricedTransformedBatch);
-                }
-
             }
 
             if (billingTransformedBatch != null && billingTransformedBatch.GetRecordCount() > 0 && this.BillingOutputStages != null)
             {
                 foreach (var billingOutputStage in this.BillingOutputStages)
-                {
                     context.OutputItems.Add(billingOutputStage, billingTransformedBatch);
-                }
             }
 
             if (trafficTransformedBatch != null && trafficTransformedBatch.GetRecordCount() > 0 && this.TrafficOutputStages != null)
             {
                 foreach (var trafficOutputStage in this.TrafficOutputStages)
-                {
                     context.OutputItems.Add(trafficOutputStage, trafficTransformedBatch);
-                }
             }
         }
 
@@ -1018,7 +1009,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                         }
                     });
                 } while (!context.ShouldStop() && hasItem);
-
             });
         }
 
