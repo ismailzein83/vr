@@ -1,32 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
 {
     public class UpdateWhSBalancesQueueActivator : BaseUpdateAccountBalancesQueueActivator
     {
+        //const string BillingCdrRecordTypeId = "6cf5f7ad-5123-45d2-b47f-eca613d454f7";
+        //const string BillingStatsRecordTypeId = "7df45dea-6052-4f99-88e3-93f0562f2ffa";
         static WHSFinancialAccountManager s_financialAccountManager = new WHSFinancialAccountManager();
+
         public Guid CustomerUsageTransactionTypeId { get; set; }
         public Guid SupplierUsageTransactionTypeId { get; set; }
         public UpdateAccountBalanceSettings UpdateAccountBalanceSettings { get; set; }
 
-        const string BillingCdrRecordTypeId = "6cf5f7ad-5123-45d2-b47f-eca613d454f7";
-        const string BillingStatsRecordTypeId = "7df45dea-6052-4f99-88e3-93f0562f2ffa";
+
         protected override void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context)
         {
-            dynamic cdrRecord = context.Record;
+            DataRecordType dataRecordType = new DataRecordTypeManager().GetDataRecordType(context.DataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", context.DataRecordTypeId);
+            dataRecordType.Settings.ThrowIfNull("dataRecordType.Settings", context.DataRecordTypeId);
 
-            DateTime attemptTime;
-            switch (context.DataRecordTypeId.ToString().ToLower())
-            {
-                case BillingCdrRecordTypeId: attemptTime = cdrRecord.AttemptDateTime; break;
-                case BillingStatsRecordTypeId: attemptTime = cdrRecord.BatchStart; break;
-                default: throw new NotSupportedException(string.Format("Data Record Type: {0} is not supported", context.DataRecordTypeId));
-            }
+            dynamic cdrRecord = context.Record;
+            DateTime attemptTime = cdrRecord.GetFieldValue(dataRecordType.Settings.DateTimeField);
+
+            //switch (context.DataRecordTypeId.ToString().ToLower())
+            //{
+            //    case BillingCdrRecordTypeId: attemptTime = cdrRecord.AttemptDateTime; break;
+            //    case BillingStatsRecordTypeId: attemptTime = cdrRecord.BatchStart; break;
+            //    default: throw new NotSupportedException(string.Format("Data Record Type: {0} is not supported", context.DataRecordTypeId));
+            //}
 
             int? saleFinancialAccountId = cdrRecord.SaleFinancialAccount;
             if (saleFinancialAccountId.HasValue)
