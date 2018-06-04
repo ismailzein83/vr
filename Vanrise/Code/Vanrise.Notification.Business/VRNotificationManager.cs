@@ -104,13 +104,13 @@ namespace Vanrise.Notification.Business
             {
                 if (notifications.TryGetValue(notClearedNotification.EventKey, out matchedNotification))
                 {
-                    if (vrAlertLevelManager.GetAlertLevelWeight(matchedNotification.AlertLevelId) > vrAlertLevelManager.GetAlertLevelWeight(notClearedNotification.AlertLevelId))
-                    {
-                        matchedNotification = notClearedNotification;
-                    }
+                    if (vrAlertLevelManager.GetAlertLevelWeight(matchedNotification.AlertLevelId) < vrAlertLevelManager.GetAlertLevelWeight(notClearedNotification.AlertLevelId))
+                        notifications[notClearedNotification.EventKey] = notClearedNotification;
                 }
                 else
+                {
                     notifications.Add(notClearedNotification.EventKey, notClearedNotification);
+                }
             }
 
             return notifications;
