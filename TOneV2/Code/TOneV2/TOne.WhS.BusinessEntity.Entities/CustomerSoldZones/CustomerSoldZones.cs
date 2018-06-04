@@ -22,6 +22,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public int RoutingProductId { get; set; }
 
+        public HashSet<int> Services { get; set; }
     }
 
     public class CustomersSoldZoneDetail
@@ -35,12 +36,13 @@ namespace TOne.WhS.BusinessEntity.Entities
     }
 
     public class CustomerZoneDataDetail
-    {
+    { 
         public string CustomerName { get; set; }
 
         public decimal Rate { get; set; }
         
         public int RoutingProductId { get; set; }
 
+        public HashSet<int> Services { get; set; }
     }
 }

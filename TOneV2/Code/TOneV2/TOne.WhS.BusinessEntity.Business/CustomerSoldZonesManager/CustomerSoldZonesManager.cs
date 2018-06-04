@@ -111,7 +111,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             CustomerId = customerRate.CustomerId,
                             Rate = _currencyExchangeRateManager.ConvertValueToCurrency(customerRate.EffectiveRateValue, sysCurrencyId, input.Query.CurrencyId, DateTime.Now),
-                            RoutingProductId = customerRate.RoutingProductId
+                            RoutingProductId = customerRate.RoutingProductId,
+                            Services = customerRate.SaleZoneServiceIds
                         });
                     }
 
@@ -125,7 +126,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
             public override CustomersSoldZoneDetail EntityDetailMapper(CustomersSoldZone entity)
-            {
+            { 
                 var customerSoldZonesDetail = new CustomersSoldZoneDetail();
                 customerSoldZonesDetail.ZoneId = entity.ZoneId;
                 customerSoldZonesDetail.EffectiveOn = entity.EffectiveOn;
@@ -143,7 +144,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     CustomerName = _carrierAccountManager.GetCarrierAccountName(customerZoneData.CustomerId),
                     Rate = customerZoneData.Rate,
-                    RoutingProductId = customerZoneData.RoutingProductId
+                    RoutingProductId = customerZoneData.RoutingProductId,
+                    Services = customerZoneData.Services
                 };
             }
 

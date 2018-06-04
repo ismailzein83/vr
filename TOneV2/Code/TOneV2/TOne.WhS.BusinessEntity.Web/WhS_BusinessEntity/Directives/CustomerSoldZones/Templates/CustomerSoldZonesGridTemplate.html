@@ -15,6 +15,9 @@
                 <span style="width:50px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;font-weight:bold">
                     {{customerZone.Rate| number: viewScope.longPrecision}}
                 </span>
+                <span style="width:50px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden; padding-left:5px;">
+                    <vr-whs-be-services-viewer on-ready="customerZone.onServiceViewerReady"></vr-whs-be-services-viewer>
+                </span>
             </span>
         </div>
     </vr-datagridcolumn>
