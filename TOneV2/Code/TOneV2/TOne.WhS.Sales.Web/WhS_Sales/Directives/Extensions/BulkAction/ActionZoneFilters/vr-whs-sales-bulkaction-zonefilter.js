@@ -269,7 +269,7 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                 //The CountrySoldToCustomerFilter must be executed first because the others depend on it
                 if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                     var countrySoldToCustomerFilter = {
-                        $type: 'TOne.WhS.Sales.Business.CountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
+                        $type: 'TOne.WhS.Sales.Business.RPCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
                         CustomerId: bulkActionContext.ownerId,
                         EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
                         IsEffectiveInFuture: true

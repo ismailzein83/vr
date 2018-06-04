@@ -37,7 +37,7 @@ namespace Vanrise.Common.Business
             var country = s_vrObjectTrackingManager.GetObjectDetailById(countryHistoryId);
             return country.CastWithValidate<Country>("Country : historyId ", countryHistoryId);
         }
-        public IEnumerable<CountryInfo> GeCountriesInfo(CountryFilter filter)
+        public IEnumerable<CountryInfo> GetCountriesInfo(CountryFilter filter)
         {
             IEnumerable<Country> allCountries = GetCachedCountries().Values;
 
@@ -339,7 +339,16 @@ namespace Vanrise.Common.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<SourceCountryReaderConfig>(SourceCountryReaderConfig.EXTENSION_TYPE);
         }
-
+        public List<string> GetCountryNames(IEnumerable<int> countryIds)
+        {
+            List<string> countryNames = new List<string>();
+            foreach (var countryId in countryIds)
+            {
+                var countryName = GetCountryName(countryId);
+                countryNames.Add(countryName);
+            }
+            return countryNames;
+        }
         public Dictionary<string, long> GetExistingItemIds()
         {
             Dictionary<string, long> existingItemIds = new Dictionary<string, long>();

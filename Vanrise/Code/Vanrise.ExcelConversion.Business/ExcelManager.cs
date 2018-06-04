@@ -23,15 +23,14 @@ namespace Vanrise.ExcelConversion.Business
                 throw new NullReferenceException(String.Format("file '{0}'", fileId));
             if (file.Content == null)
                 throw new NullReferenceException(String.Format("file.Content '{0}'", fileId));
-            MemoryStream stream = new MemoryStream(file.Content);
-            Workbook workbook = new Workbook(stream);
-            Common.Utilities.ActivateAspose();
 
+            MemoryStream stream = new MemoryStream(file.Content);
+
+            Common.Utilities.ActivateAspose();
+            var workbook = CreateWorkbook(file, stream);
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             foreach (var sheet in workbook.Worksheets)
             {
-
-
                 ExcelWorksheet eSheet = new ExcelWorksheet()
                 {
                     Rows = new List<ExcelRow>(),
@@ -39,11 +38,8 @@ namespace Vanrise.ExcelConversion.Business
                 };
                 ArrayList mcells = sheet.Cells.MergedCells;
 
-
-
                 for (int i = 0; i < mcells.Count; i++)
                 {
-
                     CellArea area = (CellArea)mcells[i];
                     MergedCell mc = new MergedCell();
                     mc.col = area.StartColumn;
@@ -51,7 +47,6 @@ namespace Vanrise.ExcelConversion.Business
                     mc.rowspan = (area.EndRow - area.StartRow) + 1;
                     mc.colspan = (area.EndColumn - area.StartColumn) + 1;
                     eSheet.MergedCells.Add(mc);
-
                 }
 
                 ewb.Sheets.Add(eSheet);
@@ -109,8 +104,19 @@ namespace Vanrise.ExcelConversion.Business
 
             return ewb;
         }
+        public Workbook CreateWorkbook(VRFile file,MemoryStream stream)
+        {
+            if (file.Extension.ToLower().Equals("csv"))
+            {
+                TxtLoadOptions txtLoadOptions = new TxtLoadOptions();
+                txtLoadOptions.Separator = Convert.ToChar(",");
+                txtLoadOptions.Encoding = System.Text.Encoding.UTF8;
+                return new Workbook(stream, txtLoadOptions);
+            }
+            else
+               return new Workbook(stream);
+        }
 
-     
         public ExcelWorksheet ReadExcelFilePage(ExcelPageQuery Query)
         {
 
@@ -121,8 +127,8 @@ namespace Vanrise.ExcelConversion.Business
             if (file.Content == null)
                 throw new NullReferenceException(String.Format("file.Content '{0}'", Query.FileId));
             MemoryStream stream = new MemoryStream(file.Content);
-            Workbook workbook = new Workbook(stream);
             Common.Utilities.ActivateAspose();
+            var workbook = CreateWorkbook(file, stream);
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             var sheet = workbook.Worksheets[Query.SheetIndex];
             if (sheet == null)
@@ -175,13 +181,14 @@ namespace Vanrise.ExcelConversion.Business
                     {
                         if (cell.Type == CellValueType.IsDateTime)
                         {
-                            if(cell.Value != null)
+                            if (cell.Value != null)
                             {
                                 var valueDate = Convert.ToDateTime(cell.Value);
-                                if(valueDate != valueDate.Date)
+                                if (valueDate != valueDate.Date)
                                 {
                                     eCell.Value = valueDate.ToString(_generalSettingsManager.GetLongDateTimeFormat());
-                                }else
+                                }
+                                else
                                 {
                                     eCell.Value = valueDate.ToString(_generalSettingsManager.GetDateFormat());
                                 }

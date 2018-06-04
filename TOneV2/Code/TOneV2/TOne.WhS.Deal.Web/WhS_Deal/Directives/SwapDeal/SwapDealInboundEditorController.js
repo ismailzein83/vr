@@ -18,10 +18,6 @@
 
         var carrierAccountId;
 
-        var dealId;
-        var dealBED;
-        var dealEED;
-
         var countrySelectedPromiseDeferred;
         var saleZoneSelectorPayload;
         loadParameters();
@@ -35,10 +31,6 @@
                 swapDealInboundEntity = parameters.swapDealInbound;
                 context = parameters.context;
                 saleZoneSelectorPayload = parameters.context != undefined ? parameters.context.getSaleZoneSelectorPayload() : undefined;
-                carrierAccountId = parameters.carrierAccountId;
-                dealId = parameters.dealId;
-                dealBED = parameters.dealBED;
-                dealEED = parameters.dealEED;
             }
 
             isEditMode = (swapDealInboundEntity != undefined);
@@ -95,7 +87,6 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-
             if (isEditMode) {
                 loadAllControls();
             }
@@ -120,10 +111,16 @@
             var promises = [];
             promises.push(loadCountryPromiseDeferred.promise);
 
-            var payload;
-
+            var payload = {};
+            payload.filter = {
+                Filters: [{
+                    $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
+                    CustomerId: context.getCarrierAccountId(),
+                    EffectiveOn: context.getDealBED(),
+                    IsEffectiveInFuture: false
+                }]
+            };
             if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryId != undefined) {
-                payload = {};
                 payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.CountryId : undefined;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }

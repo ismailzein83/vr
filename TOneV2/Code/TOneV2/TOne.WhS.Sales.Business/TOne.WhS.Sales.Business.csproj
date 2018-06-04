@@ -138,7 +138,7 @@
     <Compile Include="Context\RatePlanContext.cs" />
     <Compile Include="Country\BulkActionApplicableToCountryContext.cs" />
     <Compile Include="Country\BulkActionApplicableToCountryFilter.cs" />
-    <Compile Include="Country\CountrySoldToCustomerFilter.cs" />
+    <Compile Include="Country\RPCountrySoldToCustomerFilter.cs" />
     <Compile Include="Country\CountryWithDefaultRateManager.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="ImportRatePlan\ImportBulkActionValidationCacheManager.cs" />

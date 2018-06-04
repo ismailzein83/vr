@@ -20,6 +20,7 @@ namespace Vanrise.ExcelConversion.Business
 
         public ConvertedExcel ConvertExcelFile(long fileId, ExcelConversionSettings conversionSettings, bool stopOnFirstEmptyRow, bool isCommaDecimalSeparator)
         {
+            ExcelManager excelManager = new ExcelManager();
             ConvertedExcel convertedExcel = new ConvertedExcel
             {
                 Fields = new ConvertedExcelFieldsByName(),
@@ -33,10 +34,11 @@ namespace Vanrise.ExcelConversion.Business
             if (file.Content == null)
                 throw new NullReferenceException(String.Format("file.Content '{0}'", fileId));
             MemoryStream stream = new MemoryStream(file.Content);
-            Workbook workbook = new Workbook(stream);
             Common.Utilities.ActivateAspose();
-            ConvertFields(conversionSettings, convertedExcel, workbook,isCommaDecimalSeparator);
-            ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow,isCommaDecimalSeparator);
+            var workbook = excelManager.CreateWorkbook(file, stream);
+            Common.Utilities.ActivateAspose();
+            ConvertFields(conversionSettings, convertedExcel, workbook, isCommaDecimalSeparator);
+            ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow, isCommaDecimalSeparator);
 
             return convertedExcel;
         }

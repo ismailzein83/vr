@@ -6,6 +6,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -71,6 +72,17 @@ namespace TOne.WhS.Deal.Business
                 if (excludedSupplierZoneNames.Count() > 0)
                     validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
             }
+            if (DealType == VolCommitmentDealType.Sell)
+            {
+                var invalidCountryIds = ValidateVolumeCommitmentCountries(CarrierAccountId, BeginDate, false);
+                if (invalidCountryIds.Count() > 0)
+                {
+                    CountryManager countrymanager = new CountryManager();
+                    var invalidCountryNames = countrymanager.GetCountryNames(invalidCountryIds);
+                    validationResult = false;
+                    validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), BeginDate));
+                }
+            }
 
             return validationResult;
         }
@@ -93,7 +105,20 @@ namespace TOne.WhS.Deal.Business
                 return zoneIds;
             }
         }
-
+        private List<int> ValidateVolumeCommitmentCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            List<int> invalidCountries = new List<int>();
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+            var customerCountries = customerCountryManager.GetCustomerCountryIds(customerId, effectiveOn, isEffectiveInFuture);
+            foreach (var item in Items)
+            {
+                if (!customerCountries.Contains(item.CountryId))
+                {
+                    invalidCountries.Add(item.CountryId);
+                }
+            }
+            return invalidCountries;
+        }
         public override List<long> GetDealSupplierZoneIds()
         {
             if (DealType == VolCommitmentDealType.Sell)

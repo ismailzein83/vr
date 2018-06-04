@@ -19,6 +19,9 @@
         var carrierAccountId;
         var zoneDirectiveAPI;
 
+        var volumeCommitmentType;
+        var dealBED;
+
         loadParameters();
         defineScope();
         load();
@@ -131,6 +134,9 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
+            dealBED = context.getDealBED();
+            volumeCommitmentType = context.getVolumeType();
+            carrierAccountId = context.getCarrierAccountId();
             loadAllControls();
         }
 
@@ -174,10 +180,19 @@
             var promises = [];
             promises.push(loadCountryPromiseDeferred.promise);
 
-            var payload;
-
+            var payload = {};
+            if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value)
+            {
+                payload.filter = {
+                    Filters: [{
+                        $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
+                        CustomerId: context.getCarrierAccountId(),
+                        EffectiveOn: context.getDealBED(),
+                        IsEffectiveInFuture: false
+                    }]
+                };
+            }
             if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryId != undefined) {
-                payload = {};
                 payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryId : undefined;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }

@@ -6,6 +6,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -137,6 +138,14 @@ namespace TOne.WhS.Deal.Business
             if ((Inbounds != null && Inbounds.Count > 0) && (Outbounds != null && Outbounds.Count > 0))
             {
                 ValidateSaleAndCost(validateBeforeSaveContext, ref validationResult);
+            }
+            var invalidCountryIds = ValidateSwapDealCountries(CarrierAccountId, BeginDate, false);
+            if (invalidCountryIds.Count() > 0)
+            {
+                CountryManager countrymanager = new CountryManager();
+                var invalidCountryNames = countrymanager.GetCountryNames(invalidCountryIds.Distinct());
+                validationResult = false;
+                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), BeginDate));
             }
 
             return validationResult;
@@ -281,7 +290,20 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
-
+        private List<int> ValidateSwapDealCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            List<int> invalidCountries = new List<int>();
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+            var customerCountries = customerCountryManager.GetCustomerCountryIds(customerId, effectiveOn, isEffectiveInFuture);
+            foreach (var inbound in Inbounds)
+            {
+                if (!customerCountries.Contains(inbound.CountryId))
+                {
+                    invalidCountries.Add(inbound.CountryId);
+                }
+            }
+            return invalidCountries;
+        }
         private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
         {
             if (Inbounds == null || Inbounds.Count == 0)

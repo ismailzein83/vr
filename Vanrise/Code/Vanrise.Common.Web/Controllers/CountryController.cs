@@ -38,7 +38,7 @@ namespace Vanrise.Common.Web.Controllers
 		{
 			var manager = new CountryManager();
 			CountryFilter countryFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<CountryFilter>(filter) : null;
-			return manager.GeCountriesInfo(countryFilter);
+			return manager.GetCountriesInfo(countryFilter);
 		}
 
 		[HttpGet]

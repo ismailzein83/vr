@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-	public class CountrySoldToCustomerFilter : ICountryFilter
+	public class RPCountrySoldToCustomerFilter : ICountryFilter
 	{
 		private Dictionary<int, DateTime> _datesByCountry;
 

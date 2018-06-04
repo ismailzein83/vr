@@ -28,6 +28,8 @@
 
         var carrierAccountInfo;
 
+        var originalEED;
+
 
         loadParameters();
         defineScope();
@@ -61,7 +63,9 @@
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
+               
                 if (carrierAccountInfo != undefined) {
+                    updateDescription();
                     var payload = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
@@ -153,7 +157,17 @@
                     return "Deactivation date must be less than deal EED";
                 return null;
             };
-            $scope.scopeModel.validateDatesRange = function () {
+            $scope.scopeModel.validateBED = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            };
+            $scope.scopeModel.validateEED = function () {
+                var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+                var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
+                var originalExpiredDate = UtilsService.createDateFromString(originalEED);
+                if (isEditMode && originalExpiredDate < today && eed < originalExpiredDate)
+                {
+                    return "Deal expired, EED can only be extended";
+                }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
 
@@ -164,8 +178,11 @@
                 var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
+                if ($scope.scopeModel.beginDate == undefined || $scope.scopeModel.endDate == undefined)
+                    return 'Please select Deal BED and Deal EED';
                 if (dealInboundAPI != undefined && !dealInboundAPI.hasData())
                     return 'Please, one record must be added at least.';
+               
                 return null;
             };
 
@@ -176,8 +193,11 @@
                 var selectedcarrier = carrierAccountSelectorAPI.getSelectedValues();
                 if (selectedcarrier == undefined)
                     return 'Please select a Carrier Account.';
+                if ($scope.scopeModel.beginDate == undefined || $scope.scopeModel.endDate == undefined)
+                    return 'Please select Deal BED and Deal EED';
                 if (dealOutboundAPI != undefined && !dealOutboundAPI.hasData())
                     return 'Please,one record must be added at least.';
+               
                 return null;
             };
             $scope.scopeModel.onDealStatusChanged = function () {
@@ -187,7 +207,7 @@
                     $scope.scopeModel.deActivationDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             };
             $scope.scopeModel.dataForBoundsReady = function () {
-                return (carrierAccountInfo != undefined);
+                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
             };
         }
         function load() {
@@ -242,6 +262,13 @@
             var endDate = new Date($scope.scopeModel.endDate);
             return ($scope.scopeModel.gracePeriod < UtilsService.diffDays(beginDate, endDate));
         }
+        function updateDescription() {
+            if (!isEditMode) {
+                setTimeout(function () {
+                    $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(VRDateTimeService.getNowDateTime());
+                });
+            }
+        }
         function setTitle() {
             if (isEditMode) {
                 if (dealEntity != undefined)
@@ -253,6 +280,7 @@
         function loadStaticData() {
             if (dealEntity == undefined)
                 return;
+            originalEED = dealEntity.Settings.EndDate;
             $scope.scopeModel.isCommitmentAgreement = isCommitmentAgreement();
             //console.log(isCommitmentAgreement())
             //if (isCommitmentAgreement())
@@ -471,8 +499,7 @@
                             CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
                         };
                     }
-                    else
-                    {
+                    else {
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSaleZonesIdsFromItems()
                         };
@@ -490,6 +517,15 @@
 
                     return payload;
                 },
+                getDealBED: function () {
+                    return $scope.scopeModel.beginDate
+                },
+                getDealEED: function () {
+                    return $scope.scopeModel.endDate
+                },
+                getCarrierAccountId: function () {
+                    return carrierAccountSelectorAPI.getSelectedIds();
+                }
             };
         }
         function getSelectedSaleZonesIdsFromItems(includedIds) {

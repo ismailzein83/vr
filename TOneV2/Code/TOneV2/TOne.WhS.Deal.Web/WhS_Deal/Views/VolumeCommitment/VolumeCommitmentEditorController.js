@@ -27,6 +27,8 @@
 
         var carrierAccountInfo;
 
+        var originalEED;
+
         loadParameters();
         defineScope();
         load();
@@ -92,7 +94,16 @@
                 if ($scope.scopeModel.selectedDealStatus != undefined)
                     return ($scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value);
             };
-            $scope.scopeModel.validateDatesRange = function () {
+            $scope.scopeModel.validateBED = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
+            };
+            $scope.scopeModel.validateEED = function () {
+                var today = UtilsService.createDateFromString(UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()));
+                var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
+                var originalExpiredDate = UtilsService.createDateFromString(originalEED);
+                if (isEditMode && originalExpiredDate < today && eed < originalExpiredDate) {
+                    return "Deal expired, EED can only be extended";
+                }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
             $scope.scopeModel.showVolumeItemSection = function ()
@@ -190,6 +201,7 @@
         function loadStaticData() {
             if (volumeCommitmentEntity == undefined)
                 return;
+            originalEED = volumeCommitmentEntity.Settings.EndDate;
             $scope.scopeModel.description = volumeCommitmentEntity.Name;
             $scope.scopeModel.beginDate = volumeCommitmentEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EndDate;
@@ -408,6 +420,18 @@
                         }
                         return idName;
                     }
+                },
+                getVolumeType: function () {
+                    return $scope.scopeModel.selectedVolumeCommitmentType;
+                },
+                getDealBED: function () {
+                    return $scope.scopeModel.beginDate;
+                },
+                getDealEED: function () {
+                    return $scope.scopeModel.endDate;
+                },
+                getCarrierAccountId: function () {
+                    return carrierAccountSelectorAPI.getSelectedIds();
                 }
 
             };
