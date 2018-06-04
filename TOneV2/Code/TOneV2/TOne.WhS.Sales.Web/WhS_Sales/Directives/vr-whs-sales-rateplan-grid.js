@@ -206,7 +206,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 									array.push(i);
 							}
 
-							if (array.length == routeOptions.length) {
+							if (array.length == routeOptionsForView.length) {
 								setColorOfRouteOptions(routeOptionsForView, null);
 								rowStyle = { CssClass: 'rate-plane-bg-danger' };
 							}
