@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Demo.Module.Business;
+using Demo.Module.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
-using Demo.Module.Entities;
-using Demo.Module.Business;
 using Vanrise.Entities;
-
 
 namespace Demo.Module.Web.Controllers
 {
@@ -15,36 +14,33 @@ namespace Demo.Module.Web.Controllers
     [JSONWithTypeAttribute]
     public class Demo_Module_BuildingController : BaseAPIController
     {
-    //    BranchManager branchManager = new BranchManager();
-       
+        BuildingManager buildingManager = new BuildingManager();
+        [HttpPost]
+        [Route("GetFilteredBuildings")]
+        public object GetFilteredBuildings(DataRetrievalInput<BuildingQuery> input)
+        {
+            return GetWebResponse(input, buildingManager.GetFilteredBuildings(input));
+        }
 
-    //    [HttpPost]
-    //    [Route("AddBranch")]
-    //    public InsertOperationOutput<BranchDetails> AddBranch(Branch branch)
-    //    {
-    //        return branchManager.AddBranch(branch);
-    //    }
+        [HttpGet]
+        [Route("GetBuildingById")]
+        public Building GetBuildingById(long buildingId)
+        {
+            return buildingManager.GetBuildingById(buildingId);
+        }
 
-    //    [HttpPost]
-    //    [Route("GetFilteredBranches")]
-    //    public object GetFilteredBranches(DataRetrievalInput<BranchQuery> input)
-    //    {
-    //        return GetWebResponse(input, branchManager.GetFilteredBranches(input));
-    //    }
+        [HttpPost]
+        [Route("UpdateBuilding")]
+        public UpdateOperationOutput<BuildingDetails> UpdateBuilding(Building building)
+        {
+            return buildingManager.UpdateBuilding(building);
+        }
 
-    //    [HttpGet]
-    //    [Route("GetBranchById")]
-    //    public Branch GetBranchById(int branchId)
-    //    {
-    //        return branchManager.GetBranchById(branchId);
-    //    }
-
-
-    //    [HttpPost]
-    //    [Route("UpdateBranch")]
-    //    public UpdateOperationOutput<BranchDetails> UpdateBranch(Branch branch)
-    //    {
-    //        return branchManager.UpdateBranch(branch);
-    //    }
+        [HttpPost]
+        [Route("AddBuilding")]
+        public InsertOperationOutput<BuildingDetails> AddBuilding(Building building)
+        {
+            return buildingManager.AddBuilding(building);
+        }
     }
 }

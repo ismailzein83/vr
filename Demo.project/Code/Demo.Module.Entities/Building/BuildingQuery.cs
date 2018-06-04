@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.Module.Entities.Building
+namespace Demo.Module.Entities
 {
-    class BuildingQuery
+   public class BuildingQuery
     {
+        public string Name { get; set; }
     }
 }
