@@ -81,6 +81,7 @@
     <Compile Include="DataRecordFields\FieldGuidType.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\EditGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\LimitResultFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBESaveConditions\ConditionGroupSaveCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\BasicAdvancedFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\FilterGroupFilterDefinitionSettings.cs" />
