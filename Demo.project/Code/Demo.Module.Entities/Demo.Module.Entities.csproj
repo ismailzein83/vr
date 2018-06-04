@@ -75,6 +75,9 @@
     <Compile Include="Company\CompanyQuery.cs" />
     <Compile Include="Branch\Setting\Setting.cs" />
     <Compile Include="Branch\Setting\SettingConfig.cs" />
+    <Compile Include="Family\Family.cs" />
+    <Compile Include="Family\FamilyDetails.cs" />
+    <Compile Include="Family\FamilyQuery.cs" />
     <Compile Include="Item\Item.cs" />
     <Compile Include="Item\ItemDetails.cs" />
     <Compile Include="Item\ItemInfo.cs" />

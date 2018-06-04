@@ -63,6 +63,7 @@
     <Compile Include="BuildingDataManager.cs" />
     <Compile Include="CollegeDataManager.cs" />
     <Compile Include="CompanyDataManager.cs" />
+    <Compile Include="FamilyDataManager.cs" />
     <Compile Include="ItemDataManager.cs" />
     <Compile Include="ProductDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

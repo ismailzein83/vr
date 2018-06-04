@@ -52,10 +52,12 @@
     <Compile Include="DemoModuleFactory.cs" />
     <Compile Include="IBranchDataManager.cs" />
     <Compile Include="IBuildingDataManager.cs" />
+    <Compile Include="IMemberDataManager.cs" />
     <Compile Include="ICollegeDataManager.cs" />
     <Compile Include="ICompanyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IItemDataManager.cs" />
+    <Compile Include="IFamilyDataManager.cs" />
     <Compile Include="IProductDataManager.cs" />
     <Compile Include="IUniversityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

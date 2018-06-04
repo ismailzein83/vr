@@ -147,6 +147,8 @@
     <Content Include="Demo_Module\Directives\Company\demo-module-company-grid.js" />
     <Content Include="Demo_Module\Directives\Company\demo-module-company-selector.js" />
     <Content Include="Demo_Module\Directives\Company\Templates\CompanyGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Family\demo-module-family-grid.js" />
+    <Content Include="Demo_Module\Directives\Family\Template\FamilyGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Item\demo-module-item-grid.js" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
@@ -173,6 +175,7 @@
     <Content Include="Demo_Module\Services\APIServices\CollegeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CollegeInfoConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\FamilyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ItemAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ProductAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
@@ -182,6 +185,7 @@
     <Content Include="Demo_Module\Services\CollegeService.js" />
     <Content Include="Demo_Module\Services\CompanyService.js" />
     <Content Include="Demo_Module\Services\DescriptionService.js" />
+    <Content Include="Demo_Module\Services\FamilyService.js" />
     <Content Include="Demo_Module\Services\ItemService.js" />
     <Content Include="Demo_Module\Services\ProductService.js" />
     <Content Include="Demo_Module\Services\UniversityService.js" />
@@ -204,6 +208,10 @@
     <Content Include="Demo_Module\Views\CompanyEditorController.js" />
     <Content Include="Demo_Module\Views\CompanyManagement.html" />
     <Content Include="Demo_Module\Views\CompanyManagementController.js" />
+    <Content Include="Demo_Module\Views\FamilyEditor.html" />
+    <Content Include="Demo_Module\Views\FamilyEditorController.js" />
+    <Content Include="Demo_Module\Views\FamilyManagement.html" />
+    <Content Include="Demo_Module\Views\FamilyManagementController.js" />
     <Content Include="Demo_Module\Views\ItemEditor.html" />
     <Content Include="Demo_Module\Views\ItemEditorController.js" />
     <Content Include="Demo_Module\Views\ProductsEditor.html" />
@@ -223,6 +231,7 @@
     <Compile Include="Controllers\CollegeInfoConfigsController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\FamilyController.cs" />
     <Compile Include="Controllers\SettingConfigsController.cs" />
     <Compile Include="Controllers\UniversityController.cs" />
     <Compile Include="Controllers\VRProductController.cs" />
