@@ -11,11 +11,8 @@ namespace Vanrise.AccountBalance.Entities
         public Guid BillingTransactionTypeId { get; set; }
         public string Name { get; set; }
         public bool IsCredit { get; set; }
-
         public BillingTransactionTypeSettings Settings { get; set; }
     }
-
-    
 
     public class BillingTransactionTypeSettings
     {
@@ -24,11 +21,4 @@ namespace Vanrise.AccountBalance.Entities
         /// </summary>
         public bool ManualAdditionDisabled { get; set; }
     }
-
- 
-
-
-  
-
-   
 }
