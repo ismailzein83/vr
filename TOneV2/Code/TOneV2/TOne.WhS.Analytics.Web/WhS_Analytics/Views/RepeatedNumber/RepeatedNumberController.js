@@ -8,6 +8,12 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
 
     var switchDirectiveAPI;
     var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    
+    var customerApi;
+    var customerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var supplierApi;
+    var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var timeRangeDirectiveAPI;
     var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -17,7 +23,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
 
     var phoneNumberDirectiveAPI;
     var phoneNumberReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-    
+
     defineScope();
     load();
 
@@ -29,6 +35,18 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
         $scope.onSwitchDirectiveReady = function (api) {
             switchDirectiveAPI = api;
             switchReadyPromiseDeferred.resolve();
+        };
+
+       
+
+        $scope.onCustomerDirectiveReady = function (api) {
+            customerApi = api;
+            customerReadyPromiseDeferred.resolve();
+        };
+
+        $scope.onSupplierDirectiveReady = function (api) {
+            supplierApi = api;
+            supplierReadyPromiseDeferred.resolve();
         };
 
         $scope.nRecords = '10';
@@ -59,7 +77,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             phoneNumberReadyPromiseDeferred.resolve();
         };
 
-        
+
         $scope.search = function () {
             return mainGridAPI.loadGrid(getQuery());
         };
@@ -67,7 +85,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
 
     function getQuery() {
         var filter = buildFilter();
-        
+
         var query = {
             Filter: filter,
             From: $scope.fromDate,
@@ -87,7 +105,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadSwitches, loadPhoneNumber, loadTimeRangeSelector, loadCallStatus])
+        return UtilsService.waitMultipleAsyncOperations([loadSwitches, loadCustomerSelector, loadSupplierSelector, loadPhoneNumber, loadTimeRangeSelector, loadCallStatus])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -99,6 +117,9 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
     function buildFilter() {
         var filter = {};
         filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
+        filter.CustomerIds = customerApi.getSelectedIds();
+        filter.SupplierIds = supplierApi.getSelectedIds();
+
         return filter;
     }
 
@@ -111,6 +132,22 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, payload, loadSwitchPromiseDeferred);
         });
         return loadSwitchPromiseDeferred.promise;
+    }
+
+    function loadCustomerSelector() {
+        var loadCustomerPromiseDeferred = UtilsService.createPromiseDeferred();
+        customerReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(customerApi, undefined, loadCustomerPromiseDeferred);
+        });
+        return loadCustomerPromiseDeferred.promise;
+    }
+
+    function loadSupplierSelector() {
+        var loadSupplierPromiseDeferred = UtilsService.createPromiseDeferred();
+        supplierReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(supplierApi, undefined, loadSupplierPromiseDeferred);
+        });
+        return loadSupplierPromiseDeferred.promise;
     }
 
     function loadTimeRangeSelector() {
@@ -126,7 +163,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
         var callStatusLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         callStatusReadyPromiseDeferred.promise.then(function () {
             var payload = { selectedIds: 0 };
-            VRUIUtilsService.callDirectiveLoad(callStatusDirectiveAPI, payload , callStatusLoadPromiseDeferred);
+            VRUIUtilsService.callDirectiveLoad(callStatusDirectiveAPI, payload, callStatusLoadPromiseDeferred);
         });
         return callStatusLoadPromiseDeferred.promise;
     }

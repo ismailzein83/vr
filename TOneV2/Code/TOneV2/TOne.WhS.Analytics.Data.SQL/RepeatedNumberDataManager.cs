@@ -157,6 +157,8 @@ namespace TOne.WhS.Analytics.Data.SQL
         private void AddFilterToQuery(RepeatedNumberFilter filter, StringBuilder whereBuilder)
         {
             AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");
+            AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
+            AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
         }
         private void AddFilter<T>(StringBuilder whereBuilder, IEnumerable<T> values, string column)
         {
