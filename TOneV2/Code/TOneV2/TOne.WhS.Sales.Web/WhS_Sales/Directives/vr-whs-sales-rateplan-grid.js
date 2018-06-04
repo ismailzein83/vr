@@ -195,7 +195,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 					var routeOptionsForView = dataItem.RouteOptionsDetailsForView;
 					if (rate == undefined) {
 						setColorOfRouteOptions(routeOptions, null);
-						rowStyle = { CssClass: 'bg-success' };
+						rowStyle = { CssClass: 'rate-plane-bg-success' };
 					}
 					else { // Validate the rate
 						if (routeOptionsForView != null && routeOptionsForView.length > 0) {
@@ -208,7 +208,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 							if (array.length == routeOptions.length) {
 								setColorOfRouteOptions(routeOptionsForView, null);
-								rowStyle = { CssClass: "bg-danger" };
+								rowStyle = { CssClass: 'rate-plane-bg-danger' };
 							}
 							else if (array.length > 0) {
 								for (var i = 0; i < routeOptionsForView.length; i++)
