@@ -105,7 +105,8 @@ namespace Vanrise.Common.Business
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
             {
-                mailMessage.To.Add(new MailAddress(toAddress));
+                if (!String.IsNullOrEmpty(toAddress))
+                    mailMessage.To.Add(new MailAddress(toAddress));
             }
 
             mailMessage.Subject = subject;
@@ -134,7 +135,8 @@ namespace Vanrise.Common.Business
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
             {
-                mailMessage.To.Add(new MailAddress(toAddress));
+                if (!string.IsNullOrEmpty(toAddress))
+                    mailMessage.To.Add(new MailAddress(toAddress));
             }
 
             if (!String.IsNullOrWhiteSpace(cc))
@@ -142,7 +144,8 @@ namespace Vanrise.Common.Business
                 string[] ccAddresses = cc.Split(';', ',', ':');
                 foreach (var ccAddress in ccAddresses)
                 {
-                    mailMessage.CC.Add(new MailAddress(ccAddress));
+                    if (!string.IsNullOrEmpty(ccAddress))
+                        mailMessage.CC.Add(new MailAddress(ccAddress));
                 }
             }
 
@@ -151,7 +154,8 @@ namespace Vanrise.Common.Business
                 string[] bccAddresses = bcc.Split(';', ',', ':');
                 foreach (var bccAddress in bccAddresses)
                 {
-                    mailMessage.Bcc.Add(new MailAddress(bccAddress));
+                    if (!string.IsNullOrEmpty(bccAddress))
+                        mailMessage.Bcc.Add(new MailAddress(bccAddress));
                 }
             }
 
