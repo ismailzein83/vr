@@ -1,4 +1,4 @@
-﻿using Demo.Module.Entities.Building;
+﻿using Demo.Module.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
