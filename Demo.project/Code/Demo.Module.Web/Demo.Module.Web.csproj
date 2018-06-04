@@ -154,6 +154,8 @@
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-selector.js" />
     <Content Include="Demo_Module\Directives\Product\Templates\ProductGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Room\demo-module-room-grid.js" />
+    <Content Include="Demo_Module\Directives\Room\Templates\RoomGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-setting-selector.js" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-small-setting.js" />
@@ -178,6 +180,7 @@
     <Content Include="Demo_Module\Services\APIServices\FamilyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ItemAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ProductAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\RoomAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UniversityAPIService.js" />
     <Content Include="Demo_Module\Services\BranchService.js" />
@@ -188,6 +191,7 @@
     <Content Include="Demo_Module\Services\FamilyService.js" />
     <Content Include="Demo_Module\Services\ItemService.js" />
     <Content Include="Demo_Module\Services\ProductService.js" />
+    <Content Include="Demo_Module\Services\RoomService.js" />
     <Content Include="Demo_Module\Services\UniversityService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
     <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
@@ -218,6 +222,10 @@
     <Content Include="Demo_Module\Views\ProductsEditorController.js" />
     <Content Include="Demo_Module\Views\ProductsManagement.html" />
     <Content Include="Demo_Module\Views\ProductsManagementController.js" />
+    <Content Include="Demo_Module\Views\RoomEditor.html" />
+    <Content Include="Demo_Module\Views\RoomEditorController.js" />
+    <Content Include="Demo_Module\Views\RoomManagement.html" />
+    <Content Include="Demo_Module\Views\RoomManagementController.js" />
     <Content Include="Demo_Module\Views\UniversityEditor.html" />
     <Content Include="Demo_Module\Views\UniversityEditorController.js" />
     <Content Include="Demo_Module\Views\UniversityManagement.html" />
@@ -225,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
     <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\CollegeController.cs" />
@@ -278,6 +287,7 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
