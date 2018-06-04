@@ -115,9 +115,9 @@
     }
     /* end  rtl class*/
 
-    .rate-plan-grid {
-        border-bottom: 1px solid #D0D0D0;
-    }
+        .rate-plan-grid {
+            border-bottom: 1px solid #D0D0D0;
+        }
 
         .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) {
             background-color: #fff !important;
@@ -132,17 +132,12 @@
         }
 
         .rate-plan-grid[alternative-color] .vr-datagrid-body.odd > div:first-of-type:hover {
-            background-color: #d7ebee !important;
+            background-color: #c6f4fb !important;
         }
 
         .rate-plan-grid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
-            background-color: #d7ebee !important;
+            background-color: #c6f4fb !important;
         }
-
-        .rate-plan-grid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
-            background-color: #d7ebee !important;
-        }
-
 
         .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container {
             border-right: 1px solid rgb(208, 208, 208);
@@ -150,17 +145,17 @@
             padding: 1px 0px;
         }
 
-            .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container:last-child {
-                border-right: unset;
-            }
+        .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container:last-child {
+            border-right: unset;
+        }
 
-            .rate-plane-bg-danger {
-                background-color: #e65e5e;
-            }
+        .rate-plane-bg-danger {
+            background-color: #e65e5e;
+        }
 
-            .rate-plane-bg-success {
-                background-color: #bcf5a4;
-            }
+        .rate-plane-bg-success {
+            background-color: #bcf5a4;
+        }
 </style>
 
 <div vr-loader="isLoading" ng-show="showDirective">
@@ -589,9 +584,9 @@
                                         <vr-validation-group validationcontext="dataItem.validationContext">
                                             <div class="vr-datagrid-body" ng-class="$index%2==0 && !getRowStyle(dataItem).CssClass ? 'odd' : '' ">
                                                 <div ng-class="getRowStyle(dataItem).CssClass" style="min-height: 24px;border-right:1px solid #D0D0D0;border-left:1px solid #D0D0D0">
-                                                    <div ng-if="!dataItem.displayRow" style="width:100%;position:relative" >
-                                                        <div style=" margin: -2px; height :24px;display:inline-block;width:20px" >
-                                                            <div class="row-toggle" >
+                                                    <div ng-if="!dataItem.displayRow" style="width:100%;position:relative">
+                                                        <div style=" margin: -2px; height :24px;display:inline-block;width:20px">
+                                                            <div class="row-toggle">
                                                                 <span class="glyphicon glyphicon-menu-right hand-cursor toggle-icon expand" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
                                                                 <span class="glyphicon glyphicon-menu-down hand-cursor  toggle-icon" style="top: calc(50% - 6px); left: 4px" ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
                                                             </div>
@@ -604,7 +599,7 @@
                                                         <div style="white-space:nowrap;display:flex;" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal'}">
                                                             <div style="display:inline-flex;width:100%" class="vr-datagrid-row" ng-click="onRowClicked($event);">
 
-                                                                <div style=" margin: -2px; height :24px;display:inline-flex;width:20px" >
+                                                                <div style=" margin: -2px; height :24px;display:inline-flex;width:20px">
                                                                     <div class="row-toggle">
                                                                         <span class="glyphicon glyphicon-menu-right hand-cursor toggle-icon expand" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
                                                                         <span class="glyphicon glyphicon-menu-down hand-cursor toggle-icon " ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
@@ -778,8 +773,7 @@
                                                                     <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
                                                                         <div class="vr-datagrid-cell">
                                                                             <div class="vr-datagrid-celltext ">
-                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}"
->
+                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
                                                                                     <vr-datetimepicker type="date"
                                                                                                        value="dataItem.CurrentRateEED"
                                                                                                        onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
@@ -801,15 +795,15 @@
                                                                     <!--</div>-->
                                                                 </div>
                                                             </div>
-                                                         
-                                                                <div ng-if="dataItem.loadDrilldownTemplate" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;display:block;background-color:#fff">
-                                                                    <div style="margin:-2px;width:20px;display:inline-block"></div>
-                                                                    <div style="width:calc(100% - 20px);display:inline-block;padding:5px;background-color:#F5F5F5;border-left:1px solid #D0D0D0">
-                                                                        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-                                                                    </div>
+
+                                                            <div ng-if="dataItem.loadDrilldownTemplate" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;display:block;background-color:#fff">
+                                                                <div style="margin:-2px;width:20px;display:inline-block"></div>
+                                                                <div style="width:calc(100% - 20px);display:inline-block;padding:5px;background-color:#F5F5F5;border-left:1px solid #D0D0D0">
+                                                                    <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
                                                                 </div>
-</div>
-                                                       
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                         </vr-validation-group>
