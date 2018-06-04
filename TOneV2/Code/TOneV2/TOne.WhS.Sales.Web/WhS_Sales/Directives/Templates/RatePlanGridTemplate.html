@@ -1,5 +1,5 @@
 ﻿<style type="text/css">
-    /*start of rate-plan-grid */
+  /*start of rate-plan-grid */
     .rate-plan-grid .vr-datagrid-header div {
         text-transform: none;
     }
@@ -123,6 +123,9 @@
             background-color: #fff !important;
         }
 
+        .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(even){
+            background-color: #e9e9e9 !important;
+        }
         .rate-plan-grid[horizontal-line="true"] .vr-datagrid-body {
             border-bottom: 1px solid #D0D0D0;
         }
@@ -132,11 +135,19 @@
         }
 
         .rate-plan-grid[alternative-color] .vr-datagrid-body.odd > div:first-of-type:hover {
-            background-color: #c6f4fb !important;
+            background-color: #1be1ff  !important;
         }
 
         .rate-plan-grid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
-            background-color: #c6f4fb !important;
+            background-color: #1be1ff  !important;
+        }
+
+		.rate-plan-grid .vr-datagrid-datacells-click {
+			background-color: #1be1ff  !important;
+		}
+
+        .rate-plan-grid .vr-datagrid-datacells-click .vr-datagrid-cell-container {
+            background-color: #1be1ff  !important;
         }
 
         .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container {
@@ -151,11 +162,7 @@
 
         .rate-plane-bg-danger {
             background-color: #e65e5e;
-        }
-
-        .rate-plane-bg-success {
-            background-color: #bcf5a4;
-        }
+        }        
 </style>
 
 <div vr-loader="isLoading" ng-show="showDirective">

@@ -195,7 +195,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 					var routeOptionsForView = dataItem.RouteOptionsDetailsForView;
 					if (rate == undefined) {
 						setColorOfRouteOptions(routeOptions, null);
-						rowStyle = { CssClass: 'rate-plane-bg-success' };
+						rowStyle = { CssClass: 'bg-success' };
 					}
 					else { // Validate the rate
 						if (routeOptionsForView != null && routeOptionsForView.length > 0) {
