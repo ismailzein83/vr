@@ -37,7 +37,7 @@ namespace Vanrise.GenericData.Entities
 
         List<string> FieldNames { get; }
 
-        int LimitResult { get; }
+        int? LimitResult { get; }
 
         OrderDirection Direction { get; }
     }

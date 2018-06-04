@@ -18,7 +18,7 @@ namespace Vanrise.GenericData.Entities
 
         public RecordFilterGroup FilterGroup { get; set; }
 
-        public int LimitResult { get; set; }
+        public int? LimitResult { get; set; }
 
         public OrderDirection Direction { get; set; }
 

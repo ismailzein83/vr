@@ -50,16 +50,12 @@ namespace Vanrise.GenericData.Business
             var idDataRecordField = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
             var storageRecords = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
             {
-
-                FromRow = 0,
-                ToRow = 1000,
                 SortByColumnName = string.Format("FieldValues.{0}.Description", idDataRecordField.Name),
                 Query = new DataRecordQuery
                 {
                     Columns = columns,
                     ColumnTitles = columnTitles,
                     DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId },
-                    LimitResult = 1000,
                 },
             }) as BigResult<DataRecordDetail>;
 
@@ -279,7 +275,7 @@ namespace Vanrise.GenericData.Business
                     ColumnTitles = columnTitles,
                     DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId },
                     Direction = OrderDirection.Descending,
-                    LimitResult = 1000,
+                    LimitResult = input.Query.LimitResult,
                     //SortColumns=,
                     //ToTime
                 },

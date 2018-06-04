@@ -13,7 +13,7 @@ namespace Vanrise.GenericData.Entities
         public DateTime? FromTime { get; set; }
         public DateTime? ToTime { get; set; }
         public RecordFilterGroup FilterGroup { get; set; }
-       
+        public int? LimitResult { get; set; }
         public List<GenericBusinessEntityFilter> Filters { get; set; }
     }
     public class GenericBusinessEntityFilter

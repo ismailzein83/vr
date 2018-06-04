@@ -34,6 +34,9 @@ namespace Vanrise.GenericData.Business
             DataStore dataStore = new DataStoreManager().GetDataStore(dataRecordStorage.DataStoreId);
             dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);
             dataStore.Settings.ThrowIfNull("dataStore.Settings", dataRecordStorage.DataStoreId);
+           
+            if (dataRecordStorage.Settings.RequiredLimitResult && !input.Query.LimitResult.HasValue)
+                throw new Exception("Limit result should not be null.");
 
             var remoteRecordDataManager = dataStore.Settings.GetRemoteRecordDataManager(new GetRemoteRecordStorageDataManagerContext() { DataStore = dataStore, DataRecordStorage = dataRecordStorage });
             if (remoteRecordDataManager != null)
@@ -97,6 +100,7 @@ namespace Vanrise.GenericData.Business
                 }
                 else
                 {
+
                     return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = recordType.DataRecordTypeId });
                 }
             }
@@ -799,10 +803,24 @@ namespace Vanrise.GenericData.Business
         {
             if (records.Count > 0)
             {
+                IOrderedEnumerable<DataRecord> orderedDataRecord = null;
                 if (input.Query.Direction == OrderDirection.Ascending)
-                    return records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult).ToList();
+                {
+                    orderedDataRecord = records.OrderBy(itm => itm.RecordTime);
+                }
                 else
-                    return records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult).ToList();
+                {
+                    orderedDataRecord = records.OrderByDescending(itm => itm.RecordTime);
+                }
+
+                if (input.Query.LimitResult.HasValue)
+                {
+                    return orderedDataRecord.Take(input.Query.LimitResult.Value).ToList();
+                }
+                else
+                {
+                    return orderedDataRecord.ToList();
+                }
             }
             else
             {
@@ -1132,7 +1150,7 @@ namespace Vanrise.GenericData.Business
                 set;
             }
 
-            public int LimitResult
+            public int? LimitResult
             {
                 get;
                 set;

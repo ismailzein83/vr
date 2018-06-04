@@ -614,17 +614,17 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        private string BuildQuery(List<string> fieldNames, int limitResult, OrderDirection orderDirection, string recordFilter)
+        private string BuildQuery(List<string> fieldNames, int? limitResult, OrderDirection orderDirection, string recordFilter)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             string tableName = GetTableNameWithSchema();
 
             string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
             string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, orderDirection == OrderDirection.Ascending ? "ASC" : "DESC");
-            StringBuilder str = new StringBuilder(string.Format(@"  select Top {0} {1} from {2} WITH (NOLOCK)
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} {1} from {2} WITH (NOLOCK)
                                                                     where (@FromTime is null or {3} >= @FromTime) 
                                                                     and (@ToTime is null or {3} <= @ToTime) {4} {5}",
-                                                                    limitResult, string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
+                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
                                                                     tableName, dateTimeColumn, recordFilterResult, orderResult));
             //input.SortByColumnName = dateTimeColumn;
             return str.ToString();
