@@ -67,6 +67,27 @@ namespace TOne.WhS.Deal.Business
             record.OrigCostCurrencyId = record.CostCurrencyId;
         }
 
+        /// <summary>
+        /// used in data transformation
+        /// </summary>
+        /// <param name="record"></param>
+        public void FillOrigSMSValues(dynamic record)
+        {
+            record.OrigSaleRateId = record.SaleRateId;
+            record.OrigSaleRateValue = record.SaleRateValue;
+            record.OrigSaleNet = record.SaleNet;
+            record.OrigSaleExtraChargeRateValue = record.SaleExtraChargeRateValue;
+            record.OrigSaleExtraChargeValue = record.SaleExtraChargeValue;
+            record.OrigSaleCurrencyId = record.SaleCurrencyId;
+
+            record.OrigCostRateId = record.CostRateId;
+            record.OrigCostRateValue = record.CostRateValue;
+            record.OrigCostNet = record.CostNet;
+            record.OrigCostExtraChargeRateValue = record.CostExtraChargeRateValue;
+            record.OrigCostExtraChargeValue = record.CostExtraChargeValue;
+            record.OrigCostCurrencyId = record.CostCurrencyId;
+        }
+
         public void FillOrigSaleDealValues(dynamic record)
         {
             DealSaleZoneGroupWithoutRate dealSaleZoneGroup = GetAccountSaleZoneGroup(record.CustomerId, record.SaleZoneId, record.AttemptDateTime);
