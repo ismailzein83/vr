@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using Vanrise.Data;
 using Vanrise.Data.SQL;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
@@ -57,6 +54,9 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void SaveRoutesSucceededToDB(Dictionary<string, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
 		{
+			if (routesWithCommandsByBO == null || routesWithCommandsByBO.Count == 0)
+				return;
+
 			Object dbApplyAddStream = InitialiazeStreamForDBApply();
 			Object dbApplyUpdateStream = InitialiazeStreamForDBApply();
 			Object dbApplyDeleteStream = InitialiazeStreamForDBApply();

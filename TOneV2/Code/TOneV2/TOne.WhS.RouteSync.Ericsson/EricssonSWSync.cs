@@ -114,12 +114,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (routeCasesToAdd.Count > 0)
 				routeCases = InsertAndGetRouteCases(context.SwitchId, routeCasesToAdd);
 
-			routeCases.ThrowIfNull("routeCases");
+			routeCases.ThrowIfNull(string.Format("No route cases found for switch with id '{0}'", context.SwitchId));
 
 			foreach (var routesToConvertKvp in routesToConvertByRCString)
 			{
 				RouteCase routeCase = routeCases.GetRecord(routesToConvertKvp.Key);
-				routeCase.ThrowIfNull("routeCase");
+				routeCase.ThrowIfNull("No route case found");
 
 				var routes = routesToConvertKvp.Value.Select(item => { item.RCNumber = routeCase.RCNumber; return item; });
 				convertedRoutes.AddRange(routes);
@@ -242,7 +242,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 			if (failedCustomerMappingToUpdate.Count > 0)
 				customerMappingDataManager.UpdateCustomerMappingsInTempTable(failedCustomerMappingToUpdate.Select(item => item.CustomerMappingWithActionType.CustomerMapping));
-
 			#endregion
 
 			#region execute and log Route Cases
@@ -469,6 +468,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 		private SupplierMapping GetSupplierMapping(string supplierId)
 		{
+			if (CarrierMappings == null || CarrierMappings.Count == 0)
+				return null;
 			var supplierCarrierMapping = CarrierMappings.GetRecord(supplierId);
 			if (supplierCarrierMapping == null)
 				return null;
@@ -694,7 +695,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 		{
 			var routeCases = new RouteCaseManager().GetAllRouteCases(switchId);
 			if (routeCases == null || routeCases.Count == 0)
-				throw new VRBusinessException(string.Format("No route cases found switch with id {0}", switchId));
+				throw new VRBusinessException(string.Format("No route cases found for switch with id {0}", switchId));
 
 			Dictionary<string, List<EricssonRouteWithCommands>> result = ericssonRoutesToDeleteWithCommands != null ? new Dictionary<string, List<EricssonRouteWithCommands>>(ericssonRoutesToDeleteWithCommands) : new Dictionary<string, List<EricssonRouteWithCommands>>();
 
@@ -769,16 +770,21 @@ namespace TOne.WhS.RouteSync.Ericsson
 			List<string> deletedRouteCommands = new List<string>();
 
 			var codeGroupObject = new CodeGroupManager().GetMatchCodeGroup(route.Code);
-			codeGroupObject.ThrowIfNull(string.Format("CodeGroup not found for code {0}.", route.Code));
+			codeGroupObject.ThrowIfNull(string.Format("CodeGroup not found for code '{0}'.", route.Code));
 			string routeCodeGroup = codeGroupObject.Code;
 
 			CarrierMapping carrierCustomerMapping;
 			if (!carrierMappingByCustomerBo.TryGetValue(route.BO, out carrierCustomerMapping))
 			{
-				carrierCustomerMapping.ThrowIfNull(string.Format("No customer mapping found with BO: {0}.", route.BO));
+				carrierCustomerMapping.ThrowIfNull(string.Format("No customer mapping found with BO: '{0}'.", route.BO));
 			}
 
+			if (routeCases == null || routeCases.Count == 0)
+				throw new NullReferenceException("No route cases found.");
+
 			var routeCase = routeCases.FindRecord(item => item.RCNumber == route.RCNumber);
+			if (routeCase == null)
+				throw new NullReferenceException(string.Format("No route cases found with route case number '{0}'.", route.RCNumber));
 			var options = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
 
 			EricssonRouteProperties ericssonRouteProperties = GetRouteTypeAndParameters(supplierByOutTrunk, route, ref routeCodeGroup, carrierCustomerMapping, options);
@@ -1184,6 +1190,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 								isCustomerSucceed = true;
 								CustomerMappingWithCommands customerMappingSucceededWithCommands = null;
 								CustomerMappingWithCommands customerMappingFailedWithCommands = null;
+
+								if (customerMappingWithCommands.OBACommands == null || customerMappingWithCommands.OBACommands.Count == 0)
+									throw new NullReferenceException(string.Format("There is no OBA commands for customer with BO '{0}'", customerMapping.BO));
+
 								foreach (var command in customerMappingWithCommands.OBACommands)
 								{
 									sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
@@ -1195,6 +1205,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 										break;
 									}
 								}
+								#region trunk
 								/*
 								if (isCustomerSucceed)
 								{
@@ -1236,6 +1247,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 										}
 									}
 								}*/
+								#endregion
 
 								if (isCustomerSucceed)
 								{
@@ -1359,6 +1371,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 								break;
 							}
 						}
+
+						if (!commandsSucceed)
+						{
+							failedRouteCaseNumbers.Add(routeCaseWithCommands);
+							break;
+						}
 						command = string.Format("{0}:RC={1};", EricssonCommands.ANRAI_Command, rcNumber);
 						sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
 						commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
@@ -1370,12 +1388,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 						sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
 						commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
 						if (!IsCommandSucceed(response))
-						{
-							failedRouteCaseNumbers.Add(routeCaseWithCommands);
-							break;
-						}
-
-						if (!commandsSucceed)
 						{
 							failedRouteCaseNumbers.Add(routeCaseWithCommands);
 							break;

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using TOne.WhS.RouteSync.Ericsson.Data;
-using TOne.WhS.RouteSync.Ericsson.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -120,6 +119,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void UpdateCustomerMappingsInTempTable(IEnumerable<CustomerMapping> customerMappingsToUpdate)
 		{
+			if (customerMappingsToUpdate == null || !customerMappingsToUpdate.Any())
+				return;
 			DataTable dtCustomerMappings = BuildCustomerMappingsTable(customerMappingsToUpdate);
 			ExecuteNonQueryText(query_UpdateRecordsWithFailedTrunk, (cmd) =>
 			{
@@ -190,23 +191,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			};
 		}
 		#endregion
-
-		private DataTable BuildCustomerMappingsUpdateTable(IEnumerable<CustomerMappingWithActionType> customerMappingsToUpdate)
-		{
-			DataTable dtCustomerMappings = new DataTable();
-			dtCustomerMappings.Columns.Add("BO", typeof(string));
-			dtCustomerMappings.Columns.Add("CustomerMapping", typeof(string));
-			dtCustomerMappings.BeginLoadData();
-			foreach (var customerMappingToUpdate in customerMappingsToUpdate)
-			{
-				DataRow dr = dtCustomerMappings.NewRow();
-				dr["BO"] = customerMappingToUpdate.CustomerMapping.BO;
-				dr["CustomerMapping"] = Helper.SerializeCustomerMapping(customerMappingToUpdate.CustomerMappingOldValue);
-				dtCustomerMappings.Rows.Add(dr);
-			}
-			dtCustomerMappings.EndLoadData();
-			return dtCustomerMappings;
-		}
 
 		private DataTable BuildCustomerMappingsTable(IEnumerable<CustomerMapping> customerMappingsToUpdate)
 		{

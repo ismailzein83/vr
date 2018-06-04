@@ -179,6 +179,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void RemoveRoutesFromTempTable(IEnumerable<EricssonConvertedRoute> routes)
 		{
+			if (routes == null || !routes.Any())
+				return;
 			ExecuteNonQueryText(query_EricssonRouteTableType, null);
 			DataTable dtRoutes = BuildRouteTable(routes);
 			string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName);
@@ -193,6 +195,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void UpdateRoutesInTempTable(IEnumerable<EricssonConvertedRoute> routes)
 		{
+			if (routes == null || !routes.Any())
+				return;
 			ExecuteNonQueryText(query_EricssonRouteTableType, null);
 			DataTable dtRoutes = BuildRouteTable(routes);
 			string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName, RouteTableName);
