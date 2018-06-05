@@ -76,8 +76,8 @@ namespace Vanrise.Fzero.Services.DailyReportsSummary
                             cmd.CommandTimeout = 600;
                             using (cmd)
                             {
-                                var fromDate = new DateTime(2017, 12, 05);//DateTime.Today.AddDays(-1).Date;
-                                var toDate = new DateTime(2017, 12, 06);//DateTime.Today.Date;
+                                var fromDate = DateTime.Today.AddDays(-1).Date;
+                                var toDate = DateTime.Today.Date;
                                 db.AssignParameters(cmd, new Object[] { i.ID, i.User.ClientID.Value, fromDate,toDate });
                                 using (IDataReader reader = db.ExecuteReader(cmd))
                                 {
@@ -169,9 +169,9 @@ namespace Vanrise.Fzero.Services.DailyReportsSummary
                         {
                             Email email = new Email() { EmailTemplateID = ID };
                             email.DestinationEmail = mobileOperator.DailyReportsSummaryEmail;
-                            email.Subject = string.Format("Daily Fruad Report {0}", DateTime.Today.ToString("dd-MM-yyyy"));
+                            email.Subject = string.Format("Daily Fraud Report {0}", DateTime.Today.ToString("dd-MM-yyyy"));
                             email.Body = "Dear Sir/Madame,"
-                                       + "<br />Kindly find attached our daily fruad detection reports for " + DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy") + "."
+                                       + "<br />Kindly find attached our daily fraud detection reports for " + DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy") + "."
                                        + "<br />Total numbers detected: "
                                        + listReportedCLI.Count()
                                        + " <br /> <br />Best Regards,";

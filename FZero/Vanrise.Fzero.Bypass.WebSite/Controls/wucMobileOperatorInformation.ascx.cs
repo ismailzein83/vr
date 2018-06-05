@@ -474,10 +474,10 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         {
             return "Daily reports summary email required";
         }
-        else if (!Manager.IsValidEmail(DailyReportsSummaryEmail) && EnableDailyReportsSummary)
-        {
-            return "Daily reports summary email required";
-        }
+        //else if (!Manager.IsValidEmail(DailyReportsSummaryEmail) && EnableDailyReportsSummary)
+        //{
+        //    return "Daily reports summary email required";
+        //}
 
 
         if (!txtUserNameReadOnly)
