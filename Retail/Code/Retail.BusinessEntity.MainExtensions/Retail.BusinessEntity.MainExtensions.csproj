@@ -152,6 +152,8 @@
     <Compile Include="AccountConditions\SubAccountCondition.cs" />
     <Compile Include="AccountParts\AccountPartOperatorSetting.cs" />
     <Compile Include="AccountParts\AccountPartOperatorSettingDefinition.cs" />
+    <Compile Include="AccountParts\AccountPartTaxesSettings.cs" />
+    <Compile Include="AccountParts\AccountPartTaxesSettingsDefinition.cs" />
     <Compile Include="AccountRecurringChargeRuleSets\ApplyFirstAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountRecurringChargeRuleSets\SingleRuleAccountRecurringChargeRuleSetSettings.cs" />
     <Compile Include="AccountSynchronizerInsertHandlers\AssignProductAndPackagesAccountInsertHandler.cs" />
