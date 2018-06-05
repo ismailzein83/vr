@@ -63,19 +63,38 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (soldCustomersCountries.Count == 0)
                     return null;
 
-                List<long> filterdZonesIdsByCode = null;
-
+                List<long> filterdZonesIds = new List<long>();
+                if(input.Query.ZoneIds != null)
+                    filterdZonesIds.AddRange(input.Query.ZoneIds);
+                
                 if (input.Query.Code != null)
                 {
-                    filterdZonesIdsByCode = _saleCodeManager.GetSaleZonesIdsByCode(input.Query.Code);
+                    List<long> filterdZonesIdsByCode = _saleCodeManager.GetSaleZonesIdsByCode(input.Query.Code);
 
                     if (filterdZonesIdsByCode.Count == 0)
+                        return null;
+
+                    if (input.Query.ZoneIds != null)
+                    {
+                        foreach (var zoneId in input.Query.ZoneIds)
+                        {
+                            if (!filterdZonesIdsByCode.Contains(zoneId))
+                                filterdZonesIds.Remove(zoneId);
+                        }
+                    }
+                    else
+                    {
+                        filterdZonesIds.AddRange(filterdZonesIdsByCode);
+                    }
+
+                    if (filterdZonesIds.Count == 0)
                         return null;
                 }
 
                 var customerCountriesByCountryId = StructureCustomersCountriesByCountryId(soldCustomersCountries);
 
-                var soldZonesIds = _saleZoneManager.GetSoldZonesBySellingNumberPlan(input.Query.SellingNumberPlanId, customerCountriesByCountryId.Keys.ToList(), filterdZonesIdsByCode, input.Query.ZoneName, effectiveOn);
+                var soldZonesIds = _saleZoneManager.GetSoldZonesBySellingNumberPlan(input.Query.SellingNumberPlanId, customerCountriesByCountryId.Keys.ToList(), filterdZonesIds, effectiveOn);
+                
                 if (soldZonesIds == null)
                     return null;
                 var customerZoneDetails = RoutingManagerFactory.GetManager<ICustomerZoneDetailsManager>().GetCustomerZoneDetailsByZoneIdsAndCustomerIds(soldZonesIds, customersIds);

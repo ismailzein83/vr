@@ -170,7 +170,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
         }
 
-        public List<long> GetSoldZonesBySellingNumberPlan(int sellingNumberPlanId, List<int> countryIds, List<long> zoneIds, string zoneName, DateTime effectiveOn)
+        public List<long> GetSoldZonesBySellingNumberPlan(int sellingNumberPlanId, List<int> countryIds, List<long> zoneIds, DateTime effectiveOn)
         {
             var saleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
@@ -179,9 +179,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (countryIds != null && countryIds.Count > 0 && !countryIds.Contains(x.CountryId))
                     return false;
                 if (zoneIds != null && zoneIds.Count > 0 && !zoneIds.Contains(x.SaleZoneId))
-                    return false;
-                if (zoneName != null && !x.Name.ToLower().Contains(zoneName.ToLower()))
-                    return false;
+                    return false;               
                 if (!x.IsEffective(effectiveOn))
                     return false;
                 return true;

@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class CustomerSoldZonesQuery
     {
-        public string ZoneName { get; set; }
+        public List<long> ZoneIds { get; set; }
 
         public string Code { get; set; }
 

@@ -4,11 +4,11 @@
             <vr-row removeline>
                 <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberReady" onselectionchanged="scopeModel.onSellingNumberPlanSelectionChanged" normal-col-num="2" selectedvalues="scopeModel.sellingNumber" isrequired="true"> </vr-whs-be-sellingnumberplan-selector>
                 <vr-columns width="normal" haschildcolumns>
-                    <vr-common-country-selector on-ready="scopeModel.onCountryReady" ismultipleselection></vr-common-country-selector>
+                    <vr-common-country-selector on-ready="scopeModel.onCountryReady" selectedvalues="scopeModel.country" ismultipleselection onselectionchanged="onCountrySelectionChanged"></vr-common-country-selector>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-textbox value="scopeModel.zoneName" label="Zone Name"></vr-textbox>
-                </vr-columns>
+                <span vr-loader="isLoadingSaleZonesSelector" vr-disabled="scopeModel.sellingNumber == undefined || scopeModel.country.length == 0">
+                    <vr-whs-be-salezone-selector normal-col-num="2" selectedvalues="salezones" ismultipleselection on-ready="onSaleZoneDirectiveReady" />
+                </span>
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.saleCode" label="Code Start With"></vr-textbox>
                 </vr-columns>

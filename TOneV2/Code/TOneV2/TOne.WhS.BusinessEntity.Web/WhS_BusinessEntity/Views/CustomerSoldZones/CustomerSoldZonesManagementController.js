@@ -9,14 +9,21 @@
         var gridAPI;
         var sellingNumberPlanSelectorAPI;
         var sellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var customerApi;
         var customerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var routingProductApi;
         var routingProductSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var zoneSelectorDirectiveAPI;
+        var zoneSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
         defineScope();
@@ -37,8 +44,12 @@
             $scope.scopeModel.onSellingNumberPlanSelectionChanged = function () {
                 $scope.scopeModel.selectedCustomers = [];
                 $scope.scopeModel.selectedRoutingProducts = [];
-                if (sellingNumberPlanSelectorAPI.getSelectedIds() == undefined)                   
+                if (countryDirectiveApi != undefined) {
+                    $scope.scopeModel.country.length = 0;
+                }
+                if (sellingNumberPlanSelectorAPI.getSelectedIds() == undefined) {
                     return;
+                }
                 var customerPayload = {
                     filter: { SellingNumberPlanId: sellingNumberPlanSelectorAPI.getSelectedIds() }
                 };
@@ -51,15 +62,36 @@
                 $scope.scopeModel.isLoadingCustomerSelector = true;
                 $scope.scopeModel.isLoadingRoutingProductSelector = true;
 
-                
+
                 UtilsService.waitMultiplePromises([carrierAccountSelectorLoadPromise, routingProductSelectorLoadPromise]).finally(function () {
                     $scope.scopeModel.isLoadingCustomerSelector = false;
                     $scope.scopeModel.isLoadingRoutingProductSelector = false;
                 });
             };
+            $scope.onSaleZoneDirectiveReady = function (api) {
+                zoneSelectorDirectiveAPI = api;
+                zoneSelectorReadyPromiseDeferred.resolve();
+
+            };
             $scope.scopeModel.onCountryReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
+            };
+            $scope.onCountrySelectionChanged = function () {
+                var country = countryDirectiveApi.getSelectedIds();
+                if (country != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingSelector = value;
+                };
+                var payload = {
+                        sellingNumberPlanId: sellingNumberPlanSelectorAPI.getSelectedIds(),
+                            filter: {
+                                CountryIds: countryDirectiveApi.getSelectedIds(),
+                },
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneSelectorDirectiveAPI, payload, setLoader);
+                }
+                if (zoneSelectorDirectiveAPI != undefined)
+                    $scope.salezones.length = 0;
             };
             $scope.scopeModel.onCustomerSelectorReady = function (api) {
                 customerApi = api;
@@ -127,7 +159,7 @@
 
         function buildGridQuery() {
             return {
-                ZoneName: $scope.scopeModel.zoneName,
+                ZoneIds: zoneSelectorDirectiveAPI.getSelectedIds(),
                 Code: $scope.scopeModel.saleCode,
                 SellingNumberPlanId: sellingNumberPlanSelectorAPI.getSelectedIds(),
                 CountriesIds: countryDirectiveApi.getSelectedIds(),
