@@ -126,7 +126,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
             public override CustomersSoldZoneDetail EntityDetailMapper(CustomersSoldZone entity)
-            { 
+            {
                 var customerSoldZonesDetail = new CustomersSoldZoneDetail();
                 customerSoldZonesDetail.ZoneId = entity.ZoneId;
                 customerSoldZonesDetail.EffectiveOn = entity.EffectiveOn;
@@ -195,17 +195,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CustomersSoldZoneDetail> context)
             {
-                ExportExcelSheet sheet = new ExportExcelSheet()
+
+                Vanrise.Entities.DataRetrievalInput<CustomerSoldZonesQuery> input = context.Input as Vanrise.Entities.DataRetrievalInput<CustomerSoldZonesQuery>;
+
+                input.ThrowIfNull("input");
+
+                ExportExcelSheet sheet = new ExportExcelSheet
                 {
                     SheetName = "Least Sale Price",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Rates", Width = 200 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Count" });
 
+                int topCustomers = input.Query.Top;
+                for (var i = 0; i < topCustomers; i++)
+                {
+                    var j = i + 1;
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer " + j, Width = 30 });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Rate " + j, Width = 30 });
+                }
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -216,27 +225,32 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneId });
                             row.Cells.Add(new ExportExcelCell { Value = record.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = GetCustomerZoneDataDetailsAsString(record.CustomerZones) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SaleCount });
+                            if (record.CustomerZones != null && record.CustomerZones.Any())
+                            {
+                                foreach (var customerZoneDataDetail in record.CustomerZones)
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = customerZoneDataDetail.CustomerName });
+                                    row.Cells.Add(new ExportExcelCell { Value = customerZoneDataDetail.Rate });
+                                }
+                                AddEmptyCelss(topCustomers, record.CustomerZones.Count(), row);
+                            }
                         }
                     }
                 }
                 context.MainSheet = sheet;
             }
-
-            private string GetCustomerZoneDataDetailsAsString(IEnumerable<CustomerZoneDataDetail> customerZoneDataDetails)
+            private void AddEmptyCelss(int headerCellCount, int rowCellCount, ExportExcelRow row)
             {
-                StringBuilder customerZoneDataSB = new StringBuilder();
-
-                foreach (var customerZoneDataDetail in customerZoneDataDetails)
+                if (rowCellCount < headerCellCount)
                 {
-                    customerZoneDataSB.Append(string.Format("{0} {1}", customerZoneDataDetail.CustomerName, customerZoneDataDetail.Rate)).Append("".PadRight(10));
+                    int emptyValuesCount = headerCellCount - rowCellCount;
+                    for (int i = 0; i < emptyValuesCount; i++)
+                    {
+                        row.Cells.Add(new ExportExcelCell { Value = null });
+                        row.Cells.Add(new ExportExcelCell { Value = null });
+                    }
                 }
-
-                return customerZoneDataSB.ToString();
-
             }
         }
     }
