@@ -6,17 +6,6 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public struct RouteRuleIdentifier
-    {
-        public int CustomerId { get; set; }
-        public string Code { get; set; }
-
-        public override int GetHashCode()
-        {
-            return CustomerId.GetHashCode() + Code.GetHashCode();
-        }
-    }
-
     public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings, IRuleCountryCriteria
     {
         public string Name { get; set; }
@@ -27,9 +16,46 @@ namespace TOne.WhS.Routing.Entities
 
         public string SourceId { get; set; }
 
+        public DateTime BED { get { return BeginEffectiveTime; } }
+
+        public DateTime? EED { get { return EndEffectiveTime; } }
+
         public CorrespondentType CorrespondentType { get { return Settings.CorrespondentType; } }
 
         public override bool HasAdditionalInformation { get { return true; } }
+
+        public override void UpdateAdditionalInformation(Vanrise.Rules.BaseRule existingRule, ref Vanrise.Rules.AdditionalInformation additionalInformation)
+        {
+            RouteRuleAdditionalInformation routeRuleAdditionalInformation = new RouteRuleAdditionalInformation();
+            if (additionalInformation != null)
+            {
+                RouteRuleAdditionalInformation existingAdditionalInformation = additionalInformation.CastWithValidate<RouteRuleAdditionalInformation>("RouteRuleAdditionalInformation");
+                routeRuleAdditionalInformation.CriteriaHasChanged = existingAdditionalInformation.CriteriaHasChanged;
+                routeRuleAdditionalInformation.SettingsHasChanged = existingAdditionalInformation.SettingsHasChanged;
+            }
+
+            if (existingRule != null)
+            {
+                RouteRule existingRouteRule = existingRule.CastWithValidate<RouteRule>("RouteRule", existingRule.RuleId);
+
+                string existingBaseRouteRuleCriteria = Vanrise.Common.Serializer.Serialize(existingRouteRule.Criteria);
+                string newBaseRouteRuleCriteria = Vanrise.Common.Serializer.Serialize(this.Criteria);
+                if (string.Compare(existingBaseRouteRuleCriteria, newBaseRouteRuleCriteria) != 0)
+                    routeRuleAdditionalInformation.CriteriaHasChanged = true;
+
+                string existingSettings = Vanrise.Common.Serializer.Serialize(existingRouteRule.Settings);
+                string newSettings = Vanrise.Common.Serializer.Serialize(this.Settings);
+                if (string.Compare(existingSettings, newSettings) != 0)
+                    routeRuleAdditionalInformation.SettingsHasChanged = true;
+            }
+            else
+            {
+                routeRuleAdditionalInformation.CriteriaHasChanged = true;
+                routeRuleAdditionalInformation.SettingsHasChanged = true;
+            }
+
+            additionalInformation = routeRuleAdditionalInformation;
+        }
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
@@ -67,39 +93,6 @@ namespace TOne.WhS.Routing.Entities
             }
 
             return base.IsAnyCriteriaExcluded(target);
-        }
-
-        public override void UpdateAdditionalInformation(Vanrise.Rules.BaseRule existingRule, ref Vanrise.Rules.AdditionalInformation additionalInformation)
-        {
-            RouteRuleAdditionalInformation routeRuleAdditionalInformation = new RouteRuleAdditionalInformation();
-            if (additionalInformation != null)
-            {
-                RouteRuleAdditionalInformation existingAdditionalInformation = additionalInformation.CastWithValidate<RouteRuleAdditionalInformation>("RouteRuleAdditionalInformation");
-                routeRuleAdditionalInformation.CriteriaHasChanged = existingAdditionalInformation.CriteriaHasChanged;
-                routeRuleAdditionalInformation.SettingsHasChanged = existingAdditionalInformation.SettingsHasChanged;
-            }
-
-            if (existingRule != null)
-            {
-                RouteRule existingRouteRule = existingRule.CastWithValidate<RouteRule>("RouteRule", existingRule.RuleId);
-
-                string existingBaseRouteRuleCriteria = Vanrise.Common.Serializer.Serialize(existingRouteRule.Criteria);
-                string newBaseRouteRuleCriteria = Vanrise.Common.Serializer.Serialize(this.Criteria);
-                if (string.Compare(existingBaseRouteRuleCriteria, newBaseRouteRuleCriteria) != 0)
-                    routeRuleAdditionalInformation.CriteriaHasChanged = true;
-
-                string existingSettings = Vanrise.Common.Serializer.Serialize(existingRouteRule.Settings);
-                string newSettings = Vanrise.Common.Serializer.Serialize(this.Settings);
-                if (string.Compare(existingSettings, newSettings) != 0)
-                    routeRuleAdditionalInformation.SettingsHasChanged = true;
-            }
-            else
-            {
-                routeRuleAdditionalInformation.CriteriaHasChanged = true;
-                routeRuleAdditionalInformation.SettingsHasChanged = true;
-            }
-
-            additionalInformation = routeRuleAdditionalInformation;
         }
 
         public ISaleZoneGroupContext GetSaleZoneGroupContext()
@@ -206,16 +199,6 @@ namespace TOne.WhS.Routing.Entities
                 return new List<int> { routingProductId.Value };
             }
         }
-
-        public DateTime BED
-        {
-            get { return BeginEffectiveTime; }
-        }
-
-        public DateTime? EED
-        {
-            get { return EndEffectiveTime; }
-        }
     }
 
     public interface ILinkedRouteRuleContext
@@ -233,5 +216,16 @@ namespace TOne.WhS.Routing.Entities
         public bool CriteriaHasChanged { get; set; }
 
         public bool SettingsHasChanged { get; set; }
+    }
+
+    public struct RouteRuleIdentifier
+    {
+        public int CustomerId { get; set; }
+        public string Code { get; set; }
+
+        public override int GetHashCode()
+        {
+            return CustomerId.GetHashCode() + Code.GetHashCode();
+        }
     }
 }

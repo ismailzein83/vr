@@ -6,7 +6,6 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups;
-using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -128,6 +127,7 @@ namespace TOne.WhS.Routing.Business
 		{
 			var routeRules = base.GetAllRules();
 			string ruleNameLower = !string.IsNullOrEmpty(input.Query.Name) ? input.Query.Name.ToLower() : null;
+
 			Func<RouteRule, bool> filterExpression = (routeRule) =>
 				{
 					if (input.Query.IsManagementScreen && !routeRule.Criteria.IsVisibleInManagementView())
@@ -329,9 +329,11 @@ namespace TOne.WhS.Routing.Business
 
 			return selectiveCountryCriteriaGroup.CountryIds != null && selectiveCountryCriteriaGroup.CountryIds.Count > 0;
 		}
+
 		#endregion
 
 		#region Private Methods
+
 		private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
 		{
 			List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
@@ -557,7 +559,6 @@ namespace TOne.WhS.Routing.Business
 				get { return "WhS_Routing_RouteRules_ViewHistoryItem"; }
 			}
 		}
-
 
 		#endregion
 	}
