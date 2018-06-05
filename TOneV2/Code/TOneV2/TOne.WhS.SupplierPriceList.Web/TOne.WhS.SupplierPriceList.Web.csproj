@@ -162,6 +162,7 @@
     <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\RatePrecisionTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\ReceivedPriceListStatusEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SPLDefintionEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SupplierPriceListType.js" />
     <Content Include="WhS_SupplierPriceList\Constant\ZoneServicesChangeTypeEnum.js" />
@@ -180,6 +181,8 @@
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-spl-supplierpricelistconfiguration-basic.js" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPricelistDateField\Template\PricelistDateFieldTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPricelistDateField\whs-spl-excelconversion-fieldmapping-pricelistdatefield.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\Templates\ReceivedSupplierPriceListGridTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\whs-spl-receivedsupplierpricelist-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\Templates\SupplierPriceListPreviewSectionTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\whs-spl-supplierpricelistpreview-section.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPricelistPreviewSummary\Templates\SupplierPricelistPreviewSummary.html" />
@@ -195,17 +198,21 @@
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\Templates\SupplierPriceListCodePreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\whs-spl-codepreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\ModuleInitialization.js" />
+    <Content Include="WhS_SupplierPriceList\Services\APIServices\ReceivedSupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListTemplateAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListPreviewAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListTemplateService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />
+    <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPriceList.html" />
+    <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPriceListController.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreview.html" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ReceivedSupplierPriceListController.cs" />
     <Compile Include="Controllers\SupplierPriceListTemplateController.cs" />
     <Compile Include="Controllers\SupplierPriceListPreviewController.cs" />
     <Compile Include="Controllers\SupplierPriceListController.cs" />
