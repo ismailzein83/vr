@@ -39,7 +39,9 @@
 
         function getFilter() {
             return {
-                Name: $scope.scopeModel.name
+                query:{
+                    Name: $scope.scopeModel.name
+                }
             };
         };
 

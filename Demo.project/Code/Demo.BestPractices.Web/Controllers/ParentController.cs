@@ -42,5 +42,13 @@ namespace Demo.BestPractices.Web.Controllers
         {
             return parentManager.AddParent(parent);
         }
+
+        [HttpGet]
+        [Route("GetParentsInfo")]
+        public IEnumerable<ParentInfo> GetParentsInfo(string filter = null)
+        {
+            ParentInfoFilter parentInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ParentInfoFilter>(filter) : null;
+            return parentManager.GetParentsInfo(parentInfoFilter);
+        }
     }
 }

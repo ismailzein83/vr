@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ChildAPIServic
     function ChildGrid($scope, ctrl) {
 
         var gridApi;
-
+        var parentId;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -38,7 +38,11 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ChildAPIServic
                 function getDirectiveApi() {
                     var directiveApi = {};
 
-                    directiveApi.load = function (query) {
+                    directiveApi.load = function (payload) {
+                        var query = payload.query;
+                        parentId = payload.parentId;
+                        if (payload.hideParentColumn)
+                            $scope.scopeModel.hideParentColumn = payload.hideParentColumn;
                         return gridApi.retrieveData(query);
                     };
 
@@ -73,7 +77,8 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ChildAPIServic
             var onChildUpdated = function (child) {
                 gridApi.itemUpdated(child);
             };
-            Demo_BestPractices_ChildService.editChild(child.ChildId, onChildUpdated);
+            var parentIdItem = parentId != undefined ? { ParentId: parentId } : undefined;
+            Demo_BestPractices_ChildService.editChild(child.ChildId, onChildUpdated, parentIdItem);
         };
 
 

@@ -31,14 +31,18 @@ namespace Demo.BestPractices.Data.SQL
         public bool Insert(Child child, out long insertedId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Insert]", out id, child.Name);
-            insertedId = Convert.ToInt64(id);
-            return (nbOfRecordsAffected > 0);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Insert]", out id, child.Name, child.ParentId);
+            bool result = (nbOfRecordsAffected > 0);
+            if (result)
+                insertedId = (long)id;
+            else
+                insertedId = 0;
+            return result;
         }
         public bool Update(Child child)
         {
 
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Update]", child.ChildId, child.Name);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Update]", child.ChildId, child.Name, child.ParentId);
             return (nbOfRecordsAffected > 0);
         }
 
@@ -50,7 +54,8 @@ namespace Demo.BestPractices.Data.SQL
             return new Child
             {
                 ChildId = GetReaderValue<long>(reader, "ID"),
-                Name = GetReaderValue<string>(reader, "Name")
+                Name = GetReaderValue<string>(reader, "Name"),
+                ParentId = GetReaderValue<long>(reader, "ParentId"),
             };
         }
         #endregion

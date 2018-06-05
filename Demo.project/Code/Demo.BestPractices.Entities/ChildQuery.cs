@@ -9,5 +9,6 @@ namespace Demo.BestPractices.Entities
     public class ChildQuery
     {
         public string Name { get; set; }
+        public List<long> ParentIds { get; set; }
     }
 }

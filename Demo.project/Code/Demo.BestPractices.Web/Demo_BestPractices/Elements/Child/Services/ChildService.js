@@ -1,10 +1,12 @@
 ﻿app.service('Demo_BestPractices_ChildService', ['VRModalService', 'VRNotificationService',
 function (VRModalService, VRNotificationService) {
 
-    function addChild(onChildAdded) {
+    function addChild(onChildAdded, parentIdItem) {
 
         var settings = {};
-        var parameters = {};
+        var parameters  = {
+            parentIdItem:parentIdItem
+        };
 
         settings.onScopeReady = function (modalScope) {
             modalScope.onChildAdded = onChildAdded;
@@ -13,10 +15,11 @@ function (VRModalService, VRNotificationService) {
         VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
     };
 
-    function editChild(childId, onChildUpdated) {
+    function editChild(childId, onChildUpdated, parentIdItem) {
         var settings = {};
         var parameters = {
-            childId: childId
+            childId: childId,
+            parentIdItem: parentIdItem
         };
 
         settings.onScopeReady = function (modalScope) {

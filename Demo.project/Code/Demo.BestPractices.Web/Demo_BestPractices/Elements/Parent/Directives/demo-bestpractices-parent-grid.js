@@ -20,6 +20,7 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ParentAPIServi
     function ParentGrid($scope, ctrl) {
 
         var gridApi;
+        var gridDrillDownTabsObj;
 
         this.initializeController = initializeController;
 
@@ -30,6 +31,26 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ParentAPIServi
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
+
+                var drillDownDefinitions = [];
+                AddChildDrillDown();
+                function AddChildDrillDown() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = "Child";
+                    drillDownDefinition.directive = "demo-bestpractices-child-search";
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, parentItem) {
+                        parentItem.childGridAPI = directiveAPI;
+                        var payload = {
+                            parentId: parentItem.ParentId
+                        };
+                        return parentItem.childGridAPI.load(payload);
+                    };
+                    drillDownDefinitions.push(drillDownDefinition);
+                }
+
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveApi()); 
@@ -43,6 +64,7 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ParentAPIServi
                     };
 
                     directiveApi.onParentAdded = function (parent) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(parent);
                         gridApi.itemAdded(parent);
                     };
                     return directiveApi;
@@ -52,6 +74,11 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ParentAPIServi
 
                 return Demo_BestPractices_ParentAPIService.GetFilteredParents(dataRetrievalInput)
                 .then(function (response) {
+                    if (response && response.Data) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                        }
+                    }
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -71,6 +98,7 @@ function (UtilsService, VRNotificationService, Demo_BestPractices_ParentAPIServi
         };
         function editParent(parent) {
             var onParentUpdated = function (parent) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(parent);
                 gridApi.itemUpdated(parent);
             };
             Demo_BestPractices_ParentService.editParent(parent.ParentId, onParentUpdated);

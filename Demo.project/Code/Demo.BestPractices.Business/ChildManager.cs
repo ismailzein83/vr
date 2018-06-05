@@ -12,7 +12,8 @@ using Vanrise.Entities;
 namespace Demo.BestPractices.Business
 {
    public  class ChildManager
-    {  
+    {
+       ParentManager _parentManager = new ParentManager();
        #region Public Methods
         public IDataRetrievalResult<ChildDetails> GetFilteredChilds(DataRetrievalInput<ChildQuery> input)
         {
@@ -20,6 +21,8 @@ namespace Demo.BestPractices.Business
             Func<Child, bool> filterExpression = (child) =>
             {
                 if (input.Query.Name != null && !child.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.ParentIds != null && !input.Query.ParentIds.Contains(child.ParentId))
                     return false;
                 return true;
             };
@@ -109,7 +112,8 @@ namespace Demo.BestPractices.Business
             return new ChildDetails
             {
                 Name = child.Name,
-                ChildId = child.ChildId
+                ChildId = child.ChildId,
+                ParentName = _parentManager.GetParentName(child.ParentId)
             };
         }
         #endregion 

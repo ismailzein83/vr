@@ -99,7 +99,9 @@
   <ItemGroup>
     <Content Include="Demo_BestPractices\Constant\ModuleConfig.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Directives\demo-bestpractices-child-grid.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\demo-bestpractices-child-search.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Directives\Templates\ChildGridTemplate.html" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\Templates\ChildSearchTemplate.html" />
     <Content Include="Demo_BestPractices\Elements\Child\Services\APIServices\ChildAPIService.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Services\ChildService.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Views\ChildEditor.html" />
@@ -107,6 +109,7 @@
     <Content Include="Demo_BestPractices\Elements\Child\Views\ChildManagement.html" />
     <Content Include="Demo_BestPractices\Elements\Child\Views\ChildManagementController.js" />
     <Content Include="Demo_BestPractices\Elements\Parent\Directives\demo-bestpractices-parent-grid.js" />
+    <Content Include="Demo_BestPractices\Elements\Parent\Directives\demo-bestpractices-parent-selector.js" />
     <Content Include="Demo_BestPractices\Elements\Parent\Directives\Templates\ParentGridTemplate.html" />
     <Content Include="Demo_BestPractices\Elements\Parent\Services\APIServices\ParentAPIService.js" />
     <Content Include="Demo_BestPractices\Elements\Parent\Services\ParentService.js" />

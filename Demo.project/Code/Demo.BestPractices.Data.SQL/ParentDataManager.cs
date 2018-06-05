@@ -32,8 +32,12 @@ namespace Demo.BestPractices.Data.SQL
         {
             object id;
             int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Parent_Insert]", out id, parent.Name);
-            insertedId = Convert.ToInt64(id);
-            return (nbOfRecordsAffected > 0);
+            bool result = (nbOfRecordsAffected > 0);
+            if (result)
+                insertedId = (long)id;
+            else
+                insertedId = 0;
+            return result;
         }
         public bool Update(Parent parent)
         {

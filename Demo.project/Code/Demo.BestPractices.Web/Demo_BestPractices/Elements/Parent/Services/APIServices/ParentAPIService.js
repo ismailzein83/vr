@@ -21,12 +21,16 @@
         function AddParent(parent) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "AddParent"), parent);
         };
+        function GetParentsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "GetParentsInfo"), { filter: filter });
+        };
 
         return {
             GetFilteredParents: GetFilteredParents,
             GetParentById: GetParentById,
             UpdateParent: UpdateParent,
             AddParent: AddParent,
+            GetParentsInfo: GetParentsInfo
         };
     };
     appControllers.service("Demo_BestPractices_ParentAPIService", parentAPIService);

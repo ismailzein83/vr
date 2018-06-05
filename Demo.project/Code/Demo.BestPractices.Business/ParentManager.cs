@@ -22,13 +22,19 @@ namespace Demo.BestPractices.Business
             {
                 if (input.Query.Name != null && !parent.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
+               
                 return true;
             };
             return DataRetrievalManager.Instance.ProcessResult(input, allParents.ToBigResult(input, filterExpression, ParentDetailMapper));
 
         }
-
-
+        public string GetParentName(long parentId)
+        {
+            var parent = GetParentById(parentId);
+            if (parent == null)
+                return null;
+            return parent.Name;
+        }
         public InsertOperationOutput<ParentDetails> AddParent(Parent parent)
         {
             IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
@@ -53,10 +59,33 @@ namespace Demo.BestPractices.Business
         }
         public Parent GetParentById(long parentId)
         {
-            var allParents = GetCachedParents();
-            return allParents.GetRecord(parentId);
+            return GetCachedParents().GetRecord(parentId);
         }
-
+        public IEnumerable<ParentInfo> GetParentsInfo(ParentInfoFilter parentInfoFilter)
+        {
+            var allParents = GetCachedParents();
+            Func<Parent, bool> filterFunc = (parent) =>
+            {
+                if (parentInfoFilter != null)
+                {
+                    if(parentInfoFilter.Filters != null)
+                    {
+                        var context = new ParentInfoFilterContext{
+                            ParentId = parent.ParentId
+                        };
+                        foreach(var filter in parentInfoFilter.Filters)
+                        {
+                            if(!filter.IsMatch(context))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            };
+            return allParents.MapRecords(ParentInfoMapper, filterFunc).OrderBy(parent => parent.Name);
+        }
         public UpdateOperationOutput<ParentDetails> UpdateParent(Parent parent)
         {
             IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
@@ -108,6 +137,15 @@ namespace Demo.BestPractices.Business
         public ParentDetails ParentDetailMapper(Parent parent)
         {
             return new ParentDetails
+            {
+                Name = parent.Name,
+                ParentId = parent.ParentId
+            };
+        }
+
+        public ParentInfo ParentInfoMapper(Parent parent)
+        {
+            return new ParentInfo
             {
                 Name = parent.Name,
                 ParentId = parent.ParentId

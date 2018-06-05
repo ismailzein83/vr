@@ -9,6 +9,12 @@
         var childId;
         var childEntity;
 
+        var parentIdItem;
+
+        var parentDirectiveApi;
+        var parentReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -17,6 +23,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 childId = parameters.childId;
+                parentIdItem = parameters.parentIdItem;
+               
             }
             isEditMode = (childId != undefined);
         };
@@ -24,6 +32,11 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.disableParent = parentIdItem != undefined;
+            $scope.scopeModel.onParentDirectiveReady = function (api) {
+                parentDirectiveApi = api;
+                parentReadyPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.saveChild = function () {
                 if (isEditMode)
@@ -63,6 +76,22 @@
 
         function loadAllControls() {
 
+            function loadParentSelector() {
+                var parentLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                parentReadyPromiseDeferred.promise.then(function () {
+                    var parentPayload = {};
+                    if (parentIdItem != undefined)
+                        parentPayload.selectedIds = parentIdItem.ParentId;
+                   
+                    if (childEntity != undefined)
+                        parentPayload.selectedIds = childEntity.ParentId;
+
+                    VRUIUtilsService.callDirectiveLoad(parentDirectiveApi, parentPayload, parentLoadPromiseDeferred);
+                });
+                return parentLoadPromiseDeferred.promise;
+
+            }
+
             function setTitle() {
                 if (isEditMode && childEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(childEntity.Name, "Child");
@@ -75,7 +104,7 @@
                     $scope.scopeModel.name = childEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParentSelector])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })
@@ -88,6 +117,7 @@
             var object = {
                 ChildId: (childId != undefined) ? childId : undefined,
                 Name: $scope.scopeModel.name,
+                ParentId: parentDirectiveApi.getSelectedIds()
             };
             return object;
         };
