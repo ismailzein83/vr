@@ -78,6 +78,7 @@
     <Compile Include="PriceListTemplate\SupplierPriceListTemplateFilter.cs" />
     <Compile Include="PriceListTemplate\SupplierPriceListTemplateInfo.cs" />
     <Compile Include="ReceivedPricelist.cs" />
+    <Compile Include="ReceivedPriceListQuery.cs" />
     <Compile Include="SPL\ChangedData\ChangedZoneService.cs" />
     <Compile Include="SPL\ChangedData\ChangedCode.cs" />
     <Compile Include="SPL\ChangedData\ChangedRate.cs" />
