@@ -22,6 +22,8 @@ namespace Vanrise.Rules
 
 		public int? CreatedBy { get; set; }
 
+        public DateTime? LastModifiedTime { get; set; }
+
 		public int? LastModifiedBy { get; set; }
 
 		public virtual void RefreshRuleState(IRefreshRuleStateContext context)
@@ -36,7 +38,6 @@ namespace Vanrise.Rules
 		public virtual void UpdateAdditionalInformation(BaseRule existingRule, ref AdditionalInformation additionalInformation)
 		{
 		}
-
 
         public long GetPriorityIfSameCriteria(IRuleGetPriorityContext context)
         {
