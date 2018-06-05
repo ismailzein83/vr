@@ -3,7 +3,7 @@
     "use strict";
     roomEditorController.$inject = ['$scope', 'Demo_Module_RoomAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function roomEditorController($scope, Demo_BestPractices_RoomAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function roomEditorController($scope, Demo_Module_RoomAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
         var roomId;
@@ -56,7 +56,7 @@
         };
 
         function getRoom() {
-            return Demo_BestPractices_RoomAPIService.GetRoomById(roomId).then(function (response) {
+            return Demo_Module_RoomAPIService.GetRoomById(roomId).then(function (response) {
                 roomEntity = response;
             });
         };
@@ -96,7 +96,7 @@
 
             $scope.scopeModel.isLoading = true;
             var roomObject = buildRoomObjectFromScope();
-            return Demo_BestPractices_RoomAPIService.AddRoom(roomObject)
+            return Demo_Module_RoomAPIService.AddRoom(roomObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Room", response, "Name")) {
                     if ($scope.onRoomAdded != undefined) {
@@ -116,7 +116,7 @@
         function updateRoom() {
             $scope.scopeModel.isLoading = true;
             var roomObject = buildRoomObjectFromScope();
-            Demo_BestPractices_RoomAPIService.UpdateRoom(roomObject).then(function (response) {
+            Demo_Module_RoomAPIService.UpdateRoom(roomObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Room", response, "Name")) {
                     if ($scope.onRoomUpdated != undefined) {
                         $scope.onRoomUpdated(response.UpdatedObject);

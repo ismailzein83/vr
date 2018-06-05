@@ -14,5 +14,33 @@ namespace Demo.Module.Web.Controllers
     [JSONWithTypeAttribute]
     public class Demo_Module_RoomController : BaseAPIController
     {
+        RoomManager roomManager = new RoomManager();
+        [HttpPost]
+        [Route("GetFilteredRooms")]
+        public object GetFilteredRooms(DataRetrievalInput<RoomQuery> input)
+        {
+            return GetWebResponse(input, roomManager.GetFilteredRooms(input));
+        }
+
+        [HttpGet]
+        [Route("GetRoomById")]
+        public Room GetRoomById(long roomId)
+        {
+            return roomManager.GetRoomById(roomId);
+        }
+
+        [HttpPost]
+        [Route("UpdateRoom")]
+        public UpdateOperationOutput<RoomDetails> UpdateRoom(Room room)
+        {
+            return roomManager.UpdateRoom(room);
+        }
+
+        [HttpPost]
+        [Route("AddRoom")]
+        public InsertOperationOutput<RoomDetails> AddRoom(Room room)
+        {
+            return roomManager.AddRoom(room);
+        }
     }
 }

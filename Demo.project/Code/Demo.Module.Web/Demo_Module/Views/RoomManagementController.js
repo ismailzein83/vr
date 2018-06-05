@@ -28,7 +28,7 @@
                         gridApi.onRoomAdded(room);
                     }
                 };
-                Demo_Module_RoomService.addRoom(onoomAdded);
+                Demo_Module_RoomService.addRoom(onRoomAdded);
             };
         };
 

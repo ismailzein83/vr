@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Directives\Building\demo-module-building-selector.js" />
     <Content Include="Demo_Module\Directives\Building\demo-module-building-grid.js" />
     <Content Include="Demo_Module\Directives\Building\Templates\BuildingGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Description\demo-module-description.js" />
@@ -156,7 +157,9 @@
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-selector.js" />
     <Content Include="Demo_Module\Directives\Product\Templates\ProductGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Room\demo-module-room-search.js" />
     <Content Include="Demo_Module\Directives\Room\demo-module-room-grid.js" />
+    <Content Include="Demo_Module\Directives\Room\Templates\RoomSearchTemplate.html" />
     <Content Include="Demo_Module\Directives\Room\Templates\RoomGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-setting-selector.js" />

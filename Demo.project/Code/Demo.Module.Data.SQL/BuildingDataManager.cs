@@ -34,8 +34,12 @@ namespace Demo.Module.Data.SQL
         {
             object id;
             int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Building_Insert]", out id, building.Name);
-            insertedId = Convert.ToInt64(id);
-            return (nbOfRecordsAffected > 0);
+            bool result = (nbOfRecordsAffected > 0);
+            if (result)
+                insertedId = (long)id;
+            else
+                insertedId = 0;
+            return result;
         }
         public bool Update(Building building)
         {
