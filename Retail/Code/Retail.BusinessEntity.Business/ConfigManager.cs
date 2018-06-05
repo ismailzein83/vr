@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -22,11 +23,11 @@ namespace Retail.BusinessEntity.Business
 
             return accountDIDRelationDefinitionId;
         }
-        public List<RetailInvoiceTaxDefinition> GetRetailTaxesDefinitions()
+        public VRTaxesDefinition GetRetailTaxesDefinitions()
         {
             RetailInvoiceSettings retailInvoiceSettings = this.GetRetailInvoiceSettings();
-            retailInvoiceSettings.TaxesDefinitions.ThrowIfNull("retailInvoiceSettings.TaxesDefinitions"); ;
-            return retailInvoiceSettings.TaxesDefinitions;
+            retailInvoiceSettings.VRTaxesDefinition.ThrowIfNull("retailInvoiceSettings.TaxesDefinitions"); ;
+            return retailInvoiceSettings.VRTaxesDefinition;
         }
 
         #endregion
