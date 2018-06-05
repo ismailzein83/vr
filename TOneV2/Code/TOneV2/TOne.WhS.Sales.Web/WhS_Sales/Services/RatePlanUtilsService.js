@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService', 'VRDateTimeService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum'];
+    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService', 'VRDateTimeService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum', 'UISettingsService', '$filter'];
 
-    function RatePlanUtilsService(UtilsService, VRValidationService, VRDateTimeService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum) {
+    function RatePlanUtilsService(UtilsService, VRValidationService, VRDateTimeService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, $filter) {
         return {
             onNewRateBlurred: onNewRateBlurred,
             onNewRateChanged: onNewRateChanged,
@@ -75,8 +75,10 @@
         }
 
         function formatNewRate(dataItem) {
-            if (dataItem.NewRate)
+            if (dataItem.NewRate) {
                 dataItem.NewRate = Number(dataItem.NewRate);
+                dataItem.NewRate = $filter('vrtextOrNumber')(dataItem.NewRate, UISettingsService.getLongPrecision());
+            }
         }
 
         function setRateChangeTypeIcon(dataItem) {
