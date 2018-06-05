@@ -214,6 +214,7 @@
     <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
     <Content Include="Common\Constant\CompanySettingPropertyEnum.js" />
     <Content Include="Common\Constant\EntityFilterEffectiveModeEnum.js" />
+    <Content Include="Common\Constant\MonthEnum.js" />
     <Content Include="Common\Constant\SalutationTypeEnum.js" />
     <Content Include="Common\Constant\GridWidthFactorEnum.js" />
     <Content Include="Common\Constant\GenderTypeEnum.js" />
@@ -268,6 +269,9 @@
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingobjecttype.js" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingpropertyevaluator.js" />
     <Content Include="Common\Directives\ModalWidth\vr-common-modalwidth-selector.js" />
+    <Content Include="Common\Directives\Month\Templates\DayMonthTemplate.html" />
+    <Content Include="Common\Directives\Month\vr-common-daymonth.js" />
+    <Content Include="Common\Directives\Month\vr-common-month-selector.js" />
     <Content Include="Common\Directives\Personalization\PersonilizationEditorController.js" />
     <Content Include="Common\Directives\Personalization\Templates\PersonilizationEditor.html" />
     <Content Include="Common\Directives\Personalization\vr-common-personalization.js" />
@@ -402,6 +406,8 @@
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-extendedsettings.js" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-selector.js" />
     <Content Include="Common\Directives\VRRule\VRRuleDefinition\vr-common-ruledefinition-settings.js" />
+    <Content Include="Common\Directives\VRTax\VRTaxDefinition\Templates\TaxDefinitionTemplate.html" />
+    <Content Include="Common\Directives\VRTax\VRTaxDefinition\vr-common-taxdefinition.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileEditor.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTilesGridTemplate.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileViewEditor.html" />

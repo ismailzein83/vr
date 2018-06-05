@@ -86,7 +86,7 @@
                             var field = recordTypeFields[j];
                             if (field.FieldPath == selectedField.FieldPath)
                             {
-                                $scope.scopeModal.selectedFields.push({ fieldPath: field.FieldPath, fieldTitle: selectedField.FieldTitle, isRequired: selectedField.IsRequired });
+                                $scope.scopeModal.selectedFields.push({ fieldPath: field.FieldPath, fieldTitle: selectedField.FieldTitle, isRequired: selectedField.IsRequired, isDisabled: selectedField.IsDisabled });
                             }
                         }
                     }
@@ -103,6 +103,7 @@
                     FieldPath: $scope.scopeModal.selectedFields[i].fieldPath,
                     FieldTitle: $scope.scopeModal.selectedFields[i].fieldTitle,
                     IsRequired: $scope.scopeModal.selectedFields[i].isRequired,
+                    IsDisabled: $scope.scopeModal.selectedFields[i].isDisabled,
                 });
             }
             return rowObject;

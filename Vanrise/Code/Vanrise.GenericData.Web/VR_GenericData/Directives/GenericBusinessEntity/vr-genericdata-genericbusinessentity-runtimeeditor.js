@@ -34,6 +34,8 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             var genericBusinessEntityId;
             var genericBusinessEntity;
 
+            var fieldValues;
+
             var titleFieldName;
 
             var runtimeEditorAPI;
@@ -49,7 +51,6 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     runtimeEditorReadyDeferred.resolve();
                 };
 
-
                 defineAPI();
             }
 
@@ -58,16 +59,17 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    
                     if (payload != undefined) {
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         genericBusinessEntityId = payload.genericBusinessEntityId;
+                        fieldValues = payload.fieldValues;
                         historyId = payload.historyId;
                         context = payload.context;
                     }
-
+                   
                     isEditMode = (genericBusinessEntityId != undefined || historyId != undefined);
-
+                   
                     var loadPromise = UtilsService.createPromiseDeferred();
                     promises.push(loadPromise.promise);
 
@@ -91,12 +93,12 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
 
                     genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
                     genericBusinessEntity.BusinessEntityDefinitionId = businessEntityDefinitionId;
-
+                   
                     var fieldValues = {};
                     runtimeEditorAPI.setData(fieldValues);
 
                     genericBusinessEntity.FieldValues = fieldValues;
-
+                    
                     return genericBusinessEntity;
                 };
 
@@ -132,10 +134,9 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
 
                 function loadEditorRuntimeDirective() {
                     var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
-
                     runtimeEditorReadyDeferred.promise.then(function () {
                         var runtimeEditorPayload = {
-                            selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : undefined,
+                            selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : fieldValues,
                             dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
                             definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings,
                             historyId: historyId

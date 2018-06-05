@@ -15,9 +15,10 @@
 
         });
 
-        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId,editorSize) {
+        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId,editorSize,fieldValues) {
             var parameters = {
-                businessEntityDefinitionId: businessEntityDefinitionId
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                fieldValues:fieldValues
             };
 
             var settings = {
@@ -32,10 +33,11 @@
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
 
-        function editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize) {
+        function editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId,
-                genericBusinessEntityId: genericBusinessEntityId
+                genericBusinessEntityId: genericBusinessEntityId,
+                fieldValues : fieldValues
             };
 
             var settings = {

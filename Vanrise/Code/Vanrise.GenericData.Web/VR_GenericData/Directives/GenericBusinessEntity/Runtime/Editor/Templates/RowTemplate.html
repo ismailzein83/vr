@@ -1,3 +1,5 @@
 ﻿<span ng-repeat="field in ctrl.fields">
-    <vr-directivewrapper directive="field.runTimeEditor" on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="4" isrequired="field.IsRequired"></vr-directivewrapper>
+    <span vr-disabled="field.IsDisabled">
+        <vr-directivewrapper directive="field.runTimeEditor" on-ready="field.onFieldDirectiveReady" selectionmode="single" normal-col-num="4" isrequired="field.IsRequired"></vr-directivewrapper>
+    </span>
 </span>

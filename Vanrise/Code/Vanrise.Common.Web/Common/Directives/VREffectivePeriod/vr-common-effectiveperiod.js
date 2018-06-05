@@ -25,6 +25,7 @@
             this.initializeController = initializeController;
             
             function initializeController() {
+                $scope.scopeModel = {};
 
                 $scope.scopeModel.validateDates = function (date) {
                     return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);

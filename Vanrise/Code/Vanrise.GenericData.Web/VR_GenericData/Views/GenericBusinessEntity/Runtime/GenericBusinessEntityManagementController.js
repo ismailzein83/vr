@@ -81,7 +81,7 @@
             }
 
             $scope.search = function () {
-                return gridDirectiveAPI.load(getGridFilter());;
+                return gridDirectiveAPI.load(getGridFilter());
             };
 
             $scope.addBusinessEntity = function () {
@@ -183,7 +183,7 @@
             var filterData = filterDirectiveAPI != undefined ? filterDirectiveAPI.getData() : undefined;
             var filterGroup;
             var filters;
-
+           
             if (filterData != undefined) {
                 if (filterData.RecordFilter != undefined) {
                     if (filterData.RecordFilter.$type.indexOf("RecordFilterGroup") < 0) {
@@ -211,7 +211,8 @@
                     FilterGroup: filterGroup,
                     FromTime: filterData != undefined ? filterData.FromTime : undefined,
                     ToTime: filterData != undefined ? filterData.ToTime : undefined,
-                    Filters: filters
+                    Filters: filters,
+                    LimitResult: filterData != undefined ? filterData.LimitResult : undefined
                 },
                 businessEntityDefinitionId: businessEntityDefinitionAPI.getSelectedIds()
             };

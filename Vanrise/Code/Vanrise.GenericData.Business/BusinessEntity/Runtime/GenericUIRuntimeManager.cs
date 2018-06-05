@@ -264,6 +264,7 @@ namespace Vanrise.GenericData.Business
                 {
                     var runtimeField = BuildRuntimeField<GenericEditorRuntimeField>(field, dataRecordTypeFieldsByName, dataRecordTypeId);
                     runtimeField.IsRequired = field.IsRequired;
+                    runtimeField.IsDisabled = field.IsDisabled;
                     runtimeRow.Fields.Add(runtimeField);
                 }
             }

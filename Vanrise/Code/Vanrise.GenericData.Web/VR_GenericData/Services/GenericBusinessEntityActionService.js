@@ -6,7 +6,7 @@ app.service('VR_GenericData_GenericBEActionService',
 
         var actionTypes = [];
 
-        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType) {
+        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType, fieldValues) {
 
             genericBusinessEntity.menuActions = [];
 
@@ -20,7 +20,7 @@ app.service('VR_GenericData_GenericBEActionService',
                         if (genericBEAction != undefined && genericBEAction.Settings != undefined) {
                             var actionType = getActionTypeIfExist(genericBEAction.Settings.ActionTypeName);
                             if (actionType != undefined) {
-                                addGridMenuAction(genericBEAction, actionType, genericBEGridAction);
+                                addGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues);
                             }
                         }
                     }
@@ -28,7 +28,7 @@ app.service('VR_GenericData_GenericBEActionService',
                 }
             }
 
-            function addGridMenuAction(genericBEAction, actionType, genericBEGridAction) {
+            function addGridMenuAction(genericBEAction, actionType, genericBEGridAction, fieldValues) {
                 genericBusinessEntity.menuActions.push({
                     name: genericBEGridAction.Title,
                     clicked: function (selectedGenericBusinessEntity) {
@@ -43,9 +43,10 @@ app.service('VR_GenericData_GenericBEActionService',
                             businessEntityDefinitionId: businessEntityDefinitionId,
                             genericBusinessEntityId: genericBusinessEntityId,
                             genericBEAction: genericBEAction,
+                            fieldValues: fieldValues,
                             onItemUpdated: function (updatedItem) {
                                 VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, updatedItem, gridAPI, genericBEGridViews, idFieldType);
-                                defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType);
+                                defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
                                 gridAPI.itemUpdated(updatedItem);
                             }
                         };
@@ -80,11 +81,12 @@ app.service('VR_GenericData_GenericBEActionService',
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
                     var onItemUpdated = payload.onItemUpdated;
                     var editorSize = undefined;//payload.editorSize;
+                    var fieldValues = payload.fieldValues;
                     var onGenericBEUpdated = function (updatedGenericBE) {
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedGenericBE);
                     };
-                    VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize);
+                    VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
                 }
             };
             registerActionType(actionType);

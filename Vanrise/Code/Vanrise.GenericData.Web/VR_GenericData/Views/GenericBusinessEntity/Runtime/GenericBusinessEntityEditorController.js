@@ -13,6 +13,8 @@
         var genericBusinessEntityId;
         var businessEntityDefinitionId;
 
+        var fieldValues;
+
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -26,6 +28,7 @@
             if (parameters != undefined) {
                 businessEntityDefinitionId = parameters.businessEntityDefinitionId;
                 genericBusinessEntityId = parameters.genericBusinessEntityId;
+                fieldValues = parameters.fieldValues;
             }
 
             isEditMode = (genericBusinessEntityId != undefined);
@@ -62,8 +65,9 @@
                     var runtimeEditorPayload = {
                             businessEntityDefinitionId: businessEntityDefinitionId,
                             genericBusinessEntityId: genericBusinessEntityId,
+                            fieldValues: fieldValues,
                             context: getContext()
-                };
+                    };
                     VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
             });
 

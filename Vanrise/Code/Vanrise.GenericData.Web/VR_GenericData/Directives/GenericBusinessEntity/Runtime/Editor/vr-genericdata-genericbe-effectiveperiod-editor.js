@@ -43,27 +43,27 @@
                 var api = {};
 
                 api.load = function (payload) {
-                        var promises = [];
+                    var promises = [];
 
-                        promises.push(loadEffectivePeriodDirective());
+                    promises.push(loadEffectivePeriodDirective());
 
-                        function loadEffectivePeriodDirective() {
-                            var efectivePeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    function loadEffectivePeriodDirective() {
+                        var efectivePeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            effectivePeriodDirectiveReadyDeferred.promise.then(function () {
-                                var effectivePeriodPayload;
-                                if (payload != undefined) {
-                                    effectivePeriodPayload = {
-                                        BED: payload.BED,
-                                        EED: payload.EED
-                                    };
-                                }
-                                VRUIUtilsService.callDirectiveLoad(effectivePeriodAPI, effectivePeriodPayload, efectivePeriodDirectiveLoadDeferred);
-                            });
-                            return efectivePeriodDirectiveLoadDeferred.promise;
-                        }
+                        effectivePeriodDirectiveReadyDeferred.promise.then(function () {
+                            var effectivePeriodPayload;
+                            if (payload != undefined && payload.selectedValues != undefined) {
+                                effectivePeriodPayload = {
+                                    BED: payload.selectedValues.BED,
+                                    EED: payload.selectedValues.EED
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(effectivePeriodAPI, effectivePeriodPayload, efectivePeriodDirectiveLoadDeferred);
+                        });
+                        return efectivePeriodDirectiveLoadDeferred.promise;
+                    }
 
-                        return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.setData = function (obj) {

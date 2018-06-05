@@ -28,7 +28,7 @@
             var genericBEActions = [];
             var genericBEGridActions = [];
             var genericBEGridViews = [];
-
+            var fieldValues;
             var idFieldType;
 
             var gridAPI;
@@ -51,7 +51,6 @@
                         for (var i = 0; i < genericBusinessEntity.menuActions.length; i++)
                             menuActions.push(genericBusinessEntity.menuActions[i]);
                }
-
                     return menuActions;
                 };
 
@@ -69,7 +68,7 @@
                             for (var i = 0; i < response.Data.length; i++) {
                                 var genericBusinessEntity = response.Data[i];
                                 VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
-                                VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType);
+                                VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType, fieldValues);
                             }
                         }
                         onResponseReady(response);
@@ -89,14 +88,15 @@
 
                 api.load = function (payload) {
                     var promises = [];
-
                     var gridQuery;
-
+                    
                     if (payload != undefined) {
                         if (businessEntityDefinitionId != undefined && businessEntityDefinitionId != payload.businessEntityDefinitionId)
                             $scope.scopeModel.columns.length = 0;
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         gridQuery = payload.query;
+                        if (gridQuery != undefined)
+                            fieldValues = gridQuery.fieldValues;
                     }
 
                     if ($scope.scopeModel.columns.length == 0) {
@@ -184,7 +184,7 @@
 
                 api.onGenericBEAdded = function (addedBusinessEntity) {
                     VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
-                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType);
+                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
                     gridAPI.itemAdded(addedBusinessEntity);
                 };
 

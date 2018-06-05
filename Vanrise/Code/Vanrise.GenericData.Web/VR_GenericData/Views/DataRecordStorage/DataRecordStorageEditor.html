@@ -31,6 +31,9 @@
                         <vr-columns width="1/3row">
                             <vr-switch value="scopeModel.enableUseCaching" label="Enable Use Caching" isrequired="true"></vr-switch>
                         </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.requiredLimitResult" label="Required Limit Result" isrequired="true"></vr-switch>
+                        </vr-columns>
                         <vr-columns width="1/3row" vr-loader="scopeModel.isModifiedBySelectorLoading">
                             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.modifiedByFieldSelectorReady" label="Modified By Field" selectedvalues="scopeModel.modifiedByField"></vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>

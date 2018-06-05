@@ -32,7 +32,7 @@
             }
             function defineAPI() {
                 var api = {};
-
+                
                 api.load = function (payload) {
                     var promises = [];
                     $scope.scopeModel.filters = [];
@@ -51,7 +51,7 @@
                                         loadPromisedeferred: UtilsService.createPromiseDeferred(),
                                     };
                                     promises.push(filterItem.loadPromisedeferred.promise);
-                                    addFilterAPI(filterItem)
+                                    addFilterAPI(filterItem);
                                 }
                             }
 
@@ -95,6 +95,9 @@
                                 filterData.FromTime = data.FromTime;
                             if (data.ToTime != undefined)
                                 filterData.ToTime = data.ToTime;
+                            if (data.LimitResult != undefined)
+                                filterData.LimitResult = data.LimitResult;
+                            
                             if (data.Filters != undefined)
                             {
                                 for (var j = 0; j < data.Filters.length; j++) {

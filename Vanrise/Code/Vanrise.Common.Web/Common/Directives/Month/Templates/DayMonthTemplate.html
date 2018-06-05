@@ -1,0 +1,16 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-common-month-selector on-ready="scopeModel.onMonthSelectorReady" onselectionchanged="scopeModel.onMonthSelectorChanged"
+                                  normal-col-num="3" isrequired="true"></vr-common-month-selector>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-select on-ready="scopeModel.onNbOfDaysSelectorReady"
+                   label="Day"
+                   datasource="scopeModel.days"
+                   selectedvalues="scopeModel.selectedDay"
+                   datavaluefield="day"
+                   datatextfield="dayDescription"
+                   isrequired>
+        </vr-select>
+    </vr-columns>
+</vr-row>

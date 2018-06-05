@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class GenericEditorRuntimeField:GenericUIRuntimeField
     {
         public bool IsRequired { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }

@@ -1,0 +1,20 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-label>Title</vr-label>
+        <vr-textbox value="ctrl.titlevalue" type="text" onvaluechanged="ctrl.onTitleValueChange"></vr-textbox>
+    </vr-columns>
+
+    <vr-columns withemptyline width="1/2row">
+        <vr-button type="Add" data-onclick="ctrl.addTitle" vr-disabled="ctrl.disabledAddTitle" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-validator validate="ctrl.validateAddTitle()">
+            <vr-datalist maxitemsperrow="3" datasource="ctrl.titles" autoremoveitem="true">
+                {{dataItem.title}}
+            </vr-datalist>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

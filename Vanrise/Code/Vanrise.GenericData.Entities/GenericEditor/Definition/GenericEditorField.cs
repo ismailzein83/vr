@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class GenericEditorField : GenericUIField
     {
         public bool IsRequired { get; set; }
+        public bool IsDisabled { get; set; }
     }
 }
