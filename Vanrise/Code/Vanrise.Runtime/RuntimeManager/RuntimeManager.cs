@@ -57,8 +57,9 @@ namespace Vanrise.Runtime
             _runtimeNodeId = runtimeNodeId;
             _runtimeNodeInstanceId = runtimeNodeInstanceId;
 
-            _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-            _ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            //_cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            //_ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            //ramTotMB = new PerformanceCounter("Memory", "Total MBytes");
 
             int retryCount = 0;
             while (true)
@@ -96,8 +97,8 @@ namespace Vanrise.Runtime
         string _serviceURL;
         RuntimeHost _runtimeHost;
 
-        PerformanceCounter _cpuCounter;
-        PerformanceCounter _ramCounter;
+        //PerformanceCounter _cpuCounter;
+        //PerformanceCounter _ramCounter;
 
         IRuntimeManagerDataManager _dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>();
         RunningProcessManager _runningProcessManager = new RunningProcessManager();
@@ -360,8 +361,10 @@ namespace Vanrise.Runtime
         {
             try
             {
-                List<VRDiskInfo> diskInfos = GetDiskInfos();                
-                if (!_runtimeNodeStateDataManager.TryUpdateHeartBeat(_runtimeNodeId, _runtimeNodeInstanceId, (Decimal)_cpuCounter.NextValue(), (Decimal)_ramCounter.NextValue(),
+                List<VRDiskInfo> diskInfos = GetDiskInfos();
+                Decimal cpuUsage = 0M;//(Decimal)_cpuCounter.NextValue()
+                Decimal availableRam = 0M;//(Decimal)_ramCounter.NextValue()
+                if (!_runtimeNodeStateDataManager.TryUpdateHeartBeat(_runtimeNodeId, _runtimeNodeInstanceId, cpuUsage, availableRam,
                     Serializer.Serialize(diskInfos), _runtimeHost.NbOfEnabledProcesses, _runtimeHost.GetAllRunningProcessIds().Count))
                 {
                     LoggerFactory.GetLogger().WriteError("Cannot Update Heart in Node '{0}', Service InstanceID '{1}'. Node Shutdown", _runtimeNodeId, _runtimeNodeInstanceId);
