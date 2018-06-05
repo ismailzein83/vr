@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="scopeModel.childs"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="ChildId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'ChildId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

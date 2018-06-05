@@ -9,7 +9,7 @@ namespace Demo.BestPractices.Data
 {
     public interface IParentDataManager:IDataManager
     {
-        bool AreCompaniesUpdated(ref object updateHandle);
+        bool AreParentsUpdated(ref object updateHandle);
         List<Parent> GetParents();
         bool Insert(Parent parent, out long insertedId);
         bool Update(Parent parent);

@@ -20,7 +20,7 @@ namespace Demo.BestPractices.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool AreCompaniesUpdated(ref object updateHandle)
+        public bool AreParentsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[dbo].[Parent]", ref updateHandle);
         }

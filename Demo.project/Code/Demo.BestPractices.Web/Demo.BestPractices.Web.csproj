@@ -95,11 +95,11 @@
     <Compile Include="Controllers\ParentController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Demo_BestPractices\Elements\Child\Directives\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Demo_BestPractices\Constant\ModuleConfig.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\demo-bestpractices-child-grid.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\Templates\ChildGridTemplate.html" />
     <Content Include="Demo_BestPractices\Elements\Child\Services\APIServices\ChildAPIService.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Services\ChildService.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Views\ChildEditor.html" />

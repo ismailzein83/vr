@@ -85,7 +85,7 @@ namespace Demo.BestPractices.Business
             object _updateHandle;
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return parentDataManager.AreCompaniesUpdated(ref _updateHandle);
+                return parentDataManager.AreParentsUpdated(ref _updateHandle);
             }
         }
         #endregion

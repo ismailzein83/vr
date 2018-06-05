@@ -51,7 +51,9 @@
   <ItemGroup>
     <Compile Include="Child.cs" />
     <Compile Include="Parent.cs" />
+    <Compile Include="ChildDetails.cs" />
     <Compile Include="ParentDetails.cs" />
+    <Compile Include="ChildQuery.cs" />
     <Compile Include="ParentQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
