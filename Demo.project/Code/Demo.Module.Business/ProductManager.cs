@@ -122,21 +122,28 @@ namespace Demo.Module.Business
             return deleteOperationOutput;
         }
 
-        //public IEnumerable<ProductInfo> GetUniversitiesInfo()
-        //{
-        //    var allUniversities = GetCachedProducts();
-        //    Func<Product, bool> filterFunc = null;
+        public IEnumerable<Demo.Module.Entities.Product.ProductInfo> GetProductsInfo()
+        {
+            var allProducts = GetCachedProducts();
+            Func<Product, bool> filterFunc = null;
 
-        //    filterFunc = (university) =>
-        //    {
-        //        return true;
-        //    };
+            filterFunc = (product) =>
+            {
+                return true;
+            };
 
-        //    IEnumerable<Product> filteredUniversities = (filterFunc != null) ? allUniversities.FindAllRecords(filterFunc) : allUniversities.MapRecords(u => u.Value);
-        //    return filteredUniversities.MapRecords(ProductInfoMapper).OrderBy(university => university.Name);
-        //}
+            IEnumerable<Product> filteredProducts = (filterFunc != null) ? allProducts.FindAllRecords(filterFunc) : allProducts.MapRecords(u => u.Value);
+            return filteredProducts.MapRecords(ProductInfoMapper).OrderBy(product => product.Name);
+        }
 
-
+        Demo.Module.Entities.Product.ProductInfo ProductInfoMapper(Product product)
+        {
+            return new Demo.Module.Entities.Product.ProductInfo
+            {
+                ProductId = product.ProductId,
+                Name = product.Name
+            };
+        }
 
         
     }

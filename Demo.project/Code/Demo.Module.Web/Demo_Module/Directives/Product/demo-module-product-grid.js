@@ -28,11 +28,14 @@ app.directive("demoModuleProductGrid", ["VRNotificationService", "Demo_Module_Pr
             this.initializeController = initializeController;
 
             function initializeController() {
-                $scope.products = [];
-                $scope.onGridReady = function (api) {
+
+                $scope.scopeModel = {};
+                $scope.scopeModel.products = [];
+
+                $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
 
-                    gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, $scope.gridMenuActions);
+                    gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, $scope.scopeModel.gridMenuActions);
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                         ctrl.onReady(getDirectiveAPI());
@@ -52,7 +55,7 @@ app.directive("demoModuleProductGrid", ["VRNotificationService", "Demo_Module_Pr
                     }
                 };
 
-                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return Demo_Module_ProductAPIService.GetFilteredProducts(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
@@ -71,7 +74,7 @@ app.directive("demoModuleProductGrid", ["VRNotificationService", "Demo_Module_Pr
             }
 
             function defineMenuActions() {
-                $scope.gridMenuActions = [{
+                $scope.scopeModel.gridMenuActions = [{
                     name: "Edit",
                     clicked: editProduct,
 
@@ -85,7 +88,7 @@ app.directive("demoModuleProductGrid", ["VRNotificationService", "Demo_Module_Pr
                 var onProductUpdated = function (product) {
                     gridAPI.itemUpdated(product);
                 }
-                Demo_Module_ProductService.editProduct(product.Entity.ProductId, onProductUpdated);
+                Demo_Module_ProductService.editProduct(product.ProductId, onProductUpdated);
             }
 
             function deleteProduct(product) {

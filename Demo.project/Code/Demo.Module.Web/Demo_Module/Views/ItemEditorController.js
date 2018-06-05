@@ -4,22 +4,22 @@
 
     itemEditorController.$inject = ['$scope', 'Demo_Module_ItemAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function collegeEditorController($scope, Demo_Module_ItemAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function itemEditorController($scope, Demo_Module_ItemAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
         var itemId;
         var itemEntity;
         var context;
 
-        var productDirectiveApi;
-        var productReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var ProductDirectiveApi;
+        var ProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var infoDirectiveAPI;
-        var infoReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        //var infoDirectiveAPI;
+        //var infoReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         //var infoEntity;
 
-        var descriptionDirectiveAPI;
-        var descriptionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        //var descriptionDirectiveAPI;
+        //var descriptionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         //var descriptionEntity;
 
         loadParameters();
@@ -33,26 +33,27 @@
                 context = parameters.context;
             }
             isEditMode = (itemId != undefined);
+
         }
 
         function defineScope() {
 
             $scope.scopeModel = {};
 
-            $scope.saveItem = function () {
+            $scope.scopeModel.saveItem = function () {
                 if (isEditMode)
                     return updateItem();
                 else
                     return insertItem();
             };
 
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
 
-            $scope.onProductDirectiveReady = function (api) {
-                productDirectiveApi = api;
-                productReadyPromiseDeferred.resolve();
+            $scope.scopeModel.onProductDirectiveReady = function (api) {
+                ProductDirectiveApi = api;
+                ProductReadyPromiseDeferred.resolve();
             };
 
             //$scope.scopeModel.onItemInfoReady = function (api) {
@@ -67,16 +68,16 @@
         }
 
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             if (isEditMode) {
                 getItem().then(function () {
                     loadAllControls()
                       .finally(function () {
                           itemEntity = undefined;
                       });
-                }).catch(function () {
+                }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModel.isLoading = false;
                 });
             }
             else {
@@ -86,20 +87,19 @@
 
         function getItem() {
             return Demo_Module_ItemAPIService.GetItemById(itemId).then(function (itemObject) {
-                itemEntity = itemEntity;
-                //infoEntity = itemEntityEntity.ItemInfo;
-                //descriptionEntity = itemEntity.DescriptionString;
+                itemEntity = itemObject;
+             
             });
         }
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductySelector])//, loadInfoDirective, loadDescriptionDirective
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
 
@@ -116,17 +116,17 @@
             }
         }
 
-        function loadProductySelector() {
-            var productLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            productReadyPromiseDeferred.promise.then(function () {
+        function loadProductSelector() {
+            var ProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            ProductReadyPromiseDeferred.promise.then(function () {
                 var directivePayload = {
                     selectedIds: itemEntity != undefined ? itemEntity.ProductId : undefined,
                 };
 
-                VRUIUtilsService.callDirectiveLoad(productDirectiveApi, directivePayload, productLoadPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(ProductDirectiveApi, directivePayload, ProductLoadPromiseDeferred);
 
             });
-            return productLoadPromiseDeferred.promise;
+            return ProductLoadPromiseDeferred.promise;
         }
 
         //function loadInfoDirective() {
@@ -158,51 +158,49 @@
 
         function buildItemObjFromScope() {
             return {
-                ItemId: (collegeId != null) ? collegeId : 0,
+                ItemId: (itemId != null) ? itemId : 0,
                 Name: $scope.scopeModel.name,
-                ProductId: $scope.scopeModel.selector.UniversityId,
-                ProductName: $scope.scopeModel.selector.Name,
-                ItemInfo: infoDirectiveAPI.getData(),
-                DescriptionString: descriptionDirectiveAPI.getData()
+                ProductId: $scope.scopeModel.selector.ProductId,
+                ProductName: $scope.scopeModel.selector.Name
             };
         }
 
-        function insertCollege() {
-            $scope.isLoading = true;
+        function insertItem() {
+            $scope.scopeModel.isLoading = true;
 
-            var collegeObject = buildCollegeObjFromScope();
-            return Demo_Module_CollegeAPIService.AddCollege(collegeObject)
+            var itemObject = buildItemObjFromScope();
+            return Demo_Module_ItemAPIService.AddItem(itemObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("College", response, "Name")) {
-                    if ($scope.onCollegeAdded != undefined) {
-                        $scope.onCollegeAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded("Item", response, "Name")) {
+                    if ($scope.onItemAdded != undefined) {
+                        $scope.onItemAdded(response.InsertedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
 
-        function updateCollege() {
-            $scope.isLoading = true;
+        function updateItem() {
+            $scope.scopeModel.isLoading = true;
 
-            var collegeObject = buildCollegeObjFromScope();
-            Demo_Module_CollegeAPIService.UpdateCollege(collegeObject)
+            var itemObject = buildItemObjFromScope();
+            Demo_Module_ItemAPIService.UpdateItem(itemObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("College", response, "Name")) {
-                    if ($scope.onCollegeUpdated != undefined)
-                        $scope.onCollegeUpdated(response.UpdatedObject);
+                if (VRNotificationService.notifyOnItemUpdated("Item", response, "Name")) {
+                    if ($scope.onItemUpdated != undefined)
+                        $scope.onItemUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
         }
     }
-    appControllers.controller('Demo_Module_CollegeEditorController', collegeEditorController);
+    appControllers.controller('Demo_Module_ItemEditorController', itemEditorController);
 })(appControllers);

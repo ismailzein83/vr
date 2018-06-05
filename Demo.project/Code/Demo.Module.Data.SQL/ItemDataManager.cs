@@ -13,7 +13,7 @@ namespace Demo.Module.Data.SQL
 {
     public class ItemDataManager : BaseSQLDataManager, IItemDataManager
     {
-        public ItemDataManager() :
+          public ItemDataManager() :
             base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoProject_DBConnStringKey"))
         {
         }
@@ -32,7 +32,7 @@ namespace Demo.Module.Data.SQL
         {
             //string infoSerializedString = null;
             //if (item.ItemInfo != null)
-            //    infoSerializedString = Vanrise.Common.Serializer.Serialize(item.CollegeInfo);
+            //    infoSerializedString = Vanrise.Common.Serializer.Serialize(item.ItemInfo);
 
             //string descriptionSerializedString = null;
             //if (item.DescriptionString != null)
@@ -41,7 +41,7 @@ namespace Demo.Module.Data.SQL
             //}
 
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item_Insert]", out id, item.Name, item.ProductId);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item2_Insert]", out id, item.Name, item.ProductId);
             insertedId = Convert.ToInt32(id);
             return (nbOfRecordsAffected > 0);
         }
@@ -56,7 +56,7 @@ namespace Demo.Module.Data.SQL
             //if (college.DescriptionString != null)
             //    descriptionSerializedString = Vanrise.Common.Serializer.Serialize(college.DescriptionString);
 
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item_Update]", item.ItemId, item.Name, item.ProductId);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item2_Update]", item.ItemId, item.Name, item.ProductId);
             return (nbOfRecordsAffected > 0);
         }
 
@@ -68,7 +68,7 @@ namespace Demo.Module.Data.SQL
 
         public bool AreCollegesUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("[dbo].[Item]", ref updateHandle);
+            return base.IsDataUpdated("[dbo].[Items]", ref updateHandle);
         }
 
         Item ItemMapper(IDataReader reader)

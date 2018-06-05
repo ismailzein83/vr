@@ -67,8 +67,8 @@ namespace Demo.Module.Business
             if (insertActionSuccess)
             {
                 Item.ItemId = ItemId;
-                //insertOperationOutput.Result = InsertOperationResult.Succeeded;
-               // insertOperationOutput.InsertedObject = ItemDetailMapper(Item);
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = ItemDetailMapper(Item);
             }
             else
             {
@@ -89,7 +89,7 @@ namespace Demo.Module.Business
             if (updateActionSuccess)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                //updateOperationOutput.UpdatedObject = ItemDetailMapper(Item);
+                updateOperationOutput.UpdatedObject = ItemDetailMapper(Item);
             }
             else
             {

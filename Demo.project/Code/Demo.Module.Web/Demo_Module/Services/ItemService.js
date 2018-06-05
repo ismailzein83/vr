@@ -20,6 +20,8 @@ function (VRModalService, Demo_Module_ItemAPIService, VRNotificationService) {
         VRModalService.showModal('/Client/Modules/Demo_Module/Views/ItemEditor.html', parameters, settings);
     }
     function editItem(itemId, itemProduct, onItemUpdated) {
+
+        console.log(itemId);
         var settings = {
         };
         var parameters = {

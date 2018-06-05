@@ -1,157 +1,138 @@
-﻿"use strict"
-app.directive("demoModuleUniversityGrid", ["VRNotificationService", "Demo_Module_UniversityAPIService", "Demo_Module_UniversityService", "Demo_Module_CollegeService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-    function (VRNotificationService, Demo_Module_UniversityAPIService, Demo_Module_UniversityService, Demo_Module_CollegeService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
-        var directiveDefinitionObject = {
+﻿'use strict';
+app.directive('demoModuleProductSelector', ['VRNotificationService', 'Demo_Module_ProductAPIService', 'UtilsService', 'VRUIUtilsService',
+function (VRNotificationService, Demo_Module_ProductAPIService, UtilsService, VRUIUtilsService) {
 
-            restrict: "E",
-            scope: {
-                onReady: '='
-            },
+    var directiveDefinitionObject = {
+        restrict: 'E',
+        scope: {
+            onReady: '=',
+            ismultipleselection: "@",
+            onselectionchanged: '=',
+            selectedvalues: '=',
+            isrequired: "=",
+            onselectitem: "=",
+            ondeselectitem: "=",
+            hideremoveicon: '@',
+            normalColNum: '@',
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            ctrl.datasource = [];
 
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var universityGrid = new UniversityGrid($scope, ctrl, $attrs);
-                universityGrid.initializeController();
-            },
+            ctrl.selectedvalues;
+            if ($attrs.ismultipleselection != undefined)
+                ctrl.selectedvalues = [];
 
-            controllerAs: 'ctrl',
-            bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: "/Client/Modules/Demo_Module/Directives/University/templates/UniversityGridTemplate.html"
-        };
-
-        function UniversityGrid($scope, ctrl, $attrs) {
-            var gridAPI;
-            var gridDrillDownTabs;
-            this.initializeController = initializeController;
-
-            function initializeController() {
-                $scope.universities = [];
-                $scope.onGridReady = function (api) {
-                    gridAPI = api;
-
-                    gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, $scope.gridMenuActions);
-                    
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
-
-                    function getDirectiveAPI() {
-                        var directiveAPI = {};
-                        directiveAPI.loadGrid = function (query) {
-                            return gridAPI.retrieveData(query);
-                        };
-
-                        directiveAPI.onUniversityAdded = function (university) {
-                            gridDrillDownTabs.setDrillDownExtensionObject(university);
-                            gridAPI.itemAdded(university);
-                        };
-                        return directiveAPI;
-                    }
+            $scope.addNewProduct = function () {
+                var onProductAdded = function (productObj) {
+                    ctrl.datasource.push(productObj.Entity);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(productObj.Entity);
+                    else
+                        ctrl.selectedvalues = productObj.Entity;
                 };
+                Demo_Module_ProductService.addProduct(onProductAdded);
+            };
 
-                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return Demo_Module_UniversityAPIService.GetFilteredUniversities(dataRetrievalInput)
-                    .then(function (response) {
-                        if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                var tableItem = response.Data[i];
-                                gridDrillDownTabs.setDrillDownExtensionObject(tableItem);
-                            }
-                        }
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-                };
-                defineMenuActions();
-            }
+            var productSelector = new ProductSelector(ctrl, $scope, $attrs);
+            productSelector.initializeController();
+        },
+        controllerAs: 'ctrl',
+        bindToController: true,
+        compile: function (element, attrs) {
+            return {
+                pre: function ($scope, iElem, iAttrs, ctrl) {
 
-            function defineMenuActions() {
-                $scope.gridMenuActions = [{
-                    name: "Edit",
-                    clicked: editUniversity,
-
-                }, {
-                    name: "Delete",
-                    clicked: deleteUniversity,
-                }];
-            }
-
-            function editUniversity(university) {
-                var onUniversityUpdated = function (university) {
-                    gridAPI.itemUpdated(university);
                 }
-                Demo_Module_UniversityService.editUniversity(university.Entity.UniversityId, onUniversityUpdated);
-            }
-
-            function deleteUniversity(university) {
-                var onUniversityDeleted = function (university) {
-                    gridAPI.itemDeleted(university);
-                };
-                Demo_Module_UniversityService.deleteUniversity($scope, university, onUniversityDeleted)
-            }
-
-            function getGridDrillDownDefinitions() {
-                var drillDownDefinitions = [];
-                drillDownDefinitions.push(getCollegeDrillDownDefinition());
-                return drillDownDefinitions;
-            }
-
-            function getCollegeDrillDownDefinition() {
-                var drillDownDefinition = {};
-                drillDownDefinition.title = "Colleges";
-                drillDownDefinition.directive = "demo-module-college-grid";
-                drillDownDefinition.loadDirective = function (collegeGridAPI, tableItem) {
-                    tableItem.collegeGridAPI = collegeGridAPI;
-                    var query = {
-                        Name: null,
-                        UniversityIds: [tableItem.Entity.UniversityId]
-                    };
-                    return collegeGridAPI.loadGrid(query);
-                };
-
-                drillDownDefinition.parentMenuActions = [{
-                    name: "Add College",
-                    clicked: function (tableItem) {
-                        if (drillDownDefinition.setTabSelected != undefined)
-                            drillDownDefinition.setTabSelected(tableItem);
-
-                        var onCollegeAdded = function (collegeObj) {
-                            if (tableItem.collegeGridAPI != undefined) {
-                                tableItem.collegeGridAPI.onCollegeAdded(collegeObj);
-                            }
-                        };
-                        Demo_Module_CollegeService.addCollege(onCollegeAdded);
-                    },
-                }];
-                return drillDownDefinition;
-            }
-
-            function getDrillDownToAnalyticTable() {
-                var drillDownDefinition = {};
-
-                drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-                drillDownDefinition.directive = "vr-common-objecttracking-grid";
-
-                drillDownDefinition.loadDirective = function (directiveAPI, analyticTableItem) {
-
-                    analyticTableItem.objectTrackingGridAPI = directiveAPI;
-                    var query = {
-                        ObjectId: analyticTableItem.Entity.UniversityId,
-                        EntityUniqueName: CollegeAPIService.GetCollegesInfo(ObjectId),
-
-                    };
-
-                    return analyticTableItem.objectTrackingGridAPI.load(query);
-                };
-
-                return drillDownDefinition;
-            }
+            };
+        },
+        template: function (element, attrs) {
+            return getProductTemplate(attrs);
         }
-        return directiveDefinitionObject;
-    }]
-    );
+
+    };
+
+    function getProductTemplate(attrs) {
+
+        var multipleselection = "";
+        var label = "Product";
+        if (attrs.ismultipleselection != undefined) {
+            label = "Product";
+            multipleselection = "ismultipleselection";
+        }
+
+        var addCliked = '';
+        if (attrs.showaddbutton != undefined)
+            addCliked = 'onaddclicked="addNewProduct"';
+
+        var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
+
+        return '<vr-columns  colnum="{{ctrl.normalColNum}}"  ><vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="ProductId" isrequired="ctrl.isrequired"'
+            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged=" ctrl.onselectionchanged" entityName="Product" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' + hideremoveicon + '>'
+            + '</vr-select></vr-columns>';
+    }
+
+    function ProductSelector(ctrl, $scope, attrs) {
+
+        var selectorAPI;
+
+        function initializeController() {
+
+            $scope.scopeModel = {};
+            $scope.scopeModel.onselection = function (selectedProduct) {
+                ctrl.onselectionchanged(selectedProduct);
+            };
+
+            $scope.scopeModel.onSelectorReady = function (api) {
+                selectorAPI = api;
+                defineAPI();
+            };
+
+            $scope.scopeModel.onCancelSearch = function (api) {
+                $scope.scopeModel.searchProduct = undefined;
+            };
+        }
+
+        function defineAPI() {
+            var api = {};
+
+            api.load = function (payload) {
+                selectorAPI.clearDataSource();
+
+                var selectedIds;
+                var filter;
+
+                if (payload != undefined) {
+                    selectedIds = [];
+                    selectedIds.push(payload.selectedIds);
+                    filter = payload.filter;
+                }
+                return getProductsInfo(attrs, ctrl, selectedIds, filter);
+            };
+
+            api.getSelectedIds = function () {
+                return VRUIUtilsService.getIdSelectedIds('ProductId', attrs, ctrl);
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        this.initializeController = initializeController;
+    }
+
+    function getProductsInfo(attrs, ctrl, selectedIds, filter) {
+        return Demo_Module_ProductAPIService.GetProductsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+            ctrl.datasource.length = 0;
+            angular.forEach(response, function (itm) {
+                ctrl.datasource.push(itm);
+            });
+
+            if (selectedIds != undefined) {
+                VRUIUtilsService.setSelectedValues(selectedIds, 'ProductId', attrs, ctrl);
+            }
+        });
+    }
+
+    return directiveDefinitionObject;
+}]);

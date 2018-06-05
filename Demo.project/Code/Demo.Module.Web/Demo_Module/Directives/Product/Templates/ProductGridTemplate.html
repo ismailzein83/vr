@@ -1,10 +1,10 @@
-﻿<vr-datagrid datasource="products"
-             on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
+﻿<vr-datagrid datasource="scopeModel.products"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions"
-             idfield="Entity.ProductId" enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.ProductId'" type="'Text'"></vr-datagridcolumn>
+             menuactions="scopeModel.gridMenuActions"
+             idfield="ProductId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'ProductId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Product Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

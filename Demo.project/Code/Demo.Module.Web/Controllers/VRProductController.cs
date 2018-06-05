@@ -49,13 +49,13 @@ namespace Demo.Module.Web.Controllers
             return productManager.Delete(productId);
         }
 
-        //[HttpGet]
-        //[Route("GetProductsInfo")]
-        //public IEnumerable<Demo.Module.Entities.Product.ProductInfo> GetProductsInfo()
-        //{
-        //    ProductManager universityManager = new ProductManager();
-        //    return universityManager.GetProductsInfo();
-        //}
+        [HttpGet]
+        [Route("GetProductsInfo")]
+        public IEnumerable<Demo.Module.Entities.Product.ProductInfo> GetProductsInfo()
+        {
+            ProductManager productManager = new ProductManager();
+            return productManager.GetProductsInfo();
+        }
 
         [HttpGet]
         [Route("GetProductById")]

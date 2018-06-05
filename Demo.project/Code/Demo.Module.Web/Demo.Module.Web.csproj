@@ -150,6 +150,8 @@
     <Content Include="Demo_Module\Directives\Family\demo-module-family-grid.js" />
     <Content Include="Demo_Module\Directives\Family\Template\FamilyGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Item\demo-module-item-grid.js" />
+    <Content Include="Demo_Module\Directives\Item\demo-module-item-search.js" />
+    <Content Include="Demo_Module\Directives\Item\Templates\ItemSearchTemplate.html" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-selector.js" />
@@ -218,6 +220,8 @@
     <Content Include="Demo_Module\Views\FamilyManagementController.js" />
     <Content Include="Demo_Module\Views\ItemEditor.html" />
     <Content Include="Demo_Module\Views\ItemEditorController.js" />
+    <Content Include="Demo_Module\Views\ItemManagementController.js" />
+    <Content Include="Demo_Module\Views\ItemManagement.html" />
     <Content Include="Demo_Module\Views\ProductsEditor.html" />
     <Content Include="Demo_Module\Views\ProductsEditorController.js" />
     <Content Include="Demo_Module\Views\ProductsManagement.html" />

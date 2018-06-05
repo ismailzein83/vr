@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Demo_Module_ItemEditorController" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="Demo_Module_ItemEditorController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formItemEditor">
             <vr-tabs>
@@ -7,7 +7,7 @@
                         <vr-columns width="1/3row">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <demo-module-product-selector normal-col-num="4" selectedvalues="scopeModel.selector" on-ready="onProductDirectiveReady"></demo-module-product-selector>
+                        <demo-module-product-selector normal-col-num="4" selectedvalues="scopeModel.selector" on-ready="scopeModel.onProductDirectiveReady"></demo-module-product-selector>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
@@ -26,8 +26,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formItemEditor" data-onclick="saveItem"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" formname="formItemEditor" data-onclick="scopeModel.saveItem"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

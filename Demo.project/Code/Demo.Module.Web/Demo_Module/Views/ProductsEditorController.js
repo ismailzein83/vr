@@ -9,51 +9,41 @@ function ProductsEditorController($scope, Demo_Module_ProductAPIService, VRNotif
     var isEditMode;
     var productId;
     var productEntity;
-    var context;
 
     loadParameters();
     defineScope();
     load();
 
-
     function loadParameters() {
 
         var parameters = VRNavigationService.getParameters($scope);
-
         if (parameters != undefined && parameters != null) {
-
             productId = parameters.productId;
-            context = parameters.context;
-
         }
-        
         isEditMode = (productId != undefined);
-    }
+    };
 
     function defineScope() {
 
-        $scope.saveProduct = function () {
-            if (isEditMode)
-                 updateProduct();
-            else
-                 insertProduct();
-        }
+        $scope.scopeModel = {};
 
-        $scope.close = function () {
+        $scope.scopeModel.saveProduct = function () {
+            if (isEditMode)
+                updateProduct();
+            else
+                insertProduct();
+        };
+        $scope.scopeModel.close = function () {
             $scope.modalContext.closeModal()
         };
 
-
-    }
+    };
 
     function load() {
 
-        $scope.isLoading = true;
-
+        $scope.scopeModel.isLoading = true;
         if (isEditMode) {
-
             getProduct().then(function () {
-
                 loadAllControls()
                     .finally(function () {
                         productEntity = undefined;
@@ -62,18 +52,16 @@ function ProductsEditorController($scope, Demo_Module_ProductAPIService, VRNotif
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
             });
-
         } else {
-
             loadAllControls();
         }
-    }
+    };
 
     function getProduct() {
-        return Demo_Module_ProductAPIService.GetProductById(productId).then(function (productObject) {
-            productEntity = productObject;
+        return Demo_Module_ProductAPIService.GetProductById(productId).then(function (response) {
+            productEntity = response;
         });
-    }
+    };
 
 
     function loadAllControls() {
@@ -82,7 +70,7 @@ function ProductsEditorController($scope, Demo_Module_ProductAPIService, VRNotif
                VRNotificationService.notifyExceptionWithClose(error, $scope);
            })
           .finally(function () {
-              $scope.isLoading = false;
+              $scope.scopeModel.isLoading = false;
           });
     }
 
@@ -91,57 +79,48 @@ function ProductsEditorController($scope, Demo_Module_ProductAPIService, VRNotif
             $scope.title = UtilsService.buildTitleForUpdateEditor(productEntity.Name, "Product");
         else
             $scope.title = UtilsService.buildTitleForAddEditor("Product");
-    }
+    };
 
     function loadStaticData() {
         if (productEntity != undefined)
-            $scope.name = productEntity.Name;
-    }
+            $scope.scopeModel.name = productEntity.Name;
+    };
 
+
+    function buildProductObjectFromScope() {
+        var object = {
+            ProductId: (productId != undefined) ? productId : undefined,
+            Name: $scope.scopeModel.name,
+        };
+        return object;
+    };
 
     function insertProduct() {
 
-        $scope.isLoading = true;
-
-        var productObj = {
-            ProductId: productId,
-            Name: $scope.name
-        };
-
-        return Demo_Module_ProductAPIService.AddProduct(productObj).then(function (response) {
+        $scope.scopeModel.isLoading = true;
+        var productObject = buildProductObjectFromScope();
+        return Demo_Module_ProductAPIService.AddProduct(productObject).then(function (response) {
 
             if (VRNotificationService.notifyOnItemAdded("Product", response, "Name")) {
 
                 if ($scope.onProductAdded != undefined) {
-
                     $scope.onProductAdded(response.InsertedObject);
                 }
-
                 $scope.modalContext.closeModal();
-
             }
-
         }).catch(function (error) {
-
             VRNotificationService.notifyException(error, $scope);
-            console.log(error);
-
         }).finally(function () {
-
-            $scope.isLoading = false;
+            $scope.scopeModel.isLoading = false;
         });
 
     }
 
     function updateProduct() {
-        $scope.isLoading = true;
+        $scope.scopeModel.isLoading = true;
 
-        var productObj = {
-            ProductId: productId,
-            Name: $scope.name
-        };
-
-        Demo_Module_ProductAPIService.UpdateProduct(productObj)
+        var productObject = buildProductObjectFromScope();
+        Demo_Module_ProductAPIService.UpdateProduct(productObject)
         .then(function (response) {
             if (VRNotificationService.notifyOnItemUpdated("Product", response, "Name")) {
                 if ($scope.ProductUpdated != undefined)
@@ -151,7 +130,7 @@ function ProductsEditorController($scope, Demo_Module_ProductAPIService, VRNotif
         }).catch(function (error) {
             VRNotificationService.notifyException(error, $scope);
         }).finally(function () {
-            $scope.isLoading = false;
+            $scope.scopeModel.isLoading = false;
         });
     }
 }

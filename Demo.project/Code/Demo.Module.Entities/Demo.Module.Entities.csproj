@@ -57,6 +57,7 @@
     <Compile Include="Branch\BranchQuery.cs" />
     <Compile Include="Branch\Setting\Dimensions\Dimensions.cs" />
     <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
+    <Compile Include="Product\ProductInfoFilter.cs" />
     <Compile Include="Room\Room.cs" />
     <Compile Include="Room\RoomDetails.cs" />
     <Compile Include="Room\RoomQuery.cs" />

@@ -38,7 +38,7 @@ app.directive("demoModuleItemGrid", ["VRNotificationService", "Demo_Module_ItemA
                         directiveAPI.loadGrid = function (query) {
                             return gridAPI.retrieveData(query);
                         };
-                        directiveAPI.onitemAdded = function (item) {
+                        directiveAPI.onItemAdded = function (item) {
                             gridAPI.itemAdded(item);
                         };
                         return directiveAPI;
@@ -71,11 +71,11 @@ app.directive("demoModuleItemGrid", ["VRNotificationService", "Demo_Module_ItemA
                 var onItemUpdated = function (item) {
                     gridAPI.itemUpdated(item);
                 };
-                Demo_Module_ItemService.editItem(item.itemId, item.ProductName, onItemUpdated);
+                Demo_Module_ItemService.editItem(item.ItemId, item.ProductName, onItemUpdated);
             }
 
             function deleteItem(item) {
-                var onItemDeleted = function (item) {
+                var oItemDeleted = function (item) {
                     gridAPI.itemDeleted(item);
                 };
                 Demo_Module_ItemService.deleteItem($scope, item, onItemDeleted)

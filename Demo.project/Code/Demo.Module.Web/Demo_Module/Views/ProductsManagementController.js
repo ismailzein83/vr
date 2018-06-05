@@ -13,19 +13,21 @@ function productsManagementController($scope,VRNotificationService,Demo_Module_P
 
     function defineScope(){
 
-        $scope.searchClicked = function () {
+        $scope.scopeModel = {};
 
-            gridAPI.loadGrid(getGridQuery());
+        $scope.scopeModel.search = function () {
+
+            gridAPI.loadGrid(getFilter());
         }
 
-        $scope.onGridReady = function (api) {
+        $scope.scopeModel.onGridReady = function (api) {
 
             gridAPI = api;
-            api.loadGrid(getGridQuery());
+            api.loadGrid(getFilter());
 
         }
 
-        $scope.addNewProduct = function () 
+        $scope.scopeModel.addProduct = function ()
         {
             var onProductAdded = function (product) {
 
@@ -42,10 +44,11 @@ function productsManagementController($scope,VRNotificationService,Demo_Module_P
     function load() {
     }
 
-    function getGridQuery() {
-
-        return { Name: $scope.name };
-    }
+    function getFilter() {
+        return {
+            Name: $scope.scopeModel.name
+        };
+    };
 
 
 
