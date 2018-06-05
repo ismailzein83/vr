@@ -69,6 +69,7 @@
     <Compile Include="NewSupplierZonesServicesDataManager.cs" />
     <Compile Include="NewSupplierRateDataManager.cs" />
     <Compile Include="NewSupplierZoneDataManager.cs" />
+    <Compile Include="ReceivedPricelistManager.cs" />
     <Compile Include="SupplierPricelistPreviewSummaryDataManager.cs" />
     <Compile Include="SupplierZoneServicePreviewDataManager.cs" />
     <Compile Include="SupplierPriceListTemplateDataManager.cs" />
