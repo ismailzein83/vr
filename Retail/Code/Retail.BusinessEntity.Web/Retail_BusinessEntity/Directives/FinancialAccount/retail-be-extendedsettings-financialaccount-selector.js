@@ -44,6 +44,7 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
             var status;
             var effectiveDate;
             var isEffectiveInFuture;
+            var accountTypeId;
             function initializeController() {
                 ctrl.onDirectiveReady = function (api) {
                     directiveReadyAPI = api;
@@ -56,7 +57,7 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                 var api = {};
 
                 api.load = function (payload) {
-                    var accountTypeId;
+                   
                     var extendedSettings;
                     var selectedIds;
 
@@ -108,6 +109,10 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
 
                 filter.Filters = [];
 
+                var financialAccountBalanceAccountFilter = {
+                    $type: 'Retail.BusinessEntity.Business.FinancialAccountBalanceAccountFilter, Retail.BusinessEntity.Business',
+                    AccountTypeId: accountTypeId
+                };
                 var financialAccounts = {
                     $type: 'Retail.BusinessEntity.Business.AccountBalanceEnabledAccountFilter, Retail.BusinessEntity.Business',
                 };
@@ -115,6 +120,7 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                     $type: "Retail.BusinessEntity.Business.Filters.AccountBalanceStatusFilter ,Retail.BusinessEntity.Business",
                     Status: status
                 };
+            filter.Filters.push(financialAccountBalanceAccountFilter);
             filter.Filters.push(financialAccounts);
             filter.Filters.push(financialAccountStatus);
                 return filter;

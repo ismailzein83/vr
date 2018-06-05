@@ -11,7 +11,8 @@ using Vanrise.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Business;
-
+using Vanrise.Common;
+using Vanrise.InvToAccBalanceRelation.Entities;
 namespace Retail.Interconnect.Business
 {
     public class InterconnectInvoiceGenerator : InvoiceGenerator
@@ -84,6 +85,7 @@ namespace Retail.Interconnect.Business
                     InvoiceDetails = interconnectInvoiceDetails,
                     InvoiceItemSets = generatedInvoiceItemSets,
                 };
+                SetInvoiceBillingTransactions(context, interconnectInvoiceDetails);
             }
             else
             {
@@ -94,7 +96,38 @@ namespace Retail.Interconnect.Business
 
             #endregion
         }
-       
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, InterconnectInvoiceDetails invoiceDetails)
+        {
+            var relationManager = new Vanrise.InvToAccBalanceRelation.Business.InvToAccBalanceRelationDefinitionManager();
+            List<BalanceAccountInfo> invoiceBalanceAccounts = relationManager.GetInvoiceBalanceAccounts(context.InvoiceTypeId, context.PartnerId, context.IssueDate);
+
+            invoiceBalanceAccounts.ThrowIfNull("invoiceBalanceAccounts", context.PartnerId);
+            if (invoiceBalanceAccounts.Count == 0)
+                throw new Vanrise.Entities.DataIntegrityValidationException("invoiceBalanceAccounts.Count == 0");
+
+            var billingTransaction = new GeneratedInvoiceBillingTransaction()
+            {
+                AccountTypeId = invoiceBalanceAccounts.FirstOrDefault().AccountTypeId,
+                AccountId = context.PartnerId,
+                TransactionTypeId = this._invoiceTransactionTypeId,
+                Amount = invoiceDetails.Amount,
+                CurrencyId = invoiceDetails.InterconnectCurrencyId
+            };
+        
+            billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
+            billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
+            if (this._usageTransactionTypeIds != null)
+            {
+                foreach (Guid usageTransactionTypeId in this._usageTransactionTypeIds)
+                {
+                    billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                    {
+                        TransactionTypeId = usageTransactionTypeId
+                    });
+                }
+            }
+            context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
+        }
         private InterconnectInvoiceDetails BuildInterconnectInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
