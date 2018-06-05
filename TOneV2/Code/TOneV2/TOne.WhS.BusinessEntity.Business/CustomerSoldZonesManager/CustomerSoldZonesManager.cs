@@ -64,9 +64,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     return null;
 
                 List<long> filterdZonesIds = new List<long>();
-                if(input.Query.ZoneIds != null)
+                if (input.Query.ZoneIds != null)
                     filterdZonesIds.AddRange(input.Query.ZoneIds);
-                
+
                 if (input.Query.Code != null)
                 {
                     List<long> filterdZonesIdsByCode = _saleCodeManager.GetSaleZonesIdsByCode(input.Query.Code);
@@ -94,7 +94,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var customerCountriesByCountryId = StructureCustomersCountriesByCountryId(soldCustomersCountries);
 
                 var soldZonesIds = _saleZoneManager.GetSoldZonesBySellingNumberPlan(input.Query.SellingNumberPlanId, customerCountriesByCountryId.Keys.ToList(), filterdZonesIds, effectiveOn);
-                
+
                 if (soldZonesIds == null)
                     return null;
                 var customerZoneDetails = RoutingManagerFactory.GetManager<ICustomerZoneDetailsManager>().GetCustomerZoneDetailsByZoneIdsAndCustomerIds(soldZonesIds, customersIds);
@@ -233,6 +233,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     var j = i + 1;
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer " + j, Width = 30 });
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Rate " + j, Width = 30 });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services " + j, Width = 30 });
                 }
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -251,8 +252,13 @@ namespace TOne.WhS.BusinessEntity.Business
                                 {
                                     row.Cells.Add(new ExportExcelCell { Value = customerZoneDataDetail.CustomerName });
                                     row.Cells.Add(new ExportExcelCell { Value = customerZoneDataDetail.Rate });
+
+                                    ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+                                    var services = zoneServiceConfigManager.GetZoneServicesNames(customerZoneDataDetail.Services);
+                                    string servicesSymbol = string.Join(",", services);
+                                    row.Cells.Add(new ExportExcelCell { Value = servicesSymbol });
                                 }
-                                AddEmptyCelss(topCustomers, record.CustomerZones.Count(), row);
+                                AddEmptyCelss(sheet.Header.Cells.Count, row.Cells.Count, row);
                             }
                         }
                     }
@@ -266,7 +272,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     int emptyValuesCount = headerCellCount - rowCellCount;
                     for (int i = 0; i < emptyValuesCount; i++)
                     {
-                        row.Cells.Add(new ExportExcelCell { Value = null });
                         row.Cells.Add(new ExportExcelCell { Value = null });
                     }
                 }
