@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
+
 namespace Vanrise.Common.Business
 {
     public class GeneralSettingsManager
@@ -22,7 +19,6 @@ namespace Vanrise.Common.Business
             ConfigManager configManager = new ConfigManager();
             return configManager.GetGeneralTechnicalSetting();
         }
-
 
         public GoogleAnalyticsData GetGoogleAnalyticsSetting()
         {
@@ -155,7 +151,6 @@ namespace Vanrise.Common.Business
             return uiSettings;
         }
 
-
         public UIParameter GetParameter(string parameterName)
         {
             var uiSettings = GetUIParameters();
@@ -217,5 +212,4 @@ namespace Vanrise.Common.Business
             return "yyyy-MM-dd";
         }
     }
-
 }
