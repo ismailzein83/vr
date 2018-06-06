@@ -41,6 +41,7 @@ namespace Vanrise.Entities
         public ExcelCellStyle Style { get; set; }
         public dynamic Value { get; set; }
     }
+
     public class ExcelCellStyle
     {
         public bool IsBold { get; set; }
@@ -52,8 +53,6 @@ namespace Vanrise.Entities
         public List<ExportExcelHeaderCell> Cells { get; set; }
     }
 
-    public enum ExcelCellType { DateTime }
-
     public class ExportExcelHeaderCell
     {
         public string Title { get; set; }
@@ -62,6 +61,14 @@ namespace Vanrise.Entities
 
         public DateTimeType? DateTimeType { get; set; }
 
+        public NumberType? NumberType { get; set; }
+
         public int? Width { get; set; }
     }
+
+    public enum ExcelCellType { DateTime, Number }
+
+    public enum DateTimeType { Date, DateTime, LongDateTime }
+
+    public enum NumberType { Int, BigInt, NormalDecimal, LongDecimal }
 }

@@ -170,7 +170,6 @@
     <Compile Include="VRConnection\VRConnectionInfo.cs" />
     <Compile Include="VRConnection\VRConnection.cs" />
     <Compile Include="DateTimeRange.cs" />
-    <Compile Include="DateTimeType.cs" />
     <Compile Include="GridColumnSettings.cs" />
     <Compile Include="Settings\BankDetailsSettings\BankDetailsDetail.cs" />
     <Compile Include="Settings\BankDetailsSettings\BankDetailsSettings.cs" />

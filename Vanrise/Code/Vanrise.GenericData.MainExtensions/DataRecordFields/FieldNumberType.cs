@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-    public enum FieldNumberPrecision { Normal = 0, Long = 1 }
 
     public class FieldNumberType : DataRecordFieldType
     {
@@ -46,9 +46,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (_nonNullableRuntimeType == null)
             {
-                lock(this)
+                lock (this)
                 {
-                    if(_nonNullableRuntimeType == null)
+                    if (_nonNullableRuntimeType == null)
                     {
                         var attributeInfo = Utilities.GetEnumAttribute<FieldNumberDataType, FieldNumberDataTypeInfoAttribute>(this.DataType);
                         if (attributeInfo == null)
@@ -56,7 +56,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         _nonNullableRuntimeType = attributeInfo.RuntimeType;
                     }
                 }
-                
+
             }
             return _nonNullableRuntimeType;
         }
@@ -339,8 +339,31 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
         }
 
+        public override void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
+        {
+            context.HeaderCell.ThrowIfNull("context.HeaderCell");
+            var headerCell = context.HeaderCell;
+            headerCell.CellType = ExcelCellType.Number;
+            switch (this.DataType)
+            {
+                case FieldNumberDataType.Int: headerCell.NumberType = NumberType.Int; break;
+                case FieldNumberDataType.BigInt: headerCell.NumberType = NumberType.BigInt; break;
+                case FieldNumberDataType.Decimal:
+                    switch (this.DataPrecision)
+                    {
+                        case FieldNumberPrecision.Normal: headerCell.NumberType = NumberType.NormalDecimal; break;
+                        case FieldNumberPrecision.Long: headerCell.NumberType = NumberType.LongDecimal; break;
+                        default: throw new NotSupportedException(string.Format("FieldNumberPrecision '{0}' is not supported", this.DataPrecision));
+                    }
+                    break;
+                default: throw new NotSupportedException(string.Format("FieldNumberDataType '{0}' is not supported", this.DataType)); break;
+            }
+        }
+
         #endregion
     }
+
+    public enum FieldNumberPrecision { Normal = 0, Long = 1 }
 
     public enum FieldNumberDataType
     {
@@ -351,7 +374,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         [FieldNumberDataTypeInfo(RuntimeType = typeof(long))]
         BigInt = 2
     }
-
     public class FieldNumberDataTypeInfoAttribute : Attribute
     {
         public Type RuntimeType { get; set; }

@@ -6,7 +6,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class GeneralSettingsManager
+    public class GeneralSettingsManager : IGeneralSettingsManager
     {
         public GeneralSettingData GetGeneralSettingData()
         {

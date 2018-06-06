@@ -15,6 +15,16 @@ namespace Vanrise.Common
     {
         const string DEFAULT_EXCEL_SHEET_NAME = "Result";
 
+        int _normalPrecision;
+        int _longPrecision;  
+
+        public ExcelManager()
+        {
+            IGeneralSettingsManager generalSettingsManager = BusinessManagerFactory.GetManager<IGeneralSettingsManager>();
+            _normalPrecision = generalSettingsManager.GetNormalPrecisionValue();
+            _longPrecision = generalSettingsManager.GetLongPrecisionValue();
+        }
+
         internal IDataRetrievalResult<T> ExportExcel<T>(BigResult<T> result, ExcelExportHandler<T> exportExcelHandler, DataRetrievalInput input)
         {
             ExportExcelSheet excelSheet;
@@ -233,6 +243,7 @@ namespace Vanrise.Common
             excelResult.ExcelFileStream = memoryStream;
             return excelResult;
         }
+
         private void BuildWorkBookSheet(Workbook wbk, ExportExcelSheet excelSheet)
         {
             ValidateSheet(excelSheet);
@@ -246,6 +257,7 @@ namespace Vanrise.Common
             if (excelSheet.AutoFitColumns)
                 workSheet.AutoFitColumns();
         }
+
         private void BuildHeaderCells(Worksheet workSheet, List<ExportExcelHeaderCell> exportExcelHeaderCells, int rowIndex, int colIndex)
         {
             foreach (var headerCell in exportExcelHeaderCells)
@@ -262,6 +274,7 @@ namespace Vanrise.Common
                 colIndex++;
             }
         }
+
         private void BuildSheetRows(Worksheet workSheet, ExportExcelSheet excelSheet, List<ExportExcelRow> exportExcelRows, int rowIndex, int colIndex)
         {
             foreach (var excelRow in exportExcelRows)
@@ -285,6 +298,7 @@ namespace Vanrise.Common
                 rowIndex++;
             }
         }
+
         private void ValidateSheet(ExportExcelSheet excelSheet)
         {
             if (excelSheet == null)
@@ -300,6 +314,7 @@ namespace Vanrise.Common
         private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell, ExcelCellStyle style)
         {
             var cellStyle = excelCell.GetDisplayStyle();
+
             if (headerCell != null && headerCell.CellType.HasValue)
             {
                 switch (headerCell.CellType.Value)
@@ -309,8 +324,15 @@ namespace Vanrise.Common
                             throw new NullReferenceException("headerCell.DateTimeType");
                         cellStyle.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
                         break;
+
+                    case ExcelCellType.Number:
+                        if (!headerCell.NumberType.HasValue)
+                            throw new NullReferenceException("headerCell.NumberType");
+                        cellStyle.Custom = this.GetNumberFormat(headerCell.NumberType.Value);
+                        break;
                 }
             }
+
             if (style != null)
             {
                 cellStyle.Font.IsBold = style.IsBold;
@@ -323,8 +345,22 @@ namespace Vanrise.Common
                     cellStyle.Font.Color = Color.White;
                 }
             }
-            excelCell.SetStyle(cellStyle);
 
+            excelCell.SetStyle(cellStyle);
+        }
+
+        private string GetNumberFormat(Vanrise.Entities.NumberType numberType)
+        {
+            switch (numberType)
+            {
+                case Vanrise.Entities.NumberType.Int:
+                case Vanrise.Entities.NumberType.BigInt: return "#,##0";
+                case Vanrise.Entities.NumberType.NormalDecimal:
+                    return string.Concat("#,##0.", new StringBuilder(_normalPrecision).Insert(0, "0", _normalPrecision).ToString());
+                case Vanrise.Entities.NumberType.LongDecimal:
+                    return string.Concat("#,##0.", new StringBuilder(_longPrecision).Insert(0, "0", _longPrecision).ToString());
+                default: throw new NotSupportedException(String.Format("numberType '{0}'", numberType));
+            }
         }
 
         private ExportExcelSheet ConvertResultToDefaultExcelFormat<T>(BigResult<T> result)

@@ -885,12 +885,7 @@ namespace Vanrise.Analytic.Business
                                 if (!summary.MeasureValues.TryGetValue(measureName, out measureValue))
                                     throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
 
-                                var measure = measures.GetRecord(measureName);
-                                object value = measureValue.Value;
-                                if (measure.Config.FieldType.CanRoundValue)
-                                    value = measure.Config.FieldType.GetRoundedValue(value);
-
-                                totalrow.Cells.Add(new ExportExcelCell { Value = value });
+                                totalrow.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
                             }
                         }
                         sheet.Rows.Add(totalrow);
@@ -904,9 +899,7 @@ namespace Vanrise.Analytic.Business
                         if (record.DimensionValues != null)
                         {
                             foreach (var dimValue in record.DimensionValues)
-                            {
                                 row.Cells.Add(new ExportExcelCell { Value = dimValue.Name });
-                            }
                         }
 
                         if (_query.MeasureFields != null)
@@ -917,12 +910,7 @@ namespace Vanrise.Analytic.Business
                                 if (!record.MeasureValues.TryGetValue(measureName, out measureValue))
                                     throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
 
-                                var measure = measures.GetRecord(measureName);
-                                object value = measureValue.Value;
-                                if (measure.Config.FieldType.CanRoundValue)
-                                    value = measure.Config.FieldType.GetRoundedValue(value);
-
-                                row.Cells.Add(new ExportExcelCell { Value = value });
+                                row.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
                             }
                         }
                     }
