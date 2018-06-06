@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
-using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
-using System.Globalization;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -17,33 +13,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId { get { return new Guid("75aef329-27bd-4108-b617-f5cc05ff2aa3"); } }
 
-        public override bool AreEqual(Object newValue, Object oldValue)
-        {
-            if (newValue == null && oldValue == null)
-                return true;
-         
-            if (newValue == null || oldValue == null)
-                return false;
-
-            switch (DataType)
-            {
-                case FieldNumberDataType.BigInt:
-                    long newLongValue = (long)newValue;
-                    long oldLongValue = (long)oldValue;
-                    return newLongValue.Equals(oldLongValue);
-
-                case FieldNumberDataType.Decimal:
-                    decimal newDecimalValue = (decimal)newValue;
-                    decimal oldDecimalValue = (decimal)oldValue;
-                    return newDecimalValue.Equals(oldDecimalValue);
-
-                case FieldNumberDataType.Int:
-                    int newIntValue = (int)newValue;
-                    int oldIntValue = (int)oldValue;
-                    return newIntValue.Equals(oldIntValue);
-                default: return false;
-            }
-        }
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-number-viewereditor"; } }
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-number-runtimeeditor"; } }
@@ -53,6 +22,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public FieldNumberDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
+
 
         #region Public Methods
 
@@ -258,6 +228,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 default: throw new NotSupportedException(string.Format("FieldNumberDataType {0} not supported.", this.DataType));
             }
         }
+
         public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
             if (context.FieldDescription == null)
@@ -337,6 +308,34 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 default:
                     context.ErrorMessage = "Error while parsing field of number type:" + context.FieldDescription.ToString();
                     break;
+            }
+        }
+
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
+
+            if (newValue == null || oldValue == null)
+                return false;
+
+            switch (DataType)
+            {
+                case FieldNumberDataType.BigInt:
+                    long newLongValue = (long)newValue;
+                    long oldLongValue = (long)oldValue;
+                    return newLongValue.Equals(oldLongValue);
+
+                case FieldNumberDataType.Decimal:
+                    decimal newDecimalValue = (decimal)newValue;
+                    decimal oldDecimalValue = (decimal)oldValue;
+                    return newDecimalValue.Equals(oldDecimalValue);
+
+                case FieldNumberDataType.Int:
+                    int newIntValue = (int)newValue;
+                    int oldIntValue = (int)oldValue;
+                    return newIntValue.Equals(oldIntValue);
+                default: return false;
             }
         }
 
