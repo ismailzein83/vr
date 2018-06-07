@@ -63,11 +63,11 @@ namespace TOne.WhS.RouteSync.Entities
 
         RouteRangeType? RouteRangeType { get; }
 
+        Action<Exception, bool> WriteBusinessHandledException { get; }
+
         SwitchSyncOutput SwitchSyncOutput { set; }
 
         SwitchRouteSyncInitializationData InitializationData { set; }
-
-        Action<Exception, bool> WriteBusinessHandledException { get; }
     }
 
     public interface ISwitchRouteSynchronizerFinalizeContext
