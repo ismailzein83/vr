@@ -31,7 +31,7 @@ namespace Retail.Runtime.Tasks
             //GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
-            TestRDBSelectQuery();
+            //TestRDBSelectQuery();
             //var analyticTableMeasureExternalSource =
             //    new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             //    {
@@ -660,8 +660,8 @@ namespace Retail.Runtime.Tasks
                                                         .ColumnValue("InitialBalance", initialBalance)
                                                         .ColumnValue("CurrentBalance", currentBalance)
                                                         .ColumnValue("CurrencyID", currencyId)
-                                                        .ColumnValueIfNotDefaultValue(bed, ctx => ctx.ColumnValue("BED", bed.Value))
-                                                        .ColumnValueIfNotDefaultValue(eed, ctx => ctx.ColumnValue("EED", eed.Value))
+                                                        .ColumnValueDBNullIfDefaultValue("BED", bed)
+                                                        .ColumnValueDBNullIfDefaultValue("EED", eed)
                                                         .ColumnValue("Status", (int)status)
                                                         .ColumnValue("IsDeleted", isDeleted)
                                                        .EndInsert()
@@ -764,6 +764,161 @@ namespace Retail.Runtime.Tasks
                 .UpdateLiveBalances(liveBalancesToUpdate)
                 .EndBatchQuery().GetResolvedQuery().QueryText;
 
+            List<LiveBalanceNextThresholdUpdateEntity> updateEntities = new List<LiveBalanceNextThresholdUpdateEntity>{
+                new LiveBalanceNextThresholdUpdateEntity { AccountTypeId = Guid.NewGuid(), AccountId = "43534", AlertRuleId = 5, NextAlertThreshold = 64},
+                new LiveBalanceNextThresholdUpdateEntity { AccountTypeId = Guid.NewGuid(), AccountId = "74"},
+                new LiveBalanceNextThresholdUpdateEntity { AccountTypeId = Guid.NewGuid(), AccountId = "685", AlertRuleId =6, NextAlertThreshold = 435}
+            };
+           
+            var tempTableColumns1 = new Dictionary<string, RDBTableColumnDefinition>();
+            tempTableColumns1.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            tempTableColumns1.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableColumns1.Add("NextAlertThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            tempTableColumns1.Add("AlertRuleID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            var tempTableQuery1 = new RDBTempTableQuery(tempTableColumns1);
+            var UpdateBalanceRuleInfos = new RDBQueryContext(dataProvider)
+                .StartBatchQuery()
+                    .AddQuery().CreateTempTable(tempTableQuery1)
+                    .Foreach(updateEntities,
+                        (updateEntity, ctx) => ctx.AddQuery().Insert().IntoTable(tempTableQuery1)
+                                                                .ColumnValue("AccountTypeID", updateEntity.AccountTypeId)
+                                                                .ColumnValue("AccountID", updateEntity.AccountId)
+                                                                .ColumnValueDBNullIfDefaultValue("NextAlertThreshold", updateEntity.NextAlertThreshold)
+                                                                .ColumnValueDBNullIfDefaultValue("AlertRuleID", updateEntity.AlertRuleId)
+                                                             .EndInsert())
+                    .AddQuery()
+                        .Update().FromTable(TABLE_NAME)
+                            .Join("lb")
+                            .Join(RDBJoinType.Inner, tempTableQuery1, "updateEntities").And().EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID").EqualsCondition("lb", "AccountID", "updateEntities", "AccountID").EndAnd()
+                            .EndJoin()
+                            .ColumnValue("NextAlertThreshold", new RDBColumnExpression { TableAlias = "updateEntities", ColumnName = "NextAlertThreshold" })
+                            .ColumnValue("AlertRuleID", new RDBColumnExpression { TableAlias = "updateEntities", ColumnName = "AlertRuleID" })
+                        .EndUpdate()
+                .EndBatchQuery().GetResolvedQuery().QueryText;
+
+          var  GetLiveBalancesToAlert =  new RDBQueryContext(dataProvider)
+                    .Select()
+                        .From(TABLE_NAME, "lb")
+                        .Where().And()
+                                    .EqualsCondition("AccountTypeID", accountTypeId)
+                                    .LiveBalanceToAlertCondition("lb")
+                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                .EndAnd()
+                        .SelectColumns().AllTableColumns("lb").EndColumns()
+                    .EndSelect().GetResolvedQuery().QueryText;
+        
+
+        var GetLiveBalancesToClearAlert = new RDBQueryContext(dataProvider)
+                   .Select()
+                       .From(TABLE_NAME, "lb")
+                       .Where().And()
+                                   .EqualsCondition("AccountTypeID", accountTypeId)
+                                   .LiveBalanceToClearAlertCondition("lb")
+                                   .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                               .EndAnd()
+                       .SelectColumns().AllTableColumns("lb").EndColumns()
+                   .EndSelect().GetResolvedQuery().QueryText;
+
+        var HasLiveBalancesUpdateData = new RDBQueryContext(dataProvider)
+                    .If().IfCondition()
+                            .ExistsCondition()
+                            .From(TABLE_NAME, "lb", 1)
+                            .Where()
+                                .And()
+                                    .EqualsCondition("AccountTypeID", accountTypeId)
+                                    .Or()
+                                        .And().LiveBalanceToAlertCondition("lb").EndAnd()
+                                        .And().LiveBalanceToClearAlertCondition("lb").EndAnd()
+                                    .EndOr()
+                                .EndAnd()
+                            .SelectColumns().Column("ID").EndColumns()
+                            .EndSelect()
+                    .ThenQuery().Select().FromNoTable().SelectColumns().FixedValue(true, "rslt").EndColumns().EndSelect()
+                    .ElseQuery().Select().FromNoTable().SelectColumns().FixedValue(false, "rslt").EndColumns().EndSelect()
+                    .EndIf().GetResolvedQuery().QueryText;
+
+        AccountBalanceQuery query2 = new AccountBalanceQuery
+        {
+             AccountTypeId = Guid.NewGuid(),
+             AccountsIds = new List<string> {"343", "6334", "6454" },
+              Balance = 43,
+               Sign = ">", Status = VRAccountStatus.Active, EffectiveDate = DateTime.Now, Top = 34, OrderBy = "ASC"
+        };
+            var GetFilteredAccountBalances = new RDBQueryContext(dataProvider)
+                        .Select()
+                        .From(TABLE_NAME, "lb", query2.Top)
+                        .Where().And()
+                                    .EqualsCondition("AccountTypeID", query2.AccountTypeId)
+                                    .ConditionIf(() => query2.AccountsIds != null && query2.AccountsIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, query2.AccountsIds))
+                                    .ConditionIf(() => query2.Sign != null, ctx => ctx.CompareCondition("CurrentBalance", ConvertBalanceCompareSign(query2.Sign), query2.Balance))
+                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                    .LiveBalanceActiveAndEffectiveCondition("lb", query2.Status, query2.EffectiveDate, query2.IsEffectiveInFuture)
+                                .EndAnd()
+                        .SelectColumns().AllTableColumns("lb").EndColumns()
+                        .Sort().ByColumn("CurrentBalance", query2.OrderBy == "ASC" ? RDBSortDirection.ASC : RDBSortDirection.DESC).EndSort()
+                        .EndSelect().GetResolvedQuery().QueryText;
+
+            TABLE_NAME = "VR_AccountBalance_AccountUsage";
+
+            var GetOverridenAccountUsagesByDeletedTransactionIds = 
+             new RDBQueryContext(dataProvider)
+                        .Select()
+                        .From(TABLE_NAME, "au")
+                        .Join()
+                            .JoinSelect(RDBJoinType.Inner, "usageOverride")
+                                .From(AccountUsageOverrideDataManager.TABLE_NAME, "usageOverride")
+                                .Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds)
+                                .SelectColumns().Columns("AccountTypeID", "AccountID", "TransactionTypeID", "PeriodStart", "PeriodEnd").EndColumns()
+                                .EndSelect()
+                            .And()
+                                .EqualsCondition("au", "AccountTypeID", "usageOverride", "AccountTypeID")
+                                .EqualsCondition("au", "AccountID", "usageOverride", "AccountID")
+                                .EqualsCondition("au", "TransactionTypeID", "usageOverride", "TransactionTypeID")
+                                .CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, new RDBColumnExpression { TableAlias = "usageOverride", ColumnName = "PeriodStart" })
+                                .CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = "usageOverride", ColumnName = "PeriodEnd" })
+                            .EndAnd()
+                        .EndJoin()
+                        .SelectColumns().AllTableColumns("au").EndColumns()
+                        .EndSelect().GetResolvedQuery().QueryText;
+
+            List<AccountUsageByTime> accountUsagesByTime = new List<AccountUsageByTime> {
+                new AccountUsageByTime { AccountId = "353", EndPeriod = DateTime.Now},
+                new AccountUsageByTime { AccountId = "6543", EndPeriod = DateTime.Today}
+            };
+
+            
+        
+            var tempTableColumns3 = new Dictionary<string, RDBTableColumnDefinition>();
+            tempTableColumns3.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableColumns3.Add("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            var tempTableQuery3 = new RDBTempTableQuery(tempTableColumns3);
+            var GetAccountUsagesByTransactionTypes = new RDBQueryContext(dataProvider)
+                        .StartBatchQuery()
+                            .AddQuery().CreateTempTable(tempTableQuery3)
+                            .Foreach(accountUsagesByTime, (usageByTime, ctx) =>
+                                        ctx.AddQuery()
+                                            .Insert()
+                                            .IntoTable(tempTableQuery)
+                                            .ColumnValue("AccountID", usageByTime.AccountId)
+                                            .ColumnValue("PeriodEnd", usageByTime.EndPeriod)
+                                            .EndInsert())
+                            .AddQuery().Select()
+                                        .From(TABLE_NAME, "au")
+                                        .Join().Join(RDBJoinType.Inner, tempTableQuery3, "queryTable")
+                                                .And()
+                                                    .EqualsCondition("au", "AccountID", "queryTable", "AccountID")
+                                                    .CompareCondition("PeriodEnd", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodEnd" })
+                                                .EndAnd()
+                                        .EndJoin()
+                                        .Where().And()
+                                                    .EqualsCondition("AccountTypeID", accountTypeId)
+                                                    .ConditionIf(() => billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds))
+                                                    .ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false)
+                                                .EndAnd()
+                                        .SelectColumns().AllTableColumns("au").EndColumns()
+                                       .EndSelect()
+                            .EndBatchQuery().GetResolvedQuery().QueryText;
+
             Console.ReadKey();
             //RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_User", _userTable);
             //RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_Group", _groupTable);
@@ -862,7 +1017,17 @@ namespace Retail.Runtime.Tasks
            // //    .And().DecimalCondition("Age", RDBConditionOperator.G, 24).EndWhere();
         }
 
-
+        private static RDBCompareConditionOperator ConvertBalanceCompareSign(string sign)
+        {
+            switch (sign)
+            {
+                case ">": return RDBCompareConditionOperator.G;
+                case ">=": return RDBCompareConditionOperator.GEq;
+                case "<": return RDBCompareConditionOperator.L;
+                case "<=": return RDBCompareConditionOperator.LEq;
+                default: throw new NotSupportedException(String.Format("Sign '{0},", sign));
+            }
+        }
         void TestAppDomain()
         {
             var domain = AppDomain.CreateDomain("ChildDomain");
