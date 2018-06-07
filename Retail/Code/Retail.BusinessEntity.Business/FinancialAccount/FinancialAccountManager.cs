@@ -345,7 +345,7 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
 
         public bool TryGetFinancialAccount(Guid accountDefinitionId, long accountId, bool withInherited, DateTime effectiveOn, string classification, out FinancialAccountData financialAccountData)
         {
-            IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountDefinitionId, accountId, withInherited);// shouldbe for for one classification
+            IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountDefinitionId, accountId, withInherited, classification);// shouldbe for for one classification
             if (financialAccounts != null)
             {
                 financialAccountData = financialAccounts.FindRecord(itm => itm.FinancialAccount.IsEffective(effectiveOn));
@@ -366,6 +366,12 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
         public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited)
         {
             var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInherited(accountDefinitionId) : GetCachedFinancialAccounts(accountDefinitionId);
+            return cachedFinancialAccounts.GetRecord(accountId);
+        }
+
+        public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited, string classification)
+        {
+            var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInheritedByClassification(accountDefinitionId, classification) : GetCachedFinancialAccountsByClassification(accountDefinitionId, classification);
             return cachedFinancialAccounts.GetRecord(accountId);
         }
 
@@ -689,6 +695,35 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                 });
         }
 
+        private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsByClassification(Guid accountDefinitionId, string classification)
+        {
+            string cacheKey = String.Concat("GetCachedFinancialAccountsByClassification_", classification);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheKey, accountDefinitionId,
+                () =>
+                {
+                    Dictionary<long, IOrderedEnumerable<FinancialAccountData>> allFinancialAccountsData = GetCachedFinancialAccounts(accountDefinitionId);
+                    Dictionary<long, IOrderedEnumerable<FinancialAccountData>> neededFinancialAccounts = new Dictionary<long, IOrderedEnumerable<FinancialAccountData>>();
+                    foreach(var entry in allFinancialAccountsData)
+                    {
+                        List<FinancialAccountData> entryNeededFinAccounts = null;
+                        foreach(var financialAccountData in entry.Value)
+                        {
+                            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
+                            financialAccountDefinitionSettings.ApplicableClassifications.ThrowIfNull("financialAccountDefinitionSettings.ApplicableClassifications", financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
+                            if(financialAccountDefinitionSettings.ApplicableClassifications.Contains(classification))
+                            {
+                                if (entryNeededFinAccounts == null)
+                                    entryNeededFinAccounts = new List<FinancialAccountData>();
+                                entryNeededFinAccounts.Add(financialAccountData);
+                            }
+                        }
+                        if(entryNeededFinAccounts != null)
+                            neededFinancialAccounts.Add(entry.Key, entryNeededFinAccounts.OrderByDescending(itm => itm.FinancialAccount.EED.HasValue ? itm.FinancialAccount.EED.Value : DateTime.MaxValue));
+                    }
+                    return neededFinancialAccounts;
+                });
+        }
+
         private void AddfinancialAccountDataToDictionary(Dictionary<long, Dictionary<string, List<FinancialAccountData>>> financialAccountDataDic, Dictionary<long, IOrderedEnumerable<FinancialAccountData>> financialAccountData)
         {
             if (financialAccountData != null)
@@ -734,7 +769,36 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                     return allFinancialAccountsData.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(faItm => faItm.FinancialAccount.EED.HasValue ? faItm.FinancialAccount.EED.Value : DateTime.MaxValue));
                 });
         }
-     
+
+        private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithInheritedByClassification(Guid accountDefinitionId, string classification)
+        {
+            string cacheKey = String.Concat("GetCachedFinancialAccountsWithInheritedByClassification_", classification);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheKey, accountDefinitionId,
+                () =>
+                {
+                    Dictionary<long, IOrderedEnumerable<FinancialAccountData>> allFinancialAccountsData = GetCachedFinancialAccountsWithInherited(accountDefinitionId);
+                    Dictionary<long, IOrderedEnumerable<FinancialAccountData>> neededFinancialAccounts = new Dictionary<long, IOrderedEnumerable<FinancialAccountData>>();
+                    foreach (var entry in allFinancialAccountsData)
+                    {
+                        List<FinancialAccountData> entryNeededFinAccounts = null;
+                        foreach (var financialAccountData in entry.Value)
+                        {
+                            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
+                            financialAccountDefinitionSettings.ApplicableClassifications.ThrowIfNull("financialAccountDefinitionSettings.ApplicableClassifications", financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
+                            if (financialAccountDefinitionSettings.ApplicableClassifications.Contains(classification))
+                            {
+                                if (entryNeededFinAccounts == null)
+                                    entryNeededFinAccounts = new List<FinancialAccountData>();
+                                entryNeededFinAccounts.Add(financialAccountData);
+                            }
+                        }
+                        if (entryNeededFinAccounts != null)
+                            neededFinancialAccounts.Add(entry.Key, entryNeededFinAccounts.OrderByDescending(itm => itm.FinancialAccount.EED.HasValue ? itm.FinancialAccount.EED.Value : DateTime.MaxValue));
+                    }
+                    return neededFinancialAccounts;
+                });
+        }
+
         private void AddAccountNodeFinancialAccounts(AccountTreeNode accountNode, Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData)
         {
             List<FinancialAccountData> financialAccounts = allFinancialAccountsData.GetOrCreateItem(accountNode.Account.AccountId);
