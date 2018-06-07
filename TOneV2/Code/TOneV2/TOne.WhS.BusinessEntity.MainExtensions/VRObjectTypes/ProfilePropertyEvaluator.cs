@@ -9,7 +9,7 @@ using Vanrise.Entities;
 using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum CarrierProfileField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, AlertingSMSPhoneNumbers = 4 }
+    public enum CarrierProfileField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, AlertingSMSPhoneNumbers = 4, ProfileCompanyName = 5 }
 
     public class ProfilePropertyEvaluator: VRObjectPropertyEvaluator
     {
@@ -39,6 +39,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     return this.GetCarrierContactDescritpion(profile, CarrierContactType.PricingEmail);
                 case MainExtensions.CarrierProfileField.AlertingSMSPhoneNumbers:
                     return this.GetCarrierContactDescritpion(profile, CarrierContactType.AlertingSMSPhoneNumbers);
+                case MainExtensions.CarrierProfileField.ProfileCompanyName:
+                    return profile.Settings.Company;
             }
 
             return null;
