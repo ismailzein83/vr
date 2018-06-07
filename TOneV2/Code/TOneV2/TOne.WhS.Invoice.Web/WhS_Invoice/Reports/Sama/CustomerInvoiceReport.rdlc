@@ -702,15 +702,16 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>0.98333in</Top>
+        <Top>0.97777in</Top>
         <Left>5.41385in</Left>
-        <Height>0.24652in</Height>
+        <Height>0.15001in</Height>
         <Width>2.3401in</Width>
         <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
+          <VerticalAlign>Top</VerticalAlign>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
           <PaddingTop>2pt</PaddingTop>
@@ -736,8 +737,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.24027in</Top>
-        <Left>5.41385in</Left>
+        <Top>1.13334in</Top>
+        <Left>5.41384in</Left>
         <Height>0.1875in</Height>
         <Width>0.9in</Width>
         <ZIndex>13</ZIndex>
@@ -768,8 +769,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.24027in</Top>
-        <Left>6.35552in</Left>
+        <Top>1.13334in</Top>
+        <Left>6.35551in</Left>
         <Height>0.1875in</Height>
         <Width>1.39843in</Width>
         <ZIndex>14</ZIndex>
@@ -802,8 +803,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.43472in</Top>
-        <Left>6.35552in</Left>
+        <Top>1.32779in</Top>
+        <Left>6.35551in</Left>
         <Height>0.21875in</Height>
         <Width>1.39843in</Width>
         <ZIndex>15</ZIndex>
@@ -2430,7 +2431,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Billing Time</Value>
+                <Value>Time Zone</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -3195,7 +3196,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!TotalNumberOfCalls.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!TotalNumberOfCalls.Value, 0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3265,7 +3266,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(System.Math.Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3865,8 +3866,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.42777in</Top>
-        <Left>5.41385in</Left>
+        <Top>1.32084in</Top>
+        <Left>5.41384in</Left>
         <Height>0.24791in</Height>
         <Width>0.9in</Width>
         <ZIndex>35</ZIndex>

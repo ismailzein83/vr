@@ -1536,7 +1536,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(System.Math.Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1571,7 +1571,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!NumberOfCalls.Value</Value>
+                              <Value>=FormatNumber(Fields!NumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1735,7 +1735,7 @@
         <Top>2.26042in</Top>
         <Left>0.05499in</Left>
         <Height>0.46875in</Height>
-        <Width>7.71855in</Width>
+        <Width>7.71854in</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -2007,7 +2007,7 @@
         <Top>2.8866in</Top>
         <Left>1.99052in</Left>
         <Height>0.19792in</Height>
-        <Width>5.78302in</Width>
+        <Width>5.78301in</Width>
         <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
