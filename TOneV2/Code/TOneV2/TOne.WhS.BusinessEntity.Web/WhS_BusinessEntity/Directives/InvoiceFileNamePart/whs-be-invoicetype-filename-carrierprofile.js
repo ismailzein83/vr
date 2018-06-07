@@ -31,7 +31,7 @@ app.directive("whsBeInvoicetypeFilenameCarrierprofile", ["UtilsService", "VRNoti
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.profileFields = UtilsService.getArrayEnum(WhS_BE_ProfileFieldEnum);
-          
+
                 defineAPI();
             }
 
@@ -39,14 +39,14 @@ app.directive("whsBeInvoicetypeFilenameCarrierprofile", ["UtilsService", "VRNoti
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
                     if (payload != undefined) {
                         context = payload.context;
                         if (payload.concatenatedPartSettings != undefined) {
                             $scope.scopeModel.selectedProfileField = UtilsService.getItemByVal($scope.scopeModel.profileFields, payload.concatenatedPartSettings.PartName, "value");
                         }
-                        var promises = [];
-                        return UtilsService.waitMultiplePromises(promises);
                     }
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

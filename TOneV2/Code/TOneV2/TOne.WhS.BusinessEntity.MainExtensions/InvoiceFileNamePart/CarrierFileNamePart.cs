@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.InvoiceFileNamePart
         public CarrierFileNamePartEnum PartName { get; set; }
         public override Guid ConfigId
         {
-            get { return new Guid("832EA1EA-E372-4CB7-8E8C-0B3B1305B17E"); }
+            get { return new Guid("67dd74aa-33ac-4d75-93f6-0bd1adacaf41"); }
         }
 
         public override string GetPartText(IInvoiceFileNamePartContext context)
