@@ -63,11 +63,11 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
             public RouteRangeType? RouteRangeType { get; set; }
 
+            public Action<Exception, bool> WriteBusinessHandledException { get; set; }
+
             public SwitchSyncOutput SwitchSyncOutput { get; set; }
 
             public SwitchRouteSyncInitializationData InitializationData { get; set; }
-
-            public Action<Exception, bool> WriteBusinessHandledException { get; set; }
         }
 
         #endregion
