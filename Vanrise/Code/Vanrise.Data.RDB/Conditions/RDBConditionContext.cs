@@ -9,18 +9,22 @@ namespace Vanrise.Data.RDB
     public class RDBConditionContext<T>
     {
         T _parent;
+        RDBQueryBuilderContext _queryBuilderContext;
         Action<BaseRDBCondition> _setCondition;
         string _tableAlias;
 
-        public RDBConditionContext(T parent, Action<BaseRDBCondition> setCondition, string tableAlias)
+        public RDBConditionContext(T parent, RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias)
         {
             _parent = parent;
+            _queryBuilderContext = queryBuilderContext;
             _setCondition = setCondition;
             _tableAlias = tableAlias;
         }
 
-        public RDBConditionContext()
+        public RDBConditionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias)
         {
+            _queryBuilderContext = queryBuilderContext;
+            _tableAlias = tableAlias;
         }
 
         internal T Parent
@@ -36,14 +40,6 @@ namespace Vanrise.Data.RDB
             set
             {
                 _setCondition = value;
-            }
-        }
-
-        internal string TableAlias
-        {
-            set
-            {
-                _tableAlias = value;
             }
         }
 
@@ -161,6 +157,40 @@ namespace Vanrise.Data.RDB
         }
 
         public T CompareCondition(string columnName, RDBCompareConditionOperator oper, DateTime value)
+        {
+            return CompareCondition(_tableAlias, columnName, oper, value);
+        }
+
+        public T CompareCondition(string tableAlias, string columnName, RDBCompareConditionOperator oper, bool value)
+        {
+            return CompareCondition(
+                new RDBColumnExpression
+                {
+                    TableAlias = tableAlias,
+                    ColumnName = columnName
+                },
+                oper,
+                new RDBFixedBooleanExpression { Value = value });
+        }
+
+        public T CompareCondition(string columnName, RDBCompareConditionOperator oper, bool value)
+        {
+            return CompareCondition(_tableAlias, columnName, oper, value);
+        }
+
+        public T CompareCondition(string tableAlias, string columnName, RDBCompareConditionOperator oper, Guid value)
+        {
+            return CompareCondition(
+                new RDBColumnExpression
+                {
+                    TableAlias = tableAlias,
+                    ColumnName = columnName
+                },
+                oper,
+                new RDBFixedGuidExpression { Value = value });
+        }
+
+        public T CompareCondition(string columnName, RDBCompareConditionOperator oper, Guid value)
         {
             return CompareCondition(_tableAlias, columnName, oper, value);
         }
@@ -368,6 +398,20 @@ namespace Vanrise.Data.RDB
         {
             return NotEndsWithCondition(_tableAlias, columnName, value);
         }
+        
+        public IRDBSelectQuery<T> ExistsCondition()
+        {
+            var selectQuery = new RDBSelectQuery<T>(_parent, _queryBuilderContext.CreateChildContext());
+            this.Condition(new RDBExistsCondition<T> { SelectQuery = selectQuery});
+            return selectQuery;
+        }
+
+        public IRDBSelectQuery<T> NotExistsCondition()
+        {
+            var selectQuery = new RDBSelectQuery<T>(_parent, _queryBuilderContext.CreateChildContext());
+            this.Condition(new RDBNotExistsCondition<T> { SelectQuery = selectQuery });
+            return selectQuery;
+        }
 
         public T ListCondition(BaseRDBExpression expression, RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)
         {
@@ -482,17 +526,17 @@ namespace Vanrise.Data.RDB
 
         public RDBAndConditionContext<T> And()
         {
-            return new RDBAndConditionContext<T>(_parent, _setCondition, _tableAlias);
+            return new RDBAndConditionContext<T>(_parent, _queryBuilderContext, _setCondition, _tableAlias);
         }
 
         public RDBOrConditionContext<T> Or()
         {
-            return new RDBOrConditionContext<T>(_parent, _setCondition, _tableAlias);
+            return new RDBOrConditionContext<T>(_parent, _queryBuilderContext, _setCondition, _tableAlias);
         }
 
         public RDBNullOrConditionContext<T> ConditionIfColumnNotNull(string tableAlias, string columnName)
         {
-            return new RDBNullOrConditionContext<T>(_parent, _setCondition, tableAlias, columnName);
+            return new RDBNullOrConditionContext<T>(_parent, _queryBuilderContext, _setCondition, tableAlias, columnName);
         }
 
         public RDBNullOrConditionContext<T> ConditionIfColumnNotNull(string columnName)

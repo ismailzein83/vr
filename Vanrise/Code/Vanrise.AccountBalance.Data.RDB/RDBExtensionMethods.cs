@@ -15,6 +15,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             return conditionContext.Or().NullCondition(liveBalanceAlias, "AccountID")
                                      .And()
+                                            .ConditionIfColumnNotNull(liveBalanceAlias, "IsDeleted").EqualsCondition(liveBalanceAlias, "IsDeleted", false)
                                             .ConditionIfNotDefaultValue(accountStatus, ctx => ctx.EqualsCondition(liveBalanceAlias, "Status", (int)accountStatus.Value))
                                             .ConditionIfNotDefaultValue(effectiveDate, ctx => ctx.And()
                                                                                                      .ConditionIfColumnNotNull(liveBalanceAlias, "BED").CompareCondition(liveBalanceAlias, "BED", RDBCompareConditionOperator.LEq, effectiveDate.Value)
@@ -96,13 +97,41 @@ namespace Vanrise.AccountBalance.Data.RDB
                                              Expression1 = new RDBColumnExpression { TableAlias = "au", ColumnName = "UsageBalance", DontAppendTableAlias = true },
                                              Expression2 = new RDBColumnExpression { TableAlias = "auToUpdate", ColumnName = "UpdateValue" }
                                          })
-                                         .ColumnValueIfNotDefaultValue(correctionProcessId, ctx => ctx.ColumnValue("CorrectionProcessID", correctionProcessId.Value))
+                                         .ColumnValueDBNullIfDefaultValue("CorrectionProcessID", correctionProcessId)
                                          .EndUpdate();
             }
             else
             {
                 return batchQueryContext;
             }
+        }
+
+        public static RDBAndConditionContext<T> LiveBalanceToAlertCondition<T>(this RDBAndConditionContext<T> andConditionContext, string liveBalanceAlias)
+        {
+            return andConditionContext
+                    .CompareCondition("CurrentBalance", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = liveBalanceAlias, ColumnName = "NextAlertThreshold" })
+                    .ConditionIfColumnNotNull("LastExecutedActionThreshold").CompareCondition("NextAlertThreshold", RDBCompareConditionOperator.L, new RDBColumnExpression { TableAlias = liveBalanceAlias, ColumnName = "LastExecutedActionThreshold" });
+        }
+        public static RDBAndConditionContext<T> LiveBalanceToClearAlertCondition<T>(this RDBAndConditionContext<T> andConditionContext, string liveBalanceAlias)
+        {
+            return andConditionContext
+                    .CompareCondition("CurrentBalance", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = liveBalanceAlias, ColumnName = "LastExecutedActionThreshold" });
+        }
+
+        public static RDBAndConditionContext<T> BillingTransactionsToUpdateBalanceCondition<T>(this RDBAndConditionContext<T> andConditionContext)
+        {
+            return andConditionContext
+                                .Or()
+                                    .And()
+                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", false)
+                                    .EndAnd()
+                                    .And()
+                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", true)
+                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", true)
+                                        .ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance", false)
+                                    .EndAnd()
+                                .EndOr();
         }
     }
 }

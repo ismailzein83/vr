@@ -8,10 +8,10 @@ namespace Vanrise.Data.RDB
 {
     public class RDBNullOrConditionContext<T> : RDBConditionContext<T>
     {
-        public RDBNullOrConditionContext(T parent, Action<BaseRDBCondition> setCondition, string tableAlias, string columnName)
+        public RDBNullOrConditionContext(T parent, RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias, string columnName)
+            : base(queryBuilderContext, tableAlias)
         {
             base.Parent = parent;
-            base.TableAlias = tableAlias;
             base.SetConditionAction = (condition) =>
             {
                 var conditions = new List<BaseRDBCondition>();

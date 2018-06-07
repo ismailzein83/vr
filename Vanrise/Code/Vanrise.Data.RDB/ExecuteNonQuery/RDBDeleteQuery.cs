@@ -46,7 +46,7 @@ namespace Vanrise.Data.RDB
 
         public RDBConditionContext<IRDBDeleteQueryFiltered<T>> Where()
         {
-            return new RDBConditionContext<IRDBDeleteQueryFiltered<T>>(this, (condition) => this.Condition = condition, _tableAlias);
+            return new RDBConditionContext<IRDBDeleteQueryFiltered<T>>(this, _queryBuilderContext, (condition) => this.Condition = condition, _tableAlias);
         }
 
         public T EndDelete()

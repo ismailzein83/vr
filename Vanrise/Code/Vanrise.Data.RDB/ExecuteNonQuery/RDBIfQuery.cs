@@ -97,7 +97,7 @@ namespace Vanrise.Data.RDB
 
         public RDBConditionContext<IRDBIfQueryConditionDefined<T>> IfCondition()
         {
-            return new RDBConditionContext<IRDBIfQueryConditionDefined<T>>(this, (condition) => this.Condition = condition, null);
+            return new RDBConditionContext<IRDBIfQueryConditionDefined<T>>(this, _queryBuilderContext, (condition) => this.Condition = condition, null);
         }
 
 

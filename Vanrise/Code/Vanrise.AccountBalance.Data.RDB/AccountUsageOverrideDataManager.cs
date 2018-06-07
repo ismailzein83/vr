@@ -7,7 +7,7 @@ using Vanrise.Data.RDB;
 
 namespace Vanrise.AccountBalance.Data.RDB
 {
-    public class AccountUsageOverrideDataManager
+    public class AccountUsageOverrideDataManager : IAccountUsageOverrideDataManager
     {
         public static string TABLE_NAME = "VR_AccountBalance_AccountUsageOverride";
 

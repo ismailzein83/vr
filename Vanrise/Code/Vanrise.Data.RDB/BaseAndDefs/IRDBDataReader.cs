@@ -50,5 +50,10 @@ namespace Vanrise.Data.RDB
 
         Boolean? GetNullableBoolean(string fieldName);
 
+        byte[] GetBytes(string fieldName);
+
+        byte[] GetBytesWithNullHandling(string fieldName);
+
+        byte[] GetNullableBytes(string fieldName);
     }
 }

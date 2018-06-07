@@ -625,6 +625,22 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 throw new NotImplementedException();
             }
+
+
+            public byte[] GetBytes(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public byte[] GetBytesWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public byte[] GetNullableBytes(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion

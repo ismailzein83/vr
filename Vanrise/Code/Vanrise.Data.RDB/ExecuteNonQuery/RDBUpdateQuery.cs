@@ -50,7 +50,7 @@ namespace Vanrise.Data.RDB
         public RDBConditionContext<IRDBUpdateQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
         {
             this._notExistConditionTableAlias = tableAlias;
-            return new RDBConditionContext<IRDBUpdateQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
+            return new RDBConditionContext<IRDBUpdateQueryNotExistsConditionDefined<T>>(this, _queryBuilderContext, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
         }
         
         public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, BaseRDBExpression value)
@@ -103,6 +103,11 @@ namespace Vanrise.Data.RDB
             return this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
         }
 
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, byte[] value)
+        {
+            return this.ColumnValue(columnName, new RDBFixedBytesExpression { Value = value });
+        }
+
         public IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction, Action<IRDBUpdateQueryColumnsAssigned<T>> falseAction)
         {
             if (shouldUpdateColumnValue())
@@ -117,9 +122,57 @@ namespace Vanrise.Data.RDB
             return ColumnValueIf(shouldUpdateColumnValue, trueAction, null);
         }
 
-        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction)
+        //public IRDBUpdateQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction)
+        //{
+        //    return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
+        //}
+
+        private IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue<Q>(string columnName, Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> actionIfNotDefaultValue)
         {
-            return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
+            if (value == null || value.Equals(default(Q)))
+            {
+                return ColumnValue(columnName, new RDBNullExpression());
+            }
+            else
+            {
+                actionIfNotDefaultValue(this);
+                return this;
+            }
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, int? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, long? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, decimal? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, float? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, DateTime? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, bool? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, Guid? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
         }
 
         public RDBJoinContext<IRDBUpdateQueryJoined<T>> Join(string tableAlias)
@@ -132,7 +185,7 @@ namespace Vanrise.Data.RDB
         
         public RDBConditionContext<IRDBUpdateQueryFiltered<T>> Where()
         {
-            return new RDBConditionContext<IRDBUpdateQueryFiltered<T>>(this, (condition) => this.Condition = condition, _tableAlias);
+            return new RDBConditionContext<IRDBUpdateQueryFiltered<T>>(this, _queryBuilderContext, (condition) => this.Condition = condition, _tableAlias);
         }
         
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
@@ -240,11 +293,27 @@ namespace Vanrise.Data.RDB
 
         IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value);
 
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValue(string columnName, byte[] value);
+
         IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction, Action<IRDBUpdateQueryColumnsAssigned<T>> falseAction);
         
         IRDBUpdateQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldUpdateColumnValue, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction);
         
-        IRDBUpdateQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction);
+        //IRDBUpdateQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBUpdateQueryColumnsAssigned<T>> trueAction);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, int? value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, long? value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, decimal? value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, float? value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, DateTime? value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, bool? value);
+
+        IRDBUpdateQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, Guid? value);
     }
 
     public interface IRDBUpdateQueryCanFilter<T>

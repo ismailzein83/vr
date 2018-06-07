@@ -145,17 +145,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                    .From(TABLE_NAME, "bt")
                    .Where().And()
                                 .EqualsCondition("AccountTypeID", accountTypeId)
-                                .Or()
-                                    .And()
-                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", false)
-                                    .EndAnd()
-                                    .And()
-                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", true)
-                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", true)
-                                        .ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance", false)
-                                    .EndAnd()
-                                .EndOr()
+                                .BillingTransactionsToUpdateBalanceCondition()                                
                            .EndAnd()
                     .SelectColumns().AllTableColumns("bt").EndColumns()
                     .EndSelect()
@@ -186,7 +176,18 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public List<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
-            throw new NotImplementedException();
+            return new RDBQueryContext(GetDataProvider())
+                        .Select()
+                        .From(TABLE_NAME, "bt")
+                        .Where().And()
+                                    .EqualsCondition("AccountTypeID", accountTypeId)
+                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                    .ConditionIf(() => accountIds != null && accountIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
+                                    .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
+                                .EndAnd()
+                        .SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID").EndColumns()
+                        .EndSelect()
+                        .GetItems(BillingTransactionMetaDataMapper);
         }
 
         public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByTransactionTypes(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime, List<Guid> transactionTypeIds)
@@ -258,7 +259,20 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypeIds, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {
-            throw new NotImplementedException();
+            return new RDBQueryContext(GetDataProvider())
+                        .Select()
+                        .From(TABLE_NAME, "bt")
+                        .Where().And()
+                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                    .ConditionIf(() => accountTypeIds != null && accountTypeIds.Count() > 0, ctx => ctx.ListCondition("AccountTypeID", RDBListConditionOperator.IN, accountTypeIds))
+                                    .ConditionIf(() => accountIds != null && accountIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
+                                    .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
+                                    .CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, fromDate)
+                                    .ConditionIfNotDefaultValue(toDate, ctx => ctx.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, toDate.Value))
+                                .EndAnd()
+                        .SelectColumns().AllTableColumns("bt").EndColumns()
+                        .EndSelect()
+                        .GetItems(BillingTransactionMapper);
         }
 
         public BillingTransaction GetLastBillingTransaction(Guid accountTypeId, string accountId)
@@ -279,7 +293,16 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public bool HasBillingTransactionData(Guid accountTypeId)
         {
-            throw new NotImplementedException();
+            return new RDBQueryContext(GetDataProvider())
+                        .Select()
+                        .From(TABLE_NAME, "bt", 1)
+                        .Where().And()
+                                    .EqualsCondition("AccountTypeID", accountTypeId)
+                                    .BillingTransactionsToUpdateBalanceCondition()
+                                .EndAnd()
+                        .SelectColumns().Column("ID").EndColumns()
+                        .EndSelect()                        
+                        .ExecuteScalar().NullableLongValue.HasValue;
         }
 
         #endregion

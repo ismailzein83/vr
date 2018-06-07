@@ -75,6 +75,7 @@ namespace Vanrise.Data.RDB
         {
             return new RDBConditionContext<IRDBJoinContextReady<T>>(
                 this,
+                _queryBuilderContext,
                 (condition) =>
                 {
                     _queryBuilderContext.AddTableAlias(table, tableAlias);

@@ -111,7 +111,7 @@ namespace Vanrise.Data.RDB
 
         public RDBConditionContext<ISelectQueryFiltered<T>> Where()
             {
-                return new RDBConditionContext<ISelectQueryFiltered<T>>(this, (condition) => this._condition = condition, this._tableAlias);
+                return new RDBConditionContext<ISelectQueryFiltered<T>>(this, _queryBuilderContext, (condition) => this._condition = condition, this._tableAlias);
             }
 
         public RDBGroupByContext<ISelectQueryGroupByDefined<T>> GroupBy()

@@ -48,7 +48,7 @@ namespace Vanrise.Data.RDB
         public RDBConditionContext<IRDBInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
         {
             this._notExistConditionTableAlias = tableAlias;
-            return new RDBConditionContext<IRDBInsertQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
+            return new RDBConditionContext<IRDBInsertQueryNotExistsConditionDefined<T>>(this, _queryBuilderContext, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
         }
 
         public IRDBInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string parameterName, bool isParameterAlreadyDeclared = false, bool addSelectQuery = true, bool selectQueryWithAlias = false)
@@ -111,6 +111,11 @@ namespace Vanrise.Data.RDB
             return this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
         }
 
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, byte[] value)
+        {
+            return this.ColumnValue(columnName, new RDBFixedBytesExpression { Value = value });
+        }
+
         public IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction, Action<IRDBInsertQueryColumnsAssigned<T>> falseAction)
         {
             if (shouldAddColumnValue())
@@ -125,9 +130,57 @@ namespace Vanrise.Data.RDB
             return ColumnValueIf(shouldAddColumnValue, trueAction, null);
         }
 
-        public IRDBInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction)
+        //public IRDBInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction)
+        //{
+        //    return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
+        //}
+
+        private IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue<Q>(string columnName, Q value, Action<IRDBInsertQueryColumnsAssigned<T>> actionIfNotDefaultValue)
         {
-            return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
+            if (value == null || value.Equals(default(Q)))
+            {
+                return ColumnValue(columnName, new RDBNullExpression());
+            }
+            else
+            {
+                actionIfNotDefaultValue(this);
+                return this;
+            }
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, int? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, long? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, decimal? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, float? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, DateTime? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, bool? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
+        }
+
+        public IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, Guid? value)
+        {
+            return ColumnValueDBNullIfDefaultValue(columnName, value, (ctx) => ctx.ColumnValue(columnName, value.Value));
         }
 
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
@@ -273,11 +326,27 @@ namespace Vanrise.Data.RDB
 
         IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value);
 
+        IRDBInsertQueryColumnsAssigned<T> ColumnValue(string columnName, byte[] value);
+
         IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction, Action<IRDBInsertQueryColumnsAssigned<T>> falseAction);
 
         IRDBInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction);
 
-        IRDBInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction);
+        //IRDBInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IRDBInsertQueryColumnsAssigned<T>> trueAction);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, int? value);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, long? value);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, decimal? value);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, float? value);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, DateTime? value);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, bool? value);
+
+        IRDBInsertQueryColumnsAssigned<T> ColumnValueDBNullIfDefaultValue(string columnName, Guid? value);
     }
 
     public interface IRDBInsertQueryCanDefineNotExistsCondition<T>

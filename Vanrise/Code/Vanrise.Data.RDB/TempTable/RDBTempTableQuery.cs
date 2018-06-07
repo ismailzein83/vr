@@ -30,7 +30,8 @@ namespace Vanrise.Data.RDB
 
         public string GetUniqueName()
         {
-            _tempTableName.ThrowIfNull("_tempTableName");
+            if (_tempTableName == null)
+                throw new Exception("Create Temp Table is not added to the query");
             return _tempTableName;
         }
 

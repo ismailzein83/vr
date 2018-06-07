@@ -144,6 +144,25 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    public class RDBFixedBytesExpression : BaseRDBExpression
+    {
+        public byte[] Value { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            string parameterName = context.GenerateUniqueDBParameterName();
+            context.AddParameter(new RDBParameter
+            {
+                Name = parameterName,
+                DBParameterName = parameterName,
+                Type = RDBDataType.VarBinary,
+                Direction = RDBParameterDirection.In,
+                Value = this.Value
+            });
+            return parameterName;
+        }
+    }
+
     public class RDBNowDateTimeExpression : BaseRDBExpression
     {
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
