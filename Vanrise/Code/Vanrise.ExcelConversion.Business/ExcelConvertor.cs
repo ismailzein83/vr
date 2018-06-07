@@ -228,18 +228,29 @@ namespace Vanrise.ExcelConversion.Business
                 return fldValue;
         }
 
-        private Decimal getCropOrRoundedValue(Decimal value, int precision, RatePrecicionType ratePrecicionType)
+        private Decimal? getCropOrRoundedValue(Decimal value, int precision, RatePrecicionType ratePrecicionType)
         {
             Decimal result;
-            if (ratePrecicionType == RatePrecicionType.CropRate)
+            switch (ratePrecicionType)
             {
-                Decimal y = (Decimal)(Math.Pow(10, precision));
-                result = value * y;
-                result = Decimal.Floor(result);
-                result = result/y;
+                case RatePrecicionType.Round:
+                    return result = Decimal.Round(value, precision);
+
+                case RatePrecicionType.RoundUp:
+                    Decimal x = (Decimal)(Math.Pow(10, precision));
+                    result = value * x;
+                    result = Decimal.Ceiling(result);
+                    return result = result / x;
+
+                case RatePrecicionType.RoundDown:
+                    Decimal y = (Decimal)(Math.Pow(10, precision));
+                    result = value * y;
+                    result = Decimal.Floor(result);
+                    return result = result / y;
+
+                default:
+                    return null;
             }
-            else result = Decimal.Round(value, precision);
-            return result;
         }
 
         private bool CheckIsRowEmpty(Row row, int maxdatacol)

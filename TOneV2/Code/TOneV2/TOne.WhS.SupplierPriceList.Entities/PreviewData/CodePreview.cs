@@ -27,5 +27,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public CodePreview Entity { get; set; }
 
         public string ChangeTypeDecription { get; set; }
+        public string RecentZoneName { get; set; }
+        public string ZoneName { get; set; }
     }
 }

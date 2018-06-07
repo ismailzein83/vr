@@ -27,7 +27,8 @@ namespace Vanrise.ExcelConversion.Entities
     }
     public enum RatePrecicionType
     {
-        RoundRate = 0,
-        CropRate = 1,
+        Round = 0,
+        RoundUp = 1,
+        RoundDown = 2
     }
 }

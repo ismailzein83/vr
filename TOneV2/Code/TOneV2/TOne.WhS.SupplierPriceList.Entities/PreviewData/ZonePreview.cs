@@ -52,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
     }
 
 
-    public class ZoneRatePreviewDetail
+    public class    ZoneRatePreviewDetail
     {
         public string ZoneName { get; set; }
         public string RecentZoneName { get; set; }

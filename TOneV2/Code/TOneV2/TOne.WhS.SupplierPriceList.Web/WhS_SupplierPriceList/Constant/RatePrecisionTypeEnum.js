@@ -1,4 +1,5 @@
 ﻿app.constant('WhS_SupPL_RatePrecisionTypeEnum', {
-    RoundRate: { value: 0, description: "Round Rate" },
-    CropRate: { value: 1, description: "Crop Rate" }
+    Round: { value: 0, description: "Round" },
+    RoundUp: { value: 1, description: "Round Up" },
+    RoundDown: { value: 2, description: "Round Down" },
 });
