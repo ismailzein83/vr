@@ -42,5 +42,12 @@ namespace Demo.Module.Web.Controllers
         {
             return buildingManager.AddBuilding(building);
         }
+        [HttpGet]
+        [Route("GetBuildingsInfo")]
+        public IEnumerable<BuildingInfo> GetBuildingsInfo(string filter = null)
+        {
+            BuildingInfoFilter buildingInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<BuildingInfoFilter>(filter) : null;
+            return buildingManager.GetBuildingsInfo(buildingInfoFilter);
+        }
     }
 }

@@ -6,6 +6,8 @@
     function roomManagementController($scope, VRNotificationService, Demo_Module_RoomService, UtilsService, VRUIUtilsService, Demo_Module_CompanyService) {
 
         var gridApi;
+        var buildingDirectiveApi;
+        var buildingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
@@ -15,6 +17,10 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
                 api.load(getFilter());
+            };
+            $scope.scopeModel.onBuildingDirectiveReady = function (api) {
+                buildingDirectiveApi = api;
+                buildingReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.search = function () {
@@ -33,13 +39,35 @@
         };
 
         function load() {
-
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
         }
 
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadBuildingSelector])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+              .finally(function () {
+                  $scope.scopeModel.isLoading = false;
+              });
+        }
+
+        function loadBuildingSelector() {
+            var buildingLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            buildingReadyPromiseDeferred.promise.then(function () {
+                var directivePayload = undefined;
+                VRUIUtilsService.callDirectiveLoad(buildingDirectiveApi, directivePayload, buildingLoadPromiseDeferred);
+            });
+            return buildingLoadPromiseDeferred.promise;
+        }
 
         function getFilter() {
             return {
-                Name: $scope.scopeModel.name
+                query: {
+                    Name: $scope.scopeModel.name,
+                    BuildingIds: buildingDirectiveApi.getSelectedIds()
+                }
             };
         };
 

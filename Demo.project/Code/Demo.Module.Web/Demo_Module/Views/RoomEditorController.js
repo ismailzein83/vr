@@ -9,6 +9,12 @@
         var roomId;
         var roomEntity;
 
+        var buildingIdItem;
+
+        var buildingDirectiveApi;
+        var buildingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -17,6 +23,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 roomId = parameters.roomId;
+                buildingIdItem = parameters.buildingIdItem;
+
             }
             isEditMode = (roomId != undefined);
         };
@@ -24,6 +32,11 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.disableBuilding = buildingIdItem != undefined;
+            $scope.scopeModel.onBuildingDirectiveReady = function (api) {
+                buildingDirectiveApi = api;
+                buildingReadyPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.saveRoom = function () {
                 if (isEditMode)
@@ -63,6 +76,22 @@
 
         function loadAllControls() {
 
+            function loadBuildingSelector() {
+                var buildingLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                buildingReadyPromiseDeferred.promise.then(function () {
+                    var buildingPayload = {};
+                    if (buildingIdItem != undefined)
+                        buildingPayload.selectedIds = buildingIdItem.BuildingId;
+
+                    if (roomEntity != undefined)
+                        buildingPayload.selectedIds = roomEntity.BuildingId;
+
+                    VRUIUtilsService.callDirectiveLoad(buildingDirectiveApi, buildingPayload, buildingLoadPromiseDeferred);
+                });
+                return buildingLoadPromiseDeferred.promise;
+
+            }
+
             function setTitle() {
                 if (isEditMode && roomEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(roomEntity.Name, "Room");
@@ -75,7 +104,7 @@
                     $scope.scopeModel.name = roomEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBuildingSelector])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })
@@ -88,6 +117,7 @@
             var object = {
                 RoomId: (roomId != undefined) ? roomId : undefined,
                 Name: $scope.scopeModel.name,
+                BuildingId: buildingDirectiveApi.getSelectedIds()
             };
             return object;
         };

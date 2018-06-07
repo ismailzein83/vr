@@ -32,7 +32,7 @@ namespace Demo.Module.Data.SQL
         public bool Insert(Room room, out long insertedId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Insert]", out id, room.Name);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Insert]", out id, room.Name, room.BuildingId);
             bool result = (nbOfRecordsAffected > 0);
             if (result)
                 insertedId = (long)id;
@@ -43,7 +43,7 @@ namespace Demo.Module.Data.SQL
         public bool Update(Room room)
         {
 
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Update]", room.RoomId, room.Name);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Update]", room.RoomId, room.Name, room.BuildingId);
             return (nbOfRecordsAffected > 0);
         }
 
@@ -55,7 +55,8 @@ namespace Demo.Module.Data.SQL
             return new Room
             {
                 RoomId = GetReaderValue<long>(reader, "ID"),
-                Name = GetReaderValue<string>(reader, "Name")
+                Name = GetReaderValue<string>(reader, "Name"),
+                BuildingId = GetReaderValue<long>(reader, "BuildingId"),
             };
         }
         #endregion

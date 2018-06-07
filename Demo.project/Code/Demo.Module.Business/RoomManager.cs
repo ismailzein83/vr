@@ -14,6 +14,7 @@ namespace Demo.Module.Business
 {
     public class RoomManager
     {
+        BuildingManager _buildingManager = new BuildingManager();
 
         #region Public Methods
         public IDataRetrievalResult<RoomDetails> GetFilteredRooms(DataRetrievalInput<RoomQuery> input)
@@ -23,13 +24,14 @@ namespace Demo.Module.Business
             {
                 if (input.Query.Name != null && !room.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
+                if (input.Query.BuildingIds != null && !input.Query.BuildingIds.Contains(room.BuildingId))
+                    return false;
                 return true;
             };
             return DataRetrievalManager.Instance.ProcessResult(input, allRooms.ToBigResult(input, filterExpression, RoomDetailMapper));
 
         }
-
-
+        
         public InsertOperationOutput<RoomDetails> AddRoom(Room room)
         {
             IRoomDataManager roomDataManager = DemoModuleFactory.GetDataManager<IRoomDataManager>();
@@ -111,7 +113,8 @@ namespace Demo.Module.Business
             return new RoomDetails
             {
                 Name = room.Name,
-                RoomId = room.RoomId
+                RoomId = room.RoomId,
+                BuildingName = _buildingManager.GetBuildingName(room.BuildingId)
             };
         }
         #endregion

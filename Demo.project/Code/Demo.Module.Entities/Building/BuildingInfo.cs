@@ -6,4 +6,9 @@ using System.Threading.Tasks;
 
 namespace Demo.Module.Entities
 {
+    public class BuildingInfo
+    {
+        public long BuildingId { get; set; }
+        public string Name { get; set; }
+    }
 }

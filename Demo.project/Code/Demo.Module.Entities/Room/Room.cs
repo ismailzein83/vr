@@ -10,5 +10,6 @@ namespace Demo.Module.Entities
     {
         public long RoomId { get; set; }
         public string Name { get; set; }
+        public long BuildingId { get; set; }
     }
 }

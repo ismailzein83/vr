@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, Demo_Module_RoomAPIService, Demo_
     function RoomGrid($scope, ctrl) {
 
         var gridApi;
-
+        var buildingId;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -38,8 +38,13 @@ function (UtilsService, VRNotificationService, Demo_Module_RoomAPIService, Demo_
                 function getDirectiveApi() {
                     var directiveApi = {};
 
-                    directiveApi.load = function (query) {
+                    directiveApi.load = function (payload) {
+                        var query = payload.query;
+                        buildingId = payload.buildingId;
+                        if (payload.hideBuildingColumn)
+                            $scope.scopeModel.hideBuildingColumn = payload.hideBuildingColumn;
                         return gridApi.retrieveData(query);
+                        
                     };
 
                     directiveApi.onRoomAdded = function (room) {
@@ -51,7 +56,7 @@ function (UtilsService, VRNotificationService, Demo_Module_RoomAPIService, Demo_
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
 
                 return Demo_Module_RoomAPIService.GetFilteredRooms(dataRetrievalInput)
-                .then(function (response) {
+                .then(function (response) {                    
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -73,7 +78,8 @@ function (UtilsService, VRNotificationService, Demo_Module_RoomAPIService, Demo_
             var onRoomUpdated = function (room) {
                 gridApi.itemUpdated(room);
             };
-            Demo_Module_RoomService.editRoom(room.RoomId, onRoomUpdated);
+            var buildingIdItem = buildingId != undefined ? { BuildingId: buildingId } : undefined;
+            Demo_Module_RoomService.editRoom(room.RoomId, onRoomUpdated, buildingIdItem);
         };
 
 

@@ -20,6 +20,7 @@ function (UtilsService, VRNotificationService, Demo_Module_BuildingAPIService, D
     function BuildingGrid($scope, ctrl) {
 
         var gridApi;
+        var gridDrillDownTabsObj;
 
         this.initializeController = initializeController;
 
@@ -30,6 +31,28 @@ function (UtilsService, VRNotificationService, Demo_Module_BuildingAPIService, D
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
+
+                var drillDownDefinitions = [];
+                AddRoomDrillDown();
+                function AddRoomDrillDown() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = "Room";
+                    drillDownDefinition.directive = "demo-Module-room-search";
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, buildingItem) {
+                        buildingItem.roomGridAPI = directiveAPI;
+                        var payload = {
+                            buildingId: buildingItem.BuildingId
+                        };
+                        return buildingItem.roomGridAPI.load(payload);
+                    };
+                    drillDownDefinitions.push(drillDownDefinition);
+                }
+
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.gridMenuActions);
+
+
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveApi());
@@ -43,6 +66,7 @@ function (UtilsService, VRNotificationService, Demo_Module_BuildingAPIService, D
                     };
 
                     directiveApi.onBuildingAdded = function (building) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(building);
                         gridApi.itemAdded(building);
                     };
                     return directiveApi;
@@ -52,6 +76,11 @@ function (UtilsService, VRNotificationService, Demo_Module_BuildingAPIService, D
 
                 return Demo_Module_BuildingAPIService.GetFilteredBuildings(dataRetrievalInput)
                 .then(function (response) {
+                    if (response && response.Data) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                        }
+                    }
                     onResponseReady(response);
                 })
                 .catch(function (error) {

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("demoBestpracticesChildSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'Demo_BestPractices_ChildService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, Demo_BestPractices_ChildService) {
+app.directive("demoModuleRoomSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'Demo_Module_RoomService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, Demo_Module_RoomService) {
 
     var directiveDefinitionObject = {
 
@@ -11,7 +11,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new ChildSearch($scope, ctrl, $attrs);
+            var ctor = new RoomSearch($scope, ctrl, $attrs);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,28 +19,28 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/Demo_BestPractices/Elements/Child/Directives/Templates/ChildSearchTemplate.html"
-
+        templateUrl: "/Client/Modules/Demo_Module/Directives/Room/Templates/RoomSearchTemplate.html"
+        
     };
 
-    function ChildSearch($scope, ctrl, $attrs) {
+    function RoomSearch($scope, ctrl, $attrs) {
 
         var gridAPI;
-        var parentId;
+        var buildingId;
 
         this.initializeController = initializeController;
         var context;
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.addChild = function () {
-                var parentIdItem = { ParentId: parentId };
-                var onChildAdded = function (obj) {
-                    gridAPI.onChildAdded(obj);
+            $scope.scopeModel.addRoom = function () {
+                var buildingIdItem = { BuildingId: buildingId };
+                var onRoomAdded = function (obj) {
+                    gridAPI.onRoomAdded(obj);
                 };
-                Demo_BestPractices_ChildService.addChild(onChildAdded, parentIdItem);
+                Demo_Module_RoomService.addRoom(onRoomAdded, buildingIdItem);
             };
-         
+
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 defineAPI();
@@ -52,12 +52,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
             api.load = function (payload) {
                 if (payload != undefined) {
-                    parentId = payload.parentId;
+                    buildingId = payload.buildingId;
                 }
                 return gridAPI.load(getGridQuery());
             };
-            api.onChildAdded = function (childObject) {
-                gridAPI.onChildAdded(childObject);
+            api.onRoomAdded = function (roomObject) {
+                gridAPI.onRoomAdded(roomObject);
             };
 
 
@@ -67,9 +67,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
         function getGridQuery() {
             var payload = {
-                query: { ParentIds: [parentId] },
-                parentId: parentId,
-                hideParentColumn:true
+                query: { BuildingIds: [buildingId] },
+                buildingId: buildingId,
+                hideBuildingColumn: true
             };
             return payload;
         }

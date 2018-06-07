@@ -9,5 +9,6 @@ namespace Demo.Module.Entities
    public class RoomQuery
     {
         public string Name { get; set; }
+        public List<long> BuildingIds { get; set; }
     }
 }

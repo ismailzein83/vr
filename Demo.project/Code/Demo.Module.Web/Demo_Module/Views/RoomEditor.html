@@ -7,6 +7,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
+                        <demo-module-building-selector isdisabled="scopeModel.disableBuilding" on-ready="scopeModel.onBuildingDirectiveReady" isrequired="true" normal-col-num="6"></demo-module-building-selector>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

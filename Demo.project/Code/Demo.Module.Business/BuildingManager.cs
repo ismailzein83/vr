@@ -28,6 +28,13 @@ namespace Demo.Module.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allBuildings.ToBigResult(input, filterExpression, BuildingDetailMapper));
 
         }
+        public string GetBuildingName(long buildingId)
+        {
+            var parent = GetBuildingById(buildingId);
+            if (parent == null)
+                return null;
+            return parent.Name;
+        }
 
 
         public InsertOperationOutput<BuildingDetails> AddBuilding(Building building)
@@ -54,10 +61,34 @@ namespace Demo.Module.Business
         }
         public Building GetBuildingById(long buildingId)
         {
-            var allBuildings = GetCachedBuildings();
-            return allBuildings.GetRecord(buildingId);
+            return GetCachedBuildings().GetRecord(buildingId);
         }
-
+        public IEnumerable<BuildingInfo> GetBuildingsInfo(BuildingInfoFilter buildingInfoFilter)
+        {
+            var allBuildings = GetCachedBuildings();
+            Func<Building, bool> filterFunc = (building) =>
+            {
+                if (buildingInfoFilter != null)
+                {
+                    if (buildingInfoFilter.Filters != null)
+                    {
+                        var context = new BuildingInfoFilterContext
+                        {
+                            BuildingId = building.BuildingId
+                        };
+                        foreach (var filter in buildingInfoFilter.Filters)
+                        {
+                            if (!filter.IsMatch(context))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            };
+            return allBuildings.MapRecords(BuildingInfoMapper, filterFunc).OrderBy(building => building.Name);
+        }
         public UpdateOperationOutput<BuildingDetails> UpdateBuilding(Building building)
         {
             IBuildingDataManager buildingDataManager = DemoModuleFactory.GetDataManager<IBuildingDataManager>();
@@ -109,6 +140,15 @@ namespace Demo.Module.Business
         public BuildingDetails BuildingDetailMapper(Building building)
         {
             return new BuildingDetails
+            {
+                Name = building.Name,
+                BuildingId = building.BuildingId
+            };
+        }
+
+        public BuildingInfo BuildingInfoMapper(Building building)
+        {
+            return new BuildingInfo
             {
                 Name = building.Name,
                 BuildingId = building.BuildingId
