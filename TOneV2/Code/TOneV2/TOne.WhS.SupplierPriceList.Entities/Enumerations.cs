@@ -22,9 +22,13 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
 	public enum ReceivedPricelistStatus
 	{
-		New = 0,
+		Received = 0,
 		Processing = 1,
-		Failed = 2,
-		Succeeded = 3
+		Succeeded = 2,
+		CompletedWithNoChanges = 3,
+		FailedDueToBusinessRuleError = 4,
+		FailedDueToProcessingError = 5,
+		FailedDueToConfigurationError = 6,
+		FailedDueToReceivedMailError = 7
 	}
 }
