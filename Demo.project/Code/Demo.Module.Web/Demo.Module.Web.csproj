@@ -162,8 +162,13 @@
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-selector.js" />
     <Content Include="Demo_Module\Directives\Product\Templates\ProductGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Room\demo-module-room-roomshape.js" />
     <Content Include="Demo_Module\Directives\Room\demo-module-room-search.js" />
     <Content Include="Demo_Module\Directives\Room\demo-module-room-grid.js" />
+    <Content Include="Demo_Module\Directives\Room\MainExtensions\demo-module-room-roomshape-circle.js" />
+    <Content Include="Demo_Module\Directives\Room\MainExtensions\demo-module-room-roomshape-rectangle.js" />
+    <Content Include="Demo_Module\Directives\Room\MainExtensions\Templates\CircleShapeTemplate.html" />
+    <Content Include="Demo_Module\Directives\Room\MainExtensions\Templates\RectangleShapeTemplate.html" />
     <Content Include="Demo_Module\Directives\Room\Templates\RoomSearchTemplate.html" />
     <Content Include="Demo_Module\Directives\Room\Templates\RoomGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />

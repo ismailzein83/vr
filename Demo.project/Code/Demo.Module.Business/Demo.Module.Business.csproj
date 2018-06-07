@@ -91,6 +91,7 @@
     <Compile Include="FamilyManager.cs" />
     <Compile Include="ProductManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomShapeDescriptionContext.cs" />
     <Compile Include="UniversityManager.cs" />
   </ItemGroup>
   <ItemGroup>

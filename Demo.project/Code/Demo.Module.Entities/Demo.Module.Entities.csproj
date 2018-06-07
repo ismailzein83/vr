@@ -98,6 +98,7 @@
     <Compile Include="Product\ProductInfo.cs" />
     <Compile Include="Product\ProductQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Room\RoomShapeConfig.cs" />
     <Compile Include="University\University.cs" />
     <Compile Include="University\UniversityDetails.cs" />
     <Compile Include="University\UniversityInfo.cs" />
