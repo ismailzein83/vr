@@ -1,4 +1,5 @@
-﻿"use strict"
+﻿
+"use strict"
 app.directive("demoModuleFamilyGrid", ["UtilsService", "VRNotificationService", "Demo_Module_FamilyAPIService", "Demo_Module_FamilyService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
 function (UtilsService, VRNotificationService, Demo_Module_FamilyAPIService, Demo_Module_FamilyService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
@@ -14,22 +15,45 @@ function (UtilsService, VRNotificationService, Demo_Module_FamilyAPIService, Dem
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl:"/Client/Modules/Demo_Module/Directives/Product/templates/FamilyGridTemplate.html"
+        templateUrl: "/Client/Modules/Demo_Module/Directives/Family/Template/FamilyGridTemplate.html"
     };
 
     function FamilyGrid($scope, ctrl) {
 
         var gridApi;
+        var gridDrillDownTabsObj;
 
         this.initializeController = initializeController;
 
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.familys = [];
+            $scope.scopeModel.families = [];
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
+
+                var drillDownDefinitions = [];
+                AddMemberDrillDown();
+                function AddMemberDrillDown() {
+                    var drillDownDefinition = {};
+
+                    drillDownDefinition.title = "Member";
+                    drillDownDefinition.directive = "demo-module-member-search";
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, familyItem) {
+                        familyItem.memberGridAPI = directiveAPI;
+
+                        var payload = {
+                            familyId: familyItem.FamilyId
+                        };
+
+                        return familyItem.memberGridAPI.load(payload);
+                    };
+                    drillDownDefinitions.push(drillDownDefinition);
+                }
+
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveApi());
@@ -43,6 +67,7 @@ function (UtilsService, VRNotificationService, Demo_Module_FamilyAPIService, Dem
                     };
 
                     directiveApi.onFamilyAdded = function (family) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(family);
                         gridApi.itemAdded(family);
                     };
                     return directiveApi;
@@ -50,8 +75,13 @@ function (UtilsService, VRNotificationService, Demo_Module_FamilyAPIService, Dem
             };
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
 
-                return Demo_Module_FamilyAPIService.GetFilteredFamilys(dataRetrievalInput)
+                return Demo_Module_FamilyAPIService.GetFilteredFamilies(dataRetrievalInput)
                 .then(function (response) {
+                    if (response && response.Data) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                        }
+                    }
                     onResponseReady(response);
                 })
                 .catch(function (error) {
@@ -71,6 +101,7 @@ function (UtilsService, VRNotificationService, Demo_Module_FamilyAPIService, Dem
         };
         function editFamily(family) {
             var onFamilyUpdated = function (family) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(family);
                 gridApi.itemUpdated(family);
             };
             Demo_Module_FamilyService.editFamily(family.FamilyId, onFamilyUpdated);

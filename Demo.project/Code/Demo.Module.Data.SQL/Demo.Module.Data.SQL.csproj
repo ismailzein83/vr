@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchDataManager.cs" />
+    <Compile Include="MemberDataManager.cs" />
     <Compile Include="RoomDataManager.cs" />
     <Compile Include="BuildingDataManager.cs" />
     <Compile Include="CollegeDataManager.cs" />

@@ -24,23 +24,27 @@ namespace Demo.Module.Data.SQL
         #region Public Methods
         public bool AreCompaniesUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated("[dbo].[Parent]", ref updateHandle);
+            return base.IsDataUpdated("[dbo].[Family1]", ref updateHandle);
         }
         public List<Family> GetFamilies()
         {
-            return GetItemsSP("[dbo].[sp_Parent_GetAll]", FamilyMapper);
+            return GetItemsSP("[dbo].[sp_Family1_GetAll]", FamilyMapper);
         }
         public bool Insert(Family family, out long insertedId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Parent_Insert]", out id, family.Name);
-            insertedId = Convert.ToInt64(id);
-            return (nbOfRecordsAffected > 0);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Family_Insert]", out id, family.Name);
+            bool result = (nbOfRecordsAffected > 0);
+            if (result)
+                insertedId = (long)id;
+            else
+                insertedId = 0;
+            return result;
         }
         public bool Update(Family family)
         {
 
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Parent_Update]", family.FamilyId, family.Name);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Family_Update]", family.FamilyId, family.Name);
             return (nbOfRecordsAffected > 0);
         }
 

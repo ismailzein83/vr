@@ -23,7 +23,8 @@
 
 
             $scope.scopeModel.addFamily = function () {
-                console.log("add")
+                console.log("add");
+
                 var onFamilyAdded = function (family) {
                     if (gridApi != undefined) {
                        

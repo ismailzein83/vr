@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="scopeModel.members"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="MemberId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'MemberId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Family'" field="'FamilyName'" type="'Text'" ng-show="!scopeModel.hideFamilyColumn"></vr-datagridcolumn>
+</vr-datagrid>

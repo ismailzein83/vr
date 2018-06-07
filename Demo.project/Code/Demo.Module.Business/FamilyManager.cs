@@ -17,17 +17,23 @@ namespace Demo.Module.Business
         #region Public Methods
         public IDataRetrievalResult<FamilyDetails> GetFilteredFamilies(DataRetrievalInput<FamilyQuery> input)
         {
-            var allFamilys = GetCachedFamilies();
+            var allFamilies = GetCachedFamilies();
             Func<Family, bool> filterExpression = (family) =>
             {
                 if (input.Query.Name != null && !family.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 return true;
             };
-            return DataRetrievalManager.Instance.ProcessResult(input, allFamilys.ToBigResult(input, filterExpression, FamilyDetailMapper));
+            return DataRetrievalManager.Instance.ProcessResult(input, allFamilies.ToBigResult(input, filterExpression, FamilyDetailMapper));
 
         }
-
+        public string GetFamilyName(long familyId)
+        {
+            var family = GetFamilyById(familyId);
+            if (family == null)
+                return null;
+            return family.Name;
+        }
 
         public InsertOperationOutput<FamilyDetails> AddFamily(Family family)
         {
@@ -55,6 +61,32 @@ namespace Demo.Module.Business
         {
             var allFamilys = GetCachedFamilies();
             return allFamilys.GetRecord(familyId);
+        }
+        public IEnumerable<FamilyInfo> GetFamiliesInfo(FamilyInfoFilter familyInfoFilter)
+        {
+            var allFamilies = GetCachedFamilies();
+            Func<Family, bool> filterFunc = (family) =>
+            {
+                if (familyInfoFilter != null)
+                {
+                    if (familyInfoFilter.Filters != null)
+                    {
+                        var context = new FamilyInfoFilterContext
+                        {
+                            FamilyId = family.FamilyId
+                        };
+                        foreach (var filter in familyInfoFilter.Filters)
+                        {
+                            if (!filter.IsMatch(context))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            };
+            return allFamilies.MapRecords(FamilyInfoMapper, filterFunc).OrderBy(family => family.Name);
         }
 
         public UpdateOperationOutput<FamilyDetails> UpdateFamily(Family family)
@@ -108,6 +140,17 @@ namespace Demo.Module.Business
         public FamilyDetails FamilyDetailMapper(Family family)
         {
             return new FamilyDetails
+            {
+                Name = family.Name,
+                FamilyId = family.FamilyId
+            };
+        }
+
+
+
+        public FamilyInfo FamilyInfoMapper(Family family)
+        {
+            return new FamilyInfo
             {
                 Name = family.Name,
                 FamilyId = family.FamilyId

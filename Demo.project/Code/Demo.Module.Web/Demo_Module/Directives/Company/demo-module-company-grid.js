@@ -104,7 +104,7 @@ function (UtilsService, VRNotificationService, Demo_Module_CompanyAPIService, De
         };
         function editCompany(company) {
             var onCompanyUpdated = function (company) {
-                gridDrillDownTabsObj.setDrillDownExtensionObject(company);
+                //gridDrillDownTabsObj.setDrillDownExtensionObject(company);
                 gridApi.itemUpdated(company);
                 
             };

@@ -59,6 +59,11 @@
     <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
     <Compile Include="Building\BuildingInfo.cs" />
     <Compile Include="Building\BuildingInfoFilter.cs" />
+    <Compile Include="Family\FamilyInfo.cs" />
+    <Compile Include="Family\FamilyInfoFilter.cs" />
+    <Compile Include="Member\Member.cs" />
+    <Compile Include="Member\MemberDetails.cs" />
+    <Compile Include="Member\MemberQuery.cs" />
     <Compile Include="Product\ProductInfoFilter.cs" />
     <Compile Include="Room\Room.cs" />
     <Compile Include="Room\RoomDetails.cs" />

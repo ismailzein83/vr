@@ -18,7 +18,7 @@ namespace Demo.Web.Controllers
         FamilyManager familyManager = new FamilyManager();
         [HttpPost]
         [Route("GetFilteredFamilies")]
-        public object GetFilteredParents(DataRetrievalInput<FamilyQuery> input)
+        public object GetFilteredFamilys(DataRetrievalInput<FamilyQuery> input)
         {
             return GetWebResponse(input, familyManager.GetFilteredFamilies(input));
         }
@@ -42,6 +42,15 @@ namespace Demo.Web.Controllers
         public InsertOperationOutput<FamilyDetails> AddFamily(Family family)
         {
             return familyManager.AddFamily(family);
+        }
+
+
+        [HttpGet]
+        [Route("GetFamiliesInfo")]
+        public IEnumerable<FamilyInfo> GetFamiliesInfo(string filter = null)
+        {
+            FamilyInfoFilter familyInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<FamilyInfoFilter>(filter) : null;
+            return familyManager.GetFamiliesInfo(familyInfoFilter);
         }
     }
 }

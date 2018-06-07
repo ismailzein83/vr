@@ -148,12 +148,17 @@
     <Content Include="Demo_Module\Directives\Company\demo-module-company-grid.js" />
     <Content Include="Demo_Module\Directives\Company\demo-module-company-selector.js" />
     <Content Include="Demo_Module\Directives\Company\Templates\CompanyGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Family\demo-module-family-selector.js" />
     <Content Include="Demo_Module\Directives\Family\demo-module-family-grid.js" />
     <Content Include="Demo_Module\Directives\Family\Template\FamilyGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Item\demo-module-item-grid.js" />
     <Content Include="Demo_Module\Directives\Item\demo-module-item-search.js" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemSearchTemplate.html" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Member\demo-module-member-search.js" />
+    <Content Include="Demo_Module\Directives\Member\demo-module-member-grid.js" />
+    <Content Include="Demo_Module\Directives\Member\Templates\MemberSearchTemplate.html" />
+    <Content Include="Demo_Module\Directives\Member\Templates\MemberGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-grid.js" />
     <Content Include="Demo_Module\Directives\Product\demo-module-product-selector.js" />
     <Content Include="Demo_Module\Directives\Product\Templates\ProductGridTemplate.html" />
@@ -184,6 +189,7 @@
     <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\FamilyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ItemAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\MemberAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\ProductAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RoomAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
@@ -195,6 +201,7 @@
     <Content Include="Demo_Module\Services\DescriptionService.js" />
     <Content Include="Demo_Module\Services\FamilyService.js" />
     <Content Include="Demo_Module\Services\ItemService.js" />
+    <Content Include="Demo_Module\Services\MemberService.js" />
     <Content Include="Demo_Module\Services\ProductService.js" />
     <Content Include="Demo_Module\Services\RoomService.js" />
     <Content Include="Demo_Module\Services\UniversityService.js" />
@@ -225,6 +232,10 @@
     <Content Include="Demo_Module\Views\ItemEditorController.js" />
     <Content Include="Demo_Module\Views\ItemManagementController.js" />
     <Content Include="Demo_Module\Views\ItemManagement.html" />
+    <Content Include="Demo_Module\Views\MemberEditor.html" />
+    <Content Include="Demo_Module\Views\MemberEditorController.js" />
+    <Content Include="Demo_Module\Views\MemberManagement.html" />
+    <Content Include="Demo_Module\Views\MemberManagementController.js" />
     <Content Include="Demo_Module\Views\ProductsEditor.html" />
     <Content Include="Demo_Module\Views\ProductsEditorController.js" />
     <Content Include="Demo_Module\Views\ProductsManagement.html" />
@@ -240,6 +251,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
     <Compile Include="Controllers\BranchController.cs" />
