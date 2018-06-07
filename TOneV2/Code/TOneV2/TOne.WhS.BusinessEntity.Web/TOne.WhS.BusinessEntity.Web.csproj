@@ -228,6 +228,7 @@
     <Content Include="WhS_BusinessEntity\Constant\MigrationEffectiveDateTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PriceListExtensionFormatEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\ProfileFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SaleEntityZoneRoutingProductSourceTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePricelistCompressFileEnum.js" />
@@ -322,6 +323,8 @@
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-extendedsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\InvoiceFileNamePart\Templates\ProfileFieldFileNameTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\InvoiceFileNamePart\whs-be-invoicetype-filename-carrierprofile.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSupplierCodeGridDefinitionViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSaleCodeGridDefinitionViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\whs-be-anumber-suppliercodegridview-definition.js" />

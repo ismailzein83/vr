@@ -74,6 +74,10 @@
     <Reference Include="Vanrise.GenericData.Transformation.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -105,6 +109,7 @@
     <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
+    <Compile Include="InvoiceFileNamePart\CarrierFileNamePart.cs" />
     <Compile Include="MappingSteps\GetCDPNsForIdentificationStep.cs" />
     <Compile Include="MappingSteps\CheckSoldCountryForCustomerStep.cs" />
     <Compile Include="MappingSteps\GetCDPNsForZoneMatchStep.cs" />
