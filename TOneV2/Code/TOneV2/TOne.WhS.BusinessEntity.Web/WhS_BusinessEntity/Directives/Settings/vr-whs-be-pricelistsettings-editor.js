@@ -139,6 +139,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     codeChangeTypeSettings = data.CodeChangeTypeDescriptions;
                     rateChangeTypeSettings = data.RateChangeTypeDescriptions;
                     fileNamePattern = data.SalePricelistFileNamePattern;
+                    if (ctrl.showSubjectCode) {
+                        ctrl.subjectCode = data.SubjectCode;
+                    }
                 }
 
                 if (ctrl.showPricelistEmailTemplateSelector) {
@@ -197,7 +200,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     CodeChangeTypeDescriptions: (CodeChangeTypeSettingsGridAPI != undefined) ? CodeChangeTypeSettingsGridAPI.getData() : undefined,
                     RateChangeTypeDescriptions: (RateChangeTypeSettingsGridAPI != undefined) ? RateChangeTypeSettingsGridAPI.getData() : undefined,
                     SalePricelistFileNamePattern: (FileNamePatternAPI != undefined) ? FileNamePatternAPI.getData() : undefined,
-
+                    SubjectCode: ctrl.subjectCode
                 };
             };
 
@@ -328,6 +331,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.showCodeChangeTypeSettingsGrid = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showRateChangeTypeSettingsGrid = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showFileNamePattern = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showSubjectCode = directiveContext == customerEnumValue;
         }
 
         function prepareDirectivesRequiredForContext(directiveContext) {

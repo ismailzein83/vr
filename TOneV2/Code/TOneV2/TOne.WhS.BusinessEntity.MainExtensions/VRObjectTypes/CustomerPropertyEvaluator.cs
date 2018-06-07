@@ -10,13 +10,13 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum CustomerField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, BillingContact = 4, PricingContact = 5, AlertingSMSPhoneNumbers = 6 }
+    public enum CustomerField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, BillingContact = 4, PricingContact = 5, AlertingSMSPhoneNumbers = 6, SubjectCode = 7 }
 
     public class CustomerPropertyEvaluator : VRObjectPropertyEvaluator
     {
         public override Guid ConfigId
         {
-            get { return new Guid("2647ede8-0ba5-4131-8f2f-eb047ff0b359"); } 
+            get { return new Guid("2647ede8-0ba5-4131-8f2f-eb047ff0b359"); }
         }
 
         public CustomerField CustomerField { get; set; }
@@ -44,6 +44,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     return this.GetCarrierContactDescritpion(customer.CarrierProfileId, CarrierContactType.PricingContactPerson);
                 case MainExtensions.CustomerField.AlertingSMSPhoneNumbers:
                     return this.GetCarrierContactDescritpion(customer.CarrierProfileId, CarrierContactType.AlertingSMSPhoneNumbers);
+                case MainExtensions.CustomerField.SubjectCode:
+                    return new CarrierAccountManager().GetCustomerSubjectCode(customer.CarrierAccountId);
             }
 
             return null;

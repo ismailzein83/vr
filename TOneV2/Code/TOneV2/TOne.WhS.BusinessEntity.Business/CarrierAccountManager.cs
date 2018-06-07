@@ -275,6 +275,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return sellingProductManager.GetSellingProductDecreasedRateDayOffset(sellingProductId);
         }
 
+        public string GetCustomerSubjectCode(int carrierAccountId)
+        {
+            var customer = GetCarrierAccount(carrierAccountId);
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("customer.CustomerSettings", carrierAccountId);
+
+            return customer.CustomerSettings.PricelistSettings != null
+                ? customer.CustomerSettings.PricelistSettings.SubjectCode
+                : null;
+        }
         public PriceListExtensionFormat GetCustomerPriceListExtensionFormatId(int carrierAccountId)
         {
             var customer = GetCarrierAccount(carrierAccountId);
@@ -618,7 +628,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (filter.SellingNumberPlanId.HasValue && carr.SellingNumberPlanId != filter.SellingNumberPlanId.Value)
                         return false;
 
-                    if (filter.SellingProductId.HasValue && carr.SellingProductId != filter.SellingProductId.Value )
+                    if (filter.SellingProductId.HasValue && carr.SellingProductId != filter.SellingProductId.Value)
                         return false;
 
                     if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
@@ -1637,9 +1647,9 @@ namespace TOne.WhS.BusinessEntity.Business
         public string Name { get; set; }
 
         public List<int> CarrierProfilesIds { get; set; }
-        
+
         public List<CarrierAccountType> AccountsTypes { get; set; }
-        
+
         public List<ActivationStatus> ActivationStatuses { get; set; }
 
         public List<int> SellingNumberPlanIds { get; set; }
