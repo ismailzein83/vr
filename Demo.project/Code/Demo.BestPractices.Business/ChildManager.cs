@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Demo.BestPractices.Business
@@ -29,7 +30,11 @@ namespace Demo.BestPractices.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allChilds.ToBigResult(input, filterExpression, ChildDetailMapper));
 
         }
-
+        public IEnumerable<ChildShapeConfig> GetChildShapeConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<ChildShapeConfig>(ChildShapeConfig.EXTENSION_TYPE);
+        }
 
         public InsertOperationOutput<ChildDetails> AddChild(Child child)
         {
@@ -109,12 +114,23 @@ namespace Demo.BestPractices.Business
         #region Mappers
         public ChildDetails ChildDetailMapper(Child child)
         {
-            return new ChildDetails
+            var childDetails = new ChildDetails
             {
                 Name = child.Name,
                 ChildId = child.ChildId,
-                ParentName = _parentManager.GetParentName(child.ParentId)
+                ParentName = _parentManager.GetParentName(child.ParentId),
             };
+
+            if (child.Settings != null && child.Settings.ChildShape != null)
+            {
+                var context = new ChildShapeDescriptionContext
+                {
+                    Child = child
+                };
+                childDetails.AreaDescription = child.Settings.ChildShape.GetChildAreaDescription(context);
+            }
+
+            return childDetails;
         }
         #endregion 
     }

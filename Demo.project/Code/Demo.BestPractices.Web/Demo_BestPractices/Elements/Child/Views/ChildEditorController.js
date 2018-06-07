@@ -14,6 +14,8 @@
         var parentDirectiveApi;
         var parentReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var childShapeDirectiveApi;
+        var childShapeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -36,6 +38,11 @@
             $scope.scopeModel.onParentDirectiveReady = function (api) {
                 parentDirectiveApi = api;
                 parentReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onChildShapeDirectiveReady = function (api) {
+                childShapeDirectiveApi = api;
+                childShapeReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.saveChild = function () {
@@ -76,6 +83,19 @@
 
         function loadAllControls() {
 
+            function loadChildShapeDirective() {
+                var childShapeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                childShapeReadyPromiseDeferred.promise.then(function () {
+                    var childShapePayload;
+                    if (childEntity != undefined && childEntity.Settings != undefined)
+                        childShapePayload = {
+                            childShapeEntity: childEntity.Settings.ChildShape
+                        };
+                    VRUIUtilsService.callDirectiveLoad(childShapeDirectiveApi, childShapePayload, childShapeLoadPromiseDeferred);
+                });
+                return childShapeLoadPromiseDeferred.promise;
+            }
+
             function loadParentSelector() {
                 var parentLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 parentReadyPromiseDeferred.promise.then(function () {
@@ -104,7 +124,7 @@
                     $scope.scopeModel.name = childEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParentSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadParentSelector, loadChildShapeDirective])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })
@@ -117,7 +137,10 @@
             var object = {
                 ChildId: (childId != undefined) ? childId : undefined,
                 Name: $scope.scopeModel.name,
-                ParentId: parentDirectiveApi.getSelectedIds()
+                ParentId: parentDirectiveApi.getSelectedIds(),
+                Settings: {
+                    ChildShape: childShapeDirectiveApi.getData()
+                }
             };
             return object;
         };

@@ -31,7 +31,12 @@ namespace Demo.BestPractices.Data.SQL
         public bool Insert(Child child, out long insertedId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Insert]", out id, child.Name, child.ParentId);
+
+            string serializedChildSettings = null;
+            if (child.Settings != null)
+                serializedChildSettings = Vanrise.Common.Serializer.Serialize(child.Settings);
+
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Insert]", out id, child.Name, child.ParentId, serializedChildSettings);
             bool result = (nbOfRecordsAffected > 0);
             if (result)
                 insertedId = (long)id;
@@ -41,8 +46,11 @@ namespace Demo.BestPractices.Data.SQL
         }
         public bool Update(Child child)
         {
+            string serializedChildSettings = null;
+            if (child.Settings != null)
+                serializedChildSettings = Vanrise.Common.Serializer.Serialize(child.Settings);
 
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Update]", child.ChildId, child.Name, child.ParentId);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Child_Update]", child.ChildId, child.Name, child.ParentId, serializedChildSettings);
             return (nbOfRecordsAffected > 0);
         }
 
@@ -56,6 +64,7 @@ namespace Demo.BestPractices.Data.SQL
                 ChildId = GetReaderValue<long>(reader, "ID"),
                 Name = GetReaderValue<string>(reader, "Name"),
                 ParentId = GetReaderValue<long>(reader, "ParentId"),
+                Settings = Vanrise.Common.Serializer.Deserialize<ChildSettings>(reader["Settings"] as string)
             };
         }
         #endregion

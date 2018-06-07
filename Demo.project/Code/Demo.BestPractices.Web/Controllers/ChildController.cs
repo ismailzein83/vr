@@ -42,5 +42,13 @@ namespace Demo.BestPractices.Web.Controllers
         {
             return childManager.AddChild(child);
         }
+        [HttpGet]
+        [Route("GetChildShapeConfigs")]
+        public IEnumerable<ChildShapeConfig> GetChildShapeConfigs()
+        {
+            return childManager.GetChildShapeConfigs();
+        }
+
+        
     }
 }

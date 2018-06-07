@@ -98,8 +98,13 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Demo_BestPractices\Constant\ModuleConfig.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\demo-bestpractices-child-childshape.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Directives\demo-bestpractices-child-grid.js" />
     <Content Include="Demo_BestPractices\Elements\Child\Directives\demo-bestpractices-child-search.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\MainExtensions\demo-bestpractices-child-childshape-square.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\MainExtensions\demo-bestpractices-child-childshape-circle.js" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\MainExtensions\Templates\CircleShapeTemplate.html" />
+    <Content Include="Demo_BestPractices\Elements\Child\Directives\MainExtensions\Templates\SquareShapeTemplate.html" />
     <Content Include="Demo_BestPractices\Elements\Child\Directives\Templates\ChildGridTemplate.html" />
     <Content Include="Demo_BestPractices\Elements\Child\Directives\Templates\ChildSearchTemplate.html" />
     <Content Include="Demo_BestPractices\Elements\Child\Services\APIServices\ChildAPIService.js" />

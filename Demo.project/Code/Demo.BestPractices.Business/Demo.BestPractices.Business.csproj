@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChildManager.cs" />
+    <Compile Include="ChildShapeDescriptionContext.cs" />
     <Compile Include="ParentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

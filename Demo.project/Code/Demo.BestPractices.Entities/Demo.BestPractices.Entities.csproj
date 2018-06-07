@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Child.cs" />
+    <Compile Include="ChildShapeConfig.cs" />
     <Compile Include="Parent.cs" />
     <Compile Include="ChildDetails.cs" />
     <Compile Include="ParentDetails.cs" />

@@ -21,12 +21,15 @@
         function AddChild(child) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "AddChild"), child);
         };
-
+        function GetChildShapeConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_BestPractices_ModuleConfig.moduleName, controller, "GetChildShapeConfigs"));
+        }
         return {
             GetFilteredChilds: GetFilteredChilds,
             GetChildById: GetChildById,
             UpdateChild: UpdateChild,
             AddChild: AddChild,
+            GetChildShapeConfigs: GetChildShapeConfigs
         };
     };
     appControllers.service("Demo_BestPractices_ChildAPIService", childAPIService);
