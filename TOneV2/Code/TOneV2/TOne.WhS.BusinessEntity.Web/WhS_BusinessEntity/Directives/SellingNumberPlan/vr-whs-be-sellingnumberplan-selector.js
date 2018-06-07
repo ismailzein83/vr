@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SellingNumberPlanService',
     function (WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService, WhS_BE_SellingNumberPlanService) {
 
@@ -57,9 +58,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
             template: function (element, attrs) {
                 return getBeSellingNumberPlansTemplate(attrs);
             }
-
         };
-
 
         function getBeSellingNumberPlansTemplate(attrs) {
 
@@ -91,6 +90,8 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
         }
 
         function sellingNumberPlanCtor(ctrl, $scope, attrs) {
+            this.initializeController = initializeController;
+
             var selectorAPI;
 
             function initializeController() {
@@ -105,8 +106,10 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
+
                     var selectIfSingleItem;
                     var selectedIds;
+
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         selectIfSingleItem = payload.selectifsingleitem;
@@ -138,11 +141,13 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                     });
                 };
 
+                api.hasSingleItem = function () {
+                    return ctrl.datasource.length == 1;
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

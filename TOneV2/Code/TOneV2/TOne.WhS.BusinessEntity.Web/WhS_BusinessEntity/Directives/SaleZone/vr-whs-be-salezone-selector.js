@@ -207,8 +207,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         return UtilsService.waitMultiplePromises(promises);
                     }
                     else {
-                        saleZoneSelectorCtrl.isSellingNumberPlanVisible = true;
-
                         if (genericUIContext != undefined && genericUIContext.getFields != undefined && typeof (genericUIContext.getFields) == "function") {
                             var fields = genericUIContext.getFields();
                             if (fields != undefined) {
@@ -302,7 +300,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                 var setSelectedSaleZonesPromiseDeferred = UtilsService.createPromiseDeferred();
                                 promises.push(setSelectedSaleZonesPromiseDeferred.promise);
 
-
                                 var loadSaleZonePromise = WhS_BE_SaleZoneAPIService.GetSellingNumberPlanIdBySaleZoneIds(selectedSaleZoneIds).then(function (response) {
 
                                     var selectedSellingNumberPlanIds = [];
@@ -311,11 +308,11 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                             selectedSellingNumberPlanIds.push(response[i].SellingNumberPlanId);
                                     }
 
-                                    var payloadDirective = {
-                                        selectedIds: selectedSellingNumberPlanIds
+                                    var sellingDirectivePayload = {
+                                        selectedIds: selectedSellingNumberPlanIds,
+                                        selectifsingleitem: true
                                     };
-
-                                    VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
+                                    VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, sellingDirectivePayload, loadSellingNumberPlanPromiseDeferred);
 
                                     loadSellingNumberPlanPromiseDeferred.promise.then(function () {
                                         var input = {
@@ -328,7 +325,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                         });
                                     });
                                 });
-
                                 promises.push(loadSaleZonePromise);
 
                                 UtilsService.waitMultiplePromises(promises).then(function () {
@@ -338,13 +334,20 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                 });
                             });
 
-                            return loadSellingNumberPlanSectionPromiseDeferred.promise;
+                            return loadSellingNumberPlanSectionPromiseDeferred.promise.then(function () {
+                                IsSellingNumberPlanVisible();
+                            });
                         }
                         else {
                             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+
                             sellingReadyPromiseDeferred.promise.then(function () {
-                                var payloadDirective;
-                                VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, payloadDirective, loadSellingNumberPlanPromiseDeferred);
+                                var sellingDirectivePayload = { selectifsingleitem: true };
+                                VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, sellingDirectivePayload, loadSellingNumberPlanPromiseDeferred);
+                            });
+
+                            return loadSellingNumberPlanPromiseDeferred.promise.then(function () {
+                                IsSellingNumberPlanVisible();
                             });
                         }
                     }
@@ -367,6 +370,14 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     saleZoneSelectorCtrl.onReady(api);
 
                 return api;
+            }
+
+            function IsSellingNumberPlanVisible() {
+                if (sellingDirectiveApi.hasSingleItem()) {
+                    saleZoneSelectorCtrl.isSellingNumberPlanVisible = false;
+                } else {
+                    saleZoneSelectorCtrl.isSellingNumberPlanVisible = true;
+                }
             }
         }
 
