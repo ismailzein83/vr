@@ -111,8 +111,8 @@
 
             var errorMessage = "Invalid time range";
 
-            var startDate = getDateObject(fromDate);
-            var endDate = getDateObject(toDate);
+            var startDate = UtilsService.getDateObject(fromDate);
+            var endDate = UtilsService.getDateObject(toDate);
 
             if (startDate != undefined && endDate != undefined) {
                 if (startDate.getTime() > endDate.getTime())
@@ -128,16 +128,7 @@
             }
             return null;
         }
-
-        function getDateObject(date) {
-            if (date instanceof Date)
-                return date;
-            else if (typeof (date) == 'string')
-                return UtilsService.createDateFromString(date);
-            else
-                return undefined;
-        }
-
+        
         function validateTimeEqualorGreaterthanToday(currentDate) {
             var errorMessage = "Date cannot be in the past";
             var today = VRDateTimeService.getNowDateTime();

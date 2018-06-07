@@ -817,8 +817,7 @@
 
         var isShouldSubsctractOffsetfromDate;
 
-        function shouldSubsctractOffsetfromDate()
-        {
+        function shouldSubsctractOffsetfromDate() {
             if (isShouldSubsctractOffsetfromDate == undefined) {
                 var convertedDate = new Date("2000-01-01T00:00:00");
                 isShouldSubsctractOffsetfromDate = (convertedDate.getHours() != 0);
@@ -909,7 +908,14 @@
                 return true;
             return false;
         }
-
+        function getDateObject(date) {
+            if (date instanceof Date)
+                return date;
+            else if (typeof (date) == 'string')
+                return createDateFromString(date);
+            else
+                return undefined;
+        }
         return ({
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -972,7 +978,8 @@
             getBaseUrlPrefix: getBaseUrlPrefix,
             areTimePeriodsOverlapped: areTimePeriodsOverlapped,
             linkExistingPromiseToPromiseDeferred: linkExistingPromiseToPromiseDeferred,
-            waitPromiseNode: waitPromiseNode
+            waitPromiseNode: waitPromiseNode,
+            getDateObject: getDateObject
         });
     }
 
