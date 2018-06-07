@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RPZoneCodeGroupDataManager.cs" />
     <Compile Include="CodeMatchesDataManager.cs" />
     <Compile Include="CodeSaleZoneDataManager.cs" />
     <Compile Include="CustomerQualityConfigurationDataManager.cs" />

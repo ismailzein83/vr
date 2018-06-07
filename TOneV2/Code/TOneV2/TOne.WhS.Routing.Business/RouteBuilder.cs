@@ -71,11 +71,11 @@ namespace TOne.WhS.Routing.Business
 
                             if (customerZoneDetail.SaleZoneServiceIds == null)
                             {
-                                customerRoutes.Add(new CustomerRoute() 
-                                { 
+                                customerRoutes.Add(new CustomerRoute()
+                                {
                                     Code = routeCode,
-                                    CorrespondentType = CorrespondentType.Other, 
-                                    CustomerId = customerZoneDetail.CustomerId, 
+                                    CorrespondentType = CorrespondentType.Other,
+                                    CustomerId = customerZoneDetail.CustomerId,
                                     SaleZoneId = saleZoneDefintion.SaleZoneId,
                                     VersionNumber = context.VersionNumber
                                 });
@@ -494,9 +494,10 @@ namespace TOne.WhS.Routing.Business
                     if (!routeOptionRuleTargets.Any())
                         continue;
 
-                    RouteOptionRuleTarget firstRouteOptionRuleTarget = routeOptionRuleTargets[0];
-                    if (firstRouteOptionRuleTarget.SupplierRateEED.HasValue)
+                    if (routeOptionRuleTargets.FirstOrDefault(itm => itm.SupplierRateEED.HasValue) != null)
                         supplierHavingZonesWithEED.Add(supplierId);
+
+                    RouteOptionRuleTarget firstRouteOptionRuleTarget = routeOptionRuleTargets[0];
 
                     optionSupplierDetails = new RPRouteOptionSupplier
                     {

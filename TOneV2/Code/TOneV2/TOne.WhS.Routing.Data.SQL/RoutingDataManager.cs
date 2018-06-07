@@ -161,6 +161,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CodeSaleZoneMatchTable);
             query.AppendLine(query_CodeSupplierZoneMatchTable);
             query.AppendLine(query_SaleZoneTable);
+            query.AppendLine(query_ZoneCodeGroupTable);
             ExecuteNonQueryText(query.ToString(), null);
 
             //CREATE FUNCTION must be the only statement in the batch
@@ -168,6 +169,11 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
         #region Constants
+        const string query_ZoneCodeGroupTable = @"CREATE TABLE [dbo].[ZoneCodeGroup](
+                                                        [ZoneId] [bigint] NOT NULL,
+                                                        [CodeGroups] [nvarchar](max) NOT NULL,
+                                                        [IsSale] bit NOT NULL
+                                                        )ON [PRIMARY]";
 
         const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[CustomerQualityConfigurationData](
                                                         [QualityConfigurationId] [uniqueidentifier] NOT NULL,

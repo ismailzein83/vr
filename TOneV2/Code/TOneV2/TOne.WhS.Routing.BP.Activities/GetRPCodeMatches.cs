@@ -1,12 +1,14 @@
 ﻿using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.Queueing;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -34,23 +36,33 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void DoWork(GetRPCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
-            dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
+            dataManager.RoutingDatabase = routingDatabase;
+
+            IRPZoneCodeGroupDataManager rpZoneCodeGroupDataManager = RoutingDataManagerFactory.GetDataManager<IRPZoneCodeGroupDataManager>();
+            rpZoneCodeGroupDataManager.RoutingDatabase = routingDatabase;
+
+            Dictionary<bool, Dictionary<long, HashSet<string>>> zoneCodeGroupsDict = rpZoneCodeGroupDataManager.GetZoneCodeGroups();
+            Dictionary<long, HashSet<string>> saleZoneCodeGroups = zoneCodeGroupsDict != null ? zoneCodeGroupsDict.GetRecord(true) : null;
+            Dictionary<long, HashSet<string>> costZoneCodeGroups = zoneCodeGroupsDict != null ? zoneCodeGroupsDict.GetRecord(false) : null;
 
             var codeMatches = dataManager.GetRPCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId, () => ShouldStop(handle));
-            
+
             long currentZoneId = 0;
             Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;
-            
+
             foreach (var codeMatch in codeMatches.OrderBy(c => c.SaleZoneId))
             {
                 if (ShouldStop(handle))
                     break;
 
+                HashSet<string> saleCodeGroups = saleZoneCodeGroups != null ? saleZoneCodeGroups.GetRecord(codeMatch.SaleZoneId) : null;
+
                 if (currentZoneId != codeMatch.SaleZoneId)
                 {
-                    if (currentSupplierCodeMatchesWithRate != null)
+                    if (currentSupplierCodeMatchesWithRate != null && currentSupplierCodeMatchesWithRate.Count > 0)
                     {
                         RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
                        {
@@ -69,13 +81,23 @@ namespace TOne.WhS.Routing.BP.Activities
                 {
                     foreach (var item in codeMatch.SupplierCodeMatches)
                     {
+                        if (saleCodeGroups != null)
+                        {
+                            HashSet<string> costCodeGroups = costZoneCodeGroups != null ? costZoneCodeGroups.GetRecord(item.CodeMatch.SupplierZoneId) : null;
+                            if (costCodeGroups == null)
+                                continue;
+
+                            if (!costCodeGroups.Any(saleCodeGroups.Contains))
+                                continue;
+                        }
+
                         if (!currentSupplierCodeMatchesWithRate.ContainsKey(item.CodeMatch.SupplierZoneId))
                             currentSupplierCodeMatchesWithRate.Add(item.CodeMatch.SupplierZoneId, item);
                     }
                 }
             }
 
-            if (currentSupplierCodeMatchesWithRate != null)
+            if (currentSupplierCodeMatchesWithRate != null && currentSupplierCodeMatchesWithRate.Count > 0)
             {
                 RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
                 {

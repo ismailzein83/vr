@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRPZoneCodeGroupDataManager.cs" />
     <Compile Include="IRPQualityConfigurationDataManager.cs" />
     <Compile Include="ICustomerQualityConfigurationDataManager.cs" />
     <Compile Include="IRoutingEntityDetailsDataManager.cs" />

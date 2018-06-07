@@ -627,5 +627,7 @@
     <Build Include="TOneWhS_BE\User Defined Types\SupplierRecurringChargesType.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\CustomerRecurringChargesTypeType.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\CustomerRecurringChargesType.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ZoneCodeGroup_GetSale.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ZoneCodeGroup_GetCost.sql" />
   </ItemGroup>
 </Project>

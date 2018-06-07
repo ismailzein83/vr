@@ -26,4 +26,18 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
 
     }
+
+    public class ZoneCodeGroup
+    {
+        public long ZoneId { get; set; }
+
+        public bool IsSale { get; set; }
+
+        public List<string> CodeGroups { get; set; }
+    }
+
+    public class ZoneCodeGroupBatch
+    {
+        public List<ZoneCodeGroup> ZoneCodeGroups { get; set; }
+    }
 }

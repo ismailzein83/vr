@@ -102,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyZoneCodeGroupToDB.cs" />
     <Compile Include="ApplyCodeMatchesToDB.cs" />
     <Compile Include="ApplyCodesToCodeSaleZoneTable.cs" />
     <Compile Include="ApplyCustomerRouteQualityDataToDB.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="EntitiesUpdater\GetBERouteInfo.cs" />
     <Compile Include="FillRoutingEntityDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckModifiedCustomerZoneDetails.cs" />
+    <Compile Include="GenerateZoneCodeGroup.cs" />
     <Compile Include="InitializeRouteProcess.cs" />
     <Compile Include="PartialRoute\CheckModifiedCustomerRoutes.cs" />
     <Compile Include="PartialRoute\BuildPartialCustomerRoutes.cs" />
@@ -158,6 +160,7 @@
     <Compile Include="PrepareCustomerRouteQualityDataForDBApply.cs" />
     <Compile Include="PrepareCustomerRoutesForApply.cs" />
     <Compile Include="PrepareCustomerZoneDetailForDBApply.cs" />
+    <Compile Include="PrepareZoneCodeGroupForApply.cs" />
     <Compile Include="PrepareProductRoutesForApply.cs" />
     <Compile Include="PrepareRPQualityDataForDBApply.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />

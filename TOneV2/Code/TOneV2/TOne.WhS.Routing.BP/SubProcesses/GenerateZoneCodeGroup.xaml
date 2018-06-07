@@ -1,0 +1,152 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.SubProcesses.GenerateZoneCodeGroup"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
+    <x:Property Name="EffectiveOn" Type="InArgument(s:Nullable(s:DateTime))" />
+    <x:Property Name="IsFuture" Type="InArgument(x:Boolean)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.SubProcesses.GenerateZoneCodeGroup_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+    <Parallel.Variables>
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GenerateZoneCodeGroupStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(twbe:ZoneCodeGroupBatch)" Name="GenerateZoneCodeGroupQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PrepareZoneCodeGroupStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PrepareZoneCodeGroupQueue" />
+    </Parallel.Variables>
+    <twrba:GenerateZoneCodeGroup sap2010:WorkflowViewState.IdRef="GenerateZoneCodeGroup_1">
+      <twrba:GenerateZoneCodeGroup.EffectiveOn>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">EffectiveOn</mca:CSharpValue>
+        </InArgument>
+      </twrba:GenerateZoneCodeGroup.EffectiveOn>
+      <twrba:GenerateZoneCodeGroup.IsFuture>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">IsFuture</mca:CSharpValue>
+        </InArgument>
+      </twrba:GenerateZoneCodeGroup.IsFuture>
+      <twrba:GenerateZoneCodeGroup.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(twbe:ZoneCodeGroupBatch)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twbe:ZoneCodeGroupBatch)">GenerateZoneCodeGroupQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twrba:GenerateZoneCodeGroup.OutputQueue>
+      <twrba:GenerateZoneCodeGroup.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GenerateZoneCodeGroupStatus</mca:CSharpReference>
+        </OutArgument>
+      </twrba:GenerateZoneCodeGroup.Status>
+    </twrba:GenerateZoneCodeGroup>
+    <twrba:PrepareZoneCodeGroupForApply sap2010:WorkflowViewState.IdRef="PrepareZoneCodeGroupForApply_1">
+      <twrba:PrepareZoneCodeGroupForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(twbe:ZoneCodeGroupBatch)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twbe:ZoneCodeGroupBatch)">GenerateZoneCodeGroupQueue</mca:CSharpValue>
+        </InArgument>
+      </twrba:PrepareZoneCodeGroupForApply.InputQueue>
+      <twrba:PrepareZoneCodeGroupForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PrepareZoneCodeGroupQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twrba:PrepareZoneCodeGroupForApply.OutputQueue>
+      <twrba:PrepareZoneCodeGroupForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GenerateZoneCodeGroupStatus</mca:CSharpValue>
+        </InArgument>
+      </twrba:PrepareZoneCodeGroupForApply.PreviousActivityStatus>
+      <twrba:PrepareZoneCodeGroupForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">PrepareZoneCodeGroupStatus</mca:CSharpReference>
+        </OutArgument>
+      </twrba:PrepareZoneCodeGroupForApply.Status>
+    </twrba:PrepareZoneCodeGroupForApply>
+    <twrba:ApplyZoneCodeGroupToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyZoneCodeGroupToDB_1">
+      <twrba:ApplyZoneCodeGroupToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PrepareZoneCodeGroupQueue</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplyZoneCodeGroupToDB.InputQueue>
+      <twrba:ApplyZoneCodeGroupToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">PrepareZoneCodeGroupStatus</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplyZoneCodeGroupToDB.PreviousActivityStatus>
+      <twrba:ApplyZoneCodeGroupToDB.RoutingDatabaseId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplyZoneCodeGroupToDB.RoutingDatabaseId>
+    </twrba:ApplyZoneCodeGroupToDB>
+    <sads:DebugSymbol.Symbol>d1VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlWm9uZUNvZGVHcm91cC54YW1sD0kDjgEOAgEBUAVlIwIBPGYFeyoCARt8BYwBJAIBAlMLU2ICAVViC2J6AgFNXQtdiAECAUVYC1hSAgE9cwtzcgIBNGkLaYABAgEseAt4eQIBJG4LbngCARyEAQuEAXECARN/C39wAgELiQELiQFZAgED</sads:DebugSymbol.Symbol>
+  </Parallel>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GenerateZoneCodeGroup_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareZoneCodeGroupForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyZoneCodeGroupToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.GenerateZoneCodeGroup_1" sap:VirtualizedContainerService.HintSize="834,166" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
