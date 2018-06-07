@@ -10,7 +10,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierProfile_Update]
 	@LastModifiedBy int
 AS
 BEGIN
-IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierProfile where Name = @Name and Id!=@ID) 
+IF NOT EXISTS(select 1 from TOneWhS_BE.CarrierProfile where Name = @Name and Id!=@ID and ISNULL(IsDeleted,0) = 0) 
 BEGIN
 	Update TOneWhS_BE.CarrierProfile
 	Set Name = @Name,
