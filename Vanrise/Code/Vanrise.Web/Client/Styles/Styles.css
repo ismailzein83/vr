@@ -5,6 +5,7 @@
 /* start main-menu*/
 .wrapper-toogled {
     padding-left: 185px !important;
+    min-width: 1360px;
 }
 
 .wrapper-normal {
@@ -133,6 +134,7 @@
 
 .vr-container {
     padding: 0px 5px;
+    min-width: 1366px;
 }
 
     .vr-container div[ng-view] {

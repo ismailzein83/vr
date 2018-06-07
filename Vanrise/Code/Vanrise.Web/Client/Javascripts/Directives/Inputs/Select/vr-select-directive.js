@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout, $rootScope, VRLocalizationService) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout, $rootScope, VRLocalizationService, VRModalService, MobileService) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
@@ -466,25 +466,12 @@
                     isSelected: isSelected
                 });
                 controller.selectedValuespageSize = 20;
+                controller.isMobile = MobileService.isMobile();
                 var afterShowDropdown = function (id) {
                     var dropdown = $('div[name=' + id + ']');
                     var menuPosition = getDropDownDirection(id);
                     $('div[name=' + id + ']').find('.dropdown-menu').css({ position: 'fixed', top: menuPosition.top, left: menuPosition.left });
-                    setTimeout(function () {
-                        var lastScrollTop;
-                        dropdown.find("#divDataSourceContainer" + id).scroll(function (e) {
-                            var scrollTop = dropdown.find("#divDataSourceContainer" + id).scrollTop();
-                            var scrollPercentage = 100 * scrollTop / (dropdown.find('#divDataSourceBody' + id).height() - dropdown.find("#divDataSourceContainer" + id).height());
-
-                            if (scrollTop > lastScrollTop) {
-                                if (scrollPercentage > 80)
-                                    addPageToBoundDataSource();
-                            }
-                            lastScrollTop = scrollTop;
-
-                        });
-                        markSelectedDataItem();
-                    }, 1);
+                    attachPagingOnScrollOnDataSourceContainer(id);
                     var selfHeight = dropdown.height();
                     var selfOffset = dropdown.offset();
                     var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
@@ -508,6 +495,40 @@
                     }
 
                 };
+
+                function attachPagingOnScrollOnDataSourceContainer(id) {
+                    setTimeout(function () {
+                        var lastScrollTop;
+                        $("#divDataSourceContainer" + id).scroll(function (e) {
+                            var scrollTop = $("#divDataSourceContainer" + id).scrollTop();
+                            var scrollPercentage = 100 * scrollTop / ($('#divDataSourceBody' + id).height() - $("#divDataSourceContainer" + id).height());
+                            if (scrollTop > lastScrollTop) {
+                                if (scrollPercentage > 80)
+                                    addPageToBoundDataSource();
+                                    //addDataSourcePage();
+                            }
+                            lastScrollTop = scrollTop;
+                        });
+                        markSelectedDataItem();
+                    }, controller.isMobile ? 1200 : 1);
+                };
+
+
+                var isAddingDataSourcePage = false;
+                function addDataSourcePage() {
+                    if (isAddingDataSourcePage)
+                        return;
+                    isAddingDataSourcePage = true;
+                    selectService.disableScroll();
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            controller.dataSourcePageSize += 20;
+                            isAddingDataSourcePage = false;
+                            selectService.enableScroll();
+                        });
+                    }, 1);
+                }
+
                 var afterHideDropdown = function (id) {
                     controller.filtername = '';
                     controller.searchLocal();
@@ -609,6 +630,12 @@
                         left: ddleft
                     };
                 };
+
+                controller.hideMobileDropDown = function () {
+                    afterHideDropdown(controller.id);
+                    $('div[name=' + controller.id + ']').find('.dropdown-menu').hide();
+                };
+
                 function hideAllOtherDropDown(currentId) {
                     var dropdowns = $('.dropdown-menu');
                     var len = dropdowns.length;
@@ -633,9 +660,23 @@
                             }
                         }
                     }
+
                 };
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
+                        if (controller.isMobile) {
+                            var modalSettings = {
+                                autoclose: true
+                            };
+                            modalSettings.onScopeReady = function (modalScope) {
+                                modalScope.ctrl = controller;                               
+                            };
+                            VRModalService.showModal("/Client/Javascripts/Directives/Inputs/Select/MobileOptionPopup.html", null, modalSettings);
+                            controller.dataSourcePageSize = 20;
+                            attachPagingOnScrollOnDataSourceContainer($attrs.id);
+                            fillEffectiveDataSourceFromItems(getdatasource());
+                            return;
+                        }
 
                         hideAllOtherDropDown($attrs.id);
                         if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
@@ -673,10 +714,9 @@
                 controller.initializeSelectedValuesPaging = function () {
                     setTimeout(function () {
                         var selectedLastScrollTop;
-                        var dropdown = $('div[name=' + $attrs.id + ']');
-                        dropdown.find("#divSelectedValuesContainer" + $attrs.id).scroll(function (e) {
-                            var scrollTop = dropdown.find("#divSelectedValuesContainer" + $attrs.id).scrollTop();
-                            var scrollPercentage = 100 * scrollTop / (dropdown.find('#divSelectedValuesBody' + $attrs.id).height() - dropdown.find("#divSelectedValuesContainer" + $attrs.id).height());
+                        $("#divSelectedValuesContainer" + $attrs.id).scroll(function (e) {
+                            var scrollTop = $("#divSelectedValuesContainer" + $attrs.id).scrollTop();
+                            var scrollPercentage = 100 * scrollTop / ($('#divSelectedValuesBody' + $attrs.id).height() - $("#divSelectedValuesContainer" + $attrs.id).height());
                             if (scrollTop > selectedLastScrollTop) {
                                 if (scrollPercentage > 80) {
                                     addSelectedValuesPage();
@@ -1087,7 +1127,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService', 'VRModalService', 'MobileService'];
 
     app.directive('vrSelect', vrSelectDirective);
 
