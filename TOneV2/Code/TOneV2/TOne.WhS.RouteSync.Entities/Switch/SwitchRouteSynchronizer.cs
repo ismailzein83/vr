@@ -57,15 +57,15 @@ namespace TOne.WhS.RouteSync.Entities
 
     public interface ISwitchRouteSynchronizerInitializeContext
     {
-        RouteRangeType? RouteRangeType { get; }
-
-        SwitchRouteSyncInitializationData InitializationData { set; }
-
+        string SwitchId { get; }
+        
         string SwitchName { get; }
 
-        string SwitchId { get; }
+        RouteRangeType? RouteRangeType { get; }
 
         SwitchSyncOutput SwitchSyncOutput { set; }
+
+        SwitchRouteSyncInitializationData InitializationData { set; }
 
         Action<Exception, bool> WriteBusinessHandledException { get; }
     }
