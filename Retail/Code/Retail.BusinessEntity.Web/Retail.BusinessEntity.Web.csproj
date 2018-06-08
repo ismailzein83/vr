@@ -170,6 +170,7 @@
     <Compile Include="Controllers\AccountManagerAssignmentsController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\AccountPartDefinitionController.cs" />
+    <Compile Include="Controllers\AccountPartTaxesRuntimeController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\AccountSynchronizerHandlerController.cs" />
     <Compile Include="Controllers\FinancialAccountController.cs" />
@@ -460,9 +461,13 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\PortalAccountInsertHandlerTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-operator.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\retail-be-accounttype-part-definition-taxes.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeOperatorPartDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Definition\Templates\AccountTypeTaxesDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-operator.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\retail-be-accounttype-part-runtime-taxes.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeOperatorPartRuntimeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeTaxesPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinitions\retail-be-actiondefinition-balancealertsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinitions\retail-be-actiondefinition-sendemailsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinitions\Templates\ActionDefinitionBalanceAlertSettings.html" />
@@ -722,7 +727,9 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\OverriddenConfigurationServiceType.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-didtechnicalsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-retailinvoicesettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\DIDTechnicalSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\RetailInvoiceSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Status\retail-be-statusdefinition-grid.js" />
@@ -776,6 +783,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChangeStatusActionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountPartTaxesRuntimeAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorsWithLocalAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
