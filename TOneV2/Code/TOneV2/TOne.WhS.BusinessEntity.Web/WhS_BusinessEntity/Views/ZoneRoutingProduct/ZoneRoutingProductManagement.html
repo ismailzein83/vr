@@ -2,42 +2,39 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
-                <vr-whs-be-sellingnumberplan-selector normal-col-num="2" on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan"
-                                                      onselectionchanged="onSellingNumberPlanSelectionChanged" isrequired="true"></vr-whs-be-sellingnumberplan-selector>
-
+                <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady"
+                                                      onselectionchanged="onSellingNumberPlanSelectionChanged"
+                                                      selectedvalues="selectedSellingNumberPlan"
+                                                      normal-col-num="2" isrequired="true">
+                </vr-whs-be-sellingnumberplan-selector>
                 <span ng-show="selectedSellingNumberPlan" vr-loader="isLoadingSaleZonesSelector">
-                    <vr-whs-be-salezone-selector ismultipleselection normal-col-num="2" on-ready="onSaleZoneDirectiveReady">
-                    </vr-whs-be-salezone-selector>
+                    <vr-whs-be-salezone-selector on-ready="onSaleZoneDirectiveReady" normal-col-num="2" ismultipleselection></vr-whs-be-salezone-selector>
                 </span>
 
                 <vr-columns width="normal">
-                    <vr-select label="Owner Type"
-                               datasource="ownerTypes"
+                    <vr-select datasource="ownerTypes"
                                selectedvalues="selectedOwnerType"
                                onselectionchanged="onOwnerTypeChanged"
                                datavaluefield="value"
                                datatextfield="description"
+                               label="Owner Type"
                                entityname="Owner Type"
-                               hideremoveicon isrequired="true">
+                               isrequired="true" hideremoveicon>
                     </vr-select>
                 </vr-columns>
                 <span vr-loader="isLoadingOwnerSelector">
                     <span ng-show="showSellingProductSelector">
                         <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
-                                                           selectedvalues="selectedSellingProduct"
                                                            onselectionchanged="onSellingProductChanged"
-                                                           normal-col-num="2"
-                                                           hideremoveicon isrequired="showSellingProductSelector">
+                                                           selectedvalues="selectedSellingProduct"
+                                                           normal-col-num="2" isrequired="showSellingProductSelector" hideremoveicon>
                         </vr-whs-be-sellingproduct-selector>
                     </span>
                     <span ng-show="showCarrierAccountSelector">
                         <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
                                                            selectedvalues="selectedCustomer"
                                                            onselectionchanged="onCarrierAccountChanged"
-                                                           getcustomers
-                                                           normal-col-num="2"
-                                                           hideremoveicon isrequired="showCarrierAccountSelector">
-
+                                                           normal-col-num="2" isrequired="showCarrierAccountSelector" getcustomers hideremoveicon>
                         </vr-whs-be-carrieraccount-selector>
                     </span>
                 </span>

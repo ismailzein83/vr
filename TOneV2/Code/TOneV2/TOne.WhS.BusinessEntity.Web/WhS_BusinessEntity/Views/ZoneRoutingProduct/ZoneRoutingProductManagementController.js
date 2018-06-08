@@ -6,74 +6,85 @@
 
     function zoneRoutingProductManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBeSaleRateApiService, VRDateTimeService) {
 
-        var gridApi;
-        var sellingNumberPlanDirectiveApi;
+        var primarySaleEntity;
+        var filter = {};
 
-        var sellingNumberPlanReadyPromiseDeferred = utilsService.createPromiseDeferred();
-        var saleZoneDirectiveApi;
-        var saleZoneReadyPromiseDeferred = utilsService.createPromiseDeferred();
+        var sellingNumberPlanSelectorApi;
+        var sellingNumberPlanSelectorReadyDeferred = utilsService.createPromiseDeferred();
+
+        var saleZoneSelectorApi;
+        var saleZoneSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
         var sellingProductSelectorApi;
         var sellingProductSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
         var carrierAccountSelectorApi;
         var carrierAccountSelectorReadyDeferred = utilsService.createPromiseDeferred();
-        var primarySaleEntity;
+
+        var gridApi;
+
 
         defineScope();
         load();
-        var filter = {};
 
         function defineScope() {
             $scope.effectiveOn = VRDateTimeService.getNowDateTime();
-            $scope.searchClicked = function () {
-                setFilterObject();
-                return gridApi.load(filter);
-            };
-            $scope.onSellingNumberPlanDirectiveReady = function (api) {
-                sellingNumberPlanDirectiveApi = api;
-                sellingNumberPlanReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onSaleZoneDirectiveReady = function (api) {
-                saleZoneDirectiveApi = api;
-                saleZoneReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onSellingNumberPlanSelectionChanged = function () {
-
-                if (sellingNumberPlanDirectiveApi.getSelectedIds() == undefined)
-                    return;
-
-                var setSaleZoneLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
-                var saleZoneSelectorPayload = {
-                    sellingNumberPlanId: sellingNumberPlanDirectiveApi.getSelectedIds()
-                };
-                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveApi, saleZoneSelectorPayload, setSaleZoneLoader);
-
-                var sellingProductPayload = {
-                    filter: { SellingNumberPlanId: sellingNumberPlanDirectiveApi.getSelectedIds() }
-                };
-
-                var carrierAccountPayload = {
-                    filter: { SellingNumberPlanId: sellingNumberPlanDirectiveApi.getSelectedIds() }
-                };
-
-                var sellingProductSelectorLoadPromise = sellingProductSelectorApi.load(sellingProductPayload);
-                var carrierAccountSelectorLoadPromise = carrierAccountSelectorApi.load(carrierAccountPayload);
-
-                $scope.isLoadingOwnerSelector = true;
-                utilsService.waitMultiplePromises([sellingProductSelectorLoadPromise, carrierAccountSelectorLoadPromise]).finally(function () {
-                    $scope.isLoadingOwnerSelector = false;
-
-                });
-            };
-
             $scope.ownerTypes = utilsService.getArrayEnum(whSBeSalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
             $scope.selectedSellingProduct = undefined;
             $scope.showSellingProductSelector = false;
             $scope.showCarrierAccountSelector = false;
+
+            $scope.onSellingNumberPlanDirectiveReady = function (api) {
+                sellingNumberPlanSelectorApi = api;
+                sellingNumberPlanSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onSaleZoneDirectiveReady = function (api) {
+                saleZoneSelectorApi = api;
+                saleZoneSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onSellingProductSelectorReady = function (api) {
+                sellingProductSelectorApi = api;
+                sellingProductSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountSelectorApi = api;
+                carrierAccountSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onGridReady = function (api) {
+                gridApi = api;
+            };
+
+            $scope.onSellingNumberPlanSelectionChanged = function () {
+
+                if (sellingNumberPlanSelectorApi.getSelectedIds() == undefined)
+                    return;
+
+                var setSaleZoneLoader = function (value) { $scope.isLoadingSaleZonesSelector = value };
+                var saleZoneSelectorPayload = {
+                    sellingNumberPlanId: sellingNumberPlanSelectorApi.getSelectedIds()
+                };
+                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneSelectorApi, saleZoneSelectorPayload, setSaleZoneLoader);
+
+                var sellingProductPayload = {
+                    filter: { SellingNumberPlanId: sellingNumberPlanSelectorApi.getSelectedIds() }
+                };
+                var sellingProductSelectorLoadPromise = sellingProductSelectorApi.load(sellingProductPayload);
+
+                var carrierAccountPayload = {
+                    filter: { SellingNumberPlanId: sellingNumberPlanSelectorApi.getSelectedIds() }
+                };
+                var carrierAccountSelectorLoadPromise = carrierAccountSelectorApi.load(carrierAccountPayload);
+
+                $scope.isLoadingOwnerSelector = true;
+                utilsService.waitMultiplePromises([sellingProductSelectorLoadPromise, carrierAccountSelectorLoadPromise]).finally(function () {
+                    $scope.isLoadingOwnerSelector = false;
+                });
+            };
 
             $scope.onOwnerTypeChanged = function () {
                 if ($scope.selectedOwnerType != undefined) {
@@ -89,40 +100,36 @@
                     }
                 }
             };
-            $scope.onSellingProductSelectorReady = function (api) {
-                sellingProductSelectorApi = api;
-                sellingProductSelectorReadyDeferred.resolve();
-            };
-            $scope.onCarrierAccountSelectorReady = function (api) {
-                carrierAccountSelectorApi = api;
-                carrierAccountSelectorReadyDeferred.resolve();
-            };
-            $scope.onGridReady = function (api) {
-                gridApi = api;
+
+            $scope.searchClicked = function () {
+                setFilterObject();
+                return gridApi.load(filter);
             };
         }
         function load() {
             $scope.isLoadingFilter = true;
             loadAllControls();
         }
+
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([loadSellingNumberPlan, loadSellingProduct, loadCarrierAccount, loadSaleAreaSettingsData])
-              .catch(function (error) {
-                  vrNotificationService.notifyExceptionWithClose(error, $scope);
-              })
-             .finally(function () {
-                 $scope.isLoadingFilter = false;
-             });
+            return utilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadSellingProductSelector, loadCarrierAccountSelector, loadSaleAreaSettingsData])
+                      .catch(function (error) {
+                          vrNotificationService.notifyExceptionWithClose(error, $scope);
+                      })
+                      .finally(function () {
+                         $scope.isLoadingFilter = false;
+                     });
         }
-        function loadSellingNumberPlan() {
+        function loadSellingNumberPlanSelector() {
             var loadSellingNumberPlanPromiseDeferred = utilsService.createPromiseDeferred();
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                vruiUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveApi, undefined, loadSellingNumberPlanPromiseDeferred);
+
+            sellingNumberPlanSelectorReadyDeferred.promise.then(function () {
+                vruiUtilsService.callDirectiveLoad(sellingNumberPlanSelectorApi, undefined, loadSellingNumberPlanPromiseDeferred);
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;
         }
-        function loadSellingProduct() {
+        function loadSellingProductSelector() {
             var sellingProductSelectorLoadDeferred = utilsService.createPromiseDeferred();
 
             sellingProductSelectorReadyDeferred.promise.then(function () {
@@ -130,28 +137,28 @@
             });
             return sellingProductSelectorLoadDeferred.promise;
         }
-        function loadCarrierAccount() {
+        function loadCarrierAccountSelector() {
             var carrierAccountSelectorLoadDeferred = utilsService.createPromiseDeferred();
             carrierAccountSelectorReadyDeferred.promise.then(function () {
                 vruiUtilsService.callDirectiveLoad(carrierAccountSelectorApi, undefined, carrierAccountSelectorLoadDeferred);
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
-        function setFilterObject() {
-            filter = {
-                EffectiveOn: $scope.effectiveOn,
-                SellingNumberPlanId: sellingNumberPlanDirectiveApi.getSelectedIds(),
-                ZonesIds: saleZoneDirectiveApi.getSelectedIds(),
-                OwnerType: $scope.selectedOwnerType.value,
-                OwnerId: ($scope.selectedOwnerType.value === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorApi.getSelectedIds() : carrierAccountSelectorApi.getSelectedIds(),
-                PrimarySaleEntity: primarySaleEntity
-            };
-
-        }
         function loadSaleAreaSettingsData() {
             return whSBeSaleRateApiService.GetPrimarySaleEntity().then(function (response) {
                 primarySaleEntity = response;
             });
+        }
+
+        function setFilterObject() {
+            filter = {
+                EffectiveOn: $scope.effectiveOn,
+                SellingNumberPlanId: sellingNumberPlanSelectorApi.getSelectedIds(),
+                ZonesIds: saleZoneSelectorApi.getSelectedIds(),
+                OwnerType: $scope.selectedOwnerType.value,
+                OwnerId: ($scope.selectedOwnerType.value === whSBeSalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductSelectorApi.getSelectedIds() : carrierAccountSelectorApi.getSelectedIds(),
+                PrimarySaleEntity: primarySaleEntity
+            };
         }
     }
 
