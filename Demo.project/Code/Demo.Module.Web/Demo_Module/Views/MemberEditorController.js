@@ -14,6 +14,8 @@
         var familyDirectiveApi;
         var familyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var memberShapeDirectiveApi;
+        var memberShapeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -36,6 +38,11 @@
             $scope.scopeModel.onFamilyDirectiveReady = function (api) {
                 familyDirectiveApi = api;
                 familyReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onMemberShapeDirectiveReady = function (api) {
+                memberShapeDirectiveApi = api;
+                memberShapeReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.saveMember = function () {
@@ -76,6 +83,19 @@
 
         function loadAllControls() {
 
+            function loadMemberShapeDirective() {
+                var memberShapeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                memberShapeReadyPromiseDeferred.promise.then(function () {
+                    var memberShapePayload;
+                    if (memberEntity != undefined && memberEntity.Settings != undefined)
+                        memberShapePayload = {
+                            memberShapeEntity: memberEntity.Settings.MemberShape
+                        };
+                    VRUIUtilsService.callDirectiveLoad(memberShapeDirectiveApi, memberShapePayload, memberShapeLoadPromiseDeferred);
+                });
+                return memberShapeLoadPromiseDeferred.promise;
+            }
+
             function loadFamilySelector() {
                 var familyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 familyReadyPromiseDeferred.promise.then(function () {
@@ -104,7 +124,7 @@
                     $scope.scopeModel.name = memberEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFamilySelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFamilySelector, loadMemberShapeDirective])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })
@@ -117,7 +137,10 @@
             var object = {
                 MemberId: (memberId != undefined) ? memberId : undefined,
                 Name: $scope.scopeModel.name,
-                FamilyId: familyDirectiveApi.getSelectedIds()
+                FamilyId: familyDirectiveApi.getSelectedIds(),
+                Settings: {
+                    MemberShape: memberShapeDirectiveApi.getData()
+                }
             };
             return object;
         };

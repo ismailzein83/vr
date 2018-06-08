@@ -24,6 +24,9 @@
         function AddMember(member) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "AddMember"), member);
         };
+        function GetMemberShapeConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetMemberShapeConfigs"));
+        }
 
         return {
             GetFilteredMembers: GetFilteredMembers,

@@ -155,6 +155,11 @@
     <Content Include="Demo_Module\Directives\Item\demo-module-item-search.js" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemSearchTemplate.html" />
     <Content Include="Demo_Module\Directives\Item\Templates\ItemGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\MainExtensions\Templates\CircleShapeTemplate.html" />
+    <Content Include="Demo_Module\Directives\MainExtensions\Templates\SquareShapeTemplate.html" />
+    <Content Include="Demo_Module\Directives\Member\demo-module-member-membershape-circle.js" />
+    <Content Include="Demo_Module\Directives\Member\demo-module-member-membershape-square.js" />
+    <Content Include="Demo_Module\Directives\Member\demo-module-member-membershape.js" />
     <Content Include="Demo_Module\Directives\Member\demo-module-member-search.js" />
     <Content Include="Demo_Module\Directives\Member\demo-module-member-grid.js" />
     <Content Include="Demo_Module\Directives\Member\Templates\MemberSearchTemplate.html" />

@@ -64,6 +64,7 @@
     <Compile Include="Member\Member.cs" />
     <Compile Include="Member\MemberDetails.cs" />
     <Compile Include="Member\MemberQuery.cs" />
+    <Compile Include="Member\MemberShapeConfig.cs" />
     <Compile Include="Product\ProductInfoFilter.cs" />
     <Compile Include="Room\Room.cs" />
     <Compile Include="Room\RoomDetails.cs" />

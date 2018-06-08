@@ -1,4 +1,5 @@
-﻿<div vr-modalcontent ng-controller="Demo_Module_MemberEditorController" vr-loader="scopeModel.isLoading" width="small">
+﻿
+<div vr-modalcontent ng-controller="Demo_Module_MemberEditorController" vr-loader="scopeModel.isLoading" width="small">
     <vr-modalbody>
         <vr-form name="formMemberEditor">
             <vr-tabs>
@@ -9,6 +10,9 @@
                         </vr-columns>
                         <demo-module-family-selector isdisabled="scopeModel.disableFamily" on-ready="scopeModel.onFamilyDirectiveReady" isrequired="true" normal-col-num="6"></demo-module-family-selector>
                     </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <demo-module-member-membershape normal-col-num="6" isrequired="true" on-ready="scopeModel.onMemberShapeDirectiveReady"></demo-module-member-membershape>
                 </vr-tab>
             </vr-tabs>
 

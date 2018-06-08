@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Caching;
-
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Demo.Module.Business
@@ -16,6 +16,11 @@ namespace Demo.Module.Business
     {
         FamilyManager _familyManager = new FamilyManager();
         #region Public Methods
+        public IEnumerable<MemberShapeConfig> GetMemberShapeConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<MemberShapeConfig>(MemberShapeConfig.EXTENSION_TYPE);
+        }
         public IDataRetrievalResult<MemberDetails> GetFilteredMembers(DataRetrievalInput<MemberQuery> input)
         {
             var allMembers = GetCachedMembers();

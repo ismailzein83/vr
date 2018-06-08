@@ -44,5 +44,11 @@ namespace Demo.Web.Controllers
         {
             return memberManager.AddMember(member);
         }
+        [HttpGet]
+        [Route("GetMemberShapeConfigs")]
+        public IEnumerable<MemberShapeConfig> GetChildShapeConfigs()
+        {
+            return memberManager.GetMemberShapeConfigs();
+        }
     }
 }
