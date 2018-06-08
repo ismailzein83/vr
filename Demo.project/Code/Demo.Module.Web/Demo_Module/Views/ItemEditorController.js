@@ -1,7 +1,6 @@
 ﻿(function (appControllers) {
 
     "use strict";
-
     itemEditorController.$inject = ['$scope', 'Demo_Module_ItemAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
     function itemEditorController($scope, Demo_Module_ItemAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
@@ -9,18 +8,14 @@
         var isEditMode;
         var itemId;
         var itemEntity;
-        var context;
 
-        var ProductDirectiveApi;
-        var ProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var productIdItem;
 
-        //var infoDirectiveAPI;
-        //var infoReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        //var infoEntity;
+        var productDirectiveApi;
+        var productReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        //var descriptionDirectiveAPI;
-        //var descriptionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        //var descriptionEntity;
+        var itemShapeDirectiveApi;
+        var itemShapeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -30,145 +25,130 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 itemId = parameters.itemId;
-                context = parameters.context;
+                productIdItem = parameters.productIdItem;
+
             }
             isEditMode = (itemId != undefined);
-
-        }
+        };
 
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.disableProduct = productIdItem != undefined;
+            $scope.scopeModel.onProductDirectiveReady = function (api) {
+                productDirectiveApi = api;
+                productReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onItemShapeDirectiveReady = function (api) {
+                itemShapeDirectiveApi = api;
+                itemShapeReadyPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.saveItem = function () {
                 if (isEditMode)
                     return updateItem();
                 else
                     return insertItem();
+
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
-            $scope.scopeModel.onProductDirectiveReady = function (api) {
-                ProductDirectiveApi = api;
-                ProductReadyPromiseDeferred.resolve();
-            };
-
-            //$scope.scopeModel.onItemInfoReady = function (api) {
-            //    infoDirectiveAPI = api;
-            //    infoReadyPromiseDeferred.resolve();
-            //};
-
-            //$scope.onDescriptionReady = function (api) {
-            //    descriptionDirectiveAPI = api;
-            //    descriptionReadyPromiseDeferred.resolve();
-            //};
-        }
+        };
 
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
                 getItem().then(function () {
-                    loadAllControls()
-                      .finally(function () {
-                          itemEntity = undefined;
-                      });
+                    loadAllControls().finally(function () {
+                        itemEntity = undefined;
+                    });
                 }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
-            else {
+            else
                 loadAllControls();
-            }
-        }
+        };
 
         function getItem() {
-            return Demo_Module_ItemAPIService.GetItemById(itemId).then(function (itemObject) {
-                itemEntity = itemObject;
-             
+            return Demo_Module_ItemAPIService.GetItemById(itemId).then(function (response) {
+                itemEntity = response;
             });
-        }
+        };
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductSelector])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModel.isLoading = false;
-              });
-        }
-
-        function setTitle() {
-            if (isEditMode && itemEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(itemEntity.Name, "Item");
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor("Item");
-        }
-
-        function loadStaticData() {
-            if (itemEntity != undefined) {
-                $scope.scopeModel.name = itemEntity.Name;
+            function loadItemShapeDirective() {
+                var itemShapeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                itemShapeReadyPromiseDeferred.promise.then(function () {
+                    var itemShapePayload;
+                    if (itemEntity != undefined && itemEntity.Settings != undefined)
+                        itemShapePayload = {
+                            itemShapeEntity: itemEntity.Settings.ItemShape
+                        };
+                    VRUIUtilsService.callDirectiveLoad(itemShapeDirectiveApi, itemShapePayload, itemShapeLoadPromiseDeferred);
+                });
+                return itemShapeLoadPromiseDeferred.promise;
             }
-        }
 
-        function loadProductSelector() {
-            var ProductLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            ProductReadyPromiseDeferred.promise.then(function () {
-                var directivePayload = {
-                    selectedIds: itemEntity != undefined ? itemEntity.ProductId : undefined,
-                };
+            function loadProductSelector() {
+                var productLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                productReadyPromiseDeferred.promise.then(function () {
+                    var productPayload = {};
+                    if (productIdItem != undefined)
+                        productPayload.selectedIds = productIdItem.ProductId;
 
-                VRUIUtilsService.callDirectiveLoad(ProductDirectiveApi, directivePayload, ProductLoadPromiseDeferred);
+                    if (itemEntity != undefined)
+                        productPayload.selectedIds = itemEntity.ProductId;
 
-            });
-            return ProductLoadPromiseDeferred.promise;
-        }
+                    VRUIUtilsService.callDirectiveLoad(productDirectiveApi, productPayload, productLoadPromiseDeferred);
+                });
+                return productLoadPromiseDeferred.promise;
 
-        //function loadInfoDirective() {
-        //    var infoDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-        //    infoReadyPromiseDeferred.promise.then(function () {
-        //        var infoDirectivePayload;
-        //        if (infoEntity != undefined) {
-        //            infoDirectivePayload = infoEntity;
-        //        }
+            }
 
-        //        VRUIUtilsService.callDirectiveLoad(infoDirectiveAPI, infoDirectivePayload, infoDeferredLoadPromiseDeferred);
-
-        //    });
-        //    return infoDeferredLoadPromiseDeferred.promise;
-        //}
-
-        //function loadDescriptionDirective() {
-        //    var descriptionDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-        //    descriptionReadyPromiseDeferred.promise.then(function () {
-        //        var descriptionDirectivePayload;
-        //        if (descriptionEntity != undefined) {
-        //            descriptionDirectivePayload = descriptionEntity;
-        //        }
-        //        VRUIUtilsService.callDirectiveLoad(descriptionDirectiveAPI, descriptionDirectivePayload, descriptionDeferredLoadPromiseDeferred);
-
-        //    });
-        //    return descriptionDeferredLoadPromiseDeferred.promise;
-        //}
-
-        function buildItemObjFromScope() {
-            return {
-                ItemId: (itemId != null) ? itemId : 0,
-                Name: $scope.scopeModel.name,
-                ProductId: $scope.scopeModel.selector.ProductId,
-                ProductName: $scope.scopeModel.selector.Name
+            function setTitle() {
+                if (isEditMode && itemEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(itemEntity.Name, "Item");
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor("Item");
             };
-        }
+
+            function loadStaticData() {
+                if (itemEntity != undefined)
+                    $scope.scopeModel.name = itemEntity.Name;
+            };
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadProductSelector, loadItemShapeDirective])
+             .catch(function (error) {
+                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+             })
+               .finally(function () {
+                   $scope.scopeModel.isLoading = false;
+               });
+        };
+
+        function buildItemObjectFromScope() {
+            var object = {
+                ItemId: (itemId != undefined) ? itemId : undefined,
+                Name: $scope.scopeModel.name,
+                ProductId: productDirectiveApi.getSelectedIds(),
+                Settings: {
+                    ItemShape: itemShapeDirectiveApi.getData()
+                }
+            };
+            return object;
+        };
 
         function insertItem() {
-            $scope.scopeModel.isLoading = true;
 
-            var itemObject = buildItemObjFromScope();
+            $scope.scopeModel.isLoading = true;
+            var itemObject = buildItemObjectFromScope();
             return Demo_Module_ItemAPIService.AddItem(itemObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Item", response, "Name")) {
@@ -178,29 +158,33 @@
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
+                $scope.scopeModel.isLoading = false;
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
+
+        };
 
         function updateItem() {
             $scope.scopeModel.isLoading = true;
-
-            var itemObject = buildItemObjFromScope();
-            Demo_Module_ItemAPIService.UpdateItem(itemObject)
-            .then(function (response) {
+            var itemObject = buildItemObjectFromScope();
+            Demo_Module_ItemAPIService.UpdateItem(itemObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Item", response, "Name")) {
-                    if ($scope.onItemUpdated != undefined)
+                    if ($scope.onItemUpdated != undefined) {
                         $scope.onItemUpdated(response.UpdatedObject);
+                    }
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
+                $scope.scopeModel.isLoading = false;
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+
             });
-        }
-    }
+        };
+
+    };
     appControllers.controller('Demo_Module_ItemEditorController', itemEditorController);
 })(appControllers);

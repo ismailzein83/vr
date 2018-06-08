@@ -1,6 +1,5 @@
 ﻿using Demo.Module.Business;
 using Demo.Module.Entities;
-using Demo.Module.Entities.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +14,12 @@ namespace Demo.Module.Web.Controllers
       [JSONWithType]
     public class ItemController : BaseAPIController
     {
+        ItemManager itemManager = new ItemManager();
+
         [HttpPost]
         [Route("AddItem")]
         public InsertOperationOutput<ItemDetails> AddItem(Item item)
         {
-            ItemManager itemManager = new ItemManager();
             return itemManager.AddItem(item);
         }
 
@@ -27,7 +27,6 @@ namespace Demo.Module.Web.Controllers
         [Route("UpdateItem")]
         public UpdateOperationOutput<ItemDetails> UpdateItem(Item item)
         {
-            ItemManager itemManager = new ItemManager();
             return itemManager.UpdateItem(item);
         }
 
@@ -35,7 +34,6 @@ namespace Demo.Module.Web.Controllers
         [Route("GetFilteredItems")]
         public object GetFilteredItems(DataRetrievalInput<ItemQuery> input)
         {
-            ItemManager itemManager = new ItemManager();
             return GetWebResponse(input, itemManager.GetFilteredItems(input));
         }
 
@@ -44,8 +42,14 @@ namespace Demo.Module.Web.Controllers
         [Route("GetItemById")]
         public Item GetItemById(int itemId)
         {
-            ItemManager itemManager = new ItemManager();
             return itemManager.GetItemById(itemId);
+        }
+
+        [HttpGet]
+        [Route("GetItemShapeConfigs")]
+        public IEnumerable<ItemShapeConfig> GetItemShapeConfigs()
+        {
+            return itemManager.GetItemShapeConfigs();
         }
 
         //[HttpGet]

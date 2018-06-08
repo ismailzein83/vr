@@ -1,41 +1,94 @@
 ﻿using Demo.Module.Data;
-using Demo.Module.Entities.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Demo.Module.Entities;
+using Demo.Module.Entities.ProductInfo;
+
 
 namespace Demo.Module.Business
 {
     public class ProductManager
     {
 
+        #region Public Methods
+        public IDataRetrievalResult<ProductDetails> GetFilteredProducts(DataRetrievalInput<ProductQuery> input)
+        {
+            var allProducts = GetCachedProducts();
+            Func<Product, bool> filterExpression = (product) =>
+            {
+                if (input.Query.Name != null && !product.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+
+                return true;
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, allProducts.ToBigResult(input, filterExpression, ProductDetailMapper));
+
+        }
+        public string GetProductName(long productId)
+        {
+            var product = GetProductById(productId);
+            if (product == null)
+                return null;
+            return product.Name;
+        }
         public InsertOperationOutput<ProductDetails> AddProduct(Product product)
         {
             IProductDataManager productDataManager = DemoModuleFactory.GetDataManager<IProductDataManager>();
             InsertOperationOutput<ProductDetails> insertOperationOutput = new InsertOperationOutput<ProductDetails>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int productId = -1;
+            long productId = -1;
+
             bool insertActionSuccess = productDataManager.Insert(product, out productId);
             if (insertActionSuccess)
             {
                 product.ProductId = productId;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = ProductDetailMapper(product);
             }
             else
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
-
             }
             return insertOperationOutput;
-
         }
-
+        public Product GetProductById(long productId)
+        {
+            return GetCachedProducts().GetRecord(productId);
+        }
+        public IEnumerable<Demo.Module.Entities.ProductInfo.ProductInfo> GetProductsInfo(ProductInfoFilter productInfoFilter)
+        {
+            var allProducts = GetCachedProducts();
+            Func<Product, bool> filterFunc = (product) =>
+            {
+                if (productInfoFilter != null)
+                {
+                    if (productInfoFilter.Filters != null)
+                    {
+                        var context = new ProductInfoFilterContext
+                        {
+                            ProductId = product.ProductId
+                        };
+                        foreach (var filter in productInfoFilter.Filters)
+                        {
+                            if (!filter.IsMatch(context))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            };
+            return allProducts.MapRecords(ProductInfoMapper, filterFunc).OrderBy(product => product.Name);
+        }
         public UpdateOperationOutput<ProductDetails> UpdateProduct(Product product)
         {
             IProductDataManager productDataManager = DemoModuleFactory.GetDataManager<IProductDataManager>();
@@ -45,6 +98,7 @@ namespace Demo.Module.Business
             bool updateActionSuccess = productDataManager.Update(product);
             if (updateActionSuccess)
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = ProductDetailMapper(product);
             }
@@ -54,45 +108,9 @@ namespace Demo.Module.Business
             }
             return updateOperationOutput;
         }
+        #endregion
 
-        public Product GetProductById(int productId)
-        {
-            var allProducts = GetCachedProducts();
-            return allProducts.GetRecord(productId);
-        }
-
-        public ProductDetails ProductDetailMapper(Product product)
-        {
-            return new ProductDetails
-            {
-                Entity = product
-            };
-        }
-
-        public IDataRetrievalResult<ProductDetails> GetFilteredProducts(DataRetrievalInput<ProductQuery> input)
-        {
-            var allProducts = GetCachedProducts();
-            Func<Product, bool> filterExpression = (product) =>
-            {
-                if (input.Query.Name != null && !product.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                    return false;
-                return true;
-            };
-            return DataRetrievalManager.Instance.ProcessResult(input, allProducts.ToBigResult(input, filterExpression, ProductDetailMapper));
-        }
-
-        private Dictionary<int, Product> GetCachedProducts()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-                .GetOrCreateObject("GetCachedProducts", () =>
-                {
-                    IProductDataManager productDataManager = DemoModuleFactory.GetDataManager<IProductDataManager>();
-                    List<Product> products = productDataManager.GetProducts();
-                    return products.ToDictionary(product => product.ProductId, product => product);
-                });
-        }
-       
-
+        #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IProductDataManager productDataManager = DemoModuleFactory.GetDataManager<IProductDataManager>();
@@ -102,49 +120,41 @@ namespace Demo.Module.Business
                 return productDataManager.AreProductsUpdated(ref _updateHandle);
             }
         }
+        #endregion
 
-        public string GetProductName(int productId)
+        #region Private Methods
+
+        private Dictionary<long, Product> GetCachedProducts()
         {
-            var product = GetProductById(productId);
-            return product != null ? product.Name : null;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
+               .GetOrCreateObject("GetCachedProducts", () =>
+               {
+                   IProductDataManager productDataManager = DemoModuleFactory.GetDataManager<IProductDataManager>();
+                   List<Product> products = productDataManager.GetProducts();
+                   return products.ToDictionary(product => product.ProductId, product => product);
+               });
         }
+        #endregion
 
-        public DeleteOperationOutput<ProductDetails> Delete(int Id)
+        #region Mappers
+        public ProductDetails ProductDetailMapper(Product product)
         {
-            IProductDataManager productDataManager = DemoModuleFactory.GetDataManager<IProductDataManager>();
-            DeleteOperationOutput<ProductDetails> deleteOperationOutput = new DeleteOperationOutput<ProductDetails>();
-            deleteOperationOutput.Result = DeleteOperationResult.Failed;
-            bool deleteActionSuccess = productDataManager.Delete(Id);
-            if (deleteActionSuccess)
+            return new ProductDetails
             {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-            }
-            return deleteOperationOutput;
-        }
-
-        public IEnumerable<Demo.Module.Entities.Product.ProductInfo> GetProductsInfo()
-        {
-            var allProducts = GetCachedProducts();
-            Func<Product, bool> filterFunc = null;
-
-            filterFunc = (product) =>
-            {
-                return true;
-            };
-
-            IEnumerable<Product> filteredProducts = (filterFunc != null) ? allProducts.FindAllRecords(filterFunc) : allProducts.MapRecords(u => u.Value);
-            return filteredProducts.MapRecords(ProductInfoMapper).OrderBy(product => product.Name);
-        }
-
-        Demo.Module.Entities.Product.ProductInfo ProductInfoMapper(Product product)
-        {
-            return new Demo.Module.Entities.Product.ProductInfo
-            {
-                ProductId = product.ProductId,
-                Name = product.Name
+                Name = product.Name,
+                ProductId = product.ProductId
             };
         }
 
+        public Demo.Module.Entities.ProductInfo.ProductInfo ProductInfoMapper(Product product)
+        {
+            return new Demo.Module.Entities.ProductInfo.ProductInfo
+            {
+                Name = product.Name,
+                ProductId = product.ProductId
+            };
+        }
+        #endregion 
         
     }
 }

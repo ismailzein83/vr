@@ -1,11 +1,16 @@
-﻿<div vr-modalcontent ng-controller="Demo_Module_ProductsEditorController" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Demo_Module_ProductEditorController" vr-loader="scopeModel.isLoading" width="small">
     <vr-modalbody>
-        <vr-form name="formUniversityEditor">
-            <vr-row removeline>
-                <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
-                </vr-columns>
-            </vr-row>
+        <vr-form name="formProductEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+
         </vr-form>
     </vr-modalbody>
     <div>

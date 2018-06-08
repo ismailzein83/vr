@@ -1,6 +1,6 @@
-﻿<vr-panel ng-controller="Demo_Module_ProductsManagementController" vr-loader="scopeModel.isLoading">
+﻿<vr-panel ng-controller="Demo_Module_ProductManagementController" vr-loader="scopeModel.isLoading">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
@@ -17,13 +17,8 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <!--<demo-module-university-grid on-ready="onGridReady"></demo-module-university-grid>-->
                 <demo-module-product-grid on-ready="scopeModel.onGridReady"></demo-module-product-grid>
-
             </vr-columns>
         </vr-row>
-
     </vr-form>
-
 </vr-panel>
-

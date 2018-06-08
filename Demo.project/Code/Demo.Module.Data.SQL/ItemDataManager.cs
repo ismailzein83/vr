@@ -7,17 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Newtonsoft.Json;
-using Demo.Module.Entities.Item;
 
 namespace Demo.Module.Data.SQL
 {
     public class ItemDataManager : BaseSQLDataManager, IItemDataManager
     {
-          public ItemDataManager() :
+        #region Constructors
+        public ItemDataManager() :
             base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoProject_DBConnStringKey"))
         {
         }
+        #endregion
 
+        #region Public Methods
         public bool AreItemsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[dbo].[Items]", ref updateHandle);
@@ -28,57 +30,48 @@ namespace Demo.Module.Data.SQL
             return GetItemsSP("[dbo].[sp_Item2_GetAll]", ItemMapper);
         }
 
-        public bool Insert(Item item, out int insertedId)
+        public bool Insert(Item item, out long insertedId)
         {
-            //string infoSerializedString = null;
-            //if (item.ItemInfo != null)
-            //    infoSerializedString = Vanrise.Common.Serializer.Serialize(item.ItemInfo);
-
-            //string descriptionSerializedString = null;
-            //if (item.DescriptionString != null)
-            //{
-            //    descriptionSerializedString = Vanrise.Common.Serializer.Serialize(college.DescriptionString);
-            //}
-
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item2_Insert]", out id, item.Name, item.ProductId);
-            insertedId = Convert.ToInt32(id);
-            return (nbOfRecordsAffected > 0);
+            
+            string serializedItemSettings = null;
+            if (item.Settings != null)
+                serializedItemSettings = Vanrise.Common.Serializer.Serialize(item.Settings);
+
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item2_Insert]", out id, item.Name, item.ProductId, serializedItemSettings);
+            bool result = (nbOfRecordsAffected > 0);
+            if (result)
+                insertedId = (long)id;
+            else
+                insertedId = 0;
+            return result;
         }
 
         public bool Update(Item item)
         {
-            //string infoSerializedString = null;
-            //if (college.CollegeInfo != null)
-            //    infoSerializedString = Vanrise.Common.Serializer.Serialize(college.CollegeInfo);
+            string serializedItemSettings = null;
+            if (item.Settings != null)
+                serializedItemSettings = Vanrise.Common.Serializer.Serialize(item.Settings);
 
-            //string descriptionSerializedString = null;
-            //if (college.DescriptionString != null)
-            //    descriptionSerializedString = Vanrise.Common.Serializer.Serialize(college.DescriptionString);
-
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item2_Update]", item.ItemId, item.Name, item.ProductId);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item2_Update]", item.ItemId, item.Name, item.ProductId, serializedItemSettings);
             return (nbOfRecordsAffected > 0);
         }
+       
+        #endregion
 
-        public bool Delete(int collegeId)
-        {
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Item_Delete]", collegeId);
-            return (nbOfRecordsAffected > 0);
-        }
 
-        public bool AreCollegesUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("[dbo].[Items]", ref updateHandle);
-        }
-
+        #region Mappers
         Item ItemMapper(IDataReader reader)
         {
             return new Item
             {
-                ItemId = GetReaderValue<int>(reader, "ID"),
+                ItemId = GetReaderValue<long>(reader, "ID"),
                 Name = GetReaderValue<string>(reader, "Name"),
-                ProductId = GetReaderValue<int>(reader, "ProductId"),
+                ProductId = GetReaderValue<long>(reader, "ProductId"),
+                Settings = Vanrise.Common.Serializer.Deserialize<ItemSettings>(reader["Settings"] as string)
+
             };
         }
+        #endregion
     }
 }

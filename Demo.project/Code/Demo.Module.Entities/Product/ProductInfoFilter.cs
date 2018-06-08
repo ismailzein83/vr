@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.BestPractices.Entities
+namespace Demo.Module.Entities
 {
-    public class ParentInfoFilter
+    public class ProductInfoFilter
     {
-        public List<IParentInfoFilter> Filters { get; set; }
+        public List<IProductInfoFilter> Filters { get; set; }
     }
-    public interface IParentInfoFilter
+    public interface IProductInfoFilter
     {
-        bool IsMatch(IParentInfoFilterContext context);
+        bool IsMatch(IProductInfoFilterContext context);
     }
 
-    public interface IParentInfoFilterContext
+    public interface IProductInfoFilterContext
     {
-        long ParentId { get; set; }
+        long ProductId { get; set; }
     }
-    public class ParentInfoFilterContext : IParentInfoFilterContext
+    public class ProductInfoFilterContext : IProductInfoFilterContext
     {
-        public long ParentId { get; set; }
+        public long ProductId { get; set; }
     }
 }

@@ -1,59 +1,49 @@
-﻿/// <reference path="../Services/APIServices/SettingConfigsAPIService.js" />
-(function (appControllers) {
-
+﻿(function (appControllers) {
     "use strict";
 
-productsManagementController.$inject = ['$scope', 'VRNotificationService', 'Demo_Module_ProductService'];
+    parentManagementController.$inject = ['$scope', 'VRNotificationService', 'Demo_Module_ProductService', 'UtilsService', 'VRUIUtilsService', 'Demo_Module_CompanyService'];
 
-function productsManagementController($scope,VRNotificationService,Demo_Module_ProductService) {
+    function parentManagementController($scope, VRNotificationService, Demo_Module_ProductService, UtilsService, VRUIUtilsService, Demo_Module_CompanyService) {
 
-    var gridAPI;
-    defineScope();
-    load();
+        var gridApi;
+        defineScope();
+        load();
 
-    function defineScope(){
+        function defineScope() {
+            $scope.scopeModel = {};
 
-        $scope.scopeModel = {};
-
-        $scope.scopeModel.search = function () {
-
-            gridAPI.loadGrid(getFilter());
-        }
-
-        $scope.scopeModel.onGridReady = function (api) {
-
-            gridAPI = api;
-            api.loadGrid(getFilter());
-
-        }
-
-        $scope.scopeModel.addProduct = function ()
-        {
-            var onProductAdded = function (product) {
-
-                if (gridAPI != undefined)
-                    gridAPI.onProductAdded(product)
+            $scope.scopeModel.onGridReady = function (api) {
+                gridApi = api;
+                api.load(getFilter());
             };
 
-            Demo_Module_ProductService.addProduct(onProductAdded);
+            $scope.scopeModel.search = function () {
+                return gridApi.load(getFilter());
+            };
+
+
+            $scope.scopeModel.addProduct = function () {
+                var onProductAdded = function (product) {
+                    if (gridApi != undefined) {
+                        gridApi.onProductAdded(product);
+                    }
+                };
+                Demo_Module_ProductService.addProduct(onProductAdded);
+            };
+        };
+
+        function load() {
+
         }
 
-    }//end defineScope()
 
-
-    function load() {
-    }
-
-    function getFilter() {
-        return {
-            Name: $scope.scopeModel.name
+        function getFilter() {
+            return {
+                Name: $scope.scopeModel.name
+            };
         };
+
     };
 
-
-
-}//end controller function
-
-appControllers.controller("Demo_Module_ProductsManagementController",productsManagementController);
-
+    appControllers.controller('Demo_Module_ProductManagementController', parentManagementController);
 })(appControllers);

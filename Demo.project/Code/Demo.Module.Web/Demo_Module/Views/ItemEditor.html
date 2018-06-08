@@ -1,26 +1,20 @@
-﻿<div vr-modalcontent ng-controller="Demo_Module_ItemEditorController" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="Demo_Module_ItemEditorController" vr-loader="scopeModel.isLoading" width="small">
     <vr-modalbody>
         <vr-form name="formItemEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
-                    <vr-row>
-                        <vr-columns width="1/3row">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <demo-module-product-selector normal-col-num="4" selectedvalues="scopeModel.selector" on-ready="scopeModel.onProductDirectiveReady"></demo-module-product-selector>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <!--<demo-module-description on-ready="onDescriptionReady"></demo-module-description>-->
-                        </vr-columns>
+                        <demo-module-product-selector isdisabled="scopeModel.disableProduct" on-ready="scopeModel.onProductDirectiveReady" isrequired="true" normal-col-num="6"></demo-module-product-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
-                    <vr-row>
-                        <!--<demo-module-item-info on-ready="scopeModel.onItemInfoReady" normal-col-num="4" isrequired="true" vr-loader="scopeModel.isLoadingDirective"></demo-module-college-info>-->
-                    </vr-row>
+                    <demo-module-item-itemshape normal-col-num="6" isrequired="true" on-ready="scopeModel.onItemShapeDirectiveReady"></demo-module-item-itemshape>
                 </vr-tab>
             </vr-tabs>
+
         </vr-form>
     </vr-modalbody>
     <div>

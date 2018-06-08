@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.Module.Entities.Product
+namespace Demo.Module.Entities
 {
     public class ProductQuery
     {

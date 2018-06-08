@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.Module.Entities.Product
+namespace Demo.Module.Entities.ProductInfo
 {
     public class ProductInfo
     {
-
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string Name { get; set; }
     }
 }

@@ -1,10 +1,13 @@
-﻿<vr-datagrid datasource="items"
-             on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
+﻿<vr-datagrid datasource="scopeModel.items"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions"
-             idfield="ItemId" enableautoexport="true">
+             menuactions="scopeModel.gridMenuActions"
+             idfield="ItemId"
+             enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'ItemId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Item Name'" field="'ItemName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Product Name'" field="'ProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Product'" field="'ProductName'" type="'Text'" ng-show="!scopeModel.hideParentColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Area'" field="'AreaDescription'" type="'Text'"></vr-datagridcolumn>
+
 </vr-datagrid>

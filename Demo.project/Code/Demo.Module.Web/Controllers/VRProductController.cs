@@ -1,5 +1,5 @@
 ﻿using Demo.Module.Business;
-using Demo.Module.Entities.Product;
+using Demo.Module.Entities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,58 +12,45 @@ using Vanrise.Web.Base;
 
 namespace Demo.Module.Web.Controllers
 {
-    
     [RoutePrefix(Constants.ROUTE_PREFIX + "VRProduct")]
+    [JSONWithTypeAttribute]
     public class VRProductController : BaseAPIController
     {
+        ProductManager productManager = new ProductManager();
         [HttpPost]
-        [Route("AddProduct")]
-        public InsertOperationOutput<ProductDetails> AddProduct(Product product)
+        [Route("GetFilteredProducts")]
+        public object GetFilteredProducts(DataRetrievalInput<ProductQuery> input)
         {
-            ProductManager productManager = new ProductManager();
-            return productManager.AddProduct(product);
+            return GetWebResponse(input, productManager.GetFilteredProducts(input));
+        }
 
+        [HttpGet]
+        [Route("GetProductById")]
+        public Product GetProductById(long productId)
+        {
+            return productManager.GetProductById(productId);
         }
 
         [HttpPost]
         [Route("UpdateProduct")]
         public UpdateOperationOutput<ProductDetails> UpdateProduct(Product product)
         {
-            ProductManager universityManager = new ProductManager();
-            return universityManager.UpdateProduct(product);
+            return productManager.UpdateProduct(product);
         }
 
         [HttpPost]
-        [Route("GetFilteredProducts")]
-        public object GetFilteredProducts(DataRetrievalInput<ProductQuery> input)
+        [Route("AddProduct")]
+        public InsertOperationOutput<ProductDetails> AddProduct(Product product)
         {
-            ProductManager productManager = new ProductManager();
-            return GetWebResponse(input, productManager.GetFilteredProducts(input));
-        }
-
-        [HttpGet]
-        [Route("DeleteProduct")]
-        public DeleteOperationOutput<ProductDetails> DeleteProduct(int productId)
-        {
-            ProductManager productManager = new ProductManager();
-            return productManager.Delete(productId);
+            return productManager.AddProduct(product);
         }
 
         [HttpGet]
         [Route("GetProductsInfo")]
-        public IEnumerable<Demo.Module.Entities.Product.ProductInfo> GetProductsInfo()
+        public IEnumerable<Demo.Module.Entities.ProductInfo.ProductInfo> GetProductsInfo(string filter = null)
         {
-            ProductManager productManager = new ProductManager();
-            return productManager.GetProductsInfo();
+            ProductInfoFilter parentInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ProductInfoFilter>(filter) : null;
+            return productManager.GetProductsInfo(parentInfoFilter);
         }
-
-        [HttpGet]
-        [Route("GetProductById")]
-        public Product GetProductById(int productId)
-        {
-            ProductManager productManager = new ProductManager();
-            return productManager.GetProductById(productId);
-        }
-       
     }
 }

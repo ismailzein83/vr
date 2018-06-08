@@ -61,6 +61,7 @@
     <Compile Include="Building\BuildingInfoFilter.cs" />
     <Compile Include="Family\FamilyInfo.cs" />
     <Compile Include="Family\FamilyInfoFilter.cs" />
+    <Compile Include="Item\ItemShapeConfig.cs" />
     <Compile Include="Member\Member.cs" />
     <Compile Include="Member\MemberDetails.cs" />
     <Compile Include="Member\MemberQuery.cs" />

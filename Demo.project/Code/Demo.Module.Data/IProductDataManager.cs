@@ -1,4 +1,4 @@
-﻿using Demo.Module.Entities.Product;
+﻿using Demo.Module.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +13,9 @@ namespace Demo.Module.Data
 
         List<Product> GetProducts();
 
-        bool Insert(Product product, out int insertedId);
+        bool Insert(Product product, out long insertedId);
 
         bool Update(Product product);
 
-        bool Delete(int Id);
     }
 }

@@ -10,34 +10,33 @@
 
 
         function GetFilteredItems(input) {
-            console.log("as");
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetFilteredItems"), input);
         }
 
-        function GetItemById(Id) {
+        function GetItemById(itemId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'GetItemById'),
-                { itemId: Id }
+                { itemId: itemId }
                 );
         }
 
-        function AddItem(Item) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "AddItem"), Item);
+        function AddItem(item) {
+            console.log(item);
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "AddItem"), item);
         }
-        function UpdateItem(Item) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "UpdateItem"), Item);
+        function UpdateItem(item) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "UpdateItem"), item);
         }
-        function DeleteItem(Id) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, 'DeleteItem'), {
-                ItemId: Id
-            });
+     
+        function GetItemShapeConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetItemShapeConfigs"));
         }
 
         return ({
             AddItem: AddItem,
             UpdateItem: UpdateItem,
-            DeleteItem: DeleteItem,
             GetFilteredItems: GetFilteredItems,
-            GetItemById: GetItemById
+            GetItemById: GetItemById,
+            GetItemShapeConfigs: GetItemShapeConfigs
         });
     }
 

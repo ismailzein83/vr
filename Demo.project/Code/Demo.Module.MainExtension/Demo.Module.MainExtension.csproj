@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Item\CircleShape.cs" />
+    <Compile Include="Item\SquareShape.cs" />
     <Compile Include="Member\CircleShape.cs" />
     <Compile Include="Member\SquareShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
