@@ -97,6 +97,7 @@
     <Compile Include="AccountManager\AccountManagerAssignmentRuntimeInput.cs" />
     <Compile Include="AccountManager\AccountManagerDefInfo.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionFilter.cs" />
+    <Compile Include="AccountPart\InvoiceTypesTaxesRuntime.cs" />
     <Compile Include="AccountProvisioner\AccountProvisioner.cs" />
     <Compile Include="AccountProvisioner\AccountProvisionerConfig.cs" />
     <Compile Include="AccountProvisioner\AccountProvisionerDefinitionSettings.cs" />
