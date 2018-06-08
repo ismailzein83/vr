@@ -11,5 +11,7 @@ namespace Demo.Module.Entities.Member
         public long MemberId { get; set; }
         public string Name { get; set; }
         public string FamilyName { get; set; }
+        public string AreaDescription { get; set; }
+
     }
 }

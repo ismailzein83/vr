@@ -32,7 +32,10 @@ namespace Demo.Module.Data.SQL
         public bool Insert(Member member, out long insertedId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Member_Insert]", out id, member.Name, member.FamilyId);
+            string serializedMemberSettings = null;
+            if (member.Settings != null)
+                serializedMemberSettings = Vanrise.Common.Serializer.Serialize(member.Settings);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Member_Insert]", out id, member.Name, member.FamilyId, serializedMemberSettings);
             bool result = (nbOfRecordsAffected > 0);
             if (result)
                 insertedId = (long)id;
@@ -57,6 +60,7 @@ namespace Demo.Module.Data.SQL
                 MemberId = GetReaderValue<long>(reader, "ID"),
                 Name = GetReaderValue<string>(reader, "Name"),
                 FamilyId = GetReaderValue<long>(reader, "FamilyID"),
+                Settings = Vanrise.Common.Serializer.Deserialize<MemberSettings>(reader["Settings"] as string),
             };
         }
         #endregion

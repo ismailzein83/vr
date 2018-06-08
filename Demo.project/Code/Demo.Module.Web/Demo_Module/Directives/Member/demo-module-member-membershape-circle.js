@@ -46,8 +46,9 @@ app.directive("demoModuleMemberMembershapeCircle", ["UtilsService", "VRNotificat
                 };
 
                 api.getData = function () {
+                    console.log("kngksdf")
                     return {
-                        $type: "Demo.Module.MainExtentions.Member.CircleShape,Demo.Module.MainExtentions",
+                        $type: "Demo.Module.MainExtension.Member.CircleShape,Demo.Module.MainExtension",
                         Radius: $scope.scopeModel.radius,
                     };
                 };

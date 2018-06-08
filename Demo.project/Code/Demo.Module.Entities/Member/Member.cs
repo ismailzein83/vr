@@ -11,5 +11,21 @@ namespace Demo.Module.Entities.Member
         public long MemberId { get; set; }
         public string Name { get; set; }
         public long FamilyId { get; set; }
+        public MemberSettings Settings { get; set; }
+
     }
+   public class MemberSettings
+   {
+       public MemberShape MemberShape { get; set; }
+   }
+   public abstract class MemberShape
+   {
+       public abstract Guid ConfigId { get; }
+       public abstract string GetMemberAreaDescription(IMemberShapeDescriptionContext context);
+   }
+   public interface IMemberShapeDescriptionContext
+   {
+       Member Member { get; }
+   }
+
 }

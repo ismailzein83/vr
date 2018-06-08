@@ -25,7 +25,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "AddMember"), member);
         };
         function GetMemberShapeConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetMemberShapeConfigs"));
+            var a = BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetMemberShapeConfigs"));
+            console.log(a)
+            return a;
         }
 
         return {
@@ -33,6 +35,7 @@
             GetMemberById: GetMemberById,
             UpdateMember: UpdateMember,
             AddMember: AddMember,
+            GetMemberShapeConfigs: GetMemberShapeConfigs,
         };
     };
     appControllers.service("Demo_Module_MemberAPIService", memberAPIService);

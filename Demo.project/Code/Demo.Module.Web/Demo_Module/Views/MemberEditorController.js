@@ -15,6 +15,8 @@
         var familyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var memberShapeDirectiveApi;
+
+        var memberShapeDirectiveApi1;
         var memberShapeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
@@ -42,6 +44,7 @@
 
             $scope.scopeModel.onMemberShapeDirectiveReady = function (api) {
                 memberShapeDirectiveApi = api;
+                memberShapeDirectiveApi1 = api;
                 memberShapeReadyPromiseDeferred.resolve();
             };
 
@@ -139,7 +142,7 @@
                 Name: $scope.scopeModel.name,
                 FamilyId: familyDirectiveApi.getSelectedIds(),
                 Settings: {
-                    MemberShape: memberShapeDirectiveApi.getData()
+                    MemberShape: memberShapeDirectiveApi1.getData()
                 }
             };
             return object;
@@ -149,6 +152,9 @@
 
             $scope.scopeModel.isLoading = true;
             var memberObject = buildMemberObjectFromScope();
+            console.log("ghjdtyjtyde")
+            console.log(memberObject)
+
             return Demo_Module_MemberAPIService.AddMember(memberObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Member", response, "Name")) {

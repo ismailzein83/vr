@@ -12,7 +12,7 @@ using Vanrise.Entities;
 
 namespace Demo.Module.Business
 {
-   public  class MemberManager
+    public class MemberManager
     {
         FamilyManager _familyManager = new FamilyManager();
         #region Public Methods
@@ -115,14 +115,27 @@ namespace Demo.Module.Business
         #region Mappers
         public MemberDetails MemberDetailMapper(Member member)
         {
-            return new MemberDetails
+
+            var memberDetails = new MemberDetails
             {
                 Name = member.Name,
                 MemberId = member.MemberId,
-                FamilyName = _familyManager.GetFamilyName(member.FamilyId)
+                FamilyName = _familyManager.GetFamilyName(member.FamilyId),
             };
-        }
+
+            if (member.Settings != null && member.Settings.MemberShape != null)
+            {
+                var context = new MemberShapeDescriptionContext
+                {
+                    Member = member
+                };
+                memberDetails.AreaDescription = member.Settings.MemberShape.GetMemberAreaDescription(context);
+            }
+
+            return memberDetails;
         #endregion
+
+        }
 
     }
 }

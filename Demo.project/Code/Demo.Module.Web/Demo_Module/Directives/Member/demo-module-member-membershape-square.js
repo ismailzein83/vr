@@ -48,7 +48,7 @@ app.directive("demoModuleMemberMembershapeSquare", ["UtilsService", "VRNotificat
 
                 api.getData = function () {
                     return {
-                        $type: "Demo.Module.MainExtentions.Member.SquareShape,Demo.Module.MainExtentions",
+                        $type: "Demo.Module.MainExtension.Member.SquareShape,Demo.Module.MainExtension",
                         Width: $scope.scopeModel.width,
                         Height: $scope.scopeModel.height,
                     };
