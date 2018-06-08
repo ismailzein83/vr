@@ -51,7 +51,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
             DateTime minAttemptDateTime;
             DateTime maxAttemptDateTime;
-            HashSet<DealZoneGroup> saleDealZoneGroups; 
+            HashSet<DealZoneGroup> saleDealZoneGroups;
             HashSet<DealZoneGroup> costDealZoneGroups;
             PrepareLists(batchRecords, out saleDealZoneGroups, out costDealZoneGroups, out mainCDRs, out partialPricedCDRs, out minAttemptDateTime, out maxAttemptDateTime);
 
@@ -218,7 +218,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             if (costDealDetailedProgresses == null)
                 costDealDetailedProgresses = new Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress>();
         }
-
 
         private Func<int, DealZoneGroupTierDetails> GetSaleDealZoneGroupTierDetails(DealZoneGroup saleDealZoneGroup, long saleZoneId, DateTime attemptDateTime)
         {
@@ -614,26 +613,30 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 SetPrimaryBillingCDRRecordData(billingCDRRecord, propertyNames, firstCDR.Net, cdrFirstDurationInSeconds, firstCDR.PricedDurationInSeconds, 1, firstCDR.Rate, firstCDR.PricedDurationInSeconds);
                 SetSecondaryBillingCDRRecordData(secondBillingCDRRecord, propertyNames, secondCDR.Net, cdrSecondDurationInSeconds, secondCDR.PricedDurationInSeconds, 2, secondCDR.Rate, secondCDR.PricedDurationInSeconds);
 
-                decimal otherCDRNet = billingCDRRecord.GetFieldValue(otherPropertyNames[PropertyName.Net]);
-                decimal otherCDRPricedDuration = billingCDRRecord.GetFieldValue(otherPropertyNames[PropertyName.PricedDurationInSeconds]);
+                decimal? otherCDRNet = billingCDRRecord.GetFieldValue(otherPropertyNames[PropertyName.Net]);
+                decimal? otherCDRPricedDuration = billingCDRRecord.GetFieldValue(otherPropertyNames[PropertyName.PricedDurationInSeconds]);
                 decimal? otherCDRExtraCharge = billingCDRRecord.GetFieldValue(otherPropertyNames[PropertyName.ExtraChargeValue]);
 
-                decimal otherCDRFirstNet = otherCDRNet * firstCDR.Percentage / 100;
-                decimal otherCDRSecondNet = otherCDRNet - otherCDRFirstNet;
-                decimal otherCDRFirstPricedDurationInSeconds = otherCDRPricedDuration * firstCDR.Percentage / 100;
-                decimal otherCDRSecondPricedDurationInSeconds = otherCDRPricedDuration - otherCDRFirstPricedDurationInSeconds;
+                if (otherCDRNet.HasValue)
+                {
+                    decimal otherCDRFirstNet = otherCDRNet.Value * firstCDR.Percentage / 100;
+                    decimal otherCDRSecondNet = otherCDRNet.Value - otherCDRFirstNet;
+                    billingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.Net], otherCDRFirstNet);
+                    secondBillingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.Net], otherCDRSecondNet);
+                }
 
-                billingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.Net], otherCDRFirstNet);
-                billingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.PricedDurationInSeconds], otherCDRFirstPricedDurationInSeconds);
-
-                secondBillingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.Net], otherCDRSecondNet);
-                secondBillingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.PricedDurationInSeconds], otherCDRSecondPricedDurationInSeconds);
+                if (otherCDRPricedDuration.HasValue)
+                {
+                    decimal otherCDRFirstPricedDurationInSeconds = otherCDRPricedDuration.Value * firstCDR.Percentage / 100;
+                    decimal otherCDRSecondPricedDurationInSeconds = otherCDRPricedDuration.Value - otherCDRFirstPricedDurationInSeconds;
+                    billingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.PricedDurationInSeconds], otherCDRFirstPricedDurationInSeconds);
+                    secondBillingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.PricedDurationInSeconds], otherCDRSecondPricedDurationInSeconds);
+                }
 
                 if (otherCDRExtraCharge.HasValue)
                 {
                     decimal otherCDRFirstExtraCharge = otherCDRExtraCharge.Value * firstCDR.Percentage / 100;
                     decimal otherCDRSecondExtraCharge = otherCDRExtraCharge.Value - otherCDRFirstExtraCharge;
-
                     billingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.ExtraChargeValue], otherCDRFirstExtraCharge);
                     secondBillingCDRRecord.SetFieldValue(otherPropertyNames[PropertyName.ExtraChargeValue], otherCDRSecondExtraCharge);
                 }
