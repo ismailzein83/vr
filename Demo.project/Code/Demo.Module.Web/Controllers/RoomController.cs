@@ -42,5 +42,11 @@ namespace Demo.Module.Web.Controllers
         {
             return roomManager.AddRoom(room);
         }
+        [HttpGet]
+        [Route("GetRoomShapeConfigs")]
+        public IEnumerable<RoomShapeConfig> GetRoomShapeConfigs()
+        {
+            return roomManager.GetRoomShapeConfigs();
+        }
     }
 }

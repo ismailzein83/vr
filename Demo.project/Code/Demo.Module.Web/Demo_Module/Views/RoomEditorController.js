@@ -14,6 +14,8 @@
         var buildingDirectiveApi;
         var buildingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var roomShapeDirectiveApi;
+        var roomShapeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -36,6 +38,11 @@
             $scope.scopeModel.onBuildingDirectiveReady = function (api) {
                 buildingDirectiveApi = api;
                 buildingReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onRoomShapeDirectiveReady = function (api) {
+                roomShapeDirectiveApi = api;
+                roomShapeReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.saveRoom = function () {
@@ -76,6 +83,19 @@
 
         function loadAllControls() {
 
+            function loadRoomShapeDirective() {
+                var roomShapeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                roomShapeReadyPromiseDeferred.promise.then(function () {
+                    var roomShapePayload;
+                    if (roomEntity != undefined && roomEntity.Settings != undefined)
+                        roomShapePayload = {
+                            roomShapeEntity: roomEntity.Settings.RoomShape
+                        };
+                    VRUIUtilsService.callDirectiveLoad(roomShapeDirectiveApi, roomShapePayload, roomShapeLoadPromiseDeferred);
+                });
+                return roomShapeLoadPromiseDeferred.promise;
+            }
+
             function loadBuildingSelector() {
                 var buildingLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 buildingReadyPromiseDeferred.promise.then(function () {
@@ -104,7 +124,7 @@
                     $scope.scopeModel.name = roomEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBuildingSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBuildingSelector, loadRoomShapeDirective])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })
@@ -117,7 +137,10 @@
             var object = {
                 RoomId: (roomId != undefined) ? roomId : undefined,
                 Name: $scope.scopeModel.name,
-                BuildingId: buildingDirectiveApi.getSelectedIds()
+                BuildingId: buildingDirectiveApi.getSelectedIds(),
+                Settings: {
+                    RoomShape: roomShapeDirectiveApi.getData()
+                }
             };
             return object;
         };

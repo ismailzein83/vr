@@ -21,12 +21,16 @@
         function AddRoom(room) {
             return BaseAPIService.post(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "AddRoom"), room);
         };
+        function GetRoomShapeConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Demo_Module_ModuleConfig.moduleName, controller, "GetRoomShapeConfigs"));
+        }
 
         return {
             GetFilteredRooms: GetFilteredRooms,
             GetRoomById: GetRoomById,
             UpdateRoom: UpdateRoom,
             AddRoom: AddRoom,
+            GetRoomShapeConfigs: GetRoomShapeConfigs
         };
     };
     appControllers.service("Demo_Module_RoomAPIService", roomAPIService);

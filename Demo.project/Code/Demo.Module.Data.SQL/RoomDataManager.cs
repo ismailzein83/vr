@@ -32,7 +32,12 @@ namespace Demo.Module.Data.SQL
         public bool Insert(Room room, out long insertedId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Insert]", out id, room.Name, room.BuildingId);
+
+            string serializedRoomSettings = null;
+            if (room.Settings != null)
+                serializedRoomSettings = Vanrise.Common.Serializer.Serialize(room.Settings);
+
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Insert]", out id, room.Name, room.BuildingId, serializedRoomSettings);
             bool result = (nbOfRecordsAffected > 0);
             if (result)
                 insertedId = (long)id;
@@ -42,8 +47,11 @@ namespace Demo.Module.Data.SQL
         }
         public bool Update(Room room)
         {
+            string serializedRoomSettings = null;
+            if (room.Settings != null)
+                serializedRoomSettings = Vanrise.Common.Serializer.Serialize(room.Settings);
 
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Update]", room.RoomId, room.Name, room.BuildingId);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_Room_Update]", room.RoomId, room.Name, room.BuildingId, serializedRoomSettings);
             return (nbOfRecordsAffected > 0);
         }
 
@@ -57,6 +65,7 @@ namespace Demo.Module.Data.SQL
                 RoomId = GetReaderValue<long>(reader, "ID"),
                 Name = GetReaderValue<string>(reader, "Name"),
                 BuildingId = GetReaderValue<long>(reader, "BuildingId"),
+                Settings = Vanrise.Common.Serializer.Deserialize<RoomSettings>(reader["Settings"] as string)
             };
         }
         #endregion

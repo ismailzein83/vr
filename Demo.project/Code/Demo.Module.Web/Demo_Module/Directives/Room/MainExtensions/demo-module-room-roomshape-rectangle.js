@@ -1,65 +1,65 @@
-﻿//"use strict";
+﻿"use strict";
 
-//app.directive("demoBestpracticesChildChildshapeSquare", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-//    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("demoModuleRoomRoomshapeRectangle", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
-//        var directiveDefinitionObject = {
+        var directiveDefinitionObject = {
 
-//            restrict: "E",
-//            scope:
-//            {
-//                onReady: "=",
-//            },
+            restrict: "E",
+            scope:
+            {
+                onReady: "=",
+            },
 
-//            controller: function ($scope, $element, $attrs) {
-//                var ctrl = this;
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
 
-//                var ctor = new SquareShape($scope, ctrl, $attrs);
-//                ctor.initializeController();
-//            },
+                var ctor = new SquareShape($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
 
-//            controllerAs: "ctrl",
-//            bindToController: true,
-//            compile: function (element, attrs) {
+            controllerAs: "ctrl",
+            bindToController: true,
+            compile: function (element, attrs) {
 
-//            },
-//            templateUrl: "/Client/Modules/Demo_BestPractices/Elements/Child/Directives/MainExtensions/Templates/SquareShapeTemplate.html"
-//        };
+            },
+            templateUrl: "/Client/Modules/Demo_Module/Directives/Room/MainExtensions/Templates/RectangleShapeTemplate.html"
+        };
 
-//        function SquareShape($scope, ctrl, $attrs) {
-//            this.initializeController = initializeController;
+        function SquareShape($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-//            function initializeController() {
-//                $scope.scopeModel = {};
-//                defineAPI();
-//            }
+            function initializeController() {
+                $scope.scopeModel = {};
+                defineAPI();
+            }
 
-//            function defineAPI() {
-//                var api = {};
+            function defineAPI() {
+                var api = {};
 
-//                api.load = function (payload) {
-//                    if (payload != undefined && payload.childShapeEntity != undefined) {
-//                        $scope.scopeModel.width = payload.childShapeEntity.Width;
-//                        $scope.scopeModel.height = payload.childShapeEntity.Height;
-//                    }
-//                    var promises = [];
-//                    return UtilsService.waitMultiplePromises(promises);
-//                };
+                api.load = function (payload) {
+                    if (payload != undefined && payload.roomShapeEntity != undefined) {
+                        $scope.scopeModel.length = payload.roomShapeEntity.Length;
+                        $scope.scopeModel.width = payload.roomShapeEntity.Width;
+                    }
+                    var promises = [];
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-//                api.getData = function () {
-//                    return {
-//                        $type: "Demo.BestPractices.MainExtentions.Child.SquareShape,Demo.BestPractices.MainExtentions",
-//                        Width: $scope.scopeModel.width,
-//                        Height: $scope.scopeModel.height,
-//                    };
-//                };
+                api.getData = function () {
+                    return {
+                        $type: "Demo.Module.MainExtension.Room.RectangleShape,Demo.Module.MainExtension",
+                        Length: $scope.scopeModel.length,
+                        Width: $scope.scopeModel.width,
+                    };
+                };
 
-//                if (ctrl.onReady != null)
-//                    ctrl.onReady(api);
-//            }
-//        }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
+        }
 
-//        return directiveDefinitionObject;
+        return directiveDefinitionObject;
 
-//    }
-//]);
+    }
+]);

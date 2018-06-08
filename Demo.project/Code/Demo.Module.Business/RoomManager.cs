@@ -31,6 +31,11 @@ namespace Demo.Module.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allRooms.ToBigResult(input, filterExpression, RoomDetailMapper));
 
         }
+        public IEnumerable<RoomShapeConfig> GetRoomShapeConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<RoomShapeConfig>(RoomShapeConfig.EXTENSION_TYPE);
+        }
         
         public InsertOperationOutput<RoomDetails> AddRoom(Room room)
         {
@@ -110,12 +115,21 @@ namespace Demo.Module.Business
         #region Mappers
         public RoomDetails RoomDetailMapper(Room room)
         {
-            return new RoomDetails
+            var roomDetails = new RoomDetails
             {
                 Name = room.Name,
                 RoomId = room.RoomId,
-                BuildingName = _buildingManager.GetBuildingName(room.BuildingId)
+                BuildingName = _buildingManager.GetBuildingName(room.BuildingId),
             };
+            if (room.Settings != null && room.Settings.RoomShape != null)
+            {
+                var context = new RoomShapeDescriptionContext
+                {
+                    Room = room
+                };
+                roomDetails.AreaDescription = room.Settings.RoomShape.GetRoomShapeDescription(context);
+            }
+            return roomDetails;
         }
         #endregion
 
