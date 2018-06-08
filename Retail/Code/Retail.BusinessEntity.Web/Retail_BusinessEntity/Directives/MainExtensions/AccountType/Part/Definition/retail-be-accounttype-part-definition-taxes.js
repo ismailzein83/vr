@@ -61,7 +61,7 @@ app.directive('retailBeAccounttypePartDefinitionTaxes', ['UtilsService', 'VRUIUt
 
                         VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, invoiceTypeSelectorPayload, invoiceTypeSelectorLoadDeferred);
                     });
-                    return invoiceTypeSelectorLoadDeferred.promise
+                    return invoiceTypeSelectorLoadDeferred.promise;
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

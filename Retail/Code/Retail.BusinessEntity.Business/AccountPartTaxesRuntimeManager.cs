@@ -20,6 +20,7 @@ namespace Retail.BusinessEntity.Business
             foreach (var invoiceTypeId in InvoiceTypesIds){
                 InvoiceTypesTaxesRuntime invoiceTypesTaxesRuntime = new InvoiceTypesTaxesRuntime();
 
+                invoiceTypesTaxesRuntime.InvoiceTypeId = invoiceTypeId;
                 invoiceTypesTaxesRuntime.InvoiceTypeTitle = invoiceTypeManager.GetInvoiceType(invoiceTypeId).Name;
                 invoiceTypesTaxesRuntime.TaxesDefinitions = configManager.GetRetailTaxesDefinitions();
                 invoiceTypesTaxes.Add(invoiceTypeId, invoiceTypesTaxesRuntime);
