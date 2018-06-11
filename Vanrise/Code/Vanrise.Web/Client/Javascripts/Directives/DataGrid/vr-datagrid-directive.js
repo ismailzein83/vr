@@ -7,6 +7,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
         var normaltextDirection = VRLocalizationService.isLocalizationRTL() ? "right" : "left";
         var numbertextDirection = "right";
         var columnVisibilities = [];
+        var baseColumnVisibilities = [];
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -25,8 +26,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 margin: '=',
                 dragdropsetting: '='
             },
-             controller: function ($scope, $element, $attrs) {
+            controller: function ($scope, $element, $attrs) {
                 columnVisibilities = [];
+                baseColumnVisibilities = [];
                 $scope.$on("$destroy", function () {
                     $('.vr-grid-menu').parents('div').unbind('scroll', hideGridColumnsMenu);
                     $(window).unbind('scroll', hideGridColumnsMenu);
@@ -249,6 +251,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     cssClass: col.cssclass,
                     sysName: col.sysName
                 };
+
+                var colSys = getColumnBySysName(colDef.sysName);
+                if (colSys != null)
+                    ctrl.setColumnVisibilitiesArray(colSys, colDef);
+
+
+
                 lastAddedColumnId++;
                 colDef.columnId = lastAddedColumnId;
 
@@ -337,6 +346,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 calculateColumnsWidth();
                 scheduleRowHtmlBuild();
                 return colDef;
+            }
+
+            function getColumnBySysName(sysNameValue) {
+                var colSys = UtilsService.getItemByVal(baseColumnVisibilities, sysNameValue, 'SysName');
+                return colSys;
             }
 
             function getCellTemplateWithFilter(template, colDef) {
@@ -573,7 +587,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
                 function updateColumnVisibilitiesData(colDef, isVisible) {
                     var index = UtilsService.getItemIndexByVal(columnVisibilities, colDef.sysName, 'SysName');
-                    if(index >= 0)
+                    if (index >= 0)
                         columnVisibilities.splice(index, 1);
                     else
                         columnVisibilities.push({
@@ -680,6 +694,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         return getRowCSSClass(dataItem);
                     else
                         return dataItem.CssClass;
+                };
+
+                ctrl.setColumnVisibilitiesArray = function (colItem, colDef) {
+                    if (colItem.IsVisible == true) {
+                        ctrl.showColumn(colDef);
+                    }
+                    else
+                        ctrl.hideColumn(colDef);
+                    columnVisibilities.push(colItem);
                 };
                 var odd = false;
                 ctrl.getCellContainerClass = function (dataItem, colDef) {
@@ -1063,16 +1086,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             columnVisibilities.length = 0;
                         else {
                             for (var i = 0; i < payloadColumnVisibilities.length; i++) {
+                                baseColumnVisibilities = payloadColumnVisibilities;
                                 var colItem = payloadColumnVisibilities[i];
                                 var colDef = getColDefBySyName(colItem.SysName);
                                 if (colDef == null)
                                     continue;
-                                if (colItem.IsVisible == true) {
-                                    ctrl.showColumn(colDef);
-                                }
-                                else
-                                    ctrl.hideColumn(colDef);
-                               columnVisibilities.push(colItem);
+                                ctrl.setColumnVisibilitiesArray(colItem, colDef);
                             }
                         }
                     }
@@ -1083,7 +1102,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (columnVisibilities.length > 0) {
                         setting = {
                             "$type": "Vanrise.Common.Business.GridPersonalizationExtendedSetting, Vanrise.Common.Business",
-                             ColumnVisibilities: columnVisibilities
+                            ColumnVisibilities: columnVisibilities
                         };
                     }
                     return setting;
