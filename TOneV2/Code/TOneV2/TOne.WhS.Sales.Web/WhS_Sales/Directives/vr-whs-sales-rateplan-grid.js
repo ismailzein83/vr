@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum','$filter',
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum', '$filter',
 	function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService, WhS_Sales_SupplierStatusEnum, $filter) {
 		return {
 			restrict: "E",
@@ -169,7 +169,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 						decreasedRateDayOffset: decreasedRateDayOffset
 					};
 					WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
-					dataItem.NewRate = $filter('vrtextOrNumber') (dataItem.NewRate, $scope.longPrecision);
+					dataItem.NewRate = $filter('vrtextOrNumber')(dataItem.NewRate, $scope.longPrecision);
 					dataItem.onNewRateBEDChanged(dataItem);
 				};
 
@@ -203,7 +203,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 							var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
 							for (var i = 0; i < routeOptionsForView.length; i++) {
-								if (routeOptionsForView[i].ConvertedSupplierRate > rate && routeOptionsForView[i].SupplierStatus != WhS_Sales_SupplierStatusEnum.Block.value)
+								if (routeOptionsForView[i].ConvertedSupplierRate >= rate && routeOptionsForView[i].SupplierStatus != WhS_Sales_SupplierStatusEnum.Block.value)
 									array.push(i);
 							}
 
@@ -635,7 +635,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 				if (zoneItem.NewRate != null) {
 					zoneItem.IsDirty = true;
-
+					zoneItem.NewRate = $filter('vrtextOrNumber')(zoneItem.NewRate, $scope.longPrecision);
 					if (zoneItem.NewRateEED == null)
 						zoneItem.NewRateEED = zoneItem.ZoneEED;
 				}
