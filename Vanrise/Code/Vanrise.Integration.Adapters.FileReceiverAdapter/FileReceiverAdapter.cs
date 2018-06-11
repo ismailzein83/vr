@@ -11,6 +11,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         public enum Actions
         {
+            NoAction = -1,
             Rename = 0,
             Delete = 1,
             Move = 2 // Move to Folder
@@ -71,17 +72,21 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                     DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
                     base.LogVerbose("Getting all files with extenstion {0}", fileAdapterArgument.Extension);
                     FileInfo[] Files = d.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
-                    base.LogInformation("{0} files are ready to be imported", Files.Length);
+                    
+                    short numberOfFilesRead = 0;
                     foreach (FileInfo file in Files)
                     {
                         if (context.ShouldStopImport())
                             break;
+
                         if (regEx.IsMatch(file.Name))
                         {
                             CreateStreamReader(fileAdapterArgument, context.OnDataReceived, file);
                             AfterImport(fileAdapterArgument, file);
+                            numberOfFilesRead++;
                         }
                     }
+                    base.LogInformation("{0} files have been imported", numberOfFilesRead);
                 }
                 catch (Exception ex)
                 {

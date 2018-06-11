@@ -12,6 +12,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         }
         public enum Actions
         {
+            NoAction = -1,
             Rename = 0,
             Delete = 1,
             Move = 2,// Move to Folder

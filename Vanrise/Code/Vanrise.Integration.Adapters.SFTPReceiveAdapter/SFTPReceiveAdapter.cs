@@ -39,8 +39,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 sftp.ChangeDirectory(SFTPAdapterArgument.Directory);
                 SftpItemCollection sftpCollection = sftp.GetList(string.Format("{0}/*{1}", SFTPAdapterArgument.Directory, SFTPAdapterArgument.Extension));
 
-                base.LogInformation("{0} files are ready to be imported", sftpCollection.Count);
-
                 if (sftpCollection.Count > 0)
                 {
                     short numberOfFilesRead = 0;
@@ -87,6 +85,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                             }
                         }
                     }
+
+                    base.LogInformation("{0} files have been imported", numberOfFilesRead);
                 }
                 CloseConnection(sftp);
             }

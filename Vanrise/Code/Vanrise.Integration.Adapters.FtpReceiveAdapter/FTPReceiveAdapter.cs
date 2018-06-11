@@ -39,7 +39,6 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 ftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 FtpList ftpList = ftp.GetList(string.Format("*{0}", ftpAdapterArgument.Extension));
 
-                base.LogInformation("{0} files are ready to be imported", ftpList.Count);
                 if (ftpList.Count > 0)
                 {
                     short numberOfFilesRead = 0;
@@ -86,6 +85,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             }
                         }
                     }
+
+                    base.LogInformation("{0} files have been imported", numberOfFilesRead);
                 }
                 CloseConnection(ftp);
             }
