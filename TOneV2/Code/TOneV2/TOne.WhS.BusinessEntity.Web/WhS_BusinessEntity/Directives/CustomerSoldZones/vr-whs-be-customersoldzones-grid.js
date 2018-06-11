@@ -37,7 +37,7 @@ app.directive("vrWhsBeCustomersoledzonesGrid", ["UtilsService", "VRNotificationS
                 return WhS_BE_CustomerSoldZones.GetFilteredCustomerSoldZones(dataRetrievalInput).then(function (response) {
                     if (response && response.Data) {
                         for (var i = 0; i < response.Data.length; i++) {
-                            var dataItem = response.Data[i]
+                            var dataItem = response.Data[i];
                             gridDrillDownTabsObj.setDrillDownExtensionObject(dataItem);
                             for (var j = 0; j < dataItem.CustomerZones.length; j++) {
                                 setService(dataItem.CustomerZones[j]);
