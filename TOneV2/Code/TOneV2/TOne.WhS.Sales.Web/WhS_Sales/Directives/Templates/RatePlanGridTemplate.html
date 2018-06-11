@@ -1,5 +1,5 @@
 ﻿<style type="text/css">
-  /*start of rate-plan-grid */
+    /*start of rate-plan-grid */
     .rate-plan-grid .vr-datagrid-header div {
         text-transform: none;
     }
@@ -119,35 +119,30 @@
             border-bottom: 1px solid #D0D0D0;
         }
 
-        .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) {
-            background-color: #fff !important;
+
+        .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
+            background-color: inherit !important;
         }
 
-        .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(even){
-            background-color: #e9e9e9 !important;
-        }
         .rate-plan-grid[horizontal-line="true"] .vr-datagrid-body {
             border-bottom: 1px solid #D0D0D0;
         }
 
-        .rate-plan-grid[alternative-color="true"] .vr-datagrid-body.odd {
-            background-color: #e9e9e9 !important;
+        .rate-plan-grid[alternative-color] .vr-datagrid-body:hover {
+            background-color: #1be1ff !important;
         }
 
-        .rate-plan-grid[alternative-color] .vr-datagrid-body.odd > div:first-of-type:hover {
-            background-color: #1be1ff  !important;
+        .rate-plan-grid[alternative-color] .vr-datagrid-row:hover {
+            background-color: #1be1ff !important;
         }
 
-        .rate-plan-grid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
-            background-color: #1be1ff  !important;
-        }
 
-		.rate-plan-grid .vr-datagrid-datacells-click {
-			background-color: #1be1ff  !important;
-		}
+        .rate-plan-grid .vr-datagrid-datacells-click {
+            background-color: #1be1ff !important;
+        }
 
         .rate-plan-grid .vr-datagrid-datacells-click .vr-datagrid-cell-container {
-            background-color: #1be1ff  !important;
+            background-color: #1be1ff !important;
         }
 
         .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container {
@@ -162,7 +157,7 @@
 
         .rate-plane-bg-danger {
             background-color: #e65e5e;
-        }        
+        }
 </style>
 
 <div vr-loader="isLoading" ng-show="showDirective">
@@ -587,9 +582,9 @@
                         <div id="gridBodyContainer" ng-style="{'max-height': ratePlanGridCtrl.maxHeight}" style="overflow-y:auto;overflow-x:hidden">
                             <div id="gridBody">
                                 <div>
-                                    <div id="rowSection1" ng-repeat="dataItem in zoneItems">
+                                    <div id="rowSection1" ng-repeat="dataItem in zoneItems" class="vr-datagrid-body" ng-class="$index%2==0 && !getRowStyle(dataItem).CssClass ? 'odd' : '' ">
                                         <vr-validation-group validationcontext="dataItem.validationContext">
-                                            <div class="vr-datagrid-body" ng-class="$index%2==0 && !getRowStyle(dataItem).CssClass ? 'odd' : '' ">
+                                            <div>
                                                 <div ng-class="getRowStyle(dataItem).CssClass" style="min-height: 24px;border-right:1px solid #D0D0D0;border-left:1px solid #D0D0D0">
                                                     <div ng-if="!dataItem.displayRow" style="width:100%;position:relative">
                                                         <div style=" margin: -2px; height :24px;display:inline-block;width:20px">
@@ -726,6 +721,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+
                                                                 <!--<div ng-show="rateCalculationMethod" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
@@ -736,83 +732,82 @@
                                                                     </div>
                                                                 </div>-->
 
+
                                                                 <div style="display:inline-flex;vertical-align:top;width:65px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
-                                                                        <div
-                                                                                <div class="vr-datagrid-celltext ">
-                                                                                    <span vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
-                                                                                        <vr-textbox type="number"
-                                                                                                    value="dataItem.NewRate"
-                                                                                                    customvalidate="dataItem.validateNewRate()"
-                                                                                                    decimalprecision="{{::longPrecision}}"
-                                                                                                    onvaluechanged="onNewRateChanged(dataItem)"
-                                                                                                    onblurtextbox="onNewRateBlurred(dataItem)"
-                                                                                                    tonextinput>
-                                                                                        </vr-textbox>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                    </div>
-
-                                                                    <div style="display:inline-flex;vertical-align:top;width:18px" class="vr-datagrid-cell-container">
-                                                                        <div class="vr-datagrid-cell">
-                                                                            <div class="vr-datagrid-celltext ">
-                                                                                <div style="text-align: left">
-                                                                                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
-                                                                                </div>
-                                                                            </div>
+                                                                        <div class="vr-datagrid-celltext ">
+                                                                            <span vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
+                                                                                <vr-textbox type="number"
+                                                                                            value="dataItem.NewRate"
+                                                                                            customvalidate="dataItem.validateNewRate()"
+                                                                                            decimalprecision="{{::longPrecision}}"
+                                                                                            onvaluechanged="onNewRateChanged(dataItem)"
+                                                                                            onblurtextbox="onNewRateBlurred(dataItem)"
+                                                                                            tonextinput>
+                                                                                </vr-textbox>
+                                                                            </span>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
-                                                                        <div class="vr-datagrid-cell">
-                                                                            <div class="vr-datagrid-celltext ">
-                                                                                <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || dataItem.IsCountryNew)}}">
-                                                                                    <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.NewRate != null" onvaluechanged="dataItem.onNewRateBEDChanged(dataItem)" firechangeifempty disablefocus></vr-datetimepicker>
-                                                                                </span>
-                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="true">
-                                                                                    <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" customvalidate="dataItem.validateRateChangeDates()" onvaluechanged="dataItem.onNewRateBEDChanged(dataItem)" disablefocus></vr-datetimepicker>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
-                                                                        <div class="vr-datagrid-cell">
-                                                                            <div class="vr-datagrid-celltext ">
-                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
-                                                                                    <vr-datetimepicker type="date"
-                                                                                                       value="dataItem.CurrentRateEED"
-                                                                                                       onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
-                                                                                                       firechangeifempty
-                                                                                                       customvalidate="dataItem.validateRateChangeDates()" disablefocus>
-                                                                                    </vr-datetimepicker>
-                                                                                </span>
-                                                                                <span ng-show="dataItem.NewRate != null" vr-disabled="true">
-                                                                                    <vr-datetimepicker type="date"
-                                                                                                       value="dataItem.NewRateEED"
-                                                                                                       customvalidate="dataItem.validateNewRateDates()"
-                                                                                                       disablefocus>
-                                                                                    </vr-datetimepicker>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <!--</div>-->
                                                                 </div>
+
+                                                                <div style="display:inline-flex;vertical-align:top;width:18px" class="vr-datagrid-cell-container">
+                                                                    <div class="vr-datagrid-cell">
+                                                                        <div class="vr-datagrid-celltext ">
+                                                                            <div style="text-align: left">
+                                                                                <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
+                                                                    <div class="vr-datagrid-cell">
+                                                                        <div class="vr-datagrid-celltext ">
+                                                                            <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || dataItem.IsCountryNew)}}">
+                                                                                <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.NewRate != null" onvaluechanged="dataItem.onNewRateBEDChanged(dataItem)" firechangeifempty disablefocus></vr-datetimepicker>
+                                                                            </span>
+                                                                            <span ng-hide="dataItem.NewRate != null" vr-disabled="true">
+                                                                                <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" customvalidate="dataItem.validateRateChangeDates()" onvaluechanged="dataItem.onNewRateBEDChanged(dataItem)" disablefocus></vr-datetimepicker>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
+                                                                    <div class="vr-datagrid-cell">
+                                                                        <div class="vr-datagrid-celltext ">
+                                                                            <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
+                                                                                <vr-datetimepicker type="date"
+                                                                                                   value="dataItem.CurrentRateEED"
+                                                                                                   onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
+                                                                                                   firechangeifempty
+                                                                                                   customvalidate="dataItem.validateRateChangeDates()" disablefocus>
+                                                                                </vr-datetimepicker>
+                                                                            </span>
+                                                                            <span ng-show="dataItem.NewRate != null" vr-disabled="true">
+                                                                                <vr-datetimepicker type="date"
+                                                                                                   value="dataItem.NewRateEED"
+                                                                                                   customvalidate="dataItem.validateNewRateDates()"
+                                                                                                   disablefocus>
+                                                                                </vr-datetimepicker>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
 
-                                                            <div ng-if="dataItem.loadDrilldownTemplate" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;display:block;background-color:#fff">
-                                                                <div style="margin:-2px;width:20px;display:inline-block"></div>
-                                                                <div style="width:calc(100% - 20px);display:inline-block;padding:5px;background-color:#F5F5F5;border-left:1px solid #D0D0D0">
-                                                                    <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-                                                                </div>
+
+                                                        </div>
+                                                        <div ng-if="dataItem.loadDrilldownTemplate" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;display:block;background-color:#fff">
+                                                            <div style="margin:-2px;width:20px;display:inline-block"></div>
+                                                            <div style="width:calc(100% - 20px);display:inline-block;padding:5px;background-color:#F5F5F5;border-left:1px solid #D0D0D0">
+                                                                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
+                                            </div>
                                         </vr-validation-group>
 
                                         <!--<div id="rowTemplate">-->

@@ -710,10 +710,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (object != null)
                         return;
 
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    if (index % 2 == 0 && ctrl.layoutOption.alternativeColor == true)
-                        return;
-
                     return colDef && colDef.cssClass;
                 };
 

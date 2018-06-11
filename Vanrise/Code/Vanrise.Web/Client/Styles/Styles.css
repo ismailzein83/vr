@@ -2217,9 +2217,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     background-color: #d7ebee !important;
 }
 
-    .vr-datagrid-datacells-click .vr-datagrid-cell-container {
-        background-color: #d7ebee !important;
-    }
+.vr-datagrid-datacells-click .vr-datagrid-cell-container {
+    background-color: #d7ebee !important;
+}
 
 .vr-datagrid-cell, .vr-datagrid-header-cell {
     display: inline-flex;
@@ -4191,6 +4191,9 @@ vr-datalist .drag-icon {
     background-color: #e9e9e9;
 }
 
+.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container{
+     background-color: inherit !important;
+}
 
 .vr-datagrid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
     background-color: #d7ebee !important;
@@ -4202,9 +4205,9 @@ vr-datalist .drag-icon {
     padding: 1px 0px;
 }
 
-    .vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
-        border-right: unset;
-    }
+.vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
+    border-right: unset;
+}
 
 /* end vr-datagrid custom layout */
 
