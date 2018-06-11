@@ -1,6 +1,9 @@
 ﻿<span ng-show="showSellingNumberPlan">
-    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem"
-                                          isrequired="showSellingNumberPlan" normal-col-num="4"></vr-whs-be-sellingnumberplan-selector>
+    <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" 
+                                          selectedvalues="selectedSellingNumberPlan" 
+                                          onselectitem="onSellingNumberPlanSelectItem"
+                                          isrequired="showSellingNumberPlan" normal-col-num="4">
+    </vr-whs-be-sellingnumberplan-selector>
 </span>
 <span vr-loader="isLoadingSaleZonesSelector" ng-show="selectedSellingNumberPlan!=undefined || !showSellingNumberPlan">
     <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady" isrequired="true" normal-col-num="4"></vr-whs-be-salezone-selector>

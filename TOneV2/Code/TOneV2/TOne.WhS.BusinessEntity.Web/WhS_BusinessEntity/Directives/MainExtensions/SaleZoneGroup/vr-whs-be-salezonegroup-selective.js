@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'UtilsService', 'VRUIUtilsService',
     function (WhS_BE_SaleZoneAPIService, WhS_BE_SellingNumberPlanAPIService, UtilsService, VRUIUtilsService) {
 
@@ -9,14 +10,9 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 sellingnumberplanid: "="
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
-                $scope.showSellingNumberPlan = false;
-
                 var ctor = new selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -30,10 +26,10 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/SaleZoneGroup/Templates/SelectiveSaleZonesDirectiveTemplate.html';
             }
-
         };
 
         function selectiveCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
+            this.initializeController = initializeController;
 
             var sellingNumberPlanDirectiveAPI;
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -44,6 +40,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
             var sellingNumberPlanParameter;
 
             function initializeController() {
+                $scope.showSellingNumberPlan = false;
 
                 $scope.onSellingNumberPlanDirectiveReady = function (api) {
                     sellingNumberPlanDirectiveAPI = api;
@@ -77,10 +74,13 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
+
                     var sellingNumberPlanId;
                     var saleZoneGroupSettings;
                     var saleZoneFilterSettings;
+
                     if (payload != undefined) {
                         sellingNumberPlanId = payload.sellingNumberPlanId;
                         saleZoneGroupSettings = payload.saleZoneGroupSettings;
@@ -100,7 +100,6 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                                     selectedIds: saleZoneGroupSettings.SellingNumberPlanId
                                 };
                             }
-
                             VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
                         });
                     }
@@ -109,10 +108,9 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                     promises.push(loadSaleZonePromiseDeferred.promise);
 
                     saleZoneReadyPromiseDeferred.promise.then(function () {
-                        var saleZonePayload;
                         sellingNumberPlanParameter = sellingNumberPlanId != undefined ? sellingNumberPlanId : saleZoneGroupSettings != undefined ? saleZoneGroupSettings.SellingNumberPlanId : undefined;
 
-                        saleZonePayload = {
+                        var saleZonePayload = {
                             filter: { SaleZoneFilterSettings: saleZoneFilterSettings != undefined ? saleZoneFilterSettings : undefined },
                             sellingNumberPlanId: sellingNumberPlanParameter,
                             selectedIds: saleZoneGroupSettings != undefined ? saleZoneGroupSettings.ZoneIds : undefined
@@ -135,8 +133,7 @@ app.directive('vrWhsBeSalezonegroupSelective', ['WhS_BE_SaleZoneAPIService', 'Wh
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }]);
