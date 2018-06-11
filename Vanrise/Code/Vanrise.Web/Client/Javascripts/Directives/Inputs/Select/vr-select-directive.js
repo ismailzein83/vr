@@ -505,7 +505,7 @@
                             if (scrollTop > lastScrollTop) {
                                 if (scrollPercentage > 80)
                                     addPageToBoundDataSource();
-                                    //addDataSourcePage();
+                                //addDataSourcePage();
                             }
                             lastScrollTop = scrollTop;
                         });
@@ -669,7 +669,7 @@
                                 autoclose: true
                             };
                             modalSettings.onScopeReady = function (modalScope) {
-                                modalScope.ctrl = controller;                               
+                                modalScope.ctrl = controller;
                             };
                             VRModalService.showModal("/Client/Javascripts/Directives/Inputs/Select/MobileOptionPopup.html", null, modalSettings);
                             controller.dataSourcePageSize = 20;
@@ -950,6 +950,9 @@
                             if (isSingle != undefined) {
                                 //$('.dropdown-menu').hide();
                                 ctrl.selectedvalues = undefined;
+                                if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
+                                    ctrl.ondeselectitem(ctrl.selectedvalues);
+                                }
                             }
 
                             else {
