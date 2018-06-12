@@ -1,12 +1,10 @@
 ﻿using System;
+using Vanrise.Entities;
 using System.Activities;
+using Vanrise.Common.Business;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -38,6 +36,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
 
             importSPLContext.PriceListCurrencyId = currencyId;
+            importSPLContext.SupplierId = supplierId;
             importSPLContext.SetDateMembers(supplierId, priceListDate);
         }
     }
@@ -63,6 +62,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public const string CustomDataKey = "ImportSPLContext";
         private int _priceListCurrencyId;
         private int _systemCurrencyId;
+        private int _supplierId;
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
         private TOne.WhS.BusinessEntity.Business.ConfigManager _tOneConfigManager = new BusinessEntity.Business.ConfigManager();
 
@@ -70,6 +70,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         #region Properties
 
+        public int SupplierId
+        {
+            get { return _supplierId; }
+            set { _supplierId = value; }
+        }
         public int PriceListCurrencyId
         {
             get
@@ -155,5 +160,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         }
 
         #endregion
+
     }
 }
