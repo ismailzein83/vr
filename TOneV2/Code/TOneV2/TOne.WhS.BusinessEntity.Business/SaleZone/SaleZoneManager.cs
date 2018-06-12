@@ -40,7 +40,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZones.Values;
         }
 
-
         public UpdateOperationOutput<SaleZoneDetail> UpdateSaleZoneName(long zoneId, string zoneName, int sellingNumberPlanId)
         {
             if (String.IsNullOrWhiteSpace(zoneName))
@@ -69,6 +68,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+
         public List<string> GetSaleZoneNames(List<long> saleZoneIds)
         {
             List<string> zoneNames = new List<string>();
@@ -80,6 +80,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return zoneNames;
         }
+
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);
@@ -228,6 +229,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(filterFunc);
             }
         }
+
         public SaleZone GetCustomerSaleZoneByCode(int customerId, string codeNumber)
         {
             SaleCodeManager saleCodeManager = new SaleCodeManager();
@@ -245,6 +247,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return GetSaleZone(saleCode.ZoneId);
         }
+
         public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
         {
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
@@ -451,6 +454,13 @@ namespace TOne.WhS.BusinessEntity.Business
             return cachedSaleZones.MapRecords(x => x.SaleZoneId, x => x.CountryId == countryId && (x.Name != null && x.Name.Trim().ToLower() == targetZoneName));
         }
 
+        public long ReserveIDRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(GetSaleZoneType(), numberOfIDs, out startingId);
+            return startingId;
+        }
+
         #endregion
 
         #region Private Members
@@ -485,12 +495,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
 
             return saleZoneDetail;
-        }
-        public long ReserveIDRange(int numberOfIDs)
-        {
-            long startingId;
-            IDManager.Instance.ReserveIDRange(GetSaleZoneType(), numberOfIDs, out startingId);
-            return startingId;
         }
 
         private SaleZoneInfo SaleZoneInfoMapper(SaleZone saleZone)
@@ -541,6 +545,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+
         private class SaleZoneLoggableEntity : VRLoggableEntityBase
         {
             public static SaleZoneLoggableEntity Instance = new SaleZoneLoggableEntity();
