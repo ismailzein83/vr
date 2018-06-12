@@ -189,7 +189,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "RecordType",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -217,7 +217,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "ChargingID",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -251,7 +251,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "ServedPDPAddress",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -283,7 +283,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "Duration",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -292,7 +292,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "CauseForRecClosing",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -301,7 +301,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "RecordSequenceNumber",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -319,7 +319,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "LocalSequenceNumber",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -328,7 +328,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "APNSelectionMode",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -337,7 +337,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "ChargingCharacteristics",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -346,7 +346,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "ChSelectionMode",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
@@ -355,7 +355,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "RATType",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
             parsers.Add("9F2D", new BinaryFieldParser
@@ -363,7 +363,7 @@ namespace Mediation.Runtime.Tasks
                 Settings = new NumberFieldParser
                 {
                     FieldName = "PDNConnectionID",
-                    NumberType = NumberType.Int
+                    NumberType = Vanrise.DataParser.Entities.NumberType.Int
                 }
             });
 
