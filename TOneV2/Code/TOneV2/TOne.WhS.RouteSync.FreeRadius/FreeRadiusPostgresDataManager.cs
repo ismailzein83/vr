@@ -33,13 +33,26 @@ namespace TOne.WhS.RouteSync.FreeRadius
             set { _redundantConnectionStrings = value; }
         }
 
-        public void PrepareTables(Entities.ISwitchRouteSynchronizerInitializeContext context)
+        #region Public Methods
+
+        public void PrepareTables(IFreeRadiusPrepareTablesContext context)
         {
             SwitchSyncOutput switchSyncOutput;
             ExecFreeRadiusPostgresDataManagerAction((singleNodeDataManager, dataManagerIndex) =>
             {
                 singleNodeDataManager.PrepareTables();
             }, context.SwitchName, context.SwitchId, null, context.WriteBusinessHandledException, true, "initializing", out switchSyncOutput);
+            context.SwitchSyncOutput = switchSyncOutput;
+        }
+
+        public void BuildSaleCodeZones(IFreeRadiusBuildSaleCodeZonesContext context)
+        {
+            SwitchSyncOutput switchSyncOutput;
+            ExecFreeRadiusPostgresDataManagerAction((singleNodeDataManager, dataManagerIndex) =>
+            {
+                singleNodeDataManager.BuildSaleCodeZones(context.FreeRadiusSaleZones, context.FreeRadiusSaleCodes);
+            }, context.SwitchName, context.SwitchId, context.PreviousSwitchSyncOutput, context.WriteBusinessHandledException, false, null, out switchSyncOutput);
+
             context.SwitchSyncOutput = switchSyncOutput;
         }
 
@@ -63,6 +76,9 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         public void SwapTables(Entities.ISwapTableContext context)
         {
+            FreeRadiusSwapTablePayload payload = context.Payload != null ? context.Payload.CastWithValidate<FreeRadiusSwapTablePayload>("freeRadiusSwapTablePayload") : null;
+            bool syncSaleCodeZones = payload != null ? payload.SyncSaleCodeZones : false;
+
             SwitchSyncOutput switchSyncOutput;
             ExecFreeRadiusPostgresDataManagerAction((singleNodeDataManager, dataManagerIndex) =>
             {
@@ -70,7 +86,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finalizing Database {0} for Switch '{1}'...", args);
 
-                singleNodeDataManager.SwapTables(context.IndexesCommandTimeoutInSeconds);
+                singleNodeDataManager.SwapTables(context.IndexesCommandTimeoutInSeconds, syncSaleCodeZones);
 
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Database {0} for Switch '{1}' is finalized", args);
 
@@ -91,6 +107,10 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
             context.SwitchSyncOutput = switchSyncOutput;
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void ExecFreeRadiusPostgresDataManagerAction(Action<SingleNodeDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
             Action<Exception, bool> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
@@ -160,6 +180,8 @@ namespace TOne.WhS.RouteSync.FreeRadius
                 }
             }
         }
+
+        #endregion
     }
 
     internal class SingleNodeDataManager : BasePostgresDataManager
@@ -168,9 +190,20 @@ namespace TOne.WhS.RouteSync.FreeRadius
         const string TempTableName = "route_temp";
         const string OldTableName = "route_old";
 
+        const string SaleZoneTableName = "salezone";
+        const string TempSaleZoneTableName = "salezone_temp";
+        const string SaleCodeTableName = "salecode";
+        const string TempSaleCodeTableName = "salecode_temp";
+
         string TableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TableName) : TableName; } }
         string TempTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TempTableName) : TempTableName; } }
         string OldTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, OldTableName) : OldTableName; } }
+
+        string SaleZoneTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, SaleZoneTableName) : SaleZoneTableName; } }
+        string TempSaleZoneTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TempSaleZoneTableName) : TempSaleZoneTableName; } }
+        string SaleCodeTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, SaleCodeTableName) : SaleCodeTableName; } }
+        string TempSaleCodeTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TempSaleCodeTableName) : TempSaleCodeTableName; } }
+
 
         FreeRadiusPostgresConnectionString _freeRadiusPostgresConnectionString;
 
@@ -191,18 +224,37 @@ namespace TOne.WhS.RouteSync.FreeRadius
             BuildRouteTempTable();
         }
 
+        public void BuildSaleCodeZones(List<FreeRadiusSaleZone> freeRadiusSaleZones, List<FreeRadiusSaleCode> freeRadiusSaleCodes)
+        {
+            BuildSaleCodeZoneTempTables();
+
+            if (freeRadiusSaleZones != null && freeRadiusSaleZones.Count > 0)
+                base.Bulk(freeRadiusSaleZones, TempSaleZoneTableNameWithSchema);
+
+            if (freeRadiusSaleCodes != null && freeRadiusSaleCodes.Count > 0)
+                base.Bulk(freeRadiusSaleCodes, TempSaleCodeTableNameWithSchema);
+        }
+
         public void ApplyFreeRadiusRoutesForDB(List<FreeRadiusConvertedRoute> convertedRoute)
         {
             base.Bulk(convertedRoute, TempTableNameWithSchema);
         }
 
-        public void SwapTables(int indexesCommandTimeoutInSeconds)
+        public void SwapTables(int indexesCommandTimeoutInSeconds, bool syncSaleCodeZones)
         {
             string createIndexScript = string.Format(@"CREATE INDEX IX_route_CustomerId_cldsid_{0} ON {1} USING btree
                                                       (customer_id COLLATE pg_catalog.default, cldsid) TABLESPACE pg_default;
                                                       ALTER TABLE {1} CLUSTER ON IX_route_CustomerId_cldsid_{0};", Guid.NewGuid().ToString("N"), TempTableNameWithSchema);
             string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3}; ", TableNameWithSchema, OldTableName, TempTableNameWithSchema, TableName);
-            ExecuteNonQuery(new string[] { createIndexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
+
+            List<string> pgStrings = new List<string> { createIndexScript, swapTableScript };
+            if (syncSaleCodeZones)
+            {
+                pgStrings.Add(string.Format("ALTER TABLE {0} RENAME TO {1};", TempSaleZoneTableNameWithSchema, SaleZoneTableName));
+                pgStrings.Add(string.Format("ALTER TABLE {0} RENAME TO {1};", TempSaleCodeTableNameWithSchema, SaleCodeTableName));
+            }
+
+            ExecuteNonQuery(pgStrings.ToArray(), indexesCommandTimeoutInSeconds);
         }
 
         public void ApplyDifferentialRoutes(List<FreeRadiusConvertedRoute> updatedConvertedRoute)
@@ -215,7 +267,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
             HashSet<CustomerCode> customerCodes = updatedRoutes.Select(itm => new CustomerCode() { CustomerId = itm.Customer_id, Code = itm.Cldsid }).ToHashSet();
 
             List<FreeRadiusConvertedRoute> compressedAffectedRoutes = GetAffectedRoutes(customerCodes);
-            if(compressedAffectedRoutes != null && compressedAffectedRoutes.Count > 0)
+            if (compressedAffectedRoutes != null && compressedAffectedRoutes.Count > 0)
             {
                 List<FreeRadiusConvertedRoute> decompressedAffectedRoutes = DecompressConvertedRoutes(compressedAffectedRoutes);
 
@@ -315,7 +367,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
             foreach (var updatedRoute in updatedRoutes)
             {
-                pgQuery.Append(string.Format("Insert Into {0} (customer_id, clisid, cldsid, code, min_perc, max_perc) VALUES ('{1}', ''{2}'', '{3}', '{4}', {5}, {6});", TableNameWithSchema,
+                pgQuery.Append(string.Format("Insert Into {0} (customer_id, clisid, cldsid, code, min_perc, max_perc) VALUES ('{1}', '{2}', '{3}', '{4}', {5}, {6});", TableNameWithSchema,
                     updatedRoute.Customer_id, updatedRoute.Clisis, updatedRoute.Cldsid, updatedRoute.Option, updatedRoute.Min_perc, updatedRoute.Max_perc));
             }
 
@@ -359,6 +411,27 @@ namespace TOne.WhS.RouteSync.FreeRadius
                                                            max_perc double precision NOT NULL);", TempTableNameWithSchema);
 
             ExecuteNonQuery(new string[] { dropTempTableScript, dropOldTableScript, createTempTableScript });
+        }
+
+        private void BuildSaleCodeZoneTempTables()
+        {
+            string dropSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", SaleZoneTableNameWithSchema);
+            string dropSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", SaleCodeTableNameWithSchema);
+            string dropTempSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", TempSaleZoneTableNameWithSchema);
+            string dropTempSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0};", TempSaleCodeTableNameWithSchema);
+
+            string createTempSaleZoneTableScript = string.Format(@"CREATE TABLE {0} (                                                         
+                                                                   ID bigint,
+                                                                   Name character varying(255) COLLATE pg_catalog.""default"",
+                                                                   SellingNumberPlanID integer);", TempSaleZoneTableNameWithSchema);
+
+            string createTempSaleCodeTableScript = string.Format(@"CREATE TABLE {0} (
+                                                                   ID bigint,
+                                                                   Code character varying(20) COLLATE pg_catalog.""default"",
+                                                                   ZoneId bigint);", TempSaleCodeTableNameWithSchema);
+
+            ExecuteNonQuery(new string[] { dropSaleZoneTableScript, dropSaleCodeTableScript, dropTempSaleCodeTableScript, dropTempSaleZoneTableScript, 
+                createTempSaleZoneTableScript, createTempSaleCodeTableScript });
         }
     }
 }

@@ -63,6 +63,7 @@
                             $scope.scopeModel.mappingSeparator = freeRadiusSWSync.MappingSeparator;
                             $scope.scopeModel.supplierOptionsSeparator = freeRadiusSWSync.SupplierOptionsSeparator;
                             $scope.scopeModel.numberOfOptions = freeRadiusSWSync.NumberOfOptions;
+                            $scope.scopeModel.syncSaleCodeZones = freeRadiusSWSync.SyncSaleCodeZones;
                             freeRadiusDataManager = freeRadiusSWSync.DataManager;
                             carrierMappings = freeRadiusSWSync.CarrierMappings;
                         }
@@ -114,7 +115,8 @@
                         MappingSeparator: $scope.scopeModel.mappingSeparator,
                         SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions,
-                        CarrierMappings: freeRadiusCarrierAccountMappingGridAPI.getData(),
+                        SyncSaleCodeZones: $scope.scopeModel.syncSaleCodeZones,
+                        CarrierMappings: freeRadiusCarrierAccountMappingGridAPI.getData()
                     };
                     return data;
                 };

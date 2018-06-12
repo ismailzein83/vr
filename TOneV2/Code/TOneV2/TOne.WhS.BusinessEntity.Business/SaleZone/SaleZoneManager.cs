@@ -121,6 +121,24 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedSaleZones().GetRecord(saleZoneId);
         }
 
+        public IEnumerable<SaleZone> GetSaleZones(DateTime effectiveOn)
+        {
+            Dictionary<long, SaleZone> allSaleZones = this.GetCachedSaleZones();
+            if (allSaleZones == null)
+                return null;
+
+            Func<SaleZone, bool> filterPredicate = (zone) =>
+            {
+                if (!zone.IsEffective(effectiveOn))
+                    return false;
+
+                return true;
+            };
+            IEnumerable<SaleZone> filteredSaleZones = allSaleZones.FindAllRecords(filterPredicate);
+            return (filteredSaleZones != null && filteredSaleZones.Count() > 0) ? filteredSaleZones : null;
+        }
+
+
         public int? GetSaleZoneCountryId(long saleZoneId)
         {
             SaleZone saleZone = GetSaleZone(saleZoneId);
@@ -180,7 +198,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (countryIds != null && countryIds.Count > 0 && !countryIds.Contains(x.CountryId))
                     return false;
                 if (zoneIds != null && zoneIds.Count > 0 && !zoneIds.Contains(x.SaleZoneId))
-                    return false;               
+                    return false;
                 if (!x.IsEffective(effectiveOn))
                     return false;
                 return true;

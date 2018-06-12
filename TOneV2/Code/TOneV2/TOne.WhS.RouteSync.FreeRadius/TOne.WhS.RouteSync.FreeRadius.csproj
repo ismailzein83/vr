@@ -78,6 +78,8 @@
     <Compile Include="FreeRadiusManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FreeRadiusSWSync.cs" />
+    <Compile Include="FreeRadiusSaleCode.cs" />
+    <Compile Include="FreeRadiusSaleZone.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

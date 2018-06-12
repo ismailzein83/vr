@@ -85,7 +85,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
                                     freeRadiusConvertedRoute.Add(new FreeRadiusConvertedRoute()
                                     {
                                         Customer_id = customerId,
-                                        Clisis = "''",
+                                        Clisis = "",
                                         Cldsid = string.Format("{0}[{1}-{2}]", codeWithoutLastDigit, minCodeLastDigit, previousConvertedRouteWithCodeLastDigit.CodeLastDigit),
                                         Option = freeRadiusConvertedRouteOption.Option,
                                         Min_perc = freeRadiusConvertedRouteOption.Min_perc,
@@ -108,7 +108,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
                             freeRadiusConvertedRoute.Add(new FreeRadiusConvertedRoute()
                             {
                                 Customer_id = customerId,
-                                Clisis = "''",
+                                Clisis = "",
                                 Cldsid = string.Format("{0}[{1}-{2}]", codeWithoutLastDigit, minCodeLastDigit, previousConvertedRouteWithCodeLastDigit.CodeLastDigit),
                                 Option = freeRadiusConvertedRouteOption.Option,
                                 Min_perc = freeRadiusConvertedRouteOption.Min_perc,

@@ -17,6 +17,8 @@ namespace TOne.WhS.RouteSync.Entities
 
         Action<Exception, bool> WriteBusinessHandledException { get; }
 
+        object Payload { get; }
+
         SwitchSyncOutput SwitchSyncOutput { set; }
     }
 
@@ -33,6 +35,8 @@ namespace TOne.WhS.RouteSync.Entities
         public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
 
         public Action<Exception, bool> WriteBusinessHandledException { get; set; }
+
+        public object Payload { get; set; }
 
         public SwitchSyncOutput SwitchSyncOutput { get; set; }
     }

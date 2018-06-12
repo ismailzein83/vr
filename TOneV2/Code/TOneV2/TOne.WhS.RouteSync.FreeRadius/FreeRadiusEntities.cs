@@ -92,4 +92,9 @@ namespace TOne.WhS.RouteSync.FreeRadius
             return this.Option.GetHashCode() + this.Min_perc.GetHashCode() + this.Max_perc.GetHashCode();
         }
     }
+
+    public class FreeRadiusSwapTablePayload
+    {
+        public bool SyncSaleCodeZones { get; set; }
+    }
 }

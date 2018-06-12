@@ -26,6 +26,8 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         public int NumberOfOptions { get; set; }
 
+        public bool SyncSaleCodeZones { get; set; }
+
         /// <summary>
         /// Key = Carrier Account Id
         /// </summary>
@@ -35,7 +37,42 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            this.DataManager.PrepareTables(context);
+            var prepareTablesContext = new FreeRadiusPrepareTablesContext()
+            {
+                SwitchId = context.SwitchId,
+                SwitchName = context.SwitchName,
+                RouteRangeType = context.RouteRangeType,
+                WriteBusinessHandledException = context.WriteBusinessHandledException,
+            };
+            this.DataManager.PrepareTables(prepareTablesContext);
+            SwitchSyncOutput switchSyncOutput = prepareTablesContext.SwitchSyncOutput;
+
+            if (this.SyncSaleCodeZones)
+            {
+                DateTime effectiveDate = DateTime.Now;
+
+                List<TOne.WhS.BusinessEntity.Entities.SaleZone> saleZones = new SaleZoneManager().GetSaleZones(effectiveDate).ToList();
+                List<FreeRadiusSaleZone> freeRadiusSaleZones = (saleZones != null && saleZones.Count > 0) ?
+                    saleZones.Select(itm => new FreeRadiusSaleZone() { SaleZoneId = itm.SaleZoneId, Name = itm.Name, SellingNumberPlanId = itm.SellingNumberPlanId }).ToList() : null;
+
+                List<TOne.WhS.BusinessEntity.Entities.SaleCode> saleCodes = new SaleCodeManager().GetSaleCodes(effectiveDate);
+                List<FreeRadiusSaleCode> freeRadiusSaleCodes = (saleCodes != null && saleCodes.Count > 0) ?
+                    saleCodes.Select(itm => new FreeRadiusSaleCode() { SaleCodeId = itm.SaleCodeId, Code = itm.Code, ZoneId = itm.ZoneId }).ToList() : null;
+
+                var buildSaleCodeZonesContext = new FreeRadiusBuildSaleCodeZonesContext()
+                {
+                    SwitchId = context.SwitchId,
+                    SwitchName = context.SwitchName,
+                    WriteBusinessHandledException = context.WriteBusinessHandledException,
+                    PreviousSwitchSyncOutput = prepareTablesContext.SwitchSyncOutput,
+                    FreeRadiusSaleZones = freeRadiusSaleZones,
+                    FreeRadiusSaleCodes = freeRadiusSaleCodes
+                };
+                this.DataManager.BuildSaleCodeZones(buildSaleCodeZonesContext);
+                switchSyncOutput = TOne.WhS.RouteSync.Business.Helper.MergeSwitchSyncOutputItems(switchSyncOutput, buildSaleCodeZonesContext.SwitchSyncOutput);
+            }
+
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -81,12 +118,13 @@ namespace TOne.WhS.RouteSync.FreeRadius
         {
             SwapTableContext swapTableContext = new SwapTableContext()
             {
-                WriteTrackingMessage = context.WriteTrackingMessage,
-                SwitchName = context.SwitchName,
-                IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds,
                 SwitchId = context.SwitchId,
+                SwitchName = context.SwitchName,
+                WriteTrackingMessage = context.WriteTrackingMessage,
+                IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds,
                 PreviousSwitchSyncOutput = context.PreviousSwitchSyncOutput,
-                WriteBusinessHandledException = context.WriteBusinessHandledException
+                WriteBusinessHandledException = context.WriteBusinessHandledException,
+                Payload = new FreeRadiusSwapTablePayload() { SyncSaleCodeZones = this.SyncSaleCodeZones }
             };
             this.DataManager.SwapTables(swapTableContext);
             context.SwitchSyncOutput = swapTableContext.SwitchSyncOutput;
@@ -249,7 +287,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
                             FreeRadiusConvertedRoute convertedRoute = new FreeRadiusConvertedRoute()
                             {
                                 Customer_id = customerMapping.Mapping,
-                                Clisis = "''",
+                                Clisis = "",
                                 Cldsid = route.Code,
                                 Option = convertedRouteOption.Option,
                                 Min_perc = currentPercentage,
@@ -317,7 +355,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
                     if (routeOption.IsBlocked || !routeOption.Percentage.HasValue)
                         continue;
 
-                    StringBuilder backupOptionsBuilder = new StringBuilder(); 
+                    StringBuilder backupOptionsBuilder = new StringBuilder();
 
                     if (routeOption.Backups != null && routeOption.Backups.Count > 0)
                     {
