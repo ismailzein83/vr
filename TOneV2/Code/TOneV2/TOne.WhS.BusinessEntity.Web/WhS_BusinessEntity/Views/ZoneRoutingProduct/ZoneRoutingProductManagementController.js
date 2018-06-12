@@ -32,6 +32,7 @@
             $scope.ownerTypes = utilsService.getArrayEnum(whSBeSalePriceListOwnerTypeEnum);
             $scope.selectedOwnerType = $scope.ownerTypes[0];
             $scope.selectedSellingProduct = undefined;
+            $scope.showSellingNumberPlanSelector = true;
             $scope.showSellingProductSelector = false;
             $scope.showCarrierAccountSelector = false;
 
@@ -117,17 +118,22 @@
                           vrNotificationService.notifyExceptionWithClose(error, $scope);
                       })
                       .finally(function () {
-                         $scope.isLoadingFilter = false;
-                     });
+                          $scope.isLoadingFilter = false;
+                      });
         }
         function loadSellingNumberPlanSelector() {
             var loadSellingNumberPlanPromiseDeferred = utilsService.createPromiseDeferred();
 
             sellingNumberPlanSelectorReadyDeferred.promise.then(function () {
-                vruiUtilsService.callDirectiveLoad(sellingNumberPlanSelectorApi, undefined, loadSellingNumberPlanPromiseDeferred);
+                var sellingNumberPlanSelectorPayload = { selectifsingleitem: true };
+                vruiUtilsService.callDirectiveLoad(sellingNumberPlanSelectorApi, sellingNumberPlanSelectorPayload, loadSellingNumberPlanPromiseDeferred);
             });
 
-            return loadSellingNumberPlanPromiseDeferred.promise;
+            return loadSellingNumberPlanPromiseDeferred.promise.then(function () {
+                if (sellingNumberPlanSelectorApi.hasSingleItem()) {
+                    $scope.showSellingNumberPlanSelector = false;
+                }
+            });
         }
         function loadSellingProductSelector() {
             var sellingProductSelectorLoadDeferred = utilsService.createPromiseDeferred();

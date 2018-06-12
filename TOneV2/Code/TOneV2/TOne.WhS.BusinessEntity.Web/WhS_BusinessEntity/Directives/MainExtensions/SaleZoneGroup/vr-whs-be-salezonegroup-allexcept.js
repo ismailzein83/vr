@@ -31,37 +31,15 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
         function allExceptCtor(ctrl, $scope, WhS_BE_SaleZoneAPIService) {
             this.initializeController = initializeController;
 
-            var sellingNumberPlanDirectiveAPI;
-            var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var saleZoneDirectiveAPI;
-            var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var saleZoneSelectorAPI;
+            var saleZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var sellingNumberPlanParameter;
 
             function initializeController() {
-                $scope.showSellingNumberPlan = false;
-
-                $scope.onSellingNumberPlanDirectiveReady = function (api) {
-                    sellingNumberPlanDirectiveAPI = api;
-                    sellingNumberPlanReadyPromiseDeferred.resolve();
-                };
-
-                $scope.onSaleZoneDirectiveReady = function (api) {
-                    saleZoneDirectiveAPI = api;
-                    saleZoneReadyPromiseDeferred.resolve();
-                };
-
-                $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
-                    if (selectedItem != undefined) {
-
-                        var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
-
-                        var payload = {
-                            sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-                    }
+                $scope.onSaleZoneSelectorReady = function (api) {
+                    saleZoneSelectorAPI = api;
+                    saleZoneSelectorReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -71,7 +49,6 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
 
                     var sellingNumberPlanId;
                     var saleZoneGroupSettings;
@@ -83,39 +60,26 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                         saleZoneFilterSettings = payload.saleZoneFilterSettings;
                     }
 
-                    if (sellingNumberPlanId == undefined || (saleZoneFilterSettings != undefined && saleZoneFilterSettings.RoutingProductId == undefined)) {
-                        $scope.showSellingNumberPlan = true;
+                    var promises = [];
+                    promises.push(loadSaleZoneSelector());
 
-                        var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadSellingNumberPlanPromiseDeferred.promise);
+                    function loadSaleZoneSelector() {
+                        var loadSaleZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                            var sellingNumberPlanPayload;
+                        saleZoneSelectorReadyDeferred.promise.then(function () {
+                            var sellingNumberPlanId = sellingNumberPlanId != undefined ? sellingNumberPlanId : saleZoneGroupSettings != undefined ? saleZoneGroupSettings.SellingNumberPlanId : undefined;
 
-                            if (saleZoneGroupSettings != undefined) {
-                                sellingNumberPlanPayload = {
-                                    selectedIds: saleZoneGroupSettings.SellingNumberPlanId
-                                };
-                            }
-
-                            VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
+                            var saleZonePayload = {
+                                filter: { SaleZoneFilterSettings: saleZoneFilterSettings != undefined ? saleZoneFilterSettings : undefined },
+                                sellingNumberPlanId: sellingNumberPlanId,
+                                selectedIds: saleZoneGroupSettings != undefined ? saleZoneGroupSettings.ZoneIds : undefined,
+                                showSellingNumberPlanIfMultiple: true
+                            };
+                            VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, saleZonePayload, loadSaleZoneSelectorPromiseDeferred);
                         });
+
+                        return loadSaleZoneSelectorPromiseDeferred.promise;
                     }
-
-                    var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(loadSaleZonePromiseDeferred.promise);
-
-                    saleZoneReadyPromiseDeferred.promise.then(function () {
-
-                        sellingNumberPlanParameter = sellingNumberPlanId != undefined ? sellingNumberPlanId : saleZoneGroupSettings != undefined ? saleZoneGroupSettings.SellingNumberPlanId : undefined;
-
-                        var saleZonePayload = {
-                            filter: { SaleZoneFilterSettings: saleZoneFilterSettings != undefined ? saleZoneFilterSettings : undefined },
-                            sellingNumberPlanId: sellingNumberPlanParameter,
-                            selectedIds: saleZoneGroupSettings != undefined ? saleZoneGroupSettings.ZoneIds : undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, saleZonePayload, loadSaleZonePromiseDeferred);
-                    });
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -123,8 +87,8 @@ app.directive('vrWhsBeSalezonegroupAllexcept', ['WhS_BE_SaleZoneAPIService', 'Wh
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.AllExceptSaleZoneGroup, TOne.WhS.BusinessEntity.MainExtensions",
-                        SellingNumberPlanId: sellingNumberPlanParameter != undefined && sellingNumberPlanParameter > 0 ? sellingNumberPlanParameter : sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                        ZoneIds: saleZoneDirectiveAPI.getSelectedIds()
+                        SellingNumberPlanId: saleZoneSelectorAPI.getSellingNumberPlanId(),
+                        ZoneIds: saleZoneSelectorAPI.getSelectedIds()
                     };
                 };
 

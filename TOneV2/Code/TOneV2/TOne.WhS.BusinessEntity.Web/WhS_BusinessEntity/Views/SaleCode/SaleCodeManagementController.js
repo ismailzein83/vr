@@ -6,11 +6,8 @@
 
     function saleCodeManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRDateTimeService) {
 
-        var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var saleZoneDirectiveAPI;
-        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var saleZoneSelectorAPI;
+        var saleZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var gridAPI;
 
@@ -21,39 +18,24 @@
         function defineScope() {
             $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
-            $scope.onSellingNumberPlanDirectiveReady = function (api) {
-                sellingNumberPlanDirectiveAPI = api;
-                sellingNumberPlanReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onSaleZoneDirectiveReady = function (api) {
-                saleZoneDirectiveAPI = api;
-                saleZoneReadyPromiseDeferred.resolve();
+            $scope.onSaleZoneSelectorReady = function (api) {
+                saleZoneSelectorAPI = api;
+                saleZoneSelectorReadyDeferred.resolve();
             };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
             };
 
-            $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
-                if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
-
-                    var payload = {
-                        sellingNumberPlanId: selectedItem.SellingNumberPlanId
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-                }
-            };
-
             $scope.searchClicked = function () {
+
                 var queryHandler = {
                     $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business"
                 };
 
                 queryHandler.Query = {
-                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                    ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
+                    SellingNumberPlanId: saleZoneSelectorAPI.getSellingNumberPlanId(),
+                    ZonesIds: saleZoneSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
                     EffectiveOn: $scope.effectiveOn
                 };
@@ -68,23 +50,22 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadSaleZoneSelector])
               .catch(function (error) {
                   VRNotificationService.notifyExceptionWithClose(error, $scope);
               })
-             .finally(function () {
+              .finally(function () {
                  $scope.isLoadingFilter = false;
              });
         }
-        function loadSellingNumberPlanSelector() {
-            var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
+        function loadSaleZoneSelector() {
+            var loadSaleZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
-                var sellingNumberPlanPayload = { selectifsingleitem: true };
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
+            saleZoneSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, undefined, loadSaleZoneSelectorPromiseDeferred);
             });
 
-            return loadSellingNumberPlanPromiseDeferred.promise;
+            return loadSaleZoneSelectorPromiseDeferred.promise;
         }
     }
 

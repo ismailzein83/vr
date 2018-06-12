@@ -2,14 +2,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
-                <vr-whs-be-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady"
-                                                      onselectionchanged="onSellingNumberPlanSelectItem"
-                                                      selectedvalues="selectedSellingNumberPlan"
-                                                      normal-col-num="2" isrequired="true">
-                </vr-whs-be-sellingnumberplan-selector>
-                <vr-columns ng-show="selectedSellingNumberPlan!=undefined" width="normal" haschildcolumns>
-                    <vr-whs-be-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-selector>
-                </vr-columns>
+                <vr-whs-be-salezone-selector on-ready="onSaleZoneSelectorReady" normal-col-num="2" ismultipleselection></vr-whs-be-salezone-selector>
                 <vr-columns width="normal">
                     <vr-textbox type="Code" label="Code" value="code"></vr-textbox>
                 </vr-columns>
