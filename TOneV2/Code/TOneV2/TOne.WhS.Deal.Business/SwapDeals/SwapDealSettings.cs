@@ -226,7 +226,7 @@ namespace TOne.WhS.Deal.Business
             return costAmount;
         }
 
-        public int? GetSaleVolume()
+        public decimal? GetSaleVolume()
         {
             if (Inbounds == null || Inbounds.Count == 0)
                 return null;
@@ -237,7 +237,7 @@ namespace TOne.WhS.Deal.Business
             }
             return saleVolume;
         }
-        public int? GetCostVolume()
+        public decimal? GetCostVolume()
         {
             if (Outbounds == null || Outbounds.Count == 0)
                 return null;
@@ -283,7 +283,7 @@ namespace TOne.WhS.Deal.Business
                     if (balancedVolume > Difference.Value)
                     {
                         validationResult = false;
-                        validateBeforeSaveContext.ValidateMessages.Add("Amounts should be balanced");
+                        validateBeforeSaveContext.ValidateMessages.Add("Durations should be balanced");
                     }
                 }
 
