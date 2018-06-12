@@ -24,13 +24,15 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            var switchInfo = this.Switch.Get(context);
+            SwitchInfo switchInfo = this.Switch.Get(context);
+            RouteRangeType? routeRangeType = this.RouteRangeType.Get(context);
+
             SwitchSyncOutput switchSyncOutput;
             var switchRouteSynchronizerInitializeContext = new SwitchRouteSynchronizerInitializeContext
             {
-                RouteRangeType = this.RouteRangeType.Get(context),
                 SwitchId = switchInfo.SwitchId,
                 SwitchName = switchInfo.Name,
+                RouteRangeType = routeRangeType,
                 WriteBusinessHandledException = context.GetSharedInstanceData().WriteBusinessHandledException
             };
 
