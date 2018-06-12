@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-label>Title</vr-label>
+        <vr-label>Tax Title</vr-label>
         <vr-textbox value="ctrl.titlevalue" type="text" onvaluechanged="ctrl.onTitleValueChange"></vr-textbox>
     </vr-columns>
 
@@ -12,9 +12,11 @@
 <vr-row removeline>
     <vr-columns width="fullrow">
         <vr-validator validate="ctrl.validateAddTitle()">
-            <vr-datalist maxitemsperrow="3" datasource="ctrl.titles" autoremoveitem="true">
-                {{dataItem.title}}
-            </vr-datalist>
+            <vr-row>
+                <vr-datalist maxitemsperrow="3" datasource="ctrl.titles" autoremoveitem="true">
+                    {{dataItem.title}}
+                </vr-datalist>
+            </vr-row>
         </vr-validator>
     </vr-columns>
 </vr-row>
