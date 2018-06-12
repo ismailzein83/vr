@@ -340,7 +340,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 try
                 {
                     bool isCompressed = input.CompressAttachement || _carrierAccountManager.GetCustomerCompressPriceListFileStatus(customer.CarrierAccountId);
-                    vrMailManager.SendMail(evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
+                    vrMailManager.SendMail(evaluatedObject.From,evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
                         , vrMailAttachements, isCompressed);
                     salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { customerPriceList.OwnerId }, customerPriceList.PriceListId);
                 }
