@@ -149,11 +149,9 @@
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportprocessquery-selector.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableTemplate.html" />
-    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTitleGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable-grid.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable.js" />
-    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtitle-grid.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\SendEmailHandlerAutomatedReportEditorController.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailHandlerAutomatedReport.html" />
