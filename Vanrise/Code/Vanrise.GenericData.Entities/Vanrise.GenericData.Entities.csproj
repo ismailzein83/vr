@@ -90,6 +90,7 @@
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordStorageManager.cs" />
     <Compile Include="BusinessManagers\IBusinessEntityDefinitionManager.cs" />
+    <Compile Include="BusinessManagers\IGenericBusinessEntityManager.cs" />
     <Compile Include="BusinessManagers\IGenericRuleDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
     <Compile Include="DataStorage\DataRecordStorage\BusinessObjectDataRecordStorageConfig.cs" />
