@@ -12549,6 +12549,13 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
+        private List<CompositeFieldsParser> GetOgeroHuaweiFileNameCompositeParsers()
+        {
+            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
+            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
+            return compositeParsers;
+        }
 
         #endregion
 
@@ -12710,13 +12717,7 @@ namespace Mediation.Runtime.DataParser
             compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             return compositeParsers;
         }
-        private List<CompositeFieldsParser> GetOgeroHuaweiFileNameCompositeParsers()
-        {
-            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
-            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
-            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
-            return compositeParsers;
-        }
+
         #endregion
 
         #region Alcatel Ogero
