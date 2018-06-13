@@ -250,7 +250,9 @@ as (select * from (values
 
 ('4B424B30-083C-4999-B883-AF4555ECC819','WhS_RouteSync_EricssonSwitchFTPLogger','FTP','WhS_RouteSync_EricssonSwitchLogger'		,'{"Editor":"whs-routesync-ericssonswitchlogger-ftp"}'),
 ('26c8c829-8289-468e-91e0-f9e91de644f1','Point Of Interconnect','Point Of Interconnect','VR_GenericData_FieldCustomObjectTypeSettings'		,'{"Editor":"whs-be-pointofinterconnect-trunks-customobjectsettings"}'),
-('67dd74aa-33ac-4d75-93f6-0bd1adacaf41','ProfileField','Profile Field','VR_InvoiceType_FileNameParts'		,'{"Editor":"whs-be-invoicetype-filename-carrierprofile"}')
+('67dd74aa-33ac-4d75-93f6-0bd1adacaf41','ProfileField','Profile Field','VR_InvoiceType_FileNameParts'		,'{"Editor":"whs-be-invoicetype-filename-carrierprofile"}'),
+
+('2AEDD1D5-26D1-4C0E-A49C-CE5E8355C300','WhS_Routing_AnalyticItemaAtions_OpenCustomerRoutes','Open Customer Routes','Analytic_ItemActionTemplates','{"Editor":"vr-whs-routing-analyticitemactions-opencustomerroutes"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

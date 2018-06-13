@@ -26,6 +26,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -199,6 +201,8 @@
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockSupplierZone\Templates\BlockSupplierZoneActionDefinition.html" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockSupplierZone\whs-routing-action-blocksupplierzone.js" />
     <Content Include="WhS_Routing\Directives\Extensions\Actions\BlockSupplierZone\whs-routing-actiondefinition-blocksupplierzone.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\AnalyticItemActions\Templates\OpenCustomerRoutesItemAction.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\AnalyticItemActions\vr-whs-routing-analyticitemactions-opencustomerroutes.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\Templates\RouteOptionRulesSettingsBlockTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\Templates\RouteOptionRulesSettingsMarketPriceTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteOptionRuleSettings\vr-whs-routing-routeoptionrulesettings-block.js" />
@@ -363,6 +367,7 @@
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\TrafficStatisticQualityConfigurationAPIService.js" />
+    <Content Include="WhS_Routing\Services\CustomerRoutesService.js" />
     <Content Include="WhS_Routing\Services\QualityConfigurationService.js" />
     <Content Include="WhS_Routing\Services\RouteOptionRuleService.js" />
     <Content Include="WhS_Routing\Services\MarketPriceService.js" />
