@@ -19,49 +19,50 @@ namespace Vanrise.Security.MainExtensions.SecurityProvider
 
         public Guid ApplicationId { get; set; }
 
-        //public override SecurityProviderAuthenticateResult Authenticate(ISecurityProviderAuthenticateContext context)
-        //{
-        //    var payload = context.Payload.CastWithValidate<EmailPasswordSecurityProviderAuthenticationPayload>("context.Payload");
-        //    CredentialsInput credentialsInput = new CredentialsInput() { Email = payload.Email, Password = payload.Password };
-        //    var vrConnection = new VRConnectionManager().GetVRConnection<VRInterAppRestConnection>(VRConnectionId);
-        //    VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-        //    AuthenticateOperationOutput<AuthenticationToken> authenticateOperationOutput = connectionSettings.AnonymousPost<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>("/api/VR_Sec/Security/Authenticate", credentialsInput);
+        public override SecurityProviderAuthenticateResult Authenticate(ISecurityProviderAuthenticateContext context)
+        {
+            throw new NotImplementedException();
+            //var payload = context.Payload.CastWithValidate<EmailPasswordSecurityProviderAuthenticationPayload>("context.Payload");
+            //CredentialsInput credentialsInput = new CredentialsInput() { Email = payload.Email, Password = payload.Password };
+            //var vrConnection = new VRConnectionManager().GetVRConnection<VRInterAppRestConnection>(VRConnectionId);
+            //VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            //AuthenticateOperationOutput<AuthenticationToken> authenticateOperationOutput = connectionSettings.AnonymousPost<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>("/api/VR_Sec/Security/Authenticate", credentialsInput);
 
-        //    context.FailureMessage = authenticateOperationOutput.Message;
-        //    context.AuthenticatedUser = new UserManager().GetUserbyEmail(payload.Email);
+            //context.FailureMessage = authenticateOperationOutput.Message;
+            //context.AuthenticatedUser = new UserManager().GetUserbyEmail(payload.Email);
 
-        //    if (authenticateOperationOutput.AuthenticationObject != null)
-        //        context.PasswordExpirationDaysLeft = authenticateOperationOutput.AuthenticationObject.PasswordExpirationDaysLeft;
+            //if (authenticateOperationOutput.AuthenticationObject != null)
+            //    context.PasswordExpirationDaysLeft = authenticateOperationOutput.AuthenticationObject.PasswordExpirationDaysLeft;
 
-        //    SecurityProviderAuthenticateResult authenticateResult;
-        //    switch (authenticateOperationOutput.Result)
-        //    {
-        //        case AuthenticateOperationResult.ActivationNeeded:
-        //            authenticateResult = SecurityProviderAuthenticateResult.ActivationNeeded;
-        //            break;
-        //        case AuthenticateOperationResult.UserNotExists:
-        //            authenticateResult = SecurityProviderAuthenticateResult.UserNotExists;
-        //            break;
-        //        case AuthenticateOperationResult.WrongCredentials:
-        //            authenticateResult = SecurityProviderAuthenticateResult.WrongCredentials;
-        //            break;
-        //        case AuthenticateOperationResult.PasswordExpired:
-        //            authenticateResult = SecurityProviderAuthenticateResult.PasswordExpired;
-        //            break;
-        //        case AuthenticateOperationResult.Inactive:
-        //            authenticateResult = SecurityProviderAuthenticateResult.Inactive;
-        //            break;
-        //        case AuthenticateOperationResult.Failed:
-        //            authenticateResult = SecurityProviderAuthenticateResult.Failed;
-        //            break;
-        //        case AuthenticateOperationResult.Succeeded:
-        //            authenticateResult = SecurityProviderAuthenticateResult.Succeeded;
-        //            break;
-        //        default: throw new NotSupportedException(string.Format("AuthenticateOperationResult {0} not supported.", authenticateOperationOutput));
-        //    }
+            //SecurityProviderAuthenticateResult authenticateResult;
+            //switch (authenticateOperationOutput.Result)
+            //{
+            //    case AuthenticateOperationResult.ActivationNeeded:
+            //        authenticateResult = SecurityProviderAuthenticateResult.ActivationNeeded;
+            //        break;
+            //    case AuthenticateOperationResult.UserNotExists:
+            //        authenticateResult = SecurityProviderAuthenticateResult.UserNotExists;
+            //        break;
+            //    case AuthenticateOperationResult.WrongCredentials:
+            //        authenticateResult = SecurityProviderAuthenticateResult.WrongCredentials;
+            //        break;
+            //    case AuthenticateOperationResult.PasswordExpired:
+            //        authenticateResult = SecurityProviderAuthenticateResult.PasswordExpired;
+            //        break;
+            //    case AuthenticateOperationResult.Inactive:
+            //        authenticateResult = SecurityProviderAuthenticateResult.Inactive;
+            //        break;
+            //    case AuthenticateOperationResult.Failed:
+            //        authenticateResult = SecurityProviderAuthenticateResult.Failed;
+            //        break;
+            //    case AuthenticateOperationResult.Succeeded:
+            //        authenticateResult = SecurityProviderAuthenticateResult.Succeeded;
+            //        break;
+            //    default: throw new NotSupportedException(string.Format("AuthenticateOperationResult {0} not supported.", authenticateOperationOutput));
+            //}
 
-        //    return authenticateResult;
-        //}
+            //return authenticateResult;
+        }
 
         //public override bool ResetPassword(ISecurityProviderResetPasswordContext context)
         //{

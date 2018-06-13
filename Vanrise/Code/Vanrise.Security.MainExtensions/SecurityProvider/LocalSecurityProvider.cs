@@ -22,77 +22,78 @@ namespace Vanrise.Security.MainExtensions.SecurityProvider
 
         public override bool PasswordCheckRequired { get { return true; } }
 
-        //public override SecurityProviderAuthenticateResult Authenticate(ISecurityProviderAuthenticateContext context)
-        //{
-        //    var payload = context.Payload.CastWithValidate<EmailPasswordSecurityProviderAuthenticationPayload>("context.Payload");
+        public override SecurityProviderAuthenticateResult Authenticate(ISecurityProviderAuthenticateContext context)
+        {
+            throw new NotImplementedException();
+            //var payload = context.Payload.CastWithValidate<EmailPasswordSecurityProviderAuthenticationPayload>("context.Payload");
 
-        //    UserManager manager = new UserManager();
-        //    User user = manager.GetUserbyEmail(payload.Email);
-        //    if (user == null)
-        //        return SecurityProviderAuthenticateResult.UserNotExists;
+            //UserManager manager = new UserManager();
+            //User user = manager.GetUserbyEmail(payload.Email);
+            //if (user == null)
+            //    return SecurityProviderAuthenticateResult.UserNotExists;
 
-        //    var configManager = new Security.Business.ConfigManager();
+            //var configManager = new Security.Business.ConfigManager();
 
-        //    TimeSpan? disableTillTime;
-        //    if (manager.IsUserDisabledTill(user, out disableTillTime))
-        //    {
-        //        context.FailureMessage = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTime.Value.Minutes, disableTillTime.Value.Seconds);
-        //        return SecurityProviderAuthenticateResult.Inactive;
-        //    }
+            //TimeSpan? disableTillTime;
+            //if (manager.IsUserDisabledTill(user, out disableTillTime))
+            //{
+            //    context.FailureMessage = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTime.Value.Minutes, disableTillTime.Value.Seconds);
+            //    return SecurityProviderAuthenticateResult.Inactive;
+            //}
 
-        //    if (configManager.GetFailedInterval().HasValue)
-        //    {
-        //        DateTime now = DateTime.Now;
-        //        UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
-        //        var failedLogins = userFailedLoginManager.GetUserFailedLoginByUserId(user.UserId, now.AddMinutes(-1), now.AddTicks(configManager.GetFailedInterval().Value.Ticks));
-        //        if (failedLogins.Count() == configManager.GetMaxFailedTries())
-        //        {
-        //            DateTime disableTill = now.AddMinutes(configManager.GetLockForMinutes());
-        //            var disableTillTimeSpan = disableTill - now;
+            //if (configManager.GetFailedInterval().HasValue)
+            //{
+            //    DateTime now = DateTime.Now;
+            //    UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
+            //    var failedLogins = userFailedLoginManager.GetUserFailedLoginByUserId(user.UserId, now.AddMinutes(-1), now.AddTicks(configManager.GetFailedInterval().Value.Ticks));
+            //    if (failedLogins.Count() == configManager.GetMaxFailedTries())
+            //    {
+            //        DateTime disableTill = now.AddMinutes(configManager.GetLockForMinutes());
+            //        var disableTillTimeSpan = disableTill - now;
 
-        //            SecurityManager.SendNotificationMail(user, configManager);
+            //        SecurityManager.SendNotificationMail(user, configManager);
 
-        //            if (manager.UpdateDisableTill(user.UserId, disableTill))
-        //            {
-        //                VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User is locked after multiple failed logins");
-        //                context.FailureMessage = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTimeSpan.Minutes, disableTillTimeSpan.Seconds);
-        //                return SecurityProviderAuthenticateResult.Inactive;
-        //            }
-        //        }
-        //    }
+            //        if (manager.UpdateDisableTill(user.UserId, disableTill))
+            //        {
+            //            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User is locked after multiple failed logins");
+            //            context.FailureMessage = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTimeSpan.Minutes, disableTillTimeSpan.Seconds);
+            //            return SecurityProviderAuthenticateResult.Inactive;
+            //        }
+            //    }
+            //}
 
-        //    context.AuthenticatedUser = user;
+            //context.AuthenticatedUser = user;
 
-        //    DateTime passwordChangeTime;
-        //    string loggedInUserPassword = manager.GetUserPassword(user.UserId, out passwordChangeTime);
+            //DateTime passwordChangeTime;
+            //string loggedInUserPassword = manager.GetUserPassword(user.UserId, out passwordChangeTime);
 
-        //    if (HashingUtility.VerifyHash(payload.Password, "", loggedInUserPassword))
-        //    {
-        //        int? passwordExpirationDaysLeft;
-        //        bool isPasswordExpired = Helper.CheckIfPasswordExpired(user, passwordChangeTime, out passwordExpirationDaysLeft);
-        //        context.PasswordExpirationDaysLeft = passwordExpirationDaysLeft;
+            //if (HashingUtility.VerifyHash(payload.Password, "", loggedInUserPassword))
+            //{
+            //    int? passwordExpirationDaysLeft;
+            //    bool isPasswordExpired = Helper.CheckIfPasswordExpired(user, passwordChangeTime, out passwordExpirationDaysLeft);
+            //    context.PasswordExpirationDaysLeft = passwordExpirationDaysLeft;
 
-        //        if (isPasswordExpired)
-        //        {
-        //            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User password is expired");
-        //            return SecurityProviderAuthenticateResult.PasswordExpired;
-        //        }
+            //    if (isPasswordExpired)
+            //    {
+            //        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User password is expired");
+            //        return SecurityProviderAuthenticateResult.PasswordExpired;
+            //    }
 
-        //        return SecurityProviderAuthenticateResult.Succeeded;
-        //    }
+            //    return SecurityProviderAuthenticateResult.Succeeded;
+            //}
 
-        //    string loggedInUserTempPassword = manager.GetUserTempPassword(user.UserId);
-        //    if (HashingUtility.VerifyHash(payload.Password, "", loggedInUserTempPassword))
-        //    {
-        //        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with activation needed");
-        //        return SecurityProviderAuthenticateResult.ActivationNeeded;
-        //    }
+            //string loggedInUserTempPassword = manager.GetUserTempPassword(user.UserId);
+            //if (HashingUtility.VerifyHash(payload.Password, "", loggedInUserTempPassword))
+            //{
+            //    VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with activation needed");
+            //    return SecurityProviderAuthenticateResult.ActivationNeeded;
+            //}
 
-        //    int addedId;
-        //    new UserFailedLoginManager().AddUserFailedLogin(new UserFailedLogin { FailedResultId = (int)AuthenticateOperationResult.WrongCredentials, UserId = user.UserId }, out addedId);
-        //    VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with wrong credentials");
-        //    return SecurityProviderAuthenticateResult.WrongCredentials;
-        //}
+            //int addedId;
+            //new UserFailedLoginManager().AddUserFailedLogin(new UserFailedLogin { FailedResultId = (int)AuthenticateOperationResult.WrongCredentials, UserId = user.UserId }, out addedId);
+            //VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with wrong credentials");
+            //return SecurityProviderAuthenticateResult.WrongCredentials;
+        }
 
         //public override bool ResetPassword(ISecurityProviderResetPasswordContext context)
         //{
