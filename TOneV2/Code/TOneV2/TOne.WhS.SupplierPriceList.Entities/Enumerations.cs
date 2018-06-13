@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
@@ -15,20 +12,40 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
 	public enum SupplierPriceListType
 	{
+		[Description("Rate Change")]
 		RateChange = 0,
+
+		[Description("Country")]
 		Country = 1,
+
+		[Description("Full")]
 		Full = 2
 	}
 
 	public enum ReceivedPricelistStatus
 	{
+		[Description("Received")]
 		Received = 0,
-		Processing = 1,
-		Succeeded = 2,
-		CompletedWithNoChanges = 3,
-		FailedDueToBusinessRuleError = 4,
-		FailedDueToProcessingError = 5,
-		FailedDueToConfigurationError = 6,
-		FailedDueToReceivedMailError = 7
+
+		[Description("Processing")]
+		Processing = 10,
+
+		[Description("Succeeded")]
+		Succeeded = 60,
+
+		[Description("Completed with no changes")]
+		CompletedWithNoChanges = 65,
+
+		[Description("Failed due to business rule error")]
+		FailedDueToBusinessRuleError = 70,
+
+		[Description("Failed due to processing error")]
+		FailedDueToProcessingError = 75,
+
+		[Description("Failed due to configuration error")]
+		FailedDueToConfigurationError = 80,
+
+		[Description("Failed due to received mail error")]
+		FailedDueToReceivedMailError = 85
 	}
 }
