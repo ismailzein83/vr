@@ -33,6 +33,52 @@ namespace Vanrise.Analytic.Business
             return _vrComponentTypeManager.GetComponentTypeSettings<VRAutomatedReportQueryDefinitionSettings>(vrComponentTypeId);
         }
 
+        public Dictionary<Guid, VRAutomatedReportDataSchema> GetAutomatedReportDataSchema(AutomatedReportQueries input)
+        {
+            Dictionary<Guid, VRAutomatedReportDataSchema> schema = new Dictionary<Guid, VRAutomatedReportDataSchema>();
+            if (input != null)
+            {
+                var queries = input.Queries;
+                if(queries!=null && queries.Count!=0)
+                {
+                    foreach (var query in queries)
+                    {
+                        query.Settings.ThrowIfNull("query.Settings", query.VRAutomatedReportQueryId);
+                        VRAutomatedReportQueryGetSchemaContext context = new VRAutomatedReportQueryGetSchemaContext
+                        {
+                            QueryDefinitionId = query.DefinitionId
+                        };
+                        var querySchema = query.Settings.GetSchema(context);
+                        schema.Add(query.VRAutomatedReportQueryId, querySchema);
+                    }
+                }
+            }
+            return schema;
+        }
+
+        public ValidateQueryAndHandlerSettingsResult ValidateQueryAndHandlerSettings(ValidateQueryAndHandlerSettingsInput input)
+        {
+            ValidateQueryAndHandlerSettingsResult result = new ValidateQueryAndHandlerSettingsResult();
+            if (input == null)
+            {
+                throw new Exception("No queries nor handlers were added.");
+            }
+            var queries = input.Queries;
+            if (queries == null || queries.Count == 0)
+            {
+                throw new Exception("No queries were added.");
+            }
+            var handlerSettings = input.HandlerSettings;
+            handlerSettings.ThrowIfNull("handlerSettings");
+            VRAutomatedReportHandlerValidateContext context = new VRAutomatedReportHandlerValidateContext{
+                Queries = input.Queries
+            };
+            handlerSettings.Validate(context);
+            result.ErrorMessage = context.ErrorMessage;
+            result.Result = context.Result;
+            return result;
+        }
+
         #endregion
 
         #region Mappers

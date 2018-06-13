@@ -20,11 +20,13 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
     function SendEmailHandler($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
+        var context;
+
         function initializeController() {
 
             $scope.scopeModel = {};
             $scope.scopeModel.columns = [];
-
+             
             $scope.scopeModel.removeColumn = function (dataItem) {
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.columns, dataItem.id, 'id');
                 if (index > -1) {
@@ -32,20 +34,17 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
                 }
             };
 
-            $scope.scopeModel.addAttachementGenerator = addAttachementGenerator;
-
-            function addAttachementGenerator() {
+            $scope.scopeModel.addAttachementGenerator = function () {
                 var onAttachementGeneratorAdded = function (obj) {
                     $scope.scopeModel.columns.push(obj);
-
                 };
-                VRAnalytic_SendEmailHandlerService.addAttachementGenerator(onAttachementGeneratorAdded);
-            }
+                VRAnalytic_SendEmailHandlerService.addAttachementGenerator(onAttachementGeneratorAdded, getContext());
+            };
 
 
             $scope.scopeModel.validateColumns = function () {
                 if ($scope.scopeModel.columns.length == 0) {
-                    return 'Please, one record must be added at least.';
+                    return 'At least one record must be added.';
                 }
                 var columnNames = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
@@ -57,7 +56,7 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
                     var nameToValidate = columnNames[0];
                     columnNames.splice(0, 1);
                     if (!validateName(nameToValidate, columnNames)) {
-                        return 'Two or more columns have the same Name';
+                        return 'Two or more columns have the same name.';
                     }
                 }
                 return null;
@@ -70,17 +69,6 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
                 }
             };
 
-
-            //function getContext() {
-            //    var currentContext = context;
-
-            //    if (currentContext == undefined) {
-            //        currentContext = {};
-            //    }
-            //    return currentContext
-            //}
-
-
             defineMenuActions();
             defineAPI();
         }
@@ -89,22 +77,25 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
             var api = {};
 
             api.load = function (payload) {
-                var attachementGenerators = payload.settings.AttachementGenerators; 
-
                 if (payload != undefined) {
-                    $scope.scopeModel.to = payload.settings.To;
-                    $scope.scopeModel.subject = payload.settings.Subject;
-                    $scope.scopeModel.body = payload.settings.Body;
+                    context = payload.context;
+                    if (payload.settings != undefined) {
+                        $scope.scopeModel.to = payload.settings.To;
+                        $scope.scopeModel.subject = payload.settings.Subject;
+                        $scope.scopeModel.body = payload.settings.Body;
 
-                    if (attachementGenerators != undefined) {
-                        for (var i = 0; i < attachementGenerators.length; i++) {
-                            var gridItem = {
-                                id: i,
-                                VRAutomatedReportFileGeneratorId: attachementGenerators[i].VRAutomatedReportFileGeneratorId,
-                                Name: attachementGenerators[i].Name,
-                                Settings: attachementGenerators[i].Settings,
-                            };
-                            $scope.scopeModel.columns.push(gridItem);
+                        var attachementGenerators = payload.settings.AttachementGenerators;
+
+                        if (attachementGenerators != undefined) {
+                            for (var i = 0; i < attachementGenerators.length; i++) {
+                                var gridItem = {
+                                    id: i,
+                                    VRAutomatedReportFileGeneratorId: attachementGenerators[i].VRAutomatedReportFileGeneratorId,
+                                    Name: attachementGenerators[i].Name,
+                                    Settings: attachementGenerators[i].Settings,
+                                };
+                                $scope.scopeModel.columns.push(gridItem);
+                            }
                         }
                     }
                 }
@@ -150,7 +141,16 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
                 var index = $scope.scopeModel.columns.indexOf(object);
                 $scope.scopeModel.columns[index] = obj;
             };
-            VRAnalytic_SendEmailHandlerService.editAttachementGenerator(object, onAttachementGeneratorUpdated);
+            VRAnalytic_SendEmailHandlerService.editAttachementGenerator(object, onAttachementGeneratorUpdated, getContext());
+        }
+
+        function getContext() {
+            var currentContext = context;
+
+            if (currentContext == undefined) {
+                currentContext = {};
+            }
+            return currentContext;
         }
     }
 

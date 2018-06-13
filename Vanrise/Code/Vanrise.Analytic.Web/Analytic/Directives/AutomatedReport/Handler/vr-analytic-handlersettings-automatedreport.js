@@ -33,6 +33,8 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
         var directiveAPI;
         var directiveReadyDeferred;
 
+        var context;
+
         function initializeController() {
 
             $scope.scopeModel = {};
@@ -48,7 +50,10 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
                 var setLoader = function (value) {
                     $scope.scopeModel.isLoadingDirective = value;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                var directivePayload = {
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
         }
 
@@ -57,11 +62,11 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
             var api = {};
             api.load = function (payload) {
                 selectorAPI.clearDataSource();
-
                 var promises = [];
                 var settings;
                 if (payload != undefined) {
-                    settings = payload;
+                    settings = payload.settings;
+                    context = payload.context;
                 }
                 if (settings != undefined) {
                     var loadDirectivePromise = loadDirective();
@@ -93,7 +98,7 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
 
                     directiveReadyDeferred.promise.then(function () {
                         directiveReadyDeferred = undefined;
-                        var directivePayload = { settings: settings };
+                        var directivePayload = { settings: settings, context: getContext() };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
 
@@ -111,10 +116,20 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
                 }
                 return data;
             };
+
+            api.validate = function () {
+                return directiveAPI.validate();
+            };
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
 
             }
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
     function getTemplate(attrs) {
@@ -130,7 +145,7 @@ function (UtilsService, VR_Analytic_AutomatedReportHandlerSettingsAPIService, VR
                         + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                         + ' datavaluefield="ExtensionConfigurationId"'
                         + ' datatextfield="Title"'
-                        + 'label="Handler Settings"  entityName="Setting" '
+                        + 'label="Action Type"  entityName="Type" '
                         + ' ' + hideremoveicon + ' '
                        + 'isrequired >'
                     + '</vr-select>'

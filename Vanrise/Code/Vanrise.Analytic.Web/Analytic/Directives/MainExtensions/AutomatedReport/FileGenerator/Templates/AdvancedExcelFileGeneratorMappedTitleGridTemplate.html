@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="titleMapping" norowhighlightonclick="true"
+                on-ready="onGridReady" hidegridmenu>
+    <vr-datagridcolumn headertext="'Cell'" fixedwidth="150" disablesorting="true">
+        <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onDirectiveReady"
+                                                          normal-col-num="6">
+        </vr-excelconversion-fieldmapping-cellfieldmapping>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Table Title'" widthfactor="15" disablesorting="true">
+        <vr-textbox normal-col-num="6" value="dataItem.tableTitle"> </vr-textbox>
+    </vr-datagridcolumn>
+</vr-datagrid>

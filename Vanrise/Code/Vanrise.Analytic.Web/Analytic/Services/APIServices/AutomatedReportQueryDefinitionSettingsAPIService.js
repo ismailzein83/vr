@@ -21,10 +21,20 @@
             });
         }
 
+        function GetAutomatedReportDataSchema(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAutomatedReportDataSchema'), input);
+        }
+
+        function ValidateQueryAndHandlerSettings(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'ValidateQueryAndHandlerSettings'), input);
+        }
+
         return ({
             GetAutomatedReportTemplateConfigs: GetAutomatedReportTemplateConfigs,
             GetVRAutomatedReportQueryDefinitionsInfo: GetVRAutomatedReportQueryDefinitionsInfo,
-            GetVRAutomatedReportQueryDefinitionSettings: GetVRAutomatedReportQueryDefinitionSettings
+            GetVRAutomatedReportQueryDefinitionSettings: GetVRAutomatedReportQueryDefinitionSettings,
+            GetAutomatedReportDataSchema: GetAutomatedReportDataSchema,
+            ValidateQueryAndHandlerSettings: ValidateQueryAndHandlerSettings
         });
     }
 

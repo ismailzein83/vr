@@ -57,9 +57,9 @@
 
             function setTitle() {
                 if (isEditMode && attachementGeneratorEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(attachementGeneratorEntity.Name, "Attachement Generator");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(attachementGeneratorEntity.Name, "Attachment");
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("Attachement Generator");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Attachment");
             }
 
             function loadStaticData() {
@@ -99,16 +99,16 @@
         }
 
         function insertAttachementGenerator() {
-            var Object = buildObjFromScope();
+            var object = buildObjFromScope();
             if ($scope.onAttachementGeneratorAdded != undefined && typeof ($scope.onAttachementGeneratorAdded) == 'function')
-                $scope.onAttachementGeneratorAdded(Object);
+                $scope.onAttachementGeneratorAdded(object);
             $scope.modalContext.closeModal();
         }
 
         function updateAttachementGenerator() {
-            var Object = buildObjFromScope();
+            var object = buildObjFromScope();
             if ($scope.onAttachementGeneratorUpdated != undefined && typeof ($scope.onAttachementGeneratorUpdated) == 'function')
-                $scope.onAttachementGeneratorUpdated(Object);
+                $scope.onAttachementGeneratorUpdated(object);
             $scope.modalContext.closeModal();
         }
 

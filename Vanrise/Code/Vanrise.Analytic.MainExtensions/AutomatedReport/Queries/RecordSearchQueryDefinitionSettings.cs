@@ -14,6 +14,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             get { return new Guid("76DC3174-8FB1-445B-A118-B9E86DB46A5E"); }
         }
 
+        public Guid DataRecordTypeId { get; set; }
+
         public List<RecordSearchQueryDefinitionDataRecordStorage> DataRecordStorages { get; set; }
 
         public override string RuntimeEditor { get { return "vr-analytic-recordsearchquerydefinitionsettings-runtimeeditor"; } }

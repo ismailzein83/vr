@@ -1,0 +1,33 @@
+﻿<vr-validator validate="validateGrid()">
+    <vr-datagrid on-ready="onGridReady"
+                 datasource="mappedCols"
+                 ondeleterow="removeMappedCol"
+                 hidegridmenu="true"
+                 norowhighlightonclick="true">
+        <vr-datagridcolumn headertext="'Cell'" fixedwidth="150" disablesorting="true">
+            <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="dataItem.onDirectiveReady"
+                                                              isrequired="true"
+                                                              normal-col-num="6">
+            </vr-excelconversion-fieldmapping-cellfieldmapping>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Field'" widthfactor="70" disablesorting="true">
+            <vr-select on-ready="dataItem.onFieldSelectorReady"
+                       datasource="dataItem.fields"
+                       datatextfield="description"
+                       datavaluefield="value"
+                       selectedvalues="dataItem.selectedField"
+                       onselectionchanged="dataItem.onFieldSelectionChanged"
+                       entityname="Field"
+                       isrequired>
+            </vr-select>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Column Header'" widthfactor="70" disablesorting="true">
+            <vr-textbox value="dataItem.editedTitle" isrequired></vr-textbox>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>
+<vr-row>
+    <vr-columns colnum="5">
+        <a href="" ng-click="addAllFields()" ng-show="mappedCols.length==0">Add All Fields</a>
+    </vr-columns>
+</vr-row>

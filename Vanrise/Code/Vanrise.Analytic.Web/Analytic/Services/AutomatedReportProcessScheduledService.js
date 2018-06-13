@@ -4,7 +4,7 @@
     function automatedReportProcessScheduledService(VRModalService) {
 
 
-        function addQuery(onQueryAdded) {
+        function addQuery(onQueryAdded, context) {
 
             var modalSettings = {};
 
@@ -13,19 +13,21 @@
             };
 
             var modalParameters = {
+                context: context
             };
             VRModalService.showModal('/Client/Modules/Analytic/Directives/AutomatedReport/Queries/Templates/AutomatedReportProcessScheduledQueryEditor.html', modalParameters, modalSettings);
         }
 
 
-        function editQuery(object, onQueryUpdated) {
+        function editQuery(object, onQueryUpdated, context) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modelScope) {
                 modelScope.onQueryUpdated = onQueryUpdated;
             };
             var modalParameters = {
-                Entity: object
+                Entity: object,
+                context: context
             };
             VRModalService.showModal('/Client/Modules/Analytic/Directives/AutomatedReport/Queries/Templates/AutomatedReportProcessScheduledQueryEditor.html', modalParameters, modalSettings);
         }

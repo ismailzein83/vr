@@ -39,5 +39,20 @@ namespace Vanrise.Analytic.Web.Controllers
             return vrAutomatedReportQueryDefinitionManager.GetVRAutomatedReportQueryDefinitionSettings(vrComponentTypeId);
         }
 
+        [HttpPost]
+        [Route("GetAutomatedReportDataSchema")]
+        public Dictionary<Guid,VRAutomatedReportDataSchema> GetAutomatedReportDataSchema(AutomatedReportQueries input)
+        {
+            VRAutomatedReportQueryDefinitionManager vrAutomatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
+            return vrAutomatedReportQueryDefinitionManager.GetAutomatedReportDataSchema(input);
+        }
+
+        [HttpPost]
+        [Route("ValidateQueryAndHandlerSettings")]
+        public ValidateQueryAndHandlerSettingsResult ValidateQueryAndHandlerSettings(ValidateQueryAndHandlerSettingsInput input)
+        {
+            VRAutomatedReportQueryDefinitionManager vrAutomatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
+            return vrAutomatedReportQueryDefinitionManager.ValidateQueryAndHandlerSettings(input);
+        }
     }
 }

@@ -10,6 +10,11 @@ namespace Vanrise.Analytic.Entities
     {
         public abstract Guid ConfigId { get; }
 
+        public virtual void Validate(IVRAutomatedReportHandlerValidateContext context)
+        {
+            
+        }
+
         public abstract VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context);
     }
 

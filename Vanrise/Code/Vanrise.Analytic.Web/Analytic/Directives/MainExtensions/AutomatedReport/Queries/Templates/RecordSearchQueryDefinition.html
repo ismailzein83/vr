@@ -1,6 +1,12 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" onselectionchanged ="scopeModel.onDataRecordStorageSelectionChanged" selectedvalues="scopeModel.selectedDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
+        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady" onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged" label="Data Record Type" isrequired="true" hideremoveicon></vr-genericdata-datarecordtype-selector>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row" vr-loader="scopeModel.isLoadingDataStorageSelector">
+        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" onselectionchanged="scopeModel.onDataRecordStorageSelectionChanged" selectedvalues="scopeModel.selectedDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
     </vr-columns>
     <vr-columns width="1/3row"  withemptyline>
         <vr-button type="Add" data-onclick="scopeModel.addColumn" standalone vr-disabled="scopeModel.selectedDataRecordStorage == undefined"></vr-button>
@@ -23,7 +29,7 @@
                 <vr-datagridcolumn headertext="'Name'" disablesorting>
                     <label value="dataItem.columnName">{{dataItem.columnName}}</label>
                 </vr-datagridcolumn>
-
+              
                 <vr-datagridcolumn headertext="'Selected'" disablesorting>
                     <vr-switch value="dataItem.isSelected"></vr-switch>
                 </vr-datagridcolumn>

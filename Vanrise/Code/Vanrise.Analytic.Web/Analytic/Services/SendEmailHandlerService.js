@@ -4,7 +4,7 @@
     function sendEmailHandlerService(VRModalService) {
 
 
-        function addAttachementGenerator(onAttachementGeneratorAdded) {
+        function addAttachementGenerator(onAttachementGeneratorAdded, context) {
 
             var modalSettings = {};
 
@@ -13,18 +13,20 @@
             };
 
             var modalParameters = {
+                context: context
             };
             VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/SendEmailHandlerAutomatedReportEditor.html', modalParameters, modalSettings);
         }
 
-        function editAttachementGenerator(object, onAttachementGeneratorUpdated) {
+        function editAttachementGenerator(object, onAttachementGeneratorUpdated, context) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modelScope) {
                 modelScope.onAttachementGeneratorUpdated = onAttachementGeneratorUpdated;
             };
             var modalParameters = {
-                Entity: object
+                Entity: object,
+                context: context
             };
             VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/SendEmailHandlerAutomatedReportEditor.html', modalParameters, modalSettings);
         }

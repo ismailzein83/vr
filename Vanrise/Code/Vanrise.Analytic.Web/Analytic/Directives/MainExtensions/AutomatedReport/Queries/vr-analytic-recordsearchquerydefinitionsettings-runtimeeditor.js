@@ -21,14 +21,17 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
        
         var dataRecordStorageSelectorAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var dataStorageIsSelectedArrayDeffered = UtilsService.createPromiseDeferred();
 
         var timePeriodSelectorAPI;
         var timePeriodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var dataRecordTypeFieldsSelectorAPI;
+        var dataRecordTypeFieldsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var dataRecordTypeId;
+
         function initializeController() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
                 dataRecordStorageSelectorReadyDeferred.resolve();
@@ -39,6 +42,11 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 timePeriodSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady = function (api) {
+                dataRecordTypeFieldsSelectorAPI = api;
+                dataRecordTypeFieldsSelectorReadyPromiseDeferred.resolve();
+            };
+
             defineAPI();
         }
 
@@ -46,66 +54,90 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             var api = {};
 
             api.load = function (payload) {
+                var dataStorageIsSelectedArrayDeffered = UtilsService.createPromiseDeferred();
+                var dataRecordTypeIdDeferred = UtilsService.createPromiseDeferred();
                 var promises = [];
-                var loadDataRecordStorageSelectorPromise = loadDataRecordStorageSelector();
-                var loadTimePeriodSelectorPromise = loadTimePeriodSelector();
-
-                promises.push(loadDataRecordStorageSelectorPromise);
-                promises.push(loadTimePeriodSelectorPromise);
-
                 var entity;
-                var defintionId;
+                var definitionId;
                 var dataStorageArray = [];
                 var dataStorageIsSelectedArray = [];
                 var dataRecordStoragePayload = [];
-                
+                var columns = [];
+                var columnNames = [];
+                var context;
 
+                dataRecordTypeId = undefined;
                 if (payload != undefined) {
                     entity = payload.runtimeDirectiveEntity;
-                    defintionId = payload.definitionId;
-                    
+                    definitionId = payload.definitionId;
+                    context = payload.context;
                     if (entity != undefined) {
                         $scope.scopeModel.limitResult = entity.LimitResult;
                         dataRecordStoragePayload = entity.DataRecordStorages;
-
-                        if(dataRecordStoragePayload!=undefined){
+                        columns = entity.Columns;
+                        if (dataRecordStoragePayload != undefined) {
                             for (var i = 0; i < dataRecordStoragePayload.length; i++) {
                                 dataStorageIsSelectedArray.push(dataRecordStoragePayload[i].DataRecordStorageId);
+                            }
+                            dataStorageIsSelectedArrayDeffered.resolve();
+                        }
+                        if (columns != undefined) {
+                            for (var i = 0; i < columns.length; i++) {
+                                var column = columns[i];
+                                if (column != undefined) {
+                                    columnNames.push(column.ColumnName);
+                                }
                             }
                         }
                     }
 
-                    else {
-                        $scope.scopeModel.limitResult = '';
-
-                        VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.GetVRAutomatedReportQueryDefinitionSettings(defintionId).then(function (response) {
-                            dataRecordStorageSelectorAPI.clearDataSource();
-                            var arr = response.ExtendedSettings.DataRecordStorages;
-                            for (var i = 0; i < arr.length; i++) {
-                                dataStorageArray.push(arr[i]);
-                            }
-                            for (var i = 0; i < dataStorageArray.length; i++) {
-                                if (dataStorageArray[i].IsSelected == true) {
-                                    dataStorageIsSelectedArray.push(dataStorageArray[i].DataRecordStorageId);
+                    VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.GetVRAutomatedReportQueryDefinitionSettings(definitionId).then(function (response) {
+                        if (response != undefined && response.ExtendedSettings != undefined) {
+                            if (entity == undefined) {
+                                dataRecordStorageSelectorAPI.clearDataSource();
+                                $scope.scopeModel.limitResult = '';
+                                var arr = response.ExtendedSettings.DataRecordStorages;
+                                for (var i = 0; i < arr.length; i++)
+                                {
+                                    dataStorageArray.push(arr[i]);
                                 }
+                                for (var i = 0; i < dataStorageArray.length; i++)
+                                {
+                                    if (dataStorageArray[i].IsSelected == true) {
+                                        dataStorageIsSelectedArray.push(dataStorageArray[i].DataRecordStorageId);
+                                    }
+                                }
+                                dataStorageIsSelectedArrayDeffered.resolve();
                             }
-                        });
-                    }
-                    dataStorageIsSelectedArrayDeffered.resolve();
-            };
+                            dataRecordTypeId = response.ExtendedSettings.DataRecordTypeId;
+                            dataRecordTypeIdDeferred.resolve();
+                        }
+                    });
+                    
+                };
+
+                var loadDataRecordStorageSelectorPromise = loadDataRecordStorageSelector();
+                var loadTimePeriodSelectorPromise = loadTimePeriodSelector();
+                var loadDataRecordTypeFieldsSelectorPromise = loadDataRecordTypeFieldsSelector();
+
+                promises.push(loadDataRecordStorageSelectorPromise);
+                promises.push(loadTimePeriodSelectorPromise);
+                promises.push(loadDataRecordTypeFieldsSelectorPromise);
+
                 function loadDataRecordStorageSelector() {
                     var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                    UtilsService.waitMultiplePromises([dataRecordStorageSelectorReadyDeferred.promise, dataStorageIsSelectedArrayDeffered.promise]).then(function () {
+                    var promises = [dataRecordStorageSelectorReadyDeferred.promise, dataStorageIsSelectedArrayDeffered.promise, dataRecordTypeIdDeferred.promise];
+                    UtilsService.waitMultiplePromises(promises).then(function () {
                         var dataStorageSelectorPayload = {
-                            selectedIds: defintionId != undefined ? dataStorageIsSelectedArray : undefined
-                            };
+                            DataRecordTypeId: definitionId != undefined ? dataRecordTypeId : undefined,
+                            selectedIds: definitionId != undefined ? dataStorageIsSelectedArray : undefined
+                        };
                         VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, dataStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
                     });
                     return dataRecordStorageSelectorLoadDeferred.promise;
                 }
 
-                function loadTimePeriodSelector(){
+                function loadTimePeriodSelector() {
                     var timePeriodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                     timePeriodSelectorReadyDeferred.promise.then(function () {
@@ -116,6 +148,20 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     });
                     return timePeriodSelectorLoadDeferred.promise;
                 }
+
+                function loadDataRecordTypeFieldsSelector() {
+                    var loadDataRecordTypeFieldsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    var promises = [dataRecordTypeFieldsSelectorReadyPromiseDeferred.promise, dataRecordTypeIdDeferred.promise];
+                    UtilsService.waitMultiplePromises(promises).then(function () {
+                        var typeFieldsPayload = {
+                            dataRecordTypeId: dataRecordTypeId,
+                            selectedIds: columnNames
+                        };
+                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldsSelectorAPI, typeFieldsPayload, loadDataRecordTypeFieldsSelectorPromiseDeferred);
+                    });
+                    return loadDataRecordTypeFieldsSelectorPromiseDeferred.promise;
+                }
+
                 return UtilsService.waitMultiplePromises(promises);
             };
 
@@ -127,16 +173,40 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     dataRecordStoragesArray.push({ DataRecordStorageId: array [i]});
                 }
 
+                var dataRecordTypeFields = dataRecordTypeFieldsSelectorAPI.getSelectedIds();
+                var columnNames =[];
+                var columnsArray = [];
+
+                for (var i = 0; i < $scope.scopeModel.selectedFields.length; i++) {
+                    var field = $scope.scopeModel.selectedFields[i];
+                    if (field != undefined) {
+                        columnsArray.push({
+                            ColumnName: field.Name,
+                            ColumnTitle: field.Title
+                        });
+                        columnNames.push(field.Name);
+                    }
+                }
+
                 return {
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQuerySettings,Vanrise.Analytic.MainExtensions',
-                    DataRecordStorages: dataRecordStoragesArray,//dataRecordStorageSelectorAPI.getSelectedIds(),//$scope.scopeModel.selectedValues,
+                    DataRecordStorages: dataRecordStoragesArray,
                     TimePeriod: timePeriodSelectorAPI.getData(),
-                    LimitResult : $scope.scopeModel.limitResult,
+                    LimitResult: $scope.scopeModel.limitResult,
+                    Columns: columnsArray
                 };
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {
+            };
+            return currentContext;
         }
     }
 

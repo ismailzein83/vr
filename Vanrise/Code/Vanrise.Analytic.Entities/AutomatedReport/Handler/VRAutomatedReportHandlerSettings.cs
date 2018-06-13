@@ -11,6 +11,12 @@ namespace Vanrise.Analytic.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract void Execute(IVRAutomatedReportHandlerExecuteContext context);
+
+        public virtual void Validate(IVRAutomatedReportHandlerValidateContext context)
+        {
+            
+        }
+
     }
 
     public interface IVRAutomatedReportHandlerExecuteContext
@@ -18,5 +24,13 @@ namespace Vanrise.Analytic.Entities
         VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName);
 
         VRAutomatedReportResolvedDataFieldValue GetDataField(Guid vrAutomatedReportQueryId, string fieldName);
+    }
+    public interface IVRAutomatedReportHandlerValidateContext
+    {
+        List<VRAutomatedReportQuery> Queries { get;}
+
+        bool Result { set; }
+
+        string ErrorMessage { set; }
     }
 }

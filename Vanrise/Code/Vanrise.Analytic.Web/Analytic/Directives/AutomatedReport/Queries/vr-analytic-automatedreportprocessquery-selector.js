@@ -13,7 +13,8 @@ app.directive('vrAnalyticAutomatedreportprocessquerySelector', ['VR_Analytic_Aut
                 onselectitem: '=',
                 isrequired: '=',
                 normalColNum: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                label: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -86,7 +87,7 @@ app.directive('vrAnalyticAutomatedreportprocessquerySelector', ['VR_Analytic_Aut
         }
 
         function getTemplate(attrs) {
-            var label = "Definition";
+            var label = attrs.label != undefined ? attrs.label : "Definition";
             var hideremoveicon = '';
 
             if (attrs.hideremoveicon != undefined)

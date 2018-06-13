@@ -123,6 +123,12 @@ namespace Vanrise.GenericData.Entities
             }
         }
 
+        public virtual bool RenderDescriptionByDefault()
+        {
+            return false;
+        }
+
+
         protected virtual dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
             return Convert.ChangeType(originalValue, GetNonNullableRuntimeType());

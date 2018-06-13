@@ -22,7 +22,7 @@
                         </vr-datagridcolumn>-->
 
                         <vr-datagridcolumn headertext="'Name'" disablesorting>
-                            <label value="dataItem.QueryName">{{dataItem.QueryName}}</label>
+                            <label value="dataItem.QueryTitle">{{dataItem.QueryTitle}}</label>
                         </vr-datagridcolumn>
 
                     </vr-datagrid>
@@ -31,9 +31,7 @@
         </vr-row>
     </vr-tab>
 
-    <vr-tab header="'Handler'">
-
-
-                <vr_analytic_handlersettings_automatedreport on-ready="scopeModel.onHandlerSettingsAutomatedReportReady" normal-col-num="6"></vr_analytic_handlersettings_automatedreport>
+    <vr-tab header="'Action'">
+        <vr-analytic-handlersettings-automatedreport on-ready="scopeModel.onHandlerSettingsAutomatedReportReady" normal-col-num="6"></vr-analytic-handlersettings-automatedreport>
     </vr-tab>
 </vr-tabs>

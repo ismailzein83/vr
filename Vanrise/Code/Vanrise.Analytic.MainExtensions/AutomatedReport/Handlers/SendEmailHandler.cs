@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.BP.Arguments;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 {
@@ -29,7 +32,47 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public override void Execute(IVRAutomatedReportHandlerExecuteContext context)
         {
-            throw new NotImplementedException();
+            if (this.AttachementGenerators != null && this.AttachementGenerators.Count != 0)
+            {
+                List<VRMailAttachement> attachements = new List<VRMailAttachement>();
+                var attachementGenerators = this.AttachementGenerators;
+                foreach (var generator in attachementGenerators)
+                {
+                    generator.ThrowIfNull("attachement");
+                    generator.Settings.ThrowIfNull("attachement.Settings");
+                    VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext()
+                    {
+                        HandlerContext = context
+
+                    };
+                    VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(generateFileContext);
+                    if (generatedFile != null)
+                    {
+                        VRMailAttachmentExcel excelAttachment = new VRMailAttachmentExcel()
+                        {
+                            Name = generatedFile.FileName,
+                            Content = generatedFile.FileContent
+                        };
+                        attachements.Add(excelAttachment);
+                    }
+                }
+                new VRMailManager().SendMail(this.To, null, null, this.Subject, this.Body, attachements);
+            }
+        }
+
+        public override void Validate(IVRAutomatedReportHandlerValidateContext context)
+        {
+            if (this.AttachementGenerators == null || this.AttachementGenerators.Count == 0)
+            {
+                throw new Exception("No attachement generators were added.");
+            }
+
+            foreach (var generator in this.AttachementGenerators)
+            {
+                generator.ThrowIfNull("generator");
+                generator.Settings.ThrowIfNull("generator.Settings");
+                generator.Settings.Validate(context);
+            }
         }
     }
 }

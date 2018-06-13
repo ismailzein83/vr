@@ -68,7 +68,11 @@
     <Compile Include="AnalyticSummaryBigResult.cs" />
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
+    <Compile Include="AutomatedReportQueries.cs" />
+    <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportHandlerValidateContext.cs" />
     <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportFileGeneratorConfig.cs" />
+    <Compile Include="AutomatedReport\Handler\VRAutomatedReportFileGeneratorGenerateFileContext.cs" />
+    <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerExecuteContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerSettingsConfig.cs" />
     <Compile Include="AutomatedReport\Query\RecordSearchQueryDefinitionInfo.cs" />
     <Compile Include="AutomatedReport\Query\RecordSearchQueryDefinitionInfoFilter.cs" />
@@ -88,6 +92,8 @@
     <Compile Include="AutomatedReport\Query\VRAutomatedReportQuery.cs" />
     <Compile Include="AutomatedReport\Query\VRAutomatedReportQueryDefinition.cs" />
     <Compile Include="AutomatedReport\Query\VRAutomatedReportQueryDefinitionSettings.cs" />
+    <Compile Include="AutomatedReport\Query\Schema\VRAutomatedReportQueryGetSchemaContext.cs" />
+    <Compile Include="AutomatedReport\Query\VRAutomatedReportQueryExecuteContext.cs" />
     <Compile Include="AutomatedReport\Query\VRAutomatedReportQuerySettings.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportResolvedDataFieldValue.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportResolvedDataItem.cs" />
@@ -105,6 +111,8 @@
     <Compile Include="AnalyticDataProvider\AnalyticDataProvider.cs" />
     <Compile Include="AnalyticDataProvider\AnalyticDataProviderConfig.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAnalysisPeriod.cs" />
+    <Compile Include="ValidateQueryAndHandlerSettingsInput.cs" />
+    <Compile Include="ValidateQueryAndHandlerSettingsResult.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorConfig.cs" />
     <Compile Include="Config\AnalyticItemConfigDetail.cs" />
     <Compile Include="Config\AnalyticItemConfigInput.cs" />

@@ -33,6 +33,8 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
         var directiveAPI;
         var directiveReadyDeferred;
 
+        var context;
+
         function initializeController() {
 
             $scope.scopeModel = {};
@@ -48,7 +50,10 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
                 var setLoader = function (value) {
                     $scope.scopeModel.isLoadingDirective = value;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                var directivePayload = {
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
         }
 
@@ -60,6 +65,7 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
                 var fileGenerator;
                 if (payload != undefined) {
                     fileGenerator = payload.fileGenerator;
+                    context = payload.context;
                 }
                 if (fileGenerator != undefined) {
                     var loadDirectivePromise = loadDirective();
@@ -89,7 +95,10 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
 
                     directiveReadyDeferred.promise.then(function () {
                         directiveReadyDeferred = undefined;
-                        var directivePayload = fileGenerator;
+                        var directivePayload = {
+                            fileGenerator: fileGenerator,
+                            context: getContext()
+                        };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
 
@@ -111,6 +120,12 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
                 ctrl.onReady(api);
             }
         }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
+        }
     }
 
     function getTemplate(attrs) {
@@ -120,13 +135,13 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
         }
         var template =
             '<vr-row>'
-                + '<vr-columns width="1/2row" colnum="{{ctrl.normalColNum}}">'
+                + '<vr-columns colnum="{{ctrl.normalColNum}}">'
                     + ' <vr-select on-ready="scopeModel.onFileGeneratorReady"'
                         + ' datasource="scopeModel.templateConfigs"'
                         + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                         + ' datavaluefield="ExtensionConfigurationId"'
                         + ' datatextfield="Title"'
-                        + 'label="Handler Type"  entityName="Type" '
+                        + 'label="Type"  entityName="Type" '
                         + ' ' + hideremoveicon + ' '
                        + 'isrequired >'
                     + '</vr-select>'

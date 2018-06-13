@@ -17,6 +17,8 @@
         var runtimeDirectiveAPI;
         var runtimeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var context;
+
         loadParameters();
         defineScope();
         load();
@@ -26,8 +28,10 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 automatedReportEntity = parameters.Entity;
-                if (parameters.Entity !=undefined)
+                context = parameters.context;
+                if (parameters.Entity != undefined) {
                     runtimeDirectiveEntity = parameters.Entity.Settings;
+                }
             }
             isEditMode = (automatedReportEntity != undefined);
         }
@@ -53,10 +57,10 @@
                };
 
             $scope.scopeModel.onAutomatedReportProcessScheduledSelectionChanged = function (value) {
-
                 if (value != undefined) {
-                    if (automatedReportProcessScheduledSelectedPromiseDeferred != undefined)
+                    if (automatedReportProcessScheduledSelectedPromiseDeferred != undefined) {
                         automatedReportProcessScheduledSelectedPromiseDeferred.resolve();
+                    }
                     else {
                         runtimeDirectiveReadyDeferred.promise.then(function () {
                             var setLoader = function (value) {
@@ -64,6 +68,7 @@
                             };
                             var runtimeDirectivePayload = {
                                 definitionId: automatedReportProcessScheduledSelectorAPI.getSelectedIds(),
+                                context: getContext()
                             };
 
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeDirectiveAPI, runtimeDirectivePayload, setLoader);
@@ -91,7 +96,7 @@
 
             function setTitle() {
                 if (isEditMode && automatedReportEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(automatedReportEntity.QueryName, "Automated Report Query");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(automatedReportEntity.QueryTitle, "Automated Report Query");
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("Automated Report Query");
             }
@@ -100,7 +105,7 @@
 
                 if (automatedReportEntity == undefined)
                     return;
-                $scope.scopeModel.Name = automatedReportEntity.QueryName;
+                $scope.scopeModel.Name = automatedReportEntity.QueryTitle;
             }
 
             function loadAutomatedReportProcessScheduledSelector() {
@@ -129,7 +134,8 @@
                         automatedReportProcessScheduledSelectedPromiseDeferred = undefined;
                         var runtimeDirectivePayload = {
                             definitionId: automatedReportProcessScheduledSelectorAPI.getSelectedIds(),
-                            runtimeDirectiveEntity: runtimeDirectiveEntity != undefined ? runtimeDirectiveEntity : undefined,
+                            runtimeDirectiveEntity: runtimeDirectiveEntity,
+                            context: getContext()
                         };
                         VRUIUtilsService.callDirectiveLoad(runtimeDirectiveAPI, runtimeDirectivePayload, runtimeDirectiveLoadDeferred);
                     });
@@ -149,24 +155,33 @@
         function buildObjFromScope() {
             var obj = {
                 DefinitionId: automatedReportProcessScheduledSelectorAPI.getSelectedIds(),
-                QueryName: $scope.scopeModel.Name,
+                QueryTitle: $scope.scopeModel.Name,
                 Settings: runtimeDirectiveAPI.getData(),
             };
             return obj;
         }
 
         function insertQuery() {
-            var Object = buildObjFromScope();
+            var object = buildObjFromScope();
+            object.VRAutomatedReportQueryId = UtilsService.guid();
             if ($scope.onQueryAdded != undefined && typeof ($scope.onQueryAdded) == 'function')
-                $scope.onQueryAdded(Object);
+                $scope.onQueryAdded(object);
             $scope.modalContext.closeModal();
         }
 
         function updateQuery() {
-            var Object = buildObjFromScope();
+            var object = buildObjFromScope();
+            object.VRAutomatedReportQueryId = automatedReportEntity.VRAutomatedReportQueryId;
             if ($scope.onQueryUpdated != undefined && typeof ($scope.onQueryUpdated) == 'function')
-                $scope.onQueryUpdated(Object);
+                $scope.onQueryUpdated(object);
             $scope.modalContext.closeModal();
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
     appControllers.controller('VRAnalytic_AutomatedReportProcessScheduledQueryEditorController', automatedReportProcessScheduledQueryEditorController);

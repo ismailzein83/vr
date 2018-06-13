@@ -15,5 +15,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
         }
 
         public Guid AnalyticTableId { get; set; }
+
+        public override string RuntimeEditor { get { return "vr-analytic-analytictablequerydefinitionsettings-runtimeeditor"; } }
+
     }
 }

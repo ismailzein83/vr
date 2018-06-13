@@ -51,6 +51,9 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\Vanrise.Analytic.BP.Arguments\bin\Debug\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
@@ -64,10 +67,15 @@
     <Compile Include="DAProfCalc\ExecuteProfiledMerging.cs" />
     <Compile Include="DAProfCalc\ExecuteRecordProfiling.cs" />
     <Compile Include="DAProfCalc\ProfilingDGItem.cs" />
+    <Compile Include="AutomatedReportProcessEvaluator.cs" />
     <Compile Include="GetDataAnalysisDefinitionItems.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
+      <Project>{74bcfdd5-6f60-4976-a31c-712beccc2787}</Project>
+      <Name>Vanrise.Analytic.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
       <Name>Vanrise.Analytic.Business</Name>

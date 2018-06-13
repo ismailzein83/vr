@@ -247,6 +247,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 context.FieldValue = businessEntityContext.FieldValue;
             
         }
+
+        public override bool RenderDescriptionByDefault()
+        {
+            return true;
+        }
         #endregion
 
         #region Private Methods

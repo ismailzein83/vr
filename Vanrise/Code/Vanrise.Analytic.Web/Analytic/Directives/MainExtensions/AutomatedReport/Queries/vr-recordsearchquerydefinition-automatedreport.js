@@ -8,8 +8,8 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var recordSearchquery = new RecordSearchquery($scope, ctrl, $attrs);
-            recordSearchquery.initializeController();
+            var recordSearchQuery = new RecordSearchQuery($scope, ctrl, $attrs);
+            recordSearchQuery.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -17,11 +17,18 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
     };
 
 
-    function RecordSearchquery($scope, ctrl, $attrs) {
+    function RecordSearchQuery($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
         var dataRecordStorageSelectorAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataRecordTypeSelectorAPI;
+        var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var dataRecordTypeSelectedPromiseDeferred;
+
+        var dataRecordTypeId;
 
         function initializeController() {
 
@@ -29,6 +36,12 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
 
             $scope.scopeModel.columns = [];
 
+            $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
+                dataRecordTypeSelectorAPI = api;
+                dataRecordTypeSelectorReadyDeferred.resolve();
+            };
+
+           
             $scope.scopeModel.onGridReady = function (api) {
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(getDirectiveAPI());
@@ -38,6 +51,28 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
             $scope.scopeModel.onDataRecordStorageSelectorReady = function (api) {
                 dataRecordStorageSelectorAPI = api;
                 dataRecordStorageSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onDataRecordTypeSelectionChanged = function (selectedDataRecordType) {
+                if (selectedDataRecordType != undefined) {
+                    if (dataRecordTypeSelectedPromiseDeferred != undefined) {
+                        dataRecordTypeSelectedPromiseDeferred.resolve();
+                    }
+                    else {
+                        $scope.scopeModel.columns.length = 0;
+                        var dataRecordTypeSelectedId = selectedDataRecordType.DataRecordTypeId;
+                        if (dataRecordTypeSelectedId != undefined) {
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isLoadingDataStorageSelector = value;
+                            };
+                            var dataRecordStoragePayload = {
+                                DataRecordTypeId: dataRecordTypeSelectedId
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordStorageSelectorAPI, dataRecordStoragePayload, setLoader, dataRecordTypeSelectedPromiseDeferred);
+                        }
+                    }
+                }
+                
             };
 
             $scope.scopeModel.addColumn = function () {
@@ -60,7 +95,7 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
 
             $scope.scopeModel.validateColumns = function () {
                 if ($scope.scopeModel.columns.length == 0) {
-                    return 'Please, one record must be added at least.';
+                    return 'At least one record must be added.';
                 }
                 var columnIds = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
@@ -72,7 +107,7 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
                     var nameToValidate = columnIds[0];
                     columnIds.splice(0, 1);
                     if (!validateName(nameToValidate, columnIds)) {
-                        return 'Two or more columns have the same Name';
+                        return 'Two or more columns have the same name.';
                     }
                 }
                 return null;
@@ -91,16 +126,38 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
             var api = {};
 
             api.load = function (payload) {
+                if (payload != undefined && payload.extendedSettings!=undefined) {
+                    dataRecordTypeId = payload.extendedSettings.DataRecordTypeId;
+                    dataRecordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                }
                 var promises = [];
-                var loadDataRecordStorageSelectorPromise = loadDataRecordStorageSelector();
-                promises.push(loadDataRecordStorageSelectorPromise);
+
+                var loadDataRecordTypeSelectorPromise = loadDataRecordTypeSelector();
+                promises.push(loadDataRecordTypeSelectorPromise);
+                
+                if (dataRecordTypeId != undefined) {
+                    var loadDataRecordStorageSelectorPromise = loadDataRecordStorageSelector();
+                    promises.push(loadDataRecordStorageSelectorPromise);
+                }
+
+                function loadDataRecordTypeSelector() {
+                    var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    dataRecordTypeSelectorReadyDeferred.promise.then(function () {
+                        var payload = {
+                            selectedIds: dataRecordTypeId
+                        };
+                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, payload, dataRecordTypeSelectorLoadDeferred);
+                    });
+                    return dataRecordTypeSelectorLoadDeferred.promise;
+                }
 
                 function loadDataRecordStorageSelector() {
                     var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    
                     if (payload != undefined) {
                         var dataRecordStorages = payload.extendedSettings.DataRecordStorages;
                         var dataRecordStorageIdsList = [];
-
+                       
                         for (var i = 0; i < dataRecordStorages.length; i++) {
                             dataRecordStorageIdsList.push(dataRecordStorages[i].DataRecordStorageId);
                         }
@@ -126,9 +183,12 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
                             }
                         });
                     }
-
-                    dataRecordStorageSelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, undefined, dataRecordStorageSelectorLoadDeferred);
+                    UtilsService.waitMultiplePromises([dataRecordStorageSelectorReadyDeferred.promise, dataRecordTypeSelectedPromiseDeferred.promise]).then(function () {
+                        dataRecordTypeSelectedPromiseDeferred = undefined;
+                        var dataRecordStoragePayload = {
+                            DataRecordTypeId : dataRecordTypeId
+                        };
+                        VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, dataRecordStoragePayload, dataRecordStorageSelectorLoadDeferred);
                     });
                     return UtilsService.waitMultiplePromises(promises);
                 }
@@ -137,6 +197,7 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
             api.getData = function () {
                 return {
                     $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionSettings,Vanrise.Analytic.MainExtensions",
+                    DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                     DataRecordStorages: getColumns()
                 };
 

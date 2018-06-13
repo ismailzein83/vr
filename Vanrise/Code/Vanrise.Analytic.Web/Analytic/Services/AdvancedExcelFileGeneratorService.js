@@ -4,7 +4,7 @@
     function advancedExcelFileGeneratorService(VRModalService) {
 
 
-        function addTableDefinition(onTableDefinitionAdded) {
+        function addTableDefinition(onTableDefinitionAdded, context) {
 
             var modalSettings = {};
 
@@ -13,18 +13,20 @@
             };
 
             var modalParameters = {
+                context: context
             };
             VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/FileGenerator/Templates/AdvancedExcelFileGeneratorEditorTemplate.html', modalParameters, modalSettings);
         }
 
-        function editTableDefinition(object, onTableDefinitionUpdated) {
+        function editTableDefinition(object, onTableDefinitionUpdated, context) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modelScope) {
                 modelScope.onTableDefinitionUpdated = onTableDefinitionUpdated;
             };
             var modalParameters = {
-                Entity: object
+                Entity: object,
+                context: context
             };
             VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/FileGenerator/Templates/AdvancedExcelFileGeneratorEditorTemplate.html', modalParameters, modalSettings);
         }

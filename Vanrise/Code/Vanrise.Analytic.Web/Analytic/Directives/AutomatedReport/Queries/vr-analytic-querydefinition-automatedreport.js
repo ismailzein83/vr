@@ -130,7 +130,7 @@ function (UtilsService, VR_Analytic_AutomatedReportQueryDefinitionSettingsAPISer
                         + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                         + ' datavaluefield="ExtensionConfigurationId"'
                         + ' datatextfield="Title"'
-                        + 'label="Extended Settings"  entityName="Setting" '
+                        + 'label="Type"  entityName="Settings" '
                         + ' ' + hideremoveicon + ' '
                        + 'isrequired >'
                     + '</vr-select>'
