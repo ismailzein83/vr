@@ -30,9 +30,23 @@ namespace Vanrise.GenericData.Business
             s_securityManager = new SecurityManager();
         }
         #endregion
+     
 
 
         #region Public Methods
+
+         static DataRecordStorageManager.RecordCacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.RecordCacheManager>();
+         DataRecordStorageManager.RecordCacheManager GetCacheManager()
+         {
+             return s_cacheManager;
+         }
+         public R GetCachedOrCreate<R>(Object cacheName, Guid businessEntityDefinitionId, Func<R> createObject)
+         {
+             var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+             return GetCacheManager().GetOrCreateObject(cacheName, dataRecordStorageId, createObject);
+         }
+
+
         public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
@@ -683,7 +697,7 @@ namespace Vanrise.GenericData.Business
         }
         #endregion
 
-
+        #region BaseBusinessEntityManager
         public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             throw new NotImplementedException();
@@ -723,7 +737,9 @@ namespace Vanrise.GenericData.Business
         {
             throw new NotImplementedException();
         }
-
+       
+        #endregion
+     
         #region security
 
         public bool DoesUserHaveViewAccess(int userId, List<Guid> genericBeDefinitionIds)
@@ -769,6 +785,7 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
     }
     public class GenericBusinessEntityRuntimeEditor
     {

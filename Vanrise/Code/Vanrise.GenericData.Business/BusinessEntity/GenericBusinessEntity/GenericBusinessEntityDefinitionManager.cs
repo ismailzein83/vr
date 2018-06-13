@@ -40,6 +40,10 @@ namespace Vanrise.GenericData.Business
             genericBEDefinition.Settings.ThrowIfNull("genericBEDefinition.Settings");
             return genericBEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("genericBEDefinition.Settings");
         }
+        public Guid GetGenericBEDataRecordStorageId(Guid businessEntityDefinitionId)
+        {
+            return GetGenericBEDefinitionSettings(businessEntityDefinitionId).DataRecordStorageId;
+        }
         public DataRecordType GetGenericBEDataRecordType(Guid businessEntityDefinitionId)
         {
             var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
