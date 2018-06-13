@@ -1,5 +1,6 @@
-﻿app.run(['VR_Analytic_AnalyticReportService', 'VR_Analytic_DataAnalysisItemDefinitionService', 'VR_Analytic_AnalyticItemConfigService', function (VR_Analytic_AnalyticReportService, VR_Analytic_DataAnalysisItemDefinitionService, VR_Analytic_AnalyticItemConfigService) {
-    VR_Analytic_AnalyticReportService.registerObjectTrackingDrillDownToAnalyticReport();
-    VR_Analytic_DataAnalysisItemDefinitionService.registerObjectTrackingDrillDownToDataAnalysisItemDefinition();
-    VR_Analytic_AnalyticItemConfigService.registerObjectTrackingDrillDownToAnalyticItemConfig();
+﻿app.run(['VR_Analytic_AnalyticReportService', 'VR_Analytic_DataAnalysisItemDefinitionService', 'VR_Analytic_AnalyticItemConfigService', 'VR_Analytic_AnalyticItemActionService', function (VR_Analytic_AnalyticReportService, VR_Analytic_DataAnalysisItemDefinitionService, VR_Analytic_AnalyticItemConfigService, VR_Analytic_AnalyticItemActionService) {
+	VR_Analytic_AnalyticReportService.registerObjectTrackingDrillDownToAnalyticReport();
+	VR_Analytic_DataAnalysisItemDefinitionService.registerObjectTrackingDrillDownToDataAnalysisItemDefinition();
+	VR_Analytic_AnalyticItemConfigService.registerObjectTrackingDrillDownToAnalyticItemConfig();
+	VR_Analytic_AnalyticItemActionService.registerOpenRecordSearch();
 }]);
