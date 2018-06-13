@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon_EntityFilterEffectiveModeEnum', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_BE_SaleZoneAPIService, VRCommon_EntityFilterEffectiveModeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon_EntityFilterEffectiveModeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService',
+    function (WhS_BE_SaleZoneAPIService, VRCommon_EntityFilterEffectiveModeEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -186,6 +186,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     }
 
                     if (payloadSellingNumberPlanId != undefined) {
+                        sellingNumberPlanId = payloadSellingNumberPlanId;
+
                         var loadSaleZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         loadSellingNumberPlanSelector(payloadSellingNumberPlanId).then(function () {
