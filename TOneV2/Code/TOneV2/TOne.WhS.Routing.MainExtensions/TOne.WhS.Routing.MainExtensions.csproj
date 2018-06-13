@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Analytic.Entities\bin\Debug\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Notification">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.dll</HintPath>
     </Reference>
@@ -49,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticItemActions\OpenCustomerRoutesItemAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRActions\BlockCustomerAccountDefinitionSettings.cs" />
     <Compile Include="VRActions\BlockSaleZoneDefinitionSettings.cs" />
