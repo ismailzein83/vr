@@ -8,45 +8,68 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Caching;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class PointOfInterconnectManager
     {
         static Guid pointOfInterconnectBEDefinitionId = new Guid("fc6e8188-d37a-4c2c-9deb-7b944ef00991");
+        GenericBusinessEntityDefinitionManager _genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
+        GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         public long? GetPointOfInterconnect(int switchId, string truck)
         {
-            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            var pointOfInterconnects = genericBusinessEntityManager.GetAllGenericBusinessEntities(pointOfInterconnectBEDefinitionId);
-            if (pointOfInterconnects != null)
-            {
-                GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
-                foreach (var pointOfInterconnect in pointOfInterconnects)
+            var cachedPointOfInterconnects = GetCachedPointOfInterconnectBySwitchIdAndTruck();
+            var pointOfInterconnect = cachedPointOfInterconnects.GetRecord(string.Format("{0}_{1}", switchId, truck));
+            if (pointOfInterconnect == null)
+                return null;
+            return pointOfInterconnect.PointOfInterconnectEntityId;
+        }
+
+        public Dictionary<string, PointOfInterconnectEntity> GetCachedPointOfInterconnectBySwitchIdAndTruck()
+        {
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedPointOfInterconnectBySwitchIdAndTruck", pointOfInterconnectBEDefinitionId,
+                () =>
                 {
-                    Object currentSwitchId = -1;
-                    Object currentPointOfInterconnect = null;
-                    if (pointOfInterconnect.FieldValues.TryGetValue("SwitchId", out currentSwitchId) && pointOfInterconnect.FieldValues.TryGetValue("TrunkDetails", out currentPointOfInterconnect))
+                    Dictionary<string, PointOfInterconnectEntity> pointOfInterconnectBySwitchIdAndTruck = new Dictionary<string, PointOfInterconnectEntity>();
+
+                    var idFieldType = _genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(pointOfInterconnectBEDefinitionId);
+                    idFieldType.ThrowIfNull("idFieldType");
+                    idFieldType.Name.ThrowIfNull("idFieldType.Name");
+                    var pointOfInterconnects = _genericBusinessEntityManager.GetAllGenericBusinessEntities(pointOfInterconnectBEDefinitionId);
+                    if (pointOfInterconnects != null)
                     {
-                        int castedSwitchId = (int)currentSwitchId;
-                        if (castedSwitchId != switchId)
-                            continue;
-
-                        PointOfInterconnect castedPointOfInterconnect = currentPointOfInterconnect as PointOfInterconnect;
-                        if (castedPointOfInterconnect != null && castedPointOfInterconnect.Trunks != null && castedPointOfInterconnect.Trunks.Any(x => x.Trunk == truck))
+                        foreach (var pointOfInterconnect in pointOfInterconnects)
                         {
-                            var idFieldType = genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(pointOfInterconnectBEDefinitionId);
-                            idFieldType.ThrowIfNull("idFieldType");
-                            idFieldType.Name.ThrowIfNull("idFieldType.Name");
+                            PointOfInterconnectEntity pointOfInterconnectEntity = new PointOfInterconnectEntity();
+
+                            Object currentSwitchId = -1;
+                            pointOfInterconnect.FieldValues.TryGetValue("SwitchId", out currentSwitchId);
+                            pointOfInterconnectEntity.SwitchId = currentSwitchId.CastWithValidateStruct<int>("SwitchId");
+
                             Object pointOfInterConnectId;
-                            if (pointOfInterconnect.FieldValues.TryGetValue(idFieldType.Name, out pointOfInterConnectId))
-                                return (long)pointOfInterConnectId;
+                            pointOfInterconnect.FieldValues.TryGetValue(idFieldType.Name, out pointOfInterConnectId);
+                            pointOfInterconnectEntity.PointOfInterconnectEntityId = pointOfInterConnectId.CastWithValidateStruct<long>("pointOfInterConnectId");
+
+                            Object name = null;
+                            pointOfInterconnect.FieldValues.TryGetValue("Name", out name);
+                            pointOfInterconnectEntity.Name = name.CastWithValidate<string>("name");
+
+                            Object currentPointOfInterconnect = -1;
+                            pointOfInterconnect.FieldValues.TryGetValue("TrunkDetails", out currentPointOfInterconnect);
+                            pointOfInterconnectEntity.Settings = currentPointOfInterconnect.CastWithValidate<PointOfInterconnect>("trunks");
+                            pointOfInterconnectEntity.Settings.Trunks.ThrowIfNull("pointOfInterconnectEntity.Settings.Trunks");
+
+                            foreach (var trunk in pointOfInterconnectEntity.Settings.Trunks)
+                            {
+                                string key = string.Format("{0}_{1}", pointOfInterconnectEntity.SwitchId, trunk.Trunk);
+                                if (!pointOfInterconnectBySwitchIdAndTruck.ContainsKey(key))
+                                    pointOfInterconnectBySwitchIdAndTruck.Add(key, pointOfInterconnectEntity);
+                            }
                         }
-
                     }
-                }
-
-            }
-            return null;
+                    return pointOfInterconnectBySwitchIdAndTruck;
+                });
         }
     }
 }
