@@ -73,19 +73,40 @@ namespace Retail.Interconnect.Business
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
             }
-        
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
-            
+            IEnumerable<VRTaxItemDetail> taxItemDetails = _financialAccountManager.GetFinancialAccountTaxItemDetails(context.InvoiceTypeId, _acountBEDefinitionId, context.PartnerId);
+
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
+
+
             #region BuildInterconnectInvoiceDetails
             InterconnectInvoiceDetails interconnectInvoiceDetails = BuildInterconnectInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate);
-            if (interconnectInvoiceDetails != null && interconnectInvoiceDetails.Amount != 0)
+            if (interconnectInvoiceDetails != null)
             {
-                context.Invoice = new GeneratedInvoice
+
+                if (taxItemDetails != null)
                 {
-                    InvoiceDetails = interconnectInvoiceDetails,
-                    InvoiceItemSets = generatedInvoiceItemSets,
-                };
-                SetInvoiceBillingTransactions(context, interconnectInvoiceDetails);
+                    foreach (var tax in taxItemDetails)
+                    {
+                        interconnectInvoiceDetails.AmountWithTaxes += ((interconnectInvoiceDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                    }
+                }
+
+                if (interconnectInvoiceDetails.AmountWithTaxes != 0)
+                {
+                    context.Invoice = new GeneratedInvoice
+                    {
+                        InvoiceDetails = interconnectInvoiceDetails,
+                        InvoiceItemSets = generatedInvoiceItemSets,
+                    };
+                    SetInvoiceBillingTransactions(context, interconnectInvoiceDetails);
+                }
+                else
+                {
+                    context.ErrorMessage = "No billing data available.";
+                    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                    return;
+                }
+              
             }
             else
             {
@@ -94,8 +115,11 @@ namespace Retail.Interconnect.Business
                 return;
             }
 
+
+
             #endregion
         }
+
         private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, InterconnectInvoiceDetails invoiceDetails)
         {
             var relationManager = new Vanrise.InvToAccBalanceRelation.Business.InvToAccBalanceRelationDefinitionManager();
@@ -155,7 +179,7 @@ namespace Retail.Interconnect.Business
             }
             return interconnectInvoiceDetails;
         }
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             
@@ -196,6 +220,25 @@ namespace Retail.Interconnect.Business
                     {
                         generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                     }
+                }
+            }
+
+            if (generatedInvoiceItemSets.Count > 0)
+            {
+                if (taxItemDetails != null)
+                {
+                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                    generatedInvoiceItemSet.SetName = "Taxes";
+                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                    foreach (var item in taxItemDetails)
+                    {
+                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                        {
+                            Details = item,
+                            Name = " "
+                        });
+                    }
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
             return generatedInvoiceItemSets;

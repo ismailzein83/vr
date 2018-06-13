@@ -45,21 +45,21 @@ namespace Retail.Interconnect.Business
         {
             get
             {
-                return "retail-interconnect-account-invoice-selector";
+                return "retail-be-account-invoice-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                return "retail-interconnect-account-invoice-selector";
+                return "retail-be-account-invoice-selector";
             }
         }
         public override string PartnerInvoiceSettingFilterFQTN
         {
             get
             {
-                return "Retail.Interconnect.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.Interconnect.Business";
+                return "Retail.BusinessEntity.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.BusinessEntity.Business";
             }
         }
         public override dynamic GetActualPartnerId(IActualPartnerContext context)

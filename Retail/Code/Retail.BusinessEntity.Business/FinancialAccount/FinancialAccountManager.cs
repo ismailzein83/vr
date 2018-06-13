@@ -179,7 +179,11 @@ namespace Retail.BusinessEntity.Business
             }
             return true;
         }
-
+        public IEnumerable<VRTaxItemDetail> GetFinancialAccountTaxItemDetails(Guid invoiceTypeId, Guid accountDefinitionId, string financialAccountId)
+        {
+            var financialAccountData = GetFinancialAccountData(accountDefinitionId, financialAccountId);
+            return s_accountManager.GetTaxItemDetails(invoiceTypeId, accountDefinitionId, financialAccountData.Account.AccountId);
+        }
         public FinancialAccountRuntimeData GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn, string classification)
         {
             var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();

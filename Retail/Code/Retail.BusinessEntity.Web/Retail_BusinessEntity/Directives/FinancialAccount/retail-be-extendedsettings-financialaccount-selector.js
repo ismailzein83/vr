@@ -57,7 +57,7 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                 var api = {};
 
                 api.load = function (payload) {
-                   
+
                     var extendedSettings;
                     var selectedIds;
 
@@ -84,7 +84,10 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                             status: status,
                             effectiveDate: effectiveDate,
                             isEffectiveInFuture: isEffectiveInFuture,
-                           
+                                financialAccountFilters: [{
+                            $type: "Retail.BusinessEntity.Business.FinancialAccountBalanceTypeFilter ,Retail.BusinessEntity.Business",
+                                BalanceAccountTypeId: accountTypeId
+                        }]
                         };
                         if (extendedSettings != undefined)
                             selectorPayload.AccountBEDefinitionId = extendedSettings.AccountBEDefinitionId;
@@ -105,28 +108,29 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                     ctrl.onReady(api);
             }
             function getAccountSelectorFilter() {
-                var filter = {};
+                var filter = {
+                };
 
                 filter.Filters = [];
 
                 var financialAccountBalanceAccountFilter = {
-                    $type: 'Retail.BusinessEntity.Business.FinancialAccountBalanceAccountFilter, Retail.BusinessEntity.Business',
-                    AccountTypeId: accountTypeId
+                        $type : 'Retail.BusinessEntity.Business.FinancialAccountBalanceAccountFilter, Retail.BusinessEntity.Business',
+                                AccountTypeId: accountTypeId
                 };
                 var financialAccounts = {
-                    $type: 'Retail.BusinessEntity.Business.AccountBalanceEnabledAccountFilter, Retail.BusinessEntity.Business',
-                };
-                var financialAccountStatus = {
-                    $type: "Retail.BusinessEntity.Business.Filters.AccountBalanceStatusFilter ,Retail.BusinessEntity.Business",
-                    Status: status
-                };
+                        $type : 'Retail.BusinessEntity.Business.AccountBalanceEnabledAccountFilter, Retail.BusinessEntity.Business',
+                        };
+                    var financialAccountStatus = {
+                        $type : "Retail.BusinessEntity.Business.Filters.AccountBalanceStatusFilter ,Retail.BusinessEntity.Business",
+                                Status: status
+                        };
             filter.Filters.push(financialAccountBalanceAccountFilter);
             filter.Filters.push(financialAccounts);
             filter.Filters.push(financialAccountStatus);
                 return filter;
-            }
+           }
             this.initializeController = initializeController;
-        }
+     }
 
         return directiveDefinitionObject;
     }]);

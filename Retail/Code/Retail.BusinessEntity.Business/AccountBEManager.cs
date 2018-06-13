@@ -187,6 +187,82 @@ namespace Retail.BusinessEntity.Business
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountBEDefinitionId);
             return cachedAccounts.GetRecord(accountId);
         }
+
+        public IEnumerable<VRTaxItemDetail> GetTaxItemDetails(Guid invoiceTypeId, Guid accountBEDefinitionId, long accountId)
+        {
+            List<VRTaxItemDetail> taxItemDetails = new List<VRTaxItemDetail>();
+            var taxesDefinitions = new ConfigManager().GetRetailTaxesDefinitions();
+            if (taxesDefinitions != null)
+            {
+                IAccountTaxes accountTaxes;
+
+                if (HasAccountTaxes(accountBEDefinitionId, accountId, false, out  accountTaxes))
+                {
+                    var taxes = accountTaxes.GetAccountTaxes();
+                    if (taxes != null)
+                    {
+                        var invoiceTypeTaxes = taxes.FindRecord(x => x.InvoiceTypeId == invoiceTypeId);
+                        if (invoiceTypeTaxes != null)
+                        {
+                            if (invoiceTypeTaxes.VRTaxSetting.VAT.HasValue)
+                            {
+                                taxItemDetails.Add(new VRTaxItemDetail
+                                {
+                                    TaxName = "VAT",
+                                    Value = invoiceTypeTaxes.VRTaxSetting.VAT.Value
+                                });
+                            }
+                            foreach (var tax in invoiceTypeTaxes.VRTaxSetting.Items)
+                            {
+                                var taxDefinition = taxesDefinitions.ItemDefinitions.FindRecord(x => x.ItemId == tax.ItemId);
+                                if (taxDefinition != null)
+                                {
+                                    taxItemDetails.Add(new VRTaxItemDetail
+                                    {
+                                        TaxName = taxDefinition.Title,
+                                        Value = tax.Value
+                                    });
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            return taxItemDetails;
+        }
+
+        public bool HasAccountTaxes(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountTaxes accountTaxes)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            if (account == null)
+                throw new NullReferenceException(String.Format("account '{0}'", accountId));
+
+            if (account.Settings == null)
+            {
+                accountTaxes = null;
+                return false;
+            }
+
+            if (account.Settings.Parts != null)
+            {
+                foreach (var part in account.Settings.Parts)
+                {
+                    accountTaxes = part.Value.Settings as IAccountTaxes;
+                    if (accountTaxes != null)
+                        return true;
+                }
+            }
+            if (getInherited && account.ParentAccountId.HasValue)
+                return HasAccountTaxes(accountBEDefinitionId, account.ParentAccountId.Value, true, out accountTaxes);
+            else
+            {
+                accountTaxes = null;
+                return false;
+            }
+        }
+
+
         public string GetAccountName(Guid accountBEDefinitionId, long accountId, bool showConcatenatedName = false)
         {
             Account account = this.GetAccount(accountBEDefinitionId, accountId);

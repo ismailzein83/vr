@@ -62,6 +62,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
             var isEffectiveInFuture;
             var filter;
             var partnerInvoiceFilters;
+            var financialAccountFilters;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -87,6 +88,21 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         }
                         if (accountIds.length > 0)
                         {
+                            var filters;
+                            if (financialAccountFilters != undefined) {
+                                filters = [];
+                                for (var i = 0; i < financialAccountFilters.length; i++) {
+                                    filters.push(financialAccountFilters[i]);
+                                }
+                            }
+                            if (partnerInvoiceFilters != undefined) {
+                                if (filters == undefined)
+                                    filters = [];
+                                for (var i = 0; i < partnerInvoiceFilters.length; i++) {
+                                    filters.push(partnerInvoiceFilters[i]);
+                                }
+                            }
+
                             var selectorPayload = {
                                 accountBEDefinitionId: accountBEDefinitionId,
                                 filter: {
@@ -94,7 +110,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                     Status: status,
                                     EffectiveDate: effectiveDate,
                                     IsEffectiveInFuture: isEffectiveInFuture,
-                                    Filters: partnerInvoiceFilters
+                                    Filters: filters
                                 },
                                 setItemsSelected: true
                             };
@@ -127,6 +143,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         isEffectiveInFuture = payload.isEffectiveInFuture;
                         filter = payload.filter;
                         partnerInvoiceFilters = payload.partnerInvoiceFilters;
+                        financialAccountFilters = payload.financialAccountFilters;
                     }
 
                     var promises = [];
@@ -164,6 +181,23 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                             if (attrs.ismultipleselection == undefined) {
                                 accountIds = [accountSelectedIds];
                             }
+
+                            var filters;
+                            if (financialAccountFilters != undefined)
+                            {
+                                filters = [];
+                                for(var i=0;i<financialAccountFilters.length;i++)
+                                {
+                                    filters.push(financialAccountFilters[i]);
+                                }
+                            }
+                            if (partnerInvoiceFilters != undefined) {
+                                if (filters == undefined)
+                                  filters = [];
+                                for (var i = 0; i < partnerInvoiceFilters.length; i++) {
+                                    filters.push(partnerInvoiceFilters[i]);
+                                }
+                            }
                            
                             var financialAccountPayload = {
                                 accountBEDefinitionId: accountBEDefinitionId,
@@ -173,7 +207,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                     Status: status,
                                     EffectiveDate: effectiveDate,
                                     IsEffectiveInFuture: isEffectiveInFuture,
-                                    Filters: partnerInvoiceFilters
+                                    Filters: filters
                                 },
                                 setItemsSelected: true
                             };

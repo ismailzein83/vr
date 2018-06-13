@@ -10,6 +10,8 @@ namespace Retail.Interconnect.Entities
     public class InterconnectInvoiceDetails
     {
         public decimal Amount { get; set; }
+        public decimal AmountWithTaxes { get; set; }
+
         public decimal Duration { get; set; }
         public int InterconnectCurrencyId { get; set; }
         public string InterconnectCurrency { get; set; }

@@ -78,7 +78,10 @@ namespace Retail.BusinessEntity.Entities
 
         int ProductId { get; set; }
     }
-
+    public interface IAccountTaxes
+    {
+        List<TaxInvoiceTypeSetting> GetAccountTaxes();
+    }
     public interface IAccountProfile
     {
         string Address { get; }

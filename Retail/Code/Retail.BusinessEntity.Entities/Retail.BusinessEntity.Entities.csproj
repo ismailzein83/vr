@@ -347,6 +347,7 @@
     <Compile Include="Switch\SwitchIntegration.cs" />
     <Compile Include="Switch\SwitchIntegrationConfig.cs" />
     <Compile Include="Switch\SwitchSettings.cs" />
+    <Compile Include="TaxInviceTypeSetting.cs" />
     <Compile Include="Volume\Definition\VolumeDefinitionConfig.cs" />
     <Compile Include="Volume\Definition\VolumeDefinitionSettings.cs" />
     <Compile Include="Volume\Types\DurationVolumeDefinitionSettings.cs" />
