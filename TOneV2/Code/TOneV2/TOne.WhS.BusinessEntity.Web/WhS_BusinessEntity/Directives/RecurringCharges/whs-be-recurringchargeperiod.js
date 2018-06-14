@@ -41,6 +41,13 @@ app.directive('whsBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    
+                    var selectedValues;
+                    if (payload != undefined)
+                    {
+                        selectedValues = payload.selectedValues;
+                    }
+
                     var promises = [];
 
                     promises.push(loadRecurringChargePeriodSelector());
@@ -50,23 +57,28 @@ app.directive('whsBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsService',
 
                         recurringChargePeriodSelectorReadyDeferred.promise.then(function () {
                             var recurringChargePeriodSelectorPayload;
-                            if (payload != undefined)
-                                recurringChargePeriodSelectorPayload = { Settings: payload.Settings };
+                   
+                            if (selectedValues != undefined && selectedValues.RecurringChargePeriod != undefined)
+                                recurringChargePeriodSelectorPayload = { recurringChargePeriod: selectedValues.RecurringChargePeriod.Settings };
 
                             VRUIUtilsService.callDirectiveLoad(recurringChargePeriodSelectorAPI, recurringChargePeriodSelectorPayload, recurringChargePeriodSelectorLoadDeferred);
-
-                            return recurringChargePeriodSelectorLoadDeferred.promise;
+                            
                         });
+                        return recurringChargePeriodSelectorLoadDeferred.promise;
+
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.setData = function () {
-                    return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.RecurringChargePeriod, TOne.WhS.BusinessEntity.Entities",
-                        Settings: recurringChargePeriodSelectorAPI.getData()
-                    };
+                api.setData = function (entity) {
+                    if (entity != undefined)
+                    {
+                        entity.RecurringChargePeriod = {
+                            $type: "TOne.WhS.BusinessEntity.Entities.RecurringChargePeriod, TOne.WhS.BusinessEntity.Entities",
+                            Settings: recurringChargePeriodSelectorAPI.getData()
+                        };
+                    }
                 };
 
                 if (ctrl.onReady != null)

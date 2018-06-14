@@ -28,8 +28,16 @@ app.directive("whsBeRecurringchargeperiodsettingsOnceayear", ["UtilsService", "V
         function OnceAYearRecurringCharge($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var dayMonthDirectiveAPI;
+            var dayMonthDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.onDayMonthDirectiveReady = function (api) {
+                    dayMonthDirectiveAPI = api;
+                    dayMonthDirectiveReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -38,18 +46,32 @@ app.directive("whsBeRecurringchargeperiodsettingsOnceayear", ["UtilsService", "V
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
-                    if (payload != undefined) {
+                    promises.push(loadDayMonthDirective());
+
+                    function loadDayMonthDirective() {
+                        var dayMonthDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        dayMonthDirectiveReadyDeferred.promise.then(function () {
+                            var dayMonthDirectivePayload;
+                            if (payload != undefined && payload.extendedSettings != undefined) {
+                                dayMonthDirectivePayload = {
+                                    selectedValues: payload.extendedSettings.Date,
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(dayMonthDirectiveAPI, dayMonthDirectivePayload, dayMonthDirectiveLoadDeferred);
+                        });
+                        return dayMonthDirectiveLoadDeferred.promise;
                     }
 
-                    var promises = [];
-                    
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges.OnceAYearRecuringCharge ,TOne.WhS.BusinessEntity.MainExtensions",
+                        Date: dayMonthDirectiveAPI.getData()
                     };
                 };
 

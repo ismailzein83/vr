@@ -25,6 +25,7 @@ namespace TOne.WhS.BusinessEntity.Business
         static LiveBalanceManager s_liveBalanceManager = new LiveBalanceManager();
         static InvoiceManager s_invoiceManager = new InvoiceManager();
         static InvoiceAccountManager s_invoiceAccountManager = new InvoiceAccountManager();
+        static SecurityManager s_securityManager = new SecurityManager();
 
         #endregion
 
@@ -266,6 +267,22 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return null;
         }
+
+        public bool DoesUserHaveViewAccess(int financialAccountId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var financialAccount = GetFinancialAccount(financialAccountId);
+            return DoesUserHaveViewAccess(userId, financialAccount);
+        }
+
+        public bool DoesUserHaveViewAccess(int userId, WHSFinancialAccount financialAccount)
+        {
+            if (financialAccount.Security != null && financialAccount.Security.ViewRequiredPermission != null)
+                return s_securityManager.IsAllowed(financialAccount.Security.ViewRequiredPermission, userId);
+            else
+                return true;
+        }
+
         public bool TryGetCustAccFinancialAccountData(int customerAccountId, DateTime effectiveOn, out WHSCarrierFinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<WHSCarrierFinancialAccountData> carrierFinancialAccounts = GetCachedCustCarrierFinancialsByCarrAccId().GetRecord(customerAccountId);
@@ -1380,6 +1397,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 IsActive = IsFinancialAccountActive(financialAccount),
                 BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId,
                // InvoiceTypeIds = financialAccountDefinitionSettings.InvoiceTypeIds,
+                IsApplicableToCustomer = financialAccountDefinitionSettings.ExtendedSettings != null ? financialAccountDefinitionSettings.ExtendedSettings.IsApplicableToCustomer : false,
+                IsApplicableToSupplier = financialAccountDefinitionSettings.ExtendedSettings != null ? financialAccountDefinitionSettings.ExtendedSettings.IsApplicableToSupplier : false
             };
         }
         #endregion

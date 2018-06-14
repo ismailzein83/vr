@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities.RecurringCharges;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
 
-namespace TOne.WhS.BusinessEntity.Business.RecurringCharges
+namespace TOne.WhS.BusinessEntity.Business
 {
     public class RecurringChargeManager 
     {

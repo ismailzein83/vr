@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace TOne.WhS.BusinessEntity.Entities.RecurringCharges
+namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RecurringChargePeriodConfig : ExtensionConfiguration
     {

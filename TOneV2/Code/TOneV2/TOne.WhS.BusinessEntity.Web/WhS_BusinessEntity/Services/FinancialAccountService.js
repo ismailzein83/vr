@@ -2,9 +2,9 @@
 
     'use stict';
 
-    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierProfileService', 'VRUIUtilsService', 'VR_AccountBalance_BillingTransactionAPIService', 'WhS_BE_FinancialAccountAPIService'];
+    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierProfileService', 'VRUIUtilsService', 'VR_AccountBalance_BillingTransactionAPIService', 'WhS_BE_FinancialAccountAPIService', 'WhS_BE_FinancialAccountDefinitionAPIService', 'WhS_BE_RecurringChargeAPIService'];
 
-    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService, VR_AccountBalance_BillingTransactionAPIService, WhS_BE_FinancialAccountAPIService) {
+    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService, VR_AccountBalance_BillingTransactionAPIService, WhS_BE_FinancialAccountAPIService, WhS_BE_FinancialAccountDefinitionAPIService, WhS_BE_RecurringChargeAPIService) {
 
         function addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded) {
             var parameters = {
@@ -80,6 +80,13 @@
 
         function defineFinancialAccountDrillDownTabs(financialAccount, gridAPI) {
             var drillDownTabs = [];
+            
+            if (financialAccount.IsApplicableToCustomer)
+                addCustomerRecurringChargeDrillDownTab();
+           
+            if (financialAccount.IsApplicableToSupplier) 
+                addSupplierRecurringChargeDrillDownTab();
+            
             addBillingTransactionDrillDownTab();
 
             setDrillDownTabs();
@@ -110,6 +117,57 @@
 
                 drillDownTabs.push(drillDownTab);
             }
+
+            function addCustomerRecurringChargeDrillDownTab() {
+                if (financialAccount == undefined)
+                    return;
+                var customerDrillDownTab = {};
+
+                customerDrillDownTab.title = "Customer Recurring Charge";
+                customerDrillDownTab.directive = "vr-genericdata-genericbusinessentity-management";
+                customerDrillDownTab.haspermission = function () {
+                    return WhS_BE_RecurringChargeAPIService.HasViewRecurringChargePermission(financialAccount.Entity.FinancialAccountId);
+                };
+                customerDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccountObj) {
+                    var financialAccountId = financialAccount.Entity.FinancialAccountId;
+
+                    var genericBusinessEntityPayload = {
+                        businessEntityDefinitionId: "fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131",
+                        fieldValues: {
+                            FinancialAccountId: financialAccountId
+                        }
+                    };
+                    return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
+                };
+
+                drillDownTabs.push(customerDrillDownTab);
+            }
+
+            function addSupplierRecurringChargeDrillDownTab() {
+                if (financialAccount == undefined)
+                    return;
+                var supplierDrillDownTab = {};
+
+                supplierDrillDownTab.title = "Supplier Recurring Charge";
+                supplierDrillDownTab.directive = "vr-genericdata-genericbusinessentity-management";
+                supplierDrillDownTab.haspermission = function () {
+                    return WhS_BE_RecurringChargeAPIService.HasViewRecurringChargePermission(financialAccount.Entity.FinancialAccountId);
+                };
+                supplierDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccountObj) {
+                    var financialAccountId = financialAccount.Entity.FinancialAccountId;
+
+                    var genericBusinessEntityPayload = {
+                        businessEntityDefinitionId: "e9c11a90-864c-45a1-b90c-d7fdd80e9cf3",
+                        fieldValues: {
+                            FinancialAccountId: financialAccountId
+                        }
+                    };
+                    return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
+                };
+
+                drillDownTabs.push(supplierDrillDownTab);
+            }
+
             function setDrillDownTabs() {
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
                 drillDownManager.setDrillDownExtensionObject(financialAccount);

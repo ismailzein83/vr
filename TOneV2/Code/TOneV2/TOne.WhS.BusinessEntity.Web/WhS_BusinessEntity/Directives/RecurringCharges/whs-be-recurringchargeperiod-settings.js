@@ -30,15 +30,28 @@
             this.initializeController = initializeController;
            
             var recurringChargePeriodSelectorAPI;
+            var context;
+
+            var directiveAPI;
+            var directiveReadyDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
 
-                $scope.scopeModel.onSelectorReady = function (api) {
+                $scope.scopeModel.onRecurringChargePeriodSelectorReady = function (api) {
                     recurringChargePeriodSelectorAPI = api;
                     defineAPI();
+                };
+
+                $scope.scopeModel.onDirectiveReady = function (api) {
+                    directiveAPI = api;
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var directivePayload = { context: getContext() };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -49,25 +62,26 @@
 
                     recurringChargePeriodSelectorAPI.clearDataSource();
                     var promises = [];
-                    var context;
                     var recurringChargePeriod;
-
 
                     if (payload != undefined) {
                         context = payload.context;
+                        recurringChargePeriod = payload.recurringChargePeriod;
                     }
 
+                   if (recurringChargePeriod != undefined)
+                        promises.push(loadDirective());
+                    
                     promises.push(getRecurringChargePeriodsTemplateConfigs());
 
                     function getRecurringChargePeriodsTemplateConfigs() {
-
                         return WhS_BE_RecurringChargeAPIService.GetRecurringChargePeriodsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (recurringChargePeriod != undefined) {
 
+                                if (recurringChargePeriod != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, recurringChargePeriod.ConfigId, 'ExtensionConfigurationId');
                                 }
@@ -125,10 +139,9 @@
             if (attrs.hideremoveicon != undefined) {
                 hideremoveicon = 'hideremoveicon';
             }
-            var template =
-                '<vr-row>'
+            var template ='<vr-row>'
                     + '<vr-columns width="1/2row">'
-                        + ' <vr-select on-ready="scopeModel.onSelectorReady"'
+                        + ' <vr-select on-ready="scopeModel.onRecurringChargePeriodSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'

@@ -11,8 +11,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetRecurringChargePeriodsConfigs"));
         }
 
+        function HasViewRecurringChargePermission(financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'DoesUserHaveViewAccess'), { financialAccountId: financialAccountId });
+        }
+
         return ({
-            GetRecurringChargePeriodsConfigs: GetRecurringChargePeriodsConfigs
+            GetRecurringChargePeriodsConfigs: GetRecurringChargePeriodsConfigs,
+            HasViewRecurringChargePermission: HasViewRecurringChargePermission
         });
     }
 

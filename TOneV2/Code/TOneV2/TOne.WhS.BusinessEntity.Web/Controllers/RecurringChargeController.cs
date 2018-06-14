@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using TOne.WhS.BusinessEntity.Business.RecurringCharges;
-using TOne.WhS.BusinessEntity.Entities.RecurringCharges;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
@@ -14,6 +14,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     public class RecurringChargeController : Vanrise.Web.Base.BaseAPIController
     {
         RecurringChargeManager _manager = new RecurringChargeManager();
+        WHSFinancialAccountManager _financialAccountManager = new WHSFinancialAccountManager();
 
         [HttpGet]
         [Route("GetRecurringChargePeriodsConfigs")]
@@ -21,5 +22,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             return _manager.GetRecurringChargePeriodsConfigs();
         }
+
+        [HttpGet]
+        [Route("DoesUserHaveViewAccess")]
+        public bool DoesUserHaveViewAccess(int financialAccountId)
+        {
+            return _financialAccountManager.DoesUserHaveViewAccess(financialAccountId);
+        }
+
     }
 }

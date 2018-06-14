@@ -13,10 +13,12 @@ namespace TOne.WhS.BusinessEntity.Entities
     public abstract class RecurringChargePeriodSettings
     {
         public abstract Guid ConfigId { get; }
-        public abstract void Evaluate(IRecurringChargePeriodSettingsContext context);
+        public abstract void Execute(IRecurringChargePeriodSettingsContext context);
     }
     public interface IRecurringChargePeriodSettingsContext
     {
-
+        DateTime FromDate { get; }
+        DateTime ToDate { get; }
+        List<DateTime> Periods { set; }
     }
 }

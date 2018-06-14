@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
@@ -32,6 +33,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int? LastModifiedBy { get; set; }
 
         public DateTime? LastModifiedTime { get; set; }
+
+        public FinancialAcccountSecurity Security { get; set; }
     }
 
     public class WHSFinancialAccountSettings
@@ -62,6 +65,12 @@ namespace TOne.WhS.BusinessEntity.Entities
         {
 
         }
+    }
+
+    public class FinancialAcccountSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+
     }
 
     public interface IWHSFinancialAccountFillCustomerExtraDataContext
