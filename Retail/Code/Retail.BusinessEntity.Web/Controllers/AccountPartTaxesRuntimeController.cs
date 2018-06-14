@@ -17,8 +17,14 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetInvoiceTypesTaxesRuntime")]
-        public Dictionary<Guid, InvoiceTypesTaxesRuntime> GetInvoiceTypesTaxesRuntime(List<Guid> InvoiceTypesIds) {
-            return _manager.GetInvoiceTypesTaxesRuntime(InvoiceTypesIds);
+        public Dictionary<Guid, InvoiceTypesTaxesRuntime> GetInvoiceTypesTaxesRuntime(AccountPartTaxesRuntimeInput input)
+        {
+            return _manager.GetInvoiceTypesTaxesRuntime(input.InvoiceTypesIds);
         }
+    }
+
+    public class AccountPartTaxesRuntimeInput
+    {
+        public List<Guid> InvoiceTypesIds { get; set; }
     }
 }

@@ -10,7 +10,7 @@
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns width="1/3row" ng-repeat="tax in scopeModel.taxItems">
+                <vr-columns width="1/3row" ng-if="invoiceType.Taxes!=undefined" ng-repeat="tax in invoiceType.Taxes">
                     <vr-textbox label="{{tax.Title}}" value="tax.Value" type="number"></vr-textbox>
                 </vr-columns>
             </vr-row>

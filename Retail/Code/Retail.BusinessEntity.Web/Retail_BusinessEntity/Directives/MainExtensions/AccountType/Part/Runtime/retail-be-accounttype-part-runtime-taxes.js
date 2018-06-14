@@ -19,7 +19,7 @@ app.directive('retailBeAccounttypePartRuntimeTaxes', ['UtilsService', 'Retail_BE
 
     function AccountTypeTaxesPartRuntime($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
-
+        
         ctrl.invoiceTypesTaxes = [];
 
         function initializeController() {
@@ -33,8 +33,6 @@ app.directive('retailBeAccounttypePartRuntimeTaxes', ['UtilsService', 'Retail_BE
                 var partDefinition;
                 var partSettings;
 
-                $scope.scopeModel.taxItems = [];
-                
                 if (payload != undefined) {
                     partDefinition = payload.partDefinition;
                     partSettings = payload.partSettings;
@@ -45,60 +43,70 @@ app.directive('retailBeAccounttypePartRuntimeTaxes', ['UtilsService', 'Retail_BE
                 
                 function getInvoiceTypesIds() {
                     var invoiceTypesIds = [];
-                    var invoiceTypes = partDefinition.Settings.InvoiceTypes;
-                    for (var i = 0; i < invoiceTypes.length; i++)
-                        invoiceTypesIds.push(invoiceTypes[i].InvoiceTypeId);
+                    if (partDefinition.Settings.InvoiceTypes != undefined) {
+                        var invoiceTypes = partDefinition.Settings.InvoiceTypes;
+                        for (var i = 0; i < invoiceTypes.length; i++)
+                            invoiceTypesIds.push(invoiceTypes[i].InvoiceTypeId);
+                    }
                     return invoiceTypesIds;
                 }
 
                 function getInvoiceTypesTaxes(invoiceTypesIds) {
-                    return Retail_BE_AccountPartTaxesRuntimeAPIService.GetInvoiceTypesTaxesRuntime(invoiceTypesIds).then(function (response) {
-                        angular.forEach(response, function (item) {
-                            if (item.$type) {
-                                ctrl.invoiceTypesTaxes.push(item);
+                    var input = { InvoiceTypesIds: invoiceTypesIds };
+                    return Retail_BE_AccountPartTaxesRuntimeAPIService.GetInvoiceTypesTaxesRuntime(input).then(function (response) {
+                        if (response != undefined) {
+                            for (var p in response) {
+                                if (p != "$type") {
+                                    var taxDetail = {
+                                        InvoiceTypeTitle: response[p].InvoiceTypeTitle,
+                                        Taxes: response[p].TaxesDefinitions.ItemDefinitions
+                                    }
+                                    ctrl.invoiceTypesTaxes.push(taxDetail);
+                                }
                             }
-                        });
-
+                        }
                         if (partSettings != undefined) {
-                            for (var i = 0; i < partSettings.InviceTypes.length; i++) {
-                                if (partSettings.InviceTypes[i].VRTaxSetting != undefined) {
-                                    $scope.scopeModel.vatPercentage = partSettings.InviceTypes[i].VRTaxSetting.VAT;
-                                    $scope.scopeModel.vatId = partSettings.InviceTypes[i].VRTaxSetting.VATId;
-                                    for (var j = 0; j < partSettings.InviceTypes[i].VRTaxSetting.Items.length; j++) {
-                                        var taxItem = {
-                                            ItemId: partSettings.InviceTypes[i].VRTaxSetting.Items[j].ItemId,
-                                            Title: ctrl.invoiceTypesTaxes[i].TaxesDefinitions.ItemDefinitions[j].Title,
-                                            Value: partSettings.InviceTypes[i].VRTaxSetting.Items[j].Value
-                                        };
-                                        $scope.scopeModel.taxItems.push(taxItem);
+                          if (partSettings.InvoiceTypes != undefined) {
+                              for (var i = 0; i < partSettings.InvoiceTypes.length; i++) {
+                                  var invoiceTypes = partSettings.InvoiceTypes[i];
+                                  if (invoiceTypes != undefined && invoiceTypes.VRTaxSetting != undefined) {
+                                      $scope.scopeModel.vatPercentage = invoiceTypes.VRTaxSetting.VAT;
+                                      $scope.scopeModel.vatId = invoiceTypes.VRTaxSetting.VATId;
+                                      if (invoiceTypes.VRTaxSetting.Items != undefined) {
+                                          for (var j = 0; j < invoiceTypes.VRTaxSetting.Items.length; j++) {
+                                              ctrl.invoiceTypesTaxes[i].Taxes[j].Value = invoiceTypes.VRTaxSetting.Items[j].Value;
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    });
+                        });
                 }
             };
 
             api.getData = function () {
                 return {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartTaxesSettings,Retail.BusinessEntity.MainExtensions',
-                    InviceTypes: getInvoiceTypesTaxesData()
+                    InvoiceTypes: getInvoiceTypesTaxesData()
                 };
             };
 
             function getInvoiceTypesTaxesData() {
                 
                 var invoiceTaxes = [];
+                var taxItems = [];
                 for (var i = 0; i < ctrl.invoiceTypesTaxes.length; i++) {
-                    var taxesDefinition = ctrl.invoiceTypesTaxes[i].TaxesDefinitions.ItemDefinitions;
-                    var taxItems = [];
-                    for (var j = 0; j < taxesDefinition.length; j++) {
-                        taxItems.push({
-                            ItemId: taxesDefinition[j].ItemId,
-                            Value: $scope.scopeModel.taxItems[j].Value
-                        });
+                    var invoiceTypes = ctrl.invoiceTypesTaxes[i];
+                    if (invoiceTypes != undefined && invoiceTypes.TaxesDefinitions != undefined && invoiceTypes.TaxesDefinitions.ItemDefinitions != undefined) {
+                        var taxesDefinition = invoiceTypes.TaxesDefinitions.ItemDefinitions;
+                        for (var j = 0; j < taxesDefinition.length; j++) {
+                            taxItems.push({
+                                ItemId: taxesDefinition[j].ItemId,
+                                Value: taxesDefinition[j].Value
+                            });
+                        }
                     }
-
                     var taxInvoiceTypeSetting = {
                         InvoiceTypeId: ctrl.invoiceTypesTaxes[i].InvoiceTypeId,
                         VRTaxSetting: {

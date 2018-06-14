@@ -51,7 +51,7 @@ app.directive('retailBeAccounttypePartDefinitionTaxes', ['UtilsService', 'VRUIUt
                     invoiceTypeSelectorReadyDeferred.promise.then(function () {
                         var invoiceTypeSelectorPayload;
 
-                        if (partDefinitionSettings != undefined) {
+                        if (partDefinitionSettings != undefined && partDefinitionSettings.InvoiceTypes != undefined) {
                             for (var i = 0; i < partDefinitionSettings.InvoiceTypes.length; i++)
                                 selectedInvoiceTypes.push(partDefinitionSettings.InvoiceTypes[i].InvoiceTypeId);
                             invoiceTypeSelectorPayload = {
@@ -77,8 +77,10 @@ app.directive('retailBeAccounttypePartDefinitionTaxes', ['UtilsService', 'VRUIUt
             function getInvoiceTypes() {
                 var invoiceTypes = [];
                 var invoices = invoiceTypeSelectorAPI.getSelectedIds();
-                for (var i = 0; i < invoices.length ; i++) {
-                    invoiceTypes.push({ InvoiceTypeId: invoices [i]});
+                if (invoices != undefined) {
+                    for (var i = 0; i < invoices.length ; i++) {
+                        invoiceTypes.push({ InvoiceTypeId: invoices[i] });
+                    }
                 }
                 return invoiceTypes;
             }

@@ -9,8 +9,8 @@
 
         var controllerName = "AccountPartTaxesRuntime";
 
-        function GetInvoiceTypesTaxesRuntime(invoiceTypesIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetInvoiceTypesTaxesRuntime'), invoiceTypesIds);
+        function GetInvoiceTypesTaxesRuntime(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetInvoiceTypesTaxesRuntime'), input);
         }
 
         return ({

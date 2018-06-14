@@ -10,20 +10,23 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountPartTaxesRuntimeManager
     {
-        public Dictionary<Guid, InvoiceTypesTaxesRuntime> GetInvoiceTypesTaxesRuntime(List<Guid> InvoiceTypesIds)
+        public Dictionary<Guid, InvoiceTypesTaxesRuntime> GetInvoiceTypesTaxesRuntime(List<Guid> invoiceTypesIds)
         {
             Dictionary<Guid, InvoiceTypesTaxesRuntime> invoiceTypesTaxes = new Dictionary<Guid, InvoiceTypesTaxesRuntime>();
            
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             ConfigManager configManager = new ConfigManager();
 
-            foreach (var invoiceTypeId in InvoiceTypesIds){
-                InvoiceTypesTaxesRuntime invoiceTypesTaxesRuntime = new InvoiceTypesTaxesRuntime();
+            foreach (var invoiceTypeId in invoiceTypesIds){
+                if (invoiceTypesIds != null)
+                {
+                    InvoiceTypesTaxesRuntime invoiceTypesTaxesRuntime = new InvoiceTypesTaxesRuntime();
 
-                invoiceTypesTaxesRuntime.InvoiceTypeId = invoiceTypeId;
-                invoiceTypesTaxesRuntime.InvoiceTypeTitle = invoiceTypeManager.GetInvoiceType(invoiceTypeId).Name;
-                invoiceTypesTaxesRuntime.TaxesDefinitions = configManager.GetRetailTaxesDefinitions();
-                invoiceTypesTaxes.Add(invoiceTypeId, invoiceTypesTaxesRuntime);
+                    invoiceTypesTaxesRuntime.InvoiceTypeId = invoiceTypeId;
+                    invoiceTypesTaxesRuntime.InvoiceTypeTitle = invoiceTypeManager.GetInvoiceType(invoiceTypeId).Name;
+                    invoiceTypesTaxesRuntime.TaxesDefinitions = configManager.GetRetailTaxesDefinitions();
+                    invoiceTypesTaxes.Add(invoiceTypeId, invoiceTypesTaxesRuntime);
+                }
             }
             return invoiceTypesTaxes;
         }
