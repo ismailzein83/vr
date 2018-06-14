@@ -133,6 +133,8 @@ namespace TOne.WhS.Deal.Business
                     {
                         CarrierAccountId = dealInfo.CarrierAccountId,
                         Deal = dealInfo.DealId,
+                        DealBED = dealInfo.DealBED,
+                        DealEED = dealInfo.DealEED,
                         RemainingDaysToGrace = dealInfo.RemainingDaysToGrace,
                         RemainingDaysToEnd = dealInfo.RemainingDaysToEnd,
                         DaysTostart = dealInfo.DaysTostart,
@@ -144,7 +146,7 @@ namespace TOne.WhS.Deal.Business
                             overallExpectedVolumeInMin > 0 ? (dealInfo.OverallProgressInMinutes / overallExpectedVolumeInMin) * 100 : 0,
                         WeeklyProgressPerc =
                             weeklyExpectedVolumeInMin > 0 ? (dealInfo.WeeklyProgressMinutes / weeklyExpectedVolumeInMin) * 100 : 0,
-                        
+
                     };
                     dataRecords.Add(recordType);
                 }
@@ -156,6 +158,8 @@ namespace TOne.WhS.Deal.Business
             var swapDealProgressObject = new Dictionary<string, object>
             {
                 {"Deal", swapDealProgress.Deal},
+                {"DealBED", swapDealProgress.DealBED},
+                {"DealEED", swapDealProgress.DealEED},
                 {"CarrierAccount", swapDealProgress.CarrierAccountId},
                 {"Group", swapDealProgress.GroupNumber},
                 {"GroupType", swapDealProgress.GroupType},
@@ -222,6 +226,8 @@ namespace TOne.WhS.Deal.Business
     public class SwapDealProgressDataRecordType
     {
         public long Deal { get; set; }
+        public DateTime DealBED { get; set; }
+        public DateTime? DealEED { get; set; }
         public int CarrierAccountId { get; set; }
         public int GroupNumber { get; set; }
         public int GroupType { get; set; }
