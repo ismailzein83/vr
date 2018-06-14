@@ -7,40 +7,31 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum ActivationStatus
-    {
-        [Description("Active")]
-        Active = 0,
+	public enum ActivationStatus
+	{
+		[Description("Active")]
+		Active = 0,
 
-        [Description("Inactive")]
-        Inactive = 1,
+		[Description("Inactive")]
+		Inactive = 1,
 
-        [Description("Testing")]
-        Testing = 2
-    }
-    public class CarrierAccountSettings
-    {
-        public ActivationStatus ActivationStatus { get; set; }
+		[Description("Testing")]
+		Testing = 2
+	}
+	public class CarrierAccountSettings
+	{
+		public ActivationStatus ActivationStatus { get; set; }
 
-        public int CurrencyId { get; set; }
+		public int CurrencyId { get; set; }
 
-        public string Mask { get; set; }
+		public string Mask { get; set; }
 
-        public int NominalCapacity { get; set; }
+		public int NominalCapacity { get; set; }
 
-        public Guid? InvoiceSettingId { get; set; }
+		public Guid? InvoiceSettingId { get; set; }
 
-        public Guid? CompanySettingId { get; set; }
+		public Guid? CompanySettingId { get; set; }
 
-        public CarrierAccountPriceListSettings PriceListSettings { get; set; }
-
-        public bool IsInterconnectSwitch { get; set; }
-    }
-    public class CarrierAccountPriceListSettings
-    {
-        public string Email { get; set; }
-        public string FileMask { get; set; }
-        public string SubjectCode { get; set; }
-        public List<int> BPBusinessRuleSetIds { get; set; }
-    }
+		public bool IsInterconnectSwitch { get; set; }
+	}
 }
