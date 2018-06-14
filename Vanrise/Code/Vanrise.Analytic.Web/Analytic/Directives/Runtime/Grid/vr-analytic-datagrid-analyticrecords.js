@@ -97,7 +97,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 								});
 							}).catch(function (error) {
 								promiseReadyDeferred.reject(error);
-							});;
+							});
 							return promiseReadyDeferred.promise;
 
 						};
@@ -201,7 +201,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 							if (groupingDimensions[j].DimensionName != dimension.DimensionName)
 								selectedDimensions.push(groupingDimensions[j].DimensionName);
 						if (!dimension.hideDimension)
-							setDrillDownData(dimension, selectedDimensions)
+							setDrillDownData(dimension, selectedDimensions);
 					}
 
 					function setDrillDownData(dimension, selectedDimensions) {
@@ -692,7 +692,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 								settingsObject: settings,
 								clicked: function (dataItem) {
 									this.settingsObject.DimensionFilters = getDimensionValues(dataItem, selectedDimensions, groupingDimensions, parentDimensions, dimensionFilters);
-									var payload = { ItemAction: this.itemActionObject, Settings: this.settingsObject }
+									var payload = { ItemAction: this.itemActionObject, Settings: this.settingsObject };
 									return VR_Analytic_AnalyticItemActionService.excuteItemAction(payload);
 								},
 							});

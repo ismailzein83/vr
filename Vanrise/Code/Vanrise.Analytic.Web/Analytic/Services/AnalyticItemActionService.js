@@ -44,7 +44,7 @@
 				ExecuteAction: function (payload) {
 					if (payload == undefined || payload.ItemAction == undefined || payload.Settings == undefined)
 						return;
-					openRecordSearchAction(payload)
+					openRecordSearchAction(payload);
 				}
 			};
 			registerActionType(actionType);
