@@ -82,6 +82,7 @@ namespace Retail.Interconnect.Business
             InterconnectInvoiceDetails interconnectInvoiceDetails = BuildInterconnectInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate);
             if (interconnectInvoiceDetails != null)
             {
+                interconnectInvoiceDetails.AmountWithTaxes = interconnectInvoiceDetails.Amount;
 
                 if (taxItemDetails != null)
                 {
