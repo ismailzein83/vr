@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common.Business;
+using System.Collections.Generic;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -22,7 +20,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         RateChangeType = 8,
         Currency = 9,
         CodeChangeType = 10,
-        Increment = 11
+        Increment = 11,
+        CodeRateChangeType = 12,
+        EffectiveDate = 13
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -80,6 +80,31 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 case CodeOnEachRowBEFieldType.Increment:
                     context.Value = context.Increment;
                     break;
+                case CodeOnEachRowBEFieldType.CodeRateChangeType:
+                    context.Value = GetCodeRateChange(context.CustomerId, context.RateChangeType, context.CodeChangeType);
+                    break;
+                case CodeOnEachRowBEFieldType.EffectiveDate:
+                    context.Value = GetEffectiveDate(context.CodeBED, context.RateBED);
+                    break;
+            }
+        }
+        private DateTime? GetEffectiveDate(DateTime? codeBED, DateTime? rateBED)
+        {
+            return codeBED > rateBED ? codeBED : rateBED;
+        }
+        private string GetCodeRateChange(int customerId, RateChangeType rateChangeType, CodeChange codeChangeType)
+        {
+            var codeChangeTypeDescriptions = new CarrierAccountManager().GetCustomerCodeChangeTypeSettings(customerId);
+
+            switch (codeChangeType)
+            {
+                case CodeChange.New:
+                    return codeChangeTypeDescriptions.NewCode;
+                case CodeChange.Moved:
+                    return codeChangeTypeDescriptions.NewCode;
+                case CodeChange.Closed:
+                    return codeChangeTypeDescriptions.ClosedCode;
+                default: return GetRateChange(rateChangeType, customerId);
             }
         }
         private string GetRateChange(RateChangeType rateChangeType, int customerId)

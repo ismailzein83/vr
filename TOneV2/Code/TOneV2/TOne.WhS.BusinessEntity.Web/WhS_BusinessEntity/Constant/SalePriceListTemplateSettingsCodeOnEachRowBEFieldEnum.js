@@ -10,5 +10,7 @@
     RateChangeType: { value: 8, description: "Rate Change Type" },
     Currency: { value: 9, description: "Currency" },
     CodeChangeType: { value: 10, description: "Code Change Type" },
-    Increment: { value: 11, description: "Increment" }
+    Increment: { value: 11, description: "Increment" },
+    CodeRateChangeType: { value: 12, description: "Code And Rate Change Type" },
+    EffectiveDate: { value: 13, description: "Effective Date" }
 });
