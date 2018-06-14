@@ -55,33 +55,44 @@ app.directive('retailBeAccounttypePartRuntimeTaxes', ['UtilsService', 'Retail_BE
                     var input = { InvoiceTypesIds: invoiceTypesIds };
                     return Retail_BE_AccountPartTaxesRuntimeAPIService.GetInvoiceTypesTaxesRuntime(input).then(function (response) {
                         if (response != undefined) {
-                            for (var p in response) {
-                                if (p != "$type") {
+                            for (var key in response) {
+                                if (key != "$type") {
+                                    var objectValue = response[key];
                                     var taxDetail = {
-                                        InvoiceTypeTitle: response[p].InvoiceTypeTitle,
-                                        Taxes: response[p].TaxesDefinitions.ItemDefinitions
+                                        InvoiceTypeId:key,
+                                        InvoiceTypeTitle: objectValue.InvoiceTypeTitle,
+                                        Taxes: [],
                                     };
+                                    var invoiceTypeSettingsValues;
+                                    if (partSettings != undefined && partSettings.InvoiceTypes != undefined) {
+                                        invoiceTypeSettingsValues = UtilsService.getItemByVal(partSettings.InvoiceTypes, key, 'InvoiceTypeId');
+                                        if (invoiceTypeSettingsValues != undefined && invoiceTypeSettingsValues.VRTaxSetting != undefined)
+                                        {
+                                            taxDetail.vatPercentage =invoiceTypeSettingsValues.VRTaxSetting.VAT ;
+                                            taxDetail.vatId = invoiceTypeSettingsValues.VRTaxSetting.VATId;
+                                        }
+                                    }
+                                    if (objectValue.TaxesDefinitions != undefined && objectValue.TaxesDefinitions.ItemDefinitions != undefined) {
+                                        for (var i = 0; i < objectValue.TaxesDefinitions.ItemDefinitions.length; i++) {
+                                            var itemDefinition = objectValue.TaxesDefinitions.ItemDefinitions[i];
+                                            var tax = {
+                                                ItemId: itemDefinition.ItemId,
+                                                Title: itemDefinition.Title,
+                                            };
+                                            if (invoiceTypeSettingsValues != undefined && invoiceTypeSettingsValues.VRTaxSetting != undefined && invoiceTypeSettingsValues.VRTaxSetting.Items != undefined) {
+                                                var itemObject = UtilsService.getItemByVal(invoiceTypeSettingsValues.VRTaxSetting.Items, itemDefinition.ItemId, 'ItemId');
+                                                if (itemObject != undefined)
+                                                    tax.Value = itemObject.Value;
+                                            }
+
+                                            taxDetail.Taxes.push(tax);
+                                        }
+                                    }
                                     ctrl.invoiceTypesTaxes.push(taxDetail);
                                 }
                             }
                         }
-                        if (partSettings != undefined) {
-                          if (partSettings.InvoiceTypes != undefined) {
-                              for (var i = 0; i < partSettings.InvoiceTypes.length; i++) {
-                                  var invoiceTypes = partSettings.InvoiceTypes[i];
-                                  if (invoiceTypes != undefined && invoiceTypes.VRTaxSetting != undefined) {
-                                      $scope.scopeModel.vatPercentage = invoiceTypes.VRTaxSetting.VAT;
-                                      $scope.scopeModel.vatId = invoiceTypes.VRTaxSetting.VATId;
-                                      if (invoiceTypes.VRTaxSetting.Items != undefined) {
-                                          for (var j = 0; j < invoiceTypes.VRTaxSetting.Items.length; j++) {
-                                              ctrl.invoiceTypesTaxes[i].Taxes[j].Value = invoiceTypes.VRTaxSetting.Items[j].Value;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        });
+                    });
                 }
             };
 
@@ -95,24 +106,28 @@ app.directive('retailBeAccounttypePartRuntimeTaxes', ['UtilsService', 'Retail_BE
             function getInvoiceTypesTaxesData() {
                 
                 var invoiceTaxes = [];
-                var taxItems = [];
                 for (var i = 0; i < ctrl.invoiceTypesTaxes.length; i++) {
-                    var invoiceTypes = ctrl.invoiceTypesTaxes[i];
-                    if (invoiceTypes != undefined && invoiceTypes.TaxesDefinitions != undefined && invoiceTypes.TaxesDefinitions.ItemDefinitions != undefined) {
-                        var taxesDefinition = invoiceTypes.TaxesDefinitions.ItemDefinitions;
-                        for (var j = 0; j < taxesDefinition.length; j++) {
-                            taxItems.push({
-                                ItemId: taxesDefinition[j].ItemId,
-                                Value: taxesDefinition[j].Value
-                            });
+                    var invoiceType = ctrl.invoiceTypesTaxes[i];
+                    var taxItems = [];
+                    if (invoiceType != undefined && invoiceType.Taxes != undefined) {
+                        for (var j = 0; j < invoiceType.Taxes.length; j++) {
+                            var tax = invoiceType.Taxes[j];
+                            if (tax.Value != undefined)
+                            {
+                                taxItems.push({
+                                    ItemId: tax.ItemId,
+                                    Value: tax.Value
+                                });
+                            }
+                           
                         }
                     }
                     var taxInvoiceTypeSetting = {
-                        InvoiceTypeId: ctrl.invoiceTypesTaxes[i].InvoiceTypeId,
+                        InvoiceTypeId: invoiceType.InvoiceTypeId,
                         VRTaxSetting: {
                             Items: taxItems,
-                            VAT: $scope.scopeModel.vatPercentage,
-                            VATId: $scope.scopeModel.vatId
+                            VAT: invoiceType.vatPercentage,
+                            VATId: invoiceType.vatId
                         }
                     };
                     invoiceTaxes.push(taxInvoiceTypeSetting);
