@@ -246,7 +246,7 @@
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePricelistTemplateMappedCellHeaderEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateSettingsCodesByZoneBEFieldEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\SalePriceListTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePricelistTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SupplierEntityServiceSourceEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SwitchConnectivityTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\VolumeCommitmentTypeEnum.js" />
@@ -457,9 +457,12 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\FaultTicketsSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplateHelper.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistTypeMappingTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-codechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelistsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricingsettings-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-purchasearea-settings-pricelisttypemapping.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-ratechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-faulttickets-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern-helper.js" />

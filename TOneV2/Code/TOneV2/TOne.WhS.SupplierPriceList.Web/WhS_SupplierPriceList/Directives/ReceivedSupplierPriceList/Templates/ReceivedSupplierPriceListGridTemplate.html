@@ -1,9 +1,17 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid datasource="receivedPricelists"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             defaultsortdirection="'DESC'"
+             defaultsortbyfieldname="ReceivedPricelist.ReceivedDate"
+             idfield="SupplierId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeDescription'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Received Date'" field="'ReceivedPricelist.ReceivedDate'" type="'Datetime'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Processing Date'" field="'ReceivedPricelist.StartProcessingDate'" type="'Datetime'" isrequired></vr-datagridcolumn>
+    <!--<vr-datagridcolumn ng-if="ReceivedPricelist.ProcessInstanceId!=null"  headertext="'Error'" type="'Text'" onclicked="viewDetails" isclickable="true" isrequired></vr-datagridcolumn>-->
+    <!--<vr-datagridcolumn ng-if="isFailed" headertext="'Error'" type="'Text'" field="'ReceivedPricelist.ProcessInstanceId'" onclicked="viewError" isclickable="true" isrequired></vr-datagridcolumn>-->
+    <!--<vr-datagridcolumn headertext="'Error'"  type="'Text'" onclicked="viewDetails" isclickable="true" isrequired>View Details</vr-datagridcolumn>-->
+</vr-datagrid>

@@ -15,12 +15,12 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "ReceivedSupplierPriceList")]
     public class WhS_ReceivedSupplierPriceListController : BaseAPIController
     {
-        //[HttpPost]
-        //[Route("GetFilteredReceivedSupplierPriceList")]
-        //public object GetFilteredReceivedSupplierPriceList(Vanrise.Entities.DataRetrievalInput<ReceivedSupplierPriceListQuery> input)
-        //{
-        //    ReceivedSupplierPriceListManager manager = new ReceivedSupplierPriceListManager();
-        //    return GetWebResponse(input, manager.GetFilteredReceivedSupplierPriceList(input));
-        //}
+        [HttpPost]
+        [Route("GetFilteredReceivedSupplierPriceList")]
+        public object GetFilteredReceivedSupplierPriceList(Vanrise.Entities.DataRetrievalInput<ReceivedPricelistQuery> input)
+        {
+            ReceivedSupplierPricelistManager manager = new ReceivedSupplierPricelistManager();
+            return GetWebResponse(input, manager.GetFilteredReceivedPricelists(input));
+        }
     }
 }

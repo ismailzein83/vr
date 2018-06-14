@@ -1,114 +1,153 @@
-﻿//"use strict";
+﻿"use strict";
 
-//app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotificationService", "WhS_SupPL_ReceivedSupplierPriceListAPIService", "FileAPIService", "WhS_BE_SupplierPriceListService", "BusinessProcess_BPInstanceService",
-//function (UtilsService, VRNotificationService, WhS_SupPL_ReceivedSupplierPriceListAPIService, FileAPIService, WhS_BE_SupplierPriceListService, BusinessProcess_BPInstanceService) {
-//    var directiveDefinitionObject = {
+app.directive("vrWhsBePurchaseareaSettingsPricelisttypemapping", ["UtilsService", "WhS_SupPL_SupplierPriceListTypeEnum",
+function (UtilsService , WhS_SupPL_SupplierPriceListTypeEnum) {
 
-//        restrict: "E",
-//        scope: {
-//            onReady: "="
-//        },
-//        controller: function ($scope, $element, $attrs) {
-//            var ctrl = this;
-//            var grid = new ReceivedSupplierPriceListGrid($scope, ctrl, $attrs);
-//            grid.initializeController();
-//        },
-//        controllerAs: "ctrl",
-//        bindToController: true,
-//        compile: function (element, attrs) {
+    var directiveDefinitionObject = {
 
-//        },
-//        templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/ReceivedSupplierPriceList/Templates/ReceivedSupplierPriceListGridTemplate.html"
+        restrict: "E",
+        scope: {
+            onReady: "="
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var mappingGrid = new MappingGrid($scope, ctrl, $attrs);
+            mappingGrid.initializeController();
+        },
+        controllerAs: "ctrl",
+        bindToController: true,
+        compile: function (element, attrs) {
 
-//    };
+        },
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Settings/Templates/PricelistTypeMappingTemplate.html"
+    };
 
-//    function ReceivedSupplierPriceListGrid($scope, ctrl, $attrs) {
+    function MappingGrid($scope, ctrl, $attrs) {
+        this.initializeController = initializeController;
 
-//        var gridAPI;
-//        this.initializeController = initializeController;
+        var gridAPI;
 
-//        function initializeController() {
+        //var pricelisttypeSelectorAPI;
+        //var pricelisttypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-//            $scope.receivedPricelists = [];
-//            $scope.onGridReady = function (api) {
-//                gridAPI = api;
+        var pricelistTypesOptions = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);
 
-//                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-//                    ctrl.onReady(getDirectiveAPI());
-//                function getDirectiveAPI() {
+        function initializeController() {
 
-//                    var directiveAPI = {};
-//                    directiveAPI.loadGrid = function (query) {
-//                        return gridAPI.retrieveData(query);
-//                    };
-//                    return directiveAPI;
-//                }
-//            };
+            $scope.scopeModel = {};
+            $scope.scopeModel.pricelistTypeMappers = [];
 
-//            //$scope.isFailed = 
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                    ctrl.onReady(getDirectiveAPI());
 
-//            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-//                return WhS_SupPL_ReceivedSupplierPriceListAPIService.GetFilteredReceivedSupplierPriceList(dataRetrievalInput)
-//                    .then(function (response) {
-//                        console.log(response);
-//                        onResponseReady(response);
-//                    })
-//                    .catch(function (error) {
-//                        VRNotificationService.notifyException(error, $scope);
-//                    });
-//            };
-//            $scope.viewDetails = function (priceListObj) {
-//                viewTracker(priceListObj)
-//            }
+            };
 
-//            defineMenuActions();
-//        }
 
-//        function defineMenuActions() {
-//            $scope.gridMenuActions = function (dataItem) {
-//                var menuActions = [];
-//                var processInstanceId = dataItem.ReceivedPricelist.ProcessInstanceId;
-//                if (dataItem.ReceivedPricelist.FileId !== 0 && dataItem.ReceivedPricelist.FileId != null) {
-//                    var downloadPricelistAction = {
-//                        name: "Download",
-//                        clicked: downloadPriceList
-//                    };
-//                    menuActions.push(downloadPricelistAction);
-//                }
 
-//                if (processInstanceId != null && dataItem.StatusDescription == "Succeeded") {
-//                    var additionalMenuActions = WhS_BE_SupplierPriceListService.getAdditionalActionOfSupplierPricelistGrid();
-//                    for (var i = 0, length = additionalMenuActions.length; i < length; i++) {
-//                        var additionalMenuAction = additionalMenuActions[i];
-//                        var menuAction = {
-//                            name: additionalMenuAction.name,
-//                            clicked: function (dataItem) {
-//                                var payload = {
-//                                    processInstanceId: dataItem.ReceivedPricelist.ProcessInstanceId
-//                                };
-//                                additionalMenuAction.clicked(payload);
-//                            }
-//                        };
-//                        menuActions.push(menuAction);
-//                    }
-//                }
+            $scope.scopeModel.addColumn = function (data) {
+                var gridItem = {
+                        id: $scope.scopeModel.pricelistTypeMappers.length + 1,
+                };
+                //gridItem.onPricelistTypeSelectorReady = function (api) {
+                //    console.log("onPricelistTypeSelectorReady");
+                //    pricelisttypeSelectorAPI = api;
+                //    pricelisttypeSelectorReadyDeferred.resolve();
+                //};
 
-//                return menuActions;
-//            };
-//        }
+                ////pricelisttypeSelectorReadyDeferred.promise.then
+                    setPricelistTypes(gridItem);
+                    if (data != undefined) {
+                        gridItem.Subject = data.Subject;
+                        gridItem.selectedPricelistType = data.PricelistType;
+                    }
+                    $scope.scopeModel.pricelistTypeMappers.push(gridItem);
 
-//        function downloadPriceList(priceListObj) {
-//            FileAPIService.DownloadFile(priceListObj.ReceivedPricelist.FileId)
-//                    .then(function (response) {
-//                        UtilsService.downloadFile(response.data, response.headers);
-//                    });
-//        }
 
-//        function viewTracker(priceListObj) {
-//            return BusinessProcess_BPInstanceService.openProcessTracking(priceListObj.ReceivedPricelist.ProcessInstanceId);
-//        }
-//    }
+            };
 
-//    return directiveDefinitionObject;
+            $scope.scopeModel.removeColumn = function (dataItem) {
+                var index = UtilsService.getItemIndexByVal($scope.scopeModel.pricelistTypeMappers, dataItem.Subject, 'Subject');
+                if (index > -1) {
+                    $scope.scopeModel.pricelistTypeMappers.splice(index, 1);
+                }
+            };
+            $scope.scopeModel.validateColumns = function () {
+                if ($scope.scopeModel.pricelistTypeMappers.length == 0) {
+                    return 'Please, one record must be added at least.';
+                }
 
-//}]);
+                var columnSubject = [];
+                for (var i = 0; i < $scope.scopeModel.pricelistTypeMappers.length; i++) {
+                    if ($scope.scopeModel.pricelistTypeMappers[i].Subject != undefined) {
+                        columnSubject.push($scope.scopeModel.pricelistTypeMappers[i].Subject);
+                    }
+                }
+                while (columnSubject.length > 0) {
+                    var nameToValidate = columnSubject[0];
+                    columnSubject.splice(0, 1);
+                    if (!validateName(nameToValidate, columnSubject)) {
+                        return 'Two or more columns have the same Subject';
+                    }
+                }
+                return null;
+                function validateName(name, array) {
+                    for (var j = 0; j < array.length; j++) {
+                        if (array[j] == name) 
+                            return false;
+                    }
+                    return true;
+                }
+            };
+
+        }
+        function getDirectiveAPI() {
+            var directiveAPI = {};
+
+            directiveAPI.load = function (payload) {
+
+                if (payload != undefined) {
+                    var pricelistTypeMappingList = payload.pricelistTypeMappingList;
+
+                    if (pricelistTypeMappingList != null) {
+                        for (var i = 0; i < pricelistTypeMappingList.length; i++) {
+                            var item = pricelistTypeMappingList[i];
+                            setPricelistTypes(item);
+
+                            item.selectedPricelistType = UtilsService.getItemByVal(pricelistTypesOptions, item.PricelistType, 'value');
+                            if (item != undefined) {
+                                $scope.scopeModel.pricelistTypeMappers.push(item);
+                            }
+                        }
+                    }
+                }
+
+            };
+
+            directiveAPI.getData = function () {
+                var columns = [];
+                for (var i = 0; i < $scope.scopeModel.pricelistTypeMappers.length; i++) {
+                    var column = $scope.scopeModel.pricelistTypeMappers[i];
+                    columns.push({
+                        Subject: column.Subject,
+                        PricelistType: column.selectedPricelistType.value,
+                    });
+                }
+                return columns;
+            };
+            return directiveAPI;
+        }
+
+        function setPricelistTypes(gridItem) { 
+            gridItem.pricelistTypesOptions = [];
+            for (var i = 0; i < pricelistTypesOptions.length; i++) {
+                gridItem.pricelistTypesOptions.push(pricelistTypesOptions[i]);
+            }
+        }
+
+    }
+
+    return directiveDefinitionObject;
+
+}]);

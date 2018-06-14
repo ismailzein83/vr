@@ -1,27 +1,31 @@
-﻿<vr-panel ng-controller="WhS_SupPL_ReceivedSupplierPriceListController">
+﻿<vr-panel ng-controller="WhS_SupPL_ReceivedSupplierPricelistController">
     <vr-form name="formFilter" vr-loader="scopeModel.isLoading">
-        <!--<vr-validation-group validationcontext="inPutExcelGroupValid">-->
         <div>
             <vr-row removeline>
-                <vr-whs-be-carrieraccount-selector getsuppliers on-ready="scopeModel.onCarrierAccountDirectiveReady" normal-col-num="2" selectedvalues="scopeModel.selectedSupplier" ismultipleselection></vr-whs-be-carrieraccount-selector>
+                <vr-whs-be-carrieraccount-selector getsuppliers on-ready="scopeModel.onCarrierAccountDirectiveReady" normal-col-num="2" ismultipleselection></vr-whs-be-carrieraccount-selector>
 
                 <vr-columns width="normal">
-                    <vr-select label="Status" datasource="scopeModel.Status" datavaluefield="value" datatextfield="description" selectedvalues="scopeModel.selectedStatus" ismultipleselection></vr-select>    
+                    <whs-spl-receivedpricelist-status-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection></whs-spl-receivedpricelist-status-selector>
                 </vr-columns>
 
                 <vr-columns width="normal">
-                    <vr-textbox label="Top" type="number"></vr-textbox>
+                    <vr-textbox label="Top" value="scopeModel.top" type="number" minvalue="1" decimalprecision="0" isrequired></vr-textbox>
                 </vr-columns>
 
             </vr-row>
         </div>
-
-        <vr-row>
+        <vr-row removeline>
             <vr-actionbar>
                 <div transclude-to="buttons">
-                    <vr-button type="Load" data-onclick="scopeModel.load"></vr-button>
+                    <vr-button type="Load" formname="formFilter" data-onclick="scopeModel.load"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <whs-spl-receivedsupplierpricelist-grid on-ready="scopeModel.onGridReady"></whs-spl-receivedsupplierpricelist-grid>
+            </vr-columns>
+        </vr-row>
+
     </vr-form>
 </vr-panel>

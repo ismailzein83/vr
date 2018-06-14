@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    class ReceivedPriceListQuery
+    public class ReceivedPricelistQuery
     {
+        public List<int> SupplierIds { get; set; }
+        public List<int> Status { get; set; }
+        public int Top { get; set; }
     }
 }

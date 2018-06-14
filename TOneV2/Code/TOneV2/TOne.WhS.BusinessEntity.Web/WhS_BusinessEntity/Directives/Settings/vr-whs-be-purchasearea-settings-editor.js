@@ -1,6 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService', 'VRNotificationService', function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService) {
+app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService) {
     return {
         restrict: 'E',
         scope: {
@@ -17,31 +18,48 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
     };
 
     function PurchaseAreaSettings(ctrl, $scope, $attrs) {
-
         this.initializeController = initializeController;
 
+        var pricelistTypeMappingAPI;
+        var pricelistTypeMappingReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var data;
+
         function initializeController() {
+
             defineAPI();
+
+            ctrl.onPricelistTypeMappingReady = function (api) {
+                pricelistTypeMappingAPI = api;
+                pricelistTypeMappingReadyDeferred.resolve();
+            };
+
         }
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
 
-                var data;
-
                 if (payload != undefined) {
                     data = payload.data;
                 }
 
                 var promises = [];
+                load();
 
-                loadStaticData(data);
+                function load() {
+                    loadAllControls();
+                }
 
-                var getSystemCurrencyPromise = getSystemCurrency();
-                promises.push(getSystemCurrencyPromise);
+                function loadAllControls() {
+                    return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadPricelistMapping, getSystemCurrency])
+                       .catch(function (error) {
+                           VRNotificationService.notifyExceptionWithClose(error, $scope);
+                       })
+                      .finally(function () {
+                      });
+                }
 
-                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
@@ -50,7 +68,8 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
                     RetroactiveDayOffset: ctrl.retroactiveDayOffset,
                     MaximumRate: ctrl.maximumRate,
-                    MaximumCodeRange: ctrl.maximumCodeRange
+                    MaximumCodeRange: ctrl.maximumCodeRange,
+                    PricelistTypeMappingList: pricelistTypeMappingAPI.getData()
                 };
             };
 
@@ -58,7 +77,7 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                 ctrl.onReady(api);
         }
 
-        function loadStaticData(data) {
+        function loadStaticData() {
             if (data == undefined)
                 return;
             ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
@@ -66,6 +85,22 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
             ctrl.maximumRate = data.MaximumRate;
             ctrl.maximumCodeRange = data.MaximumCodeRange;
         }
+
+        function loadPricelistMapping() {
+            var pricelistTypeMappingloadDeferred = UtilsService.createPromiseDeferred();
+            pricelistTypeMappingReadyDeferred.promise.then(function () {
+                    var payload;
+                    if (data != undefined && data.PricelistTypeMappingList != undefined) {
+                        payload = {
+                            pricelistTypeMappingList: data.PricelistTypeMappingList
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(pricelistTypeMappingAPI, payload, pricelistTypeMappingloadDeferred);
+                });
+            return pricelistTypeMappingloadDeferred.promise;
+        }
+
+
         function getSystemCurrency() {
             return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
                 if (response != undefined) {

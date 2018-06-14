@@ -2,21 +2,50 @@
 
     "use strict";
 
-    receivedSupplierPriceListController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_SupPL_ReceivedPriceListStatusEnum'];
+    receivedSupplierPricelistController.$inject = ['$scope', 'VRNotificationService',  'UtilsService', 'VRUIUtilsService'];
 
-    function receivedSupplierPriceListController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_SupPL_ReceivedPriceListStatusEnum) {
+    function receivedSupplierPricelistController($scope, VRNotificationService, UtilsService, VRUIUtilsService) {
 
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var statusSelectorAPI;
+        var statusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var filter = {};
+        var gridAPI;
 
         defineScope();
         load();
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.selectedStatus = [];
+            $scope.scopeModel.top = 100;
 
-            $scope.scopeModel.Status = UtilsService.getArrayEnum(WhS_SupPL_ReceivedPriceListStatusEnum);
+
+            $scope.scopeModel.onGridReady = function (api) {
+                gridAPI = api;
+            };
+
+            $scope.scopeModel.onStatusSelectorReady = function (api) {
+                statusSelectorAPI = api;
+                statusSelectorPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.load = function () {
+                if ($scope.scopeModel.top > 0) {
+                    getFilterObject();
+                    return gridAPI.loadGrid(filter);
+                }
+            };
+            function getFilterObject() {
+
+                filter = {
+                    SupplierIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                    Status: statusSelectorAPI.getSelectedIds(),
+                    Top: $scope.scopeModel.top
+                    };
+            }
 
             $scope.scopeModel.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
@@ -25,14 +54,13 @@
         }
 
         function load() {
-          //  $scope.scopeModel.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector])
            .catch(function (error) {
-               $scope.scopeModel.isLoading = false;
                VRNotificationService.notifyExceptionWithClose(error, $scope);
            })
            .finally(function () {
@@ -51,5 +79,5 @@
 
 
     }
-    appControllers.controller('WhS_SupPL_ReceivedSupplierPriceListController', receivedSupplierPriceListController);
+    appControllers.controller('WhS_SupPL_ReceivedSupplierPricelistController', receivedSupplierPricelistController);
 })(appControllers);

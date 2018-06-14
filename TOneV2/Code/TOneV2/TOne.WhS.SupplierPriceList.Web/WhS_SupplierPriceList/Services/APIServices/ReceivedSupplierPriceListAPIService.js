@@ -1,20 +1,20 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    receivedSupplierPriceListAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_SupPL_ModuleConfig", "SecurityService"];
+    receivedSupplierPricelistAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_SupPL_ModuleConfig", "SecurityService"];
 
-    function receivedSupplierPriceListAPIService(BaseAPIService, UtilsService, WhS_SupPL_ModuleConfig, SecurityService) {
+    function receivedSupplierPricelistAPIService(BaseAPIService, UtilsService, WhS_SupPL_ModuleConfig, SecurityService) {
 
         var controllerName = "ReceivedSupplierPriceList";
 
-        function GetFilteredReceivedSupplierPriceList(input) {
+        function GetFilteredReceivedSupplierPricelist(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredReceivedSupplierPriceList"), input);
         }
 
         return ({
-            GetFilteredReceivedSupplierPriceList: GetFilteredReceivedSupplierPriceList,
+            GetFilteredReceivedSupplierPricelist: GetFilteredReceivedSupplierPricelist,
         });
     }
 
-    appControllers.service("WhS_SupPL_SupplierPriceListAPIService", receivedSupplierPriceListAPIService);
+    appControllers.service("WhS_SupPL_ReceivedSupplierPricelistAPIService", receivedSupplierPricelistAPIService);
 })(appControllers);

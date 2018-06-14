@@ -438,6 +438,11 @@ namespace TOne.WhS.BusinessEntity.Business
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.RetroactiveDayOffset;
         }
+        public List<PricelistTypeMapping> GetPurchasePricelistTypeMappingList()
+        {
+             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+             return purchaseAreaSettings.PricelistTypeMappingList;
+        }
         public IEnumerable<VRDocumentItemDefinition> GetDocumentItemDefinitionsInfo()
         {
             BusinessEntityTechnicalSettingsData setting = GetBusinessEntitySettingData();
