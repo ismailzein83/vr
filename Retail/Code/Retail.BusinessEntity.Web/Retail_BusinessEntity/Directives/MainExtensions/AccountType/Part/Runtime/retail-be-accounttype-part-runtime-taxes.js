@@ -60,7 +60,7 @@ app.directive('retailBeAccounttypePartRuntimeTaxes', ['UtilsService', 'Retail_BE
                                     var taxDetail = {
                                         InvoiceTypeTitle: response[p].InvoiceTypeTitle,
                                         Taxes: response[p].TaxesDefinitions.ItemDefinitions
-                                    }
+                                    };
                                     ctrl.invoiceTypesTaxes.push(taxDetail);
                                 }
                             }
