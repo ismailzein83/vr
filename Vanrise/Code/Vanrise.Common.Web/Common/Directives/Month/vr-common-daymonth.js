@@ -49,7 +49,7 @@
                 };
 
                 $scope.scopeModel.onMonthSelectorChanged = function (value) {
-                    $scope.scopeModel.selectedDay = "";
+                    $scope.scopeModel.selectedDay = undefined;
                     if (value != undefined) {
                         if (selectedMonthDeferred != undefined)
                             selectedMonthDeferred.resolve();

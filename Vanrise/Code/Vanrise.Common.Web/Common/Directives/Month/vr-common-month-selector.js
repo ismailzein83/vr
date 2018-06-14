@@ -86,13 +86,16 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            var label = attrs.label ? attrs.label : 'Month';
+            var label ='Month';
 
             var ismultipleselection = '';
             if (attrs.ismultipleselection != undefined && attrs.ismultipleselection != null) {
-                label = label == 'Month' ? 'Months' : label;
+                label = 'Months';
                 ismultipleselection = ' ismultipleselection';
             }
+
+            if (attrs.label != undefined)
+                label = attrs.label;
 
             var hideremoveicon = (attrs.hideremoveicon != undefined && attrs.hideremoveicon != null) ? 'hideremoveicon' : null;
 
