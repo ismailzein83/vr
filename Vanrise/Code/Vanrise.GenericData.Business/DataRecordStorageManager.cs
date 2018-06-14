@@ -23,6 +23,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Public Methods Data Record
+
         public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
@@ -105,6 +106,7 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
+
         public List<DataRecord> GetAllDataRecords(Guid dataRecordStorageId)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
@@ -199,6 +201,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Public Methods
+
         public RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, Guid recordTypeId)
         {
             DataRecordType dataRecordType = new DataRecordTypeManager().GetDataRecordType(recordTypeId);
@@ -225,6 +228,7 @@ namespace Vanrise.GenericData.Business
 
             return null;
         }
+
         public void ConvertChildFilterGroup(RecordFilter recordFilter, DataRecordType recordType, List<RecordFilter> convertedFilters)
         {
             RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
@@ -523,6 +527,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods
+
         private void GetDataRecordData(Guid dataRecordStorageId, out DataRecordStorage dataRecordStorage, out DataStore dataStore)
         {
             dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
@@ -583,10 +588,10 @@ namespace Vanrise.GenericData.Business
             return dataStore.Settings.GetDataRecordDataManager(getRecordStorageDataManagerContext);
         }
 
-
         #endregion
 
         #region Private Methods Data Record
+
         private List<DataRecord> GetCachedDataRecords(Guid dataRecordStorageId)
         {
             return CacheManagerFactory.GetCacheManager<RecordCacheManager>().GetOrCreateObject("GetCachedDataRecords", dataRecordStorageId,
@@ -916,6 +921,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Classes Data Record
+
         public class RecordCacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
 
@@ -936,6 +942,7 @@ namespace Vanrise.GenericData.Business
                 return isCacheExpired;
             }
         }
+
         #endregion
 
         #region Private Classes
@@ -1163,7 +1170,6 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-
         #endregion
 
         #region Mappers
@@ -1190,7 +1196,5 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-
-
     }
 }
