@@ -47,4 +47,20 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.AddBusinessEntity(businessEntity);
         }
     }
+
+
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "SecurityProvider")]
+    public class SecurityProviderController : BaseAPIController
+    {
+        SecurityProviderManager _manager = new SecurityProviderManager();
+        [HttpGet]
+        [Route("GetSecurityProviderConfigs")]
+        public IEnumerable<SecurityProviderConfigs> GetSecurityProviderConfigs()
+        {
+            return _manager.GetSecurityProviderConfigs();
+        }
+        
+    }
+
 }
