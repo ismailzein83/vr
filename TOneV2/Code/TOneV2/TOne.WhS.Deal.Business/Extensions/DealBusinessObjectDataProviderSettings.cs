@@ -22,13 +22,19 @@ namespace TOne.WhS.Deal.Business
 
         public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
         {
+            if (!context.FromTime.HasValue)
+                throw new NullReferenceException("context.FromTime");
+
+            if (!context.ToTime.HasValue)
+                throw new NullReferenceException("context.ToTime");
+
             var saleProgressByDealId = new SwapDealnfoByDealId();
             var costProgressByDealId = new SwapDealnfoByDealId();
             var dealDetailedProgressManager = new DealDetailedProgressManager();
             var swapDealManager = new SwapDealManager();
             var minDealBED = DateTime.Now;
 
-            IEnumerable<DealDefinition> deals = swapDealManager.GetSwapDealsEffectiveAfterDate(context.FromTime);
+            IEnumerable<DealDefinition> deals = swapDealManager.GetSwapDealsEffectiveAfterDate(context.FromTime.Value);
 
             foreach (var dealDefinition in deals)
             {
@@ -94,7 +100,7 @@ namespace TOne.WhS.Deal.Business
             }
 
             List<int> dealIds = deals.Select(deal => deal.DealId).ToList();
-            IEnumerable<DealDetailedProgress> dealsDetailedProgresses = dealDetailedProgressManager.GetDealsDetailedProgress(dealIds, minDealBED, context.ToTime);
+            IEnumerable<DealDetailedProgress> dealsDetailedProgresses = dealDetailedProgressManager.GetDealsDetailedProgress(dealIds, minDealBED, context.ToTime.Value);
 
             foreach (var dealProgress in dealsDetailedProgresses)
             {
