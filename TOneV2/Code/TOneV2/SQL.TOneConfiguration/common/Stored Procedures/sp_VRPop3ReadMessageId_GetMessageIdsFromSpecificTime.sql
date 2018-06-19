@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [common].[sp_VRPop3ReadMessageId_GetMessageIdsFromDate]
+CREATE PROCEDURE [common].[sp_VRPop3ReadMessageId_GetMessageIdsFromSpecificTime]
 	-- Add the parameters for the stored procedure here
 	@ConnectionID uniqueIdentifier,
 	@SenderIdentifier varchar(255),

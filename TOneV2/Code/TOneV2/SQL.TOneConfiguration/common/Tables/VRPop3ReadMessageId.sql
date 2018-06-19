@@ -5,9 +5,11 @@
     [MessageId]        NVARCHAR (400)   NOT NULL,
     [MessageTime]      DATETIME         NOT NULL,
     [timestamp]        ROWVERSION       NULL,
-    [CreatedTime]      DATETIME         NULL,
+    [CreatedTime]      DATETIME         CONSTRAINT [DF_VRPop3ReadMessageId_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [IX_VRPop3ReadMessageId_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

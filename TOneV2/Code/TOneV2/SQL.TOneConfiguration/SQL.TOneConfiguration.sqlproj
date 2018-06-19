@@ -715,7 +715,6 @@
     <Build Include="rules\Stored Procedures\sp_RuleChangedForProcessing_DeleteByRuleAndType.sql" />
     <Build Include="common\Tables\VRPop3ReadMessageId.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateSetting.sql" />
-    <Build Include="common\Stored Procedures\sp_VRPop3ReadMessageId_GetMessageIdsFromDate.sql" />
     <Build Include="common\Stored Procedures\sp_VRPop3ReadMessageId_GetLastMessageSendTime.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_TryKeep.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_GetAll.sql" />
@@ -772,6 +771,7 @@
     <Build Include="common\Stored Procedures\sp_EntityPersonalization_InsertIfNotExistsOrUpdate.sql" />
     <Build Include="common\Stored Procedures\sp_EntityPersonalization_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_EntityPersonalization_Delete.sql" />
+    <Build Include="common\Stored Procedures\sp_VRPop3ReadMessageId_GetMessageIdsFromSpecificTime.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
