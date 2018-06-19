@@ -148,7 +148,7 @@ as (select * from (values
 ('696fcb6c-ee81-4c34-a390-6793ecc7252d','Voice','Voice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidcdr"}'),
 ('0f35bd74-81d4-4cf3-950d-98de8cdad7d9','SMS','SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidsms"}'),
 ('81A1FFFA-8AE6-41F0-A3E2-ED6457F72FDB','Retail_BE_AccountBulkActionsSettingConfig_SendEmail','Send Rates','Retail_BE_AccountBulkActionSettingsConfig','{"Editor":"retail-be-accountbulkactionsettings-sendrates"}'),
-('6388F486-9BB7-47D2-B16C-31C9FDCE9A8D','Taxes','Taxes','Retail_BE_AccountPartDefinition'		,'{"DefinitionEditor":"retail-be-accounttype-part-definition-taxes","RuntimeEditor":"retail-be-accounttype-part-runtime-taxes"}}')
+('6388F486-9BB7-47D2-B16C-31C9FDCE9A8D','Taxes','Taxes','Retail_BE_AccountPartDefinition'		,'{"DefinitionEditor":"retail-be-accounttype-part-definition-taxes","RuntimeEditor":"retail-be-accounttype-part-runtime-taxes"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
