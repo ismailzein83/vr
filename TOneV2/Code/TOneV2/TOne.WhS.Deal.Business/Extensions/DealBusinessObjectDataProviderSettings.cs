@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using Vanrise.Common;
-using TOne.WhS.Deal.Entities;
 using System.Collections.Generic;
+using System.Linq;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.Deal.Business
@@ -10,15 +10,10 @@ namespace TOne.WhS.Deal.Business
     public class DealBusinessObjectDataProviderSettings : BusinessObjectDataProviderExtendedSettings
     {
         static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
-        public override Guid ConfigId
-        {
-            get { return new Guid("7b5d42b4-b05c-4f54-9683-a73dd0cebd68"); }
-        }
 
-        public override bool DoesSupportFilterOnAllFields
-        {
-            get { return false; }
-        }
+        public override Guid ConfigId { get { return new Guid("7b5d42b4-b05c-4f54-9683-a73dd0cebd68"); } }
+
+        public override bool DoesSupportFilterOnAllFields { get { return false; } }
 
         public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
         {
@@ -80,6 +75,7 @@ namespace TOne.WhS.Deal.Business
                     };
                     saleProgressByGroupNb.Add(inbound.ZoneGroupNumber, dealInfo);
                 }
+
                 foreach (var outbound in swapDealSetting.Outbounds)
                 {
                     SwapDealInfo dealInfo = new SwapDealInfo
@@ -159,6 +155,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dataRecords;
         }
+
         private DataRecordObject DataRecordObjectMapper(SwapDealProgressDataRecordType swapDealProgress)
         {
             var swapDealProgressObject = new Dictionary<string, object>
@@ -179,6 +176,7 @@ namespace TOne.WhS.Deal.Business
             };
             return new DataRecordObject(new Guid("AB46069D-0FFC-4027-9CCF-BD1AF8EC91F7"), swapDealProgressObject);
         }
+
         private void AppendSwapDealInfos(SwapDealnfoByDealId dealById, DealDetailedProgress dealProgress)
         {
             SwapDealInfoByGroupNb zoneGroup = dealById.GetRecord(dealProgress.DealId);
@@ -201,16 +199,18 @@ namespace TOne.WhS.Deal.Business
         }
     }
 
-    #region classes
+    #region Classes
 
     public class SwapDealnfoByDealId : Dictionary<Int32, SwapDealInfoByGroupNb>
     {
 
     }
+
     public class SwapDealInfoByGroupNb : Dictionary<Int32, SwapDealInfo>
     {
 
     }
+
     public class SwapDealInfo
     {
         public long DealId { get; set; }
