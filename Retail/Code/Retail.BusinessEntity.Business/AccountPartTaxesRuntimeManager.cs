@@ -15,16 +15,18 @@ namespace Retail.BusinessEntity.Business
             Dictionary<Guid, InvoiceTypesTaxesRuntime> invoiceTypesTaxes = new Dictionary<Guid, InvoiceTypesTaxesRuntime>();
            
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-            ConfigManager configManager = new ConfigManager();
-
-            foreach (var invoiceTypeId in invoiceTypesIds){
-                if (invoiceTypesIds != null)
+            if (invoiceTypesIds != null)
+            {
+                ConfigManager configManager = new ConfigManager();
+                var taxesDefinitions = configManager.GetRetailTaxesDefinitions();
+                foreach (var invoiceTypeId in invoiceTypesIds)
                 {
-                    InvoiceTypesTaxesRuntime invoiceTypesTaxesRuntime = new InvoiceTypesTaxesRuntime();
-
-                    invoiceTypesTaxesRuntime.InvoiceTypeId = invoiceTypeId;
-                    invoiceTypesTaxesRuntime.InvoiceTypeTitle = invoiceTypeManager.GetInvoiceType(invoiceTypeId).Name;
-                    invoiceTypesTaxesRuntime.TaxesDefinitions = configManager.GetRetailTaxesDefinitions();
+                    var invoiceTypesTaxesRuntime = new InvoiceTypesTaxesRuntime
+                    {
+                        InvoiceTypeId = invoiceTypeId,
+                        InvoiceTypeTitle = invoiceTypeManager.GetInvoiceType(invoiceTypeId).Name,
+                        TaxesDefinitions = taxesDefinitions
+                    };
                     invoiceTypesTaxes.Add(invoiceTypeId, invoiceTypesTaxesRuntime);
                 }
             }
