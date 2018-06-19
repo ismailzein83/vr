@@ -405,7 +405,7 @@ app.directive('vrSecSecurityprovidersettingsStaticeditor', ['UtilsService', 'VRU
                 hideremoveicon = 'hideremoveicon';
             }
             var template =  '<vr-row>'
-            + '<vr-sec-security-providersettings  on-ready="scopeModel.onSecurityProviderSelectorReady" normal-col-num="3"></vr-sec-security-providersettings> '
+            + '<vr-sec-security-providersettings  on-ready="scopeModel.onSecurityProviderSelectorReady" isrequired="true" normal-col-num="3"></vr-sec-security-providersettings> '
         + '</vr-row>'
 
             return template;
