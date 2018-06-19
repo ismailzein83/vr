@@ -18,7 +18,6 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 			_columnMapper.Add("ChangeTypeDecription", "ChangeType");
 		}
 
-
 		public long ProcessInstanceId
 		{
 			set
@@ -44,7 +43,6 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 		{
 			return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]", CodePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.CountryId, query.OnlyModified);
 		}
-
 
 		object Vanrise.Data.IBulkApplyDataManager<CodePreview>.InitialiazeStreamForDBApply()
 		{
@@ -79,7 +77,6 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 			};
 		}
 
-
 		private CodePreview CodePreviewMapper(IDataReader reader)
 		{
 			CodePreview codePreview = new CodePreview
@@ -93,41 +90,5 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 			};
 			return codePreview;
 		}
-	}
-
-	public class ReceivedPricelistManagerTemp : BaseSQLDataManager, IReceivedPricelistManagerTemp
-	{
-		public ReceivedPricelistManagerTemp()
-			: base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
-		{
-
-		}
-
-		#region Public Methods
-		public void SetReceivedPricelistAsStarted(int receivedPricelistRecordId, ReceivedPricelistStatus status, long processInstanceId, DateTime startProcessingTime)
-		{
-			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsStarted", receivedPricelistRecordId, status, processInstanceId, startProcessingTime);
-		}
-
-		public void SetReceivedPricelistAsCompleted(int receivedPricelistRecordId, ReceivedPricelistStatus status, int pricelistId)
-		{
-			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsCompleted", receivedPricelistRecordId, status, pricelistId);
-		}
-
-		public void UpdateReceivePricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status)
-		{
-			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatus", receivedPricelistRecordId, status);
-		}
-
-		public bool InsertReceivedPricelist(int supplierId, long? fileId, DateTime receivedDate, SupplierPriceListType? pricelistType, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors, out int recordId)
-		{
-			object receivedPricelistRecordId;
-			var serializedErrors = Vanrise.Common.Serializer.Serialize(errors);
-			int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_Insert", out receivedPricelistRecordId, supplierId, fileId, receivedDate, pricelistType, status, serializedErrors);
-			recordId = (affectedRows > 0) ? (int)receivedPricelistRecordId : -1;
-
-			return (affectedRows > 0);
-		}
-		#endregion
 	}
 }

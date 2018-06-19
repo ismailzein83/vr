@@ -1,32 +1,41 @@
 ﻿(function (appControllers) {
 
-    'use strict';
+	'use strict';
 
-    SupplierPriceListTemplateService.$inject = ['VRModalService'];
+	SupplierPriceListTemplateService.$inject = ['VRModalService'];
 
-    function SupplierPriceListTemplateService(VRModalService) {
+	function SupplierPriceListTemplateService(VRModalService) {
 
-        function saveSupplierPriceListTemplate(onSupplierPriceListTemplatSaved, configDetails, supplierId) {
-            var settings = {
-            };
+		function saveSupplierPriceListTemplate(onSupplierPriceListTemplatSaved, configDetails, supplierId) {
+			var settings = {
+			};
 
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onSupplierPriceListTemplatSaved = onSupplierPriceListTemplatSaved;
-            };
-            var parameters = {
-                ConfigDetails: configDetails,
-                SupplierId: supplierId
-            };
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onSupplierPriceListTemplatSaved = onSupplierPriceListTemplatSaved;
+			};
+			var parameters = {
+				ConfigDetails: configDetails,
+				SupplierId: supplierId
+			};
 
-            VRModalService.showModal("/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListTemplateEditor.html", parameters, settings);
-        }
+			VRModalService.showModal("/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListTemplateEditor.html", parameters, settings);
+		}
 
+		function showReceivedPricelistErrorDetails(errorDetails) {
+			var settings = {};
+			var parameters = {
+				ErrorDetails: errorDetails,
+			};
 
-        return ({
-            saveSupplierPriceListTemplate: saveSupplierPriceListTemplate
-        })
-    }
+			VRModalService.showModal("/Client/Modules/WhS_SupplierPriceList/Views/ReceivedPricelistErrorDetails.html", parameters, settings);
+		}
 
-    appControllers.service('WhS_SupPL_SupplierPriceListTemplateService', SupplierPriceListTemplateService);
+		return ({
+			saveSupplierPriceListTemplate: saveSupplierPriceListTemplate,
+			showReceivedPricelistErrorDetails: showReceivedPricelistErrorDetails
+		})
+	}
+
+	appControllers.service('WhS_SupPL_SupplierPriceListTemplateService', SupplierPriceListTemplateService);
 
 })(appControllers);

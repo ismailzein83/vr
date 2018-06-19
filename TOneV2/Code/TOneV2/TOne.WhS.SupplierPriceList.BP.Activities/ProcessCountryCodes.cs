@@ -7,6 +7,7 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 using TOne.WhS.SupplierPriceList.Business;
 using Vanrise.BusinessProcess;
 using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -14,7 +15,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     public class ProcessCountryCodesInput
     {
-        public SupplierPriceListType SupplierPriceListType { get; set; }
+        public SupplierPricelistType SupplierPriceListType { get; set; }
 
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
 
@@ -53,7 +54,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         #region Input Arguments
 
         [RequiredArgument]
-        public InArgument<SupplierPriceListType> SupplierPriceListType { get; set; }
+        public InArgument<SupplierPricelistType> SupplierPriceListType { get; set; }
 
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }

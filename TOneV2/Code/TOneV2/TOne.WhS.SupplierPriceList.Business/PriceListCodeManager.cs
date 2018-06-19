@@ -193,7 +193,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             return existingCodesByCodeValue;
         }
 
-        private void ProcessCountryCodes(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones,
+        private void ProcessCountryCodes(int countryId, SupplierPricelistType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones,
             DateTime codeCloseDate, DateTime priceListDate, ExistingCodesByCodeValue existingCodesByCodeValue, out HashSet<string> importedCodesHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
@@ -392,14 +392,14 @@ namespace TOne.WhS.SupplierPriceList.Business
                 && importedCode.ZoneName.Equals(existingCode.ParentZone.ZoneEntity.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private IEnumerable<ExistingCode> GetExistingCodesToClose(int countryId, SupplierPriceListType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes,
+        private IEnumerable<ExistingCode> GetExistingCodesToClose(int countryId, SupplierPricelistType supplierPriceListType, IEnumerable<ImportedZone> importedZones, IEnumerable<ImportedCode> importedCodes,
             IEnumerable<ExistingCode> existingCodes, ExistingZonesByName existingZonesByName, HashSet<string> importedCodeValues)
         {
             List<ExistingCode> existingCodesToClose = new List<ExistingCode>();
 
             if (importedZones.Count() > 0) // Country is included
             {
-                if (supplierPriceListType == SupplierPriceListType.RateChange || !DoCountryCodeGroupsExistInImportedData(countryId, importedCodes))
+                if (supplierPriceListType == SupplierPricelistType.RateChange || !DoCountryCodeGroupsExistInImportedData(countryId, importedCodes))
                 {
                     foreach (ImportedZone importedZone in importedZones)
                     {
@@ -418,7 +418,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
             else // Country is excluded
             {
-                if (supplierPriceListType == SupplierPriceListType.Full)
+                if (supplierPriceListType == SupplierPricelistType.Full)
                     existingCodesToClose = existingCodes.ToList();
             }
 

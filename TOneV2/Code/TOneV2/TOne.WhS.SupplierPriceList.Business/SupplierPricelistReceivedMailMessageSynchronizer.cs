@@ -31,8 +31,9 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 		public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
 		{
-			IReceivedPricelistManagerTemp receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManagerTemp>();
+			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 			CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+			BusinessEntity.Business.ConfigManager configManager = new BusinessEntity.Business.ConfigManager();
 
 			foreach (var targetBE in context.TargetBE)
 			{
@@ -47,13 +48,17 @@ namespace TOne.WhS.SupplierPriceList.Business
 					Dictionary<string, CarrierAccount> supplierAccounts = carrierAccountManager.GetCachedSupplierAccountsByAutoImportEmail();
 					var supplierAccount = supplierAccounts.GetRecord(receivedMailMessage.Header.From.ToLower());
 
-					SupplierPriceListType? pricelistType = null;
-					if (receivedMailMessage.Header.Subject.ToLower().Contains("full") || receivedMailMessage.Header.Subject.ToLower().Contains("a-z"))
-						pricelistType = SupplierPriceListType.Full;
-					else if (receivedMailMessage.Header.Subject.ToLower().Contains("country"))
-						pricelistType = SupplierPriceListType.Country;
-					else if (receivedMailMessage.Header.Subject.ToLower().Contains("ratechange") || receivedMailMessage.Header.Subject.ToLower().Contains("rate change"))
-						pricelistType = SupplierPriceListType.RateChange;
+					SupplierPricelistType? pricelistType = null;
+					var pricelistTypeMappings = configManager.GetPurchasePricelistTypeMappingList();
+					pricelistTypeMappings.ThrowIfNull("Pricelist Type Mappings");
+					foreach (var pricelistTypeMapping in pricelistTypeMappings)
+					{
+						if (receivedMailMessage.Header.Subject.ToLower().Contains(pricelistTypeMapping.Subject))
+						{
+							pricelistType = pricelistTypeMapping.PricelistType;
+							break;
+						}
+					}
 
 					var receivedMessageAttachments = receivedMailMessage.GetAttachments();
 
@@ -66,6 +71,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 					var zipApplicableFiles = GetApplicableFilesFromZipFiles(receivedMessageAttachments);
 					if (zipApplicableFiles != null || zipApplicableFiles.Any())
 						applicableFiles.AddRange(zipApplicableFiles);
+
+					var attachmentCode = supplierAccount.SupplierSettings.AutoImportSettings.AttachmentCode;
+					if (!string.IsNullOrEmpty(attachmentCode))
+						applicableFiles = applicableFiles.FindAllRecords(item => item.Name.ToLower().Contains(attachmentCode.ToLower())).ToList();
 
 					var supplierPriceListTemplateManager = new SupplierPriceListTemplateManager();
 					var supplierPriceListTemplate = supplierPriceListTemplateManager.GetSupplierPriceListTemplateBySupplierId(supplierAccount.CarrierAccountId);
@@ -93,7 +102,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 							SupplierPriceListTemplateId = supplierPriceListTemplate.SupplierPriceListTemplateId,
 							CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(supplierAccount.CarrierAccountId),
 							PriceListDate = receivedMailMessage.Header.MessageSendTime,
-							SupplierPriceListType = pricelistType.Value,
+							SupplierPricelistType = pricelistType.Value,
 							IsAutoImport = true,
 							ReceivedPricelistRecordId = recordId,
 							UserId = loggedInUserId
@@ -110,11 +119,11 @@ namespace TOne.WhS.SupplierPriceList.Business
 			}
 		}
 
-		private bool IsValidToImport(CarrierAccount supplierAccount, SupplierPriceListType? pricelistType, List<VRFile> applicableFiles, out List<SPLImportErrorDetail> errors)
+		private bool IsValidToImport(CarrierAccount supplierAccount, SupplierPricelistType? pricelistType, List<VRFile> applicableFiles, out List<SPLImportErrorDetail> errors)
 		{
 			errors = new List<SPLImportErrorDetail>();
 
-			var attachmentCode = supplierAccount.SupplierSettings.AutoImportSettings.AttachmentCode;
+			//var attachmentCode = supplierAccount.SupplierSettings.AutoImportSettings.AttachmentCode;
 
 			if (pricelistType == null)
 				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Subject does not contain pricelist type." });
@@ -125,8 +134,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 			else if (applicableFiles.Count > 1)
 				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "There are more than one applicable attachment." });
 
-			else if (!string.IsNullOrEmpty(attachmentCode) && applicableFiles[0].Name.ToLower().Contains(attachmentCode.ToLower()))
-				errors.Add(new SPLImportErrorDetail() { ErrorMessage = string.Format("Attachment name does not contain .", attachmentCode) });
+			//else if (!string.IsNullOrEmpty(attachmentCode) && applicableFiles[0].Name.ToLower().Contains(attachmentCode.ToLower()))
+			//errors.Add(new SPLImportErrorDetail() { ErrorMessage = string.Format("Attachment name does not contain .", attachmentCode) });
 
 			if (errors.Any())
 				return false;

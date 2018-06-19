@@ -73,6 +73,8 @@
     <Compile Include="SupplierPricelistExcelFieldMapping\PricelistDateFieldMapping.cs" />
     <Compile Include="SupplierPriceListSettings\BasicSupplierPriceListSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRObjectTypes\ReceivedPricelistObjectType.cs" />
+    <Compile Include="VRObjectTypes\ReceivedPricelistPropertyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
@@ -82,6 +84,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Business\TOne.WhS.SupplierPriceList.Business.csproj">
+      <Project>{ecd63186-7d8e-4cbb-8e90-c1fff4a806a0}</Project>
+      <Name>TOne.WhS.SupplierPriceList.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.Entities\TOne.WhS.SupplierPriceList.Entities.csproj">
       <Project>{0940dc86-5421-4324-87cd-3f3ad458f4f6}</Project>

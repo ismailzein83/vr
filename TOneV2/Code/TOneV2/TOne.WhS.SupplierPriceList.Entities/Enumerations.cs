@@ -10,7 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		Updated = 2,
 	}
 
-	public enum SupplierPriceListType
+	/*public enum SupplierPriceListType
 	{
 		[Description("Rate Change")]
 		RateChange = 0,
@@ -20,7 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 
 		[Description("Full")]
 		Full = 2
-	}
+	}*/
 
 	public enum ReceivedPricelistStatus
 	{

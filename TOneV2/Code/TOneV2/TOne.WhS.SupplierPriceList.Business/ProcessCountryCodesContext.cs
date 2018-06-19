@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
@@ -12,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public int CountryId { get; set; }
 
-        public SupplierPriceListType SupplierPriceListType { get; set; }
+        public SupplierPricelistType SupplierPriceListType { get; set; }
 
         public IEnumerable<ImportedZone> ImportedZones { get; set; }
 

@@ -1,87 +1,99 @@
 ﻿using System;
 using System.Data;
-using Vanrise.Data.SQL;
-using TOne.WhS.SupplierPriceList.Entities;
-using Vanrise.Entities;
 using System.Collections.Generic;
+using Vanrise.Common;
+using Vanrise.Data.SQL;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
-    public class ReceivedPricelistManager : BaseSQLDataManager, IReceivedPricelistManager
-    {
-        public ReceivedPricelistManager()
-            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
-        {
+	public class ReceivedPricelistManager : BaseSQLDataManager, IReceivedPricelistManager
+	{
+		public ReceivedPricelistManager()
+			: base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+		{
 
-        }
+		}
 
-        #region Public Methods
+		#region Public Methods
 
-        public bool InsertReceivedPricelist(ReceivedPricelist receivedPricelist, out int insertedObjectId)
-        {
-            object receivedPricelistId;
+		public bool InsertReceivedPricelist(ReceivedPricelist receivedPricelist, out int insertedObjectId)
+		{
+			object receivedPricelistId;
 
-            int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_Insert", out receivedPricelistId, receivedPricelist.SupplierId, receivedPricelist.FileId, receivedPricelist.ReceivedDate, receivedPricelist.PricelistType, receivedPricelist.Status, receivedPricelist.PricelistId, receivedPricelist.ProcessInstanceId);
-            insertedObjectId = (affectedRows > 0) ? (int)receivedPricelistId : -1;
+			int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_Insert", out receivedPricelistId, receivedPricelist.SupplierId, receivedPricelist.FileId, receivedPricelist.ReceivedDateTime, receivedPricelist.PricelistType, receivedPricelist.Status, receivedPricelist.PricelistId, receivedPricelist.ProcessInstanceId);
+			insertedObjectId = (affectedRows > 0) ? (int)receivedPricelistId : -1;
 
-            return (affectedRows > 0);
-        }
+			return (affectedRows > 0);
+		}
 
-        public bool InsertReceivedPricelist(int supplierId, long fileId, DateTime receivedDate, SupplierPriceListType pricelistType, ReceivedPricelistStatus status, int? pricelistId, long? processInstanceId, out int insertedObjectId)
-        {
-            object receivedPricelistId;
+		public bool InsertReceivedPricelist(int supplierId, long? fileId, DateTime receivedDate, SupplierPricelistType? pricelistType, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors, out int recordId)
+		{
+			object receivedPricelistRecordId;
+			var serializedErrors = Vanrise.Common.Serializer.Serialize(errors);
+			int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_Insert", out receivedPricelistRecordId, supplierId, fileId, receivedDate, pricelistType, status, null, null, serializedErrors);
+			recordId = (affectedRows > 0) ? (int)receivedPricelistRecordId : -1;
 
-            int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_Insert", out receivedPricelistId, supplierId, fileId, receivedDate, pricelistType, status, pricelistId, processInstanceId);
-            insertedObjectId = (affectedRows > 0) ? (int)receivedPricelistId : -1;
+			return (affectedRows > 0);
+		}
 
-            return (affectedRows > 0);
-        }
+		public void SetReceivedPricelistAsStarted(int receivedPricelistRecordId, ReceivedPricelistStatus status, long processInstanceId, DateTime startProcessingTime)
+		{
+			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsStarted", receivedPricelistRecordId, status, processInstanceId, startProcessingTime);
+		}
 
-        public void UpdateReceivedPricelistStatus(int receivedPricelistId, ReceivedPricelistStatus status)
-        {
-            ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatus", receivedPricelistId, status);
-        }
+		public void SetReceivedPricelistAsCompleted(int receivedPricelistRecordId, ReceivedPricelistStatus status, int pricelistId)
+		{
+			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsCompleted", receivedPricelistRecordId, status, pricelistId);
+		}
 
-        public void UpdateReceivedPricelistInfos(int receivedPricelistId, ReceivedPricelistStatus status, int pricelistId, long processInstanceId)
-        {
-            ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdatePrcielistInfos", receivedPricelistId, status, pricelistId, processInstanceId);
-        }
+		public void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status)
+		{
+			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatus", receivedPricelistRecordId, status);
+		}
 
-        public List<ReceivedPricelist> GetFilteredReceivedPricelists(ReceivedPricelistQuery input)
-        {
-            List<int> supplierIds = input.SupplierIds;
-            List<int> status = input.Status;
+		public ReceivedPricelist GetReceivedPricelistById(int id)
+		{
+			return GetItemSP("[TOneWhS_SPL].[sp_ReceivedSupplierPricelist_GetReceivedPricelistById]", ReceivedPricelistMapper, id);
+		}
 
-            string strSupplierIds = null;
-            if (supplierIds != null && supplierIds.Count > 0)
-                strSupplierIds = string.Join(",", supplierIds);
+		public List<ReceivedPricelist> GetFilteredReceivedPricelists(ReceivedPricelistQuery input)
+		{
+			List<int> supplierIds = input.SupplierIds;
+			List<int> status = input.Status;
 
-            string strStatus = null;
-            if (status != null && status.Count > 0)
-                strStatus = string.Join(",", status);
+			string strSupplierIds = null;
+			if (supplierIds != null && supplierIds.Count > 0)
+				strSupplierIds = string.Join(",", supplierIds);
 
-            return GetItemsSP("[TOneWhS_SPL].[sp_ReceivedSupplierPricelist_GetFiltered]", ReceivedPricelistMapper, strSupplierIds, strStatus, input.Top);
-        }
+			string strStatus = null;
+			if (status != null && status.Count > 0)
+				strStatus = string.Join(",", status);
 
-        #endregion
+			return GetItemsSP("[TOneWhS_SPL].[sp_ReceivedSupplierPricelist_GetFiltered]", ReceivedPricelistMapper, strSupplierIds, strStatus, input.Top);
+		}
 
-        #region Mappers
-        private ReceivedPricelist ReceivedPricelistMapper(IDataReader reader)
-        {
-            return new ReceivedPricelist()
-            {
-                //Id = GetReaderValue<int>(reader, "Id"),
-                SupplierId =GetReaderValue<int>(reader, "SupplierId"),
-                FileId = GetReaderValue<long?>(reader, "FileId"),
-                ReceivedDate = (DateTime)reader["ReceivedDate"],
-                PricelistType = (SupplierPriceListType?)GetReaderValue<int?>(reader, "PricelistType"),
-                Status = (ReceivedPricelistStatus)GetReaderValue<int>(reader, "Status"),
-                PricelistId = GetReaderValue<int?>(reader, "PricelistId"),
-                ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceId"),
-                StartProcessingDate = GetReaderValue<DateTime?>(reader, "StartProcessingDate"),
-            };
-        }
+		#endregion
 
-        #endregion
-    }
+		#region Mappers
+		private ReceivedPricelist ReceivedPricelistMapper(IDataReader reader)
+		{
+			return new ReceivedPricelist()
+			{
+				//Id = GetReaderValue<int>(reader, "Id"),
+				SupplierId = GetReaderValue<int>(reader, "SupplierId"),
+				FileId = GetReaderValue<long?>(reader, "FileId"),
+				ReceivedDateTime = (DateTime)reader["ReceivedDate"],
+				PricelistType = (SupplierPricelistType?)GetReaderValue<int?>(reader, "PricelistType"),
+				Status = (ReceivedPricelistStatus)GetReaderValue<int>(reader, "Status"),
+				PricelistId = GetReaderValue<int?>(reader, "PricelistId"),
+				ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceId"),
+				StartProcessingDateTime = GetReaderValue<DateTime?>(reader, "StartProcessingDate"),
+				ErrorDetails = string.IsNullOrEmpty(GetReaderValue<string>(reader, "ErrorDetails")) ? null : Serializer.Deserialize<List<SPLImportErrorDetail>>(GetReaderValue<string>(reader, "ErrorDetails")),
+			};
+		}
+
+		#endregion
+	}
 }

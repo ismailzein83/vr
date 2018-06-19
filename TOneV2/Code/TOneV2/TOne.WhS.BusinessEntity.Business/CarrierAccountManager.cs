@@ -104,6 +104,21 @@ namespace TOne.WhS.BusinessEntity.Business
 			   });
 		}
 
+		public string GetSupplierAutoImportEmail(int carrierAccountId)
+		{
+			var carrierAccount = GetCarrierAccount(carrierAccountId);
+
+			carrierAccount.ThrowIfNull("Carrier Account", carrierAccountId);
+			carrierAccount.SupplierSettings.ThrowIfNull("CarrierAccount.CustomerSetting", carrierAccountId);
+
+			var autoImportEmail = carrierAccount.SupplierSettings.AutoImportSettings.Email;
+
+			if (string.IsNullOrEmpty(autoImportEmail))
+				throw new DataIntegrityValidationException(string.Format("There is no auto import email for supplier with Id '{0}'.", carrierAccount.CarrierAccountId));
+
+			return autoImportEmail;
+		}
+
 		public int GetSupplierEffectiveDateDayOffset(int carrierAccountId)
 		{
 			var carrierAccount = GetCarrierAccount(carrierAccountId);

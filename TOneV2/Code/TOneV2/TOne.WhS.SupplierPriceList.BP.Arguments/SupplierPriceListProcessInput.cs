@@ -17,7 +17,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
 
 		public int SupplierPriceListTemplateId { get; set; }
 
-		public SupplierPriceListType SupplierPriceListType { get; set; }
+		public SupplierPricelistType SupplierPricelistType { get; set; }
 
 		public bool IsAutoImport { get; set; }
 

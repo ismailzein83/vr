@@ -12,40 +12,77 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class ReceivedSupplierPricelistManager
-    {
+	public class ReplyMapping
+	{
+		public ReceivedPricelistStatus Status { get; set; }
+		public bool Send { get; set; }
+		public Guid MailTemplateId { get; set; }
+		public bool AttachFile { get; set; }
+	}
 
-        #region Public Methods
-        public IDataRetrievalResult<ReceivedPricelistDetail> GetFilteredReceivedPricelists(DataRetrievalInput<ReceivedPricelistQuery> input)
-        {
-            return BigDataManager.Instance.RetrieveData(input, new ReceivedPricelistRequestHandler());
-        }
+	public class ReceivedSupplierPricelistManager
+	{
 
-        #endregion
+		#region Public Methods
+		public void SendReceivedPricelistReply(ReceivedPricelist receivedPricelist)
+		{
+			var vrMailManager = new VRMailManager();
+			VRFileManager fileManager = new VRFileManager();
 
-        #region Private Classes
+			ReplyMapping x = new ReplyMapping();
 
-        private class ReceivedPricelistRequestHandler : BigDataRequestHandler<ReceivedPricelistQuery, ReceivedPricelist, ReceivedPricelistDetail>
-        {
+			var objects = new Dictionary<string, dynamic>
+			{
+				{"ReceivedPricelist", receivedPricelist}
+			};
+			List<VRMailAttachement> vrMailAttachements = null;
 
-            public override ReceivedPricelistDetail EntityDetailMapper(ReceivedPricelist entity)
-            {
-                return new ReceivedPricelistDetail()
-                {
-                    ReceivedPricelist = entity,
-                    SupplierName = new CarrierAccountManager().GetCarrierAccountName(entity.SupplierId),
-                    StatusDescription = Vanrise.Common.Utilities.GetEnumDescription(entity.Status),
-                    PriceListTypeDescription = entity.PricelistType.HasValue ? Vanrise.Common.Utilities.GetEnumDescription(entity.PricelistType.Value) : null,
-                };
-            }
+			if (receivedPricelist.FileId.HasValue && x.AttachFile)
+			{
+				var pricelistFile = fileManager.GetFile(receivedPricelist.FileId.Value);
+				vrMailAttachements = new List<VRMailAttachement>() { new VRMailAttachmentExcel { Name = pricelistFile.Name, Content = pricelistFile.Content } };
+			}
+			var evaluatedObject = vrMailManager.EvaluateMailTemplate(x.MailTemplateId, objects);
+			vrMailManager.SendMail(evaluatedObject.From, evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
+						, vrMailAttachements, false);
+		}
 
-            public override IEnumerable<ReceivedPricelist> RetrieveAllData(DataRetrievalInput<ReceivedPricelistQuery> input)
-            {
-                IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
-                return receivedPricelistDataManager.GetFilteredReceivedPricelists(input.Query);
-            }
-        }
+		public IDataRetrievalResult<ReceivedPricelistDetail> GetFilteredReceivedPricelists(DataRetrievalInput<ReceivedPricelistQuery> input)
+		{
+			return BigDataManager.Instance.RetrieveData(input, new ReceivedPricelistRequestHandler());
+		}
 
-        #endregion
-    }
+		public ReceivedPricelist GetReceivedPricelistById(int id)
+		{
+			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
+			return receivedPricelistDataManager.GetReceivedPricelistById(id);
+		}
+
+		#endregion
+
+		#region Private Classes
+
+		private class ReceivedPricelistRequestHandler : BigDataRequestHandler<ReceivedPricelistQuery, ReceivedPricelist, ReceivedPricelistDetail>
+		{
+
+			public override ReceivedPricelistDetail EntityDetailMapper(ReceivedPricelist entity)
+			{
+				return new ReceivedPricelistDetail()
+				{
+					ReceivedPricelist = entity,
+					SupplierName = new CarrierAccountManager().GetCarrierAccountName(entity.SupplierId),
+					StatusDescription = Vanrise.Common.Utilities.GetEnumDescription(entity.Status),
+					PriceListTypeDescription = entity.PricelistType.HasValue ? Vanrise.Common.Utilities.GetEnumDescription(entity.PricelistType.Value) : null,
+				};
+			}
+
+			public override IEnumerable<ReceivedPricelist> RetrieveAllData(DataRetrievalInput<ReceivedPricelistQuery> input)
+			{
+				IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
+				return receivedPricelistDataManager.GetFilteredReceivedPricelists(input.Query);
+			}
+		}
+
+		#endregion
+	}
 }

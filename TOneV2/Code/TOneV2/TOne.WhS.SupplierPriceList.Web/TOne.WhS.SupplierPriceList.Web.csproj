@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -162,6 +164,7 @@
     <Content Include="WhS_SupplierPriceList\Constant\RateChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\RatePrecisionTypeEnum.js" />
+    <Content Include="WhS_SupplierPriceList\Constant\ReceivedPricelistObjectPropertyEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\ReceivedPricelistStatusEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SPLDefintionEnum.js" />
     <Content Include="WhS_SupplierPriceList\Constant\SupplierPriceListType.js" />
@@ -181,6 +184,10 @@
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-spl-supplierpricelistconfiguration-basic.js" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPricelistDateField\Template\PricelistDateFieldTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPricelistDateField\whs-spl-excelconversion-fieldmapping-pricelistdatefield.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\VRObjectTypes\Templates\ReceivedPricelistObjectTypeTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\VRObjectTypes\Templates\ReceivedPricelistPropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\VRObjectTypes\whs-spl-receivedpricelistobjecttype.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\VRObjectTypes\whs-spl-receivedpricelistpropertyevaluator.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\Templates\ReceivedSupplierPricelistGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\whs-spl-receivedsupplierpricelist-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\whs-spl-receivedpricelist-status-selector.js" />
@@ -206,6 +213,8 @@
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListTemplateService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />
+    <Content Include="WhS_SupplierPriceList\Views\ReceivedPricelistErrorDetails.html" />
+    <Content Include="WhS_SupplierPriceList\Views\ReceivedPricelistErrorDetailsController.js" />
     <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPricelist.html" />
     <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPricelistController.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreview.html" />

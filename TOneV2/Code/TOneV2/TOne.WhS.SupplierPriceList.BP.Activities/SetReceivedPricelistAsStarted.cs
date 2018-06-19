@@ -15,7 +15,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 		{
 			int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
 			long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-			IReceivedPricelistManagerTemp manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManagerTemp>();
+			IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 
 			manager.SetReceivedPricelistAsStarted(receivedPricelistRecordId, ReceivedPricelistStatus.Processing, processInstanceId, DateTime.Now);
 		}

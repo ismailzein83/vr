@@ -17,8 +17,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 		{
 			int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
 			ReceivedPricelistStatus receivedPricelistStatus = this.ReceivedPricelistStatus.Get(context);
-			IReceivedPricelistManagerTemp manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManagerTemp>();
-			manager.UpdateReceivePricelistStatus(receivedPricelistRecordId, receivedPricelistStatus);
+			IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
+			manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, receivedPricelistStatus);
 		}
 	}
 }

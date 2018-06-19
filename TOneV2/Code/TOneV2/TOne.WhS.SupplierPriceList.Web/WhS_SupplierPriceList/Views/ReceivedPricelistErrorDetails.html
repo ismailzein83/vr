@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent ng-controller="WhS_SupPL_ReceivedPricelistErrorDetailsController" vr-loader="scopeModal.isLoading" size="small">
+	<vr-modalbody>
+		<vr-form name="formSupplierPriceListPreview">
+
+			<vr-row ng-if="scopeModal.errorDetails != undefined && scopeModal.errorDetails.length > 0">
+				<vr-columns width="fullrow">
+					<label class="alert alert-danger" vr-alert>
+						<ul>
+							<li ng-repeat="errorDetail in scopeModal.errorDetails">{{errorDetail.ErrorMessage}}</li>
+						</ul>
+					</label>
+				</vr-columns>
+			</vr-row>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Close" data-onclick="scopeModal.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>

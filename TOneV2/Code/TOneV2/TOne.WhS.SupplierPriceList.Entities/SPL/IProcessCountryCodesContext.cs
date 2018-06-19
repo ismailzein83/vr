@@ -11,7 +11,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
         int CountryId { get; }
 
-        SupplierPriceListType SupplierPriceListType { get; }
+        SupplierPricelistType SupplierPriceListType { get; }
 
         IEnumerable<ImportedZone> ImportedZones { get; }
 

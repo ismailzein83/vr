@@ -93,8 +93,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 			{
 				if (isAutoImport)
 				{
-					IReceivedPricelistManagerTemp manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManagerTemp>();
-					manager.UpdateReceivePricelistStatus(receivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToConfigurationError);
+					IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
+					manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToConfigurationError);
 				}
 				throw;
 			}

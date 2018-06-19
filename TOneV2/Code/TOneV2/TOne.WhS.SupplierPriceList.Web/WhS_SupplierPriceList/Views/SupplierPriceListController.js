@@ -249,7 +249,7 @@ function (appControllers) {
 
             var inputArguments = {
                 $type: "TOne.WhS.SupplierPriceList.BP.Arguments.SupplierPriceListProcessInput, TOne.WhS.SupplierPriceList.BP.Arguments",
-                SupplierPriceListType: $scope.scopeModel.selectedPriceListType.value,
+                SupplierPricelistType: $scope.scopeModel.selectedPriceListType.value,
                 SupplierAccountId: carrierAccountDirectiveAPI.getSelectedIds(),
                 CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                 FileId: $scope.scopeModel.inPutFile.fileId,

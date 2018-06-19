@@ -13,11 +13,4 @@ namespace TOne.WhS.SupplierPriceList.Data
 
 		IEnumerable<CodePreview> GetFilteredCodePreview(SPLPreviewQuery query);
 	}
-	public interface IReceivedPricelistManagerTemp : IDataManager
-	{
-		bool InsertReceivedPricelist(int supplierId, long? fileId, DateTime receivedDate, SupplierPriceListType? pricelistType, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors, out int recordId);
-		void SetReceivedPricelistAsStarted(int receivedPricelistRecordId, ReceivedPricelistStatus status, long processInstanceId, DateTime startProcessingTime);
-		void SetReceivedPricelistAsCompleted(int receivedPricelistRecordId, ReceivedPricelistStatus status, int pricelistId);
-		void UpdateReceivePricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status);
-	}
 }
