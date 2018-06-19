@@ -141,6 +141,11 @@
     <Compile Include="Tasks\IBPTaskFilter.cs" />
     <Compile Include="TriggerProcessEventInput.cs" />
     <Compile Include="TriggerProcessEventOutput.cs" />
+    <Compile Include="VRWorkflow\VRWorkflow.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowActivity.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowArgument.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowVariable.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowVariableType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
