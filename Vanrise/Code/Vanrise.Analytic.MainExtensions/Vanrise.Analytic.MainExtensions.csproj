@@ -46,10 +46,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Analytic.BP.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Vanrise.Analytic.BP.Arguments\obj\Debug\Vanrise.Analytic.BP.Arguments.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticItemAction\OpenRecordSearchItemAction.cs" />
@@ -87,6 +83,10 @@
     <Compile Include="TimeRangeFilters\PreviousPeriodFilter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
+      <Project>{74bcfdd5-6f60-4976-a31c-712beccc2787}</Project>
+      <Name>Vanrise.Analytic.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
       <Name>Vanrise.Analytic.Business</Name>
