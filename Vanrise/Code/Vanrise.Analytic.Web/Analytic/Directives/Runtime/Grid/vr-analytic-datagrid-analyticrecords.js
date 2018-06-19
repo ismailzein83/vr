@@ -378,17 +378,16 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 						ctrl.measuresConfig = payload.MeasuresConfig;
 					}
 
-					//if (payLoad.ClassStyleDefinitions != undefined) {
-					//    ctrl.classStyleDefinitions = payLoad.ClassStyleDefinitions;
-					//}
-
+					if (payload.ClassStyleDefinitions != undefined) {
+					    ctrl.classStyleDefinitions = payload.ClassStyleDefinitions;
+					}
 					if (payload.GroupingDimensions != undefined && payload.Settings == undefined) {
 						for (var i = 0; i < payload.GroupingDimensions.length; i++) {
 							var groupingDimension = payload.GroupingDimensions[i];
 							var dimension = UtilsService.getItemByVal(ctrl.dimensions, groupingDimension.DimensionName, 'DimensionName');
 							var gridWidth = UtilsService.getItemByVal(gridWidths, dimension.Width, "value");
 							if (gridWidth != undefined)
-								dimension.Widthfactor = gridWidth.widthFactor;
+							    dimension.Widthfactor = gridWidth.widthFactor;							
 							var classStyleItem = UtilsService.getItemByVal(ctrl.classStyleDefinitions, dimension.ColumnStyleId, "StyleDefinitionId");
 							if (classStyleItem != undefined) {
 								if (classStyleItem.StyleDefinitionSettings != undefined && classStyleItem.StyleDefinitionSettings.StyleFormatingSettings != undefined && classStyleItem.StyleDefinitionSettings.StyleFormatingSettings.ClassName != undefined) {
