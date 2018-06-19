@@ -71,7 +71,7 @@ namespace Vanrise.GenericData.Business
         {
             get
             {
-                if(_summaryRecordDataManager == null)
+                if (_summaryRecordDataManager == null)
                 {
                     GetSummaryRecordStorageDataManagerContext context = new GetSummaryRecordStorageDataManagerContext(this.SummaryTransformationDefinition, TempStorageInformation);
                     _summaryRecordDataManager = context.DataStore.Settings.GetSummaryDataRecordDataManager(context);
@@ -120,12 +120,20 @@ namespace Vanrise.GenericData.Business
             var dataRecords = GetDataRecordsFromSummaryItems(itemsToAdd);
             this.SummaryRecordDataManager.InsertSummaryRecords(dataRecords);
         }
-        
+
 
         protected override void UpdateItemsInDB(List<GenericSummaryItem> itemsToUpdate)
         {
             var dataRecords = GetDataRecordsFromSummaryItems(itemsToUpdate);
-            this.SummaryRecordDataManager.UpdateSummaryRecords(dataRecords);
+
+            List<string> fieldsToJoin = new List<string>() { _summaryTransformationDefinition.SummaryIdFieldName };
+
+            DataRecordType summaryItemDataRecordType = new DataRecordTypeManager().GetDataRecordType(this.SummaryTransformationDefinition.SummaryItemRecordTypeId);
+            summaryItemDataRecordType.ThrowIfNull("summaryItemDataRecordType");
+            summaryItemDataRecordType.Fields.ThrowIfNull("summaryItemDataRecordType.Fields");
+            List<string> fieldsToUpdate = summaryItemDataRecordType.Fields.FindAllRecords(itm => itm.Formula == null).Select(itm => itm.Name).ToList();
+
+            this.SummaryRecordDataManager.UpdateSummaryRecords(dataRecords, fieldsToJoin, fieldsToUpdate);
         }
 
         protected override GenericSummaryItem CreateSummaryItemFromRawItem(dynamic rawItem)

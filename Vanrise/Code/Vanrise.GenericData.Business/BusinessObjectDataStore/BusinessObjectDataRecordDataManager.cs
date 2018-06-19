@@ -75,18 +75,20 @@ namespace Vanrise.GenericData.Business
             return dataRecords;
         }
 
-        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
         {
+            var recordType = s_dataRecordTypeManager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
+            recordType.ThrowIfNull("recordType", _dataRecordStorage.DataRecordTypeId);
+            recordType.Fields.ThrowIfNull("recordType.Fields", _dataRecordStorage.DataRecordTypeId);
+
             var loadContext = new BusinessObjectDataProviderLoadRecordsContext
             {
                 FromTime = from,
                 ToTime = to,
-                FilterGroup = filterGroup
+                FilterGroup = filterGroup,
+                Fields = recordType.Fields.Where(fld => fld.Formula != null).Select(fld => fld.Name).ToList()
             };
-            var recordType = s_dataRecordTypeManager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
-            recordType.ThrowIfNull("recordType", _dataRecordStorage.DataRecordTypeId);
-            recordType.Fields.ThrowIfNull("recordType.Fields", _dataRecordStorage.DataRecordTypeId);
-            loadContext.Fields = recordType.Fields.Where(fld => fld.Formula != null).Select(fld => fld.Name).ToList();
+
             bool doesSupportFilterOnAllFields = _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.DoesSupportFilterOnAllFields;
             loadContext.OnRecordLoadedAction = (record, recordTime) =>
             {
@@ -151,14 +153,13 @@ namespace Vanrise.GenericData.Business
         {
             public Action<DataRecordObject, DateTime> OnRecordLoadedAction { get; set; }
 
-
-            public DateTime FromTime
+            public DateTime? FromTime
             {
                 get;
                 set;
             }
 
-            public DateTime ToTime
+            public DateTime? ToTime
             {
                 get;
                 set;

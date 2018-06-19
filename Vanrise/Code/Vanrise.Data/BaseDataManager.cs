@@ -135,5 +135,13 @@ namespace Vanrise.Data
             else
                 return value;
         }
+
+        protected object ToDBNullIfDefault(DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+                return DBNull.Value;
+            else
+                return ToDBNullIfDefault(dateTime.Value);
+        }
     }
 }

@@ -23,9 +23,9 @@ namespace Vanrise.GenericData.Business
 
     public interface IBusinessObjectDataProviderLoadRecordsContext
     {
-        DateTime FromTime { get; }
+        DateTime? FromTime { get; }
 
-        DateTime ToTime { get; }
+        DateTime? ToTime { get; }
 
         RecordFilterGroup FilterGroup { get; }
 

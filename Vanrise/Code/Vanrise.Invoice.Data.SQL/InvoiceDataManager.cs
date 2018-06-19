@@ -52,7 +52,7 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceLock", invoiceId, lockedDate);
             return (affectedRows > -1);
         }
-        public bool  SetInvoiceSentDate(long invoiceId, DateTime? sentDate)
+        public bool SetInvoiceSentDate(long invoiceId, DateTime? sentDate)
         {
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceSentDate", invoiceId, sentDate);
             return (affectedRows > -1);
@@ -72,7 +72,7 @@ namespace Vanrise.Invoice.Data.SQL
             if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count() > 0)
                 partnerIds = string.Join<string>(",", input.Query.PartnerIds);
 
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent,input.Query.IsPaid);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent, input.Query.IsPaid);
         }
 
         public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, IEnumerable<string> partnerIds, DateTime fromDate, DateTime toDate)
@@ -160,11 +160,11 @@ namespace Vanrise.Invoice.Data.SQL
 
                 Guid? splitInvoiceGroupId = Guid.NewGuid();
 
-                for(var i = 0;i<  generateInvoicesInputToSave.Count;i++)
+                for (var i = 0; i < generateInvoicesInputToSave.Count; i++)
                 {
                     var generateInvoiceInputToSave = generateInvoicesInputToSave[i];
 
-                    if(generateInvoiceInputToSave.InvoiceIdToDelete.HasValue && generateInvoiceInputToSave.SplitInvoiceGroupId.HasValue)
+                    if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue && generateInvoiceInputToSave.SplitInvoiceGroupId.HasValue)
                     {
                         splitInvoiceGroupId = generateInvoiceInputToSave.SplitInvoiceGroupId.Value;
                     }
@@ -437,7 +437,7 @@ namespace Vanrise.Invoice.Data.SQL
                 SourceId = reader["SourceID"] as string,
                 IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic"),
                 Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader["Settings"] as string),
-                InvoiceSettingId =  GetReaderValue<Guid>(reader, "InvoiceSettingId"),
+                InvoiceSettingId = GetReaderValue<Guid>(reader, "InvoiceSettingId"),
                 SentDate = GetReaderValue<DateTime?>(reader, "SentDate"),
                 SettlementInvoiceId = GetReaderValue<long?>(reader, "SettlementInvoiceId"),
                 SplitInvoiceGroupId = GetReaderValue<Guid?>(reader, "SplitInvoiceGroupId"),
@@ -471,7 +471,7 @@ namespace Vanrise.Invoice.Data.SQL
         #endregion
 
 
-        public void LoadInvoices(Guid invoiceTypeId, DateTime fromTime, DateTime toTime, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded)
+        public void LoadInvoices(Guid invoiceTypeId, DateTime? fromTime, DateTime? toTime, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded)
         {
             int parameterIndex = 0;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
@@ -482,7 +482,7 @@ namespace Vanrise.Invoice.Data.SQL
             ExecuteReaderText(query,
                 (reader) =>
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         onInvoiceLoaded(InvoiceMapper(reader));
                         if (shouldStop())
@@ -518,7 +518,7 @@ namespace Vanrise.Invoice.Data.SQL
 
         string GetColumnNameFromFieldName(string fieldName)
         {
-            switch(fieldName)
+            switch (fieldName)
             {
                 case "Partner": return "PartnerID";
                 case "User": return "UserId";

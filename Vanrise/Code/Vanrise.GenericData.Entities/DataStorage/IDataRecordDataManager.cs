@@ -12,7 +12,7 @@ namespace Vanrise.GenericData.Entities
 
         List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context);
 
-        void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady);
+        void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady);
 
         void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);
 
@@ -46,7 +46,7 @@ namespace Vanrise.GenericData.Entities
     {
         void InsertSummaryRecords(IEnumerable<dynamic> records);
 
-        void UpdateSummaryRecords(IEnumerable<dynamic> records);
+        void UpdateSummaryRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate);
 
         IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart);
     }

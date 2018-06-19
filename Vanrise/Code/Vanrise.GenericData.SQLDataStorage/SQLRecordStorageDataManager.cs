@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             get
             {
-                if(_dataRecordFieldsByName == null)
+                if (_dataRecordFieldsByName == null)
                 {
                     DataRecordTypeManager manager = new DataRecordTypeManager();
                     _dataRecordFieldsByName = manager.GetDataRecordTypeFields(_dataRecordStorage.DataRecordTypeId);
@@ -281,38 +281,44 @@ namespace Vanrise.GenericData.SQLDataStorage
             this.ApplyStreamToDB(readyStream);
         }
 
-        public void UpdateSummaryRecords(IEnumerable<dynamic> records)
+        public void UpdateSummaryRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
         {
+            List<string> columnsToJoin = this.GetColumnNamesFromFieldNames(fieldsToJoin);
+            if (columnsToJoin == null || columnsToJoin.Count == 0)
+                throw new NullReferenceException("columnsToJoin");
+
+            List<string> columnsToUpdate = this.GetColumnNamesFromFieldNames(fieldsToUpdate);
+            if (columnsToUpdate == null || columnsToUpdate.Count == 0)
+                throw new NullReferenceException("columnsToUpdate");
+
             StringBuilder queryBuilder = new StringBuilder(@"UPDATE existingRecord
                                 SET #COLUMNSUPDATE#
-                                FROM #TABLE# existingRecord JOIN @UpdatedRecords updatedRecord ON existingRecord.#IDCOLUMN# = updatedRecord.#IDCOLUMN#");
-            var idColumnMapping = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == _summaryTransformationDefinition.SummaryIdFieldName);
-            if (idColumnMapping == null)
-                throw new NullReferenceException(String.Format("idColumnMapping '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
-            if (idColumnMapping.ColumnName == null)
-                throw new NullReferenceException(String.Format("idColumnMapping.ColumnName '{0}'", _summaryTransformationDefinition.SummaryBatchStartFieldName));
+                                FROM #TABLE# existingRecord JOIN @UpdatedRecords updatedRecord ON #JOINCOLUMNS#");
+
+            List<string> joinColumns = new List<string>();
+            foreach (var joinColumn in columnsToJoin)
+                joinColumns.Add(string.Format("existingRecord.{0} = updatedRecord.{0}", joinColumn));
 
             StringBuilder columnsUpdateBuilder = new StringBuilder();
-            foreach (var columnsMapping in _dataRecordStorageSettings.Columns)
+            foreach (var columnToUpdate in columnsToUpdate)
             {
                 if (columnsUpdateBuilder.Length > 0)
                     columnsUpdateBuilder.Append(", ");
-                columnsUpdateBuilder.AppendLine(String.Format("{0} = updatedRecord.{0}", columnsMapping.ColumnName));
+                columnsUpdateBuilder.AppendLine(String.Format("{0} = updatedRecord.{0}", columnToUpdate));
             }
 
             queryBuilder.Replace("#TABLE#", GetTableNameWithSchema());
-            queryBuilder.Replace("#IDCOLUMN#", idColumnMapping.ColumnName);
+            queryBuilder.Replace("#JOINCOLUMNS#", string.Join(" And ", joinColumns));
             queryBuilder.Replace("#COLUMNSUPDATE#", columnsUpdateBuilder.ToString());
 
             DataTable dt = this.DynamicManager.ConvertDataRecordsToTable(records);
-            ExecuteNonQueryText(queryBuilder.ToString(),
-                (cmd) =>
-                {
-                    SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
-                    prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
-                    prm.Value = dt;
-                    cmd.Parameters.Add(prm);
-                });
+            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
+            {
+                SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
+                prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
+                prm.Value = dt;
+                cmd.Parameters.Add(prm);
+            });
         }
 
         public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
@@ -380,7 +386,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.IsDataUpdated(GetTableNameWithSchema(), ref updateHandle);
         }
 
-        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
         {
             var recortTypeManager = new DataRecordTypeManager();
             var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
@@ -390,22 +396,30 @@ namespace Vanrise.GenericData.SQLDataStorage
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             string tableName = GetTableNameWithSchema();
 
-            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            int parameterIndex = 0;
+            StringBuilder sb_Query = new StringBuilder(string.Format(@"Select * From {0} WITH (NOLOCK)", tableName));
 
-            string recordFilterResult = string.Empty;
+            List<string> queryFilters = new List<string>();
+            if (from.HasValue)
+                queryFilters.Add(string.Format("({0} >= @FromTime)", dateTimeColumn));
+
+            if (to.HasValue)
+                queryFilters.Add(string.Format("({0} < @ToTime)", dateTimeColumn));
+
+            int parameterIndex = 0;
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
             if (recordFilterGroup != null)
             {
                 Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
                 string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
-                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
+
+                if (!string.IsNullOrEmpty(recordFilter))
+                    queryFilters.Add(recordFilter);
             }
 
-            string query = string.Format(@"select  * from {0} WITH (NOLOCK)
-                                           where ({1} >= @FromTime) 
-                                           and ({1} < @ToTime) {2}", tableName, dateTimeColumn, recordFilterResult);
+            if (queryFilters.Count > 0)
+                sb_Query.Append(string.Format(" Where {0} ", string.Join(" And ", queryFilters)));
 
-            ExecuteReaderText(query, (reader) =>
+            ExecuteReaderText(sb_Query.ToString(), (reader) =>
             {
                 while (reader.Read())
                 {
@@ -418,12 +432,14 @@ namespace Vanrise.GenericData.SQLDataStorage
                 }
             }, (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter("@FromTime", from));
-                cmd.Parameters.Add(new SqlParameter("@ToTime", to));
+                if (from.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@FromTime", from.Value));
+
+                if (to.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@ToTime", to.Value));
+
                 foreach (var prm in parameterValues)
-                {
                     cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-                }
             });
         }
 
@@ -506,7 +522,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             bool withOutParameter = false;
             insertedId = null;
             SqlParameter sqlParameter = null;
-            var effectedRows = ExecuteNonQueryText(BuildInsertQuery(fieldValues, parameterValues,createdUserId,modifiedUserId, ref withOutParameter), (cmd) =>
+            var effectedRows = ExecuteNonQueryText(BuildInsertQuery(fieldValues, parameterValues, createdUserId, modifiedUserId, ref withOutParameter), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -880,9 +896,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 string columnName = GetColumnNameFromFieldName(fieldName);
                 if (string.Compare(columnName, "null", true) != 0)
-                {
                     result.Add(columnName);
-                }
             }
             return result;
         }

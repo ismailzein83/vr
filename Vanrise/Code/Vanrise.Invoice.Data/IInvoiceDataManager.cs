@@ -38,6 +38,6 @@ namespace Vanrise.Invoice.Data
         bool SetInvoiceSentDate(long invoiceId, DateTime? sentDate);
         bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate);
 
-        void LoadInvoices(Guid invoiceTypeId, DateTime from, DateTime to, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded);
+        void LoadInvoices(Guid invoiceTypeId, DateTime? from, DateTime? to, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded);
     }
 }
