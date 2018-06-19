@@ -54,7 +54,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotific
 									|| receivedPricelist.ReceivedPricelist.Status == WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToProcessingError.value
 									|| receivedPricelist.ReceivedPricelist.Status == WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToConfigurationError.value
 									|| receivedPricelist.ReceivedPricelist.Status == WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToReceivedMailError.value) {
-									receivedPricelist.ErrorCol = "View Details"
+									receivedPricelist.ErrorCol = "View Details";
 								}
 							}
 							onResponseReady(response);
@@ -65,7 +65,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotific
 				};
 				$scope.viewDetails = function (pricelistObj) {
 					if (pricelistObj.ReceivedPricelist.ErrorDetails != null && pricelistObj.ReceivedPricelist.ErrorDetails.length > 0)
-						WhS_SupPL_SupplierPriceListTemplateService.showReceivedPricelistErrorDetails(pricelistObj.ReceivedPricelist.ErrorDetails)
+						WhS_SupPL_SupplierPriceListTemplateService.showReceivedPricelistErrorDetails(pricelistObj.ReceivedPricelist.ErrorDetails);
 					else viewTracker(pricelistObj);
 				};
 

@@ -431,7 +431,7 @@
 					if (carrierAccountEntity.SupplierSettings) {
 						$scope.scopeModel.supplierEffectiveDateDayOffset = carrierAccountEntity.SupplierSettings.EffectiveDateDayOffset;
 						if (carrierAccountEntity.SupplierSettings.AutoImportSettings) {
-							$scope.scopeModel.isAutoImportActive = carrierAccountEntity.SupplierSettings.AutoImportSettings.IsAutoImportActive
+							$scope.scopeModel.isAutoImportActive = carrierAccountEntity.SupplierSettings.AutoImportSettings.IsAutoImportActive;
 							$scope.scopeModel.automaticPriceListEmail = carrierAccountEntity.SupplierSettings.AutoImportSettings.Email;
 							$scope.scopeModel.automaticPriceListSubjectCode = carrierAccountEntity.SupplierSettings.AutoImportSettings.SubjectCode;
 							$scope.scopeModel.automaticPriceListAttachmentCode = carrierAccountEntity.SupplierSettings.AutoImportSettings.AttachmentCode;
