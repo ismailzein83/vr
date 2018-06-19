@@ -20,4 +20,20 @@ namespace TOne.WhS.SupplierPriceList
             get { return "Pricelist"; }
         }
     }
+
+    public class AllZones : Vanrise.BusinessProcess.Entities.IRuleTarget
+    {
+        public AllImportedZones AllImportedZones { get; set; }
+
+        public List<NotImportedZone> NotImportedZones { get; set; }
+
+        public object Key
+        {
+            get { return default(object); }
+        }
+        public string TargetType
+        {
+            get { return "AllZones"; }
+        }
+    }
 }
