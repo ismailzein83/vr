@@ -20,9 +20,9 @@ namespace Vanrise.GenericData.SQLDataStorage
         DataRecordStorage _dataRecordStorage;
         SummaryTransformationDefinition _summaryTransformationDefinition;
         List<string> Columns;
-        DataRecordType _dataRecordType;
         SQLTempStorageInformation _sqlTempStorageInformation;
 
+        DataRecordType _dataRecordType;
         DataRecordType DataRecordType
         {
             get
@@ -51,6 +51,24 @@ namespace Vanrise.GenericData.SQLDataStorage
                         throw new NullReferenceException(String.Format("_dataRecordFieldsByName ID '{0}'", _dataRecordStorage.DataRecordTypeId));
                 }
                 return _dataRecordFieldsByName;
+            }
+        }
+
+        IDynamicManager _dynamicManager;
+        IDynamicManager DynamicManager
+        {
+            get
+            {
+                if (_dynamicManager == null)
+                {
+                    if (_dataRecordStorage == null)
+                        throw new NullReferenceException("_dataRecordStorage");
+                    DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
+                    _dynamicManager = dynamicTypeGenerator.GetDynamicManager(_dataRecordStorage, _dataRecordStorageSettings);
+                    if (_dynamicManager == null)
+                        throw new NullReferenceException("_dynamicManager");
+                }
+                return _dynamicManager;
             }
         }
 
@@ -86,24 +104,6 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.InitializeStreamForBulkInsert();
         }
 
-        IDynamicManager _dynamicManager;
-        IDynamicManager DynamicManager
-        {
-            get
-            {
-                if (_dynamicManager == null)
-                {
-                    if (_dataRecordStorage == null)
-                        throw new NullReferenceException("_dataRecordStorage");
-                    DynamicTypeGenerator dynamicTypeGenerator = new DynamicTypeGenerator();
-                    _dynamicManager = dynamicTypeGenerator.GetDynamicManager(_dataRecordStorage, _dataRecordStorageSettings);
-                    if (_dynamicManager == null)
-                        throw new NullReferenceException("_dynamicManager");
-                }
-                return _dynamicManager;
-            }
-        }
-
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -124,14 +124,6 @@ namespace Vanrise.GenericData.SQLDataStorage
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
-        }
-
-        private string GetTableNameWithSchema()
-        {
-            string tableName = this._dataRecordStorageSettings.TableName;
-            if (!String.IsNullOrEmpty(this._dataRecordStorageSettings.TableSchema))
-                tableName = String.Format("{0}.{1}", this._dataRecordStorageSettings.TableSchema, this._dataRecordStorageSettings.TableName);
-            return tableName;
         }
 
         public void CreateSQLRecordStorageTable()
@@ -278,125 +270,6 @@ namespace Vanrise.GenericData.SQLDataStorage
             ExecuteNonQueryText(queryBuilder.ToString(), null);
         }
 
-        #region Private Methods
-
-        string GetRecordStorageCreateTableQuery(string tableName, bool isTempTable)
-        {
-            StringBuilder query = new StringBuilder();
-
-            string schema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
-            if (schema != null)
-                query.Append(String.Format(" IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", schema));
-
-            string tableNameWithSchema = (schema != null) ? String.Format("{0}.{1}", schema, tableName) : tableName;
-            query.AppendLine(String.Format("CREATE TABLE {0}", tableNameWithSchema));
-            query.AppendLine(BuildColumnDefinitionsScript());
-
-            if (!isTempTable)
-                query.AppendLine(BuildDropAndCreateTableTypeScript());
-
-            return query.ToString();
-        }
-
-        private string BuildColumnDefinitionsScript()
-        {
-            List<string> columnDefinitions = new List<string>();
-
-            foreach (var column in _dataRecordStorageSettings.Columns)
-            {
-                columnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
-            }
-            if (_dataRecordStorageSettings.IncludeQueueItemId)
-            {
-                columnDefinitions.Add("QueueItemId bigint");
-            }
-
-            return String.Format(" ({0});", string.Join(",", columnDefinitions));
-        }
-
-        string BuildDropAndCreateTableTypeScript()
-        {
-            string schemaName = !String.IsNullOrEmpty(_dataRecordStorageSettings.TableSchema) ? _dataRecordStorageSettings.TableSchema : "dbo";
-            string tableName = _dataRecordStorageSettings.TableName;
-            StringBuilder builder = new StringBuilder();
-            builder.AppendFormat(@"IF  EXISTS (SELECT * FROM sys.types st JOIN sys.schemas ss ON st.schema_id = ss.schema_id WHERE st.name = N'{1}Type'
-                                     AND ss.name = N'{0}')
-                                    DROP TYPE [{0}].[{1}Type]
-                                    
-                                    "
-                , schemaName, tableName);
-            builder.AppendLine();
-            builder.AppendFormat(@"CREATE TYPE [{0}].[{1}Type] AS TABLE ", schemaName, tableName);
-            builder.AppendLine(BuildColumnDefinitionsScript());
-            return builder.ToString();
-        }
-
-        string GetRecordStorageAlterTableQuery(SQLDataRecordStorageSettings existingDataRecordSettings)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            string existingSchema = (existingDataRecordSettings.TableSchema != null) ? existingDataRecordSettings.TableSchema : "dbo";
-            string existingName = existingDataRecordSettings.TableName;
-            string newSchema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
-            string newName = _dataRecordStorageSettings.TableName;
-
-            if (existingSchema.CompareTo(newSchema) != 0)
-            {
-                builder.Append(String.Format("IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", newSchema));
-
-                builder.Append(string.Format("ALTER SCHEMA {0} TRANSFER {1}.{2};", newSchema, existingSchema, existingName));
-            }
-
-            if (existingName.CompareTo(newName) != 0)
-                builder.Append(String.Format("BEGIN EXEC sp_executesql N'sp_rename ''{0}.{1}'', ''{2}''' END;", newSchema, existingName, newName));
-
-            List<string> addColumnDefinitions;
-            List<string> alterColumnDefinitions;
-
-            SetAddAndAlterColumnDefinitions(existingDataRecordSettings, out addColumnDefinitions, out alterColumnDefinitions);
-
-            if (addColumnDefinitions.Count() > 0)
-                builder.Append(String.Format("ALTER TABLE {0}.{1} ADD {2};", newSchema, newName, String.Join(",", addColumnDefinitions)));
-
-            foreach (var columnDefinition in alterColumnDefinitions)
-            {
-                builder.Append(String.Format("ALTER TABLE {0}.{1} ALTER COLUMN {2};", newSchema, newName, columnDefinition));
-            }
-
-            if (_dataRecordStorageSettings.IncludeQueueItemId)
-            {
-                builder.Append(String.Format(@"if not exists (select column_name from INFORMATION_SCHEMA.columns
-                                                              Where table_schema='{0}' AND table_name = '{1}' AND column_name = 'QueueItemId')
-                                               ALTER TABLE {0}.{1} ADD QueueItemId bigint;", newSchema, newName));
-            }
-
-            builder.AppendLine(BuildDropAndCreateTableTypeScript());
-
-            return builder.ToString();
-        }
-
-        void SetAddAndAlterColumnDefinitions(SQLDataRecordStorageSettings existingDataRecordSettings, out List<string> addColumnDefinitions, out List<string> alterColumnDefinitions)
-        {
-            addColumnDefinitions = new List<string>();
-            alterColumnDefinitions = new List<string>();
-
-            foreach (var column in _dataRecordStorageSettings.Columns)
-            {
-                var existingMatch = existingDataRecordSettings.Columns.FirstOrDefault(itm => itm.ColumnName == column.ColumnName);
-                if (existingMatch == null)
-                    addColumnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
-                else if (column.SQLDataType != existingMatch.SQLDataType)
-                    alterColumnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
-            }
-        }
-
-        void AppendErrorCheck(StringBuilder sql)
-        {
-            sql.Append(" IF @@ERROR <> 0 BEGIN ROLLBACK TRAN END;");
-        }
-
-        #endregion
-
         public void InsertSummaryRecords(IEnumerable<dynamic> records)
         {
             var dbApplyStream = this.InitialiazeStreamForDBApply();
@@ -492,7 +365,6 @@ namespace Vanrise.GenericData.SQLDataStorage
                 });
 
         }
-
 
         public List<DataRecord> GetAllDataRecords(List<string> columns)
         {
@@ -614,35 +486,6 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        private string BuildQuery(List<string> fieldNames, int? limitResult, OrderDirection orderDirection, string recordFilter)
-        {
-            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
-            string tableName = GetTableNameWithSchema();
-
-            string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
-            string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, orderDirection == OrderDirection.Ascending ? "ASC" : "DESC");
-            StringBuilder str = new StringBuilder(string.Format(@"  select {0} {1} from {2} WITH (NOLOCK)
-                                                                    where (@FromTime is null or {3} >= @FromTime) 
-                                                                    and (@ToTime is null or {3} <= @ToTime) {4} {5}",
-                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
-                                                                    tableName, dateTimeColumn, recordFilterResult, orderResult));
-            //input.SortByColumnName = dateTimeColumn;
-            return str.ToString();
-        }
-        private string BuildGetAllQuery()
-        {
-            string tableName = GetTableNameWithSchema();
-            StringBuilder str = new StringBuilder(string.Format(@"  select {0} from {1} WITH (NOLOCK) ",
-                                                                     string.Join<string>(",", Columns),
-                                                                    tableName));
-            return str.ToString();
-        }
-        string GenerateParameterName(ref int parameterIndex)
-        {
-            return String.Format("@Prm_{0}", parameterIndex++);
-        }
-
-
         public bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId)
         {
             Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
@@ -655,103 +498,6 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                     }) > 0;
 
-        }
-        private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues,int? modifiedUserId)
-        {
-            if (fieldValues == null || fieldValues.Count == 0)
-                throw new Exception("fieldValues should not be null or empty.");
-            StringBuilder queryBuilder = new StringBuilder();
-
-            int parameterIndex = 0;
-            string tableName = GetTableNameWithSchema();
-            StringBuilder whereQuery = new StringBuilder();
-            StringBuilder valuesQuery = new StringBuilder();
-            StringBuilder ifNotExistsQueryBuilder = new StringBuilder();
-            var idColumn = GetIdColumn();
-            var shouldAddIfExist = false;
-
-            foreach (var fieldValue in fieldValues)
-            {
-                var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
-                var parameter = GenerateParameterName(ref parameterIndex);
-
-                DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
-                if (matchingField.Type.StoreValueSerialized)
-                {
-                    parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
-                    {
-                        Object = fieldValue.Value
-                    }));
-                }
-                else
-                    parameterValues.Add(parameter, fieldValue.Value);
-
-                if (sqlDataRecordStorageColumn.IsUnique)
-                {
-                    if (ifNotExistsQueryBuilder.Length > 0)
-                    {
-                        ifNotExistsQueryBuilder.Append(" AND ");
-                    }
-                    if (idColumn.Name == fieldValue.Key)
-                    {
-                        ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
-                        if (whereQuery.Length != 0)
-                            whereQuery.Append(" AND ");
-                        whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
-                    }
-                    else
-                    {
-                        shouldAddIfExist = true;
-                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
-                    }
-
-
-                }
-                if (idColumn.Name != fieldValue.Key)
-                {
-                    if (valuesQuery.Length != 0)
-                        valuesQuery.Append(",");
-                    valuesQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
-                }
-            }
-
-            if (modifiedUserId.HasValue && _dataRecordStorage.Settings.LastModifiedByField != null)
-            {
-                var modifiedByColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedByField);
-                if (modifiedByColumn !=  null)
-                {
-                    var parameter = GenerateParameterName(ref parameterIndex);
-                    parameterValues.Add(parameter, modifiedUserId.Value);
-
-                    if (valuesQuery.Length != 0)
-                        valuesQuery.Append(",");
-                    valuesQuery.AppendFormat(@" {0} = {1}  ", modifiedByColumn.ColumnName, parameter);
-                }
-               
-            }
-
-            if (_dataRecordStorage.Settings.LastModifiedTimeField != null)
-            {
-                var modifiedTimeColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedTimeField);
-                if (modifiedTimeColumn != null)
-                {
-                    if (valuesQuery.Length != 0)
-                        valuesQuery.Append(",");
-                    valuesQuery.AppendFormat(@" {0} = getdate()  ", modifiedTimeColumn.ColumnName);
-                }
-              
-            }
-
-            if (shouldAddIfExist)
-            {
-                queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
-                queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());
-            }
-            queryBuilder.Append(@"BEGIN  UPDATE #TABLENAME# SET #VALUESQUERY# WHERE #WHEREQUERY#  END");
-            queryBuilder.Replace("#VALUESQUERY#", valuesQuery.ToString());
-            queryBuilder.Replace("#WHEREQUERY#", whereQuery.ToString());
-            queryBuilder.Replace("#TABLENAME#", tableName);
-            return queryBuilder.ToString();
         }
 
         public bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
@@ -777,6 +523,131 @@ namespace Vanrise.GenericData.SQLDataStorage
             if (withOutParameter)
                 insertedId = sqlParameter.Value;
             return effectedRows > 0;
+        }
+
+        #region Private Methods
+
+        private string GetTableNameWithSchema()
+        {
+            string tableName = this._dataRecordStorageSettings.TableName;
+            if (!String.IsNullOrEmpty(this._dataRecordStorageSettings.TableSchema))
+                tableName = String.Format("{0}.{1}", this._dataRecordStorageSettings.TableSchema, this._dataRecordStorageSettings.TableName);
+            return tableName;
+        }
+
+        private string GetRecordStorageCreateTableQuery(string tableName, bool isTempTable)
+        {
+            StringBuilder query = new StringBuilder();
+
+            string schema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            if (schema != null)
+                query.Append(String.Format(" IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", schema));
+
+            string tableNameWithSchema = (schema != null) ? String.Format("{0}.{1}", schema, tableName) : tableName;
+            query.AppendLine(String.Format("CREATE TABLE {0}", tableNameWithSchema));
+            query.AppendLine(BuildColumnDefinitionsScript());
+
+            if (!isTempTable)
+                query.AppendLine(BuildDropAndCreateTableTypeScript());
+
+            return query.ToString();
+        }
+
+        private string BuildColumnDefinitionsScript()
+        {
+            List<string> columnDefinitions = new List<string>();
+
+            foreach (var column in _dataRecordStorageSettings.Columns)
+            {
+                columnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
+            }
+            if (_dataRecordStorageSettings.IncludeQueueItemId)
+            {
+                columnDefinitions.Add("QueueItemId bigint");
+            }
+
+            return String.Format(" ({0});", string.Join(",", columnDefinitions));
+        }
+
+        private string BuildDropAndCreateTableTypeScript()
+        {
+            string schemaName = !String.IsNullOrEmpty(_dataRecordStorageSettings.TableSchema) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            string tableName = _dataRecordStorageSettings.TableName;
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat(@"IF  EXISTS (SELECT * FROM sys.types st JOIN sys.schemas ss ON st.schema_id = ss.schema_id WHERE st.name = N'{1}Type'
+                                     AND ss.name = N'{0}')
+                                    DROP TYPE [{0}].[{1}Type]
+                                    
+                                    "
+                , schemaName, tableName);
+            builder.AppendLine();
+            builder.AppendFormat(@"CREATE TYPE [{0}].[{1}Type] AS TABLE ", schemaName, tableName);
+            builder.AppendLine(BuildColumnDefinitionsScript());
+            return builder.ToString();
+        }
+
+        private string GetRecordStorageAlterTableQuery(SQLDataRecordStorageSettings existingDataRecordSettings)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            string existingSchema = (existingDataRecordSettings.TableSchema != null) ? existingDataRecordSettings.TableSchema : "dbo";
+            string existingName = existingDataRecordSettings.TableName;
+            string newSchema = (_dataRecordStorageSettings.TableSchema != null) ? _dataRecordStorageSettings.TableSchema : "dbo";
+            string newName = _dataRecordStorageSettings.TableName;
+
+            if (existingSchema.CompareTo(newSchema) != 0)
+            {
+                builder.Append(String.Format("IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{0}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {0}' END;", newSchema));
+
+                builder.Append(string.Format("ALTER SCHEMA {0} TRANSFER {1}.{2};", newSchema, existingSchema, existingName));
+            }
+
+            if (existingName.CompareTo(newName) != 0)
+                builder.Append(String.Format("BEGIN EXEC sp_executesql N'sp_rename ''{0}.{1}'', ''{2}''' END;", newSchema, existingName, newName));
+
+            List<string> addColumnDefinitions;
+            List<string> alterColumnDefinitions;
+
+            SetAddAndAlterColumnDefinitions(existingDataRecordSettings, out addColumnDefinitions, out alterColumnDefinitions);
+
+            if (addColumnDefinitions.Count() > 0)
+                builder.Append(String.Format("ALTER TABLE {0}.{1} ADD {2};", newSchema, newName, String.Join(",", addColumnDefinitions)));
+
+            foreach (var columnDefinition in alterColumnDefinitions)
+            {
+                builder.Append(String.Format("ALTER TABLE {0}.{1} ALTER COLUMN {2};", newSchema, newName, columnDefinition));
+            }
+
+            if (_dataRecordStorageSettings.IncludeQueueItemId)
+            {
+                builder.Append(String.Format(@"if not exists (select column_name from INFORMATION_SCHEMA.columns
+                                                              Where table_schema='{0}' AND table_name = '{1}' AND column_name = 'QueueItemId')
+                                               ALTER TABLE {0}.{1} ADD QueueItemId bigint;", newSchema, newName));
+            }
+
+            builder.AppendLine(BuildDropAndCreateTableTypeScript());
+
+            return builder.ToString();
+        }
+
+        private void SetAddAndAlterColumnDefinitions(SQLDataRecordStorageSettings existingDataRecordSettings, out List<string> addColumnDefinitions, out List<string> alterColumnDefinitions)
+        {
+            addColumnDefinitions = new List<string>();
+            alterColumnDefinitions = new List<string>();
+
+            foreach (var column in _dataRecordStorageSettings.Columns)
+            {
+                var existingMatch = existingDataRecordSettings.Columns.FirstOrDefault(itm => itm.ColumnName == column.ColumnName);
+                if (existingMatch == null)
+                    addColumnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
+                else if (column.SQLDataType != existingMatch.SQLDataType)
+                    alterColumnDefinitions.Add(String.Format("{0} {1}", column.ColumnName, column.SQLDataType));
+            }
+        }
+
+        private void AppendErrorCheck(StringBuilder sql)
+        {
+            sql.Append(" IF @@ERROR <> 0 BEGIN ROLLBACK TRAN END;");
         }
 
         private string BuildInsertQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, int? createdUserId, int? modifiedUserId, ref bool withOutParameter)
@@ -848,7 +719,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     valuesQuery.AppendFormat(@" {0} ", parameter);
                 }
             }
-           
+
             if (_dataRecordStorage.Settings.CreatedTimeField != null)
             {
                 var createdTimeColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.CreatedTimeField);
@@ -863,7 +734,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     columnNamesBuilder.AppendFormat(@" {0} ", createdTimeColumn.ColumnName);
                     valuesQuery.AppendFormat(@"  getdate()  ");
                 }
-               
+
             }
 
             if (modifiedUserId.HasValue && _dataRecordStorage.Settings.LastModifiedByField != null)
@@ -899,7 +770,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     columnNamesBuilder.AppendFormat(@" {0} ", modifiedTimeColumn.ColumnName);
                     valuesQuery.AppendFormat(@" getdate() ");
                 }
-                
+
             }
 
 
@@ -917,7 +788,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             return queryBuilder.ToString();
         }
-       
+
         private DataRecord DataRecordMapper(IDataReader reader)
         {
 
@@ -955,7 +826,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             return new DataRecord { RecordTime = recordTime, FieldValues = fieldValues };
         }
 
-        string GetColumnNameFromFieldName(string fieldName)
+        private string GetColumnNameFromFieldName(string fieldName)
         {
             var column = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == fieldName);
             if (column == null)
@@ -970,7 +841,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 return column.ColumnName;
             }
         }
-        SQLDataRecordStorageColumn GetColumnFromFieldName(string fieldName)
+
+        private SQLDataRecordStorageColumn GetColumnFromFieldName(string fieldName)
         {
             var column = _dataRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ValueExpression == fieldName);
             if (column == null)
@@ -985,7 +857,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 return column;
             }
         }
-        DataRecordField GetIdColumn()
+
+        private DataRecordField GetIdColumn()
         {
             var column = DataRecordType.Fields.FirstOrDefault(x => x.Name == DataRecordType.Settings.IdField);
             if (column == null)
@@ -997,7 +870,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 return column;
             }
         }
-        List<string> GetColumnNamesFromFieldNames(List<string> fieldNames)
+
+        private List<string> GetColumnNamesFromFieldNames(List<string> fieldNames)
         {
             if (fieldNames == null || fieldNames.Count == 0)
                 return null;
@@ -1012,5 +886,135 @@ namespace Vanrise.GenericData.SQLDataStorage
             }
             return result;
         }
+
+        private string BuildQuery(List<string> fieldNames, int? limitResult, OrderDirection orderDirection, string recordFilter)
+        {
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            string tableName = GetTableNameWithSchema();
+
+            string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
+            string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, orderDirection == OrderDirection.Ascending ? "ASC" : "DESC");
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} {1} from {2} WITH (NOLOCK)
+                                                                    where (@FromTime is null or {3} >= @FromTime) 
+                                                                    and (@ToTime is null or {3} <= @ToTime) {4} {5}",
+                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
+                                                                    tableName, dateTimeColumn, recordFilterResult, orderResult));
+            //input.SortByColumnName = dateTimeColumn;
+            return str.ToString();
+        }
+
+        private string BuildGetAllQuery()
+        {
+            string tableName = GetTableNameWithSchema();
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} from {1} WITH (NOLOCK) ",
+                                                                     string.Join<string>(",", Columns),
+                                                                    tableName));
+            return str.ToString();
+        }
+
+        private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, int? modifiedUserId)
+        {
+            if (fieldValues == null || fieldValues.Count == 0)
+                throw new Exception("fieldValues should not be null or empty.");
+            StringBuilder queryBuilder = new StringBuilder();
+
+            int parameterIndex = 0;
+            string tableName = GetTableNameWithSchema();
+            StringBuilder whereQuery = new StringBuilder();
+            StringBuilder valuesQuery = new StringBuilder();
+            StringBuilder ifNotExistsQueryBuilder = new StringBuilder();
+            var idColumn = GetIdColumn();
+            var shouldAddIfExist = false;
+
+            foreach (var fieldValue in fieldValues)
+            {
+                var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
+                var parameter = GenerateParameterName(ref parameterIndex);
+
+                DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
+                if (matchingField.Type.StoreValueSerialized)
+                {
+                    parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
+                    {
+                        Object = fieldValue.Value
+                    }));
+                }
+                else
+                    parameterValues.Add(parameter, fieldValue.Value);
+
+                if (sqlDataRecordStorageColumn.IsUnique)
+                {
+                    if (ifNotExistsQueryBuilder.Length > 0)
+                    {
+                        ifNotExistsQueryBuilder.Append(" AND ");
+                    }
+                    if (idColumn.Name == fieldValue.Key)
+                    {
+                        ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                        if (whereQuery.Length != 0)
+                            whereQuery.Append(" AND ");
+                        whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    }
+                    else
+                    {
+                        shouldAddIfExist = true;
+                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    }
+
+
+                }
+                if (idColumn.Name != fieldValue.Key)
+                {
+                    if (valuesQuery.Length != 0)
+                        valuesQuery.Append(",");
+                    valuesQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
+                }
+            }
+
+            if (modifiedUserId.HasValue && _dataRecordStorage.Settings.LastModifiedByField != null)
+            {
+                var modifiedByColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedByField);
+                if (modifiedByColumn != null)
+                {
+                    var parameter = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(parameter, modifiedUserId.Value);
+
+                    if (valuesQuery.Length != 0)
+                        valuesQuery.Append(",");
+                    valuesQuery.AppendFormat(@" {0} = {1}  ", modifiedByColumn.ColumnName, parameter);
+                }
+
+            }
+
+            if (_dataRecordStorage.Settings.LastModifiedTimeField != null)
+            {
+                var modifiedTimeColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedTimeField);
+                if (modifiedTimeColumn != null)
+                {
+                    if (valuesQuery.Length != 0)
+                        valuesQuery.Append(",");
+                    valuesQuery.AppendFormat(@" {0} = getdate()  ", modifiedTimeColumn.ColumnName);
+                }
+
+            }
+
+            if (shouldAddIfExist)
+            {
+                queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
+                queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());
+            }
+            queryBuilder.Append(@"BEGIN  UPDATE #TABLENAME# SET #VALUESQUERY# WHERE #WHEREQUERY#  END");
+            queryBuilder.Replace("#VALUESQUERY#", valuesQuery.ToString());
+            queryBuilder.Replace("#WHEREQUERY#", whereQuery.ToString());
+            queryBuilder.Replace("#TABLENAME#", tableName);
+            return queryBuilder.ToString();
+        }
+
+        private string GenerateParameterName(ref int parameterIndex)
+        {
+            return String.Format("@Prm_{0}", parameterIndex++);
+        }
+
+        #endregion
     }
 }
