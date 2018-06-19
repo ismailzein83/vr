@@ -629,5 +629,12 @@
     <Build Include="TOneWhS_BE\User Defined Types\CustomerRecurringChargesType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_ZoneCodeGroup_GetSale.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_ZoneCodeGroup_GetCost.sql" />
+    <Build Include="TOneWhS_SPL\Tables\ReceivedSupplierPricelist.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_UpdateStatus.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_SetAsStarted.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_SetAsCompleted.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_Insert.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_GetReceivedPricelistById.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_GetFiltered.sql" />
   </ItemGroup>
 </Project>
