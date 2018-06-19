@@ -472,11 +472,12 @@ app.directive('vrSecSecurityprovidersettingsStaticeditor', ['UtilsService', 'VRU
                 };
 
                 api.setData = function (securityProviderObject) {
-                   
-                        if(securityProviderObject!=undefined)
-                            securityProviderObject.Settings = {
+
+                    if (securityProviderObject != undefined)
+                        securityProviderObject.Settings = {
+                            $type: "Vanrise.Security.Entities.SecurityProviderSettings,Vanrise.Security.Entities",
                             ExtendedSettings: securityProviderSelectorAPI.getData()
-                            }
+                        }
                 };
 
                 if (ctrl.onReady != null)
