@@ -86,9 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessRules\Actions\GetServiceWithMinimumBEDAction.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosingZonesAboveThresholdCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDGreaterThanActionDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDLessThanActionDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ModifyingCodesInRateChangePricelistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RenamedZonesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />

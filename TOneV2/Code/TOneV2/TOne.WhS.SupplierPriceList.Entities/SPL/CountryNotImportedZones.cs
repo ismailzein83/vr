@@ -25,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList
     {
         public AllImportedZones AllImportedZones { get; set; }
 
-        public List<NotImportedZone> NotImportedZones { get; set; }
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
 
         public object Key
         {

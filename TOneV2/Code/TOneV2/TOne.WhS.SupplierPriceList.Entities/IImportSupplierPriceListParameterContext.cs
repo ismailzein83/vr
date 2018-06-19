@@ -1,10 +1,12 @@
 ﻿using System;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
     public interface IImportSPLContext
     {
+        SupplierPricelistType SupplierPricelistType { get; }
         int SupplierId { get; }
         TimeSpan CodeCloseDateOffset { get; }
         DateTime CodeEffectiveDate { get; }

@@ -5,6 +5,7 @@ using Vanrise.Common.Business;
 using System.Collections.Generic;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -20,6 +21,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> PriceListDate { get; set; }
+        [RequiredArgument]
+        public InArgument<SupplierPricelistType> PricelistType { get; set; }
 
         #endregion
         protected override void CacheMetadata(CodeActivityMetadata metadata)
@@ -32,12 +35,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int supplierId = SupplierId.Get(context);
             int currencyId = CurrencyId.Get(context);
             DateTime priceListDate = PriceListDate.Get(context);
+            SupplierPricelistType pricelistType = PricelistType.Get(context);
 
             ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
 
             importSPLContext.PriceListCurrencyId = currencyId;
             importSPLContext.SupplierId = supplierId;
             importSPLContext.SetDateMembers(supplierId, priceListDate);
+            importSPLContext.SupplierPricelistType = pricelistType;
         }
     }
 
@@ -63,6 +68,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private int _priceListCurrencyId;
         private int _systemCurrencyId;
         private int _supplierId;
+        private SupplierPricelistType _SupplierPricelistType; 
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
         private TOne.WhS.BusinessEntity.Business.ConfigManager _tOneConfigManager = new BusinessEntity.Business.ConfigManager();
 
@@ -74,6 +80,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             get { return _supplierId; }
             set { _supplierId = value; }
+        }
+        public SupplierPricelistType SupplierPricelistType
+        {
+            get { return _SupplierPricelistType; }
+            set { _SupplierPricelistType = value; }
         }
         public int PriceListCurrencyId
         {
