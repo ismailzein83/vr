@@ -13,6 +13,8 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Invoice.Business;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
@@ -95,7 +97,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
 
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, customerInvoiceBySaleCurrency);
+            var financialAccountId = financialAccount.FinancialAccountId;
+            CustomerRecurringChargeManager customerRecurringChargeManager = new CustomerRecurringChargeManager();
+            List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccountId, fromDate, toDate);
+
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
             #region BuildCustomerInvoiceDetails
             CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType, minAmount);
 
@@ -134,7 +140,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         context.NeedApproval = settings.NeedApproval;
                     }
-                    
+
                     context.Invoice = new GeneratedInvoice
                     {
                         InvoiceDetails = customerInvoiceDetails,
@@ -152,7 +158,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             #endregion
         }
-
+        
         private List<CustomerInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate,decimal? commission, CommissionType? commissionType,IEnumerable<VRTaxItemDetail>  taxItemDetails)
         {
 
@@ -221,7 +227,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return customerInvoiceBySaleCurrencies;
         }
-
 
         private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate, DateTime toDate)
         {
@@ -312,7 +317,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return customerInvoiceDetails;
         }
 
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails, List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoicesBySaleCurrency)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails, List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoicesBySaleCurrency, List<RecurringChargeItem> customerRecurringCharges)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             if(customerInvoicesBySaleCurrency != null && customerInvoicesBySaleCurrency.Count > 0)
@@ -397,6 +402,24 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
                 }
             }
+
+            if (customerRecurringCharges != null && customerRecurringCharges.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "RecurringCharge";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
+                foreach (var customerRecurringCharge in customerRecurringCharges)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = customerRecurringCharge,
+                        Name = " "
+                    });
+                }
+                generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+            }
+
             return generatedInvoiceItemSets;
         }
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId)
