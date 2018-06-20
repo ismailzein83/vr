@@ -18,28 +18,15 @@ namespace Vanrise.Data.SQL
     public class BaseSQLDataManager : BaseDataManager
     {
         static string _bcpCommandName;
+        static string s_bcpDirectory;
+
+        #region ctor
+
         static BaseSQLDataManager()
         {
             _bcpCommandName = ConfigurationManager.AppSettings["BCPCommandName"];
             AddBCPIfNotAdded();
         }
-
-        static string s_bcpDirectory;
-        private static void AddBCPIfNotAdded()
-        {
-            s_bcpDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(BaseSQLDataManager)).Location), "BCPRoot");
-            if (!Directory.Exists(s_bcpDirectory))
-                Directory.CreateDirectory(s_bcpDirectory);
-            string bcpFullPath = Path.Combine(s_bcpDirectory, "v_bcp.exe");
-            if (!File.Exists(bcpFullPath))
-                File.WriteAllBytes(bcpFullPath, Resource.v_bcp);
-
-            string bcprllFullPath = Path.Combine(s_bcpDirectory, "bcp.rll");
-            if (!File.Exists(bcprllFullPath))
-                File.WriteAllBytes(bcprllFullPath, Resource.bcp);
-        }
-
-        #region ctor
 
         public BaseSQLDataManager()
             : base()
@@ -68,6 +55,17 @@ namespace Vanrise.Data.SQL
                 From = new DateTime(1753, 1, 1, 0, 0, 0),
                 To = new DateTime(9999, 12, 31, 23, 59, 59)
             };
+        }
+
+        public string GetSqlParameterSqlType(string parameterName, Object parameterValue)
+        {
+            SqlParameter sqlPrm = new SqlParameter(parameterName, parameterValue);
+            string sqlType = sqlPrm.SqlDbType.ToString();
+            if (sqlPrm.Size > 0)
+                sqlType = string.Format("{0}({1})", sqlType, sqlPrm.Size);
+            else if (sqlPrm.SqlDbType == SqlDbType.Decimal)
+                sqlType = "Decimal(38, 15)";
+            return sqlType;
         }
 
         #endregion
@@ -529,7 +527,21 @@ namespace Vanrise.Data.SQL
 
         #region Private Methods
 
-        SqlConnection GetOpenConnection()
+        private static void AddBCPIfNotAdded()
+        {
+            s_bcpDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(BaseSQLDataManager)).Location), "BCPRoot");
+            if (!Directory.Exists(s_bcpDirectory))
+                Directory.CreateDirectory(s_bcpDirectory);
+            string bcpFullPath = Path.Combine(s_bcpDirectory, "v_bcp.exe");
+            if (!File.Exists(bcpFullPath))
+                File.WriteAllBytes(bcpFullPath, Resource.v_bcp);
+
+            string bcprllFullPath = Path.Combine(s_bcpDirectory, "bcp.rll");
+            if (!File.Exists(bcprllFullPath))
+                File.WriteAllBytes(bcprllFullPath, Resource.bcp);
+        }
+
+        private SqlConnection GetOpenConnection()
         {
             SqlConnection connection = new System.Data.SqlClient.SqlConnection(GetConnectionString());
             connection.Open();
@@ -690,16 +702,5 @@ namespace Vanrise.Data.SQL
         }
 
         #endregion
-
-        public string GetSqlParameterSqlType(string parameterName, Object parameterValue)
-        {
-            SqlParameter sqlPrm = new SqlParameter(parameterName, parameterValue);
-            string sqlType = sqlPrm.SqlDbType.ToString();
-            if (sqlPrm.Size > 0)
-                sqlType = string.Format("{0}({1})", sqlType, sqlPrm.Size);
-            else if (sqlPrm.SqlDbType == SqlDbType.Decimal)
-                sqlType = "Decimal(38, 15)";
-            return sqlType;
-        }
     }
 }
