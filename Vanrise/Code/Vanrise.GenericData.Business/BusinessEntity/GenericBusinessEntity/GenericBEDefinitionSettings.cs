@@ -89,10 +89,13 @@ namespace Vanrise.GenericData.Business
         string InfoType { get; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
     }
+    public enum HandlerOperationType { Add = 0,Update = 1}
     public interface IGenericBEOnBeforeInsertHandlerContext
     {
+        HandlerOperationType OperationType { get;}
         GenericBusinessEntity GenericBusinessEntity { get; set; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
+        GenericBusinessEntity OldGenericBusinessEntity { get; }
         Guid BusinessEntityDefinitionId { get; }
     }
 

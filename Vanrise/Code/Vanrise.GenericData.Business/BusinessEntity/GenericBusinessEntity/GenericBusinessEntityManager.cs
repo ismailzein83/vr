@@ -372,7 +372,7 @@ namespace Vanrise.GenericData.Business
 
             var idFieldType = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
 
-            OnBeforeSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntityToAdd);
+            OnBeforeSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntityToAdd, HandlerOperationType.Add);
             var fieldTypes = _genericBEDefinitionManager.GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
             OnBeforeSaveMethod(fieldTypes, genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntityToAdd, null);
 
@@ -425,6 +425,8 @@ namespace Vanrise.GenericData.Business
 
 
             var oldGenericBE = GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
+
+            OnBeforeSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntityToUpdate, HandlerOperationType.Update);
 
             bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues);
 
@@ -502,7 +504,7 @@ namespace Vanrise.GenericData.Business
             }
 
         }
-        private void OnBeforeSaveHandler(GenericBEDefinitionSettings genericBEDefinitionSetting, Guid businessEntityDefinitionId, GenericBusinessEntity oldEntity, GenericBusinessEntity newEntity)
+        private void OnBeforeSaveHandler(GenericBEDefinitionSettings genericBEDefinitionSetting, Guid businessEntityDefinitionId, GenericBusinessEntity oldEntity, GenericBusinessEntity newEntity, HandlerOperationType operationType)
         {
             if (genericBEDefinitionSetting.OnBeforeInsertHandler != null)
             {
@@ -510,6 +512,8 @@ namespace Vanrise.GenericData.Business
                 {
                     DefinitionSettings = genericBEDefinitionSetting,
                     GenericBusinessEntity = newEntity,
+                    OldGenericBusinessEntity = oldEntity,
+                    OperationType = operationType,
                     BusinessEntityDefinitionId = businessEntityDefinitionId,
                 });
             }

@@ -43,41 +43,43 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBe
         }
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
-
-            if (PartDefinitions != null)
+            if (context.OperationType == HandlerOperationType.Add)
             {
-                context.DefinitionSettings.ThrowIfNull("context.DefinitionSettings");
-                context.DefinitionSettings.ExtendedSettings.ThrowIfNull("context.DefinitionSettings.ExtendedSettings");
-                context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
-                string serialNumberPattern = new GenericBusinessEntityDefinitionManager().GetExtendedSettingsInfoByType(context.DefinitionSettings, InfoType) as string; 
-                if (serialNumberPattern != null)
+                if (PartDefinitions != null)
                 {
-                    var serialNumberPartContext = new GenericBESerialNumberPartSettingsContext
+                    context.DefinitionSettings.ThrowIfNull("context.DefinitionSettings");
+                    context.DefinitionSettings.ExtendedSettings.ThrowIfNull("context.DefinitionSettings.ExtendedSettings");
+                    context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
+                    string serialNumberPattern = new GenericBusinessEntityDefinitionManager().GetExtendedSettingsInfoByType(context.DefinitionSettings, InfoType) as string;
+                    if (serialNumberPattern != null)
                     {
-                        DefinitionSettings = context.DefinitionSettings,
-                        GenericBusinessEntity = context.GenericBusinessEntity,
-                        BusinessEntityDefinitionId = context.BusinessEntityDefinitionId
-                    };
-
-                    foreach (var part in PartDefinitions)
-                    {
-                        if (serialNumberPattern != null && serialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                        var serialNumberPartContext = new GenericBESerialNumberPartSettingsContext
                         {
-                            serialNumberPattern = serialNumberPattern.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberPartContext));
+                            DefinitionSettings = context.DefinitionSettings,
+                            GenericBusinessEntity = context.GenericBusinessEntity,
+                            BusinessEntityDefinitionId = context.BusinessEntityDefinitionId
+                        };
+
+                        foreach (var part in PartDefinitions)
+                        {
+                            if (serialNumberPattern != null && serialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                            {
+                                serialNumberPattern = serialNumberPattern.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberPartContext));
+                            }
                         }
-                    }
 
-                    if (context.GenericBusinessEntity.FieldValues == null)
-                        context.GenericBusinessEntity.FieldValues = new Dictionary<string, object>();
+                        if (context.GenericBusinessEntity.FieldValues == null)
+                            context.GenericBusinessEntity.FieldValues = new Dictionary<string, object>();
 
-                    Object serialNumberField = null;
-                    if (context.GenericBusinessEntity.FieldValues.TryGetValue(this.FieldName, out serialNumberField))
-                    {
-                        context.GenericBusinessEntity.FieldValues[this.FieldName] = serialNumberPattern;
-                    }
-                    else
-                    {
-                        context.GenericBusinessEntity.FieldValues.Add(this.FieldName, serialNumberPattern);
+                        Object serialNumberField = null;
+                        if (context.GenericBusinessEntity.FieldValues.TryGetValue(this.FieldName, out serialNumberField))
+                        {
+                            context.GenericBusinessEntity.FieldValues[this.FieldName] = serialNumberPattern;
+                        }
+                        else
+                        {
+                            context.GenericBusinessEntity.FieldValues.Add(this.FieldName, serialNumberPattern);
+                        }
                     }
                 }
             }
