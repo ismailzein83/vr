@@ -256,6 +256,7 @@ as (select * from (values
 ('6D39DDC2-E5EB-46C3-A926-37D59A9FD1AD','Groups','Groups','#/view/Security/Views/Group/GroupManagement'																		,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Group/GetFilteredGroups',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1,0),
 ('17B7D7F7-0A1E-4AC1-B2A9-CC71755E3216','Users','Users','#/view/Security/Views/User/UserManagement'																			,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/Users/GetFilteredUsers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,0),
 ('147C1862-9B0C-4285-B415-00C9210FC691','Permissions','Permissions','#/view/Security/Views/Permission/BusinessEntityManagement'												,'9B73765C-BDD7-487B-8D32-E386288DB79B','VR_Sec/BusinessEntityNode/GetEntityNodes & VR_Sec/Permission/GetFilteredEntityPermissions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10,0),
+('628CF733-4E3D-4E68-981D-037CD0825389','Security Provider','Security Provider',NULL																						,'9B73765C-BDD7-487B-8D32-E386288DB79B',NULL,NULL,NULL,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"00166bed-92c1-4a5d-8280-a048c8a0eb95"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',15, 0),
 
 ('241540BF-51E5-4D63-9806-EB212DADC3B3','Tenants','Tenants','#/view/Security/Views/Tenant/TenantManagement'																	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Sec/Tenants/GetFilteredTenants',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50,1),
 
@@ -459,28 +460,6 @@ when not matched by target then
 	insert([ID],[Name],[ParentID],[Fields],[ExtraFieldsEvaluator],[Settings])
 	values(s.[ID],s.[Name],s.[ParentID],s.[Fields],s.[ExtraFieldsEvaluator],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
-end
-
-
---[sec].[View]-----------------------------12001 to 13000-------------------------------------------------------
-begin
-set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('628CF733-4E3D-4E68-981D-037CD0825389','Security Provider','Security Provider',NULL,'9B73765C-BDD7-487B-8D32-E386288DB79B',NULL,NULL,NULL,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"00166bed-92c1-4a5d-8280-a048c8a0eb95"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',NULL)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
-merge	[sec].[View] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
-when not matched by target then
-	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
-	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
---------------------------------------------------------------------------------------------------------------
 end
 
 
