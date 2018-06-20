@@ -18,6 +18,6 @@
 \images\INSOFT-login.png
 \images\INSOFT-iconheader.ico
 
-\images\CentralAuth-logoonheader.png
-\images\CentralAuth-login.png
-\images\CentralAuth-iconheader.ico
+\images\logoonheader.png
+\images\login.png
+\images\iconheader.ico

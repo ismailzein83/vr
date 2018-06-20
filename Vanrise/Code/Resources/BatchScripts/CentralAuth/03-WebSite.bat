@@ -18,9 +18,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\VR_Notification\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\Analytic\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\images\CentralAuth-logoonheader.png" /S /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\images\CentralAuth-login.png" /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\"
-xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\images\CentralAuth-iconheader.ico" /S /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\"
 
 rename "\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\CentralAuth-logoonheader.png" "logoonheader.png"
 rename "\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\CentralAuth-login.png" "login.png"
