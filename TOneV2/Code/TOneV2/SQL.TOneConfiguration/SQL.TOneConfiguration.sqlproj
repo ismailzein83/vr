@@ -858,6 +858,7 @@
     <None Include="TOne_Jazz.PostDeployment.sql" />
     <None Include="Security.RemoteProvider.PostDeployment.sql" />
     <None Include="CentralAuth.PostDeployment.sql" />
+    <None Include="TOne.AutoImportSPL.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
