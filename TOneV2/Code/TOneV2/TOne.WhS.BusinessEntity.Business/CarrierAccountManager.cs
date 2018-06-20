@@ -60,7 +60,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				   Dictionary<string, CarrierAccount> supplierAccountsByAutoImportEmail = new Dictionary<string, CarrierAccount>();
 				   foreach (CarrierAccount item in allCarrierAccounts.Values)
 				   {
-					   if (item.SupplierSettings == null || item.SupplierSettings.AutoImportSettings == null)
+					   if (item.SupplierSettings == null || item.SupplierSettings.AutoImportSettings == null || !item.SupplierSettings.AutoImportSettings.IsAutoImportActive)
 						   continue;
 
 					   string email = item.SupplierSettings.AutoImportSettings.Email;
