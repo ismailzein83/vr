@@ -25,7 +25,7 @@ BEGIN
       ,[ProcessInstanceId]
       ,[StartProcessingDate]
 	  ,[ErrorDetails]
-	 FROM [TOneV2_Dev].[TOneWhS_SPL].[ReceivedSupplierPricelist] WITH(NOLOCK) 
+	 FROM [TOneWhS_SPL].[ReceivedSupplierPricelist] WITH(NOLOCK) 
 	 Where  (@SupplierIds  is null or SupplierID in (select SupplierId from @SupplierIdsTable)) 
 	 and 	 (@Status  is null or [Status] in (select [Status] from @StatusTable))
 	 ORDER BY [ReceivedDate] DESC

@@ -636,5 +636,6 @@
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_Insert.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_GetReceivedPricelistById.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_GetFiltered.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_UpdateStatusWithErrors.sql" />
   </ItemGroup>
 </Project>

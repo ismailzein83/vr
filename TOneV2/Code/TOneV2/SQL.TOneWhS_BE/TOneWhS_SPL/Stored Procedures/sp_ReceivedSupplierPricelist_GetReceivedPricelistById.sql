@@ -15,6 +15,6 @@ BEGIN
       ,[ProcessInstanceId]
       ,[StartProcessingDate]
 	  ,[ErrorDetails]
-	 FROM [TOneV2_Dev].[TOneWhS_SPL].[ReceivedSupplierPricelist] WITH(NOLOCK) 
+	 FROM [TOneWhS_SPL].[ReceivedSupplierPricelist] WITH(NOLOCK) 
 	 Where [ID] = @id
 END
