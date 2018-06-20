@@ -16,5 +16,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public RecurringChargePeriod RecurringChargePeriod { get; set; }
+        public IEnumerable<SupplierRecurringCharge> GetSupplierRecurringChargeRDLCSchema()
+        {
+            return null;
+        }
     }
 }
