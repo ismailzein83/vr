@@ -53,5 +53,9 @@ namespace Vanrise.Analytic.Business
         {
             return _templateConfigManager.GetExtensionConfigurations<DimensionMappingRuleSettingConfig>(DimensionMappingRuleSettingConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<MeasureMappingRuleSettingConfig> GetMeasureMappingRuleSettingConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<MeasureMappingRuleSettingConfig>(MeasureMappingRuleSettingConfig.EXTENSION_TYPE);
+        }
     }
 }

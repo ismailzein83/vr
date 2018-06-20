@@ -93,6 +93,14 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetDimensionMappingRuleSettingConfigs();
         }
+
+        [HttpGet]
+        [Route("GetMeasureMappingRuleSettingConfigs")]
+        public IEnumerable<MeasureMappingRuleSettingConfig> GetMeasureMappingRuleSettingConfigs()
+        {
+            return _manager.GetMeasureMappingRuleSettingConfigs();
+        }
+
         [HttpGet]
         [Route("GetMeasureExternalSourceExtendedSettingConfigs")]
         public IEnumerable<MeasureExternalSourceSettingConfig> GetMeasureExternalSourceExtendedSettingConfigs()

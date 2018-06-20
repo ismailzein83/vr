@@ -47,6 +47,11 @@
         function GetDimensionMappingRuleSettingConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionMappingRuleSettingConfigs"));
         }
+
+        function GetMeasureMappingRuleSettingConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureMappingRuleSettingConfigs"));
+        }
+
         return ({
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
@@ -57,7 +62,8 @@
             GetVRRestAPIAnalyticQueryInterceptorConfigs: GetVRRestAPIAnalyticQueryInterceptorConfigs,
             GetDRSearchPageSubviewDefinitionSettingsConfigs: GetDRSearchPageSubviewDefinitionSettingsConfigs,
             GetMeasureExternalSourceExtendedSettingConfigs: GetMeasureExternalSourceExtendedSettingConfigs,
-            GetDimensionMappingRuleSettingConfigs: GetDimensionMappingRuleSettingConfigs
+            GetDimensionMappingRuleSettingConfigs: GetDimensionMappingRuleSettingConfigs,
+            GetMeasureMappingRuleSettingConfigs: GetMeasureMappingRuleSettingConfigs
         });
     }
 

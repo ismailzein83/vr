@@ -8,6 +8,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
 {
     public class MeasureMappingRule
     {
+        public Guid MeasureMappingRuleId { get; set; }
         public string Name { get; set; }
         public MeasureMappingRuleSettings Settings { get; set; }
     }

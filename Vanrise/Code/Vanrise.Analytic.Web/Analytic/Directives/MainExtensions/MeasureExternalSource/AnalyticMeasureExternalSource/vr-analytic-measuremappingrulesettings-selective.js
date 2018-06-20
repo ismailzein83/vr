@@ -1,20 +1,20 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    DimensionMappingRuleSettingsSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService'];
-    function DimensionMappingRuleSettingsSelective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService) {
+    MeasureMappingRuleSettingsSelective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService'];
+    function MeasureMappingRuleSettingsSelective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 isrequired: '=',
-                
+
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var dimensionMappingRuleSettingsSelective = new DimensionMappingRuleSettingsSelective($scope, ctrl, $attrs);
-                dimensionMappingRuleSettingsSelective.initializeController();
+                var measureMappingRuleSettingsSelective = new MeasureMappingRuleSettingsSelective($scope, ctrl, $attrs);
+                measureMappingRuleSettingsSelective.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
@@ -22,10 +22,10 @@
                 return getTemplate($attrs);
             }
         };
-        function DimensionMappingRuleSettingsSelective($scope, ctrl, $attrs) {
+        function MeasureMappingRuleSettingsSelective($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            
-            
+
+
             var tableId;
             var context;
             var ruleEntity;
@@ -49,9 +49,9 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
 
-                    var payload = {                       
+                    var payload = {
                         context: getContext(),
-                        tableId: tableId
+                        tableId: tableId,
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
                 };
@@ -63,15 +63,17 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     selectorAPI.clearDataSource();
 
                     var promises = [];
 
                     if (payload != undefined) {
-                        
+
                         ruleEntity = payload.ruleEntity;
                         context = payload.context;
                         tableId = payload.tableId;
+
                     }
 
                     if (ruleEntity != undefined) {
@@ -82,7 +84,7 @@
                     promises.push(getTemplateConfigsPromise);
 
                     function getTemplateConfigs() {
-                        return VR_Analytic_AnalyticConfigurationAPIService.GetDimensionMappingRuleSettingConfigs().then(function (response) {
+                        return VR_Analytic_AnalyticConfigurationAPIService.GetMeasureMappingRuleSettingConfigs().then(function (response) {
                             if (response != null) {
 
                                 for (var i = 0; i < response.length; i++) {
@@ -90,26 +92,26 @@
 
                                 }
                                 if (ruleEntity != undefined) {
-                                    
-                                    var dimensionRuleEntity = ruleEntity.Entity != undefined ? ruleEntity.Entity.Settings : undefined;
-                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, dimensionRuleEntity.ConfigId, 'ExtensionConfigurationId');
+
+                                    var measureRuleEntity = ruleEntity.Entity != undefined ? ruleEntity.Entity.Settings : undefined;
+                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, measureRuleEntity.ConfigId, 'ExtensionConfigurationId');
 
                                 }
                             }
                         });
                     }
                     function loadDirective() {
-                        
+
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            
+
                             var directivePayload = {
                                 ruleEntity: ruleEntity,
                                 context: getContext(),
-                                tableId: tableId
+                                tableId: tableId,
                             };
 
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
@@ -140,7 +142,7 @@
 
                 if (currentContext == undefined)
                     currentContext = {};
-               
+
                 return currentContext;
             }
         }
@@ -153,12 +155,12 @@
                 '<vr-row>'
                     + '<vr-columns colnum="{{ctrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
-                        
+
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Type"  entityName="Dimension Mapping Rule Setting" '
+                            + 'label="Type"  entityName="Measure Mapping Rule Setting" '
                             + ' ' + hideremoveicon + ' '
                             + 'isrequired ="ctrl.isrequired"'
                            + ' >'
@@ -173,5 +175,5 @@
         }
         return directiveDefinitionObject;
     }
-    app.directive("vrAnalyticDimensionmappingrulesettingsSelective", DimensionMappingRuleSettingsSelective);
+    app.directive("vrAnalyticMeasuremappingrulesettingsSelective", MeasureMappingRuleSettingsSelective);
 })(appControllers);

@@ -177,6 +177,7 @@
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-dimensionmappingrulesettings-selective.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-dimensionmappingrules-grid.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-measuremappingrules-grid.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-measuremappingrulesettings-selective.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\AnalyticExcludeDimensionTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\AnalyticSameDimensionTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\Templates\SpecificMappingMeasureTemplate.html" />
@@ -300,6 +301,10 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-timevariation-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\vr-analytic-measuremappingrulesettings-specificmapping.js" />
+    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\LastPeriodFilterTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
+    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\Templates\DataRecordSourceSubviewSettingsTemplate.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\vr-analytic-datarecordsource-subviewsettings.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Templates\DataRecordSearchPageItemDetailsTemplate.html" />
@@ -325,10 +330,6 @@
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-sumaggregate.js" />
     <Content Include="Analytic\Directives\MainExtensions\DataAnalysis\Templates\DataAnalysisExtraFields.html" />
     <Content Include="Analytic\Directives\MainExtensions\DataAnalysis\vr-analytic-dataanalysisextrafields.js" />
-    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\LastPeriodFilterTemplate.html" />
-    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
-    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />
-    <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
     <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\vr-analytic-memory-dataprovider.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\Templates\HistoryAnalyticReportRuntimeTemplates.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\History\vr-analytic-analyticreport-history-runtime.js" />

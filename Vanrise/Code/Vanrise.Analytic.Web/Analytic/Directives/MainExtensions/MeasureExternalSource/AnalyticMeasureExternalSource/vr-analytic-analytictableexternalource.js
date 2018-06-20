@@ -27,6 +27,9 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
             var gridAPI;
             var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var measureGridAPI;
+            var measureGridReadyDeferred = UtilsService.createPromiseDeferred();
+
             var tableSelectedDeferred;
 
             this.initializeController = initializeController;
@@ -49,10 +52,11 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
 
                             var payload = {
                                 context: getContext(),
-                                tableId: tableId,
+                                tableId: tableId
                             };
 
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridAPI, payload, setLoader);
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measureGridAPI, payload, setLoader);
                         }
                     }
 
@@ -61,6 +65,11 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                 $scope.scopeModel.onGridDirectiveReady = function (api) {
                     gridAPI = api;
                     gridReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onMeasureGridDirectiveReady = function (api) {
+                    measureGridAPI = api;
+                    measureGridReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -84,6 +93,7 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                             promises.push(loadGrid());
                         }
                     }
+                   
                     promises.push(loadTableSelector());
 
                     function loadTableSelector() {
@@ -99,17 +109,24 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                     }
 
                     function loadGrid() {
-                       
                         var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([tableSelectedDeferred.promise, gridReadyDeferred.promise]).then(function () {
+                        UtilsService.waitMultiplePromises([tableSelectedDeferred.promise, gridReadyDeferred.promise, measureGridReadyDeferred.promise]).then(function () {
                             tableSelectedDeferred = undefined;
-                            var payload = {
+                            var dimensionPayload = {
                                 context: getContext(),                         
                                 tableId: tableId,
-                                rules: entity!=undefined ? entity.DimensionMappingRules : undefined
+                                rules: entity != undefined ? entity.DimensionMappingRules : undefined,
+
                             };
-                            
-                            VRUIUtilsService.callDirectiveLoad(gridAPI, payload, loadGridPromiseDeferred);
+                            var measurePayload = {
+                                context: getContext(),
+                                tableId: tableId,
+                                rules: entity != undefined ? entity.MeasureMappingRules : undefined,
+
+                            };
+                            VRUIUtilsService.callDirectiveLoad(gridAPI, dimensionPayload, loadGridPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(measureGridAPI, measurePayload, loadGridPromiseDeferred);
+
                         });
                         return loadGridPromiseDeferred.promise;
 
@@ -122,7 +139,8 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                     var analyticTable = {
                         $type: "Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource, Vanrise.Analytic.MainExtensions",
                         AnalyticTableId: tableSelectorAPI.getSelectedIds(),
-                        DimensionMappingRules: gridAPI.getData()
+                        DimensionMappingRules: gridAPI.getData(),
+                        MeasureMappingRules: measureGridAPI.getData()
                     };
                     return analyticTable;
                 };
