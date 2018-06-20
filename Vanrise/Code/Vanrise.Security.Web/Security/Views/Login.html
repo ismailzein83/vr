@@ -1,13 +1,16 @@
 ﻿<div class="login-container">
     <div ng-controller="VR_Sec_LoginController">
-        <div style="margin-top: 50%; padding-top: 55%">
+        <div style="margin-top: 50%; padding-top: 55%;position: relative;">
             <!--<img src="../../Client/Images/doruknet-logo.png" class="vr-company-logo" style="visibility:hidden" />-->
             <vr-form name="formLogin" submitname="login">
-                <div class="row login-spacer" ng-show="showSecurityProviderSelector">
-                    <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
-                        <vr-sec-securityprovider-selector on-ready="onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="selectedSecurityProvider"></vr-sec-securityprovider-selector>
+                <div style="position: absolute; top: -45px; width: 330px;">
+                    <div class="row login-spacer" ng-show="showSecurityProviderSelector">
+                        <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
+                            <vr-sec-securityprovider-selector customlabel="Authentication Method" on-ready="onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="selectedSecurityProvider"></vr-sec-securityprovider-selector>
+                        </div>
                     </div>
                 </div>
+                
 
                 <span ng-if="selectedSecurityProvider!=undefined" vr-loader="isLoadingAuthenticateUserEditor">
                     <vr-directivewrapper directive="selectedSecurityProvider.AuthenticateUserEditor" on-ready="onAuthenticateUserEditorReady"></vr-directivewrapper>
