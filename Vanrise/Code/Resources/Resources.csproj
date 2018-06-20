@@ -107,6 +107,8 @@
     <Content Include="BatchScripts\CarrierPortal\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\CDRAnalysis\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\CDRAnalysis\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\CentralAuth\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\CentralAuth\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ClearVoice\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ClearVoice\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\CloudXPoint\list-of-excluded-files.txt" />
@@ -300,6 +302,15 @@
     <None Include="BatchScripts\CDRAnalysis\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\CDRAnalysis\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CDRAnalysis\All.bat" />
+    <None Include="BatchScripts\CentralAuth\01-Runtime.bat" />
+    <None Include="BatchScripts\CentralAuth\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\CentralAuth\03-WebSite.bat" />
+    <None Include="BatchScripts\CentralAuth\05-CompressFiles.bat" />
+    <None Include="BatchScripts\CentralAuth\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\CentralAuth\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\CentralAuth\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\CentralAuth\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\CentralAuth\All.bat" />
     <None Include="BatchScripts\ClearVoice\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\ClearVoice\02-Runtime.bat" />
     <None Include="BatchScripts\ClearVoice\30-WebSite_FullVersion.bat" />
