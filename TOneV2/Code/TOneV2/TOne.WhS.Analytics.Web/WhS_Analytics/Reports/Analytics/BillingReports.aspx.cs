@@ -38,8 +38,14 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                     ReportDefinitionManager managerReport = new ReportDefinitionManager();
                     RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(reportId);
 
+                    ReportDefinitionRDLCFile rdlcFile = rdlc.ReportDefinitionRDLCFiles.FindRecord(x => x.ReportDefinitionRDLCFileId == parameters.ReportDefinitionRDLCFileId);
+                    if (rdlcFile == null)
+                        rdlcFile = rdlc.ReportDefinitionRDLCFiles.First();
+
+                    parameters.RDLCFileTitle = rdlcFile.Title;
                     ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                    ReportViewer1.LocalReport.ReportPath = Server.MapPath(rdlc.ReportURL);
+                    ReportViewer1.LocalReport.ReportPath = Server.MapPath(rdlcFile.RDLCURL);
+
                     IReportGenerator r = rdlc.GetReportGenerator();
 
                     ReportViewer1.LocalReport.DataSources.Clear();

@@ -13,6 +13,8 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string Name { get; set; }
 
         public string ReportURL { get; set; }
+
+        public List<ReportDefinitionRDLCFile> ReportDefinitionRDLCFiles { get; set; }
         public string Description { get; set; }
         public ReportParameterSettings ParameterSettings { get; set; }
         public string ReportGeneratorFQTN { get; set; }
@@ -34,5 +36,16 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
             }
             return _reportGenerator;
         }
+    }
+
+    public class ReportDefinitionRDLCFile
+    {
+        public int ReportDefinitionRDLCFileId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Title { get; set; }
+
+        public string RDLCURL { get; set; }
     }
 }

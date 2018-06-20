@@ -160,6 +160,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             $scope.singleCustomer = null;
             $scope.customers = [];
             $scope.suppliers = [];
+            // $scope.reportRdlcType = null;
             $scope.selectedPeriod = $scope.periods[6];
 
             if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true) {
@@ -168,11 +169,19 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 });
 
             }
+            else if ($scope.reporttype) {
+                setTimeout(function () {
+                    $scope.params.reportRdlcType = $scope.reporttype.ReportDefinitionRDLCFiles[0];
+                });
+            }
+               
+
             //else {
             //    $scope.selectedPeriod = $scope.periods[6];
             //}
             $scope.params = {
                 groupByCustomer: false,
+                reportRdlcType: null,
                 groupByProfile: false,
                 selectedCustomers: [],
                 selectedSuppliers: [],
@@ -215,6 +224,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             Settings: {
                 $type: "TOne.WhS.Analytics.Entities.BillingReport.ReportParameters, TOne.WhS.Analytics.Entities",
                 FromTime: $scope.fromDate,
+                ReportDefinitionRDLCFileId: $scope.params.reportRdlcType.ReportDefinitionRDLCFileId,
                 ToTime: $scope.toDate,
                 GroupByCustomer: $scope.params.groupByCustomer,
                 CustomersId: customerAccountDirectiveAPI.getSelectedIds() != undefined ? customerAccountDirectiveAPI.getSelectedIds().join(",") : "",

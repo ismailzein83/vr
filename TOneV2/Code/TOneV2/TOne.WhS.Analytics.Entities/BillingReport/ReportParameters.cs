@@ -9,6 +9,10 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
 {
     public class ReportParameters : VRTempPayloadSettings
     {
+        public int ReportDefinitionRDLCFileId { get; set; }
+
+        public string RDLCFileTitle { get; set; }
+
         public DateTime FromTime { get; set; }
 
         public DateTime? ToTime { get; set; }
