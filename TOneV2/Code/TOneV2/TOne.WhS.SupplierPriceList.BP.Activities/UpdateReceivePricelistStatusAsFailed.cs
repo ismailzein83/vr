@@ -42,7 +42,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 			manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, receivedPricelistStatus, errorDetails);
 
 			var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-			receivedSupplierPricelistManager.SendMail(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+			receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+			receivedSupplierPricelistManager.SendMailToInternal(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
 		}
 	}
 }

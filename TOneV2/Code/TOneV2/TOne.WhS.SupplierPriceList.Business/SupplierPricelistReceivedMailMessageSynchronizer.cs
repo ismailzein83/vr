@@ -92,13 +92,14 @@ namespace TOne.WhS.SupplierPriceList.Business
 						{
 							errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Supplier does not have pricelist template." });
 							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.FailedDueToConfigurationError, errors, out recordId);
-							receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Failed);
+							receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
 						}
 						else
 						{
 							int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
 							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.Received, null, out recordId);
-							receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Received);
+							receivedSupplierPricelistManager.SendMailToSupplier(recordId, AutoImportEmailTypeEnum.Received);
+							receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Received);
 
 							var supplierPriceListProcessInput = new SupplierPriceListProcessInput
 							{
@@ -120,7 +121,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 					else
 					{
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, null, receivedMailMessage.Header.MessageSendTime, null, ReceivedPricelistStatus.FailedDueToReceivedMailError, errors, out recordId);
-						receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Failed);
+						receivedSupplierPricelistManager.SendMailToSupplier(recordId, AutoImportEmailTypeEnum.Failed);
+						receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
 					}
 				}
 			}

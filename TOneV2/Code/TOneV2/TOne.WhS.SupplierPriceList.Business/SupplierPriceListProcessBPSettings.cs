@@ -4,6 +4,7 @@ using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.SupplierPriceList.Data;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.BP.Arguments;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -39,8 +40,9 @@ namespace TOne.WhS.SupplierPriceList.Business
 				SupplierPriceListManager SupplierPriceListManager = new SupplierPriceListManager();
 				SupplierPriceListManager.CleanTemporaryTables(processInstanceId);
 				receivedPricelistManager.UpdateReceivedPricelistStatus(supplierPriceListProcessInput.ReceivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToProcessingError);
-				
+
 				var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
+				receivedSupplierPricelistManager.SendMailToInternal(supplierPriceListProcessInput.ReceivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
 			}
 			base.OnBPExecutionCompleted(context);
 		}
