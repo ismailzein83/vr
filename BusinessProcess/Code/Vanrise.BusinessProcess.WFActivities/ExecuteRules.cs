@@ -26,7 +26,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 
 		public OutArgument<bool> ViolatedRulesExist { get; set; }
 
-		public OutArgument<bool> ErrorMessages { get; set; }
+		public OutArgument<List<BPValidationMessage>> ErrorMessages { get; set; }
 
 		protected override void Execute(CodeActivityContext context)
 		{
