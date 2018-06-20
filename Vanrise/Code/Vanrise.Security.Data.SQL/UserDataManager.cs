@@ -65,7 +65,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(userObject.ExtendedSettings) : null, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null, userObject.CreatedBy, userObject.LastModifiedBy);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.SecurityProviderId, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(userObject.ExtendedSettings) : null, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null, userObject.CreatedBy, userObject.LastModifiedBy);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -73,7 +73,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null, userObject.LastModifiedBy);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.SecurityProviderId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null, userObject.LastModifiedBy);
             return (recordesEffected > 0);
         }
 
@@ -150,6 +150,7 @@ namespace Vanrise.Security.Data.SQL
             return new Entities.User
             {
                 UserId = Convert.ToInt32(reader["Id"]),
+                SecurityProviderId = (Guid)(reader["SecurityProviderId"]),
                 Name = reader["Name"] as string,
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),

@@ -132,7 +132,17 @@
     <Content Include="Security\Directives\DynamicPage\Templates\DynamicPagesGrid.html" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpage-grid.js" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
+    <Content Include="Security\Directives\Email\vr-sec-email-remoteselector.js" />
     <Content Include="Security\Directives\MainExtensions\Group\vr-sec-group-static.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\CustomObject\vr-sec-providersettings-customobjectsettings.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\FindUser\Templates\RemoteProviderTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\FindUser\Templates\LocalProviderTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\FindUser\vr-sec-securityprovider-finduser-remoteprovider.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\FindUser\vr-sec-securityprovider-finduser-localprovider.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\OnBeforeInsertHandler\vr-sec-securityprovider-beforeinserthandler.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\Settings\Templates\RemoteProviderTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\Settings\vr-sec-securityprovider-settings-localprovider.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\Settings\vr-sec-securityprovider-settings-remoteprovider.js" />
     <Content Include="Security\Directives\MainExtensions\VRObjectTypes\Templates\UserObjectTypeTemplate.html" />
     <Content Include="Security\Directives\MainExtensions\VRObjectTypes\Templates\UserProfilePropertyEvaluatorTemplate.html" />
     <Content Include="Security\Directives\MainExtensions\VRObjectTypes\vr-sec-userobjecttype.js" />
@@ -143,6 +153,14 @@
     <Content Include="Security\Directives\RequiredPermission\Templates\RequiredPermissionTemplate.html" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-permissionoptions-selector.js" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-requiredpermission-grid.js" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\AuthenticateUser\Templates\EmailPasswordTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\SecurityProvider\AuthenticateUser\vr-sec-securityprovider-authenticateuser-emailpassword.js" />
+    <Content Include="Security\Directives\SecurityProvider\Templates\SecurityProviderSettingsTemplate.html" />
+    <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-settings-selector.js" />
+    <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-remoteselector.js" />
+    <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-settings.js" />
+    <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-selector.js" />
+    <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovidersettings-staticeditor.js" />
     <Content Include="Security\Directives\Settings\Templates\APISettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\SecuritySettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\MailMessageTemplateSettingsTemplate.html" />
@@ -177,6 +195,8 @@
     <Content Include="Security\Services\APIServices\BusinessEntityNodeAPIService.js" />
     <Content Include="Security\Services\APIServices\ModuleAPIService.js" />
     <Content Include="Security\Services\APIServices\OrgChartAPIService.js" />
+    <Content Include="Security\Services\APIServices\RegisteredApplicationAPIService.js" />
+    <Content Include="Security\Services\APIServices\SecurityProviderAPIService.js" />
     <Content Include="Security\Services\APIServices\SecurityAPIService.js" />
     <Content Include="Security\Services\APIServices\MenuAPIService.js" />
     <Content Include="Security\Services\APIServices\PermissionAPIService.js" />
@@ -231,6 +251,8 @@
     <Content Include="Security\Views\DynamicPages\DynamicPageManagementController.js" />
     <Content Include="Security\Views\RequiredPermission\EditRequiredPermission.html" />
     <Content Include="Security\Views\RequiredPermission\EditRequiredPermissionController.js" />
+    <Content Include="Security\Views\Security\RemoteApplications.html" />
+    <Content Include="Security\Views\Security\RemoteApplicationsController.js" />
     <Content Include="Security\Views\Tenant\TenantManagement.html" />
     <Content Include="Security\Views\Tenant\TenantManagementController.js" />
     <Content Include="Security\Views\Tenant\TenantEditor.html" />
@@ -273,7 +295,9 @@
     <Compile Include="Controllers\BusinessEntityNodeController.cs" />
     <Compile Include="Controllers\ModuleController.cs" />
     <Compile Include="Controllers\OrgChartController.cs" />
+    <Compile Include="Controllers\RegisteredApplicationController.cs" />
     <Compile Include="Controllers\TenantController.cs" />
+    <Compile Include="Controllers\SecurityProviderController.cs" />
     <Compile Include="Controllers\ViewController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -325,6 +349,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Security\Directives\Menu\View\Templates\" />
+    <Folder Include="Security\Directives\SecurityProviderAuthentication\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

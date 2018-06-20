@@ -15,12 +15,26 @@ namespace Vanrise.Security.MainExtensions.GenericBEOnBeforeInsertHandlers
 
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
-            //SecurityProviderOnBeforeSaveContext securityProviderOnBeforeSaveContext = new Entities.SecurityProviderOnBeforeSaveContext();
-            //var securityProviderSettings = context.GenericBusinessEntity.FieldValues.GetRecord("Settings") as SecurityProviderSettings;
-            //securityProviderSettings.ExtendedSettings.OnBeforeSave(securityProviderOnBeforeSaveContext);
+            context.ThrowIfNull("context");
+            context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
+            context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
 
-            //if (!string.IsNullOrEmpty(securityProviderOnBeforeSaveContext.ErrorMessage))
-            //    throw new Exception(securityProviderOnBeforeSaveContext.ErrorMessage);
+            SecurityProviderSettings previousSecurityProviderSettings = null;
+            if (context.OldGenericBusinessEntity != null && context.OldGenericBusinessEntity.FieldValues != null)
+                previousSecurityProviderSettings = context.OldGenericBusinessEntity.FieldValues.GetRecord("Settings") as SecurityProviderSettings;
+
+            SecurityProviderOnBeforeSaveContext securityProviderOnBeforeSaveContext = new Entities.SecurityProviderOnBeforeSaveContext()
+            {
+                PreviousSettings = previousSecurityProviderSettings != null ? previousSecurityProviderSettings.ExtendedSettings : null
+            };
+
+            var securityProviderSettings = context.GenericBusinessEntity.FieldValues.GetRecord("Settings") as SecurityProviderSettings;
+            securityProviderSettings.ThrowIfNull("securityProviderSettings");
+            securityProviderSettings.ExtendedSettings.ThrowIfNull("securityProviderSettings.ExtendedSettings");
+            securityProviderSettings.ExtendedSettings.OnBeforeSave(securityProviderOnBeforeSaveContext);
+
+            if (!string.IsNullOrEmpty(securityProviderOnBeforeSaveContext.ErrorMessage))
+                throw new Exception(securityProviderOnBeforeSaveContext.ErrorMessage);
         }
     }
 }

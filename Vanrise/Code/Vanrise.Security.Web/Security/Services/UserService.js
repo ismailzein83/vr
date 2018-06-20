@@ -20,14 +20,18 @@
 
 
 
-        function addUser(onUserAdded) {
+        function addUser(onUserAdded, connectionId) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onUserAdded = onUserAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', null, modalSettings);
+            var modalParameters = {
+                connectionId: connectionId
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', modalParameters, modalSettings);
         }
 
         function editUser(userId, onUserUpdated) {

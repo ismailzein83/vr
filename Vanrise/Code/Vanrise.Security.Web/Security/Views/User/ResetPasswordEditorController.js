@@ -53,21 +53,31 @@
         }
 
         function load() {
-            return loadPasswordHint().then(function () {
-                setTitle();
+            $scope.isloading = true;
+
+            VR_Sec_UserAPIService.GetUserbyId(userId).then(function (user) {
+                loadPasswordHint(user.SecurityProviderId).then(function () {
+                    setTitle();
+                    $scope.isloading = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                    $scope.isloading = false;
+                });
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+                $scope.isloading = false;
             });
-          
         }
 
-        function setTitle(){
+        function setTitle() {
             $scope.title = 'Reset Password';
         }
-        function loadPasswordHint() {
-            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+        function loadPasswordHint(securityProviderId) {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo(securityProviderId).then(function (response) {
                 $scope.passwordHint = response.RequirementsMessage;
             });
         }
-       
+
     }
 
     appControllers.controller('VR_Sec_ResetPasswordEditorController', ResetPasswordEditorController);

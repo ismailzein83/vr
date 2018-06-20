@@ -11,13 +11,13 @@ namespace Vanrise.Web.Controllers
 
     public class HomeController : Controller
     {
-       VRLocalizationManager _vrLocalizationManager = new VRLocalizationManager();
+        VRLocalizationManager _vrLocalizationManager = new VRLocalizationManager();
         public ActionResult Index()
         {
-          
+
             ViewBag.Title = "Home Page";
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
-            GeneralSettingsManager settingManager =  new GeneralSettingsManager();
+            GeneralSettingsManager settingManager = new GeneralSettingsManager();
             var cacheSettingData = settingManager.GetCacheSettingData();
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
             Common.Business.ConfigManager cManager = new Common.Business.ConfigManager();
@@ -30,12 +30,16 @@ namespace Vanrise.Web.Controllers
             var isRTL = _vrLocalizationManager.IsRTL();
             ViewBag.IsRTL = isRTL.ToString().ToLower();
             ViewBag.RTLClass = isRTL ? " class= rtl " : "";
-          
-           
+
+
             Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();
             var loginUrl = securityManager.GetLoginURL();
             if (loginUrl != null)
                 ViewBag.LoginURL = loginUrl;
+            int? loggedInUserId;
+            if (SecurityContext.Current.TryGetLoggedInUserId(out loggedInUserId))
+                ViewBag.HasRemoteApplications = new Vanrise.Security.Business.RegisteredApplicationManager().HasRemoteApplications(loggedInUserId.Value).ToString().ToLower();
+
             return View("~/Client/CSViews/Home/Index.cshtml");
         }
     }

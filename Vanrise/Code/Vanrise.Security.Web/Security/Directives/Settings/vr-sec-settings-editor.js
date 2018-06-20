@@ -27,6 +27,9 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             var mailMessageTemplateSettingsAPI;
             var mailMessageTemplateSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var securityProviderSettingsAPI;
+            var securityProviderSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             //var passwordSettingsAPI;
             //var passwordSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -59,7 +62,11 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 apiSettingsReadyPromiseDeferred.resolve();
             };
 
-           
+            $scope.scopeModel.onSecurityProviderSettingsReady = function (api) {
+                securityProviderSettingsAPI = api;
+                securityProviderSettingsReadyPromiseDeferred.resolve();
+            };
+
             $scope.scopeModel.passwordValueCustomValidation = function () {
                 if (parseInt($scope.scopeModel.passwordLength) >= parseInt($scope.scopeModel.maxPasswordLength))
                     return "Min password length should be less then Max password length.";
@@ -76,8 +83,6 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 return null;
             };
 
-          
-
             $scope.scopeModel.validateLockInterval = function () {
                 if ($scope.scopeModel.maxUserLoginTries > 0)
                     return true;
@@ -89,7 +94,8 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 passwordComplexityReadyPromiseDeferred.promise.then(function () {
                     defineAPI();
                 });
-            }
+            };
+
             function defineAPI() {
                 var api = {};
 
@@ -97,10 +103,12 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     var promises = [];
                     var mailMessageTemplateSettingsPayload;
                     var passwordSettingsPayload;
+                    var securityProviderSettingsPayload;
                     var apiSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
                         passwordSettingsPayload = payload.data.PasswordSettings;
+                        securityProviderSettingsPayload = payload.data.SecurityProviderSettings;
                         apiSettingsPayload = payload.data.APISettings;
                         mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser;
                         mailMessageTemplateSettingsPayload.SendEmailOnResetPasswordByAdmin = payload.data.SendEmailOnResetPasswordByAdmin;
@@ -129,6 +137,15 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
                     promises.push(mailMessageTemplateSettingsLoadPromiseDeferred.promise);
 
+                    //Loading Security Provider Settings
+                    var securityProviderSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    securityProviderSettingsReadyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(securityProviderSettingsAPI, securityProviderSettingsPayload, securityProviderSettingsLoadPromiseDeferred);
+                        });
+
+                    promises.push(securityProviderSettingsLoadPromiseDeferred.promise);
+
                     var apiSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     apiSettingsReadyPromiseDeferred.promise
                         .then(function () {
@@ -144,7 +161,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     };
                     VRUIUtilsService.callDirectiveLoad(passwordComplexityAPI, passwordComplexityPayload, passwordComplexityLoadPromiseDeferred);
                     promises.push(passwordComplexityLoadPromiseDeferred.promise);
-                   
+
                     var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     mailMessageTemplateSelectorReadyDeferred.promise.then(function () {
                         var mailMessageTemplateSelectorPayload = {
@@ -156,8 +173,8 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorAPI, mailMessageTemplateSelectorPayload, mailMessageTemplateSelectorLoadPromiseDeferred);
                     });
                     promises.push(mailMessageTemplateSelectorLoadPromiseDeferred.promise);
-                   
-                    
+
+
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -168,6 +185,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     return {
                         $type: "Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities",
                         MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData(),
+                        SecurityProviderSettings: securityProviderSettingsAPI.getData(),
                         PasswordSettings: {
                             PasswordLength: $scope.scopeModel.passwordLength,
                             MaxPasswordLength: $scope.scopeModel.maxPasswordLength,
@@ -180,7 +198,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                             PasswordAgeInDays: $scope.scopeModel.passwordAgeInDays,
                             PasswordExpirationDaysToNotify: $scope.scopeModel.expirationDaysToNotify
                         },
-                        APISettings:apiSettingsAPI.getData(),
+                        APISettings: apiSettingsAPI.getData(),
                         SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser(),
                         SendEmailOnResetPasswordByAdmin: mailMessageTemplateSettingsAPI.getSendEmailOnResetPasswordByAdmin(),
                         SessionExpirationInMinutes: $scope.scopeModel.sessionExpirationInMinutes

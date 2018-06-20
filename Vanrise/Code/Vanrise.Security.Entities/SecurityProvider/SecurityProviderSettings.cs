@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public class SecurityProviderDefinition : Vanrise.Entities.VRComponentType<SecurityProviderDefinitionSettings>
+    public class SecurityProviderConfigurationSettings
     {
-
+        public Guid DefaultSecurityProviderId { get; set; }
     }
 }

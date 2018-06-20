@@ -17,25 +17,15 @@ namespace Vanrise.Security.Business
 {
     public class UserManager : BaseBusinessEntityManager, IUserManager
     {
-        static TimeSpan s_tempPasswordValidity;
-
         GroupManager _groupManager;
         SecurityManager _securityManager;
         ConfigManager _configManager;
+
         public UserManager()
         {
-
             _groupManager = new GroupManager();
-
             _securityManager = new SecurityManager();
-
             _configManager = new ConfigManager();
-
-        }
-        static UserManager()
-        {
-            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["TempPasswordValidity"], out s_tempPasswordValidity))
-                s_tempPasswordValidity = new TimeSpan(1, 0, 0);
         }
 
         #region Public Methods
@@ -200,6 +190,14 @@ namespace Vanrise.Security.Business
             return dataManager.GetUserTempPassword(userId);
         }
 
+        public InsertOperationOutput<UserDetail> AddRemoteUser(Guid connectionId, UserToAdd userToAdd)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            return connectionSettings.Post<UserToAdd, InsertOperationOutput<UserDetail>>("/api/VR_Sec/Users/AddUser", userToAdd);
+        }
+
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(UserToAdd userObject)
         {
             InsertOperationOutput<UserDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<UserDetail>();
@@ -214,40 +212,16 @@ namespace Vanrise.Security.Business
                 return insertOperationOutput;
             }
 
-            var cloudServiceProxy = GetCloudServiceProxy();
             User addedUser = null;
-            if (cloudServiceProxy != null)
-            {
-                var output = cloudServiceProxy.AddUserToApplication(new AddUserToApplicationInput
-                {
-                    Email = userObject.Email,
-                    EnabledTill = userObject.EnabledTill,
-                    Description = userObject.Description,
-                    TenantId = userObject.TenantId
-                });
-                if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
-                {
-                    insertActionSucc = true;
-                    addedUser = GetUserbyId(output.OperationOutput.InsertedObject.User.UserId);
-                }
-                else
-                {
-                    insertActionSucc = false;
-                    if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Failed)
-                    {
-                        return new InsertOperationOutput<UserDetail>()
-                        {
-                            Message = output.OperationOutput.Message,
-                            Result = output.OperationOutput.Result,
-                            ShowExactMessage = output.OperationOutput.ShowExactMessage
-                        };
-                    }
-                }
-            }
-            else
-            {
 
-                string pwd;
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(userObject.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", userObject.SecurityProviderId);
+
+            string encryptedPassword = null;
+            string pwd = null;
+
+            if (securityProvider.Settings.ExtendedSettings.PasswordCheckRequired)
+            {
                 if (!String.IsNullOrWhiteSpace(userObject.Password))//password is not required when adding User, it is auto-generated
                 {
                     string validationMessage;
@@ -269,29 +243,32 @@ namespace Vanrise.Security.Business
                     PasswordGenerator passwordGenerator = new PasswordGenerator();
                     pwd = passwordGenerator.Generate();
                 }
-                string encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
-         
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-                addedUser = new User
+                encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
+            }
+
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            addedUser = new User
+            {
+                Email = userObject.Email,
+                Name = userObject.Name,
+                SecurityProviderId = userObject.SecurityProviderId,
+                EnabledTill = userObject.EnabledTill,
+                Description = userObject.Description,
+                TenantId = userObject.TenantId,
+                ExtendedSettings = userObject.ExtendedSettings,
+                Settings = new UserSetting()
                 {
-                    Email = userObject.Email,
-                    Name = userObject.Name,
-                    EnabledTill = userObject.EnabledTill,
-                    Description = userObject.Description,
-                    TenantId = userObject.TenantId,
-                    ExtendedSettings = userObject.ExtendedSettings,
-                    Settings = new UserSetting()
-                    {
-                        PhotoFileId = userObject.PhotoFileId,
-                        EnablePasswordExpiration = userObject.EnablePasswordExpiration
-                    },
-                    CreatedBy = loggedInUserId,
-                    LastModifiedBy = loggedInUserId
+                    PhotoFileId = userObject.PhotoFileId,
+                    EnablePasswordExpiration = userObject.EnablePasswordExpiration
+                },
+                CreatedBy = loggedInUserId,
+                LastModifiedBy = loggedInUserId
 
-                };
-                insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
-
+            };
+            insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
+            if (securityProvider.Settings.ExtendedSettings.PasswordCheckRequired)
+            {
                 if (insertActionSucc)
                 {
                     addedUser.UserId = userId;
@@ -305,7 +282,6 @@ namespace Vanrise.Security.Business
                         });
                         sendMailTask.Start();
                     }
-
                 }
             }
 
@@ -368,53 +344,33 @@ namespace Vanrise.Security.Business
             }
 
             bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            User updatedUser = null;
-            if (cloudServiceProxy != null)
-            {
-                var output = cloudServiceProxy.UpdateUserToApplication(new UpdateUserToApplicationInput
-                {
-                    UserId = userObject.UserId,
-                    EnabledTill = userObject.EnabledTill,
-                    Description = userObject.Description,
-                    //TenantId = userObject.TenantId
-                });
-                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
-                {
-                    updateActionSucc = true;
-                    updatedUser = GetUserbyId(output.OperationOutput.UpdatedObject.User.UserId);
 
-                }
-                else
-                {
-                    updateActionSucc = false;
-                }
-            }
-            else
+            User updatedUser = null;
+
+            User currentUser = GetUserbyId(userObject.UserId);
+            if (currentUser.IsSystemUser)
+                throw new Exception("Cannot update System User");
+            UserSetting settings = currentUser.Settings;
+            if (settings == null)
+                settings = new UserSetting();
+            settings.PhotoFileId = userObject.PhotoFileId;
+            settings.EnablePasswordExpiration = userObject.EnablePasswordExpiration;
+            updatedUser = new User()
             {
-                User currentUser = GetUserbyId(userObject.UserId);
-                if (currentUser.IsSystemUser)
-                    throw new Exception("Cannot update System User");
-                UserSetting settings = currentUser.Settings;
-                if (settings == null)
-                    settings = new UserSetting();
-                settings.PhotoFileId = userObject.PhotoFileId;
-                settings.EnablePasswordExpiration = userObject.EnablePasswordExpiration;
-                updatedUser = new User()
-                {
-                    UserId = userObject.UserId,
-                    Email = userObject.Email,
-                    Name = userObject.Name,
-                    EnabledTill = userObject.EnabledTill,
-                    Description = userObject.Description,
-                    TenantId = userObject.TenantId,
-                    ExtendedSettings = userObject.ExtendedSettings,
-                    Settings = settings,
-                    LastModifiedBy = SecurityContext.Current.GetLoggedInUserId()
-                };
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.UpdateUser(updatedUser);
-            }
+                UserId = userObject.UserId,
+                Email = userObject.Email,
+                SecurityProviderId = userObject.SecurityProviderId,
+                Name = userObject.Name,
+                EnabledTill = userObject.EnabledTill,
+                Description = userObject.Description,
+                TenantId = userObject.TenantId,
+                ExtendedSettings = userObject.ExtendedSettings,
+                Settings = settings,
+                LastModifiedBy = SecurityContext.Current.GetLoggedInUserId()
+            };
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            updateActionSucc = dataManager.UpdateUser(updatedUser);
+
 
             if (updateActionSucc)
             {
@@ -465,17 +421,8 @@ namespace Vanrise.Security.Business
             updateOperationOutput.UpdatedObject = null;
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
 
-            bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                throw new NullReferenceException("cloudServiceProxy");
-            }
-            else
-            {
-                int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
-                updateActionSucc = dataManager.DisableUser(userId, lastModifiedBy);
-            }
+            int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+            bool updateActionSucc = dataManager.DisableUser(userId, lastModifiedBy);
 
             if (updateActionSucc)
             {
@@ -492,6 +439,7 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+
         public bool IsUserDisabledTill(User user, out TimeSpan? disableTill)
         {
             disableTill = null;
@@ -540,17 +488,8 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                throw new ArgumentNullException("cloudServiceProxy");
-            }
-            else
-            {
-                int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
-                updateActionSucc = dataManager.EnableUser(userId, lastModifiedBy);
-            }
+            int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+            bool updateActionSucc = dataManager.EnableUser(userId, lastModifiedBy);
 
             if (updateActionSucc)
             {
@@ -575,18 +514,9 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                throw new ArgumentNullException("cloudServiceProxy");
-            }
-            else
-            {
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
-                updateActionSucc = dataManager.UnlockUser(userObject.UserId, lastModifiedBy);
-            }
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+            bool updateActionSucc = dataManager.UnlockUser(userObject.UserId, lastModifiedBy);
 
             if (updateActionSucc)
             {
@@ -605,82 +535,35 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(string email, string password)
+        {
+            User user = GetUserbyEmail(email);
+            if (user == null)
+            {
+                UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+                updateOperationOutput.Message = "Invalid Email";
+            }
+            return ResetPassword(user.UserId, password);
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(int userId, string password)
         {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentNullException("password");
+
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            string validationMessage;
-            if (!_securityManager.DoesPasswordMeetRequirement(password, out validationMessage))
-            {
-                updateOperationOutput.Message = validationMessage;
-                return updateOperationOutput;
-            }
-           
             User user = GetUserbyId(userId);
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
 
-            bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                var output = cloudServiceProxy.ResetUserPasswordApplication(new ResetUserPasswordApplicationInput
-                {
-                    UserId = userId
-                });
-                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
-                {
-                    updateActionSucc = true;
-                }
-                else
-                {
-                    updateActionSucc = false;
-                }
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(password))
-                    throw new ArgumentNullException("password");
-
-                string hashedPassword = HashingUtility.ComputeHash(password, "", null);
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
-                updateActionSucc = dataManager.ResetPassword(userId, hashedPassword, lastModifiedBy);
-
-
-                if (updateActionSucc)
-                {
-                    new UserPasswordHistoryManager().AddPasswordHistory(userId, hashedPassword, true);
-                    //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
-                    //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
-                    //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
-                    //emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
-                    var configManager = new ConfigManager();
-                    if (configManager.ShouldSendEmailOnResetPasswordByAdmin())
-                    {
-                        Task taskSendMail = new Task(() =>
-                        {
-                            try
-                            {
-                                Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                                objects.Add("User", user);
-                                objects.Add("Password", password);
-
-                                Guid resetPasswordId = configManager.GetResetPasswordId();
-
-                                VRMailManager vrMailManager = new VRMailManager();
-                                vrMailManager.SendMail(resetPasswordId, objects);
-                            }
-                            catch (Exception ex)
-                            {
-                                LoggerFactory.GetExceptionLogger().WriteException(ex);
-                            }
-                        });
-                        taskSendMail.Start();
-                    }
-                }
-            }
+            SecurityProviderResetPasswordContext resetPasswordContext = new SecurityProviderResetPasswordContext() { User = user, Password = password };
+            bool updateActionSucc = securityProvider.Settings.ExtendedSettings.ResetPassword(resetPasswordContext);
 
             if (updateActionSucc)
             {
@@ -690,6 +573,8 @@ namespace Vanrise.Security.Business
             else
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+                updateOperationOutput.Message = resetPasswordContext.ValidationMessage;
+                updateOperationOutput.ShowExactMessage = resetPasswordContext.ShowExactMessage;
             }
 
             return updateOperationOutput;
@@ -702,54 +587,15 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                var output = cloudServiceProxy.ForgotUserPasswordApplication(new ForgotUserPasswordApplicationInput
-                {
-                    Email = email
-                });
-                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
-                {
-                    updateActionSucc = true;
-                }
-                else
-                {
-                    updateActionSucc = false;
-                }
-            }
-            else
-            {
-                UserManager userManager = new UserManager();
-                var user = userManager.GetUserbyEmail(email);
+            var user = new UserManager().GetUserbyEmail(email);
+            if (user == null)
+                return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
-                if (user == null)
-                    return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
 
-                PasswordGenerator pwdGenerator = new PasswordGenerator();
-                string pwd = pwdGenerator.Generate();
-
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                int lastModifiedBy = user.UserId;
-                updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(pwd, "", null), DateTime.Now.Add(s_tempPasswordValidity), lastModifiedBy);
-                if (updateActionSucc)
-                {
-                    //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
-                    //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
-                    //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
-                    //emailTemplateManager.SendEmail(email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
-
-                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("User", user);
-                    objects.Add("Password", pwd);
-
-                    Guid forgotPasswordId = new ConfigManager().GetForgotPasswordId();
-
-                    VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(forgotPasswordId, objects);
-                }
-            }
+            SecurityProviderForgotPasswordContext resetPasswordContext = new SecurityProviderForgotPasswordContext() { User = user };
+            bool updateActionSucc = securityProvider.Settings.ExtendedSettings.ForgotPassword(resetPasswordContext);
 
             if (updateActionSucc)
             {
@@ -757,46 +603,8 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            }
-
-            return updateOperationOutput;
-        }
-
-        public UpdateOperationOutput<object> UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill)
-        {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            int lastModifiedBy = userId;
-            bool updateActionSucc = dataManager.UpdateTempPasswordById(userId, HashingUtility.ComputeHash(password, "", null), passwordValidTill, lastModifiedBy);
-
-            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (updateActionSucc)
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-            }
-
-            return updateOperationOutput;
-        }
-
-        public UpdateOperationOutput<object> UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill)
-        {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            User user = GetUserbyEmail(email);
-            int lastModifiedBy = user.UserId;
-            bool updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(password, "", null), passwordValidTill, lastModifiedBy);
-
-            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (updateActionSucc)
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.Message = resetPasswordContext.ValidationMessage;
+                updateOperationOutput.ShowExactMessage = resetPasswordContext.ShowExactMessage;
             }
 
             return updateOperationOutput;
@@ -804,53 +612,31 @@ namespace Vanrise.Security.Business
 
         public UpdateOperationOutput<object> ActivatePassword(string email, string password, string tempPassword)
         {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-
-            UserManager userManager = new UserManager();
-            var user = userManager.GetUserbyEmail(email);
-            int userId = user.UserId;
+            var user = new UserManager().GetUserbyEmail(email);
             if (user == null)
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
-
-            string validationMessage;
-            if (!_securityManager.DoesPasswordMeetRequirement(password, out validationMessage))
-            {
-                updateOperationOutput.Message = validationMessage;
-                updateOperationOutput.Result = UpdateOperationResult.Failed;
-                return updateOperationOutput;
-            }
-
-            if (_securityManager.IsPasswordSame(userId, password, out validationMessage))
-            {
-                updateOperationOutput.Message = validationMessage;
-                updateOperationOutput.Result = UpdateOperationResult.Failed;
-                updateOperationOutput.ShowExactMessage = true;
-                return updateOperationOutput;
-            }
-
-            string loggedInUserTempPassword = GetUserTempPassword(user.UserId);
-            if (!HashingUtility.VerifyHash(tempPassword, "", loggedInUserTempPassword))
-                return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
-
-            string hashedPass = HashingUtility.ComputeHash(password, "", null);
-
-            int lastModifiedBy = user.UserId;
-            bool updateActionSucc = dataManager.ActivatePassword(email, hashedPass, lastModifiedBy);
-
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
+
+            SecurityProviderActivatePasswordContext context = new SecurityProviderActivatePasswordContext() { User = user, Password = password, TempPassword = tempPassword };
+            bool updateActionSucc = securityProvider.Settings.ExtendedSettings.ActivatePassword(context);
             if (updateActionSucc)
             {
-                new UserPasswordHistoryManager().AddPasswordHistory(user.UserId, hashedPass, false);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+            else
+            {
+                updateOperationOutput.Message = context.ValidationMessage;
+                updateOperationOutput.ShowExactMessage = context.ShowExactMessage;
             }
 
             return updateOperationOutput;
         }
-
 
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
@@ -959,6 +745,38 @@ namespace Vanrise.Security.Business
                 });
         }
 
+        public IEnumerable<EmailInfo> GetRemoteEmailInfo(Guid connectionId, string serializedFilter)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            return connectionSettings.Get<IEnumerable<EmailInfo>>(string.Format("/api/VR_Sec/Users/GetEmailInfo?serializedFilter={0}", serializedFilter));
+        }
+
+        public IEnumerable<EmailInfo> GetEmailInfo(EmailInfoFilter filter)
+        {
+            var users = GetCachedUsers();
+            if (users == null)
+                return null;
+
+            Func<User, bool> filterExpression = (user) =>
+            {
+                return true;
+            };
+
+            return users.MapRecords(EmailInfoMapper, filterExpression);
+        }
+
+        private EmailInfo EmailInfoMapper(User user)
+        {
+            return new EmailInfo()
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Description = user.Description
+            };
+        }
+
         #endregion
 
         #region Private Methods
@@ -1018,12 +836,8 @@ namespace Vanrise.Security.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetUsers",
                () =>
                {
-                   IEnumerable<User> users;
-                   if (!TryGetUsersFromAuthServer(out users))
-                   {
-                       IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                       users = dataManager.GetUsers();
-                   }
+                   IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                   IEnumerable<User> users = dataManager.GetUsers();
                    return users.ToDictionary(kvp => kvp.UserId, kvp => kvp);
                });
         }
@@ -1038,53 +852,6 @@ namespace Vanrise.Security.Business
                });
         }
 
-        internal bool TryGetUsersFromAuthServer(out IEnumerable<User> users)
-        {
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                GetApplicationUsersInput input = new GetApplicationUsersInput();
-                var output = cloudServiceProxy.GetApplicationUsers(input);
-                if (output != null && output.Users != null)
-                    users = output.Users.Select(user => MapCloudUserToUser(user));
-                else
-                    users = null;
-                return true;
-            }
-            else
-            {
-                users = null;
-                return false;
-            }
-        }
-
-        private User MapCloudUserToUser(CloudApplicationUser cloudApplicationUser)
-        {
-            return new User
-            {
-                UserId = cloudApplicationUser.User.UserId,
-                Email = cloudApplicationUser.User.Email,
-                Name = cloudApplicationUser.User.Name,
-                LastLogin = cloudApplicationUser.User.LastLogin,
-                Description = cloudApplicationUser.Description,
-                EnabledTill = cloudApplicationUser.EnabledTill,
-                TenantId = cloudApplicationUser.User.TenantId,
-                CreatedTime = cloudApplicationUser.User.CreatedTime,
-                CreatedBy = cloudApplicationUser.User.CreatedBy,
-                LastModifiedBy = cloudApplicationUser.User.LastModifiedBy,
-                LastModifiedTime = cloudApplicationUser.User.LastModifiedTime
-            };
-        }
-
-        private ICloudService GetCloudServiceProxy()
-        {
-            var authServerManager = new CloudAuthServerManager();
-            var authServer = authServerManager.GetAuthServer();
-            if (authServer != null)
-                return new CloudServiceProxy(authServer);
-            else
-                return null;
-        }
         private static void StartSendMailTask(Guid newUserID, object user, string pwd)
         {
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
@@ -1110,19 +877,9 @@ namespace Vanrise.Security.Business
         {
             IUserDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             object _updateHandle;
-            ICloudService _cloudServiceProxy = (new UserManager()).GetCloudServiceProxy();
-
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                if (_cloudServiceProxy != null)
-                {
-                    var output = _cloudServiceProxy.CheckApplicationUsersUpdated(new CheckApplicationUsersUpdatedInput { LastReceivedUpdateInfo = _updateHandle });
-                    if (output != null)
-                        _updateHandle = output.LastUpdateInfo;
-                    return output.Updated;
-                }
-                else
-                    return _dataManager.AreUsersUpdated(ref _updateHandle);
+                return _dataManager.AreUsersUpdated(ref _updateHandle);
             }
         }
 
@@ -1228,9 +985,13 @@ namespace Vanrise.Security.Business
             userDetail.Entity = userObject;
             userDetail.Status = status;
             userDetail.GroupNames = GetGroupNames(userObject.UserId);
+
+            var securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(userObject.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", userObject.SecurityProviderId);
+
+            userDetail.SupportPasswordManagement = securityProvider.Settings.ExtendedSettings.SupportPasswordManagement;
             return userDetail;
         }
-
 
         private UserInfo UserInfoMapper(User userObject)
         {

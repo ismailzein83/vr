@@ -113,6 +113,13 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.AddUser(userObject);
         }
 
+        [HttpPost]
+        [Route("AddRemoteUser")]
+        public Vanrise.Entities.InsertOperationOutput<UserDetail> AddRemoteUser(RemoteUserToAddInput remoteUserObject)
+        {
+            return _manager.AddRemoteUser(remoteUserObject.VRConnectionId, remoteUserObject.User);
+        }
+
         [HttpGet]
         [Route("CheckUserName")]
         public bool CheckUserName(string name)
@@ -125,6 +132,13 @@ namespace Vanrise.Security.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(ResetPasswordInput user)
         {
             return _manager.ResetPassword(user.UserId, user.Password);
+        }
+
+        [HttpPost]
+        [Route("ResetPasswordByEmail")]
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPasswordByEmail(EmailResetPasswordInput user)
+        {
+            return _manager.ResetPassword(user.Email, user.Password);
         }
 
         [IsAnonymous]
@@ -172,19 +186,31 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.GetUserDetailsById(userId);
         }
+
+        [HttpGet]
+        [Route("GetRemoteEmailInfo")]
+        public IEnumerable<EmailInfo> GetRemoteEmailInfo(Guid connectionId, string serializedFilter = null)
+        {
+            return _manager.GetRemoteEmailInfo(connectionId, serializedFilter);
+        }
+
+        [HttpGet]
+        [Route("GetEmailInfo")]
+        public IEnumerable<EmailInfo> GetEmailInfo(string serializedFilter = null)
+        {
+            EmailInfoFilter filter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<EmailInfoFilter>(serializedFilter) : null;
+            return _manager.GetEmailInfo(filter);
+        }
+
     }
 
-    public class ForgotPasswordInput
+    public class RemoteUserToAddInput
     {
-        public string Email { get; set; }
+        public UserToAdd User { get; set; }
+
+        public Guid VRConnectionId { get; set; }
     }
 
-    public class ActivatePasswordInput
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string TempPassword { get; set; }
-    }
     public class UpdateLanguageInput
     {
         public Guid LanguageId { get; set; }

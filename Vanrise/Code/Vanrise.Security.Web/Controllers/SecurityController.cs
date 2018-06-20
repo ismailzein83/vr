@@ -31,6 +31,15 @@ namespace Vanrise.Security.Web.Controllers
 
         [IsAnonymous]
         [HttpPost]
+        [Route("Authenticate2")]
+        public AuthenticateOperationOutput<AuthenticationToken> Authenticate2(AuthenticateInput authenticateInput)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.Authenticate(authenticateInput.SecurityProviderId, authenticateInput.Payload);
+        }
+
+        [IsAnonymous]
+        [HttpPost]
         [Route("TryRenewCurrentSecurityToken")]
         public TryRenewCurrentSecurityTokenOutput TryRenewCurrentSecurityToken()
         {
@@ -46,9 +55,9 @@ namespace Vanrise.Security.Web.Controllers
         [HttpPost]
         [Route("ChangePassword")]
         public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(ChangedPasswordObject changedPasswordObject)
-        {          
+        {
             SecurityManager manager = new SecurityManager();
-            return manager.ChangePassword(changedPasswordObject.OldPassword,changedPasswordObject.NewPassword);
+            return manager.ChangePassword(changedPasswordObject.OldPassword, changedPasswordObject.NewPassword);
         }
 
         [IsAnonymous]
@@ -76,20 +85,44 @@ namespace Vanrise.Security.Web.Controllers
 
         [IsAnonymous]
         [HttpGet]
-        [Route("HasAuthServer")]
-        public bool HasAuthServer()
+        [Route("GetPasswordValidationInfo")]
+        public PasswordValidationInfo GetPasswordValidationInfo(Guid? securityProviderId = null)
         {
-            CloudAuthServerManager manager = new CloudAuthServerManager();
-            return manager.HasAuthServer();
+            SecurityManager manager = new SecurityManager();
+            return manager.GetPasswordValidationInfo(securityProviderId);
         }
 
         [IsAnonymous]
-        [HttpGet]
-        [Route("GetPasswordValidationInfo")]
-        public PasswordValidationInfo GetPasswordValidationInfo()
+        [HttpPost]
+        [Route("GetRemotePasswordValidationInfo")]
+        public PasswordValidationInfo GetRemotePasswordValidationInfo(RemotePasswordValidationInfoInput input)
         {
             SecurityManager manager = new SecurityManager();
-            return manager.GetPasswordValidationInfo();
+            return manager.GetRemotePasswordValidationInfo(input.VRConnectionId, input.SecurityProviderId);
+        }
+
+        [HttpGet]
+        [Route("RedirectToApplication")]
+        public ApplicationRedirectOutput RedirectToApplication(string applicationURL)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.RedirectToApplication(applicationURL);
+        }
+
+        [IsAnonymous]
+        [HttpPost]
+        [Route("TryGenerateToken")]
+        public ApplicationRedirectOutput TryGenerateToken(ApplicationRedirectInput input)
+        {
+            return _manager.TryGenerateToken(input);
+        }
+
+        [IsAnonymous]
+        [HttpPost]
+        [Route("ValidateSecurityToken")]
+        public bool ValidateSecurityToken(ValidateSecurityTokenInput input)
+        {
+            return _manager.ValidateSecurityToken(input);
         }
     }
 
@@ -100,10 +133,15 @@ namespace Vanrise.Security.Web.Controllers
         public AuthenticationToken NewAuthenticationToken { get; set; }
     }
 
-    public class ChangeExpiredPasswordInput
+    public class AuthenticateInput
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string OldPassword { get; set; }
+        public Guid SecurityProviderId { get; set; }
+        public SecurityProviderAuthenticationPayload Payload { get; set; }
+    }
+
+    public class RemotePasswordValidationInfoInput
+    {
+        public Guid? SecurityProviderId { get; set; }
+        public Guid VRConnectionId { get; set; }
     }
 }

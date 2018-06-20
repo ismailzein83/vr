@@ -1,0 +1,16 @@
+﻿<vr-columns width="1/2row">
+    <vr-textbox value="scopeModel.email" label="Email" localizedlabel="VRRes.Email.VREnd" type="email" isrequired></vr-textbox>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-switch value="scopeModel.enablePasswordExpiration" label="Enable Password Expiration"></vr-switch>
+</vr-columns>
+<vr-columns width="fullrow" haschildcolumns ng-if="scopeModel.showPasswordSection">
+    <vr-validator validate="scopeModel.validatePasswords()">
+        <vr-columns width="1/2row">
+            <vr-textbox label="Password" localizedlabel="VRRes.Password.VREnd" type="password" value="scopeModel.password" hint="{{scopeModel.passwordHint}}" largehint isrequired="{{scopeModel.requiredPassword}}"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox label="Confirm Password" localizedlabel="VRRes.ConfirmPassword.VREnd" type="password" value="scopeModel.confirmedPassword" isrequired="{{scopeModel.requiredPassword}}"></vr-textbox>
+        </vr-columns>
+    </vr-validator>
+</vr-columns>

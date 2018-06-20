@@ -9,8 +9,11 @@ namespace Vanrise.Security.Entities
     public class UserToUpdate
     {
         public int UserId { get; set; }
+
         public int TenantId { get; set; }
 
+        public Guid SecurityProviderId { get; set; }
+        
         public string Email { get; set; }
 
         public string Name { get; set; }

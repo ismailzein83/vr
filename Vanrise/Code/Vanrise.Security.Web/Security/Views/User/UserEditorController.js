@@ -11,11 +11,21 @@
         var userEntity;
         var context;
         var isViewHistoryMode;
+
         var tenantSelectorAPI;
         var tenantReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var groupSelectorAPI;
         var groupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var securityProviderSelectorApi;
+        var securityProviderSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var findUserDirectiveApi;
+        var findUserDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+        $scope.isRemote = false;
+        var connectionId;
 
         loadParameters();
         defineScope();
@@ -27,6 +37,8 @@
             if (parameters != undefined && parameters != null) {
                 userId = parameters.userId;
                 context = parameters.context;
+                connectionId = parameters.connectionId;
+                $scope.isRemote = connectionId != undefined;
             }
             isEditMode = (userId != undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
@@ -35,17 +47,37 @@
         function defineScope() {
             $scope.showTenantSelector = true;
 
-            $scope.passwordHint = "";
+            $scope.onSecurityProviderSelectorReady = function (api) {
+                securityProviderSelectorApi = api;
+                securityProviderSelectorPromiseDeferred.resolve();
+            };
 
-            $scope.requiredPassword = false;
-
-            $scope.showPasswordSection = !isEditMode;
+            $scope.onFindUserEditorReady = function (api) {
+                findUserDirectiveApi = api;
+                if (findUserDirectivePromiseDeferred != undefined) {
+                    findUserDirectivePromiseDeferred.resolve();
+                }
+                else {
+                    var setLoader = function (value) {
+                        $scope.isLoadingFindUserEditor = value;
+                    };
+                    var payload = { securityProviderId: securityProviderSelectorApi.getSelectedIds(), context: buildContext() };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, findUserDirectiveApi, payload, setLoader);
+                }
+            };
 
             $scope.save = function () {
-                if (isEditMode)
+                if (isEditMode) {
                     return updateUser();
-                else
-                    return insertUser();
+                }
+                else {
+                    if (connectionId != undefined) {
+                        return insertRemoteUser();
+                    }
+                    else {
+                        return insertUser();
+                    }
+                }
             };
 
 
@@ -71,11 +103,7 @@
                 groupSelectorAPI = api;
                 groupReadyPromiseDeferred.resolve();
             };
-            $scope.validatePasswords = function () {
-                if ($scope.password != $scope.confirmedPassword)
-                    return 'Passwords do not match';
-                return null;
-            };
+
             $scope.hideTenantSelectorIfNotNeeded = function () {
                 $scope.showTenantSelector = false;
             };
@@ -132,13 +160,71 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector, loadGroupSelector, loadPasswordHint])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
+            var loadFinduserDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+            UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTenantSelector, loadGroupSelector, loadSecurityProviderSelector]).then(function () {
+                loadFinduserDirective().then(function () {
+                    loadFinduserDirectivePromiseDeferred.resolve();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
+            })
+              .catch(function (error) {
+                  VRNotificationService.notifyExceptionWithClose(error, $scope);
+              })
+             .finally(function () {
+                 $scope.isLoading = false;
+             });
+            return loadFinduserDirectivePromiseDeferred.promise;
+        }
+
+        function loadFinduserDirective() {
+            var findUserDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            UtilsService.waitMultiplePromises([findUserDirectivePromiseDeferred.promise]).then(function () {
+                findUserDirectivePromiseDeferred = undefined;
+                var findUserDirectivePayload =
+                {
+                    email: userEntity != undefined ? userEntity.Email : undefined,
+                    password: userEntity != undefined ? userEntity.Password : undefined,
+                    enablePasswordExpiration: userEntity != undefined && userEntity.Settings != undefined ? userEntity.Settings.EnablePasswordExpiration : undefined,
+                    securityProviderId: userEntity != undefined ? userEntity.SecurityProviderId : securityProviderSelectorApi.getSelectedIds(),
+                    context: buildContext()
+                };
+                VRUIUtilsService.callDirectiveLoad(findUserDirectiveApi, findUserDirectivePayload, findUserDirectiveLoadDeferred);
+            });
+            return findUserDirectiveLoadDeferred.promise;
+        }
+
+        function buildContext() {
+            return {
+                fillUserInfo: fillUserInfo,
+                connectionId: connectionId
+            };
+        }
+
+        function fillUserInfo(userInfo) {
+            if (userInfo != undefined) {
+                $scope.scopemodel.name = userInfo.name;
+                $scope.scopemodel.description = userInfo.description;
+            }
+        }
+
+        function loadSecurityProviderSelector() {
+            var securityProviderSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            securityProviderSelectorPromiseDeferred.promise.then(function () {
+                var securityProviderPayload = { selectfirstitem: true, connectionId: connectionId };
+
+                if (userEntity != undefined) {
+                    securityProviderPayload.selectedIds = userEntity.SecurityProviderId;
+                }
+
+                VRUIUtilsService.callDirectiveLoad(securityProviderSelectorApi, securityProviderPayload, securityProviderSelectorLoadDeferred);
+            });
+            return securityProviderSelectorLoadDeferred.promise.then(function () {
+                $scope.showSecurityProviderSelector = !securityProviderSelectorApi.hasSingleItem();
+            });
         }
 
         function loadTenantSelector() {
@@ -168,20 +254,6 @@
             return loadGroupPromiseDeferred.promise;
         }
 
-        function loadPasswordHint() {
-            if (isEditMode == true) return;
-            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
-                $scope.passwordHint = response.RequirementsMessage;
-                $scope.requiredPassword = response.RequiredPassword;
-            });
-        }
-
-        function hasAuthServer() {
-            return VR_Sec_SecurityAPIService.HasAuthServer().then(function (response) {
-                $scope.hasAuthServer = response;
-            });
-        }
-
         function setTitle() {
             if (isEditMode && userEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(userEntity.Name, 'User');
@@ -197,12 +269,10 @@
                 return;
 
             $scope.scopemodel.name = userEntity.Name;
-            $scope.scopemodel.email = userEntity.Email;
             $scope.scopemodel.description = userEntity.Description;
             $scope.scopemodel.enabledTill = userEntity.EnabledTill;
 
             if (userEntity.Settings != undefined) {
-                $scope.scopemodel.enablePasswordExpiration = userEntity.Settings.EnablePasswordExpiration;
                 if (userEntity.Settings.PhotoFileId != null)
                     $scope.scopemodel.userPhoto = {
                         fileId: userEntity.Settings.PhotoFileId
@@ -210,26 +280,34 @@
                 else
                     $scope.scopemodel.userPhoto = null;
             }
-
-
         }
 
         function buildUserObjFromScope() {
+            var findUserDirectiveData = findUserDirectiveApi.getData();
+
             var userObject = {
                 UserId: (userId != null) ? userId : 0,
+                SecurityProviderId: securityProviderSelectorApi.getSelectedIds(),
                 Name: $scope.scopemodel.name,
-                Email: $scope.scopemodel.email,
+                Email: findUserDirectiveData.email,
                 Description: $scope.scopemodel.description,
                 EnabledTill: $scope.scopemodel.enabledTill,
                 TenantId: tenantSelectorAPI.getSelectedIds(),
                 GroupIds: groupSelectorAPI.getSelectedIds(),
                 PhotoFileId: $scope.scopemodel.userPhoto != null ? $scope.scopemodel.userPhoto.fileId : null,
-                EnablePasswordExpiration : $scope.scopemodel.enablePasswordExpiration
+                EnablePasswordExpiration: findUserDirectiveData.enablePasswordExpiration
             };
             if (!isEditMode)
-                userObject.Password = $scope.password;
+                userObject.Password = findUserDirectiveData.password;
+
             return userObject;
         }
+
+
+        function buildRemoteUserObjFromScope() {
+            return { User: buildUserObjFromScope(), VRConnectionId: connectionId };
+        }
+
 
         function insertUser() {
             $scope.isLoading = true;
@@ -248,7 +326,25 @@
             }).finally(function () {
                 $scope.isLoading = false;
             });
+        }
 
+        function insertRemoteUser() {
+            $scope.isLoading = true;
+
+            var remoteUserObject = buildRemoteUserObjFromScope();
+
+            return VR_Sec_UserAPIService.AddRemoteUser(remoteUserObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('User', response, 'Email')) {
+                    if ($scope.onUserAdded != undefined)
+                        $scope.onUserAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
         }
 
         function updateUser() {

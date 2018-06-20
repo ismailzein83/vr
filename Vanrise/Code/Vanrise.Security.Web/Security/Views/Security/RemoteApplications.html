@@ -1,0 +1,17 @@
+﻿<div vr-modalcontent ng-controller="VR_Sec_RemoteApplicationsController">
+    <vr-modalbody width="'15%'">
+        <vr-form name="formChangePassword" vr-loader="isLoadingRemoteApplications">
+            <vr-datalist maxitemsperrow="1" datasource="remoteApplications">
+                <a href="" ng-click="viewScope.redirectToApplication(dataItem.URL)">{{dataItem.Name}}</a>
+            </vr-datalist>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

@@ -2,13 +2,33 @@
 
     'use strict';
 
-    LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService','UtilsService','VR_Sec_UserAPIService','VRLocalizationService'];
+    LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService', 'UtilsService', 'VR_Sec_UserAPIService', 'VRLocalizationService', 'VR_Sec_SecurityProviderAPIService', 'VRUIUtilsService'];
 
-    function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService) {
+    function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService, VR_Sec_SecurityProviderAPIService, VRUIUtilsService) {
+
+        var securityProviderSelectorApi;
+        var securityProviderSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var authenticateUserEditorApi;
+
         defineScope();
         load();
 
         function defineScope() {
+            $scope.showSecurityProviderSelector = true;
+
+            $scope.onSecurityProviderSelectorReady = function (api) {
+                securityProviderSelectorApi = api;
+                securityProviderSelectorPromiseDeferred.resolve();
+            };
+
+            $scope.onAuthenticateUserEditorReady = function (api) {
+                authenticateUserEditorApi = api;
+                var setLoader = function (value) {
+                    $scope.isLoadingAuthenticateUserEditor = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, authenticateUserEditorApi, undefined, setLoader);
+            };
 
             $scope.Login = login;
             $rootScope.onValidationMessageShown = function (e) {
@@ -24,11 +44,11 @@
                 if (innerWidth - elleft < 100) {
                     elleft = elleft - (100 + $(self).width() + 10);
                     $(tooltip).addClass('tooltip-error-right');
-                    $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 })
+                    $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
                 }
                 else {
                     $(tooltip).removeClass('tooltip-error-right');
-                    $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
+                    $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft });
                 }
                 e.stopPropagation();
             };
@@ -39,17 +59,42 @@
         }
 
         function load() {
+            $scope.isLoading = true;
+            loadAllControls();
         }
 
-        function login() {
+        function loadAllControls() {
+            function loadSecurityProviderSelector() {
+
+                var securityProviderSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                securityProviderSelectorPromiseDeferred.promise.then(function () {
+                    var securityProviderPayload = { selectfirstitem: true };
+                    VRUIUtilsService.callDirectiveLoad(securityProviderSelectorApi, securityProviderPayload, securityProviderSelectorLoadDeferred);
+                });
+                return securityProviderSelectorLoadDeferred.promise.then(function () {
+                    $scope.showSecurityProviderSelector = !securityProviderSelectorApi.hasSingleItem();
+                });
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([loadSecurityProviderSelector]).then(function () { }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
+        function login(password) {
+            var authenticateUserEditorPayload = authenticateUserEditorApi.getData();
+            if (password != undefined)
+                authenticateUserEditorPayload.Password = password;
+
             var reloginAfterPasswordActivation = function (passwordAfterActivation) {
-                $scope.password = passwordAfterActivation;
-                login();
+                login(passwordAfterActivation);
             };
 
             var loginPromisedeferred = UtilsService.createPromiseDeferred();
 
-            return SecurityService.authenticate($scope.email, $scope.password, reloginAfterPasswordActivation).then(function () {
+            return SecurityService.authenticate(securityProviderSelectorApi.getSelectedIds(), authenticateUserEditorPayload, reloginAfterPasswordActivation).then(function () {
                 var promises = [];
                 promises.push(UISettingsService.loadUISettings());
                 promises.push(getLoggedInUserLanguage());
@@ -71,8 +116,7 @@
                 loginPromisedeferred.reject(error);
             });
 
-            function getLoggedInUserLanguage()
-            {
+            function getLoggedInUserLanguage() {
                 return VR_Sec_UserAPIService.GetLoggedInUserLanguageId().then(function (response) {
                     VRLocalizationService.createOrUpdateLanguageCookie(response);
                 });

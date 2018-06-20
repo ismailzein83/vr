@@ -13,6 +13,10 @@ namespace Vanrise.Security.Entities
 
         public string UserName { get; set; }
 
+        public Guid SecurityProviderId { get; set; }
+
+        public bool SupportPasswordManagement { get; set; }
+
         public string UserDisplayName { get; set; }
 
         public int ExpirationIntervalInMinutes { get; set; }

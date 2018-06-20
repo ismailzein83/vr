@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="BusinessEntityModuleDataManager.cs" />
-    <Compile Include="CloudAuthServerDataManager.cs" />
     <Compile Include="CookieNameDataManager.cs" />
     <Compile Include="EncryptionKeyDataManager.cs" />
     <Compile Include="ModuleDataManager.cs" />
@@ -55,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GroupDataManager.cs" />
     <Compile Include="RequiredPermissionSetDataManager.cs" />
+    <Compile Include="RegisteredApplicationDataManager.cs" />
     <Compile Include="SystemActionDataManager.cs" />
     <Compile Include="TenantDataManager.cs" />
     <Compile Include="UserDataManager.cs" />

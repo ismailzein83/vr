@@ -180,44 +180,4 @@ namespace Vanrise.Security.Business
         }
         #endregion
     }
-    public class SecurityProviderCustomObjectTypeSettings : Vanrise.GenericData.Entities.FieldCustomObjectTypeSettings
-    {
-        public override Guid ConfigId
-        {
-
-            get { return new Guid("17823DCD-AF7B-4DD0-A19F-945DE96B74CE"); }
-        }
-
-        public override string GetDescription(Vanrise.GenericData.Entities.IFieldCustomObjectTypeSettingsContext context)
-        {
-            return null;
-        }
-
-        public override bool AreEqual(Object newValue, Object oldValue)
-        {
-            return true;
-        }
-
-        public override Type GetNonNullableRuntimeType()
-        {
-            return typeof(SecurityProviderSettings);
-        }
-
-        public override dynamic ParseNonNullValueToFieldType(object originalValue)
-        {
-           return originalValue as SecurityProviderSettings;
-        }
-    }
-
-    public class SecurityProviderManager
-    {
-        #region Public Methods
-        public IEnumerable<SecurityProviderConfigs> GetSecurityProviderConfigs()
-        {
-            var extensionConfigurationManager = new ExtensionConfigurationManager();
-            return extensionConfigurationManager.GetExtensionConfigurations<SecurityProviderConfigs>(SecurityProviderConfigs.EXTENSION_TYPE);
-        }
-
-        #endregion
-    }
 }

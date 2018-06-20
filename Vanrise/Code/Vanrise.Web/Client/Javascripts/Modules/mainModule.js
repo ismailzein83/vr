@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService", "VRNotificationService",
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService, VRNotificationService) {
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService", "VRNotificationService", "VR_Sec_RegisteredApplicationAPIService",
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService, VRNotificationService, VR_Sec_RegisteredApplicationAPIService) {
     (function () {
         document.getElementById("mainBodyContainer").style.display = "block";
     })();
@@ -31,8 +31,30 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         }
         $scope.userDisplayName = userInfo.UserDisplayName;
         $scope.userPhotoFileId = userInfo.PhotoFileId;
-
+        $scope.supportPasswordManagement = userInfo.SupportPasswordManagement;
+        $scope.securityProviderId = userInfo.SecurityProviderId;
+        //getRemoteRegisteredApplicationsInfo(userInfo);
     };
+
+    //var getRemoteRegisteredApplicationsInfo = function (userInfo) {
+    //    var securityProviderId = userInfo.SecurityProviderId;
+    //    $scope.isLoadingRemoteApplications = true;
+
+    //    VR_Sec_RegisteredApplicationAPIService.GetRemoteRegisteredApplicationsInfo(securityProviderId).then(function (response) {
+    //        if (response != undefined) {
+    //            $scope.remoteApplications = response;
+    //        }
+    //    }).catch(function (error) {
+    //        VRNotificationService.notifyException(error, $scope);
+    //    }).finally(function () {
+    //        $scope.isLoadingRemoteApplications = false;
+    //    });
+    //};
+    
+    //$scope.redirectToApplication = function (remoteApplication) {
+    //    return SecurityService.redirectToApplication(remoteApplication.URL);
+    //}
+
     $rootScope.setLocalizationEnabled = function (isLocalizationEnabled) {
         if (isLocalizationEnabled != undefined) {
             VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
@@ -69,12 +91,12 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         if (innerWidth - elleft < 100 && !VRLocalizationService.isLocalizationRTL()) {
             elleft = elleft - (100 + $(self).width() + 10);
             $(tooltip).addClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 })
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
         }
         else if (VRLocalizationService.isLocalizationRTL() && (selfOffset.left - $(window).scrollLeft()) > 100) {
             elleft = elleft - (100 + $(self).width() + 10);
             $(tooltip).addClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 })
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
         }
         e.stopPropagation();
     };
@@ -169,6 +191,18 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             modalScope.title = "Change my Password";
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/ChangePassword.html', null, modalSettings);
+    };
+
+    $scope.openRemoteApplicationsModal = function () {
+        var parameters = {
+            securityProviderId: $scope.securityProviderId
+        };
+        var modalSettings = {
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Switch Application";
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/Security/RemoteApplications.html', parameters, modalSettings);
     };
 
     $scope.openEditProfileModal = function () {
@@ -409,7 +443,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         else d = s;
         var res = String(d).search(dateReg) != -1;
         return res;
-    }
+    };
 
 }]);
 

@@ -11,5 +11,6 @@ namespace Vanrise.Security.Entities
         public User Entity { get; set; }
         public UserStatus Status { get; set; }
         public string GroupNames { get; set ; }
+        public bool SupportPasswordManagement { get; set; }
     }
 }

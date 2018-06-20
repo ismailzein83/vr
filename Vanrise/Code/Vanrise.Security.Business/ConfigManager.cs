@@ -112,6 +112,11 @@ namespace Vanrise.Security.Business
             return GetSecuritySettings().SessionExpirationInMinutes;
         }
 
+        public Guid GetDefaultSecurityProviderId()
+        {
+            return GetSecurityProviderSettings().DefaultSecurityProviderId;
+        }
+
         #endregion
 
 
@@ -150,6 +155,13 @@ namespace Vanrise.Security.Business
             securitySettings.ThrowIfNull("securitySettings");
 
             return securitySettings;
+        }
+
+        private SecurityProviderConfigurationSettings GetSecurityProviderSettings()
+        {
+            SecurityProviderConfigurationSettings securityProviderSettings = GetSecuritySettings().SecurityProviderSettings;
+            securityProviderSettings.ThrowIfNull("securityProviderSettings");
+            return securityProviderSettings;
         }
         #endregion
     }

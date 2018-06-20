@@ -14,8 +14,6 @@ namespace Vanrise.Security.Entities
 
         public string Name { get; set; }
 
-        public Guid DefinitionId { get; set; }
-
         public SecurityProviderSettings Settings { get; set; }
     }
 
@@ -26,6 +24,8 @@ namespace Vanrise.Security.Entities
 
     public abstract class SecurityProviderExtendedSettings
     {
+        public abstract Guid ConfigId { get; }
+
         public virtual string FindUserEditor { get; set; }
 
         public virtual string AuthenticateUserEditor { get; set; }
@@ -49,17 +49,12 @@ namespace Vanrise.Security.Entities
         public virtual ApplicationRedirectInput GetApplicationRedirectInput(ISecurityProviderGetApplicationRedirectInputContext context) { throw new NotImplementedException(); }
 
         public virtual bool ValidateSecurityToken(ISecurityProviderValidateSecurityTokenContext context) { throw new NotImplementedException(); }
+
+        public virtual void OnBeforeSave(ISecurityProviderOnBeforeSaveContext context) { }
+
+        public virtual IEnumerable<RegisteredApplicationInfo> GetRemoteRegisteredApplicationsInfo(ISecurityProviderGetRemoteRegisteredApplicationsInfoContext context) { return null; }
     }
 
-    public class ApplicationRedirectInput
-    {
-        public Guid ApplicationId { get; set; }
-
-        public string Token { get; set; }
-
-        public string Email { get; set; }
-
-    }
     public abstract class SecurityProviderAuthenticationPayload
     {
 
@@ -201,5 +196,29 @@ namespace Vanrise.Security.Entities
         public string Token { get; set; }
 
         public Guid ApplicationId { get; set; }
+    }
+
+    public interface ISecurityProviderOnBeforeSaveContext
+    {
+        SecurityProviderExtendedSettings PreviousSettings { get; }
+
+        string ErrorMessage { set; }
+    }
+
+    public class SecurityProviderOnBeforeSaveContext : ISecurityProviderOnBeforeSaveContext
+    {
+        public SecurityProviderExtendedSettings PreviousSettings { get; set; }
+
+        public string ErrorMessage { get; set; }
+    }
+
+    public interface ISecurityProviderGetRemoteRegisteredApplicationsInfoContext
+    {
+        string SerializedFilter { get; }
+    }
+
+    public class SecurityProviderGetRemoteRegisteredApplicationsInfoContext : ISecurityProviderGetRemoteRegisteredApplicationsInfoContext
+    {
+        public string SerializedFilter { get; set; }
     }
 }

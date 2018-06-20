@@ -76,7 +76,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTenantSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -107,17 +107,11 @@
         }
 
         function loadStaticData() {
-            
+
             if (tenantEntity == undefined)
                 return;
 
             $scope.name = tenantEntity.Name;
-        }
-
-        function hasAuthServer() {
-            return VR_Sec_SecurityAPIService.HasAuthServer().then(function (response) {
-                $scope.hasAuthServer = response;
-            });
         }
 
         function buildTenantObjFromScope() {

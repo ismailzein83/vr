@@ -1,19 +1,20 @@
 ﻿'use strict';
 
-app.service('Sec_CookieService', ['$cookies','VRNotificationService',
+app.service('Sec_CookieService', ['$cookies', 'VRNotificationService',
 function ($cookies, VRNotificationService) {
 
-    function createAccessCookie(userInfo) {
-        $cookies.put(getAccessCookieName(), userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
+    function createAccessCookie(userInfo, cookieName) {
+        var accessCookieName = cookieName == undefined ? getAccessCookieName() : cookieName;
+        $cookies.put(accessCookieName, userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
     }
 
-    function createAccessCookieFromAuthToken(authToken) {
+    function createAccessCookieFromAuthToken(authToken, cookieName) {
         authToken.cookieCreatedTime = new Date();
         if (authToken.PasswordExpirationDaysLeft != null) {
             $cookies.put("passwordExpirationDays", authToken.PasswordExpirationDaysLeft, { path: '/', domain: location.hostname, expires: '', secure: false });
         }
         var userInfo = JSON.stringify(authToken);
-        createAccessCookie(userInfo);
+        createAccessCookie(userInfo, cookieName);
     }
 
     function getAccessCookie() {

@@ -13,6 +13,26 @@ namespace Vanrise.Security.Entities
 
         public MailMessageTemplateSettings MailMessageTemplateSettings { get; set; }
 
+        SecurityProviderConfigurationSettings _securityProviderSettings;
+        public SecurityProviderConfigurationSettings SecurityProviderSettings
+        {
+            get
+            {
+                if (_securityProviderSettings == null)
+                {
+                    _securityProviderSettings = new SecurityProviderConfigurationSettings
+                    {
+                        DefaultSecurityProviderId = new Guid("9554069b-795e-4bb1-bff3-9af0f47fc0ff")
+                    };
+                }
+                return _securityProviderSettings;
+            }
+            set
+            {
+                _securityProviderSettings = value;
+            }
+        }
+
         PasswordSettings _passwordSettings;
         public PasswordSettings PasswordSettings
         {

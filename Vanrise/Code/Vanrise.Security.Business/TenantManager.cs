@@ -61,7 +61,7 @@ namespace Vanrise.Security.Business
             var user = userManager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
             var allItems = GetTenantsByTenantId(user.TenantId, true);
 
-            if (filter == null )
+            if (filter == null)
                 return allItems.MapRecords(TenantInfoMapper);
 
 
@@ -115,28 +115,8 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            bool updateActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                var output = cloudServiceProxy.UpdateTenantToApplication(new UpdateTenantToApplicationInput
-                {
-                    TenantId = tenantObject.TenantId
-                });
-                if (output.OperationOutput != null && output.OperationOutput.Result == UpdateOperationResult.Succeeded)
-                {
-                    updateActionSucc = true;
-                }
-                else
-                {
-                    updateActionSucc = false;
-                }
-            }
-            else
-            {
-                ITenantDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ITenantDataManager>();
-                updateActionSucc = dataManager.UpdateTenant(tenantObject);
-            }
+            ITenantDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ITenantDataManager>();
+            bool updateActionSucc = dataManager.UpdateTenant(tenantObject);
 
             if (updateActionSucc)
             {
@@ -159,33 +139,11 @@ namespace Vanrise.Security.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             int tenantId = -1;
-            bool insertActionSucc;
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                var output = cloudServiceProxy.AddTenantToApplication(new AddTenantToApplicationInput
-                {
-                    Name = tenantObject.Name,
-                    Settings = tenantObject.Settings,
-                    ParentTenantId = tenantObject.ParentTenantId
-                });
-                if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
-                {
-                    insertActionSucc = true;
-                    tenantObject = MapCloudTenantToTenant(output.OperationOutput.InsertedObject);
-                }
-                else
-                {
-                    insertActionSucc = false;
-                }
-            }
-            else
-            {
+
                 ITenantDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ITenantDataManager>();
-                insertActionSucc = dataManager.AddTenant(tenantObject, out tenantId);
+             bool   insertActionSucc = dataManager.AddTenant(tenantObject, out tenantId);
                 tenantObject.TenantId = tenantId;
 
-            }
 
             if (insertActionSucc)
             {
@@ -214,41 +172,13 @@ namespace Vanrise.Security.Business
                 });
         }
 
-        public CloudTenantOutput GetCloudTenantOutput(int tenantId, int applicationId)
-        {
-            var items = GetCachedCloudTenantOutput(applicationId);
-            if (items != null)
-            {
-                return items.GetRecord(tenantId);
-            }
-            return null;
-        }
-        #region private methods
-        private Dictionary<int, CloudTenantOutput> GetCachedCloudTenantOutput(int applicationId)
-        {
-            return CacheManagerFactory.GetCacheManager<CloudTenantCacheManager>().GetOrCreateObject(string.Format("GetCloudTenantsByAppId_{0}", applicationId),
-               () =>
-               {
-                   IEnumerable<CloudTenantOutput> cloudTenants;
-                   if (!TryGetCloudTenantsFromAuthServer(out cloudTenants))
-                   {
-                       return null;
-                   }
-                   return cloudTenants.ToDictionary(kvp => kvp.TenantId, kvp => kvp);
-               });
-        }
-
         private Dictionary<int, Tenant> GetCachedTenants()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetTenants",
                () =>
                {
-                   IEnumerable<Tenant> tenants;
-                   if (!TryGetTenantsFromAuthServer(out tenants))
-                   {
                        ITenantDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ITenantDataManager>();
-                       tenants = dataManager.GetTenants();
-                   }
+                     IEnumerable<Tenant>  tenants = dataManager.GetTenants();
                    return tenants != null ? tenants.ToDictionary(kvp => kvp.TenantId, kvp => kvp) : null;
                });
         }
@@ -258,12 +188,8 @@ namespace Vanrise.Security.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetTenantList",
                () =>
                {
-                   IEnumerable<Tenant> tenants;
-                   if (!TryGetTenantsFromAuthServer(out tenants))
-                   {
                        ITenantDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ITenantDataManager>();
-                       tenants = dataManager.GetTenants();
-                   }
+                   IEnumerable<Tenant>    tenants = dataManager.GetTenants();
                    return tenants;
                });
         }
@@ -303,67 +229,6 @@ namespace Vanrise.Security.Business
             };
         }
 
-        private bool TryGetCloudTenantsFromAuthServer(out IEnumerable<CloudTenantOutput> tenants)
-        {
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                CloudTenantInput input = new CloudTenantInput();
-                var output = cloudServiceProxy.GetCloudTenants(input);
-                if (output != null && output.Count > 0)
-                    tenants = output;
-                else
-                    tenants = null;
-                return true;
-            }
-            else
-            {
-                tenants = null;
-                return false;
-            }
-        }
-
-        private bool TryGetTenantsFromAuthServer(out IEnumerable<Tenant> tenants)
-        {
-            var cloudServiceProxy = GetCloudServiceProxy();
-            if (cloudServiceProxy != null)
-            {
-                GetApplicationTenantsInput input = new GetApplicationTenantsInput();
-                var output = cloudServiceProxy.GetApplicationTenants(input);
-                if (output != null && output.Tenants != null)
-                    tenants = output.Tenants.Select(tenant => MapCloudTenantToTenant(tenant));
-                else
-                    tenants = null;
-                return true;
-            }
-            else
-            {
-                tenants = null;
-                return false;
-            }
-        }
-
-        private Tenant MapCloudTenantToTenant(CloudApplicationTenant cloudApplicationTenant)
-        {
-            return new Tenant
-            {
-                TenantId = cloudApplicationTenant.Tenant.TenantId,
-                Name = cloudApplicationTenant.Tenant.Name,
-                ParentTenantId = cloudApplicationTenant.Tenant.ParentTenantId,
-                Settings = cloudApplicationTenant.Tenant.Settings
-            };
-        }
-
-        private ICloudService GetCloudServiceProxy()
-        {
-            var authServerManager = new CloudAuthServerManager();
-            var authServer = authServerManager.GetAuthServer();
-            if (authServer != null)
-                return new CloudServiceProxy(authServer);
-            else
-                return null;
-        }
-        #endregion
 
         #region Private Classes
 
@@ -371,27 +236,10 @@ namespace Vanrise.Security.Business
         {
             ITenantDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<ITenantDataManager>();
             object _updateHandle;
-            ICloudService _cloudServiceProxy = (new TenantManager()).GetCloudServiceProxy();
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                if (_cloudServiceProxy != null)
-                {
-                    var output = _cloudServiceProxy.CheckApplicationTenantsUpdated(new CheckApplicationTenantsUpdatedInput { LastReceivedUpdateInfo = _updateHandle });
-                    if (output != null)
-                        _updateHandle = output.LastUpdateInfo;
-                    return output.Updated;
-                }
-                else
-                    return _dataManager.AreTenantsUpdated(ref _updateHandle);
-            }
-        }
-
-        private class CloudTenantCacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            protected override bool IsTimeExpirable
-            {
-                get { return true; }
+                return _dataManager.AreTenantsUpdated(ref _updateHandle);
             }
         }
 

@@ -20,119 +20,164 @@ namespace Vanrise.Security.Business
 
         #region Public Methods
 
-        public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
+        public AuthenticateOperationOutput<AuthenticationToken> Authenticate(Guid securityProviderId, SecurityProviderAuthenticationPayload payload)
         {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(securityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", securityProviderId);
 
-            UserManager manager = new UserManager();
-            User user = manager.GetUserbyEmail(email);
-            if (user != null && user.IsSystemUser)
-                throw new Exception("Can not login using System Account");
+            SecurityProviderAuthenticateContext context = new SecurityProviderAuthenticateContext() { Payload = payload };
+            SecurityProviderAuthenticateResult result = securityProvider.Settings.ExtendedSettings.Authenticate(context);
 
             AuthenticateOperationOutput<AuthenticationToken> authenticationOperationOutput = new AuthenticateOperationOutput<AuthenticationToken>();
             authenticationOperationOutput.Result = AuthenticateOperationResult.Failed;
             authenticationOperationOutput.AuthenticationObject = null;
 
-            if (user != null)
+            if (result != SecurityProviderAuthenticateResult.Succeeded)
             {
-
-                ConfigManager cManager = new ConfigManager();
-
-                TimeSpan? disableTillTime;
-                if (manager.IsUserDisabledTill(user, out disableTillTime))
+                authenticationOperationOutput.Message = context.FailureMessage;
+                switch (result)
                 {
-                    authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
-                    authenticationOperationOutput.Message = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTime.Value.Minutes, disableTillTime.Value.Seconds);
-                    return authenticationOperationOutput;
+                    case SecurityProviderAuthenticateResult.ActivationNeeded:
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.ActivationNeeded;
+                        break;
+                    case SecurityProviderAuthenticateResult.UserNotExists:
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
+                        break;
+                    case SecurityProviderAuthenticateResult.WrongCredentials:
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
+                        break;
+                    case SecurityProviderAuthenticateResult.PasswordExpired:
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.PasswordExpired;
+                        break;
+                    case SecurityProviderAuthenticateResult.Inactive:
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
+                        break;
+                    case SecurityProviderAuthenticateResult.Failed:
+                        authenticationOperationOutput.Result = AuthenticateOperationResult.Failed;
+                        break;
+                    default: throw new NotSupportedException(string.Format("SecurityProviderAuthenticateResult {0} not supported.", result));
                 }
+                return authenticationOperationOutput;
+            }
 
-                if (cManager.GetFailedInterval().HasValue)
-                {
-                    UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
-                    var failedLogins = userFailedLoginManager.GetUserFailedLoginByUserId(user.UserId, DateTime.Now.AddMinutes(-1), DateTime.Now.AddTicks(cManager.GetFailedInterval().Value.Ticks));
-                    if (failedLogins.Count() == cManager.GetMaxFailedTries())
-                    {
-                        UserManager userManager = new UserManager();
-                        DateTime disableTill = DateTime.Now.AddMinutes(cManager.GetLockForMinutes());
-                        var disableTillTimeSpan = disableTill - DateTime.Now;
+            User user = context.AuthenticatedUser;
+            user.ThrowIfNull("user");
+            if (user.IsSystemUser)
+                throw new Exception("Can not login using System Account");
 
-                        SendNotificationMail(user, cManager);
+            if (user.SecurityProviderId != securityProviderId)
+            {
+                authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
+                return authenticationOperationOutput;
+            }
 
-                        if (userManager.UpdateDisableTill(user.UserId, disableTill))
-                        {
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User is locked after multiple failed logins");
-                            authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
-                            authenticationOperationOutput.Message = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTimeSpan.Minutes, disableTillTimeSpan.Seconds);
-                            return authenticationOperationOutput;
-                        }
-                    }
-                }
+            if (!new UserManager().IsUserEnable(user))
+            {
+                VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with inactive user");
+                authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
+                return authenticationOperationOutput;
+            }
 
-                if (!manager.IsUserEnable(user))
-                {
-                    authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
-                    VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with inactive user");
-                }
-                else
-                {
-                    DateTime passwordChangeTime;
-                    string loggedInUserPassword = manager.GetUserPassword(user.UserId, out passwordChangeTime);
+            AuthenticationToken authToken = CreateAuthenticationToken(user);
+            authToken.PasswordExpirationDaysLeft = context.PasswordExpirationDaysLeft;
+            authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
+            authenticationOperationOutput.AuthenticationObject = authToken;
+            int lastModifiedBy = user.UserId;
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
+            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Login successfully");
 
-                    if (HashingUtility.VerifyHash(password, "", loggedInUserPassword))
-                    {
-                        int? passwordExpirationDaysLeft;
-                        bool passwordIsExpired = CheckIfPasswordExpired(user.UserId, passwordChangeTime, out passwordExpirationDaysLeft);
-                        if (passwordIsExpired)
-                        {
-                            authenticationOperationOutput.Result = AuthenticateOperationResult.PasswordExpired;
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User password is expired");
-                        }
-                        else
-                        {
-                            AuthenticationToken authToken = CreateAuthenticationToken(user);
-                            authToken.PasswordExpirationDaysLeft = passwordExpirationDaysLeft;
-                            authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
-                            authenticationOperationOutput.AuthenticationObject = authToken;
-                            int lastModifiedBy = user.UserId;
-                            dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Login successfully");
-                        }
-                       
+            return authenticationOperationOutput;
+        }
 
-                    }
-                    else
-                    {
-                        string loggedInUserTempPassword = manager.GetUserTempPassword(user.UserId);
-                        if (HashingUtility.VerifyHash(password, "", loggedInUserTempPassword))
-                        {
-                            authenticationOperationOutput.Result = AuthenticateOperationResult.ActivationNeeded;
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with activation needed");
+        public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
+        {
+            EmailPasswordSecurityProviderAuthenticationPayload payload = new EmailPasswordSecurityProviderAuthenticationPayload() { Email = email, Password = password };
+            Guid defaultSecurityProviderId = new Security.Business.ConfigManager().GetDefaultSecurityProviderId();
+            return Authenticate(defaultSecurityProviderId, payload);
+        }
 
-                        }
-                        else
-                        {
+        public ApplicationRedirectOutput RedirectToApplication(string applicationURL)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            User user = new UserManager().GetUserbyId(userId);
 
-                            int addedId;
-                            UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
-                            userFailedLoginManager.AddUserFailedLogin(new UserFailedLogin
-                            {
-                                FailedResultId = (int)AuthenticateOperationResult.WrongCredentials,
-                                UserId = user.UserId
-                            }, out addedId);
-                            authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
-                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with wrong credentials");
-                        }
-                    }
-                }
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
 
+            SecurityToken currentUserToken;
+            if (!SecurityContext.TryGetSecurityToken(out currentUserToken))
+                return null;
+
+            string encryptedToken = Common.Cryptography.Encrypt(Common.Serializer.Serialize(currentUserToken), GetLocalTokenDecryptionKey());
+
+            SecurityProviderGetApplicationRedirectInputContext context = new SecurityProviderGetApplicationRedirectInputContext() { Token = encryptedToken, Email = user.Email };
+            ApplicationRedirectInput applicationRedirectInput = securityProvider.Settings.ExtendedSettings.GetApplicationRedirectInput(context);
+
+            return Vanrise.Common.VRWebAPIClient.Post<ApplicationRedirectInput, ApplicationRedirectOutput>(applicationURL, "/api/VR_Sec/Security/TryGenerateToken", applicationRedirectInput);
+        }
+
+        public ApplicationRedirectOutput TryGenerateToken(ApplicationRedirectInput input)
+        {
+            User user = new UserManager().GetUserbyEmail(input.Email);
+            if (user == null)
+                return null;
+
+            if (user.IsSystemUser)
+                return null;
+
+            if (!new UserManager().IsUserEnable(user))
+            {
+                VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with inactive user");
+                return null;
+            }
+
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
+
+            SecurityProviderValidateSecurityTokenContext context = new SecurityProviderValidateSecurityTokenContext() { Token = input.Token, ApplicationId = input.ApplicationId };
+            bool isValid = securityProvider.Settings.ExtendedSettings.ValidateSecurityToken(context);
+            if (!isValid)
+                return null;
+
+            ApplicationRedirectOutput output = new ApplicationRedirectOutput()
+            {
+                CookieName = GetCookieName(),
+                AuthenticationToken = CreateAuthenticationToken(user)
+            };
+
+            return output;
+        }
+
+        public bool ValidateSecurityToken(ValidateSecurityTokenInput input)
+        {
+            if (input.ApplicationId.HasValue)
+            {
+                RegisteredApplication registeredApplication = new RegisteredApplicationManager().GetRegisteredApplicationbyId(input.ApplicationId.Value);
+                if (registeredApplication == null)
+                    return false;
+
+                string applicationURL = registeredApplication.URL;
+                if (string.IsNullOrEmpty(applicationURL))
+                    return false;
+
+                ValidateSecurityTokenInput validateSecurityTokenInput = new ValidateSecurityTokenInput() { Token = input.Token };
+                return Vanrise.Common.VRWebAPIClient.Post<ValidateSecurityTokenInput, bool>(applicationURL, "/api/VR_Sec/Security/ValidateSecurityToken", validateSecurityTokenInput);
             }
             else
             {
-                authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
-                LoggerFactory.GetLogger().WriteError("User '{0}' failed to login", email);
-            }
+                string decryptionKey = GetTokenDecryptionKey();
+                string decryptedToken = Common.Cryptography.Decrypt(input.Token, decryptionKey);
 
-            return authenticationOperationOutput;
+                SecurityToken securityToken = Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
+                if (securityToken == null)
+                    return false;
+
+                if (securityToken.ExpiresAt < DateTime.Now)
+                    return false;
+
+                return true;
+            }
         }
 
         public bool TryRenewCurrentAuthenticationToken(out AuthenticationToken newAuthenticationToken)
@@ -159,10 +204,13 @@ namespace Vanrise.Security.Business
 
         public AuthenticationToken CreateAuthenticationToken(User user)
         {
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
             AuthenticationToken authToken = new AuthenticationToken();
             authToken.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
             authToken.Token = null;
             authToken.UserName = user.Email;
+            authToken.SecurityProviderId = user.SecurityProviderId;
+            authToken.SupportPasswordManagement = securityProvider.Settings.ExtendedSettings.SupportPasswordManagement;
             authToken.UserDisplayName = user.Name;
             authToken.PhotoFileId = user.Settings != null ? user.Settings.PhotoFileId : null;
             int sessionExpirationInMinutes = s_configManager.GetSessionExpirationInMinutes();
@@ -182,7 +230,7 @@ namespace Vanrise.Security.Business
             return authToken;
         }
 
-        private static void SendNotificationMail(User user, ConfigManager cManager)
+        public static void SendNotificationMail(User user, ConfigManager cManager)
         {
             Guid? notificationId = cManager.GetNotificationMailTemplateId();
 
@@ -256,19 +304,19 @@ namespace Vanrise.Security.Business
             return new RequiredPermissionSettings { Entries = entitiesPermissions.Values.ToList() };
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> ChangeExpiredPassword(string email,string oldPassword, string newPassword)
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangeExpiredPassword(string email, string oldPassword, string newPassword)
         {
             User user = s_userManager.GetUserbyEmail(email);
-            return ChangePassword(user.UserId, oldPassword, newPassword); ;
+            return ChangePassword(user.UserId, oldPassword, newPassword, true);
         }
 
         public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(string oldPassword, string newPassword)
         {
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-            return ChangePassword(loggedInUserId, oldPassword,newPassword);
+            return ChangePassword(loggedInUserId, oldPassword, newPassword, false);
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(int userId, string oldPassword, string newPassword)
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(int userId, string oldPassword, string newPassword, bool passwordExpired)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             UserManager manager = new UserManager();
@@ -277,36 +325,21 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            string validationMessage;
-            if (!DoesPasswordMeetRequirement(newPassword, out validationMessage))
-            {
-                updateOperationOutput.Message = validationMessage;
-                return updateOperationOutput;
-            }
+            User user = new UserManager().GetUserbyId(userId);
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(user.SecurityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", user.SecurityProviderId);
 
-            if (IsPasswordSame(userId, newPassword, out validationMessage))
-            {
-                updateOperationOutput.Message = validationMessage;
-                return updateOperationOutput;
-            }
+            SecurityProviderChangePasswordContext changePasswordContext = new SecurityProviderChangePasswordContext() { User = user, NewPassword = newPassword, OldPassword = oldPassword, PasswordExpired = passwordExpired };
+            bool updateActionSucc = securityProvider.Settings.ExtendedSettings.ChangePassword(changePasswordContext);
 
-            User currentUser = manager.GetUserbyId(userId);
-            string currentUserPassword = manager.GetUserPassword(userId);
-
-            bool changePasswordActionSucc = false;
-            bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUserPassword);
-            string encryptedNewPassword = "";
-            if (oldPasswordIsCorrect)
+            if (updateActionSucc)
             {
-                encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", null);
-                int lastModifiedBy = userId;
-                changePasswordActionSucc = dataManager.ChangePassword(userId, encryptedNewPassword, lastModifiedBy);
-            }
-
-            if (changePasswordActionSucc)
-            {
-                new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedNewPassword, false);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+            else
+            {
+                updateOperationOutput.ShowExactMessage = changePasswordContext.ShowExactMessage;
+                updateOperationOutput.Message = changePasswordContext.ValidationMessage;
             }
 
             return updateOperationOutput;
@@ -330,63 +363,18 @@ namespace Vanrise.Security.Business
             return false;
         }
 
-        public bool CheckIfPasswordExpired(int userId, DateTime passwordChangeTime, out int? passwordExpirationDaysLeft)
-        {
-            var user = s_userManager.GetUserbyId(userId);
-            passwordExpirationDaysLeft = null;
-            ConfigManager configManager = new ConfigManager();
-            if (user.Settings== null || !user.Settings.EnablePasswordExpiration)
-                return false;
-
-            int? age = configManager.GetPasswordAgeInDays();
-            int? exparitionDaysToNotify = configManager.GetPasswordExpirationDaysToNotify();
-
-            if (age.HasValue)
-            {
-                int settingsPasswordAge = age.Value;
-                int passwordAge = (int)((DateTime.Now - passwordChangeTime).TotalDays);
-                int totalDaysToExpirePassword = settingsPasswordAge - passwordAge;
-                int daysToNotify = exparitionDaysToNotify.HasValue ? exparitionDaysToNotify.Value : 0;
-                if (totalDaysToExpirePassword <= daysToNotify)
-                {
-                    passwordExpirationDaysLeft = totalDaysToExpirePassword;
-                }
-                return passwordAge >= settingsPasswordAge;
-            }
-            return false;
-        }
-
         public string GetCookieName()
         {
-            var authServer = GetAuthServer();
-            if (authServer != null)
-            {
-                return authServer.Settings.AuthenticationCookieName;
-            }
-            else
-                return GetLocalCookieName();
+            return GetLocalCookieName();
         }
 
         public string GetLoginURL()
         {
-            var authServer = GetAuthServer();
-            if (authServer != null)
-            {
-                return String.Format("{0}/Security/Login", authServer.Settings.OnlineURL);
-            }
-            else
-                return null;
+            return null;
         }
-
         public string GetTokenDecryptionKey()
         {
-            var authServer = GetAuthServer();
-            if (authServer != null)
-            {
-                return authServer.Settings.TokenDecryptionKey;
-            }
-            else
-                return GetLocalTokenDecryptionKey();
+            return GetLocalTokenDecryptionKey();
         }
 
         static string s_localTokenDecryptionKey;
@@ -427,20 +415,6 @@ namespace Vanrise.Security.Business
                 }
             }
             return s_localCookieName;
-        }
-
-        CloudAuthServer GetAuthServer()
-        {
-            CloudAuthServerManager authServerManager = new CloudAuthServerManager();
-            var authServer = authServerManager.GetAuthServer();
-            if (authServer != null)
-            {
-                if (authServer.Settings == null)
-                    throw new NullReferenceException("authServer.Settings");
-                return authServer;
-            }
-            else
-                return null;
         }
 
         public int GetPasswordComplexityScore(string password)
@@ -496,81 +470,44 @@ namespace Vanrise.Security.Business
             return configManager.GetExactExceptionMessage();
         }
 
-        public PasswordValidationInfo GetPasswordValidationInfo()
+        public PasswordValidationInfo GetPasswordValidationInfo(Guid? securityProviderId)
         {
-            StringBuilder msg = new StringBuilder();
-            msg.Append("Password must meet complexity requirements:");
-            ConfigManager cManager = new ConfigManager();
-            int passwordLength = cManager.GetPasswordLength();
-            int maxPasswordLength = cManager.GetMaxPasswordLength();
-            var complexity = cManager.GetPasswordComplexity();
-            msg.Append(string.Format("<br> - Length must be at least {0} characters.", passwordLength));
-            msg.Append(string.Format("<br> - Length must be at most {0} characters.", maxPasswordLength));
-
-            if (complexity.HasValue)
+            SecurityProvider securityProvider;
+            if (securityProviderId.HasValue)
             {
-                msg.Append(string.Format("<br> - Passwords must contain characters from {0} of the following four categories:", complexity.Value == PasswordComplexity.Medium ? "two" : "three"));
-                msg.Append("<ul><li>Uppercase characters of European languages (A through Z).</li>");
-                msg.Append("<li>Lowercase characters of European languages (a through z).</li>");
-                msg.Append("<li>Base 10 digits (0 through 9).</li>");
-                msg.Append("<li>Nonalphanumeric characters:  ~,!,@,#,$,%,^,&,*,?,_,~,-,£,(,).</li></ul>");
+                securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(securityProviderId.Value);
+                securityProvider.ThrowIfNull("securityProvider", securityProviderId.Value);
             }
-            return new PasswordValidationInfo()
+            else
             {
-                RequirementsMessage = msg.ToString(),
-                RequiredPassword = !cManager.ShouldSendEmailOnNewUser()
-            };
+                securityProvider = new SecurityProviderManager().GetDefaultSecurityProvider();
+                securityProvider.ThrowIfNull("default securityProvider");
+            }
+
+            return securityProvider.Settings.ExtendedSettings.GetPasswordValidationInfo(new SecurityProviderGetPasswordValidationInfoContext());
         }
 
+        public PasswordValidationInfo GetRemotePasswordValidationInfo(Guid connectionId, Guid? securityProviderId)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            string args = securityProviderId.HasValue ? string.Format("?securityProviderId={0}", securityProviderId) : string.Empty;
+
+            return connectionSettings.Get<PasswordValidationInfo>(string.Format("/api/VR_Sec/Security/GetPasswordValidationInfo", args));
+        }
 
         public bool CheckTokenAccess(SecurityToken securityToken, out string errorMessage, out InvalidAccess invalidAccess)
         {
-
             if (securityToken.ExpiresAt < DateTime.Now)
             {
                 errorMessage = "Token Expired";
                 invalidAccess = InvalidAccess.TokenExpired;
                 return false;
             }
-            var authServer = GetAuthServer();
-            if (authServer != null)
-            {
-                if (securityToken.AccessibleCloudApplications == null || !securityToken.AccessibleCloudApplications.Any(app => app.ApplicationId == authServer.Settings.CurrentApplicationId))
-                {
-                    errorMessage = "You don't have access to this application";
-                    invalidAccess = InvalidAccess.UnauthorizeAccess;
-                    return false;
-                }
 
-                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-                UserManager userManager = new UserManager();
-                User currentUser = userManager.GetUserbyId(loggedInUserId);
-                if (!CheckTenantLicenseIfValid(currentUser.TenantId, authServer.Settings.CurrentApplicationId))
-                {
-                    errorMessage = "License Expired";
-                    invalidAccess = InvalidAccess.LicenseExpired;
-                    return false;
-                }
-            }
             errorMessage = null;
             invalidAccess = InvalidAccess.None;
-            return true;
-        }
-
-        private bool CheckTenantLicenseIfValid(int tenantId, int applicationId)
-        {
-            TenantManager tenantManager = new TenantManager();
-            CloudTenantOutput output = tenantManager.GetCloudTenantOutput(tenantId, applicationId);
-
-            if (output == null)
-                return false;
-
-            if (!output.LicenseExpiresOn.HasValue)
-                return true;
-
-            if (output.LicenseExpiresOn < DateTime.Now)
-                return false;
-
             return true;
         }
 

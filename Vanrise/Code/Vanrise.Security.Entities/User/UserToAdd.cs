@@ -12,6 +12,8 @@ namespace Vanrise.Security.Entities
 
         public string Email { get; set; }
 
+        public Guid SecurityProviderId { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

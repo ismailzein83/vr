@@ -7,6 +7,8 @@
         var email;
         var userObj;
         var oldPassword;
+        var securityProviderId;
+
         loadParameters();
         defineScope();
         load();
@@ -17,6 +19,7 @@
             if (parameters) {
                 email = parameters.email;
                 oldPassword = parameters.oldPassword;
+                securityProviderId = parameters.securityProviderId;
             }
         }
 
@@ -65,7 +68,7 @@
         }
 
         function loadPasswordHint() {
-            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo(securityProviderId).then(function (response) {
                 $scope.passwordHint = response.RequirementsMessage;
             });
         }

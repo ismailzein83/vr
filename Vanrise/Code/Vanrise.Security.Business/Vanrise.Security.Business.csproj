@@ -61,22 +61,23 @@
     <Compile Include="BusinessEntityManager.cs" />
     <Compile Include="BusinessEntityModuleManager.cs" />
     <Compile Include="BusinessEntityNodeManager.cs" />
-    <Compile Include="CloudApplicationServiceManager.cs" />
-    <Compile Include="CloudAuthServerManager.cs" />
-    <Compile Include="CloudServiceProxy.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Group\TryAddUserGroupSettingsContext.cs" />
     <Compile Include="Group\GroupSettingsContext.cs" />
     <Compile Include="Group\StaticGroup.cs" />
     <Compile Include="HashingUtility.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="OrgChartManager.cs" />
     <Compile Include="EmailContext\PasswordEmailContext.cs" />
     <Compile Include="PasswordGenerator.cs" />
+    <Compile Include="RegisteredApplicationManager.cs" />
     <Compile Include="RequiredPermissionSetManager.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="SecurityExtensionMethods.cs" />
+    <Compile Include="SecurityProviderCustomObjectTypeSettings.cs" />
+    <Compile Include="SecurityProviderManager.cs" />
     <Compile Include="SystemActionManager.cs" />
     <Compile Include="TenantManager.cs" />
     <Compile Include="UserGroupManager.cs" />
@@ -128,6 +129,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

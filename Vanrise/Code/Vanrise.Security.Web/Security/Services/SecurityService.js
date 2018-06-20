@@ -1,13 +1,14 @@
 ﻿'use strict';
 
 app.service('SecurityService', ['$rootScope', 'Sec_CookieService', 'UtilsService', 'VR_Sec_PermissionFlagEnum', '$cookies', 'VR_Sec_SecurityAPIService', '$q', 'VRNotificationService', 'VRModalService',
-function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum, $cookies, VR_Sec_SecurityAPIService,  $q, VRNotificationService, VRModalService) {
+function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum, $cookies, VR_Sec_SecurityAPIService, $q, VRNotificationService, VRModalService) {
 
-    function authenticate(email, password, reloginAfterPasswordActivation) {
+    function authenticate(securityProviderId, payload, reloginAfterPasswordActivation) {
         var deferred = $q.defer();
+
         var credentialsObject = {
-            Email: email,
-            Password: password
+            SecurityProviderId: securityProviderId,
+            Payload: payload
         };
         VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
             if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded, onExpiredPasswordChangeNeeded)) {
@@ -28,7 +29,9 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
                 if (reloginAfterPasswordActivation != undefined)
                     reloginAfterPasswordActivation(passwordAfterActivation);
             };
-            activatePassword(email, password, onPasswordActivated);
+            var email = payload.Email;
+            var password = payload.Password;
+            activatePassword(email, password, onPasswordActivated, securityProviderId);
         }
 
         function onExpiredPasswordChangeNeeded() {
@@ -36,16 +39,19 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
                 if (reloginAfterPasswordActivation != undefined)
                     reloginAfterPasswordActivation(passwordAfterChange);
             };
-            changeExpiredPassword(email, password, onExpiredPasswordChanged);
+            var email = payload.Email;
+            var password = payload.Password;
+            changeExpiredPassword(email, password, onExpiredPasswordChanged, securityProviderId);
         }
 
         return deferred.promise;
     }
 
-    function activatePassword(email, tempPassword, onPasswordActivated) {
+    function activatePassword(email, tempPassword, onPasswordActivated, securityProviderId) {
         var modalParameters = {
             email: email,
-            tempPassword: tempPassword
+            tempPassword: tempPassword,
+            securityProviderId: securityProviderId
         };
 
         var modalSettings = {};
@@ -56,10 +62,11 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         VRModalService.showModal('/Client/Modules/Security/Views/User/ActivatePasswordEditor.html', modalParameters, modalSettings);
     }
 
-    function changeExpiredPassword(email, oldPassword, onExpiredPasswordChanged) {
+    function changeExpiredPassword(email, oldPassword, onExpiredPasswordChanged, securityProviderId) {
         var modalParameters = {
             email: email,
-            oldPassword: oldPassword
+            oldPassword: oldPassword,
+            securityProviderId: securityProviderId
         };
 
         var modalSettings = {};
@@ -191,8 +198,7 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
             renewTokenIfNeeded(userToken);
             return userToken.Token;
         }
-        else
-        {
+        else {
             return undefined;
         }
     }
@@ -221,6 +227,22 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         }
     }
 
+    function redirectToApplication(applicationURL) {
+        var deferred = $q.defer();
+
+        VR_Sec_SecurityAPIService.RedirectToApplication(applicationURL).then(function (response) {
+            if (response != undefined) {
+                Sec_CookieService.createAccessCookieFromAuthToken(response.AuthenticationToken, response.CookieName);
+            }
+            deferred.resolve();
+            window.location.href = applicationURL;
+        }).catch(function () {
+            deferred.reject();
+        });
+
+        return deferred.promise;
+    }
+
     return ({
         authenticate: authenticate,
         isAllowed: isAllowed,
@@ -232,6 +254,7 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         HasPermissionToActions: HasPermissionToActions,
         setAccessCookieName: Sec_CookieService.setAccessCookieName,
         setLoginURL: setLoginURL,
-        redirectToLoginPage: redirectToLoginPage
+        redirectToLoginPage: redirectToLoginPage,
+        redirectToApplication: redirectToApplication
     });
 }]);

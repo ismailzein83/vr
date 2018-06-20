@@ -18,6 +18,17 @@ namespace Vanrise.Common.Business
         public T Get<T>(string actionName)
         {
             CredentialsInput credentialsInput = new CredentialsInput() { Email = this.Username, Password = this.Password };
+            return Get<T>(credentialsInput, actionName);
+        }
+
+        public Q Post<T, Q>(string actionName, T request, bool serializeWithFullType = false)
+        {
+            CredentialsInput credentialsInput = new CredentialsInput() { Email = this.Username, Password = this.Password };
+            return Post<T, Q>(credentialsInput, actionName, request, serializeWithFullType);
+        }
+
+        public T Get<T>(CredentialsInput credentialsInput, string actionName)
+        {
             var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
                  "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
 
@@ -27,9 +38,8 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.VRWebAPIClient.Get<T>(BaseURL, actionName, headers);
         }
 
-        public Q Post<T, Q>(string actionName, T request, bool serializeWithFullType = false)
+        public Q Post<T, Q>(CredentialsInput credentialsInput, string actionName, T request, bool serializeWithFullType = false)
         {
-            CredentialsInput credentialsInput = new CredentialsInput() { Email = this.Username, Password = this.Password };
             var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
                  "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
 
@@ -37,7 +47,17 @@ namespace Vanrise.Common.Business
             headers.Add(result.AuthenticationObject.TokenName, result.AuthenticationObject.Token);
 
             return Vanrise.Common.VRWebAPIClient.Post<T, Q>(BaseURL, actionName, request, headers, serializeWithFullType);
-        } 
+        }
+
+        public T AnonymousGet<T>(string actionName)
+        {
+            return Vanrise.Common.VRWebAPIClient.Get<T>(BaseURL, actionName);
+        }
+
+        public Q AnonymousPost<T, Q>(string actionName, T request, bool serializeWithFullType = false)
+        {
+            return Vanrise.Common.VRWebAPIClient.Post<T, Q>(BaseURL, actionName, request, null, serializeWithFullType);
+        }
     }
 
     public class VRInterAppRestConnectionFilter : IVRConnectionFilter

@@ -14,6 +14,7 @@
             GetUserbyId: GetUserbyId,
             GetMembers: GetMembers,
             AddUser: AddUser,
+            AddRemoteUser: AddRemoteUser,
             UpdateUser: UpdateUser,
             CheckUserName: CheckUserName,
             ResetPassword: ResetPassword,
@@ -29,7 +30,8 @@
             UnlockUser: UnlockUser,
             GetUserHistoryDetailbyHistoryId: GetUserHistoryDetailbyHistoryId,
             GetLoggedInUserLanguageId: GetLoggedInUserLanguageId,
-            UpdateLoggedInUserLanguage: UpdateLoggedInUserLanguage
+            UpdateLoggedInUserLanguage: UpdateLoggedInUserLanguage,
+            GetRemoteEmailInfo: GetRemoteEmailInfo
         });
 
         function GetFilteredUsers(input) {
@@ -45,7 +47,7 @@
         }
         function GetLoggedInUserLanguageId() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetLoggedInUserLanguageId'));
-     
+
         }
         function UpdateLoggedInUserLanguage(languageInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateLoggedInUserLanguage'), languageInput);
@@ -76,6 +78,10 @@
 
         function AddUser(user) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddUser'), user);
+        }
+
+        function AddRemoteUser(remoteUser) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'AddRemoteUser'), remoteUser);
         }
 
         function UpdateUser(user) {
@@ -118,6 +124,13 @@
 
         function LoadLoggedInUserProfile() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'LoadLoggedInUserProfile'));
+        }
+
+        function GetRemoteEmailInfo(connectionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetRemoteEmailInfo"), {
+                connectionId: connectionId,
+                filter: filter
+            });
         }
 
         function HasAddUserPermission() {

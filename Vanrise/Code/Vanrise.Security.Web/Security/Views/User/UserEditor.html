@@ -1,12 +1,22 @@
 ﻿<div vr-modalcontent ng-controller="VR_Sec_UserEditorController" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formUserEditor">
+            <vr-row ng-show="showSecurityProviderSelector">
+                <span vr-disabled="isInEditMode" ng-if="!isRemote">
+                    <vr-sec-securityprovider-selector normal-col-num="6" on-ready="onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="scopemodel.selectedSecurityProvider"></vr-sec-securityprovider-selector>
+                </span>
+                <span vr-disabled="isInEditMode" ng-if="isRemote">
+                    <vr-sec-securityprovider-remoteselector normal-col-num="6" on-ready="onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="scopemodel.selectedSecurityProvider"></vr-sec-securityprovider-remoteselector>
+                </span>
+            </vr-row>
+            <vr-row>
+                <span ng-if="scopemodel.selectedSecurityProvider!=undefined" vr-loader="isLoadingFindUserEditor">
+                    <vr-directivewrapper directive="scopemodel.selectedSecurityProvider.FindUserEditor" on-ready="onFindUserEditorReady"></vr-directivewrapper>
+                </span>
+            </vr-row>
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopemodel.email" label="Email" localizedlabel="VRRes.Email.VREnd" type="email" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/2row" ng-if="!hasAuthServer">
-                    <vr-textbox value="scopemodel.name" label="Name" localizedlabel="VRRes.Name.VREnd" maxlength="40" refusepecialcharacter isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
+                    <vr-textbox value="scopemodel.name" label="Name" localizedlabel="VRRes.Name.VREnd" maxlength="40" refusepecialcharacter isrequired></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-textbox value="scopemodel.description" label="Description" localizedlabel="VRRes.Description.VREnd"></vr-textbox>
@@ -14,26 +24,14 @@
                 <vr-columns width="1/2row">
                     <vr-datetimepicker type="dateTime" label="Enable Till" localizedlabel="'VRRes.Enable Till.VREnd'" value="scopemodel.enabledTill"></vr-datetimepicker>
                 </vr-columns>
-                <vr-columns width="fullrow" haschildcolumns ng-show="showPasswordSection">
-                    <vr-validator validate="validatePasswords()">
-                        <vr-columns width="1/2row">
-                            <vr-textbox label="Password" localizedlabel="VRRes.Password.VREnd" type="password" value="password" hint="{{passwordHint}}" largehint isrequired="{{requiredPassword}}"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox label="Confirm Password" localizedlabel="VRRes.ConfirmPassword.VREnd" type="password" value="confirmedPassword" isrequired="{{requiredPassword}}"></vr-textbox>
-                        </vr-columns>
-                    </vr-validator>
-                </vr-columns>
+
                 <vr-columns width="1/2row" ng-show="showTenantSelector">
                     <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon vr-disabled="isInEditMode" customlabel="Tenant" localizedcustomlabel="VRRes.Tenant.VREnd"></vr-sec-tenant-selector>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-sec-group-selector on-ready="onGroupSelectorReady" ismultipleselection></vr-sec-group-selector>
                 </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-switch value="scopemodel.enablePasswordExpiration" label="Enable Password Expiration"></vr-switch>
-                </vr-columns>
-                <vr-columns width="fullrow" haschildcolumns >
+                <vr-columns width="fullrow" haschildcolumns>
                     <vr-columns width="1/2row">
                         <vr-fileupload tempfile="true" extension="images" value="scopemodel.userPhoto" label="User Photo"> </vr-fileupload>
                     </vr-columns>

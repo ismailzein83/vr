@@ -13,13 +13,14 @@
             ChangePassword: ChangePassword,
             IsAllowed: IsAllowed,
             HasPermissionToActions: HasPermissionToActions,
-            HasAuthServer: HasAuthServer,
             GetPasswordValidationInfo: GetPasswordValidationInfo,
-            ChangeExpiredPassword: ChangeExpiredPassword
+            GetRemotePasswordValidationInfo: GetRemotePasswordValidationInfo,
+            ChangeExpiredPassword: ChangeExpiredPassword,
+            RedirectToApplication: RedirectToApplication
         });
 
-        function Authenticate(credentialsObject) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'Authenticate'), credentialsObject);
+        function Authenticate(authenticateObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'Authenticate2'), authenticateObject);
         }
 
         function TryRenewCurrentSecurityToken() {
@@ -44,11 +45,20 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasPermissionToActions'), { systemActionNames: systemActionNames }, { useCache: true });
         }
 
-        function HasAuthServer() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasAuthServer'));
+        function GetPasswordValidationInfo(securityProviderId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetPasswordValidationInfo'), {
+                securityProviderId: securityProviderId
+            });
         }
-        function GetPasswordValidationInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetPasswordValidationInfo'));
+
+        function GetRemotePasswordValidationInfo(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetRemotePasswordValidationInfo'), input);
+        }
+
+        function RedirectToApplication(applicationURL) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'RedirectToApplication'), {
+                applicationURL: applicationURL
+            });
         }
     }
 

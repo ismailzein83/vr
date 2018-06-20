@@ -23,6 +23,8 @@ namespace Vanrise.Security.Entities
 
         public int UserId { get; set; }
 
+        public Guid SecurityProviderId { get; set; }
+
         public int TenantId { get; set; }
 
         public string Email { get; set; }

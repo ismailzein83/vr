@@ -15,7 +15,7 @@
             }, i[r].l = 1 * new Date(); a = s.createElement(o),
             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-    </script>   
+    </script>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
     @Styles.Render("~/Content/HandsonTable")
@@ -27,12 +27,26 @@
 </head>
 <body @ViewBag.RTLClass>
     <div ng-show="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
-    <div ng-show="!spinner" ng-cloak id="mainBodyContainer" style="display:none" >
+    <div ng-show="!spinner" ng-cloak id="mainBodyContainer" style="display:none">
         <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
             <div class="container">
                 <div class="navbar-header">
                     <img src="/Images/logoonheader.png" class="minilogo hand-cursor" ng-click="goToHomePage()" title="Home" />
                     <div class="vr-logout-span">
+
+                        @*<div class="vr-logout-span" ng-show="remoteApplications!=undefined && remoteApplications.length > 0">
+                            <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                                <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-retweet"></span>
+                                    <label class="vr-user-separator">|</label>
+                                </div>
+                                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
+                                    <li ng-repeat="remoteApplication in remoteApplications">
+                                        <a href="" ng-click="redirectToApplication(remoteApplication)">{{remoteApplication.Name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>*@
 
                         <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                             <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
@@ -49,15 +63,21 @@
                                 <li role="presentation" ng-if="@ViewBag.IsLocalizationEnabled">
                                     <a href="" ng-click="openEditMyLanguageModal()">Edit My Language</a>
                                 </li>
-                                <li role="presentation">
+                                <li role="presentation" ng-if="supportPasswordManagement">
                                     <a href="" ng-click="openResetPasswordModal()">Change My Password</a>
                                 </li>
+                                <li role="presentation" ng-if="@ViewBag.HasRemoteApplications">
+                                    <a href="" ng-click="openRemoteApplicationsModal()">Switch Application</a>
+                                </li>
+                                
                                 <li role="presentation">
                                     <a href="" ng-click="logout()">Logout</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
+
+
                     <div class="menu-icon support-call">
                         <a href="" ng-click="openSupportModal()" style="position:relative"><img style="position:absolute;left:110px" src="Client/Images/support.png" class="vr-support" /></a>
                     </div>

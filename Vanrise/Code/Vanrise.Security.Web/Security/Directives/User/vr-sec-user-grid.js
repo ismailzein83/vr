@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VRUIUtilsService', 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_SecurityAPIService', 'VR_Sec_UserActivationStatusEnum',
-    function (VR_Sec_UserAPIService, VR_Sec_UserService, VRUIUtilsService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_SecurityAPIService, VR_Sec_UserActivationStatusEnum) {
+app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VRUIUtilsService', 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_UserActivationStatusEnum', 'SecurityService',
+    function (VR_Sec_UserAPIService, VR_Sec_UserService, VRUIUtilsService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_UserActivationStatusEnum, SecurityService) {
 
         var directiveDefinitionObject = {
 
@@ -27,11 +27,12 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             var gridDrillDownTabsObj;
             var gridAPI;
             var gridQuery;
-            var hasAuthServer;
             this.initializeController = initializeController;
 
-            function initializeController() {
+            var userInfo = SecurityService.getLoggedInUserInfo();
+            var supportPasswordManagement = userInfo.SupportPasswordManagement;
 
+            function initializeController() {
                 $scope.users = [];
 
                 $scope.onGridReady = function (api) {
@@ -48,10 +49,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
                         directiveAPI.loadGrid = function (query) {
                             gridQuery = query;
-                            return VR_Sec_SecurityAPIService.HasAuthServer().then(function (response) {
-                                hasAuthServer = response;
-                                gridAPI.retrieveData(query);
-                            });
+                            gridAPI.retrieveData(query);
                         };
 
                         directiveAPI.onUserAdded = function (userObject) {
@@ -90,16 +88,22 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                             name: "Edit",
                             clicked: editUser,
                             haspermission: hasUpdateUserPermission
-                        }, {
-                            name: "Reset Password",
-                            clicked: resetPassword,
-                            haspermission: hasResetUserPasswordPermission
-                        }, {
+                        },
+                        {
                             name: "Assign Permissions",
                             clicked: assignPermissions,
                             haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
                         }
                     ];
+
+                    if (dataItem.SupportPasswordManagement) {
+                        var resetPasswordAction = {
+                            name: "Reset Password",
+                            clicked: resetPassword,
+                            haspermission: hasResetUserPasswordPermission
+                        };
+                        menuActions.push(resetPasswordAction);
+                    }
 
                     var menuAction;
                     switch (dataItem.Status) {
@@ -165,11 +169,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             }
 
             function resetPassword(userObj) {
-                if (hasAuthServer) {
-                    VR_Sec_UserService.resetAuthServerPassword($scope, userObj.Entity.UserId);
-                } else {
-                    VR_Sec_UserService.resetPassword(userObj.Entity.UserId);
-                }
+                VR_Sec_UserService.resetPassword(userObj.Entity.UserId);
             }
 
             function assignPermissions(userObj) {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ChangePasswordController.$inject = ['$scope', 'VR_Sec_SecurityAPIService', 'VRNotificationService'];
+    ChangePasswordController.$inject = ['$scope', 'VR_Sec_SecurityAPIService', 'VRNotificationService', 'Sec_CookieService'];
 
-    function ChangePasswordController($scope, VR_Sec_SecurityAPIService, VRNotificationService) {
+    function ChangePasswordController($scope, VR_Sec_SecurityAPIService, VRNotificationService, Sec_CookieService) {
 
         loadParameters();
         defineScope();
@@ -47,7 +47,7 @@
         }
 
         function loadPasswordHint() {
-            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo(Sec_CookieService.getLoggedInUserInfo().SecurityProviderId).then(function (response) {
                 $scope.passwordHint = response.RequirementsMessage;
             });
         }
