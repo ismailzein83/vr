@@ -14,7 +14,6 @@ xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll" /y /v /z 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\CentralAuth\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\Common\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\ExcelConversion\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\VR_Notification\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\FixesFullVersion\WebSite\CentralAuth\%YYYYMMDD%\Client\Modules\Analytic\"
