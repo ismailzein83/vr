@@ -39,6 +39,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 				SupplierPriceListManager SupplierPriceListManager = new SupplierPriceListManager();
 				SupplierPriceListManager.CleanTemporaryTables(processInstanceId);
 				receivedPricelistManager.UpdateReceivedPricelistStatus(supplierPriceListProcessInput.ReceivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToProcessingError);
+				
+				var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
 			}
 			base.OnBPExecutionCompleted(context);
 		}

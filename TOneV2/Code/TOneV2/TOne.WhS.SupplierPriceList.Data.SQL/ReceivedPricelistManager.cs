@@ -5,6 +5,7 @@ using Vanrise.Common;
 using Vanrise.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
+using System.Linq;
 
 namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
@@ -31,7 +32,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 		public bool InsertReceivedPricelist(int supplierId, long? fileId, DateTime receivedDate, SupplierPricelistType? pricelistType, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors, out int recordId)
 		{
 			object receivedPricelistRecordId;
-			var serializedErrors = Vanrise.Common.Serializer.Serialize(errors);
+			var serializedErrors = (errors != null && errors.Any()) ? Vanrise.Common.Serializer.Serialize(errors) : null;
 			int affectedRows = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_Insert", out receivedPricelistRecordId, supplierId, fileId, receivedDate, pricelistType, status, null, null, serializedErrors);
 			recordId = (affectedRows > 0) ? (int)receivedPricelistRecordId : -1;
 
@@ -51,6 +52,12 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 		public void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status)
 		{
 			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatus", receivedPricelistRecordId, status);
+		}
+
+		public void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors)
+		{
+			var serializedErrors = (errors != null && errors.Any()) ? Vanrise.Common.Serializer.Serialize(errors) : null;
+			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatusWithErrors", receivedPricelistRecordId, status, serializedErrors);
 		}
 
 		public ReceivedPricelist GetReceivedPricelistById(int id)

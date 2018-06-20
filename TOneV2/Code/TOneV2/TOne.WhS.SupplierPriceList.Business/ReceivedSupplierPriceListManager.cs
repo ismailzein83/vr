@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Data;
 using TOne.WhS.SupplierPriceList.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Common.Excel;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -56,6 +58,60 @@ namespace TOne.WhS.SupplierPriceList.Business
 		{
 			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 			return receivedPricelistDataManager.GetReceivedPricelistById(id);
+		}
+
+		public void SendMail(int receivedPricelistRecordId, AutoImportEmailTypeEnum emailType)
+		{
+			VRFileManager fileManager = new VRFileManager();
+			VRFile receivedPricelistFile = null;
+			var receivedPricelist = GetReceivedPricelistById(receivedPricelistRecordId);
+			receivedPricelist.ThrowIfNull(string.Format("There is no received pricelist with Id '{0}'.", receivedPricelistRecordId));
+
+			var supplierMailAttachements = new List<VRMailAttachement>();
+			var internalMailAttachements = new List<VRMailAttachement>();
+
+			AutoImportTemplate supplierAutoImportTemplate = new BusinessEntity.Business.ConfigManager().GetSupplierAutoImportTemplateByType(emailType);
+			AutoImportTemplate internalAutoImportTemplate = new BusinessEntity.Business.ConfigManager().GetInternalAutoImportTemplateByType(emailType);
+
+			if (supplierAutoImportTemplate.AttachPricelist)
+			{
+				receivedPricelistFile = fileManager.GetFile(receivedPricelist.FileId.Value);
+				receivedPricelistFile.ThrowIfNull(string.Format("There is no file with Id '{0}'.", receivedPricelist.FileId.Value));
+				supplierMailAttachements.Add(new VRMailAttachmentExcel { Name = receivedPricelistFile.Name, Content = receivedPricelistFile.Content });
+			}
+
+			if (internalAutoImportTemplate.AttachPricelist)
+			{
+				receivedPricelistFile = (receivedPricelistFile == null) ? fileManager.GetFile(receivedPricelist.FileId.Value) : receivedPricelistFile;
+				receivedPricelistFile.ThrowIfNull(string.Format("There is no file with Id '{0}'.", receivedPricelist.FileId.Value));
+				internalMailAttachements.Add(new VRMailAttachmentExcel { Name = receivedPricelistFile.Name, Content = receivedPricelistFile.Content });
+			}
+
+			var objects = new Dictionary<string, dynamic>
+			{
+				{"Received Pricelist", receivedPricelist}
+			};
+
+			if (receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
+			{
+				var excelFile = new VRExcelFile();
+				var errorSheet = new VRExcelSheet();
+				errorSheet.AddCell((new VRExcelCell() { Value = "", RowIndex = 0, ColumnIndex = 0 }));
+
+				for (int i = 0; i < receivedPricelist.ErrorDetails.Count; i++)
+				{
+					errorSheet.AddCell(new VRExcelCell() { Value = receivedPricelist.ErrorDetails[i].ErrorMessage, RowIndex = i + 1, ColumnIndex = 0 });
+				}
+				supplierMailAttachements.Add(new VRMailAttachmentExcel { Name = "Errors", Content = excelFile.GenerateExcelFile() });
+				internalMailAttachements.Add(new VRMailAttachmentExcel { Name = "Errors", Content = excelFile.GenerateExcelFile() });
+			}
+
+			VRMailManager vrMailManager = new VRMailManager();
+			var supplierEvaluatedObj = vrMailManager.EvaluateMailTemplate(supplierAutoImportTemplate.EmailTemplateId, objects);
+			vrMailManager.SendMail(supplierEvaluatedObj.From, supplierEvaluatedObj.To, supplierEvaluatedObj.CC, supplierEvaluatedObj.BCC, supplierEvaluatedObj.Subject, supplierEvaluatedObj.Body, supplierMailAttachements, false);
+
+			var internalEvaluatedObj = vrMailManager.EvaluateMailTemplate(internalAutoImportTemplate.EmailTemplateId, objects);
+			vrMailManager.SendMail(internalEvaluatedObj.From, internalEvaluatedObj.To, internalEvaluatedObj.CC, internalEvaluatedObj.BCC, internalEvaluatedObj.Subject, internalEvaluatedObj.Body, internalMailAttachements, false);
 		}
 
 		#endregion

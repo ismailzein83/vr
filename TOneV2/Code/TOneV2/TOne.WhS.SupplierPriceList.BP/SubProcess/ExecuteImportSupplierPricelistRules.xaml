@@ -62,6 +62,7 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Boolean" Name="ViolatedRuleExist" />
+      <Variable x:TypeArguments="scg:List(vbe:BPValidationMessage)" Name="ErrorMessages" />
     </Sequence.Variables>
     <vbw:ExecuteRules GetRulesFromParentProcess="{x:Null}" ParentMessagePrefix="{x:Null}" WriteMessagesToParentProcess="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
       <vbw:ExecuteRules.BusinessRulesKey>
@@ -74,6 +75,11 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">IsAutoImport</mca:CSharpValue>
         </InArgument>
       </vbw:ExecuteRules.DoNotThrowExceptionOnRulesViolation>
+      <vbw:ExecuteRules.ErrorMessages>
+        <OutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">ErrorMessages</mca:CSharpReference>
+        </OutArgument>
+      </vbw:ExecuteRules.ErrorMessages>
       <vbw:ExecuteRules.ImportedDataToValidate>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
@@ -93,28 +99,33 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-          <twsba:UpdateReceivePricelistStatus sap2010:WorkflowViewState.IdRef="UpdateReceivePricelistStatus_1">
-            <twsba:UpdateReceivePricelistStatus.ReceivedPricelistRecordId>
+          <twsba:UpdateReceivePricelistStatusAsFailed sap2010:WorkflowViewState.IdRef="UpdateReceivePricelistStatusAsFailed_1">
+            <twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistRecordId>
               <InArgument x:TypeArguments="x:Int32">
                 <mca:CSharpValue x:TypeArguments="x:Int32">ReceivedPricelistRecordId</mca:CSharpValue>
               </InArgument>
-            </twsba:UpdateReceivePricelistStatus.ReceivedPricelistRecordId>
-            <twsba:UpdateReceivePricelistStatus.ReceivedPricelistStatus>
+            </twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistRecordId>
+            <twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistStatus>
               <InArgument x:TypeArguments="twse:ReceivedPricelistStatus">
                 <mca:CSharpValue x:TypeArguments="twse:ReceivedPricelistStatus">Entities.ReceivedPricelistStatus.FailedDueToBusinessRuleError</mca:CSharpValue>
               </InArgument>
-            </twsba:UpdateReceivePricelistStatus.ReceivedPricelistStatus>
-          </twsba:UpdateReceivePricelistStatus>
+            </twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistStatus>
+            <twsba:UpdateReceivePricelistStatusAsFailed.ValidationErrorMessages>
+              <InArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+                <mca:CSharpValue x:TypeArguments="scg:List(vbe:BPValidationMessage)">ErrorMessages</mca:CSharpValue>
+              </InArgument>
+            </twsba:UpdateReceivePricelistStatusAsFailed.ValidationErrorMessages>
+          </twsba:UpdateReceivePricelistStatusAsFailed>
           <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="Import supplier pricelist failed due to business rule error." />
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbA4+A3EOAgEBQgVXGAIBGVgFbwoCAQJFC0VZAgEsTwtPdwIBJlQLVGMCASBKC0pWAgEaWwtbcwIBA18JbRQCAQlgC2swAgEMbAtsnAECAQpjEWNhAgETaBFooAECAQ1sW2yZAQIBCw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbBA+A3wOAgEBQwVdGAIBI14FegoCAQJGC0ZZAgFAUAtQdwIBOVULVXcCATJaC1pjAgErSwtLVgIBJGELYXMCAQNlCXgUAgEKZgt2OAIBDXcLd5wBAgELbhFuoAECARxzEXN1AgEVaRFpZwIBDndbd5kBAgEM</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="UpdateReceivePricelistStatus_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="UpdateReceivePricelistStatusAsFailed_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>

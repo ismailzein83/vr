@@ -1,32 +1,46 @@
 ﻿<vr-columns width="fullrow">
-    <vr-tabs>
-        <vr-tab header="'General'">
-            <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Effective Date Day Offset" type="number" value="ctrl.effectiveDateDayOffset" minvalue="0" maxvalue="10000" isrequired="true"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Retroactive Day Offset" value="ctrl.retroactiveDayOffset" minvalue="0" maxvalue="10000" decimalprecision="0" type="number" isrequired="true"></vr-textbox>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="1/2row">
-                    <span ng-if="ctrl.systemCurrencySymbol!=undefined">
-                        <vr-label>Max Cost Rate ({{ctrl.systemCurrencySymbol}})</vr-label>
-                        <vr-textbox value="ctrl.maximumRate" minvalue="0" type="number" isrequired="true"></vr-textbox>
-                    </span>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Max Code Range" value="ctrl.maximumCodeRange" minvalue="0" type="number" isrequired="true"></vr-textbox>
-                </vr-columns>
-            </vr-row>
-        </vr-tab>
-        <vr-tab header="'Auto-Import'">
-            <vr-section title="Pricelist Type Mapping">
-                <vr-row>
-                    <vr-whs-be-purchasearea-settings-pricelisttypemapping on-ready="ctrl.onPricelistTypeMappingReady"></vr-whs-be-purchasearea-settings-pricelisttypemapping>
-                </vr-row>
-            </vr-section>
-        </vr-tab>
-    </vr-tabs>
+	<vr-tabs>
+		<vr-tab header="'General'">
+			<vr-row>
+				<vr-columns width="1/2row">
+					<vr-textbox label="Effective Date Day Offset" type="number" value="ctrl.effectiveDateDayOffset" minvalue="0" maxvalue="10000" isrequired="true"></vr-textbox>
+				</vr-columns>
+				<vr-columns width="1/2row">
+					<vr-textbox label="Retroactive Day Offset" value="ctrl.retroactiveDayOffset" minvalue="0" maxvalue="10000" decimalprecision="0" type="number" isrequired="true"></vr-textbox>
+				</vr-columns>
+			</vr-row>
+			<vr-row>
+				<vr-columns width="1/2row">
+					<span ng-if="ctrl.systemCurrencySymbol!=undefined">
+						<vr-label>Max Cost Rate ({{ctrl.systemCurrencySymbol}})</vr-label>
+						<vr-textbox value="ctrl.maximumRate" minvalue="0" type="number" isrequired="true"></vr-textbox>
+					</span>
+				</vr-columns>
+				<vr-columns width="1/2row">
+					<vr-textbox label="Max Code Range" value="ctrl.maximumCodeRange" minvalue="0" type="number" isrequired="true"></vr-textbox>
+				</vr-columns>
+			</vr-row>
+		</vr-tab>
+		<vr-tab header="'Auto-Import'">
+			<vr-row>
+				<vr-columns width="1/2row">
+					<vr-label>Supplier Template Settings</vr-label>
+					<vr-whs-be-autoimporttemplatesettings-editor on-ready="ctrl.onAutoImportTemplateSettingsReady"></vr-whs-be-autoimporttemplatesettings-editor>
+				</vr-columns>
+				<vr-columns width="1/2row">
+					<vr-label>Internal Template Settings</vr-label>
+					<vr-whs-be-autoimporttemplatesettings-editor on-ready="ctrl.onInternalAutoImportTemplateSettingsReady"></vr-whs-be-autoimporttemplatesettings-editor>
+				</vr-columns>
+			</vr-row>
+			<vr-row>
+				<vr-columns width="fullrow">
+					<vr-section title="Pricelist Type Mapping">
+						<vr-row>
+							<vr-whs-be-purchasearea-settings-pricelisttypemapping on-ready="ctrl.onPricelistTypeMappingReady"></vr-whs-be-purchasearea-settings-pricelisttypemapping>
+						</vr-row>
+					</vr-section>
+				</vr-columns>
+			</vr-row>
+		</vr-tab>
+	</vr-tabs>
 </vr-columns> 

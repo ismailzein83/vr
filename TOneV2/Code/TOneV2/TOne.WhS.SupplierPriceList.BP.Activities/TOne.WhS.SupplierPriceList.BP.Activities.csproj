@@ -55,6 +55,10 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
@@ -132,6 +136,7 @@
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="SetImportSPLContext.cs" />
     <Compile Include="SetReceivedPricelistAsCompleted.cs" />
+    <Compile Include="SetReceivedPricelistAsCompletedWithNoChanges.cs" />
     <Compile Include="SetReceivedPricelistAsStarted.cs" />
     <Compile Include="ShifTime.cs" />
     <Compile Include="StructureImportedZones.cs" />
@@ -139,7 +144,7 @@
     <Compile Include="StructureDataByCountries.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
     <Compile Include="UpdateImportedBEDs.cs" />
-    <Compile Include="UpdateReceivePricelistStatus.cs" />
+    <Compile Include="UpdateReceivePricelistStatusAsFailed.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">

@@ -13,10 +13,3 @@
 	FileId: { value: 11, description: "File Id" },
 	ReceivedPricelistId: { value: 12, description: "Received Pricelist Id" },
 });
-
-app.constant('WhS_SupPL_AutoImportEmailTypeEnum', {
-	Received: { value: 0, description: "Received" },
-	Succeeded: { value: 1, description: "Succeeded" },
-	Failed: { value: 2, description: "Failed" },
-	Internal: { value: 3, description: "Internal" },
-});

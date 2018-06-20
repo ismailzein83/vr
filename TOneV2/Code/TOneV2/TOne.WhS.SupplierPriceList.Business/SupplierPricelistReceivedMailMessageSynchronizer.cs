@@ -32,6 +32,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 		public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
 		{
 			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
+			var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
+
 			CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 			BusinessEntity.Business.ConfigManager configManager = new BusinessEntity.Business.ConfigManager();
 
@@ -94,6 +96,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 						int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.Received, null, out recordId);
+						receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Received);
 
 						var supplierPriceListProcessInput = new SupplierPriceListProcessInput
 						{
@@ -114,6 +117,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 					else
 					{
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, null, receivedMailMessage.Header.MessageSendTime, null, ReceivedPricelistStatus.FailedDueToReceivedMailError, errors, out recordId);
+						receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Received);
 					}
 				}
 			}
