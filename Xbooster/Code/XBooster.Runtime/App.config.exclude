@@ -48,7 +48,8 @@
     <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
     <add key="CDRComparisonOutputDBConnStringKey"                 value="CDRComparisonOutputDBConnString"/>
-    <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>    
+    <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
