@@ -41,3 +41,4 @@ xcopy "C:\TFS\Retail\Code\Retail.Voice.Web\Retail_Voice" /S /E /R /y /v /i /z /Q
 xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\FixesFullVersion\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_SMS\"
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\FixesFullVersion\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\FixesFullVersion\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
+xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\FixesFullVersion\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Interconnect\"
