@@ -23,27 +23,36 @@
 
         function VRTaxDefinition($scope, ctrl, $attrs) {
 
-            ctrl.titles = [];
+           
 
             this.initializeController = initializeController;
 
-            function initializeController() {             
-                ctrl.disabledAddTitle = false;
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.taxesDefinitions = [];
 
-                ctrl.addTitle = function () {
-                    ctrl.titles.push({ title: ctrl.titlevalue });
-                    ctrl.titlevalue = undefined;
-                    ctrl.disabledAddTitle = true;
+                $scope.scopeModel.disabledAddTitle = false;
+
+                $scope.scopeModel.addTaxDefinition = function () {
+                    $scope.scopeModel.taxesDefinitions.push({
+                        itemId: UtilsService.guid(),
+                        title: undefined
+                    });
                 };
 
-                ctrl.onTitleValueChange = function (value) {
-                    ctrl.disabledAddTitle = (value == undefined && ctrl.titlevalue.length - 1 < 1) || UtilsService.getItemIndexByVal(ctrl.titles, value, "title") != -1;
-                };
-
-                ctrl.validateAddTitle = function () {
-                    if (ctrl.title != undefined && ctrl.title.length == 0)
-                        return "Enter at least one keyword.";
+                $scope.scopeModel.validateTaxesDefinitions = function () {
+                    for (var i = 0; i < $scope.scopeModel.taxesDefinitions.length; i++) {
+                        var taxDefinition = $scope.scopeModel.taxesDefinitions[i];
+                        if (UtilsService.getItemIndexByVal($scope.scopeModel.taxesDefinitions, taxDefinition.title, "title") != i) {
+                            return "There exists a duplicated record.";
+                        }
+                    }
                     return null;
+                };
+
+                $scope.scopeModel.removeTaxDefinition = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.taxesDefinitions, dataItem.title, "title");
+                    $scope.scopeModel.taxesDefinitions.splice(index, 1);
                 };
 
                 defineAPI();
@@ -54,25 +63,31 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    
                     if (payload != undefined) {
                         if (payload.TaxesDefinition != undefined && payload.TaxesDefinition.ItemDefinitions != undefined)
-                            angular.forEach(payload.TaxesDefinition.ItemDefinitions, function (val) {
-                                ctrl.titles.push({ title: val.Title });
-                            });
+                            for (var i = 0; i < payload.TaxesDefinition.ItemDefinitions.length; i++) {
+                                var itemDefinition = payload.TaxesDefinition.ItemDefinitions[i];
+                                $scope.scopeModel.taxesDefinitions.push({
+                                    itemId: itemDefinition.ItemId,
+                                    title: itemDefinition.Title
+                                });
+                            }
                     }
-
                     return UtilsService.waitMultiplePromises(promises);
+
                 };
 
                 api.getData = function () {
-                    var itemDefinitions = [];
-
-                    for (var i = 0; i < ctrl.titles.length; i++) {
-                        var taxItemDefinition = {};
-                        taxItemDefinition.ItemId = UtilsService.guid();
-                        taxItemDefinition.Title = ctrl.titles[i].title;
-                        itemDefinitions.push(taxItemDefinition);
+                    var itemDefinitions;
+                    if ($scope.scopeModel.taxesDefinitions.length > 0) {
+                        itemDefinitions = [];
+                        for (var i = 0; i < $scope.scopeModel.taxesDefinitions.length; i++) {
+                            var taxeDefinition = $scope.scopeModel.taxesDefinitions[i];
+                            itemDefinitions.push({
+                                ItemId: taxeDefinition.itemId,
+                                Title: taxeDefinition.title
+                            });
+                        }
                     }
                     return {
                         $type: "Vanrise.Entities.VRTaxesDefinition,Vanrise.Entities",
