@@ -20,8 +20,12 @@
     [LastCDRAttempt]           DATETIME         NULL,
     [MinimumDurationInSeconds] DECIMAL (20, 4)  NULL,
     [MaximumDurationInSeconds] DECIMAL (20, 4)  NULL,
+    [FinancialAccountId]       BIGINT           NULL,
+    [BillingAccountId]         VARCHAR (50)     NULL,
     CONSTRAINT [IX_TrafficStats15Min_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
