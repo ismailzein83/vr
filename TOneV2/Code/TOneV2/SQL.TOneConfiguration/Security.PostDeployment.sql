@@ -45,7 +45,8 @@ as (select * from (values
 ('BE6619AE-687F-45E3-BD7B-90D1DB4626B6','Static Group','Static Group','VR_Sec_GroupSettings','{"Editor":"vr-sec-group-static"}'),
 
 ('BCAA46FC-F305-4414-A005-C0EB1550367C','Local Security Provider','Local Security Provider','VR_Sec_SecurityProviderSettings',					'{"Editor":"vr-sec-securityprovider-settings-localprovider"}'),
-('B47D2D8D-A9D3-42E1-91B1-25807167CE86','VR_Sec_SecurityProvider','Security Provider','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings',	'{"Editor":"vr-sec-securityprovider-beforeinserthandler"}')
+('B47D2D8D-A9D3-42E1-91B1-25807167CE86','VR_Sec_SecurityProvider','Security Provider','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings',	'{"Editor":"vr-sec-securityprovider-beforeinserthandler"}'),
+('04C515AB-5A8F-4C3B-A8F1-A4CE98518D06','Remote Security Provider','Remote Security Provider','VR_Sec_SecurityProviderSettings','{"Editor":"vr-sec-securityprovider-settings-remoteprovider"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
@@ -482,4 +483,24 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
---[sec].[SecurityProvider]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('9554069B-795E-4BB1-BFF3-9AF0F47FC0FF','Local Provider','{"$type":"Vanrise.Security.Entities.SecurityProviderSettings, Vanrise.Security.Entities","ExtendedSettings":{"$type":"Vanrise.Security.MainExtensions.SecurityProvider.LocalSecurityProvider, Vanrise.Security.MainExtensions","ConfigId":"bcaa46fc-f305-4414-a005-c0eb1550367c","AuthenticateUserEditor":"vr-sec-securityprovider-authenticateuser-emailpassword","FindUserEditor":"vr-sec-securityprovider-finduser-localprovider","SupportPasswordManagement":true,"PasswordCheckRequired":true}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[sec].[SecurityProvider] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);update [sec].[User] set SecurityProviderId = '9554069B-795E-4BB1-BFF3-9AF0F47FC0FF' where SecurityProviderId is null
+
+--[sec].[SecurityProvider]--------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('9554069B-795E-4BB1-BFF3-9AF0F47FC0FF','Local Provider','{"$type":"Vanrise.Security.Entities.SecurityProviderSettings, Vanrise.Security.Entities","ExtendedSettings":{"$type":"Vanrise.Security.MainExtensions.SecurityProvider.LocalSecurityProvider, Vanrise.Security.MainExtensions","ConfigId":"bcaa46fc-f305-4414-a005-c0eb1550367c","AuthenticateUserEditor":"vr-sec-securityprovider-authenticateuser-emailpassword","FindUserEditor":"vr-sec-securityprovider-finduser-localprovider","SupportPasswordManagement":true,"PasswordCheckRequired":true}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[sec].[SecurityProvider] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+update [sec].[User] set SecurityProviderId = '9554069B-795E-4BB1-BFF3-9AF0F47FC0FF' where SecurityProviderId is null
