@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
 using System.Configuration;
-using System.Data.Common;
+using System.Data;
 
 namespace Vanrise.Data
 {
@@ -18,6 +14,12 @@ namespace Vanrise.Data
             if (!int.TryParse(ConfigurationManager.AppSettings["BCP_DecimalPrecision"], out s_decimalPrecision))
                 s_decimalPrecision = 6;
         }
+
+        public BaseDataManager()
+            : this("MainDBConnString")
+        {
+        }
+
         public BaseDataManager(string connectionStringName): this(connectionStringName, true)
         {
 
@@ -70,11 +72,6 @@ namespace Vanrise.Data
             return String.Format("{0:00}:{1:00}:{2:00}.{3:000}", value.Hour, value.Minute, value.Second, value.MilliSecond);
         }
 
-        public BaseDataManager()
-            : this("MainDBConnString")
-        {
-        }
-
         protected virtual string GetConnectionString()
         {
             return _connectionString;
@@ -102,15 +99,6 @@ namespace Vanrise.Data
                 throw new Exception(String.Format("Connection String not found. Connection String Name '{0}'", connectionStringName));
             return connectionStringEntry.ConnectionString;
         }
-
-        #region Get Reader Field
-
-        protected T GetReaderValue<T>(IDataReader reader, string fieldName)
-        {
-            return reader[fieldName] != DBNull.Value ? (T)reader[fieldName] : default(T);
-        }
-
-        #endregion
 
         protected object ToDBNullIfDefault(int value)
         {
@@ -143,5 +131,14 @@ namespace Vanrise.Data
             else
                 return ToDBNullIfDefault(dateTime.Value);
         }
+
+        #region Get Reader Field
+
+        protected T GetReaderValue<T>(IDataReader reader, string fieldName)
+        {
+            return reader[fieldName] != DBNull.Value ? (T)reader[fieldName] : default(T);
+        }
+
+        #endregion
     }
 }
