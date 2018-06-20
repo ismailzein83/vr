@@ -81,7 +81,7 @@
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
-    <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString,ConfigurationDBConnString"/>
   </appSettings>
 
   <system.web>
