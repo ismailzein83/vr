@@ -1,0 +1,135 @@
+﻿<?xml version="1.0"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301879
+  -->
+<configuration>
+  <configSections>
+
+    <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
+  </configSections>
+
+  <vanriseLogging maxLogLevel="Information">
+    <loggers>
+      <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
+        <parameters>
+          <parameter name="LoggingConnectionStringKey" value="LogDBConnString" />
+          <parameter name="ConfigurationConnectionStringKey" value="ConfigurationDBConnString" />
+        </parameters>
+      </logger>
+      <logger name="ConsoleLogger"  type="Vanrise.Common.ConsoleLogger, Vanrise.Common"></logger>
+    </loggers>
+    <exceptionLoggers>
+      <exceptionLogger name="DefaultExceptionLogger"  type="Vanrise.Common.DefaultExceptionLogger, Vanrise.Common"></exceptionLogger>
+    </exceptionLoggers>
+  </vanriseLogging>
+  <connectionStrings>
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneV2_Transaction;User ID=sa;Password= " />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneV2_Logging;User ID=sa;Password= " />
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
+    <add name="MainDBConnString" connectionString=""/>
+  </connectionStrings>
+  <appSettings>
+    <add key="Web_ExtendedModulesNames" value=""/>
+    <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
+    <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tCe!r@l@uth"/>
+    <add key="TempPasswordValidity" value="24:00:00"/>
+
+    <add key="vs:EnableBrowserLink" value="false"/>
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    
+    <add key="VRNotificationTransactionDBConnStringKey"         value="TransactionDBConnString"/>
+    
+    <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
+
+    <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
+    <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>  
+    
+    <add key="ExposedConnectionStringNames" value=""/>
+  </appSettings>
+  <system.web>
+    <httpHandlers>
+      <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false" />
+    </httpHandlers>
+    <compilation debug="false" targetFramework="4.5">
+      <assemblies>
+        <add assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845DCD8080CC91" />
+        <add assembly="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845DCD8080CC91" />
+        <add assembly="Microsoft.Build.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B03F5F7F11D50A3A" />
+      </assemblies>
+      <buildProviders>
+        <add extension=".rdlc" type="Microsoft.Reporting.RdlBuildProvider, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+      </buildProviders>
+    </compilation>
+    <httpRuntime targetFramework="4.5" maxRequestLength="1048576" enableVersionHeader="false" />
+    <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
+  </system.web>
+  <system.webServer>
+    <validation validateIntegratedModeConfiguration="false" />
+    <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+      <add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    </handlers>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="1073741824" />
+      </requestFiltering>
+    </security>
+    <staticContent>
+      <remove fileExtension=".woff" />
+      <remove fileExtension=".woff2" />
+      <mimeMap fileExtension=".woff" mimeType="application/font-woff" />
+      <mimeMap fileExtension=".woff2" mimeType="application/font-woff2" />
+    </staticContent>
+    <modules>
+      <remove name="UrlRoutingModule-4.0" />
+      <add name="UrlRoutingModule-4.0" type="System.Web.Routing.UrlRoutingModule" preCondition="" />
+      <!-- any other modules you want to run in MVC e.g. FormsAuthentication, Roles etc. -->
+    </modules>
+    <directoryBrowse showFlags="None"  enabled="false"/>
+  </system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-5.0.0.0" newVersion="5.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.5.2.14234" newVersion="1.5.2.14234" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.0.0.0" newVersion="5.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Net.Http.Formatting" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.0.0.0" newVersion="5.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>

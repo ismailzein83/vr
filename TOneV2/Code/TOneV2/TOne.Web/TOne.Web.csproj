@@ -24,6 +24,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -656,8 +658,14 @@
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
     <Content Include="appSettings.config" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="images\CentralAuth-iconheader.ico" />
+    <Content Include="images\CentralAuth-login.png" />
+    <Content Include="images\CentralAuth-logoonheader.png" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
+    <Content Include="Web.config.CentralAuth.exclude">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
