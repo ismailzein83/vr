@@ -392,12 +392,6 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardInterconnectStructure");
             }
 
-            if (projectName == "CentralAuth")
-            {
-                sb = sb.Replace(mainItem, "StandardCentralAuthStructure");
-            }
-
-
             if (!Directory.Exists(sqlFilesOutputPath))
             {
                 Directory.CreateDirectory(sqlFilesOutputPath);
