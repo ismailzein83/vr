@@ -15,7 +15,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[BusinessEntityDefinitionID],[Settings],[CreatedBy],[LastModifiedBy],[LastModifiedTime])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('32DD1352-1A6E-4D54-BA4C-5E47D653B804','Active','81A975C2-509A-4F09-925F-BC9740F7847D','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":false,"IsInvoiceActive":false,"IsAccountBalanceActive":false}',-1,-1,'2018-03-28 16:18:15.063')
+('32DD1352-1A6E-4D54-BA4C-5E47D653B804','Active','81A975C2-509A-4F09-925F-BC9740F7847D','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":true,"IsAccountBalanceActive":true}',-1,-1,'2018-03-28 16:18:15.063')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BusinessEntityDefinitionID],[Settings],[CreatedBy],[LastModifiedBy],[LastModifiedTime]))
 merge	[common].[StatusDefinition] as t
