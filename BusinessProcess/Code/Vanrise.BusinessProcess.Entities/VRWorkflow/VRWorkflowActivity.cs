@@ -24,6 +24,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         void AddVariables(VRWorkflowVariableCollection variables);
 
+        void AddVariable(VRWorkflowVariable variable);
+
         VRWorkflowVariable GetVariableWithValidate(string variableName);
 
         IEnumerable<VRWorkflowVariable> GetAllVariables();
@@ -35,5 +37,7 @@ namespace Vanrise.BusinessProcess.Entities
         void AddFullNamespaceCode(string namespaceCode);
 
         void AddUsingStatement(string usingStatement);
+
+        IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext();
     }
 }

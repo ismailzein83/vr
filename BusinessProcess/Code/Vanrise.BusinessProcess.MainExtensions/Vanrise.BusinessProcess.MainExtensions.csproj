@@ -63,9 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRWorkflowActivities\CodeGenerationHelper.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignActivity.cs" />
-    <Compile Include="VRWorkflowActivities\VRWorkflowAssignExpressionActivity.cs" />
-    <Compile Include="VRWorkflowActivities\VRWorkflowAssignVariableActivity.cs" />
+    <Compile Include="VRWorkflowActivities\DeletedActivities\VRWorkflowAssignExpressionActivity.cs" />
+    <Compile Include="VRWorkflowActivities\DeletedActivities\VRWorkflowAssignVariableActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowCustomLogicActivity.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowForEachActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowIfElseActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSequenceActivity.cs" />
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowGenericVariableType.cs" />

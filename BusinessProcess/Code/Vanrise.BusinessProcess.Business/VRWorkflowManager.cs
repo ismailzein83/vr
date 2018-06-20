@@ -170,31 +170,61 @@ namespace Vanrise.BusinessProcess.Business
         private class VRWorkflowActivityGenerateWFActivityCodeContext : IVRWorkflowActivityGenerateWFActivityCodeContext
         {
             Dictionary<string, VRWorkflowArgument> _allArguments = new Dictionary<string, VRWorkflowArgument>();
-            public VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowArgumentCollection workflowArguments)
-            {
-                if (workflowArguments != null)
-                {
-                    foreach(var arg in workflowArguments)
-                    {
-                        _allArguments.Add(arg.Name, arg);
-                    }
-                }
-            }
 
+            List<IVRWorkflowActivityGenerateWFActivityCodeContext> _childContexts = new List<IVRWorkflowActivityGenerateWFActivityCodeContext>();
+            
             public List<string> OtherNameSpaceCodes { get; private set; }
 
             public List<string> AdditionalUsingStatements { get; private set; }
 
             Dictionary<string, VRWorkflowVariable> _allVariables = new Dictionary<string, VRWorkflowVariable>();
 
+            public VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowArgumentCollection workflowArguments)
+            {
+                if (workflowArguments != null)
+                {
+                    foreach (var arg in workflowArguments)
+                    {
+                        _allArguments.Add(arg.Name, arg);
+                    }
+                }
+                this.OtherNameSpaceCodes = new List<string>();
+                this.AdditionalUsingStatements = new List<string>();
+            }
+
+            private VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowActivityGenerateWFActivityCodeContext parentContext)
+            {
+                if(parentContext._allVariables != null)
+                {
+                    foreach (var parentVariable in parentContext._allVariables)
+                    {
+                        AddVariable(parentVariable.Value);
+                    }
+                }
+                this._allArguments = parentContext._allArguments;
+                this.OtherNameSpaceCodes = parentContext.OtherNameSpaceCodes;
+                this.AdditionalUsingStatements = parentContext.AdditionalUsingStatements;
+            }
+
             public void AddVariables(VRWorkflowVariableCollection variables)
             {
                 variables.ThrowIfNull("variables");
                 foreach(var variable in variables)
                 {
-                    if (_allVariables.ContainsKey(variable.Name))
-                        throw new Exception(String.Format("Variable '{0}' already added to the Workflow Variables", variable.Name));
-                    _allVariables.Add(variable.Name, variable);
+                    AddVariable(variable);
+                }
+            }
+
+            public void AddVariable(VRWorkflowVariable variable)
+            {
+                variable.ThrowIfNull("variable");
+
+                if (_allVariables.ContainsKey(variable.Name))
+                    throw new Exception(String.Format("Variable '{0}' already added to the Workflow Variables", variable.Name));
+                _allVariables.Add(variable.Name, variable);
+                foreach(var childContext in this._childContexts)
+                {
+                    childContext.AddVariable(variable);
                 }
             }
 
@@ -212,15 +242,11 @@ namespace Vanrise.BusinessProcess.Business
 
             public void AddFullNamespaceCode(string namespaceCode)
             {
-                if (this.OtherNameSpaceCodes == null)
-                    this.OtherNameSpaceCodes = new List<string>();
                 this.OtherNameSpaceCodes.Add(namespaceCode);
             }
 
             public void AddUsingStatement(string usingStatement)
             {
-                if (this.AdditionalUsingStatements == null)
-                    this.AdditionalUsingStatements = new List<string>();
                 this.AdditionalUsingStatements.Add(usingStatement);
             }
 
@@ -233,6 +259,11 @@ namespace Vanrise.BusinessProcess.Business
             public IEnumerable<VRWorkflowArgument> GetAllWorkflowArguments()
             {
                 return _allArguments.Values;
+            }
+
+            public IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext()
+            {
+                return new VRWorkflowActivityGenerateWFActivityCodeContext(this);
             }
         }
 

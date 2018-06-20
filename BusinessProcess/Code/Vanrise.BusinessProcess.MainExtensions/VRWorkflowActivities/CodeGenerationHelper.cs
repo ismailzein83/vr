@@ -39,7 +39,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         private static string BuildVariablesPropertiesCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             StringBuilder variablesPropertiesCodeBuilder = new StringBuilder();
-            
+
             string propertyGetter = @"
 get
     {
@@ -78,25 +78,11 @@ public #VARIABLETYPE# #VARIABLENAME#
             foreach (var wfVariable in context.GetAllVariables())
             {
                 StringBuilder variablePropertyCodeBuilder = new StringBuilder(variablePropertyTemplate);
-               
-                        variablePropertyCodeBuilder.Replace("#PROPERTYGETTER#", propertyGetter);
-                        variablePropertyCodeBuilder.Replace("#PROPERTYSETTER#", propertySetter);
-                       
 
-                variablePropertyCodeBuilder.Replace("#VARIABLENAME#", wfVariable.Name);
-                Type wfVariableRuntimeType = wfVariable.Type.GetRuntimeType(null);
-                string wfVariableRuntimeTypeAsString = CSharpCompiler.TypeToString(wfVariableRuntimeType);
-                variablePropertyCodeBuilder.Replace("#VARIABLETYPE#", wfVariableRuntimeTypeAsString);
-                if (wfVariableRuntimeType.IsValueType)
-                {
-                    variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", string.Concat("(", wfVariableRuntimeTypeAsString, ")"));
-                    variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", "");
-                }
-                else
-                {
-                    variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", string.Concat(" as ", wfVariableRuntimeTypeAsString));
-                    variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", "");
-                }
+                variablePropertyCodeBuilder.Replace("#PROPERTYGETTER#", propertyGetter);
+                variablePropertyCodeBuilder.Replace("#PROPERTYSETTER#", propertySetter);
+
+                ReplaceVariablePlaceHolders(variablePropertyCodeBuilder, wfVariable.Name, wfVariable.Type);
                 variablesPropertiesCodeBuilder.AppendLine(variablePropertyCodeBuilder.ToString());
             }
 
@@ -120,25 +106,29 @@ public #VARIABLETYPE# #VARIABLENAME#
                         break;
                     default: throw new NotSupportedException(String.Format("wfArgument.Direction '{0}'", wfArgument.Direction.ToString()));
                 }
-
-                variablePropertyCodeBuilder.Replace("#VARIABLENAME#", wfArgument.Name);
-                Type wfVariableRuntimeType = wfArgument.Type.GetRuntimeType(null);
-                string wfVariableRuntimeTypeAsString = CSharpCompiler.TypeToString(wfVariableRuntimeType);
-                variablePropertyCodeBuilder.Replace("#VARIABLETYPE#", wfVariableRuntimeTypeAsString);
-                if (wfVariableRuntimeType.IsValueType)
-                {
-                    variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", string.Concat("(", wfVariableRuntimeTypeAsString, ")"));
-                    variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", "");
-                }
-                else
-                {
-                    variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", string.Concat(" as ", wfVariableRuntimeTypeAsString));
-                    variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", "");
-                }
+                ReplaceVariablePlaceHolders(variablePropertyCodeBuilder, wfArgument.Name, wfArgument.Type);
                 variablesPropertiesCodeBuilder.AppendLine(variablePropertyCodeBuilder.ToString());
             }
 
             return variablesPropertiesCodeBuilder.ToString();
+        }
+
+        private static void ReplaceVariablePlaceHolders(StringBuilder variablePropertyCodeBuilder, string variableName, VRWorkflowVariableType variableType)
+        {
+            variablePropertyCodeBuilder.Replace("#VARIABLENAME#", variableName);
+            Type wfVariableRuntimeType = variableType.GetRuntimeType(null);
+            string wfVariableRuntimeTypeAsString = CSharpCompiler.TypeToString(wfVariableRuntimeType);
+            variablePropertyCodeBuilder.Replace("#VARIABLETYPE#", wfVariableRuntimeTypeAsString);
+            if (wfVariableRuntimeType.IsValueType)
+            {
+                variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", string.Concat("(", wfVariableRuntimeTypeAsString, ")"));
+                variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", "");
+            }
+            else
+            {
+                variablePropertyCodeBuilder.Replace("#VARIABLEREFERENCETYPECAST#", string.Concat(" as ", wfVariableRuntimeTypeAsString));
+                variablePropertyCodeBuilder.Replace("#VARIABLEVALUETYPECAST#", "");
+            }
         }
     }
 }

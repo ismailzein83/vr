@@ -37,13 +37,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         }
     }
 
-    public enum VRWorkflowAssignActivtyTargetType { Variable = 0, Argument = 1, FreeExpression = 2 }
-
     public class VRWorkflowAssignActivityItem
     {
         public string To { get; set; }
-
-        public VRWorkflowAssignActivtyTargetType TargetType { get; set; }
 
         public string Value { get; set; }
     }

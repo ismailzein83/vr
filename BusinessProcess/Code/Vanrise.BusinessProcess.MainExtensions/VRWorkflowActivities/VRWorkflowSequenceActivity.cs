@@ -23,47 +23,64 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             StringBuilder codeBuilder = new StringBuilder();
 
-            codeBuilder.Append(@"
+            if ((this.Activities != null && this.Activities.Count > 1)
+                ||
+                (this.Variables != null && this.Variables.Count > 0)
+                )//WF Sequence activity is needed only when more than 1 activity exist or Variables exists
+            {
+                var childContext = context.CreateChildContext();
+
+                codeBuilder.Append(@"
             new Sequence
             {");
-            codeBuilder.AppendLine();
-
-            if (this.Variables != null)
-            {
-                context.AddVariables(this.Variables);
-                codeBuilder.Append(@"
-                Variables = ");
-                codeBuilder.Append(this.Variables.GenerateVariablesCode());
-            }
-
-            if (this.Activities != null)
-            {
-                if (this.Variables != null)
-                    codeBuilder.Append(",");
-                codeBuilder.Append(@"
-                Activities = 
-                {");
                 codeBuilder.AppendLine();
 
-                bool isFirstActivity = true;
-                foreach (var vrActivity in this.Activities)
+                if (this.Variables != null)
                 {
-                    if (!isFirstActivity)
+                    childContext.AddVariables(this.Variables);
+                    codeBuilder.Append(@"
+                Variables = ");
+                    codeBuilder.Append(this.Variables.GenerateVariablesCode());
+                }
+
+                if (this.Activities != null)
+                {
+                    if (this.Variables != null)
                         codeBuilder.Append(",");
-                    else
-                        isFirstActivity = false;
-                    vrActivity.Settings.ThrowIfNull("vrActivity.Settings");
-                    string childActivityCode = vrActivity.Settings.GenerateWFActivityCode(context);
-                    codeBuilder.Append(childActivityCode);
+                    codeBuilder.Append(@"
+                Activities = 
+                {");
                     codeBuilder.AppendLine();
+
+                    bool isFirstActivity = true;
+                    foreach (var vrActivity in this.Activities)
+                    {
+                        if (!isFirstActivity)
+                            codeBuilder.Append(",");
+                        else
+                            isFirstActivity = false;
+                        vrActivity.Settings.ThrowIfNull("vrActivity.Settings", vrActivity.VRWorkflowActivityId);
+                        string childActivityCode = vrActivity.Settings.GenerateWFActivityCode(childContext);
+                        codeBuilder.Append(childActivityCode);
+                        codeBuilder.AppendLine();
+                    }
+
+                    codeBuilder.AppendLine();
+                    codeBuilder.Append("}");
                 }
 
                 codeBuilder.AppendLine();
                 codeBuilder.Append("}");
             }
-
-            codeBuilder.AppendLine();
-            codeBuilder.Append("}");
+            else
+            {
+                if(this.Activities.Count == 1)
+                {
+                    var firstActivity = this.Activities[0];
+                    firstActivity.Settings.ThrowIfNull("firstActivity.Settings");
+                    codeBuilder.Append(firstActivity.Settings.GenerateWFActivityCode(context));
+                }
+            }
             return codeBuilder.ToString();
         }
     }
