@@ -24,9 +24,9 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneV2_Transaction;User ID=sa;Password= " />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOneV2_Logging;User ID=sa;Password= " />
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TOne_Configuration;User ID=sa;Password= "/>
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=CentralAuth_Transaction;User ID=sa;Password= " />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=CentralAuth_Logging;User ID=sa;Password= " />
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=CentralAuth_Configuration;User ID=sa;Password= "/>
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
