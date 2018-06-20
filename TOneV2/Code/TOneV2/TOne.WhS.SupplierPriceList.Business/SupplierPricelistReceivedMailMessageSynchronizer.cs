@@ -92,32 +92,35 @@ namespace TOne.WhS.SupplierPriceList.Business
 						{
 							errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Supplier does not have pricelist template." });
 							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.FailedDueToConfigurationError, errors, out recordId);
+							receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Failed);
 						}
-
-						int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.Received, null, out recordId);
-						receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Received);
-
-						var supplierPriceListProcessInput = new SupplierPriceListProcessInput
+						else
 						{
-							SupplierAccountId = supplierAccount.CarrierAccountId,
-							FileId = receivedPricelistFile.FileId,
-							SupplierPriceListTemplateId = supplierPriceListTemplate.SupplierPriceListTemplateId,
-							CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(supplierAccount.CarrierAccountId),
-							PriceListDate = receivedMailMessage.Header.MessageSendTime,
-							SupplierPricelistType = pricelistType.Value,
-							IsAutoImport = true,
-							ReceivedPricelistRecordId = recordId,
-							UserId = loggedInUserId
-						};
+							int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.Received, null, out recordId);
+							receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Received);
 
-						BPInstanceManager bpClient = new BPInstanceManager();
-						bpClient.CreateNewProcess(new CreateProcessInput { InputArguments = supplierPriceListProcessInput });
+							var supplierPriceListProcessInput = new SupplierPriceListProcessInput
+							{
+								SupplierAccountId = supplierAccount.CarrierAccountId,
+								FileId = receivedPricelistFile.FileId,
+								SupplierPriceListTemplateId = supplierPriceListTemplate.SupplierPriceListTemplateId,
+								CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(supplierAccount.CarrierAccountId),
+								PriceListDate = receivedMailMessage.Header.MessageSendTime,
+								SupplierPricelistType = pricelistType.Value,
+								IsAutoImport = true,
+								ReceivedPricelistRecordId = recordId,
+								UserId = loggedInUserId
+							};
+
+							BPInstanceManager bpClient = new BPInstanceManager();
+							bpClient.CreateNewProcess(new CreateProcessInput { InputArguments = supplierPriceListProcessInput });
+						}
 					}
 					else
 					{
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, null, receivedMailMessage.Header.MessageSendTime, null, ReceivedPricelistStatus.FailedDueToReceivedMailError, errors, out recordId);
-						receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Received);
+						receivedSupplierPricelistManager.SendMail(recordId, AutoImportEmailTypeEnum.Failed);
 					}
 				}
 			}

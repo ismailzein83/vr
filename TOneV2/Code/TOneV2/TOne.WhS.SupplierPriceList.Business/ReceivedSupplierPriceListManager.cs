@@ -73,14 +73,14 @@ namespace TOne.WhS.SupplierPriceList.Business
 			AutoImportTemplate supplierAutoImportTemplate = new BusinessEntity.Business.ConfigManager().GetSupplierAutoImportTemplateByType(emailType);
 			AutoImportTemplate internalAutoImportTemplate = new BusinessEntity.Business.ConfigManager().GetInternalAutoImportTemplateByType(emailType);
 
-			if (supplierAutoImportTemplate.AttachPricelist)
+			if (supplierAutoImportTemplate.AttachPricelist && receivedPricelist.FileId.HasValue)
 			{
 				receivedPricelistFile = fileManager.GetFile(receivedPricelist.FileId.Value);
 				receivedPricelistFile.ThrowIfNull(string.Format("There is no file with Id '{0}'.", receivedPricelist.FileId.Value));
 				supplierMailAttachements.Add(new VRMailAttachmentExcel { Name = receivedPricelistFile.Name, Content = receivedPricelistFile.Content });
 			}
 
-			if (internalAutoImportTemplate.AttachPricelist)
+			if (internalAutoImportTemplate.AttachPricelist && receivedPricelist.FileId.HasValue)
 			{
 				receivedPricelistFile = (receivedPricelistFile == null) ? fileManager.GetFile(receivedPricelist.FileId.Value) : receivedPricelistFile;
 				receivedPricelistFile.ThrowIfNull(string.Format("There is no file with Id '{0}'.", receivedPricelist.FileId.Value));
@@ -96,14 +96,15 @@ namespace TOne.WhS.SupplierPriceList.Business
 			{
 				var excelFile = new VRExcelFile();
 				var errorSheet = new VRExcelSheet();
-				errorSheet.AddCell((new VRExcelCell() { Value = "", RowIndex = 0, ColumnIndex = 0 }));
+				errorSheet.AddCell((new VRExcelCell() { Value = "Errors", RowIndex = 0, ColumnIndex = 0 }));
 
 				for (int i = 0; i < receivedPricelist.ErrorDetails.Count; i++)
 				{
 					errorSheet.AddCell(new VRExcelCell() { Value = receivedPricelist.ErrorDetails[i].ErrorMessage, RowIndex = i + 1, ColumnIndex = 0 });
 				}
-				supplierMailAttachements.Add(new VRMailAttachmentExcel { Name = "Errors", Content = excelFile.GenerateExcelFile() });
-				internalMailAttachements.Add(new VRMailAttachmentExcel { Name = "Errors", Content = excelFile.GenerateExcelFile() });
+				excelFile.AddSheet(errorSheet);
+				supplierMailAttachements.Add(new VRMailAttachmentExcel { Name = "Errors.xls", Content = excelFile.GenerateExcelFile() });
+				internalMailAttachements.Add(new VRMailAttachmentExcel { Name = "Errors.xls", Content = excelFile.GenerateExcelFile() });
 			}
 
 			VRMailManager vrMailManager = new VRMailManager();
