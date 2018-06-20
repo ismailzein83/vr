@@ -13,6 +13,8 @@ xcopy "C:\TFS\Retail\Code\Retail.Runtime\App.config.Interconnect.exclude" /y /v 
 rename "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\App.config.Interconnect.exclude" "Interconnect.Runtime.exe.config"
 rename "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\Retail.Runtime.exe" "Interconnect.Runtime.exe"
 
+xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect\Reports"								/S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\Modules\Retail_Interconnect\Reports" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Retail_Interconnect\runtime-list-of-excluded-files.txt
+
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 
