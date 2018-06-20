@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [sec].[sp_User_Update] 
 	@ID int,
+	@SecurityProviderId uniqueidentifier,
 	@Name Nvarchar(255),
 	@Email Nvarchar(255),
 	@Description Nvarchar(1000),
@@ -14,6 +15,7 @@ BEGIN
 		UPDATE sec.[User]
 		SET Name = @Name,
 			Email = @Email,
+			SecurityProviderId=@SecurityProviderId,
 			[Description] = @Description,
 			TenantId = @TenantId,
 			EnabledTill = @EnabledTill,

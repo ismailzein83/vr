@@ -772,6 +772,11 @@
     <Build Include="common\Stored Procedures\sp_EntityPersonalization_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_EntityPersonalization_Delete.sql" />
     <Build Include="common\Stored Procedures\sp_VRPop3ReadMessageId_GetMessageIdsFromSpecificTime.sql" />
+    <Build Include="sec\Tables\SecurityProvider.sql" />
+    <Build Include="sec\Tables\RegisteredApplication.sql" />
+    <Build Include="sec\Stored Procedures\sp_RegisteredApplication_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_RegisteredApplication_GetAll.sql" />
+    <Build Include="sec\User Defined Types\SecurityProviderType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
@@ -851,6 +856,7 @@
     <None Include="Mediation_Ogero.Huawei.PostDeployment.sql" />
     <None Include="Mediation_Ogero.Radius.PostDeployment.sql" />
     <None Include="TOne_Jazz.PostDeployment.sql" />
+    <None Include="Security.RemoteProvider.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

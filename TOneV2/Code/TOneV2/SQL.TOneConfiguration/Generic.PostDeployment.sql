@@ -361,7 +361,8 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('d76e65b5-21be-4c0b-92af-d38feab10c68','BusinessObjects','{"$type":"Vanrise.GenericData.Business.BusinessObjectDataStoreSettings, Vanrise.GenericData.Business","ConfigId":"c9fa9112-6d68-490c-bcbf-bd41a912a865","IsRemoteDataStore":false}')
+('d76e65b5-21be-4c0b-92af-d38feab10c68','BusinessObjects','{"$type":"Vanrise.GenericData.Business.BusinessObjectDataStoreSettings, Vanrise.GenericData.Business","ConfigId":"c9fa9112-6d68-490c-bcbf-bd41a912a865","IsRemoteDataStore":false}'),
+('608A5CC4-A933-4BF3-83A7-3797EDD0BB41','Configuration Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
