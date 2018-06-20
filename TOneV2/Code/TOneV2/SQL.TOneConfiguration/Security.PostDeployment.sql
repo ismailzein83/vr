@@ -469,7 +469,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('9554069B-795E-4BB1-BFF3-9AF0F47FC0FF','Local Provider','{"$type":"Vanrise.Security.Entities.SecurityProviderSettings, Vanrise.Security.Entities","ExtendedSettings":{"$type":"Vanrise.Security.MainExtensions.SecurityProvider.LocalSecurityProvider, Vanrise.Security.MainExtensions","ConfigId":"bcaa46fc-f305-4414-a005-c0eb1550367c","AuthenticateUserEditor":"vr-sec-securityprovider-authenticateuser-emailpassword","FindUserEditor":"vr-sec-securityprovider-finduser-localprovider","SupportPasswordManagement":true,"PasswordCheckRequired":true}}')
+('9554069B-795E-4BB1-BFF3-9AF0F47FC0FF','Local','{"$type":"Vanrise.Security.Entities.SecurityProviderSettings, Vanrise.Security.Entities","ExtendedSettings":{"$type":"Vanrise.Security.MainExtensions.SecurityProvider.LocalSecurityProvider, Vanrise.Security.MainExtensions","ConfigId":"bcaa46fc-f305-4414-a005-c0eb1550367c","AuthenticateUserEditor":"vr-sec-securityprovider-authenticateuser-emailpassword","FindUserEditor":"vr-sec-securityprovider-finduser-localprovider","SupportPasswordManagement":true,"PasswordCheckRequired":true}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[sec].[SecurityProvider] as t
