@@ -112,3 +112,6 @@ Retail_RA_Overridden.PostDeployment.sql
 Interconnect
 InterConnect.PostDeployment.sql
 
+CentralAuth
+CentralAuth.PostDeployment.sql
+
