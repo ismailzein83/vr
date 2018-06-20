@@ -28,5 +28,9 @@
     [DestinationZoneId]        BIGINT           NULL,
     [CallType]                 INT              NULL,
     [CDRType]                  INT              NULL,
+    [FinancialAccountId]       BIGINT           NULL,
+    [BillingAccountId]         VARCHAR (50)     NULL,
     [QueueItemId]              BIGINT           NULL);
+
+
 

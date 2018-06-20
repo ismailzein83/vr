@@ -28,8 +28,12 @@
     [DestinationZoneId]        BIGINT           NULL,
     [CallType]                 INT              NULL,
     [CDRType]                  INT              NULL,
+    [FinancialAccountId]       BIGINT           NULL,
+    [BillingAccountId]         VARCHAR (50)     NULL,
     CONSTRAINT [IX_BillingCDR_Failed_CDRID] UNIQUE NONCLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 
