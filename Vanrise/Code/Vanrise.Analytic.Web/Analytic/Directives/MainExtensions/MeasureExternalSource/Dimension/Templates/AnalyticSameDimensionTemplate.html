@@ -1,7 +1,7 @@
 ﻿<vr-row removeline>   
-    <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionsSelectorReady" normal-col-num="4" ismultipleselection isrequired="true" ></vr-analytic-dimension-selector>
     <vr-columns width="1/3row">
-        <vr-select datatextfield="description" datavaluefield="value" label="Same Dimensions Type" datasource="scopeModel.sameDimensionTypes" selectedvalues="scopeModel.selectedSameDimensionType" isrequired="true"></vr-select>
+        <vr-select datatextfield="description" onselectionchanged="scopeModel.onSelectDimensionType" datavaluefield="value" label="Same Dimensions Type" datasource="scopeModel.sameDimensionTypes" selectedvalues="scopeModel.selectedSameDimensionType" isrequired="true"></vr-select>
     </vr-columns>
+    <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionsSelectorReady" normal-col-num="4" ismultipleselection isrequired="scopeModel.dimensionRequired"></vr-analytic-dimension-selector>
 </vr-row>
 

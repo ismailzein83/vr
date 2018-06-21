@@ -15,7 +15,7 @@ app.directive("vrAnalyticMeasuremappingrulesGrid", ["UtilsService", "VRNotificat
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/MeasureExternalSource/AnalyticMeasureExternalSource/Templates/AnalyticMeasureMappingRulesGridTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/AnalyticMeasureExternalSource/Templates/AnalyticMeasureMappingRulesGridTemplate.html"
         };
         function RulesGrid($scope, ctrl, $attrs) {
 

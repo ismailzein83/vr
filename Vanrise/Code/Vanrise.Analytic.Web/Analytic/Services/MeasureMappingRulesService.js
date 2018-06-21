@@ -14,7 +14,7 @@ app.service("VR_Analytic_MeasureMappingRulesService", ["VRModalService",
                 context: params.context,
                 tableId: params.tableId,
             };
-            VRModalService.showModal("/Client/Modules/Analytic/Directives/MainExtensions/MeasureExternalSource/AnalyticMeasureExternalSource/Templates/MeasureMappingRulesGridEditor.html", parameters, settings); // fix
+            VRModalService.showModal("/Client/Modules/Analytic/Directives/AnalyticMeasureExternalSource/Templates/MeasureMappingRulesGridEditor.html", parameters, settings); // fix
         };
         function editRule(ruleEntity, onRuleUpdated, params) {
             var settings = {};
@@ -27,7 +27,7 @@ app.service("VR_Analytic_MeasureMappingRulesService", ["VRModalService",
                 tableId: params.tableId,
                 ruleEntity: ruleEntity
             };
-            VRModalService.showModal("/Client/Modules/Analytic/Directives/MainExtensions/MeasureExternalSource/AnalyticMeasureExternalSource/Templates/MeasureMappingRulesGridEditor.html", parameters, settings);
+            VRModalService.showModal("/Client/Modules/Analytic/Directives/AnalyticMeasureExternalSource/Templates/MeasureMappingRulesGridEditor.html", parameters, settings);
         };
         return {
             addRule: addRule,

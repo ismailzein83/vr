@@ -90,7 +90,8 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                         if(entity != undefined)
                         {
                             tableSelectedDeferred = UtilsService.createPromiseDeferred();
-                            promises.push(loadGrid());
+                            promises.push(loadDimesionGrid());
+                            promises.push(loadMeasureGrid());
                         }
                     }
                    
@@ -108,30 +109,37 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                         return loadTableSelectorPromiseDeferred.promise;
                     }
 
-                    function loadGrid() {
+                    function loadDimesionGrid() {
                         var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([tableSelectedDeferred.promise, gridReadyDeferred.promise, measureGridReadyDeferred.promise]).then(function () {
-                            tableSelectedDeferred = undefined;
+                        UtilsService.waitMultiplePromises([tableSelectedDeferred.promise, gridReadyDeferred.promise]).then(function () {
                             var dimensionPayload = {
                                 context: getContext(),                         
                                 tableId: tableId,
                                 rules: entity != undefined ? entity.DimensionMappingRules : undefined,
-
                             };
+                            VRUIUtilsService.callDirectiveLoad(gridAPI, dimensionPayload, loadGridPromiseDeferred);
+                        });
+                        return loadGridPromiseDeferred.promise;
+                    }
+
+                    function loadMeasureGrid() {
+                        var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                        UtilsService.waitMultiplePromises([tableSelectedDeferred.promise,measureGridReadyDeferred.promise]).then(function () {
                             var measurePayload = {
                                 context: getContext(),
                                 tableId: tableId,
                                 rules: entity != undefined ? entity.MeasureMappingRules : undefined,
-
                             };
-                            VRUIUtilsService.callDirectiveLoad(gridAPI, dimensionPayload, loadGridPromiseDeferred);
+
                             VRUIUtilsService.callDirectiveLoad(measureGridAPI, measurePayload, loadGridPromiseDeferred);
 
                         });
                         return loadGridPromiseDeferred.promise;
-
                     }
-                    return UtilsService.waitMultiplePromises(promises);
+
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        tableSelectedDeferred = undefined;
+                    });
                    
                 };
                 api.getData = function () {

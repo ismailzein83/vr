@@ -14,7 +14,7 @@ function (UtilsService, VRUIUtilsService) {
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/MeasureExternalSource/Measure/Templates/SpecificMappingMeasureTemplate.html"
+        templateUrl: "/Client/Modules/Analytic/Directives/AnalyticMeasureExternalSource/MainExtensions/Templates/SpecificMappingMeasureTemplate.html"
     };
     function SpecificMapping($scope, ctrl, $attrs) {
 
@@ -49,16 +49,15 @@ function (UtilsService, VRUIUtilsService) {
                 var tableId;
                 var promises = [];
 
+                var settings;
+
                 if (payload != undefined) {
                     context = payload.context;
                     ruleEntity = payload.ruleEntity;
                     tableId = payload.tableId;
-                 
+
                     if (ruleEntity != undefined) {
-                        var settings = ruleEntity.Entity != undefined ? ruleEntity.Entity.Settings : undefined;
-                        var selectedIds = settings != undefined ? settings.MeasureNames : undefined;
-                        var selectedMappedMeasuresIds = settings != undefined ? settings.MappedMeasures : undefined;
-                        var measureType = (ruleEntity.Entity != undefined && ruleEntity.Entity.Settings != undefined) ? ruleEntity.Entity.Settings.Type : undefined;
+                        settings = ruleEntity.Entity != undefined ? ruleEntity.Entity.Settings : undefined;
                     }
                 }
                 promises.push(loadMeasuresSelector());
@@ -71,7 +70,7 @@ function (UtilsService, VRUIUtilsService) {
 
                         var payload = {
                             filter: { TableIds: [tableId] },
-                            selectedIds: selectedIds
+                            selectedIds: settings != undefined ? settings.MeasureName : undefined,
                         };
                         VRUIUtilsService.callDirectiveLoad(measuresSelectorAPI, payload, measuresSelectorLoadDeferred);
                     });
@@ -85,7 +84,7 @@ function (UtilsService, VRUIUtilsService) {
 
                         var payload = {
                             filter: { TableIds: [context.getAnalyticTableId()] },
-                            selectedIds: selectedMappedMeasuresIds
+                            selectedIds: settings != undefined ? settings.MappedMeasures : undefined,
                         };
                         VRUIUtilsService.callDirectiveLoad(mappedMeasuresSelectorAPI, payload, measuresSelectorLoadDeferred);
                     });
@@ -95,10 +94,11 @@ function (UtilsService, VRUIUtilsService) {
                 return UtilsService.waitMultiplePromises(promises);
             };
             api.getData = function () {
+               
                 return {
                     $type: "Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping, Vanrise.Analytic.MainExtensions",
                     MappedMeasures: mappedMeasuresSelectorAPI.getSelectedIds(),
-                    MeasureNames: measuresSelectorAPI.getSelectedIds()
+                    MeasureName: measuresSelectorAPI.getSelectedIds()
                 };
             };
             if (ctrl.onReady != null)

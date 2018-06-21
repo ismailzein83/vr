@@ -28,6 +28,18 @@ function (UtilsService, VRUIUtilsService, VR_Analytic_SameDimensionTypeEnum) {
                     dimensionsSelectorAPI = api;
                     dimensionsSelectorReadyDeferred.resolve();
                 };
+
+                $scope.scopeModel.onSelectDimensionType = function (dimension) {
+                    if (dimension != undefined)
+                    {
+                        if (dimension.value == VR_Analytic_SameDimensionTypeEnum.SpecificDimensions.value) {
+                            $scope.scopeModel.dimensionRequired = true;
+                        } else {
+                            $scope.scopeModel.dimensionRequired = false;
+                        }
+                    }
+                };
+
                 $scope.scopeModel.sameDimensionTypes = UtilsService.getArrayEnum(VR_Analytic_SameDimensionTypeEnum);
                 defineAPI();
             }

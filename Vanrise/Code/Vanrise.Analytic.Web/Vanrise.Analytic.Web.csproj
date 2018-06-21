@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analytic\Directives\AutomatedReport\Handler\Templates\" />
+    <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\" />
     <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Templates\" />
   </ItemGroup>
   <ItemGroup>
@@ -169,20 +170,22 @@
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\vr-analytictablequerydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\vr-recordsearchquerydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\AnalyticDimensionMappingRulesGridEditorController.js" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\AnalyticMeasureMappingRulesGridEditorController.js" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\AnalyticMeasureMappingRulesGridEditorController.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticDimensionMappingRulesGridTemplate.html" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticMeasureMappingRulesGridTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\Templates\AnalyticMeasureMappingRulesGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticTableMeasureExternalSourceTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\DimensionMappingRulesGridEditor.html" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\MeasureMappingRulesGridEditor.html" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\Templates\MeasureMappingRulesGridEditor.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-analytictableexternalource.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-dimensionmappingrulesettings-selective.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-dimensionmappingrules-grid.js" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-measuremappingrules-grid.js" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-measuremappingrulesettings-selective.js" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\vr-analytic-measuremappingrules-grid.js" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\vr-analytic-measuremappingrulesettings-selective.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\AnalyticExcludeDimensionTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\AnalyticSameDimensionTemplate.html" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\Templates\SpecificMappingMeasureTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\SpecificMappingDimensionTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\vr-analytic-dimensionmappingrulessettings-specificmapping.js" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\MainExtensions\Templates\SpecificMappingMeasureTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\vr-analytic-dimension-exclude.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\vr-analytic-dimension-same.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\Templates\AdvancedMeasureOrderOptionsTemplate.html" />
@@ -302,7 +305,7 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\Templates\RealTimeChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-timevariation-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
-    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\vr-analytic-measuremappingrulesettings-specificmapping.js" />
+    <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\MainExtensions\vr-analytic-measuremappingrulesettings-specificmapping.js" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\LastPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
