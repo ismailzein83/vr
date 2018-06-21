@@ -8,6 +8,7 @@ using TOne.WhS.SupplierPriceList.Data;
 using TOne.WhS.SupplierPriceList.Business;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -95,6 +96,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 				{
 					IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 					manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToConfigurationError,new List<SPLImportErrorDetail>() { new SPLImportErrorDetail() { ErrorMessage = ex.Message} });
+					var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
+					receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
 				}
 				throw;
 			}
