@@ -75,7 +75,7 @@
 			var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
 			var promises = [];
 			promises.push(carrierAccountReadyPromiseDeferred.promise);
-			promises.push(statusSelectorPromiseDeferred.promise)
+			promises.push(statusSelectorPromiseDeferred.promise);
 			UtilsService.waitMultiplePromises(promises).then(function () {
 				getFilterObject();
 				gridPromiseDeferred.promise.then(function () {
