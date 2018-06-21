@@ -13,7 +13,7 @@ app.directive('retailDataChargingpolicySettings', ['UtilsService', function (Uti
         },
         controllerAs: 'ctrl',
         bindToController: true,
-        templateUrl: '/Client/Modules/Retail_Data/Directives/MainExtensions/Templates/DataChargingPolicySettingsTemplate.html'
+        templateUrl: '/Client/Modules/Retail_Data/Directives/MainExtensions/ChargingPolicy/Templates/DataChargingPolicySettingsTemplate.html'
     };
 
     function DataChargingPolicySettings($scope, ctrl, $attrs) {

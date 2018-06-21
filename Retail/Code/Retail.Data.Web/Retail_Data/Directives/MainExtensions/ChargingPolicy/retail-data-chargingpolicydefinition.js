@@ -17,9 +17,9 @@
             },
             controllerAs: "datachargingpolicyCtrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_Data/Directives/MainExtensions/Templates/DataChargingPolicyDefinitionTemplate.html"
-
+            templateUrl: "/Client/Modules/Retail_Data/Directives/MainExtensions/ChargingPolicy/Templates/DataChargingPolicyDefinitionTemplate.html"
         };
+
         function DataChargingpolicydefinition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -99,5 +99,4 @@
     }
 
     app.directive('retailDataChargingpolicydefinition', DataChargingpolicydefinitionDirective);
-
 })(app);

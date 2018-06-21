@@ -710,6 +710,10 @@
       <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
       <Name>Retail.Data.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.MainExtensions\Retail.Data.MainExtensions.csproj">
+      <Project>{750f4fde-cada-485c-906b-841673df0300}</Project>
+      <Name>Retail.Data.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Interconnect.Business\Retail.Interconnect.Business.csproj">
       <Project>{2ae6da00-8341-4dbe-b7e7-53e27d06b2c9}</Project>
       <Name>Retail.Interconnect.Business</Name>

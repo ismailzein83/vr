@@ -120,10 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Data\Constant\ModuleConfig.js" />
-    <Content Include="Retail_Data\Directives\MainExtensions\retail-data-chargingpolicydefinition.js" />
-    <Content Include="Retail_Data\Directives\MainExtensions\retail-data-chargingpolicy-settings.js" />
-    <Content Include="Retail_Data\Directives\MainExtensions\Templates\DataChargingPolicyDefinitionTemplate.html" />
-    <Content Include="Retail_Data\Directives\MainExtensions\Templates\DataChargingPolicySettingsTemplate.html" />
+    <Content Include="Retail_Data\Directives\MainExtensions\QueueActivators\retail-data-queueactivator-accumulatedata.js" />
+    <Content Include="Retail_Data\Directives\MainExtensions\QueueActivators\Templates\QueueActivatorAccumulateDataTemplate.html" />
+    <Content Include="Retail_Data\Directives\MainExtensions\ChargingPolicy\retail-data-chargingpolicydefinition.js" />
+    <Content Include="Retail_Data\Directives\MainExtensions\ChargingPolicy\retail-data-chargingpolicy-settings.js" />
+    <Content Include="Retail_Data\Directives\MainExtensions\ChargingPolicy\Templates\DataChargingPolicyDefinitionTemplate.html" />
+    <Content Include="Retail_Data\Directives\MainExtensions\ChargingPolicy\Templates\DataChargingPolicySettingsTemplate.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

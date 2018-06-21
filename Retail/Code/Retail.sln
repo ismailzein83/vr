@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -211,9 +211,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Entitie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Interconnect.Web", "Retail.Interconnect.Web\Retail.Interconnect.Web.csproj", "{0711C943-582D-49C8-B1F1-E1F6F2EB7FF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Business", "Retail.Data.Business\Retail.Data.Business.csproj", "{FC74AEF0-2C58-404D-A9FC-1AE466F84226}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Data", "Retail.Data.Data\Retail.Data.Data.csproj", "{9074FFB6-22BF-40FA-8049-46339623CD65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Data.SQL", "Retail.Data.Data.SQL\Retail.Data.Data.SQL.csproj", "{A20EC58E-C706-4B05-BFD6-FF531D41A94B}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 87
+		SccNumberOfProjects = 90
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -561,6 +567,18 @@ Global
 		SccProjectTopLevelParentUniqueName86 = Retail.sln
 		SccProjectName86 = Retail.Interconnect.Web
 		SccLocalPath86 = Retail.Interconnect.Web
+		SccProjectUniqueName87 = Retail.Data.Business\\Retail.Data.Business.csproj
+		SccProjectTopLevelParentUniqueName87 = Retail.sln
+		SccProjectName87 = Retail.Data.Business
+		SccLocalPath87 = Retail.Data.Business
+		SccProjectUniqueName88 = Retail.Data.Data\\Retail.Data.Data.csproj
+		SccProjectTopLevelParentUniqueName88 = Retail.sln
+		SccProjectName88 = Retail.Data.Data
+		SccLocalPath88 = Retail.Data.Data
+		SccProjectUniqueName89 = Retail.Data.Data.SQL\\Retail.Data.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName89 = Retail.sln
+		SccProjectName89 = Retail.Data.Data.SQL
+		SccLocalPath89 = Retail.Data.Data.SQL
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -931,6 +949,18 @@ Global
 		{0711C943-582D-49C8-B1F1-E1F6F2EB7FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0711C943-582D-49C8-B1F1-E1F6F2EB7FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0711C943-582D-49C8-B1F1-E1F6F2EB7FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC74AEF0-2C58-404D-A9FC-1AE466F84226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC74AEF0-2C58-404D-A9FC-1AE466F84226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC74AEF0-2C58-404D-A9FC-1AE466F84226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC74AEF0-2C58-404D-A9FC-1AE466F84226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9074FFB6-22BF-40FA-8049-46339623CD65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9074FFB6-22BF-40FA-8049-46339623CD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9074FFB6-22BF-40FA-8049-46339623CD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9074FFB6-22BF-40FA-8049-46339623CD65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1035,5 +1065,8 @@ Global
 		{2AE6DA00-8341-4DBE-B7E7-53E27D06B2C9} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
 		{ED0CD3D2-1E3F-4399-BA99-0EBF76746A34} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
 		{0711C943-582D-49C8-B1F1-E1F6F2EB7FF4} = {5EEB3C1D-9A37-4E9C-897A-CB9364A80C9D}
+		{FC74AEF0-2C58-404D-A9FC-1AE466F84226} = {D2979848-35B3-464F-A335-62EE41236287}
+		{9074FFB6-22BF-40FA-8049-46339623CD65} = {D2979848-35B3-464F-A335-62EE41236287}
+		{A20EC58E-C706-4B05-BFD6-FF531D41A94B} = {D2979848-35B3-464F-A335-62EE41236287}
 	EndGlobalSection
 EndGlobal
