@@ -55,7 +55,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 					pricelistTypeMappings.ThrowIfNull("Pricelist Type Mappings");
 					foreach (var pricelistTypeMapping in pricelistTypeMappings)
 					{
-						if (receivedMailMessage.Header.Subject.ToLower().Contains(pricelistTypeMapping.Subject))
+						if (receivedMailMessage.Header.Subject.ToLower().Contains(pricelistTypeMapping.Subject.ToLower()))
 						{
 							pricelistType = pricelistTypeMapping.PricelistType;
 							break;
