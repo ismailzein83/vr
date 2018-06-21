@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotificationService", "WhS_SupPL_ReceivedSupplierPricelistAPIService", "FileAPIService", "WhS_BE_SupplierPriceListService", "BusinessProcess_BPInstanceService", "WhS_SupPL_ReceivedPricelistStatusEnum", "WhS_SupPL_SupplierPriceListTemplateService",
-	function (UtilsService, VRNotificationService, WhS_SupPL_ReceivedSupplierPricelistAPIService, FileAPIService, WhS_BE_SupplierPriceListService, BusinessProcess_BPInstanceService, WhS_SupPL_ReceivedPricelistStatusEnum, WhS_SupPL_SupplierPriceListTemplateService) {
+app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_ReceivedSupplierPricelistAPIService", "FileAPIService", "WhS_BE_SupplierPriceListService", "BusinessProcess_BPInstanceService", "WhS_SupPL_ReceivedPricelistStatusEnum", "WhS_SupPL_SupplierPriceListTemplateService",
+	function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_ReceivedSupplierPricelistAPIService, FileAPIService, WhS_BE_SupplierPriceListService, BusinessProcess_BPInstanceService, WhS_SupPL_ReceivedPricelistStatusEnum, WhS_SupPL_SupplierPriceListTemplateService) {
 		var directiveDefinitionObject = {
 
 			restrict: "E",
@@ -25,6 +25,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotific
 		function ReceivedSupplierPricelistGrid($scope, ctrl, $attrs) {
 
 			var gridAPI;
+			var gridDrillDownTabsObj;
 			this.initializeController = initializeController;
 
 			function initializeController() {
@@ -32,6 +33,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotific
 				$scope.receivedPricelists = [];
 				$scope.onGridReady = function (api) {
 					gridAPI = api;
+					gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs([], gridAPI, $scope.menuActions, true);
 
 					if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
 						ctrl.onReady(getDirectiveAPI());
@@ -108,6 +110,17 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotific
 						};
 						menuActions.push(viewTrackerMenuAction);
 					}
+
+					if (dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.Succeeded.value
+						&& dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.CompletedWithNoChanges.value
+						&& dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToReceivedMailError.value) {
+						var setAsCompletedMenuAction = {
+							name: "Set As Completed",
+							clicked: setReceivedPricelistAsCompleted,
+						};
+						menuActions.push(setAsCompletedMenuAction);
+					}
+
 					return menuActions;
 				};
 			}
@@ -121,6 +134,16 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRNotific
 
 			function viewTracker(pricelistObj) {
 				return BusinessProcess_BPInstanceService.openProcessTracking(pricelistObj.ReceivedPricelist.ProcessInstanceId);
+			}
+
+			function setReceivedPricelistAsCompleted(pricelistObj) {
+				$scope.isLoading = true;
+				WhS_SupPL_ReceivedSupplierPricelistAPIService.SetReceivedPricelistAsCompleted(pricelistObj)
+					.then(function (response) {
+						gridDrillDownTabsObj.setDrillDownExtensionObject(response);
+						gridAPI.itemUpdated(response);
+						$scope.isLoading = false;
+					});
 			}
 		}
 

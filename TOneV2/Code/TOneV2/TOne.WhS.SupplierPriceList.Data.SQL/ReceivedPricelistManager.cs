@@ -54,6 +54,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatus", receivedPricelistRecordId, status);
 		}
 
+		public void SetReceivedPricelistAsCompletedManualy(int receivedPricelistRecordId, ReceivedPricelistStatus status)
+		{
+			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsCompletedManualy", receivedPricelistRecordId, status);
+		}
+
 		public void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors)
 		{
 			var serializedErrors = (errors != null && errors.Any()) ? Vanrise.Common.Serializer.Serialize(errors) : null;
@@ -88,7 +93,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 		{
 			return new ReceivedPricelist()
 			{
-				//Id = GetReaderValue<int>(reader, "Id"),
+				Id = GetReaderValue<int>(reader, "ID"),
 				SupplierId = GetReaderValue<int>(reader, "SupplierId"),
 				FileId = GetReaderValue<long?>(reader, "FileId"),
 				ReceivedDateTime = (DateTime)reader["ReceivedDate"],

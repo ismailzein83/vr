@@ -26,29 +26,6 @@ namespace TOne.WhS.SupplierPriceList.Business
 	{
 
 		#region Public Methods
-		public void SendReceivedPricelistReply(ReceivedPricelist receivedPricelist)
-		{
-			var vrMailManager = new VRMailManager();
-			VRFileManager fileManager = new VRFileManager();
-
-			ReplyMapping x = new ReplyMapping();
-
-			var objects = new Dictionary<string, dynamic>
-			{
-				{"ReceivedPricelist", receivedPricelist}
-			};
-			List<VRMailAttachement> vrMailAttachements = null;
-
-			if (receivedPricelist.FileId.HasValue && x.AttachFile)
-			{
-				var pricelistFile = fileManager.GetFile(receivedPricelist.FileId.Value);
-				vrMailAttachements = new List<VRMailAttachement>() { new VRMailAttachmentExcel { Name = pricelistFile.Name, Content = pricelistFile.Content } };
-			}
-			var evaluatedObject = vrMailManager.EvaluateMailTemplate(x.MailTemplateId, objects);
-			vrMailManager.SendMail(evaluatedObject.From, evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
-						, vrMailAttachements, false);
-		}
-
 		public IDataRetrievalResult<ReceivedPricelistDetail> GetFilteredReceivedPricelists(DataRetrievalInput<ReceivedPricelistQuery> input)
 		{
 			return BigDataManager.Instance.RetrieveData(input, new ReceivedPricelistRequestHandler());
@@ -58,6 +35,17 @@ namespace TOne.WhS.SupplierPriceList.Business
 		{
 			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 			return receivedPricelistDataManager.GetReceivedPricelistById(id);
+		}
+
+		public ReceivedPricelistDetail SetReceivedPricelistAsCompleted(ReceivedPricelistDetail receivedPricelistDetail)
+		{
+			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
+			receivedPricelistDataManager.SetReceivedPricelistAsCompletedManualy(receivedPricelistDetail.ReceivedPricelist.Id, ReceivedPricelistStatus.Succeeded);
+			SendMailToSupplier(receivedPricelistDetail.ReceivedPricelist.Id, AutoImportEmailTypeEnum.Succeeded);
+			SendMailToInternal(receivedPricelistDetail.ReceivedPricelist.Id, AutoImportEmailTypeEnum.Succeeded);
+			receivedPricelistDetail.ReceivedPricelist.Status = ReceivedPricelistStatus.Succeeded;
+			receivedPricelistDetail.StatusDescription = Vanrise.Common.Utilities.GetEnumDescription(receivedPricelistDetail.ReceivedPricelist.Status);
+			return receivedPricelistDetail;
 		}
 
 		public void SendMail(int receivedPricelistRecordId, AutoImportEmailTypeEnum emailType)
@@ -182,7 +170,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 				{"Received Pricelist", receivedPricelist}
 			};
 
-			if (receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
+			if ((int)receivedPricelist.Status > 65 && receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
 			{
 				var excelFile = new VRExcelFile();
 				var errorSheet = new VRExcelSheet();

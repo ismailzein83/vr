@@ -12,15 +12,23 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.SupplierPriceList.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "ReceivedSupplierPriceList")]
-    public class WhS_ReceivedSupplierPriceListController : BaseAPIController
-    {
-        [HttpPost]
-        [Route("GetFilteredReceivedSupplierPriceList")]
-        public object GetFilteredReceivedSupplierPriceList(Vanrise.Entities.DataRetrievalInput<ReceivedPricelistQuery> input)
-        {
-            ReceivedSupplierPricelistManager manager = new ReceivedSupplierPricelistManager();
-            return GetWebResponse(input, manager.GetFilteredReceivedPricelists(input));
-        }
-    }
+	[RoutePrefix(Constants.ROUTE_PREFIX + "ReceivedSupplierPriceList")]
+	public class WhS_ReceivedSupplierPriceListController : BaseAPIController
+	{
+		[HttpPost]
+		[Route("GetFilteredReceivedSupplierPriceList")]
+		public object GetFilteredReceivedSupplierPriceList(Vanrise.Entities.DataRetrievalInput<ReceivedPricelistQuery> input)
+		{
+			ReceivedSupplierPricelistManager manager = new ReceivedSupplierPricelistManager();
+			return GetWebResponse(input, manager.GetFilteredReceivedPricelists(input));
+		}
+
+		[HttpPost]
+		[Route("SetReceivedPricelistAsCompleted")]
+		public ReceivedPricelistDetail SetReceivedPricelistAsCompleted(ReceivedPricelistDetail receivedPricelistDetail)
+		{
+			ReceivedSupplierPricelistManager manager = new ReceivedSupplierPricelistManager();
+			return manager.SetReceivedPricelistAsCompleted(receivedPricelistDetail);
+		}
+	}
 }
