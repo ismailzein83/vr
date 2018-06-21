@@ -81,7 +81,7 @@
     <Compile Include="Controllers\DAProfCalcOutputSettingsController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
-    <Compile Include="Controllers\SendEmailHandlerController.cs" />
+    <Compile Include="Controllers\AutomatedReportHandlerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -153,11 +153,13 @@
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable-grid.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator-mappedtable.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator.js" />
-    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\SendEmailHandlerAutomatedReportEditorController.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\AutomatedReportHandlerEditorController.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\FTPHandlerAutomatedReport.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailHandlerAutomatedReport.html" />
-    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailHandlerAutomatedReportEditor.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\AutomatedReportHandlerEditor.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-ftphandler-automatedreporthandler.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-sendemailhandler-automatedreporthandler.js" />
-    <Content Include="Analytic\Directives\AutomatedReport\FileGenerator\vr-analytic-sendemailhandler-filegenerator.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\FileGenerator\vr-analytic-automatedreporthandler-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\Templates\AnalyticTableQueryDefinition.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\Templates\AnalyticTableQueryDefinitionSettingsRuntimeEditorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\Templates\RecordSearchQueryDefinition.html" />
@@ -359,7 +361,7 @@
     <Content Include="Analytic\Services\AnalyticReportService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportQueryDefinitionSettingsAPIService.js" />
-    <Content Include="Analytic\Services\APIServices\SendEmailHandlerAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\AutomatedReportAPIService.js" />
     <Content Include="Analytic\Services\AutomatedReportProcessScheduledService.js" />
     <Content Include="Analytic\Services\DimensionMappingRulesService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
@@ -382,7 +384,7 @@
     <Content Include="Analytic\Services\APIServices\AnalyticReportAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
     <Content Include="Analytic\Services\AdvancedExcelFileGeneratorService.js" />
-    <Content Include="Analytic\Services\SendEmailHandlerService.js" />
+    <Content Include="Analytic\Services\AutomatedReportHandlerService.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditor.html" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagement.html" />

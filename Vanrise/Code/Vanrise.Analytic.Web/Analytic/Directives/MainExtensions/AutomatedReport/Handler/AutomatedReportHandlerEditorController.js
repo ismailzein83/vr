@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     "use strict";
-    sendEmailHandlerAutomatedReportEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRComponentTypeAPIService'];
-    function sendEmailHandlerAutomatedReportEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_VRComponentTypeAPIService) {
+    automatedReportHandlerEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRComponentTypeAPIService'];
+    function automatedReportHandlerEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_VRComponentTypeAPIService) {
 
 
         var isEditMode;
@@ -13,7 +13,7 @@
         var context;
 
         loadParameters();
-        defineScope();
+        defineScope(); 
         load();
 
         function loadParameters() {
@@ -49,7 +49,7 @@
 
         }
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
@@ -85,7 +85,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
 
@@ -119,5 +119,5 @@
             return currentContext;
         }
     }
-    appControllers.controller('VRAnalytic_SendEmailHandlerAutomatedReportEditorController', sendEmailHandlerAutomatedReportEditorController);
+    appControllers.controller('VRAnalytic_AutomatedReportHandlerEditorController', automatedReportHandlerEditorController);
 })(appControllers);

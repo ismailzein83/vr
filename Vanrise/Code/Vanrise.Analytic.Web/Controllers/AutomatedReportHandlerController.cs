@@ -10,9 +10,9 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Analytic.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "SendEmailHandler")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "AutomatedReportHandler")]
     [JSONWithTypeAttribute]
-    public class SendEmailHandlerController : BaseAPIController
+    public class AutomatedReportHandlerController : BaseAPIController
     {
         [HttpGet]
         [Route("GetFileGeneratorTemplateConfigs")]

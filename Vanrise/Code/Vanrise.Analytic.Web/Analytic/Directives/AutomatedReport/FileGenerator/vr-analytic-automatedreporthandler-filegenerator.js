@@ -1,7 +1,7 @@
 ﻿"use strict";
-
-app.directive("vrAnalyticSendemailhandlerFilegenerator", ["UtilsService", "VRAnalytic_SendEmailHandlerAPIService", "VRUIUtilsService",
-function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService) {
+ 
+app.directive("vrAnalyticAutomatedreporthandlerFilegenerator", ["UtilsService", "VRAnalytic_AutomatedReportHandlerAPIService", "VRUIUtilsService",
+function (UtilsService, VRAnalytic_AutomatedReportHandlerAPIService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -75,7 +75,7 @@ function (UtilsService, VRAnalytic_SendEmailHandlerAPIService, VRUIUtilsService)
                 promises.push(getFileGeneratorTemplateConfigsPromise);
 
                 function getFileGeneratorTemplateConfigs() {
-                    return VRAnalytic_SendEmailHandlerAPIService.GetFileGeneratorTemplateConfigs().then(function (response) {
+                    return VRAnalytic_AutomatedReportHandlerAPIService.GetFileGeneratorTemplateConfigs().then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 $scope.scopeModel.templateConfigs.push(response[i]);

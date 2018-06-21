@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     'use stict';
-    sendEmailHandlerService.$inject = ['VRModalService'];
-    function sendEmailHandlerService(VRModalService) {
+    automatedReportHandlerService.$inject = ['VRModalService'];
+    function automatedReportHandlerService(VRModalService) {
 
 
         function addAttachementGenerator(onAttachementGeneratorAdded, context) {
@@ -15,7 +15,7 @@
             var modalParameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/SendEmailHandlerAutomatedReportEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/AutomatedReportHandlerEditor.html', modalParameters, modalSettings);
         }
 
         function editAttachementGenerator(object, onAttachementGeneratorUpdated, context) {
@@ -28,15 +28,15 @@
                 Entity: object,
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/SendEmailHandlerAutomatedReportEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/AutomatedReportHandlerEditor.html', modalParameters, modalSettings);
         }
 
         return {
             addAttachementGenerator: addAttachementGenerator,
             editAttachementGenerator: editAttachementGenerator,
         };
-    }
+    } 
 
-    appControllers.service('VRAnalytic_SendEmailHandlerService', sendEmailHandlerService);
+    appControllers.service('VRAnalytic_AutomatedReportHandlerService', automatedReportHandlerService);
 
 })(appControllers);
