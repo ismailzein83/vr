@@ -105,7 +105,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRUIUtils
 
 					if (processInstanceId != null) {
 						var viewTrackerMenuAction = {
-							name: "View Tracker",
+							name: "Process Log",
 							clicked: viewTracker,
 						};
 						menuActions.push(viewTrackerMenuAction);

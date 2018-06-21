@@ -215,8 +215,8 @@
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />
     <Content Include="WhS_SupplierPriceList\Views\ReceivedPricelistErrorDetails.html" />
     <Content Include="WhS_SupplierPriceList\Views\ReceivedPricelistErrorDetailsController.js" />
-    <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPricelist.html" />
-    <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPricelistController.js" />
+    <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPricelists.html" />
+    <Content Include="WhS_SupplierPriceList\Views\ReceivedSupplierPricelistsController.js" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreview.html" />
     <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewController.js" />
   </ItemGroup>
