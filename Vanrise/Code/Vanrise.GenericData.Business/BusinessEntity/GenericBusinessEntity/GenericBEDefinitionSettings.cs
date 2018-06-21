@@ -43,9 +43,10 @@ namespace Vanrise.GenericData.Business
         }
         public override string GroupSelectorUIControl { get; set; }
 
-
-       public GenericBEDefinitionSecurity Security { get; set; }
-
+        public bool HideAddButton { get; set; }
+        public string SelectorSingularTitle { get; set; }
+        public string SelectorPluralTitle { get; set; }
+        public GenericBEDefinitionSecurity Security { get; set; }
        // public string FieldPath { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
         public Guid DataRecordTypeId { get; set; }
