@@ -29,7 +29,7 @@ namespace Vanrise.Analytic.Entities
     {
         List<VRAutomatedReportQuery> Queries { get;}
 
-        bool Result { set; }
+        bool Result { get; set; }
 
         string ErrorMessage { set; }
     }
