@@ -126,7 +126,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 				{"Received Pricelist", receivedPricelist}
 			};
 
-			if (receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
+			if ((int)receivedPricelist.Status > 65 && receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
 			{
 				var excelFile = new VRExcelFile();
 				var errorSheet = new VRExcelSheet();
