@@ -239,7 +239,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             ivOption.Flag1 = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
                                     supplier.Gateways.Count);
                             ivOption.BktSerial = serial++;
-                            ivOption.BktCapacity = (int)Math.Ceiling(ivOption.Flag1.Value / 10);
+                            ivOption.BktCapacity = (int)Math.Round(ivOption.Flag1.Value / 10);
                             ivOption.BktToken = ivOption.BktCapacity;
                         }
                         routes.Add(ivOption);
