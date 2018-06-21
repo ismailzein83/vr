@@ -30,7 +30,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 FTPCommunicator ftpCommunicator = new FTPCommunicator(this.FTPCommunicatorSettings);
                 foreach (var generator in attachementGenerators)
                 {
-                    generator.ThrowIfNull("attachement");
                     generator.Settings.ThrowIfNull("attachement.Settings");
                     VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext()
                     {
@@ -55,12 +54,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         {
             if (this.AttachementGenerators == null || this.AttachementGenerators.Count == 0)
             {
-                throw new Exception("No attachement generators were added.");
+                throw new Exception("No attachment generators were added.");
             }
 
             foreach (var generator in this.AttachementGenerators)
             {
-                generator.ThrowIfNull("generator");
                 generator.Settings.ThrowIfNull("generator.Settings");
                 generator.Settings.Validate(context);
                 if (!context.Result)

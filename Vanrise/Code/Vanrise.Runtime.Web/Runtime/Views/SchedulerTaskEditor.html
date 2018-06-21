@@ -64,6 +64,11 @@
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
+            <vr-row>
+                <vr-columns width="fullrow" ng-if="scopeModel.validationErrorMessage != undefined">
+                    <label class="alert alert-danger" vr-alert>{{scopeModel.validationErrorMessage}}</label>
+                </vr-columns>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

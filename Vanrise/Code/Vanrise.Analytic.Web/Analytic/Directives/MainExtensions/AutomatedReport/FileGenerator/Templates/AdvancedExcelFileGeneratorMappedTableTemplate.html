@@ -1,31 +1,30 @@
 ﻿<vr-row>
-    <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="onFirstRowMappingReady"
+    <vr-excelconversion-fieldmapping-cellfieldmapping on-ready="scopeModel.onFirstRowMappingReady"
                                                         label="First Row"
                                                         type="'row'"
                                                         isrequired="true" normal-col-num="4">
     </vr-excelconversion-fieldmapping-cellfieldmapping>
-    <vr-columns colnum="2" >
-        <vr-switch value="includeTitle" label="Include Title"></vr-switch>
-    </vr-columns>
 </vr-row>
-<vr-row vr-loader="isLoadingMappedTitle">
-    <vr-columns width="fullrow" withemptyline>
-        <vr-analytic-advancedexcel-filegenerator-mappedtitle-grid on-ready="onMappedTitleGridReady">
-
-        </vr-analytic-advancedexcel-filegenerator-mappedtitle-grid>
+<vr-row>
+    <vr-columns width="1/4row">
+        <vr-switch value="scopeModel.includeHeaders" label="Include Headers"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-switch value="scopeModel.includeTitle" label="Include Title"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.tableTitle" isrequired="scopeModel.includeTitle" vr-disabled="!scopeModel.includeTitle" label="Title"></vr-textbox>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns colnum="10" withemptyline>
-        <vr-button type="Add" data-onclick="addMappedCol" standalone="true" vr-disabled="disableAddMappedCol()"></vr-button>
+        <vr-button type="Add" data-onclick="scopeModel.addMappedCol" standalone="true" vr-disabled="scopeModel.disableAddMappedCol()"></vr-button>
     </vr-columns>
-    <vr-columns colnum="2">
-        <vr-switch value="includeHeaders" label="Include Headers"></vr-switch>
-    </vr-columns>
+   
 </vr-row>
-<vr-row vr-loader="isLoadingMappedCol">
+<vr-row vr-loader="scopeModel.isLoadingMappedCol">
     <vr-columns width="fullrow">
-        <vr-analytic-advancedexcel-filegenerator-mappedtable-grid on-ready="onMappedColumnsGridReady">
+        <vr-analytic-advancedexcel-filegenerator-mappedtable-grid on-ready="scopeModel.onMappedColumnsGridReady">
 
         </vr-analytic-advancedexcel-filegenerator-mappedtable-grid>
     </vr-columns>

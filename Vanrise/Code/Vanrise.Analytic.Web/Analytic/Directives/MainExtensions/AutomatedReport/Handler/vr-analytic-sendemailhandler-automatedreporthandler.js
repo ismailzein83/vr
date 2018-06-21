@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrAnalyticSendemailhandlerAutomatedreporthandler", ["UtilsService", "VRAnalytic_SendEmailHandlerService",
-function (UtilsService, VRAnalytic_SendEmailHandlerService) {
+app.directive("vrAnalyticSendemailhandlerAutomatedreporthandler", ["UtilsService", "VRAnalytic_AutomatedReportHandlerService",
+function (UtilsService, VRAnalytic_AutomatedReportHandlerService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -15,7 +15,7 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
         bindToController: true,
         templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/SendEmailHandlerAutomatedReport.html"
     };
-
+     
 
     function SendEmailHandler($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
@@ -38,7 +38,7 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
                 var onAttachementGeneratorAdded = function (obj) {
                     $scope.scopeModel.columns.push(obj);
                 };
-                VRAnalytic_SendEmailHandlerService.addAttachementGenerator(onAttachementGeneratorAdded, getContext());
+                VRAnalytic_AutomatedReportHandlerService.addAttachementGenerator(onAttachementGeneratorAdded, getContext());
             };
 
 
@@ -141,7 +141,7 @@ function (UtilsService, VRAnalytic_SendEmailHandlerService) {
                 var index = $scope.scopeModel.columns.indexOf(object);
                 $scope.scopeModel.columns[index] = obj;
             };
-            VRAnalytic_SendEmailHandlerService.editAttachementGenerator(object, onAttachementGeneratorUpdated, getContext());
+            VRAnalytic_AutomatedReportHandlerService.editAttachementGenerator(object, onAttachementGeneratorUpdated, getContext());
         }
 
         function getContext() {

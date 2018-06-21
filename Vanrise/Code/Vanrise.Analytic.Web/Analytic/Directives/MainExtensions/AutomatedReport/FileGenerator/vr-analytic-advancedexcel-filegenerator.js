@@ -38,6 +38,8 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var queries;
 
         var querySelected;
+        var querySelectedPromise;
+
         var listNameSelected;
 
         var isEditMode;
@@ -120,41 +122,69 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
             api.load = function (payload) {
                 var promises = [];
+                var queryArrayPromise = UtilsService.createPromiseDeferred();
+
                 if (payload != undefined) {
-                    {
-                        var tableDefinitions = payload.fileGenerator != undefined ? payload.fileGenerator.TableDefinitions : undefined;
-                        var fileId = payload.fileGenerator != undefined ? payload.fileGenerator.FileTemplateId : undefined;
-                        context = payload.context;
-                    }
-                    if (context != undefined) {
-                        queries = context.getQueryInfo();
-                        queryNameSelectorReadyDeferred.promise.then(function () {
-                            if (queries != undefined) {
-                                for (var i = 0; i < queries.length ; i++) {
-                                    $scope.scopeModel.queries.push({
-                                        description: queries[i].QueryTitle,
-                                        value: queries[i].VRAutomatedReportQueryId
-                                    });
-                                }
-                                queryNameSelectorAPI.selectIfSingleItem();
+                    var tableDefinitions = payload.fileGenerator != undefined ? payload.fileGenerator.TableDefinitions : undefined;
+                    var fileId = payload.fileGenerator != undefined ? payload.fileGenerator.FileTemplateId : undefined;
+                    context = payload.context;
+                }
 
+                if (context != undefined) {
+                    queries = context.getQueryInfo();
+                    queryNameSelectorReadyDeferred.promise.then(function () {
+                        if (queries != undefined) {
+                            for (var i = 0; i < queries.length ; i++) {
+                                $scope.scopeModel.queries.push({
+                                    description: queries[i].QueryTitle,
+                                    value: queries[i].VRAutomatedReportQueryId
+                                });
                             }
-                        });
-                    }
-                    if (tableDefinitions != undefined) {
-                        mappedTables = tableDefinitions;
-                    }
-                    if (mappedTables != undefined && mappedTables.length != 0) {
-                        var mappedTable = mappedTables[0];
-                        listNameSelected = mappedTable.ListName;
+                            queryNameSelectorAPI.selectIfSingleItem();
+                            queryArrayPromise.resolve();
+                        }
+                    });
+                }
+                if (tableDefinitions != undefined) {
+                    mappedTables = tableDefinitions;
+                }
+                if (mappedTables != undefined && mappedTables.length != 0) {
+                    var mappedTable = mappedTables[0];
+                    listNameSelected = mappedTable.ListName;
+                    querySelectedPromise = UtilsService.createPromiseDeferred();
+                    queryArrayPromise.promise.then(function () {
                         querySelected = UtilsService.getItemByVal($scope.scopeModel.queries, mappedTable.VRAutomatedReportQueryId, "value");
-                    }
-                    if (fileId != undefined)
-                        $scope.scopeModel.file = { fileId: fileId };
+                        querySelectedPromise.resolve();
+                    });
+                }
+                if (fileId != undefined)
+                {
+                    $scope.scopeModel.file = { fileId: fileId };
+                }
 
-                    promises.push(loadMappedTables());
+                promises.push(loadMappedTables());
+
+                function loadMappedTables() {
+                    var promises = [];
+                    $scope.scopeModel.isLoadingTabs = true;
+                    for (var i = 0 ; i < mappedTables.length; i++) {
+                        var mappedTableItem = {
+                            payload: mappedTables[i],
+                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        };
+                        promises.push(mappedTableItem.loadPromiseDeferred.promise);
+                        addMappedTableTab(mappedTableItem);
+                    }
+                    return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                        VRNotificationService.showError(error);
+                    }).finally(function () {
+                        $scope.scopeModel.isLoadingTabs = false;
+                    });
+
                 }
                 return UtilsService.waitMultiplePromises(promises);
+
             };
 
             api.getData = function () {
@@ -185,50 +215,63 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         }
 
        
-        function loadMappedTables() {
-            var promises = [];
-
-            for (var i = 0 ; i < mappedTables.length; i++) {
-                var mappedTableItem = {
-                    payload: mappedTables[i],
-                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                };
-                promises.push(mappedTableItem.loadPromiseDeferred.promise);
-
-                addMappedTableTab(mappedTableItem);
-            }
-            return UtilsService.waitMultiplePromises(promises);
-        }
-
         function addMappedTableTab(mappedTableItem) {
-            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-            var mappedTableTab = {
-                header: querySelected.description + " - "+listNameSelected,
-                tableTabIndex: ++tableIndex,
-                Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
-                onDirectiveReady: function (api) {
-                    mappedTableTab.directiveAPI = api;
-                    mappedTableItem.readyPromiseDeferred.resolve();
-                }
-            };
+            if (querySelectedPromise != undefined) {
+                querySelectedPromise.promise.then(function () {
+                    if (querySelected != undefined) {
+                        var mappedTableTab = {
+                            header: querySelected.description + " - " + listNameSelected + ' (' + tableIndex + ')',
+                            tableTabIndex: ++tableIndex,
+                            Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
+                            onDirectiveReady: function (api) {
+                                mappedTableTab.directiveAPI = api;
+                                mappedTableItem.readyPromiseDeferred.resolve();
+                            },
+                            loadPromiseDeferred: mappedTableItem.loadPromiseDeferred
+                        };
 
-            var directivePayload = {
-                context: getContext(),
-                mappedTable: mappedTableItem.payload,
-                showEditButton: false,
-            };
+                        var directivePayload = {
+                            context: getContext(),
+                            mappedTable: mappedTableItem.payload,
+                            showEditButton: false,
+                        };
+                        mappedTableItem.readyPromiseDeferred.promise.then(function () {
+                            VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
+                        });
+                        $scope.scopeModel.tables.push(mappedTableTab);
+                    }
+                    else {
+                        mappedTableItem.loadPromiseDeferred.reject("A query used has been deleted.");
+                    }
+                });
+            }
+            else {
+                var mappedTableTab = {
+                    header: querySelected.description + " - " + listNameSelected + ' (' + tableIndex + ')',
+                    tableTabIndex: ++tableIndex,
+                    Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
+                    onDirectiveReady: function (api) {
+                        mappedTableTab.directiveAPI = api;
+                        mappedTableItem.readyPromiseDeferred.resolve();
+                    },
+                    loadPromiseDeferred: mappedTableItem.loadPromiseDeferred
+                };
 
-            mappedTableItem.readyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
-            });
-
-            $scope.scopeModel.tables.push(mappedTableTab);
+                var directivePayload = {
+                    context: getContext(),
+                    mappedTable: mappedTableItem.payload,
+                    showEditButton: false,
+                };
+                mappedTableItem.readyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
+                });
+                $scope.scopeModel.tables.push(mappedTableTab);
+            }
         }
 
 
         function getContext() {
-            var currentContext = context;
+            var currentContext = UtilsService.cloneObject(context);
             if (currentContext == undefined)
                 currentContext = {};
             currentContext. getSelectedSheetApi =  function () {

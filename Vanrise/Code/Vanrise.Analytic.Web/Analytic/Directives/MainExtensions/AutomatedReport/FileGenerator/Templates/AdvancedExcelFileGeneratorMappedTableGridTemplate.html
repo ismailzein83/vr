@@ -1,7 +1,7 @@
-﻿<vr-validator validate="validateGrid()">
-    <vr-datagrid on-ready="onGridReady"
-                 datasource="mappedCols"
-                 ondeleterow="removeMappedCol"
+﻿<vr-validator validate="scopeModel.validateGrid()">
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.mappedCols"
+                 ondeleterow="scopeModel.removeMappedCol"
                  hidegridmenu="true"
                  norowhighlightonclick="true">
         <vr-datagridcolumn headertext="'Cell'" fixedwidth="150" disablesorting="true">
@@ -28,6 +28,6 @@
 </vr-validator>
 <vr-row>
     <vr-columns colnum="5">
-        <a href="" ng-click="addAllFields()" ng-show="mappedCols.length==0">Add All Fields</a>
+        <a href="" ng-click="scopeModel.addAllFields()" ng-show="scopeModel.mappedCols.length==0">Add all fields</a>
     </vr-columns>
 </vr-row>

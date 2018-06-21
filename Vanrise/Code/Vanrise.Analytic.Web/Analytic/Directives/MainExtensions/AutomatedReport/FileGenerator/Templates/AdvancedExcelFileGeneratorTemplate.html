@@ -1,58 +1,58 @@
-﻿<vr-row>
-    <vr-columns width="1/4row">
-        <vr-fileupload tempfile="true" label="Excel Template" extension="xls,xlsx,csv,xlsb" value="scopeModel.file" isrequired="true"></vr-fileupload>
-    </vr-columns>
-</vr-row>
-<vr-row removeline>
-    <vr-columns width="1/2row">
-        <vr-section title="Excel Viewer">
-            <vr-excel-wb on-ready="scopeModel.onExcelWorkbookReady" fileid="scopeModel.file.fileId"></vr-excel-wb>
-        </vr-section>
-    </vr-columns>
+﻿    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-fileupload tempfile="true" label="Excel Template" extension="xls,xlsx,csv,xlsb" value="scopeModel.file" isrequired="true"></vr-fileupload>
+        </vr-columns>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="1/2row">
+            <vr-section title="Excel Viewer">
+                <vr-excel-wb on-ready="scopeModel.onExcelWorkbookReady" fileid="scopeModel.file.fileId"></vr-excel-wb>
+            </vr-section>
+        </vr-columns>
 
-    <vr-columns width="1/2row">
-        <vr-tabs>
-            <vr-tab header="'Excel Tables'">
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-select  on-ready="scopeModel.onQueryNameSelectorReady"
-                                    datasource="scopeModel.queries"
-                                    datatextfield="description"
-                                    datavaluefield="value"
-                                    selectedvalues="scopeModel.querySelected"
-                                    onselectionchanged="scopeModel.onQuerySelectionChanged"
-                                    entityname="Query"
-                                    label="Query"
-                                    isrequired="scopeModel.tables.length==0">
-                        </vr-select>
-                    </vr-columns>
-                    <vr-columns width="1/3row">
-                        <vr-select on-ready="scopeModel.onListNameSelectorReady"
-                                    datasource="scopeModel.listNames"
-                                    datatextfield="description"
-                                    datavaluefield="value"
-                                    selectedvalues="scopeModel.listNameSelected"
-                                    entityname="List"
-                                    label="List"
-                                    isrequired="scopeModel.tables.length==0">
-                        </vr-select>
-                    </vr-columns>
-                    <vr-columns width="1/4row" withemptyline>
-                        <vr-button type="Add" data-onclick="scopeModel.addMappedTable" standalone="true" vr-disabled="scopeModel.disableAddMappedTable()"></vr-button>
-                    </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-tabs on-ready="scopeModel.onTabsReady">
-                        <vr-tab ng-repeat="table in scopeModel.tables" header="table.header" onremove="scopeModel.removeTable" data="table">
-                            <vr-directivewrapper on-ready="table.onDirectiveReady"
-                                                    directive="table.Editor"
-                                                    normal-col-num="{{selectiveCtrl.normalColNum}}"
-                                                    isrequired="selectiveCtrl.isrequired">
-                            </vr-directivewrapper>
-                        </vr-tab>
-                    </vr-tabs>
-                </vr-row>
-            </vr-tab>
-        </vr-tabs>
-    </vr-columns>
-</vr-row>
+        <vr-columns width="1/2row">
+            <vr-tabs>
+                <vr-tab header="'Excel Tables'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-select on-ready="scopeModel.onQueryNameSelectorReady"
+                                       datasource="scopeModel.queries"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.querySelected"
+                                       onselectionchanged="scopeModel.onQuerySelectionChanged"
+                                       entityname="Query"
+                                       label="Query"
+                                       isrequired="scopeModel.tables.length==0">
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-select on-ready="scopeModel.onListNameSelectorReady"
+                                       datasource="scopeModel.listNames"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.listNameSelected"
+                                       entityname="List"
+                                       label="List"
+                                       isrequired="scopeModel.tables.length==0">
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="1/4row" withemptyline>
+                            <vr-button type="Add" data-onclick="scopeModel.addMappedTable" standalone="true" vr-disabled="scopeModel.disableAddMappedTable()"></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-tabs on-ready="scopeModel.onTabsReady" vr-loader="scopeModel.isLoadingTabs">
+                            <vr-tab ng-repeat="table in scopeModel.tables" header="table.header" onremove="scopeModel.removeTable" data="table">
+                                <vr-directivewrapper on-ready="table.onDirectiveReady"
+                                                     directive="table.Editor"
+                                                     normal-col-num="{{selectiveCtrl.normalColNum}}"
+                                                     isrequired="table.isrequired">
+                                </vr-directivewrapper>
+                            </vr-tab>
+                        </vr-tabs>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-columns>
+    </vr-row>

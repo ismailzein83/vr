@@ -78,14 +78,15 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             };
             var dataRecords = dataRecordStorageManager.GetFilteredDataRecords(input) as BigResult<DataRecordDetail>;
 
-            if (dataRecords != null && dataRecords.Data != null)
+            if (dataRecords != null && dataRecords.Data != null && dataRecords.Data.Count()!=0)
             {
                 var data = dataRecords.Data;
                 foreach (var dataItem in data)
                 {
                     VRAutomatedReportDataItem item = new VRAutomatedReportDataItem();
                     Dictionary<string, VRAutomatedReportDataFieldValue> fields = new Dictionary<string, VRAutomatedReportDataFieldValue>();
-                    if(dataItem.FieldValues!=null && dataItem.FieldValues.Count!=0){
+                    if(dataItem.FieldValues!=null && dataItem.FieldValues.Count!=0)
+                    {
                         foreach(var fieldValue in dataItem.FieldValues){
                             fields.GetOrCreateItem(fieldValue.Key,
                             () =>
@@ -101,8 +102,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                     item.Fields = fields;
                     automatedreportDataList.Items.Add(item);
                 }
-                automatedReportDataResult.Lists.Add("Main", automatedreportDataList);
             }
+            automatedReportDataResult.Lists.Add("Main", automatedreportDataList);
             return automatedReportDataResult;
         }
 

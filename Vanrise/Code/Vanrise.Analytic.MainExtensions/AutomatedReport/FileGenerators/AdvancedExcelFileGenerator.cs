@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {
@@ -21,7 +22,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             get { return new Guid("9FAAE9B2-931E-4B3F-BDA4-B0F3B7647488"); }
         }
 
-        public long? FileTemplateId { get; set; }
+        public long FileTemplateId { get; set; }
 
         public List<AdvancedExcelFileGeneratorTableDefinition> TableDefinitions { get; set; }
 
@@ -31,17 +32,19 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         {
             byte[] fileContent = null;
 
-            if (this.TableDefinitions != null && this.TableDefinitions.Count!=0)
-            {
-                Workbook TableDefinitionsWorkbook = new Workbook();
-                Vanrise.Common.Utilities.ActivateAspose();
-                TableDefinitionsWorkbook.Worksheets.Clear();
+            VRFileManager fileManager = new VRFileManager();
+            byte[] bytes = fileManager.GetFile(this.FileTemplateId).Content;
+            var fileStream = new System.IO.MemoryStream(bytes);
+            Workbook TableDefinitionsWorkbook = new Workbook(fileStream);
+            Common.Utilities.ActivateAspose();
 
+            if (this.TableDefinitions != null && this.TableDefinitions.Count != 0)
+            {
                 foreach (var tableDef in this.TableDefinitions)
                 {
                     var columns = tableDef.ColumnDefinitions;
                     columns.ThrowIfNull("columns");
-                    Worksheet TableDefinitionsWorksheet = TableDefinitionsWorkbook.Worksheets.Add(tableDef.SheetName);
+                    Worksheet TableDefinitionsWorksheet = TableDefinitionsWorkbook.Worksheets[tableDef.SheetIndex];
                     var dataList = context.HandlerContext.GetDataList(tableDef.VRAutomatedReportQueryId, tableDef.ListName);
                     string dataListIdentifier = string.Format("{0}_{1}", tableDef.VRAutomatedReportQueryId, tableDef.ListName);
                     dataList.ThrowIfNull("dataList", dataListIdentifier);
@@ -49,250 +52,196 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     dataList.FieldInfos.ThrowIfNull("dataList.FieldInfos", dataListIdentifier);
                     var fieldInfos = dataList.FieldInfos;
                     int fieldInfosCount = fieldInfos.Count;
-
-                    int titleIndex = tableDef.RowIndex;
-                    int headerIndex = tableDef.RowIndex;
-                    int rowIndex;
+                    int titleRowIndex = tableDef.RowIndex;
+                    int headerRowIndex = tableDef.RowIndex;
+                    int dataRowIndex;
 
                     if (tableDef.IncludeTitle && tableDef.IncludeHeaders)
                     {
-                        headerIndex = titleIndex + 1;
-                        rowIndex = headerIndex + 1;
+                        headerRowIndex = titleRowIndex + 1;
+                        dataRowIndex = headerRowIndex + 1;
                     }
                     else if (tableDef.IncludeTitle && !tableDef.IncludeHeaders)
                     {
-                        rowIndex = titleIndex + 1;
+                        dataRowIndex = titleRowIndex + 1;
                     }
                     else if (!tableDef.IncludeTitle && tableDef.IncludeHeaders)
                     {
-                        rowIndex = headerIndex + 1;
+                        dataRowIndex = headerRowIndex + 1;
                     }
                     else
                     {
-                        rowIndex = tableDef.RowIndex;
+                        dataRowIndex = tableDef.RowIndex;
                     }
-                  
+
                     Dictionary<int, List<int>> colIndexByRow = new Dictionary<int, List<int>>();
-             
+
                     bool setHeaders = true;
-                    if (tableDef.TitleDefinition != null && tableDef.IncludeTitle)
+                    if (tableDef.Title != null && tableDef.IncludeTitle)
                     {
-                        var titleDefinition = tableDef.TitleDefinition;
-                        TableDefinitionsWorksheet.Cells[titleIndex, titleDefinition.ColumnIndex].PutValue(titleDefinition.Title);
-                        TableDefinitionsWorksheet.Cells.SetColumnWidth(titleDefinition.ColumnIndex, 20);
-                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(titleIndex, titleDefinition.ColumnIndex);
+                        var title = tableDef.Title;
+                        List<int> columnIndices = new List<int>();
+                        foreach (var col in columns)
+                        {
+                            columnIndices.Add(col.ColumnIndex);
+                        }
+                        var orderedIndices = columnIndices.OrderBy(x => x);
+                        var titleColumnIndex = orderedIndices.First();
+                        TableDefinitionsWorksheet.Cells.Merge(titleRowIndex, titleColumnIndex, 1, columnIndices.Count);
+                        TableDefinitionsWorksheet.Cells[titleRowIndex, titleColumnIndex].PutValue(title);
+                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(titleRowIndex, titleColumnIndex);
                         Style style = cell.GetStyle();
+                        style.HorizontalAlignment = TextAlignmentType.Center;
                         style.Font.Name = "Times New Roman";
                         style.Font.Color = Color.Black;
                         style.Font.Size = 16;
                         style.Font.IsBold = true;
                         cell.SetStyle(style);
                     }
-                    
-                    foreach (var item in dataList.Items)
+
+                    if (dataList.Items.Count != 0)
                     {
-                        foreach (var field in item.Fields)
+                        foreach (var item in dataList.Items)
                         {
-                            var matchingColumn = columns.FindRecord(x => x.FieldName == field.Key);
-                            if (matchingColumn != null)
+                            foreach(var column in columns)
                             {
+                                var field = item.Fields.FindRecord(x => x.Key == column.FieldName);
                                 if (field.Value != null)
                                 {
                                     var fieldInfo = fieldInfos.GetRecord(field.Key);
-                                    if (tableDef.IncludeHeaders && fieldInfo!=null && setHeaders)
+                                    if (tableDef.IncludeHeaders && fieldInfo != null && setHeaders)
                                     {
-                                        TableDefinitionsWorksheet.Cells[headerIndex, matchingColumn.ColumnIndex].PutValue(fieldInfo.FieldTitle);
-                                        TableDefinitionsWorksheet.Cells.SetColumnWidth(matchingColumn.ColumnIndex, 20);
-                                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(headerIndex, matchingColumn.ColumnIndex);
+                                        TableDefinitionsWorksheet.Cells[headerRowIndex, column.ColumnIndex].PutValue(fieldInfo.FieldTitle);
+                                        TableDefinitionsWorksheet.Cells.SetColumnWidth(column.ColumnIndex, 20);
+                                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(headerRowIndex, column.ColumnIndex);
                                         Style style = cell.GetStyle();
                                         style.Font.Name = "Times New Roman";
                                         style.Font.Color = Color.Black;
                                         style.Font.Size = 14;
                                         style.Font.IsBold = true;
                                         cell.SetStyle(style);
-                                        var headerIndices = colIndexByRow.GetOrCreateItem(headerIndex,
-                                            () =>
-                                            {
-                                                return new List<int>();
-                                            });
-                                        headerIndices.Add(matchingColumn.ColumnIndex);
                                     }
                                     var fieldType = fieldInfo.FieldType;
                                     bool renderDescription = fieldType.RenderDescriptionByDefault();
-                                    if(renderDescription)
+                                    if (renderDescription)
                                     {
-                                        TableDefinitionsWorksheet.Cells[rowIndex, matchingColumn.ColumnIndex].PutValue(field.Value.Description);
-                                        TableDefinitionsWorksheet.Cells.SetColumnWidth(matchingColumn.ColumnIndex, 20);
-                                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(rowIndex, matchingColumn.ColumnIndex);
+                                        TableDefinitionsWorksheet.Cells[dataRowIndex, column.ColumnIndex].PutValue(field.Value.Description);
+                                        TableDefinitionsWorksheet.Cells.SetColumnWidth(column.ColumnIndex, 20);
+                                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(dataRowIndex, column.ColumnIndex);
                                         Style style = cell.GetStyle();
+                                        style.HorizontalAlignment = TextAlignmentType.Right;
                                         style.Font.Name = "Times New Roman";
                                         style.Font.Color = Color.Black;
                                         style.Font.Size = 12;
                                         style.Font.IsBold = false;
                                         cell.SetStyle(style);
-                                        var dataIndices = colIndexByRow.GetOrCreateItem(rowIndex,
+                                        var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
                                             () =>
                                             {
                                                 return new List<int>();
                                             });
-                                        dataIndices.Add(matchingColumn.ColumnIndex);
+                                        dataIndices.Add(column.ColumnIndex);
 
                                     }
                                     else
                                     {
-                                        if (field.Value.Value  is DateTime)
+                                        if (field.Value.Value is DateTime)
                                         {
                                             var date = Convert.ToDateTime(field.Value.Value);
                                             GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
                                             string format = generalSettingsManager.GetDateTimeFormat();
-                                            TableDefinitionsWorksheet.Cells[rowIndex, matchingColumn.ColumnIndex].PutValue(date.ToString(format));
-                                            TableDefinitionsWorksheet.Cells.SetColumnWidth(matchingColumn.ColumnIndex, 20);
-                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(rowIndex, matchingColumn.ColumnIndex);
+                                            TableDefinitionsWorksheet.Cells[dataRowIndex, column.ColumnIndex].PutValue(date.ToString(format));
+                                            TableDefinitionsWorksheet.Cells.SetColumnWidth(column.ColumnIndex, 20);
+                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(dataRowIndex, column.ColumnIndex);
                                             Style style = cell.GetStyle();
+                                            style.HorizontalAlignment = TextAlignmentType.Right;
                                             style.Font.Name = "Times New Roman";
                                             style.Font.Color = Color.Black;
-                                            style.Font.Size = 14;
+                                            style.Font.Size = 12;
                                             style.Font.IsBold = false;
                                             cell.SetStyle(style);
-                                            var dataIndices = colIndexByRow.GetOrCreateItem(rowIndex,
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
                                             () =>
                                             {
                                                 return new List<int>();
                                             });
-                                            dataIndices.Add(matchingColumn.ColumnIndex);
+                                            dataIndices.Add(column.ColumnIndex);
 
+                                        }
+                                        else if (field.Value.Value is int || field.Value.Value is double || field.Value.Value is decimal || field.Value.Value is long)
+                                        {
+                                            TableDefinitionsWorksheet.Cells[dataRowIndex, column.ColumnIndex].PutValue(field.Value.Value);
+                                            TableDefinitionsWorksheet.Cells.SetColumnWidth(column.ColumnIndex, 20);
+                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(dataRowIndex, column.ColumnIndex);
+                                            Style style = cell.GetStyle();
+                                            style.HorizontalAlignment = TextAlignmentType.Left;
+                                            style.Font.Name = "Times New Roman";
+                                            style.Font.Color = Color.Black;
+                                            style.Font.Size = 12;
+                                            style.Font.IsBold = false;
+                                            cell.SetStyle(style);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
+                                            () =>
+                                            {
+                                                return new List<int>();
+                                            });
+                                            dataIndices.Add(column.ColumnIndex);
                                         }
                                         else
                                         {
-                                            TableDefinitionsWorksheet.Cells[rowIndex, matchingColumn.ColumnIndex].PutValue(field.Value.Value);
-                                            TableDefinitionsWorksheet.Cells.SetColumnWidth(matchingColumn.ColumnIndex, 20);
-                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(rowIndex, matchingColumn.ColumnIndex);
+                                            TableDefinitionsWorksheet.Cells[dataRowIndex, column.ColumnIndex].PutValue(field.Value.Value);
+                                            TableDefinitionsWorksheet.Cells.SetColumnWidth(column.ColumnIndex, 20);
+                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(dataRowIndex, column.ColumnIndex);
                                             Style style = cell.GetStyle();
+                                            style.HorizontalAlignment = TextAlignmentType.Right;
                                             style.Font.Name = "Times New Roman";
                                             style.Font.Color = Color.Black;
-                                            style.Font.Size = 14;
+                                            style.Font.Size = 12;
                                             style.Font.IsBold = false;
                                             cell.SetStyle(style);
-                                            var dataIndices = colIndexByRow.GetOrCreateItem(rowIndex,
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
                                             () =>
                                             {
                                                 return new List<int>();
                                             });
-                                            dataIndices.Add(matchingColumn.ColumnIndex);
+                                            dataIndices.Add(column.ColumnIndex);
                                         }
                                     }
                                 }
+                            }
+                            setHeaders = false;
+                            dataRowIndex++;
+                        }
+                    }
+                    else
+                    {
+                        foreach (var col in columns)
+                        {
+                            if (tableDef.IncludeHeaders && setHeaders)
+                            {
+                                TableDefinitionsWorksheet.Cells[headerRowIndex, col.ColumnIndex].PutValue(col.FieldTitle);
+                                TableDefinitionsWorksheet.Cells.SetColumnWidth(col.ColumnIndex, 20);
+                                Cell cell = TableDefinitionsWorksheet.Cells.GetCell(headerRowIndex, col.ColumnIndex);
+                                Style style = cell.GetStyle();
+                                style.Font.Name = "Times New Roman";
+                                style.Font.Color = Color.Black;
+                                style.Font.Size = 14;
+                                style.Font.IsBold = true;
+                                cell.SetStyle(style);
                             }
                         }
                         setHeaders = false;
-                        rowIndex++;
                     }
-                    if (colIndexByRow != null && colIndexByRow.Count !=0)
-                    {
-                        if(colIndexByRow.Count >=1)
-                        {
-                            foreach (var row in colIndexByRow)
-                            {
-                                if (row.Value != null && row.Value.Count != 0)
-                                {
-                                    if (row.Key == colIndexByRow.Keys.OrderBy(x => x).First())
-                                    {
-                                        var orderedColumnIndices = row.Value.OrderBy(x => x);
-                                        foreach (var columnIndex in orderedColumnIndices)
-                                        {
-                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
-                                            Style style = cell.GetStyle();
-                                            if (columnIndex == orderedColumnIndices.First())
-                                            {
-                                                style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                                            }
-                                            else if (columnIndex == orderedColumnIndices.Last())
-                                            {
-                                                style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                                            }
-                                            style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
-                                            cell.SetStyle(style);
-                                        }
-                                    }
-                                    else if (row.Key == colIndexByRow.Keys.OrderBy(x => x).Last())
-                                    {
-                                        var orderedColumnIndices = row.Value.OrderBy(x => x);
-                                        foreach (var columnIndex in orderedColumnIndices)
-                                        {
-                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
-                                            Style style = cell.GetStyle();
-                                            if (columnIndex == orderedColumnIndices.First())
-                                            {
-                                                style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                                            }
-                                            else if (columnIndex == orderedColumnIndices.Last())
-                                            {
-                                                style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                                            }
-                                            style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
-                                            cell.SetStyle(style);
-
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var orderedColumnIndices = row.Value.OrderBy(x => x);
-                                        foreach (var columnIndex in orderedColumnIndices)
-                                        {
-                                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
-                                            Style style = cell.GetStyle();
-                                            if (columnIndex == orderedColumnIndices.First())
-                                            {
-                                                style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-
-                                            }
-                                            else if (columnIndex == orderedColumnIndices.Last())
-                                            {
-                                                style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                                            }
-                                            cell.SetStyle(style);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else if (colIndexByRow.Count == 1)
-                        {
-                            var onlyRow = colIndexByRow.First();
-                            if (onlyRow.Value != null && onlyRow.Value.Count != 0)
-                            {
-                                var orderedColumnIndices = onlyRow.Value.OrderBy(x => x);
-                                foreach (var columnIndex in orderedColumnIndices)
-                                {
-                                    Cell cell = TableDefinitionsWorksheet.Cells.GetCell(onlyRow.Key, columnIndex);
-                                    Style style = cell.GetStyle();
-                                    if (columnIndex == orderedColumnIndices.First())
-                                    {
-                                        style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-
-                                    }
-                                    else if (columnIndex == orderedColumnIndices.Last())
-                                    {
-                                        style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                                    }
-                                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
-                                    style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
-                                    cell.SetStyle(style);
-                                }
-                            }
-                        }
-                    }
-                    MemoryStream memoryStream = new MemoryStream();
-                    memoryStream = TableDefinitionsWorkbook.SaveToStream();
-                    fileContent = memoryStream.ToArray();
+                    SetBorders(colIndexByRow, ref TableDefinitionsWorksheet);   
                 }
             }
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = TableDefinitionsWorkbook.SaveToStream();
+            fileContent = memoryStream.ToArray();
             return new VRAutomatedReportGeneratedFile()
             {
-                FileName = "AutomatedReport.xls",
                 FileContent = fileContent
             };
-
         }
 
         public override void Validate(IVRAutomatedReportHandlerValidateContext context)
@@ -305,10 +254,16 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             if (context.Queries != null && context.Queries.Count != 0)
             {
                 var queries = context.Queries;
+                context.Result = true;
                 foreach (var tableDefinition in tableDefinitions)
                 {
                     var matchingQuery = queries.FindRecord(x => x.VRAutomatedReportQueryId == tableDefinition.VRAutomatedReportQueryId);
-                    matchingQuery.ThrowIfNull("matchingQuery");
+                    if (matchingQuery == null)
+                    {
+                        context.Result = false;
+                        context.ErrorMessage = string.Format("A query used in the handler has been deleted.");
+                        break;
+                    }
                     matchingQuery.Settings.ThrowIfNull("matchingQuery.Settings");
                     var querySettings = matchingQuery.Settings.CastWithValidate<RecordSearchQuerySettings>("matchingQuery.Settings");
                     querySettings.Columns.ThrowIfNull("querySettings.Columns");
@@ -319,17 +274,180 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     var tableDefinitionColumns = tableDefinition.ColumnDefinitions;
                     if (tableDefinition.ColumnDefinitions.Count == 0)
                         throw new Exception(string.Format("No handler columns were added."));
+                    List<string> missingTableFields = new List<string>();
                     foreach (var tableDefinitionColumn in tableDefinitionColumns)
                     {
                         if (!queryColumns.Any(x => x.ColumnName == tableDefinitionColumn.FieldName))
                         {
-                            context.Result = false;
-                            context.ErrorMessage = string.Format("The field '{0}' was not found in query '{1}' after it has been edited.", tableDefinitionColumn.FieldTitle, matchingQuery.QueryTitle);
-                            break;
+                            if (!missingTableFields.Contains(tableDefinitionColumn.FieldTitle))
+                                missingTableFields.Add(tableDefinitionColumn.FieldTitle);
+                        }
+                       
+                    }
+                    if (missingTableFields != null && missingTableFields.Count == 1)
+                    {
+                        context.Result = false;
+                        context.ErrorMessage = string.Format("The field '{0}' was not found in query '{1}' after it has been edited.", missingTableFields.First(), matchingQuery.QueryTitle);
+                        break;
+                    }
+                    else if (missingTableFields != null && missingTableFields.Count > 1)
+                    {
+                        string joinedFields;
+                        if (missingTableFields.Count == 2)
+                        {
+                            joinedFields = string.Join(" and ", missingTableFields);
                         }
                         else
                         {
-                            context.Result = true;
+                            joinedFields = string.Join(" , ", missingTableFields);
+                        }
+                        context.Result = false;
+                        context.ErrorMessage = string.Format("The fields '{0}' were not found in query '{1}' after it has been edited.", joinedFields, matchingQuery.QueryTitle);
+                        break;
+                    }
+                }
+            }
+        }
+        private void SetBorders(Dictionary<int, List<int>> colIndexByRow, ref Worksheet TableDefinitionsWorksheet)
+        {
+            if (colIndexByRow != null && colIndexByRow.Count != 0)
+            {
+                if (colIndexByRow.Count > 1)
+                {
+                    foreach (var row in colIndexByRow)
+                    {
+                        if (row.Value != null && row.Value.Count != 0)
+                        {
+                            if (row.Key == colIndexByRow.Keys.OrderBy(x => x).First())
+                            {
+                                var orderedColumnIndices = row.Value.OrderBy(x => x);
+                                if (orderedColumnIndices.Count() == 1)
+                                {
+                                    var columnIndex = orderedColumnIndices.First();
+                                    Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
+                                    Style style = cell.GetStyle();
+                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                                    cell.SetStyle(style);
+                                }
+                                else
+                                {
+                                    foreach (var columnIndex in orderedColumnIndices)
+                                    {
+                                        Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
+                                        Style style = cell.GetStyle();
+                                        if (columnIndex == orderedColumnIndices.First())
+                                        {
+                                            style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                                        }
+                                        else if (columnIndex == orderedColumnIndices.Last())
+                                        {
+                                            style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                        }
+                                        style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                                        cell.SetStyle(style);
+                                    }
+                                }
+
+                            }
+                            else if (row.Key == colIndexByRow.Keys.OrderBy(x => x).Last())
+                            {
+                                var orderedColumnIndices = row.Value.OrderBy(x => x);
+                                if (orderedColumnIndices.Count() == 1)
+                                {
+                                    var columnIndex = orderedColumnIndices.First();
+                                    Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
+                                    Style style = cell.GetStyle();
+                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                    style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+                                    cell.SetStyle(style);
+                                }
+                                foreach (var columnIndex in orderedColumnIndices)
+                                {
+                                    Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
+                                    Style style = cell.GetStyle();
+                                    if (columnIndex == orderedColumnIndices.First())
+                                    {
+                                        style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                                    }
+                                    else if (columnIndex == orderedColumnIndices.Last())
+                                    {
+                                        style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                    }
+                                    style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+                                    cell.SetStyle(style);
+
+                                }
+                            }
+                            else
+                            {
+                                var orderedColumnIndices = row.Value.OrderBy(x => x);
+                                if (orderedColumnIndices.Count() == 1)
+                                {
+                                    var columnIndex = orderedColumnIndices.First();
+                                    Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
+                                    Style style = cell.GetStyle();
+                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                    cell.SetStyle(style);
+                                }
+                                foreach (var columnIndex in orderedColumnIndices)
+                                {
+                                    Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, columnIndex);
+                                    Style style = cell.GetStyle();
+                                    if (columnIndex == orderedColumnIndices.First())
+                                    {
+                                        style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+
+                                    }
+                                    else if (columnIndex == orderedColumnIndices.Last())
+                                    {
+                                        style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                    }
+                                    cell.SetStyle(style);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (colIndexByRow.Count == 1)
+                {
+                    var onlyRow = colIndexByRow.First();
+                    if (onlyRow.Value != null && onlyRow.Value.Count != 0)
+                    {
+                        var orderedColumnIndices = onlyRow.Value.OrderBy(x => x);
+                        if (orderedColumnIndices.Count() == 1)
+                        {
+                            var columnIndex = orderedColumnIndices.First();
+                            Cell cell = TableDefinitionsWorksheet.Cells.GetCell(onlyRow.Key, columnIndex);
+                            Style style = cell.GetStyle();
+                            style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                            style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+                            style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                            style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                            cell.SetStyle(style);
+                        }
+                        else
+                        {
+                            foreach (var columnIndex in orderedColumnIndices)
+                            {
+                                Cell cell = TableDefinitionsWorksheet.Cells.GetCell(onlyRow.Key, columnIndex);
+                                Style style = cell.GetStyle();
+                                if (columnIndex == orderedColumnIndices.First())
+                                {
+                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+
+                                }
+                                else if (columnIndex == orderedColumnIndices.Last())
+                                {
+                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                }
+                                style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                                style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+                                cell.SetStyle(style);
+                            }
                         }
                     }
                 }
@@ -353,7 +471,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public bool IncludeHeaders { get; set; }
 
-        public AdvancedExcelFileGeneratorTableTitleDefinition TitleDefinition { get; set; }
+        public string Title { get; set; }
 
         public List<AdvancedExcelFileGeneratorTableColumnDefinition> ColumnDefinitions { get; set; }
     }
@@ -403,10 +521,4 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public string FieldName { get; set; }
     }
 
-    public class AdvancedExcelFileGeneratorTableTitleDefinition
-    {
-        public string Title { get; set; }
-
-        public int ColumnIndex { get; set; }
-    }
 }

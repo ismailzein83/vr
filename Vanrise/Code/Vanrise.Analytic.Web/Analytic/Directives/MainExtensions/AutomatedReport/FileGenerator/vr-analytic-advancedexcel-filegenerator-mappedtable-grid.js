@@ -6,7 +6,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
     var directiveDefinitionObject = {
 
         restrict: "E",
-        scope: {
+        scope: { 
             onReady: "="
         },
         controller: function ($scope, $element, $attrs) {
@@ -39,9 +39,12 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
 
         function initializeController() {
 
-            $scope.mappedCols = [];
-            
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel = {
+        };
+
+            $scope.scopeModel.mappedCols =[];
+
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
 
 
@@ -50,92 +53,93 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
 
                 function getDirectiveAPI() {
 
-                    var directiveAPI = {};
+                    var directiveAPI = {
+                };
                     directiveAPI.load = function (query) {
                         contextPromiseDeferred.resolve();
                         context = query.context;
                         return loadMappedColumns(query.mappedSheet);
-                    };
+                };
 
                     directiveAPI.getData = function () {
                         return getMappedTable();
-                    };
+                };
 
 
                     directiveAPI.addMappedCol = function () {
                         var mappedCol = getMappedCol();
-                        $scope.mappedCols.push(mappedCol);
-                    };
+                        $scope.scopeModel.mappedCols.push(mappedCol);
+                };
 
 
                     return directiveAPI;
-                }
+            }
 
                 contextPromiseDeferred.promise.then(function () {
                     if (context.getSelectedQuery != undefined && typeof (context.getSelectedQuery) == "function") {
                         selectedQueryId = context.getSelectedQuery().value;
-                    }
-                });
-              
-            };
+                }
+            });
 
-            $scope.removeMappedCol = function (dataItem) {
-                var index = $scope.mappedCols.indexOf(dataItem);
-                $scope.mappedCols.splice(index, 1);
-            };
+        };
 
-            $scope.addAllFields = function () {
+            $scope.scopeModel.removeMappedCol = function (dataItem) {
+                var index = $scope.scopeModel.mappedCols.indexOf(dataItem);
+                $scope.scopeModel.mappedCols.splice(index, 1);
+        };
+
+            $scope.scopeModel.addAllFields = function () {
                 if (context != undefined && context.getQueryFields != undefined && typeof (context.getQueryFields) == "function") {
                     var fieldsPromise = context.getQueryFields(selectedQueryId);
-                    var fieldsArray = [];
+                    var fieldsArray =[];
                     fieldsPromise.then(function (fields) {
                         if (fields != undefined) {
                             for (var fieldName in fields) {
                                 fieldsArray.push({
-                                    description: fields[fieldName],
+                                        description: fields[fieldName],
                                     value: fieldName
-                                });
-                            }
+                            });
+                        }
                             for (var i = 0; i < fieldsArray.length; i++) {
                                 var mappedCol = getMappedCol(undefined, undefined, undefined, fieldsArray[i]);
-                                $scope.mappedCols.push(mappedCol);
-                            }
+                                $scope.scopeModel.mappedCols.push(mappedCol);
                         }
-                    });
-                }
-               
-                
-            };
-
-            $scope.validateGrid = function () {
-                if ($scope.mappedCols.length == 0) {
-                    return 'At least one record must be added.';
-                }
-                var titles = [];
-                var firstRowDirectives = [];
-                for (var i = 0; i < $scope.mappedCols.length; i++) {
-                    if ($scope.mappedCols[i].directiveAPI != undefined && $scope.mappedCols[i].directiveAPI.getData() != undefined) {
-                        firstRowDirectives.push($scope.mappedCols[i].directiveAPI.getData().CellIndex);
                     }
+                });
+            }
+
+
+        };
+
+            $scope.scopeModel.validateGrid = function () {
+                if ($scope.scopeModel.mappedCols.length == 0) {
+                    return 'At least one record must be added.';
+            }
+                var titles =[];
+                var firstRowDirectives =[];
+                for (var i = 0; i < $scope.scopeModel.mappedCols.length; i++) {
+                    if ($scope.scopeModel.mappedCols[i].directiveAPI != undefined && $scope.scopeModel.mappedCols[i].directiveAPI.getData() != undefined) {
+                        firstRowDirectives.push($scope.scopeModel.mappedCols[i].directiveAPI.getData().CellIndex);
                 }
+            }
                 while (firstRowDirectives.length > 0) {
                     var indexToValidate = firstRowDirectives[0];
                     firstRowDirectives.splice(0, 1);
                     if (!validateIndex(indexToValidate, firstRowDirectives)) {
                         return 'Two or more columns have the same column index.';
-                    }
-                   
                 }
+
+            }
 
                 return null;
                 function validateIndex(index, array) {
                     for (var j = 0; j < array.length; j++) {
-                        if (array[j] == index)
+                        if (array[j]== index)
                             return false;
-                    }
-                    return true;
                 }
-            };
+                    return true;
+            }
+        };
 
         }
 
@@ -145,7 +149,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
                 for (var i = 0; i < mappedSheet.ColumnDefinitions.length; i++) {
                     var mappedCol = getMappedCol(mappedSheet.ColumnDefinitions[i], mappedSheet.SheetIndex, mappedSheet.RowIndex);
                     promises.push(mappedCol.directiveLoadDeferred.promise);
-                    $scope.mappedCols.push(mappedCol);
+                    $scope.scopeModel.mappedCols.push(mappedCol);
                 }
             }
             return UtilsService.waitMultiplePromises(promises);
@@ -155,7 +159,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
 
         function getMappedCol(mappedColumn, sheetIndex, firstRowIndex, selectedField) {
             if (mappedColumn != undefined) {
-                $scope.isLoadingMappedCol = true;
+                $scope.scopeModel.isLoadingMappedCol = true;
             }
 
             var mappedCol = {};
@@ -214,7 +218,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
             UtilsService.waitMultiplePromises([mappedCol.fieldSelectorLoadPromiseDeferred.promise]).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-                $scope.isLoadingMappedCol = false;
+                $scope.scopeModel.isLoadingMappedCol = false;
             });
 
             return mappedCol;
@@ -259,14 +263,14 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
 
         function getMappedTable() {
 
-            if ($scope.mappedCols.length == 0)
+            if ($scope.scopeModel.mappedCols.length == 0)
                 return null;
 
             var mappedColumns = [];
 
-            for (var i = 0; i < $scope.mappedCols.length; i++) {
+            for (var i = 0; i < $scope.scopeModel.mappedCols.length; i++) {
 
-                var mappedCol = $scope.mappedCols[i];
+                var mappedCol = $scope.scopeModel.mappedCols[i];
                 var mappedColumn = {
                     $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorTableColumnDefinition, Vanrise.Analytic.MainExtensions"
                 };

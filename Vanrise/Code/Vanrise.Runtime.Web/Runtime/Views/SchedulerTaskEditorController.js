@@ -267,24 +267,74 @@
         }
 
         function insertTask() {
-            $scope.isLoading = true;
-            var taskObject = buildTaskObjFromScope();
-            return SchedulerTaskAPIService.AddTask(taskObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Schedule Task", response)) {
-                    if ($scope.onTaskAdded != undefined)
-                        $scope.onTaskAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
+            var queriesAndHandlersValidatedPromise = UtilsService.createPromiseDeferred();
+            if (taskActionDirectiveAPI.validate != undefined && typeof (taskActionDirectiveAPI.validate) == "function") {
+                taskActionDirectiveAPI.validate().then(function (response) {
+                    if (response != undefined) {
+                        var result = response.Result;
+                        var errorMessage = response.ErrorMessage;
+                        if (!result) {
+                            $scope.scopeModel.validationErrorMessage = errorMessage;
+                            queriesAndHandlersValidatedPromise.reject();
+                        }
+                        else {
+                            queriesAndHandlersValidatedPromise.resolve();
+                        }
+                    }
+                    else {
+                        queriesAndHandlersValidatedPromise.resolve();
+                    }
+                });
+            }
+        else
+        {
+            queriesAndHandlersValidatedPromise.resolve();
+        }
+                queriesAndHandlersValidatedPromise.promise.then(function () {
+                $scope.isLoading = true;
+                var taskObject = buildTaskObjFromScope();
+                return SchedulerTaskAPIService.AddTask(taskObject)
+                .then(function (response) {
+                    if (VRNotificationService.notifyOnItemAdded("Schedule Task", response)) {
+                        if ($scope.onTaskAdded != undefined)
+                            $scope.onTaskAdded(response.InsertedObject);
+                        $scope.modalContext.closeModal();
                 }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
             });
-
+            });
         }
 
         function updateTask() {
+            var queriesAndHandlersValidatedPromise = UtilsService.createPromiseDeferred();
+            if (taskActionDirectiveAPI.validate != undefined && typeof (taskActionDirectiveAPI.validate) == "function") {
+                taskActionDirectiveAPI.validate().then(function (response) {
+                    if (response != undefined) {
+                        var result = response.Result;
+                        var errorMessage = response.ErrorMessage;
+                        if (!result) {
+                            $scope.scopeModel.validationErrorMessage = errorMessage;
+                            queriesAndHandlersValidatedPromise.reject();
+                        }
+                        else
+                        {
+                            queriesAndHandlersValidatedPromise.resolve();
+                        }
+                    }
+                    else {
+                        queriesAndHandlersValidatedPromise.resolve();
+                    }
+                });
+            }
+            else
+            {
+                queriesAndHandlersValidatedPromise.resolve();
+            }
+
+            queriesAndHandlersValidatedPromise.promise.then(function () {
             $scope.isLoading = true;
             var taskObject = buildTaskObjFromScope();
             SchedulerTaskAPIService.UpdateTask(taskObject)
@@ -294,10 +344,11 @@
                         $scope.onTaskUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
-            }).catch(function (error) {
+                }).catch(function(error) {
                 VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
+                }).finally(function () {
                 $scope.isLoading = false;
+                });
             });
         }
 

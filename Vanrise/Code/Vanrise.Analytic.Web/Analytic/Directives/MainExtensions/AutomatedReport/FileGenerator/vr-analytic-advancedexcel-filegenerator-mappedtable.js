@@ -3,7 +3,7 @@
 app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService', 'VRUIUtilsService',  function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
-        scope: {
+        scope: { 
             onReady: "=",
             normalColNum: '@',
             isrequired: '='
@@ -13,7 +13,7 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
             var advancedExcelMappedTableTemplate = new AdvancedExcelMappedTableTemplate($scope, ctrl, $attrs);
             advancedExcelMappedTableTemplate.initializeController();
         },
-        controllerAs: "ctrl",
+        controllerAs: "ctrlTable",
         bindToController: true,
         templateUrl: '/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/FileGenerator/Templates/AdvancedExcelFileGeneratorMappedTableTemplate.html'
     };
@@ -25,9 +25,6 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
         var firstRowDirectiveAPI;
         var firstRowDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var mappedTitleAPI;
-        var mappedTitleReadyDeferred = UtilsService.createPromiseDeferred();
-
         var mappedColumnsAPI;
         var mappedColumnsReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -35,38 +32,33 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
         var context;
 
         function initializeController() {
+            $scope.scopeModel = {};
 
-            $scope.onFirstRowMappingReady = function (api) {
+            $scope.scopeModel.onFirstRowMappingReady = function (api) {
                 firstRowDirectiveAPI = api;
                 firstRowDirectiveReadyDeferred.resolve();
             };
 
-            $scope.onMappedTitleGridReady = function (api) {
-                mappedTitleAPI = api;
-                mappedTitleReadyDeferred.resolve();
-            };
-
-            $scope.onMappedColumnsGridReady = function (api) {
+            $scope.scopeModel.onMappedColumnsGridReady = function (api) {
                 mappedColumnsAPI = api;
                 mappedColumnsReadyDeferred.resolve();
             };
 
 
-            $scope.addMappedCol = function () {
+            $scope.scopeModel.addMappedCol = function () {
                 mappedColumnsAPI.addMappedCol();
             };
-            $scope.addAllFields = function () {
+            $scope.scopeModel.addAllFields = function () {
                 mappedColumnsAPI.addAllFields();
-
             };
 
-            $scope.disableAddMappedCol = function () {
+            $scope.scopeModel.disableAddMappedCol = function () {
                 if (context!=undefined && context.getQueryInfo()!=undefined && context.getQueryInfo().length == 0) {
                     return true;
                 }
             };
 
-            UtilsService.waitMultiplePromises([firstRowDirectiveReadyDeferred.promise, mappedTitleReadyDeferred.promise, mappedColumnsReadyDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([firstRowDirectiveReadyDeferred.promise, mappedColumnsReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
         }
@@ -82,8 +74,9 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     context = payload.context;
                 }
                 if (mappedTable != undefined) {
-                    $scope.includeHeaders = mappedTable.IncludeHeaders;
-                    $scope.includeTitle = mappedTable.IncludeTitle;
+                    $scope.scopeModel.includeHeaders = mappedTable.IncludeHeaders;
+                    $scope.scopeModel.includeTitle = mappedTable.IncludeTitle;
+                    $scope.scopeModel.tableTitle = mappedTable.Title;
                 }
 
                 var loadFirstRowDirectivePromise = loadFirstRowDirective();
@@ -91,9 +84,6 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
 
                 var loadMappedColumnsGridPromise = loadMappedColumnsGrid();
                 promises.push(loadMappedColumnsGridPromise);
-
-                var loadMappedTitleGridPromise = loadMappedTitleGrid();
-                promises.push(loadMappedTitleGridPromise);
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -107,11 +97,12 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorTableDefinition, Vanrise.Analytic.MainExtensions',
                     SheetIndex: firstRowDirectiveData.SheetIndex,
                     RowIndex: firstRowDirectiveData.RowIndex,
-                    IncludeTitle:$scope.includeTitle,
-                    IncludeHeaders: $scope.includeHeaders,
-                    TitleDefinition: mappedTitleAPI.getData(),
+                    IncludeTitle: $scope.scopeModel.includeTitle,
+                    IncludeHeaders: $scope.scopeModel.includeHeaders,
+                    Title: $scope.scopeModel.includeTitle ? $scope.scopeModel.tableTitle : undefined,
                     ColumnDefinitions: mappedColumnsAPI.getData()
                 };
+
                 return mappedTable;
             };
 
@@ -144,18 +135,6 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
             return firstRowDirectiveLoadDeferred.promise;
         }
 
-        function loadMappedTitleGrid(){
-            var mappedTitleLoadDeferred = UtilsService.createPromiseDeferred();
-
-            mappedTitleReadyDeferred.promise.then(function () {
-                var mappedTitlePayload = {
-                    context: getContext(),
-                    mappedSheet: mappedTable,
-                };
-                VRUIUtilsService.callDirectiveLoad(mappedTitleAPI, mappedTitlePayload, mappedTitleLoadDeferred);
-            });
-            return mappedTitleLoadDeferred.promise;
-        }
 
         function loadMappedColumnsGrid() {
             var mappedColumnsLoadDeferred = UtilsService.createPromiseDeferred();
@@ -170,7 +149,7 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
         }
 
         function getContext() {
-            var currentContext = context;
+            var currentContext = UtilsService.cloneObject(context);
             if (currentContext == undefined) {
                 currentContext = {};
             }

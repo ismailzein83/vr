@@ -39,7 +39,7 @@ function (UtilsService, VRUIUtilsService) {
 
             $scope.onBPDefinitionDirectiveReady = function (api) {
                 bpDefenitionDirectiveAPI = api;
-             
+
                 var setLoader = function (value) {
                     $scope.isLoadingAction = value;
                 };
@@ -128,6 +128,17 @@ function (UtilsService, VRUIUtilsService) {
                 }
                 return UtilsService.waitMultiplePromises(promises);
 
+            };
+
+            api.validate = function () {
+                if (bpDefenitionDirectiveAPI != undefined && bpDefenitionDirectiveAPI.validate != undefined && typeof (bpDefenitionDirectiveAPI.validate) == "function") {
+                    return bpDefenitionDirectiveAPI.validate();
+                }
+                else {
+                    var validatePromise = UtilsService.createPromiseDeferred();
+                    validatePromise.resolve();
+                    return validatePromise.promise;
+                }
             };
 
             if (ctrl.onReady != null)

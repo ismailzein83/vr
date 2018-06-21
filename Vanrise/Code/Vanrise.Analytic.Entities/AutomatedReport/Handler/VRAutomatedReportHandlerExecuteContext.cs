@@ -20,7 +20,7 @@ namespace Vanrise.Analytic.Entities
         public VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName)
         {
             VRAutomatedReportResolvedDataList resolvedDataList = new VRAutomatedReportResolvedDataList()
-            { 
+            {
                 FieldInfos = new Dictionary<string,VRAutomatedReportFieldInfo>(),
                 Items = new List<VRAutomatedReportResolvedDataItem>()
             };
@@ -91,8 +91,8 @@ namespace Vanrise.Analytic.Entities
                                         }
                                         resolvedItems.Add(resolvedItem);
                                     }
-                                    resolvedDataList.Items = resolvedItems;
                                 }
+                                resolvedDataList.Items = resolvedItems;
                             }
                         }
                     }

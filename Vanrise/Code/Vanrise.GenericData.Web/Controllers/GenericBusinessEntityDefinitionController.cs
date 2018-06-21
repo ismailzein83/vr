@@ -111,5 +111,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericBESerialNumberPartSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetDataRecordTypeFields")]
+        public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
+        {
+            return _manager.GetDataRecordTypeFields(dataRecordTypeId);
+        }
     }
 }

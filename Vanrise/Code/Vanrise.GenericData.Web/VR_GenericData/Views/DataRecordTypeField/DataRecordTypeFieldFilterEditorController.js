@@ -75,7 +75,7 @@
                 $scope.isLoading = false;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
+            });
         }
 
         function loadGroupFilter() {
@@ -94,7 +94,7 @@
 
         function buildContext() {
             var context = {
-                getFields: function () { return fields },
+                getFields: function () { return fields; },
                 getRuleEditor: getRuleFilterEditorByFieldType
             };
             return context;
