@@ -98,7 +98,7 @@
 
             var label = '{{ctrl.fieldTitle}}';
             if (attrs.ismultipleselection != undefined) {
-                label = '{{ctrl.fieldTitle}}s';
+                label = '{{ctrl.fieldTitle}}';
                 multipleselection = 'ismultipleselection';
             }
 
