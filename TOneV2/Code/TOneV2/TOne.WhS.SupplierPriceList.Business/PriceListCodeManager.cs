@@ -399,7 +399,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             if (importedZones.Count() > 0) // Country is included
             {
-                if (supplierPriceListType == SupplierPricelistType.RateChange || !DoCountryCodeGroupsExistInImportedData(countryId, importedCodes))
+                if (supplierPriceListType == SupplierPricelistType.RateChange || (!DoCountryCodeGroupsExistInImportedData(countryId, importedCodes) && IsCodeGroupVerificationEnabled()))
                 {
                     foreach (ImportedZone importedZone in importedZones)
                     {
@@ -424,16 +424,20 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             return existingCodesToClose;
         }
-
+        public bool IsCodeGroupVerificationEnabled()
+        {
+            BusinessEntity.Business.ConfigManager configManager = new BusinessEntity.Business.ConfigManager();
+            return configManager.GetCodeGroupVerification();
+        }
         private bool DoCountryCodeGroupsExistInImportedData(int countryId, IEnumerable<ImportedCode> importedCodes)
         {
-            IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(countryId);
-            foreach (ImportedCode importedCode in importedCodes)
-            {
-                if (codeGroupCodes.Any(x => x.Code == importedCode.Code))
-                    return true;
-            }
-
+            
+                IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(countryId);
+                foreach (ImportedCode importedCode in importedCodes)
+                {
+                    if (codeGroupCodes.Any(x => x.Code == importedCode.Code))
+                        return true;
+                }
             return false;
         }
 

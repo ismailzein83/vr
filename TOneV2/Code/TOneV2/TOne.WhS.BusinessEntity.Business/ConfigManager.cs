@@ -416,7 +416,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			return result;
 		}
-
+        public bool GetCodeGroupVerification()
+        {
+            PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+            return purchaseAreaSettings.CodeGroupVerfifcation;
+        }
 		public int GetPurchaseAreaEffectiveDateDayOffset()
 		{
 			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();

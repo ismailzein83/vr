@@ -13,6 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public List<PricelistTypeMapping> PricelistTypeMappingList { get; set; }
 		public List<AutoImportTemplate> AutoImportTemplateList { get; set; }
 		public List<AutoImportTemplate> InternalAutoImportTemplateList { get; set; }
+        public bool CodeGroupVerfifcation { get; set; }
 	}
 
 	public class PricelistTypeMapping

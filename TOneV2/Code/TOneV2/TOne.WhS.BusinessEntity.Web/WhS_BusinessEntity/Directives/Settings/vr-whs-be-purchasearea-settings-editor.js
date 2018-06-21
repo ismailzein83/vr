@@ -87,6 +87,7 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 						PricelistTypeMappingList: pricelistTypeMappingAPI.getData(),
 						AutoImportTemplateList: autoImportTemplateSettingsAPI.getData(),
 						InternalAutoImportTemplateList: internalAutoImportTemplateSettingsAPI.getData(),
+						CodeGroupVerfifcation: ctrl.codeGroupVerification
 					};
 				};
 
@@ -96,11 +97,13 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
 			function loadStaticData() {
 				if (data == undefined)
-					return;
+				    return;
+				console.log(data);
 				ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
 				ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
 				ctrl.maximumRate = data.MaximumRate;
 				ctrl.maximumCodeRange = data.MaximumCodeRange;
+				ctrl.codeGroupVerification = data.CodeGroupVerfifcation;
 			}
 
 			function loadAutoImportTemplateSettings() {

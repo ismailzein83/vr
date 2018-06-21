@@ -141,6 +141,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\Npgsql.dll</HintPath>
     </Reference>
+    <Reference Include="OpenPop">
+      <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\OpenPop.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
     </Reference>
