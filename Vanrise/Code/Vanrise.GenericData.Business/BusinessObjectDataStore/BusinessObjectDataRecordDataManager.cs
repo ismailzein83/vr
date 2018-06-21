@@ -153,59 +153,24 @@ namespace Vanrise.GenericData.Business
         {
             public Action<DataRecordObject, DateTime> OnRecordLoadedAction { get; set; }
 
-            public DateTime? FromTime
-            {
-                get;
-                set;
-            }
+            public DateTime? FromTime { get; set; }
 
-            public DateTime? ToTime
-            {
-                get;
-                set;
-            }
+            public DateTime? ToTime { get; set; }
 
-            public RecordFilterGroup FilterGroup
-            {
-                get;
-                set;
-            }
+            public RecordFilterGroup FilterGroup { get; set; }
 
-            public int? LimitResult
-            {
-                get;
-                set;
-            }
+            public int? LimitResult { get; set; }
 
-            public OrderDirection? OrderDirection
-            {
-                get;
-                set;
-            }
+            public OrderDirection? OrderDirection { get; set; }
 
-            public bool IsLoadStopped
-            {
-                get;
-                set;
-            }
+            public bool IsLoadStopped { get; set; }
 
-            public List<string> Fields
-            {
-                get;
-                set;
-            }
+            public List<string> Fields { get; set; }
 
-            public void OnRecordLoaded(DataRecordObject dataRecordObject, DateTime recordTime)
-            {
-                this.OnRecordLoadedAction(dataRecordObject, recordTime);
-            }
+            public void OnRecordLoaded(DataRecordObject dataRecordObject, DateTime recordTime) { this.OnRecordLoadedAction(dataRecordObject, recordTime); }
 
-            public void StopLoadingRecords()
-            {
-                this.IsLoadStopped = true;
-            }
+            public void StopLoadingRecords() { this.IsLoadStopped = true; }
         }
-
 
         #endregion
     }
