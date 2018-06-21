@@ -77,6 +77,12 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             function initializeController() {
                 $scope.scopeModel = {};
 
+                $scope.scopeModel.selectorsingulartitle;
+
+                $scope.scopeModel.selectorpluraltitle;
+
+                $scope.scopeModel.hideaddbutton;
+
                 $scope.scopeModel.onDataRecordTypeSelectorDirectiveReady = function (api) {
                     dataRecordTypeSelectorAPI = api;
                     dataRecordTypeSelectorReadyPromiseDeferred.resolve();
@@ -185,7 +191,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         GenericBEActions: actionDefinitionGridAPI.getData(),
                         ExtendedSettings: extendedSettingsAPI.getData(),
                         OnBeforeInsertHandler: beforeInsertHandlerAPI.getData(),
-                        OnAfterSaveHandler: afterSaveHandlerAPI.getData()
+                        OnAfterSaveHandler: afterSaveHandlerAPI.getData(),
+                        SelectorSingularTitle: $scope.scopeModel.selectorSingularTitle,
+                        SelectorPluralTitle: $scope.scopeModel.selectorPluralTitle,
+                        HideAddButton: $scope.scopeModel.hideAddButton
+
                     };
                 };
 
@@ -195,8 +205,13 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     if (payload != undefined) {
                         businessEntityDefinitionSettings = payload.businessEntityDefinitionSettings;
 
-                        if (businessEntityDefinitionSettings != undefined)
+                        if (businessEntityDefinitionSettings != undefined) {
                             recordTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                            $scope.scopeModel.selectorSingularTitle=businessEntityDefinitionSettings.SelectorSingularTitle;
+                            $scope.scopeModel.selectorPluralTitle = businessEntityDefinitionSettings.SelectorPluralTitle;
+                            $scope.scopeModel.hideAddButton = businessEntityDefinitionSettings.HideAddButton;
+
+                        }
 
                     }
                     promises.push(loadDataRecordTypeSelector());
