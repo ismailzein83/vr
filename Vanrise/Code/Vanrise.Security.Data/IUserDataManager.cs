@@ -18,7 +18,7 @@ namespace Vanrise.Security.Data
         bool AddUser(User user, string tempPassword, out int insertedId);
 
         bool UpdateUser(User user);
-
+        bool ChangeUserSecurityProvider(int userId, Guid securityProviderId, string encryptedPassword, UserSetting userSettings, int lastModifiedBy);
         bool DisableUser(int userID, int lastModifiedBy);
 
         bool EnableUser(int userID, int lastModifiedBy);

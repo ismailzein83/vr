@@ -136,10 +136,16 @@ namespace Vanrise.Security.Data.SQL
             return ExecuteNonQuerySP("sec.sp_User_UpdateProfile", userId, name, settings != null ? Vanrise.Common.Serializer.Serialize(settings) : null, lastModifiedBy) > 0;
         }
 
+        public bool ChangeUserSecurityProvider(int userId, Guid securityProviderId, string encryptedPassword, UserSetting userSettings, int lastModifiedBy)
+        {
+            return ExecuteNonQuerySP("sec.sp_User_ChangeSecurityProvider", userId, securityProviderId, encryptedPassword, userSettings != null ? Vanrise.Common.Serializer.Serialize(userSettings) : null, lastModifiedBy) > 0;
+        }
+
         public bool AreUsersUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("sec.[User]", ref updateHandle);
         }
+
 
         #endregion
 
@@ -170,6 +176,9 @@ namespace Vanrise.Security.Data.SQL
         }
 
         #endregion
+
+
+       
     }
 
     //public enum RDBDataType { Varchar, NVarchar, Int, BigInt, Decimal, DateTime}

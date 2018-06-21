@@ -120,6 +120,7 @@
     <Compile Include="User\UserInfo.cs" />
     <Compile Include="User\UserProfile.cs" />
     <Compile Include="User\UserQuery.cs" />
+    <Compile Include="User\UserToChangeSecurityProvider.cs" />
     <Compile Include="User\UserToUpdate.cs" />
     <Compile Include="User\UserToAdd.cs" />
     <Compile Include="View\View.cs" />

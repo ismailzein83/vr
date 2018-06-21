@@ -206,45 +206,18 @@ namespace Vanrise.Security.Business
             int userId = -1;
             bool insertActionSucc;
 
-            if (!Utilities.IsEmailValid(userObject.Email))
+
+            string errorMessage;
+            string encryptedPassword;
+            string pwd;
+            bool passwordCheckRequired;
+            if (!ValidateUser(userObject.Email, userObject.SecurityProviderId, userObject.Password, out  encryptedPassword, out  pwd, out  passwordCheckRequired, out  errorMessage))
             {
-                insertOperationOutput.Message = "Invalid Email Address.";
+                insertOperationOutput.Message = errorMessage;
                 return insertOperationOutput;
             }
 
             User addedUser = null;
-
-            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(userObject.SecurityProviderId);
-            securityProvider.ThrowIfNull("securityProvider", userObject.SecurityProviderId);
-
-            string encryptedPassword = null;
-            string pwd = null;
-
-            if (securityProvider.Settings.ExtendedSettings.PasswordCheckRequired)
-            {
-                if (!String.IsNullOrWhiteSpace(userObject.Password))//password is not required when adding User, it is auto-generated
-                {
-                    string validationMessage;
-                    if (!_securityManager.DoesPasswordMeetRequirement(userObject.Password, out validationMessage))
-                    {
-                        insertOperationOutput.Message = validationMessage;
-                        return insertOperationOutput;
-                    }
-
-                    pwd = userObject.Password;
-                }
-                else
-                {
-                    if (!_configManager.ShouldSendEmailOnNewUser())
-                    {
-                        insertOperationOutput.Message = "Password cannot be empty.";
-                        return insertOperationOutput;
-                    }
-                    PasswordGenerator passwordGenerator = new PasswordGenerator();
-                    pwd = passwordGenerator.Generate();
-                }
-                encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
-            }
 
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
@@ -267,9 +240,10 @@ namespace Vanrise.Security.Business
 
             };
             insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
-            if (securityProvider.Settings.ExtendedSettings.PasswordCheckRequired)
+            if (insertActionSucc)
             {
-                if (insertActionSucc)
+
+                if (passwordCheckRequired)
                 {
                     addedUser.UserId = userId;
                     new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedPassword, false);
@@ -283,10 +257,7 @@ namespace Vanrise.Security.Business
                         sendMailTask.Start();
                     }
                 }
-            }
 
-            if (insertActionSucc)
-            {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
                 VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, addedUser);
@@ -310,6 +281,113 @@ namespace Vanrise.Security.Business
 
             return insertOperationOutput;
         }
+
+        public bool ValidateUser(string email,Guid securityProviderId,string password, out string encryptedPassword, out string pwd,out bool passwordCheckRequired,  out string errorMessage)
+        {
+            errorMessage = null;
+
+            encryptedPassword = null;
+            pwd = null;
+            passwordCheckRequired = false;
+
+            if (!Utilities.IsEmailValid(email))
+            {
+                errorMessage = "Invalid Email Address.";
+                return false;
+            }
+
+            SecurityProvider securityProvider = new SecurityProviderManager().GetSecurityProviderbyId(securityProviderId);
+            securityProvider.ThrowIfNull("securityProvider", securityProviderId);
+
+            passwordCheckRequired = securityProvider.Settings.ExtendedSettings.PasswordCheckRequired;
+            if (passwordCheckRequired)
+            {
+                if (!String.IsNullOrWhiteSpace(password))//password is not required when adding User, it is auto-generated
+                {
+                    string validationMessage;
+                    if (!_securityManager.DoesPasswordMeetRequirement(password, out validationMessage))
+                    {
+                        errorMessage = validationMessage;
+                        return false;
+                    }
+
+                    pwd = password;
+                }
+                else
+                {
+                    if (!_configManager.ShouldSendEmailOnNewUser())
+                    {
+                        errorMessage = "Password cannot be empty.";
+                        return false;
+                    }
+                    PasswordGenerator passwordGenerator = new PasswordGenerator();
+                    pwd = passwordGenerator.Generate();
+                }
+                encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
+            }
+
+            return true;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> ChangeUserSecurityProvider(UserToChangeSecurityProvider userToChangeSecurityProvider)
+        {
+            UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            int userId = -1;
+            bool updateActionSucc;
+
+            string errorMessage;
+            string encryptedPassword;
+            string pwd;
+            bool passwordCheckRequired;
+            if (!ValidateUser(userToChangeSecurityProvider.Email, userToChangeSecurityProvider.SecurityProviderId, userToChangeSecurityProvider.Password, out  encryptedPassword, out  pwd,out  passwordCheckRequired, out  errorMessage))
+            {
+                updateOperationOutput.Message = errorMessage;
+                return updateOperationOutput;
+            }
+
+            var currentUser = GetUserbyId(userToChangeSecurityProvider.UserId);
+            var userSettings = new UserSetting
+            {
+                EnablePasswordExpiration = userToChangeSecurityProvider.EnablePasswordExpiration,
+                LanguageId =currentUser.Settings.LanguageId,
+                PhotoFileId = currentUser.Settings.PhotoFileId
+            };
+
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+
+            updateActionSucc = dataManager.ChangeUserSecurityProvider(userToChangeSecurityProvider.UserId, userToChangeSecurityProvider.SecurityProviderId, encryptedPassword, userSettings, loggedInUserId);
+            if (updateActionSucc)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var updatedUser = GetUserbyId(userToChangeSecurityProvider.UserId);
+                if (passwordCheckRequired)
+                {
+                    new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedPassword, false);
+                    Guid newUserId = _configManager.GetNewUserId();
+                    if (_configManager.ShouldSendEmailOnNewUser())
+                    {
+                        Task sendMailTask = new Task(() =>
+                        {
+                            StartSendMailTask(newUserId, updatedUser, pwd);
+                        });
+                        sendMailTask.Start();
+                    }
+                }
+                VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, updatedUser);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = UserDetailMapper(updatedUser);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUserExpiration(int userId, DateTime? enabledTill)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
