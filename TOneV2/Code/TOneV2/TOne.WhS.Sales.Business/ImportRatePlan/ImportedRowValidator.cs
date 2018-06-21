@@ -270,7 +270,7 @@ namespace TOne.WhS.Sales.Business
 						{
 							if (effectiveDateAsDateTime != newCountryBED)
 							{
-								context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is different than the zone effective date '{2}'", context.ExistingZone.CountryId, UtilitiesManager.GetDateTimeAsString(newCountryBED), UtilitiesManager.GetDateTimeAsString(effectiveDateAsDateTime));
+								context.ErrorMessage = string.Format("Country with id '{0}' is sold to the Customer on '{1}' which is different than the zone effective date '{2}'", context.ExistingZone.CountryId, UtilitiesManager.GetDateTimeAsString(newCountryBED), UtilitiesManager.GetDateTimeAsString(effectiveDateAsDateTime));
 								return false;
 							}
 						}
@@ -282,7 +282,7 @@ namespace TOne.WhS.Sales.Business
 
 					else if (countryBED > effectiveDateAsDateTime)
 					{
-						context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", context.ExistingZone.CountryId, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(effectiveDateAsDateTime));
+						context.ErrorMessage = string.Format("Country with id '{0}' is sold to the Customer on '{1}' which is greater than the effective date '{2}'", context.ExistingZone.CountryId, UtilitiesManager.GetDateTimeAsString(countryBED), UtilitiesManager.GetDateTimeAsString(effectiveDateAsDateTime));
 						return false;
 					}
 				}
