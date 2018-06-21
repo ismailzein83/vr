@@ -43,7 +43,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
 			var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
 			receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
-			receivedSupplierPricelistManager.SendMailToInternal(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
 		}
 	}
 }
