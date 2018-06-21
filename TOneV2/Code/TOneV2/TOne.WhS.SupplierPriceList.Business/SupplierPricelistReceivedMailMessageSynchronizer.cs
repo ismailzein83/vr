@@ -90,7 +90,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 						if (supplierPriceListTemplate == null)
 						{
-							errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Supplier does not have pricelist template." });
+							errors.Add(new SPLImportErrorDetail() { ErrorMessage = "No pricelist mapping is defined yet for this supplier." });
 							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.FailedDueToConfigurationError, errors, out recordId);
 							receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
 						}
@@ -135,7 +135,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 			//var attachmentCode = supplierAccount.SupplierSettings.AutoImportSettings.AttachmentCode;
 
 			if (pricelistType == null)
-				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Subject does not contain pricelist type." });
+				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Email subject does not contain pricelist type." });
 
 			if (applicableFiles == null || applicableFiles.Count == 0)
 				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "There is no applicable attachment." });
