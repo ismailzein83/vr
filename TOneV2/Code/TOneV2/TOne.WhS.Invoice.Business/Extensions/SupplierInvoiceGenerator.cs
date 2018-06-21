@@ -51,6 +51,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             string offset = null;
             DateTime fromDate = context.FromDate;
             DateTime toDate = context.ToDate;
+            TimeSpan? offsetValue = null;
 
             DateTime toDateForBillingTransaction = context.ToDate.Date.AddDays(1);
             if (timeZoneId.HasValue)
@@ -58,6 +59,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(timeZoneId.Value);
                 if (timeZone != null)
                 {
+                    offsetValue = timeZone.Settings.Offset;
                     offset = timeZone.Settings.Offset.ToString();
                     fromDate = context.FromDate.Add(-timeZone.Settings.Offset);
                     toDate = context.ToDate.Add(-timeZone.Settings.Offset);
@@ -84,7 +86,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
             }
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails, offsetValue);
             if (itemSetNamesDic.Count == 0)
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
@@ -443,7 +445,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
@@ -479,8 +481,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SupplierZoneId = Convert.ToInt64(supplierZoneId.Value),
                             InvoiceMeasures = new InvoiceMeasures
                             {
-                                BillingPeriodFrom = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
-                                BillingPeriodTo = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
                                 CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0),
                                 CostNet = costNetValue,
                                 NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
@@ -488,6 +488,27 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             }
 
                         };
+
+
+                        if (billingPeriodFrom != null)
+                        {
+                            var originalBillingPeriodFromDate = Convert.ToDateTime(billingPeriodFrom.Value);
+                            var originalBillingPeriodToDate = Convert.ToDateTime(billingPeriodTo.Value);
+                            var billingPeriodFromDate = originalBillingPeriodFromDate;
+                            var billingPeriodToDate = originalBillingPeriodToDate;
+                            if (offsetValue.HasValue)
+                            {
+                                billingPeriodFromDate = billingPeriodFromDate.Add(offsetValue.Value);
+                                billingPeriodToDate = billingPeriodToDate.Add(offsetValue.Value);
+                            }
+
+                            invoiceBillingRecord.InvoiceMeasures.OriginalBillingPeriodFrom = originalBillingPeriodFromDate;
+                            invoiceBillingRecord.InvoiceMeasures.OriginalBillingPeriodTo = originalBillingPeriodToDate;
+                            invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = billingPeriodFromDate;
+                            invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = billingPeriodToDate;
+                        }
+
+
                         if(commission.HasValue)
                         {
                             if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
@@ -557,6 +578,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public Decimal CostDuration { get; set; }
             public DateTime BillingPeriodTo { get; set; }
             public DateTime BillingPeriodFrom { get; set; }
+            public DateTime OriginalBillingPeriodTo { get; set; }
+            public DateTime OriginalBillingPeriodFrom { get; set; }
             public decimal AmountAfterCommission { get; set; }
             public decimal OriginalAmountAfterCommission { get; set; }
             public decimal AmountAfterCommissionWithTaxes { get; set; }
