@@ -133,11 +133,13 @@
     <Compile Include="FaultTickets\SupplierFaultTicketSettingsInput.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnect.cs" />
     <Compile Include="RecurringCharges\CustomerRecurringCharge.cs" />
+    <Compile Include="RecurringCharges\CustomerRecurringChargesType.cs" />
     <Compile Include="RecurringCharges\RecurringChargeItem.cs" />
     <Compile Include="RecurringCharges\RecurringChargePeriod.cs" />
     <Compile Include="RecurringCharges\RecurringChargePeriodConfig.cs" />
     <Compile Include="RecurringCharges\RecurringChargePeriodSettingsContext.cs" />
     <Compile Include="RecurringCharges\SupplierRecurringCharge.cs" />
+    <Compile Include="RecurringCharges\SupplierRecurringChargesType.cs" />
     <Compile Include="SalePriceList\SalePriceListNew.cs" />
     <Compile Include="SalePriceList\SalePriceListNewDetail.cs" />
     <Compile Include="Settings\FaultTicketsSettingsData.cs" />

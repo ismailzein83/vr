@@ -95,9 +95,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
 
-            var financialAccountId = financialAccount.FinancialAccountId;
             SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
-            List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccountId, fromDate, toDate);
+            List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate);
 
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, supplierInvoiceBySaleCurrency, evaluatedSupplierRecurringCharges);
             #region BuildSupplierInvoiceDetails
@@ -154,8 +153,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         private List<SupplierInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
         {
 
-            List<string> listMeasures = new List<string> {  "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-            List<string> listDimensions = new List<string> {  "CostCurrency" };
+            List<string> listMeasures = new List<string> { "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
+            List<string> listDimensions = new List<string> { "CostCurrency" };
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null);
             if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
             {
@@ -220,7 +219,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return supplierInvoiceBySaleCurrencies;
         }
 
-        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, SupplierInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate,DateTime toDate)
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, SupplierInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate, DateTime toDate)
         {
             var financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
             var balanceAccountTypeId = financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
@@ -268,8 +267,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     List<InvoiceBillingRecord> invoiceBillingRecordList = null;
                     if (itemSetNamesDic.TryGetValue("GroupedByCostZone", out invoiceBillingRecordList))
                     {
-                         supplierInvoiceDetails = new SupplierInvoiceDetails();
-                         supplierInvoiceDetails.PartnerType = partnerType;
+                        supplierInvoiceDetails = new SupplierInvoiceDetails();
+                        supplierInvoiceDetails.PartnerType = partnerType;
                         foreach (var invoiceBillingRecord in invoiceBillingRecordList)
                         {
 
@@ -299,7 +298,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                 }
             }
-            if (supplierInvoiceDetails != null )
+            if (supplierInvoiceDetails != null)
             {
                 supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
                 supplierInvoiceDetails.SupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.SupplierCurrencyId);
@@ -325,7 +324,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         Name = " "
                     });
                 }
-              
+
                 generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
 
             }
@@ -412,7 +411,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate,int? currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -427,7 +426,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>(),
                     CurrencyId = currencyId,
-                  //  OrderType = AnalyticQueryOrderType.ByAllDimensions
+                    //  OrderType = AnalyticQueryOrderType.ByAllDimensions
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
@@ -439,7 +438,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
-        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord,string measureName)
+        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
         {
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
@@ -509,7 +508,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         }
 
 
-                        if(commission.HasValue)
+                        if (commission.HasValue)
                         {
                             if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
                             {
@@ -523,8 +522,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
                             invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet;
                         }
-                       
-                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission ;
+
+                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
                         invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
                         invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
                         invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet;
@@ -535,18 +534,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             {
                                 invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
 
-                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes +=((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
 
                                 invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * Convert.ToDecimal(tax.Value)) / 100);
 
-                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes +=((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
+                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
                             }
                         }
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedByCostZone", invoiceBillingRecord);
 
                     }
-                    
+
                 }
             }
             return itemSetNamesDic;
@@ -562,7 +561,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 invoiceBillingRecordList = new List<InvoiceBillingRecord>();
                 invoiceBillingRecordList.Add(invoiceBillingRecord);
                 itemSetNamesDic.Add(key, invoiceBillingRecordList);
-            }else
+            }
+            else
             {
                 invoiceBillingRecordList.Add(invoiceBillingRecord);
                 itemSetNamesDic[key] = invoiceBillingRecordList;

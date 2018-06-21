@@ -174,9 +174,11 @@
     <Compile Include="PointOfInterconnect\PointOfInterconnectTrunksObjectTypeSettings.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="RecurringCharges\CustomerRecurringChargeManager.cs" />
+    <Compile Include="RecurringCharges\CustomerRecurringChargeTypeManager.cs" />
     <Compile Include="RecurringCharges\RecurringChargeManager.cs" />
     <Compile Include="RecurringCharges\RecurringChargePeriodObjectTypeSettings.cs" />
     <Compile Include="RecurringCharges\SupplierRecurringChargeManager.cs" />
+    <Compile Include="RecurringCharges\SupplierRecurringChargeTypeManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadByRateBED.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadLastRoutingProduct.cs" />
     <Compile Include="SalePriceListChange\OtherRatesPreviewManager.cs" />

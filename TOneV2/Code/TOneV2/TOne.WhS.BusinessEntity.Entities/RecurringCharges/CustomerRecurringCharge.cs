@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CustomerRecurringCharge
     {
         public int ID { get; set; }
-        public int RecurringChargeTypeId { get; set; }
+        public long RecurringChargeTypeId { get; set; }
         public int FinancialAccountId { get; set; }
         public decimal Amount { get; set; }
         public int CurrencyId { get; set; }

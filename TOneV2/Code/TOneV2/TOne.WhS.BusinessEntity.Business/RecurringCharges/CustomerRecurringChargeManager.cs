@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business.RecurringCharges;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
@@ -25,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 CustomerRecurringCharge customerRecurringCharge = new CustomerRecurringCharge();
                 customerRecurringCharge.ID = Convert.ToInt32(fieldValues["ID"]);
-                customerRecurringCharge.RecurringChargeTypeId = Convert.ToInt32(fieldValues["RecurringChargeTypeId"]);
+                customerRecurringCharge.RecurringChargeTypeId = Convert.ToInt64(fieldValues["RecurringChargeTypeId"]);
                 customerRecurringCharge.FinancialAccountId = Convert.ToInt32(fieldValues["FinancialAccountId"]);
                 customerRecurringCharge.Amount = Convert.ToDecimal(fieldValues["Amount"]);
                 customerRecurringCharge.CurrencyId = Convert.ToInt32(fieldValues["CurrencyId"]);
@@ -86,10 +87,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
 
+                var customerRecurringChargeTypeManager = new CustomerRecurringChargeTypeManager();
                 foreach (var date in context.Periods)
                 {
                     var recurringChargeItem = new RecurringChargeItem();
-                    //recurringChargeItem.Name = (effectiveCustomerRecurringCharge.RecurringChargeTypeId);
+                    recurringChargeItem.Name = customerRecurringChargeTypeManager.GetCustomerRecurringChargeTypeName(effectiveCustomerRecurringCharge.RecurringChargeTypeId);
                     recurringChargeItem.Amount = effectiveCustomerRecurringCharge.Amount;
                     recurringChargeItem.Date = date;
 
