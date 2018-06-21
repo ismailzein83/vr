@@ -20,6 +20,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         }
 
         #region Properties
+
+        public VRSshParameters SshParameters { get; set; }
         public string Extension { get; set; }
         public string Mask { get; set; }
         public string Directory { get; set; }
@@ -59,5 +61,62 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
     {
         public DateTime LastRetrievedFileTime { get; set; }
         public string LastRetrievedFileName { get; set; }
+    }
+
+    public class VRSshParameters
+    {
+        public VRCompressionEnum? Compression { get; set; }
+        public VRSshEncryptionAlgorithmEnum? SshEncryptionAlgorithm { get; set; }
+        public VRSshHostKeyAlgorithmEnum? SshHostKeyAlgorithm { get; set; }
+        public VRSshKeyExchangeAlgorithmEnum? SshKeyExchangeAlgorithm { get; set; }
+        public VRSshMacAlgorithmEnum? SshMacAlgorithm { get; set; }
+        public VRSshOptionsEnum? SshOptions { get; set; }
+    }
+
+    public enum VRCompressionEnum
+    {
+        False = 0,
+        True = 1
+    }
+
+    public enum VRSshEncryptionAlgorithmEnum
+    {
+        None = 0,
+        RC4 = 1,
+        TripleDES = 2,
+        AES = 4,
+        Blowfish = 8,
+        Twofish = 16,
+        Any = 255
+    }
+
+    public enum VRSshHostKeyAlgorithmEnum
+    {
+        None = 0,
+        RSA = 1,
+        DSS = 2,
+        Any = 255
+    }
+
+    public enum VRSshKeyExchangeAlgorithmEnum
+    {
+        None = 0,
+        DiffieHellmanGroup1SHA1 = 1,
+        DiffieHellmanGroup14SHA1 = 2,
+        DiffieHellmanGroupExchangeSHA1 = 4,
+        Any = 255
+    }
+
+    public enum VRSshMacAlgorithmEnum
+    {
+        None = 0,
+        MD5 = 1,
+        SHA1 = 2,
+        Any = 255
+    }
+
+    public enum VRSshOptionsEnum
+    {
+        None = 0
     }
 }
