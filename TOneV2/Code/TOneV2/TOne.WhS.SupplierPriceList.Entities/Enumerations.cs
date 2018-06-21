@@ -33,19 +33,19 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		[Description("Succeeded")]
 		Succeeded = 60,
 
-		[Description("Completed with no changes")]
+		[Description("Completed With No Changes")]
 		CompletedWithNoChanges = 65,
 
-		[Description("Failed due to business rule error")]
+		[Description("Failed Due To Business Rule Error")]
 		FailedDueToBusinessRuleError = 70,
 
-		[Description("Failed due to processing error")]
+		[Description("Failed Due To Processing Error")]
 		FailedDueToProcessingError = 75,
 
-		[Description("Failed due to configuration error")]
+		[Description("Failed Due To Configuration Error")]
 		FailedDueToConfigurationError = 80,
 
-		[Description("Failed due to received mail error")]
+		[Description("Failed Due To Received Mail Error")]
 		FailedDueToReceivedMailError = 85
 	}
 }
