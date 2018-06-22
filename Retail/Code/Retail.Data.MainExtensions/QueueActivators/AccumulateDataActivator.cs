@@ -33,168 +33,168 @@ namespace Retail.Data.MainExtensions.QueueActivators
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
-            DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
-            var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
-            if (queueItemType == null)
-                throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
-            var recordTypeId = queueItemType.DataRecordTypeId;
-            var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
+            //DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
+            //var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
+            //if (queueItemType == null)
+            //    throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
+            //var recordTypeId = queueItemType.DataRecordTypeId;
+            //var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            Type accumulatedDataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(_accumulatedDataRecordTypeId);
+            //DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            //Type accumulatedDataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(_accumulatedDataRecordTypeId);
 
-            DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-            int maxParameterNumber = 51000; // dataRecordStorageManager.GetDBQueryMaxParameterNumber(_accumulatedDataRecordStorageId);
+            //DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+            //int maxParameterNumber = 51000; // dataRecordStorageManager.GetDBQueryMaxParameterNumber(_accumulatedDataRecordStorageId);
 
-            Dictionary<string, dynamic> accumulatedDataDict = new Dictionary<string, dynamic>();
-            Dictionary<string, dynamic> accumulatedDataToAddDict = new Dictionary<string, dynamic>();
-            Dictionary<string, dynamic> accumulatedDataToUpdateDict = new Dictionary<string, dynamic>();
+            //Dictionary<string, dynamic> accumulatedDataDict = new Dictionary<string, dynamic>();
+            //Dictionary<string, dynamic> accumulatedDataToAddDict = new Dictionary<string, dynamic>();
+            //Dictionary<string, dynamic> accumulatedDataToUpdateDict = new Dictionary<string, dynamic>();
 
-            Dictionary<string, List<dynamic>> batchRecordsByUserSession = new Dictionary<string, List<dynamic>>();
-            foreach (var record in batchRecords)
-            {
-                List<dynamic> dataRecords = batchRecordsByUserSession.GetOrCreateItem(record.UserSession as string, () => { return new List<dynamic>(); });
-                dataRecords.Add(record);
-            }
+            //Dictionary<string, List<dynamic>> batchRecordsByUserSession = new Dictionary<string, List<dynamic>>();
+            //foreach (var record in batchRecords)
+            //{
+            //    List<dynamic> dataRecords = batchRecordsByUserSession.GetOrCreateItem(record.UserSession as string, () => { return new List<dynamic>(); });
+            //    dataRecords.Add(record);
+            //}
 
-            List<string> currentBatchUserSessions = new List<string>();
-            List<dynamic> currentBatchDataRecords = new List<dynamic>();
-            foreach (var kvp in batchRecordsByUserSession)
-            {
-                currentBatchUserSessions.Add(kvp.Key);
-                currentBatchDataRecords.AddRange(kvp.Value);
+            //List<string> currentBatchUserSessions = new List<string>();
+            //List<dynamic> currentBatchDataRecords = new List<dynamic>();
+            //foreach (var kvp in batchRecordsByUserSession)
+            //{
+            //    currentBatchUserSessions.Add(kvp.Key);
+            //    currentBatchDataRecords.AddRange(kvp.Value);
 
-                if (currentBatchUserSessions.Count >= maxParameterNumber)
-                {
-                    AccumulateData(currentBatchDataRecords, currentBatchUserSessions, dataRecordStorageManager, accumulatedDataRecordRuntimeType, accumulatedDataDict, accumulatedDataToAddDict, accumulatedDataToUpdateDict);
-                    currentBatchUserSessions = new List<string>();
-                    currentBatchDataRecords = new List<dynamic>();
-                }
-            }
+            //    if (currentBatchUserSessions.Count >= maxParameterNumber)
+            //    {
+            //        AccumulateData(currentBatchDataRecords, currentBatchUserSessions, dataRecordStorageManager, accumulatedDataRecordRuntimeType, accumulatedDataDict, accumulatedDataToAddDict, accumulatedDataToUpdateDict);
+            //        currentBatchUserSessions = new List<string>();
+            //        currentBatchDataRecords = new List<dynamic>();
+            //    }
+            //}
 
-            if (currentBatchUserSessions.Count > 0)
-                AccumulateData(currentBatchDataRecords, currentBatchUserSessions, dataRecordStorageManager, accumulatedDataRecordRuntimeType, accumulatedDataDict, accumulatedDataToAddDict, accumulatedDataToUpdateDict);
+            //if (currentBatchUserSessions.Count > 0)
+            //    AccumulateData(currentBatchDataRecords, currentBatchUserSessions, dataRecordStorageManager, accumulatedDataRecordRuntimeType, accumulatedDataDict, accumulatedDataToAddDict, accumulatedDataToUpdateDict);
 
-            if (accumulatedDataToAddDict != null && accumulatedDataToAddDict.Count > 0)
-            {
-                dataRecordStorageManager.AddDataRecords(_accumulatedDataRecordStorageId, accumulatedDataToAddDict.Values);
-            }
+            //if (accumulatedDataToAddDict != null && accumulatedDataToAddDict.Count > 0)
+            //{
+            //    dataRecordStorageManager.AddDataRecords(_accumulatedDataRecordStorageId, accumulatedDataToAddDict.Values);
+            //}
 
-            if (accumulatedDataToUpdateDict != null && accumulatedDataToUpdateDict.Count > 0)
-            {
-                List<string> fieldsToJoin = BuildFieldsToJoin();
-                List<string> fieldsToUpdate = BuildFieldsToUpdate();
-                dataRecordStorageManager.UpdateDataRecords(_accumulatedDataRecordStorageId, accumulatedDataToUpdateDict.Values, fieldsToJoin, fieldsToUpdate);
-            }
+            //if (accumulatedDataToUpdateDict != null && accumulatedDataToUpdateDict.Count > 0)
+            //{
+            //    List<string> fieldsToJoin = BuildFieldsToJoin();
+            //    List<string> fieldsToUpdate = BuildFieldsToUpdate();
+            //    dataRecordStorageManager.UpdateDataRecords(_accumulatedDataRecordStorageId, accumulatedDataToUpdateDict.Values, fieldsToJoin, fieldsToUpdate);
+            //}
         }
 
         private void AccumulateData(List<dynamic> batchRecords, List<string> batchUserSessions, DataRecordStorageManager dataRecordStorageManager, Type accumulatedDataRecordRuntimeType,
             Dictionary<string, dynamic> accumulatedDataDict, Dictionary<string, dynamic> accumulatedDataToAddDict, Dictionary<string, dynamic> accumulatedDataToUpdateDict)
         {
-            RecordFilterGroup recordFilterGroup = this.BuildRecordFilterGroup(batchUserSessions);
+            //RecordFilterGroup recordFilterGroup = this.BuildRecordFilterGroup(batchUserSessions);
 
-            dataRecordStorageManager.GetDataRecords(_accumulatedDataRecordStorageId, null, null, recordFilterGroup, null, (itm) =>
-            {
-                string userSession = itm.GetFieldValue(ProcessedDataPropertyName.UserSession);
-                accumulatedDataDict.Add(userSession, itm);
-                accumulatedDataToUpdateDict.Add(userSession, itm);
-            });
+            //dataRecordStorageManager.GetDataRecords(_accumulatedDataRecordStorageId, null, null, recordFilterGroup, null, (itm) =>
+            //{
+            //    string userSession = itm.GetFieldValue(ProcessedDataPropertyName.UserSession);
+            //    accumulatedDataDict.Add(userSession, itm);
+            //    accumulatedDataToUpdateDict.Add(userSession, itm);
+            //});
 
-            foreach (var currentRecord in batchRecords)
-            {
-                DateTime recordDateTime = currentRecord.GetFieldValue(ProcessedDataPropertyName.RecordDateTime);
-                string userSession = currentRecord.GetFieldValue(ProcessedDataPropertyName.UserSession);
-                decimal? inputOctets = currentRecord.GetFieldValue(ProcessedDataPropertyName.InputOctets);
-                decimal? outputOctets = currentRecord.GetFieldValue(ProcessedDataPropertyName.OutputOctets);
+            //foreach (var currentRecord in batchRecords)
+            //{
+            //    DateTime recordDateTime = currentRecord.GetFieldValue(ProcessedDataPropertyName.RecordDateTime);
+            //    string userSession = currentRecord.GetFieldValue(ProcessedDataPropertyName.UserSession);
+            //    decimal? inputOctets = currentRecord.GetFieldValue(ProcessedDataPropertyName.InputOctets);
+            //    decimal? outputOctets = currentRecord.GetFieldValue(ProcessedDataPropertyName.OutputOctets);
 
-                dynamic dataRecord;
-                if (accumulatedDataDict.TryGetValue(userSession, out dataRecord))
-                {
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastInTime, recordDateTime);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastOutTime, recordDateTime);
+            //    dynamic dataRecord;
+            //    if (accumulatedDataDict.TryGetValue(userSession, out dataRecord))
+            //    {
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastInTime, recordDateTime);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastOutTime, recordDateTime);
 
-                    if (inputOctets.HasValue)
-                    {
-                        decimal? lastReceivedIn = dataRecord.GetFieldValue(AccumulatedDataPropertyName.LastReceivedIn);
-                        decimal? totalIn = dataRecord.GetFieldValue(AccumulatedDataPropertyName.TotalIn);
+            //        if (inputOctets.HasValue)
+            //        {
+            //            decimal? lastReceivedIn = dataRecord.GetFieldValue(AccumulatedDataPropertyName.LastReceivedIn);
+            //            decimal? totalIn = dataRecord.GetFieldValue(AccumulatedDataPropertyName.TotalIn);
 
-                        if (!lastReceivedIn.HasValue || (inputOctets.Value - lastReceivedIn.Value) >= 0)
-                        {
-                            decimal newInputOctets = inputOctets.Value - (lastReceivedIn.HasValue ? lastReceivedIn.Value : 0);
-                            decimal newTotalIn = (totalIn.HasValue ? totalIn.Value : 0) + newInputOctets;
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedIn, inputOctets.Value);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalIn, newTotalIn);
-                        }
-                        else
-                        {
-                            decimal newInputOctets = (_sessionOctetsLimit - lastReceivedIn.Value) + inputOctets.Value;
-                            decimal newTotalIn = (totalIn.HasValue ? totalIn.Value : 0) + newInputOctets;
-                            int numberOfInReset = dataRecord.GetFieldValue(AccumulatedDataPropertyName.NumberOfInReset);
+            //            if (!lastReceivedIn.HasValue || (inputOctets.Value - lastReceivedIn.Value) >= 0)
+            //            {
+            //                decimal newInputOctets = inputOctets.Value - (lastReceivedIn.HasValue ? lastReceivedIn.Value : 0);
+            //                decimal newTotalIn = (totalIn.HasValue ? totalIn.Value : 0) + newInputOctets;
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedIn, inputOctets.Value);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalIn, newTotalIn);
+            //            }
+            //            else
+            //            {
+            //                decimal newInputOctets = (_sessionOctetsLimit - lastReceivedIn.Value) + inputOctets.Value;
+            //                decimal newTotalIn = (totalIn.HasValue ? totalIn.Value : 0) + newInputOctets;
+            //                int numberOfInReset = dataRecord.GetFieldValue(AccumulatedDataPropertyName.NumberOfInReset);
 
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedIn, inputOctets.Value);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalIn, newTotalIn);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.NumberOfInReset, numberOfInReset + 1);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastInResetTime, recordDateTime);
-                        }
-                    }
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedIn, inputOctets.Value);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalIn, newTotalIn);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.NumberOfInReset, numberOfInReset + 1);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastInResetTime, recordDateTime);
+            //            }
+            //        }
 
-                    if (outputOctets.HasValue)
-                    {
-                        decimal? lastReceivedOut = dataRecord.GetFieldValue(AccumulatedDataPropertyName.LastReceivedOut);
-                        decimal? totalOut = dataRecord.GetFieldValue(AccumulatedDataPropertyName.TotalOut);
+            //        if (outputOctets.HasValue)
+            //        {
+            //            decimal? lastReceivedOut = dataRecord.GetFieldValue(AccumulatedDataPropertyName.LastReceivedOut);
+            //            decimal? totalOut = dataRecord.GetFieldValue(AccumulatedDataPropertyName.TotalOut);
 
-                        if (!lastReceivedOut.HasValue || (outputOctets.Value - lastReceivedOut.Value) >= 0)
-                        {
-                            decimal newOutputOctets = outputOctets.Value - (lastReceivedOut.HasValue ? lastReceivedOut.Value : 0);
-                            decimal newTotalOut = (totalOut.HasValue ? totalOut.Value : 0) + newOutputOctets;
+            //            if (!lastReceivedOut.HasValue || (outputOctets.Value - lastReceivedOut.Value) >= 0)
+            //            {
+            //                decimal newOutputOctets = outputOctets.Value - (lastReceivedOut.HasValue ? lastReceivedOut.Value : 0);
+            //                decimal newTotalOut = (totalOut.HasValue ? totalOut.Value : 0) + newOutputOctets;
 
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedOut, outputOctets.Value);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalOut, newTotalOut);
-                        }
-                        else
-                        {
-                            decimal newOutputOctets = (_sessionOctetsLimit - lastReceivedOut.Value) + outputOctets.Value;
-                            decimal newTotalOut = (totalOut.HasValue ? totalOut.Value : 0) + newOutputOctets;
-                            int numberOfOutReset = dataRecord.GetFieldValue(AccumulatedDataPropertyName.NumberOfOutReset);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedOut, outputOctets.Value);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalOut, newTotalOut);
+            //            }
+            //            else
+            //            {
+            //                decimal newOutputOctets = (_sessionOctetsLimit - lastReceivedOut.Value) + outputOctets.Value;
+            //                decimal newTotalOut = (totalOut.HasValue ? totalOut.Value : 0) + newOutputOctets;
+            //                int numberOfOutReset = dataRecord.GetFieldValue(AccumulatedDataPropertyName.NumberOfOutReset);
 
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedOut, outputOctets.Value);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalOut, newTotalOut);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.NumberOfOutReset, numberOfOutReset + 1);
-                            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastOutResetTime, recordDateTime);
-                        }
-                    }
-                }
-                else
-                {
-                    long? ispId = currentRecord.GetFieldValue(ProcessedDataPropertyName.ISP);
-                    string userName = currentRecord.GetFieldValue(ProcessedDataPropertyName.UserName);
-                    string sessionId = currentRecord.GetFieldValue(ProcessedDataPropertyName.SessionId);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedOut, outputOctets.Value);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalOut, newTotalOut);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.NumberOfOutReset, numberOfOutReset + 1);
+            //                dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastOutResetTime, recordDateTime);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        long? ispId = currentRecord.GetFieldValue(ProcessedDataPropertyName.ISP);
+            //        string userName = currentRecord.GetFieldValue(ProcessedDataPropertyName.UserName);
+            //        string sessionId = currentRecord.GetFieldValue(ProcessedDataPropertyName.SessionId);
 
-                    dataRecord = Activator.CreateInstance(accumulatedDataRecordRuntimeType) as dynamic;
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.ISP, ispId);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.UserName, userName);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.SessionId, sessionId);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.UserSession, userSession);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.RecordDateTime, recordDateTime);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastInTime, recordDateTime);
-                    dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastOutTime, recordDateTime);
+            //        dataRecord = Activator.CreateInstance(accumulatedDataRecordRuntimeType) as dynamic;
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.ISP, ispId);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.UserName, userName);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.SessionId, sessionId);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.UserSession, userSession);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.RecordDateTime, recordDateTime);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastInTime, recordDateTime);
+            //        dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastOutTime, recordDateTime);
 
-                    if (inputOctets.HasValue)
-                    {
-                        dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedIn, inputOctets.Value);
-                        dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalIn, inputOctets.Value);
-                    }
+            //        if (inputOctets.HasValue)
+            //        {
+            //            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedIn, inputOctets.Value);
+            //            dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalIn, inputOctets.Value);
+            //        }
 
-                    if (outputOctets.HasValue)
-                    {
-                        dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedOut, outputOctets.Value);
-                        dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalOut, outputOctets.Value);
-                    }
+            //        if (outputOctets.HasValue)
+            //        {
+            //            dataRecord.SetFieldValue(AccumulatedDataPropertyName.LastReceivedOut, outputOctets.Value);
+            //            dataRecord.SetFieldValue(AccumulatedDataPropertyName.TotalOut, outputOctets.Value);
+            //        }
 
-                    accumulatedDataDict.Add(userSession, dataRecord);
-                    accumulatedDataToAddDict.Add(userSession, dataRecord);
-                }
-            }
+            //        accumulatedDataDict.Add(userSession, dataRecord);
+            //        accumulatedDataToAddDict.Add(userSession, dataRecord);
+            //    }
+            //}
         }
 
         #endregion
