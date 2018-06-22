@@ -56,7 +56,6 @@
     <Compile Include="IRequiredPermissionSetDataManager.cs" />
     <Compile Include="ISystemActionDataManager.cs" />
     <Compile Include="ITenantDataManager.cs" />
-    <Compile Include="IRegisteredApplicationDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
     <Compile Include="IUserGroupDataManager.cs" />
     <Compile Include="IUserFailedLoginDataManager.cs" />
