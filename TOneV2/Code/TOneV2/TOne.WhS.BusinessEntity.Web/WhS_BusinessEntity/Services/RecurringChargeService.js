@@ -15,7 +15,6 @@
                 return WhS_BE_FinancialAccountAPIService.HasViewFinancialAccountPermission();
             };*/
             drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
-                console.log(carrierAccountItem);
                 carrierAccountItem.genericBusinessGridAPI = directiveAPI;
                 var payload = {
                     query: {
@@ -26,7 +25,6 @@
 
                 return carrierAccountItem.genericBusinessGridAPI.load(payload);
             };
-            console.log(drillDownDefinition);
             WhS_BE_CarrierAccountService.addDrillDownDefinition(drillDownDefinition);
         }
 

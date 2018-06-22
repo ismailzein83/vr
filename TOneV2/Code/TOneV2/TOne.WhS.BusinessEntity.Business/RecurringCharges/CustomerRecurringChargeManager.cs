@@ -67,7 +67,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             Name = customerRecurringChargeTypeManager.GetCustomerRecurringChargeTypeName(effectiveCustomerRecurringCharge.RecurringChargeTypeId),
                             Amount = effectiveCustomerRecurringCharge.Amount,
-                            Date = date
+                            Date = date,
+                            CurrencyId = effectiveCustomerRecurringCharge.CurrencyId
                         });
                     }
                 }

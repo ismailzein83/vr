@@ -129,8 +129,7 @@
                     return WhS_BE_RecurringChargeAPIService.HasViewRecurringChargePermission(financialAccount.Entity.FinancialAccountId);
                 };
                 customerDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccountObj) {
-                    var financialAccountId = financialAccount.Entity.FinancialAccountId;
-
+                    var financialAccountId = financialAccountObj.Entity.FinancialAccountId;
                     var genericBusinessEntityPayload = {
                         businessEntityDefinitionId: "fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131",
                         fieldValues: {
@@ -154,7 +153,7 @@
                     return WhS_BE_RecurringChargeAPIService.HasViewRecurringChargePermission(financialAccount.Entity.FinancialAccountId);
                 };
                 supplierDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccountObj) {
-                    var financialAccountId = financialAccount.Entity.FinancialAccountId;
+                    var financialAccountId = financialAccountObj.Entity.FinancialAccountId;
 
                     var genericBusinessEntityPayload = {
                         businessEntityDefinitionId: "e9c11a90-864c-45a1-b90c-d7fdd80e9cf3",

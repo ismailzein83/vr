@@ -124,7 +124,7 @@ app.directive('whsBeFinancialaccountSelector', ['WhS_BE_FinancialAccountAPIServi
                 if (businessEntityDefinitionId != undefined) {
                     filter.FinancialAccountDefinitionId = businessEntityDefinitionId;
                     filter.Status = WHS_BE_FinancialAccountStatusEnum.Active.value;
-                    filter.EffectiveDate = VRDateTimeService.getNowDateTime();
+                  //  filter.EffectiveDate = VRDateTimeService.getNowDateTime(); removed to get effective now and in future
                 }
                 filter.CarrierType = $scope.scopeModel.selectedCarrierType != undefined ? $scope.scopeModel.selectedCarrierType.value : undefined;
                 return filter;

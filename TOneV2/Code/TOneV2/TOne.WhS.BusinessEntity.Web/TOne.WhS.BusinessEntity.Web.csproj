@@ -622,6 +622,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\FinancialAccountService.js" />
+    <Content Include="WhS_BusinessEntity\Services\RecurringChargeService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleAreaTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleEntityZoneRoutingProductService.js" />
