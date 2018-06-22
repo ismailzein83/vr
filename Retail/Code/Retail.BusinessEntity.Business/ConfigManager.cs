@@ -26,7 +26,8 @@ namespace Retail.BusinessEntity.Business
         public VRTaxesDefinition GetRetailTaxesDefinitions()
         {
             RetailInvoiceSettings retailInvoiceSettings = this.GetRetailInvoiceSettings();
-            retailInvoiceSettings.VRTaxesDefinition.ThrowIfNull("retailInvoiceSettings.TaxesDefinitions"); ;
+            if (retailInvoiceSettings == null)
+                return null;
             return retailInvoiceSettings.VRTaxesDefinition;
         }
 
@@ -44,9 +45,7 @@ namespace Retail.BusinessEntity.Business
         }
         private RetailInvoiceSettings GetRetailInvoiceSettings()
         {
-            RetailInvoiceSettings retailInvoiceSettings = new SettingManager().GetSetting<RetailInvoiceSettings>(RetailInvoiceSettings.SETTING_TYPE);
-            retailInvoiceSettings.ThrowIfNull("retailInvoiceSettings");
-            return retailInvoiceSettings;
+           return new SettingManager().GetSetting<RetailInvoiceSettings>(RetailInvoiceSettings.SETTING_TYPE);
         }
         #endregion
     }
