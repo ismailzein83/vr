@@ -15,6 +15,16 @@ using Vanrise.Runtime.Entities;
 using Vanrise.AccountBalance.Data.RDB;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Entities;
+using System.Activities.Statements;
+using System.Activities;
+using Microsoft.CSharp.Activities;
+using System.Activities.Expressions;
+using System.Activities.XamlIntegration;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities;
+using Vanrise.BusinessProcess.Business;
+using Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
 
 namespace Retail.Runtime.Tasks
 {
@@ -23,6 +33,8 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
+            GenerateVRWorkflow();
+            //CreateWFProgrammatically();
             //Parallel.For(0, 1, (i) =>
             //    {
             //        TestStringConcatenation();
@@ -172,6 +184,267 @@ namespace Retail.Runtime.Tasks
 
             Console.WriteLine("DONE");
             Console.ReadKey();
+        }
+
+        private void GenerateVRWorkflow()
+        {
+            var workflow = new VRWorkflow
+            {
+                VRWorkflowId = Guid.NewGuid(),
+                Settings = new VRWorkflowSettings
+                {
+                    Arguments = new VRWorkflowArgumentCollection
+                    {
+                        new VRWorkflowArgument { Name= "InputArg1", Direction = VRWorkflowArgumentDirection.In, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}},
+                        new VRWorkflowArgument { Name= "InputArg2", Direction = VRWorkflowArgumentDirection.In, Type = new VRWorkflowGenericVariableType { FieldType = new FieldNumberType{ DataType = FieldNumberDataType.Int}}},
+                        new VRWorkflowArgument { Name= "OutputArg1", Direction = VRWorkflowArgumentDirection.Out, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}},
+                        new VRWorkflowArgument { Name= "InOutArg1", Direction = VRWorkflowArgumentDirection.InOut, Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}}
+                    },
+                    RootActivity = new VRWorkflowActivity
+                    {
+                        Settings = new VRWorkflowSequenceActivity
+                        {
+                            Variables = new VRWorkflowVariableCollection
+                            {
+                                new VRWorkflowVariable
+                                {
+                                     Name = "Variable1",
+                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
+                                },
+                                new VRWorkflowVariable
+                                {
+                                     Name = "Variable2",
+                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
+                                },
+                                new VRWorkflowVariable
+                                {
+                                     Name = "IntVariable1",
+                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldNumberType{ DataType = FieldNumberDataType.Int }}
+                                },
+                                new VRWorkflowVariable
+                                {
+                                     Name = "ListVariable1",
+                                     Type = new VRWorkflowGenericVariableType { FieldType = new FieldArrayType { FieldType = new FieldTextType() }}
+                                }
+                            },
+                            Activities = new VRWorkflowActivityCollection
+                            {
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowAssignActivity 
+                                    {
+                                        Items = new List<VRWorkflowAssignActivityItem>
+                                        {
+                                            new VRWorkflowAssignActivityItem { To = "Variable1", Value = "\"New Activity: Variable 1 Value \" + DateTime.Now.ToString()"},
+                                            new VRWorkflowAssignActivityItem { To = "ListVariable1", Value = "new List<string> { \"Item 1\", \"Item 2\", \"Item 3\" }"},
+                                            new VRWorkflowAssignActivityItem { To = "IntVariable1", Value = "5"}
+                                        }
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"From Custom Activity\");Console.WriteLine(\"Value of Variable1: {0}\", Variable1);Variable2 = \"I changed the Value of the Variable2\";"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of Variable2: {0}\", this.Variable2);"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of IntVariable1: {0}\", IntVariable1);"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = @"foreach(var item in ListVariable1)
+{
+    Console.WriteLine(""List Item: {0}"", item);
+}"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowAssignActivity 
+                                    {
+                                        Items = new List<VRWorkflowAssignActivityItem>
+                                        {
+                                            new VRWorkflowAssignActivityItem { To = "ListVariable1[1]", Value = "\"new Value for second Item \" + DateTime.Now.ToString() "}
+                                        }
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = @"foreach(var item in ListVariable1)
+{
+    Console.WriteLine(""List Item: {0}"", item);
+}"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value of InputArg1: {0}\", InputArg1);"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "OutputArg1 = \"VAlue returned in Output Arguments. using Arguments\";"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowIfElseActivity{
+                                         Condition = "1 == 1",
+                                         TrueActivity = new VRWorkflowActivity
+                                                        {
+                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Condition is true\");"}
+                                                        }
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowIfElseActivity{
+                                         Condition = "InputArg2 >= 10",
+                                         TrueActivity = new VRWorkflowActivity
+                                                        {
+                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Input Argument '{0}' is greater than 10\", InputArg2);"}
+                                                        },
+                                         FalseActivity = new VRWorkflowActivity
+                                                        {
+                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Input Argument '{0}' is less than 10\", InputArg2);"}
+                                                        }
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowForEachActivity
+                                    {
+                                         List = "ListVariable1",
+                                          IterationVariableName = "Item",
+                                           IterationVariableType = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()},
+                                            Activity = new VRWorkflowActivity
+                                            {
+                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Foreach Iteration: '{0}' \", Item);"}
+                                            }
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowSequenceActivity
+                                    {
+                                         Variables = new VRWorkflowVariableCollection
+                                         {
+                                             new VRWorkflowVariable
+                                             {
+                                                 Name = "SubVariable1",
+                                                 Type = new VRWorkflowGenericVariableType { FieldType = new FieldTextType()}
+                                             }
+                                         },
+                                         Activities = new VRWorkflowActivityCollection
+                                         {
+                                             new VRWorkflowActivity
+                                            {
+                                                Settings = new VRWorkflowAssignActivity 
+                                                {
+                                                    Items = new List<VRWorkflowAssignActivityItem>
+                                                    {
+                                                        new VRWorkflowAssignActivityItem { To = "SubVariable1", Value = "\"Sub Variable 1 Value \" + DateTime.Now.ToString()"},
+                                                        new VRWorkflowAssignActivityItem { To = "IntVariable1", Value = "55"}
+                                                    }
+                                                }
+                                            },
+                                            new VRWorkflowActivity
+                                            {
+                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"SubVariable1 in SUB: '{0}' \", SubVariable1);"}
+                                            },
+                                            new VRWorkflowActivity
+                                            {
+                                                Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"IntVariable1 in SUB: '{0}' \", IntVariable1);"}
+                                            },
+                                            new VRWorkflowActivity
+                                            {
+                                                 Settings = new VRWorkflowSequenceActivity
+                                                {
+                                                     Activities = new VRWorkflowActivityCollection
+                                                     {
+                                                        new VRWorkflowActivity
+                                                        {
+                                                            Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"IntVariable1 in SUB SUB: '{0}' \", IntVariable1);"}
+                                                        }
+                                                     }
+                                                }
+                                            }
+                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            Activity wfWorkflow;
+            List<string> errorMessage;
+            if (new VRWorkflowManager().TryCompileWorkflow(workflow, out wfWorkflow, out errorMessage))
+            {
+                var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { {"InputArg1", "this is teh value send in INputArg1"}, {"InputArg2", 43} });
+            }
+        }
+
+        private void CreateWFProgrammatically()
+        {
+            var wf = new WF();
+            Compile(wf);
+            WorkflowInvoker.Invoke(wf);
+            WorkflowInvoker.Invoke(wf);
+            WorkflowInvoker.Invoke(wf);
+            WorkflowInvoker.Invoke(wf);
+            Console.ReadKey();
+        }
+
+        
+
+        static void Compile(Activity dynamicActivity)
+        {
+
+            TextExpressionCompilerSettings settings = new TextExpressionCompilerSettings
+
+            {
+
+                Activity = dynamicActivity,
+
+                Language = "C#",
+
+                ActivityName = dynamicActivity.GetType().FullName.Split('.').Last() + "_CompiledExpressionRoot",
+
+                ActivityNamespace = string.Join(".", dynamicActivity.GetType().FullName.Split('.').Reverse().Skip(1).Reverse()),
+
+                RootNamespace = null,
+
+                GenerateAsPartialClass = false,
+
+                AlwaysGenerateSource = true,
+
+            };
+
+
+
+            TextExpressionCompilerResults results =
+
+                new TextExpressionCompiler(settings).Compile();
+
+            if (results.HasErrors)
+            {
+
+                throw new Exception("Compilation failed.");
+
+            }
+
+
+
+            ICompiledExpressionRoot compiledExpressionRoot =
+
+                Activator.CreateInstance(results.ResultType,
+
+                    new object[] { dynamicActivity }) as ICompiledExpressionRoot;
+
+            CompiledExpressionInvoker.SetCompiledExpressionRootForImplementation(
+
+                dynamicActivity, compiledExpressionRoot);
+
         }
 
         private void TestStringConcatenation()
@@ -1213,6 +1486,53 @@ order by [AttemptDateTime] desc";
                 _parent.CallFromChild();
             });
             t.Start();
+        }
+    }
+    public class WF : Activity
+    {
+
+        public InArgument<string> InputText { get; set; }
+
+        public WF()
+        {
+            var sequence = new Sequence();
+            var variable1 = new Variable<string>("Variable1");
+            sequence.Variables.Add(variable1);
+            this.Implementation = () => new Sequence
+            {
+
+                Variables = 
+                 {
+                      new Variable<string>{  Name = "Variable1", Default = "Var 1"}, 
+                      new Variable<string>{  Name = "Variable2"}, 
+                      new Variable<List<string>>{  Name = "List1"}
+                 },
+                Activities = 
+                 {
+                     //new WriteLine { Text = "From WriteLine"},
+                     new WriteLine { Text = new InArgument<string>(new CSharpValue<string>("Variable1"))},
+                     new WriteLine { Text = new CSharpValue<string>("DateTime.Now.ToString()")},
+                     new ReadFromConsole { Output = new CSharpReference<string>("Variable2")},
+                     new WriteLine { Text = new CSharpValue<string>("String.Format(\" this text {0} is written at {1}\", Variable2, DateTime.Now)")},
+                     new Assign { To = new OutArgument<string>(new CSharpReference<string>("Variable1")), Value = new InArgument<string>(new CSharpValue<string>("\"new value for variable 1 \" + DateTime.Now.ToString()"))  },
+                     new WriteLine { Text = new CSharpValue<string>("Variable1")},
+                     new Assign { To = new OutArgument<List<string>>(new CSharpReference<List<string>>("List1")), Value = new InArgument<List<string>>(new CSharpValue<List<string>>("new List<string> { \"item1\", \"item2\", \"item3\" }"))  },
+                     new Assign { To = new OutArgument<string>(new CSharpReference<string>("List1[1]")), Value = new InArgument<string>(new CSharpValue<string>("\" List Item2 value changed \" + DateTime.Now.ToString()"))  },
+                     new WriteLine { Text = new CSharpValue<string>("List1[1]")},
+                     new Assign { To = new OutArgument<string>(new CSharpReference<string>("List1[1]")), Value = new InArgument<string>(new CSharpValue<string>("List1[1] + \" value appended \" + DateTime.Now.ToString()"))  },
+                     new WriteLine { Text = new CSharpValue<string>("List1[1]")}
+                 }
+            };
+        }
+    }
+
+    public class ReadFromConsole : CodeActivity
+    {
+        public OutArgument<string> Output { get; set; }
+        protected override void Execute(CodeActivityContext context)
+        {
+            string line = Console.ReadLine();
+            this.Output.Set(context, line);
         }
     }
 
