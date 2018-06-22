@@ -273,11 +273,7 @@
     <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowManagement.html" />
     <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VRWorkflow\Directives\" />
-    <Folder Include="VRWorkflow\Services\APIServices\" />
-    <Folder Include="VRWorkflow\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
