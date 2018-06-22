@@ -2,7 +2,7 @@
     <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
     <vr-columns withemptyline>
         <vr-button type="Search" formname="formFilter" data-onclick="search" standalone></vr-button>
-        <vr-button type="Add" data-onclick="addBusinessEntity" ng-show="scopeModel.showAddButton" standalone></vr-button>
+        <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="!scopeModel.hideAddButton" standalone></vr-button>
     </vr-columns>
 </vr-row>
 <vr-row>
