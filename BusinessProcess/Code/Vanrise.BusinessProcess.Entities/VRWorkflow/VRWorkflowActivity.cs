@@ -13,6 +13,10 @@ namespace Vanrise.BusinessProcess.Entities
         public VRWorkflowActivitySettings Settings { get; set; }
     }
 
+    public class VRWorkflowActivityCollection : List<VRWorkflowActivity>
+    {
+    }
+
     public abstract class VRWorkflowActivitySettings
     {
         public abstract Guid ConfigId { get; }

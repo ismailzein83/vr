@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             get { return new Guid("9292B3BE-256F-400F-9BC6-A0423FA0B30F"); }
         }
 
-        public List<VRWorkflowActivity> Activities { get; set; }
+        public VRWorkflowActivityCollection Activities { get; set; }
 
         public VRWorkflowVariableCollection Variables { get; set; }
         
