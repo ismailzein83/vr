@@ -17,10 +17,10 @@ namespace TOne.WhS.Deal.Business
         public DateTime? EED { get; set; }
         public bool IsExcluded(ISaleZoneFilterContext context)
         {
-            SwapDealManager swapDealManager = new SwapDealManager();
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
             if (context.SaleZone == null)
                 throw new ArgumentNullException("SaleZone");
-            return swapDealManager.IsZoneExcluded(context.SaleZone.SaleZoneId, BED, EED, CarrierAccountId, DealId,true);
+            return dealDefinitionManager.IsZoneExcluded(context.SaleZone.SaleZoneId, BED, EED, CarrierAccountId, DealId,true);
         }
     }
 }

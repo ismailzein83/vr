@@ -47,7 +47,7 @@
                             <vr-columns width="1/3row">
                                 <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateEED()" onvaluechanged="scopeModel.onEEDchanged"></vr-datetimepicker>
                             </vr-columns>
-                            <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectReady" isrequired="true" normal-col-num="4"></vr-common-currency-selector>
+                            <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectReady" isrequired="true"  normal-col-num="4"></vr-common-currency-selector>
                             <vr-columns width="1/3row">
                                 <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" decimalprecision="0" isrequired="true" customvalidate="scopeModel.validateGracePeriod()"></vr-textbox>
                             </vr-columns>
@@ -110,7 +110,6 @@
                         </ul>
                     </label>
                 </vr-columns>
-
             </vr-row>
         </vr-form>
     </vr-modalbody>

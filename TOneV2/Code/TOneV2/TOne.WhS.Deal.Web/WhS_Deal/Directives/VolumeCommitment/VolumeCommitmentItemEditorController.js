@@ -223,9 +223,9 @@
 
         function setTitle() {
             if (isEditMode && volumeCommitmentItemEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemEntity.Name, 'Volume Commitment Item');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemEntity.Name, 'Group');
             else
-                $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment Item');
+                $scope.title = UtilsService.buildTitleForAddEditor('Group');
         }
 
         function loadStaticData() {

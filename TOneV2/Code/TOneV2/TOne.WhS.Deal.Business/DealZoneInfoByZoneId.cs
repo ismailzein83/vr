@@ -7,7 +7,7 @@ using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
-    public class DealZoneInfoByZoneId : Dictionary<long, List<DealZoneInfo>>
+    public class DealZoneInfoByZoneId : Dictionary<long, SortedList<DateTime, DealZoneInfo>>
     {
     }
 }

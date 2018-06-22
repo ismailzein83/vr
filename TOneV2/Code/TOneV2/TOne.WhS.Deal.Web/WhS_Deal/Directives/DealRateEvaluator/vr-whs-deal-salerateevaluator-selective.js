@@ -28,6 +28,8 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
         var evaluatedRate;
         var directiveAPI;
         var selectorAPI;
+        var context;
+
         $scope.scopeModel = {};
 
         function initializeController() {
@@ -43,12 +45,11 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                 var setLoader = function (value) {
                     selectiveCtrl.isLoadingDirective = value;
                 };
-                var directivePayload = undefined;
+                var directivePayload = {
+                    context: getContext()
+                };
                 if (evaluatedRate != undefined)
-                    directivePayload =
-                   {
-                       evaluatedRate: evaluatedRate
-                   };
+                    directivePayload.evaluatedRate = evaluatedRate;
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
         }
@@ -56,24 +57,31 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
             var api = {};
             api.load = function (payload) {
                 // selectorAPI.clearDataSource();
-
                 var promises = [];
                 var getsaleRateEvaluatorConfigurationPromise = getSaleRateEvaluatorConfiguration();
                 promises.push(getsaleRateEvaluatorConfigurationPromise);
 
                 if (payload != undefined) {
-                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    context = payload.context;
                     evaluatedRate = payload.evaluatedRate;
-                    var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                    directiveReadyDeferred.promise.then(function () {
-                        var payload = {
-                            evaluatedRate: evaluatedRate
-                        };
-                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, loadDirectivePromiseDeferred);
-                    });
-                    promises.push(loadDirectivePromiseDeferred.promise);
+                }
+                if (evaluatedRate != undefined) {
+                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadDirective());
                 }
 
+                function loadDirective() {
+                    var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    directiveReadyDeferred.promise.then(function () {
+                        var payloadEntity = {
+                            evaluatedRate: evaluatedRate,
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadEntity, loadDirectivePromiseDeferred);
+                    });
+                    return loadDirectivePromiseDeferred.promise;
+                }
+                
                 function getSaleRateEvaluatorConfiguration() {
                     return WhS_Deal_VolCommitmentDealAPIService.GetSaleRateEvaluatorConfigurationTemplateConfigs().then(
                         function (rateEvaluators) {
@@ -108,6 +116,12 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
 
             if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
                 selectiveCtrl.onReady(api);
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
 }]);

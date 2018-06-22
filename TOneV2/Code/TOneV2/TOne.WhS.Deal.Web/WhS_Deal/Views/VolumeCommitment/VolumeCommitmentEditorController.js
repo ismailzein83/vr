@@ -53,7 +53,9 @@
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
-                var payload;
+                var payload = {
+                    context : context
+                };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountSelectorAPI, payload, setLoader, carrierAccountSelectorReadyDeferred);
                 var payload = { context: getContext() };
                 volumeCommitmenetItemsAPI.load(payload);
@@ -432,6 +434,10 @@
                 },
                 getCarrierAccountId: function () {
                     return carrierAccountSelectorAPI.getSelectedIds();
+                },
+                getVolumeCommitmentCurrency : function ()
+                {
+                    return currencyDirectiveAPI.getSelectedValues();
                 }
 
             };

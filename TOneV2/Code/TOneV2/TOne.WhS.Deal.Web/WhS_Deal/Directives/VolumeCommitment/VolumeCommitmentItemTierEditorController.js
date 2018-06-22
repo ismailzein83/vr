@@ -109,21 +109,29 @@
 
             rateEvaluatorReadyPromiseDeferred.promise.then(function () {
 
-                var payload = undefined;
+                var payload = {
+                    context: getRateEvaluatorContext()
+                };
                 if (volumeCommitmentItemTierEntity != undefined && volumeCommitmentItemTierEntity.EvaluatedRate != undefined)
-                    payload =
-                    {
-                        evaluatedRate: volumeCommitmentItemTierEntity.EvaluatedRate
-                    };
+                    payload.evaluatedRate = volumeCommitmentItemTierEntity.EvaluatedRate;
+
                 VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
             });
             return loadREWSelectiveDirectivePromiseDeferred.promise;
         }
+
+        function getRateEvaluatorContext()
+        {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
+        }
         function setTitle() {
             if (isEditMode)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemTierEntity.tierName, 'Volume Commitment Item Tier');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemTierEntity.tierName, 'Tier');
             else
-                $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment Item Tier');
+                $scope.title = UtilsService.buildTitleForAddEditor('Tier');
         }
 
         function loadStaticData() {

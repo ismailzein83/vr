@@ -11,7 +11,8 @@
     </vr-select>
 </vr-columns>
 <vr-columns colnum="{{selectiveCtrl.normalColNum}}" vr-loader="selectiveCtrl.isLoadingDirective">
-    <vr-directivewrapper directive="selectiveCtrl.selectedTemplateConfig.Editor"
+    <vr-directivewrapper  ng-if="selectiveCtrl.selectedTemplateConfig != undefined"
+                         directive="selectiveCtrl.selectedTemplateConfig.Editor"
                          on-ready="selectiveCtrl.onDirectiveWrapperReady"
                          isrequired="selectiveCtrl.isrequired">
     </vr-directivewrapper>

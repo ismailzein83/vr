@@ -70,12 +70,11 @@
 
             rateEvaluatorReadyPromiseDeferred.promise.then(function () {
 
-                var payload = undefined;
+                var payload = {
+                    context: getContext()
+                };
                 if (exRateEntity != undefined && exRateEntity.EvaluatedRate != undefined) {
-                    payload =
-                    {
-                        evaluatedRate: exRateEntity.EvaluatedRate
-                    };
+                    payload.evaluatedRate= exRateEntity.EvaluatedRate
                 }
                 VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
             });
@@ -138,6 +137,12 @@
                 $scope.onVolumeCommitmentItemTierExRateUpdated(parameterObj);
             }
             $scope.modalContext.closeModal();
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
 
     }

@@ -6,6 +6,8 @@ using Vanrise.Common.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -117,7 +119,32 @@ namespace TOne.WhS.Deal.Business
                 record.OrigCostDealZoneGroupNb = null;
             }
         }
-
+        public bool IsSaleZoneIncludedInDeal(int customerId, long zoneId, DateTime effectiveAfter)
+        {
+            var dealZoneInfoByCustomerId = GetCachedCustomerDealZoneInfoByCustomerId();
+            var customerDeals = dealZoneInfoByCustomerId.GetRecord(customerId);
+            var dealZoneInfo = customerDeals.GetRecord(zoneId);
+            if (dealZoneInfo == null)
+                return false;
+            var zoneInfo = dealZoneInfo.First();
+            if (effectiveAfter > zoneInfo.Value.EED)
+                return false;
+            else
+                return true;
+        }
+        public bool IsSupplierZoneIncludedInDeal(int supplierId, long zoneId, DateTime effectiveAfter)
+        {
+            var dealZoneInfoByCustomerId = GetCachedSupplierDealZoneInfoBySupplierId();
+            var supplierDeals = dealZoneInfoByCustomerId.GetRecord(supplierId);
+            var dealZoneInfo = supplierDeals.GetRecord(zoneId);
+            if (dealZoneInfo == null)
+                return false;
+            var zoneInfo = dealZoneInfo.First();
+            if (effectiveAfter > zoneInfo.Value.EED)
+                return false;
+            else
+                return true;
+        }
         public DealSaleZoneGroupWithoutRate GetAccountSaleZoneGroup(int? customerId, long? saleZoneId, DateTime effectiveDate)
         {
             if (!customerId.HasValue || !saleZoneId.HasValue)
@@ -180,7 +207,80 @@ namespace TOne.WhS.Deal.Business
 
             return BuildDealZoneGroupTierDetailsWithoutRate(dealZoneGroupTier);
         }
-
+        public bool IsZoneExcluded(long zoneId, DateTime dealBED, DateTime? dealEED, int carrierAccountId, int? dealId, bool isSale)
+        {
+            Dictionary<int, DealZoneInfoByZoneId> cachedDealInfo = new Dictionary<int, DealZoneInfoByZoneId>();
+            SwapDealManager swapDealManager = new SwapDealManager();
+            if (isSale)
+                cachedDealInfo = GetCachedCustomerDealZoneInfoByCustomerId();
+            else
+                cachedDealInfo = GetCachedSupplierDealZoneInfoBySupplierId();
+            if (cachedDealInfo != null)
+            {
+                DealZoneInfoByZoneId dealZoneInfo = cachedDealInfo.GetRecord(carrierAccountId);
+                if (dealZoneInfo != null)
+                {
+                    var zoneInfos = dealZoneInfo.GetRecord(zoneId);
+                    if (zoneInfos != null)
+                    {
+                        foreach (var zoneInfo in zoneInfos)
+                        {
+                            if ((dealId != zoneInfo.Value.DealId || dealId == null) && IsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
+                                return true;
+                        }
+                    }
+                }
+                else
+                {
+                    SaleZoneManager saleZoneManager = new SaleZoneManager();
+                    var saleZone = saleZoneManager.GetSaleZone(zoneId);
+                    if (saleZone == null)
+                        throw new NullReferenceException("saleZone");
+                    if (dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null))
+                        return true;
+                }
+            }
+            return false;
+        }
+        private bool IsOverlapped(DateTime firstBeginEffectiveDate, DateTime? firstEndEffectiveDate, DateTime secondBeginEffectiveDate, DateTime? secondEndEffectiveDate)
+        {
+            return (secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate) && firstEndEffectiveDate > secondBeginEffectiveDate);
+        }
+        public List<long> AreZonesExcluded(OverlappedZonesContext context, bool isSale)
+        {
+            List<long> excludedSaleZones = new List<long>();
+            if (context.ZoneIds != null)
+                foreach (var saleZoneId in context.ZoneIds)
+                {
+                    if (IsZoneExcluded(saleZoneId, context.BED, context.EED, context.CarrierAccountId, context.DealId, isSale))
+                        excludedSaleZones.Add(saleZoneId);
+                }
+            return excludedSaleZones;
+        }
+        public List<long> GetExcludedSaleZones(int? dealId, int carrierAccountId, List<long> saleZoneIds, DateTime beginDate, DateTime? endDate)
+        {
+            var overlappedSaleZonesContext = new OverlappedZonesContext
+            {
+                ZoneIds = saleZoneIds,
+                BED = beginDate,
+                EED = endDate,
+                CarrierAccountId = carrierAccountId,
+                DealId = dealId,
+            };
+            return AreZonesExcluded(overlappedSaleZonesContext, true);
+        }
+        public List<long> GetExcludedSupplierZones(int? dealId, int carrierAccountId, List<long> supplierZoneIds, DateTime beginDate, DateTime? endDate)
+        {
+            var overlappedSupplierZonesContext = new OverlappedZonesContext
+            {
+                ZoneIds = supplierZoneIds,
+                BED = beginDate,
+                EED = endDate,
+                CarrierAccountId = carrierAccountId,
+                DealId = dealId,
+            };
+            return AreZonesExcluded(overlappedSupplierZonesContext, false);
+        }
         public DealZoneGroupTierDetailsWithoutRate GetSupplierDealZoneGroupTierDetailsWithoutRate(int dealId, int zoneGroupNb, int tierNb)
         {
             DealSupplierZoneGroupWithoutRate dealSupplierZoneGroup = GetDealSupplierZoneGroupWithoutRate(dealId, zoneGroupNb);
@@ -235,7 +335,7 @@ namespace TOne.WhS.Deal.Business
 
         public Dictionary<int, DealDefinition> GetAllCachedDealDefinitions()
         {
-            return base.GetCachedDeals();
+            return GetCachedDeals();
         }
 
         public IEnumerable<DealSaleZoneGroup> GetDealSaleZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions)
@@ -346,7 +446,105 @@ namespace TOne.WhS.Deal.Business
                 RetroActiveFromTierNb = dealSaleZoneGroupTier.RetroActiveFromTierNumber
             };
         }
+        private Dictionary<int, DealZoneInfoByZoneId> GetCachedCustomerDealZoneInfoByCustomerId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustomerDealZoneInfoByZoneId", () =>
+            {
+                Dictionary<int, DealZoneInfoByZoneId> customerDealZoneInfo = new Dictionary<int, DealZoneInfoByZoneId>();
+                var cachedDeals = GetCachedDeals();
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                foreach (var dealDef in cachedDeals.Values)
+                {
+                    var zoneIds = dealDef.Settings.GetDealSaleZoneIds();
+                    if (zoneIds != null)
+                    {
+                        var carrierAccountId = dealDef.Settings.GetCarrierAccountId();
+                        var carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
 
+                        if (CarrierAccountManager.IsCustomer(carrierAccount.AccountType))
+                        {
+                            DealZoneInfoByZoneId dealZoneInfoByZoneId = customerDealZoneInfo.GetOrCreateItem(carrierAccountId);
+                            foreach (var zoneId in zoneIds)
+                            {
+                                SortedList<DateTime, DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId, () => { return new SortedList<DateTime, DealZoneInfo>(new DecsendingDateTimeComparer()); });
+
+                                var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, dealDef.Settings.BeginDate, dealDef.Settings.EndDate));
+                                if (overlappedItem == null)
+                                {
+                                    dealZoneInfos.Add(dealDef.Settings.BeginDate, new DealZoneInfo
+                                    {
+                                        DealId = dealDef.DealId,
+                                        ZoneId = zoneId,
+                                        BED = dealDef.Settings.BeginDate,
+                                        EED = dealDef.Settings.EndDate
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                return customerDealZoneInfo;
+            });
+        }
+
+        private class DecsendingDateTimeComparer : IComparer<DateTime>
+        {
+            public int Compare(DateTime firstDate, DateTime secondDate)
+            {
+                return firstDate < secondDate ? 1 : -1;
+            }
+        }
+
+        private Dictionary<int, DealZoneInfoByZoneId> GetCachedSupplierDealZoneInfoBySupplierId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSupplierDealZoneInfoByZoneId", () =>
+            {
+                Dictionary<int, DealZoneInfoByZoneId> supplierDealZoneInfo = new Dictionary<int, DealZoneInfoByZoneId>();
+                var cachedDeals = GetCachedDealsByConfigId();
+                IEnumerable<DealDefinition> dealDefinitions = cachedDeals.Values.SelectMany(item => item);
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                foreach (var deal in dealDefinitions)
+                {
+                    var zoneIds = deal.Settings.GetDealSupplierZoneIds();
+                    if (zoneIds != null)
+                    {
+                        var carrierAccountId = deal.Settings.GetCarrierAccountId();
+                        var carrierAccount = carrierAccountManager.GetCarrierAccount(carrierAccountId);
+
+                        if (carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange)
+                        {
+                            DealZoneInfoByZoneId dealZoneInfoByZoneId;
+                            if (!supplierDealZoneInfo.TryGetValue(carrierAccountId, out dealZoneInfoByZoneId))
+                            {
+                                dealZoneInfoByZoneId = new DealZoneInfoByZoneId();
+                                supplierDealZoneInfo.Add(carrierAccountId, dealZoneInfoByZoneId);
+                            }
+                            foreach (var zoneId in zoneIds)
+                            {
+                                SortedList<DateTime, DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId, () => { return new SortedList<DateTime, DealZoneInfo>(new DecsendingDateTimeComparer()); });
+                                //List<DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId);
+                                var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, deal.Settings.BeginDate, deal.Settings.EndDate));
+                                if (overlappedItem == null)
+                                {
+                                    dealZoneInfos.Add(deal.Settings.BeginDate, new DealZoneInfo
+                                    {
+                                        DealId = deal.DealId,
+                                        ZoneId = zoneId,
+                                        BED = deal.Settings.BeginDate,
+                                        EED = deal.Settings.EndDate
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+                return supplierDealZoneInfo;
+            });
+        }
+        public bool IsOverlapped(DealZoneInfo dealZoneInfo, DateTime beginEffectiveDate, DateTime? endEffectiveDate)
+        {
+            return (endEffectiveDate.VRGreaterThan(dealZoneInfo.BED) && dealZoneInfo.EED > beginEffectiveDate);
+        }
         DealZoneGroupTierDetailsWithoutRate BuildDealZoneGroupTierDetailsWithoutRate(DealSupplierZoneGroupTierWithoutRate dealSupplierZoneGroupTier)
         {
             return new DealZoneGroupTierDetailsWithoutRate()
@@ -374,7 +572,7 @@ namespace TOne.WhS.Deal.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSaleZoneGroups", () =>
             {
                 Dictionary<DealZoneGroup, DealSaleZoneGroupWithoutRate> result = new Dictionary<DealZoneGroup, DealSaleZoneGroupWithoutRate>();
-                var cachedDeals = base.GetCachedDeals();
+                var cachedDeals = GetCachedDeals();
                 foreach (DealDefinition dealDefinition in cachedDeals.Values)
                 {
                     DealGetZoneGroupsContext context = new DealGetZoneGroupsContext(dealDefinition.DealId, DealZoneGroupPart.Sale, false);
@@ -405,7 +603,7 @@ namespace TOne.WhS.Deal.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSupplierZoneGroups", () =>
             {
                 Dictionary<DealZoneGroup, DealSupplierZoneGroupWithoutRate> result = new Dictionary<DealZoneGroup, DealSupplierZoneGroupWithoutRate>();
-                var cachedDeals = base.GetCachedDeals();
+                var cachedDeals = GetCachedDeals();
                 foreach (DealDefinition dealDefinition in cachedDeals.Values)
                 {
                     DealGetZoneGroupsContext context = new DealGetZoneGroupsContext(dealDefinition.DealId, DealZoneGroupPart.Cost, false);

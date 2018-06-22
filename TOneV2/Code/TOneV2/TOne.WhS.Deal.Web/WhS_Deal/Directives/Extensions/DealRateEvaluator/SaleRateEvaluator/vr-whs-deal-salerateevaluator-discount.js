@@ -32,7 +32,7 @@ app.directive("vrWhsDealSalerateevaluatorDiscount", ['UtilsService', function (U
 
             api.load = function (payload) {
 
-                if (payload != undefined) {
+                if (payload.evaluatedRate != undefined) {
                     $scope.scopeModel.Discount = payload.evaluatedRate.Discount;
                 }
             };

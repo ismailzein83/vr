@@ -80,7 +80,7 @@ namespace TOne.WhS.Deal.Business
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
-            SwapDealManager swapDealManager = new SwapDealManager();
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             validateBeforeSaveContext.ValidateMessages = new List<string>();
@@ -113,8 +113,8 @@ namespace TOne.WhS.Deal.Business
                 }
 
             }
-            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
-            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
+            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
+            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
             if (excludedSaleZones.Count() > 0)
             {
                 validationResult = false;

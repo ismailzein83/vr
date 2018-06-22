@@ -19,10 +19,12 @@ app.directive("vrWhsDealSalerateevaluatorFixed", ['UtilsService', 'UISettingsSer
     };
 
     function FixedSaleRateEvaluator(ctrl, $scope) {
+        var context;
 
         this.initializeController = initializeController;
 
         function initializeController() {
+         
             $scope.scopeModel = {};
             $scope.longPrecision = UISettingsService.getLongPrecision();
             defineAPI();
@@ -31,9 +33,17 @@ app.directive("vrWhsDealSalerateevaluatorFixed", ['UtilsService', 'UISettingsSer
             var api = {};
 
             api.load = function (payload) {
+                var promises = [];
                 if (payload != undefined) {
-                    $scope.scopeModel.Rate = payload.evaluatedRate.Rate;
+                    context = payload.context;
+                    var currency = context.getVolumeCommitmentCurrency();
+                    if(currency != undefined)
+                        $scope.scopeModel.currency = currency.Symbol;
+                    if (payload.evaluatedRate != undefined) {
+                        $scope.scopeModel.Rate = payload.evaluatedRate.Rate;
+                    }
                 }
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getDescription = function () {

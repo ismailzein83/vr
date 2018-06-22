@@ -26,6 +26,7 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
         var directiveReadyDeferred;
         var directiveAPI;
         var evaluatedRate;
+        var context;
 
         function initializeController() {
             selectiveCtrl.templateConfigs = [];
@@ -38,12 +39,12 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                 var setLoader = function (value) {
                     $scope.isLoadingDirective = value;
                 };
-                var directivePayload = undefined;
+                var directivePayload = {
+                    context: getContext()
+                };
+
                 if (evaluatedRate != undefined)
-                    directivePayload =
-                   {
-                       evaluatedRate: evaluatedRate
-                   };
+                    directivePayload.evaluatedRate = evaluatedRate;
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
             };
         }
@@ -56,16 +57,24 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                 promises.push(getsupplierRateEvaluatorConfigurationPromise);
 
                 if (payload != undefined) {
-                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    context = payload.context;
                     evaluatedRate = payload.evaluatedRate;
+                }
+                if (evaluatedRate != undefined) {
+                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadDirective());
+                }
+
+                function loadDirective() {
                     var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     directiveReadyDeferred.promise.then(function () {
-                        var payload = {
-                            evaluatedRate: evaluatedRate
+                        var payloadEntity = {
+                            evaluatedRate: evaluatedRate,
+                            context: getContext()
                         };
-                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, loadDirectivePromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadEntity, loadDirectivePromiseDeferred);
                     });
-                    promises.push(loadDirectivePromiseDeferred.promise);
+                    return loadDirectivePromiseDeferred.promise;
                 }
 
                 function getSupplierRateEvaluatorConfiguration() {
@@ -101,6 +110,12 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
             };
             if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
                 selectiveCtrl.onReady(api);
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
 
     }

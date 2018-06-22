@@ -42,7 +42,8 @@
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDealInbound() : insertSwapDealInbound();
             };
-
+            var swapDealCurrency = context.getSwapDealCurrency();
+            $scope.scopeModel.currency = swapDealCurrency != undefined ? swapDealCurrency.Symbol : undefined;
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };

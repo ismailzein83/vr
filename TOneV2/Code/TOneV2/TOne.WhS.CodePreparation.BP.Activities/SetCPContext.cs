@@ -5,6 +5,8 @@ using System.Text;
 using System.Activities;
 using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.CodePreparation.BP.Activities
 {
@@ -25,9 +27,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
             CPParametersContext cpParametersContext = context.GetCPParameterContext() as CPParametersContext;
             cpParametersContext.SellingNumberPlanId = SellingNumberPlanId.Get(context);
             cpParametersContext.EffectiveDate = EffectiveDate.Get(context);
+            cpParametersContext.Customers = new CarrierAccountManager().GetCustomersBySellingNumberPlanId(cpParametersContext.SellingNumberPlanId);
         }
     }
 
@@ -45,7 +49,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
     public class CPParametersContext : ICPParametersContext
     {
-
+        public IEnumerable<CarrierAccountInfo> Customers { get; set; }
         public DateTime EffectiveDate { get; set; }
 
         public int SellingNumberPlanId { get; set; }

@@ -50,6 +50,8 @@
                 return (isEditMode) ? updateSwapDealOutbound() : insertSwapDealOutbound();
             };
 
+            var swapDealCurrency = context.getSwapDealCurrency();
+            $scope.scopeModel.currency = swapDealCurrency != undefined ? swapDealCurrency.Symbol: undefined;
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();

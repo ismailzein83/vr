@@ -70,6 +70,14 @@
       <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
       <Name>TOne.WhS.CodePreparation.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">
+      <Project>{fcc59d3d-6e58-4558-bc27-8c6a01223cb7}</Project>
+      <Name>TOne.WhS.Deal.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
+      <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
+      <Name>TOne.WhS.Deal.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Business\TOne.WhS.Sales.Business.csproj">
       <Project>{101b3960-9114-451e-8344-4074998e32f6}</Project>
       <Name>TOne.WhS.Sales.Business</Name>
