@@ -13,58 +13,27 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRecurringChargeManager
     {
+        GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         static Guid supplierRecurringChargesBEDefinitionId = new Guid("e9c11a90-864c-45a1-b90c-d7fdd80e9cf3");
-        public List<SupplierRecurringCharge> GetAllSupplierRecurringCharges()
+
+
+        public IEnumerable<SupplierRecurringCharge> GetSupplierRecurringChargesByFinancialAccountId(int financialAccountId)
         {
-            var supplierRecurringChargesGenericBE = new List<SupplierRecurringCharge>();
-
-            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            var supplierRecurringChargesBEDefinitions = genericBusinessEntityManager.GetAllGenericBusinessEntities(supplierRecurringChargesBEDefinitionId);
-
-            foreach (var supplierRecurringChargesBEDefinition in supplierRecurringChargesBEDefinitions)
+            var supplierRecurringCharges = GetCachedSupplierRecurringCharges();
+            if (supplierRecurringCharges == null)
             {
-                var fieldValues = supplierRecurringChargesBEDefinition.FieldValues;
-
-                SupplierRecurringCharge supplierRecurringCharge = new SupplierRecurringCharge();
-                supplierRecurringCharge.ID = Convert.ToInt32(fieldValues["ID"]);
-                supplierRecurringCharge.RecurringChargeTypeId = Convert.ToInt64(fieldValues["RecurringChargeTypeId"]);
-                supplierRecurringCharge.FinancialAccountId = Convert.ToInt32(fieldValues["FinancialAccountId"]);
-                supplierRecurringCharge.Amount = Convert.ToDecimal(fieldValues["Amount"]);
-                supplierRecurringCharge.CurrencyId = Convert.ToInt32(fieldValues["CurrencyId"]);
-                supplierRecurringCharge.BED = (DateTime)fieldValues["BED"];
-                supplierRecurringCharge.EED = (DateTime)fieldValues["EED"];
-                supplierRecurringCharge.RecurringChargePeriod = (RecurringChargePeriod)fieldValues["RecurringChargePeriod"];
-
-                supplierRecurringChargesGenericBE.Add(supplierRecurringCharge);
+                return null;
             }
-
-            return supplierRecurringChargesGenericBE;
+            return supplierRecurringCharges.Values.FindAllRecords(x => x.FinancialAccountId == financialAccountId);
         }
-
-        public Dictionary<int, List<SupplierRecurringCharge>> GetSupplierRecurringChargesByFinancialAccountId(int financialAccountId)
-        {
-            var supplierRecurringChargesByFinancialAccountId = new Dictionary<int, List<SupplierRecurringCharge>>();
-
-            List<SupplierRecurringCharge> supplierRecurringCharges = GetAllSupplierRecurringCharges();
-            List<SupplierRecurringCharge> supplierRecurringChargesForFinancialAccId = new List<SupplierRecurringCharge>();
-
-            foreach (var recurringCharge in supplierRecurringCharges)
-            {
-                if (recurringCharge.FinancialAccountId == financialAccountId)
-                    supplierRecurringChargesForFinancialAccId.Add(recurringCharge);
-            }
-            supplierRecurringChargesByFinancialAccountId.Add(financialAccountId, supplierRecurringChargesForFinancialAccId);
-
-            return supplierRecurringChargesByFinancialAccountId;
-        }
-
+        
         public List<SupplierRecurringCharge> GetEffectiveSupplierRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate)
         {
+            var supplierRecurringCharges = GetSupplierRecurringChargesByFinancialAccountId(financialAccountId);
+            if (supplierRecurringCharges == null)
+                return null;
+
             var effectiveSupplierRecurringCharges = new List<SupplierRecurringCharge>();
-
-            var supplierRecurringChargesByFinancialAccountId = GetSupplierRecurringChargesByFinancialAccountId(financialAccountId);
-            var supplierRecurringCharges = supplierRecurringChargesByFinancialAccountId[financialAccountId];
-
             foreach (var supplierRecurringCharge in supplierRecurringCharges)
             {
                 if (Utilities.AreTimePeriodsOverlapped(supplierRecurringCharge.BED, supplierRecurringCharge.EED, fromDate, toDate))
@@ -75,32 +44,73 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate)
         {
-            var evaluatedRecurringCharges = new List<RecurringChargeItem>();
+           
             var effectiveSupplierRecurringCharges = GetEffectiveSupplierRecurringCharges(financialAccountId, fromDate, toDate);
+            if (effectiveSupplierRecurringCharges == null)
+                return null;
+
+            var evaluatedRecurringCharges = new List<RecurringChargeItem>();
+            var supplierRecurringChargeTypeManager = new SupplierRecurringChargeTypeManager();
 
             foreach (var effectiveSupplierRecurringCharge in effectiveSupplierRecurringCharges)
             {
+                effectiveSupplierRecurringCharge.RecurringChargePeriod.ThrowIfNull("effectiveSupplierRecurringCharge.RecurringChargePeriod");
+                effectiveSupplierRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveSupplierRecurringCharge.RecurringChargePeriod.Settings");
+                
                 var context = new RecurringChargePeriodSettingsContext()
                 {
                     FromDate = fromDate,
-                    ToDate = toDate,
-                    Periods = new List<DateTime>()
+                    ToDate = toDate
                 };
 
                 effectiveSupplierRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
 
-                var supplierRecurringChargeTypeManager = new SupplierRecurringChargeTypeManager();
-                foreach (var date in context.Periods)
+                if (context.Periods != null)
                 {
-                    var recurringChargeItem = new RecurringChargeItem();
-                    recurringChargeItem.Name = supplierRecurringChargeTypeManager.GetSupplierRecurringChargeTypeName(effectiveSupplierRecurringCharge.RecurringChargeTypeId);
-                    recurringChargeItem.Amount = effectiveSupplierRecurringCharge.Amount;
-                    recurringChargeItem.Date = date;
-
-                    evaluatedRecurringCharges.Add(recurringChargeItem);
+                    foreach (var date in context.Periods)
+                    {
+                        evaluatedRecurringCharges.Add(new RecurringChargeItem
+                    {
+                        Name = supplierRecurringChargeTypeManager.GetSupplierRecurringChargeTypeName(effectiveSupplierRecurringCharge.RecurringChargeTypeId),
+                        Amount = effectiveSupplierRecurringCharge.Amount,
+                        Date = date
+                    });
+                    }
                 }
             }
             return evaluatedRecurringCharges;
+        }
+
+        private Dictionary<long, SupplierRecurringCharge> GetCachedSupplierRecurringCharges()
+        {
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedSupplierRecurringCharges", supplierRecurringChargesBEDefinitionId, () =>
+            {
+                Dictionary<long, SupplierRecurringCharge> supplierRecurringChargesDic = new Dictionary<long, SupplierRecurringCharge>();
+                var supplierRecurringChargesBEDefinitions = _genericBusinessEntityManager.GetAllGenericBusinessEntities(supplierRecurringChargesBEDefinitionId);
+                if (supplierRecurringChargesBEDefinitions != null)
+                {
+                    foreach (var supplierRecurringChargesBEDefinition in supplierRecurringChargesBEDefinitions)
+                    {
+                        var fieldValues = supplierRecurringChargesBEDefinition.FieldValues;
+                        if (fieldValues != null)
+                        {
+                            var supplierRecurringCharge = new SupplierRecurringCharge
+                            {
+                                ID = Convert.ToInt64(fieldValues["ID"]),
+                                RecurringChargeTypeId = Convert.ToInt64(fieldValues["RecurringChargeTypeId"]),
+                                FinancialAccountId = Convert.ToInt32(fieldValues["FinancialAccountId"]),
+                                Amount = Convert.ToDecimal(fieldValues["Amount"]),
+                                CurrencyId = Convert.ToInt32(fieldValues["CurrencyId"]),
+                                BED = (DateTime)fieldValues["BED"],
+                                EED = (DateTime)fieldValues["EED"],
+                                RecurringChargePeriod = (RecurringChargePeriod)fieldValues["RecurringChargePeriod"]
+                            };
+                            supplierRecurringChargesDic.Add(supplierRecurringCharge.ID, supplierRecurringCharge);
+                        }
+                    }
+                }
+                return supplierRecurringChargesDic;
+            });
         }
     }
 }

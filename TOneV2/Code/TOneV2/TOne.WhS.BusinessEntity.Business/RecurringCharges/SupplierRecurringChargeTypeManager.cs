@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -16,7 +17,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public string GetSupplierRecurringChargeTypeName(long supplierRecurringChargesTypeId)
         {
             Dictionary<long, SupplierRecurringChargesType> cachedEntities = this.GetAllCachedSupplierRecurringChargesTypes();
-            return cachedEntities[supplierRecurringChargesTypeId].Name;
+            Func<SupplierRecurringChargesType, bool> filterFunc = (entity) =>
+           {
+               if (entity.SupplierRecurringChargeTypeId != supplierRecurringChargesTypeId)
+                   return false;
+               return true;
+           };
+            IEnumerable<SupplierRecurringChargesType> filteredEntities = cachedEntities.FindAllRecords(filterFunc).OrderByDescending(x => x.SupplierRecurringChargeTypeId);
+            return filteredEntities.FirstOrDefault().Name;
         }
         #endregion
 
