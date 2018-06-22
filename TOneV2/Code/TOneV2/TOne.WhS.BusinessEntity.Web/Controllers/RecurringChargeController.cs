@@ -21,13 +21,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public IEnumerable<RecurringChargePeriodConfig> GetRecurringChargePeriodsConfigs()
         {
             SupplierRecurringChargeManager supplierManager = new SupplierRecurringChargeManager();
-            // var effective = supplierManager.GetEffectiveSupplierRecurringCharges(new DateTime(2018, 4, 18), new DateTime(2021, 1, 1));
-
-            //CustomerRecurringChargeManager customerManager = new CustomerRecurringChargeManager();
-            //var effective = customerManager.GetEffectiveCustomerRecurringCharges(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31));
-            // var recurringCharges = customerManager.GetEffectiveCustomerRecurringCharges(45, new DateTime(2018, 1, 1), new DateTime(2018, 12, 31));
-            var recurringCharges = supplierManager.GetEvaluatedRecurringCharges(45, new DateTime(2018, 1, 1), new DateTime(2018, 12, 31));
-
             return _manager.GetRecurringChargePeriodsConfigs();
         }
 
