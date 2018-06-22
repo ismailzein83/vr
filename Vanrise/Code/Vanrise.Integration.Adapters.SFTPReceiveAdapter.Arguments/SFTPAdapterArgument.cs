@@ -54,6 +54,18 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
 
         public string InvalidFilesDirectory { get; set; }
 
+        public int _port = 22;
+        public int Port
+        {
+            get
+            {
+                return _port;
+            }
+            set
+            {
+                _port = value;
+            }
+        }
         # endregion
     }
 
@@ -71,6 +83,15 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public VRSshKeyExchangeAlgorithmEnum? SshKeyExchangeAlgorithm { get; set; }
         public VRSshMacAlgorithmEnum? SshMacAlgorithm { get; set; }
         public VRSshOptionsEnum? SshOptions { get; set; }
+
+        public bool IsEmpty()
+        {
+            if (!Compression.HasValue && !SshEncryptionAlgorithm.HasValue && !SshHostKeyAlgorithm.HasValue 
+             && !SshKeyExchangeAlgorithm.HasValue && !SshMacAlgorithm.HasValue && !SshOptions.HasValue)
+                return true;
+
+            return false;
+        }
     }
 
     public enum VRCompressionEnum

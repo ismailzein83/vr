@@ -15,7 +15,7 @@
         var taskTriggerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var adapterTypeDirectiveAPI;
-        var adapterTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var adapterTypeDirectiveReadyPromiseDeferred;
 
         var mailMessageTemplateSelectorAPI;
         var mailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -61,7 +61,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onTaskTriggerDirectiveReady = function (api) {
@@ -71,7 +71,7 @@
 
             $scope.scopeModel.onAdapterTypeDirectiveReady = function (api) {
                 adapterTypeDirectiveAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingAdapterDirective = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingAdapterDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, adapterTypeDirectiveAPI, undefined, setLoader, adapterTypeDirectiveReadyPromiseDeferred);
             };
 
@@ -120,6 +120,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
+                adapterTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 getDataSource().then(function () {
                     getDataSourceTask().then(function () {
                         loadAllControls();
@@ -223,20 +224,23 @@
 
             promises.push(dataSourcePromiseLoad);
 
-            var adapterPayload = {};
-            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.Settings != undefined && dataSourceEntity.Entity.Settings.AdapterArgument != undefined)
-                adapterPayload.adapterArgument = dataSourceEntity.Entity.Settings.AdapterArgument;
-            if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.AdapterState != undefined && adapterPayload != undefined)
-                adapterPayload.adapterState = dataSourceEntity.Entity.AdapterState;
+            if (dataSourceEntity != undefined && dataSourceEntity.Entity != undefined) {
+                var adapterPayload = {};
+                if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.Settings != undefined && dataSourceEntity.Entity.Settings.AdapterArgument != undefined)
+                    adapterPayload.adapterArgument = dataSourceEntity.Entity.Settings.AdapterArgument;
+                if (dataSourceTask != undefined && dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.AdapterState != undefined && adapterPayload != undefined)
+                    adapterPayload.adapterState = dataSourceEntity.Entity.AdapterState;
 
 
-            var loadAdapterTypePromiseDeferred = UtilsService.createPromiseDeferred();
-            promises.push(loadAdapterTypePromiseDeferred.promise);
-            adapterTypeDirectiveReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(adapterTypeDirectiveAPI, adapterPayload, loadAdapterTypePromiseDeferred);
-            });
+                var loadAdapterTypePromiseDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadAdapterTypePromiseDeferred.promise);
+                adapterTypeDirectiveReadyPromiseDeferred.promise.then(function () {
+                    adapterTypeDirectiveReadyPromiseDeferred = undefined;
+                    VRUIUtilsService.callDirectiveLoad(adapterTypeDirectiveAPI, adapterPayload, loadAdapterTypePromiseDeferred);
+                });
+            }
+
             return UtilsService.waitMultiplePromises(promises);
-
         }
 
         function loadMailMessageTypeSelector() {

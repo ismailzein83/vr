@@ -167,10 +167,120 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             sftp.Dispose();
         }
 
-        void EstablishConnection(Sftp sftp, SFTPAdapterArgument SFTPAdapterArgument)
+        void EstablishConnection(Sftp sftp, SFTPAdapterArgument sftpAdapterArgument)
         {
-            sftp.Connect(SFTPAdapterArgument.ServerIP);
-            sftp.Login(SFTPAdapterArgument.UserName, SFTPAdapterArgument.Password);
+            SshParameters sshParameters = BuildSshParameters(sftpAdapterArgument.SshParameters);
+            if (sshParameters == null)
+                sftp.Connect(sftpAdapterArgument.ServerIP, sftpAdapterArgument.Port);
+            else
+                sftp.Connect(sftpAdapterArgument.ServerIP, sftpAdapterArgument.Port, sshParameters);
+
+            sftp.Login(sftpAdapterArgument.UserName, sftpAdapterArgument.Password);
+        }
+
+        SshParameters BuildSshParameters(VRSshParameters vrSshParameters)
+        {
+            if (vrSshParameters == null || vrSshParameters.IsEmpty())
+                return null;
+
+            SshParameters sshParameters = new SshParameters();
+            TrySetCompression(sshParameters, vrSshParameters.Compression);
+            TrySetSshEncryptionAlgorithm(sshParameters, vrSshParameters.SshEncryptionAlgorithm);
+            TrySetSshHostKeyAlgorithm(sshParameters, vrSshParameters.SshHostKeyAlgorithm);
+            TrySetSshKeyExchangeAlgorithm(sshParameters, vrSshParameters.SshKeyExchangeAlgorithm);
+            TrySetSshMacAlgorithm(sshParameters, vrSshParameters.SshMacAlgorithm);
+            TrySetSshOptions(sshParameters, vrSshParameters.SshOptions);
+
+            return sshParameters;
+        }
+
+        private void TrySetCompression(SshParameters sshParameters, VRCompressionEnum? compression)
+        {
+            if (compression.HasValue)
+            {
+                switch (compression.Value)
+                {
+                    case VRCompressionEnum.False: sshParameters.Compression = false; break;
+                    case VRCompressionEnum.True: sshParameters.Compression = true; break;
+                    default: throw new NotSupportedException(string.Format("VRCompressionEnum {0} not supported.", compression.Value));
+                }
+            }
+        }
+
+        private void TrySetSshEncryptionAlgorithm(SshParameters sshParameters, VRSshEncryptionAlgorithmEnum? sshEncryptionAlgorithm)
+        {
+            if (sshEncryptionAlgorithm.HasValue)
+            {
+                switch (sshEncryptionAlgorithm.Value)
+                {
+                    case VRSshEncryptionAlgorithmEnum.AES: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.AES; break;
+                    case VRSshEncryptionAlgorithmEnum.Any: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.Any; break;
+                    case VRSshEncryptionAlgorithmEnum.Blowfish: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.Blowfish; break;
+                    case VRSshEncryptionAlgorithmEnum.None: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.None; break;
+                    case VRSshEncryptionAlgorithmEnum.RC4: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.RC4; break;
+                    case VRSshEncryptionAlgorithmEnum.TripleDES: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.TripleDES; break;
+                    case VRSshEncryptionAlgorithmEnum.Twofish: sshParameters.EncryptionAlgorithms = SshEncryptionAlgorithm.Twofish; break;
+                    default: throw new NotSupportedException(string.Format("VRSshEncryptionAlgorithmEnum {0} not supported.", sshEncryptionAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshHostKeyAlgorithm(SshParameters sshParameters, VRSshHostKeyAlgorithmEnum? sshHostKeyAlgorithm)
+        {
+            if (sshHostKeyAlgorithm.HasValue)
+            {
+                switch (sshHostKeyAlgorithm.Value)
+                {
+                    case VRSshHostKeyAlgorithmEnum.Any: sshParameters.HostKeyAlgorithms = SshHostKeyAlgorithm.Any; break;
+                    case VRSshHostKeyAlgorithmEnum.DSS: sshParameters.HostKeyAlgorithms = SshHostKeyAlgorithm.DSS; break;
+                    case VRSshHostKeyAlgorithmEnum.None: sshParameters.HostKeyAlgorithms = SshHostKeyAlgorithm.None; break;
+                    case VRSshHostKeyAlgorithmEnum.RSA: sshParameters.HostKeyAlgorithms = SshHostKeyAlgorithm.RSA; break;
+                    default: throw new NotSupportedException(string.Format("VRSshHostKeyAlgorithmEnum {0} not supported.", sshHostKeyAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshKeyExchangeAlgorithm(SshParameters sshParameters, VRSshKeyExchangeAlgorithmEnum? sshKeyExchangeAlgorithm)
+        {
+            if (sshKeyExchangeAlgorithm.HasValue)
+            {
+                switch (sshKeyExchangeAlgorithm.Value)
+                {
+                    case VRSshKeyExchangeAlgorithmEnum.Any: sshParameters.KeyExchangeAlgorithms = SshKeyExchangeAlgorithm.Any; break;
+                    case VRSshKeyExchangeAlgorithmEnum.DiffieHellmanGroup14SHA1: sshParameters.KeyExchangeAlgorithms = SshKeyExchangeAlgorithm.DiffieHellmanGroup14SHA1; break;
+                    case VRSshKeyExchangeAlgorithmEnum.DiffieHellmanGroup1SHA1: sshParameters.KeyExchangeAlgorithms = SshKeyExchangeAlgorithm.DiffieHellmanGroup1SHA1; break;
+                    case VRSshKeyExchangeAlgorithmEnum.DiffieHellmanGroupExchangeSHA1: sshParameters.KeyExchangeAlgorithms = SshKeyExchangeAlgorithm.DiffieHellmanGroupExchangeSHA1; break;
+                    case VRSshKeyExchangeAlgorithmEnum.None: sshParameters.KeyExchangeAlgorithms = SshKeyExchangeAlgorithm.None; break;
+                    default: throw new NotSupportedException(string.Format("VRSshKeyExchangeAlgorithmEnum {0} not supported.", sshKeyExchangeAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshMacAlgorithm(SshParameters sshParameters, VRSshMacAlgorithmEnum? sshMacAlgorithm)
+        {
+            if (sshMacAlgorithm.HasValue)
+            {
+                switch (sshMacAlgorithm.Value)
+                {
+                    case VRSshMacAlgorithmEnum.Any: sshParameters.MacAlgorithms = SshMacAlgorithm.Any; break;
+                    case VRSshMacAlgorithmEnum.MD5: sshParameters.MacAlgorithms = SshMacAlgorithm.MD5; break;
+                    case VRSshMacAlgorithmEnum.None: sshParameters.MacAlgorithms = SshMacAlgorithm.None; break;
+                    case VRSshMacAlgorithmEnum.SHA1: sshParameters.MacAlgorithms = SshMacAlgorithm.SHA1; break;
+                    default: throw new NotSupportedException(string.Format("VRSshMacAlgorithmEnum {0} not supported.", sshMacAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshOptions(SshParameters sshParameters, VRSshOptionsEnum? sshOptions)
+        {
+            if (sshOptions.HasValue)
+            {
+                switch (sshOptions.Value)
+                {
+                    case VRSshOptionsEnum.None: sshParameters.Options = SshOptions.None; break;
+                    default: throw new NotSupportedException(string.Format("VRSshOptionsEnum {0} not supported.", sshOptions.Value));
+                }
+            }
         }
 
         void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, SFTPAdapterArgument SFTPAdapterArgument, ImportedBatchProcessingOutput output)
