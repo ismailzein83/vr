@@ -172,58 +172,51 @@
                 ticketContactsGridAPI = api;                
                 ticketContactsGridReadyPromiseDeferred.resolve();
             };
-        }
-
+        }        
         function load() {
             $scope.isLoading = true;
-
-            if (isEditMode) {
-                getCarrierProfile().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            carrierProfileEntity = undefined;
-                        });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
-                });
-            }
-            else if (isViewHistoryMode) {
-                getCarrierProfileHistory().then(function () {
-                    loadAllControls().finally(function () {
-                        carrierProfileEntity = undefined;
-                    });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
-                });
-
-            }
-            else {
-                loadAllControls();
-            }
+            loadAllControls()
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });
         }
+
+        function loadAllControls() {
+            var initialPromises = [];
+            if (isEditMode) {
+                initialPromises.push(getCarrierProfile());
+            }
+            else if (isViewHistoryMode) {               
+                initialPromises.push(getCarrierProfileHistory());
+            }
+            var rootPromiseNode = {
+                promises: initialPromises,
+                getChildNode: function () {                    
+                    return {
+                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadTicketContacts])]
+                    };
+                }
+            };
+            return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
+                carrierProfileEntity = undefined;
+            });
+        }
+
         function getCarrierProfileHistory() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfileHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 carrierProfileEntity = response;
 
             });
         }
+
         function getCarrierProfile() {
             return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
                 carrierProfileEntity = carrierProfile;
                 cityId = carrierProfileEntity.Settings.CityId;
             });
-        }
-
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadTicketContacts])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
         }
 
         function setTitle() {
