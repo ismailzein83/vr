@@ -37,7 +37,8 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            
+            $scope.scopeModel.showAddButton = false;
+
             $scope.scopeModel.onFilterDirectiveReady = function (api) {
                 filterDirectiveAPI = api;
                 filterDirectiveReadyDeferred.resolve();
@@ -54,6 +55,8 @@
             };
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChange = function () {
                 if (businessEntityDefinitionAPI.getSelectedIds() != undefined) {
+                    checkDoesUserHaveAddAccess(businessEntityDefinitionAPI.getSelectedIds());
+
                     if (businessEntityDefinitionSelectedDeferred != undefined)
                         businessEntityDefinitionSelectedDeferred.resolve();
                     else {
@@ -72,6 +75,14 @@
                 }
             };
             
+            function checkDoesUserHaveAddAccess(definitionId) {
+                VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
+                    $scope.scopeModel.showAddButton = response;
+                });
+
+            }
+
+
             $scope.search = function () {
                 return gridDirectiveAPI.load(getGridFilter());
             };
@@ -140,7 +151,7 @@
                     {
                         $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                     }
-                    $scope.scopeModel.hideAddButton = genericBEDefinitionSettings.HideAddButton;
+                    $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
                 }
             });
         }
