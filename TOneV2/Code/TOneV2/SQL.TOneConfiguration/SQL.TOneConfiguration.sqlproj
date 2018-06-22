@@ -774,9 +774,8 @@
     <Build Include="common\Stored Procedures\sp_VRPop3ReadMessageId_GetMessageIdsFromSpecificTime.sql" />
     <Build Include="sec\Tables\SecurityProvider.sql" />
     <Build Include="sec\Tables\RegisteredApplication.sql" />
-    <Build Include="sec\Stored Procedures\sp_RegisteredApplication_Insert.sql" />
-    <Build Include="sec\Stored Procedures\sp_RegisteredApplication_GetAll.sql" />
     <Build Include="sec\User Defined Types\SecurityProviderType.sql" />
+    <Build Include="sec\User Defined Types\RegisteredApplicationType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
