@@ -27,24 +27,26 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
             if (this.AttachementGenerators != null && this.AttachementGenerators.Count != 0 && this.FTPCommunicatorSettings != null)
             {
                 var attachementGenerators = this.AttachementGenerators;
-                FTPCommunicator ftpCommunicator = new FTPCommunicator(this.FTPCommunicatorSettings);
-                foreach (var generator in attachementGenerators)
+                using (FTPCommunicator ftpCommunicator = new FTPCommunicator(this.FTPCommunicatorSettings))
                 {
-                    generator.Settings.ThrowIfNull("attachement.Settings");
-                    VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext()
+                    foreach (var generator in attachementGenerators)
                     {
-                        HandlerContext = context
-
-                    };
-                    VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(generateFileContext);
-                    generatedFile.FileName = generator.Name + ".xls";
-                    if (generatedFile != null)
-                    {
-                        MemoryStream stream = new MemoryStream(generatedFile.FileContent);
-                        string errorMessage = null;
-                        if (!ftpCommunicator.TryWriteFile(stream, generatedFile.FileName, this.Subdirectory, out errorMessage))
+                        generator.Settings.ThrowIfNull("attachement.Settings");
+                        VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext()
                         {
-                            throw new Exception(errorMessage);
+                            HandlerContext = context
+
+                        };
+                        VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(generateFileContext);
+                        generatedFile.FileName = generator.Name + ".xls";
+                        if (generatedFile != null)
+                        {
+                            MemoryStream stream = new MemoryStream(generatedFile.FileContent);
+                            string errorMessage = null;
+                            if (!ftpCommunicator.TryWriteFile(stream, generatedFile.FileName, this.Subdirectory, out errorMessage))
+                            {
+                                throw new Exception(errorMessage);
+                            }
                         }
                     }
                 }

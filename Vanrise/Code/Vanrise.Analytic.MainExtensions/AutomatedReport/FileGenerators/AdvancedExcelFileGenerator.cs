@@ -86,8 +86,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             columnIndices.Add(col.ColumnIndex);
                         }
                         var orderedIndices = columnIndices.OrderBy(x => x);
+                        int difference = 1;
+                        if (orderedIndices.Count() > 1)
+                        {       
+                            difference = orderedIndices.Last() - orderedIndices.First()+1;
+                        }
                         var titleColumnIndex = orderedIndices.First();
-                        TableDefinitionsWorksheet.Cells.Merge(titleRowIndex, titleColumnIndex, 1, columnIndices.Count);
+                        TableDefinitionsWorksheet.Cells.Merge(titleRowIndex, titleColumnIndex, 1, difference);
                         TableDefinitionsWorksheet.Cells[titleRowIndex, titleColumnIndex].PutValue(title);
                         Cell cell = TableDefinitionsWorksheet.Cells.GetCell(titleRowIndex, titleColumnIndex);
                         Style style = cell.GetStyle();
@@ -120,6 +125,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                         style.Font.Size = 14;
                                         style.Font.IsBold = true;
                                         cell.SetStyle(style);
+                                        var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
+                                            () =>
+                                            {
+                                                return new List<int>();
+                                            });
+                                        headerIndices.Add(column.ColumnIndex);
                                     }
                                     var fieldType = fieldInfo.FieldType;
                                     bool renderDescription = fieldType.RenderDescriptionByDefault();
@@ -228,6 +239,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 style.Font.Size = 14;
                                 style.Font.IsBold = true;
                                 cell.SetStyle(style);
+                                var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
+                                             () =>
+                                             {
+                                                 return new List<int>();
+                                             });
+                                headerIndices.Add(col.ColumnIndex);
                             }
                         }
                         setHeaders = false;
