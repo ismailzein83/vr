@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum',
-function (UtilsService, VR_Integration_CompressionTypeEnum) {
+app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VR_Integration_CompressionEnum', 'VR_Integration_SshEncryptionAlgorithmEnum', 'VR_Integration_SshHostKeyAlgorithmEnum', 'VR_Integration_SshKeyExchangeAlgorithmEnum', 'VR_Integration_SshMacAlgorithmEnum', 'VR_Integration_SshOptionsEnum',
+function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_CompressionEnum, VR_Integration_SshEncryptionAlgorithmEnum, VR_Integration_SshHostKeyAlgorithmEnum, VR_Integration_SshKeyExchangeAlgorithmEnum, VR_Integration_SshMacAlgorithmEnum, VR_Integration_SshOptionsEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -30,7 +30,15 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
 
 
         function initializeController() {
+            $scope.scopeModel = {};
             $scope.compressionTypes = UtilsService.getArrayEnum(VR_Integration_CompressionTypeEnum);
+
+            $scope.scopeModel.compression = UtilsService.getArrayEnum(VR_Integration_CompressionEnum);
+            $scope.scopeModel.sshEncryptionAlgorithm = UtilsService.getArrayEnum(VR_Integration_SshEncryptionAlgorithmEnum);
+            $scope.scopeModel.sshHostKeyAlgorithm = UtilsService.getArrayEnum(VR_Integration_SshHostKeyAlgorithmEnum);
+            $scope.scopeModel.sshKeyExchangeAlgorithm = UtilsService.getArrayEnum(VR_Integration_SshKeyExchangeAlgorithmEnum);
+            $scope.scopeModel.sshMacAlgorithm = UtilsService.getArrayEnum(VR_Integration_SshMacAlgorithmEnum);
+            $scope.scopeModel.sshOptions = UtilsService.getArrayEnum(VR_Integration_SshOptionsEnum);
 
             $scope.actionsAfterImport = [{ value: -1, name: 'No Action' }, { value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
@@ -48,6 +56,40 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
             api.getData = function () {
 
                 var extension;
+                var sshParameters;
+                if ($scope.scopeModel.hasSshParameters) {
+                    if ($scope.scopeModel.selectedCompression != undefined) {
+                        tryInitializeSshParameters();
+                        sshParameters.Compression = $scope.scopeModel.selectedCompression.value;
+                    }
+                    if ($scope.scopeModel.selectedSshEncryptionAlgorithm != undefined) {
+                        tryInitializeSshParameters();
+                        sshParameters.SshEncryptionAlgorithm = $scope.scopeModel.selectedSshEncryptionAlgorithm.value;
+                    }
+                    if ($scope.scopeModel.selectedSshHostKeyAlgorithm != undefined) {
+                        tryInitializeSshParameters();
+                        sshParameters.SshHostKeyAlgorithm = $scope.scopeModel.selectedSshHostKeyAlgorithm.value;
+                    }
+                    if ($scope.scopeModel.selectedSshKeyExchangeAlgorithm != undefined) {
+                        tryInitializeSshParameters();
+                        sshParameters.SshKeyExchangeAlgorithm = $scope.scopeModel.selectedSshKeyExchangeAlgorithm.value;
+                    }
+                    if ($scope.scopeModel.selectedSshMacAlgorithm != undefined) {
+                        tryInitializeSshParameters();
+                        sshParameters.SshMacAlgorithm = $scope.scopeModel.selectedSshMacAlgorithm.value;
+                    }
+                    if ($scope.scopeModel.selectedSshOptions != undefined) {
+                        tryInitializeSshParameters();
+                        sshParameters.SshOptions = $scope.scopeModel.selectedSshOptions.value;
+                    }
+                }
+
+                function tryInitializeSshParameters() {
+                    if (sshParameters == undefined)
+                        sshParameters = {};
+                }
+
+
 
                 if ($scope.extension.indexOf(".") == 0)
                     extension = $scope.extension;
@@ -69,7 +111,8 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                     CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined,
                     FileCompletenessCheckInterval: $scope.fileCompletenessCheckInterval,
                     NumberOfFiles: $scope.maxNumberOfFiles,
-                    InvalidFilesDirectory: $scope.invalidDirectory
+                    InvalidFilesDirectory: $scope.invalidDirectory,
+                    SshParameters: sshParameters
                 };
             };
             api.getStateData = function () {
@@ -98,16 +141,32 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                         $scope.fileCompletenessCheckInterval = argumentData.FileCompletenessCheckInterval;
                         $scope.maxNumberOfFiles = argumentData.NumberOfFiles;
                         $scope.invalidDirectory = argumentData.InvalidFilesDirectory;
+                        if (argumentData.SshParameters != undefined) {
+                            $scope.scopeModel.hasSshParameters = true;
+                                if (argumentData.SshParameters.Compression != undefined)
+                                    $scope.scopeModel.selectedCompression = UtilsService.getItemByVal($scope.scopeModel.compression, argumentData.SshParameters.Compression, "value");
+                                if (argumentData.SshParameters.SshEncryptionAlgorithm != undefined)
+                                    $scope.scopeModel.selectedSshEncryptionAlgorithm = UtilsService.getItemByVal($scope.scopeModel.sshEncryptionAlgorithm, argumentData.SshParameters.SshEncryptionAlgorithm, "value");
+                                if (argumentData.SshParameters.SshHostKeyAlgorithm != undefined)
+                                    $scope.scopeModel.selectedSshHostKeyAlgorithm = UtilsService.getItemByVal($scope.scopeModel.sshHostKeyAlgorithm, argumentData.SshParameters.SshHostKeyAlgorithm, "value");
+                                if (argumentData.SshParameters.SshKeyExchangeAlgorithm != undefined)
+                                    $scope.scopeModel.selectedSshKeyExchangeAlgorithm = UtilsService.getItemByVal($scope.scopeModel.sshKeyExchangeAlgorithm, argumentData.SshParameters.SshKeyExchangeAlgorithm, "value");
+                                if (argumentData.SshParameters.SshMacAlgorithm != undefined)
+                                    $scope.scopeModel.selectedSshMacAlgorithm = UtilsService.getItemByVal($scope.scopeModel.sshMacAlgorithm, argumentData.SshParameters.SshMacAlgorithm, "value");
+                                if (argumentData.SshParameters.SshOptions != undefined)
+                                    $scope.scopeModel.selectedSshOptions = UtilsService.getItemByVal($scope.scopeModel.sshOptions, argumentData.SshParameters.SshOptions, "value");
+                        }
+
                     }
-
-                }
-            };
+                };
 
 
+                
+            }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
     }
 
     return directiveDefinitionObject;
-}]);
+}])

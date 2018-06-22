@@ -112,6 +112,7 @@
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Constants\ModuleConfig.js" />
+    <Content Include="Integration\Constants\SshparametersEnum.js" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterMySQLTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterSFTPTemplate.html" />
     <Content Include="Integration\Directives\Adapter\Templates\AdapterPostgresTemplate.html" />
