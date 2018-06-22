@@ -46,7 +46,8 @@ as (select * from (values
 
 ('BCAA46FC-F305-4414-A005-C0EB1550367C','Local Security Provider','Local Security Provider','VR_Sec_SecurityProviderSettings',					'{"Editor":"vr-sec-securityprovider-settings-localprovider"}'),
 ('B47D2D8D-A9D3-42E1-91B1-25807167CE86','VR_Sec_SecurityProvider','Security Provider','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings',	'{"Editor":"vr-sec-securityprovider-beforeinserthandler"}'),
-('04C515AB-5A8F-4C3B-A8F1-A4CE98518D06','Remote Security Provider','Remote Security Provider','VR_Sec_SecurityProviderSettings','{"Editor":"vr-sec-securityprovider-settings-remoteprovider"}')
+('04C515AB-5A8F-4C3B-A8F1-A4CE98518D06','Remote Security Provider','Remote Security Provider','VR_Sec_SecurityProviderSettings','{"Editor":"vr-sec-securityprovider-settings-remoteprovider"}'),
+('17823DCD-AF7B-4DD0-A19F-945DE96B74CE','Security Provider','Security Provider','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"vr-sec-providersettings-customobjectsettings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
