@@ -8,11 +8,16 @@ using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Security.Business
 {
     public class RegisteredApplicationManager
     {
+
+        static Guid beDefinitionId = new Guid("a7b4c14a-a11a-42ba-a85f-c0f030a99b94");
+
+
         public IEnumerable<RegisteredApplication> GetAllRegisteredApplications()
         {
             var cachedRegisteredApplications = this.GetCachedRegisteredApplications();
@@ -67,20 +72,24 @@ namespace Vanrise.Security.Business
 
         public RegisterApplicationOutput RegisterApplication(string applicationName, string applicationURL)
         {
-            IRegisteredApplicationDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRegisteredApplicationDataManager>();
-            RegisteredApplication registeredApplication = new RegisteredApplication()
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            var genericBusinessEntityToAdd = new GenericBusinessEntityToAdd
             {
-                ApplicationId = Guid.NewGuid(),
-                Name = applicationName,
-                URL = applicationURL
+                BusinessEntityDefinitionId = beDefinitionId,
+                FieldValues = new Dictionary<string, object>()
             };
-            bool insertActionSucc = dataManager.AddRegisteredApplication(registeredApplication);
-            if (insertActionSucc)
+            genericBusinessEntityToAdd.FieldValues.Add("Name", applicationName);
+            genericBusinessEntityToAdd.FieldValues.Add("URL", applicationURL);
+            var insertOperationOutput = genericBusinessEntityManager.AddGenericBusinessEntity(genericBusinessEntityToAdd);
+            if (insertOperationOutput.Result == Vanrise.Entities.InsertOperationResult.Succeeded)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                return new RegisterApplicationOutput() { ApplicationId = registeredApplication.ApplicationId };
+                var accplicationIdObject = insertOperationOutput.InsertedObject.FieldValues.GetRecord("ID");
+                if (accplicationIdObject != null)
+                {
+                    var accplicationId = (Guid)accplicationIdObject.Value;
+                    return new RegisterApplicationOutput() { ApplicationId = accplicationId };
+                }
             }
-
             return null;
         }
 
@@ -103,23 +112,32 @@ namespace Vanrise.Security.Business
 
         private Dictionary<Guid, RegisteredApplication> GetCachedRegisteredApplications()
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedRegisteredApplications",
-               () =>
-               {
-                   IRegisteredApplicationDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IRegisteredApplicationDataManager>();
-                   IEnumerable<RegisteredApplication> registeredApplications = dataManager.GetRegisteredApplications();
-                   return registeredApplications.ToDictionary(kvp => kvp.ApplicationId, kvp => kvp);
-               });
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedRegisteredApplications", beDefinitionId, () =>
+            {
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(beDefinitionId);
+                Dictionary<Guid, RegisteredApplication> result = new Dictionary<Guid, RegisteredApplication>();
+
+                if (genericBusinessEntities != null)
+                {
+                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                    {
+                        if (genericBusinessEntity.FieldValues == null)
+                            continue;
+
+                        RegisteredApplication registeredApplication = new RegisteredApplication()
+                        {
+                            ApplicationId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
+                            URL = genericBusinessEntity.FieldValues.GetRecord("URL") as string
+                        };
+                        result.Add(registeredApplication.ApplicationId, registeredApplication);
+                    }
+                }
+
+                return result;
+            });
         }
 
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IRegisteredApplicationDataManager _dataManager = SecurityDataManagerFactory.GetDataManager<IRegisteredApplicationDataManager>();
-            object _updateHandle;
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreRegisteredApplicationsUpdated(ref _updateHandle);
-            }
-        }
     }
 }

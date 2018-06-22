@@ -46,6 +46,12 @@ namespace Vanrise.GenericData.Business
              return GetCacheManager().GetOrCreateObject(cacheName, dataRecordStorageId, createObject);
          }
 
+         //public void SetCacheExpired(Guid businessEntityDefinitionId)
+         //{
+         //    var dataRecordStorageId = _genericBEDefinitionManager.GetGenericBEDataRecordStorageId(businessEntityDefinitionId);
+         //    GetCacheManager().SetCacheExpired(dataRecordStorageId);
+         //}
+
 
         public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter)
         {
