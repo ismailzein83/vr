@@ -56,7 +56,10 @@ namespace TOne.WhS.Deal.Business
 
         public int CurrencyId { get; set; }
 
-
+        private DateTime? DealEEDWithGracePeriod
+        {
+            get { return EndDate.HasValue ? EndDate.Value.AddDays(GracePeriod) : EndDate; }
+        }
         #region Public Methods
 
         public override int GetCarrierAccountId()
@@ -153,22 +156,24 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
-            if (Status == DealStatus.Draft || BeginDate == EndDate)
+            DateTime? realEED = GetRealEED();
+
+            if (Status == DealStatus.Draft || (realEED.HasValue && BeginDate == realEED))
                 return;
 
             switch (context.DealZoneGroupPart)
             {
                 case DealZoneGroupPart.Both:
-                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates);
-                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates);
+                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates, realEED);
+                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates, realEED);
                     break;
 
                 case DealZoneGroupPart.Sale:
-                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates);
+                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates, realEED);
                     break;
 
                 case DealZoneGroupPart.Cost:
-                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates);
+                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates, realEED);
                     break;
 
                 default: throw new NotSupportedException(string.Format("DealZoneGroupPart {0} not supported.", context.DealZoneGroupPart));
@@ -290,6 +295,13 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
+        private DateTime? GetRealEED()
+        {
+            DateTime? EED = EndDate;
+            if (Status == DealStatus.Inactive)
+                EED = DeActivationDate;
+            return EED < DealEEDWithGracePeriod ? EED : DealEEDWithGracePeriod;
+        }
         private List<int> ValidateSwapDealCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             List<int> invalidCountries = new List<int>();
@@ -304,7 +316,7 @@ namespace TOne.WhS.Deal.Business
             }
             return invalidCountries;
         }
-        private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
+        private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates, DateTime? dealEED)
         {
             if (Inbounds == null || Inbounds.Count == 0)
                 return null;
@@ -314,7 +326,7 @@ namespace TOne.WhS.Deal.Business
             {
                 BaseDealSaleZoneGroup dealSaleZoneGroup;
                 if (evaluateRates)
-                    dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(swapDealInbound) };
+                    dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(swapDealInbound, dealEED) };
                 else
                     dealSaleZoneGroup = new DealSaleZoneGroupWithoutRate { Tiers = BuildSaleTiersWithoutRate(swapDealInbound) };
 
@@ -322,18 +334,16 @@ namespace TOne.WhS.Deal.Business
                 dealSaleZoneGroup.DealId = dealId;
                 dealSaleZoneGroup.DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber;
                 dealSaleZoneGroup.CustomerId = CarrierAccountId;
-                dealSaleZoneGroup.Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId));
-                dealSaleZoneGroup.Status = base.Status;
-                dealSaleZoneGroup.DeActivationDate = base.DeActivationDate;
+                dealSaleZoneGroup.Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId), dealEED);
                 dealSaleZoneGroup.BED = BeginDate;
-                dealSaleZoneGroup.EED = EndDate;
+                dealSaleZoneGroup.EED = dealEED;
 
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
             return saleZoneGroups;
         }
 
-        private List<DealSaleZoneGroupZoneItem> BuildSaleZones(IEnumerable<long> saleZoneIds)
+        private List<DealSaleZoneGroupZoneItem> BuildSaleZones(IEnumerable<long> saleZoneIds, DateTime? dealEED)
         {
             if (saleZoneIds == null || !saleZoneIds.Any())
                 throw new NullReferenceException("saleZoneIds");
@@ -342,7 +352,7 @@ namespace TOne.WhS.Deal.Business
             {
                 ZoneId = zoneId,
                 BED = BeginDate,
-                EED = EndDate
+                EED = dealEED
 
             }).ToList();
         }
@@ -367,11 +377,11 @@ namespace TOne.WhS.Deal.Business
             return dealSaleTiers.OrderBy(itm => itm.TierNumber);
         }
 
-        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(SwapDealInbound swapDealInbound)
+        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(SwapDealInbound swapDealInbound, DateTime? dealEED)
         {
             var zoneIds = swapDealInbound.SaleZones.Select(z => z.ZoneId);
 
-            Dictionary<long, List<DealRate>> saleRatesByZoneId = GetDealRatesByZoneId(swapDealInbound.Rate, zoneIds);
+            Dictionary<long, List<DealRate>> saleRatesByZoneId = GetDealRatesByZoneId(swapDealInbound.Rate, zoneIds, dealEED);
             DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier
             {
                 RatesByZoneId = saleRatesByZoneId,
@@ -383,7 +393,7 @@ namespace TOne.WhS.Deal.Business
 
             if (swapDealInbound.ExtraVolumeRate.HasValue)
             {
-                Dictionary<long, List<DealRate>> extraRateByZoneId = GetDealRatesByZoneId(swapDealInbound.ExtraVolumeRate.Value, zoneIds);
+                Dictionary<long, List<DealRate>> extraRateByZoneId = GetDealRatesByZoneId(swapDealInbound.ExtraVolumeRate.Value, zoneIds, dealEED);
                 dealSaleZoneGroupTiers.Add(new DealSaleZoneGroupTier
                 {
                     RatesByZoneId = extraRateByZoneId,
@@ -394,7 +404,7 @@ namespace TOne.WhS.Deal.Business
             return dealSaleZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
 
-        private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates)
+        private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates, DateTime? dealEED)
         {
             if (Outbounds == null || Outbounds.Count == 0)
                 return null;
@@ -404,25 +414,23 @@ namespace TOne.WhS.Deal.Business
             {
                 BaseDealSupplierZoneGroup dealSupplierZoneGroup;
                 if (evaluateRates)
-                    dealSupplierZoneGroup = new DealSupplierZoneGroup() { Tiers = BuildSupplierTiers(swapDealOutbound) };
+                    dealSupplierZoneGroup = new DealSupplierZoneGroup() { Tiers = BuildSupplierTiers(swapDealOutbound, dealEED) };
                 else
                     dealSupplierZoneGroup = new DealSupplierZoneGroupWithoutRate() { Tiers = BuildSupplierTiersWithoutRate(swapDealOutbound) };
 
                 dealSupplierZoneGroup.DealId = dealId;
                 dealSupplierZoneGroup.DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber;
                 dealSupplierZoneGroup.SupplierId = CarrierAccountId;
-                dealSupplierZoneGroup.Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId));
-                dealSupplierZoneGroup.Status = base.Status;
-                dealSupplierZoneGroup.DeActivationDate = base.DeActivationDate;
+                dealSupplierZoneGroup.Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId), dealEED);
                 dealSupplierZoneGroup.BED = BeginDate;
-                dealSupplierZoneGroup.EED = EndDate;
+                dealSupplierZoneGroup.EED = dealEED;
 
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }
             return dealSupplierZoneGroups;
         }
 
-        private List<DealSupplierZoneGroupZoneItem> BuildSupplierZones(IEnumerable<long> supplierZoneIds)
+        private List<DealSupplierZoneGroupZoneItem> BuildSupplierZones(IEnumerable<long> supplierZoneIds, DateTime? dealEED)
         {
             if (supplierZoneIds == null || !supplierZoneIds.Any())
                 throw new NullReferenceException("supplierZoneIds");
@@ -431,15 +439,15 @@ namespace TOne.WhS.Deal.Business
             {
                 ZoneId = zoneId,
                 BED = BeginDate,
-                EED = EndDate
+                EED = dealEED
 
             }).ToList();
         }
 
-        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(SwapDealOutbound swapDealOutbound)
+        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(SwapDealOutbound swapDealOutbound, DateTime? dealEED)
         {
             IEnumerable<long> supplierZoneIds = swapDealOutbound.SupplierZones.Select(z => z.ZoneId);
-            Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = GetDealRatesByZoneId(swapDealOutbound.Rate, supplierZoneIds);
+            Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = GetDealRatesByZoneId(swapDealOutbound.Rate, supplierZoneIds, dealEED);
 
             DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier()
             {
@@ -455,7 +463,7 @@ namespace TOne.WhS.Deal.Business
 
             if (swapDealOutbound.ExtraVolumeRate.HasValue)
             {
-                var extraRateByZoneId = GetDealRatesByZoneId(swapDealOutbound.ExtraVolumeRate.Value, supplierZoneIds);
+                var extraRateByZoneId = GetDealRatesByZoneId(swapDealOutbound.ExtraVolumeRate.Value, supplierZoneIds, dealEED);
                 dealSupplierZoneGroupTiers.Add(new DealSupplierZoneGroupTier
                 {
                     RatesByZoneId = extraRateByZoneId,
@@ -486,12 +494,8 @@ namespace TOne.WhS.Deal.Business
             return dealSupplierTiers.OrderBy(itm => itm.TierNumber);
         }
 
-        private Dictionary<long, List<DealRate>> GetDealRatesByZoneId(decimal rate, IEnumerable<long> zoneIds)
+        private Dictionary<long, List<DealRate>> GetDealRatesByZoneId(decimal rate, IEnumerable<long> zoneIds, DateTime? dealEED)
         {
-            DateTime? EED = EndDate;
-            if (Status == DealStatus.Inactive)
-                EED = DeActivationDate;
-
             var dealeRateByZoneId = new Dictionary<long, List<DealRate>>();
             foreach (var zoneId in zoneIds)
             {
@@ -500,7 +504,7 @@ namespace TOne.WhS.Deal.Business
                 {
                     ZoneId = zoneId,
                     BED = BeginDate,
-                    EED = EED,
+                    EED = dealEED,
                     Rate = rate,
                     CurrencyId = CurrencyId
                 });

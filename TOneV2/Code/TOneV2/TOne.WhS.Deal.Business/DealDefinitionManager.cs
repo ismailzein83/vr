@@ -156,7 +156,7 @@ namespace TOne.WhS.Deal.Business
             {
                 foreach (DealSaleZoneGroupWithoutRate dealSaleZoneGroup in dealSaleZoneGroups)
                 {
-                    if (!dealSaleZoneGroup.IsEffective(effectiveDate) || !CheckDealStatus(dealSaleZoneGroup.Status, dealSaleZoneGroup.DeActivationDate, effectiveDate))
+                    if (!dealSaleZoneGroup.IsEffective(effectiveDate))
                         continue;
 
                     if (dealSaleZoneGroup.Zones != null && dealSaleZoneGroup.Zones.Any(item => item.ZoneId == saleZoneId && item.IsEffective(effectiveDate)))
@@ -177,7 +177,7 @@ namespace TOne.WhS.Deal.Business
             {
                 foreach (DealSupplierZoneGroupWithoutRate dealSupplierZoneGroup in dealSupplierZoneGroups)
                 {
-                    if (!dealSupplierZoneGroup.IsEffective(effectiveDate) || !CheckDealStatus(dealSupplierZoneGroup.Status, dealSupplierZoneGroup.DeActivationDate, effectiveDate))
+                    if (!dealSupplierZoneGroup.IsEffective(effectiveDate))
                         continue;
 
                     if (dealSupplierZoneGroup.Zones != null && dealSupplierZoneGroup.Zones.Any(item => item.ZoneId == supplierZoneId && item.IsEffective(effectiveDate)))
