@@ -403,9 +403,16 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<Guid> GetBankDetails(int carrierProfileId)
         {
-            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            var companySettings = GetCompanySetting(carrierProfileId);
-            return companySettings.BankDetails;
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            if (carrierProfile.Settings.BankDetailsIds != null && carrierProfile.Settings.BankDetailsIds.Count > 0)
+            {
+                return carrierProfile.Settings.BankDetailsIds;
+            }else
+            {
+                Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+                var companySettings = GetCompanySetting(carrierProfileId);
+                return companySettings.BankDetails;
+            }
         }
         public List<VRTaxItemDefinition> GetTaxesDefinition()
         {

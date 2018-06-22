@@ -1114,6 +1114,15 @@ namespace TOne.WhS.BusinessEntity.Business
 		}
 		public IEnumerable<Guid> GetBankDetails(int carrierAccountId)
 		{
+            var carrierProfileId = GetCarrierProfileId(carrierAccountId);
+            if(carrierProfileId.HasValue)
+            {
+                var carrierProfile = _carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
+                if (carrierProfile != null && carrierProfile.Settings != null && carrierProfile.Settings.BankDetailsIds != null && carrierProfile.Settings.BankDetailsIds.Count > 0)
+                {
+                    return carrierProfile.Settings.BankDetailsIds;
+                }
+            }
 			var companySettings = GetCompanySetting(carrierAccountId);
 			return companySettings.BankDetails;
 		}
