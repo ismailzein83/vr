@@ -402,7 +402,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
-                        Details = supplierRecurringCharges,
+                        Details = supplierRecurringCharge,
                         Name = " "
                     });
                 }
