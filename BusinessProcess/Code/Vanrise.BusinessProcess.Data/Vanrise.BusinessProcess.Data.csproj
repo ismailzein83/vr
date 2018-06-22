@@ -70,6 +70,7 @@
     <Compile Include="IBPBusinessRuleDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IBPValidationMessageDataManager.cs" />
+    <Compile Include="IVRWorkflowDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

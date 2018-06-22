@@ -162,6 +162,7 @@
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
+    <Compile Include="Controllers\VRWorkflowController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\SchedulerTaskModel.cs" />
     <Compile Include="Models\BPInstanceModel.cs" />
@@ -259,6 +260,18 @@
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\vr-businessprocess-runtimeservice.js" />
     <Content Include="BusinessProcess\VR_BusinessProcess_ModuleInitialization.js" />
+    <Content Include="VRWorkflow\Directives\Templates\VRWorkflowActivitiesTemplate.html" />
+    <Content Include="VRWorkflow\Directives\Templates\VRWorkflowDefinitionTemplate.html" />
+    <Content Include="VRWorkflow\Directives\Templates\VRWorkflowGridTemplate.html" />
+    <Content Include="VRWorkflow\Directives\vr-workflow-activities.html" />
+    <Content Include="VRWorkflow\Directives\vr-workflow-definition.js" />
+    <Content Include="VRWorkflow\Directives\vr-workflow-management-grid.js" />
+    <Content Include="VRWorkflow\Services\APIServices\VRWorkflowAPIService.js" />
+    <Content Include="VRWorkflow\Services\VRWorkflowService.js" />
+    <Content Include="VRWorkflow\Views\VRWorkflowEditor.html" />
+    <Content Include="VRWorkflow\Views\VRWorkflowEditorController.js" />
+    <Content Include="VRWorkflow\Views\VRWorkflowManagement.html" />
+    <Content Include="VRWorkflow\Views\VRWorkflowManagementController.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
