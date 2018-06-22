@@ -6,48 +6,54 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRecurringChargeTypeManager
     {
+        GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         public static Guid supplierRecurringChargesTypeBEDefinitionId = new Guid("7501c2b2-374b-432c-b423-59e772663eb8");
-        
+
         #region Public Mehods
-        public string GetSupplierRecurringChargeTypeName(long supplierRecurringChargesTypeId)
+        public string GetSupplierRecurringChargeTypeName(long supplierRecurringChargeTypeId)
         {
-            Dictionary<long, SupplierRecurringChargesType> cachedEntities = this.GetAllCachedSupplierRecurringChargesTypes();
-            Func<SupplierRecurringChargesType, bool> filterFunc = (entity) =>
-           {
-               if (entity.SupplierRecurringChargeTypeId != supplierRecurringChargesTypeId)
-                   return false;
-               return true;
-           };
-            IEnumerable<SupplierRecurringChargesType> filteredEntities = cachedEntities.FindAllRecords(filterFunc).OrderByDescending(x => x.SupplierRecurringChargeTypeId);
+            var supplierRecurringChargesTypes = GetCachedSupplierRecurringChargesTypes();
+            if (supplierRecurringChargesTypes == null)
+            {
+                return null;
+            }
+            IEnumerable<SupplierRecurringChargesType> filteredEntities = supplierRecurringChargesTypes.Values.FindAllRecords(x => x.SupplierRecurringChargeTypeId == supplierRecurringChargeTypeId);
             return filteredEntities.FirstOrDefault().Name;
         }
         #endregion
 
         #region Private Methods
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISupplierRecurringChargesTypeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierRecurringChargesTypeDataManager>();
-            object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreAllSupplierRecurringChargesTypesUpdated(ref _updateHandle);
-            }
-        }
-        private Dictionary<long, SupplierRecurringChargesType> GetAllCachedSupplierRecurringChargesTypes()
+        private Dictionary<long, SupplierRecurringChargesType> GetCachedSupplierRecurringChargesTypes()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllSupplierRecurringChargesTypes",
-               () =>
-               {
-                   ISupplierRecurringChargesTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRecurringChargesTypeDataManager>();
-                   IEnumerable<SupplierRecurringChargesType> supplierRecurringChargesTypes = dataManager.GetAllSupplierRecurringChargesTypes();
-                   return supplierRecurringChargesTypes.ToDictionary(record => record.SupplierRecurringChargeTypeId, record => record);
-               });
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedSupplierRecurringChargesTypes", supplierRecurringChargesTypeBEDefinitionId, () =>
+            {
+                Dictionary<long, SupplierRecurringChargesType> supplierRecurringChargesTypesDic = new Dictionary<long, SupplierRecurringChargesType>();
+                var supplierRecurringChargesTypesBEDefinitions = _genericBusinessEntityManager.GetAllGenericBusinessEntities(supplierRecurringChargesTypeBEDefinitionId);
+                if (supplierRecurringChargesTypesBEDefinitions != null)
+                {
+                    foreach (var supplierRecurringChargesBEDefinition in supplierRecurringChargesTypesBEDefinitions)
+                    {
+                        var fieldValues = supplierRecurringChargesBEDefinition.FieldValues;
+                        if (fieldValues != null)
+                        {
+                            var supplierRecurringChargeType = new SupplierRecurringChargesType
+                            {
+                                SupplierRecurringChargeTypeId = Convert.ToInt64(fieldValues.GetRecord("ID")),
+                                Name = Convert.ToString(fieldValues.GetRecord("Name"))
+                            };
+                            supplierRecurringChargesTypesDic.Add(supplierRecurringChargeType.SupplierRecurringChargeTypeId, supplierRecurringChargeType);
+                        }
+                    }
+                }
+                return supplierRecurringChargesTypesDic;
+            });
         }
 
         #endregion

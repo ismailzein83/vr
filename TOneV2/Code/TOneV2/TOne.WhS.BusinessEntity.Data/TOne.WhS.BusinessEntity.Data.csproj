@@ -54,11 +54,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BEDataManagerFactory.cs" />
-    <Compile Include="ICustomerRecurringChargesTypeDataManager.cs" />
     <Compile Include="IAccountManagerCarrierDataManager.cs" />
     <Compile Include="IANumberSupplierCodeDataManager.cs" />
     <Compile Include="ICarrierAccountStatusHistoryDataManager.cs" />
-    <Compile Include="ISupplierRecurringChargesTypeDataManager.cs" />
     <Compile Include="IZoneCodeGroupDataManager.cs" />
     <Compile Include="ICodeGroupDataManager.cs" />
     <Compile Include="ICarrierAccountDataManager.cs" />

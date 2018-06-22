@@ -6,50 +6,56 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.BusinessEntity.Business.RecurringCharges
 {
     public class CustomerRecurringChargeTypeManager
     {
+        GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
         public static Guid customerRecurringChargesTypeBEDefinitionId = new Guid("61885a4a-647d-45ea-810a-7028ae9a7f1f");
 
         #region Public Mehods
         public string GetCustomerRecurringChargeTypeName(long customerRecurringChargeTypeId)
         {
-            Dictionary<long, CustomerRecurringChargesType> cachedEntities = this.GetAllCachedCustomerRecurringChargesTypes();
-            Func<CustomerRecurringChargesType, bool> filterFunc = (entity) =>
+            var customerRecurringChargesTypes = GetCachedCustomerRecurringChargesTypes();
+            if (customerRecurringChargesTypes == null)
             {
-                if (entity.CustomerRecurringChargeTypeId != customerRecurringChargeTypeId)
-                    return false;
-                return true;
-            };
-            IEnumerable<CustomerRecurringChargesType> filteredEntities = cachedEntities.FindAllRecords(filterFunc).OrderByDescending(x => x.CustomerRecurringChargeTypeId);
-            return filteredEntities.FirstOrDefault().Name;
+                return null;
+            }
+           IEnumerable<CustomerRecurringChargesType> filteredEntities =  customerRecurringChargesTypes.Values.FindAllRecords(x => x.CustomerRecurringChargeTypeId == customerRecurringChargeTypeId);
+           return filteredEntities.FirstOrDefault().Name;
         }
         #endregion
 
         #region Private Methods
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ICustomerRecurringChargesTypeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerRecurringChargesTypeDataManager>();
-            object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
+        private Dictionary<long, CustomerRecurringChargesType> GetCachedCustomerRecurringChargesTypes()
+        {
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedCustomerRecurringChargesTypes", customerRecurringChargesTypeBEDefinitionId, () =>
             {
-                return _dataManager.AreAllCustomerRecurringChargesTypesUpdated(ref _updateHandle);
-            }
+                Dictionary<long, CustomerRecurringChargesType> customerRecurringChargesTypesDic = new Dictionary<long, CustomerRecurringChargesType>();
+                var customerRecurringChargesTypesBEDefinitions = _genericBusinessEntityManager.GetAllGenericBusinessEntities(customerRecurringChargesTypeBEDefinitionId);
+                if (customerRecurringChargesTypesBEDefinitions != null)
+                {
+                    foreach (var customerRecurringChargesBEDefinition in customerRecurringChargesTypesBEDefinitions)
+                    {
+                        var fieldValues = customerRecurringChargesBEDefinition.FieldValues;
+                        if (fieldValues != null)
+                        {
+                            var customerRecurringChargeType = new CustomerRecurringChargesType
+                            {
+                                CustomerRecurringChargeTypeId = Convert.ToInt64(fieldValues.GetRecord("ID")),
+                                Name = Convert.ToString(fieldValues.GetRecord("Name"))
+                            };
+                            customerRecurringChargesTypesDic.Add(customerRecurringChargeType.CustomerRecurringChargeTypeId, customerRecurringChargeType);
+                        }
+                    }
+                }
+                return customerRecurringChargesTypesDic;
+            });
         }
-        private Dictionary<long, CustomerRecurringChargesType> GetAllCachedCustomerRecurringChargesTypes()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerRecurringChargesTypes",
-               () =>
-               {
-                   ICustomerRecurringChargesTypeDataManager dataManager = BEDataManagerFactory.GetDataManager<ICustomerRecurringChargesTypeDataManager>();
-                   IEnumerable<CustomerRecurringChargesType> customerRecurringChargesTypes = dataManager.GetAllCustomerRecurringChargesTypes();
-                   return customerRecurringChargesTypes.ToDictionary(record => record.CustomerRecurringChargeTypeId, record => record);
-               });
-        }
-
+     
         #endregion
     }
 }
