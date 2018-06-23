@@ -48,8 +48,8 @@
 
     <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>  
-    
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString"/>
   </appSettings>
   <system.web>
