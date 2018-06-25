@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.BusinessProcess.Entities.VRWorkflow
+namespace Vanrise.BusinessProcess.Entities
 {
-    class VRWorkflowDetail
+    public class VRWorkflowDetail
     {
+        // public VRWorkflow Entity { get; set; }
     }
 }
