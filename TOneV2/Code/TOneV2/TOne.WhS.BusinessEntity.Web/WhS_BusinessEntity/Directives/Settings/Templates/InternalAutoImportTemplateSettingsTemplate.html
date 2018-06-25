@@ -1,0 +1,19 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+			 datasource="scopeModel.gridData"
+			 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+			 hidegridmenu>
+	<vr-datagridcolumn headertext="'Event'" field="'EmailType.description'" type="'Text'" widthfactor="4" disablesorting></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Email Template'" field="'EmailTemplate'" widthfactor="7" disablesorting>
+		<vr-common-mailmessagetemplate-selector on-ready="dataItem.OnMailMessagetemplateSelectorReady"
+												selectedvalues="dataItem.EmailTemplate"
+												hidelabel="true"
+												normalColNum="6"
+												showaddbutton>
+		</vr-common-mailmessagetemplate-selector>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Attach Pricelist'" field="'AttachPricelist'" widthfactor="4" disablesorting>
+		<div style="text-align:center">
+			<vr-switch value="dataItem.AttachPricelist"></vr-switch>
+		</div>
+	</vr-datagridcolumn>
+</vr-datagrid>

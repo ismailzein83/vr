@@ -453,6 +453,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\vr-whs-be-customersoldzones-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\AutoImportTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\CodeChangeTypeSettingsGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\InternalAutoImportTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricingSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\RateChangeTypeSettingsGridTemplate.html" />
@@ -461,6 +462,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplateHelper.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistTypeMappingTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-autoimporttemplatesettings-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-internalautoimporttemplatesettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-codechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelistsettings-editor.js" />

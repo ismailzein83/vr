@@ -98,7 +98,6 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 			function loadStaticData() {
 				if (data == undefined)
 				    return;
-				console.log(data);
 				ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
 				ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
 				ctrl.maximumRate = data.MaximumRate;
