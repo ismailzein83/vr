@@ -120,6 +120,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytic\Constants\AnalyticQueryHandlerValidatorResultEnum.js" />
     <Content Include="Analytic\Constants\AnalyticSameDimensionTypeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcOutputFieldTypeEnum.js" />
     <Content Include="Analytic\Constants\AccessTypeEnum.js" />
