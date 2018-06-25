@@ -31,10 +31,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.VRObjectTypes
 			switch (this.ReceivedPricelistField)
 			{
 				case ReceivedPricelistField.PricelistType:
-					return receivedPricelist.PricelistType;
+					return (receivedPricelist.PricelistType.HasValue) ? Utilities.GetEnumDescription(receivedPricelist.PricelistType.Value) : null;
 
 				case ReceivedPricelistField.PricelistStatus:
-					return receivedPricelist.Status;
+					return Utilities.GetEnumDescription(receivedPricelist.Status);
 
 				case ReceivedPricelistField.ReceivedDateTime:
 					return receivedPricelist.ReceivedDateTime;

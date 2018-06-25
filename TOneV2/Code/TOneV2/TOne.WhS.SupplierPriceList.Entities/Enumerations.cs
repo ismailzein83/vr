@@ -36,6 +36,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		[Description("Completed With No Changes")]
 		CompletedWithNoChanges = 65,
 
+		[Description("Imported Manually")]
+		ImportedManually = 66,
+
 		[Description("Failed Due To Business Rule Error")]
 		FailedDueToBusinessRuleError = 70,
 

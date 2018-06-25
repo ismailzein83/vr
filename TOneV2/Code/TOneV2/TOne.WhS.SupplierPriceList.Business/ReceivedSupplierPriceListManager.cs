@@ -40,10 +40,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 		public ReceivedPricelistDetail SetReceivedPricelistAsCompleted(ReceivedPricelistDetail receivedPricelistDetail)
 		{
 			IReceivedPricelistManager receivedPricelistDataManager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
-			receivedPricelistDataManager.SetReceivedPricelistAsCompletedManualy(receivedPricelistDetail.ReceivedPricelist.Id, ReceivedPricelistStatus.Succeeded);
+			receivedPricelistDataManager.SetReceivedPricelistAsCompletedManualy(receivedPricelistDetail.ReceivedPricelist.Id, ReceivedPricelistStatus.ImportedManually);
 			SendMailToSupplier(receivedPricelistDetail.ReceivedPricelist.Id, AutoImportEmailTypeEnum.Succeeded);
 			SendMailToInternal(receivedPricelistDetail.ReceivedPricelist.Id, AutoImportEmailTypeEnum.Succeeded);
-			receivedPricelistDetail.ReceivedPricelist.Status = ReceivedPricelistStatus.Succeeded;
+			receivedPricelistDetail.ReceivedPricelist.Status = ReceivedPricelistStatus.ImportedManually;
 			receivedPricelistDetail.StatusDescription = Vanrise.Common.Utilities.GetEnumDescription(receivedPricelistDetail.ReceivedPricelist.Status);
 			return receivedPricelistDetail;
 		}
@@ -108,7 +108,8 @@ namespace TOne.WhS.SupplierPriceList.Business
 			VRFileManager fileManager = new VRFileManager();
 			VRFile receivedPricelistFile = null;
 			var receivedPricelist = GetReceivedPricelistById(receivedPricelistRecordId);
-			receivedPricelist.ThrowIfNull(string.Format("There is no received pricelist with Id '{0}'.", receivedPricelistRecordId));
+			if (receivedPricelist == null)
+				throw new VRBusinessException(string.Format("There is no received pricelist with Id '{0}'.", receivedPricelistRecordId));
 
 			var supplierMailAttachements = new List<VRMailAttachement>();
 
