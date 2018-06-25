@@ -132,6 +132,7 @@
     <Compile Include="FaultTickets\CustomerFaultTicketSettings.cs" />
     <Compile Include="FaultTickets\SupplierFaultTicketSettingsInput.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnect.cs" />
+    <Compile Include="Settings\PurchaseAreaTechnicalSettings.cs" />
     <Compile Include="RecurringCharges\CustomerRecurringCharge.cs" />
     <Compile Include="RecurringCharges\CustomerRecurringChargesType.cs" />
     <Compile Include="RecurringCharges\RecurringChargeItem.cs" />
