@@ -125,7 +125,6 @@ namespace Mediation.Runtime.Tasks
             {
                 RecordParser = new HeaderRecordParser
                 {
-                    RecordLengthIndex = 5,
                     HeaderLength = 3,
                     PackageRecordParser = new BinaryRecordParser
                     {

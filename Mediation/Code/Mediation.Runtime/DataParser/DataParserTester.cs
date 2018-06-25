@@ -12568,8 +12568,8 @@ namespace Mediation.Runtime.DataParser
                 RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers.HeaderRecordParser
                 {
                     HeaderLength = 8,
-                    RecordLengthIndex = 1,
-                    RecordLengthByteLength = 1,
+                    HeaderTagLength = 1,
+                    RecordLengthByteLength = 2,
                     PackageRecordParser = new BinaryRecordParser
                     {
                         Settings = new PackageRecordParser
