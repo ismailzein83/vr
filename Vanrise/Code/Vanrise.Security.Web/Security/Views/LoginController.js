@@ -15,7 +15,7 @@
         load();
 
         function defineScope() {
-            $scope.showSecurityProviderSelector = true;
+            $scope.showSecurityProviderSelector = false;
 
             $scope.onSecurityProviderSelectorReady = function (api) {
                 securityProviderSelectorApi = api;
