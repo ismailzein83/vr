@@ -52,7 +52,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceID"),
                 SPLStateBackupId = GetReaderValue<long?>(reader, "SPLStateBackupID"),
-                UserId = GetReaderValue<int>(reader, "UserID")
+                UserId = GetReaderValue<int>(reader, "UserID"),
+                PricelistType = (SupplierPricelistType?)GetReaderValue<byte?>(reader, "PricelistType")
             };
             return supplierPriceList;
         }

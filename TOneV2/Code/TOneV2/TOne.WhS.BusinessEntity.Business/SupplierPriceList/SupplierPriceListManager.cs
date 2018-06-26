@@ -70,10 +70,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Pricelists",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
                 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -84,9 +84,10 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell() { Value = record.PricelistTypeDescription });
                             row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreateTime });
                             row.Cells.Add(new ExportExcelCell { Value = record.Currency });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreateTime });
                         }
                     }
                 }
@@ -137,6 +138,7 @@ namespace TOne.WhS.BusinessEntity.Business
             CurrencyManager currencyManager = new CurrencyManager();
             Currency currency = currencyManager.GetCurrency(priceList.CurrencyId);
             supplierPriceListDetail.Currency = currency != null ? currency.Symbol : null;
+            supplierPriceListDetail.PricelistTypeDescription = priceList.PricelistType.HasValue ? Vanrise.Common.Utilities.GetEnumDescription(priceList.PricelistType.Value) : null;
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             supplierPriceListDetail.SupplierName = carrierAccountManager.GetCarrierAccountName(priceList.SupplierId);
             UserManager userManager = new UserManager();

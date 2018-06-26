@@ -83,7 +83,11 @@ function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPr
                                 name: additionalMenuAction.name,
                                 clicked: function (dataItem) {
                                 var payload = {
-                                        processInstanceId: dataItem.Entity.ProcessInstanceId
+                                    processInstanceId: dataItem.Entity.ProcessInstanceId,
+                                    fileId: dataItem.Entity.FileId,
+                                    supplierPricelistType: dataItem.Entity.PricelistType,
+                                    pricelistDate: dataItem.Entity.CreateTime,
+                                    currencyId: dataItem.Entity.CurrencyId
                                 };
                                 additionalMenuAction.clicked(payload);
                         }

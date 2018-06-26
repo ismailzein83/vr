@@ -31,9 +31,9 @@
 		}
 
 		return ({
-			saveSupplierPriceListTemplate: saveSupplierPriceListTemplate,
-			showReceivedPricelistErrorDetails: showReceivedPricelistErrorDetails
-		})
+		    saveSupplierPriceListTemplate: saveSupplierPriceListTemplate,
+		    showReceivedPricelistErrorDetails: showReceivedPricelistErrorDetails
+		});
 	}
 
 	appControllers.service('WhS_SupPL_SupplierPriceListTemplateService', SupplierPriceListTemplateService);

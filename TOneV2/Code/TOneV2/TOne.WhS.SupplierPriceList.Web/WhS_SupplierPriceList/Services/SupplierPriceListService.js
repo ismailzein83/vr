@@ -16,7 +16,7 @@
             var previewAction = {
                 name: "Preview",
                 clicked: function (payload) {
-                    previewSupplierPriceList(payload.processInstanceId);
+                    previewSupplierPriceList(payload);
                 }
             };
             WhS_BE_SupplierPriceListService.registerAdditionalActionToSupplierPricelistGrid(previewAction);
@@ -38,7 +38,7 @@
             VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreviewTask.html', parameters, settings);
         }
 
-        function previewSupplierPriceList(processInstanceId) {
+        function previewSupplierPriceList(payload) {
 
             var settings = {
             };
@@ -48,7 +48,11 @@
 
             };
             var parameters = {
-                processInstanceId: processInstanceId
+                processInstanceId: payload.processInstanceId,
+                fileId: payload.fileId,
+                supplierPricelistType: payload.supplierPricelistType,
+                pricelistDate: payload.pricelistDate,
+                currencyId: payload.currencyId
             };
 
             VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);

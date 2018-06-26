@@ -7,6 +7,10 @@
     function supplierPriceListPreviewController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var processInstanceId;
+        var fileId;
+        var supplierPricelistType;
+        var pricelistDate;
+        var currencyId;
 
         var SupplierPriceListPreviewSectionApi;
         var SupplierPriceListPreviewSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -21,6 +25,10 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters !== undefined && parameters !== null) {
                 processInstanceId = parameters.processInstanceId;
+                fileId = parameters.fileId;
+                supplierPricelistType = parameters.supplierPricelistType;
+                pricelistDate = parameters.pricelistDate;
+                currencyId = parameters.currencyId;
             }
         }
 
@@ -55,7 +63,11 @@
             SupplierPriceListPreviewSectionReadyPromiseDeferred.promise.then(function () {
                 var SupplierPriceListPreviewSectionPayload = {
                     processInstanceId: processInstanceId,
-                    requireWarningConfirmation : false,
+                    requireWarningConfirmation: false,
+                    fileId: fileId,
+                    supplierPricelistType: supplierPricelistType,
+                    pricelistDate: pricelistDate,
+                    currencyId: currencyId
                 };
                 VRUIUtilsService.callDirectiveLoad(SupplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);
             });

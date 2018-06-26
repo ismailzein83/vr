@@ -16,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public DateTime EffectiveOn { get; set; }
 
+        public SupplierPricelistType? PricelistType { get; set; }
+
         public long? FileId { get; set; }
 
         public DateTime CreateTime { get; set; }

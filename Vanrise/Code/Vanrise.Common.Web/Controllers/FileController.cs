@@ -146,6 +146,22 @@ namespace Vanrise.Common.Web
             }
         }
 
+        [Route("GetFileName")]
+        [HttpGet]
+        public String GetFileName(long fileId)
+        {
+
+            VRFileInfo fileInfo = GetFileInfo(fileId);
+            if (fileInfo == null)
+            {
+                return null;
+            }
+            else
+            {
+                return fileInfo.Name;// +"." + fileInfo.Extension;
+            }
+        }
+
         [HttpPost]
         [Route("GetFilteredRecentFiles")]
         public object GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)

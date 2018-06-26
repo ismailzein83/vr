@@ -9,8 +9,10 @@
         var bpTaskId;
         var processInstanceId;
 
-        var SupplierPriceListPreviewSectionApi;
-        var SupplierPriceListPreviewSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var taskData;
+
+        var supplierPriceListPreviewSectionApi;
+        var supplierPriceListPreviewSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
 
@@ -38,8 +40,8 @@
             };
 
             $scope.onSupplierPriceListPreviewSectionReady = function (api) {
-                SupplierPriceListPreviewSectionApi = api;
-                SupplierPriceListPreviewSectionReadyPromiseDeferred.resolve();
+                supplierPriceListPreviewSectionApi = api;
+                supplierPriceListPreviewSectionReadyPromiseDeferred.resolve();
             };
 
         }
@@ -67,6 +69,7 @@
             $scope.scopeModal.isLoading = true;
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
                 processInstanceId = response.ProcessInstanceId;
+                taskData = response.TaskData;
                 loadAllControls();
             });
         }
@@ -87,12 +90,18 @@
         }
         function loadSupplierPriceListPreviewSection() {
             var loadSupplierPriceListPreviewSectionPromiseDeferred = UtilsService.createPromiseDeferred();
-            SupplierPriceListPreviewSectionReadyPromiseDeferred.promise.then(function () {
+
+
+           supplierPriceListPreviewSectionReadyPromiseDeferred.promise.then(function () {
                 var SupplierPriceListPreviewSectionPayload = {
                     processInstanceId: processInstanceId,
+                    fileId: taskData.FileId,
+                    supplierPricelistType: taskData.SupplierPricelistType,
+                    pricelistDate: taskData.PricelistDate,
+                    currencyId: taskData.CurrencyId,
                     requireWarningConfirmation: true,
                 };
-                VRUIUtilsService.callDirectiveLoad(SupplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(supplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);
 
             });
             return loadSupplierPriceListPreviewSectionPromiseDeferred.promise;

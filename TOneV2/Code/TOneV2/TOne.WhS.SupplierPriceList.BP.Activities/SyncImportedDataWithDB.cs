@@ -22,6 +22,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<int> CurrencyId { get; set; }
 
         [RequiredArgument]
+        public InArgument<TOne.WhS.BusinessEntity.Entities.SupplierPricelistType> SupplierPricelistType { get; set; }
+
+        [RequiredArgument]
         public InArgument<long> FileId { get; set; }
 
         [RequiredArgument]
@@ -35,6 +38,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int priceListId = this.PriceListId.Get(context);
             int supplierId = this.SupplierId.Get(context);
             int currencyId = this.CurrencyId.Get(context);
+            TOne.WhS.BusinessEntity.Entities.SupplierPricelistType  supplierPricelistType= this.SupplierPricelistType.Get(context);
             long fileId = this.FileId.Get(context);
             long stateBackupId = this.StateBackupId.Get(context);
             DateTime effectiveOn = this.EffectiveOn.Get(context);
@@ -48,7 +52,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
 
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
-            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn, userId);
+            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn, userId, supplierPricelistType);
         }
     }
 }

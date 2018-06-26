@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsSplSupplierpricelistpreviewSummary", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_SupplierPriceListPreviewPIService",
-function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_SupplierPriceListPreviewPIService) {
+app.directive("whsSplSupplierpricelistpreviewSummary", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_SupplierPriceListPreviewPIService","VRCommon_FileAPIService","VRCommon_CurrencyAPIService","WhS_SupPL_SupplierPriceListTypeEnum",
+function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_SupplierPriceListPreviewPIService, VRCommon_FileAPIService, VRCommon_CurrencyAPIService, WhS_SupPL_SupplierPriceListTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -23,6 +23,13 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
     function SupplierPriceListPreviewSummary($scope, ctrl, $attrs) {
 
         var processInstanceId;
+        var currencyId;
+        var fileId;
+
+        var validationMessageHistoryGridAPI;
+        var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -37,21 +44,61 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
             api.load = function (payload) {
 
-                if (payload != null)
+                if (payload != null) {
                     processInstanceId = payload.processInstanceId;
-                return UtilsService.waitMultipleAsyncOperations([loadSupplierPricelistPreviewSummary])
-                          .catch(function (error) {
-                              VRNotificationService.notifyException(error);
-                          });
+                    //if (pricelistDate != null) {
+                    //    pricelistDate = pricelistDate.replace("T", " ");
+                    //}
+                    currencyId = payload.currencyId;
+                    fileId = payload.fileID;
+
+                    $scope.scopeModel.pricelistDate = payload.pricelistDate;
+
+                    
+
+                    if (payload.supplierPricelistType != null) {
+                        var pricelistTypesOptions = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);
+                        $scope.scopeModel.supplierPricelistType = UtilsService.getItemByVal(pricelistTypesOptions, payload.supplierPricelistType, 'value').description;
+                    }
+
+                   
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([loadSupplierPricelistPreviewSummary,loadCurrencySymbol,loadFileName])
+                     .catch(function (error) {
+                           VRNotificationService.notifyException(error);
+                });
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
+        function loadCurrencySymbol() {
+            var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            if (currencyId != null) {
+                VRCommon_CurrencyAPIService.GetCurrency(currencyId).then(function (currency) {
+                    $scope.scopeModel.currencySymbol = currency.Symbol;
+                    currencyReadyPromiseDeferred.resolve();
+                });
+            }
+            else
+                currencyReadyPromiseDeferred.resolve();
+
+            return currencyReadyPromiseDeferred.promise;
+        }
+
+        function loadFileName() {
+            return VRCommon_FileAPIService.GetFileName(fileId).then(function (response) {
+                $scope.scopeModel.fileName = response;
+            });
+        }
+
         function loadSupplierPricelistPreviewSummary() {
 
             return WhS_SupPL_SupplierPriceListPreviewPIService.GetSupplierPricelistPreviewSummary(processInstanceId).then(function (previewSummary) {
+
                 $scope.scopeModel.numberOfNewRates = previewSummary.NumberOfNewRates;
                 $scope.scopeModel.numberOfIncreasedRates = previewSummary.NumberOfIncreasedRates;
                 $scope.scopeModel.numberOfDecreasedRates = previewSummary.NumberOfDecreasedRates;

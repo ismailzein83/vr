@@ -23,7 +23,13 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
     function SupplierPriceListPreviewSection($scope, ctrl, $attrs) {
 
         var processInstanceId;
+        var taskData;
         var requireWarningConfirmation;
+        var pricelistDate;
+        var currencySymbol;
+        var supplierPricelistType;
+        var fileId;
+        var currencyId;
         var changeType = true;
 
         var validationMessageHistoryGridAPI;
@@ -83,6 +89,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
                 var previewDataPayload = {
                     ProcessInstanceId: processInstanceId,
+
                     OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds()
                 };
 
@@ -94,11 +101,14 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
         function defineAPI() {
             var api = {};
-
             api.load = function (payload) {
 
                 if (payload != null) {
                     processInstanceId = payload.processInstanceId;
+                    pricelistDate = payload.pricelistDate;
+                    currencyId = payload.currencyId;
+                    supplierPricelistType = payload.supplierPricelistType;
+                    fileId = payload.fileId;
                     requireWarningConfirmation = payload.requireWarningConfirmation;
                 }
                 return UtilsService.waitMultipleAsyncOperations([loadViewChangeTypeSelector, loadGroupedBySelector, loadPreviewDataSection, loadValidationMessageHistory,loadSupplierPricelistPreviewSummary])
@@ -159,11 +169,13 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
             var loadSupplierPricelistPreviewSummaryPromiseDeferred = UtilsService.createPromiseDeferred();
 
             supplierPricelistPreviewSummaryReadyPromiseDeferred.promise.then(function () {
-
                 var payload = {
                     processInstanceId: processInstanceId,
+                    pricelistDate: pricelistDate, 
+                    fileID: fileId,
+                    currencyId: currencyId, 
+                    supplierPricelistType: supplierPricelistType,
                 };
-
                 VRUIUtilsService.callDirectiveLoad(supplierPricelistPreviewSummaryAPI, payload, loadSupplierPricelistPreviewSummaryPromiseDeferred);
             });
 
