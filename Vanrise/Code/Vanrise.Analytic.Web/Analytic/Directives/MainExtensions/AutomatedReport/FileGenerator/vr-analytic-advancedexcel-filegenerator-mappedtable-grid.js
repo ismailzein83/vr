@@ -118,8 +118,9 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
                 var titles =[];
                 var firstRowDirectives =[];
                 for (var i = 0; i < $scope.scopeModel.mappedCols.length; i++) {
-                    if ($scope.scopeModel.mappedCols[i].directiveAPI != undefined && $scope.scopeModel.mappedCols[i].directiveAPI.getData() != undefined) {
-                        firstRowDirectives.push($scope.scopeModel.mappedCols[i].directiveAPI.getData().CellIndex);
+                    var mappedCol = $scope.scopeModel.mappedCols[i];
+                    if (mappedCol.directiveAPI != undefined && mappedCol.directiveAPI.getData() != undefined) {
+                        firstRowDirectives.push(mappedCol.directiveAPI.getData().CellIndex);
                 }
             }
                 while (firstRowDirectives.length > 0) {

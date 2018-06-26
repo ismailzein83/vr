@@ -99,8 +99,9 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
                 }
                 var columnIds = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
-                    if ($scope.scopeModel.columns[i].columnId != undefined) {
-                        columnIds.push($scope.scopeModel.columns[i].columnId.toUpperCase());
+                    var column = $scope.scopeModel.columns[i];
+                    if (column.columnId != undefined) {
+                        columnIds.push(column.columnId.toUpperCase());
                     }
                 }
                 while (columnIds.length > 0) {
@@ -174,8 +175,9 @@ function (UtilsService,VR_GenericData_DataRecordStorageAPIService, VRUIUtilsServ
 
                                 function getName() {
                                     for (var j = 0; j < response.length; j++) {
-                                        if (response[j].DataRecordStorageId == dataRecordStorage.DataRecordStorageId) {
-                                            return response[j].Name;
+                                        var responseItem = response[j];
+                                        if (responseItem.DataRecordStorageId == dataRecordStorage.DataRecordStorageId) {
+                                            return responseItem.Name;
                                         }
                                     }
                                 }

@@ -48,8 +48,9 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService) {
                 }
                 var columnNames = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
-                    if ($scope.scopeModel.columns[i].QueryName != undefined) {
-                        columnNames.push($scope.scopeModel.columns[i].QueryName.toUpperCase());
+                    var column = $scope.scopeModel.columns[i];
+                    if (column.QueryName != undefined) {
+                        columnNames.push(column.QueryName.toUpperCase());
                     }
                 }
                 while (columnNames.length > 0) {
@@ -88,11 +89,12 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService) {
 
                         if (attachementGenerators != undefined) {
                             for (var i = 0; i < attachementGenerators.length; i++) {
+                                var attachment = attachementGenerators[i];
                                 var gridItem = {
                                     id: i,
-                                    VRAutomatedReportFileGeneratorId: attachementGenerators[i].VRAutomatedReportFileGeneratorId,
-                                    Name: attachementGenerators[i].Name,
-                                    Settings: attachementGenerators[i].Settings,
+                                    VRAutomatedReportFileGeneratorId: attachment.VRAutomatedReportFileGeneratorId,
+                                    Name: attachment.Name,
+                                    Settings: attachment.Settings,
                                 };
                                 $scope.scopeModel.columns.push(gridItem);
                             }
