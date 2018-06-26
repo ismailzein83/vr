@@ -363,6 +363,7 @@
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
+    <Content Include="Analytic\Services\APIServices\AdvancedExcelFileGeneratorAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportQueryDefinitionSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportAPIService.js" />
