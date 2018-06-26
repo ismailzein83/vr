@@ -8,6 +8,6 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class VRWorkflowDetail
     {
-        // public VRWorkflow Entity { get; set; }
+       // public BaseVRWorkflow Entity { get; set; }
     }
 }

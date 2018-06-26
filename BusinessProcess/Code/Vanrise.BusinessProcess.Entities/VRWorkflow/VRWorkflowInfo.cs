@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class VRWorkflowQuery
+   public class VRWorkflowInfo
     {
-       // public string Title { get; set; }
-     //   public bool? ShowOnlyVisibleInManagementScreen { get; set; }
     }
 }

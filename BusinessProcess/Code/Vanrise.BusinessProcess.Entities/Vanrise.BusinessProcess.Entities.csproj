@@ -145,6 +145,7 @@
     <Compile Include="VRWorkflow\VRWorkflowActivity.cs" />
     <Compile Include="VRWorkflow\VRWorkflowArgument.cs" />
     <Compile Include="VRWorkflow\VRWorkflowDetail.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowInfo.cs" />
     <Compile Include="VRWorkflow\VRWorkflowQuery.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariable.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariableType.cs" />
