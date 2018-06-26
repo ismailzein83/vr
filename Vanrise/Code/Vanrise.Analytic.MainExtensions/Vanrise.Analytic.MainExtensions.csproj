@@ -58,6 +58,8 @@
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\MeasureMappingRule.cs" />
     <Compile Include="AnalyticMeasureExternalSources\MeasureMappingRules\SpecificMapping.cs" />
     <Compile Include="AutomatedReport\FileGenerators\AdvancedExcelFileGenerator.cs" />
+    <Compile Include="AutomatedReport\FileGenerators\AdvancedExcelFileGeneratorController.cs" />
+    <Compile Include="AutomatedReport\FileGenerators\AdvancedExcelFileGeneratorManager.cs" />
     <Compile Include="AutomatedReport\FileGenerators\BasicExcelFileGenerator.cs" />
     <Compile Include="AutomatedReport\Handlers\FTPHandler.cs" />
     <Compile Include="AutomatedReport\Handlers\SendEmailHandler.cs" />
