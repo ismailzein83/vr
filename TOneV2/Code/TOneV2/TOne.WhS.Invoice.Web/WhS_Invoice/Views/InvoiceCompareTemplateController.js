@@ -2,9 +2,9 @@
 
     'use strict';
 
-    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService', 'VR_ExcelConversion_FieldTypeEnum', 'VR_Invoice_InvoiceTypeAPIService', 'WhS_Invoice_InvoiceAPIService', 'WhS_Invoice_ComparisonResultEnum', 'LabelColorsEnum', 'WhS_Invoice_ComparisonCriteriaEnum', 'UISettingsService', 'WhS_Invoice_InvoiceCompareTemplateAPIService'];
+    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService', 'VR_ExcelConversion_FieldTypeEnum', 'VR_Invoice_InvoiceTypeAPIService', 'WhS_Invoice_InvoiceAPIService', 'WhS_Invoice_ComparisonResultEnum', 'LabelColorsEnum', 'WhS_Invoice_ComparisonCriteriaEnum', 'UISettingsService', 'WhS_Invoice_InvoiceCompareTemplateAPIService', 'WhS_Invoice_ComparisonInvoiceDetailAPIService'];
 
-    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService, WhS_Invoice_InvoiceCompareTemplateAPIService) {
+    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService, WhS_Invoice_InvoiceCompareTemplateAPIService, WhS_Invoice_ComparisonInvoiceDetailAPIService) {
 
         var invoiceAccountEntity;
         var invoiceId;
@@ -149,27 +149,27 @@
 
         function getInvoice()
         {
-            return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
+            return WhS_Invoice_ComparisonInvoiceDetailAPIService.GetComparisonInvoiceDetail(invoiceId).then(function (response) {
                 invoiceEntity = response;
-                if (invoiceEntity != undefined) {
-                    if (invoiceEntity.Entity != undefined)
-                        partnerId = invoiceEntity.Entity.PartnerId;
+                if (invoiceEntity != undefined) {                    
+                        partnerId = invoiceEntity.PartnerId;
                     var normalPrecision = UISettingsService.getNormalPrecision();
-                    $scope.scopeModel.issuedBy = invoiceEntity.UserName;
+                    $scope.scopeModel.issuedBy = invoiceEntity.issuedBy;
 
-                    $scope.scopeModel.to = invoiceEntity.PartnerName;
-                    $scope.scopeModel.toDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.ToDate));
-                    $scope.scopeModel.fromDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.FromDate));
-                    $scope.scopeModel.issuedDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.IssueDate));
-                    $scope.scopeModel.dueDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.DueDate));
+                    $scope.scopeModel.to = invoiceEntity.To;
+                    $scope.scopeModel.toDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.toDate));
+                    $scope.scopeModel.fromDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.fromDate));
+                    $scope.scopeModel.issuedDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.issuedDate));
+                    $scope.scopeModel.dueDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.dueDate));
 
-                    $scope.scopeModel.serialNumber = invoiceEntity.Entity.SerialNumber;
-                    $scope.scopeModel.timeZone = invoiceEntity.TimeZoneName;
-                    $scope.scopeModel.calls = invoiceEntity.Entity.Details.TotalNumberOfCalls.toLocaleString();
-                    $scope.scopeModel.duration = Number(invoiceEntity.Entity.Details.Duration.toFixed(normalPrecision)).toLocaleString();
-                    $scope.scopeModel.totalAmount = Number(invoiceEntity.Entity.Details.TotalAmount.toFixed(normalPrecision)).toLocaleString();
-                    $scope.scopeModel.isLocked = invoiceEntity.Lock;
-                    $scope.scopeModel.isPaid = invoiceEntity.Paid;
+                    $scope.scopeModel.serialNumber = invoiceEntity.serialNumber;
+                    $scope.scopeModel.timeZone = invoiceEntity.timeZone;
+                    $scope.scopeModel.calls = invoiceEntity.calls.toLocaleString();
+                    $scope.scopeModel.duration = Number(invoiceEntity.duration.toFixed(normalPrecision)).toLocaleString();
+                    $scope.scopeModel.totalAmount = Number(invoiceEntity.totalAmount.toFixed(normalPrecision)).toLocaleString();
+                    $scope.scopeModel.isLocked = invoiceEntity.isLocked;
+                    $scope.scopeModel.isPaid = invoiceEntity.isPaid;
+                    $scope.scopeModel.currency = invoiceEntity.currency;
 
                 }
             });

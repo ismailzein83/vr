@@ -29,5 +29,12 @@ namespace TOne.WhS.Invoice.Web.Controllers
             InvoiceComparisonTemplateManager manager = new InvoiceComparisonTemplateManager();
             return manager.GetInvoiceCompareTemplate(invoiceTypeId, partnerId);
         }
+        [HttpGet]
+        [Route("GetComparisonInvoiceDetail")]
+        public ComparisonInvoiceDetail GetComparisonInvoiceDetail(long invoiceId)
+        {
+            InvoiceComparisonTemplateManager manager = new InvoiceComparisonTemplateManager();
+            return manager.GetComparisonInvoiceDetail(invoiceId);
+        }
     }
 }
