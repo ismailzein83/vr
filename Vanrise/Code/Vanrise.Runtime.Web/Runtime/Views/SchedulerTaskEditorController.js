@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
+    newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', 'VR_Analytic_QueryHandlerValidatorResultEnum'];
 
-    function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
+    function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, VRDateTimeService, VR_Analytic_QueryHandlerValidatorResultEnum) {
 
         var editMode;
         var taskId;
@@ -271,10 +271,8 @@
             if (taskActionDirectiveAPI.validate != undefined && typeof (taskActionDirectiveAPI.validate) == "function") {
                 taskActionDirectiveAPI.validate().then(function (response) {
                     if (response != undefined) {
-                        var result = response.Result;
-                        var errorMessage = response.ErrorMessage;
-                        if (!result) {
-                            $scope.scopeModel.validationErrorMessage = errorMessage;
+                        if (UtilsService.getEnum(VR_Analytic_QueryHandlerValidatorResultEnum, "value", response.Result) == VR_Analytic_QueryHandlerValidatorResultEnum.Failed) {
+                            $scope.scopeModel.validationErrorMessage = response.ErrorMessage;
                             queriesAndHandlersValidatedPromise.reject();
                         }
                         else {
@@ -313,10 +311,8 @@
             if (taskActionDirectiveAPI.validate != undefined && typeof (taskActionDirectiveAPI.validate) == "function") {
                 taskActionDirectiveAPI.validate().then(function (response) {
                     if (response != undefined) {
-                        var result = response.Result;
-                        var errorMessage = response.ErrorMessage;
-                        if (!result) {
-                            $scope.scopeModel.validationErrorMessage = errorMessage;
+                        if (UtilsService.getEnum(VR_Analytic_QueryHandlerValidatorResultEnum, "value", response.Result) == VR_Analytic_QueryHandlerValidatorResultEnum.Failed) {
+                            $scope.scopeModel.validationErrorMessage = response.ErrorMessage;
                             queriesAndHandlersValidatedPromise.reject();
                         }
                         else

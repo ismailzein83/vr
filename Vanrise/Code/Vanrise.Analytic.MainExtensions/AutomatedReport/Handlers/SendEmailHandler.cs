@@ -32,18 +32,17 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public override void Execute(IVRAutomatedReportHandlerExecuteContext context)
         {
-            if (this.AttachementGenerators != null && this.AttachementGenerators.Count != 0)
+            if (this.AttachementGenerators != null && this.AttachementGenerators.Count > 0)
             {
                 List<VRMailAttachement> attachements = new List<VRMailAttachement>();
                 foreach (var generator in AttachementGenerators)
                 {
                     generator.Settings.ThrowIfNull("attachement.Settings");
-                    var generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext()
+                    VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(new VRAutomatedReportFileGeneratorGenerateFileContext()
                     {
                         HandlerContext = context
 
-                    };
-                    VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(generateFileContext);
+                    });
                     if (generatedFile != null)
                     {
                         VRMailAttachmentExcel excelAttachment = new VRMailAttachmentExcel()
@@ -60,16 +59,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public override void Validate(IVRAutomatedReportHandlerValidateContext context)
         {
-            if (this.AttachementGenerators == null || this.AttachementGenerators.Count == 0)
-            {
-                throw new Exception("No attachment generators were added.");
-            }
-
+          
+            this.AttachementGenerators.ThrowIfNull("No attachment generators were added.");
             foreach (var generator in this.AttachementGenerators)
             {
                 generator.Settings.ThrowIfNull("generator.Settings");
                 generator.Settings.Validate(context);
-                if (!context.Result)
+                if (context.Result==QueryHandlerValidatorResult.Failed)
                     break; 
             }
         }

@@ -139,6 +139,8 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             var api = {};
 
             api.load = function (payload) {
+                $scope.scopeModel.isLoading = true;
+
                 var dataStorageIsSelectedArrayDeffered = UtilsService.createPromiseDeferred();
                 var promises = [];
                 var entity;
@@ -161,7 +163,8 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                         dataRecordStoragePayload = entity.DataRecordStorages;
                         columns = entity.Columns;
                         filterGroup = entity.FilterGroup;
-                        $scope.scopeModel.selectedOrderDirection = UtilsService.getEnum(VR_Analytic_OrderDirectionEnum, "value", entity.Direction);
+                        if(entity.Direction!=undefined)
+                            $scope.scopeModel.selectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirections, entity.Direction.value, "value");
                         sortColumns = entity.SortColumns;
                         if (dataRecordStoragePayload != undefined) {
                             for (var i = 0; i < dataRecordStoragePayload.length; i++) {
@@ -192,10 +195,11 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                                         entity: sortColumn
                                 });
                                 for (var j = 0; j < $scope.scopeModel.fieldsToSort.length; j++) {
-                                    if (sortColumn.FieldName == $scope.scopeModel.fieldsToSort[j].value) {
+                                    var fieldsToSort = $scope.scopeModel.fieldsToSort[j];
+                                    if (sortColumn.FieldName == fieldsToSort.value) {
                                         $scope.scopeModel.selectedSortColumns.push({
-                                            description: $scope.scopeModel.fieldsToSort[j].description,
-                                            value: $scope.scopeModel.fieldsToSort[j].value
+                                            description: fieldsToSort.description,
+                                            value: fieldsToSort.value
                                         });
                                     }
                                 }
@@ -215,8 +219,9 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                                 }
                                 for (var i = 0; i < dataStorageArray.length; i++)
                                 {
-                                    if (dataStorageArray[i].IsSelected == true) {
-                                        dataStorageIsSelectedArray.push(dataStorageArray[i].DataRecordStorageId);
+                                    var dataStorageItem = dataStorageArray[i];
+                                    if (dataStorageItem.IsSelected == true) {
+                                        dataStorageIsSelectedArray.push(dataStorageItem.DataRecordStorageId);
                                     }
                                 }
                                 dataStorageIsSelectedArrayDeffered.resolve();
@@ -293,7 +298,9 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
                     return recordFilterDirectiveLoadDeferred.promise;
                 };
-                return UtilsService.waitMultiplePromises(promises);
+                return UtilsService.waitMultiplePromises(promises).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
             };
 
             api.getData = function () {
@@ -326,12 +333,13 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     LimitResult: $scope.scopeModel.limitResult,
                     Direction:$scope.scopeModel.selectedOrderDirection,
                     SortColumns: getSortColumns()
-            };
+                };
                 function getSortColumns() {
                     var sortColumns = [];
                     for (var i = 0; i < $scope.scopeModel.sortColumns.length; i++) {
-                        if ($scope.scopeModel.sortColumns[i] != undefined && $scope.scopeModel.sortColumns[i].entity !=undefined) {
-                            sortColumns.push($scope.scopeModel.sortColumns[i].entity);
+                        var sortColumn = $scope.scopeModel.sortColumns[i];
+                        if (sortColumn != undefined && sortColumn.entity != undefined) {
+                            sortColumns.push(sortColumn.entity);
                         }
                     }
                     return sortColumns;

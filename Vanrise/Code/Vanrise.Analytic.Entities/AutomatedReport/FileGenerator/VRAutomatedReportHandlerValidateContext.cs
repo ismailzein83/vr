@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         public List<VRAutomatedReportQuery> Queries { get; set; }
 
-        public bool Result { get; set; }
+        public QueryHandlerValidatorResult Result { get; set; }
 
         public string ErrorMessage { get; set; }
     }

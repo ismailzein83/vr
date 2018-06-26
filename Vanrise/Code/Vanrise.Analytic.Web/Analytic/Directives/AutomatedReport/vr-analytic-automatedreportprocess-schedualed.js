@@ -16,7 +16,7 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
-            return {
+            return { 
                 pre: function ($scope, iElem, iAttrs, ctrl) {
                 }
             };
@@ -71,8 +71,9 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 }
                 var columnNames = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
-                    if ($scope.scopeModel.columns[i].QueryTitle != undefined) {
-                        columnNames.push($scope.scopeModel.columns[i].QueryTitle.toUpperCase());
+                    var column = $scope.scopeModel.columns[i];
+                    if (column.QueryTitle != undefined) {
+                        columnNames.push(column.QueryTitle.toUpperCase());
                     }
                 }
                 while (columnNames.length > 0) {
@@ -119,11 +120,12 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                     var handler = payload.data.Handler;
 
                     for (var i = 0; i < queries.length; i++) {
+                        var query = queries[i];
                         var gridItem = {
-                            DefinitionId: queries[i].DefinitionId,
-                            VRAutomatedReportQueryId: queries[i].VRAutomatedReportQueryId,
-                            QueryTitle: queries[i].QueryTitle,
-                            Settings: queries[i].Settings,
+                            DefinitionId: query.DefinitionId,
+                            VRAutomatedReportQueryId: query.VRAutomatedReportQueryId,
+                            QueryTitle: query.QueryTitle,
+                            Settings: query.Settings,
                         };
                         $scope.scopeModel.columns.push(gridItem);
                     }
@@ -226,15 +228,13 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 var fields = {};
                 automatedReportDataSchemaPromise.then(function (response) {
                     if (response != undefined) {
-                        var dataSchema = response;
-                        for (var queryId in dataSchema) {
+                        for (var queryId in response) {
                             if (queryId == vrAutomatedReportQueryId) {
-                                var listSchemas = dataSchema[queryId] != undefined ? dataSchema[queryId].ListSchemas : undefined;
+                                var listSchemas = response[queryId] != undefined ? response[queryId].ListSchemas : undefined;
                                 for (var listSchemaName in listSchemas) {
                                     if (listSchemaName != "$type") {
-                                        var listSchema = listSchemas[listSchemaName];
-                                        if (listSchema != undefined) {
-                                            var fieldSchemas = listSchema.FieldSchemas;
+                                        if (listSchemas[listSchemaName] != undefined) {
+                                            var fieldSchemas = listSchemas[listSchemaName].FieldSchemas;
                                             if (fieldSchemas != undefined) {
                                                 for (var fieldSchemaName in fieldSchemas) {
                                                     if (fieldSchemaName != "$type") {
@@ -268,8 +268,7 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 var schemaList = {};
                 schemaList.Queries = [];
                 for (var i = 0; i < queries.length; i++) {
-                    var query = queries[i];
-                    schemaList.Queries.push(query);
+                    schemaList.Queries.push(queries[i]);
                 }
             }
             return schemaList;

@@ -24,20 +24,18 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public override void Execute(IVRAutomatedReportHandlerExecuteContext context)
         {
-            if (this.AttachementGenerators != null && this.AttachementGenerators.Count != 0 && this.FTPCommunicatorSettings != null)
+            if (this.AttachementGenerators != null && this.AttachementGenerators.Count > 0 && this.FTPCommunicatorSettings != null)
             {
-                var attachementGenerators = this.AttachementGenerators;
                 using (FTPCommunicator ftpCommunicator = new FTPCommunicator(this.FTPCommunicatorSettings))
                 {
-                    foreach (var generator in attachementGenerators)
+                    foreach (var generator in this.AttachementGenerators)
                     {
                         generator.Settings.ThrowIfNull("attachement.Settings");
-                        VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext()
+                        VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(new VRAutomatedReportFileGeneratorGenerateFileContext()
                         {
                             HandlerContext = context
 
-                        };
-                        VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(generateFileContext);
+                        });
                         generatedFile.FileName = generator.Name + ".xls";
                         if (generatedFile != null)
                         {
@@ -54,16 +52,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         }
         public override void Validate(IVRAutomatedReportHandlerValidateContext context)
         {
-            if (this.AttachementGenerators == null || this.AttachementGenerators.Count == 0)
-            {
-                throw new Exception("No attachment generators were added.");
-            }
-
+            this.AttachementGenerators.ThrowIfNull("No attachment generators were added.");
             foreach (var generator in this.AttachementGenerators)
             {
                 generator.Settings.ThrowIfNull("generator.Settings");
                 generator.Settings.Validate(context);
-                if (!context.Result)
+                if (context.Result==QueryHandlerValidatorResult.Failed)
                     break;
             }
         }

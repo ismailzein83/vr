@@ -101,9 +101,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                         listNameSelectorReadyDeferred.then(function (listNames) {
                             if (listNames != undefined) {
                                 for (var i = 0; i < listNames.length ; i++) {
+                                    var listName = listNames[i];
                                     $scope.scopeModel.listNames.push({
-                                        description: listNames[i],
-                                        value: listNames[i]
+                                        description: listName,
+                                        value: listName
                                     });
                                 }
                             }
@@ -135,9 +136,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     queryNameSelectorReadyDeferred.promise.then(function () {
                         if (queries != undefined) {
                             for (var i = 0; i < queries.length ; i++) {
+                                var query = queries[i];
                                 $scope.scopeModel.queries.push({
-                                    description: queries[i].QueryTitle,
-                                    value: queries[i].VRAutomatedReportQueryId
+                                    description: query.QueryTitle,
+                                    value: query.VRAutomatedReportQueryId
                                 });
                             }
                             queryNameSelectorAPI.selectIfSingleItem();
@@ -148,7 +150,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 if (tableDefinitions != undefined) {
                     mappedTables = tableDefinitions;
                 }
-                if (mappedTables != undefined && mappedTables.length != 0) {
+                if (mappedTables != undefined && mappedTables.length > 0) {
                     var mappedTable = mappedTables[0];
                     listNameSelected = mappedTable.ListName;
                     querySelectedPromise = UtilsService.createPromiseDeferred();
@@ -241,7 +243,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                         $scope.scopeModel.tables.push(mappedTableTab);
                     }
                     else {
-                        mappedTableItem.loadPromiseDeferred.reject("A query used has been deleted.");
+                        mappedTableItem.loadPromiseDeferred.reject("A query used in this handler has been deleted.");
                     }
                 });
             }

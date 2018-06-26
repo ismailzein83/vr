@@ -14,7 +14,7 @@ namespace Vanrise.Analytic.Entities
 
         public virtual void Validate(IVRAutomatedReportHandlerValidateContext context)
         {
-            
+            context.Result = QueryHandlerValidatorResult.Successful;
         }
 
     }
@@ -25,11 +25,12 @@ namespace Vanrise.Analytic.Entities
 
         VRAutomatedReportResolvedDataFieldValue GetDataField(Guid vrAutomatedReportQueryId, string fieldName);
     }
+    public enum QueryHandlerValidatorResult { Successful = 0, Failed = 1}
     public interface IVRAutomatedReportHandlerValidateContext
     {
         List<VRAutomatedReportQuery> Queries { get;}
 
-        bool Result { get; set; }
+        QueryHandlerValidatorResult Result { get; set; }
 
         string ErrorMessage { set; }
     }

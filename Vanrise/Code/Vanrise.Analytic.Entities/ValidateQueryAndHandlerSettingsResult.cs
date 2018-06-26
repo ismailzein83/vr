@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class ValidateQueryAndHandlerSettingsResult
     {
-        public bool Result { get; set; }
+        public QueryHandlerValidatorResult Result { get; set; }
 
         public string ErrorMessage { get; set; }
     }

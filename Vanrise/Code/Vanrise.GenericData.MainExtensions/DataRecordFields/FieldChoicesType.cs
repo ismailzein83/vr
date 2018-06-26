@@ -125,6 +125,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return numberListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
+        public override bool RenderDescriptionByDefault()
+        {
+            return true;
+        }
+
         #endregion
 
         #region Private Methods
