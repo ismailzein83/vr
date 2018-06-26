@@ -1,7 +1,30 @@
-﻿<vr-columns width="1/2row">
-    <vr-common-timeperiod label="Time Period" on-ready="scopeModel.onTimePeriodSelectorReady"></vr-common-timeperiod>
-</vr-columns>
-<vr-columns width="1/2row">
-    <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionSelectorReady" ismultipleselection></vr-analytic-dimension-selector>
-</vr-columns>
-
+﻿<div vr-loader="scopeModel.isLoading">
+    <vr-row>
+        <vr-analytic-dimension-selector on-ready="scopeModel.onDimensionsSelectorReady" isrequired="true" ismultipleselection normal-col-num="6"></vr-analytic-dimension-selector>
+        <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorReady" isrequired="true" ismultipleselection normal-col-num="6"></vr-analytic-measure-selector>
+    </vr-row>
+    <vr-row>
+        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="6"></vr-common-currency-selector>
+        <vr-columns width="1/4row">
+            <vr-switch label="With Summary" value="scopeModel.withSummary"></vr-switch>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-textbox label="Top Records" value="scopeModel.topRecords" type="number"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+    <vr-common-timeperiod label="Time Period" on-ready="scopeModel.onTimePeriodSelectorReady" normal-col-num="6"></vr-common-timeperiod>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section title="Order Type">
+                <vr-analytic-ordertype-selective on-ready="scopeModel.onOrderTypeSelectorReady" isrequired="true" normal-col-num="6"></vr-analytic-ordertype-selective>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-section title="Advanced Filter" collapsible>
+                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+            </vr-section>
+        </vr-columns>
+    </vr-row>
+</div>

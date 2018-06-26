@@ -52,7 +52,6 @@ namespace Vanrise.Analytic.Entities
                                 var items = mainList.Items;
                                 var fieldSchemas = mainSchema.FieldSchemas;
 
-                                List<VRAutomatedReportResolvedDataItem> resolvedItems = new List<VRAutomatedReportResolvedDataItem>();
                                 if (items != null && items.Count > 0)
                                 {
                                     foreach (var item in items)
@@ -76,19 +75,21 @@ namespace Vanrise.Analytic.Entities
                                                     };
 
                                                     resolvedItem.Fields.Add(field.Key, resolvedFieldValue);
-                                                    var reportFieldInfo = new VRAutomatedReportFieldInfo()
+                                                    if (!resolvedDataList.FieldInfos.ContainsKey(field.Key))
                                                     {
-                                                        FieldTitle = fieldInfo.Field.Title,
-                                                        FieldType = fieldInfo.Field.Type
-                                                    };
-                                                    resolvedDataList.FieldInfos.Add(field.Key, reportFieldInfo);
+                                                        var reportFieldInfo = new VRAutomatedReportFieldInfo()
+                                                        {
+                                                            FieldTitle = fieldInfo.Field.Title,
+                                                            FieldType = fieldInfo.Field.Type
+                                                        };
+                                                        resolvedDataList.FieldInfos.Add(field.Key, reportFieldInfo);
+                                                    }
                                                 }
                                             }
                                         }
-                                        resolvedItems.Add(resolvedItem);
+                                        resolvedDataList.Items.Add(resolvedItem);
                                     }
                                 }
-                                resolvedDataList.Items = resolvedItems;
                             }
                         }
                     }

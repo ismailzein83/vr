@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrAnalyticRecordsearchquerydefinitionsettingsRuntimeeditor", ["VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService", "UtilsService", "VRUIUtilsService", "VR_Analytic_OrderDirectionEnum", 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_GenericBEDefinitionAPIService',
-function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericBEDefinitionAPIService) {
+app.directive("vrAnalyticRecordsearchquerydefinitionsettingsRuntimeeditor", ["VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService", "UtilsService", "VRUIUtilsService", "VR_Analytic_OrderDirectionEnum", 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_GenericBEDefinitionAPIService', "VRNotificationService",
+function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -298,7 +298,9 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
                     return recordFilterDirectiveLoadDeferred.promise;
                 };
-                return UtilsService.waitMultiplePromises(promises).finally(function () {
+                return UtilsService.waitMultiplePromises(promises).catch(function(error){
+                    VRNotificationService.showError(error);
+                }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             };
@@ -357,10 +359,11 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     var fields = [];
                     for (var fieldName in dataRecordTypeFields) {
                         if (fieldName != "$type") {
+                            var dataRecordTypeFieldValue = dataRecordTypeFields[fieldName];
                             fields.push({
-                                FieldTitle: dataRecordTypeFields[fieldName].Title,
+                                FieldTitle: dataRecordTypeFieldValue.Title,
                                 FieldName: fieldName,
-                                Type: dataRecordTypeFields[fieldName].Type
+                                Type: dataRecordTypeFieldValue.Type
                             });
                         }
                     }

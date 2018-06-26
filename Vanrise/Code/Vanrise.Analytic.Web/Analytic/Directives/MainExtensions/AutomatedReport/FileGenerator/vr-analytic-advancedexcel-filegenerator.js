@@ -31,6 +31,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var queryNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var listNameSelectorAPI;
+        var listNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var mappedTables = [];
         var tableIndex = 0;
@@ -83,6 +84,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
                 $scope.scopeModel.onListNameSelectorReady = function (api) {
                     listNameSelectorAPI = api;
+                    listNameSelectorReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.removeTable = function (obj) {
@@ -97,8 +99,8 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 $scope.scopeModel.onQuerySelectionChanged = function (query) {
                     if (query != undefined) {
                         $scope.scopeModel.listNames.length = 0;
-                        var listNameSelectorReadyDeferred = context.getQueryListNames(query.value);
-                        listNameSelectorReadyDeferred.then(function (listNames) {
+                        var listNameSelectorDataPromise = context.getQueryListNames(query.value);
+                        listNameSelectorDataPromise.then(function (listNames) {
                             if (listNames != undefined) {
                                 for (var i = 0; i < listNames.length ; i++) {
                                     var listName = listNames[i];
@@ -109,11 +111,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                 }
                             }
                             listNameSelectorAPI.selectIfSingleItem();
-
                         });
                     }
                 };
-                excelWorkbookReadyDeferred.promise.then(function () {
+                UtilsService.waitMultiplePromises([excelWorkbookReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
         }
@@ -132,6 +133,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 }
 
                 if (context != undefined) {
+                    promises.push(queryArrayPromise.promise);
                     queries = context.getQueryInfo();
                     queryNameSelectorReadyDeferred.promise.then(function () {
                         if (queries != undefined) {

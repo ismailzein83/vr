@@ -12,6 +12,8 @@ namespace Vanrise.Analytic.Entities
 
         public string Name { get; set; }
 
+        public string Title { get; set; }
+
         public AnalyticDimensionConfig Config { get; set; }
 
         public IDimensionEvaluator Evaluator { get; set; }

@@ -86,64 +86,70 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             {
                                 var field = item.Fields.FindRecord(x => x.Key == column.FieldName);
                                 var fieldInfo = dataList.FieldInfos.GetRecord(field.Key);
-                                if (fieldInfo != null)
-                                {
-                                    if (tableDef.IncludeHeaders && setHeaders)
-                                    {
-                                        SetStyleAndValue(ref TableDefinitionsWorksheet, headerRowIndex, column.ColumnIndex, fieldInfo.FieldTitle, 14, true, TextAlignmentType.Left);
-                                        var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
-                                            () =>
-                                            {
-                                                return new List<int>();
-                                            });
-                                        headerIndices.Add(column.ColumnIndex);
-                                    }
-                                    if (fieldInfo.FieldType.RenderDescriptionByDefault())
-                                    {
-                                        SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Description , 12, false, TextAlignmentType.Right);
-                                        var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                            () =>
-                                            {
-                                                return new List<int>();
-                                            });
-                                        dataIndices.Add(column.ColumnIndex);
-                                    }
-                                }
                                 if (field.Value != null)
                                 {
-                                    if (field.Value.Value is DateTime)
+                                    if (fieldInfo != null)
                                     {
-                                        var date = Convert.ToDateTime(field.Value.Value);
-                                        GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
-                                        SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 12, false, TextAlignmentType.Right);
-                                        var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                        () =>
+                                        if (tableDef.IncludeHeaders && setHeaders)
                                         {
-                                            return new List<int>();
-                                        });
-                                        dataIndices.Add(column.ColumnIndex);
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, headerRowIndex, column.ColumnIndex, fieldInfo.FieldTitle, 14, true, TextAlignmentType.Left);
+                                            var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
+                                                () =>
+                                                {
+                                                    return new List<int>();
+                                                });
+                                            headerIndices.Add(column.ColumnIndex);
+                                        }
+                                        if (fieldInfo.FieldType.RenderDescriptionByDefault() && field.Value.Description!=null)
+                                        {
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Description, 12, false, TextAlignmentType.Right);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
+                                                () =>
+                                                {
+                                                    return new List<int>();
+                                                });
+                                            dataIndices.Add(column.ColumnIndex);
+                                            continue;
+                                        }
+                                    }
+                                    if (field.Value.Value != null)
+                                    {
+                                        if (field.Value.Value is DateTime)
+                                        {
+                                            var date = Convert.ToDateTime(field.Value.Value);
+                                            GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 12, false, TextAlignmentType.Right);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
+                                            () =>
+                                            {
+                                                return new List<int>();
+                                            });
+                                            dataIndices.Add(column.ColumnIndex);
+                                            continue;
 
-                                    }
-                                    else if (field.Value.Value is int || field.Value.Value is double || field.Value.Value is decimal || field.Value.Value is long)
-                                    {
-                                  
-                                        SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Left);
-                                        var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                        () =>
+                                        }
+                                        else if (field.Value.Value is int || field.Value.Value is double || field.Value.Value is decimal || field.Value.Value is long)
                                         {
-                                            return new List<int>();
-                                        });
-                                        dataIndices.Add(column.ColumnIndex);
-                                    }
-                                    else
-                                    {
-                                        SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Right);
-                                        var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                        () =>
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Left);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
+                                            () =>
+                                            {
+                                                return new List<int>();
+                                            });
+                                            dataIndices.Add(column.ColumnIndex);
+                                            continue;
+
+                                        }
+                                        else
                                         {
-                                            return new List<int>();
-                                        });
-                                        dataIndices.Add(column.ColumnIndex);
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Right);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
+                                            () =>
+                                            {
+                                                return new List<int>();
+                                            });
+                                            dataIndices.Add(column.ColumnIndex);
+                                        }
                                     }
                                 }
                             }
@@ -153,10 +159,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     }
                     else
                     {
-                        foreach (var col in tableDef.ColumnDefinitions)
+                        if (tableDef.IncludeHeaders && setHeaders)
                         {
-                            if (tableDef.IncludeHeaders && setHeaders)
+                            foreach (var col in tableDef.ColumnDefinitions)
                             {
+
                                 SetStyleAndValue(ref TableDefinitionsWorksheet, headerRowIndex, col.ColumnIndex, col.FieldTitle, 14, true, TextAlignmentType.Left);
                                 var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
                                              () =>

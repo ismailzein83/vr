@@ -50,7 +50,8 @@ namespace Vanrise.Analytic.Business
                         {
                             AnalyticDimensionConfigId = itemConfig.AnalyticItemConfigId,
                             Name = itemConfig.Name,
-                            Config = dimensionConfig
+                            Config = dimensionConfig,
+                            Title = itemConfig.Title
                         };
                         analyticDimensions.Add(itemConfig.Name, dimension);
                     }
@@ -76,7 +77,8 @@ namespace Vanrise.Analytic.Business
                         {
                             AnalyticAggregateConfigId = itemConfig.AnalyticItemConfigId,
                             Name = itemConfig.Name,
-                            Config = aggregateConfig
+                            Config = aggregateConfig,
+                            Title = itemConfig.Title
                         };
                         analyticAggregates.Add(itemConfig.Name, measure);
                     }

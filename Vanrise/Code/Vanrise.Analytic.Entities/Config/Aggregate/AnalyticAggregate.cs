@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         public Guid AnalyticAggregateConfigId { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
         public AnalyticAggregateConfig Config { get; set; }
     }
 }

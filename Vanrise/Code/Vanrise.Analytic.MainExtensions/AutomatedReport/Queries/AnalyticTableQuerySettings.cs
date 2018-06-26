@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 {
@@ -33,12 +37,175 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 
         public override VRAutomatedReportDataResult Execute(IVRAutomatedReportQueryExecuteContext context)
         {
-            throw new NotImplementedException();
+            VRAutomatedReportDataResult automatedReportDataResult = new VRAutomatedReportDataResult
+            {
+                Lists = new Dictionary<string, VRAutomatedReportDataList>(),
+                Fields = new Dictionary<string, VRAutomatedReportDataFieldValue>()
+            };
+            VRAutomatedReportDataList automatedreportDataList = new VRAutomatedReportDataList()
+            {
+                Items = new List<VRAutomatedReportDataItem>()
+            };
+            List<string> dimensionFields = new List<string>();
+            List<string> measureFields = new List<string>();
+            if (Dimensions != null && Dimensions.Count > 0)
+            {
+                foreach (var dimension in Dimensions)
+                {
+                    dimensionFields.Add(dimension.DimensionName);
+                }
+            }
+            if (Measures != null && Measures.Count > 0)
+            {
+                foreach (var measure in Measures)
+                {
+                    measureFields.Add(measure.MeasureName);
+                }
+            }
+
+            VRAutomatedReportQueryDefinitionManager reportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
+            var automatedReportQueryDefinitionSettings = reportQueryDefinitionManager.GetVRAutomatedReportQueryDefinitionSettings(context.QueryDefinitionId);
+            automatedReportQueryDefinitionSettings.ThrowIfNull("automatedReportQueryDefinitionSettings", context.QueryDefinitionId);
+            var analyticTableQueryDefinitionSettings = automatedReportQueryDefinitionSettings.ExtendedSettings.CastWithValidate<AnalyticTableQueryDefinitionSettings>("AnalyticTableQuerySettings");
+            VRTimePeriodManager timePeriodManager = new VRTimePeriodManager();
+            var dateTimeRange = timePeriodManager.GetTimePeriod(this.TimePeriod);
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+
+            DataRetrievalInput<AnalyticQuery> input = new DataRetrievalInput<AnalyticQuery>()
+            {
+                DataRetrievalResultType = DataRetrievalResultType.Normal,
+                Query = new AnalyticQuery()
+                {
+                    DimensionFields = dimensionFields,
+                    MeasureFields = measureFields,
+                    FilterGroup = FilterGroup,
+                    CurrencyId = CurrencyId,
+                    WithSummary = WithSummary,
+                    TopRecords = TopRecords,
+                    OrderType = OrderType,
+                    AdvancedOrderOptions = AdvancedOrderOptions,
+                    TableId = analyticTableQueryDefinitionSettings.AnalyticTableId,
+                    FromTime = dateTimeRange.From,
+                    ToTime = dateTimeRange.To
+                }
+            };
+            AnalyticManager analyticManager = new AnalyticManager();
+            var dataRecords = analyticManager.GetFilteredRecords(input) as AnalyticSummaryBigResult<AnalyticRecord>;
+            if (dataRecords != null && dataRecords.Data != null && dataRecords.Data.Count() > 0)
+            {
+                foreach (var dataItem in dataRecords.Data)
+                {
+                    var item = new VRAutomatedReportDataItem
+                    {
+                        Fields = new Dictionary<string, VRAutomatedReportDataFieldValue>()
+                    };
+                    if (dataItem.DimensionValues != null && dataItem.DimensionValues.Count() > 0)
+                    {
+                        for (var i = 0; i < this.Dimensions.Count; i++)
+                        {
+                            var dimension = Dimensions[i];
+                            var dimensionValue = dataItem.DimensionValues.ElementAtOrDefault(i);
+
+                            var dataFieldValue = new VRAutomatedReportDataFieldValue()
+                            {
+                                Value = dimensionValue!=null ? dimensionValue.Value : null
+                            };
+                            item.Fields.Add(dimension.DimensionName, dataFieldValue);
+                        }
+                    }
+
+                    if (dataItem.MeasureValues != null && dataItem.MeasureValues.Count > 0)
+                    {
+                        for (var i = 0; i < this.Measures.Count; i++)
+                        {
+                            var measure = Measures[i];
+                            MeasureValue measureValue;
+                            dataItem.MeasureValues.TryGetValue(measure.MeasureName, out measureValue);
+
+                            var dataFieldValue = new VRAutomatedReportDataFieldValue()
+                            {
+                                Value = measureValue!= null ? measureValue.Value : null
+                            };
+                            item.Fields.Add(measure.MeasureName, dataFieldValue);
+                        }
+                    }
+                    automatedreportDataList.Items.Add(item);
+                }
+            }
+            automatedReportDataResult.Lists.Add("Main", automatedreportDataList);
+            return automatedReportDataResult;
         }
 
         public override VRAutomatedReportDataSchema GetSchema(IVRAutomatedReportQueryGetSchemaContext context)
         {
-            throw new NotImplementedException();
+            VRAutomatedReportDataSchema automatedReportSchema = new VRAutomatedReportDataSchema()
+            {
+                ListSchemas = new Dictionary<string, VRAutomatedReportDataListSchema>()
+            };
+            Dictionary<string, VRAutomatedReportDataListSchema> listSchema = new Dictionary<string, VRAutomatedReportDataListSchema>();
+            List<string> dimensionNames = new List<string>();
+            List<string> measureNames = new List<string>();
+            foreach (var dimension in this.Dimensions)
+            {
+                dimensionNames.Add(dimension.DimensionName);
+            }
+            foreach (var measure in this.Measures)
+            {
+                measureNames.Add(measure.MeasureName);
+            }
+
+            VRAutomatedReportDataListSchema listSchemaItem = new VRAutomatedReportDataListSchema()
+            {
+                FieldSchemas = new Dictionary<string, VRAutomatedReportDataFieldSchema>()
+            };
+            Dictionary<string, VRAutomatedReportDataFieldSchema> fieldSchema = new Dictionary<string, VRAutomatedReportDataFieldSchema>();
+            VRAutomatedReportQueryDefinitionManager automatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
+            var automatedReportQueryDefinitionSettings = automatedReportQueryDefinitionManager.GetVRAutomatedReportQueryDefinitionSettings(context.QueryDefinitionId);
+            automatedReportQueryDefinitionSettings.ThrowIfNull("automatedReportQueryDefinitionSettings");
+            automatedReportQueryDefinitionSettings.ExtendedSettings.ThrowIfNull("automatedReportQueryDefinitionSettings.ExtendedSettings");
+            var analyticTableQueryDefinitionSettings = automatedReportQueryDefinitionSettings.ExtendedSettings.CastWithValidate<AnalyticTableQueryDefinitionSettings>("automatedReportQueryDefinitionSettings.ExtendedSettings");
+            analyticTableQueryDefinitionSettings.ThrowIfNull("recordSearchQueryDefinitionSettings");
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+            var dimensions = analyticItemConfigManager.GetDimensions(analyticTableQueryDefinitionSettings.AnalyticTableId);
+            var measures = analyticItemConfigManager.GetMeasures(analyticTableQueryDefinitionSettings.AnalyticTableId);
+
+            foreach (var dimensionName in dimensionNames)
+            {
+                var dimension = dimensions.GetRecord(dimensionName);
+                if (dimension != null)
+                {
+                    var dataFieldSchema = new VRAutomatedReportDataFieldSchema()
+                    {
+                        Field = new DataRecordField()
+                        {
+                            Name = dimensionName,
+                            Title = dimension.Title,
+                            Type = dimension.Config != null ? dimension.Config.FieldType : null
+                        }
+                    };
+                    listSchemaItem.FieldSchemas.Add(dimensionName, dataFieldSchema);
+                }
+            }
+
+            foreach (var measureName in measureNames)
+            {
+                var measure = measures.GetRecord(measureName);
+                if (measure != null)
+                {
+                    var dataFieldSchema = new VRAutomatedReportDataFieldSchema()
+                    {
+                        Field = new DataRecordField()
+                        {
+                            Name = measureName,
+                            Title = measure.Title,
+                            Type = measure.Config != null ? measure.Config.FieldType : null
+                        }
+                    };
+                    listSchemaItem.FieldSchemas.Add(measureName, dataFieldSchema);
+                }
+            }
+            automatedReportSchema.ListSchemas.Add("Main", listSchemaItem);
+            return automatedReportSchema;
         }
     }
 
