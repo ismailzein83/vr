@@ -10,6 +10,6 @@ namespace Vanrise.Analytic.Entities
     {
         public T Summary { get; set; }
 
-        //public List<AnalyticResultSubTable> SubTables { get; set; }
+        public List<AnalyticResultSubTable> SubTables { get; set; }
     }
 }

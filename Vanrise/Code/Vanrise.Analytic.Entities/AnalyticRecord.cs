@@ -15,25 +15,25 @@ namespace Vanrise.Analytic.Entities
 
         public MeasureValues MeasureValues { get; set; }
 
-        //public List<AnalyticRecordSubTable> SubTables { get; set; }
+        public List<AnalyticRecordSubTable> SubTables { get; set; }
     }
 
-    //public class AnalyticRecordSubTable
-    //{
-    //    public List<MeasureValues> MeasureValues { get; set; }
-    //}    
+    public class AnalyticRecordSubTable
+    {
+        public List<MeasureValues> MeasureValues { get; set; }
+    }
 
-    //public class AnalyticFullResult
-    //{
-    //    public List<AnalyticRecord> AllRecords { get; set; }
+    public class AnalyticFullResult
+    {
+        public List<AnalyticRecord> AllRecords { get; set; }
 
-    //    public List<AnalyticResultSubTable> SubTables { get; set; }
-    //}
+        public List<AnalyticResultSubTable> SubTables { get; set; }
+    }
 
-    //public class AnalyticResultSubTable
-    //{
-    //    public List<DimensionValue[]> DimensionValues { get; set; }
-    //}
+    public class AnalyticResultSubTable
+    {
+        public List<DimensionValue[]> DimensionValues { get; set; }
+    }
 
     public class DBAnalyticRecord
     {

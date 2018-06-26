@@ -27,7 +27,7 @@ namespace Vanrise.Analytic.Entities
         public bool WithSummary { get; set; }
         public int? TopRecords { get; set; }
 
-        //public List<AnalyticQuerySubTable> SubTables { get; set; }
+        public List<AnalyticQuerySubTable> SubTables { get; set; }
 
         public AnalyticQueryOrderType? OrderType { get; set; }
 
@@ -36,18 +36,18 @@ namespace Vanrise.Analytic.Entities
         public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
     }
 
-    //public class AnalyticQuerySubTable
-    //{
-    //    public List<string> Dimensions { get; set; }
+    public class AnalyticQuerySubTable
+    {
+        public List<string> Dimensions { get; set; }
 
-    //    public List<string> Measures { get; set; }
+        public List<string> Measures { get; set; }
 
-    //    public AnalyticQueryOrderType? OrderType { get; set; }
+        public AnalyticQueryOrderType? OrderType { get; set; }
 
-    //    public List<MeasureStyleRule> MeasureStyleRules { get; set; }
+        public List<MeasureStyleRule> MeasureStyleRules { get; set; }
 
-    //    public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
-    //}
+        public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
+    }
 
     public abstract class AnalyticQueryAdvancedOrderOptionsBase
     {
