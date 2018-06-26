@@ -56,8 +56,20 @@ app.directive("vrAnalyticAnalytictableexternalsource", ["UtilsService","VRUIUtil
                             };
 
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridAPI, payload, setLoader);
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measureGridAPI, payload, setLoader);
+
+                            var measureSetLoader = function (value) {
+                                $scope.scopeModel.isLoadingDirective = value;
+                            };
+
+                            var measurePayload = {
+                                context: getContext(),
+                                tableId: tableId
+                            };
+
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measureGridAPI, measurePayload, measureSetLoader);
                         }
+
+
                     }
 
                 };

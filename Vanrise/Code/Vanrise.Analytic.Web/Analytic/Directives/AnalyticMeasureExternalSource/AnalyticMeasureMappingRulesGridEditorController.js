@@ -48,7 +48,7 @@
 
             function buildRuleObjFromScope() {
                 return {
-                    MeasureMappingRuleId: UtilsService.guid(),
+                    MeasureMappingRuleId: ruleEntity != undefined ? ruleEntity.MeasureMappingRuleId : UtilsService.guid(),
                     Name: $scope.scopeModel.name,
                     Settings: measureSelectiveAPI.getData(),
                 };
