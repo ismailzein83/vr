@@ -61,29 +61,66 @@ namespace Vanrise.Rules
 
         private void OrderRules(RuleNode node, Dictionary<int, List<IVRRule>> priorities)
         {
-            if (node.UnMatchedRulesNode != null)
-                node.UnMatchedRulesNode.Rules = OrderRulesByPriorityIfSameCriteria(node.UnMatchedRulesNode.Rules);
-
-            if (priorities == null || priorities.Count == 0)
+            if (priorities != null && priorities.Count > 0)
             {
-                node.Rules = OrderRulesByPriorityIfSameCriteria(node.Rules);
-                return;
-            }
-
-            if (node.Rules == null || node.Rules.Count == 0)
-                return;
-
-            HashSet<IVRRule> rules = new HashSet<IVRRule>();
-            foreach (var priority in priorities)
-            {
-                var orderedRules = OrderRulesByPriorityIfSameCriteria(priority.Value);
-                foreach (IVRRule rule in orderedRules)
+                List<IVRRule> copyOfUnmatchedRules = null;
+                List<IVRRule> orderedUnMatchedRules = null;
+                bool hasUnMatchedRules = false;
+                if (node.UnMatchedRulesNode != null && node.UnMatchedRulesNode.Rules != null && node.UnMatchedRulesNode.Rules.Count > 0)
                 {
-                    if (node.Rules.Contains(rule))
-                        rules.Add(rule);
+                    hasUnMatchedRules = true;
+                    copyOfUnmatchedRules = new List<IVRRule>(node.UnMatchedRulesNode.Rules);
+                    orderedUnMatchedRules = new List<IVRRule>();
                 }
+
+                List<IVRRule> copyOfMatchedRules = null;
+                List<IVRRule> orderedMatchedRules = null;
+                bool hasMatchedRules = false;
+                if (node.Rules != null && node.Rules.Count > 0)
+                {
+                    hasMatchedRules = true;
+                    copyOfMatchedRules = new List<IVRRule>(node.Rules);
+                    orderedMatchedRules = new List<IVRRule>();
+                }
+
+                foreach (var priority in priorities)
+                {
+                    var orderedRules = OrderRulesByPriorityIfSameCriteria(priority.Value);
+                    foreach (IVRRule rule in orderedRules)
+                    {
+                        if (hasMatchedRules && copyOfMatchedRules.Contains(rule))
+                        {
+                            orderedMatchedRules.Add(rule);
+                            copyOfMatchedRules.Remove(rule);
+                        }
+
+                        if (hasUnMatchedRules && copyOfUnmatchedRules.Contains(rule))
+                        {
+                            orderedUnMatchedRules.Add(rule);
+                            copyOfUnmatchedRules.Remove(rule);
+                        }
+                    }
+                }
+                if (hasMatchedRules && copyOfMatchedRules.Count > 0)//MatchhedRules without any priority
+                    orderedMatchedRules.AddRange(copyOfMatchedRules);
+
+                if (hasUnMatchedRules && copyOfUnmatchedRules.Count > 0)//UnMatchedRules without any priority
+                    orderedUnMatchedRules.AddRange(copyOfUnmatchedRules);
+
+                if (orderedMatchedRules != null)
+                    node.Rules = orderedMatchedRules;
+
+                if (orderedUnMatchedRules != null)
+                    node.UnMatchedRulesNode.Rules = orderedUnMatchedRules;
             }
-            node.Rules = rules.ToList();
+            else
+            {
+                if (node.Rules != null && node.Rules.Count > 0)
+                    node.Rules = OrderRulesByPriorityIfSameCriteria(node.Rules);
+
+                if (node.UnMatchedRulesNode != null && node.UnMatchedRulesNode.Rules != null && node.UnMatchedRulesNode.Rules.Count > 0)
+                    node.UnMatchedRulesNode.Rules = OrderRulesByPriorityIfSameCriteria(node.UnMatchedRulesNode.Rules);
+            }
         }
 
         private List<IVRRule> OrderRulesByPriorityIfSameCriteria(List<IVRRule> rules)
