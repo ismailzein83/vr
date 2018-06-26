@@ -22,43 +22,7 @@ namespace TOne.WhS.Invoice.Business
           var invoiceComparisonTemplates = this.GetCachedInvoiceComparisonTemplates();
           return invoiceComparisonTemplates.Values.FindRecord(x => x.InvoiceTypeId == invoiceTypeId && x.PartnerId == partnerId);
       }
-      public ComparisonInvoiceDetail GetComparisonInvoiceDetail(long invoiceId)
-      {
-          Vanrise.Invoice.Entities.InvoiceDetail invoice = new Vanrise.Invoice.Entities.InvoiceDetail();
-          Vanrise.Invoice.Business.InvoiceManager manager = new Vanrise.Invoice.Business.InvoiceManager();
-           invoice = manager.GetInvoiceDetail(invoiceId);
-           string timezone;
-           if (invoice.Entity.Details.TimeZoneId != null)
-           {
-               Vanrise.Entities.VRTimeZone timeZone = new Vanrise.Common.Business.VRTimeZoneManager().GetVRTimeZone(invoice.Entity.Details.TimeZoneId);
-               timezone = timeZone.Name;
-           }
-           else timezone = "";
-
-           
-          
-          return new ComparisonInvoiceDetail() 
-          {To= invoice.PartnerName ,
-           toDate=invoice.Entity.ToDate,
-           dueDate=invoice.Entity.DueDate,
-           calls = invoice.Entity.Details.TotalNumberOfCalls,
-           fromDate = invoice.Entity.FromDate,
-           issuedDate = invoice.Entity.IssueDate,
-           serialNumber = invoice.Entity.SerialNumber,
-           duration = invoice.Entity.Details.Duration,
-           totalAmount = invoice.Entity.Details.TotalAmount,
-           isLocked = invoice.Lock,
-           isPaid = invoice.Paid,
-           issuedBy = invoice.UserName,
-           PartnerId= invoice.Entity.PartnerId,
-           currency= invoice.Entity.Details.SupplierCurrency,
-           timeZone = timezone
-
-
-
-             
-          };
-      }
+      
       #endregion
 
       #region Private Classes

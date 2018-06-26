@@ -5,7 +5,7 @@
 
     function ComparisonInvoiceDetailAPIService(BaseAPIService, UtilsService, WhS_Invoice_ModuleConfig) {
 
-        var controllerName = "InvoiceCompareTemplateController";
+        var controllerName = "WhSInvoice";
 
         
         function GetComparisonInvoiceDetail(invoiceId) {
