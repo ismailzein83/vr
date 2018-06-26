@@ -209,12 +209,10 @@ namespace TOne.WhS.Deal.Business
         }
         public bool IsZoneExcluded(long zoneId, DateTime dealBED, DateTime? dealEED, int carrierAccountId, int? dealId, bool isSale)
         {
-            Dictionary<int, DealZoneInfoByZoneId> cachedDealInfo = new Dictionary<int, DealZoneInfoByZoneId>();
-            SwapDealManager swapDealManager = new SwapDealManager();
-            if (isSale)
-                cachedDealInfo = GetCachedCustomerDealZoneInfoByCustomerId();
-            else
-                cachedDealInfo = GetCachedSupplierDealZoneInfoBySupplierId();
+            Dictionary<int, DealZoneInfoByZoneId> cachedDealInfo = isSale
+                ? GetCachedCustomerDealZoneInfoByCustomerId()
+                : GetCachedSupplierDealZoneInfoBySupplierId();
+
             if (cachedDealInfo != null)
             {
                 DealZoneInfoByZoneId dealZoneInfo = cachedDealInfo.GetRecord(carrierAccountId);
@@ -225,19 +223,30 @@ namespace TOne.WhS.Deal.Business
                     {
                         foreach (var zoneInfo in zoneInfos)
                         {
-                            if ((dealId != zoneInfo.Value.DealId || dealId == null) && IsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
+                            if ( (!dealId.HasValue || dealId.Value != zoneInfo.Value.DealId) && IsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
                                 return true;
                         }
                     }
                 }
                 else
                 {
-                    SaleZoneManager saleZoneManager = new SaleZoneManager();
-                    var saleZone = saleZoneManager.GetSaleZone(zoneId);
-                    if (saleZone == null)
-                        throw new NullReferenceException("saleZone");
-                    if (dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null))
-                        return true;
+                    if (isSale)
+                    {
+                        var saleZone = new SaleZoneManager().GetSaleZone(zoneId);
+                        if (saleZone == null)
+                            throw new NullReferenceException("saleZone");
+                        if (dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null))
+                            return true;
+                    }
+                    else
+                    {
+                        var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
+                        if (supplierZone == null)
+                            throw new NullReferenceException("saleZone");
+                        if (dealBED < supplierZone.BED && (dealEED < supplierZone.EED || supplierZone.EED == null))
+                            return true;
+
+                    }
                 }
             }
             return false;
