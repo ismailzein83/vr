@@ -93,6 +93,10 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                             name: "Assign Permissions",
                             clicked: assignPermissions,
                             haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
+                        },
+                        {
+                              name: "Change Provider",
+                              clicked: changeProvider
                         }
                     ];
 
@@ -166,6 +170,15 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                 };
 
                 VR_Sec_UserService.editUser(userObj.Entity.UserId, onUserUpdated);
+            }
+
+            function changeProvider(userObj) {
+                var onUserUpdated = function (userObj) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(userObj);
+                    gridAPI.itemUpdated(userObj);
+                };
+
+                VR_Sec_UserService.changeProvider(userObj.Entity.UserId, onUserUpdated);
             }
 
             function resetPassword(userObj) {

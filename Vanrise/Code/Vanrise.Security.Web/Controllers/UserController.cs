@@ -74,6 +74,13 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpPost]
+        [Route("ChangeUserSecurityProvider")]
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> ChangeUserSecurityProvider(UserToChangeSecurityProvider userObject)
+        {
+            return _manager.ChangeUserSecurityProvider(userObject);
+        }
+
+        [HttpPost]
         [Route("UpdateUserExpiration")]
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUserExpiration(UserExpirationInput userExpirationInput)
         {

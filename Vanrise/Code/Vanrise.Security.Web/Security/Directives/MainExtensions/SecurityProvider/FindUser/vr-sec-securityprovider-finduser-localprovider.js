@@ -53,9 +53,11 @@ app.directive('vrSecSecurityproviderFinduserLocalprovider', ['UtilsService', 'VR
                         securityProviderId = payload.securityProviderId;
                         $scope.scopeModel.email = payload.email;
                         $scope.scopeModel.enablePasswordExpiration = payload.enablePasswordExpiration;
-
-                        if ($scope.scopeModel.email != undefined) {
+                        if (payload.isEditMode)
+                        {
                             $scope.scopeModel.isEditMode = true;
+                        }
+                        if (!payload.showPasswordSection) {
                             $scope.scopeModel.showPasswordSection = false;
                         }
                     }

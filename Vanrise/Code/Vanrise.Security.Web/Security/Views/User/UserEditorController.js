@@ -61,7 +61,9 @@
                     var setLoader = function (value) {
                         $scope.isLoadingFindUserEditor = value;
                     };
-                    var payload = { securityProviderId: securityProviderSelectorApi.getSelectedIds(), context: buildContext() };
+                    var payload = {
+                        securityProviderId: securityProviderSelectorApi.getSelectedIds(), context: buildContext(), showPasswordSection: isEditMode ? false : true, isEditMode: isEditMode
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, findUserDirectiveApi, payload, setLoader);
                 }
             };
@@ -190,7 +192,9 @@
                     password: userEntity != undefined ? userEntity.Password : undefined,
                     enablePasswordExpiration: userEntity != undefined && userEntity.Settings != undefined ? userEntity.Settings.EnablePasswordExpiration : undefined,
                     securityProviderId: userEntity != undefined ? userEntity.SecurityProviderId : securityProviderSelectorApi.getSelectedIds(),
-                    context: buildContext()
+                    context: buildContext(),
+                    showPasswordSection: isEditMode?false:true,
+                    isEditMode: isEditMode,
                 };
                 VRUIUtilsService.callDirectiveLoad(findUserDirectiveApi, findUserDirectivePayload, findUserDirectiveLoadDeferred);
             });

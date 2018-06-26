@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="VR_Sec_ChangeProviderEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formUserEditor">
+            <vr-row ng-show="scopeModel.showSecurityProviderSelector">
+                <span ng-if="!scopeModel.isRemote">
+                    <vr-sec-securityprovider-selector normal-col-num="6" on-ready="scopeModel.onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedSecurityProvider"></vr-sec-securityprovider-selector>
+                </span>
+                <span ng-if="scopeModel.isRemote">
+                    <vr-sec-securityprovider-remoteselector normal-col-num="6" on-ready="scopeModel.onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedSecurityProvider"></vr-sec-securityprovider-remoteselector>
+                </span>
+            </vr-row>
+            <vr-row>
+                <span ng-if="scopeModel.selectedSecurityProvider!=undefined" vr-loader="scopeModel.isLoadingFindUserEditor">
+                    <vr-directivewrapper directive="scopeModel.selectedSecurityProvider.FindUserEditor" on-ready="scopeModel.onFindUserEditorReady"></vr-directivewrapper>
+                </span>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" haspermission="scopeModel.hasSaveUserPermission" formname="formUserEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

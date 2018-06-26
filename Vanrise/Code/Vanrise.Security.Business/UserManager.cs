@@ -358,7 +358,7 @@ namespace Vanrise.Security.Business
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
 
-            updateActionSucc = dataManager.ChangeUserSecurityProvider(userToChangeSecurityProvider.UserId, userToChangeSecurityProvider.SecurityProviderId, encryptedPassword, userSettings, loggedInUserId);
+            updateActionSucc = dataManager.ChangeUserSecurityProvider(userToChangeSecurityProvider.UserId, userToChangeSecurityProvider.SecurityProviderId, userToChangeSecurityProvider.Email, encryptedPassword, userSettings, loggedInUserId);
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();

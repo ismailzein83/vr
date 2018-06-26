@@ -9,6 +9,7 @@
         return ({
             addUser: addUser,
             editUser: editUser,
+            changeProvider: changeProvider,
             resetPassword: resetPassword,
             resetAuthServerPassword: resetAuthServerPassword,
             forgotPassword: forgotPassword,
@@ -46,6 +47,20 @@
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/User/UserEditor.html', modalParameters, modalSettings);
+        }
+
+        function changeProvider(userId, onUserUpdated) {
+            var modalParameters = {
+                userId: userId
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onUserUpdated = onUserUpdated;
+            };
+
+            VRModalService.showModal('/Client/Modules/Security/Views/User/ChangeProviderEditor.html', modalParameters, modalSettings);
         }
 
         function viewHistoryUser(context) {

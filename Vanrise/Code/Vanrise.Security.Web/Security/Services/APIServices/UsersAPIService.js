@@ -16,6 +16,7 @@
             AddUser: AddUser,
             AddRemoteUser: AddRemoteUser,
             UpdateUser: UpdateUser,
+            ChangeUserSecurityProvider: ChangeUserSecurityProvider,
             CheckUserName: CheckUserName,
             ResetPassword: ResetPassword,
             EditUserProfile: EditUserProfile,
@@ -37,8 +38,6 @@
         function GetFilteredUsers(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetFilteredUsers'), input);
         }
-
-
 
         function GetUsersInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUsersInfo'), {
@@ -86,6 +85,10 @@
 
         function UpdateUser(user) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateUser'), user);
+        }
+
+        function ChangeUserSecurityProvider(user) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ChangeUserSecurityProvider'), user);
         }
 
         function DisableUser(user) {
