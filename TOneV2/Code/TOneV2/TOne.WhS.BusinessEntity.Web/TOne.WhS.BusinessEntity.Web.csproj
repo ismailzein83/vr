@@ -456,6 +456,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\InternalAutoImportTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricingSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PurchaseAreaTechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\RateChangeTypeSettingsGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\FaultTicketsSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplate.html" />
@@ -468,6 +469,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelistsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricingsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-purchasearea-settings-pricelisttypemapping.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-purchasearea-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-ratechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-faulttickets-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern-helper.js" />
