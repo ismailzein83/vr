@@ -242,7 +242,7 @@ namespace TOne.WhS.Deal.Business
                     {
                         var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
                         if (supplierZone == null)
-                            throw new NullReferenceException("saleZone");
+                            throw new NullReferenceException("supplierZone");
                         if (dealBED < supplierZone.BED && (dealEED < supplierZone.EED || supplierZone.EED == null))
                             return true;
 
