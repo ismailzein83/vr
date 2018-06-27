@@ -28,9 +28,13 @@ namespace Vanrise.Voucher.Business
     }
     public interface IVoucharCardSerialNumberPartConcatenatedPartContext
     {
-        Guid VoucherCardBEDefinitionId { get; set; }
+        Guid VoucherCardBEDefinitionId { get; }
     }
+    public class VoucharCardSerialNumberPartConcatenatedPartContext:IVoucharCardSerialNumberPartConcatenatedPartContext
+    {
+        public Guid VoucherCardBEDefinitionId { get; set; }
 
+    }
     public class VoucharCardDateSerialNumberPart : VRConcatenatedPartSettings<IVoucharCardSerialNumberPartConcatenatedPartContext>
     {
         public override Guid ConfigId { get { return new Guid("71DC99F2-0A5D-47B6-9FB5-419E7F936017"); } }

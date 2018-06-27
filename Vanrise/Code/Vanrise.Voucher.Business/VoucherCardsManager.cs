@@ -36,6 +36,7 @@ namespace Vanrise.Voucher.Business
                 string pinCode = GetPinCode(out  activationCode);
                 dynamic _object = Activator.CreateInstance(recordRuntimeType);
                 _object.VoucherTypeId = voucherTypeId;
+                _object.SerialNumber = GetSerialNumber();
                 _object.Amount = amount;
                 _object.ActivationCode = activationCode;
                 _object.PinCode = pinCode;
@@ -86,49 +87,31 @@ namespace Vanrise.Voucher.Business
             activationCode = Encrypt(pinGuid.ToString());
             return Encrypt(pinNum.ToString());
         }
-        public string GetSerialNumber(string lastSerialNumber)
+        public string GetSerialNumber()
         {
-            Guid serialGuid = Guid.NewGuid();
-            byte[] arr;
-            UInt64 serialnum = 0;
-            arr = serialGuid.ToByteArray();
-            serialnum = BitConverter.ToUInt64(arr, 0);
-            string uniqueSerial = serialGuid.ToString("N");
+            ConfigManager configManager = new ConfigManager();
+            var serialNumberPattern = configManager.GetSerialNumberPattern();
+            serialNumberPattern.ThrowIfNull("serialNumberPattern");
 
-            string uniqueSerialLength = serialnum.ToString().Substring(0, 14).ToUpper();
+            var genericBusinessEntitySettings = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(_definitionId);
+            genericBusinessEntitySettings.ThrowIfNull("genericBusinessEntityExtendedSettings", _definitionId);
 
-            char[] serialArray = uniqueSerialLength.ToCharArray();
-            string finalSerialNumber = string.Empty; ;
+            var genericBusinessEntityExtendedSettings = genericBusinessEntitySettings.ExtendedSettings.CastWithValidate<VoucharCardsExtendedSettings>("VoucharCardsExtendedSettings");
+            genericBusinessEntityExtendedSettings.SerialNumberParts.ThrowIfNull("genericBusinessEntityExtendedSettings.SerialNumberParts");
 
-            int part1 = 1;
-            int part2 = 1;
-            int part3 = 1;
-
-            if (lastSerialNumber != "0")
+            string serialNumber = serialNumberPattern;
+            var serialNumberContext = new VoucharCardSerialNumberPartConcatenatedPartContext
             {
-                part1 = int.Parse(lastSerialNumber.Substring(1, 2));
-                part2 = int.Parse(lastSerialNumber.Substring(3, 4));
-                part3 = int.Parse(lastSerialNumber.Substring(8, 6));
-
-                if (part3 == 999999)
+                VoucherCardBEDefinitionId = _definitionId,
+            };
+            foreach (var serialNumberPart in genericBusinessEntityExtendedSettings.SerialNumberParts)
+            {
+                if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
                 {
-                    if (part2 == 9999)
-                    {
-                        part1 = part1 + 1;
-                        part2 = 1;
-                    }
-                    else
-                    {
-                        part2 = part2 + 1;
-                    }
-                    part3 = 1;
-                }
-                else
-                {
-                    part3 = part3 + 1;
+                    serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(serialNumberContext));
                 }
             }
-            return string.Concat("Z", part1.ToString("00"), part2.ToString("0000"), " ", part3.ToString("D6"));
+            return serialNumber;
         }
 
         static byte[] bytes = ASCIIEncoding.ASCII.GetBytes("ZeroCool");
