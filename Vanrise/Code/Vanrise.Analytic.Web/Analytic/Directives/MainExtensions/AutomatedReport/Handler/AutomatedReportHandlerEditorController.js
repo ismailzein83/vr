@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     "use strict";
-    automatedReportHandlerEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRComponentTypeAPIService'];
-    function automatedReportHandlerEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_VRComponentTypeAPIService) {
+    automatedReportHandlerEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRComponentTypeAPIService', 'VR_Analytic_AdvancedExcelFileGeneratorAPIService'];
+    function automatedReportHandlerEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_VRComponentTypeAPIService, VR_Analytic_AdvancedExcelFileGeneratorAPIService) {
 
 
         var isEditMode;
@@ -34,14 +34,25 @@
                 fileGeneratorReadyPromiseDeferred.resolve();
             };
 
-            $scope.saveAttachementGenerator = function () {
+            $scope.scopeModel.downloadAttachmentGenerator = function () {
+                var input =
+                {
+                    FileGenerator: buildObjFromScope(),
+                    Queries: context.getQueryInfo()
+                };
+                VR_Analytic_AdvancedExcelFileGeneratorAPIService.DownloadAttachmentGenerator(input).then(function (response) {
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            };
+
+            $scope.scopeModel.saveAttachmentGenerator = function () {
                 if (isEditMode)
                     return updateAttachementGenerator();
                 else
                     return insertAttachementGenerator();
             };
 
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 

@@ -12,8 +12,9 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formAutomatedReportHandlerEditor" data-onclick="saveAttachementGenerator"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="DownloadFile" formname="formAutomatedReportHandlerEditor" data-onclick="scopeModel.downloadAttachmentGenerator"></vr-button>
+                <vr-button type="Save" formname="formAutomatedReportHandlerEditor" data-onclick="scopeModel.saveAttachmentGenerator"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
