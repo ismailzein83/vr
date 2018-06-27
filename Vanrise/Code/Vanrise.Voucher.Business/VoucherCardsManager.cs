@@ -14,7 +14,7 @@ namespace Vanrise.Voucher.Business
     {
         static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
 
-        public void GenerateVoucherCards(DateTime expiryDate, long voucherTypeId, decimal amount, int numberOfCards)
+        public void GenerateVoucherCards(long generationVoucherId, DateTime expiryDate, long voucherTypeId, decimal amount, int numberOfCards)
         {
             var dataRecordStorageId = new GenericBusinessEntityDefinitionManager().GetGenericBEDataRecordStorageId(_definitionId);
             var dataRcordStorageManager = new DataRecordStorageManager();
@@ -36,6 +36,7 @@ namespace Vanrise.Voucher.Business
                 string pinCode = GetPinCode(out  activationCode);
                 dynamic _object = Activator.CreateInstance(recordRuntimeType);
                 _object.VoucherTypeId = voucherTypeId;
+                _object.GenerationVoucherId = generationVoucherId;
                 _object.SerialNumber = GetSerialNumber();
                 _object.Amount = amount;
                 _object.ActivationCode = activationCode;
@@ -58,6 +59,12 @@ namespace Vanrise.Voucher.Business
             }
         }
 
+        public bool SetVoucherCardsActive(long generationVoucherId, int? numberOfCards)
+        {
+            //List<long> voucherCardsIds
+            throw new NotImplementedException();
+        }
+
         static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
         Type _recordRuntimeType;
         private Type GetRecordRuntimeTypeWithValidate(Guid dataRecordTypeId)
@@ -77,17 +84,12 @@ namespace Vanrise.Voucher.Business
             byte[] arr;
             pinGuid = Guid.NewGuid();
             arr = pinGuid.ToByteArray();
-            pinNum = BitConverter.ToUInt32(arr, 0);
-            while (pinNum.ToString().Length != 10)
-            {
-                pinGuid = Guid.NewGuid();
-                arr = pinGuid.ToByteArray();
-                pinNum = BitConverter.ToUInt32(arr, 0);
-            }
+            var num = BitConverter.ToUInt64(arr, 0);
+            var pinNum = num % 100000000000000; // 14 numbers
             activationCode = Encrypt(pinGuid.ToString());
             return Encrypt(pinNum.ToString());
         }
-        public string GetSerialNumber()
+        private string GetSerialNumber()
         {
             ConfigManager configManager = new ConfigManager();
             var serialNumberPattern = configManager.GetSerialNumberPattern();
