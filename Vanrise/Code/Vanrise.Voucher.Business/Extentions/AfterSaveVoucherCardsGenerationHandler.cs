@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
-
+using Vanrise.Common;
 namespace Vanrise.Voucher.Business
 {
     public class AfterSaveVoucherCardsGenerationHandler : GenericBEOnAfterSaveHandler
@@ -34,7 +34,9 @@ namespace Vanrise.Voucher.Business
              context.NewEntity.FieldValues.TryGetValue("NumberOfCards",out numberOfCardsObject);
              int numberOfCards = (int)numberOfCardsObject;
 
-             voucherCardsManager.GenerateVoucherCards(generationVoucherId,expiryDate, voucherTypeId, 0, numberOfCards);
+             var voucherType = new VoucherTypeManager().GetVoucherType(voucherTypeId);
+             voucherType.ThrowIfNull("voucherType", voucherTypeId);
+             voucherCardsManager.GenerateVoucherCards(generationVoucherId,expiryDate, voucherTypeId, voucherType.Amount, numberOfCards);
         }
     }
 }

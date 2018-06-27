@@ -11,5 +11,6 @@ namespace Vanrise.Voucher.Business
         static Guid _definitionId = new Guid("16fba68f-d080-4a5e-a7a8-054312ae7b6b");
 
 
+
     }
 }
