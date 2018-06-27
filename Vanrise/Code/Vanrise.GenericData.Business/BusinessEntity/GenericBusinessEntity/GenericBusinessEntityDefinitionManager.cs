@@ -34,8 +34,21 @@ namespace Vanrise.GenericData.Business
         {
             return GetGenericBEDefinition(businessEntityDefinitionId).Title;
         }
-        public GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
+
+        public GenericBESelectorRuntimeInfo GetGenericBESelectorRuntimeInfo(Guid businessEntityDefinitionId)
         {
+            var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+
+            return new GenericBESelectorRuntimeInfo()
+            {
+                SelectorSingularTitle = genericBEDefinitionSettings.SelectorSingularTitle,
+                SelectorPluralTitle = genericBEDefinitionSettings.SelectorPluralTitle
+            };
+            
+        }
+
+        public GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
+        { 
             var genericBEDefinition = GetGenericBEDefinition(businessEntityDefinitionId);
             genericBEDefinition.Settings.ThrowIfNull("genericBEDefinition.Settings");
             return genericBEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("genericBEDefinition.Settings");

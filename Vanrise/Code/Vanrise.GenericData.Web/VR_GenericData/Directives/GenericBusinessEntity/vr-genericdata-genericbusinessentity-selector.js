@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntitySelector.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService'];
+    GenericBusinessEntitySelector.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function GenericBusinessEntitySelector(VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService) {
+    function GenericBusinessEntitySelector(VR_GenericData_GenericBEDefinitionAPIService,VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -62,15 +62,35 @@
                     var filter;
                     var selectedIds;
                     var businessEntityDefinitionId;
+                    var promises = [];
+
                     if (payload != undefined) {
                         ctrl.fieldTitle = payload.fieldTitle;
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
-
                         selectedIds = payload.selectedIds;
+
+                     var getGenericBERuntimeInfoPromise = getGenericBusinessEntityRuntimeInfo();
+                     promises.push(getGenericBERuntimeInfoPromise);
+
+                     function getGenericBusinessEntityRuntimeInfo() {
+
+                            return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBusinessEntityRuntimeInfo(businessEntityDefinitionId).then(function (response) {
+                                
+                                if(response != undefined)
+                                attrs.ismultipleselection != undefined ? ctrl.fieldTitle = response.SelectorPluralTitle : ctrl.fieldTitle = response.SelectorSingularTitle;
+
+                            });
+
+                        }
                     }
 
-                    return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
+                    var getGenericBusinessEntityInfoPromise = GetGenericBusinessEntityInfo();
+                    promises.push(getGenericBusinessEntityInfoPromise);
+
+                    function GetGenericBusinessEntityInfo() {
+
+                     return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {
@@ -83,7 +103,15 @@
                             VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
                         }
                     });
+
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+
                 };
+
+
+
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('GenericBusinessEntityId', attrs, ctrl);
                 };

@@ -14,6 +14,14 @@ namespace Vanrise.GenericData.Web.Controllers
     public class GenericBusinessEntityDefinitionController : BaseAPIController
     {
         GenericBusinessEntityDefinitionManager _manager = new GenericBusinessEntityDefinitionManager();
+
+         [HttpGet]
+         [Route("GetGenericBusinessEntityRuntimeInfo")]
+        public GenericBESelectorRuntimeInfo GetGenericBusinessEntityRuntimeInfo(Guid businessEntityDefinitionId)
+        {
+            return _manager.GetGenericBESelectorRuntimeInfo(businessEntityDefinitionId);
+        }
+    
         [HttpGet]
         [Route("GetGenericBEGridDefinition")]
         public GenericBEGridDefinition GetGenericBEGridDefinition(Guid businessEntityDefinitionId)

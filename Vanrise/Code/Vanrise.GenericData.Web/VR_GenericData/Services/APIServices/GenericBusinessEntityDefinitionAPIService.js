@@ -54,6 +54,11 @@
         function GetDataRecordTypeFields(dataRecordTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetDataRecordTypeFields"), { dataRecordTypeId: dataRecordTypeId });
         }
+
+        function GetGenericBusinessEntityRuntimeInfo(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBusinessEntityRuntimeInfo"), { businessEntityDefinitionId: businessEntityDefinitionId });
+        }
+
         return ({
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
@@ -69,7 +74,8 @@
             GetGenericBESaveConditionSettingsConfigs: GetGenericBESaveConditionSettingsConfigs,
             GetGenericBEConditionSettingsConfigs: GetGenericBEConditionSettingsConfigs,
             GetGenericBESerialNumberPartSettingsConfigs: GetGenericBESerialNumberPartSettingsConfigs,
-            GetDataRecordTypeFields: GetDataRecordTypeFields
+            GetDataRecordTypeFields: GetDataRecordTypeFields,
+            GetGenericBusinessEntityRuntimeInfo: GetGenericBusinessEntityRuntimeInfo
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);
