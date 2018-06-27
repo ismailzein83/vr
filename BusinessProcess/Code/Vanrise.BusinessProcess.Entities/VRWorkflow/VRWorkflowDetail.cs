@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
     public class VRWorkflowDetail
     {
-       // public BaseVRWorkflow Entity { get; set; }
+        public Guid VRWorkflowID { get; set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
+        public DateTime LastModifiedTime { get; set; }
     }
 }

@@ -6,8 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -51,10 +55,10 @@ namespace Vanrise.BusinessProcess.Business
             string rootActivityCode = workflow.Settings.RootActivity.Settings.GenerateWFActivityCode(generateCodeContext);
             codeBuilder.Replace("#ROOTACTIVITY#", rootActivityCode);
 
-            if(workflow.Settings.Arguments != null)
+            if (workflow.Settings.Arguments != null)
             {
                 StringBuilder argumentsCodeBuilder = new StringBuilder();
-                foreach(var argument in workflow.Settings.Arguments)
+                foreach (var argument in workflow.Settings.Arguments)
                 {
                     string argumentRuntimeType = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
                     argumentsCodeBuilder.AppendLine(string.Concat("public ", argument.Direction.ToString(), "Argument<", argumentRuntimeType, "> ", argument.Name, " { get; set; }"));
@@ -80,10 +84,10 @@ namespace Vanrise.BusinessProcess.Business
                 codeBuilder.Replace("#ADDITIONALUSINGSTATEMENTS#", "");
             }
 
-            if(generateCodeContext.OtherNameSpaceCodes != null)
+            if (generateCodeContext.OtherNameSpaceCodes != null)
             {
                 var otherNameSpacesCodeBuilder = new StringBuilder();
-                foreach(var otherNameSpaceCode in generateCodeContext.OtherNameSpaceCodes)
+                foreach (var otherNameSpaceCode in generateCodeContext.OtherNameSpaceCodes)
                 {
                     otherNameSpacesCodeBuilder.AppendLine(otherNameSpaceCode);
                 }
@@ -165,14 +169,177 @@ namespace Vanrise.BusinessProcess.Business
 
         }
 
+        public Vanrise.Entities.IDataRetrievalResult<VRWorkflowDetail> GetFilteredVRWorkflows(Vanrise.Entities.DataRetrievalInput<VRWorkflowQuery> input)
+        {
+            var allVRWorkflows = GetCachedVRWorkflows();
+
+            Func<VRWorkflow, bool> filterExpression = (prod) =>
+            {
+                if (input.Query != null)
+                {
+                    if (!string.IsNullOrEmpty(input.Query.Name) && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                        return false;
+
+                    if (!string.IsNullOrEmpty(input.Query.Title) && !prod.Title.ToLower().Contains(input.Query.Title.ToLower()))
+                        return false;
+                }
+
+                return true;
+            };
+            VRActionLogger.Current.LogGetFilteredAction(VRWorkflowLoggableEntity.Instance, input);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRWorkflows.ToBigResult(input, filterExpression, VRWorkflowDetailMapper));
+        }
+
+        public VRWorkflow GetVRWorkflow(Guid vrWorkflowId)
+        {
+            var allVRWorkflows = GetCachedVRWorkflows();
+            if (allVRWorkflows == null)
+                return null;
+
+            return allVRWorkflows.GetRecord(vrWorkflowId);
+        }
+
+        Dictionary<Guid, VRWorkflow> GetCachedVRWorkflows()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetVRWorkflows",
+               () =>
+               {
+                   IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
+                   IEnumerable<VRWorkflow> vrWorkflows = dataManager.GetVRWorkflows();
+                   return vrWorkflows.ToDictionary(record => record.VRWorkflowId, record => record);
+               });
+        }
+
+        public InsertOperationOutput<VRWorkflowDetail> InsertVRWorkflow(VRWorkflowToAdd vrWorkflowToAdd)
+        {
+            IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
+
+            Guid vrWorkflowId = Guid.NewGuid();
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            int createdBy = loggedInUserId;
+
+            bool insertActionSucc = dataManager.InsertVRWorkflow(vrWorkflowToAdd, vrWorkflowId, createdBy);
+
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRWorkflowDetail>();
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            if (insertActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+                VRWorkflow insertedWorkflow = GetVRWorkflow(vrWorkflowId);
+
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRWorkflowLoggableEntity.Instance, insertedWorkflow);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = VRWorkflowDetailMapper(insertedWorkflow);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<VRWorkflowDetail> UpdateVRWorkflow(VRWorkflowToUpdate vrWorkflow)
+        {
+            IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
+
+            int lastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
+
+            bool updateActionSucc = dataManager.UpdateVRWorkflow(vrWorkflow, lastModifiedBy);
+            UpdateOperationOutput<VRWorkflowDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRWorkflowDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
+                VRWorkflow updatedWorkflow = GetVRWorkflow(vrWorkflow.VRWorkflowId);
+
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRWorkflowLoggableEntity.Instance, updatedWorkflow);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = VRWorkflowDetailMapper(updatedWorkflow);
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public string GetVRWorkflowName(VRWorkflow vrWorkflow)
+        {
+            return (vrWorkflow != null) ? vrWorkflow.Name : null;
+        }
+
         #region Private Classes
+
+        private class VRWorkflowLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRWorkflowLoggableEntity Instance = new VRWorkflowLoggableEntity();
+
+            private VRWorkflowLoggableEntity()
+            {
+
+            }
+
+            static VRWorkflowManager s_vrWorkflowManager = new VRWorkflowManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "BusinessProcess_VR_Workflow"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Business Process"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "VRWorkflow"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "BusinessProcess_BP_VRWorkflow_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRWorkflow vrWorkflow = context.Object.CastWithValidate<VRWorkflow>("context.Object");
+                return vrWorkflow.VRWorkflowId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRWorkflow vrWorkflow = context.Object.CastWithValidate<VRWorkflow>("context.Object");
+                return s_vrWorkflowManager.GetVRWorkflowName(vrWorkflow);
+            }
+        }
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreVRWorkflowsUpdated(ref _updateHandle);
+            }
+        }
 
         private class VRWorkflowActivityGenerateWFActivityCodeContext : IVRWorkflowActivityGenerateWFActivityCodeContext
         {
             Dictionary<string, VRWorkflowArgument> _allArguments = new Dictionary<string, VRWorkflowArgument>();
 
             List<IVRWorkflowActivityGenerateWFActivityCodeContext> _childContexts = new List<IVRWorkflowActivityGenerateWFActivityCodeContext>();
-            
+
             public List<string> OtherNameSpaceCodes { get; private set; }
 
             public List<string> AdditionalUsingStatements { get; private set; }
@@ -194,7 +361,7 @@ namespace Vanrise.BusinessProcess.Business
 
             private VRWorkflowActivityGenerateWFActivityCodeContext(VRWorkflowActivityGenerateWFActivityCodeContext parentContext)
             {
-                if(parentContext._allVariables != null)
+                if (parentContext._allVariables != null)
                 {
                     foreach (var parentVariable in parentContext._allVariables)
                     {
@@ -209,7 +376,7 @@ namespace Vanrise.BusinessProcess.Business
             public void AddVariables(VRWorkflowVariableCollection variables)
             {
                 variables.ThrowIfNull("variables");
-                foreach(var variable in variables)
+                foreach (var variable in variables)
                 {
                     AddVariable(variable);
                 }
@@ -222,7 +389,7 @@ namespace Vanrise.BusinessProcess.Business
                 if (_allVariables.ContainsKey(variable.Name))
                     throw new Exception(String.Format("Variable '{0}' already added to the Workflow Variables", variable.Name));
                 _allVariables.Add(variable.Name, variable);
-                foreach(var childContext in this._childContexts)
+                foreach (var childContext in this._childContexts)
                 {
                     childContext.AddVariable(variable);
                 }
@@ -267,6 +434,24 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
+
+        #endregion
+
+        #region Mappers
+        private VRWorkflowDetail VRWorkflowDetailMapper(VRWorkflow vrWorkflow)
+        {
+            if (vrWorkflow == null)
+                return null;
+
+            VRWorkflowDetail vrWorkflowDetail = new VRWorkflowDetail()
+            {
+                VRWorkflowID = vrWorkflow.VRWorkflowId,
+                Name = vrWorkflow.Name,
+                Title = vrWorkflow.Title,
+                LastModifiedTime = vrWorkflow.LastModifiedTime
+            };
+            return vrWorkflowDetail;
+        }
 
         #endregion
     }

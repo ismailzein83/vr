@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class BaseVRWorkflow
+    public abstract class BaseVRWorkflow
     {
         public string Name { get; set; }
 

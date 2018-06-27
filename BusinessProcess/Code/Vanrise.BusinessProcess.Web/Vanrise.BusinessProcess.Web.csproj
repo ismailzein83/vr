@@ -178,6 +178,7 @@
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
     <Content Include="BusinessProcess\Constants\SPLDefinitionEnum.js" />
+    <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-warning-item-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\Templates\EmptyTemplate.html" />
@@ -217,7 +218,15 @@
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskCompilationResult.html" />
     <Content Include="BusinessProcess\Directives\CustomCode\CustomCodeTaskCompilationResultController.js" />
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowArgumentsGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\MainExtensions\Templates\VRWorkflowArgumentVariableTypeGenericVariableTypeTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowArgumentVariableTypeTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-activities.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-argumentdirection-selector.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-arguments-grid.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-argumentvariabletype-selector.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\MainExtensions\vr-workflow-argumentvariabletype-genericvariabletype.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-argumentvariabletype-type-selector.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
@@ -262,9 +271,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\vr-businessprocess-runtimeservice.js" />
     <Content Include="BusinessProcess\VR_BusinessProcess_ModuleInitialization.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivitiesTemplate.html" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowDefinitionTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowGridTemplate.html" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-definition.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-management-grid.js" />
     <Content Include="BusinessProcess\Services\APIServices\VRWorkflowAPIService.js" />
     <Content Include="BusinessProcess\Services\VRWorkflowService.js" />

@@ -1,1 +1,14 @@
-﻿
+﻿<vr-datagrid datasource="workflows"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="VRWorkflowID">
+    <vr-datagridcolumn headertext="'ID'" field="'VRWorkflowID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Title'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Modified Time'" field="'LastModifiedTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

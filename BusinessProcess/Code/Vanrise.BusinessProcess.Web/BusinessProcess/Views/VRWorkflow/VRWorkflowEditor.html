@@ -1,1 +1,32 @@
-﻿
+﻿<div vr-modalcontent size="large" ng-controller="BusinessProcess_VR_WorkflowEditorController">
+    <vr-modalbody>
+        <vr-form name="formEditVRWorkflow" vr-loader="scopeModel.isLoading">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns colnum="3">
+                            <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Arguments'">
+                    <businessprocess-vr-workflow-arguments-grid on-ready="scopeModel.onArgumentsGridReady"></businessprocess-vr-workflow-arguments-grid>
+                </vr-tab>
+                <vr-tab header="'Workflow'">
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="saveWorkflow" formname="formEditVRWorkflow"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
