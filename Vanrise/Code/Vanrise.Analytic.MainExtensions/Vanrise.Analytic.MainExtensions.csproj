@@ -41,6 +41,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +71,7 @@
     <Compile Include="AutomatedReport\Queries\AnalyticTableQuerySettings.cs" />
     <Compile Include="AutomatedReport\Queries\RecordSearchQueryDefinitionSettings.cs" />
     <Compile Include="AutomatedReport\Queries\RecordSearchQuerySettings.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DARecordAggregates\CountAggregate.cs" />
     <Compile Include="DARecordAggregates\DistinctCountAggregate.cs" />
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
@@ -169,6 +174,10 @@
     <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
       <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
       <Name>Vanrise.Security.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
