@@ -96,8 +96,7 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             Guid ruleDefinitionId = input.RuleDefinitionId;
             List<string> criteriaFieldsToHide = input.CriteriaFieldsToHide;
-            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            byte[] bytes = ruleDefinitionManager.DownloadGenericRulesTemplate(ruleDefinitionId, criteriaFieldsToHide);
+            byte[] bytes = _manager.DownloadGenericRulesTemplate(ruleDefinitionId, criteriaFieldsToHide);
             MemoryStream memStreamRate = new System.IO.MemoryStream();
             memStreamRate.Write(bytes, 0, bytes.Length);
             memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
@@ -115,8 +114,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("DownloadUploadGenericRulesOutput")]
         public object DownloadUploadGenericRulesOutput(long fileId)
         {
-            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            byte[] bytes = ruleDefinitionManager.DownloadUploadGenericRulesOutput(fileId);
+            byte[] bytes = _manager.DownloadUploadGenericRulesOutput(fileId);
             MemoryStream memStreamRate = new System.IO.MemoryStream();
             memStreamRate.Write(bytes, 0, bytes.Length);
             memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
