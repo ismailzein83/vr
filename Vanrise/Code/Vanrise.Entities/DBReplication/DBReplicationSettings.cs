@@ -8,12 +8,14 @@ namespace Vanrise.Entities
 {
     public class DBReplicationSettings
     {
-        public List<DBReplicationDBConnection> DBConnections { get; set; }
+        public List<SourceDBReplicationDBConnection> SourceDBConnections { get; set; }
+
+        public List<TargetDBReplicationDBConnection> TargetDBConnections { get; set; }
     }
 
-    public class DBReplicationDBConnection
+    public class SourceDBReplicationDBConnection
     {
-        public string LinkedServerName { get; set; }
+        public string LinkedServerDBName { get; set; }
 
         public List<DBReplicationDBConnectionSourceDefinition> SourceConnectionDefinitions { get; set; }
     }
@@ -21,5 +23,17 @@ namespace Vanrise.Entities
     public class DBReplicationDBConnectionSourceDefinition
     {
         public Guid SourceDBConnectionDefinitionId { get; set; }
+    }
+
+    public class TargetDBReplicationDBConnection
+    {
+        public string ConnectionStringName { get; set; }
+
+        public List<DBReplicationDBConnectionTargetDefinition> TargetConnectionDefinitions { get; set; }
+    }
+
+    public class DBReplicationDBConnectionTargetDefinition
+    {
+        public Guid TargetDBConnectionDefinitionId { get; set; }
     }
 }

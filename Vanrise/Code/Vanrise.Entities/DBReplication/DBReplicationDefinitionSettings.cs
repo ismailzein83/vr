@@ -8,10 +8,7 @@ namespace Vanrise.Entities
 {
     public class DBReplicationDefinitionSettings : VRComponentTypeSettings
     {
-        public override Guid VRComponentTypeConfigId
-        {
-            get { return new Guid("BB07A3B5-E519-4A6C-B4C6-695069BBB64A"); }
-        }
+        public override Guid VRComponentTypeConfigId { get { return new Guid("BB07A3B5-E519-4A6C-B4C6-695069BBB64A"); } }
 
         public Dictionary<Guid, DBReplicationSourceDBConnectionDefinition> SourceDBConnectionDefinitions { get; set; }
 
@@ -28,10 +25,6 @@ namespace Vanrise.Entities
     public class DBReplicationTargetDBConnectionDefinition
     {
         public string Name { get; set; }
-
-        public string ConnectionStringName { get; set; }
-
-        public string ConnectionStringAppSettingKey { get; set; }
     }
 
     public class DBReplicationTableDefinitionSettings
@@ -43,5 +36,17 @@ namespace Vanrise.Entities
         public Guid TargetDBConnectionDefinitionId { get; set; }
 
         public string FilterDateTimeColumn { get; set; }
+
+        //public DBReplicationPreInsert DBReplicationPreInsert { get; set; }
     }
+
+    //public abstract class DBReplicationPreInsert 
+    //{
+    //    public abstract void Execute(IDBReplicationPreInsertExecuteContext context);
+    //}
+
+    //public interface IDBReplicationPreInsertExecuteContext
+    //{
+    //    List<object> DataToInsert { get; set; }
+    //}
 }
