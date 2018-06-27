@@ -79,7 +79,7 @@ namespace Vanrise.Voucher.Business
 
         private string GetPinCode(out string activationCode)
         {
-            UInt32 pinNum = 0;
+           /// UInt32 pinNum = 0;
             Guid pinGuid;
             byte[] arr;
             pinGuid = Guid.NewGuid();
