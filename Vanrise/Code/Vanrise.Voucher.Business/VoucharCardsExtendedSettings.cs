@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.Voucher.Business
 {
-    public class VoucharCardsExtendedSettings:GenericLKUPDefinitionExtendedSettings
+    public class VoucharCardsExtendedSettings : GenericBEExtendedSettings
     {
         public List<VoucharCardSerialNumberPart> SerialNumberParts { get; set; }
 
@@ -16,7 +17,6 @@ namespace Vanrise.Voucher.Business
         {
             get { return new Guid("6B038908-4F30-4F0F-8E05-E13FE5577A0D");}
         }
-        public override string RuntimeEditor { get { return ""; } }
 
     }
     public class VoucharCardSerialNumberPart
