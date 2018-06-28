@@ -10,9 +10,9 @@ namespace Vanrise.Analytic.Entities.AutomatedReport.Handler
 {
     public class VRAutomatedReportSettings : SettingData
     {
-        public static string SETTING_TYPE = "VR_Analytic_VRAutomatedReportSettings";
+        public static string SETTING_TYPE = "VR_Analytic_AutomatedReportSettings";
         public List<VRAutomatedReportSerialNumberPart> SerialNumberParts { get; set; }
-
+         
     }
     public class VRAutomatedReportSerialNumberPart
     {
