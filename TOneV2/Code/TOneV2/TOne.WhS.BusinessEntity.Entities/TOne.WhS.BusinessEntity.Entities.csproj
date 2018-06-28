@@ -75,6 +75,7 @@
     <Compile Include="ANumber\ANumberGroup.cs" />
     <Compile Include="ANumber\ANumberSaleCode.cs" />
     <Compile Include="ANumber\ANumberSupplierCode.cs" />
+    <Compile Include="Settings\AutoImportSPLSettings.cs" />
     <Compile Include="BaseOtherRatesPreviewQueryHandler.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\ContextFactory.cs" />
