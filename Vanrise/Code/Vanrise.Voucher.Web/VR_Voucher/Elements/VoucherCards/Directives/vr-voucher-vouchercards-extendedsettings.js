@@ -57,7 +57,6 @@ app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotif
 
             function defineAPI() {
                 var api = {};
-
                 api.getData = function () {
                     var serialNumberParts;
                     if ($scope.scopeModel.datasource != undefined) {
@@ -66,24 +65,29 @@ app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotif
                             var currentItem = $scope.scopeModel.datasource[i];
                             serialNumberParts.push(currentItem.Entity);
                         }
+                    } 
+                    return {
+                        $type: "Vanrise.Voucher.Business.VoucharCardsExtendedSettings,Vanrise.Voucher.Business",
+                        SerialNumberParts: serialNumberParts
                     }
-                    return serialNumberParts;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.serialNumberParts != undefined) {
-                            for (var i = 0; i < payload.serialNumberParts.length; i++) {
-                                var serialNumberPart = payload.serialNumberParts[i];
-                                $scope.scopeModel.datasource.push({ Entity: serialNumberPart });
+                        if (payload.settings != undefined) {
+                            if (payload.settings.SerialNumberParts != undefined) {
+                                for (var i = 0; i < payload.settings.SerialNumberParts.length; i++) {
+                                    var serialNumberPart = payload.settings.SerialNumberParts[i];
+                                    $scope.scopeModel.datasource.push({ Entity: serialNumberPart });
+                                }
                             }
                         }
                     }
                 };
 
-                if ($scope.scopeModel.onReady != null)
-                    $scope.scopeModel.onReady(api);
+                if (ctrl.onReady != null)
+                ctrl.onReady(api)
             }
 
             function defineMenuActions() {
