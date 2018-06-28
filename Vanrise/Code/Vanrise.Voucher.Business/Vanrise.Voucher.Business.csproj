@@ -50,6 +50,7 @@
     <Compile Include="Extentions\VoucharCardsExtendedSettings.cs" />
     <Compile Include="VoucherCardsGenerationsManager.cs" />
     <Compile Include="VoucherCardsManager.cs" />
+    <Compile Include="VoucherCardDefinitionManager.cs" />
     <Compile Include="VoucherTypeManager.cs" />
   </ItemGroup>
   <ItemGroup>

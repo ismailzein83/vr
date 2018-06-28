@@ -86,12 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VoucherCardDefinitionController.cs" />
     <Compile Include="Controllers\VRVoucherCardsContoller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_Voucher\Elements\VoucherCards\Services\APIServices\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Voucher.Business\Vanrise.Voucher.Business.csproj">
       <Project>{180cf862-0bf7-4834-968a-4e01954a7b09}</Project>
@@ -107,15 +106,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_Voucher\Constant\ModuleConfig.js" />
     <Content Include="VR_Voucher\Constant\VR_Voucher_DateCounterType.js" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\Templates\SequenceSerialNumberPartTemplate.html" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\Templates\DateSerialNumberPartTemplate.html" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\vr-voucher-vouchercards-extendedsettings-dateserialnumberpart.js" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\vr-voucher-vouchercards-extendedsettings-sequenceserialnumberpart.js" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\SerialNumberPartEditorEditorController.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\SerialNumberPatternHelperController.js" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\SerialNumberPartEditor.html" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\SerialNumberPatternHelper.html" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\VoucherCardsExtendedsettingsTemplate.html" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\vr-vouchercards-serialnumber-pattern.js" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\vr-voucher-vouchercards-extendedsettings.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Services\APIServices\VoucherTypeAPIService.js" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Services\VoucherCardsSerialNumberPartsService.js" />
   </ItemGroup>
   <PropertyGroup>
