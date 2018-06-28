@@ -1,5 +1,5 @@
 ﻿
-app.service('VR_Voucher_VouchercardsExtendedsettingsService', ['VRModalService',
+app.service('VR_Voucher_VoucherCardsSerialNumberPartsService', ['VRModalService',
     function (VRModalService) {
 
         function addSerialNumberPart(onSerialNumberPartAdded, context) {

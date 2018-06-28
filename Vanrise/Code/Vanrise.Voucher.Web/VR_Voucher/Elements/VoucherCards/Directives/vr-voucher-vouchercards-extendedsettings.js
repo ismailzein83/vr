@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotificationService", "VR_Voucher_VouchercardsExtendedsettingsService",
-    function (UtilsService, VRNotificationService, VR_Voucher_VouchercardsExtendedsettingsService) {
+app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotificationService", "VR_Voucher_VoucherCardsSerialNumberPartsService",
+    function (UtilsService, VRNotificationService, VR_Voucher_VoucherCardsSerialNumberPartsService) {
 
         var directiveDefinitionObject = {
 
@@ -44,7 +44,7 @@ app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotif
                         $scope.scopeModel.datasource.push({ Entity: serialNumberPart });
                     };
 
-                    VR_Voucher_VouchercardsExtendedsettingsService.addSerialNumberPart(onSerialNumberPartAdded, getContext());
+                    VR_Voucher_VoucherCardsSerialNumberPartsService.addSerialNumberPart(onSerialNumberPartAdded, getContext());
                 };
 
                 $scope.scopeModel.removeSerialNumberPart = function (dataItem) {
@@ -104,7 +104,7 @@ app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotif
                     $scope.scopeModel.datasource[index] = { Entity: serialNumberPart };
                 };
 
-                VR_Voucher_VouchercardsExtendedsettingsService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
+                VR_Voucher_VoucherCardsSerialNumberPartsService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
             }
             function getContext() {
                 return context;

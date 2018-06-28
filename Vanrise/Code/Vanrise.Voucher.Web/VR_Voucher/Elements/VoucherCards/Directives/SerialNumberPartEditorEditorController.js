@@ -2,11 +2,11 @@
 
     'use strict';
 
-    voucherCardsExtendedsettingsEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    serialNumberPartEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function voucherCardsExtendedsettingsEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function serialNumberPartEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
-        var context;
+       
         var serialNumberPartEntity;
 
         var isEditMode;
@@ -20,7 +20,6 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                context = parameters.context;
                 serialNumberPartEntity = parameters.serialNumberPartEntity;
             }
             isEditMode = (serialNumberPartEntity != undefined);
@@ -101,9 +100,7 @@
             }
         }
         function getContext() {
-            var currentContext = context;
-            if (currentContext == undefined)
-                currentContext = {};
+            var currentContext = {};
             currentContext.getExtensionType = function () {
                 return "VR_Vouchers_ExtendedSettings_SerialNumberParts";
             };
@@ -111,6 +108,6 @@
         }
 
     }
-    appControllers.controller('VR_Voucher_VoucherCardsExtendedsettingsEditorController', voucherCardsExtendedsettingsEditorController);
+    appControllers.controller('VR_Voucher_SerialNumberPartEditorController', serialNumberPartEditorController);
 
 })(appControllers);

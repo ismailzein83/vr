@@ -106,7 +106,7 @@
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\SerialNumberPartEditor.html" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\VoucherCardsExtendedsettingsTemplate.html" />
     <Content Include="VR_Voucher\Elements\VoucherCards\Directives\vr-voucher-vouchercards-extendedsettings.js" />
-    <Content Include="VR_Voucher\Elements\VoucherCards\Services\VouchercardsExtendedsettingsService.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Services\VoucherCardsSerialNumberPartsService.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
