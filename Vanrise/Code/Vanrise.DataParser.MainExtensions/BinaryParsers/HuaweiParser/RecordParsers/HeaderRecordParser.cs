@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 
@@ -21,7 +17,6 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordPar
 
         public override void Execute(IBinaryRecordParserContext context)
         {
-
             byte[] data = ((MemoryStream)context.RecordStream).ToArray();
 
             byte[] headerLengthData = new byte[HeaderBytesLength];
@@ -30,7 +25,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordPar
             int headerLength = ParserHelper.GetInt(headerLengthData, 0, HeaderBytesLength);
             int dataLength = data.Length - headerLength;
             byte[] parserData = new byte[dataLength];
-            Array.Copy(data, headerLength, parserData, 0, data.Length - headerLength);
+            Array.Copy(data, headerLength, parserData, 0, dataLength);
 
             BinaryParserHelper.ExecuteRecordParser(RecordParser, new MemoryStream(parserData), context);
         }
