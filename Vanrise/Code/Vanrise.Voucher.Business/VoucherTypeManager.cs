@@ -34,7 +34,7 @@ namespace Vanrise.Voucher.Business
 
                         VoucherType voucherType = new VoucherType()
                         {
-                            VoucherTypeId = (long)genericBusinessEntity.FieldValues.GetRecord("VoucherTypeId"),
+                            VoucherTypeId = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             Amount = (decimal)genericBusinessEntity.FieldValues.GetRecord("Amount"),
                             CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord("CurrencyId"),

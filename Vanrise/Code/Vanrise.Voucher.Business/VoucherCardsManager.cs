@@ -8,11 +8,25 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.Common;
 using Vanrise.Security.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.Entities;
+using Vanrise.Voucher.Entities;
 namespace Vanrise.Voucher.Business
 {
     public class VoucherCardsManager
     {
         static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
+
+        public VoucherCardResult CheckAvailablePinCode(string pinCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public VoucherCardResult SetVoucherUsed(string pinCode, string usedBy)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void GenerateVoucherCards(long generationVoucherId, DateTime expiryDate, long voucherTypeId, int numberOfCards)
         {
@@ -33,17 +47,32 @@ namespace Vanrise.Voucher.Business
             var voucherType = new VoucherTypeManager().GetVoucherType(voucherTypeId);
             voucherType.ThrowIfNull("voucherType", voucherTypeId);
 
+            var currentPinCodes = GetAllVoucherCardsPinCodes();
 
+            List<string> pinCodesToAdd = new List<string>();
 
 
             for (var i = 0; i < numberOfCards; i++)
             {
-                string activationCode;
-                string pinCode = GetPinCode(out  activationCode);
-                dynamic _object = Activator.CreateInstance(recordRuntimeType);
+                string activationCode = null;
+                string pinCode = null;
+                while (pinCode == null)
+                {
+                    string newActivationCode;
+                    string newPinCode = GetPinCode(out  newActivationCode);
+                    if ((currentPinCodes == null || !currentPinCodes.Contains(newPinCode)) && !pinCodesToAdd.Contains(newPinCode))
+                    {
+                        activationCode = newActivationCode;
+                        pinCode = newPinCode;
+                        pinCodesToAdd.Add(newPinCode);
+                        break;
+                    }
+                }
+                
+                 dynamic _object = Activator.CreateInstance(recordRuntimeType);
                 _object.VoucherTypeId = voucherTypeId;
                 _object.GenerationVoucherId = generationVoucherId;
-                _object.SerialNumber = GetSerialNumber();
+               // _object.SerialNumber = GetSerialNumber();
                 _object.Amount = voucherType.Amount;
                 _object.CurrencyId = voucherType.CurrencyId;
                 _object.ActivationCode = activationCode;
@@ -151,6 +180,26 @@ namespace Vanrise.Voucher.Business
             CryptoStream cryptoStream = new CryptoStream(memoryStream, cryptoProvider.CreateDecryptor(bytes, bytes), CryptoStreamMode.Read);
             StreamReader reader = new StreamReader(cryptoStream);
             return reader.ReadToEnd();
+        }
+
+
+
+
+        public List<string> GetAllVoucherCardsPinCodes()
+        {
+            var genericBusinessEntityManager = new GenericBusinessEntityManager();
+            int totalCount;
+            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, new List<string> { "PinCode" }, null, null, null, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
+            List<string> pinCodes = new List<string>();
+            if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
+            {
+                foreach (var genericBusinessEntity in genericBusinessEntities)
+                {
+                    string pinCode = genericBusinessEntity.FieldValues.GetRecord("PinCode") as string;
+                    pinCodes.Add(pinCode);
+                }
+            }
+            return pinCodes;
         }
 
     }

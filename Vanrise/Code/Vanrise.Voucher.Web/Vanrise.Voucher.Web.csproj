@@ -80,10 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRVoucherCardsContoller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="VR_Voucher\Elements\VoucherCards\Services\APIServices\" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +94,10 @@
     <ProjectReference Include="..\Vanrise.Voucher.Entities\Vanrise.Voucher.Entities.csproj">
       <Project>{6932b6d2-77a0-4b24-927d-067bdebdda28}</Project>
       <Name>Vanrise.Voucher.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
