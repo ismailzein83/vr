@@ -41,9 +41,26 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserSessionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.Data.Data\Retail.Data.Data.csproj">
+      <Project>{9074ffb6-22bf-40fa-8049-46339623cd65}</Project>
+      <Name>Retail.Data.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
+      <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
+      <Name>Retail.Data.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

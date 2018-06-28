@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Retail.Data.Business;
+using Retail.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.GenericData.Business;
+using Vanrise.Common;
 using Vanrise.GenericData.QueueActivators;
 using Vanrise.Queueing.Entities;
 using Vanrise.Reprocess.Entities;
-using Vanrise.Common;
 
 namespace Retail.Data.MainExtensions.QueueActivators
 {
     public class PrepareDataActivator : QueueActivator, IReprocessStageActivator
     {
+        public List<string> OutputStages { get; set; }
+
         #region QueueActivator
 
         public override void OnDisposed()
@@ -25,49 +26,62 @@ namespace Retail.Data.MainExtensions.QueueActivators
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
         {
-            //DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
-            //var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
-            //if (queueItemType == null)
-            //    throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
-            //var recordTypeId = queueItemType.DataRecordTypeId;
-            //var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
+            DataRecordBatch dataRecordBatch = context.ItemToProcess as DataRecordBatch;
+            var queueItemType = context.CurrentStage.QueueItemType as DataRecordBatchQueueItemType;
+            if (queueItemType == null)
+                throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
+            var recordTypeId = queueItemType.DataRecordTypeId;
+            var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
-            //DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            //Type accumulatedDataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(_accumulatedDataRecordTypeId);
+            Dictionary<string, UserSessionData> userSessionDataByUserSession = new Dictionary<string, UserSessionData>();
+            Dictionary<string, List<dynamic>> recordsByUserSession = new Dictionary<string, List<dynamic>>();
+            foreach (var record in batchRecords)
+            {
+                DateTime recordDateTime = record.GetFieldValue("RecordDateTime").Date;
+                string userName = record.GetFieldValue("UserName");
+                string sessionId = record.GetFieldValue("SessionId");
+                string userSession = string.Concat(userName, "_", sessionId);
 
-            //DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-            //int maxParameterNumber = 51000; // dataRecordStorageManager.GetDBQueryMaxParameterNumber(_accumulatedDataRecordStorageId);
+                UserSessionData userSessionData;
+                if (userSessionDataByUserSession.TryGetValue(userSession, out userSessionData))
+                {
+                    if (recordDateTime < userSessionData.StartDate)
+                        userSessionData.StartDate = recordDateTime;
+                }
+                else
+                {
+                    userSessionData = new UserSessionData() { UserSession = userSession, StartDate = recordDateTime };
+                    userSessionDataByUserSession.Add(userSession, userSessionData);
+                }
 
-            //Dictionary<string, dynamic> accumulatedDataDict = new Dictionary<string, dynamic>();
-            //Dictionary<string, dynamic> accumulatedDataToAddDict = new Dictionary<string, dynamic>();
-            //Dictionary<string, dynamic> accumulatedDataToUpdateDict = new Dictionary<string, dynamic>();
+                List<dynamic> userSessionDataList = recordsByUserSession.GetOrCreateItem(userSession, () => { return new List<dynamic>(); });
+                userSessionDataList.Add(record);
+            }
 
-            //Dictionary<string, List<dynamic>> batchRecordsByUserSession = new Dictionary<string, List<dynamic>>();
-            //foreach (var record in batchRecords)
-            //{
-            //    List<dynamic> dataRecords = batchRecordsByUserSession.GetOrCreateItem(record.UserSession as string, () => { return new List<dynamic>(); });
-            //    dataRecords.Add(record);
-            //}
+            List<UserSessionData> updatedUserSessionDataList = new UserSessionManager().UpdateAndGetUserSessionData(userSessionDataByUserSession.Values.ToList());
+            Dictionary<string, UserSessionData> updatedUserSessionDataDict = updatedUserSessionDataList.ToDictionary(itm => itm.UserSession, itm => itm);
 
-            //List<dynamic> userSessionsData = new List<dynamic>();
-            //foreach (var kvp in batchRecordsByUserSession)
-            //{
-            //    userSessionsData.Add(kvp.Key);
+            List<dynamic> userSessionsData = new List<dynamic>();
+            foreach (var kvp in recordsByUserSession)
+            {
+                string userSession = kvp.Key;
+                IEnumerable<dynamic> userSessionRecords = kvp.Value;
 
-            //    if (userSessionsData.Count >= maxParameterNumber)
-            //    {
-            //        AddUserSessionsData(userSessionsData);
-            //        userSessionsData = new List<dynamic>();
-            //    }
-            //}
+                UserSessionData userSessionData;
+                if (!updatedUserSessionDataDict.TryGetValue(userSession, out userSessionData))
+                    throw new NullReferenceException(string.Format("updatedUserSessionDataDict for userSession: {0}", userSession));
 
-            //if (userSessionsData.Count > 0)
-            //    AddUserSessionsData(userSessionsData);
+                foreach (var record in userSessionRecords)
+                {
+                    record.SetFieldValue("UserSession", userSession);
+                    record.SetFieldValue("UserSessionStartDate", userSessionData.StartDate);
+                }
+            }
 
-        }
+            DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription, recordTypeId);
 
-        private void AddUserSessionsData(List<dynamic> userSessionData)
-        {
+            foreach (var outputStage in this.OutputStages)
+                context.OutputItems.Add(outputStage, transformedBatch);
         }
 
         #endregion

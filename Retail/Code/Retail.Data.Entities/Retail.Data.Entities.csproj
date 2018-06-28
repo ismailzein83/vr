@@ -46,6 +46,7 @@
     <Compile Include="DataChargingPolicyDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataChargingPolicySettings.cs" />
+    <Compile Include="UserSessionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">

@@ -765,6 +765,18 @@
       <Project>{2f04a10e-321f-4cbf-9b0e-9f55c017db59}</Project>
       <Name>Retail.Cost.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Business\Retail.Data.Business.csproj">
+      <Project>{fc74aef0-2c58-404d-a9fc-1ae466f84226}</Project>
+      <Name>Retail.Data.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Data.SQL\Retail.Data.Data.SQL.csproj">
+      <Project>{a20ec58e-c706-4b05-bfd6-ff531d41a94b}</Project>
+      <Name>Retail.Data.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Data.Data\Retail.Data.Data.csproj">
+      <Project>{9074ffb6-22bf-40fa-8049-46339623cd65}</Project>
+      <Name>Retail.Data.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Data.Entities\Retail.Data.Entities.csproj">
       <Project>{f8181947-ed07-4275-9816-82d61e6e0e00}</Project>
       <Name>Retail.Data.Entities</Name>
