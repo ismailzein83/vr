@@ -10,15 +10,16 @@ namespace Xbooster.Web
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
             var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
-                "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/CDRComparison", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/XBooster_PriceListConversion", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_GenericData", "*.js", true);
+                "~/Client/Modules", "*.js", true);
+                //"~/Client/Modules/Common", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/CDRComparison", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/XBooster_PriceListConversion", "*.js", true).IncludeDirectory(
+                //"~/Client/Modules/VR_GenericData", "*.js", true);
 
             bundles.Add(modulesJSBundle);
         }
