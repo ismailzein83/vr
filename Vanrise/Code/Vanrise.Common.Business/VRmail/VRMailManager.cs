@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -29,14 +30,19 @@ namespace Vanrise.Common.Business
 
             var mailContext = new VRMailContext(mailMessageType, objects);
 
+            var from = EvaluateExpression(mailMessageTemplateId, "From", mailMessageTemplate.Settings.From, mailContext);
+            var to = EvaluateExpression(mailMessageTemplateId, "To", mailMessageTemplate.Settings.To, mailContext);
+            var cc=EvaluateExpression(mailMessageTemplateId, "CC", mailMessageTemplate.Settings.CC, mailContext);
+            var bcc = EvaluateExpression(mailMessageTemplateId, "BCC", mailMessageTemplate.Settings.BCC, mailContext);
+            var subject = EvaluateExpression(mailMessageTemplateId, "Subject", mailMessageTemplate.Settings.Subject, mailContext);
 
             return new VRMailEvaluatedTemplate
             {
-                From = EvaluateExpression(mailMessageTemplateId, "From", mailMessageTemplate.Settings.From, mailContext),
-                To = EvaluateExpression(mailMessageTemplateId, "To", mailMessageTemplate.Settings.To, mailContext),
-                CC = EvaluateExpression(mailMessageTemplateId, "CC", mailMessageTemplate.Settings.CC, mailContext),
-                BCC = EvaluateExpression(mailMessageTemplateId, "BCC", mailMessageTemplate.Settings.BCC, mailContext),
-                Subject = EvaluateExpression(mailMessageTemplateId, "Subject", mailMessageTemplate.Settings.Subject, mailContext),
+                From = from != null ? HttpUtility.HtmlDecode(from) : null,
+                To = to != null ? HttpUtility.HtmlDecode(to) : null,
+                CC = cc != null ? HttpUtility.HtmlDecode(cc) : null,
+                BCC = bcc != null ? HttpUtility.HtmlDecode(bcc) : null,
+                Subject = subject != null ? HttpUtility.HtmlDecode(subject) : null,
                 Body = EvaluateExpression(mailMessageTemplateId, "Body", mailMessageTemplate.Settings.Body, mailContext)
             };
         }
