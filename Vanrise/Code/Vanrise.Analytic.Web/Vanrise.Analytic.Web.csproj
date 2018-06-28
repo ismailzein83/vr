@@ -143,8 +143,10 @@
     <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportSerialNumberPartEditor.html" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\AutomatedReportSerialNumberPartEditorController.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportSerialNumberPartsTemplate.html" />
+    <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportSerialNumberPatternHelper.html" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportSettingsTemplate.html" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\vr-analytic-automatedreport-serialnumberparts.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Handler\vr-analytic-automatedreport-serialnumberpattern.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\vr-analytic-automatedreport-settings.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\vr-analytic-handlersettings-automatedreport.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\AutomatedReportProcessScheduledQueryEditorController.js" />
