@@ -77,8 +77,14 @@
 
                             return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBusinessEntityRuntimeInfo(businessEntityDefinitionId).then(function (response) {
                                 
-                                if(response != undefined)
-                                attrs.ismultipleselection != undefined ? ctrl.fieldTitle = response.SelectorPluralTitle : ctrl.fieldTitle = response.SelectorSingularTitle;
+                                if (response != undefined) {
+
+                                    if(attrs.ismultipleselection != undefined){
+                                        if (response.SelectorPluralTitle != undefined) ctrl.fieldTitle = response.SelectorPluralTitle;
+                                    } else {
+                                        if (response.SelectorSingularTitle != undefined) ctrl.fieldTitle = response.SelectorSingularTitle;
+                                    }
+                                }
 
                             });
 
@@ -104,7 +110,7 @@
                         }
                     });
 
-                    }
+                   }
 
                     return UtilsService.waitMultiplePromises(promises);
 
