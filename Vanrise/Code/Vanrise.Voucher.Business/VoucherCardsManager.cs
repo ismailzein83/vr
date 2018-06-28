@@ -49,7 +49,21 @@ namespace Vanrise.Voucher.Business
 
             var currentPinCodes = GetAllVoucherCardsPinCodes();
 
-            List<string> pinCodesToAdd = new List<string>();
+            HashSet<string> pinCodesToAdd = new HashSet<string>();
+           
+            ConfigManager configManager = new ConfigManager();
+            var serialNumberPattern = configManager.GetSerialNumberPattern();
+            serialNumberPattern.ThrowIfNull("serialNumberPattern");
+
+            var genericBusinessEntitySettings = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(_definitionId);
+            genericBusinessEntitySettings.ThrowIfNull("genericBusinessEntityExtendedSettings", _definitionId);
+
+            var genericBusinessEntityExtendedSettings = genericBusinessEntitySettings.ExtendedSettings.CastWithValidate<VoucharCardsExtendedSettings>("VoucharCardsExtendedSettings");
+            genericBusinessEntityExtendedSettings.SerialNumberParts.ThrowIfNull("genericBusinessEntityExtendedSettings.SerialNumberParts");
+            var serialNumberContext = new VoucharCardSerialNumberPartConcatenatedPartContext
+            {
+                VoucherCardBEDefinitionId = _definitionId,
+            };
 
 
             for (var i = 0; i < numberOfCards; i++)
@@ -68,11 +82,21 @@ namespace Vanrise.Voucher.Business
                         break;
                     }
                 }
-                
+
+                string serialNumber = serialNumberPattern;
+                foreach (var serialNumberPart in genericBusinessEntityExtendedSettings.SerialNumberParts)
+                {
+                    if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
+                    {
+                        serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(serialNumberContext));
+                    }
+                }
+
+
                  dynamic _object = Activator.CreateInstance(recordRuntimeType);
                 _object.VoucherTypeId = voucherTypeId;
                 _object.GenerationVoucherId = generationVoucherId;
-               // _object.SerialNumber = GetSerialNumber();
+                // _object.SerialNumber = serialNumber;
                 _object.Amount = voucherType.Amount;
                 _object.CurrencyId = voucherType.CurrencyId;
                 _object.ActivationCode = activationCode;
@@ -125,33 +149,6 @@ namespace Vanrise.Voucher.Business
             activationCode = Encrypt(pinGuid.ToString());
             return Encrypt(pinNum.ToString());
         }
-        private string GetSerialNumber()
-        {
-            ConfigManager configManager = new ConfigManager();
-            var serialNumberPattern = configManager.GetSerialNumberPattern();
-            serialNumberPattern.ThrowIfNull("serialNumberPattern");
-
-            var genericBusinessEntitySettings = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(_definitionId);
-            genericBusinessEntitySettings.ThrowIfNull("genericBusinessEntityExtendedSettings", _definitionId);
-
-            var genericBusinessEntityExtendedSettings = genericBusinessEntitySettings.ExtendedSettings.CastWithValidate<VoucharCardsExtendedSettings>("VoucharCardsExtendedSettings");
-            genericBusinessEntityExtendedSettings.SerialNumberParts.ThrowIfNull("genericBusinessEntityExtendedSettings.SerialNumberParts");
-
-            string serialNumber = serialNumberPattern;
-            var serialNumberContext = new VoucharCardSerialNumberPartConcatenatedPartContext
-            {
-                VoucherCardBEDefinitionId = _definitionId,
-            };
-            foreach (var serialNumberPart in genericBusinessEntityExtendedSettings.SerialNumberParts)
-            {
-                if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
-                {
-                    serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(serialNumberContext));
-                }
-            }
-            return serialNumber;
-        }
-
         static byte[] bytes = ASCIIEncoding.ASCII.GetBytes("ZeroCool");
         private static string Encrypt(string code)
         {
@@ -182,15 +179,12 @@ namespace Vanrise.Voucher.Business
             return reader.ReadToEnd();
         }
 
-
-
-
-        public List<string> GetAllVoucherCardsPinCodes()
+        public HashSet<string> GetAllVoucherCardsPinCodes()
         {
             var genericBusinessEntityManager = new GenericBusinessEntityManager();
             int totalCount;
             var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, new List<string> { "PinCode" }, null, null, null, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
-            List<string> pinCodes = new List<string>();
+            HashSet<string> pinCodes = new HashSet<string>();
             if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
             {
                 foreach (var genericBusinessEntity in genericBusinessEntities)
