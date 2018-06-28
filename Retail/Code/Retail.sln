@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -217,9 +217,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Data", "Retail.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Data.SQL", "Retail.Data.Data.SQL\Retail.Data.Data.SQL.csproj", "{A20EC58E-C706-4B05-BFD6-FF531D41A94B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ringo.ProxyAPI", "Retail.Ringo.ProxyAPI\Retail.Ringo.ProxyAPI.csproj", "{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 90
+		SccNumberOfProjects = 91
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -579,6 +581,10 @@ Global
 		SccProjectTopLevelParentUniqueName89 = Retail.sln
 		SccProjectName89 = Retail.Data.Data.SQL
 		SccLocalPath89 = Retail.Data.Data.SQL
+		SccProjectUniqueName90 = Retail.Ringo.ProxyAPI\\Retail.Ringo.ProxyAPI.csproj
+		SccProjectTopLevelParentUniqueName90 = Retail.sln
+		SccProjectName90 = Retail.Ringo.ProxyAPI
+		SccLocalPath90 = Retail.Ringo.ProxyAPI
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -961,6 +967,10 @@ Global
 		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A20EC58E-C706-4B05-BFD6-FF531D41A94B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1068,5 +1078,6 @@ Global
 		{FC74AEF0-2C58-404D-A9FC-1AE466F84226} = {D2979848-35B3-464F-A335-62EE41236287}
 		{9074FFB6-22BF-40FA-8049-46339623CD65} = {D2979848-35B3-464F-A335-62EE41236287}
 		{A20EC58E-C706-4B05-BFD6-FF531D41A94B} = {D2979848-35B3-464F-A335-62EE41236287}
+		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034} = {77D5FEA4-6D6C-4163-A368-ADB63247EE2D}
 	EndGlobalSection
 EndGlobal
