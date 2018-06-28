@@ -37,7 +37,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
         var dimensionsDeferred = UtilsService.createPromiseDeferred();
 
         var analyticTableId;
-        var analyticTableIdDeferred = UtilsService.createPromiseDeferred();
+        var analyticTableIdDeferred;
 
         var orderTypeSelectorAPI;
         var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -47,7 +47,6 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
         function initializeController() {
             $scope.scopeModel = {};
-
 
             $scope.scopeModel.onTimePeriodSelectorReady = function (api) {
                 timePeriodSelectorAPI = api;
@@ -79,9 +78,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 orderTypeSelectorReadyDeferred.resolve();
             };
 
-            var promises =[timePeriodSelectorReadyDeferred.promise, dimensionsSelectorReadyDeferred.promise, measuresSelectorReadyDeferred.promise, currencySelectorReadyDeferred.promise, recordFilterDirectiveReadyDeferred.promise, orderTypeSelectorReadyDeferred.promise];
-            UtilsService.waitMultiplePromises(promises).then(function () {
-
+            UtilsService.waitMultiplePromises([timePeriodSelectorReadyDeferred.promise, dimensionsSelectorReadyDeferred.promise, measuresSelectorReadyDeferred.promise, currencySelectorReadyDeferred.promise, recordFilterDirectiveReadyDeferred.promise, orderTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
         }
@@ -94,42 +91,30 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             var definitionId;
 
             api.load = function (payload) {
-                $scope.scopeModel.isLoading = true;
-                var promises = [];
+                $scope.scopeModel.withSummary = undefined;
+                $scope.scopeModel.topRecords = undefined;
+
                 analyticTableId = undefined;
                 if (payload != undefined) {
                     entity = payload.runtimeDirectiveEntity;
                     definitionId = payload.definitionId;
                     context = payload.context;
                     if (entity != undefined) {
-                        $scope.scopeModel.limitResult = entity.LimitResult;
                         $scope.scopeModel.withSummary = entity.WithSummary;
                         $scope.scopeModel.topRecords = entity.TopRecords;
                     }
-
+                   
+                };
+                function getAnalyticTableId() {
+                    analyticTableIdDeferred = UtilsService.createPromiseDeferred();
                     VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.GetVRAutomatedReportQueryDefinitionSettings(definitionId).then(function (response) {
                         if (response != undefined && response.ExtendedSettings != undefined) {
                             analyticTableId = response.ExtendedSettings.AnalyticTableId;
                             analyticTableIdDeferred.resolve();
                         }
                     });
-                };
-                
-                var loadTimePeriodSelectorPromise = loadTimePeriodSelector();
-                var loadDimensionsSelectorPromise = loadDimensionsSelector();
-                var loadMeasuresSelectorPromise = loadMeasuresSelector();
-                var loadDimensionsPromise = loadDimensions();
-                var loadRecordFilterDirectivePromise = loadRecordFilterDirective();
-                var loadCurrencySelectorPromise = loadCurrencySelector();
-                var loadOrderTypeSelectorPromise = loadOrderTypeSelector();
-
-                promises.push(loadTimePeriodSelectorPromise);
-                promises.push(loadDimensionsSelectorPromise);
-                promises.push(loadMeasuresSelectorPromise);
-                promises.push(loadDimensionsPromise);
-                promises.push(loadRecordFilterDirectivePromise);
-                promises.push(loadCurrencySelectorPromise);
-                promises.push(loadOrderTypeSelectorPromise);
+                    return analyticTableIdDeferred.promise;
+                }
 
                 function loadTimePeriodSelector() {
                     var timePeriodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -146,7 +131,18 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 function loadDimensionsSelector() {
                     var dimensionsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    UtilsService.waitMultiplePromises([dimensionsSelectorReadyDeferred.promise, analyticTableIdDeferred.promise]).then(function () {
+                    dimensionsSelectorReadyDeferred.promise.then(function () {
+                        function getDimensionNames() {
+
+                            var dimensionNames = [];
+                            var dimensions = entity.Dimensions;
+                            if (dimensions != undefined && dimensions.length != 0) {
+                                for (var i = 0; i < dimensions.length; i++) {
+                                    dimensionNames.push(dimensions[i].DimensionName);
+                                }
+                            }
+                            return dimensionNames;
+                        }
                         var dimensionsSelectorPayload = {
                             filter: 
                                 {
@@ -163,7 +159,18 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 function loadMeasuresSelector() {
                     var measuresSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    UtilsService.waitMultiplePromises([measuresSelectorReadyDeferred.promise, analyticTableIdDeferred.promise]).then(function () {
+                    measuresSelectorReadyDeferred.promise.then(function () {
+                        function getMeasureNames() {
+
+                            var measureNames = [];
+                            var measures = entity.Measures;
+                            if (measures != undefined && measures.length != 0) {
+                                for (var i = 0; i < measures.length; i++) {
+                                    measureNames.push(measures[i].MeasureName);
+                                }
+                            }
+                            return measureNames;
+                    }
                         var measuresSelectorPayload = {
                             filter:
                                 {
@@ -180,7 +187,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 function loadRecordFilterDirective() {
                     var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    UtilsService.waitMultiplePromises([recordFilterDirectiveReadyDeferred.promise, dimensionsDeferred.promise]).then(function () {
+                    recordFilterDirectiveReadyDeferred.promise.then(function () {
                         var recordFilterDirectivePayload = {
                             context: buildContext(),
                             FilterGroup: entity!=undefined ? entity.FilterGroup : undefined
@@ -190,6 +197,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
                     return recordFilterDirectiveLoadDeferred.promise;
                 };
+
                 function loadDimensions() {
                     var loadDimensionsLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -197,15 +205,16 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                         var input = {
                             TableIds: [analyticTableId],
                             ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
-                    };
-                    VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
-                        dimensions = response;
-                        dimensionsDeferred.resolve();
-                        loadDimensionsLoadDeferred.resolve();
-                    });
+                        };
+                        VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
+                            dimensions = response;
+                            dimensionsDeferred.resolve();
+                            loadDimensionsLoadDeferred.resolve();
+                        });
                     });
                     return loadDimensionsLoadDeferred.promise;
                 }
+
                 function loadCurrencySelector() {
                     var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -221,7 +230,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
                 function loadOrderTypeSelector() {
                     var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    UtilsService.waitMultiplePromises([orderTypeSelectorReadyDeferred.promise, analyticTableIdDeferred.promise]).then(function () {
+                    orderTypeSelectorReadyDeferred.promise.then(function () {
                         var orderTypeSelectorPayload = {
                             tableIds: [analyticTableId]};
                         if(entity!=undefined){
@@ -235,35 +244,20 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 return orderTypeSelectorLoadDeferred.promise;
                 }
 
-                function getDimensionNames() {
-
-                    var dimensionNames =[];
-                    var dimensions = entity.Dimensions;
-                    if (dimensions != undefined && dimensions.length!=0) {
-                        for (var i = 0; i < dimensions.length; i++) {
-                            dimensionNames.push(dimensions[i].DimensionName);
-                        }
+                var rootPromiseNode = {
+                    promises: [getAnalyticTableId()],
+                    getChildNode: function () {
+                        return {
+                            promises: [loadDimensions()],
+                            getChildNode: function () {
+                                return {
+                                    promises: [UtilsService.waitMultiplePromises([loadRecordFilterDirective(), loadTimePeriodSelector(), loadCurrencySelector(), loadDimensionsSelector(), loadMeasuresSelector(), loadOrderTypeSelector()])]
+                                };
+                            },
+                        };
                     }
-                    return dimensionNames;
-                }
-
-                function getMeasureNames() {
-
-                    var measureNames =[];
-                    var measures = entity.Measures;
-                    if (measures != undefined && measures.length!=0) {
-                        for (var i = 0; i < measures.length; i++) {
-                            measureNames.push(measures[i].MeasureName);
-                        }
-                    }
-                    return measureNames;
-                }
-
-                return UtilsService.waitMultiplePromises(promises).catch(function(error) {
-                    VRNotificationService.showError(error);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+                };
+                return UtilsService.waitPromiseNode(rootPromiseNode);
             };
 
             api.getData = function () {

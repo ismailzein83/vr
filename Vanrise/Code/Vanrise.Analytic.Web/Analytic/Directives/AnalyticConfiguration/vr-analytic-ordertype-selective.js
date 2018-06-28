@@ -6,7 +6,8 @@ app.directive('vrAnalyticOrdertypeSelective', ['VR_Analytic_OrderTypeEnum', 'Uti
         restrict: 'E',
         scope: {
             onReady: '=',
-            normalColNum: '@'
+            normalColNum: '@',
+            isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -131,7 +132,7 @@ app.directive('vrAnalyticOrdertypeSelective', ['VR_Analytic_OrderTypeEnum', 'Uti
                             + ' selectedvalues="scopeModel.selectedValue"'
                             + ' datavaluefield="value"'
                             + ' datatextfield="description"'
-                            + 'isrequired="true"'
+                            + 'isrequired="ctrl.isrequired!=undefined ? ctrl.isrequired : true"'
             + 'onselectionchanged="scopeModel.onSelectionChanged"'
                             + 'label="Order Type" '
                             + ' >'

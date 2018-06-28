@@ -6,17 +6,14 @@
 
         var isEditMode;
         var automatedReportEntity;
-        var runtimeEditorEntity;
         var runtimeDirectiveEntity;
 
         var automatedReportProcessScheduledSelectorAPI;
         var automatedReportProcessScheduledReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var automatedReportProcessScheduledSelectedPromiseDeferred;
-
         var runtimeDirectiveAPI;
         var runtimeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var automatedReportProcessScheduledSelectedPromiseDeferred;
+        var selectedAutomatedReportProcess;
         var context;
 
         loadParameters();
@@ -43,8 +40,9 @@
                 runtimeDirectiveAPI = api;
                 runtimeDirectiveReadyDeferred.resolve();
 
-            };
-            $scope.saveQuery= function () {
+           };
+
+            $scope.scopeModel.saveQuery= function () {
                 if (isEditMode)
                     return updateQuery();
                 else
@@ -54,36 +52,42 @@
             $scope.scopeModel.onAutomatedReportProcessScheduledSelectorReady = function (api) {
                 automatedReportProcessScheduledSelectorAPI = api;
                 automatedReportProcessScheduledReadyPromiseDeferred.resolve();
-               };
+            };
 
             $scope.scopeModel.onAutomatedReportProcessScheduledSelectionChanged = function (value) {
                 if (value != undefined) {
-                    if (automatedReportProcessScheduledSelectedPromiseDeferred != undefined) {
+                    if (selectedAutomatedReportProcess != undefined && selectedAutomatedReportProcess.RuntimeEditor != value.RuntimeEditor)
+                        runtimeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                   selectedAutomatedReportProcess = value;
+
+                   if (automatedReportProcessScheduledSelectedPromiseDeferred != undefined) {
                         automatedReportProcessScheduledSelectedPromiseDeferred.resolve();
                     }
-                    else {
-                        runtimeDirectiveReadyDeferred.promise.then(function () {
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isLoading = value;
-                            };
-                            var runtimeDirectivePayload = {
+                    else
+                        {
+                        runtimeDirectiveReadyDeferred.promise.then(function() {
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingDirective = value;
+                        };
+                        var runtimeDirectivePayload = {
                                 definitionId: automatedReportProcessScheduledSelectorAPI.getSelectedIds(),
                                 context: getContext()
-                            };
+                        };
 
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeDirectiveAPI, runtimeDirectivePayload, setLoader);
-                        });
-                    }
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, runtimeDirectiveAPI, runtimeDirectivePayload, setLoader);
+                    });
+                   }
 
                 }
-            };
+                };
 
-            $scope.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
         function load() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             if (isEditMode) {
                 automatedReportProcessScheduledSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 loadAllControls();
@@ -131,15 +135,15 @@
                     promises.push(automatedReportProcessScheduledSelectedPromiseDeferred.promise);
 
                     UtilsService.waitMultiplePromises(promises).then(function () {
-                        automatedReportProcessScheduledSelectedPromiseDeferred = undefined;
+                     automatedReportProcessScheduledSelectedPromiseDeferred = undefined;
                         var runtimeDirectivePayload = {
-                            definitionId: automatedReportProcessScheduledSelectorAPI.getSelectedIds(),
-                            runtimeDirectiveEntity: runtimeDirectiveEntity,
-                            context: getContext()
-                        };
+                                definitionId: automatedReportProcessScheduledSelectorAPI.getSelectedIds(),
+                                runtimeDirectiveEntity: runtimeDirectiveEntity,
+                                context: getContext()
+                            };
                         VRUIUtilsService.callDirectiveLoad(runtimeDirectiveAPI, runtimeDirectivePayload, runtimeDirectiveLoadDeferred);
-                    });
-                    return runtimeDirectiveLoadDeferred.promise;
+                        });
+                   return runtimeDirectiveLoadDeferred.promise;
                 }
             }
 
@@ -148,7 +152,7 @@
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
-                  $scope.isLoading = false;
+                  $scope.scopeModel.isLoading = false;
               });
         }
 
