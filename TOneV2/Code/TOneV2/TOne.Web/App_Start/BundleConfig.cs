@@ -10,36 +10,7 @@ namespace TOne.Web
         {
             Vanrise.Web.BundleConfig.RegisterBundles(bundles);
             var modulesJSBundle = Vanrise.Web.BundleConfig.CreateModulesScriptBundle().IncludeDirectory(
-                "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
-                //   "~/Client/Modules/Main", "*.js", true).IncludeDirectory(
-                //  "~/Client/Modules/Analytics", "*.js", true).IncludeDirectory(
-                //"~/Client/Modules/BI", "*.js", true).IncludeDirectory(
-                //  "~/Client/Modules/Routing", "*.js", true).IncludeDirectory(
-                //   "~/Client/Modules/BusinessEntity", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Runtime", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Integration", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
-                //    "~/Client/Modules/Billing", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
-                //     "~/Client/Modules/CDR", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_CodePreparation", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_BusinessEntity", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_SupplierPriceList", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_Sales", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_Routing", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_Analytics", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Analytic", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/ExcelConversion", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Reprocess", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_RouteSync", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_Invoice", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_Invoice", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_Deal", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_BEBridge", "*.js", true);
+                "~/Client/Modules", "*.js", true);
 
             bundles.Add(modulesJSBundle);
         }
