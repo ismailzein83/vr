@@ -148,6 +148,7 @@
     <Compile Include="VRWorkflow\VRWorkflowQuery.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariable.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariableType.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowVariableTypeConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
