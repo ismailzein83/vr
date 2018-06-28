@@ -14,16 +14,18 @@ namespace Vanrise.Voucher.Web.Controllers
     {
         VoucherCardsManager _voucherCardsManager = new VoucherCardsManager();
 
-        [Route("CheckAvailablePinCode")]
-        public VoucherCardResult CheckAvailablePinCode(string pinCode)
+        [HttpGet]
+        [Route("CheckVoucherAvailability")]
+        public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode)
         {
-            return _voucherCardsManager.CheckAvailablePinCode(pinCode);
+            return _voucherCardsManager.CheckVoucherAvailability(pinCode);
         }
-        
+
+         [HttpPut]
         [Route("SetVoucherUsed")]
-        public VoucherCardResult SetVoucherUsed(string pinCode, string usedBy)
+        public SetVoucherUsedOutput SetVoucherUsed(SetVoucherUsedInput input)
         {
-            return _voucherCardsManager.SetVoucherUsed(pinCode, usedBy);
+            return _voucherCardsManager.SetVoucherUsed(input);
         }
     }
 }

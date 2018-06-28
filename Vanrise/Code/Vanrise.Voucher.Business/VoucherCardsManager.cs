@@ -17,12 +17,12 @@ namespace Vanrise.Voucher.Business
     {
         static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
 
-        public VoucherCardResult CheckAvailablePinCode(string pinCode)
+        public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode)
         {
             throw new NotImplementedException();
         }
 
-        public VoucherCardResult SetVoucherUsed(string pinCode, string usedBy)
+        public SetVoucherUsedOutput SetVoucherUsed(SetVoucherUsedInput input)
         {
             throw new NotImplementedException();
         }
