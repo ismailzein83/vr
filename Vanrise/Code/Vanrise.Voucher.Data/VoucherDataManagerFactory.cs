@@ -11,7 +11,7 @@ namespace Vanrise.Voucher.Data
     public static class VoucherDataManagerFactory
     {
         static ObjectFactory s_objectFactory;
-        static InvoiceDataManagerFactory()
+        static VoucherDataManagerFactory()
         {
             s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.Voucher.Data.SQL"));
         }
