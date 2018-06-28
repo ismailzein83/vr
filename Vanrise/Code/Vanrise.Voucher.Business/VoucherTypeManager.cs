@@ -15,7 +15,7 @@ namespace Vanrise.Voucher.Business
         {
             return GetCachedVoucherTypes().GetRecord(voucherTypeId);
         }
-        private Dictionary<long,VoucherType>GetCachedVoucherTypes()
+        private Dictionary<long,VoucherType> GetCachedVoucherTypes()
         {
             throw new NotImplementedException();
         }

@@ -14,7 +14,7 @@ namespace Vanrise.Voucher.Business
     {
         static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
 
-        public void GenerateVoucherCards(long generationVoucherId, DateTime expiryDate, long voucherTypeId, decimal amount, int numberOfCards)
+        public void GenerateVoucherCards(long generationVoucherId, DateTime expiryDate, long voucherTypeId, int numberOfCards)
         {
             var dataRecordStorageId = new GenericBusinessEntityDefinitionManager().GetGenericBEDataRecordStorageId(_definitionId);
             var dataRcordStorageManager = new DataRecordStorageManager();
@@ -30,6 +30,12 @@ namespace Vanrise.Voucher.Business
             List<dynamic> voucherRecords = new List<dynamic>();
             var userId = SecurityContext.Current.GetLoggedInUserId();
 
+            var voucherType = new VoucherTypeManager().GetVoucherType(voucherTypeId);
+            voucherType.ThrowIfNull("voucherType", voucherTypeId);
+
+
+
+
             for (var i = 0; i < numberOfCards; i++)
             {
                 string activationCode;
@@ -38,7 +44,8 @@ namespace Vanrise.Voucher.Business
                 _object.VoucherTypeId = voucherTypeId;
                 _object.GenerationVoucherId = generationVoucherId;
                 _object.SerialNumber = GetSerialNumber();
-                _object.Amount = amount;
+                _object.Amount = voucherType.Amount;
+                _object.CurrencyId = voucherType.CurrencyId;
                 _object.ActivationCode = activationCode;
                 _object.PinCode = pinCode;
                 _object.ExpiryDate = expiryDate;

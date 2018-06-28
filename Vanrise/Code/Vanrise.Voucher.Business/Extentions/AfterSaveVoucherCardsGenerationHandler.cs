@@ -28,15 +28,13 @@ namespace Vanrise.Voucher.Business
 
              Object expiryDateObject;
              context.NewEntity.FieldValues.TryGetValue("ExpiryDate",out expiryDateObject);
-             DateTime expiryDate = (DateTime)voucherTypeIdObject;
+             DateTime expiryDate = (DateTime)expiryDateObject;
 
              Object numberOfCardsObject;
              context.NewEntity.FieldValues.TryGetValue("NumberOfCards",out numberOfCardsObject);
              int numberOfCards = (int)numberOfCardsObject;
 
-             var voucherType = new VoucherTypeManager().GetVoucherType(voucherTypeId);
-             voucherType.ThrowIfNull("voucherType", voucherTypeId);
-             voucherCardsManager.GenerateVoucherCards(generationVoucherId,expiryDate, voucherTypeId, voucherType.Amount, numberOfCards);
+             voucherCardsManager.GenerateVoucherCards(generationVoucherId,expiryDate, voucherTypeId, numberOfCards);
         }
     }
 }
