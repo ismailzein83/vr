@@ -11530,25 +11530,22 @@ namespace Mediation.Runtime.DataParser
             {
                 RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.HeaderRecordParser
                 {
-
-                    FileBytesLength = 2,
                     FileLengthPosition = 2,
-                    HeaderBytesLength = 2,
+                    FileBytesLength = 2,
                     HeaderLengthPosition = 6,
+                    HeaderBytesLength = 2,
                     RecordParser = new BinaryRecordParser
                     {
                         Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.HuaweiRecordParser
                          {
-                             RecordTypeByteLength = 2,
-                             RecordTypePosition = 4,
-                             RecordByteLength = 2,
+                             HeaderLength = 9,
                              RecordLengthPosition = 0,
-                             SubRecordsParsersByRecordType = GetHuaweiOgeroSubRecordsParsers(),
-                             HeaderLength = 9
+                             RecordByteLength = 2,
+                             RecordTypePosition = 4,
+                             RecordTypeByteLength = 2,
+                             SubRecordsParsersByRecordType = GetHuaweiOgeroSubRecordsParsers()
                          }
-
                     }
-
                 }
             };
 
@@ -11573,17 +11570,17 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new CreateRecordRecordParser
                 {
+                    RecordType = "Ogero_Huawei_CDR",
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_BF_FieldParsers_Huawei_Ogero()
                     },
-                    RecordType = "Ogero_Huawei_CDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> 
+                    { 
+                        new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
                     },
                     CompositeFieldsParsers = GetOgeroHuaweiFileNameCompositeParsers()
                 }
-
             });
 
             return parsers;
@@ -11591,7 +11588,6 @@ namespace Mediation.Runtime.DataParser
 
         private Dictionary<string, BinaryFieldParser> Get_BF_FieldParsers_Huawei_Ogero()
         {
-
             Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
             parsers.Add("80", new BinaryFieldParser
@@ -11602,7 +11598,6 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.Int
                 }
             });
-
 
             parsers.Add("82", new BinaryFieldParser
             {
@@ -11921,7 +11916,6 @@ namespace Mediation.Runtime.DataParser
                                                                 TimeShiftIndicatorIndex = 6,
                                                                 HoursTimeShiftIndex = 7,
                                                                 MinutesTimeShiftIndex = 8
-                                       
                                                              }                            
                                                         }
                                                     },
@@ -11941,8 +11935,6 @@ namespace Mediation.Runtime.DataParser
                                                                 TimeShiftIndicatorIndex = 6,
                                                                 HoursTimeShiftIndex = 7,
                                                                 MinutesTimeShiftIndex = 8
-
-                                       
                                                              }                            
                                                         }
                                                     },
