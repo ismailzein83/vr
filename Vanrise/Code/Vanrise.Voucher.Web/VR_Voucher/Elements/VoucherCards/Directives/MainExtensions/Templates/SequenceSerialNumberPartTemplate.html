@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.dateCounterType"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedDateCounterType"
+                   label="Date Counter Type">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.paddingLeft" type="number" label="Padding Left" minvalue="0" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>

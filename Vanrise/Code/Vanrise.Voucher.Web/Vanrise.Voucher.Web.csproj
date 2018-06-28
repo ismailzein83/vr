@@ -84,8 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="VR_Voucher\Constant\" />
-    <Folder Include="VR_Voucher\Elements\" />
+    <Folder Include="VR_Voucher\Elements\VoucherCards\Services\APIServices\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Voucher.Business\Vanrise.Voucher.Business.csproj">
@@ -96,6 +95,18 @@
       <Project>{6932b6d2-77a0-4b24-927d-067bdebdda28}</Project>
       <Name>Vanrise.Voucher.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VR_Voucher\Constant\VR_Voucher_DateCounterType.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\Templates\SequenceSerialNumberPartTemplate.html" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\Templates\DateSerialNumberPartTemplate.html" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\vr-voucher-vouchercards-extendedsettings-dateserialnumberpart.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\MainExtensions\vr-voucher-vouchercards-extendedsettings-sequenceserialnumberpart.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\SerialNumberPartEditorEditorController.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\SerialNumberPartEditor.html" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\Templates\VoucherCardsExtendedsettingsTemplate.html" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Directives\vr-voucher-vouchercards-extendedsettings.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Services\VouchercardsExtendedsettingsService.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

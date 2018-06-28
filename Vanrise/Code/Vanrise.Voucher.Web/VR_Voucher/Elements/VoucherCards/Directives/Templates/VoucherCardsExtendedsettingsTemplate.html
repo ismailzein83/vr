@@ -1,0 +1,14 @@
+﻿<vr-columns width="fullrow">
+    <vr-section title="Serial Number Parts" collapsible>
+        <vr-button type="Add" data-onclick="scopeModel.addSerialNumberPart" standalone></vr-button>
+
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    scopeModel.removeSerialNumberPart" hidegridmenu>
+                <vr-datagridcolumn headertext="'Variable Name'" field="'Entity.VariableName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" widthfactor="10" disablesorting></vr-datagridcolumn>
+
+            </vr-datagrid>
+        </vr-validator>
+    </vr-section>
+</vr-columns>
