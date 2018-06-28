@@ -12,16 +12,15 @@ namespace Vanrise.DataParser.Business
         {
             fieldParsers.ThrowIfNull("fieldParsers");
             fieldParsers.FieldParsersByTag.ThrowIfNull("fieldParsers.FieldParsersByTag");
-            ReadTagsFromStream(recordStream,
-                (tagValue) =>
+            ReadTagsFromStream(recordStream, (tagValue) =>
+            {
+                BinaryFieldParser fldParser;
+                if (fieldParsers.FieldParsersByTag.TryGetValue(tagValue.Tag, out fldParser))
                 {
-                    BinaryFieldParser fldParser;
-                    if (fieldParsers.FieldParsersByTag.TryGetValue(tagValue.Tag, out fldParser))
-                    {
-                        var fieldParserContext = new BinaryFieldParserContext { Record = parsedRecord, FieldValue = tagValue.Value };
-                        fldParser.Settings.Execute(fieldParserContext);
-                    }
-                });
+                    var fieldParserContext = new BinaryFieldParserContext { Record = parsedRecord, FieldValue = tagValue.Value };
+                    fldParser.Settings.Execute(fieldParserContext);
+                }
+            });
         }
 
         public static void ReadTagsFromStream(Stream stream, Action<HexTLVTagValue> onTagValueRead)
@@ -41,6 +40,7 @@ namespace Vanrise.DataParser.Business
                 int tag = ParserHelper.GetInt(rawData, start, i - start);
                 if (tag == 0 || tag == 255)
                     continue;
+
                 // parse Length
                 bool multiByteLength = (rawData[i] & 0x80) != 0;
 
