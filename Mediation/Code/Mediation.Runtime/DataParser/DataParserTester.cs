@@ -12707,6 +12707,9 @@ namespace Mediation.Runtime.DataParser
             PackageFieldParser callingPartyCategoryPackage_120 = new FixedLengthPackageFieldParser() { PackageLength = 2, FieldParser = new SkipBlockParser() };
             packages.Add(120, callingPartyCategoryPackage_120);
 
+            PackageFieldParser zeroBytePackage_0 = new FixedLengthPackageFieldParser() { PackageLength = 1, FieldParser = new SkipBlockParser() };
+            packages.Add(0, zeroBytePackage_0);
+
             return packages;
         }
 
