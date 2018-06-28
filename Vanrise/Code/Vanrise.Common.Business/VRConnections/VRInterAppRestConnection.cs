@@ -27,6 +27,12 @@ namespace Vanrise.Common.Business
             return Post<T, Q>(credentialsInput, actionName, request, serializeWithFullType);
         }
 
+        public Q Put<T, Q>(string actionName, T request)
+        {
+            CredentialsInput credentialsInput = new CredentialsInput() { Email = this.Username, Password = this.Password };
+            return Put<T, Q>(credentialsInput, actionName, request);
+        }
+
         public T Get<T>(CredentialsInput credentialsInput, string actionName)
         {
             var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
@@ -48,7 +54,16 @@ namespace Vanrise.Common.Business
 
             return Vanrise.Common.VRWebAPIClient.Post<T, Q>(BaseURL, actionName, request, headers, serializeWithFullType);
         }
+        public Q Put<T, Q>(CredentialsInput credentialsInput, string actionName, T request)
+        {
+            var result = Vanrise.Common.VRWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(BaseURL,
+                 "/api/VR_Sec/Security/Authenticate", credentialsInput, null);
 
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add(result.AuthenticationObject.TokenName, result.AuthenticationObject.Token);
+
+            return Vanrise.Common.VRWebAPIClient.Put<T, Q>(BaseURL, actionName, request, headers);
+        }
         public T AnonymousGet<T>(string actionName)
         {
             return Vanrise.Common.VRWebAPIClient.Get<T>(BaseURL, actionName);
