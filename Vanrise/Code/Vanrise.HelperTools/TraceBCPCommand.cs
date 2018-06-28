@@ -137,8 +137,8 @@ namespace Vanrise.HelperTools
 
             if (strBuilder.Length > 0)
             {
-                Guid errorFile = Guid.NewGuid();
-                File.WriteAllText(string.Format(@"{0}\{1}.txt", ConfigurationManager.AppSettings["BCPTempFilesDirectory"], errorFile), strBuilder.ToString());
+                string errorFile = string.Concat("Error_", Guid.NewGuid(), ".error");
+                File.WriteAllText(string.Format(@"{0}\{1}", ConfigurationManager.AppSettings["BCPTempFilesDirectory"], errorFile), strBuilder.ToString());
             }
 
             btn_trace.Enabled = true;
