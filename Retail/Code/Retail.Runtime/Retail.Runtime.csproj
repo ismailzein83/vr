@@ -583,9 +583,6 @@
     <Reference Include="Vanrise.Voucher.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Voucher.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Web.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mappers\MultinetMappers.cs" />
