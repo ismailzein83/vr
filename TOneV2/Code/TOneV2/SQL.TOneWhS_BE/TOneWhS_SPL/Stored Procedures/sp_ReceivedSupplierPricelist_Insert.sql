@@ -15,7 +15,7 @@ CREATE PROCEDURE [TOneWhS_SPL].[sp_ReceivedSupplierPricelist_Insert]
 	@ID INT OUT
 AS
 BEGIN
-		INSERT INTO [TOneWhS_SPL].ReceivedSupplierPricelist ( SupplierID, FileID, ReceivedDate, PricelistType, [Status], PricelistID, ProcessInstanceId,ErrorDetails)
-		VALUES ( @SupplierId,  @FileId,@ReceivedDate,@PricelistType,@Status,@PricelistId,@ProcessInstanceId,@serializedErrors)
+		INSERT INTO [TOneWhS_SPL].ReceivedSupplierPricelist ( SupplierID, FileID, ReceivedDate, PricelistType, [Status], PricelistID, ProcessInstanceId,ErrorDetails,SentToSupplier)
+		VALUES ( @SupplierId,  @FileId,@ReceivedDate,@PricelistType,@Status,@PricelistId,@ProcessInstanceId,@serializedErrors,0)
 		SET @ID = SCOPE_IDENTITY()
 END

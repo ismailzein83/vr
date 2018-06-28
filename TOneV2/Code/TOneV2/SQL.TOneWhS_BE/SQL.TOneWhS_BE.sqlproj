@@ -640,5 +640,6 @@
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_SetAsCompletedManualy.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRecurringChargesType_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerRecurringChargesType_GetAll.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_ReceivedSupplierPricelist_SetSentToSupplierStatus.sql" />
   </ItemGroup>
 </Project>

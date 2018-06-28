@@ -13,6 +13,7 @@ BEGIN
 		UPDATE [TOneWhS_SPL].ReceivedSupplierPricelist 
 		SET [Status] = @Status,
 			[StartProcessingDate] = @StartProcessingDate,
-			[ProcessInstanceId] = @ProcessInstanceId
+			[ProcessInstanceId] = @ProcessInstanceId,
+			[SentToSupplier] = 0
 		WHERE ID = @ReceivedPricelistId
 END

@@ -14,7 +14,8 @@ BEGIN
       ,[PricelistID]
       ,[ProcessInstanceId]
       ,[StartProcessingDate]
-	  ,[ErrorDetails]
+	  ,[ErrorDetails]	  
+	  ,[SentToSupplier]
 	 FROM [TOneWhS_SPL].[ReceivedSupplierPricelist] WITH(NOLOCK) 
 	 Where [ID] = @id
 END

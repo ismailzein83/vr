@@ -9,6 +9,9 @@
     [ProcessInstanceId]   BIGINT         NULL,
     [StartProcessingDate] DATETIME       NULL,
     [ErrorDetails]        NVARCHAR (MAX) NULL,
+    [SentToSupplier]      BIT            NOT NULL,
     CONSTRAINT [PK_ReceivedSupplierPricelist] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

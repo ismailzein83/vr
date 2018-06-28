@@ -11,7 +11,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData]
 	@CurrencyID INT,
 	@FileID BIGINT,
 	@EffectiveOn DateTime,
-	@UserID int
+	@UserID int,
+	@PricelistType tinyint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -26,7 +27,8 @@ BEGIN
 	@CurrencyID = @CurrencyID,
 	@FileID = @FileID,
 	@EffectiveOn = @EffectiveOn,
-	@UserID=@UserID
+	@UserID=@UserID,
+	@PricelistType=@PricelistType
 	END TRY
 	
 	Begin Catch

@@ -4,6 +4,7 @@
     [CurrencyID]        INT          NOT NULL,
     [FileID]            BIGINT       NULL,
     [EffectiveOn]       DATETIME     NULL,
+    [PricelistType]     TINYINT      NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF_SupplierPriceList_CreatedDate] DEFAULT (getdate()) NULL,
     [timestamp]         ROWVERSION   NULL,
     [SourceID]          VARCHAR (50) NULL,
@@ -12,6 +13,8 @@
     [UserID]            INT          NULL,
     CONSTRAINT [PK_SupplierPriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
