@@ -128,6 +128,7 @@
     <Content Include="Analytic\Constants\AnalyticSummaryFunctionEnum.js" />
     <Content Include="Analytic\Constants\CompareOperatorEnum.js" />
     <Content Include="Analytic\Constants\ConnectionStringTypeEnum.js" />
+    <Content Include="Analytic\Constants\DateCounterTypeEnum.js" />
     <Content Include="Analytic\Constants\ExpressionTypeEnum.js" />
     <Content Include="Analytic\Constants\GridWidthEnum.js" />
     <Content Include="Analytic\Constants\ModuleConfig.js" />
