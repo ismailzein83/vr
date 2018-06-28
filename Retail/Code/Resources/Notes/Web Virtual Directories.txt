@@ -31,3 +31,4 @@ Retail_MultiNet			C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet
 Retail_Cost				C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Cost
 VR_AccountManager		C:\TFS\Vanrise\Code\Vanrise.AccountManager.Web\VR_AccountManager
 Retail_Interconnect		C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect
+VR_Voucher				C:\TFS\Vanrise\Code\Vanrise.Voucher.Web\VR_Voucher

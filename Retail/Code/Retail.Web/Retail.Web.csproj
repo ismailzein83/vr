@@ -649,6 +649,15 @@
     <Reference Include="Vanrise.Security.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Voucher.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Voucher.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Voucher.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
