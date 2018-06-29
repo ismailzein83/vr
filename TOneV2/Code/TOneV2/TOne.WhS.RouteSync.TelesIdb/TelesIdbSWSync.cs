@@ -12,13 +12,19 @@ namespace TOne.WhS.RouteSync.TelesIdb
 {
     public class TelesIdbSWSync : SwitchRouteSynchronizer
     {
-        public const int SupplierMappingLength = 4;
+        int _supplierMappingLength = 4;
 
         public override Guid ConfigId { get { return new Guid("29135479-8150-4E23-9A0D-A42AF69A13AE"); } }
 
         public IIdbDataManager DataManager { get; set; }
 
         public string MappingSeparator { get; set; }
+ 
+        public int SupplierMappingLength
+        {
+            get { return _supplierMappingLength; }
+            set { _supplierMappingLength = value; }
+        }
 
         public int? NumberOfMappings { get; set; }
 
