@@ -35,23 +35,23 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
             if (attrs.label != undefined)
                 label = attrs.label;
             var template ='<vr-row>'
-                +'<vr-columns colnum="{{4}}">'
+                +'<vr-columns colnum="5">'
                 +'<vr-label>Initial Setting</vr-label>'
                              + '<vr-textbox value="ctrl.serialNumberPartInitialSequence" isrequired></vr-textbox>'
                              + '</vr-columns>'
             
-                             +'<vr-columns colnum="{{ctrl.normalColNum}}">'
+                             +'<vr-columns colnum="5">'
                              + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
-                             + '<vr-textbox value="ctrl.serialNumberPattern" ></vr-textbox>'
+                             + '<vr-textbox value="ctrl.serialNumberPattern" isrequired ></vr-textbox>'
                          + '</vr-columns>'
-                         + '<vr-columns width="normal" ' + withemptyline + '>'
+                         + '<vr-columns colnum="2" ' + withemptyline + '>'
                             + '<vr-button type="Help" data-onclick="scopeModel.openSerialNumberPatternHelper" standalone></vr-button>'
                          + '</vr-columns>';
             +'</vr-row>'
             return template;
         }
         function OverallVoucherCardSerialNumberPart($scope, ctrl, $attrs) {
-            var serialNumberParts;
+            var serialNumberParts=[];
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -84,11 +84,13 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
                             ctrl.serialNumberPartInitialSequence = payload.data.SerialNumberPartInitialSequence;
                     }
                                             
-                        var promise = VR_Voucher_VoucherTypeAPIService.GetVoucherCardDefinition().then(function (response) {                            
-                            serialNumberParts = response;
+                        VR_Voucher_VoucherTypeAPIService.GetVoucherCardDefinition().then(function (response) {
+                            for (var i = 0, length = response.length ; i < length; i++) {
+                                serialNumberParts.push(response[i]);
+                            }
                             });                       
 
-                            return UtilsService.waitMultiplePromises([promise]);
+                        return VR_Voucher_VoucherTypeAPIService.GetVoucherCardDefinition();
                     }
                 };
 
