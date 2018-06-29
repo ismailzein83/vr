@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IVoucherCardsDataManager.cs" />
     <Compile Include="VoucherDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

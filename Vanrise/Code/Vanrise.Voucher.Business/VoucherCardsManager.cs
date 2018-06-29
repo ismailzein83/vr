@@ -11,6 +11,8 @@ using Vanrise.Security.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Entities;
 using Vanrise.Voucher.Entities;
+using Vanrise.Voucher.Data;
+
 namespace Vanrise.Voucher.Business
 {
     public class VoucherCardsManager
@@ -19,12 +21,28 @@ namespace Vanrise.Voucher.Business
 
         public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode)
         {
+            //encrypt the pin code
+            //String encryptedPinCode = Encrypt(pinCode);
+            //GetAllVoucherCardsPinCodes();
+
+
             throw new NotImplementedException();
         }
 
         public SetVoucherUsedOutput SetVoucherUsed(SetVoucherUsedInput input)
         {
-            throw new NotImplementedException();
+            IVoucherCardsDataManager voucherCardsDataManager = VoucherDataManagerFactory.GetDataManager<IVoucherCardsDataManager>();
+            SetVoucherUsedOutput voucherUsedOutput = new SetVoucherUsedOutput();
+            bool updateActionSuccess = voucherCardsDataManager.Update(input);
+            if (updateActionSuccess)
+            {
+                voucherUsedOutput.Result = SetVoucherUsedResult.Succeeded;
+            }
+            else
+            {
+                voucherUsedOutput.Result = SetVoucherUsedResult.Failed;
+            }
+            return voucherUsedOutput;
         }
 
 
@@ -183,7 +201,7 @@ namespace Vanrise.Voucher.Business
         {
             var genericBusinessEntityManager = new GenericBusinessEntityManager();
             int totalCount;
-            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, new List<string> { "PinCode" }, null, null, null, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
+            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, null, null, null, null, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
             HashSet<string> pinCodes = new HashSet<string>();
             if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
             {
