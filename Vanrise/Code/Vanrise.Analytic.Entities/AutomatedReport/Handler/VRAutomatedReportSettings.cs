@@ -29,34 +29,4 @@ namespace Vanrise.Analytic.Entities.AutomatedReport.Handler
     {
 
     }
-    public class VRAutomatedReportDateSerialNumberPart : VRConcatenatedPartSettings<IVRAutomatedReportSerialNumberPartConcatenatedPartContext>
-    {
-        public override Guid ConfigId { get { return new Guid("A194AAC8-0675-4100-8A8B-1FBE4105FE09"); } }
-        public string DateFormat { get; set; }
-        public override string GetPartText(IVRAutomatedReportSerialNumberPartConcatenatedPartContext context)
-        {
-            var date = DateTime.Now;
-            if (!String.IsNullOrEmpty(this.DateFormat))
-            {
-                return date.ToString(this.DateFormat);
-            }
-            return date.ToString();
-        }
-    }
-
-    public enum DateCounterType { Yearly = 0 }
-    public class VRAutomatedReportSequenceSerialNumberPart : VRConcatenatedPartSettings<IVRAutomatedReportSerialNumberPartConcatenatedPartContext>
-    {
-        public override Guid ConfigId { get { return new Guid("9CC73443-2A1A-4405-A1ED-1DE27B9DCB42"); } }
-        public DateCounterType? DateCounterType { get; set; }
-        public int PaddingLeft { get; set; }
-        public override string GetPartText(IVRAutomatedReportSerialNumberPartConcatenatedPartContext context)
-        {
-            StringBuilder sequenceKey = new StringBuilder();
-            StringBuilder sequenceGroup = new StringBuilder();
-            sequenceGroup.Append("OVERALL");
-            return "";
-        }
-      
-    }
 }
