@@ -11,11 +11,16 @@ namespace Vanrise.Analytic.Business
 {
     public class ConfigManager
     {
-        public int GetSerialNumberPartInitialSequence()
+        public List<VRAutomatedReportSerialNumberPart> GetSerialNumberParts()
         {
             var serialNumberParts = GetAutomatedReportSettings().SerialNumberParts;
             serialNumberParts.ThrowIfNull("serialNumberParts");
-            return serialNumberParts.Count;
+            return serialNumberParts;
+        }
+
+        public int GetSerialNumberPartInitialSequence()
+        {
+            return GetSerialNumberParts().Count;
         }
 
         public VRAutomatedReportSettings GetAutomatedReportSettings()

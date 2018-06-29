@@ -1,21 +1,21 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    automatedReportHandlerAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig'];
+    automatedReportAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig'];
 
-    function automatedReportHandlerAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
+    function automatedReportAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
 
-        var controllerName = 'AutomatedReportHandler';
+        var controllerName = 'AutomatedReport';
 
-        function GetFileGeneratorTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetFileGeneratorTemplateConfigs'));
+        function GetAutomatedReportSettings() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAutomatedReportSettings'));
         }
-         
+
         return ({
-            GetFileGeneratorTemplateConfigs: GetFileGeneratorTemplateConfigs,
+            GetAutomatedReportSettings: GetAutomatedReportSettings,
         });
     }
 
-    appControllers.service('VRAnalytic_AutomatedReportHandlerAPIService', automatedReportHandlerAPIService);
+    appControllers.service('VR_Analytic_AutomatedReportAPIService', automatedReportAPIService);
 
 })(appControllers);

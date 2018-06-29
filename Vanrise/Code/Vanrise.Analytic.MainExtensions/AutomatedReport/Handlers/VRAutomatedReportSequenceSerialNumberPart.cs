@@ -17,31 +17,35 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         public DateCounterType? DateCounterType { get; set; }
         public int PaddingLeft { get; set; }
         public override string GetPartText(IVRAutomatedReportSerialNumberPartConcatenatedPartContext context)
-        {
-            StringBuilder sequenceKey = new StringBuilder();
-            StringBuilder sequenceGroup = new StringBuilder();
-            sequenceGroup.Append("OVERALL");
-
+        { 
             long initialSequenceValue = new Vanrise.Analytic.Business.ConfigManager().GetSerialNumberPartInitialSequence();
-
-            if (this.DateCounterType.HasValue)
+            if (context.TaskId.HasValue)
             {
-                if (sequenceKey.Length > 0)
-                    sequenceKey.Append("_");
-                sequenceGroup.Append("_");
-                sequenceGroup.Append(Common.Utilities.GetEnumDescription(this.DateCounterType.Value));
-                switch (this.DateCounterType)
-                { 
-                    case Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.DateCounterType.Yearly:
-                        sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today.Year, DateTime.Today.Year + 1));
-                        break;
+                StringBuilder sequenceKey = new StringBuilder();
+                StringBuilder sequenceGroup = new StringBuilder();
+                sequenceGroup.Append("OVERALL");
+
+                VRSequenceManager manager = new VRSequenceManager();
+                if (this.DateCounterType.HasValue)
+                {
+                    if (sequenceKey.Length > 0)
+                        sequenceKey.Append("_");
+                    sequenceGroup.Append("_");
+                    sequenceGroup.Append(Common.Utilities.GetEnumDescription(this.DateCounterType.Value));
+                    switch (this.DateCounterType)
+                    {
+                        case Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.DateCounterType.Yearly:
+                            sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today.Year, DateTime.Today.Year + 1));
+                            break;
+                    }
                 }
+                var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(),context.TaskId.Value, sequenceKey.ToString(), initialSequenceValue);
+                return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
             }
-            VRSequenceManager manager = new VRSequenceManager();
-            Guid sequenceid = new Guid();
-            //fix sequence id
-            var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(), sequenceid, sequenceKey.ToString(), initialSequenceValue);
-            return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
+            else
+            {
+                return initialSequenceValue.ToString().PadLeft(this.PaddingLeft, '0');
+            }
         }
 
     }

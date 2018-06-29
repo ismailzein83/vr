@@ -23,10 +23,11 @@ namespace Vanrise.Analytic.Entities
     }
     public interface IVRAutomatedReportSerialNumberPartConcatenatedPartContext
     {
+        Guid? TaskId { get; set; }
 
     }
     public class VRAutomatedReportSerialNumberPartConcatenatedPartContext : IVRAutomatedReportSerialNumberPartConcatenatedPartContext
     {
-
+        public Guid? TaskId { get; set; }
     }
 }

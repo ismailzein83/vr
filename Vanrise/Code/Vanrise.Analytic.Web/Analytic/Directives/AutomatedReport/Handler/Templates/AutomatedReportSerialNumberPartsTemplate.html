@@ -1,1 +1,10 @@
-﻿
+﻿<vr-button type="Add" data-onclick="ctrl.addSerialNumberPart" standalone></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeSerialNumberPart" hidegridmenu>
+        <vr-datagridcolumn headertext="'Variable Name'" field="'Entity.VariableName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" widthfactor="10" disablesorting></vr-datagridcolumn>
+
+    </vr-datagrid>
+</vr-validator>

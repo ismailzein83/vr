@@ -47,7 +47,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                     {
                         VRMailAttachmentExcel excelAttachment = new VRMailAttachmentExcel()
                         {
-                            Name = generator.Name + ".xls",
+                            Name = generatedFile.FileName,
                             Content = generatedFile.FileContent
                         };
                         attachements.Add(excelAttachment);

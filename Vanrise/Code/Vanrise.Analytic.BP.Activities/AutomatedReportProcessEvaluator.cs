@@ -32,7 +32,7 @@ namespace Vanrise.Analytic.BP.Activities
                 handler.ThrowIfNull("handler");
                 handler.Settings.ThrowIfNull("handler.Settings");
                 queries.ThrowIfNull("queries");
-                handler.Settings.Execute(new VRAutomatedReportHandlerExecuteContext(queries));
+                handler.Settings.Execute(new VRAutomatedReportHandlerExecuteContext(queries, context.GetSharedInstanceData().InstanceInfo.TaskId));
             }
         }
 

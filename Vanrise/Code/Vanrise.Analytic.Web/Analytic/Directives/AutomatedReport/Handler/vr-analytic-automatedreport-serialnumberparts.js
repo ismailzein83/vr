@@ -21,9 +21,9 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Analytic/Directives/AutomatedReport/Handler/Templates/SerialNumberPartsTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPartsTemplate.html"
 
-        };
+        }; 
 
         function SerialNumberParts($scope, ctrl, $attrs) {
 
@@ -59,7 +59,7 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
                 var api = {};
 
                 api.getData = function () {
-                    var serialNumberParts;
+                    var serialNumberParts = {};
                     if (ctrl.datasource != undefined) {
                         serialNumberParts = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
@@ -107,7 +107,13 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
                 VR_Analytic_AutomatedReportSerialNumberSettingsService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
             }
             function getContext() {
-                return context;
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                currentContext.getExtensionType = function () {
+                    return "VR_Analytic_AutomatedReportSerialNumberParts";
+                };
+                return currentContext;
             }
         }
 

@@ -24,6 +24,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public long FileTemplateId { get; set; }
 
+        public string SerialNumberPattern { get; set; }
+
         public List<AdvancedExcelFileGeneratorTableDefinition> TableDefinitions { get; set; }
 
         public List<AdvancedExcelFileGeneratorMatrixDefinition> MatrixDefinitions { get; set; }
@@ -178,10 +180,22 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     SetBorders(colIndexByRow, ref TableDefinitionsWorksheet);   
                 }
             }
+            var configManager = new Vanrise.Analytic.Business.ConfigManager();
+            var serialNumber = this.SerialNumberPattern;
+
+            foreach (var serialNumberPart in configManager.GetSerialNumberParts())
+            {
+                if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
+                {
+                    serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(new VRAutomatedReportSerialNumberPartConcatenatedPartContext() { 
+                    TaskId = context.HandlerContext.TaskId}));
+                }
+            }
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = TableDefinitionsWorkbook.SaveToStream();
             return new VRAutomatedReportGeneratedFile()
             {
+                FileName = serialNumber + ".xls",
                 FileContent = memoryStream.ToArray()
             };
         }

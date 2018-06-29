@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AnalyticConfigurationController.cs" />
+    <Compile Include="Controllers\AutomatedReportController.cs" />
     <Compile Include="Controllers\AutomatedReportHandlerSettingsController.cs" />
     <Compile Include="Controllers\AutomatedReportQueryDefinitionSettingsController.cs" />
     <Compile Include="Controllers\AnalyticController.cs" />
@@ -377,9 +378,10 @@
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
     <Content Include="Analytic\Services\APIServices\AdvancedExcelFileGeneratorAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\AutomatedReportAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportQueryDefinitionSettingsAPIService.js" />
-    <Content Include="Analytic\Services\APIServices\AutomatedReportAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerAPIService.js" />
     <Content Include="Analytic\Services\AutomatedReportProcessScheduledService.js" />
     <Content Include="Analytic\Services\AutomatedReportSerialNumberSettingsService.js" />
     <Content Include="Analytic\Services\DimensionMappingRulesService.js" />

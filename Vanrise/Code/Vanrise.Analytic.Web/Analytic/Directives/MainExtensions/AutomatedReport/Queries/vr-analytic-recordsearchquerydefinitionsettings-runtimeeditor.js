@@ -175,7 +175,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                         columns = entity.Columns;
                         filterGroup = entity.FilterGroup;
                         if(entity.Direction!=undefined)
-                            $scope.scopeModel.selectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirections, entity.Direction.value, "value");
+                            $scope.scopeModel.selectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirections, entity.Direction, "value");
                         sortColumns = entity.SortColumns;
                         if (dataRecordStoragePayload != undefined) {
                             for (var i = 0; i < dataRecordStoragePayload.length; i++) {
@@ -347,7 +347,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     Columns: columnsArray,
                     FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
                     LimitResult: $scope.scopeModel.limitResult,
-                    Direction:$scope.scopeModel.selectedOrderDirection,
+                    Direction:$scope.scopeModel.selectedOrderDirection.value,
                     SortColumns: getSortColumns()
                 };
                 function getSortColumns() {

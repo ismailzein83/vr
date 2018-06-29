@@ -22,8 +22,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         {
             input.ThrowIfNull("input");
             input.FileGenerator.ThrowIfNull("input.FileGenerator");
-            byte[] bytes = _manager.DownloadAttachmentGenerator(input);
-            return GetExcelResponse(bytes, input.FileGenerator.Name + ".xls");
+            var generatedFile = _manager.DownloadAttachmentGenerator(input);
+            generatedFile.ThrowIfNull("generatedFile");
+            return GetExcelResponse(generatedFile.FileContent, generatedFile.FileName);
+           
         }
     }
     public class DownloadAttachmentGeneratorInput

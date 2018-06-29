@@ -12,11 +12,11 @@ app.service('VR_Analytic_AutomatedReportSerialNumberSettingsService', ['VRModalS
             var parameters = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPartEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPartEditor.html', parameters, settings);
         }
 
         function editSerialNumberPart(serialNumberPartEntity, onSerialNumberPartUpdated, context) {
-            var settings = {
+            var settings = { 
 
             };
             settings.onScopeReady = function (modalScope) {
@@ -27,7 +27,7 @@ app.service('VR_Analytic_AutomatedReportSerialNumberSettingsService', ['VRModalS
                 context: context
             };
 
-            VRModalService.showModal('/Client/Modules/VR_Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPartEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPartEditor.html', parameters, settings);
         }
 
         return ({

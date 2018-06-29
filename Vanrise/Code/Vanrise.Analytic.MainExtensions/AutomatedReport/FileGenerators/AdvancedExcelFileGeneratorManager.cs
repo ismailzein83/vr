@@ -10,15 +10,15 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {
     public class AdvancedExcelFileGeneratorManager
     {
-        public byte[] DownloadAttachmentGenerator(DownloadAttachmentGeneratorInput input)
+        public VRAutomatedReportGeneratedFile DownloadAttachmentGenerator(DownloadAttachmentGeneratorInput input)
         {
             input.FileGenerator.Settings.ThrowIfNull("input.FileGenerator.Settings");
             input.Queries.ThrowIfNull("input.Queries");
             var generatedFile = input.FileGenerator.Settings.GenerateFile(new VRAutomatedReportFileGeneratorGenerateFileContext()
             {
-                HandlerContext = new VRAutomatedReportHandlerExecuteContext(input.Queries)
+                HandlerContext = new VRAutomatedReportHandlerExecuteContext(input.Queries, null)
             });
-            return generatedFile.FileContent;
+            return generatedFile;
         }
     }
 }

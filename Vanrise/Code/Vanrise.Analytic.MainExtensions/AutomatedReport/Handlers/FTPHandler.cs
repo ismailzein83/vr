@@ -36,7 +36,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                             HandlerContext = context
 
                         });
-                        generatedFile.FileName = generator.Name + ".xls";
                         if (generatedFile != null)
                         {
                             MemoryStream stream = new MemoryStream(generatedFile.FileContent);

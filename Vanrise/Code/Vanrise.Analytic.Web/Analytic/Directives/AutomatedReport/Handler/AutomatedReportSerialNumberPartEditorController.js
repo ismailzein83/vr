@@ -15,7 +15,7 @@
 
         loadParameters();
         defineScope();
-        load();
+        load(); 
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -32,7 +32,7 @@
                 serialNumberPartSettingsReadyDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateSerialNumberPart() : addeSerialNumberPart();
+                return (isEditMode) ? updateSerialNumberPart() : addSerialNumberPart();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -45,7 +45,7 @@
                     Settings: serialNumberPartSettingsAPI.getData()
                 };
             }
-            function addeSerialNumberPart() {
+            function addSerialNumberPart() {
                 var serialNumberPartObj = builSerialNumberPartObjFromScope();
                 if ($scope.onSerialNumberPartAdded != undefined) {
                     $scope.onSerialNumberPartAdded(serialNumberPartObj);
@@ -96,7 +96,7 @@
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
+                });
             }
         }
         function getContext() {
