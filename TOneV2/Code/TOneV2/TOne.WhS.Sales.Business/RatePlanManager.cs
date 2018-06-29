@@ -1403,7 +1403,7 @@ namespace TOne.WhS.Sales.Business
 				throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Workbook created from file '{0}' does not contain any worksheets", fileId));
 
 			Worksheet worksheet = workbook.Worksheets.ElementAt(0);
-
+            Dictionary<string, List<ImportedRow>> importedRowsByZoneName = new Dictionary<string, List<ImportedRow>>();
 			var importedRows = new List<ImportedRow>();
 			int startingRowIndex = 0;
 
@@ -1442,19 +1442,60 @@ namespace TOne.WhS.Sales.Business
 				List<ImportedOtherRate> otherRates;
 				if (!IsRowEmpty(zoneCell, rateCell, dateCell, otherRateCells, otherRateTypes, out importedZone, out importedRate, out importedDate, out otherRates))
 				{
-					importedRows.Add(new ImportedRow()
-					{
-						Zone = importedZone,
-						Rate = importedRate,
-						EffectiveDate = importedDate,
-						OtherRates = otherRates
-					});
+                    var importedRow = new ImportedRow()
+                    {
+                        Zone = importedZone,
+                        Rate = importedRate,
+                        EffectiveDate = importedDate,
+                        OtherRates = otherRates
+                    };
+                    List<ImportedRow> zoneImportedRows;
+                    if (importedRowsByZoneName.TryGetValue(importedZone, out zoneImportedRows) && zoneImportedRows.Count() > 0)
+                    {
+                        if (AreImportedRowsDuplicated(zoneImportedRows, importedZone, importedRate, importedDate, otherRates))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            zoneImportedRows.Add(importedRow);
+                        }
+                    }
+                    else
+                    {
+                        importedRowsByZoneName.Add(importedZone, new List<ImportedRow>() { importedRow });
+                    }
+                    importedRows.Add(importedRow);
 				}
 			}
-
-			return importedRows;
+            return importedRows;
 		}
-
+        //In this function (AreImportedRowsDuplicated) we check if 2 imported rows are the same we ignore one of them otherwise and if we have the same zone name but with different 
+        //data (rate,effective date,other rates) we add both rows to duplicated zones.
+        public bool AreImportedRowsDuplicated(List<ImportedRow> importedRows, string zone,string rate,string effectiveDate,List<ImportedOtherRate> otherRates)
+        {
+            bool isImportedRowMatched = false;
+            bool areOtherRatesEqual = true;
+            foreach (var importedRow in importedRows)
+            {
+                if (importedRow.Zone == zone && importedRow.Rate == rate && importedRow.EffectiveDate == effectiveDate)
+                {
+                    foreach (var otherRate in importedRow.OtherRates)
+                    {
+                        var secondOtherRate = otherRates.First(x => x.TypeId == otherRate.TypeId);
+                        if (secondOtherRate.Value != otherRate.Value)
+                            areOtherRatesEqual = false;
+                    }
+                    if (areOtherRatesEqual)
+                    {
+                        return true;
+                    }
+                }
+                else
+                    isImportedRowMatched = false;
+            }
+            return isImportedRowMatched;
+        }
 		private bool IsRowEmpty(Cell zoneCell, Cell rateCell, Cell dateCell, List<Cell> otherRateCells, List<RateTypeInfo> otherRateTypes, out string importedZone, out string importedRate, out string importedDate, out List<ImportedOtherRate> otherRates)
 		{
 			bool isImportedZoneEmpty = IsStringEmpty(zoneCell.StringValue, out importedZone);
