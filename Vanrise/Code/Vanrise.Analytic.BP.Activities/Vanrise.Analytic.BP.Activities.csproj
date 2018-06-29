@@ -51,8 +51,9 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\Vanrise.Analytic.BP.Arguments\bin\Debug\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
