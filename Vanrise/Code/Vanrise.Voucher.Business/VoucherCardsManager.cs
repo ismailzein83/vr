@@ -114,7 +114,7 @@ namespace Vanrise.Voucher.Business
                  dynamic _object = Activator.CreateInstance(recordRuntimeType);
                 _object.VoucherTypeId = voucherTypeId;
                 _object.GenerationVoucherId = generationVoucherId;
-                // _object.SerialNumber = serialNumber;
+                _object.SerialNumber = serialNumber;
                 _object.Amount = voucherType.Amount;
                 _object.CurrencyId = voucherType.CurrencyId;
                 _object.ActivationCode = activationCode;
