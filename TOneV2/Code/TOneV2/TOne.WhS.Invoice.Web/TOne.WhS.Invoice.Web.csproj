@@ -213,7 +213,6 @@
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\IncludedInvoicesInSettlementAPIService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
-    <Content Include="WhS_Invoice\Services\APIServices\ComparisonInvoiceDetailAPIService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceCompareTemplateAPIService.js" />
     <Content Include="WhS_Invoice\Services\IncludedInvoicesInSettlementService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceService.js" />

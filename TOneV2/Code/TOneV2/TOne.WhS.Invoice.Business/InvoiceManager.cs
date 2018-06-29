@@ -67,42 +67,38 @@ namespace TOne.WhS.Invoice.Business
                 ResultTooltipDescription = resultTooltipDescription
             };
         }
-        public ComparisonInvoiceDetail GetComparisonInvoiceDetail(long invoiceId)
+        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId)
         {
-            Vanrise.Invoice.Entities.InvoiceDetail invoice = new Vanrise.Invoice.Entities.InvoiceDetail();
-            Vanrise.Invoice.Business.InvoiceManager manager = new Vanrise.Invoice.Business.InvoiceManager();
-            invoice = manager.GetInvoiceDetail(invoiceId);
-            string timezone;
-            if (invoice.Entity.Details.TimeZoneId != null)
+
+            Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
+            var invoice = invoiceManager.GetInvoiceDetail(invoiceId);
+            invoice.ThrowIfNull("invoice", invoiceId);
+            var supplierInvoiceDetails = (SupplierInvoiceDetails)invoice.Entity.Details;         
+            supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+            string timezone = "";
+            if(supplierInvoiceDetails.TimeZoneId != null)
             {
-                Vanrise.Entities.VRTimeZone timeZone = new Vanrise.Common.Business.VRTimeZoneManager().GetVRTimeZone(invoice.Entity.Details.TimeZoneId);
+                Vanrise.Entities.VRTimeZone timeZone = new Vanrise.Common.Business.VRTimeZoneManager().GetVRTimeZone((int)supplierInvoiceDetails.TimeZoneId);
                 timezone = timeZone.Name;
             }
-            else timezone = "";
-
-
-
+          
             return new ComparisonInvoiceDetail()
             {
                 To = invoice.PartnerName,
-                toDate = invoice.Entity.ToDate,
-                dueDate = invoice.Entity.DueDate,
-                calls = invoice.Entity.Details.TotalNumberOfCalls,
-                fromDate = invoice.Entity.FromDate,
-                issuedDate = invoice.Entity.IssueDate,
-                serialNumber = invoice.Entity.SerialNumber,
-                duration = invoice.Entity.Details.Duration,
-                totalAmount = invoice.Entity.Details.TotalAmount,
-                isLocked = invoice.Lock,
-                isPaid = invoice.Paid,
-                issuedBy = invoice.UserName,
+                ToDate = invoice.Entity.ToDate,
+                DueDate = invoice.Entity.DueDate,
+                Calls = invoice.Entity.Details.TotalNumberOfCalls,
+                FromDate = invoice.Entity.FromDate,
+                IssuedDate = invoice.Entity.IssueDate,
+                SerialNumber = invoice.Entity.SerialNumber,
+                Duration = invoice.Entity.Details.Duration,
+                TotalAmount = invoice.Entity.Details.TotalAmount,
+                IsLocked = invoice.Lock,
+                IsPaid = invoice.Paid,
+                IssuedBy = invoice.UserName,
                 PartnerId = invoice.Entity.PartnerId,
-                currency = invoice.Entity.Details.SupplierCurrency,
-                timeZone = timezone
-
-
-
-
+                Currency = invoice.Entity.Details.SupplierCurrency,
+                TimeZone = timezone
             };
         }
 

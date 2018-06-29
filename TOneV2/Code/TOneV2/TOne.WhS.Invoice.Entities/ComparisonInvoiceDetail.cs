@@ -9,19 +9,19 @@ namespace TOne.WhS.Invoice.Entities
     public class ComparisonInvoiceDetail
     {
        public String To { get; set; }
-       public DateTime toDate { get; set; }
-       public DateTime fromDate { get; set; }
-       public DateTime issuedDate { get; set; }
-       public DateTime dueDate { get; set; }
-       public string serialNumber { get; set; }
-       public String timeZone { get; set; }
-       public String currency { get; set; }
-       public int calls { get; set; }
-       public decimal duration { get; set; }
-       public decimal totalAmount { get; set; }
-       public bool isLocked { get; set; }
-       public bool isPaid { get; set; }
-       public String issuedBy { get; set; }
+       public DateTime ToDate { get; set; }
+       public DateTime FromDate { get; set; }
+       public DateTime IssuedDate { get; set; }
+       public DateTime DueDate { get; set; }
+       public string SerialNumber { get; set; }
+       public String TimeZone { get; set; }
+       public String Currency { get; set; }
+       public int Calls { get; set; }
+       public decimal Duration { get; set; }
+       public decimal TotalAmount { get; set; }
+       public bool IsLocked { get; set; }
+       public bool IsPaid { get; set; }
+       public String IssuedBy { get; set; }
        public String PartnerId { get; set; }
 
     }

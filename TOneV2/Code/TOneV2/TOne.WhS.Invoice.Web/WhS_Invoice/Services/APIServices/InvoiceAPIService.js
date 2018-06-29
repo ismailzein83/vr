@@ -18,10 +18,16 @@
                 invoiceId: invoiceId
             });
         }
+        function GetInvoiceDetails(invoiceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {
+                invoiceId: invoiceId,
+            });
+        }
         return ({
             CompareInvoices: CompareInvoices,
             UpdateOriginalInvoiceData: UpdateOriginalInvoiceData,
-            GetOriginalInvoiceDataRuntime: GetOriginalInvoiceDataRuntime
+            GetOriginalInvoiceDataRuntime: GetOriginalInvoiceDataRuntime,
+            GetInvoiceDetails: GetInvoiceDetails
         });
     }
 

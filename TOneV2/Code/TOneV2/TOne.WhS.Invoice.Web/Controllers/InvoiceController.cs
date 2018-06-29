@@ -56,11 +56,11 @@ namespace TOne.WhS.Invoice.Web.Controllers
             return manager.GetOriginalInvoiceDataRuntime(invoiceId);
         }
         [HttpGet]
-        [Route("GetComparisonInvoiceDetail")]
-        public ComparisonInvoiceDetail GetComparisonInvoiceDetail(long invoiceId)
+        [Route("GetInvoiceDetails")]
+        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId)
         {
             InvoiceManager manager = new InvoiceManager();
-            return manager.GetComparisonInvoiceDetail(invoiceId);
+            return manager.GetInvoiceDetails(invoiceId);
         }
         
     }
