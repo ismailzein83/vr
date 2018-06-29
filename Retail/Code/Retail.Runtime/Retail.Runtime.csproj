@@ -580,6 +580,12 @@
     <Reference Include="Vanrise.Voucher.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Voucher.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Voucher.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Voucher.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Entities.dll</HintPath>
     </Reference>
@@ -759,6 +765,10 @@
     <ProjectReference Include="..\Retail.MultiNet.MainExtensions\Retail.MultiNet.MainExtensions.csproj">
       <Project>{ddebca68-714f-4334-9b05-55476145dec8}</Project>
       <Name>Retail.MultiNet.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.ProxyAPI\Retail.Ringo.ProxyAPI.csproj">
+      <Project>{fbbf1c80-97f3-47ac-82fc-8ba7c74fb034}</Project>
+      <Name>Retail.Ringo.ProxyAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Teles.Business\Retail.Teles.Business.csproj">
       <Project>{96171ed5-87c9-42c6-b052-38d788c63192}</Project>

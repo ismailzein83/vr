@@ -652,6 +652,12 @@
     <Reference Include="Vanrise.Voucher.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Voucher.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Voucher.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Voucher.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Voucher.Entities.dll</HintPath>
     </Reference>
