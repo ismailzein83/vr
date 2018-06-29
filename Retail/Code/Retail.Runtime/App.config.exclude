@@ -70,7 +70,8 @@
     
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
-    
+    <add key="VoucherDBConnStringKey"                         value="VoucherDBConnString"/>
+
     <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString,ConfigurationDBConnString"/>
   </appSettings>
   <runtime>

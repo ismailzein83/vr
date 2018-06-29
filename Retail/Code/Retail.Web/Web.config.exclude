@@ -76,8 +76,9 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
-    <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>    
-    
+    <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
+    <add key="VoucherDBConnStringKey"                         value="VoucherDBConnString"/>
+
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 

@@ -12,16 +12,16 @@ namespace Retail.Ringo.ProxyAPI
     {
         public AddTopupOutput AddTopup(AddTopupInput input)
         {
-            var vrConnectionId = new Guid("");
+            var vrConnectionId = new Guid("dc097d1d-1195-4641-b364-deeb3a50190c");
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            var checkVoucherAvailabilityOutput = connectionSettings.Get<CheckVoucherAvailabilityOutput>(string.Format("/api/VR_Voucher/VRVoucherCards/CheckVoucherAvailability?pinCode={0}", input.PinCode));
+            var checkVoucherAvailabilityOutput = connectionSettings.Get<CheckVoucherAvailabilityOutput>(string.Format("/api/VR_Voucher/VoucherCards/CheckVoucherAvailability?pinCode={0}&lockedBy={1}", input.PinCode, input.PhoneNumber));
             if (checkVoucherAvailabilityOutput != null && checkVoucherAvailabilityOutput.IsAvailable)
             {
                 /// charge the voucher;
-                var setVoucherUsed = connectionSettings.Put<SetVoucherUsedInput, SetVoucherUsedOutput>("/api/VR_Voucher/VRVoucherCards/SetVoucherUsed",
+                var setVoucherUsed = connectionSettings.Post<SetVoucherUsedInput, SetVoucherUsedOutput>("/api/VR_Voucher/VoucherCards/SetVoucherUsed",
                     new SetVoucherUsedInput
                     {
                         PinCode = input.PinCode,
