@@ -35,22 +35,23 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
             if (attrs.label != undefined)
                 label = attrs.label;
             var template ='<vr-row>'
-                +'<vr-columns colnum="{{ctrl.normalColNum}}">'
-                +'<vr-label>Serial Number Part Initial Sequence</vr-label>'
-                             + '<vr-textbox value="ctrl.serialNumberPartInitialSequence" isrequired="ctrl.isrequired"></vr-textbox>'
+                +'<vr-columns colnum="{{4}}">'
+                +'<vr-label>Initial Setting</vr-label>'
+                             + '<vr-textbox value="ctrl.serialNumberPartInitialSequence" isrequired></vr-textbox>'
                              + '</vr-columns>'
-            +'</vr-row>'
+            
                              +'<vr-columns colnum="{{ctrl.normalColNum}}">'
                              + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
-                             + '<vr-textbox value="ctrl.serialNumberPattern" isrequired="ctrl.isrequired"></vr-textbox>'
+                             + '<vr-textbox value="ctrl.serialNumberPattern" ></vr-textbox>'
                          + '</vr-columns>'
                          + '<vr-columns width="normal" ' + withemptyline + '>'
                             + '<vr-button type="Help" data-onclick="scopeModel.openSerialNumberPatternHelper" standalone></vr-button>'
                          + '</vr-columns>';
+            +'</vr-row>'
             return template;
         }
         function OverallVoucherCardSerialNumberPart($scope, ctrl, $attrs) {
-            var parts;
+            var serialNumberParts;
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -76,21 +77,18 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
                 var api = {};
 
                 api.load = function (payload) {
+                    ctrl.serialNumberPartInitialSequence = 0;
                     if (payload != undefined) {
-                        if (payload.data != undefined){                            
-                        if (payload.data.SerialNumberPattern != undefined)
+                        if (payload.data != undefined){    
                             ctrl.serialNumberPattern = payload.data.SerialNumberPattern;
-                        if(payload.data.SerialNumberPartInitialSequence!= undefined)
-                            ctrl.serialNumberPartInitialSequence=payload.data.SerialNumberPartInitialSequence;
+                            ctrl.serialNumberPartInitialSequence = payload.data.SerialNumberPartInitialSequence;
                     }
-                        var promises = [];                       
+                                            
                         var promise = VR_Voucher_VoucherTypeAPIService.GetVoucherCardDefinition().then(function (response) {                            
-                            parts = response;
-                            });
-                            promises.push(promise);
-                        
+                            serialNumberParts = response;
+                            });                       
 
-                        return UtilsService.waitMultiplePromises(promises);
+                            return UtilsService.waitMultiplePromises([promise]);
                     }
                 };
 
@@ -110,9 +108,9 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
                 if (currentContext.getParts == undefined) {
                     currentContext.getParts = function () {
                         var returnedParts = [];
-                        if (parts != undefined) {
-                            for (var i = 0, length = parts.length ; i < length; i++) {
-                                returnedParts.push(parts[i]);
+                        if (serialNumberParts != undefined) {
+                            for (var i = 0, length = serialNumberParts.length ; i < length; i++) {
+                                returnedParts.push(serialNumberParts[i]);
                             }
                         }
                         return returnedParts;
