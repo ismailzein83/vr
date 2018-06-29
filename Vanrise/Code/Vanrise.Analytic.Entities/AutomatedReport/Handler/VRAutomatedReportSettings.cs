@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace Vanrise.Analytic.Entities.AutomatedReport.Handler
+namespace Vanrise.Analytic.Entities
 {
     public class VRAutomatedReportSettings : SettingData
     {
