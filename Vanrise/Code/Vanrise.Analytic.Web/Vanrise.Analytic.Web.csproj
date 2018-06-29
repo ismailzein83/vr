@@ -140,6 +140,7 @@
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Handler\AutomatedReportSerialNumberPatternHelperController.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportSerialNumberPartEditor.html" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\AutomatedReportSerialNumberPartEditorController.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportSerialNumberPartsTemplate.html" />
