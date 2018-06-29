@@ -17,11 +17,16 @@ namespace Vanrise.Voucher.Data.SQL
 
         }
 
-        public bool Update(SetVoucherUsedInput voucherUsedInput)
+        public bool SetVoucherUsed(string pinCode, string usedBy, int lastModifiedBy)
         {
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[dbo].[sp_VoucherUsed_Update]", voucherUsedInput.PinCode, voucherUsedInput.UsedBy);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[Voucher].[sp_VoucherCards_SetUsed]", pinCode, usedBy, lastModifiedBy);
             return (nbOfRecordsAffected > 0);
         }
 
+        public bool SetVoucherLocked(string pinCode, string lockedBy, int lastModifiedBy)
+        {
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[Voucher].[sp_VoucherCards_SetLocked]", pinCode, lockedBy, lastModifiedBy);
+            return (nbOfRecordsAffected > 0);
+        }
     }
 }

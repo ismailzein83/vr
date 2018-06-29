@@ -9,19 +9,20 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Voucher.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "VRVoucherCards")]
-    public class VRVoucherCardsContoller : BaseAPIController
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "VoucherCards")]
+    public class VoucherCardsController : BaseAPIController
     {
         VoucherCardsManager _voucherCardsManager = new VoucherCardsManager();
 
         [HttpGet]
         [Route("CheckVoucherAvailability")]
-        public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode)
+        public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode, string lockedBy)
         {
-            return _voucherCardsManager.CheckVoucherAvailability(pinCode);
+            return _voucherCardsManager.CheckVoucherAvailability(pinCode, lockedBy);
         }
 
-         [HttpPut]
+        [HttpPost]
         [Route("SetVoucherUsed")]
         public SetVoucherUsedOutput SetVoucherUsed(SetVoucherUsedInput input)
         {

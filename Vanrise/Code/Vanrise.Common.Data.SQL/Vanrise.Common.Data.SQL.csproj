@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CacheRefreshDataManager.cs" />
+    <Compile Include="DataEncryptionKeyDataManager.cs" />
     <Compile Include="EnumerationDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
     <Compile Include="CityDataManager.cs" />

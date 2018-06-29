@@ -70,6 +70,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CacheRefreshManager.cs" />
+    <Compile Include="DataEncryptionKeyManager.cs" />
     <Compile Include="LicenseManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyDefinitionManager.cs" />

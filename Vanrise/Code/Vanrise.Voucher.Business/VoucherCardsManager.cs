@@ -12,6 +12,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Entities;
 using Vanrise.Voucher.Entities;
 using Vanrise.Voucher.Data;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Voucher.Business
 {
@@ -19,41 +20,100 @@ namespace Vanrise.Voucher.Business
     {
         static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
 
-        public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode)
+        public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode, string lockedBy)
         {
             //encrypt the pin code
-            String encryptedPinCode = Encrypt(pinCode);
-            List<RecordFilter> Filters = new List<RecordFilter>()
-            {
-                new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.NotEquals , Value = null  },
-                new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Less , Value = System.DateTime.Now  },
-                new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  }
-            };
-
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup()
+            string encryptedPinCode = Cryptography.Encrypt(pinCode, DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
+           
+            var recordFilterGroup = new RecordFilterGroup()
             {
                 LogicalOperator = RecordQueryLogicalOperator.And,
-                Filters = Filters
+                Filters = new List<RecordFilter>()
+                {
+                    new NonEmptyRecordFilter(){FieldName ="ActivationDate" },
+                    new StringRecordFilter(){FieldName = "PinCode", CompareOperator= StringRecordFilterOperator.Equals, Value = encryptedPinCode },
+                    new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Less , Value = System.DateTime.Now  },
+                    new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  }
+                }
             };
+            var genericBusinessEntityManager = new GenericBusinessEntityManager();
+            int totalCount;
+            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal,
+                _definitionId, null, null, null, recordFilterGroup, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
 
-            //GetAllVoucherCardsPinCodes(recordFilterGroup);
+            if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
+            {
+                var genericBusinessEntity = genericBusinessEntities.First();
+                var voucharCardId = (long)genericBusinessEntity.FieldValues.GetRecord("ID");
 
+                var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate();
+                genericBusinessEntityToUpdate.FieldValues = new Dictionary<string,object>();
+                genericBusinessEntityToUpdate.FieldValues.Add("LockedBy",lockedBy);
+                genericBusinessEntityToUpdate.FieldValues.Add("LockedDate", DateTime.Now);
+                genericBusinessEntityToUpdate.GenericBusinessEntityId = voucharCardId;
+                genericBusinessEntityToUpdate.BusinessEntityDefinitionId = _definitionId;
+                
+                var updateOutput = genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
+                if (updateOutput.Result == UpdateOperationResult.Succeeded)
+                {
+                    int currencyId = (int)genericBusinessEntity.FieldValues.GetRecord("CurrencyId");
+                    return new CheckVoucherAvailabilityOutput
+                    {
+                        Amount = (decimal)genericBusinessEntity.FieldValues.GetRecord("Amount"),
+                        CurrencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId),
+                        IsAvailable = true
+                    };
+                }
+            }
 
-            throw new NotImplementedException();
+            return new CheckVoucherAvailabilityOutput
+            {
+                IsAvailable = false
+            };
         }
 
         public SetVoucherUsedOutput SetVoucherUsed(SetVoucherUsedInput input)
         {
-            IVoucherCardsDataManager voucherCardsDataManager = VoucherDataManagerFactory.GetDataManager<IVoucherCardsDataManager>();
-            SetVoucherUsedOutput voucherUsedOutput = new SetVoucherUsedOutput();
-            bool updateActionSuccess = voucherCardsDataManager.Update(input);
-            if (updateActionSuccess)
+            var voucherUsedOutput = new SetVoucherUsedOutput
             {
-                voucherUsedOutput.Result = SetVoucherUsedResult.Succeeded;
-            }
-            else
+                Result = SetVoucherUsedResult.Failed
+            };
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+
+            string encryptedPinCode = Cryptography.Encrypt(input.PinCode, DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
+
+            var genericBusinessEntityManager = new GenericBusinessEntityManager();
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup()
             {
-                voucherUsedOutput.Result = SetVoucherUsedResult.Failed;
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = new List<RecordFilter>()
+                {
+                    new EmptyRecordFilter(){FieldName ="UsedBy" },
+                    new StringRecordFilter(){FieldName = "PinCode", CompareOperator= StringRecordFilterOperator.Equals, Value = encryptedPinCode },
+                    new NonEmptyRecordFilter(){FieldName = "LockedDate"}
+                }
+            };
+
+            int totalCount;
+            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, null, null, null, recordFilterGroup, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
+
+            if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
+            {
+                var genericBusinessEntity = genericBusinessEntities.First();
+                var voucharCardId = (long)genericBusinessEntity.FieldValues.GetRecord("ID");
+
+                var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate();
+                genericBusinessEntityToUpdate.FieldValues = new Dictionary<string, object>();
+                genericBusinessEntityToUpdate.FieldValues.Add("UsedBy", input.UsedBy);
+                genericBusinessEntityToUpdate.FieldValues.Add("UsedDate", DateTime.Now);
+                genericBusinessEntityToUpdate.GenericBusinessEntityId = voucharCardId;
+                genericBusinessEntityToUpdate.BusinessEntityDefinitionId = _definitionId;
+                var updateOutput = genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
+                if (updateOutput.Result == UpdateOperationResult.Succeeded)
+                {
+                    voucherUsedOutput.Result = SetVoucherUsedResult.Succeeded;
+                }
             }
             return voucherUsedOutput;
         }
@@ -123,7 +183,6 @@ namespace Vanrise.Voucher.Business
                     }
                 }
 
-
                  dynamic _object = Activator.CreateInstance(recordRuntimeType);
                 _object.VoucherTypeId = voucherTypeId;
                 _object.GenerationVoucherId = generationVoucherId;
@@ -167,49 +226,20 @@ namespace Vanrise.Voucher.Business
             }
             return _recordRuntimeType;
         }
-
         private string GetPinCode(out string activationCode)
         {
-           /// UInt32 pinNum = 0;
             Guid pinGuid;
             byte[] arr;
             pinGuid = Guid.NewGuid();
             arr = pinGuid.ToByteArray();
             var num = BitConverter.ToUInt64(arr, 0);
             var pinNum = num % 100000000000000; // 14 numbers
-            activationCode = Encrypt(pinGuid.ToString());
-            return Encrypt(pinNum.ToString());
-        }
-        static byte[] bytes = ASCIIEncoding.ASCII.GetBytes("ZeroCool");
-        private static string Encrypt(string code)
-        {
-            if (String.IsNullOrEmpty(code))
-            {
-                throw new ArgumentNullException("The string which needs to be encrypted can not be null.");
-            }
-            DESCryptoServiceProvider cryptoProvider = new DESCryptoServiceProvider();
-            MemoryStream memoryStream = new MemoryStream();
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, cryptoProvider.CreateEncryptor(bytes, bytes), CryptoStreamMode.Write);
-            StreamWriter writer = new StreamWriter(cryptoStream);
-            writer.Write(code);
-            writer.Flush();
-            cryptoStream.FlushFinalBlock();
-            writer.Flush();
-            return Convert.ToBase64String(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
-        }
-        private static string Decrypt(string code)
-        {
-            if (String.IsNullOrEmpty(code))
-            {
-                throw new ArgumentNullException("The string which needs to be decrypted can not be null.");
-            }
-            DESCryptoServiceProvider cryptoProvider = new DESCryptoServiceProvider();
-            MemoryStream memoryStream = new MemoryStream(Convert.FromBase64String(code));
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, cryptoProvider.CreateDecryptor(bytes, bytes), CryptoStreamMode.Read);
-            StreamReader reader = new StreamReader(cryptoStream);
-            return reader.ReadToEnd();
-        }
 
+            string decryptionKey = DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey();
+
+            activationCode = Cryptography.Encrypt(pinGuid.ToString(), decryptionKey);
+            return Cryptography.Encrypt(pinNum.ToString(), decryptionKey);
+        }
         public HashSet<string> GetAllVoucherCardsPinCodes()
         {
             var genericBusinessEntityManager = new GenericBusinessEntityManager();

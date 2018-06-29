@@ -9,6 +9,8 @@ namespace Vanrise.Voucher.Data
 {
     public interface IVoucherCardsDataManager : IDataManager
     {
-        bool Update(SetVoucherUsedInput voucherUsedInput);
+        bool SetVoucherUsed(string pinCode, string usedBy, int lastModifiedBy);
+        bool SetVoucherLocked(string pinCode, string lockedBy, int lastModifiedBy);
+
     }
 }
