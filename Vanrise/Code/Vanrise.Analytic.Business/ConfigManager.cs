@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Analytic.Entities.AutomatedReport.Handler;
+using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 
@@ -11,11 +11,11 @@ namespace Vanrise.Analytic.Business
 {
     public class ConfigManager
     {
-        public List<VRAutomatedReportSerialNumberPart> GetSerialNumberParts()
+        public int GetSerialNumberPartInitialSequence()
         {
             var serialNumberParts = GetAutomatedReportSettings().SerialNumberParts;
             serialNumberParts.ThrowIfNull("serialNumberParts");
-            return serialNumberParts;
+            return serialNumberParts.Count;
         }
 
         public VRAutomatedReportSettings GetAutomatedReportSettings()
