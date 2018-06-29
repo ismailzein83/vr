@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E7718B54-E9F5-469E-8D17-DC919BD9FBC0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vanrise.Web.Host</RootNamespace>
+    <AssemblyName>Vanrise.Web.Host</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\Resources\DLLs\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.9.3.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.9.3\lib\net45\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Caching.Runtime\Vanrise.Caching.Runtime.csproj">
+      <Project>{c6b2d722-14ce-4ed4-8b2b-52588494e449}</Project>
+      <Name>Vanrise.Caching.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
+      <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
+      <Name>Vanrise.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
+      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
+      <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Data.SQL\Vanrise.Common.Data.SQL.csproj">
+      <Project>{b3a5a0ce-6294-44b5-a4d6-521f45b35295}</Project>
+      <Name>Vanrise.Common.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Data\Vanrise.Common.Data.csproj">
+      <Project>{1a117ff8-0bd7-424e-8510-dd2491194ea0}</Project>
+      <Name>Vanrise.Common.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Excel\Vanrise.Common.Excel.csproj">
+      <Project>{5eef4d8e-6588-4bae-b447-09b0e3312e97}</Project>
+      <Name>Vanrise.Common.Excel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.MainExtensions\Vanrise.Common.MainExtensions.csproj">
+      <Project>{d8df5e36-b1e9-4827-8bee-fcc5d90cdef7}</Project>
+      <Name>Vanrise.Common.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Web\Vanrise.Common.Web.csproj">
+      <Project>{fcdbcd51-37d5-401d-bc90-52ea2caf2d5b}</Project>
+      <Name>Vanrise.Common.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.MySQL\Vanrise.Data.MySQL.csproj">
+      <Project>{699ce5d8-27d5-4b2d-961d-459604664138}</Project>
+      <Name>Vanrise.Data.MySQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.Postgres\Vanrise.Data.Postgres.csproj">
+      <Project>{1d156372-ed9e-4d47-b81e-63f34c44858b}</Project>
+      <Name>Vanrise.Data.Postgres</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.RDB\Vanrise.Data.RDB.csproj">
+      <Project>{2d7a8e74-a563-4752-866b-40e8fe14c7bc}</Project>
+      <Name>Vanrise.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.SQL\Vanrise.Data.SQL.csproj">
+      <Project>{4ab70e59-2c65-4167-8d5f-897702cf161b}</Project>
+      <Name>Vanrise.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj">
+      <Project>{00bce586-bffb-4679-92b7-9b65988fe346}</Project>
+      <Name>Vanrise.GenericData.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
+      <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>
+      <Name>Vanrise.GenericData.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.MainExtensions\Vanrise.GenericData.MainExtensions.csproj">
+      <Project>{9fba4641-edd5-4a59-a053-ce879f31ad14}</Project>
+      <Name>Vanrise.GenericData.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Normalization\Vanrise.GenericData.Normalization.csproj">
+      <Project>{a01f59d7-0c2d-4cb8-83d2-ed6e4aa9c2d2}</Project>
+      <Name>Vanrise.GenericData.Normalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Notification\Vanrise.GenericData.Notification.csproj">
+      <Project>{bddd1fac-ea45-4291-9f64-d749d47a97ba}</Project>
+      <Name>Vanrise.GenericData.Notification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Pricing\Vanrise.GenericData.Pricing.csproj">
+      <Project>{500611b7-1cc7-495d-b329-571b81e3abe0}</Project>
+      <Name>Vanrise.GenericData.Pricing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.QueueActivators\Vanrise.GenericData.QueueActivators.csproj">
+      <Project>{8fc8aa0b-5ae5-4745-be9c-0e37f8a07ff9}</Project>
+      <Name>Vanrise.GenericData.QueueActivators</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.SQLDataStorage\Vanrise.GenericData.SQLDataStorage.csproj">
+      <Project>{fd370b6a-aad0-447c-b784-32e5da4e5424}</Project>
+      <Name>Vanrise.GenericData.SQLDataStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Data.SQL\Vanrise.GenericData.Transformation.Data.SQL.csproj">
+      <Project>{47feab28-e8cf-4f2e-9ee4-04e79d28717a}</Project>
+      <Name>Vanrise.GenericData.Transformation.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Data\Vanrise.GenericData.Transformation.Data.csproj">
+      <Project>{48792be4-be79-40f3-9b6a-6a60504281a6}</Project>
+      <Name>Vanrise.GenericData.Transformation.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Entities\Vanrise.GenericData.Transformation.Entities.csproj">
+      <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>
+      <Name>Vanrise.GenericData.Transformation.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.MainExtensions\Vanrise.GenericData.Transformation.MainExtensions.csproj">
+      <Project>{52646ab6-78c7-4b9f-8a89-27328427e534}</Project>
+      <Name>Vanrise.GenericData.Transformation.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation\Vanrise.GenericData.Transformation.csproj">
+      <Project>{7827b1a9-ac2a-4b72-87e7-101223ec0396}</Project>
+      <Name>Vanrise.GenericData.Transformation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Web\Vanrise.GenericData.Web.csproj">
+      <Project>{d34d2d0a-6aa6-40c2-bbc9-1d1a6b482773}</Project>
+      <Name>Vanrise.GenericData.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
+      <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
+      <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Data.SQL\Vanrise.Security.Data.SQL.csproj">
+      <Project>{452c1ba6-47e3-4072-be53-4b6fa39d0a74}</Project>
+      <Name>Vanrise.Security.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Data\Vanrise.Security.Data.csproj">
+      <Project>{354e87d0-0442-4e11-8ba4-3d42f00b5853}</Project>
+      <Name>Vanrise.Security.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.MainExtensions\Vanrise.Security.MainExtensions.csproj">
+      <Project>{1c62d57f-ba03-42f7-9362-cb097e1145ac}</Project>
+      <Name>Vanrise.Security.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Web\Vanrise.Security.Web.csproj">
+      <Project>{c153b833-94d2-4aaf-af5e-6dca62d5bae2}</Project>
+      <Name>Vanrise.Security.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Web\Vanrise.Web.csproj">
+      <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
+      <Name>Vanrise.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52343</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:52343/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>
