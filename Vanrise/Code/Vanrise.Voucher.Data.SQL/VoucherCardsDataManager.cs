@@ -11,6 +11,11 @@ namespace Vanrise.Voucher.Data.SQL
 {
     public class VoucherCardsDataManager : BaseSQLDataManager, IVoucherCardsDataManager
     {
+        public VoucherCardsDataManager()
+            : base(GetConnectionStringName("VoucherDBConnStringKey", "VoucherDBConnString"))
+        {
+
+        }
 
         public bool Update(SetVoucherUsedInput voucherUsedInput)
         {

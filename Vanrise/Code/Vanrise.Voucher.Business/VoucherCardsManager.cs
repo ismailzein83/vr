@@ -22,8 +22,21 @@ namespace Vanrise.Voucher.Business
         public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode)
         {
             //encrypt the pin code
-            //String encryptedPinCode = Encrypt(pinCode);
-            //GetAllVoucherCardsPinCodes();
+            String encryptedPinCode = Encrypt(pinCode);
+            List<RecordFilter> Filters = new List<RecordFilter>()
+            {
+                new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.NotEquals , Value = null  },
+                new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Less , Value = System.DateTime.Now  },
+                new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  }
+            };
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup()
+            {
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = Filters
+            };
+
+            //GetAllVoucherCardsPinCodes(recordFilterGroup);
 
 
             throw new NotImplementedException();
