@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Analytic.Entities.AutomatedReport.Handler;
+using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
@@ -14,7 +14,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         public string DateFormat { get; set; }
         public override string GetPartText(IVRAutomatedReportSerialNumberPartConcatenatedPartContext context)
         {
-            var date = DateTime.Now;
+            var date = DateTime.Now; 
             if (!String.IsNullOrEmpty(this.DateFormat))
             {
                 return date.ToString(this.DateFormat);

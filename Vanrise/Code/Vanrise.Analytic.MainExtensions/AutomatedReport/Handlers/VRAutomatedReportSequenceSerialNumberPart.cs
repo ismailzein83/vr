@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Business;
-using Vanrise.Analytic.Entities.AutomatedReport.Handler;
+using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
@@ -31,7 +31,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 sequenceGroup.Append("_");
                 sequenceGroup.Append(Common.Utilities.GetEnumDescription(this.DateCounterType.Value));
                 switch (this.DateCounterType)
-                {
+                { 
                     case Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.DateCounterType.Yearly:
                         sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today.Year, DateTime.Today.Year + 1));
                         break;
