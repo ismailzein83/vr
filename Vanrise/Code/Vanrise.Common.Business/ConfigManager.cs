@@ -111,6 +111,7 @@ namespace Vanrise.Common.Business
         {
             SettingManager settingManager = new SettingManager();
             ProductInfoTechnicalSettings productInfoTechnicalSettings = settingManager.GetSetting<ProductInfoTechnicalSettings>(ProductInfoTechnicalSettings.SETTING_TYPE);
+            productInfoTechnicalSettings.ThrowIfNull("productInfoTechnicalSettings");
 
             ProductInfo productInfo = productInfoTechnicalSettings.ProductInfo;
 
