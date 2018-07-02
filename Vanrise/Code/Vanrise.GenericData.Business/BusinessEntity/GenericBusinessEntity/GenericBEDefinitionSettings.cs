@@ -181,10 +181,23 @@ namespace Vanrise.GenericData.Business
         public Guid GenericBEActionId { get; set; }
         public string Title { get; set; }
         public bool ReloadGridItem { get; set; }
+        public GenericBEActionFilterCondition FilterCondition { get; set; }
 
     }
-    
-   
+    public abstract class GenericBEActionFilterCondition
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract bool IsFilterMatch(IGenericBEActionFilterConditionContext context);
+    }
+    public interface IGenericBEActionFilterConditionContext
+    {
+        GenericBusinessEntity Entity { get; }
+    }
+    public class GenericBEActionFilterConditionContext : IGenericBEActionFilterConditionContext
+    {
+        public GenericBusinessEntity Entity { get; set; }
+    }
+
     public abstract class GenericBECondition
     {
         public abstract Guid ConfigId { get; }
@@ -235,7 +248,6 @@ namespace Vanrise.GenericData.Business
             return true;
         }
     }
-
 
     public interface IGenericBEActionDefinitionCheckAccessContext
     {

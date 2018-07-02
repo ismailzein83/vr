@@ -79,6 +79,7 @@
     <Compile Include="DataStorages\SQLDataRecordStorageState.cs" />
     <Compile Include="DataStorages\StaticSQLDataStoreSettings.cs" />
     <Compile Include="DataRecordFields\FieldGuidType.cs" />
+    <Compile Include="GenericBusinessEntity\ActionFilterCondition\GenericFilterGroupCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\EditGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\LimitResultFilterDefinitionSettings.cs" />
