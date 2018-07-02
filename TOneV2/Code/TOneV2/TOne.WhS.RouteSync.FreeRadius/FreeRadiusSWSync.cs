@@ -204,7 +204,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
                 List<string> invalidMappingCustomers = new List<string>();
 
                 foreach (var customerId in invalidMappingCustomerIds)
-                    invalidMappingCustomers.Add(string.Format("'{0}'", carrierAccountManager.GetCarrierAccountName(customerId)));
+                    invalidMappingCustomers.Add(string.Format("'{0}'", context.GetCarrierAccountNameById(customerId)));
 
                 validationMessages.Add(string.Format("Invalid Mappings for Customers: {0}", string.Join(", ", invalidMappingCustomers)));
             }
@@ -214,7 +214,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
                 List<string> invalidMappingSuppliers = new List<string>();
 
                 foreach (var supplierId in invalidMappingSupplierIds)
-                    invalidMappingSuppliers.Add(string.Format("'{0}'", carrierAccountManager.GetCarrierAccountName(supplierId)));
+                    invalidMappingSuppliers.Add(string.Format("'{0}'", context.GetCarrierAccountNameById(supplierId)));
 
                 validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));
             }

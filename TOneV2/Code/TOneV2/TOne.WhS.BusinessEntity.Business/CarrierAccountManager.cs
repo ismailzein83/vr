@@ -1376,7 +1376,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			return true;
 		}
 
-		private static string GetCarrierAccountName(string profileName, string nameSuffix)
+		public static string GetCarrierAccountName(string profileName, string nameSuffix)
 		{
 			return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
 		}

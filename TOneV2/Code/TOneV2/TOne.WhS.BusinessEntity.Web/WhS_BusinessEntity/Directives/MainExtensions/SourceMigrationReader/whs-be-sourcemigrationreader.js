@@ -172,7 +172,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 $scope.onSelectParameterDefinition = function (item) {
                     var gridItem = {
                         DisplayName: item.DisplayName,
-                        Name: item.Name
+                        Name: item.Name,
+                        Hint: item.Hint
                     };
                     $scope.selectedParameterDefinitions.push(gridItem);
 
@@ -339,6 +340,11 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 parameterDefinitions.push({
                     Name: 'MVTSMaxDoP_Redundant',
                     DisplayName: 'MVTS Redundant Max Degree of Parallelism'
+                });
+                parameterDefinitions.push({
+                    Name: 'TelesSupplierMappingLength',
+                    DisplayName: 'Teles Supplier Mapping Length',
+                    Hint: 'Use the following template for switches:</br><strong>Switch1=val1|Switch2=val2</strong></br>If switch is not added, it will take the default value 4.'
                 });
                 return parameterDefinitions;
             }

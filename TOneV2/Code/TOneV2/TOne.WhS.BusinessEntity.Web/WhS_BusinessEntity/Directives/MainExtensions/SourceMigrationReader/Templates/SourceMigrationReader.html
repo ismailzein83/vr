@@ -48,7 +48,7 @@
         <vr-textarea label="Connection String" value="connectionString" isrequired />
     </vr-columns>
     <vr-columns width="fullrow">
-        <vr-section title="Parameter Definition">
+        <vr-section header="Parameter Definition">
             <vr-columns colnum="6">
                 <vr-select label="Parameter Definitions"
                            datasource="parameterDefinitions"
@@ -69,7 +69,14 @@
                              idfield="Name">
                     <vr-datagridcolumn headertext="'Name'" field="'DisplayName'" type="'Text'" widthfactor="50"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Value'" field="" widthfactor="50" disablesorting>
-                        <vr-textbox value="dataItem.Value" type="text" isrequired="true"></vr-textbox>
+                        <vr-columns width="fullrow" haschildcolumns>
+                            <vr-columns colnum="{{dataItem.Hint!=undefined ? 11 : 12}}" haschildcolumns>
+                                <vr-textbox value="dataItem.Value" type="text" isrequired="true"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="1" left-medium-spacing>
+                                <vr-hint ng-show="dataItem.Hint!=undefined" value={{dataItem.Hint}}></vr-hint>
+                            </vr-columns>
+                        </vr-columns>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

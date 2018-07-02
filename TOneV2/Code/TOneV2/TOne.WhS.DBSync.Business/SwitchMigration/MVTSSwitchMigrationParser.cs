@@ -22,7 +22,8 @@ namespace TOne.WhS.DBSync.Business
         {
             _configuration = configuration;
         }
-        public override SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        public override SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts,
+            Dictionary<string, CarrierProfile> allCarrierProfiles)
         {
             return ReadXml(allCarrierAccounts, context);
         }

@@ -12,24 +12,31 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 using Vanrise.GenericData.Transformation.Entities;
+using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.DBSync.Business
 {
     public class TelesSwitchMigrationParser : SwitchMigrationParser
     {
         private string _configuration;
+        private string _switchName;
+        private const string TelesSupplierMappingLengthParmaterName = "TelesSupplierMappingLength";
 
-        public TelesSwitchMigrationParser(string configuration)
+        public TelesSwitchMigrationParser(string configuration, string switchName)
         {
             _configuration = configuration;
+            _switchName = switchName;
         }
 
-        public override SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        public override SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts,
+            Dictionary<string, CarrierProfile> allCarrierProfiles)
         {
-            return ReadXml(context, switchId, allCarrierAccounts);
+            return ReadXml(context, switchId, allCarrierAccounts, allCarrierProfiles);
         }
 
-        private SwitchData ReadXml(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        private SwitchData ReadXml(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts,
+             Dictionary<string, CarrierProfile> allCarrierProfiles)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(_configuration);
@@ -50,6 +57,10 @@ namespace TOne.WhS.DBSync.Business
                 NumberOfMappings = CheckUseTwoSuppliersMapping(parametersNode) ? 2 : default(int?)
             };
 
+            int? switchSupplierMappingLength = GetSwitchSupplierMappingLength(context);
+            if (switchSupplierMappingLength.HasValue)
+                synchroniser.SupplierMappingLength = switchSupplierMappingLength.Value;
+
             string connectionString;
             string redundantConnectionString;
             GetConnectionStrings(parametersNode, out connectionString, out redundantConnectionString);
@@ -60,12 +71,28 @@ namespace TOne.WhS.DBSync.Business
             {
                 synchroniser.DataManager = new IdbPostgresDataManager()
                 {
-                    ConnectionString = new IdbConnectionString (), //GetIdbConnectionString(schemaName, connectionString),
+                    ConnectionString = new IdbConnectionString(), //GetIdbConnectionString(schemaName, connectionString),
                     //RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<IdbConnectionString>() { GetIdbConnectionString(schemaName, redundantConnectionString) } : null
                 };
             }
+            Dictionary<int, CarrierAccount> carrierAccountsById = allCarrierAccounts.ToDictionary(itm => itm.Value.CarrierAccountId, itm => itm.Value);
+            Dictionary<int, CarrierProfile> carrierProfilesById = allCarrierProfiles.ToDictionary(itm => itm.Value.CarrierProfileId, itm => itm.Value);
 
-            var isSwitchRouteSynchronizerValidContext = new TOne.WhS.RouteSync.Entities.IsSwitchRouteSynchronizerValidContext();
+            var isSwitchRouteSynchronizerValidContext = new TOne.WhS.RouteSync.Entities.IsSwitchRouteSynchronizerValidContext()
+            {
+                GetCarrierAccountNameById = (carrierAccountId) =>
+                {
+                    CarrierAccount carrierAccount = carrierAccountsById.GetRecord(carrierAccountId);
+                    if (carrierAccount == null)
+                        return null;
+
+                    CarrierProfile carrierProfile = carrierProfilesById.GetRecord(carrierAccount.CarrierProfileId);
+                    if (carrierProfile == null)
+                        return null;
+
+                    return CarrierAccountManager.GetCarrierAccountName(carrierProfile.Name, carrierAccount.NameSuffix);
+                }
+            };
             bool isSwitchValid = synchroniser.IsSwitchRouteSynchronizerValid(isSwitchRouteSynchronizerValidContext);
             if (!isSwitchValid)
                 throw new VRBusinessException(string.Join(" - ", isSwitchRouteSynchronizerValidContext.ValidationMessages));
@@ -79,6 +106,35 @@ namespace TOne.WhS.DBSync.Business
                 MappingRules = mappingRules,
                 SwitchRouteSynchronizer = synchroniser
             };
+        }
+
+        private int? GetSwitchSupplierMappingLength(MigrationContext context)
+        {
+            ParameterValue concatSwitchMappingLengthListValue;
+            if (context.ParameterDefinitions == null || !context.ParameterDefinitions.TryGetValue(TelesSupplierMappingLengthParmaterName, out concatSwitchMappingLengthListValue))
+                return null;
+
+            if (string.IsNullOrEmpty(concatSwitchMappingLengthListValue.Value))
+                return null;
+
+            string[] switchesMapping = concatSwitchMappingLengthListValue.Value.Split('|');
+            if (switchesMapping == null || switchesMapping.Count() == 0)
+                return null;
+
+            string switchNameWithEqual = string.Format("{0}=", _switchName);
+            string switchMapping = switchesMapping.FirstOrDefault(itm => itm.StartsWith(switchNameWithEqual));
+            if (string.IsNullOrEmpty(switchMapping))
+                return null;
+
+            string[] splittedSwitchMapping = switchMapping.Split('=');
+            if (splittedSwitchMapping == null || splittedSwitchMapping.Length != 2)
+                return null;
+
+            int length;
+            if (!int.TryParse(splittedSwitchMapping[1], out length))
+                return null;
+
+            return length;
         }
 
         private TelesCarrierMapping BuildCarrierMapping(XmlNode carrierMappingsNode, MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)

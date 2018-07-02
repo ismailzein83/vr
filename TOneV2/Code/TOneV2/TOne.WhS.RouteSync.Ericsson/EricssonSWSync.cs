@@ -323,7 +323,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
 				return true;
 			return true;
-
+            
 			//Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>();
 
 			//foreach (var mapping in this.CarrierMappings.Values)
@@ -357,7 +357,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 			//		foreach (var customerId in customerIds)
 			//		{
-			//			string customerName = carrierAccountManager.GetCarrierAccountName(customerId);
+            //			string customerName = context.GetCarrierAccountNameById(customerId);
 			//			carrierAccountNames.Add(string.Format("'{0}'", customerName));
 			//		}
 

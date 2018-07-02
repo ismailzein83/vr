@@ -258,7 +258,16 @@ namespace TOne.WhS.BusinessEntity.Business
             baseSwitch.Settings.ThrowIfNull("baseSwitch.Settings", baseSwitch.SwitchId);
             baseSwitch.Settings.RouteSynchronizer.ThrowIfNull("baseSwitch.Settings.RouteSynchronizer", baseSwitch.SwitchId);
 
-            var context = new TOne.WhS.RouteSync.Entities.IsSwitchRouteSynchronizerValidContext();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            var context = new TOne.WhS.RouteSync.Entities.IsSwitchRouteSynchronizerValidContext()
+            {
+                GetCarrierAccountNameById = (carrierAccountId) =>
+                {
+                    return carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+                }
+            };
+
             bool isSwitchValid = baseSwitch.Settings.RouteSynchronizer.IsSwitchRouteSynchronizerValid(context);
             validationMessages = context.ValidationMessages;
             return isSwitchValid;

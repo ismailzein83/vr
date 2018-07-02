@@ -189,10 +189,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
                 foreach (var supplierId in invalidMappingSupplierIds)
                 {
-                    //CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(supplierId);
-                    //string sourceIdDesc = carrierAccount != null && !string.IsNullOrEmpty(carrierAccount.SourceId) ? string.Format(" - SourceID: {0}", carrierAccount.SourceId) : string.Empty;
-
-                    invalidMappingSuppliers.Add(string.Format("'{0}'", carrierAccountManager.GetCarrierAccountName(supplierId)));
+                    invalidMappingSuppliers.Add(string.Format("'{0}'", context.GetCarrierAccountNameById(supplierId)));
                 }
 
                 validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));

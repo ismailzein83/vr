@@ -19,6 +19,7 @@ namespace TOne.WhS.DBSync.Business
         SwitchDBSyncDataManager dbSyncDataManager;
         SourceSwitchDataManager dataManager;
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
+        readonly Dictionary<string, CarrierProfile> _allCarrierProfiles;
         readonly int _ruleTypeId;
         public SwitchMigrator(MigrationContext context)
             : base(context)
@@ -29,6 +30,9 @@ namespace TOne.WhS.DBSync.Business
 
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+
+            var dbTableCarrierProfile = Context.DBTables[DBTableName.CarrierProfile];
+            _allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
 
             MappingRuleManager mappingRuleManager = new MappingRuleManager();
             _ruleTypeId = mappingRuleManager.GetRuleTypeId();
@@ -87,7 +91,7 @@ namespace TOne.WhS.DBSync.Business
                 {
                     case "TABS.Addons.MvtsProSwitchLibraryMultipleQueue.SwitchManager": parser = new MVTSSwitchMigrationParser(sourceItem.Configuration); break;
                     case "TABS.Addons.FIKARSwitchLibrary.SwitchManager": parser = new IVSwitchMigrationParser(sourceItem.Configuration); break;
-                    case "TABS.Addons.TelesSwitchLibrary.SwitchManager": parser = new TelesSwitchMigrationParser(sourceItem.Configuration); break;
+                    case "TABS.Addons.TelesSwitchLibrary.SwitchManager": parser = new TelesSwitchMigrationParser(sourceItem.Configuration, sourceItem.Name); break;
                     case "TABS.Addons.CloudXPointSSWSwitchLibrary.SwitchManager": parser = new IVSwitchMigrationParser(sourceItem.Configuration); break;
                     default: break;
                 }
@@ -99,7 +103,7 @@ namespace TOne.WhS.DBSync.Business
 
                 if (parser != null)
                 {
-                    SwitchData switchData = parser.GetSwitchData(Context, switchId, _allCarrierAccounts);
+                    SwitchData switchData = parser.GetSwitchData(Context, switchId, _allCarrierAccounts, _allCarrierProfiles);
                     migratedSwitch.Settings = new SwitchSettings
                     {
                         RouteSynchronizer = switchData.SwitchRouteSynchronizer

@@ -98,7 +98,8 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
             }
             return mappings;
         }
-        public override SwitchData GetSwitchData(Entities.MigrationContext context, int switchId, Dictionary<string, BusinessEntity.Entities.CarrierAccount> allCarrierAccounts)
+        public override SwitchData GetSwitchData(Entities.MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts,
+            Dictionary<string, CarrierProfile> allCarrierProfiles)
         {
             return ReadXml(context, allCarrierAccounts);
         }

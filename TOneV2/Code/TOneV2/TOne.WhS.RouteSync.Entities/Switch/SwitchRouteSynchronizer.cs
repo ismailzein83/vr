@@ -58,7 +58,7 @@ namespace TOne.WhS.RouteSync.Entities
     public interface ISwitchRouteSynchronizerInitializeContext
     {
         string SwitchId { get; }
-        
+
         string SwitchName { get; }
 
         RouteRangeType? RouteRangeType { get; }
@@ -199,11 +199,14 @@ namespace TOne.WhS.RouteSync.Entities
 
     public interface IIsSwitchRouteSynchronizerValidContext
     {
+        Func<int, string> GetCarrierAccountNameById { get; }
         List<string> ValidationMessages { set; }
     }
     public class IsSwitchRouteSynchronizerValidContext : IIsSwitchRouteSynchronizerValidContext
     {
         public List<string> ValidationMessages { get; set; }
+
+        public Func<int, string> GetCarrierAccountNameById { get; set; }
     }
 
     public interface ISwitchRouteSynchronizerApplyDifferentialRoutesContext
