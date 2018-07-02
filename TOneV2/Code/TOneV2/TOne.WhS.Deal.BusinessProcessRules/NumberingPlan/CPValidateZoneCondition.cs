@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -14,35 +15,47 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as CountryToProcess != null);
+            return (target as AllCountriesToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
-            CountryToProcess countryToProcess = context.Target as CountryToProcess;
+            var dealDefinitionManager = new DealDefinitionManager();
+            var countriesToProcess = context.Target as AllCountriesToProcess;
+            var customerCountryManager = new CustomerCountryManager();
+
             ICPParametersContext codePreparationContext = context.GetExtension<ICPParametersContext>();
-            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
-            foreach (var carrierAccountInfo in codePreparationContext.Customers)
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var countryToProcess in countriesToProcess.Countries)
             {
-                var soldCountries = customerCountryManager.GetSoldCountries(carrierAccountInfo.CarrierAccountId, codePreparationContext.EffectiveDate);
-                var soldCountry = soldCountries.FirstOrDefault(c => c.CountryId == countryToProcess.CountryId);
-                if (soldCountry != null)
+                foreach (var carrierAccountInfo in codePreparationContext.Customers)
                 {
-                    if (countryToProcess.ZonesToProcess != null)
+                    var soldCountries = customerCountryManager.GetSoldCountries(carrierAccountInfo.CarrierAccountId, codePreparationContext.EffectiveDate);
+
+                    if (soldCountries == null)
+                        continue;
+
+                    var soldCountry = soldCountries.FirstOrDefault(c => c.CountryId == countryToProcess.CountryId);
+                    if (soldCountry != null)
                     {
-                        foreach (var zoneToProcess in countryToProcess.ZonesToProcess)
+                        if (countryToProcess.ZonesToProcess != null)
                         {
-                            if (zoneToProcess.ChangeType == ZoneChangeType.Deleted || zoneToProcess.ChangeType == ZoneChangeType.PendingClosed)
+                            foreach (var zoneToProcess in countryToProcess.ZonesToProcess)
                             {
-                                if (zoneToProcess.ExistingZones == null)
-                                    throw new DataIntegrityValidationException("ZoneToProcess has no existing zones");
-                                foreach (var existingZone in zoneToProcess.ExistingZones)
+                                if (zoneToProcess.ChangeType == ZoneChangeType.Deleted || zoneToProcess.ChangeType == ZoneChangeType.PendingClosed)
                                 {
-                                    if (dealDefinitionManager.IsSaleZoneIncludedInDeal(carrierAccountInfo.CarrierAccountId, existingZone.ZoneId, existingZone.BED))
+                                    if (zoneToProcess.ExistingZones == null)
+                                        throw new DataIntegrityValidationException("ZoneToProcess has no existing zones");
+                                    foreach (var existingZone in zoneToProcess.ExistingZones)
                                     {
-                                        context.Message = string.Format("Zone '{0}' is included in a deal", existingZone.Name);
-                                        return false;
+                                        var dealId = dealDefinitionManager.IsZoneIncludedInDeal(carrierAccountInfo.CarrierAccountId, existingZone.ZoneId,
+                                                codePreparationContext.EffectiveDate, true);
+                                        if (dealId.HasValue)
+                                        {
+                                            var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
+                                            sb.AppendFormat("Zone '{0}' in deal '{1}'", existingZone.Name, deal.Name);
+                                        }
                                     }
                                 }
                             }
@@ -50,6 +63,13 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                     }
                 }
             }
+
+            if (sb.Length > 1)
+            {
+                context.Message = String.Format("The Following zones are linked to deal : {0}", sb.ToString());
+                return false;
+            }
+
             return true;
         }
         public override string GetMessage(IRuleTarget target)
@@ -59,4 +79,3 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
     }
 }
- 

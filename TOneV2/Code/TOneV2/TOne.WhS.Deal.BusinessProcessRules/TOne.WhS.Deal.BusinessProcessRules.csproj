@@ -55,7 +55,8 @@
     <Compile Include="NumberingPlan\CPValidateZoneCondition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlan\RPValidateZoneCondition.cs" />
-    <Compile Include="SupplierPricelist\SPValidateZoneCondition.cs" />
+    <Compile Include="SupplierPricelist\SPValidateRateChangeCondition.cs" />
+    <Compile Include="SupplierPricelist\SPValidateClosedZoneCondition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
