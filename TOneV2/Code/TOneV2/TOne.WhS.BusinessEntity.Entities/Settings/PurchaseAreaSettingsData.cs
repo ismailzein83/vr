@@ -10,9 +10,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public int RetroactiveDayOffset { get; set; }
 		public decimal MaximumRate { get; set; }
 		public long MaximumCodeRange { get; set; }
-		public List<PricelistTypeMapping> PricelistTypeMappingList { get; set; }
-		public List<AutoImportTemplate> AutoImportTemplateList { get; set; }
-		public List<AutoImportTemplate> InternalAutoImportTemplateList { get; set; }
         public bool CodeGroupVerfifcation { get; set; }
 	}
 
