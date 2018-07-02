@@ -35,6 +35,7 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.mappingSeparator = ';';
+                $scope.scopeModel.supplierMappingLength = '4';
 
                 $scope.scopeModel.onIdbDataManagerSettingsDirectiveReady = function (api) {
                     idbDataManagerSettingsDirectiveAPI = api;
@@ -62,6 +63,7 @@
                         if (telesIdbSWSync != undefined) {
                             $scope.scopeModel.mappingSeparator = telesIdbSWSync.MappingSeparator;
                             $scope.scopeModel.numberOfMappings = telesIdbSWSync.NumberOfMappings;
+                            $scope.scopeModel.supplierMappingLength = telesIdbSWSync.SupplierMappingLength;
                             $scope.scopeModel.supplierOptionsSeparator = telesIdbSWSync.SupplierOptionsSeparator;
                             $scope.scopeModel.numberOfOptions = telesIdbSWSync.NumberOfOptions;
                             idbDataManager = telesIdbSWSync.DataManager;
@@ -85,6 +87,7 @@
                         DataManager: idbDataManagerSettingsDirectiveAPI.getData(),
                         MappingSeparator: $scope.scopeModel.mappingSeparator,
                         NumberOfMappings: $scope.scopeModel.numberOfMappings,
+                        SupplierMappingLength: $scope.scopeModel.supplierMappingLength,
                         SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions,
                         CarrierMappings: telesIdbCarrierAccountMappingGridAPI.getData(),
@@ -130,6 +133,9 @@
                 var context = {
                     getMappingSeparator: function () {
                         return $scope.scopeModel.mappingSeparator;
+                    },
+                    getSupplierMappingLength: function () {
+                        return $scope.scopeModel.supplierMappingLength;
                     }
                 };
                 return context;

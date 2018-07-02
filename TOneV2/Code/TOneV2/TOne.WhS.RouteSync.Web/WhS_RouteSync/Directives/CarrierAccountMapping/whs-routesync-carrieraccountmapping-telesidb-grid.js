@@ -26,9 +26,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
             var supplierMappingValidationFunction;
             var showCustomerMappingFunction;
             var showSupplierMappingFunction;
-
-            var oneSupplierMappingLength = 4;
-
+            
             var gridAPI;
 
             function initializeController() {
@@ -54,6 +52,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
                     if (mappingSeparator == undefined || mappingSeparator == '')
                         return null;
 
+                    var oneSupplierMappingLength = context.getSupplierMappingLength();
                     if (supplierMappingValue.length == oneSupplierMappingLength)
                         return null;
 
