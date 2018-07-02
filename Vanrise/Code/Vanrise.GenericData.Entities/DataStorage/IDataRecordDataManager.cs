@@ -14,9 +14,7 @@ namespace Vanrise.GenericData.Entities
 
         void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady);
 
-        void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);
-
-        void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
+        List<DataRecord> GetAllDataRecords(List<string> columns);
 
         bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
 
@@ -26,7 +24,9 @@ namespace Vanrise.GenericData.Entities
 
         void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate);
 
-        List<DataRecord> GetAllDataRecords(List<string> columns);
+        void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);
+
+        void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
 
         bool AreDataRecordsUpdated(ref object updateHandle);
 
