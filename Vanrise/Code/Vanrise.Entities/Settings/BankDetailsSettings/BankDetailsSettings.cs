@@ -26,6 +26,9 @@ namespace Vanrise.Entities
         public string ChannelName { get; set; }
         public string CorrespondentBank { get; set; }
         public string CorrespondentBankSwiftCode { get; set; }
+        public string ACH { get; set; }
+        public string ABARoutingNumber { get; set; }
+
 
     }
 }

@@ -35,9 +35,17 @@
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-textbox value="correspondentBankSwiftCode" label="Correspondent Bank Swift Code" localizedlabel="VRRes.CorrespondentBankSwiftCode.VREnd"></vr-textbox>
+                </vr-columns>               
+                
+                <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>
+
+                <vr-columns width="1/2row">
+                    <vr-textbox value="ach" label="ACH" localizedlabel="VRRes.ACH.VREnd"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="abaRoutingNumber" label="ABA Routing Number" localizedlabel="VRRes.ABARoutingNumber.VREnd"></vr-textbox>
                 </vr-columns>
 
-                <vr-common-currency-selector on-ready="onCurrencyDirectiveReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>
             </vr-row>
         </vr-form>
     </vr-modalbody>
