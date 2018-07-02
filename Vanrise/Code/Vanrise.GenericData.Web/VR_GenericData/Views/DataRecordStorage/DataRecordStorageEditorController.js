@@ -272,6 +272,8 @@
             if (dataRecordStorageEntity.Settings != undefined) {
                 $scope.scopeModel.enableUseCaching = dataRecordStorageEntity.Settings.EnableUseCaching;
                 $scope.scopeModel.requiredLimitResult = dataRecordStorageEntity.Settings.RequiredLimitResult;
+                $scope.scopeModel.dontReflectToDB = dataRecordStorageEntity.Settings.DontReflectToDB;
+                $scope.scopeModel.denyAPICall = dataRecordStorageEntity.Settings.DenyAPICall;
             }
         }
         function loadDataRecordTypeSelector() {
@@ -485,6 +487,8 @@
             obj.Settings.CreatedTimeField = createdTimeFieldSelectorAPI.getSelectedIds();
             obj.Settings.LastModifiedByField = modifiedByFieldSelectorAPI.getSelectedIds();
             obj.Settings.LastModifiedTimeField = modifiedTimeFieldSelectorAPI.getSelectedIds();
+            obj.Settings.DontReflectToDB = $scope.scopeModel.dontReflectToDB;
+            obj.Settings.DenyAPICall = $scope.scopeModel.denyAPICall;
             return obj;
         }
     }

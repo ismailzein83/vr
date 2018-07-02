@@ -28,6 +28,11 @@ namespace Vanrise.GenericData.Business
         {
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
 
+            foreach (var id in input.Query.DataRecordStorageIds)
+            {
+                if (DoesDataRecordStorageDenyAPICall(id))
+                    throw new NotSupportedException("External calls are not allowed.");
+            }
             var dataRecordStorageId = input.Query.DataRecordStorageIds.First();
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
@@ -379,7 +384,9 @@ namespace Vanrise.GenericData.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             dataRecordStorage.DataRecordStorageId = Guid.NewGuid();
-            UpdateStorage(dataRecordStorage);
+            dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings");
+            if (!dataRecordStorage.Settings.DontReflectToDB)
+                UpdateStorage(dataRecordStorage);
 
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 
@@ -405,8 +412,9 @@ namespace Vanrise.GenericData.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = DataRecordStorageMapper(dataRecordStorage);
-
-            UpdateStorage(dataRecordStorage);
+            dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorage.DataRecordStorageId);
+            if (!dataRecordStorage.Settings.DontReflectToDB)
+                UpdateStorage(dataRecordStorage);
 
             IDataRecordStorageDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordStorageDataManager>();
 
@@ -424,7 +432,7 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
+        public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages) 
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
             List<Guid> filterdRecrodsIds = new List<Guid>();
@@ -644,6 +652,14 @@ namespace Vanrise.GenericData.Business
         {
             IEnumerable<DataRecordField> formulaDataRecordFields = dataRecordFieldsDict.Values.FindAllRecords(itm => itm.Formula != null && input.Query.Columns.Contains(itm.Name));
             return (formulaDataRecordFields != null && formulaDataRecordFields.Count() > 0) ? formulaDataRecordFields.ToDictionary(itm => itm.Name, itm => itm) : null;
+        }
+
+        private bool DoesDataRecordStorageDenyAPICall(Guid dataRecordStorageId)
+        {
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+            dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorage.DataRecordStorageId);
+            return dataRecordStorage.Settings.DenyAPICall;
         }
 
         private IOrderedEnumerable<DataRecordDetail> GetOrderedByFields(List<SortColumn> sortColumns, IOrderedEnumerable<DataRecordDetail> orderedRecords, DataRecordType recordType)

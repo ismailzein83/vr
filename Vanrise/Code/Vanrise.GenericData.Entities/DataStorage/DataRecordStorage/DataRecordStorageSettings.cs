@@ -15,7 +15,9 @@ namespace Vanrise.GenericData.Entities
         public string LastModifiedTimeField { get; set; }
         public string CreatedTimeField { get; set; }
         public bool EnableUseCaching { get; set; }
-        public bool RequiredLimitResult { get; set; }   
+        public bool RequiredLimitResult { get; set; }
+        public bool DontReflectToDB { get; set; }
+        public bool DenyAPICall { get; set; }
         public RequiredPermissionSettings RequiredPermission { get; set; }
 
     }

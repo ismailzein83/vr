@@ -46,6 +46,12 @@
                         <vr-columns width="1/3row" vr-loader="scopeModel.isCreatedTimeSelectorLoading">
                             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.createdTimeFieldSelectorReady" label="Created Time Field" selectedvalues="scopeModel.createdTimeField"></vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.dontReflectToDB" label="Don't Reflect to DB"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-switch value="scopeModel.denyAPICall" label="Deny API Call"></vr-switch>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Setting'">
