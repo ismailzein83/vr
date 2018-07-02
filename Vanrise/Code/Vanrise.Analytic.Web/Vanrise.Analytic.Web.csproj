@@ -382,6 +382,7 @@
     <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportQueryDefinitionSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerAPIService.js" />
+    <Content Include="Analytic\Services\AutomatedReportAnalyticTableQuerySettingsService.js" />
     <Content Include="Analytic\Services\AutomatedReportProcessScheduledService.js" />
     <Content Include="Analytic\Services\AutomatedReportSerialNumberSettingsService.js" />
     <Content Include="Analytic\Services\DimensionMappingRulesService.js" />
