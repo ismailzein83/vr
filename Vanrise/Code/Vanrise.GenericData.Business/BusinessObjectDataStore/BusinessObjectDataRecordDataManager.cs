@@ -22,11 +22,6 @@ namespace Vanrise.GenericData.Business
             _dataRecordStorage = dataRecordStorage;
         }
 
-        public void ApplyStreamToDB(object stream)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context)
         {
             List<DataRecord> dataRecords = new List<DataRecord>();
@@ -102,12 +97,7 @@ namespace Vanrise.GenericData.Business
             _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
         }
 
-        public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup)
+        public List<DataRecord> GetAllDataRecords(List<string> columns)
         {
             throw new NotImplementedException();
         }
@@ -132,12 +122,22 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        public List<DataRecord> GetAllDataRecords(List<string> columns)
+        public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup)
         {
             throw new NotImplementedException();
         }
 
         public bool AreDataRecordsUpdated(ref object updateHandle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetDBQueryMaxParameterNumber()
         {
             throw new NotImplementedException();
         }
@@ -157,7 +157,7 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        public int GetDBQueryMaxParameterNumber()
+        public void ApplyStreamToDB(object stream)
         {
             throw new NotImplementedException();
         }
