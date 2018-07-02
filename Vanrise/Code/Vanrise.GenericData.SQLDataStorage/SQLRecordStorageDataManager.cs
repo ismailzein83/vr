@@ -94,11 +94,6 @@ namespace Vanrise.GenericData.SQLDataStorage
             return !String.IsNullOrEmpty(_dataStoreSettings.ConnectionString) ? _dataStoreSettings.ConnectionString : Common.Utilities.GetExposedConnectionString(_dataStoreSettings.ConnectionStringName);
         }
 
-        public void ApplyStreamToDB(object stream)
-        {
-            base.InsertBulkToTable(stream as BaseBulkInsertInfo);
-        }
-
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -124,6 +119,11 @@ namespace Vanrise.GenericData.SQLDataStorage
                 KeepIdentity = false,
                 FieldSeparator = '^',
             };
+        }
+
+        public void ApplyStreamToDB(object stream)
+        {
+            base.InsertBulkToTable(stream as BaseBulkInsertInfo);
         }
 
         public void CreateSQLRecordStorageTable()
@@ -270,57 +270,6 @@ namespace Vanrise.GenericData.SQLDataStorage
             ExecuteNonQueryText(queryBuilder.ToString(), null);
         }
 
-        public void InsertRecords(IEnumerable<dynamic> records)
-        {
-            var dbApplyStream = this.InitialiazeStreamForDBApply();
-            foreach (var record in records)
-            {
-                this.WriteRecordToStream(record, dbApplyStream);
-            }
-            var readyStream = this.FinishDBApplyStream(dbApplyStream);
-            this.ApplyStreamToDB(readyStream);
-        }
-
-        public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
-        {
-            List<string> columnsToJoin = this.GetColumnNamesFromFieldNames(fieldsToJoin);
-            if (columnsToJoin == null || columnsToJoin.Count == 0)
-                throw new NullReferenceException("columnsToJoin");
-
-            List<string> columnsToUpdate = this.GetColumnNamesFromFieldNames(fieldsToUpdate);
-            if (columnsToUpdate == null || columnsToUpdate.Count == 0)
-                throw new NullReferenceException("columnsToUpdate");
-
-            StringBuilder queryBuilder = new StringBuilder(@"UPDATE existingRecord
-                                SET #COLUMNSUPDATE#
-                                FROM #TABLE# existingRecord JOIN @UpdatedRecords updatedRecord ON #JOINCOLUMNS#");
-
-            List<string> joinColumns = new List<string>();
-            foreach (var joinColumn in columnsToJoin)
-                joinColumns.Add(string.Format("existingRecord.{0} = updatedRecord.{0}", joinColumn));
-
-            StringBuilder columnsUpdateBuilder = new StringBuilder();
-            foreach (var columnToUpdate in columnsToUpdate)
-            {
-                if (columnsUpdateBuilder.Length > 0)
-                    columnsUpdateBuilder.Append(", ");
-                columnsUpdateBuilder.AppendLine(String.Format("{0} = updatedRecord.{0}", columnToUpdate));
-            }
-
-            queryBuilder.Replace("#TABLE#", GetTableNameWithSchema());
-            queryBuilder.Replace("#JOINCOLUMNS#", string.Join(" And ", joinColumns));
-            queryBuilder.Replace("#COLUMNSUPDATE#", columnsUpdateBuilder.ToString());
-
-            DataTable dt = this.DynamicManager.ConvertDataRecordsToTable(records);
-            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
-            {
-                SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
-                prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
-                prm.Value = dt;
-                cmd.Parameters.Add(prm);
-            });
-        }
-
         public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
         {
             var recortTypeManager = new DataRecordTypeManager();
@@ -361,29 +310,15 @@ namespace Vanrise.GenericData.SQLDataStorage
             string query = BuildQuery(context.FieldNames, context.LimitResult, context.Direction, recordFilter);
 
             return GetItemsText(query, DataRecordMapper, (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(context.FromTime)));
-                    cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(context.ToTime)));
-                    foreach (var prm in parameterValues)
-                    {
-                        cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
-                    }
-                });
-
-        }
-
-        public List<DataRecord> GetAllDataRecords(List<string> columns)
-        {
-            Columns = GetColumnNamesFromFieldNames(columns);
-            string query = BuildGetAllQuery();
-            return GetItemsText(query, DataRecordMapper, (cmd) =>
             {
+                cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(context.FromTime)));
+                cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(context.ToTime)));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
             });
-        }
 
-        public bool AreDataRecordsUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated(GetTableNameWithSchema(), ref updateHandle);
         }
 
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
@@ -440,6 +375,105 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                 foreach (var prm in parameterValues)
                     cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+            });
+        }
+
+        public List<DataRecord> GetAllDataRecords(List<string> columns)
+        {
+            Columns = GetColumnNamesFromFieldNames(columns);
+            string query = BuildGetAllQuery();
+            return GetItemsText(query, DataRecordMapper, (cmd) =>
+            {
+            });
+        }
+
+        public bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
+        {
+            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
+            bool withOutParameter = false;
+            insertedId = null;
+            SqlParameter sqlParameter = null;
+            var effectedRows = ExecuteNonQueryText(BuildInsertQuery(fieldValues, parameterValues, createdUserId, modifiedUserId, ref withOutParameter), (cmd) =>
+            {
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
+                }
+                if (withOutParameter)
+                {
+                    sqlParameter = new SqlParameter("@Id", SqlDbType.BigInt);
+                    sqlParameter.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(sqlParameter);
+                }
+
+            });
+            if (withOutParameter)
+                insertedId = sqlParameter.Value;
+            return effectedRows > 0;
+        }
+
+        public void InsertRecords(IEnumerable<dynamic> records)
+        {
+            var dbApplyStream = this.InitialiazeStreamForDBApply();
+            foreach (var record in records)
+            {
+                this.WriteRecordToStream(record, dbApplyStream);
+            }
+            var readyStream = this.FinishDBApplyStream(dbApplyStream);
+            this.ApplyStreamToDB(readyStream);
+        }
+
+        public bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId)
+        {
+            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
+            return ExecuteNonQueryText(BuildUpdateQuery(fieldValues, parameterValues, modifiedUserId), (cmd) =>
+            {
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
+                }
+
+            }) > 0;
+
+        }
+
+        public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
+        {
+            List<string> columnsToJoin = this.GetColumnNamesFromFieldNames(fieldsToJoin);
+            if (columnsToJoin == null || columnsToJoin.Count == 0)
+                throw new NullReferenceException("columnsToJoin");
+
+            List<string> columnsToUpdate = this.GetColumnNamesFromFieldNames(fieldsToUpdate);
+            if (columnsToUpdate == null || columnsToUpdate.Count == 0)
+                throw new NullReferenceException("columnsToUpdate");
+
+            StringBuilder queryBuilder = new StringBuilder(@"UPDATE existingRecord
+                                SET #COLUMNSUPDATE#
+                                FROM #TABLE# existingRecord JOIN @UpdatedRecords updatedRecord ON #JOINCOLUMNS#");
+
+            List<string> joinColumns = new List<string>();
+            foreach (var joinColumn in columnsToJoin)
+                joinColumns.Add(string.Format("existingRecord.{0} = updatedRecord.{0}", joinColumn));
+
+            StringBuilder columnsUpdateBuilder = new StringBuilder();
+            foreach (var columnToUpdate in columnsToUpdate)
+            {
+                if (columnsUpdateBuilder.Length > 0)
+                    columnsUpdateBuilder.Append(", ");
+                columnsUpdateBuilder.AppendLine(String.Format("{0} = updatedRecord.{0}", columnToUpdate));
+            }
+
+            queryBuilder.Replace("#TABLE#", GetTableNameWithSchema());
+            queryBuilder.Replace("#JOINCOLUMNS#", string.Join(" And ", joinColumns));
+            queryBuilder.Replace("#COLUMNSUPDATE#", columnsUpdateBuilder.ToString());
+
+            DataTable dt = this.DynamicManager.ConvertDataRecordsToTable(records);
+            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
+            {
+                SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
+                prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
+                prm.Value = dt;
+                cmd.Parameters.Add(prm);
             });
         }
 
@@ -502,43 +536,9 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        public bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId)
+        public bool AreDataRecordsUpdated(ref object updateHandle)
         {
-            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
-            return ExecuteNonQueryText(BuildUpdateQuery(fieldValues, parameterValues, modifiedUserId), (cmd) =>
-                    {
-                        foreach (var prm in parameterValues)
-                        {
-                            cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
-                        }
-
-                    }) > 0;
-
-        }
-
-        public bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
-        {
-            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
-            bool withOutParameter = false;
-            insertedId = null;
-            SqlParameter sqlParameter = null;
-            var effectedRows = ExecuteNonQueryText(BuildInsertQuery(fieldValues, parameterValues, createdUserId, modifiedUserId, ref withOutParameter), (cmd) =>
-            {
-                foreach (var prm in parameterValues)
-                {
-                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
-                }
-                if (withOutParameter)
-                {
-                    sqlParameter = new SqlParameter("@Id", SqlDbType.BigInt);
-                    sqlParameter.Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add(sqlParameter);
-                }
-
-            });
-            if (withOutParameter)
-                insertedId = sqlParameter.Value;
-            return effectedRows > 0;
+            return base.IsDataUpdated(GetTableNameWithSchema(), ref updateHandle);
         }
 
         public int GetDBQueryMaxParameterNumber()
