@@ -119,31 +119,24 @@ namespace TOne.WhS.Deal.Business
                 record.OrigCostDealZoneGroupNb = null;
             }
         }
-        public bool IsSaleZoneIncludedInDeal(int customerId, long zoneId, DateTime effectiveAfter)
+
+        public int? IsZoneIncludedInDeal(int carrierId, long zoneId, DateTime effectiveAfter, bool isSale)
         {
-            var dealZoneInfoByCustomerId = GetCachedCustomerDealZoneInfoByCustomerId();
-            var customerDeals = dealZoneInfoByCustomerId.GetRecord(customerId);
-            var dealZoneInfo = customerDeals.GetRecord(zoneId);
+            var dealZoneInfoByCarrierId = isSale
+                ? GetCachedCustomerDealZoneInfoByCustomerId()
+                : GetCachedSupplierDealZoneInfoBySupplierId();
+
+            var carrierDeals = dealZoneInfoByCarrierId.GetRecord(carrierId);
+            var dealZoneInfo = carrierDeals.GetRecord(zoneId);
+
             if (dealZoneInfo == null)
-                return false;
-            var zoneInfo = dealZoneInfo.First();
-            if (effectiveAfter > zoneInfo.Value.EED)
-                return false;
-            else
-                return true;
-        }
-        public bool IsSupplierZoneIncludedInDeal(int supplierId, long zoneId, DateTime effectiveAfter)
-        {
-            var dealZoneInfoByCustomerId = GetCachedSupplierDealZoneInfoBySupplierId();
-            var supplierDeals = dealZoneInfoByCustomerId.GetRecord(supplierId);
-            var dealZoneInfo = supplierDeals.GetRecord(zoneId);
-            if (dealZoneInfo == null)
-                return false;
-            var zoneInfo = dealZoneInfo.First();
-            if (effectiveAfter > zoneInfo.Value.EED)
-                return false;
-            else
-                return true;
+                return null;
+
+            var zoneInfo = dealZoneInfo.First().Value;
+            if (effectiveAfter > zoneInfo.EED)
+                return null;
+
+            return zoneInfo.DealId;
         }
         public DealSaleZoneGroupWithoutRate GetAccountSaleZoneGroup(int? customerId, long? saleZoneId, DateTime effectiveDate)
         {
@@ -213,42 +206,44 @@ namespace TOne.WhS.Deal.Business
                 ? GetCachedCustomerDealZoneInfoByCustomerId()
                 : GetCachedSupplierDealZoneInfoBySupplierId();
 
-            if (cachedDealInfo != null)
-            {
-                DealZoneInfoByZoneId dealZoneInfo = cachedDealInfo.GetRecord(carrierAccountId);
-                if (dealZoneInfo != null)
-                {
-                    var zoneInfos = dealZoneInfo.GetRecord(zoneId);
-                    if (zoneInfos != null)
-                    {
-                        foreach (var zoneInfo in zoneInfos)
-                        {
-                            if ( (!dealId.HasValue || dealId.Value != zoneInfo.Value.DealId) && IsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
-                                return true;
-                        }
-                    }
-                }
-                else
-                {
-                    if (isSale)
-                    {
-                        var saleZone = new SaleZoneManager().GetSaleZone(zoneId);
-                        if (saleZone == null)
-                            throw new NullReferenceException("saleZone");
-                        if (dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null))
-                            return true;
-                    }
-                    else
-                    {
-                        var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
-                        if (supplierZone == null)
-                            throw new NullReferenceException("supplierZone");
-                        if (dealBED < supplierZone.BED && (dealEED < supplierZone.EED || supplierZone.EED == null))
-                            return true;
+            if (cachedDealInfo == null)
+                return false;
 
+            DealZoneInfoByZoneId dealZoneInfo = cachedDealInfo.GetRecord(carrierAccountId);
+            if (dealZoneInfo != null)
+            {
+                var zoneInfos = dealZoneInfo.GetRecord(zoneId);
+                if (zoneInfos != null)
+                {
+                    foreach (var zoneInfo in zoneInfos)
+                    {
+                        if ((!dealId.HasValue || dealId.Value != zoneInfo.Value.DealId) && IsOverlapped(dealBED, dealEED, zoneInfo.Value.BED, zoneInfo.Value.EED))
+                            return true;
                     }
                 }
             }
+            else
+            {
+
+                if (isSale)
+                {
+                    var saleZone = new SaleZoneManager().GetSaleZone(zoneId);
+                    if (saleZone == null)
+                        throw new NullReferenceException("saleZone");
+                    if (dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null))
+                        return true;
+                }
+                else
+                {
+                    var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
+                    if (supplierZone == null)
+                        throw new NullReferenceException("supplierZone");
+                    if (dealBED < supplierZone.BED && (dealEED < supplierZone.EED || supplierZone.EED == null))
+                        return true;
+
+                }
+            }
+
             return false;
         }
         private bool IsOverlapped(DateTime firstBeginEffectiveDate, DateTime? firstEndEffectiveDate, DateTime secondBeginEffectiveDate, DateTime? secondEndEffectiveDate)
