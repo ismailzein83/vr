@@ -56,7 +56,7 @@
                             </vr-row>
                             <vr-row vr-loader="isLoadingAction">
                                 <vr-columns width="fullrow" ng-if="scopeModel.selectedActionType">
-                                    <vr-section title="{{scopeModel.selectedActionType.Name}} Action">
+                                    <vr-section header="{{scopeModel.selectedActionType.Name}} Action">
                                         <vr-directivewrapper directive="scopeModel.selectedActionType.Info.Editor" on-ready="onTaskActionDirectiveReady"></vr-directivewrapper>
                                     </vr-section>
                             </vr-row>
