@@ -1,0 +1,19 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-label>Supplier Template Settings</vr-label>
+        <vr-whs-be-autoimporttemplatesettings-editor on-ready="ctrl.onAutoImportTemplateSettingsReady"></vr-whs-be-autoimporttemplatesettings-editor>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-label>Internal Template Settings</vr-label>
+        <vr-whs-be-internalautoimporttemplatesettings-editor on-ready="ctrl.onInternalAutoImportTemplateSettingsReady"></vr-whs-be-internalautoimporttemplatesettings-editor>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Pricelist Type Mapping">
+            <vr-row>
+                <vr-whs-be-purchasearea-settings-pricelisttypemapping on-ready="ctrl.onPricelistTypeMappingReady"></vr-whs-be-purchasearea-settings-pricelisttypemapping>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>

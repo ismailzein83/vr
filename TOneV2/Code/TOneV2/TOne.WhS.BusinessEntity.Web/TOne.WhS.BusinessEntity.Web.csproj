@@ -451,6 +451,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\Templates\CustomerSoldZonesGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CustomerSoldZones\vr-whs-be-customersoldzones-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\AutoImportSPLSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\AutoImportTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\CodeChangeTypeSettingsGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\InternalAutoImportTemplateSettingsTemplate.html" />
@@ -462,6 +463,7 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplateHelper.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistTypeMappingTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-autoimport-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-autoimporttemplatesettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-internalautoimporttemplatesettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelisttype-selector.js" />

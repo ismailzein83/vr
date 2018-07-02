@@ -53,10 +53,15 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 		{
 			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_UpdateStatus", receivedPricelistRecordId, status);
 		}
+        public void UpdateSentToSupplierStatus (int receivedPricelistRecordId, bool status)
+        {
+            ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetSentToSupplierStatus", receivedPricelistRecordId, status);
+        }
 
-		public void SetReceivedPricelistAsCompletedManualy(int receivedPricelistRecordId, ReceivedPricelistStatus status)
+		public bool SetReceivedPricelistAsCompletedManualy(int receivedPricelistRecordId, ReceivedPricelistStatus status)
 		{
-			ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsCompletedManualy", receivedPricelistRecordId, status);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_SPL].sp_ReceivedSupplierPricelist_SetAsCompletedManualy", receivedPricelistRecordId, status);
+            return (recordsEffected > 0);
 		}
 
 		public void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors)
@@ -103,6 +108,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 				ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceId"),
 				StartProcessingDateTime = GetReaderValue<DateTime?>(reader, "StartProcessingDate"),
 				ErrorDetails = string.IsNullOrEmpty(GetReaderValue<string>(reader, "ErrorDetails")) ? null : Serializer.Deserialize<List<SPLImportErrorDetail>>(GetReaderValue<string>(reader, "ErrorDetails")),
+                SentToSupplier = GetReaderValue<bool>(reader, "SentToSupplier")
 			};
 		}
 

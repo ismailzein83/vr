@@ -12,9 +12,10 @@ namespace TOne.WhS.SupplierPriceList.Data
 		void SetReceivedPricelistAsStarted(int receivedPricelistRecordId, ReceivedPricelistStatus status, long processInstanceId, DateTime startProcessingTime);
 		void SetReceivedPricelistAsCompleted(int receivedPricelistRecordId, ReceivedPricelistStatus status, int pricelistId);
 		void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status);
-		void SetReceivedPricelistAsCompletedManualy(int receivedPricelistRecordId, ReceivedPricelistStatus status);
+		bool SetReceivedPricelistAsCompletedManualy(int receivedPricelistRecordId, ReceivedPricelistStatus status);
 		void UpdateReceivedPricelistStatus(int receivedPricelistRecordId, ReceivedPricelistStatus status, IEnumerable<SPLImportErrorDetail> errors);
 		ReceivedPricelist GetReceivedPricelistById(int id);
 		List<ReceivedPricelist> GetFilteredReceivedPricelists(ReceivedPricelistQuery input);
+        void UpdateSentToSupplierStatus(int receivedPricelistRecordId, bool status);
 	}
 }

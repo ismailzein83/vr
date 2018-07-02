@@ -1,17 +1,23 @@
-﻿	<vr-datagrid datasource="receivedPricelists"
-				 on-ready="onGridReady"
-				 dataretrievalfunction="dataRetrievalFunction"
-				 pagingtype="'PagingOnScroll'"
-				 menuactions="gridMenuActions"
-				 defaultsortdirection="'DESC'"
-				 defaultsortbyfieldname="'ReceivedPricelist.ReceivedDateTime'"
-				 enableautoexport="true"
-				 vr-loader="isLoading">
-		<vr-datagridcolumn headertext="'Id'" field="'ReceivedPricelist.Id'" type="'Text'"></vr-datagridcolumn>
-		<vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
-		<vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeDescription'" type="'Text'"></vr-datagridcolumn>
-		<vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'" isrequired></vr-datagridcolumn>
-		<vr-datagridcolumn headertext="'Received Date'" field="'ReceivedPricelist.ReceivedDateTime'" type="'Datetime'"></vr-datagridcolumn>
-		<vr-datagridcolumn headertext="'Processing Date'" field="'ReceivedPricelist.StartProcessingDateTime'" type="'Datetime'"></vr-datagridcolumn>
-		<vr-datagridcolumn headertext="'Error'" field="'ErrorCol'" type="'Text'" onclicked="viewDetails" isclickable="true"></vr-datagridcolumn>
-	</vr-datagrid>
+﻿<vr-datagrid datasource="receivedPricelists"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             defaultsortdirection="'DESC'"
+             defaultsortbyfieldname="'ReceivedPricelist.ReceivedDateTime'"
+             enableautoexport="true"
+             vr-loader="isLoading"
+             idfield="ReceivedPricelist.Id">
+    <vr-datagridcolumn headertext="'Id'" field="'ReceivedPricelist.Id'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'">
+        <div ng-class="viewScope.getStatusColor(dataItem)" style="width:75%;display:inline-block;text-align:left">{{dataItem.StatusDescription}}</div>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Received Date'" field="'ReceivedPricelist.ReceivedDateTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Processing Date'" field="'ReceivedPricelist.StartProcessingDateTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Error'" field="'ErrorCol'" type="'Text'" onclicked="viewDetails" isclickable="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Sent To Supplier'">
+        <vr-icon icontype="dataItem.SentToSupplier"></vr-icon>
+    </vr-datagridcolumn>
+</vr-datagrid>

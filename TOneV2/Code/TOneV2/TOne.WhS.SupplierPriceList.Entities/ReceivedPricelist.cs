@@ -16,6 +16,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		public long? ProcessInstanceId { get; set; }
 		public DateTime? StartProcessingDateTime { get; set; }
 		public List<SPLImportErrorDetail> ErrorDetails { get; set; }
+        public bool SentToSupplier { get; set; }
 	}
 
 	public class SPLImportErrorDetail

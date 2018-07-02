@@ -25,10 +25,11 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
 
 		[HttpPost]
 		[Route("SetReceivedPricelistAsCompleted")]
-		public ReceivedPricelistDetail SetReceivedPricelistAsCompleted(ReceivedPricelistDetail receivedPricelistDetail)
+        public object SetReceivedPricelistAsCompleted(ReceivedPricelistDetail receivedPricelistDetail)
 		{
 			ReceivedSupplierPricelistManager manager = new ReceivedSupplierPricelistManager();
 			return manager.SetReceivedPricelistAsCompleted(receivedPricelistDetail);
 		}
+
 	}
 }

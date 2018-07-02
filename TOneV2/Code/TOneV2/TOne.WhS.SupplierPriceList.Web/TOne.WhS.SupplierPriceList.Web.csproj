@@ -210,6 +210,7 @@
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListTemplateAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListPreviewAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListAPIService.js" />
+    <Content Include="WhS_SupplierPriceList\Services\ReceivedSupplierPricelistService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListTemplateService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />

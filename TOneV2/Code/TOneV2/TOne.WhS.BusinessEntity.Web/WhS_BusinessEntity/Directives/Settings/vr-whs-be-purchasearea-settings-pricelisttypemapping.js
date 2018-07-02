@@ -74,9 +74,9 @@ function (UtilsService , WhS_SupPL_SupplierPriceListTypeEnum) {
                 }
             };
             $scope.scopeModel.validateColumns = function () {
-                //if ($scope.scopeModel.pricelistTypeMappers.length == 0) {
-                //    return 'Please, one record must be added at least.';
-                //}
+                if ($scope.scopeModel.pricelistTypeMappers.length == 0) {
+                    return 'Please, one record must be added at least.';
+                }
 
                 var columnSubject = [];
                 for (var i = 0; i < $scope.scopeModel.pricelistTypeMappers.length; i++) {

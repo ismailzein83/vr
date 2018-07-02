@@ -7,4 +7,5 @@
     FailedDueToProcessingError: { value: 75, description: "Failed Due To Processing Error" },
     FailedDueToConfigurationError: { value: 80, description: "Failed Due To Configuration Error" },
     FailedDueToReceivedMailError: { value: 85, description: "Failed Due To Received Mail Error" },
+    ImportedManually: { value: 66, description: "Imported Manually" },
 });
