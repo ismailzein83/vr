@@ -444,26 +444,26 @@ namespace TOne.WhS.BusinessEntity.Business
 		}
 		public List<PricelistTypeMapping> GetPurchasePricelistTypeMappingList()
 		{
-			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
-			return purchaseAreaSettings.PricelistTypeMappingList;
+            AutoImportSPLSettings autoImportSettings = GetAutoImportSPLSettings();
+            return autoImportSettings.PricelistTypeMappingList;
 		}
 
 		public AutoImportTemplate GetSupplierAutoImportTemplateByType(AutoImportEmailTypeEnum type)
 		{
-			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
-			if (purchaseAreaSettings.AutoImportTemplateList != null && purchaseAreaSettings.AutoImportTemplateList.Count > 0)
+            AutoImportSPLSettings autoImportSettings = GetAutoImportSPLSettings();
+            if (autoImportSettings.AutoImportTemplateList != null && autoImportSettings.AutoImportTemplateList.Count > 0)
 			{
-				return purchaseAreaSettings.AutoImportTemplateList.FindRecord(item => item.TemplateType == type);
+                return autoImportSettings.AutoImportTemplateList.FindRecord(item => item.TemplateType == type);
 			}
 			return null;
 		}
 
 		public AutoImportTemplate GetInternalAutoImportTemplateByType(AutoImportEmailTypeEnum type)
 		{
-			PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
-			if (purchaseAreaSettings.InternalAutoImportTemplateList != null && purchaseAreaSettings.InternalAutoImportTemplateList.Count > 0)
+            AutoImportSPLSettings autoImportSettings = GetAutoImportSPLSettings();
+            if (autoImportSettings.InternalAutoImportTemplateList != null && autoImportSettings.InternalAutoImportTemplateList.Count > 0)
 			{
-				return purchaseAreaSettings.InternalAutoImportTemplateList.FindRecord(item => item.TemplateType == type);
+                return autoImportSettings.InternalAutoImportTemplateList.FindRecord(item => item.TemplateType == type);
 			}
 			return null;
 		}
@@ -571,6 +571,10 @@ namespace TOne.WhS.BusinessEntity.Business
 		{
 			return GetSettings<PurchaseAreaSettingsData>(Constants.PurchaseAreaSettings);
 		}
+        private AutoImportSPLSettings GetAutoImportSPLSettings()
+        {
+            return GetSettings<AutoImportSPLSettings>(Constants.AutoImportSettings);
+        }
 		private FaultTicketsSettingsData GetFaultTicketsSettingsData()
 		{
 			SettingManager manager = new SettingManager();
