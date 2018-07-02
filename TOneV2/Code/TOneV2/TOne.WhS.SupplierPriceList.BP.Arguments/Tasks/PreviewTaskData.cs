@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments.Tasks
     {
         public long FileId { get; set; }
         public int CurrencyId { get; set; }
-        public String PricelistDate { get; set; }
+        public DateTime PricelistDate { get; set; }
         public SupplierPricelistType SupplierPricelistType { get; set; }
     }
 }

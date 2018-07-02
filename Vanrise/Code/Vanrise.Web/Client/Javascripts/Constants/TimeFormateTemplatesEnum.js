@@ -18,3 +18,11 @@
     ddddddMMMMyyyyHHmmssfff: { value: 16, description: "dd/MM/yyyy HH:mm:ss.fff	(ex: 22/08/2006 06:30:07.000)", expression: "dd/MM/yyyy HH:mm:ss.fff" },
     Custom: { value: 17, description: "Custom", expression: "Custom" }
 });
+
+
+
+app.constant('DateTimeFormatEnum', {
+    LongDateTime: { value: 0, name: "LongDateTime", description: "Long Date Time", mask: "LongDateTime" },
+    DateTime: { value: 1, name: "DateTime", description: "Date Time", mask: "DateTime" },
+    Date: { value: 2, name: "Date", description: "Date", mask: "Date" }
+});

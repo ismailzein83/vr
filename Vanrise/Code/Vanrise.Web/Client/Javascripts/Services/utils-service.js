@@ -1,13 +1,13 @@
 ﻿'use strict';
 (function (app) {
 
-    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum'];
+    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'DateTimeFormatEnum'];
 
-    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum) {
+    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum, DateTimeFormatEnum) {
 
         "use strict";
 
-        var dateFormat = function () {
+        var  dateFormat = function () {
             var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
                 timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
                 timezoneClip = /[^-+\dA-Z]/g,
@@ -100,7 +100,10 @@
             isoTime: "HH:MM:ss",
             isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
             isoFullDateTime: "yyyy-mm-dd'T'HH:MM:ss.l",
-            isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+            isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'",
+            LongDateTime:"yyyy-mm-dd HH:MM:ss",
+            DateTime:"yyyy-mm-dd HH:MM",
+            Date: "yyyy-mm-dd"
         };
 
         // Internationalization strings
@@ -553,6 +556,11 @@
             }
         }
 
+        function getDateTimeFormat(date, dateTimeFormatEnumObject) {
+          return dateFormat(date, dateFormat.masks[dateTimeFormatEnumObject.mask]);
+        }
+
+
         function dateToServerFormat(date) {
             if (date instanceof Date)
                 return dateFormat(date, dateFormat.masks.isoFullDateTime);
@@ -929,6 +937,7 @@
             getLogEntryTypeColor: getLogEntryTypeColor,
             getLogEntryType: getLogEntryType,
             getEnum: getEnum,
+            getDateTimeFormat:getDateTimeFormat,
             dateToServerFormat: dateToServerFormat,
             getPropMinValueFromArray: getPropMinValueFromArray,
             getShortDate: getShortDate,

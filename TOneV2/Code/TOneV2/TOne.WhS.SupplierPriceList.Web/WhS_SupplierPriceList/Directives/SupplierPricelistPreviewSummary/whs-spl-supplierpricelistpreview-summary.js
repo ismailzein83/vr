@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsSplSupplierpricelistpreviewSummary", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_SupplierPriceListPreviewPIService","VRCommon_FileAPIService","VRCommon_CurrencyAPIService","WhS_SupPL_SupplierPriceListTypeEnum",
-function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_SupplierPriceListPreviewPIService, VRCommon_FileAPIService, VRCommon_CurrencyAPIService, WhS_SupPL_SupplierPriceListTypeEnum) {
+app.directive("whsSplSupplierpricelistpreviewSummary", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_SupplierPriceListPreviewPIService","VRCommon_FileAPIService","VRCommon_CurrencyAPIService","WhS_SupPL_SupplierPriceListTypeEnum", "DateTimeFormatEnum",
+function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_SupplierPriceListPreviewPIService, VRCommon_FileAPIService, VRCommon_CurrencyAPIService, WhS_SupPL_SupplierPriceListTypeEnum, DateTimeFormatEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -46,15 +46,11 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
                 if (payload != null) {
                     processInstanceId = payload.processInstanceId;
-                    //if (pricelistDate != null) {
-                    //    pricelistDate = pricelistDate.replace("T", " ");
-                    //}
+
                     currencyId = payload.currencyId;
                     fileId = payload.fileID;
 
-                    $scope.scopeModel.pricelistDate = payload.pricelistDate;
-
-                    
+                    $scope.scopeModel.pricelistDate = UtilsService.getDateTimeFormat(payload.pricelistDate, DateTimeFormatEnum.Date);
 
                     if (payload.supplierPricelistType != null) {
                         var pricelistTypesOptions = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);

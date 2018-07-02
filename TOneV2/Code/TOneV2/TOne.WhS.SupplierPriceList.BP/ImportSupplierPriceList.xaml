@@ -1333,7 +1333,7 @@
                     <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskData()
             {
                 SupplierPricelistType = Input.SupplierPricelistType,
-                PricelistDate = Input.PriceListDate.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.DateTime)),
+                PricelistDate = Input.PriceListDate,
                 CurrencyId = Input.CurrencyId,
                 FileId = Input.FileId
             }</mca:CSharpValue>
