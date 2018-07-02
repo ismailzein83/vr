@@ -112,12 +112,22 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public bool Insert(Dictionary<string, object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InsertRecords(IEnumerable<dynamic> records)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Update(Dictionary<string, object> fieldValues, int? modifiedUserId)
         {
             throw new NotImplementedException();
         }
 
-        public bool Insert(Dictionary<string, object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
+        public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
         {
             throw new NotImplementedException();
         }
@@ -143,6 +153,11 @@ namespace Vanrise.GenericData.Business
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetDBQueryMaxParameterNumber()
         {
             throw new NotImplementedException();
         }

@@ -270,7 +270,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             ExecuteNonQueryText(queryBuilder.ToString(), null);
         }
 
-        public void InsertSummaryRecords(IEnumerable<dynamic> records)
+        public void InsertRecords(IEnumerable<dynamic> records)
         {
             var dbApplyStream = this.InitialiazeStreamForDBApply();
             foreach (var record in records)
@@ -281,7 +281,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             this.ApplyStreamToDB(readyStream);
         }
 
-        public void UpdateSummaryRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
+        public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
         {
             List<string> columnsToJoin = this.GetColumnNamesFromFieldNames(fieldsToJoin);
             if (columnsToJoin == null || columnsToJoin.Count == 0)
@@ -539,6 +539,11 @@ namespace Vanrise.GenericData.SQLDataStorage
             if (withOutParameter)
                 insertedId = sqlParameter.Value;
             return effectedRows > 0;
+        }
+
+        public int GetDBQueryMaxParameterNumber()
+        {
+            return base.GetSQLQueryMaxParameterNumber();
         }
 
         #region Private Methods

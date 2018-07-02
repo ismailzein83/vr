@@ -18,13 +18,19 @@ namespace Vanrise.GenericData.Entities
 
         void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
 
+        bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
+
+        void InsertRecords(IEnumerable<dynamic> records);
+
         bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId);
 
-        bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
+        void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate);
 
         List<DataRecord> GetAllDataRecords(List<string> columns);
 
         bool AreDataRecordsUpdated(ref object updateHandle);
+
+        int GetDBQueryMaxParameterNumber();
     }
 
     public interface IDataRecordDataManagerGetFilteredDataRecordsContext
@@ -44,10 +50,6 @@ namespace Vanrise.GenericData.Entities
 
     public interface ISummaryRecordDataManager
     {
-        void InsertSummaryRecords(IEnumerable<dynamic> records);
-
-        void UpdateSummaryRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate);
-
         IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart);
     }
 

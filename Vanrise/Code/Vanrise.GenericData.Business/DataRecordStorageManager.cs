@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.Business
             DataStore dataStore = new DataStoreManager().GetDataStore(dataRecordStorage.DataStoreId);
             dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);
             dataStore.Settings.ThrowIfNull("dataStore.Settings", dataRecordStorage.DataStoreId);
-           
+
             if (dataRecordStorage.Settings.RequiredLimitResult && !input.Query.LimitResult.HasValue)
                 throw new Exception("Limit result should not be null.");
 
@@ -110,7 +110,7 @@ namespace Vanrise.GenericData.Business
         public List<DataRecord> GetAllDataRecords(Guid dataRecordStorageId)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
-            dataRecordStorage.ThrowIfNull("dataRecordStorage",dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
             if (!dataRecordStorage.Settings.EnableUseCaching)
                 throw new NotSupportedException("This method only available for cached record storages");
             return GetCachedDataRecords(dataRecordStorageId);
@@ -161,16 +161,23 @@ namespace Vanrise.GenericData.Business
                 hasInsertedId = false;
                 fieldValues.Add(idFieldType.Name, idField);
             }
-          
+
             int? userId;
             SecurityContext.Current.TryGetLoggedInUserId(out userId);
 
-            bool insertActionSucc = storageDataManager.Insert(fieldValues, userId,userId, out insertedId);
+            bool insertActionSucc = storageDataManager.Insert(fieldValues, userId, userId, out insertedId);
 
             if (insertActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);
 
             return insertActionSucc;
+        }
+
+        public void AddDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            storageDataManager.InsertRecords(records);
         }
 
         public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues)
@@ -196,6 +203,13 @@ namespace Vanrise.GenericData.Business
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);
 
             return updateActionSucc;
+        }
+
+        public void UpdateDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            storageDataManager.UpdateRecords(records, fieldsToJoin, fieldsToUpdate);
         }
 
         #endregion
@@ -403,19 +417,11 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public void GetDataRecords(Guid dataRecordStorageId, DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
+        public void GetDataRecords(Guid dataRecordStorageId, DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
         {
-            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
-            if (dataRecordStorage == null)
-                throw new NullReferenceException(String.Format("dataRecordStorage Id '{0}'", dataRecordStorageId));
-            if (dataRecordStorage.Settings == null)
-                throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", dataRecordStorageId));
-
-            var dataManager = GetStorageDataManager(dataRecordStorage);
-            if (dataManager == null)
-                throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
-
-            dataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady);
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            storageDataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady);
         }
 
         public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
@@ -524,6 +530,13 @@ namespace Vanrise.GenericData.Business
             return dataStore.Settings.GetStorageRowCount(getStorageRowCountContext);
         }
 
+        public int GetDBQueryMaxParameterNumber(Guid dataRecordStorageId)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            return storageDataManager.GetDBQueryMaxParameterNumber();
+        }
+
         #endregion
 
         #region Private Methods
@@ -611,13 +624,13 @@ namespace Vanrise.GenericData.Business
                     var formulaColumns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula != null).Select(fld => fld.Name).ToList();
 
                     var dataRecords = dataManager.GetAllDataRecords(columns);
-                    
-                    if(formulaColumns.Count > 0)
+
+                    if (formulaColumns.Count > 0)
                     {
-                        foreach(var dataRecord in dataRecords)
+                        foreach (var dataRecord in dataRecords)
                         {
                             var dataRecordObject = new DataRecordObject(dataRecordStorage.DataRecordTypeId, dataRecord.FieldValues);
-                            foreach(var formulaColumn in formulaColumns)
+                            foreach (var formulaColumn in formulaColumns)
                             {
                                 dataRecord.FieldValues.Add(formulaColumn, dataRecordObject.GetFieldValue(formulaColumn));
                             }
@@ -722,7 +735,7 @@ namespace Vanrise.GenericData.Business
         private HashSet<string> GetFieldsThatDescriptionUsedForOrdering(DataRetrievalInput<DataRecordQuery> input, DataRecordType recordType)
         {
             HashSet<string> fieldNames = new HashSet<string>();
-            if(input.SortByColumnName != null)
+            if (input.SortByColumnName != null)
             {
                 if (input.SortByColumnName.EndsWith(".Description"))
                 {
@@ -731,7 +744,7 @@ namespace Vanrise.GenericData.Business
                 }
             }
 
-            if(input.Query.SortColumns != null)
+            if (input.Query.SortColumns != null)
             {
                 foreach (var sortColumn in input.Query.SortColumns)
                 {
@@ -926,7 +939,7 @@ namespace Vanrise.GenericData.Business
         {
 
             DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-           
+
 
             ConcurrentDictionary<Guid, Object> _updateHandlesByDataStorage = new ConcurrentDictionary<Guid, Object>();
 
@@ -1047,22 +1060,21 @@ namespace Vanrise.GenericData.Business
                     ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
                 };
             }
+
             public override DataRecordDetail EntityDetailMapper(DataRecord entity)
             {
                 throw new NotImplementedException();
             }
+
             #endregion
 
             #region Private Methods
+
             private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, Guid dataRecordStorageId)
             {
-                DataRecordStorageManager manager = new DataRecordStorageManager();
-                var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
-                dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
-                dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorageId);
+                var storageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorageId);
+                storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
 
-                var dataManager = manager.GetStorageDataManager(dataRecordStorage);
-                dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
                 var query = input.Query;
                 var context = new DataRecordDataManagerGetFilteredDataRecordsContext
                 {
@@ -1073,7 +1085,7 @@ namespace Vanrise.GenericData.Business
                     FieldNames = query.Columns,
                     Direction = query.Direction
                 };
-                return dataManager.GetFilteredDataRecords(context);
+                return storageDataManager.GetFilteredDataRecords(context);
             }
 
             #endregion

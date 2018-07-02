@@ -57,6 +57,11 @@ namespace Vanrise.Data.SQL
             };
         }
 
+        protected int GetSQLQueryMaxParameterNumber()
+        {
+            return 2000; //Exactly 2100
+        }
+
         public string GetSqlParameterSqlType(string parameterName, Object parameterValue)
         {
             SqlParameter sqlPrm = new SqlParameter(parameterName, parameterValue);
