@@ -44,6 +44,10 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -54,7 +58,8 @@
   <ItemGroup>
     <Compile Include="NumberingPlan\CPValidateZoneCondition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatePlan\RPValidateZoneCondition.cs" />
+    <Compile Include="RatePlan\RPValidateRateChangeCondition.cs" />
+    <Compile Include="RatePlan\RPValidateStopSellingCountryCondition.cs" />
     <Compile Include="SupplierPricelist\SPValidateRateChangeCondition.cs" />
     <Compile Include="SupplierPricelist\SPValidateClosedZoneCondition.cs" />
   </ItemGroup>

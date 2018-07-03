@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Text;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using TOne.WhS.Deal.Business;
 using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Deal.Business;
 using TOne.WhS.BusinessEntity.Business;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+
 
 namespace TOne.WhS.Deal.BusinessProcessRules
 {
-    class RPValidateZoneCondition : BusinessRuleCondition
+    class RPValidateRateChangeCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
@@ -26,7 +28,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            StringBuilder sb = new StringBuilder();
+            var zoneMessages = new List<String>();
             foreach (var dataByZone in allDataByZone.DataByZoneList)
             {
                 if (dataByZone.NormalRateToChange != null || dataByZone.NormalRateToClose != null)
@@ -36,13 +38,14 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                     {
                         var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
                         var zoneName = new SaleZoneManager().GetSaleZoneName(dataByZone.ZoneId);
-                        sb.AppendFormat("Zone '{0}' in deal '{1}'", zoneName, deal.Name);
+                        zoneMessages.Add(String.Format("zone {0} in deal {1}", zoneName, deal.Name));
                     }
                 }
             }
-            if (sb.Length > 1)
+            if (zoneMessages.Any())
             {
-                context.Message = String.Format("The Following zones are linked to deal : {0}", sb.ToString());
+                string zoneMessagesString = string.Concat(",", zoneMessages);
+                context.Message = String.Format("Modified rates cannot be done for zones included in deals. Following zones are : {0}", zoneMessagesString);
                 return false;
             }
             return true;
