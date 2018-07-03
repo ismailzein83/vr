@@ -111,6 +111,18 @@ namespace Vanrise.DataParser.Business
             return result;
         }
 
+        public static uint ByteToUnsignedNumber(byte[] bytes)
+        {
+            int pos = 0;
+            uint result = 0;
+            foreach (byte by in bytes)
+            {
+                result |= (uint)(by << pos);
+                pos += 8;
+            }
+            return result;
+        }
+
         public static byte[] SplitByteToNibble(byte data)
         {
             byte[] nibbles = new byte[2];

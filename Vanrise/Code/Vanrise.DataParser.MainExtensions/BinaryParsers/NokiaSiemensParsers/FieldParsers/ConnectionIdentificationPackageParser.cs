@@ -7,7 +7,7 @@ using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers
-{
+{ 
     public class ConnectionIdentificationPackageParser : BinaryFieldParserSettings
     {
         public override Guid ConfigId { get { return new Guid("345EEBD2-630C-4490-98C8-BE7E78600B69"); } }
@@ -15,7 +15,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Fi
 
         public override void Execute(IBinaryFieldParserContext context)
         {
-            int connectionIdentification =  ParserHelper.ByteToNumber(context.FieldValue);
+            long connectionIdentification = ParserHelper.ByteToUnsignedNumber(context.FieldValue);
             context.Record.SetFieldValue(this.ConnectionIdentificationFieldName, connectionIdentification);
         }
     }
