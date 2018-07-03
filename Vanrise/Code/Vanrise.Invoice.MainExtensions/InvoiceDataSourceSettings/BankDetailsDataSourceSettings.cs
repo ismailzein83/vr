@@ -49,7 +49,9 @@ namespace Vanrise.Invoice.MainExtensions
                             CurrencyName = currencyManager.GetCurrencySymbol(bankDetail.CurrencyId),
                             ChannelName = bankDetail.ChannelName,
                             CorrespondentBank = bankDetail.CorrespondentBank,
-                            CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode
+                            CorrespondentBankSwiftCode = bankDetail.CorrespondentBankSwiftCode,
+                            ACH = bankDetail.ACH,
+                            ABARoutingNumber = bankDetail.ABARoutingNumber
                         });
                     }
                 }
