@@ -23,7 +23,7 @@ namespace TOne.WhS.SupplierPriceList
 
     public class AllZones : Vanrise.BusinessProcess.Entities.IRuleTarget
     {
-        public AllImportedZones AllImportedZones { get; set; }
+        public AllImportedZones ImportedZones { get; set; }
 
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
 

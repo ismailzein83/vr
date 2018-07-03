@@ -17,10 +17,14 @@ namespace TOne.WhS.SupplierPriceList.Business
             AllZones allZones = context.Target as AllZones;
             if (allZones != null)
             {
-                if (allZones.AllImportedZones != null && allZones.NotImportedZones != null && (allZones.NotImportedZones.Count() > allZones.AllImportedZones.Zones.Count()))
+                if (allZones.ImportedZones != null && allZones.NotImportedZones != null)
                 {
-                    context.Message = "More than 50% of zones will be closed";
-                    return false;
+                    var percentageOfClosing = (allZones.NotImportedZones.Count() / allZones.ImportedZones.Zones.Count()) * 100;
+                    if (percentageOfClosing > 50)
+                    {
+                        context.Message = "More than 50% of zones will be closed";
+                        return false;
+                    }
                 }
             }
             return true;

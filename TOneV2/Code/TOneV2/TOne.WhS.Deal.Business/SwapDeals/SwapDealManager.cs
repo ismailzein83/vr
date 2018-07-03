@@ -44,9 +44,15 @@ namespace TOne.WhS.Deal.Business
 
         public IEnumerable<DealDefinition> GetSwapDealsEffectiveAfterDate(DateTime effectiveAfter)
         {
+            List<DealDefinition> dealDefinitions = new List<DealDefinition>();
             var deals = GetCachedSwapDeals();
-            return deals.Where(deal => deal.Settings.Status != DealStatus.Draft
-                                       && (deal.Settings.EndDate.HasValue && deal.Settings.EndDate.Value >= effectiveAfter));
+            foreach (var dealDefinition in deals)
+            {
+                DateTime? dealEED = GetDealEED(dealDefinition.Settings);
+                if (!dealEED.HasValue || dealEED >= effectiveAfter)
+                    dealDefinitions.Add(dealDefinition);
+            }
+            return dealDefinitions;
         }
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
@@ -132,6 +138,22 @@ namespace TOne.WhS.Deal.Business
         }
         #endregion
 
+        #region private Methods
+
+        private DateTime? GetDealEED(DealSettings dealSetting)
+        {
+            var swapDealSetting = dealSetting as SwapDealSettings;
+            DateTime? dealEED = swapDealSetting.EndDate;
+
+            if (dealEED.HasValue)
+                return swapDealSetting.Status == DealStatus.Inactive
+                    ? swapDealSetting.DeActivationDate
+                    : dealEED.Value.AddDays(swapDealSetting.GracePeriod);
+
+            return dealEED;
+        }
+
+        #endregion
         #region Private Classes
 
         private class SwapDealExcelExportHandler : ExcelExportHandler<DealDefinitionDetail>

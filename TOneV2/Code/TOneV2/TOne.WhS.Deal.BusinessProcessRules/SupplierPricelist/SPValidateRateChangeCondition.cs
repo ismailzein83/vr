@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TOne.WhS.Deal.Business;
-using System.Collections.Generic;
+using TOne.WhS.SupplierPriceList;
 using Vanrise.BusinessProcess.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.Deal.BusinessProcessRules
 {
@@ -13,37 +14,37 @@ namespace TOne.WhS.Deal.BusinessProcessRules
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is List<ImportedZone>;
+            return target is AllZones;
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             var dealDefinitionManager = new DealDefinitionManager();
-            var importedZones = context.Target as List<ImportedZone>;
+            var countryZones = context.Target as AllZones;
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
-            StringBuilder sb = new StringBuilder();
-            foreach (var importedZone in importedZones)
+            var zoneMessages = new List<string>();
+            foreach (var importedZone in countryZones.ImportedZones.Zones)
             {
                 var importedRate = importedZone.ImportedNormalRate;
-                var newZone = importedZone.NewZones.FirstOrDefault();
-                if (newZone != null)
+                if (importedRate.ChangeType != RateChangeType.NotChanged)
                 {
+                    var rate = importedRate.NewRates.First();
                     if (importedRate.EED.HasValue)
                     {
-                        var dealId = dealDefinitionManager.IsZoneIncludedInDeal(importSPLContext.SupplierId,
-                            newZone.ZoneId, importedRate.EED.Value, false);
+                        var dealId = dealDefinitionManager.IsZoneIncludedInDeal(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.EED.Value, false);
                         if (dealId.HasValue)
                         {
                             var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                            sb.AppendFormat("zone '{0}' in deal '{1}'", importedRate.ZoneName, deal.Name);
+                            zoneMessages.Add(string.Format("zone '{0}' in deal '{1}'", importedRate.ZoneName, deal.Name));
                         }
                     }
                 }
             }
-            if (sb.Length > 1)
+            if (zoneMessages.Any())
             {
-                context.Message = String.Format("Cannot perform rate Change if zones are linked to deal : {0}", sb.ToString());
+                string zoneMessageString = string.Join(",", zoneMessages);
+                context.Message = String.Format("Modified rates cannot be done for zones included in deals. Following zones are : {0}", zoneMessageString);
                 return false;
             }
             return true;
