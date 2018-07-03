@@ -203,7 +203,11 @@ namespace Vanrise.GenericData.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<GenericBEExtendedSettingsConfig>(GenericBEExtendedSettingsConfig.EXTENSION_TYPE);
         }
-
+        public IEnumerable<GenericBEActionFilterConditionConfig> GetGenericBEActionFilterConditionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericBEActionFilterConditionConfig>(GenericBEActionFilterConditionConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<GenericBEOnAfterSaveHandlerSettingsConfig> GetGenericBEOnAfterSaveHandlerSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();

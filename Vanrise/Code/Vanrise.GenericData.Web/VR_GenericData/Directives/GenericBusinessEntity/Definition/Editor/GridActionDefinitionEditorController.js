@@ -9,6 +9,9 @@
         var isEditMode;
         var gridActionDefinition;
         var context;
+        var FilterCondition;
+        var filterConditionAPI;
+        var filterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         
         loadParameters();
         defineScope();
@@ -19,7 +22,7 @@
 
             if (parameters != undefined && parameters != null) {
                 gridActionDefinition = parameters.gridActionDefinition;
-                context = parameters.context;
+                context = parameters.context; 
             }
             isEditMode = (gridActionDefinition != undefined);
         }
@@ -27,6 +30,10 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.bEActionsDefinitionInfos = context.getActionInfos();
+            $scope.scopeModel.onGenericBEGridactiondefinitionFilterReady = function (api) {
+                filterConditionAPI = api;
+                filterConditionReadyPromiseDeferred.resolve();
+            };
 
 
             $scope.scopeModel.saveGridActionDefinition = function () {
@@ -65,9 +72,20 @@
                     $scope.scopeModel.selectedActionDefnition = UtilsService.getItemByVal($scope.scopeModel.bEActionsDefinitionInfos, gridActionDefinition.GenericBEActionId, "GenericBEActionId");
 
                 }
+                function loadFilterConditionEditor() {
+                    var loadFilterConditionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    filterConditionReadyPromiseDeferred.promise.then(function () {
+                        var settingPayload = {
+                            context: getContext(),
+                            filterCondition: gridActionDefinition!=undefined?gridActionDefinition.FilterCondition:undefined
+                        };
 
+                        VRUIUtilsService.callDirectiveLoad(filterConditionAPI, settingPayload, loadFilterConditionEditorPromiseDeferred);
+                    });
+                    return loadFilterConditionEditorPromiseDeferred.promise;
+                }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadFilterConditionEditor]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -84,7 +102,7 @@
                 GenericBEActionId: $scope.scopeModel.selectedActionDefnition != undefined ? $scope.scopeModel.selectedActionDefnition.GenericBEActionId : undefined,
                 Title: $scope.scopeModel.title,
                 ReloadGridItem: $scope.scopeModel.reloadGridItem,
-                FilterCondition: null
+                FilterCondition: filterConditionAPI.getData()
             };
         }
 
@@ -92,7 +110,7 @@
             var gridActionObj = buildGridActionDefinitionFromScope();
             if ($scope.onGenericBEGridActionDefinitionAdded != undefined) {
                 $scope.onGenericBEGridActionDefinitionAdded(gridActionObj);
-            }
+            } 
             $scope.modalContext.closeModal();
         }
 
@@ -102,6 +120,12 @@
                 $scope.onGenericBEGridActionDefinitionUpdated(gridActionObj);
             }
             $scope.modalContext.closeModal();
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
 

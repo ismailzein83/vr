@@ -77,12 +77,13 @@ app.directive("vrGenericdataGenericbeGridactiondefinitionGrid", ["UtilsService",
                                 FilterCondition: currentItem.FilterCondition
                             });
                         }
-                    }
+                    } 
                     return gridActions;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+
                         context = payload.context;
                         api.clearDataSource();
                         if (payload.genericBEGridActions != undefined) {

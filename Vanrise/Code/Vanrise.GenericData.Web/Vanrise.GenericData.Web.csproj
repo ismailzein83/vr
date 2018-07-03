@@ -245,6 +245,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\ColumnDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-editordefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-viewdefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiondefinition-filter.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiondefinition-filterextension.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBeCondition\MainExtensions\Templates\FilterGroupConditionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBeCondition\MainExtensions\vr-genericdata-genericbe-filtergroupcondition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBeCondition\vr-genericdata-genericbe-condition-settings.js" />
