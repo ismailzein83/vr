@@ -270,6 +270,9 @@
     <Reference Include="Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.MainExtensions">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Web">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
     </Reference>
@@ -656,8 +659,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
-    <Content Include="appSettings.config" />
-    <Content Include="ConnectionStrings.config" />
+    <Content Include="appSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="images\CentralAuth-iconheader.ico" />
     <Content Include="images\CentralAuth-login.png" />
     <Content Include="images\CentralAuth-logoonheader.png" />
