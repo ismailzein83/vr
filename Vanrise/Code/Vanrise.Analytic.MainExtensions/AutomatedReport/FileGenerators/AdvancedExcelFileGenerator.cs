@@ -26,6 +26,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public string SerialNumberPattern { get; set; }
 
+        public bool CompressFile { get; set; }
+
         public List<AdvancedExcelFileGeneratorTableDefinition> TableDefinitions { get; set; }
 
         public List<AdvancedExcelFileGeneratorMatrixDefinition> MatrixDefinitions { get; set; }
@@ -193,11 +195,27 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = TableDefinitionsWorkbook.SaveToStream();
-            return new VRAutomatedReportGeneratedFile()
+            if (this.CompressFile)
             {
-                FileName = serialNumber + ".xls",
-                FileContent = memoryStream.ToArray()
-            };
+                ZipUtility zipUtility = new ZipUtility();
+                var zippedFileContent = zipUtility.Zip(new ZipFileInfo(){
+                    Content = memoryStream.ToArray(),
+                    FileName = serialNumber + ".xls"
+                });
+                return new VRAutomatedReportGeneratedFile()
+                {
+                    FileName = serialNumber + ".zip",
+                    FileContent = zippedFileContent
+                };
+            }
+            else
+            {
+                return new VRAutomatedReportGeneratedFile()
+                {
+                    FileName = serialNumber + ".xls",
+                    FileContent = memoryStream.ToArray()
+                };
+            }
         }
 
         public override void Validate(IVRAutomatedReportHandlerValidateContext context)
@@ -478,6 +496,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public string FieldTitle { get; set; }
 
         public int ColumnIndex { get; set; }
+
+        public bool isSubTable { get; set; }
 
         public bool UseFieldDescription { get; set; }
     }

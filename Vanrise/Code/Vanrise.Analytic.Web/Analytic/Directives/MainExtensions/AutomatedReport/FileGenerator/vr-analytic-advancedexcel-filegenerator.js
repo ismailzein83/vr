@@ -134,11 +134,16 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
             api.load = function (payload) {
                 var promises = [];
                 var queryArrayPromise = UtilsService.createPromiseDeferred();
-
+                var tableDefinitions;
+                var fileId;
                 if (payload != undefined) {
-                    var tableDefinitions = payload.fileGenerator != undefined ? payload.fileGenerator.TableDefinitions : undefined;
-                    var fileId = payload.fileGenerator != undefined ? payload.fileGenerator.FileTemplateId : undefined;
                     context = payload.context;
+                    var fileGenerator = payload.fileGenerator;
+                    if (fileGenerator != undefined) {
+                        tableDefinitions = fileGenerator.TableDefinitions;
+                        fileId = fileGenerator.FileTemplateId;
+                        $scope.scopeModel.compressFile = fileGenerator.CompressFile;
+                    }
                 }
 
                 if (context != undefined) {
@@ -215,6 +220,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGenerator,Vanrise.Analytic.MainExtensions",
                    FileTemplateId: $scope.scopeModel.file != undefined ? $scope.scopeModel.file.fileId : undefined,
                    SerialNumberPattern: serialNumberPatternAPI.getData(),
+                   CompressFile: $scope.scopeModel.compressFile,
                    TableDefinitions: getTables()
               };
               return obj;

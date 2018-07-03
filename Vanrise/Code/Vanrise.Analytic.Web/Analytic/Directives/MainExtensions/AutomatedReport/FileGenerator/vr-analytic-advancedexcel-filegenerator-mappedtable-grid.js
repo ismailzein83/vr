@@ -184,6 +184,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
             };
 
             mappedCol.fieldSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            mappedCol.selectedFieldPromiseDeferred = UtilsService.createPromiseDeferred();
             mappedCol.onFieldSelectorReady = function (api) {
                 mappedCol.fields = [];
                 mappedCol.fieldSelectorAPI = api;
@@ -203,6 +204,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
                         }
                         if (selectedField != undefined) {
                             mappedCol.selectedField = selectedField;
+                            mappedCol.selectedFieldPromiseDeferred.resolve();
                         }
                     });
             };
@@ -216,9 +218,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService) {
                 }
             };
 
-            UtilsService.waitMultiplePromises([mappedCol.fieldSelectorLoadPromiseDeferred.promise]).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
+            UtilsService.waitMultiplePromises([mappedCol.fieldSelectorLoadPromiseDeferred.promise, mappedCol.selectedFieldPromiseDeferred.promise]).finally(function () {
                 $scope.scopeModel.isLoadingMappedCol = false;
             });
 
