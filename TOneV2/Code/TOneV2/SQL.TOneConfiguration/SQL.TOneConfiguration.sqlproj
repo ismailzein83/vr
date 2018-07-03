@@ -778,6 +778,7 @@
     <Build Include="sec\User Defined Types\RegisteredApplicationType.sql" />
     <Build Include="common\Tables\DataEncryptionKey.sql" />
     <Build Include="common\Stored Procedures\sp_DataEncryptionKey_InsertIfNotExistsAndGetDataEncryptionKey.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_ChangeSecurityProvider.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
