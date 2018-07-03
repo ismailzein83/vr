@@ -448,17 +448,17 @@ namespace TOne.WhS.BusinessEntity.Business
             return autoImportSettings.PricelistTypeMappingList;
 		}
 
-		public AutoImportTemplate GetSupplierAutoImportTemplateByType(AutoImportEmailTypeEnum type)
+		public SupplierAutoImportTemplate GetSupplierAutoImportTemplateByType(AutoImportEmailTypeEnum type)
 		{
             AutoImportSPLSettings autoImportSettings = GetAutoImportSPLSettings();
-            if (autoImportSettings.AutoImportTemplateList != null && autoImportSettings.AutoImportTemplateList.Count > 0)
+            if (autoImportSettings.SupplierAutoImportTemplateList != null && autoImportSettings.SupplierAutoImportTemplateList.Count > 0)
 			{
-                return autoImportSettings.AutoImportTemplateList.FindRecord(item => item.TemplateType == type);
+                return autoImportSettings.SupplierAutoImportTemplateList.FindRecord(item => item.TemplateType == type);
 			}
 			return null;
 		}
 
-		public AutoImportTemplate GetInternalAutoImportTemplateByType(AutoImportEmailTypeEnum type)
+		public InternalAutoImportTemplate GetInternalAutoImportTemplateByType(AutoImportEmailTypeEnum type)
 		{
             AutoImportSPLSettings autoImportSettings = GetAutoImportSPLSettings();
             if (autoImportSettings.InternalAutoImportTemplateList != null && autoImportSettings.InternalAutoImportTemplateList.Count > 0)

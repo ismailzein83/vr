@@ -31,10 +31,17 @@ namespace TOne.WhS.BusinessEntity.Entities
 		Full = 2
 	}
 
-	public class AutoImportTemplate
+	public class SupplierAutoImportTemplate
 	{
 		public AutoImportEmailTypeEnum TemplateType { get; set; }
 		public Guid EmailTemplateId { get; set; }
+		public bool AttachPricelist { get; set; }
+	}
+
+	public class InternalAutoImportTemplate
+	{
+		public AutoImportEmailTypeEnum TemplateType { get; set; }
+		public Guid? EmailTemplateId { get; set; }
 		public bool AttachPricelist { get; set; }
 	}
 
