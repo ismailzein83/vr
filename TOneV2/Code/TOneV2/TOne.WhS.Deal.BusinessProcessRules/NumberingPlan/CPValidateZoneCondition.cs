@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Entities;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Deal.BusinessProcessRules
 {
@@ -26,7 +27,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
             ICPParametersContext codePreparationContext = context.GetExtension<ICPParametersContext>();
 
-            StringBuilder sb = new StringBuilder();
+            var zoneMessages = new List<string>();
             foreach (var countryToProcess in countriesToProcess.Countries)
             {
                 foreach (var carrierAccountInfo in codePreparationContext.Customers)
@@ -54,7 +55,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                                         if (dealId.HasValue)
                                         {
                                             var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                                            sb.AppendFormat("Zone '{0}' in deal '{1}'", existingZone.Name, deal.Name);
+                                            zoneMessages.Add(string.Format("Zone '{0}' in deal '{1}'", existingZone.Name, deal.Name));
                                         }
                                     }
                                 }
@@ -64,9 +65,10 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                 }
             }
 
-            if (sb.Length > 1)
+            if (zoneMessages.Any())
             {
-                context.Message = String.Format("The Following zones are linked to deal : {0}", sb.ToString());
+                string zoneMessageString = string.Join(",", zoneMessages);
+                context.Message = String.Format("Following closed zones are included in effective deals : {0}", zoneMessageString);
                 return false;
             }
 
