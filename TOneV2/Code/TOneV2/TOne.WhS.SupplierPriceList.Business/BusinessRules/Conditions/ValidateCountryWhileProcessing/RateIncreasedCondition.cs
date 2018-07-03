@@ -2,7 +2,6 @@
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
-using System.Linq;
 using System.Collections.Generic;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Entities;
@@ -20,7 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             var importedCountry = context.Target as ImportedCountry;
 
             if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
-                return true;
+                throw new NullReferenceException("importedCountry.ImportedRates");
 
             var numberOfIncreasedRates = 0;
             List<string> zonesWithIncreasedRates = new List<string>();
@@ -28,8 +27,8 @@ namespace TOne.WhS.SupplierPriceList.Business
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
             string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
             foreach (ImportedRate importedRate in importedCountry.ImportedRates)
-             {
-                 if (importedRate.ChangeType == RateChangeType.Increase)
+            {
+                if (importedRate.ChangeType == RateChangeType.Increase)
                 {
                     numberOfIncreasedRates++;
                     if (importedRate.BED < importSPLContext.CodeEffectiveDate)
