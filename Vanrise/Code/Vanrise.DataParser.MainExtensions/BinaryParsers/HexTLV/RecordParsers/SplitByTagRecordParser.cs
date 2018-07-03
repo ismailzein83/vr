@@ -16,19 +16,18 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers
 
         public override void Execute(IBinaryRecordParserContext context)
         {
-            HexTLVParserHelper.ReadTagsFromStream(context.RecordStream,
-                (tagValue) =>
-                {
-                    BinaryRecordParser subRecordsParser = null;
-                    if (this.SubRecordsParsersByTag != null)
-                        this.SubRecordsParsersByTag.TryGetValue(tagValue.Tag, out subRecordsParser);
+            HexTLVParserHelper.ReadTagsFromStream(context.RecordStream, (tagValue) =>
+            {
+                BinaryRecordParser subRecordsParser = null;
+                if (this.SubRecordsParsersByTag != null)
+                    this.SubRecordsParsersByTag.TryGetValue(tagValue.Tag, out subRecordsParser);
 
-                    if (subRecordsParser == null)
-                        subRecordsParser = this.DefaultSubRecordParser;
+                if (subRecordsParser == null)
+                    subRecordsParser = this.DefaultSubRecordParser;
 
-                    if (subRecordsParser != null)
-                        BinaryParserHelper.ExecuteRecordParser(subRecordsParser, new MemoryStream(tagValue.Value), context);
-                });
+                if (subRecordsParser != null)
+                    BinaryParserHelper.ExecuteRecordParser(subRecordsParser, new MemoryStream(tagValue.Value), context);
+            });
         }
     }
 }
