@@ -94,6 +94,7 @@
     <Compile Include="BusinessRules\BPBusinessRuleActionConfig.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleDefinitionDetail.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleDefinition.cs" />
+    <Compile Include="BusinessRules\BPBusinessRuleEffectiveAction.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleSet.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleSetDetail.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleSetInfoFilter.cs" />
