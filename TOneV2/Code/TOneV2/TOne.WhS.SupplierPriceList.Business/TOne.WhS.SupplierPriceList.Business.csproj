@@ -90,10 +90,12 @@
   <ItemGroup>
     <Compile Include="BusinessRules\Actions\GetServiceWithMinimumBEDAction.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ClosingZonesAboveThresholdCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\AcceptableRateDecreaseCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeBEDGreaterThanActionDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeBEDLessThanActionDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\ModifyingCodesInRateChangePricelistCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\AcceptableRateIncreaseCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\RateIncreasedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\RenamedZonesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />

@@ -5,6 +5,7 @@ using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using System.Collections.Generic;
 using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -28,7 +29,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
             foreach (ImportedRate importedRate in importedCountry.ImportedRates)
              {
-                if (importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(x => importedRate.Rate > x.RateEntity.Rate))
+                 if (importedRate.ChangeType == RateChangeType.Increase)
                 {
                     numberOfIncreasedRates++;
                     if (importedRate.BED < importSPLContext.CodeEffectiveDate)
