@@ -12631,6 +12631,15 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(106, trunkIdOutgoingPackage_106);
 
+            PackageFieldParser connectionIdentificationPackage_110 = new DirectLengthPackageFieldParser() 
+            {
+                FieldParser = new ConnectionIdentificationPackageParser()
+                {
+                    ConnectionIdentificationFieldName = "ConnectionIdentification"
+                }
+            };
+            packages.Add(110, connectionIdentificationPackage_110);
+
             PackageFieldParser zonePackage_122 = new FixedLengthPackageFieldParser()
             {
                 PackageLength = 3,
@@ -12645,7 +12654,9 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new PartyNumberPackageParser()
                 {
-                    PartyNumberFieldName = "CallingPartyNumber"
+                    PartyNumberFieldName = "CallingPartyNumber",
+                    NADIFieldName = "CallingNADI",
+                    NPIFieldName = "CallingNPI"
                 }
             };
             packages.Add(142, callingPartyNumberPackage_142);
@@ -12654,20 +12665,20 @@ namespace Mediation.Runtime.DataParser
             {
                 FieldParser = new PartyNumberPackageParser()
                 {
-                    PartyNumberFieldName = "CalledPartyNumber"
+                    PartyNumberFieldName = "CalledPartyNumber",
+                    NADIFieldName = "CalledNADI",
+                    NPIFieldName = "CalledNPI"
                 }
             };
             packages.Add(168, calledPartyNumberPackage_168);
 
             PackageFieldParser trafficQualityPackage_130 = new DirectLengthPackageFieldParser()
             {
-                FieldParser = new NumberFieldParser()
+                FieldParser = new TrafficQualityDataPackageParser()
                 {
-                    FieldName = "CauseValue",
-                    NumberType = NumberType.Int,
-                    FieldIndex = 0,
-                    FieldBytesLength = 2,
-                    Reverse = true
+                    CauseValueFieldName = "CauseValue",
+                    CodingStandardFieldName = "CodingStandard",
+                    LocationFieldName = "Location"
                 }
             };
             packages.Add(130, trafficQualityPackage_130);
