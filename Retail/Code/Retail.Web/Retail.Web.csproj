@@ -860,6 +860,10 @@
       <Project>{9b58744d-1e39-499a-860f-264d658abe40}</Project>
       <Name>Retail.Ringo.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Ringo.ProxyAPI\Retail.Ringo.ProxyAPI.csproj">
+      <Project>{fbbf1c80-97f3-47ac-82fc-8ba7c74fb034}</Project>
+      <Name>Retail.Ringo.ProxyAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Ringo.Web\Retail.Ringo.Web.csproj">
       <Project>{63cd6fff-d821-4d20-9661-c7c3f1a6ab63}</Project>
       <Name>Retail.Ringo.Web</Name>

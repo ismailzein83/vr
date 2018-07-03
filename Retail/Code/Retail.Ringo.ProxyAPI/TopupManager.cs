@@ -35,7 +35,6 @@ namespace Retail.Ringo.ProxyAPI
                         return new AddTopupOutput
                         {
                             IsSucceeded = true,
-                            FailureReason = FailureReason.InvalidPin
                         };
                     }
                     else
@@ -43,6 +42,7 @@ namespace Retail.Ringo.ProxyAPI
                         return new AddTopupOutput
                         {
                             IsSucceeded = false,
+                            FailureReason = FailureReason.InvalidPin
                         };
                     }
                 }
