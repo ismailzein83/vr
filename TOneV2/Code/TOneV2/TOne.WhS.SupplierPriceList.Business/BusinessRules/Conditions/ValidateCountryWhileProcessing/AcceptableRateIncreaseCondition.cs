@@ -1,16 +1,16 @@
-﻿using System;
-using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
-using Vanrise.BusinessProcess.Entities;
-using System.Linq;
-using System.Collections.Generic;
-using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Entities;
+﻿//using System;
+//using TOne.WhS.SupplierPriceList.Entities;
+//using TOne.WhS.SupplierPriceList.Entities.SPL;
+//using Vanrise.BusinessProcess.Entities;
+//using System.Linq;
+//using System.Collections.Generic;
+//using Vanrise.Common;
+//using TOne.WhS.BusinessEntity.Entities;
 
-namespace TOne.WhS.SupplierPriceList.Business
-{
-    public class AcceptableRateIncreaseCondition : BusinessRuleCondition
-    {
+//namespace TOne.WhS.SupplierPriceList.Business
+//{
+   // public class AcceptableRateIncreaseCondition : BusinessRuleCondition
+   // {
     //    public override bool ShouldValidate(IRuleTarget target)
     //    {
     //        return target is ImportedCountry;
@@ -54,5 +54,5 @@ namespace TOne.WhS.SupplierPriceList.Business
     //    {
     //        throw new NotImplementedException();
     //    }
-    }
-}
+  //  }
+//}
