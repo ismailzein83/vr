@@ -9,10 +9,10 @@ namespace Vanrise.Common.Business
 {
     public class VRSequenceManager
     {
-        public long GetNextSequenceValue(string sequenceGroup, Guid sequenceDefinitionId, string sequenceKey, long initialValue)
+        public long GetNextSequenceValue(string sequenceGroup, Guid sequenceDefinitionId, string sequenceKey, long initialValue, long? reserveNumber = null)
         {
             IVRSequenceDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRSequenceDataManager>();
-            return dataManager.GetNextSequenceValue(sequenceGroup, sequenceDefinitionId, sequenceKey, initialValue);
+            return dataManager.GetNextSequenceValue(sequenceGroup, sequenceDefinitionId, sequenceKey, initialValue, reserveNumber);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     public interface IGenericBusinessEntityManager : IBusinessManager
     {
         R GetCachedOrCreate<R>(Object cacheName, Guid businessEntityDefinitionId, Func<R> createObject);
-        List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId);
+        List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId, List<string> neededColumns = null, RecordFilterGroup filterGroup = null);
         InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd);
         //void SetCacheExpired(Guid businessEntityDefinitionId);
     }

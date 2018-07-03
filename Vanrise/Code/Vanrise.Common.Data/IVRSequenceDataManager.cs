@@ -8,6 +8,6 @@ namespace Vanrise.Common.Data
 {
     public interface IVRSequenceDataManager : IDataManager
     {
-        long GetNextSequenceValue(string sequenceGroup, Guid sequenceDefinitionId, string sequenceKey, long initialValue);
+        long GetNextSequenceValue(string sequenceGroup, Guid sequenceDefinitionId, string sequenceKey, long initialValue, long? reserveNumber);
     }
 }

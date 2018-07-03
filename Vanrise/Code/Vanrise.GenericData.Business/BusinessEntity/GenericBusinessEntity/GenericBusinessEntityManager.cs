@@ -212,12 +212,12 @@ namespace Vanrise.GenericData.Business
             return null;
         }
 
-        public List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId)
+        public List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
             genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
 
-            var dataRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId);
+            var dataRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId, columnsNeeded, filterGroup);
             List<GenericBusinessEntity> results = new List<GenericBusinessEntity>();
 
             if (dataRecords != null)
@@ -243,99 +243,83 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
-            int totalCount;
-            List<GenericBusinessEntity> genericBusinessEntities = GetGenericBusinessEntities(input.SortByColumnName, input.IsSortDescending, input.FromRow, input.ToRow, input.IsAPICall, input.ResultKey, input.GetSummary, input.DataRetrievalResultType, input.Query.BusinessEntityDefinitionId, null, input.Query.Filters, input.Query.LimitResult, input.Query.FilterGroup, input.Query.FromTime, input.Query.ToTime, input.Query.FilterValuesByFieldPath, out totalCount);
-            BigResult<GenericBusinessEntityDetail> result = new BigResult<GenericBusinessEntityDetail>();
-            if (genericBusinessEntities != null)
-            {
-                result.ResultKey = input.ResultKey;
-                result.TotalCount = totalCount;
-                List<GenericBusinessEntityDetail> resultDetail = new List<GenericBusinessEntityDetail>();
-                    foreach (var genericBusinessEntity in genericBusinessEntities)
-                    {
-                        var genericBusinessEntityDetail =  GenericBusinessEntityDetailMapper( input.Query.BusinessEntityDefinitionId,  genericBusinessEntity);
-                        resultDetail.Add(genericBusinessEntityDetail);
-                    }
-                result.Data = resultDetail;
-            }
-            VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(input.Query.BusinessEntityDefinitionId), input);
-            return result;
-        }
-
-
-        public List<GenericBusinessEntity> GetGenericBusinessEntities( string sortByColumnName,bool isSortDescending, int? fromRow, int? toRow, bool isAPICall, string resultKey, bool getSummary, DataRetrievalResultType dataRetrievalResultType,Guid businessEntityDefinitionId, List<string> neededColumns,List<GenericBusinessEntityFilter> filters , int? limitResult,RecordFilterGroup filterGroup,DateTime? fromTime ,DateTime? toTime,Dictionary<string, object> filterValuesByFieldPath, out int totalCount)
-        {
             Func<GenericBusinessEntity, bool> filterExpression = (genericBusinessEntity) =>
             {
 
                 return true;
             };
-            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
-            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(input.Query.BusinessEntityDefinitionId);
+            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", input.Query.BusinessEntityDefinitionId);
             List<string> columns = new List<string>();
             List<string> columnTitles = new List<string>();
-            if (neededColumns != null && neededColumns.Count > 0)
-            {
-                columns = neededColumns;
-                columnTitles = neededColumns;
-            }else
-            {
-                GetGridColumnNamesAndTitles(businessEntityDefinitionId, out columns, out columnTitles);
-            }
+            GetGridColumnNamesAndTitles(input.Query.BusinessEntityDefinitionId, out columns, out columnTitles);
 
-       
             var storageRecords = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
             {
-                FromRow = fromRow,
-                ToRow = toRow,
-                SortByColumnName = sortByColumnName,
-                IsAPICall = isAPICall,
-                IsSortDescending = isSortDescending,
-                ResultKey = resultKey,
-                GetSummary = getSummary,
-                DataRetrievalResultType = dataRetrievalResultType,
+                FromRow = input.FromRow,
+                ToRow = input.ToRow,
+                SortByColumnName = input.SortByColumnName,
+                IsAPICall = input.IsAPICall,
+                IsSortDescending = input.IsSortDescending,
+                ResultKey = input.ResultKey,
+                GetSummary = input.GetSummary,
+                DataRetrievalResultType = input.DataRetrievalResultType,
                 Query = new DataRecordQuery
                 {
                     Columns = columns,
-                    FilterGroup = filterGroup,
-                    Filters = filters != null ? filters.MapRecords(x =>
+                    FilterGroup = input.Query.FilterGroup,
+                    Filters = input.Query.Filters != null ? input.Query.Filters.MapRecords(x =>
                         new DataRecordFilter
                         {
                             FieldName = x.FieldName,
                             FilterValues = x.FilterValues
                         }
                     ).ToList() : null,
-                    FromTime = fromTime.HasValue ? fromTime.Value : DateTime.MinValue,
-                    ToTime = toTime.HasValue ? toTime.Value : DateTime.MaxValue,
+                    FromTime = input.Query.FromTime.HasValue ? input.Query.FromTime.Value : DateTime.MinValue,
+                    ToTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.MaxValue,
                     ColumnTitles = columnTitles,
                     DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId },
                     Direction = OrderDirection.Descending,
-                    LimitResult = limitResult,
+                    LimitResult = input.Query.LimitResult,
                 },
             }) as BigResult<DataRecordDetail>;
 
-            totalCount = storageRecords.TotalCount;
-            List<GenericBusinessEntity> result = new List<GenericBusinessEntity>();
+            List<GenericBusinessEntity> genericBusinessEntities = new List<GenericBusinessEntity>();
             if (storageRecords != null && storageRecords.Data != null)
             {
-                    foreach (var storageRecord in storageRecords.Data)
+                foreach (var storageRecord in storageRecords.Data)
+                {
+                    GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
+                    if (storageRecord.FieldValues != null)
                     {
-                        GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
-                        if (storageRecord.FieldValues != null)
+                        genericBusinessEntity.FieldValues = new Dictionary<string, object>();
+                        foreach (var fieldValue in storageRecord.FieldValues)
                         {
-                            genericBusinessEntity.FieldValues = new Dictionary<string, object>();
-                            foreach (var fieldValue in storageRecord.FieldValues)
-                            {
-                                genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
-                            }
+                            genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
                         }
-
-                        result.Add(genericBusinessEntity);
                     }
+
+                    genericBusinessEntities.Add(genericBusinessEntity);
+                }
             }
+
+            BigResult<GenericBusinessEntityDetail> result = new BigResult<GenericBusinessEntityDetail>();
+            if (genericBusinessEntities != null)
+            {
+                result.ResultKey = input.ResultKey;
+                result.TotalCount = storageRecords.TotalCount;
+                List<GenericBusinessEntityDetail> resultDetail = new List<GenericBusinessEntityDetail>();
+                    foreach (var genericBusinessEntity in genericBusinessEntities)
+                    {
+                        var genericBusinessEntityDetail =  GenericBusinessEntityDetailMapper( input.Query.BusinessEntityDefinitionId,  genericBusinessEntity);
+                        resultDetail.Add(genericBusinessEntityDetail);
+                    }
+                    result.Data = resultDetail;
+            }
+
+            VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(input.Query.BusinessEntityDefinitionId), input);
             return result;
         }
-
         public InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd)
         {
             InsertOperationOutput<GenericBusinessEntityDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();

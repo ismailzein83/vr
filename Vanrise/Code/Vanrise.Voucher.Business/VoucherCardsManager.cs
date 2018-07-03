@@ -33,13 +33,13 @@ namespace Vanrise.Voucher.Business
                     new NonEmptyRecordFilter(){FieldName ="ActivationDate" },
                     new StringRecordFilter(){FieldName = "PinCode", CompareOperator= StringRecordFilterOperator.Equals, Value = encryptedPinCode },
                     new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Less , Value = System.DateTime.Now  },
-                    new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  }
+                    new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  },
+                    new EmptyRecordFilter(){ FieldName = "LockedDate" }
+
                 }
             };
             var genericBusinessEntityManager = new GenericBusinessEntityManager();
-            int totalCount;
-            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal,
-                _definitionId, null, null, null, recordFilterGroup, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
+            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, null, recordFilterGroup);
 
             if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
             {
@@ -95,9 +95,7 @@ namespace Vanrise.Voucher.Business
                 }
             };
 
-            int totalCount;
-            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, null, null, null, recordFilterGroup, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
-
+            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, null, recordFilterGroup);
             if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
             {
                 var genericBusinessEntity = genericBusinessEntities.First();
@@ -151,11 +149,29 @@ namespace Vanrise.Voucher.Business
 
             var genericBusinessEntityExtendedSettings = genericBusinessEntitySettings.ExtendedSettings.CastWithValidate<VoucharCardsExtendedSettings>("VoucharCardsExtendedSettings");
             genericBusinessEntityExtendedSettings.SerialNumberParts.ThrowIfNull("genericBusinessEntityExtendedSettings.SerialNumberParts");
-            var serialNumberContext = new VoucharCardSerialNumberPartConcatenatedPartContext
+
+            Dictionary<string, ConcatenatedPartInitializeContext> serialNumberContexts = new Dictionary<string, ConcatenatedPartInitializeContext>();
+           
+            foreach (var serialNumberPart in genericBusinessEntityExtendedSettings.SerialNumberParts)
+            {
+                string serialNumber = serialNumberPattern;
+                if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
+                {
+                    var serialNumberContext = new ConcatenatedPartInitializeContext
+                    {
+                        SequenceDefinitionId = _definitionId,
+                        NumberOfItems = numberOfCards
+                    };
+                    serialNumberPart.Settings.IntializePart(serialNumberContext);
+                    serialNumberContexts.Add(serialNumberPart.VariableName, serialNumberContext);
+                }
+            }
+
+
+            var voucharCardSerialNumberPartConcatenatedPartContext = new VoucharCardSerialNumberPartConcatenatedPartContext
             {
                 VoucherCardBEDefinitionId = _definitionId,
             };
-
 
             for (var i = 0; i < numberOfCards; i++)
             {
@@ -177,9 +193,11 @@ namespace Vanrise.Voucher.Business
                 string serialNumber = serialNumberPattern;
                 foreach (var serialNumberPart in genericBusinessEntityExtendedSettings.SerialNumberParts)
                 {
-                    if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
+                    ConcatenatedPartInitializeContext serialNumberInitializeContext;
+                    if (serialNumber != null && serialNumberContexts.TryGetValue(serialNumberPart.VariableName, out serialNumberInitializeContext))
                     {
-                        serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(serialNumberContext));
+                        voucharCardSerialNumberPartConcatenatedPartContext.CustomData = serialNumberInitializeContext.CustomData;
+                        serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(voucharCardSerialNumberPartConcatenatedPartContext));
                     }
                 }
 
@@ -243,8 +261,7 @@ namespace Vanrise.Voucher.Business
         public HashSet<string> GetAllVoucherCardsPinCodes()
         {
             var genericBusinessEntityManager = new GenericBusinessEntityManager();
-            int totalCount;
-            var genericBusinessEntities = genericBusinessEntityManager.GetGenericBusinessEntities(null, false, null, null, false, null, false, DataRetrievalResultType.Normal, _definitionId, null, null, null, null, DateTime.MinValue, DateTime.MaxValue, null, out totalCount);
+            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, new List<string> { "PinCode" });
             HashSet<string> pinCodes = new HashSet<string>();
             if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
             {

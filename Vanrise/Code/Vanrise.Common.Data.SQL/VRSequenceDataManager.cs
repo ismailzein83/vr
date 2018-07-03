@@ -17,9 +17,9 @@ namespace Vanrise.Common.Data.SQL
         }
 
         #endregion
-        public long GetNextSequenceValue(string sequenceGroup, Guid sequenceDefinitionId, string sequenceKey, long initialValue)
+        public long GetNextSequenceValue(string sequenceGroup, Guid sequenceDefinitionId, string sequenceKey, long initialValue, long? reserveNumber)
         {
-            return (long)ExecuteScalarSP("common.sp_VRSequence_GetNext", sequenceGroup, sequenceDefinitionId, sequenceKey, initialValue);
+            return (long)ExecuteScalarSP("common.sp_VRSequence_GetNext", sequenceGroup, sequenceDefinitionId, sequenceKey, initialValue, reserveNumber.HasValue? reserveNumber.Value: 1);
         }
     }
 }

@@ -28,10 +28,12 @@ namespace Vanrise.Voucher.Business
     }
     public interface IVoucharCardSerialNumberPartConcatenatedPartContext
     {
+        Object CustomData { get; set; }
         Guid VoucherCardBEDefinitionId { get; }
     }
     public class VoucharCardSerialNumberPartConcatenatedPartContext:IVoucharCardSerialNumberPartConcatenatedPartContext
     {
+        public Object CustomData { get; set; }
         public Guid VoucherCardBEDefinitionId { get; set; }
 
     }
@@ -56,14 +58,13 @@ namespace Vanrise.Voucher.Business
         public override Guid ConfigId { get { return new Guid("F8F17A71-DDF2-4D7E-873F-861A79D67793"); } }
         public DateCounterType? DateCounterType { get; set; }
         public int PaddingLeft { get; set; }
-        public override string GetPartText(IVoucharCardSerialNumberPartConcatenatedPartContext context)
+        public override void IntializePart(IConcatenatedPartInitializeContext context)
         {
+
             StringBuilder sequenceKey = new StringBuilder();
             StringBuilder sequenceGroup = new StringBuilder();
             sequenceGroup.Append("OVERALL");
-
             long initialSequenceValue = new ConfigManager().GetSerialNumberPartInitialSequence();
-
             if (this.DateCounterType.HasValue)
             {
                 if (sequenceKey.Length > 0)
@@ -78,8 +79,28 @@ namespace Vanrise.Voucher.Business
                 }
             }
             VRSequenceManager manager = new VRSequenceManager();
-            var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(), context.VoucherCardBEDefinitionId, sequenceKey.ToString(), initialSequenceValue);
-            return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
+            var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(), context.SequenceDefinitionId, sequenceKey.ToString(), initialSequenceValue, context.NumberOfItems);
+            context.CustomData = new VoucharCardSequenceCustomObject
+            {
+                StartSequence = sequenceNumber - context.NumberOfItems + 1
+            };
+        }
+        public override string GetPartText(IVoucharCardSerialNumberPartConcatenatedPartContext context)
+        {
+
+            var voucharCardSequenceCustomObject = context.CustomData as VoucharCardSequenceCustomObject;
+            if(voucharCardSequenceCustomObject != null)
+            {
+                var currentSequence = voucharCardSequenceCustomObject.StartSequence.ToString().PadLeft(this.PaddingLeft, '0');
+                voucharCardSequenceCustomObject.StartSequence++;
+                return currentSequence;
+            }
+            return null;
+        }
+
+        public class VoucharCardSequenceCustomObject
+        {
+            public long StartSequence { get; set; }
         }
     }
 }

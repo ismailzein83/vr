@@ -119,13 +119,39 @@ namespace Vanrise.GenericData.Business
             storageDataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady);
         }
 
-        public List<DataRecord> GetAllDataRecords(Guid dataRecordStorageId)
+        public IEnumerable<DataRecord> GetAllDataRecords(Guid dataRecordStorageId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            DataRecordType recordType = new DataRecordTypeManager().GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+            recordType.ThrowIfNull("recordType", dataRecordStorage.DataRecordTypeId);
+            recordType.Fields.ThrowIfNull("recordType.Fields", dataRecordStorage.DataRecordTypeId);
+
+            RecordFilterGroup filterGroupObj = null;
+            if(filterGroup != null)
+            {
+                filterGroupObj = ConvertFilterGroup(filterGroup, recordType);
+            }
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
+            Func<DataRecord, bool> filterExpression = (dataRecord) =>
+            {
+                if (filterGroupObj != null)
+                {
+                    var context = new DataRecordDictFilterGenericFieldMatchContext(dataRecord.FieldValues, recordType.DataRecordTypeId);
+                    if (!recordFilterManager.IsFilterGroupMatch(filterGroupObj, context))
+                        return false;
+
+                }
+                return true;
+            };
+
             if (!dataRecordStorage.Settings.EnableUseCaching)
-                throw new NotSupportedException("This method only available for cached record storages");
-            return GetCachedDataRecords(dataRecordStorageId);
+            {
+                return GetDataRecords(dataRecordStorageId, columnsNeeded).FindAllRecords(filterExpression);
+            }
+           //     throw new NotSupportedException("This method only available for cached record storages");
+            return GetCachedDataRecords(dataRecordStorageId).FindAllRecords(filterExpression);
         }
 
         public IEnumerable<DataRecord> GetDataRecordsFinalResult(DataRecordType recordType, DataRetrievalInput<DataRecordQuery> input, Func<Guid, DataRetrievalInput<DataRecordQuery>, IEnumerable<DataRecord>> retrieveDataRecordFunction)
@@ -618,34 +644,53 @@ namespace Vanrise.GenericData.Business
             return CacheManagerFactory.GetCacheManager<RecordCacheManager>().GetOrCreateObject("GetCachedDataRecords", dataRecordStorageId,
                 () =>
                 {
-                    var dataManager = GetStorageDataManager(dataRecordStorageId);
-                    dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
-
-                    var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
-                    dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
-
-                    var dataRecordTypeFields = _recordTypeManager.GetDataRecordTypeFields(dataRecordStorage.DataRecordTypeId);
-                    dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordStorage.DataRecordTypeId);
-
-                    var columns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula == null).Select(x => x.Name).ToList();
-
-                    var formulaColumns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula != null).Select(fld => fld.Name).ToList();
-
-                    var dataRecords = dataManager.GetAllDataRecords(columns);
-
-                    if (formulaColumns.Count > 0)
-                    {
-                        foreach (var dataRecord in dataRecords)
-                        {
-                            var dataRecordObject = new DataRecordObject(dataRecordStorage.DataRecordTypeId, dataRecord.FieldValues);
-                            foreach (var formulaColumn in formulaColumns)
-                            {
-                                dataRecord.FieldValues.Add(formulaColumn, dataRecordObject.GetFieldValue(formulaColumn));
-                            }
-                        }
-                    }
-                    return dataRecords;
+                    return GetDataRecords(dataRecordStorageId);
                 });
+        }
+
+        private List<DataRecord> GetDataRecords(Guid dataRecordStorageId, List<string> columnsNeeded = null)
+        {
+            var dataManager = GetStorageDataManager(dataRecordStorageId);
+            dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
+
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            var dataRecordTypeFields = _recordTypeManager.GetDataRecordTypeFields(dataRecordStorage.DataRecordTypeId);
+            dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordStorage.DataRecordTypeId);
+            List<string> columns;
+            if (columnsNeeded != null)
+            {
+                foreach (var item in columnsNeeded)
+                {
+                    if (!dataRecordTypeFields.ContainsKey(item))
+                    {
+                        throw new NullReferenceException(string.Format("'{0}' field not found.", item));
+                    }
+                }
+                columns = columnsNeeded;
+            }
+            else
+            {
+                columns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula == null).Select(x => x.Name).ToList();
+            }
+
+            var formulaColumns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula != null).Select(fld => fld.Name).ToList();
+
+            var dataRecords = dataManager.GetAllDataRecords(columns);
+
+            if (formulaColumns.Count > 0)
+            {
+                foreach (var dataRecord in dataRecords)
+                {
+                    var dataRecordObject = new DataRecordObject(dataRecordStorage.DataRecordTypeId, dataRecord.FieldValues);
+                    foreach (var formulaColumn in formulaColumns)
+                    {
+                        dataRecord.FieldValues.Add(formulaColumn, dataRecordObject.GetFieldValue(formulaColumn));
+                    }
+                }
+            }
+            return dataRecords;
         }
 
         private Dictionary<string, DataRecordField> GetFormulaDataRecordFields(Dictionary<string, DataRecordField> dataRecordFieldsDict, DataRetrievalInput<DataRecordQuery> input)
