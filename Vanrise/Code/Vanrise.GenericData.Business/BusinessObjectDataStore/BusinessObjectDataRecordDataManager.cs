@@ -112,7 +112,7 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        public bool Update(Dictionary<string, object> fieldValues, int? modifiedUserId)
+        public bool Update(Dictionary<string, object> fieldValues, int? modifiedUserId, RecordFilterGroup filterGroup)
         {
             throw new NotImplementedException();
         }

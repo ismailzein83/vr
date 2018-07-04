@@ -24,34 +24,40 @@ namespace Vanrise.Voucher.Business
         {
             //encrypt the pin code
             string encryptedPinCode = Cryptography.Encrypt(pinCode, DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey());
-           
-            var recordFilterGroup = new RecordFilterGroup()
+
+            var getGenericBEFilterGroup = new RecordFilterGroup()
             {
                 LogicalOperator = RecordQueryLogicalOperator.And,
                 Filters = new List<RecordFilter>()
                 {
-                    new NonEmptyRecordFilter(){FieldName ="ActivationDate" },
                     new StringRecordFilter(){FieldName = "PinCode", CompareOperator= StringRecordFilterOperator.Equals, Value = encryptedPinCode },
-                    new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Less , Value = System.DateTime.Now  },
-                    new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  },
-                    new EmptyRecordFilter(){ FieldName = "LockedDate" }
-
                 }
             };
             var genericBusinessEntityManager = new GenericBusinessEntityManager();
-            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, null, recordFilterGroup);
+            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, null, getGenericBEFilterGroup);
 
             if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
             {
                 var genericBusinessEntity = genericBusinessEntities.First();
                 var voucharCardId = (long)genericBusinessEntity.FieldValues.GetRecord("ID");
-
+                var updateGenericBEFilterGroup = new RecordFilterGroup()
+                {
+                    LogicalOperator = RecordQueryLogicalOperator.And,
+                    Filters = new List<RecordFilter>()
+                    {
+                        new NonEmptyRecordFilter(){FieldName ="ActivationDate" },
+                        new DateTimeRecordFilter(){FieldName = "ActivationDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Less , Value = System.DateTime.Now  },
+                        new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  },
+                        new EmptyRecordFilter(){ FieldName = "LockedDate" }
+                    }
+                };
                 var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate();
                 genericBusinessEntityToUpdate.FieldValues = new Dictionary<string,object>();
                 genericBusinessEntityToUpdate.FieldValues.Add("LockedBy",lockedBy);
                 genericBusinessEntityToUpdate.FieldValues.Add("LockedDate", DateTime.Now);
                 genericBusinessEntityToUpdate.GenericBusinessEntityId = voucharCardId;
                 genericBusinessEntityToUpdate.BusinessEntityDefinitionId = _definitionId;
+                genericBusinessEntityToUpdate.FilterGroup = updateGenericBEFilterGroup;
                 
                 var updateOutput = genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
                 if (updateOutput.Result == UpdateOperationResult.Succeeded)

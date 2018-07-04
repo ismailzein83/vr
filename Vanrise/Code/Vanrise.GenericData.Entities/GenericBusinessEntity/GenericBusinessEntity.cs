@@ -19,6 +19,7 @@ namespace Vanrise.GenericData.Entities
     {
         public Object GenericBusinessEntityId { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
+        public RecordFilterGroup FilterGroup { get; set; }
 
     }
 }

@@ -218,7 +218,7 @@ namespace Vanrise.GenericData.Business
             storageDataManager.InsertRecords(records);
         }
 
-        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues)
+        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues, RecordFilterGroup filterGroup)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager");
@@ -235,7 +235,7 @@ namespace Vanrise.GenericData.Business
 
             int? userId;
             SecurityContext.Current.TryGetLoggedInUserId(out userId);
-            bool updateActionSucc = storageDataManager.Update(fieldValues, userId);
+            bool updateActionSucc = storageDataManager.Update(fieldValues, userId, filterGroup);
 
             if (updateActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);

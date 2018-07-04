@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Entities
 
         void InsertRecords(IEnumerable<dynamic> records);
 
-        bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId);
+        bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId, RecordFilterGroup filterGroup);
 
         void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate);
 

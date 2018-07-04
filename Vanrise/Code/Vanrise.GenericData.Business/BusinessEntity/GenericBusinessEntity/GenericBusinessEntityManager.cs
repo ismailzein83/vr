@@ -410,7 +410,7 @@ namespace Vanrise.GenericData.Business
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-
+             
             return insertOperationOutput;
         }
         public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate)
@@ -434,7 +434,7 @@ namespace Vanrise.GenericData.Business
 
             OnBeforeSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntityToUpdate, HandlerOperationType.Update);
 
-            bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues);
+            bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues, genericBusinessEntityToUpdate.FilterGroup);
 
             if (updateActionSucc)
             {

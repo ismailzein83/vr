@@ -423,10 +423,10 @@ namespace Vanrise.GenericData.SQLDataStorage
             this.ApplyStreamToDB(readyStream);
         }
 
-        public bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId)
+        public bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId, RecordFilterGroup filterGroup)
         {
             Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
-            return ExecuteNonQueryText(BuildUpdateQuery(fieldValues, parameterValues, modifiedUserId), (cmd) =>
+            return ExecuteNonQueryText(BuildUpdateQuery(fieldValues, parameterValues, modifiedUserId, filterGroup), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -931,7 +931,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             return str.ToString();
         }
 
-        private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, int? modifiedUserId)
+        private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, int? modifiedUserId, RecordFilterGroup filterGroup)
         {
             if (fieldValues == null || fieldValues.Count == 0)
                 throw new Exception("fieldValues should not be null or empty.");
@@ -1022,6 +1022,19 @@ namespace Vanrise.GenericData.SQLDataStorage
                 queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
                 queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());
             }
+            if (filterGroup!=null)
+            {
+                string recordFilterResult = string.Empty;
+                if(whereQuery.Length > 0)
+                {
+                    whereQuery.Append(" AND ");
+                }
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(filterGroup, ref parameterIndex, parameterValues);
+                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" {0} ", recordFilter) : string.Empty;
+                whereQuery.Append(recordFilterResult);
+            }
+
             queryBuilder.Append(@"BEGIN  UPDATE #TABLENAME# SET #VALUESQUERY# WHERE #WHEREQUERY#  END");
             queryBuilder.Replace("#VALUESQUERY#", valuesQuery.ToString());
             queryBuilder.Replace("#WHEREQUERY#", whereQuery.ToString());
