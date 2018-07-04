@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -12,22 +9,25 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is AllImportedZones;
+            return target is AllZones;
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            List<string> renamedZones = new List<string>();
-            AllImportedZones allImportedZones = context.Target as AllImportedZones;
+            var renamedZones = new List<string>();
+            var allZones = context.Target as AllZones;
+            var allImportedZones = allZones.ImportedZones;
+
             if (allImportedZones.Zones == null || allImportedZones.Zones.Count() == 0)
                 return true;
+
             foreach (var importedZone in allImportedZones.Zones)
             {
                 if (importedZone.ChangeType == ZoneChangeType.Renamed)
                     renamedZones.Add(importedZone.ZoneName);
             }
-            if (renamedZones.Count() > 0)
+            if (renamedZones.Any())
             {
-                context.Message = string.Format("The following zone(s) has been renamed :'{0}'", string.Join(",", renamedZones));
+                context.Message = string.Format("The following zone(s) have been renamed :'{0}'", string.Join(",", renamedZones));
                 return false;
             }
 
@@ -43,5 +43,5 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 
 
-   
+
 

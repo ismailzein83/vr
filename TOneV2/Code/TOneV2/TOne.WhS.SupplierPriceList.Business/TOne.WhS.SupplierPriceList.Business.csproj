@@ -94,10 +94,10 @@
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeBEDGreaterThanActionDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeBEDLessThanActionDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeEEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\ModifyingCodesInRateChangePricelistCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ModifyingCodesInRateChangePricelistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\AcceptableRateIncreaseCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\RateIncreasedCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\RenamedZonesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RenamedZonesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateImportedZones\ImportedOtherRateIsGreaterThanMaximumRateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateImportedZones\ImportedRateIsGreaterThanMaximumRateCondition.cs" />

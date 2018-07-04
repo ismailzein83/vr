@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is AllImportedZones;
+            return target is AllZones;
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
@@ -21,7 +21,9 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (importSPLContext.SupplierPricelistType == BusinessEntity.Entities.SupplierPricelistType.RateChange)
             {
                 List<string> zonesWithCodeChange = new List<string>();
-                AllImportedZones allImportedZones = context.Target as AllImportedZones;
+                var allZones = context.Target as AllZones;
+                AllImportedZones allImportedZones = allZones.ImportedZones;
+
                 foreach (var importedZone in allImportedZones.Zones)
                 {
                     if (importedZone.ImportedCodes != null && importedZone.ImportedCodes.Count() > 0)
