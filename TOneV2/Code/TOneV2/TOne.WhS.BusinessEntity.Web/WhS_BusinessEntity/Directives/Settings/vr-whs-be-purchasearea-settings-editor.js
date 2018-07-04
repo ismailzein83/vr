@@ -59,6 +59,8 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 				        RetroactiveDayOffset: ctrl.retroactiveDayOffset,
 				        MaximumRate: ctrl.maximumRate,
 				        MaximumCodeRange: ctrl.maximumCodeRange,
+				        AcceptableIncreasedRate: ctrl.acceptableIncreasedRate, 
+				        AcceptableDecreasedRate: ctrl.acceptableDecreasedRate,
 				        CodeGroupVerfifcation: ctrl.codeGroupVerification
 				    };
 				};
@@ -74,6 +76,8 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 				ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
 				ctrl.maximumRate = data.MaximumRate;
 				ctrl.maximumCodeRange = data.MaximumCodeRange;
+			    ctrl.acceptableIncreasedRate = data.AcceptableIncreasedRate;
+			    ctrl.acceptableDecreasedRate =  data.AcceptableDecreasedRate;
 				ctrl.codeGroupVerification = data.CodeGroupVerfifcation;
 			}
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -17,37 +18,44 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            //var importedCountry = context.Target as ImportedCountry;
+            var importedCountry = context.Target as ImportedCountry;
 
-            //if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
-            //    return true;
+            if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
+                throw new NullReferenceException("importedCountry.ImportedRates");
 
-            //var numberOfIncreasedRates = 0;
-            //List<string> zonesWithIncreasedRates = new List<string>();
-            //var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
-            //IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
-            //string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
-            //foreach (ImportedRate importedRate in importedCountry.ImportedRates)
-            //{
-            //    if (importedRate.ChangeType == RateChangeType.Increase)
-            //    {
-            //        numberOfIncreasedRates++;
-            //        if (importedRate.BED < importSPLContext.CodeEffectiveDate)
-            //        {
-            //            importedRate.ProcessInfo.RecentExistingRate.ThrowIfNull("RecentExistingRate");
-            //            var recentRate = Decimal.Round(importedRate.ProcessInfo.RecentExistingRate.ConvertedRate, longPrecision);
-            //            var currentRate = Decimal.Round(importedRate.Rate, longPrecision);
-            //            zonesWithIncreasedRates.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' effective on '{3}' should be on '{4}'", importedRate.ZoneName, recentRate, currentRate, importedRate.BED.ToString(importSPLContext.DateFormat), codeEffectiveDateString));
-            //        }
-            //    }
-            //}
+            var configManager = new ConfigManager();
+            int acceptableDecreaseRatePercentage = configManager.GetPurchaseAcceptableDecreasedRate();
+            var zonesWithDecreasedRatesAboveAcceptable = new List<string>();
+            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            var numberOfAcceptableDecreasedRate = 0;
 
-            //if (numberOfIncreasedRates > 0)
-            //{
-            //    string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
-            //    context.Message = string.Format("{0} increased rate(s) in country '{1}'. {2}", numberOfIncreasedRates, countryName, string.Join(", ", zonesWithIncreasedRates));
-            //    return false;
-            //}
+            foreach (ImportedRate importedRate in importedCountry.ImportedRates)
+            {
+                if (importedRate.ChangeType == RateChangeType.Decrease)
+                {
+                    importedRate.ProcessInfo.RecentExistingRate.ThrowIfNull("RecentExistingRate");
+
+                    var recentRate = importedRate.ProcessInfo.RecentExistingRate.ConvertedRate;
+                    var newRate = importedRate.Rate;
+                    var recentRateFormatted = Decimal.Round(recentRate, longPrecision);
+                    var newRateFormatted = Decimal.Round(newRate, longPrecision);
+
+                    var decreasePercentage = ((1 - newRate / recentRate) * 100);
+
+                    if (acceptableDecreaseRatePercentage < decreasePercentage)
+                    {
+                        numberOfAcceptableDecreasedRate++;
+                        zonesWithDecreasedRatesAboveAcceptable.Add(string.Format("Rate Decrease on zone '{0}' from '{1}' to '{2}' has percentage higher than the specified acceptable decrease rate percentage '{3}'", importedRate.ZoneName, recentRateFormatted, newRateFormatted, acceptableDecreaseRatePercentage));
+                    }
+                }
+            }
+
+            if (zonesWithDecreasedRatesAboveAcceptable.Any())
+            {
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
+                context.Message = string.Format("{0} decreased Rate(s) above acceptable decrease rate percentage, following rate(s) are: {1}", numberOfAcceptableDecreasedRate, string.Join(", ", zonesWithDecreasedRatesAboveAcceptable));
+                return false;
+            }
             return true;
         }
         public override string GetMessage(IRuleTarget target)
