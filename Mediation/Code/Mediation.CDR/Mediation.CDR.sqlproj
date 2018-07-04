@@ -119,10 +119,6 @@
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationLastCommittedId_Get.sql" />
     <Build Include="dbo\User Defined Types\IDType.sql" />
     <Build Include="Mediation_Generic\Tables\BadMediationRecord.sql" />
-    <Build Include="Mediation_WHS\Tables\EricssonCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\EricssonCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\EricssonBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\EricssonBadCDRType.sql" />
     <Build Include="Mediation_ICX\Tables\NokiaSiemensBadCDR.sql" />
     <Build Include="Mediation_ICX\Tables\NokiaSiemensCDR.sql" />
     <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensBadCDRType.sql" />
@@ -144,5 +140,13 @@
     <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiBadCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\JazzHuaweiDiscardedCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiDiscardedCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonLocalCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonLocalBadCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonInternationalCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonInternationalBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonLocalCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonLocalBadCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalBadCDRType.sql" />
   </ItemGroup>
 </Project>

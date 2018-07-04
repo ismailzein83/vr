@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Mediation_WHS].[EricssonBadCDR] (
+﻿CREATE TABLE [Mediation_WHS].[EricssonInternationalCDR] (
     [Id]                       BIGINT           NOT NULL,
     [RecordType]               VARCHAR (5)      NULL,
     [CallStatus]               VARCHAR (20)     NULL,
@@ -25,18 +25,6 @@
     [ExtraFields]              VARCHAR (MAX)    NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL,
-    CONSTRAINT [PK_EricssonBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_EricssonInternationalCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
-
-
-
-
-
-
-
-
-
 

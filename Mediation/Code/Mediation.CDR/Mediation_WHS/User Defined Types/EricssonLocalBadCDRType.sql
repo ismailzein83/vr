@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[EricssonCDRType] AS TABLE (
+﻿CREATE TYPE [Mediation_WHS].[EricssonLocalBadCDRType] AS TABLE (
     [Id]                       BIGINT           NULL,
     [RecordType]               VARCHAR (5)      NULL,
     [CallStatus]               VARCHAR (20)     NULL,
@@ -25,16 +25,4 @@
     [ExtraFields]              VARCHAR (MAX)    NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL);
-
-
-
-
-
-
-
-
-
-
-
-
 
