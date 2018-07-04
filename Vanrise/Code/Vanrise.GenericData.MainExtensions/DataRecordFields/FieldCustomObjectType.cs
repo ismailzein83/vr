@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.Common;
+
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldCustomObjectType : DataRecordFieldType
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("28411D23-EA66-47AC-A323-106BE0B9DA7E"); }
-        }
+        public override Guid ConfigId { get { return new Guid("28411D23-EA66-47AC-A323-106BE0B9DA7E"); } }
+
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-customobject-viewereditor"; } }
+
         public bool IsNullable { get; set; }
 
-        public override bool AreEqual(Object newValue, Object oldValue)
-        {
-            if (this.Settings != null)
-                return Settings.AreEqual(newValue, oldValue);
-            return base.AreEqual(newValue, oldValue);
-        }
+        public FieldCustomObjectTypeSettings Settings { get; set; }
+
+        public override string RuntimeEditor { get { return null; } }
+
+        public override bool StoreValueSerialized { get { return true; } }
 
         Type _runtimeType;
         public override Type GetRuntimeType()
@@ -56,7 +53,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return _nonNullableRuntimeType;
         }
 
-        public override bool StoreValueSerialized { get { return true; } }
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (this.Settings != null)
+                return Settings.AreEqual(newValue, oldValue);
+            return base.AreEqual(newValue, oldValue);
+        }
 
         public override string GetDescription(object value)
         {
@@ -67,7 +69,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 });
             return null;
         }
-        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-customobject-viewereditor"; } }
+
         public override bool IsMatched(object fieldValue, object filterValue)
         {
             throw new NotImplementedException();
@@ -88,19 +90,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-
-        public override string RuntimeEditor
-        {
-            get { return null; }
-        }
-
-        public FieldCustomObjectTypeSettings Settings { get; set; }
-
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
             return this.Settings.ParseNonNullValueToFieldType(originalValue);
         }
     }
-  
-    
 }
