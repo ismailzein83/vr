@@ -243,6 +243,7 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
+
             Func<GenericBusinessEntity, bool> filterExpression = (genericBusinessEntity) =>
             {
 
@@ -254,11 +255,25 @@ namespace Vanrise.GenericData.Business
             List<string> columnTitles = new List<string>();
             GetGridColumnNamesAndTitles(input.Query.BusinessEntityDefinitionId, out columns, out columnTitles);
 
+            var genericBeActions = _genericBEDefinitionManager.GetCachedGenericBEActionsByActionId(input.Query.BusinessEntityDefinitionId);
+
+            var actionContext = new GenericBEActionDefinitionCheckAccessContext
+            {
+                BusinessEntityDefinitionId = input.Query.BusinessEntityDefinitionId,
+                UserId = SecurityContext.Current.GetLoggedInUserId()
+            };
+            var viewContext = new GenericBEViewDefinitionCheckAccessContext
+            {
+                BusinessEntityDefinitionId = input.Query.BusinessEntityDefinitionId,
+                UserId = SecurityContext.Current.GetLoggedInUserId()
+            };
+            string sortByColumnName = input.SortByColumnName;
+
             var storageRecords = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
             {
                 FromRow = input.FromRow,
                 ToRow = input.ToRow,
-                SortByColumnName = input.SortByColumnName,
+                SortByColumnName = sortByColumnName,
                 IsAPICall = input.IsAPICall,
                 IsSortDescending = input.IsSortDescending,
                 ResultKey = input.ResultKey,
@@ -281,43 +296,75 @@ namespace Vanrise.GenericData.Business
                     DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId },
                     Direction = OrderDirection.Descending,
                     LimitResult = input.Query.LimitResult,
+                    //SortColumns=,
+                    //ToTime
                 },
             }) as BigResult<DataRecordDetail>;
 
-            List<GenericBusinessEntity> genericBusinessEntities = new List<GenericBusinessEntity>();
-            if (storageRecords != null && storageRecords.Data != null)
-            {
-                foreach (var storageRecord in storageRecords.Data)
-                {
-                    GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
-                    if (storageRecord.FieldValues != null)
-                    {
-                        genericBusinessEntity.FieldValues = new Dictionary<string, object>();
-                        foreach (var fieldValue in storageRecord.FieldValues)
-                        {
-                            genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
-                        }
-                    }
-
-                    genericBusinessEntities.Add(genericBusinessEntity);
-                }
-            }
-
             BigResult<GenericBusinessEntityDetail> result = new BigResult<GenericBusinessEntityDetail>();
-            if (genericBusinessEntities != null)
+            if (storageRecords != null)
             {
-                result.ResultKey = input.ResultKey;
+                result.ResultKey = storageRecords.ResultKey;
                 result.TotalCount = storageRecords.TotalCount;
                 List<GenericBusinessEntityDetail> resultDetail = new List<GenericBusinessEntityDetail>();
-                    foreach (var genericBusinessEntity in genericBusinessEntities)
+                if (storageRecords.Data != null)
+                {
+                    foreach (var storageRecord in storageRecords.Data)
                     {
-                        var genericBusinessEntityDetail =  GenericBusinessEntityDetailMapper( input.Query.BusinessEntityDefinitionId,  genericBusinessEntity);
+                        GenericBusinessEntityDetail genericBusinessEntityDetail = new GenericBusinessEntityDetail();
+                        if (storageRecord.FieldValues != null)
+                        {
+                            genericBusinessEntityDetail.FieldValues = new GenericBusinessEntityValues();
+                            foreach (var fieldValue in storageRecord.FieldValues)
+                            {
+                                genericBusinessEntityDetail.FieldValues.Add(fieldValue.Key, new GenericBusinessEntityValue
+                                {
+                                    Value = fieldValue.Value.Value,
+                                    Description = fieldValue.Value.Description,
+                                });
+                            }
+                        }
+                        if (genericBEDefinitionSetting.GridDefinition.GenericBEGridActions != null)
+                        {
+                            genericBusinessEntityDetail.AvailableGridActionIds = new List<Guid>();
+
+
+
+                            foreach (var genericBEGridAction in genericBEDefinitionSetting.GridDefinition.GenericBEGridActions)
+                            {
+
+                                var genericBeAction = genericBeActions.GetRecord(genericBEGridAction.GenericBEActionId);
+                                genericBeAction.ThrowIfNull("Generic Be Action ", genericBEGridAction.GenericBEActionId);
+
+                                var settings = genericBeAction.Settings;
+                                settings.ThrowIfNull("Generic Be Action Settings", genericBEGridAction.GenericBEActionId);
+
+
+                                if (settings.DoesUserHaveAccess(actionContext))
+                                    genericBusinessEntityDetail.AvailableGridActionIds.Add(genericBEGridAction.GenericBEGridActionId);
+                            }
+                        }
+                        if (genericBEDefinitionSetting.GridDefinition.GenericBEGridViews != null)
+                        {
+                            genericBusinessEntityDetail.AvailableGridViewIds = new List<Guid>();
+                            foreach (var genericBEGridView in genericBEDefinitionSetting.GridDefinition.GenericBEGridViews)
+                            {
+                                var viewSettings = genericBEGridView.Settings;
+                                viewSettings.ThrowIfNull("Generic BE View Settings", genericBEGridView.GenericBEViewDefinitionId);
+                                if (viewSettings.DoesUserHaveAccess(viewContext))
+                                    genericBusinessEntityDetail.AvailableGridViewIds.Add(genericBEGridView.GenericBEViewDefinitionId);
+                            }
+                        }
+
                         resultDetail.Add(genericBusinessEntityDetail);
                     }
-                    result.Data = resultDetail;
-            }
+                }
 
+                result.Data = resultDetail;
+            }
             VRActionLogger.Current.LogGetFilteredAction(new GenericBusinessEntityLoggableEntity(input.Query.BusinessEntityDefinitionId), input);
+            //   var vrCases =  storageDataManager.GetFilteredDataRecords()
+            //  return DataRetrievalManager.Instance.ProcessResult(input, vrCases.ToBigResult(input, filterExpression, VRCaseDetailMapper));
             return result;
         }
         public InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd)
