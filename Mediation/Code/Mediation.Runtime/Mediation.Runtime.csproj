@@ -247,6 +247,17 @@
     <Reference Include="Vanrise.GenericData.Normalization">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Notification, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Notification.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Notification.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.BP.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
     </Reference>
