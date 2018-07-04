@@ -1,5 +1,5 @@
-﻿CREATE TABLE [Mediation_WHS].[JazzHuaweiBadCDR] (
-    [Id]                   BIGINT          NOT NULL,
+﻿CREATE TYPE [Mediation_WHS].[JazzHuaweiDiscardedCDRType] AS TABLE (
+    [Id]                   BIGINT          NULL,
     [Direction]            VARCHAR (5)     NULL,
     [SwitchType]           VARCHAR (5)     NULL,
     [InTrunk]              VARCHAR (25)    NULL,
@@ -23,13 +23,5 @@
     [Rfu3]                 VARCHAR (25)    NULL,
     [Rfu4]                 VARCHAR (25)    NULL,
     [Rfu5]                 VARCHAR (25)    NULL,
-    [FileName]             VARCHAR (255)   NULL,
-    CONSTRAINT [PK_JazzHuaweiBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
-);
-
-
-
-
-
-
+    [FileName]             VARCHAR (255)   NULL);
 
