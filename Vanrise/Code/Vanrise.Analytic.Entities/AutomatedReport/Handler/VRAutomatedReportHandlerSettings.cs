@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Entities
     public interface IVRAutomatedReportHandlerExecuteContext
     {
         Guid? TaskId { get; set; }
-
+        IAutomatedReportEvaluatorContext EvaluatorContext { get; set; }
         VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName);
 
         VRAutomatedReportResolvedDataFieldValue GetDataField(Guid vrAutomatedReportQueryId, string fieldName);
@@ -33,7 +33,7 @@ namespace Vanrise.Analytic.Entities
         List<VRAutomatedReportQuery> Queries { get;}
 
         QueryHandlerValidatorResult Result { get; set; }
-
         string ErrorMessage { set; }
+
     }
 }

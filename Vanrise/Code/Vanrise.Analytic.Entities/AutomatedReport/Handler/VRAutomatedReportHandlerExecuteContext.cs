@@ -13,11 +13,13 @@ namespace Vanrise.Analytic.Entities
         private List<VRAutomatedReportQuery> Queries { get; set; }
 
         public Guid? TaskId{get; set;}
+        public IAutomatedReportEvaluatorContext EvaluatorContext { get; set; }
 
-        public VRAutomatedReportHandlerExecuteContext(List<VRAutomatedReportQuery> queries, Guid? taskId)
+        public VRAutomatedReportHandlerExecuteContext(List<VRAutomatedReportQuery> queries, Guid? taskId, IAutomatedReportEvaluatorContext evaluatorContext)
         {
             Queries = queries;
             TaskId = taskId;
+            this.EvaluatorContext = evaluatorContext;
         }
 
         public VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName)
@@ -105,5 +107,7 @@ namespace Vanrise.Analytic.Entities
         {
             return null;
         }
+
+
     }
 }

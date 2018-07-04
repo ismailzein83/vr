@@ -8,6 +8,7 @@ using Vanrise.Analytic.BP.Arguments;
 using Vanrise.Analytic.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.BP.Activities
 {
@@ -32,9 +33,33 @@ namespace Vanrise.Analytic.BP.Activities
                 handler.ThrowIfNull("handler");
                 handler.Settings.ThrowIfNull("handler.Settings");
                 queries.ThrowIfNull("queries");
-                handler.Settings.Execute(new VRAutomatedReportHandlerExecuteContext(queries, context.GetSharedInstanceData().InstanceInfo.TaskId));
+                handler.Settings.Execute(new VRAutomatedReportHandlerExecuteContext(queries, context.GetSharedInstanceData().InstanceInfo.TaskId, new AutomatedReportEvaluatorContext(context)));
             }
         }
 
+
+
+    }
+
+    public class AutomatedReportEvaluatorContext : IAutomatedReportEvaluatorContext
+    {
+        CodeActivityContext context;
+        public AutomatedReportEvaluatorContext(CodeActivityContext context)
+        {
+            this.context = context;
+        }
+        public void WriteErrorBusinessTrackingMsg(string messageFormat, params object[] args)
+        {
+            context.WriteBusinessTrackingMsg(LogEntryType.Error, messageFormat, args);
+        }
+
+        public void WriteWarningBusinessTrackingMsg(string messageFormat, params object[] args)
+        {
+            context.WriteBusinessTrackingMsg(LogEntryType.Warning, messageFormat, args);
+        }
+        public void WriteInformationBusinessTrackingMsg(string messageFormat, params object[] args)
+        {
+            context.WriteBusinessTrackingMsg(LogEntryType.Information, messageFormat, args);
+        }
     }
 }

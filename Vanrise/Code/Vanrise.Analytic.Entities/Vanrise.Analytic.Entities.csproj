@@ -112,6 +112,7 @@
     <Compile Include="AnalyticDataProvider\AnalyticDataProvider.cs" />
     <Compile Include="AnalyticDataProvider\AnalyticDataProviderConfig.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAnalysisPeriod.cs" />
+    <Compile Include="IAutomatedReportEvaluatorContext.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsInput.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsResult.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorConfig.cs" />
