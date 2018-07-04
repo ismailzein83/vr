@@ -24,7 +24,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public long FileTemplateId { get; set; }
 
-        public string SerialNumberPattern { get; set; }
+        public string FileName { get; set; }
 
         public bool CompressFile { get; set; }
 
@@ -183,13 +183,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 }
             }
             var configManager = new Vanrise.Analytic.Business.ConfigManager();
-            var serialNumber = this.SerialNumberPattern;
+            var fileName = this.FileName; 
 
-            foreach (var serialNumberPart in configManager.GetSerialNumberParts())
+            foreach (var fileNamePart in configManager.GetFileNameParts())
             {
-                if (serialNumber != null && serialNumber.Contains(string.Format("#{0}#", serialNumberPart.VariableName)))
+                if (fileName != null && fileName.Contains(string.Format("#{0}#", fileNamePart.VariableName)))
                 {
-                    serialNumber = serialNumber.Replace(string.Format("#{0}#", serialNumberPart.VariableName), serialNumberPart.Settings.GetPartText(new VRAutomatedReportSerialNumberPartConcatenatedPartContext() { 
+                    fileName = fileName.Replace(string.Format("#{0}#", fileNamePart.VariableName), fileNamePart.Settings.GetPartText(new VRAutomatedReportFileNamePartConcatenatedPartContext()
+                    { 
                     TaskId = context.HandlerContext.TaskId}));
                 }
             }
@@ -200,11 +201,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 ZipUtility zipUtility = new ZipUtility();
                 var zippedFileContent = zipUtility.Zip(new ZipFileInfo(){
                     Content = memoryStream.ToArray(),
-                    FileName = serialNumber + ".xls"
+                    FileName = fileName + ".xls"
                 });
                 return new VRAutomatedReportGeneratedFile()
                 {
-                    FileName = serialNumber + ".zip",
+                    FileName = fileName + ".zip",
                     FileContent = zippedFileContent
                 };
             }
@@ -212,7 +213,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             {
                 return new VRAutomatedReportGeneratedFile()
                 {
-                    FileName = serialNumber + ".xls",
+                    FileName = fileName + ".xls",
                     FileContent = memoryStream.ToArray()
                 };
             }

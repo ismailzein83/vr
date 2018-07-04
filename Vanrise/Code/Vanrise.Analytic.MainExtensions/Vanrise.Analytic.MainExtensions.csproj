@@ -67,8 +67,8 @@
     <Compile Include="AutomatedReport\FileGenerators\BasicExcelFileGenerator.cs" />
     <Compile Include="AutomatedReport\Handlers\FTPHandler.cs" />
     <Compile Include="AutomatedReport\Handlers\SendEmailHandler.cs" />
-    <Compile Include="AutomatedReport\Handlers\VRAutomatedReportDateSerialNumberPart.cs" />
-    <Compile Include="AutomatedReport\Handlers\VRAutomatedReportSequenceSerialNumberPart.cs" />
+    <Compile Include="AutomatedReport\Handlers\VRAutomatedReportDateFileNamePart.cs" />
+    <Compile Include="AutomatedReport\Handlers\VRAutomatedReportSequenceFileNamePart.cs" />
     <Compile Include="AutomatedReport\Queries\AnalyticTableQueryDefinitionSettings.cs" />
     <Compile Include="AutomatedReport\Queries\AnalyticTableQuerySettings.cs" />
     <Compile Include="AutomatedReport\Queries\RecordSearchQueryDefinitionSettings.cs" />

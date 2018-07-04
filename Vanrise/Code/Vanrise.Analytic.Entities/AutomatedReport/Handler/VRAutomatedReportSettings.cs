@@ -11,22 +11,22 @@ namespace Vanrise.Analytic.Entities
     public class VRAutomatedReportSettings : SettingData
     {
         public static string SETTING_TYPE = "VR_Analytic_AutomatedReportSettings";
-        public List<VRAutomatedReportSerialNumberPart> SerialNumberParts { get; set; }
+        public List<VRAutomatedReportFileNamePart> FileNameParts { get; set; }
          
     }
-    public class VRAutomatedReportSerialNumberPart
+    public class VRAutomatedReportFileNamePart
     {
         public string VariableName { get; set; }
         public string Description { get; set; }
-        public VRConcatenatedPartSettings<IVRAutomatedReportSerialNumberPartConcatenatedPartContext> Settings { get; set; }
+        public VRConcatenatedPartSettings<IVRAutomatedReportFileNamePartConcatenatedPartContext> Settings { get; set; }
 
     }
-    public interface IVRAutomatedReportSerialNumberPartConcatenatedPartContext
+    public interface IVRAutomatedReportFileNamePartConcatenatedPartContext
     {
         Guid? TaskId { get; set; }
 
     }
-    public class VRAutomatedReportSerialNumberPartConcatenatedPartContext : IVRAutomatedReportSerialNumberPartConcatenatedPartContext
+    public class VRAutomatedReportFileNamePartConcatenatedPartContext : IVRAutomatedReportFileNamePartConcatenatedPartContext
     {
         public Guid? TaskId { get; set; }
     }
