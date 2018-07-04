@@ -21,6 +21,9 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 			this.initializeController = initializeController;
 			var data;
 
+			$scope.hintTextForIncrease = "(1 - OldRate / NewRate)*100 should be less than the specified percentage";
+            $scope.hintTextForDecrease = "(1 - NewRate / OldRate)*100 should be less than the specified percentage";
+
 			function initializeController() {
 
 				defineAPI();
