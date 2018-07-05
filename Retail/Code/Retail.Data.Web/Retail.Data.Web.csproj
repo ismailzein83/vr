@@ -128,6 +128,8 @@
     <Content Include="Retail_Data\Directives\MainExtensions\ChargingPolicy\Templates\DataChargingPolicyDefinitionTemplate.html" />
     <Content Include="Retail_Data\Directives\MainExtensions\ChargingPolicy\Templates\DataChargingPolicySettingsTemplate.html" />
     <Content Include="Retail_Data\Directives\MainExtensions\QueueActivators\Templates\QueueActivatorPrepareDataTemplate.html" />
+    <Content Include="Retail_Data\Directives\Settings\retail-data-icxdatasettings.js" />
+    <Content Include="Retail_Data\Directives\Settings\Templates\ICXDataSettingsTemplate.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
