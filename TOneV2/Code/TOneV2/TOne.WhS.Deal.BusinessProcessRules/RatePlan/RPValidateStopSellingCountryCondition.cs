@@ -7,6 +7,7 @@ using TOne.WhS.Sales.Entities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 
 namespace TOne.WhS.Deal.BusinessProcessRules
@@ -26,6 +27,9 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             var salezoneManager = new SaleZoneManager();
             var zoneMessages = new List<String>();
 
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+                return true;
+
             foreach (var changedCountrie in customerCountryToChange.ChangedExistingCustomerCountries)
             {
                 var countryId = changedCountrie.CustomerCountryEntity.CountryId;
@@ -44,7 +48,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             }
             if (zoneMessages.Any())
             {
-                string zoneMessagesString = string.Concat(",", zoneMessages);
+                string zoneMessagesString = string.Join(",", zoneMessages);
                 context.Message = String.Format("Following countries having zones included in effective deals and they cannot be ended: {0}", zoneMessagesString);
                 return false;
             }

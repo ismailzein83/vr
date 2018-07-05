@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Text;
+using System.Linq;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using TOne.WhS.Deal.Business;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
-using System.Collections.Generic;
-using System.Linq;
 
 
 namespace TOne.WhS.Deal.BusinessProcessRules
@@ -44,7 +43,7 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             }
             if (zoneMessages.Any())
             {
-                string zoneMessagesString = string.Concat(",", zoneMessages);
+                string zoneMessagesString = string.Join(",", zoneMessages);
                 context.Message = String.Format("Modified rates cannot be done for zones included in deals. Following zones are : {0}", zoneMessagesString);
                 return false;
             }

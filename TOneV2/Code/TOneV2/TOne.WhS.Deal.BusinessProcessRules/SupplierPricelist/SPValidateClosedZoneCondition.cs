@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Text;
-using TOne.WhS.Deal.Business;
-using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.SupplierPriceList;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
-using TOne.WhS.SupplierPriceList.Entities.SPL;
-using TOne.WhS.SupplierPriceList;
 
 namespace TOne.WhS.Deal.BusinessProcessRules
 {
