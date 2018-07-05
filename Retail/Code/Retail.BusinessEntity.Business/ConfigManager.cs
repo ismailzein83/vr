@@ -11,8 +11,8 @@ namespace Retail.BusinessEntity.Business
 
         public Guid GetAccountDIDRelationDefinitionId()
         {
-            DIDTechnicalSettings DIDTechnicalSettings = this.GetDIDTechnicalSettings();
-            Guid accountDIDRelationDefinitionId = DIDTechnicalSettings.AccountDIDRelationDefinitionId;
+            DIDTechnicalSettings didTechnicalSettings = this.GetDIDTechnicalSettings();
+            Guid accountDIDRelationDefinitionId = didTechnicalSettings.AccountDIDRelationDefinitionId;
             if (accountDIDRelationDefinitionId == null)
                 throw new NullReferenceException("didTechnicalSettings.AccountDIDRelationDefinitionId");
 
@@ -24,6 +24,7 @@ namespace Retail.BusinessEntity.Business
             RetailInvoiceSettings retailInvoiceSettings = this.GetRetailInvoiceSettings();
             if (retailInvoiceSettings == null)
                 return null;
+
             return retailInvoiceSettings.VRTaxesDefinition;
         }
 
