@@ -248,16 +248,22 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         public void SwapTables(int indexesCommandTimeoutInSeconds, bool syncSaleCodeZones)
         {
-            string createIndexScript = string.Format(@"CREATE INDEX IX_route_CustomerId_cldsid_{0} ON {1} USING btree
+            string createRouteIndexScript = string.Format(@"CREATE INDEX IX_route_CustomerId_cldsid_{0} ON {1} USING btree
                                                       (customer_id COLLATE pg_catalog.default, cldsid) TABLESPACE pg_default;
                                                       ALTER TABLE {1} CLUSTER ON IX_route_CustomerId_cldsid_{0};", Guid.NewGuid().ToString("N"), TempTableNameWithSchema);
-            string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3}; ", TableNameWithSchema, OldTableName, TempTableNameWithSchema, TableName);
+            string swapRouteTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3}; ", TableNameWithSchema, OldTableName, TempTableNameWithSchema, TableName);
 
-            List<string> pgStrings = new List<string> { createIndexScript, swapTableScript };
+            List<string> pgStrings = new List<string> { createRouteIndexScript, swapRouteTableScript };
+
             if (syncSaleCodeZones)
             {
-                pgStrings.Add(string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3};", SaleZoneTableNameWithSchema, OldSaleZoneTableName, TempSaleZoneTableNameWithSchema, SaleZoneTableName));
-                pgStrings.Add(string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3};", SaleCodeTableNameWithSchema, OldSaleCodeTableName, TempSaleCodeTableNameWithSchema, SaleCodeTableName));
+                string createSaleZoneIndexScript = string.Format("ALTER TABLE {0} ADD constraint salezone_pkey_{1} PRIMARY KEY (id)", TempSaleZoneTableNameWithSchema, Guid.NewGuid().ToString("N"));
+                string swapSaleZoneTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3};", SaleZoneTableNameWithSchema, OldSaleZoneTableName, TempSaleZoneTableNameWithSchema, SaleZoneTableName);
+
+                string createSaleCodeIndexScript = string.Format("ALTER TABLE {0} ADD constraint salecode_pkey_{1} PRIMARY KEY (id)", TempSaleCodeTableNameWithSchema, Guid.NewGuid().ToString("N"));
+                string swapSaleCodeTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3};", SaleCodeTableNameWithSchema, OldSaleCodeTableName, TempSaleCodeTableNameWithSchema, SaleCodeTableName);
+
+                pgStrings.AddRange(new List<string>(){ createSaleZoneIndexScript, swapSaleZoneTableScript, createSaleCodeIndexScript, swapSaleCodeTableScript});
             }
 
             ExecuteNonQuery(pgStrings.ToArray(), indexesCommandTimeoutInSeconds);
@@ -424,8 +430,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
             string dropTempSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", TempSaleZoneTableNameWithSchema);
             string dropOldSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldSaleZoneTableNameWithSchema);
             string dropTempSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0};", TempSaleCodeTableNameWithSchema);
-            string dropOldSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldSaleCodeTableNameWithSchema); 
-
+            string dropOldSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldSaleCodeTableNameWithSchema);
 
             string createTempSaleZoneTableScript = string.Format(@"CREATE TABLE {0} (                                                         
                                                                    ID bigint,
