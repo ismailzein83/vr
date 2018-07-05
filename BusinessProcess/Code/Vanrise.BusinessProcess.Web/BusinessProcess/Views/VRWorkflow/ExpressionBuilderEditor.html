@@ -1,0 +1,42 @@
+<div vr-modalcontent ng-controller="BusinessProcess_VRWorkflow_ExpressionBuilderController" vr-loader="isLoading" width="'100%'">
+	<vr-modalbody>
+		<vr-form>
+			<vr-row>
+				<vr-tabs>
+					<vr-tab header="'Arguments'">
+						<vr-columns haschildcolumns width="fullrow">
+							<vr-datalist scrollable datasource="scopeModel.arguments" onitemclicked="scopeModel.itemClicked" maxitemsperrow="6" ng-show="scopeModel.arguments.length>0">
+								<span title="{{dataItem.Name}}">
+									{{dataItem.Name}}
+								</span>
+							</vr-datalist>
+						</vr-columns>
+					</vr-tab>
+					<vr-tab header="'Variables'">
+						<vr-columns haschildcolumns width="fullrow">
+							<vr-datalist scrollable datasource="scopeModel.variables" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.variables.length>0">
+								<span title="{{dataItem.Name}}">
+									{{dataItem.Name}}
+								</span>
+							</vr-datalist>
+						</vr-columns>
+					</vr-tab>
+				</vr-tabs>
+			</vr-row>
+			<vr-row>
+				<vr-columns width="fullrow">
+					<vr-textarea id="testId" trim="false" label="Expression" value="scopeModel.expressionValue" rows="40" isrequired></vr-textarea>
+				</vr-columns>
+			</vr-row>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" validationcontext="expressionBuilderEditorGroup" data-onclick="scopeModel.saveExpressionValue"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+
+	</div>
+</div>
