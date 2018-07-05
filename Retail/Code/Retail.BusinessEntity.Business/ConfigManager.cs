@@ -1,11 +1,6 @@
 ﻿using Retail.BusinessEntity.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Business;
-using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Business
@@ -23,6 +18,7 @@ namespace Retail.BusinessEntity.Business
 
             return accountDIDRelationDefinitionId;
         }
+
         public VRTaxesDefinition GetRetailTaxesDefinitions()
         {
             RetailInvoiceSettings retailInvoiceSettings = this.GetRetailInvoiceSettings();
@@ -43,10 +39,12 @@ namespace Retail.BusinessEntity.Business
 
             return didTechnicalSettings;
         }
+
         private RetailInvoiceSettings GetRetailInvoiceSettings()
         {
            return new SettingManager().GetSetting<RetailInvoiceSettings>(RetailInvoiceSettings.SETTING_TYPE);
         }
+
         #endregion
     }
 }
