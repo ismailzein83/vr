@@ -192,8 +192,11 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         const string SaleZoneTableName = "salezone";
         const string TempSaleZoneTableName = "salezone_temp";
+        const string OldSaleZoneTableName = "salezone_old";
+
         const string SaleCodeTableName = "salecode";
         const string TempSaleCodeTableName = "salecode_temp";
+        const string OldSaleCodeTableName = "salecode_old";
 
         string TableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TableName) : TableName; } }
         string TempTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TempTableName) : TempTableName; } }
@@ -201,8 +204,11 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         string SaleZoneTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, SaleZoneTableName) : SaleZoneTableName; } }
         string TempSaleZoneTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TempSaleZoneTableName) : TempSaleZoneTableName; } }
+        string OldSaleZoneTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, OldSaleZoneTableName) : OldSaleZoneTableName; } }
+
         string SaleCodeTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, SaleCodeTableName) : SaleCodeTableName; } }
         string TempSaleCodeTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, TempSaleCodeTableName) : TempSaleCodeTableName; } }
+        string OldSaleCodeTableNameWithSchema { get { return !string.IsNullOrEmpty(_freeRadiusPostgresConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _freeRadiusPostgresConnectionString.SchemaName, OldSaleCodeTableName) : OldSaleCodeTableName; } }
 
 
         FreeRadiusPostgresConnectionString _freeRadiusPostgresConnectionString;
@@ -250,8 +256,8 @@ namespace TOne.WhS.RouteSync.FreeRadius
             List<string> pgStrings = new List<string> { createIndexScript, swapTableScript };
             if (syncSaleCodeZones)
             {
-                pgStrings.Add(string.Format("ALTER TABLE {0} RENAME TO {1};", TempSaleZoneTableNameWithSchema, SaleZoneTableName));
-                pgStrings.Add(string.Format("ALTER TABLE {0} RENAME TO {1};", TempSaleCodeTableNameWithSchema, SaleCodeTableName));
+                pgStrings.Add(string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3};", SaleZoneTableNameWithSchema, OldSaleZoneTableName, TempSaleZoneTableNameWithSchema, SaleZoneTableName));
+                pgStrings.Add(string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3};", SaleCodeTableNameWithSchema, OldSaleCodeTableName, TempSaleCodeTableNameWithSchema, SaleCodeTableName));
             }
 
             ExecuteNonQuery(pgStrings.ToArray(), indexesCommandTimeoutInSeconds);
@@ -415,10 +421,11 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         private void BuildSaleCodeZoneTempTables()
         {
-            string dropSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", SaleZoneTableNameWithSchema);
-            string dropSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", SaleCodeTableNameWithSchema);
             string dropTempSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", TempSaleZoneTableNameWithSchema);
+            string dropOldSaleZoneTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldSaleZoneTableNameWithSchema);
             string dropTempSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0};", TempSaleCodeTableNameWithSchema);
+            string dropOldSaleCodeTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldSaleCodeTableNameWithSchema); 
+
 
             string createTempSaleZoneTableScript = string.Format(@"CREATE TABLE {0} (                                                         
                                                                    ID bigint,
@@ -430,8 +437,8 @@ namespace TOne.WhS.RouteSync.FreeRadius
                                                                    Code character varying(20) COLLATE pg_catalog.""default"",
                                                                    ZoneId bigint);", TempSaleCodeTableNameWithSchema);
 
-            ExecuteNonQuery(new string[] { dropSaleZoneTableScript, dropSaleCodeTableScript, dropTempSaleCodeTableScript, dropTempSaleZoneTableScript, 
-                createTempSaleZoneTableScript, createTempSaleCodeTableScript });
+            ExecuteNonQuery(new string[] { dropTempSaleZoneTableScript, dropOldSaleZoneTableScript, dropTempSaleCodeTableScript, dropOldSaleCodeTableScript, 
+                createTempSaleZoneTableScript, createTempSaleCodeTableScript  });
         }
     }
 }
