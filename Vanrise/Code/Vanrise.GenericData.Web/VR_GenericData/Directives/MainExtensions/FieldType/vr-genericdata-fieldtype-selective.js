@@ -10,9 +10,15 @@
             scope:
             {
                 onReady: "=",
+                normalColNum: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+
+                $scope.normalColNum = "4";
+                if (ctrl.normalColNum != undefined)
+                    $scope.normalColNum = ctrl.normalColNum;
+
                 var dataRecordFieldTypeSelective = new DataRecordFieldTypeSelective($scope, ctrl, $attrs);
                 dataRecordFieldTypeSelective.initializeController();
             },
@@ -34,7 +40,7 @@
             }
 
 
-            return '<vr-columns width="1/3row">'
+            return '<vr-columns colnum="{{normalColNum}}">'
                   + '<vr-select on-ready="scopeModel.onSelectorReady"'
                   + 'datasource="scopeModel.fieldTypeConfigs"'
                   + 'selectedvalues="scopeModel.selectedFieldTypeConfig"'
@@ -47,7 +53,7 @@
            + '</vr-select>'
           + '</vr-columns>'
         + ' <span  ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
-             + ' <vr-directivewrapper normal-col-num="4" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>'
+             + ' <vr-directivewrapper normal-col-num="{{normalColNum}}" directive="scopeModel.selectedFieldTypeConfig.Editor" on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>'
          + '</span>';
         }
         function DataRecordFieldTypeSelective($scope, ctrl, $attrs) {
@@ -91,7 +97,7 @@
                         configId = payload.ConfigId;
                         directivePayload = payload;
                     }
-
+            
                     var getFieldTypeConfigsPromise = getFieldTypeConfigs();
                     promises.push(getFieldTypeConfigsPromise);
 
