@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities
     public class VRAutomatedReportDataList
     {
         public VRAutomatedReportDataItem SummaryDataItem { get; set; }
-        public Dictionary<Guid, VRAutomatedReportDataTable> ItemTables { get; set; }
+        public Dictionary<Guid, VRAutomatedReportDataSubTable> ItemTables { get; set; }
         public List<VRAutomatedReportDataItem> Items { get; set; }
     }
 }
