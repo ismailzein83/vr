@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.GenericData.Entities;
 
@@ -10,6 +6,8 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class RecurringChargePeriodObjectTypeSettings : FieldCustomObjectTypeSettings
     {
+        public override Guid ConfigId { get { return new Guid("77F773F8-FB42-4A4E-97FB-BCC807BA940F"); } }
+
         public override bool AreEqual(object newValue, object oldValue)
         {
             var oldValueObject = oldValue as RecurringChargePeriod;
@@ -24,17 +22,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
-        public override Guid ConfigId
-        {
-            get { return new Guid("77F773F8-FB42-4A4E-97FB-BCC807BA940F"); }
-        }
-
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
             var valueObject = context.FieldValue as RecurringChargePeriod;
             if (valueObject != null)
             {
-               
+
             }
             return null;
         }
@@ -47,6 +40,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
             return originalValue as RecurringChargePeriod;
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Recurring Charge Period";
         }
     }
 }

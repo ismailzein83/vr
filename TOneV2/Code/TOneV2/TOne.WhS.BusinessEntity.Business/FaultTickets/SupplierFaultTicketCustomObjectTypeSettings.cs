@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
@@ -12,17 +10,14 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierFaultTicketCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("AA4C29F5-0B6A-4F38-8B2E-29A78D3961FE"); }
-        }
+        public override Guid ConfigId { get { return new Guid("AA4C29F5-0B6A-4F38-8B2E-29A78D3961FE"); } }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-
             var valueObject = context.FieldValue as List<SupplierFaultTicketDescriptionSetting>;
             if (valueObject == null)
                 valueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(context.FieldValue);
+
             if (valueObject != null)
             {
                 StringBuilder description = new StringBuilder();
@@ -49,7 +44,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool AreEqual(Object newValue, Object oldValue)
         {
-
             var oldValueObject = oldValue as List<SupplierFaultTicketDescriptionSetting>; ;
             var newValueObject = newValue as List<SupplierFaultTicketDescriptionSetting>; ;
 
@@ -63,18 +57,20 @@ namespace TOne.WhS.BusinessEntity.Business
             if (oldValueObject == null || oldValueObject.Count == 0 || newValueObject == null || newValueObject.Count == 0)
                 return false;
 
-            foreach(var oldValueItem in oldValueObject)
+            foreach (var oldValueItem in oldValueObject)
             {
                 var newValueItem = newValueObject.FindRecord(x => x.CodeNumber == oldValueItem.CodeNumber && x.ReasonId == oldValueItem.ReasonId && oldValueItem.InternationalReleaseCodeId == x.InternationalReleaseCodeId);
                 if (newValueItem == null)
                     return false;
             }
+
             foreach (var newValueItem in newValueObject)
             {
                 var oldValueItem = newValueObject.FindRecord(x => x.CodeNumber == newValueItem.CodeNumber && x.ReasonId == newValueItem.ReasonId && newValueItem.InternationalReleaseCodeId == x.InternationalReleaseCodeId);
                 if (oldValueItem == null)
                     return false;
             }
+
             return true;
         }
 
@@ -82,13 +78,19 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return typeof(List<SupplierFaultTicketDescriptionSetting>);
         }
+
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            var castedOriginalValue =  originalValue as List<SupplierFaultTicketDescriptionSetting>; ;
+            var castedOriginalValue = originalValue as List<SupplierFaultTicketDescriptionSetting>; ;
             if (castedOriginalValue != null)
                 return castedOriginalValue;
             else
                 return Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(originalValue);
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Supplier Fault Ticket";
         }
     }
 }

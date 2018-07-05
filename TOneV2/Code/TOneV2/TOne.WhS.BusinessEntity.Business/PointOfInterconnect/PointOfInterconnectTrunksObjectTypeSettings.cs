@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class PointOfInterconnectTrunksObjectTypeSettings : FieldCustomObjectTypeSettings
     {
+        public override Guid ConfigId { get { return new Guid("26C8C829-8289-468E-91E0-F9E91DE644F1"); } }
+
         public override bool AreEqual(object newValue, object oldValue)
         {
             var oldValueObject = oldValue as PointOfInterconnect;
@@ -35,11 +34,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
             }
             return true;
-        }
-
-        public override Guid ConfigId
-        {
-            get { return new Guid("26C8C829-8289-468E-91E0-F9E91DE644F1"); }
         }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
@@ -70,6 +64,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
             return originalValue as PointOfInterconnect;
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Point Of Interconnect Trunks";
         }
     }
 }
