@@ -11,7 +11,7 @@ namespace NP.IVSwitch.Data
     {
         List<EndPoint> GetEndPoints();
         bool Update(EndPoint endPoint);
-        bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
+        bool Insert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
         List<AccessList> GetAccessList();
     }
 }

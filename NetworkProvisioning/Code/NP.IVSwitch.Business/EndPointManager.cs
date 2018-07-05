@@ -76,7 +76,7 @@ namespace NP.IVSwitch.Business
                     customerIds = new HashSet<int>(filter.CustomerIds);
                     foreach (var Id in customerIds)
                     {
-                        var customerEndpointIds = (GetCarrierAccountEndPointIds(Id) != null) ? GetCarrierAccountEndPointIds(Id) : null;
+                        var customerEndpointIds = GetCarrierAccountEndPointIds(Id) ?? null;
                         if (customerEndpointIds != null)
                         {
                             foreach (int endpointId in customerEndpointIds)
@@ -173,16 +173,23 @@ namespace NP.IVSwitch.Business
                  InsertedObject = null
              };
             string mssg;
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierAccountManager = new CarrierAccountManager();
             string carrierAccountName = carrierAccountManager.GetCarrierAccountName(endPointItem.CarrierAccountId);
-            var profileId = carrierAccountManager.GetCarrierProfileId(endPointItem.CarrierAccountId);
-            if (!profileId.HasValue) return insertOperationOutput;
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            AccountCarrierProfileExtension accountExtended =
-                carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value);
+            int? profileId = carrierAccountManager.GetCarrierProfileId(endPointItem.CarrierAccountId);
+
+            if (!profileId.HasValue)
+                return insertOperationOutput;
+
+            var carrierProfileManager = new CarrierProfileManager();
+            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value);
+
+            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+            Helper.SetSwitchConfig(dataManager);
+            int globalTariffTableId = dataManager.GetGlobalTariffTableId();
+
             return endPointItem.Entity.EndPointType == UserType.ACL
-                ? InsertAcl(accountExtended, endPointItem, profileId.Value, carrierAccountName, out mssg)
-                : InsertSip(accountExtended, endPointItem, profileId.Value, carrierAccountName);
+                ? InsertAcl(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId, out mssg)
+                : InsertSip(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId);
         }
         public UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
@@ -362,49 +369,50 @@ namespace NP.IVSwitch.Business
                 GenerateRule(carrierId, endPointItem.Entity.EndPointId, carrierAccountName);
             }
         }
-        private InsertOperationOutput<EndPointDetail> InsertAcl(AccountCarrierProfileExtension accountExtended,
-        EndPointToAdd endPointItem, int profileId
-        , string carrierAccountName, out string mssg)
+        private InsertOperationOutput<EndPointDetail> InsertAcl(AccountCarrierProfileExtension accountExtended, EndPointToAdd endPointItem, int profileId, string carrierAccountName, int globalTariffTableId, out string mssg)
         {
             InsertOperationOutput<EndPointDetail> insertOperationOutput = new InsertOperationOutput<EndPointDetail>
             {
                 Result = InsertOperationResult.Failed,
                 InsertedObject = null
             };
+
             int endPointId;
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            List<EndPointInfo> userEndPointInfoList = new List<EndPointInfo>();
-            List<EndPointInfo> aclEndPointInfoList = new List<EndPointInfo>();
+            var carrierAccountManager = new CarrierAccountManager();
+            var userEndPointInfoList = new List<EndPointInfo>();
+            var aclEndPointInfoList = new List<EndPointInfo>();
+
             if (Validatingsubnet(accountExtended, endPointItem, profileId, out mssg))
             {
                 insertOperationOutput.ShowExactMessage = true;
                 insertOperationOutput.Message = mssg;
                 return insertOperationOutput;
             }
-            var endPointsExtendedSettings = EndPointCarrierAccountExtension(endPointItem, carrierAccountManager,
-                ref aclEndPointInfoList, ref userEndPointInfoList);
+            var endPointsExtendedSettings = EndPointCarrierAccountExtension(endPointItem, carrierAccountManager, ref aclEndPointInfoList, ref userEndPointInfoList);
 
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             Helper.SetSwitchConfig(dataManager);
 
-            if (
-                !dataManager.Insert(endPointItem.Entity, userEndPointInfoList, aclEndPointInfoList, out endPointId,
-                    carrierAccountName))
+            if (!dataManager.Insert(endPointItem.Entity, globalTariffTableId, userEndPointInfoList, aclEndPointInfoList, out endPointId, carrierAccountName))
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
                 return insertOperationOutput;
             }
 
-            AccountManager accountManager = new AccountManager();
+            var accountManager = new AccountManager();
             accountManager.UpdateChannelLimit(endPointItem.Entity.AccountId);
-            EndPointInfo endPointInfo = new EndPointInfo { EndPointId = endPointId };
+            var endPointInfo = new EndPointInfo
+            {
+                EndPointId = endPointId
+
+            };
 
             if (endPointsExtendedSettings.AclEndPointInfo == null)
                 endPointsExtendedSettings.AclEndPointInfo = new List<EndPointInfo>();
             endPointsExtendedSettings.AclEndPointInfo.Add(endPointInfo);
 
-            carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(
-                endPointItem.CarrierAccountId, endPointsExtendedSettings);
+            carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(endPointItem.CarrierAccountId, endPointsExtendedSettings);
+
             endPointItem.Entity.EndPointId = endPointId;
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             VRActionLogger.Current.TrackAndLogObjectAdded(EndPointLoggableEntity.Instance, endPointItem.Entity);
@@ -413,7 +421,7 @@ namespace NP.IVSwitch.Business
             GenerateRule(endPointItem.CarrierAccountId, endPointId, carrierAccountName);
             return insertOperationOutput;
         }
-        private InsertOperationOutput<EndPointDetail> InsertSip(AccountCarrierProfileExtension accountExtended, EndPointToAdd endPointItem, int profileId, string carrierAccountName)
+        private InsertOperationOutput<EndPointDetail> InsertSip(AccountCarrierProfileExtension accountExtended, EndPointToAdd endPointItem, int profileId, string carrierAccountName, int globalTariffTableId)
         {
             int endPointId;
             InsertOperationOutput<EndPointDetail> insertOperationOutput = new InsertOperationOutput<EndPointDetail>
@@ -421,9 +429,9 @@ namespace NP.IVSwitch.Business
                 Result = InsertOperationResult.Failed,
                 InsertedObject = null
             };
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            List<EndPointInfo> userEndPointInfoList = new List<EndPointInfo>();
-            List<EndPointInfo> aclEndPointInfoList = new List<EndPointInfo>();
+            var carrierAccountManager = new CarrierAccountManager();
+            var userEndPointInfoList = new List<EndPointInfo>();
+            var aclEndPointInfoList = new List<EndPointInfo>();
             if (accountExtended != null && accountExtended.CustomerAccountId.HasValue)
                 endPointItem.Entity.AccountId = accountExtended.CustomerAccountId.Value;
             else
@@ -434,18 +442,22 @@ namespace NP.IVSwitch.Business
             IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             Helper.SetSwitchConfig(dataManager);
 
-            bool succInsert = dataManager.Insert(endPointItem.Entity, userEndPointInfoList, aclEndPointInfoList, out endPointId, carrierAccountName);
-            if (!succInsert) return insertOperationOutput;
+            bool succInsert = dataManager.Insert(endPointItem.Entity, globalTariffTableId, userEndPointInfoList, aclEndPointInfoList, out endPointId, carrierAccountName);
+            if (!succInsert)
+                return insertOperationOutput;
 
-            AccountManager accountManager = new AccountManager();
+            var accountManager = new AccountManager();
             accountManager.UpdateChannelLimit(endPointItem.Entity.AccountId);
-            EndPointInfo endPointInfo = new EndPointInfo { EndPointId = endPointId };
+            var endPointInfo = new EndPointInfo
+            {
+                EndPointId = endPointId
+            };
 
             if (endPointsExtendedSettings.UserEndPointInfo == null)
                 endPointsExtendedSettings.UserEndPointInfo = new List<EndPointInfo>();
+
             endPointsExtendedSettings.UserEndPointInfo.Add(endPointInfo);
-            carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(
-                endPointItem.CarrierAccountId, endPointsExtendedSettings);
+            carrierAccountManager.UpdateCarrierAccountExtendedSetting<EndPointCarrierAccountExtension>(endPointItem.CarrierAccountId, endPointsExtendedSettings);
             endPointItem.Entity.EndPointId = endPointId;
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             VRActionLogger.Current.TrackAndLogObjectAdded(EndPointLoggableEntity.Instance, endPointItem.Entity);
@@ -454,13 +466,10 @@ namespace NP.IVSwitch.Business
             GenerateRule(endPointItem.CarrierAccountId, endPointId, carrierAccountName);
             return insertOperationOutput;
         }
-        private static EndPointCarrierAccountExtension EndPointCarrierAccountExtension(EndPointToAdd endPointItem,
-            CarrierAccountManager carrierAccountManager, ref List<EndPointInfo> aclEndPointInfoList, ref List<EndPointInfo> userEndPointInfoList)
+        private static EndPointCarrierAccountExtension EndPointCarrierAccountExtension(EndPointToAdd endPointItem, CarrierAccountManager carrierAccountManager, ref List<EndPointInfo> aclEndPointInfoList, ref List<EndPointInfo> userEndPointInfoList)
         {
             EndPointCarrierAccountExtension endPointsExtendedSettings =
-                carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(
-                    endPointItem.CarrierAccountId) ??
-                new EndPointCarrierAccountExtension();
+                carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(endPointItem.CarrierAccountId) ?? new EndPointCarrierAccountExtension();
 
             if (endPointsExtendedSettings.AclEndPointInfo != null)
                 aclEndPointInfoList = endPointsExtendedSettings.AclEndPointInfo;

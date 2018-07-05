@@ -12,6 +12,7 @@ namespace NP.IVSwitch.Data.Postgres
 {
     public class RouteDataManager : BasePostgresDataManager, IRouteDataManager
     {
+        #region public Methods
         public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
         protected override string GetConnectionString()
         {
@@ -44,7 +45,24 @@ namespace NP.IVSwitch.Data.Postgres
             string query = "select current_timestamp;";
             return (DateTime)ExecuteScalarText(query, null);
         }
-
+        public int GetGlobalTariffTableId()
+        {
+            String cmdText = @" select tariff_id
+                                from tariffs
+                                where tariff_name = 'Global'";
+            int? tariffId = (int?)ExecuteScalarText(cmdText, null);
+            if (!tariffId.HasValue)
+            {
+                string insertCmd = @"insert into tariffs (tariff_name, description) 
+                                                select  'Global' ,'Global' 
+                                                where not exists(select 1 from tariffs where tariff_name = 'Global')
+                                                returning tariff_id";
+                tariffId = (int?)ExecuteScalarText(insertCmd, null);
+                TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString, IvSwitchSync.OwnerName);
+                tariffDataManager.CreateGlobalTable(tariffId.Value);
+            }
+            return tariffId.Value;
+        }
         public List<Route> GetRoutes()
         {
             String cmdText = @"SELECT route_id,user_id,account_id,description,group_id,tariff_id,log_alias,codec_profile_id,trans_rule_id,state_id,channels_limit,
@@ -54,7 +72,6 @@ namespace NP.IVSwitch.Data.Postgres
             {
             });
         }
-
         public bool Update(Route route)
         {
             int currentState, transportPortId;
@@ -85,6 +102,9 @@ namespace NP.IVSwitch.Data.Postgres
             return recordsEffected > 0;
         }
 
+        #endregion
+
+        #region private Methods
         private int? InsertRoutes(Route route, int groupId, int tariffId)
         {
             String cmdText = @"INSERT INTO routes(account_id,user_id,description,group_id,tariff_id,
@@ -117,9 +137,12 @@ namespace NP.IVSwitch.Data.Postgres
         public int? Insert(Route route)
         {
             int groupId = GetGroupId(route);
-            int tariffId = CheckTariffTable();
+            int tariffId = GetGlobalTariffTableId();
             int? userIdInserted = InserVendorUSer(route, groupId);
-            if (!userIdInserted.HasValue) return null;
+
+            if (!userIdInserted.HasValue)
+                return null;
+
             route.UserId = userIdInserted.Value;
             int? routeId = InsertRoutes(route, groupId, tariffId);
             if (routeId.HasValue)
@@ -128,26 +151,6 @@ namespace NP.IVSwitch.Data.Postgres
                 routeTableDataManager.InsertHelperRoute(routeId.Value, route.Description);
             }
             return routeId;
-        }
-        private void UpdateCustomerChannelLimit(int accountId)
-        {
-            bool succ = false;
-            string[] query =
-            {
-                string.Format(@";with sumChannels as 
-                            (
-                            select sum(channels_limit) sumCh,account_id  from users
-                             where account_id = {0}
-                            group by account_id
-                            )
-                            UPDATE accounts
-                            SET channels_limit = sumChannels.sumCh
-                            FROM
-                             sumChannels
-                            WHERE
-                             sumChannels.account_id = accounts.account_id;", accountId)
-            };
-            ExecuteNonQuery(query);
         }
         private int? InserVendorUSer(Route route, int groupId)
         {
@@ -173,7 +176,6 @@ namespace NP.IVSwitch.Data.Postgres
             }
                 );
         }
-
         public bool UpdateVendorUSer(Route route)
         {
             String cmdText1 = @"UPDATE users
@@ -193,25 +195,6 @@ namespace NP.IVSwitch.Data.Postgres
            );
             return recordsEffected > 0;
         }
-        private int CheckTariffTable()
-        {
-            String cmdText = @" select tariff_id
-                                from tariffs
-                                where tariff_name = 'Global'";
-            int? tariffId = (int?)ExecuteScalarText(cmdText, null);
-            if (!tariffId.HasValue)
-            {
-                string insertCmd = @"insert into tariffs (tariff_name, description) 
-                                                select  'Global' ,'Global' 
-                                                where not exists(select 1 from tariffs where tariff_name = 'Global')
-                                                returning tariff_id";
-                tariffId = (int?)ExecuteScalarText(insertCmd, null);
-                TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString, IvSwitchSync.OwnerName);
-                tariffDataManager.CreateGlobalTable(tariffId.Value);
-            }
-            return tariffId.Value;
-        }
-
         private void MapEnum(Route route, out int currentState, out int transportPortId)
         {
             var currentStateValue = Enum.Parse(typeof(State), route.CurrentState.ToString());
@@ -220,12 +203,10 @@ namespace NP.IVSwitch.Data.Postgres
             var transportPortIdValue = Enum.Parse(typeof(TransportMode), route.TransportModeId.ToString());
             transportPortId = (int)transportPortIdValue;
         }
-
         private Object CheckIfNull(String parameter, Object defaultValue)
         {
             return (String.IsNullOrEmpty(parameter)) ? defaultValue : parameter;
         }
-
         private int GetGroupId(Route route)
         {
             int groupId, nextGroupId;
@@ -280,5 +261,7 @@ namespace NP.IVSwitch.Data.Postgres
             return nextGroupId + route.AccountId;
 
         }
+
+        #endregion
     }
 }

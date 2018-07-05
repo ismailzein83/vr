@@ -127,13 +127,16 @@ namespace NP.IVSwitch.Data.Postgres
             return (recordsEffected > 0);
         }
 
-        public bool SipInsert(EndPoint endPoint, List<EndPointInfo> endPointInfoList, out int insertedId, string carrierAccountName)
+        public bool SipInsert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> endPointInfoList, out int insertedId, string carrierAccountName)
         {
             insertedId = -1;
             int groupId = GetGroupId(endPoint, endPointInfoList);
-            AccessList accessList = PrepareDataForInsert(endPoint.AccountId, groupId, carrierAccountName);
+            AccessList accessList = GetOrCreateAccessList(endPoint.AccountId, globalTariffTableId, groupId, carrierAccountName);
             int? endPointId = ExecuteSipInsert(endPoint, groupId, accessList);
-            if (!endPointId.HasValue) return false;
+
+            if (!endPointId.HasValue)
+                return false;
+
             insertedId = Convert.ToInt32(endPointId);
             return true;
         }
@@ -141,24 +144,26 @@ namespace NP.IVSwitch.Data.Postgres
         {
             return GetItemsText("select user_id,route_table_id,tariff_id from access_list", AccessListMapper, null);
         }
-        public bool AclInsert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
+        public bool AclInsert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
         {
             insertedId = -1;
             List<EndPointInfo> endpoints = userEndPoints.Concat(aclEndPoints).ToList();
             int groupId = GetGroupId(endPoint, endpoints);
-            AccessList accessList = PrepareDataForInsert(endPoint.AccountId, groupId, carrierAccountName);
+            AccessList accessList = GetOrCreateAccessList(endPoint.AccountId, globalTariffTableId, groupId, carrierAccountName);
 
             int? endPointId = InserUser(endPoint, groupId, accessList);
-            if (!endPointId.HasValue) return false;
+
+            if (!endPointId.HasValue)
+                return false;
             insertedId = endPointId.Value;
             return InsertAcl(endPointId.Value, endPoint, groupId, accessList);
         }
-        public bool Insert(EndPoint endPoint, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
+        public bool Insert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> userEndPoints, List<EndPointInfo> aclEndPoints, out int insertedId, string carrierAccountName)
         {
             List<EndPointInfo> joinedEndPoint = userEndPoints.Concat(aclEndPoints).ToList();
             if (endPoint.EndPointType == UserType.ACL)
-                return AclInsert(endPoint, joinedEndPoint, aclEndPoints, out insertedId, carrierAccountName);
-            return SipInsert(endPoint, joinedEndPoint, out insertedId, carrierAccountName);
+                return AclInsert(endPoint, globalTariffTableId, joinedEndPoint, aclEndPoints, out insertedId, carrierAccountName);
+            return SipInsert(endPoint, globalTariffTableId, joinedEndPoint, out insertedId, carrierAccountName);
         }
 
         public bool Update(EndPoint endPoint)
@@ -255,47 +260,29 @@ namespace NP.IVSwitch.Data.Postgres
             int recordAffected = ExecuteNonQueryText(queries, null);
             return recordAffected > 0;
         }
-        private AccessList PrepareDataForInsert(int accountId, int groupId, string carrierAccountName)
+        private AccessList GetOrCreateAccessList(int accountId, int globalTariffTableId, int groupId, string carrierAccountName)
         {
             AccessList accessList = CheckAccessListExistense(accountId, groupId);
-            return accessList ?? CreateTariffAndRouteTables(carrierAccountName);
+            return accessList ?? CreateRouteTable(carrierAccountName, globalTariffTableId);
         }
         private AccessList CheckAccessListExistense(int accountId, int groupId)
         {
             string query = @"select route_table_id,tariff_id,user_id from users
                              where account_id =  @account_id and group_id = @group_id";
-            List<AccessList> accessLists = GetItemsText(query, AccessListMapper, cmd =>
+            AccessList accessList = GetItemText(query, AccessListMapper, cmd =>
              {
                  cmd.Parameters.AddWithValue("@account_id", accountId);
                  cmd.Parameters.AddWithValue("@group_id", groupId);
              });
-            return accessLists.Count > 0 ? accessLists.First() : null;
+            return accessList;
         }
-        private AccessList CreateTariffAndRouteTables(String carrierAccountName)
+        private AccessList CreateRouteTable(String carrierAccountName, int globalTariffTableId)
         {
-            String cmdText = @"INSERT INTO tariffs(tariff_name,description)
-                               SELECT @tariff_name, @description 
-  	                           returning  tariff_id;";
-
-            var tariffId = ExecuteScalarText(cmdText, cmd =>
-            {
-                cmd.Parameters.AddWithValue("@tariff_name", carrierAccountName);
-                cmd.Parameters.AddWithValue("@description", carrierAccountName);
-            }
-                );
-
-            if (tariffId == null) return null;
-
-            var insertedTariffId = Convert.ToInt32(tariffId);
-            TariffDataManager tariffDataManager = new TariffDataManager(IvSwitchSync.TariffConnectionString, IvSwitchSync.OwnerName);
-            tariffDataManager.CreateTariffTable(insertedTariffId);
-
-
-            String cmdText2 = @"INSERT INTO route_tables(route_table_name,description)
+            String cmdText = @"INSERT INTO route_tables(route_table_name,description)
                                SELECT @route_table_name, @description
   	                           returning  route_table_id;";
 
-            var routeId = ExecuteScalarText(cmdText2, cmd =>
+            var routeId = ExecuteScalarText(cmdText, cmd =>
             {
                 cmd.Parameters.AddWithValue("@route_table_name", carrierAccountName);
                 cmd.Parameters.AddWithValue("@description", carrierAccountName);
@@ -311,7 +298,7 @@ namespace NP.IVSwitch.Data.Postgres
             return new AccessList
             {
                 RouteTableId = insertedRouteId,
-                TariffId = insertedTariffId
+                TariffId = globalTariffTableId
             };
         }
         private Object CheckIfNull(String parameter)

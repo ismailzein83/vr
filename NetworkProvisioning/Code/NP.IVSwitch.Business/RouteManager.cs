@@ -232,15 +232,16 @@ namespace NP.IVSwitch.Business
         {
             routeId = 0;
             mssg = "";
-            AccountManager accountManager = new AccountManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var accountManager = new AccountManager();
+            var carrierAccountManager = new CarrierAccountManager();
             string carrierName = carrierAccountManager.GetCarrierAccountName(routeItem.CarrierAccountId);
-            var profileId = carrierAccountManager.GetCarrierProfileId(routeItem.CarrierAccountId);
+            int? profileId = carrierAccountManager.GetCarrierProfileId(routeItem.CarrierAccountId);
 
-            if (!profileId.HasValue) return false;
+            if (!profileId.HasValue)
+                return false;
 
             int carrierProfileId = (int)profileId;
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var carrierProfileManager = new CarrierProfileManager();
             CarrierProfile carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId);
             AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId);
             int accountId;
@@ -251,8 +252,7 @@ namespace NP.IVSwitch.Business
                 Account account = accountManager.GetAccountInfoFromProfile(carrierProfile, false);
                 accountId = accountManager.AddAccount(account);
                 AccountCarrierProfileExtension extendedSettings =
-                    carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId) ??
-                    new AccountCarrierProfileExtension();
+                    carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(carrierProfileId) ?? new AccountCarrierProfileExtension();
 
                 extendedSettings.VendorAccountId = accountId;
 
@@ -261,11 +261,9 @@ namespace NP.IVSwitch.Business
             routeItem.Entity.AccountId = accountId;
 
             RouteCarrierAccountExtension routesExtendedSettings =
-                carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(
-                    routeItem.CarrierAccountId) ??
-                new RouteCarrierAccountExtension();
+                carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(routeItem.CarrierAccountId) ?? new RouteCarrierAccountExtension();
 
-            List<RouteInfo> routeInfoList = new List<RouteInfo>();
+            var routeInfoList = new List<RouteInfo>();
             if (routesExtendedSettings.RouteInfo != null)
                 routeInfoList = routesExtendedSettings.RouteInfo;
 
@@ -288,8 +286,7 @@ namespace NP.IVSwitch.Business
                 };
                 routeInfoList.Add(routeInfo);
                 routesExtendedSettings.RouteInfo = routeInfoList;
-                carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId,
-                    routesExtendedSettings);
+                carrierAccountManager.UpdateCarrierAccountExtendedSetting(routeItem.CarrierAccountId, routesExtendedSettings);
                 GenerateRule(routeItem.CarrierAccountId, routeId, carrierName);
                 return true;
             }
