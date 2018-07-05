@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent size="large" ng-controller="BusinessProcess_VR_WorkflowEditorController">
+﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowEditorController" size="large">
     <vr-modalbody>
         <vr-form name="formEditVRWorkflow" vr-loader="scopeModel.isLoading">
             <vr-tabs>
@@ -18,14 +18,13 @@
                 <vr-tab header="'Workflow'">
                 </vr-tab>
             </vr-tabs>
-
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="saveWorkflow" formname="formEditVRWorkflow"></vr-button>
-                <vr-button type="Close" data-onclick="close"></vr-button>
+                <vr-button type="Save" data-onclick="scopeModel.saveVRWorkflow" formname="formEditVRWorkflow"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>

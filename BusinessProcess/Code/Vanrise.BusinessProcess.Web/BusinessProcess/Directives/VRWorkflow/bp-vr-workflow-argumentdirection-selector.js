@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowArgumentdirectionSelector', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowArgumentDirection',
+app.directive('businessprocessVrWorkflowArgumentdirectionSelector', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowArgumentDirectionEnum',
 
-function (UtilsService, VRUIUtilsService, VRWorkflowArgumentDirection) {
+    function (UtilsService, VRUIUtilsService, VRWorkflowArgumentDirectionEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -22,9 +22,8 @@ function (UtilsService, VRUIUtilsService, VRWorkflowArgumentDirection) {
 
                 ctrl.selectedvalues;
 
-                var argumentDirectionSelector = new ArgumentDirectionSelector(ctrl, $scope, $attrs);
-                argumentDirectionSelector.initializeController();
-
+                var ctor = new ArgumentDirectionSelectorCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -33,14 +32,13 @@ function (UtilsService, VRUIUtilsService, VRWorkflowArgumentDirection) {
             }
         };
 
-        function ArgumentDirectionSelector(ctrl, $scope, attrs) {
-
+        function ArgumentDirectionSelectorCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
 
             function initializeController() {
-                
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -48,21 +46,25 @@ function (UtilsService, VRUIUtilsService, VRWorkflowArgumentDirection) {
             }
 
             function defineAPI() {
-                var api = {};
+                var api = {
+                };
 
                 api.load = function (payload) {
-
                     selectorAPI.clearDataSource();
-                    ctrl.datasource = UtilsService.getArrayEnum(VRWorkflowArgumentDirection);
+
+                    ctrl.datasource = UtilsService.getArrayEnum(VRWorkflowArgumentDirectionEnum);
 
                     var selectedIds;
-                   
-                    if (payload) {
+
+                    if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
 
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                    }
+                    else {
+                        VRUIUtilsService.setSelectedValues(0, 'value', attrs, ctrl);
                     }
                 };
 
@@ -86,10 +88,9 @@ function (UtilsService, VRUIUtilsService, VRWorkflowArgumentDirection) {
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = 'hideremoveicon';
 
-            return '<vr-select datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired"' +
+            return '<vr-select datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired"' + ' label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                    '</vr-select>';
         }
-
     }]);

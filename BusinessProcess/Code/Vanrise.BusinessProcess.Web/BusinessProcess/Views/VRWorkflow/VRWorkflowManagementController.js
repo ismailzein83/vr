@@ -2,36 +2,44 @@
 
     "use strict";
 
-    BusinessProcess_VRWorkflowManagementController.$inject = ['$scope', 'BusinessProcess_VRWorkflowService'];
+    BusinessProcess_VRWorkflowManagementController.$inject = ['$scope', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService'];
 
-    function BusinessProcess_VRWorkflowManagementController($scope, BusinessProcess_VRWorkflowService) {
+    function BusinessProcess_VRWorkflowManagementController($scope, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService) {
+
+
         var gridAPI;
-        var filter = {};
+
         defineScope();
 
         function defineScope() {
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(filter);
+                gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.searchClicked = function () {
-                getFilterObject();
-                return gridAPI.loadGrid(filter);
+                return gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.addClicked = function () {
-                var onWorkflowAdded = function (addedWorkflow) {
-                    gridAPI.onWorkflowAdded(addedWorkflow);
+                var onVRWorkflowAdded = function (addedVRWorkflow) {
+                    gridAPI.onVRWorkflowAdded(addedVRWorkflow);
                 };
-                BusinessProcess_VRWorkflowService.addWorkflow(onWorkflowAdded);
+
+                BusinessProcess_VRWorkflowService.addVRWorkflow(onVRWorkflowAdded);
+            };
+
+            $scope.hasAddVRWorkflowPermission = function () {
+                return BusinessProcess_VRWorkflowAPIService.HasAddVRWorkflowPermission();
             };
         }
 
         function getFilterObject() {
+            var filter = {};
             filter.Name = $scope.name;
             filter.Title = $scope.title;
+            return filter;
         }
     }
 

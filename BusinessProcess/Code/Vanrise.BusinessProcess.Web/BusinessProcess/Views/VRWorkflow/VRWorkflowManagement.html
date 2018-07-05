@@ -1,5 +1,4 @@
 ﻿<vr-panel ng-controller="BusinessProcess_VR_WorkflowManagementController">
-
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
@@ -15,7 +14,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="addClicked"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="addClicked" haspermission="hasAddVRWorkflowPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -25,5 +24,4 @@
             </vr-columns>
         </vr-row>
     </vr-form>
-
 </vr-panel>

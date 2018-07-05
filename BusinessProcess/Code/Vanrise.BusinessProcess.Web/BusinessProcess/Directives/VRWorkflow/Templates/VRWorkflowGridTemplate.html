@@ -1,9 +1,10 @@
-﻿<vr-datagrid datasource="workflows"
-             on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.workflows"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.gridMenuActions"
              idfield="VRWorkflowID">
+
     <vr-datagridcolumn headertext="'ID'" field="'VRWorkflowID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Title'" field="'Title'" type="'Text'"></vr-datagridcolumn>

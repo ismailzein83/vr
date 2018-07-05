@@ -11,6 +11,8 @@ namespace Vanrise.BusinessProcess.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract Type GetRuntimeType(IVRWorkflowVariableTypeGetRuntimeTypeContext context);
+
+        public abstract string GetRuntimeTypeDescription();
     }
 
     public interface IVRWorkflowVariableTypeGetRuntimeTypeContext

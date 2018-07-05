@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -39,5 +40,17 @@ namespace Vanrise.BusinessProcess.Entities
     public class VRWorkflowToUpdate : BaseVRWorkflow
     {
         public Guid VRWorkflowId { get; set; }
+    }
+
+    public class VRWorkflowEditorRuntime
+    {
+        public VRWorkflow Entity { get; set; }
+
+        public Dictionary<Guid, VRWorkflowArgumentEditorRuntime> VRWorkflowArgumentEditorRuntimeDict { get; set; }
+    }
+
+    public class VRWorkflowArgumentEditorRuntime
+    {
+        public string VRWorkflowVariableTypeDescription { get; set; }
     }
 }

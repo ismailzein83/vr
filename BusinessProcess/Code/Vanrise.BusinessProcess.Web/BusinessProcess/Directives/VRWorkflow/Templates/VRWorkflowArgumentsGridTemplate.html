@@ -1,20 +1,13 @@
-﻿<vr-button type="Add" data-onclick="ctrl.addWorkflowArgument" standalone></vr-button>
+﻿<vr-button type="Add" data-onclick="scopeModel.addVRWorkflowArgument" standalone></vr-button>
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.datasource"
+             menuactions="scopeModel.gridMenuActions"
+             ondeleterow="scopeModel.removeVRWorkflowArgument"
+             idfield="Entity.VRWorkflowArgumentId"
+             norowhighlightonclick="true" maxheight="300px">
 
-<vr-validator validate="ctrl.isValid()">
-    <vr-datagrid datasource="ctrl.datasource" 
-                 norowhighlightonclick="true" 
-                 menuactions="gridMenuActions" 
-                 maxheight="300px"
-                 on-ready="scopeModel.onGridReady" 
-                 ondeleterow="ctrl.removeArgument" 
-                 hidegridmenu>
-        <vr-datagridcolumn headertext="'ID'" field="'Entity.VRWorkflowArgumentId'" fixedwidth="50" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Name'" fixedwidth="200">
-            <vr-textbox value="dataItem.Name" isrequired="true"></vr-textbox>
-        </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Direction'" fixedwidth="80">
-            <businessprocess-vr-workflow-argumentdirection-selector on-ready="dataItem.onDirectionSelectorReady" onselectionchanged="dataItem.saveDataItem" isrequired="true" hideremoveicon="true">{{dataItem}}</businessprocess-vr-workflow-argumentdirection-selector>
-        </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Type'"></vr-datagridcolumn>
-    </vr-datagrid>
-</vr-validator>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.VRWorkflowArgumentId'" fixedwidth="50" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Direction'" field="'Entity.DirectionDescription'" fixedwidth="80" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'Entity.TypeDescription'" disablesorting></vr-datagridcolumn>
+</vr-datagrid>

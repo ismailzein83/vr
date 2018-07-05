@@ -1,0 +1,30 @@
+﻿<div vr-modalcontent ng-controller="VR_Workflow_VRWorkflowArgumentEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formWorkflowArgumentEditor">
+            <vr-row>
+                <vr-columns colnum="6">
+                    <vr-validator validate="scopeModel.isArgumentNameValid()">
+                        <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                    </vr-validator>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <businessprocess-vr-workflow-argumentdirection-selector on-ready="scopeModel.onArgumentDirectionSelectorReady"
+                                                                            onselectionchanged="dataItem.saveDataItem"
+                                                                            label="Direction" isrequired="true" hideremoveicon="true">
+                    </businessprocess-vr-workflow-argumentdirection-selector>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <businessprocess-vr-workflow-argumentvariabletype on-ready="scopeModel.onArgumentVariableTypeDirectiveReady" label="Type"></businessprocess-vr-workflow-argumentvariabletype>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formWorkflowArgumentEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

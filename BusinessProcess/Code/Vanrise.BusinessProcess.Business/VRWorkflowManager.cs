@@ -276,6 +276,46 @@ namespace Vanrise.BusinessProcess.Business
             return (vrWorkflow != null) ? vrWorkflow.Name : null;
         }
 
+        public IEnumerable<VRWorkflowVariableTypeConfig> GetVRWorkflowVariableTypeExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<VRWorkflowVariableTypeConfig>(VRWorkflowVariableTypeConfig.EXTENSION_TYPE);
+        }
+
+        public VRWorkflowEditorRuntime GetVRWorkflowEditorRuntime(Guid vrWorkflowId)
+        {
+            VRWorkflow vrWorkflow = GetVRWorkflow(vrWorkflowId);
+            if (vrWorkflow == null)
+                vrWorkflow.ThrowIfNull("vrWorkflow", vrWorkflow.VRWorkflowId);
+
+            var argumentEditorRuntimeDic = new Dictionary<Guid, VRWorkflowArgumentEditorRuntime>();
+
+            if (vrWorkflow.Settings != null && vrWorkflow.Settings.Arguments != null)
+            {
+                foreach (var argument in vrWorkflow.Settings.Arguments)
+                {
+                    if (argument.Type == null)
+                        argument.Type.ThrowIfNull("argument.Type", argument.VRWorkflowArgumentId);
+
+                    argumentEditorRuntimeDic.Add(argument.VRWorkflowArgumentId, new VRWorkflowArgumentEditorRuntime
+                    {
+                        VRWorkflowVariableTypeDescription = argument.Type.GetRuntimeTypeDescription()
+                    });
+                }
+            }
+
+            return new VRWorkflowEditorRuntime
+            {
+                Entity = vrWorkflow,
+                VRWorkflowArgumentEditorRuntimeDict = argumentEditorRuntimeDic.Count > 0 ? argumentEditorRuntimeDic : null
+            };
+        }
+
+        public string GetVRWorkflowArgumentTypeDescription(VRWorkflowVariableType vrWorkflowArgumentType)
+        {
+            return vrWorkflowArgumentType.GetRuntimeTypeDescription();
+        }
+
         #region Private Classes
 
         private class VRWorkflowLoggableEntity : VRLoggableEntityBase
