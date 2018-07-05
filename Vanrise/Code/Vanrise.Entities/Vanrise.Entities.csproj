@@ -88,6 +88,8 @@
     <Compile Include="EntityPersonalization\EntityPersonalizationInput.cs" />
     <Compile Include="EntityPersonalization\EntityPersonalizationItem.cs" />
     <Compile Include="Enumeration.cs" />
+    <Compile Include="ExcelFileUploader\ExcelUploaderInput.cs" />
+    <Compile Include="ExcelFileUploader\ExcelUploaderOutput.cs" />
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="ICompanySettingsManager.cs" />
     <Compile Include="ExcelFileValueType.cs" />

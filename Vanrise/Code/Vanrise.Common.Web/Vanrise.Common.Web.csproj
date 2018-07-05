@@ -124,6 +124,7 @@
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\ExcelFileParserController.cs" />
     <Compile Include="Controllers\CompanyDefinitionsController.cs" />
+    <Compile Include="Controllers\ExcelFileUploaderController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\GenericLKUPController.cs" />
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
@@ -227,6 +228,8 @@
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Constant\TimeOffsetEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
+    <Content Include="Common\Directives\ExcelFileUploader\Templates\ExcelFileUploader.html" />
+    <Content Include="Common\Directives\ExcelFileUploader\vr-common-excelfileuploader.js" />
     <Content Include="Common\Directives\MainExtensions\RuntimeService\Templates\DataGroupingDistributorRuntimeServiceTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\RuntimeService\vr-common-runtimeservice-datagroupingdistributor.js" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditGridTemplate.html" />
@@ -519,6 +522,7 @@
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
     <Content Include="Common\Services\APIServices\ExcelFileParserAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanyDefinitionsAPIService.js" />
+    <Content Include="Common\Services\APIServices\ExcelFileUploaderAPIService.js" />
     <Content Include="Common\Services\APIServices\RegionAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\GenericLKUPAPIService.js" />
@@ -566,6 +570,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\CompanyDefinitionService.js" />
+    <Content Include="Common\Services\ExcelFileUploaderService.js" />
     <Content Include="Common\Services\RegionService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
@@ -615,6 +620,8 @@
     <Content Include="Common\Views\CompanyDefinition\CompanyDefinitionEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditor.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditorController.js" />
+    <Content Include="Common\Views\ExcelFileUploader\ExcelFileUploaderEditor.html" />
+    <Content Include="Common\Views\ExcelFileUploader\ExcelFileUploaderEditorController.js" />
     <Content Include="Common\Views\Region\RegionEditor.html" />
     <Content Include="Common\Views\Region\RegionEditorController.js" />
     <Content Include="Common\Views\Region\RegionManagement.html" />

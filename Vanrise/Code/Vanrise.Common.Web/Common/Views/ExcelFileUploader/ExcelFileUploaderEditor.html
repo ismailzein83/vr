@@ -1,0 +1,38 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_ExcelFileUploaderEditorController" vr-loader="scopeModel.isLoading" width="small">
+    <vr-modalbody>
+        <vr-form name="formEditor">
+     <vr-row>
+        <vr-button type="Add" data-onclick="scopeModel.addSheet" standalone></vr-button>
+    </vr-row>
+    <vr-section title="Excel Sheets">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-validator validate="scopeModel.validateColumns()">
+                    <vr-datagrid datasource="scopeModel.sheetsNames"
+                                 pagingtype="'PagingOnScroll'"
+                                 enabledraggablerow="true"
+                                 ondeleterow="scopeModel.removeSheet"
+                                 enableautoexport="true">
+
+                        <vr-datagridcolumn  headertext="'Sheet Name'" disablesorting>
+                                <vr-textbox value="dataItem.name" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+
+</vr-section>
+</vr-form>
+</vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEditor" data-onclick="scopeModel.save" vr-disabled="scopeModel.isDisabled"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"  ></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

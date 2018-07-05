@@ -71,6 +71,7 @@
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CacheRefreshManager.cs" />
     <Compile Include="DataEncryptionKeyManager.cs" />
+    <Compile Include="ExcelFileUploader\ExcelFileUploaderManager.cs" />
     <Compile Include="LicenseManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyDefinitionManager.cs" />
@@ -192,6 +193,10 @@
     <ProjectReference Include="..\Vanrise.Common.Data\Vanrise.Common.Data.csproj">
       <Project>{1a117ff8-0bd7-424e-8510-dd2491194ea0}</Project>
       <Name>Vanrise.Common.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Excel\Vanrise.Common.Excel.csproj">
+      <Project>{5eef4d8e-6588-4bae-b447-09b0e3312e97}</Project>
+      <Name>Vanrise.Common.Excel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
