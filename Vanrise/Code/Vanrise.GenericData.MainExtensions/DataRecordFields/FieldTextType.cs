@@ -143,5 +143,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return;
             context.FieldValue = context.FieldDescription.ToString().Trim();
         }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Text";
+        }
     }
 }

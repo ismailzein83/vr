@@ -94,5 +94,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return this.Settings.ParseNonNullValueToFieldType(originalValue);
         }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return Settings.GetRuntimeTypeDescription();
+        }
     }
 }

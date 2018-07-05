@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
-using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
@@ -18,20 +14,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-businessentity-runtimeeditor"; } }
 
-        public Guid BusinessEntityDefinitionId { get; set; }
-        
-        public bool IsNullable { get; set; }
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-businessentity-viewereditor"; } }
 
+        public Guid BusinessEntityDefinitionId { get; set; }
+
+        public bool IsNullable { get; set; }
+
         public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
-        
-        public override DataRecordFieldOrderType OrderType
-        {
-            get
-            {
-                return DataRecordFieldOrderType.ByFieldDescription;
-            }
-        }
+
+        public override DataRecordFieldOrderType OrderType { get { return DataRecordFieldOrderType.ByFieldDescription; } }
 
         #region Public Methods
 
@@ -124,7 +115,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         int takenCount = 0;
                         foreach (var entityId in valueAsList)
                         {
-                            if(takenCount > 10)
+                            if (takenCount > 10)
                             {
                                 continue;
                             }
@@ -238,20 +229,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 FieldDescription = context.FieldDescription,
                 FieldType = context.FieldType
             };
-           
+
             var beManager = GetBusinessEntityManager();
             beManager.GetIdByDescription(businessEntityContext);
             if (businessEntityContext.ErrorMessage != null)
                 context.ErrorMessage = businessEntityContext.ErrorMessage;
             else
                 context.FieldValue = businessEntityContext.FieldValue;
-            
+
         }
 
         public override bool RenderDescriptionByDefault()
         {
             return true;
         }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            BusinessEntityDefinitionManager _manager = new BusinessEntityDefinitionManager();
+            return _manager.GetBusinessEntityDefinitionName(BusinessEntityDefinitionId);
+        }
+
         #endregion
 
         #region Private Methods

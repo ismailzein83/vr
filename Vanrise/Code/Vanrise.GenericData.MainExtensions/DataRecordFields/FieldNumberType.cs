@@ -8,7 +8,6 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-
     public class FieldNumberType : DataRecordFieldType
     {
         public override Guid ConfigId { get { return new Guid("75aef329-27bd-4108-b617-f5cc05ff2aa3"); } }
@@ -357,6 +356,26 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     }
                     break;
                 default: throw new NotSupportedException(string.Format("FieldNumberDataType '{0}' is not supported", this.DataType)); break;
+            }
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            switch (this.DataType)
+            {
+                case FieldNumberDataType.Decimal:
+                    switch (this.DataPrecision)
+                    {
+                        case FieldNumberPrecision.Normal: return "Normal Decimal";
+                        case FieldNumberPrecision.Long: return "Long Decimal";
+                        default: throw new NotSupportedException(string.Format("DataPrecision {0}", this.DataPrecision));
+                    }
+
+                case FieldNumberDataType.Int: return "Integer";
+
+                case FieldNumberDataType.BigInt: return "Long";
+
+                default: throw new NotSupportedException(string.Format("DataType {0}", this.DataType));
             }
         }
 

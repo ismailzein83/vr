@@ -13,8 +13,9 @@ namespace Vanrise.GenericData.Entities
         public abstract Type GetNonNullableRuntimeType();
         public abstract bool AreEqual(Object newValue, Object oldValue);
         public abstract dynamic ParseNonNullValueToFieldType(Object originalValue);
-      
+        public abstract string GetRuntimeTypeDescription();
     }
+
     public interface IFieldCustomObjectTypeSettingsContext
     {
         object FieldValue { get; }

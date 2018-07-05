@@ -9,13 +9,10 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-   
     public class FieldAttachmentType : DataRecordFieldType
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("A80260FD-4492-45C9-8E60-41D91DCD4E9E"); }
-        }
+        public override Guid ConfigId { get { return new Guid("A80260FD-4492-45C9-8E60-41D91DCD4E9E"); } }
+
         public bool IsNullable { get; set; }
 
         public override Type GetRuntimeType()
@@ -27,12 +24,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             var oldAttachmentFieldTypeEntities = context.OldValue as List<AttachmentFieldTypeEntity>;
             var newAttachmentFieldTypeEntities = context.NewValue as List<AttachmentFieldTypeEntity>;
-         
+
             if (oldAttachmentFieldTypeEntities == null)
                 oldAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.OldValue);
             if (newAttachmentFieldTypeEntities == null)
                 newAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.NewValue);
-          
+
             var changesFieldTypeEntities = new List<AttachmentFieldTypeEntityChangeInfo>();
             VRFileManager vrFileManager = new VRFileManager();
 
@@ -80,7 +77,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         var fileInfo = vrFileManager.GetFileInfo(copyOldAttachmentFieldTypeEntity.FileId);
                         changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
                         {
-                            FileName = fileInfo != null? fileInfo.Name:null,
+                            FileName = fileInfo != null ? fileInfo.Name : null,
                             FileId = copyOldAttachmentFieldTypeEntity.FileId,
                             Description = string.Format("Deleted")
                         });
@@ -149,10 +146,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-
         public override string RuntimeEditor
         {
             get { return null; }
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Attachment";
         }
 
         public override void onBeforeSave(IDataRecordFieldTypeOnBeforeSaveContext context)
@@ -176,8 +177,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     }
                 }
             }
-           
-            
+
+
         }
         public override void onAfterSave(IDataRecordFieldTypeOnAfterSaveContext context)
         {
@@ -228,5 +229,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return true;
         }
+
     }
 }

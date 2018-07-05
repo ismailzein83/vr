@@ -130,6 +130,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return true;
         }
 
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Choices";
+        }
+
         #endregion
 
         #region Private Methods

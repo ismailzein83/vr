@@ -33,13 +33,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-datetime-runtimeeditor"; } }
 
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-datetime-viewereditor"; } }
+
         public FieldDateTimeDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
-        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-datetime-viewereditor"; } }
 
 
         #region Public Methods
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)
@@ -401,6 +403,20 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             };
 
             return recordFilters;
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            switch(this.DataType)
+            {
+                case FieldDateTimeDataType.Date: return "Date";
+                case FieldDateTimeDataType.DateTime: return "DateTime";
+                case FieldDateTimeDataType.Hour: return "Hour";
+                case FieldDateTimeDataType.Time: return "Time";
+                case FieldDateTimeDataType.YearMonth: return "YearMonth";
+                case FieldDateTimeDataType.YearWeek: return "YearWeek";
+                default: throw new NotSupportedException(string.Format("DataType {0}", this.DataType));
+            }
         }
 
         #endregion

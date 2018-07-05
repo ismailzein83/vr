@@ -199,5 +199,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     context.ErrorMessage = "Error while parsing field of Guid type:"+context.FieldDescription.ToString();
             }
         }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Guid";
+        }
     }
 }

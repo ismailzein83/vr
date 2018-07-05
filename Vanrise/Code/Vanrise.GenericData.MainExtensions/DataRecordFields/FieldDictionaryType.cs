@@ -124,5 +124,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return originalValue;
         }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Dictionary";
+        }
     }
 }

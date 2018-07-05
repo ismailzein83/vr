@@ -63,9 +63,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             throw new NotImplementedException();
         }
+
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
             return originalValue;
+        }
+
+        public override string GetRuntimeTypeDescription()
+        {
+            return "Array";
         }
     }
 }

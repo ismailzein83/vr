@@ -126,5 +126,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     context.ErrorMessage = "Error while parsing field of boolean type:" + context.FieldDescription.ToString(); ;
             }
         }
+        public override string GetRuntimeTypeDescription()
+        {
+           return "Boolean";
+        }
     }
 }

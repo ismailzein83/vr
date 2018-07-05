@@ -16,6 +16,7 @@ namespace Vanrise.GenericData.Entities
         public abstract string RuntimeEditor { get; }
 
         public abstract Type GetRuntimeType();
+        public abstract string GetRuntimeTypeDescription();
 
         public abstract Type GetNonNullableRuntimeType();
 
@@ -140,8 +141,6 @@ namespace Vanrise.GenericData.Entities
         Object Value { get; }
     }
 
-  
-
     public interface ISerializeDataRecordFieldValueContext
     {
         Object Object { get; }
@@ -190,13 +189,13 @@ namespace Vanrise.GenericData.Entities
         public string DescriptionFieldPath { get; set; }
     }
 
-
     public interface IDataRecordFieldTypeTryResolveDifferencesContext
     {
         Object OldValue { get; }
         Object NewValue { get;  }
         Object Changes { set; }
     }
+
     public interface IGetValueByDescriptionContext
     {
         Object FieldDescription { get; }
@@ -209,5 +208,4 @@ namespace Vanrise.GenericData.Entities
 
         DataRecordFieldType FieldType { get; set; }
     }
-  
 }
