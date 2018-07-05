@@ -42,8 +42,8 @@
                     var dataItem;
                     dataItem = {
                         id: ctrl.datasource.length + 1,
-                        name: "",
-                        title: ""
+                        name: "Customer",
+                        title: "Customer"
                     };
                     ctrl.datasource.push(dataItem);
                 };
@@ -81,8 +81,8 @@
                     if (payload.classifications == undefined) {
                         ctrl.datasource.push({
                             id:1,
-                            name: "Customer",
-                            title: "Customer"
+                            name: "",
+                            title: ""
                         });
                     }
 
