@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
 
         public override void Execute(IRecurringChargePeriodSettingsContext context)
         {
-            List<DateTime> periodsList = new List<DateTime>();
+            List<RecurringChargePeriodOutput> periodsList = new List<RecurringChargePeriodOutput>();
 
             if (this.Date.Month >= context.FromDate.Month && this.Date.Month <= context.ToDate.Month)
             {
@@ -26,13 +26,21 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     if (this.Date.Day >= context.FromDate.Day && this.Date.Day <= context.ToDate.Day)
                     {
                         for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
-                            periodsList.Add(new DateTime(i, this.Date.Month, this.Date.Day));
+                            periodsList.Add(new RecurringChargePeriodOutput
+                            {
+                                From = new DateTime(i, this.Date.Month, this.Date.Day),
+                                To = new DateTime(i+1, this.Date.Month, this.Date.Day -1),
+                            });
                     }
                 }
                 else
                 {
                     for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
-                        periodsList.Add(new DateTime(i, this.Date.Month, this.Date.Day));
+                        periodsList.Add(new RecurringChargePeriodOutput
+                        {
+                            From = new DateTime(i, this.Date.Month, this.Date.Day),
+                            To = new DateTime(i + 1, this.Date.Month, this.Date.Day - 1),
+                        });
                 }
             }
             context.Periods = periodsList;

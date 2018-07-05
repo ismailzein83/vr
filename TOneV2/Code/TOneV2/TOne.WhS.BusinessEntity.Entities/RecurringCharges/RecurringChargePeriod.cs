@@ -19,6 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         DateTime FromDate { get; }
         DateTime ToDate { get; }
-        List<DateTime> Periods { set; }
+        List<RecurringChargePeriodOutput> Periods { set; }
     }
 }

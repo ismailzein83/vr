@@ -10,6 +10,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
          public DateTime FromDate { set;  get; }
          public DateTime ToDate { set;  get; }
-         public List<DateTime> Periods { set; get; }
+         public List<RecurringChargePeriodOutput> Periods { set; get; }
+    }
+     public class RecurringChargePeriodOutput
+    {
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
     }
 }

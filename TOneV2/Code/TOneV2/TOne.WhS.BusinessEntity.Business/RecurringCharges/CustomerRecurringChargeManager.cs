@@ -61,13 +61,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
                 if (context.Periods != null)
                 {
-                    foreach (var date in context.Periods)
+                    foreach (var period in context.Periods)
                     {
                         evaluatedRecurringCharges.Add(new RecurringChargeItem
                         {
                             Name = customerRecurringChargeTypeManager.GetCustomerRecurringChargeTypeName(effectiveCustomerRecurringCharge.RecurringChargeTypeId),
                             Amount = effectiveCustomerRecurringCharge.Amount,
-                            Date = date,
+                            From = period.From,
+                            To = period.To,
                             CurrencyId = effectiveCustomerRecurringCharge.CurrencyId
                         });
                     }
