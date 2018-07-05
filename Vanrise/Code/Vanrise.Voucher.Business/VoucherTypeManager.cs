@@ -20,7 +20,7 @@ namespace Vanrise.Voucher.Business
         private Dictionary<long,VoucherType> GetCachedVoucherTypes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedSecurityProviders", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedVoucherTypes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
                 Dictionary<long, VoucherType> result = new Dictionary<long, VoucherType>();
