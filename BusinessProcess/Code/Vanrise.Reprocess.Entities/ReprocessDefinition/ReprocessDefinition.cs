@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
@@ -16,11 +12,6 @@ namespace Vanrise.Reprocess.Entities
         public string Name { get; set; }
 
         public ReprocessDefinitionSettings Settings { get; set; }
-    }
-
-    public class PostExecution
-    {
-        public List<Guid> ReprocessDefinitionIds { get; set; }
     }
 
     public class ReprocessDefinitionSettings
@@ -63,6 +54,11 @@ namespace Vanrise.Reprocess.Entities
         public abstract Vanrise.GenericData.Entities.RecordFilterGroup GetFilterGroup(IReprocessFilterGetFilterGroupContext context);
     }
 
+    public class PostExecution
+    {
+        public List<Guid> ReprocessDefinitionIds { get; set; }
+    }
+
     public abstract class ReprocessFilter
     {
 
@@ -94,8 +90,6 @@ namespace Vanrise.Reprocess.Entities
     //public abstract class ReprocessDefinitionStageExtendedSettings
     //{
     //}
-
-    
 
     public class GenericReprocessFilter : ReprocessFilter
     {
