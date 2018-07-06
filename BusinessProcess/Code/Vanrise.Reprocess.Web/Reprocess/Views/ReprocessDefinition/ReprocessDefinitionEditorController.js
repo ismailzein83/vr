@@ -63,28 +63,11 @@
                 executionFlowDefinitionAPI = api;
                 executionFlowDefinitionSelectorReadyDeferred.resolve();
             };
-
-            $scope.scopeModel.onStagesToHoldSelectorReady = function (api) {
-                stagesToHoldAPI = api;
-            };
-
-            $scope.scopeModel.onStagesToProcessSelectorReady = function (api) {
-                stagesToProcessAPI = api;
-            };
-
-            $scope.scopeModel.onStageSelectorReady = function (api) {
-                stageAPI = api;
-            };
-
             $scope.scopeModel.onExecutionFlowDefinitionSelectionChanged = function () {
                 loadStagesSelector();
                 loadStagesToHoldSelector();
                 loadStagesToProcessSelector();
                 tryLoadFlowStagesOrResolvePromise(onExecutionFlowDefinitionSelectionChangedDeferred);
-            };
-
-            $scope.scopeModel.onStageSelectorSelectionChanged = function () {
-                tryLoadFlowStagesOrResolvePromise(stageSelectorReadyDeferred);
             };
 
             $scope.scopeModel.onExecutionFlowStageSelectorReady = function (api) {
@@ -100,6 +83,21 @@
             $scope.scopeModel.onReprocessFilterDefinitionSettingsReady = function (api) {
                 reprocessFilterDefinitionSettingsAPI = api;
                 reprocessFilterDefinitionSettingsReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onStageSelectorReady = function (api) {
+                stageAPI = api;
+            };
+            $scope.scopeModel.onStageSelectorSelectionChanged = function () {
+                tryLoadFlowStagesOrResolvePromise(stageSelectorReadyDeferred);
+            };
+
+            $scope.scopeModel.onStagesToProcessSelectorReady = function (api) {
+                stagesToProcessAPI = api;
+            };
+
+            $scope.scopeModel.onStagesToHoldSelectorReady = function (api) {
+                stagesToHoldAPI = api;
             };
 
             $scope.scopeModel.save = function () {
@@ -211,12 +209,6 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector, loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-                reprocessDefinitionEntity = undefined;
-            });
 
             function setTitle() {
                 if (isEditMode) {
@@ -226,7 +218,7 @@
                 else {
                     $scope.title = UtilsService.buildTitleForAddEditor('Reprocess Definition');
                 }
-            };
+            }
 
             function loadStaticData() {
                 if (reprocessDefinitionEntity == undefined)
@@ -242,46 +234,11 @@
                         $scope.scopeModel.recordCountPerTransaction = reprocessDefinitionSettings.RecordCountPerTransaction;
                     }
                 }
-            };
-
-            function loadReprocessFilterDefinitionSettings() {
-                var reprocessFilterDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
-                reprocessFilterDefinitionSettingsReadyDeferred.promise.then(function () {
-                    var reprocessFilterDefinitionSettingsPayload;
-                    if (isEditMode) {
-                        var selectedIds;
-                        if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined && reprocessDefinitionEntity.Settings.FilterDefinition != undefined) {
-                            reprocessFilterDefinitionSettingsPayload = { filterDefinition: reprocessDefinitionEntity.Settings.FilterDefinition };
-                        }
-                    }
-
-                    VRUIUtilsService.callDirectiveLoad(reprocessFilterDefinitionSettingsAPI, reprocessFilterDefinitionSettingsPayload, reprocessFilterDefinitionSettingsLoadDeferred);
-                });
-                return reprocessFilterDefinitionSettingsLoadDeferred.promise;
-            };
-
-            function loadReprocessDefinitionSelector() {
-                var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
-                    var reprocessDefinitionSelectorPayload;
-                    if (isEditMode) {
-                        var selectedIds;
-                        if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined && reprocessDefinitionEntity.Settings.PostExecution != undefined && reprocessDefinitionEntity.Settings.PostExecution.ReprocessDefinitionIds != undefined) {
-                            selectedIds = reprocessDefinitionEntity.Settings.PostExecution.ReprocessDefinitionIds;
-                        }
-
-                        reprocessDefinitionSelectorPayload = {
-                            filter: { ExcludedReprocessDefinitionIds: [reprocessDefinitionId] },
-                            selectedIds: selectedIds
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, reprocessDefinitionSelectorPayload, reprocessDefinitionSelectorLoadDeferred);
-                });
-                return reprocessDefinitionSelectorLoadDeferred.promise;
-            };
+            }
 
             function loadDataRecordStorageSelector() {
                 var dataRecordStorageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
                 dataRecordStorageSelectorReadyDeferred.promise.then(function () {
                     var dataRecordStorageSelectorPayload;
                     if (isEditMode) {
@@ -291,11 +248,13 @@
                     }
                     VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
                 });
+
                 return dataRecordStorageSelectorLoadDeferred.promise;
-            };
+            }
 
             function loadExecutionFlowDefinitionSelector() {
                 var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
                 executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
                     var executionFlowDefinitionSelectorPayload;
                     if (isEditMode) {
@@ -305,8 +264,9 @@
                     }
                     VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
                 });
+
                 return executionFlowDefinitionSelectorLoadDeferred.promise;
-            };
+            }
 
             function loadExecutionFlowStageSelector() {
                 if (reprocessDefinitionEntity == undefined || reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId == undefined)
@@ -345,7 +305,54 @@
                     });
 
                 return executionFlowStageSelectorLoadDeferred.promise;
-            };
+            }
+
+            function loadReprocessDefinitionSelector() {
+                var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var reprocessDefinitionSelectorPayload;
+                    if (isEditMode) {
+                        var selectedIds;
+                        if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined && reprocessDefinitionEntity.Settings.PostExecution != undefined && reprocessDefinitionEntity.Settings.PostExecution.ReprocessDefinitionIds != undefined) {
+                            selectedIds = reprocessDefinitionEntity.Settings.PostExecution.ReprocessDefinitionIds;
+                        }
+
+                        reprocessDefinitionSelectorPayload = {
+                            filter: { ExcludedReprocessDefinitionIds: [reprocessDefinitionId] },
+                            selectedIds: selectedIds
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, reprocessDefinitionSelectorPayload, reprocessDefinitionSelectorLoadDeferred);
+                });
+
+                return reprocessDefinitionSelectorLoadDeferred.promise;
+            }
+
+            function loadReprocessFilterDefinitionSettings() {
+                var reprocessFilterDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                reprocessFilterDefinitionSettingsReadyDeferred.promise.then(function () {
+                    var reprocessFilterDefinitionSettingsPayload;
+                    if (isEditMode) {
+                        var selectedIds;
+                        if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined && reprocessDefinitionEntity.Settings.FilterDefinition != undefined) {
+                            reprocessFilterDefinitionSettingsPayload = { filterDefinition: reprocessDefinitionEntity.Settings.FilterDefinition };
+                        }
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(reprocessFilterDefinitionSettingsAPI, reprocessFilterDefinitionSettingsPayload, reprocessFilterDefinitionSettingsLoadDeferred);
+                });
+
+                return reprocessFilterDefinitionSettingsLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector, loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings]).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                    reprocessDefinitionEntity = undefined;
+                });
         };
 
         function insert() {
