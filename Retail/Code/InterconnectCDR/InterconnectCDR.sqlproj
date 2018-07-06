@@ -69,6 +69,10 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="COMMON\" />
     <Folder Include="COMMON\Functions\" />
+    <Folder Include="ICX_Data\" />
+    <Folder Include="ICX_Data\Tables\" />
+    <Folder Include="ICX_Data\Stored Procedures\" />
+    <Folder Include="ICX_Data\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_CDR\Tables\BillingCDR_Main.sql" />
@@ -84,5 +88,13 @@
     <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="Security\COMMON.sql" />
+    <Build Include="ICX_Data\Tables\AccumulatedData.sql" />
+    <Build Include="ICX_Data\Tables\RawData.sql" />
+    <Build Include="ICX_Data\Tables\UserSessionData.sql" />
+    <Build Include="ICX_Data\Stored Procedures\sp_UserSessionData_UpdateAndGetUserSessionData.sql" />
+    <Build Include="ICX_Data\User Defined Types\UserSessionDataType.sql" />
+    <Build Include="ICX_Data\User Defined Types\AccumulatedDataType.sql" />
+    <Build Include="ICX_Data\User Defined Types\RawDataType.sql" />
+    <Build Include="Security\ICX_Data.sql" />
   </ItemGroup>
 </Project>

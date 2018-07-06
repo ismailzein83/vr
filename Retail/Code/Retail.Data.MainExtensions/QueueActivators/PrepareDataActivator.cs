@@ -10,7 +10,7 @@ using Vanrise.Reprocess.Entities;
 
 namespace Retail.Data.MainExtensions.QueueActivators
 {
-    public class PrepareDataActivator : QueueActivator, IReprocessStageActivator
+    public class PrepareDataActivator : QueueActivator
     {
         public List<string> OutputStages { get; set; }
 
@@ -82,55 +82,6 @@ namespace Retail.Data.MainExtensions.QueueActivators
 
             foreach (var outputStage in this.OutputStages)
                 context.OutputItems.Add(outputStage, transformedBatch);
-        }
-
-        #endregion
-
-        #region IReprocessStageActivator
-
-        public void CommitChanges(IReprocessStageActivatorCommitChangesContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DropStorage(IReprocessStageActivatorDropStorageContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ExecuteStage(IReprocessStageActivatorExecutionContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FinalizeStage(IReprocessStageActivatorFinalizingContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<string> GetOutputStages(List<string> stageNames)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Vanrise.Queueing.BaseQueue<IReprocessBatch> GetQueue()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<BatchRecord> GetStageBatchRecords(IReprocessStageActivatorPreparingContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int? GetStorageRowCount(IReprocessStageActivatorGetStorageRowCountContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object InitializeStage(IReprocessStageActivatorInitializingContext context)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

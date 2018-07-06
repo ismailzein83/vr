@@ -35,7 +35,7 @@ namespace Retail.Data.Data.SQL
                 (cmd) =>
                 {
                     var dtPrm = new SqlParameter("@UserSessionDataDataTable", SqlDbType.Structured);
-                    dtPrm.TypeName = "[ICX_Data].[UserSessionType]";
+                    dtPrm.TypeName = "[ICX_Data].[UserSessionDataType]";
                     dtPrm.Value = dtUserSessionsData;
                     cmd.Parameters.Add(dtPrm);
                 });

@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [ICX_Data]
+    AUTHORIZATION [dbo];
+
