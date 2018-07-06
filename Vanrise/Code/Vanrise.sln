@@ -419,9 +419,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Voucher.Data.SQL", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web.Host", "Vanrise.Web.Host\Vanrise.Web.Host.csproj", "{E7718B54-E9F5-469E-8D17-DC919BD9FBC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.Arguments", "Vanrise.Common.Arguments\Vanrise.Common.Arguments.csproj", "{05B97477-28A4-4A35-80B0-03FDFD010613}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.BP", "Vanrise.Common.BP\Vanrise.Common.BP.csproj", "{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.BP.Arguments", "Vanrise.Common.BP.Arguments\Vanrise.Common.BP.Arguments.csproj", "{841B50AB-E1A4-46BA-9358-F6519C92A2E3}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -1137,14 +1137,14 @@ Global
 		SccProjectTopLevelParentUniqueName177 = Vanrise.sln
 		SccProjectName177 = Vanrise.Web.Host
 		SccLocalPath177 = Vanrise.Web.Host
-		SccProjectUniqueName178 = Vanrise.Common.Arguments\\Vanrise.Common.Arguments.csproj
+		SccProjectUniqueName178 = Vanrise.Common.BP\\Vanrise.Common.BP.csproj
 		SccProjectTopLevelParentUniqueName178 = Vanrise.sln
-		SccProjectName178 = Vanrise.Common.Arguments
-		SccLocalPath178 = Vanrise.Common.Arguments
-		SccProjectUniqueName179 = Vanrise.Common.BP\\Vanrise.Common.BP.csproj
+		SccProjectName178 = Vanrise.Common.BP
+		SccLocalPath178 = Vanrise.Common.BP
+		SccProjectUniqueName179 = Vanrise.Common.BP.Arguments\\Vanrise.Common.BP.Arguments.csproj
 		SccProjectTopLevelParentUniqueName179 = Vanrise.sln
-		SccProjectName179 = Vanrise.Common.BP
-		SccLocalPath179 = Vanrise.Common.BP
+		SccProjectName179 = Vanrise.Common.BP.Arguments
+		SccLocalPath179 = Vanrise.Common.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2593,14 +2593,6 @@ Global
 		{E7718B54-E9F5-469E-8D17-DC919BD9FBC0}.Release|x64.Build.0 = Release|Any CPU
 		{E7718B54-E9F5-469E-8D17-DC919BD9FBC0}.Release|x86.ActiveCfg = Release|Any CPU
 		{E7718B54-E9F5-469E-8D17-DC919BD9FBC0}.Release|x86.Build.0 = Release|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Release|x64.ActiveCfg = Release|Any CPU
-		{05B97477-28A4-4A35-80B0-03FDFD010613}.Release|x86.ActiveCfg = Release|Any CPU
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -2609,6 +2601,14 @@ Global
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}.Release|x64.ActiveCfg = Release|Any CPU
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}.Release|x86.ActiveCfg = Release|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2796,8 +2796,8 @@ Global
 		{C88BFB2F-D563-4AB4-91FE-A1CBC2775861} = {C2925AED-DA1C-472B-864B-4A83254C39F6}
 		{5FA191E9-C0BE-4577-BF24-406B5E1AC835} = {C2925AED-DA1C-472B-864B-4A83254C39F6}
 		{E7718B54-E9F5-469E-8D17-DC919BD9FBC0} = {20A2407E-D892-41D2-8D77-6612045F9E51}
-		{05B97477-28A4-4A35-80B0-03FDFD010613} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{841B50AB-E1A4-46BA-9358-F6519C92A2E3} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
