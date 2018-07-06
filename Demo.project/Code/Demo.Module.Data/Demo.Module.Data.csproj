@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DemoModuleFactory.cs" />
     <Compile Include="IBranchDataManager.cs" />
+    <Compile Include="IMasterDataManager.cs" />
     <Compile Include="IRoomDataManager.cs" />
     <Compile Include="IBuildingDataManager.cs" />
     <Compile Include="IMemberDataManager.cs" />

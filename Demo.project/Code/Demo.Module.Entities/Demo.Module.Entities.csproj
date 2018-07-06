@@ -57,6 +57,9 @@
     <Compile Include="Branch\BranchQuery.cs" />
     <Compile Include="Branch\Setting\Dimensions\Dimensions.cs" />
     <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
+    <Compile Include="Master\Master.cs" />
+    <Compile Include="Master\MasterDetails.cs" />
+    <Compile Include="Master\MasterQuery.cs" />
     <Compile Include="Building\BuildingInfo.cs" />
     <Compile Include="Building\BuildingInfoFilter.cs" />
     <Compile Include="Family\FamilyInfo.cs" />

@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="scopeModel.masters"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="MasterId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'MasterId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>    
+</vr-datagrid>

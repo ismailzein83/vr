@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchManager.cs" />
+    <Compile Include="MasterManager.cs" />
     <Compile Include="ItemShapeDescriptionContext.cs" />
     <Compile Include="MemberShapeDescriptionContext.cs" />
     <Compile Include="RoomManager.cs" />

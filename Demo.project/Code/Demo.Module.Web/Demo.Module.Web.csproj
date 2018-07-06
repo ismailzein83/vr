@@ -196,6 +196,14 @@
     <Content Include="Demo_Module\Directives\University\demo-module-university-grid.js" />
     <Content Include="Demo_Module\Directives\University\demo-module-university-selector.js" />
     <Content Include="Demo_Module\Directives\University\Templates\UniversityGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Master\Directives\demo-module-master-grid.js" />
+    <Content Include="Demo_Module\Elements\Master\Directives\Templates\MasterGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Master\Services\APIServices\MasterAPIService.js" />
+    <Content Include="Demo_Module\Elements\Master\Services\MasterService.js" />
+    <Content Include="Demo_Module\Elements\Master\Views\MasterEditor.html" />
+    <Content Include="Demo_Module\Elements\Master\Views\MasterEditorController.js" />
+    <Content Include="Demo_Module\Elements\Master\Views\MasterManagement.html" />
+    <Content Include="Demo_Module\Elements\Master\Views\MasterManagementController.js" />
     <Content Include="Demo_Module\Services\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\BranchAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\BuildingAPIService.js" />
@@ -266,6 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
