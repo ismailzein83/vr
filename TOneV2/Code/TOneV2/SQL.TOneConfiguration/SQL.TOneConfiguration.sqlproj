@@ -862,6 +862,7 @@
     <None Include="CentralAuth.PostDeployment.sql" />
     <None Include="TOne.AutoImportSPL.PostDeployment.sql" />
     <None Include="Voucher.PostDeployment.sql" />
+    <None Include="InterConnect_Data.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
