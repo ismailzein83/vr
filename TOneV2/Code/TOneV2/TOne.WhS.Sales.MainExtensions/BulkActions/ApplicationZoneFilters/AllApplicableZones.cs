@@ -16,8 +16,8 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
-            if (context.SaleZones == null || context.SaleZones.Count() == 0)
-                throw new MissingMemberException("SaleZones");
+			if (context.SaleZones == null || context.SaleZones.Count() == 0)
+				return null;//throw new MissingMemberException("SaleZones");
 
             Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate;
             Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate;

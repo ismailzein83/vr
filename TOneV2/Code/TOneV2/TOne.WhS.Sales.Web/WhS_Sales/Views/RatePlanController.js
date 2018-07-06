@@ -784,6 +784,7 @@
 						if (!isRatePlanloadedFromDrafts)
 							manageCountries();
 						showActionButtons(gridHasCustomerData);
+						$scope.showBulkActionButton = true;
 					}
 					isRatePlanloadedFromDrafts = false;
 				}).catch(function (error) {
