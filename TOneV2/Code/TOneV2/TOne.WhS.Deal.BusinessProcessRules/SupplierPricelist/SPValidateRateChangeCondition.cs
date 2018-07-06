@@ -29,8 +29,8 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                 if (importedRate.ChangeType != RateChangeType.NotChanged)
                 {
                     var rate = importedRate.NewRates.First();
-
-                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.EED.Value, false);
+                    //TODO: by mis we need to check on EED for deleted rates and for BED on increase and decrease
+                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.BED, false);
                     if (dealId.HasValue)
                     {
                         var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
