@@ -17,10 +17,6 @@ namespace Vanrise.Rules.RuleStructureBehaviors
 
         public override IEnumerable<RuleNode> StructureRules(IEnumerable<IVRRule> rules, out List<IVRRule> notMatchRules)
         {
-            int priority = 0;
-            int keyLength = 0;
-            List<IVRRule> baseRules;
-
             notMatchRules = new List<IVRRule>();
             foreach (var rule in rules)
             {
@@ -43,25 +39,66 @@ namespace Vanrise.Rules.RuleStructureBehaviors
                 else
                     notMatchRules.Add(rule);
             }
-            var orderedRuleNodesByPrefixes = _ruleNodesByPrefixes.OrderByDescending(itm => itm.Key.Length);
+            var orderedRuleNodesByPrefixes = _ruleNodesByPrefixes.OrderByDescending(itm => itm.Key.Length).ToList();
 
-            //add rules having parent prefixes
-            foreach (var ruleNodesByPrefix in orderedRuleNodesByPrefixes)
+            ////add rules having parent prefixes
+            for (int i = 0; i < orderedRuleNodesByPrefixes.Count; i++)
             {
-                if (ruleNodesByPrefix.Key.Length != keyLength)
-                    priority++;
+                int priority = 0;
+                var ruleNodesByPrefix = orderedRuleNodesByPrefixes[i];
 
-                keyLength = ruleNodesByPrefix.Key.Length;
-
-                foreach (var rule in orderedRuleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).SelectMany(itm => itm.Value.Rules))
+                int matchingNodeLength = 0;
+                for (int j = i + 1; j < orderedRuleNodesByPrefixes.Count; j++)
                 {
-                    if (!ruleNodesByPrefix.Value.Rules.Contains(rule))
+                    var matchingNode = orderedRuleNodesByPrefixes[j];
+                    if (matchingNode.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(matchingNode.Key))
                     {
-                        ruleNodesByPrefix.Value.Rules.Add(rule);
-                        ruleNodesByPrefix.Value.Priorities.Add(rule, priority);
+                        if (matchingNode.Key.Length != matchingNodeLength)
+                            priority++;
+
+                        matchingNodeLength = matchingNode.Key.Length;
+
+                        foreach (var rule in matchingNode.Value.Rules)
+                        {
+                            if (!ruleNodesByPrefix.Value.Rules.Contains(rule))
+                            {
+                                ruleNodesByPrefix.Value.Rules.Add(rule);
+                                ruleNodesByPrefix.Value.Priorities.Add(rule, priority);
+                            }
+                        }
                     }
                 }
             }
+
+
+            ////add rules having parent prefixes
+            //foreach (var ruleNodesByPrefix in orderedRuleNodesByPrefixes)
+            //{
+            //    if (ruleNodesByPrefix.Key.Length != keyLength)
+            //        priority++;
+
+            //    keyLength = ruleNodesByPrefix.Key.Length;
+
+            //    var matchingNodes = orderedRuleNodesByPrefixes.Where(itm => itm.Key != ruleNodesByPrefix.Key && ruleNodesByPrefix.Key.StartsWith(itm.Key)).OrderByDescending(itm => itm.Key.Length);//.SelectMany(itm => itm.Value.Rules);
+            //    int matchingNodeLength = 0;
+
+            //    foreach (var matchingNode in matchingNodes)
+            //    {
+            //        if (matchingNode.Key.Length != matchingNodeLength)
+            //            priority++;
+
+            //        matchingNodeLength = matchingNode.Key.Length;
+
+            //        foreach (var rule in matchingNode.Value.Rules)
+            //        {
+            //            if (!ruleNodesByPrefix.Value.Rules.Contains(rule))
+            //            {
+            //                ruleNodesByPrefix.Value.Rules.Add(rule);
+            //                ruleNodesByPrefix.Value.Priorities.Add(rule, priority);
+            //            }
+            //        }
+            //    }
+            //}
             return _ruleNodesByPrefixes.Values;
         }
 
