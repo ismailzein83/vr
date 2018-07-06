@@ -17,6 +17,7 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
+            return true;
             //CountryNotImportedCodes allCodes = context.Target as CountryNotImportedCodes;
 
             //IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
@@ -29,7 +30,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             //{
             //    if (codeGroupCodes.Any(x => x.Code == notImportedCode.Code))
             //    {
-            //        var MainCode = notImportedCode.Code;
+            //        var mainBreakout = notImportedCode.Code;
             //        codeGroupExistInNotImportedData = true;
             //    }
             //}
@@ -40,16 +41,16 @@ namespace TOne.WhS.SupplierPriceList.Business
             //    return true;
             //}
 
-            //else 
+            //else
             //{
             //    CountryManager countryManager = new CountryManager();
             //    string countryName = countryManager.GetCountryName(allCodes.CountryId);
 
 
-            //    context.Message = string.Format("Code Group of country x will be removed");
+            //    context.Message = string.Format("Code Group (x) of country y from Zone z will be removed");
             //    return false;
             //}
-            return true;
+
             //if ((supplierPriceListType != SupplierPricelistType.RateChange) && codeGroupExistInNotImportedData && !pricelistCodeManager.IsCodeGroupVerificationEnabled())
             //{
             //    context.Message = string.Format("Code Group of country {} will be removed");
