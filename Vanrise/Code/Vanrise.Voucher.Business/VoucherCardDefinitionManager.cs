@@ -12,7 +12,7 @@ namespace Vanrise.Voucher.Business
     public class VoucherCardDefinitionManager
     {
         GenericBusinessEntityDefinitionManager _genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
-        Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395"); // could be removed when VoucherCardsManager._definitionId becomes public
+        Guid _definitionId = VoucherCardsManager._definitionId;
         public List<VoucharCardSerialNumberPart> GetVoucherCardDefinition()
         {
             var genericBEDefinitionSettings = _genericBusinessEntityDefinitionManager.GetGenericBEDefinitionSettings(_definitionId);

@@ -28,5 +28,12 @@ namespace Vanrise.Voucher.Web.Controllers
         {
             return _voucherCardsManager.SetVoucherUsed(input);
         }
+        [HttpPost]
+        [Route("ActivateVoucherCards")]
+        public bool ActivateVoucherCards(VoucherCardsActivationInput voucherCardsActivationInput)
+        {
+            return _voucherCardsManager.ActivateVoucherCards(voucherCardsActivationInput);
+        }
+
     }
 }

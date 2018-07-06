@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent ng-controller="VR_Voucher_VoucherCardsActivatorController" resclass="resClass" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formVoucherActivator">
+            <vr-tabs>
+
+                <vr-row removeline ng-if="scopeModel.ready">
+                    <vr-columns width="1/2row">
+                        <vr-textbox value="scopeModel.numberofcards" type="number" minvalue="0" maxvalue="{{scopeModel.inactiveCards}}" label=" Number of Cards to be Activated" isrequired> </vr-textbox>                      
+
+                </vr-row>
+
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Execute" formname="formVoucherActivator" data-onclick="scopeModel.activate"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

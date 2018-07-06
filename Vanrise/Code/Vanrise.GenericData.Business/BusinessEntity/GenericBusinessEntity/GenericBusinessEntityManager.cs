@@ -402,7 +402,7 @@ namespace Vanrise.GenericData.Business
                 }
                 VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToAdd.BusinessEntityDefinitionId), genericBusinessEntityToAdd);
 
-                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntity);
+                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntity, HandlerOperationType.Add);
                 OnAfterSaveMethod(fieldTypes, genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
 
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -446,7 +446,7 @@ namespace Vanrise.GenericData.Business
 
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
 
-                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntity);
+                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntity, HandlerOperationType.Update);
                 OnAfterSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityToUpdate.GenericBusinessEntityId);
 
 
@@ -544,7 +544,7 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
-        private void OnAfterSaveHandler(GenericBEDefinitionSettings genericBEDefinitionSetting, Guid businessEntityDefinitionId, GenericBusinessEntity oldEntity, GenericBusinessEntity newEntity)
+        private void OnAfterSaveHandler(GenericBEDefinitionSettings genericBEDefinitionSetting, Guid businessEntityDefinitionId, GenericBusinessEntity oldEntity, GenericBusinessEntity newEntity, HandlerOperationType operationType)
         {
             if (genericBEDefinitionSetting.OnAfterSaveHandler != null)
             {
@@ -553,7 +553,8 @@ namespace Vanrise.GenericData.Business
                     DefinitionSettings = genericBEDefinitionSetting,
                     NewEntity = newEntity,
                     BusinessEntityDefinitionId = businessEntityDefinitionId,
-                    OldEntity = oldEntity
+                    OldEntity = oldEntity,
+                    OperationType = operationType
                 });
             }
         }

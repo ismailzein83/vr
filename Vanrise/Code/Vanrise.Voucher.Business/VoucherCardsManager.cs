@@ -18,7 +18,7 @@ namespace Vanrise.Voucher.Business
 {
     public class VoucherCardsManager
     {
-        static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
+        public static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
 
         public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode, string lockedBy)
         {
@@ -77,7 +77,59 @@ namespace Vanrise.Voucher.Business
                 IsAvailable = false
             };
         }
+        public bool ActivateVoucherCards(VoucherCardsActivationInput voucherCardsActivationInput)
+        {
+            var getGenericBEFilterGroup = new RecordFilterGroup()
+            {
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = new List<RecordFilter>()
+                {
+                        new ObjectListRecordFilter(){FieldName = "GenerationVoucherId" ,   Values = new List<object>{voucherCardsActivationInput.VoucherCardsGenerationId}  },
+                        new EmptyRecordFilter() {FieldName = "ActivationDate" }
+                }
+            };
 
+            var genericBusinessEntityManager = new GenericBusinessEntityManager();
+            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, null, getGenericBEFilterGroup);
+            var count = genericBusinessEntities.Count;
+            if (genericBusinessEntities != null && count >= voucherCardsActivationInput.Numberofcards) {
+                //var updateGenericBEFilterGroup = new RecordFilterGroup()
+             //   {
+                    //LogicalOperator = RecordQueryLogicalOperator.And,
+                   // Filters = new List<RecordFilter>()
+                 //   {  
+                        //new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  }
+                        
+                 //   }
+               // };                
+                for(var i=0;i<voucherCardsActivationInput.Numberofcards;i++)
+                {
+                    var voucharCardId = (long)genericBusinessEntities[i].FieldValues.GetRecord("ID");                    
+                    var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate();
+                    genericBusinessEntityToUpdate.FieldValues = new Dictionary<string, object>();
+                    genericBusinessEntityToUpdate.FieldValues.Add("ActivationDate", DateTime.Now);
+                    genericBusinessEntityToUpdate.GenericBusinessEntityId = voucharCardId;
+                    genericBusinessEntityToUpdate.BusinessEntityDefinitionId = _definitionId;
+
+                    var updateOutput = genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
+                }
+                
+                var voucherCardsGenerationsManager = new VoucherCardsGenerationsManager();
+                var voucherCardsGeneration = voucherCardsGenerationsManager.GetVoucherCardsGeneration(voucherCardsActivationInput.VoucherCardsGenerationId);
+                var InactiveCards =  count - voucherCardsActivationInput.Numberofcards;
+                var voucherCardsGenerationToUpdate = new GenericBusinessEntityToUpdate();
+                voucherCardsGenerationToUpdate.FieldValues = new Dictionary<string, object>();                
+                voucherCardsGenerationToUpdate.FieldValues.Add("InactiveCards", InactiveCards);
+                voucherCardsGenerationToUpdate.GenericBusinessEntityId = voucherCardsGeneration.VoucherCardsGenerationId;
+                voucherCardsGenerationToUpdate.BusinessEntityDefinitionId = VoucherCardsGenerationsManager._definitionId;
+
+                var updateVGenerationOutput = genericBusinessEntityManager.UpdateGenericBusinessEntity(voucherCardsGenerationToUpdate);
+
+                }
+            else throw new NullReferenceException("Not Enough Cards");
+            
+            
+            return true; }
         public SetVoucherUsedOutput SetVoucherUsed(SetVoucherUsedInput input)
         {
             var voucherUsedOutput = new SetVoucherUsedOutput
@@ -121,8 +173,7 @@ namespace Vanrise.Voucher.Business
             }
             return voucherUsedOutput;
         }
-
-
+       
         public void GenerateVoucherCards(long generationVoucherId, DateTime expiryDate, long voucherTypeId, int numberOfCards)
         {
             var dataRecordStorageId = new GenericBusinessEntityDefinitionManager().GetGenericBEDataRecordStorageId(_definitionId);

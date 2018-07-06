@@ -117,6 +117,7 @@ namespace Vanrise.GenericData.Business
     }
     public interface IGenericBEOnAfterSaveHandlerContext
     {
+        HandlerOperationType OperationType { get; }
         GenericBusinessEntity NewEntity { get;  }
         GenericBusinessEntity OldEntity { get;  }
         GenericBEDefinitionSettings DefinitionSettings { get; }
@@ -128,6 +129,8 @@ namespace Vanrise.GenericData.Business
         public GenericBusinessEntity OldEntity { get; set; }
         public GenericBEDefinitionSettings DefinitionSettings { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
+
+        public HandlerOperationType OperationType { get; set; }
     }
 
     public class GenericBEViewDefinition

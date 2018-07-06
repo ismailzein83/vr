@@ -47,7 +47,9 @@
     <Compile Include="SetVoucherUseOutput.cs" />
     <Compile Include="VoucherCard.cs" />
     <Compile Include="CheckVoucherAvailabilityOutput.cs" />
+    <Compile Include="VoucherCardsActivater.cs" />
     <Compile Include="VoucherCardSettings.cs" />
+    <Compile Include="VoucherCardsGeneration.cs" />
     <Compile Include="VoucherType.cs" />
   </ItemGroup>
   <ItemGroup>

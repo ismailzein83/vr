@@ -16,25 +16,29 @@ namespace Vanrise.Voucher.Business
 
         public override void Execute(IGenericBEOnAfterSaveHandlerContext context)
         {
-            VoucherCardsManager voucherCardsManager = new VoucherCardsManager();
+            if(context.OperationType == HandlerOperationType.Add)
+            {
+                VoucherCardsManager voucherCardsManager = new VoucherCardsManager();
 
-            Object generationVoucherIdObject;
-            context.NewEntity.FieldValues.TryGetValue("ID", out generationVoucherIdObject);
-            long generationVoucherId = (long)generationVoucherIdObject;
+                Object generationVoucherIdObject;
+                context.NewEntity.FieldValues.TryGetValue("ID", out generationVoucherIdObject);
+                long generationVoucherId = (long)generationVoucherIdObject;
 
-             Object voucherTypeIdObject;
-             context.NewEntity.FieldValues.TryGetValue("VoucherTypeId",out voucherTypeIdObject);
-             long voucherTypeId = (long)voucherTypeIdObject;
+                Object voucherTypeIdObject;
+                context.NewEntity.FieldValues.TryGetValue("VoucherTypeId", out voucherTypeIdObject);
+                long voucherTypeId = (long)voucherTypeIdObject;
 
-             Object expiryDateObject;
-             context.NewEntity.FieldValues.TryGetValue("ExpiryDate",out expiryDateObject);
-             DateTime expiryDate = (DateTime)expiryDateObject;
+                Object expiryDateObject;
+                context.NewEntity.FieldValues.TryGetValue("ExpiryDate", out expiryDateObject);
+                DateTime expiryDate = (DateTime)expiryDateObject;
 
-             Object numberOfCardsObject;
-             context.NewEntity.FieldValues.TryGetValue("NumberOfCards",out numberOfCardsObject);
-             int numberOfCards = (int)numberOfCardsObject;
+                Object numberOfCardsObject;
+                context.NewEntity.FieldValues.TryGetValue("NumberOfCards", out numberOfCardsObject);
+                int numberOfCards = (int)numberOfCardsObject;
 
-             voucherCardsManager.GenerateVoucherCards(generationVoucherId,expiryDate, voucherTypeId, numberOfCards);
+                voucherCardsManager.GenerateVoucherCards(generationVoucherId, expiryDate, voucherTypeId, numberOfCards);
+            }
+           
         }
     }
 }
