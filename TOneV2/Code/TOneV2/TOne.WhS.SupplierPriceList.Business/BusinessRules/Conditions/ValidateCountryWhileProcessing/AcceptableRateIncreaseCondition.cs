@@ -21,7 +21,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             var importedCountry = context.Target as ImportedCountry;
 
             if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
-                throw new NullReferenceException("importedCountry.ImportedRates");
+                return true;
 
             var configManager = new ConfigManager();
             int acceptableIncreaseRatePercentage = configManager.GetPurchaseAcceptableIncreasedRate();
@@ -45,7 +45,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     if (acceptableIncreaseRatePercentage < increasePercentage)
                     {
                         numberOfAcceptableincreasedRate++;
-                        zonesWithIncreasedRatesAboveAcceptable.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' at a percentage higher than the specified acceptable increase rate percentage '{3}'", importedRate.ZoneName, recentRateFormatted, newRateFormatted, acceptableIncreaseRatePercentage));
+                        zonesWithIncreasedRatesAboveAcceptable.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' at a percentage higher than the specified acceptable increase rate percentage '{3}%'", importedRate.ZoneName, recentRateFormatted, newRateFormatted, acceptableIncreaseRatePercentage));
                     }
                 }
             }

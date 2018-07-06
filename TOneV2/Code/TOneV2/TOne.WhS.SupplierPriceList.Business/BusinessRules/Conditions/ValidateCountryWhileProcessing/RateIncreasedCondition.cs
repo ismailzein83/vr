@@ -19,7 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             var importedCountry = context.Target as ImportedCountry;
 
             if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
-                throw new NullReferenceException("importedCountry.ImportedRates");
+                return true;
 
             var numberOfIncreasedRates = 0;
             List<string> zonesWithIncreasedRates = new List<string>();
