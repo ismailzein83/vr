@@ -19,8 +19,9 @@
         </vr-columns>
     </vr-row>
     <vr-row>
-        <reprocess-chunktime-selector on-ready="scopeModel.onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></reprocess-chunktime-selector>
-
+        <span ng-show="scopeModel.selectedReprocessDefinition!=undefined && scopeModel.showChunkTimeSelector">
+            <reprocess-chunktime-selector on-ready="scopeModel.onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></reprocess-chunktime-selector>
+        </span>
         <vr-columns colnum="4" ng-if="scopeModel.selectedReprocessDefinition!=undefined && !scopeModel.selectedReprocessDefinition.ForceUseTempStorage">
             <vr-switch value="scopeModel.useTempStorage" label="Use Temporary Storage"></vr-switch>
         </vr-columns>

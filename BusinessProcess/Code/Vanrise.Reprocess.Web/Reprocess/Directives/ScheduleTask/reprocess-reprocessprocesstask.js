@@ -42,6 +42,7 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.showChunkTimeSelector = false;
 
                 $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
@@ -85,6 +86,12 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                                 VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
 
                                 chunkTimeSelectorLoadDeferred.promise.then(function () {
+                                    if (chunkTimeSelectorAPI.hasSingleItem()) {
+                                        $scope.scopeModel.showChunkTimeSelector = false;
+                                    } else {
+                                        $scope.scopeModel.showChunkTimeSelector = true;
+                                    }
+
                                     $scope.scopeModel.isLoadingDirective = false;
                                 });
                             } else {
@@ -141,7 +148,6 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                     var reprocessDefinitionSelectorLoadPromise = getReprocessDefinitionSelectorLoadPromise();
                     promises.push(reprocessDefinitionSelectorLoadPromise);
 
-
                     if (filter != undefined) {
                         filterDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -193,7 +199,11 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                             VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
                         });
 
-                        return chunkTimeSelectorLoadDeferred.promise;
+                        return chunkTimeSelectorLoadDeferred.promise.then(function () {
+                            if (!chunkTimeSelectorAPI.hasSingleItem()) {
+                                $scope.scopeModel.showChunkTimeSelector = true;
+                            }
+                        });
                     }
                     function getFilterLoadPromise() {
                         var loadFilterPromiseDeferred = UtilsService.createPromiseDeferred();

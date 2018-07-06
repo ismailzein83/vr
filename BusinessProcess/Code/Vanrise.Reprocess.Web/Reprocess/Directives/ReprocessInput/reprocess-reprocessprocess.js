@@ -41,6 +41,7 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.showChunkTimeSelector = false;
 
                 $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
@@ -73,16 +74,27 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                             $scope.scopeModel.filterDefinitionEditor = reprocessDefinitionSettings.FilterDefinition != undefined ? reprocessDefinitionSettings.FilterDefinition.RuntimeEditor : undefined;
                             $scope.scopeModel.useTempStorage = false;
 
+                            var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
                             chunkTimeSelectorReadyDeferred.promise.then(function () {
                                 var chunkTimeSelectorPayload = {
                                     includedChunkTimes: reprocessDefinitionSettings.IncludedChunkTimes,
                                     selectIfSingleItem: true
                                 };
-                                VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, undefined);
+                                VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
+                            });
+
+                            chunkTimeSelectorLoadDeferred.promise.then(function () {
+                                if (chunkTimeSelectorAPI.hasSingleItem()) {
+                                    $scope.scopeModel.showChunkTimeSelector = false;
+                                } else {
+                                    $scope.scopeModel.showChunkTimeSelector = true;
+                                }
+
+                                $scope.scopeModel.isLoadingDirective = false;
                             });
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
                             $scope.scopeModel.isLoadingDirective = false;
                         });
                     }
