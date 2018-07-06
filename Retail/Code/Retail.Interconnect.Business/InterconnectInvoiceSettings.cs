@@ -8,10 +8,12 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.Interconnect.Business
 {
+    public enum InterconnectInvoiceType { Customer = 0, Supplier = 1 }
     public class InterconnectInvoiceSettings : BaseRetailInvoiceTypeSettings
     {
         public Guid InvoiceTransactionTypeId { get ;set; }
         public List<Guid> UsageTransactionTypeIds { get;set; }
+        public InterconnectInvoiceType Type { get; set; }
         public override Guid ConfigId
         {
             get { return new Guid("D2776CD1-0900-4FF6-99BC-454866EAAD74"); }
