@@ -109,7 +109,7 @@
   <ItemGroup>
     <Content Include="Integration\Constants\CompressionTypeEnum.js" />
     <Content Include="Integration\Constants\FailedBatchInfoFieldsEnum.js" />
-    <Content Include="Integration\Constants\FileCriteriaCheckEnum.js" />
+    <Content Include="Integration\Constants\FileCheckCriteriaEnum.js" />
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Constants\ModuleConfig.js" />

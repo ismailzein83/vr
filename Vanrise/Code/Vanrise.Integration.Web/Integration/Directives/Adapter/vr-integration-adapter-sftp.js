@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VR_Integration_CompressionEnum', 'VR_Integration_SshEncryptionAlgorithmEnum', 'VR_Integration_SshHostKeyAlgorithmEnum', 'VR_Integration_SshKeyExchangeAlgorithmEnum', 'VR_Integration_SshMacAlgorithmEnum', 'VR_Integration_SshOptionsEnum',
-function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_CompressionEnum, VR_Integration_SshEncryptionAlgorithmEnum, VR_Integration_SshHostKeyAlgorithmEnum, VR_Integration_SshKeyExchangeAlgorithmEnum, VR_Integration_SshMacAlgorithmEnum, VR_Integration_SshOptionsEnum) {
+app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VR_Integration_CompressionEnum', 'VR_Integration_SshEncryptionAlgorithmEnum', 'VR_Integration_SshHostKeyAlgorithmEnum', 'VR_Integration_SshKeyExchangeAlgorithmEnum', 'VR_Integration_SshMacAlgorithmEnum', 'VR_Integration_SshOptionsEnum','FileCheckCriteriaEnum',
+function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_CompressionEnum, VR_Integration_SshEncryptionAlgorithmEnum, VR_Integration_SshHostKeyAlgorithmEnum, VR_Integration_SshKeyExchangeAlgorithmEnum, VR_Integration_SshMacAlgorithmEnum, VR_Integration_SshOptionsEnum, FileCheckCriteriaEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -44,6 +44,14 @@ function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_Compr
 
             $scope.actionIsRequired = function () {
                 return !$scope.basedOnTime;
+            };
+
+            $scope.fileCheckCriterias = UtilsService.getArrayEnum(FileCheckCriteriaEnum);
+
+            $scope.onSelectedActionChanged = function (selectedAction) {
+                if (selectedAction != undefined && selectedAction.value == -1) {
+                    $scope.selectedFileCheckCriteria = undefined;
+                }
             };
 
             defineAPI();
@@ -107,6 +115,7 @@ function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_Compr
                     Password: $scope.password,
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
                     ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
+                    FileCheckCriteria: $scope.selectedFileCheckCriteria != undefined ? $scope.selectedFileCheckCriteria.value : $scope.fileCheckCriterias[0].value,
                     LastImportedFile: $scope.lastImportedFile,
                     CompressedFiles: $scope.compressed,
                     CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined,
@@ -137,6 +146,7 @@ function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_Compr
                         $scope.password = argumentData.Password;
                         $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
+                        $scope.selectedFileCheckCriteria = UtilsService.getItemByVal($scope.fileCheckCriterias, argumentData.FileCheckCriteria, "value");
                         $scope.lastImportedFile = argumentData.LastImportedFile;
                         $scope.compressed = argumentData.CompressedFiles;
                         $scope.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);

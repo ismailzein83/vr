@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 using System.Collections.Generic;
+using Vanrise.Entities;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
@@ -16,6 +17,9 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
         public override void ImportData(IAdapterImportDataContext context)
         {
             FTPAdapterArgument ftpAdapterArgument = context.AdapterArgument as FTPAdapterArgument;
+            if (ftpAdapterArgument.ActionAfterImport.HasValue && ftpAdapterArgument.ActionAfterImport.Value == (int)FTPAdapterArgument.Actions.NoAction
+                && ftpAdapterArgument.FileCheckCriteria != FTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck)
+                throw new VRBusinessException(string.Format("Check By Date and Name is required in case of no action after import"));
 
             FTPAdapterState ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument);
 
@@ -43,26 +47,59 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 {
                     short numberOfFilesRead = 0;
 
-                    FtpList ftpListToPreccess = CheckandGetFinalFtpCollection(ftpAdapterArgument, ftp, ftpList);
+                    FtpList ftpListToProccess = CheckandGetFinalFtpCollection(ftpAdapterArgument, ftp, ftpList);
                     bool newFilesStarted = false;
-                    foreach (var fileObj in ftpListToPreccess.OrderBy(c => c.Modified).ThenBy(c => c.Name))
+
+                    IEnumerable<FtpItem> ftpItems = null;
+                    switch (ftpAdapterArgument.FileCheckCriteria)
+                    {
+                        case Arguments.FTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
+                            ftpItems = ftpListToProccess.OrderBy(c => c.Modified).ThenBy(c => c.Name);
+                            break;
+                        case Arguments.FTPAdapterArgument.FileCheckCriteriaEnum.NameCheck:
+                            ftpItems = ftpListToProccess.OrderBy(c => c.Name);
+                            break;
+                        default: ftpItems = ftpListToProccess; break;
+                    }
+
+                    foreach (var fileObj in ftpItems)
                     {
                         if (context.ShouldStopImport())
                             break;
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
-                            if (!newFilesStarted)
+                            switch (ftpAdapterArgument.FileCheckCriteria)
                             {
-                                if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
-                                {
-                                    continue;
-                                }
-                                else if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
-                                {
-                                    if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
-                                        continue;
-                                }
-                                newFilesStarted = true;
+                                case FTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
+                                    {
+                                        if (!newFilesStarted)
+                                        {
+                                            if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
+                                            {
+                                                continue;
+                                            }
+                                            else if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
+                                            {
+                                                if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                                    continue;
+                                            }
+                                            newFilesStarted = true;
+                                        }
+
+                                        break;
+                                    }
+                                case FTPAdapterArgument.FileCheckCriteriaEnum.NameCheck:
+                                    {
+                                        if (!newFilesStarted)
+                                        {
+                                            if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                                continue;
+                                            newFilesStarted = true;
+                                        }
+
+                                        break;
+                                    }
+                                default: break;
                             }
 
                             if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)

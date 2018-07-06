@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_CompressionTypeEnum',
-function (UtilsService, VR_Integration_CompressionTypeEnum) {
+app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VRUIUtilsService', 'FileCheckCriteriaEnum',
+function (UtilsService, VR_Integration_CompressionTypeEnum, VRUIUtilsService, FileCheckCriteriaEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -39,6 +39,15 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                 return !$scope.basedOnTime;
             };
 
+
+            $scope.fileCheckCriterias = UtilsService.getArrayEnum(FileCheckCriteriaEnum);
+
+            $scope.onSelectedActionChanged = function (selectedAction) {
+                if (selectedAction != undefined && selectedAction.value == -1) {
+                    $scope.selectedFileCheckCriteria = undefined;
+                }
+            };
+
             defineAPI();
         }
 
@@ -65,6 +74,7 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                     Password: $scope.password,
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
                     ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
+                    FileCheckCriteria: $scope.selectedFileCheckCriteria != undefined ? $scope.selectedFileCheckCriteria.value : $scope.fileCheckCriterias[0].value,
                     LastImportedFile: $scope.lastImportedFile,
                     CompressedFiles: $scope.compressed,
                     CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined,
@@ -93,6 +103,7 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                         $scope.password = argumentData.Password;
                         $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
+                        $scope.selectedFileCheckCriteria = UtilsService.getItemByVal($scope.fileCheckCriterias, argumentData.FileCheckCriteria, "value");
                         $scope.lastImportedFile = argumentData.LastImportedFile;
                         $scope.compressed = argumentData.CompressedFiles;
                         $scope.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);

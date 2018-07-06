@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 using System.Collections.Generic;
+using Vanrise.Entities;
 
 namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 {
@@ -16,6 +17,9 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
         public override void ImportData(IAdapterImportDataContext context)
         {
             SFTPAdapterArgument SFTPAdapterArgument = context.AdapterArgument as SFTPAdapterArgument;
+            if (SFTPAdapterArgument.ActionAfterImport.HasValue && SFTPAdapterArgument.ActionAfterImport.Value == (int)SFTPAdapterArgument.Actions.NoAction
+                && SFTPAdapterArgument.FileCheckCriteria != SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck)
+                throw new VRBusinessException(string.Format("Check By Date and Name is required in case of no action after import"));
 
             SFTPAdapterState SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument);
 
@@ -45,24 +49,57 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
                     SftpItemCollection sftpCollectionToProcess = CheckandGetFinalSftpCollection(SFTPAdapterArgument, sftp, sftpCollection);
                     bool newFilesStarted = false;
-                    foreach (var fileObj in sftpCollectionToProcess.OrderBy(c => c.Modified).ThenBy(c => c.Name))
+
+                    IEnumerable<SftpItem> sftpItems = null;
+                    switch (SFTPAdapterArgument.FileCheckCriteria)
+                    {
+                        case Arguments.SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
+                            sftpItems = sftpCollectionToProcess.OrderBy(c => c.Modified).ThenBy(c => c.Name);
+                            break;
+                        case Arguments.SFTPAdapterArgument.FileCheckCriteriaEnum.NameCheck:
+                            sftpItems = sftpCollectionToProcess.OrderBy(c => c.Name);
+                            break;
+                        default: sftpItems = sftpCollectionToProcess; break;
+                    }
+
+                    foreach (var fileObj in sftpItems)
                     {
                         if (context.ShouldStopImport())
                             break;
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
-                            if (!newFilesStarted)
+                            switch (SFTPAdapterArgument.FileCheckCriteria)
                             {
-                                if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
-                                {
-                                    continue;
-                                }
-                                else if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
-                                {
-                                    if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
-                                        continue;
-                                }
-                                newFilesStarted = true;
+                                case SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
+                                    {
+                                        if (!newFilesStarted)
+                                        {
+                                            if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
+                                            {
+                                                continue;
+                                            }
+                                            else if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
+                                            {
+                                                if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                                    continue;
+                                            }
+                                            newFilesStarted = true;
+                                        }
+
+                                        break;
+                                    }
+                                case SFTPAdapterArgument.FileCheckCriteriaEnum.NameCheck:
+                                    {
+                                        if (!newFilesStarted)
+                                        {
+                                            if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                                continue;
+                                            newFilesStarted = true;
+                                        }
+
+                                        break;
+                                    }
+                                default: break;
                             }
 
                             if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)

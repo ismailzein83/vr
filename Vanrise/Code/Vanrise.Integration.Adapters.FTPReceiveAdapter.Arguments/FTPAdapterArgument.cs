@@ -14,6 +14,13 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
             Copy = 3 // Copy To Folder and Keep the original file,
         }
 
+        public enum FileCheckCriteriaEnum
+        {
+            DateAndNameCheck = 0,
+            NameCheck = 1,
+            None = 2
+        }
+
         public enum CompressionTypes
         {
             GZip,
@@ -29,6 +36,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public string Password { get; set; }
         public string DirectorytoMoveFile { get; set; }
         public int? ActionAfterImport { get; set; }
+        public FileCheckCriteriaEnum FileCheckCriteria { get; set; }
         public string LastImportedFile { get; set; }
         public bool CompressedFiles { get; set; }
         public CompressionTypes CompressionType { get; set; }
