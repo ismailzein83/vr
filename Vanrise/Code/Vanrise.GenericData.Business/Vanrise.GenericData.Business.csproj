@@ -79,6 +79,9 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEViewSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericFieldsActionAuditChangeInfoDefinition.cs" />
+    <Compile Include="BusinessEntity\LKUPBusinessEntity\LKUPBusinessEntityDefinitionManager.cs" />
+    <Compile Include="BusinessEntity\LKUPBusinessEntity\LKUPBusinessEntityDefinitionSettings.cs" />
+    <Compile Include="BusinessEntity\LKUPBusinessEntity\LKUPBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\VRRestAPIBEDefinitionSettings\VRRestAPIBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\VRRestAPIBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
