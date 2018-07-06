@@ -1,10 +1,11 @@
 ﻿<vr-row removeline vr-loader="scopeModel.isLoadingDirective">
     <vr-row>
         <vr-columns colnum="4">
-            <reprocess-reprocessdefinition-selector isrequired="true" on-ready="scopeModel.onReprocessDefinitionSelectorReady" selectedvalues="scopeModel.selectedReprocessDefinition"
-                                                    onselectionchanged="scopeModel.onReprocessDefinitionSelectionChanged"></reprocess-reprocessdefinition-selector>
+            <reprocess-reprocessdefinition-selector on-ready="scopeModel.onReprocessDefinitionSelectorReady"
+                                                    onselectionchanged="scopeModel.onReprocessDefinitionSelectionChanged"
+                                                    selectedvalues="scopeModel.selectedReprocessDefinition" isrequired="true">
+            </reprocess-reprocessdefinition-selector>
         </vr-columns>
-
         <vr-columns colnum="8" haschildcolumns>
             <vr-validator validate="scopeModel.isValid()">
                 <vr-columns colnum="6">
@@ -24,7 +25,6 @@
             <vr-switch value="scopeModel.useTempStorage" label="Use Temporary Storage"></vr-switch>
         </vr-columns>
     </vr-row>
-
     <vr-row>
         <vr-columns colnum="12" ng-if="scopeModel.filterDefinitionEditor!=undefined">
             <vr-section title="Filter" level="2">

@@ -9,7 +9,6 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var directiveConstructor = new DirectiveConstructor($scope, ctrl);
                 directiveConstructor.initializeController();
             },
@@ -28,6 +27,8 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
         function DirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var reprocessDefinitionSettings;
+
             var reprocessDefinitionSelectorAPI;
             var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -37,10 +38,10 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
             var filterDefinitionDirectiveAPI;
             var filterDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var filterDefinition;
 
             function initializeController() {
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
                     reprocessDefinitionSelectorReadyDeferred.resolve();
@@ -51,8 +52,16 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                     chunkTimeSelectorReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.validateTimeRange = function () {
-                    return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+                $scope.scopeModel.onFilterDefinitionDirectiveReady = function (api) {
+                    filterDefinitionDirectiveAPI = api;
+
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var payload = {
+                        filterDefinition: reprocessDefinitionSettings != undefined ? reprocessDefinitionSettings.FilterDefinition : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDefinitionDirectiveAPI, payload, setLoader, undefined);
                 };
 
                 $scope.scopeModel.onReprocessDefinitionSelectionChanged = function (selectedValue) {
@@ -60,8 +69,17 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                         $scope.scopeModel.isLoadingDirective = true;
 
                         Reprocess_ReprocessDefinitionAPIService.GetReprocessDefinition(selectedValue.ReprocessDefinitionId).then(function (response) {
-                            filterDefinition = response.Settings.FilterDefinition;
-                            $scope.scopeModel.filterDefinitionEditor = filterDefinition != undefined ? filterDefinition.RuntimeEditor : undefined;
+                            reprocessDefinitionSettings = response.Settings;
+                            $scope.scopeModel.filterDefinitionEditor = reprocessDefinitionSettings.FilterDefinition != undefined ? reprocessDefinitionSettings.FilterDefinition.RuntimeEditor : undefined;
+                            $scope.scopeModel.useTempStorage = false;
+
+                            chunkTimeSelectorReadyDeferred.promise.then(function () {
+                                var chunkTimeSelectorPayload = {
+                                    includedChunkTimes: reprocessDefinitionSettings.IncludedChunkTimes,
+                                    selectIfSingleItem: true
+                                };
+                                VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, undefined);
+                            });
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
                         }).finally(function () {
@@ -69,19 +87,13 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                         });
                     }
                     else {
-                        filterDefinition = undefined;
+                        reprocessDefinitionSettings = undefined;
                         $scope.scopeModel.filterDefinitionEditor = undefined;
                     }
                 };
 
-                $scope.scopeModel.onFilterDefinitionDirectiveReady = function (api) {
-                    filterDefinitionDirectiveAPI = api;
-
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
-                    var payload = { filterDefinition: filterDefinition };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDefinitionDirectiveAPI, payload, setLoader, undefined);
+                $scope.scopeModel.validateTimeRange = function () {
+                    return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
                 };
 
                 defineAPI();
@@ -94,24 +106,25 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                 api.load = function (payload) {
                     var promises = [];
 
-                    var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
-                        var payload = {
-                            filter: {
-                                Filters: [{
-                                    $type: "Vanrise.Reprocess.Business.ManualTriggerReprocessDefinitionFilter, Vanrise.Reprocess.Business"
-                                }]
-                            }
-                        };
-                        VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, payload, reprocessDefinitionSelectorLoadDeferred);
-                    });
-                    promises.push(reprocessDefinitionSelectorLoadDeferred.promise);
+                    var reprocessDefinitionSelectorLoadPromise = getReprocessDefinitionSelectorLoadPromise();
+                    promises.push(reprocessDefinitionSelectorLoadPromise);
 
-                    var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    chunkTimeSelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, undefined, chunkTimeSelectorLoadDeferred);
-                    });
-                    promises.push(chunkTimeSelectorLoadDeferred.promise);
+                    function getReprocessDefinitionSelectorLoadPromise() {
+                        var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
+                            var payload = {
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Reprocess.Business.ManualTriggerReprocessDefinitionFilter, Vanrise.Reprocess.Business"
+                                    }]
+                                }
+                            };
+                            VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, payload, reprocessDefinitionSelectorLoadDeferred);
+                        });
+
+                        return reprocessDefinitionSelectorLoadDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -129,7 +142,6 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                         }
                     };
                 };
-
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

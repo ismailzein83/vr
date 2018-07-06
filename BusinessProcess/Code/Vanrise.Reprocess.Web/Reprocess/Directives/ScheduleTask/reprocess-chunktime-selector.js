@@ -55,22 +55,41 @@ app.directive('reprocessChunktimeSelector', ['UtilsService', 'VRUIUtilsService',
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
-                    var filter;
+                    var includedChunkTimes;
+                    var selectIfSingleItem;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        filter = payload.filter;
+                        includedChunkTimes = payload.includedChunkTimes;
+                        selectIfSingleItem = payload.selectIfSingleItem;
                     }
 
-                    ctrl.datasource = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
+                    var reprocessChunkTimes = UtilsService.getArrayEnum(ReprocessChunkTimeEnum);
+                    if (includedChunkTimes != undefined) {
+                        for (var index = 0; index < reprocessChunkTimes.length; index++) {
+                            var currentReprocessChunkTime = reprocessChunkTimes[index];
+                            if (UtilsService.contains(includedChunkTimes, currentReprocessChunkTime.value)) {
+                                ctrl.datasource.push(currentReprocessChunkTime);
+                            }
+                        }
+                    } else {
+                        ctrl.datasource = reprocessChunkTimes;
+                    }
 
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                    }
+                    else if (selectIfSingleItem == true) {
+                        selectorAPI.selectIfSingleItem();
                     }
                 };
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
+                };
+
+                api.hasSingleItem = function () {
+                    return ctrl.datasource.length == 1;
                 };
 
                 if (ctrl.onReady != null)

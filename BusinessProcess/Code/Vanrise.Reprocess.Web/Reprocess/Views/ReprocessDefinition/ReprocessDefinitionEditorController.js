@@ -22,6 +22,9 @@
         var executionFlowStageAPI;
         var executionFlowStageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var chunkTimeSelectorAPI;
+        var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var reprocessDefinitionSelectorAPI;
         var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -73,6 +76,11 @@
             $scope.scopeModel.onExecutionFlowStageSelectorReady = function (api) {
                 executionFlowStageAPI = api;
                 executionFlowStageSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onChunkTimeSelectorReady = function (api) {
+                chunkTimeSelectorAPI = api;
+                chunkTimeSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
@@ -242,9 +250,7 @@
                 dataRecordStorageSelectorReadyDeferred.promise.then(function () {
                     var dataRecordStorageSelectorPayload;
                     if (isEditMode) {
-                        dataRecordStorageSelectorPayload = {
-                            selectedIds: reprocessDefinitionEntity.Settings.SourceRecordStorageIds
-                        };
+                        dataRecordStorageSelectorPayload = { selectedIds: reprocessDefinitionEntity.Settings.SourceRecordStorageIds };
                     }
                     VRUIUtilsService.callDirectiveLoad(dataRecordStorageAPI, dataRecordStorageSelectorPayload, dataRecordStorageSelectorLoadDeferred);
                 });
@@ -258,9 +264,7 @@
                 executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
                     var executionFlowDefinitionSelectorPayload;
                     if (isEditMode) {
-                        executionFlowDefinitionSelectorPayload = {
-                            selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId
-                        };
+                        executionFlowDefinitionSelectorPayload = { selectedIds: reprocessDefinitionEntity.Settings.ExecutionFlowDefinitionId };
                     }
                     VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
                 });
@@ -307,6 +311,20 @@
                 return executionFlowStageSelectorLoadDeferred.promise;
             }
 
+            function loadChunkTimeSelector() {
+                var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                chunkTimeSelectorReadyDeferred.promise.then(function () {
+                    var chunkTimeSelectorPayload;
+                    if (isEditMode) {
+                        chunkTimeSelectorPayload = { selectedIds: reprocessDefinitionEntity.Settings.IncludedChunkTimes };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
+                });
+
+                return chunkTimeSelectorLoadDeferred.promise;
+            }
+
             function loadReprocessDefinitionSelector() {
                 var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -347,7 +365,8 @@
                 return reprocessFilterDefinitionSettingsLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector, loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector, loadChunkTimeSelector,
+                loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -407,6 +426,7 @@
                 StagesToProcessNames: stagesToProcessAPI.getSelectedIds(),
                 RecordCountPerTransaction: $scope.scopeModel.recordCountPerTransaction,
                 ForceUseTempStorage: $scope.scopeModel.forceUseTempStorage,
+                IncludedChunkTimes: chunkTimeSelectorAPI.getSelectedIds(),
                 CannotBeTriggeredManually: $scope.scopeModel.cannotBeTriggeredManually,
                 PostExecution: { ReprocessDefinitionIds: reprocessDefinitionSelectorAPI.getSelectedIds() },
                 FilterDefinition: reprocessFilterDefinitionSettingsAPI != undefined ? reprocessFilterDefinitionSettingsAPI.getData() : undefined

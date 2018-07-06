@@ -32,6 +32,8 @@ namespace Vanrise.Reprocess.Entities
 
         public bool ForceUseTempStorage { get; set; }
 
+        public List<int> IncludedChunkTimes { get; set; }
+
         public bool CannotBeTriggeredManually { get; set; }
 
         public PostExecution PostExecution { get; set; }

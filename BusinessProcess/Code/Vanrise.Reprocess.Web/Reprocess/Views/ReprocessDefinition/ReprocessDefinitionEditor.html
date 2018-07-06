@@ -33,9 +33,9 @@
                                 <vr-queueing-executionflow-stage-selector on-ready="scopeModel.onExecutionFlowStageSelectorReady" customlabel="Initial Stages" isrequired="true" ismultipleselection></vr-queueing-executionflow-stage-selector>
                             </vr-columns>
                         </vr-row>
-
-
                         <vr-row>
+                            <reprocess-chunktime-selector on-ready="scopeModel.onChunkTimeSelectorReady" customlabel="Included Chunk Times" normal-col-num="4" ismultipleselection></reprocess-chunktime-selector>
+
                             <vr-columns width="1/3row">
                                 <vr-switch value="scopeModel.forceUseTempStorage" label="Force Use Temporary Storage"></vr-switch>
                             </vr-columns>
@@ -54,7 +54,6 @@
                             </vr-columns>
                         </vr-row>
                     </vr-section>
-
                     <vr-section header="Post Execution">
                         <vr-row>
                             <vr-columns colnum="6">
