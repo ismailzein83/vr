@@ -134,6 +134,7 @@
     <Compile Include="GenericRules\UploadGenericRulesOutput.cs" />
     <Compile Include="IFieldBusinessEntityType.cs" />
     <Compile Include="IGenericObject.cs" />
+    <Compile Include="LKUPBusinessEntity\LKUPBEDefinitionExtendedSettings.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />

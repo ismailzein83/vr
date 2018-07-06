@@ -49,19 +49,6 @@ namespace Vanrise.GenericData.Business
 
         public RequiredPermissionSettings EditRequiredPermission { get; set; }
     }
-    public abstract class LKUPBEDefinitionExtendedSettings
-    {
-        public abstract Guid ConfigId { get; }
-        public abstract Dictionary<string, LKUPBusinessEntityItem> GetAllLKUPBusinessEntityItems(ILKUPBusinessEntityExtendedSettingsContext context);
-        public abstract bool IsCacheExpired(object parameter, ref DateTime? lastCheckTime);
-    }
-    public interface ILKUPBusinessEntityExtendedSettingsContext
-    {
-        LKUPBusinessEntityDefinitionSettings BEDefinitionSettings { get; }
-    }
-    public class LKUPBusinessEntityItem
-    {
-        public string LKUPBusinessEntityItemId { get; set; }
-        public string Name { get; set; }
-    }
+    
+   
 }

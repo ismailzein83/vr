@@ -67,6 +67,7 @@
     <Compile Include="TextManipulationAction\AddPrefixActionSettings.cs" />
     <Compile Include="TextManipulationAction\ReplaceStringActionSettings.cs" />
     <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
+    <Compile Include="VRActionAuditLKUPBEDefinitionSettings.cs" />
     <Compile Include="VRObjectTypes\CompanySettingObjectType.cs" />
     <Compile Include="VRObjectTypes\CompanySettingPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\ProductInfoPropertyEvaluator.cs" />
