@@ -22,7 +22,9 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 			var data;
 
 			$scope.hintTextForIncrease = "(1 - OldRate / NewRate)*100 should be less than the specified percentage";
-            $scope.hintTextForDecrease = "(1 - NewRate / OldRate)*100 should be less than the specified percentage";
+			$scope.hintTextForDecrease = "(1 - NewRate / OldRate)*100 should be less than the specified percentage";
+			$scope.hintTextForClosing = "(ClosedZones  / TotalZones)*100 should be less than the specified percentage";
+            
 
 			function initializeController() {
 
@@ -64,6 +66,7 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 				        MaximumCodeRange: ctrl.maximumCodeRange,
 				        AcceptableIncreasedRate: ctrl.acceptableIncreasedRate, 
 				        AcceptableDecreasedRate: ctrl.acceptableDecreasedRate,
+				        AcceptableZoneClosingPercentage: ctrl.acceptableZoneClosingPercentage,
 				        CodeGroupVerfifcation: ctrl.codeGroupVerification
 				    };
 				};
@@ -80,7 +83,8 @@ app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 				ctrl.maximumRate = data.MaximumRate;
 				ctrl.maximumCodeRange = data.MaximumCodeRange;
 			    ctrl.acceptableIncreasedRate = data.AcceptableIncreasedRate;
-			    ctrl.acceptableDecreasedRate =  data.AcceptableDecreasedRate;
+			    ctrl.acceptableDecreasedRate = data.AcceptableDecreasedRate;
+			    ctrl.acceptableZoneClosingPercentage = data.AcceptableZoneClosingPercentage;
 				ctrl.codeGroupVerification = data.CodeGroupVerfifcation;
 			}
 

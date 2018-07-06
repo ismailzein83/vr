@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.SupplierPriceList.Entities;
+using TOne.WhS.SupplierPriceList.Entities.SPL;
+
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -17,13 +22,22 @@ namespace TOne.WhS.SupplierPriceList.Business
             AllZones allZones = context.Target as AllZones;
             if (allZones != null)
             {
-                if (allZones.ImportedZones != null && allZones.NotImportedZones != null)
+                IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
+                if (importSPLContext.SupplierPricelistType == SupplierPricelistType.Full)
                 {
-                    var percentageOfClosing = (allZones.NotImportedZones.Count() / allZones.ImportedZones.Zones.Count()) * 100;
-                    if (percentageOfClosing > 50)
+                    if (allZones.ImportedZones != null && allZones.NotImportedZones != null)
                     {
-                        context.Message = "More than 50% of zones will be closed";
-                        return false;
+                        var configManager = new ConfigManager();
+                        int acceptableZoneClosingPercentage = configManager.GetPurchaseAcceptableZoneClosingPercentage();
+                        double notImportedZoneCount = allZones.NotImportedZones.Where(a => a.HasChanged).Count();
+                        double ImportedZoneCount = allZones.ImportedZones.Zones.Count();
+
+                        double percentageOfClosing = (notImportedZoneCount / (notImportedZoneCount + ImportedZoneCount)) * 100;
+                        if (percentageOfClosing > acceptableZoneClosingPercentage)
+                        {
+                            context.Message = string.Format("More than {0}% of zones will be closed", acceptableZoneClosingPercentage);
+                            return false;
+                        }
                     }
                 }
             }
