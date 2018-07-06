@@ -17,45 +17,40 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            return true;
-            //CountryNotImportedCodes allCodes = context.Target as CountryNotImportedCodes;
+            CountryNotImportedCodes allCodes = context.Target as CountryNotImportedCodes;
 
-            //IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
-            //var supplierPriceListType = importSPLContext.SupplierPricelistType;
+            IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
+            var supplierPriceListType = importSPLContext.SupplierPricelistType;
 
-            //bool codeGroupExistInNotImportedData = false;
+            bool codeGroupExistInNotImportedData = false;
 
-            //IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(allCodes.CountryId);
-            //foreach (NotImportedCode notImportedCode in allCodes.NotImportedCodes)
-            //{
-            //    if (codeGroupCodes.Any(x => x.Code == notImportedCode.Code))
-            //    {
-            //        var mainBreakout = notImportedCode.Code;
-            //        codeGroupExistInNotImportedData = true;
-            //    }
-            //}
-            //var pricelistCodeManager = new PriceListCodeManager();
+            string mainBreakoutCode = null;
+            string zoneName = null;
 
-            //if (supplierPriceListType == SupplierPricelistType.RateChange || !codeGroupExistInNotImportedData || pricelistCodeManager.IsCodeGroupVerificationEnabled())
-            //{
-            //    return true;
-            //}
+            IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(allCodes.CountryId);
+            foreach (NotImportedCode notImportedCode in allCodes.NotImportedCodes)
+            {
+                if (codeGroupCodes.Any(x => x.Code == notImportedCode.Code))
+                {
+                    mainBreakoutCode = notImportedCode.Code;
+                    zoneName = notImportedCode.ZoneName;
+                    codeGroupExistInNotImportedData = true;
+                    break;
+                }
+            }
+            var pricelistCodeManager = new PriceListCodeManager();
 
-            //else
-            //{
-            //    CountryManager countryManager = new CountryManager();
-            //    string countryName = countryManager.GetCountryName(allCodes.CountryId);
+            if (supplierPriceListType == SupplierPricelistType.RateChange || !codeGroupExistInNotImportedData || pricelistCodeManager.IsCodeGroupVerificationEnabled())
+            {
+                return true;
+            }
 
+            CountryManager countryManager = new CountryManager();
+            string countryName = countryManager.GetCountryName(allCodes.CountryId);
 
-            //    context.Message = string.Format("Code Group (x) of country y from Zone z will be removed");
-            //    return false;
-            //}
+            context.Message = string.Format("Country '{2}' has code group '{0}' ended in zone '{1}'", mainBreakoutCode, zoneName, countryName);
+            return false;
 
-            //if ((supplierPriceListType != SupplierPricelistType.RateChange) && codeGroupExistInNotImportedData && !pricelistCodeManager.IsCodeGroupVerificationEnabled())
-            //{
-            //    context.Message = string.Format("Code Group of country {} will be removed");
-            //    return false;
-            //}
         }
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
