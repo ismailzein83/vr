@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VoucherCardsGenerationService.$inject = ['VRModalService', 'VRNotificationService'];
+    VoucherCardsGenerationService.$inject = ['VRModalService'];
 
-    function VoucherCardsGenerationService(VRModalService, VRNotificationService) {
+    function VoucherCardsGenerationService(VRModalService) {
         
         return ({
             activateVoucherGeneration: activateVoucherGeneration
@@ -12,9 +12,8 @@
 
         
 
-        function activateVoucherGeneration(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize) {
+        function activateVoucherGeneration(onGenericBEUpdated, genericBusinessEntityId, editorSize) {
             var parameters = {
-                businessEntityDefinitionId: businessEntityDefinitionId,
                 genericBusinessEntityId: genericBusinessEntityId
             };
 
@@ -29,7 +28,8 @@
         }
 
     
-    };
+    }
+    
 
     appControllers.service('VR_Voucher_VoucherCardsGenerationService', VoucherCardsGenerationService);
 

@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    voucherCardsAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Voucher_ModuleConfig', 'SecurityService'];
+    voucherCardsAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Voucher_ModuleConfig'];
 
-    function voucherCardsAPIService(BaseAPIService, UtilsService, VR_Voucher_ModuleConfig, SecurityService) {
+    function voucherCardsAPIService(BaseAPIService, UtilsService, VR_Voucher_ModuleConfig) {
 
         var controllerName = 'VoucherCards';
 

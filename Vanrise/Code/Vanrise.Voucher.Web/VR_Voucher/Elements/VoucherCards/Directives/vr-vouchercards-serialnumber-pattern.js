@@ -47,7 +47,7 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
                          + '<vr-columns width="normal" ' + withemptyline + '>'
                             + '<vr-button type="Help" data-onclick="scopeModel.openSerialNumberPatternHelper" standalone></vr-button>'
                          + '</vr-columns>';
-            +'</vr-row>'
+            +'</vr-row>';
             return template;
         }
         function OverallVoucherCardSerialNumberPart($scope, ctrl, $attrs) {
@@ -84,11 +84,9 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
                             ctrl.serialNumberPartInitialSequence = payload.data.SerialNumberPartInitialSequence;
                     }
                                             
-                        var promise = VR_Voucher_VoucherTypeAPIService.GetVoucherCardDefinition().then(function (response) {                            
+                        return VR_Voucher_VoucherTypeAPIService.GetVoucherCardDefinition().then(function (response) {
                             serialNumberParts = response;
-                            });                       
-
-                            return UtilsService.waitMultiplePromises([promise]);
+                            }); 
                     }
                 };
 

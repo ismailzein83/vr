@@ -8,8 +8,7 @@
 
         var isEditMode;
         var gridActionDefinition;
-        var context;
-        var FilterCondition;
+        var context;        
         var filterConditionAPI;
         var filterConditionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         
