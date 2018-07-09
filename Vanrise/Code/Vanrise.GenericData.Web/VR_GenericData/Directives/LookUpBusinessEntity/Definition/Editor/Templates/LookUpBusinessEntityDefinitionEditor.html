@@ -1,0 +1,14 @@
+﻿<vr-tab header="'Settings'">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox label="Singular Title" value="scopeModel.selectorSingularTitle" isrequired>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox label="Plural Title" value="scopeModel.selectorPluralTitle" isrequired>
+        </vr-columns>
+    </vr-row>
+    <vr-genericdata-lookupbe-extendedsettings on-ready="scopeModel.onLookUpBEEditorExtendedSettingsReady" normal-col-num="6" isrequired="true"></vr-genericdata-lookupbe-extendedsettings>
+</vr-tab>
+<vr-tab header="'Security'">
+    <vr-genericdata-lookupbe-security on-ready="scopeModel.onLookUpBESecurityReady"></vr-genericdata-lookupbe-security>
+</vr-tab>

@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onLookUpTypeSelectorReady"
+                   datasource="scopeModel.lookUpTypes"
+                   selectedvalues="scopeModel.selectedLookUpType"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   label="Type"
+                   isrequired
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+</vr-row>

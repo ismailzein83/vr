@@ -27,6 +27,11 @@ namespace Vanrise.Common.Business
             return vrActionAuditLKUPs.MapRecords(VRActionAuditLKUPInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
 
+        public IEnumerable<VRActionAuditLKUP> GetAllLKUPItems()
+        {
+            return this.GetCachedvrActionAuditLKUPs().Values;
+        }
+
         public string GetVRActionAuditLKUPName(int vrActionAuditLKUPId)
         {
             var vrActionAuditLKUP = GetVRActionAuditLKUP(vrActionAuditLKUPId);

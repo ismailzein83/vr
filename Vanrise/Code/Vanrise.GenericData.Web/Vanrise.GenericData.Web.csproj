@@ -149,6 +149,8 @@
     <Compile Include="Controllers\DataStoreController.cs" />
     <Compile Include="Controllers\DataStoreConfigController.cs" />
     <Compile Include="Controllers\GenericRuleTypeConfigController.cs" />
+    <Compile Include="Controllers\LKUPBusinessEntityController.cs" />
+    <Compile Include="Controllers\LKUPBusinessEntityDefinitionController.cs" />
     <Compile Include="Controllers\RecordFilterController.cs" />
     <Compile Include="Controllers\SummaryTransformationDefinitionController.cs" />
     <Compile Include="Controllers\VRRestAPIBusinessEntityController.cs" />
@@ -210,6 +212,7 @@
     <Content Include="VR_GenericData\Constants\DataRecordFieldComparisonOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\SingleMathOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\TimeRoundingIntervalEnum.js" />
+    <Content Include="VR_GenericData\Constants\VRActionAuditLKUPTypeEnum.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\Templates\BELookupRuleDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-selector.js" />
@@ -394,6 +397,14 @@
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-criteria.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-management.js" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Editor\MainExtensions\Templates\ActionAuditExtendedSettingsTemplate.html" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Editor\MainExtensions\vr-genericdata-lookupbeextendedsettings-actionaudit.js" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Editor\Templates\LookUpBusinessEntityDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Editor\vr-genericdata-lookupbe-extendedsettings.js" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Editor\vr-genericdata-lookupbusinessentity-editor.js" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Security\Templates\LookUpBESecurityTemplate.html" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\Definition\Security\vr-genericdata-lookupbe-security.js" />
+    <Content Include="VR_GenericData\Directives\LookUpBusinessEntity\vr-genericdata-lookupbusinessentity-selector.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\Templates\GenericFieldsActionAuditChangeInfoObjectRuntime.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\Templates\GenericFieldsActionAuditChangeInfoRuntime.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\vr-genericdata-genericfields-actionauditchange-objectruntime.js" />
@@ -717,6 +728,8 @@
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleTypeConfigAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\LKUPBusinessEntityAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\LKUPBusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\RecordFilterAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\SummaryTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\VRRestAPIBusinessEntityAPIService.js" />

@@ -14,11 +14,7 @@ namespace Vanrise.GenericData.Business
         public override Guid ConfigId { get { return s_configId; } }
         public override string DefinitionEditor
         {
-            get { return ""; }
-        }
-        public override string ViewerEditor
-        {
-            get { return ""; }
+            get { return "vr-genericdata-lookupbusinessentity-editor"; }
         }
         public override string IdType
         {
@@ -29,7 +25,7 @@ namespace Vanrise.GenericData.Business
         }
         public override string SelectorUIControl
         {
-            get { return ""; }
+            get { return "vr-genericdata-lookupbusinessentity-selector"; }
         }
         public override string ManagerFQTN
         {

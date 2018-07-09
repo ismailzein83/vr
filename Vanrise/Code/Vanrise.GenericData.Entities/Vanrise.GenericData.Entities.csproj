@@ -87,6 +87,7 @@
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEViewDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\StaticBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEFilterDefinitionSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\LKUPBEDefinitionSettings\LKUPBEExtendedSettingsConfig.cs" />
     <Compile Include="BusinessEntityStatusHistory\BusinessEntityStatusHistory.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
@@ -135,6 +136,9 @@
     <Compile Include="IFieldBusinessEntityType.cs" />
     <Compile Include="IGenericObject.cs" />
     <Compile Include="LKUPBusinessEntity\LKUPBEDefinitionExtendedSettings.cs" />
+    <Compile Include="LKUPBusinessEntity\LKUPBESelectorRuntimeInfo.cs" />
+    <Compile Include="LKUPBusinessEntity\LKUPBusinessEntityInfoFilter.cs" />
+    <Compile Include="LKUPBusinessEntity\LKUPBusinessEntityItemInfo.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />
