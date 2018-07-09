@@ -109,6 +109,7 @@
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
     <Compile Include="GetExistingZones.cs" />
+    <Compile Include="GetSupplierSettings.cs" />
     <Compile Include="LoadSupplierPriceListData.cs" />
     <Compile Include="PrepareChangedCodesToDB.cs" />
     <Compile Include="PrepareChangedZonesServicesToDB.cs" />
