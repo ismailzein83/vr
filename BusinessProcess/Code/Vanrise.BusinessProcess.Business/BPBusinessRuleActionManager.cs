@@ -16,6 +16,22 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetCachedBPBusinessRuleActionsByDefinition().GetRecord(bpBusinessRuleDefinitionId);
         }
+        public BusinessRuleAction GetEffectiveRuleAction (Guid bpBusinessRuleDefinitionId,int? businessRuleSetId)
+        {
+            if (!businessRuleSetId.HasValue)
+            {
+                var action = GetBusinessRuleAction(bpBusinessRuleDefinitionId);
+                if (action == null)
+                    throw new VRBusinessException("no default actions are defined for business rules");
+                return action.Details.Settings.Action;
+            }
+            else
+            {
+                BPBusinessRuleSetEffectiveActionManager effectiveActionManager = new BPBusinessRuleSetEffectiveActionManager();
+                var effectiveAction = effectiveActionManager.GetBusinessRuleEffectiveAction(bpBusinessRuleDefinitionId, businessRuleSetId.Value);
+                return effectiveAction.Action;
+            }
+        }
         public Dictionary<Guid, BPBusinessRuleEffectiveAction> GetDefaultBusinessRulesActions(Guid businessProcessId)
         {
             Dictionary<Guid, BPBusinessRuleEffectiveAction> defaultActions = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();

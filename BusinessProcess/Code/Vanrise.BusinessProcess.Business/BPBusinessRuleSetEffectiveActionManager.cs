@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -31,8 +32,14 @@ namespace Vanrise.BusinessProcess.Business
             }
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allEffectiveActions.ToBigResult(input, null, BPBusinessRuleSetEffectiveActionsDetailMapper));
         }
-
-
+        
+        public BPBusinessRuleEffectiveAction GetBusinessRuleEffectiveAction (Guid businessRuleDefinitionId,int businessRuleSetId)
+        {
+            var actions = GetCachedBPBusinessRuleSetsEffectiveActions().GetRecord(businessRuleSetId);
+            if (actions == null || actions.Count() == 0)
+                throw new VRBusinessException("No default actions are defined for business rules");
+            return actions.First(x => x.RuleDefinitionId == businessRuleDefinitionId);
+        }
         public IEnumerable<BPBusinessRuleActionType> GetRuleActionsExtensionConfigs(ActionTypesInfoFilter actionTypeFilter)
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
