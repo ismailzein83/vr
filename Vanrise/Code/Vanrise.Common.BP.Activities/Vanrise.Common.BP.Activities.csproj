@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{52F8FDCF-5649-4674-B0EA-26EE958AE8A8}</ProjectGuid>
+    <ProjectGuid>{1EDC58A6-0F86-4151-95D9-DD2C4488BDC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.Common.BP</RootNamespace>
-    <AssemblyName>Vanrise.Common.BP</AssemblyName>
+    <RootNamespace>Vanrise.Common.BP.Activities</RootNamespace>
+    <AssemblyName>Vanrise.Common.BP.Activities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -37,43 +37,19 @@
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Activities" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FinalizeDBReplication.cs" />
+    <Compile Include="InitializeDBReplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <XamlAppDef Include="DBReplicationProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Common.BP.Activities\Vanrise.Common.BP.Activities.csproj">
-      <Project>{1edc58a6-0f86-4151-95d9-dd2c4488bdc0}</Project>
-      <Name>Vanrise.Common.BP.Activities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Common.BP.Arguments\Vanrise.Common.BP.Arguments.csproj">
-      <Project>{841b50ab-e1a4-46ba-9358-f6519c92a2e3}</Project>
-      <Name>Vanrise.Common.BP.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
-      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
-      <Name>Vanrise.Entities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
