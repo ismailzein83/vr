@@ -15,5 +15,6 @@ namespace Vanrise.BusinessProcess.Entities
         public abstract void Execute(IBusinessRuleActionExecutionContext context);
 
         public abstract ActionSeverity GetSeverity();
+        public abstract string GetDescription();
     }
 }

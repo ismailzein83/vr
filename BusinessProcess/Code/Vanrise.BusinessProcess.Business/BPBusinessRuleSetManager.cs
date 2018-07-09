@@ -24,7 +24,10 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetCachedBPBusinessRuleSets().First(itm => itm.BPBusinessRuleSetId == businessRuleSetId);
         }
-
+        public List<BPBusinessRuleSet> GetAllBusinessRuleSets ()
+        {
+            return GetCachedBPBusinessRuleSets();
+        }
         public List<BPBusinessRuleSet> GetBusinessRuleSetsInfo(BPBusinessRuleSetInfoFilter filter)
         {
             var bpDefinitions = GetCachedBPBusinessRuleSets();

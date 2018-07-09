@@ -10,8 +10,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public Guid RuleDefinitionId { get; set; }
 
-        public Guid ActionId { get; set; }
+        public BusinessRuleAction Action { get; set; }
 
-        public bool IsOverriden { get; set; }
+        public bool IsInherited { get; set; }
     }
 }

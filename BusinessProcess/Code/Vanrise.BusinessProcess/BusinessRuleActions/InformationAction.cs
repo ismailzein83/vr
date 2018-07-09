@@ -23,5 +23,9 @@ namespace Vanrise.BusinessProcess
         {
             return ActionSeverity.Information;
         }
+        public override string GetDescription()
+        {
+            return "Information";
+        }
     }
 }

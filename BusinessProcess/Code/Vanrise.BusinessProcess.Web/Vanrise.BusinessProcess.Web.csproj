@@ -181,11 +181,13 @@
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
     <Content Include="BusinessProcess\Constants\SPLDefinitionEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-warning-item-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\Templates\EmptyTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-stop-execution-action.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-exclude-item-action.js" />
+    <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\Templates\RuleActionsSelectiveTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-detail.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-management-grid.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleSet\bp-business-rule-set-selector.js" />

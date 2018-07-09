@@ -25,6 +25,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             BPBusinessRuleSetManager manager = new BPBusinessRuleSetManager();
             return manager.AddBusinessRuleSet(businessRuleSetObj);
         }
+        [HttpPost]
+        [Route("GetFilteredBPBusinessRuleSetsEffectiveActions")]
+        public object GetFilteredBPBusinessRuleSetsEffectiveActions(Vanrise.Entities.DataRetrievalInput<BPBusinessRuleEffectiveActionQuery> input)
+        {
+            BPBusinessRuleSetEffectiveActionManager manager = new BPBusinessRuleSetEffectiveActionManager();
+            return manager.GetFilteredBPBusinessRuleSetsEffectiveActions(input);
+        }
 
         [HttpPost]
         [Route("UpdateBusinessRuleSet")]
@@ -34,7 +41,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return manager.UpdateBusinessRuleSet(businessRuleSetObj);
         }
 
-
+        [HttpGet]
+        [Route("GetRuleActionsExtensionConfigs")]
+        public IEnumerable<BPBusinessRuleActionType> GetRuleActionsExtensionConfigs(string serializedFilter)
+        {
+            ActionTypesInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<ActionTypesInfoFilter>(serializedFilter) : null;
+            BPBusinessRuleSetEffectiveActionManager manager = new BPBusinessRuleSetEffectiveActionManager();
+            return manager.GetRuleActionsExtensionConfigs(filter);
+        }
         [HttpGet]
         [Route("GetBusinessRuleSetsInfo")]
         public List<BPBusinessRuleSet> GetBusinessRuleSetsInfo(string serializedFilter)

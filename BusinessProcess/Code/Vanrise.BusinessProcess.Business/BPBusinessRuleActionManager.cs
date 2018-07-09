@@ -4,6 +4,8 @@ using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
 using System;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -14,6 +16,33 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetCachedBPBusinessRuleActionsByDefinition().GetRecord(bpBusinessRuleDefinitionId);
         }
+        public Dictionary<Guid, BPBusinessRuleEffectiveAction> GetDefaultBusinessRulesActions(Guid businessProcessId)
+        {
+            Dictionary<Guid, BPBusinessRuleEffectiveAction> defaultActions = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
+            BPBusinessRuleDefinitionManager bpDefinitionManager = new BPBusinessRuleDefinitionManager();
+            var allActions = GetCachedBPBusinessRuleActionsByDefinition();
+            var allDefinitions = bpDefinitionManager.GetAllBusinessRuleDefinitions();
+            foreach (var definition in allDefinitions)
+            {
+                if(definition.BPDefintionId == businessProcessId)
+                {
+                    BPBusinessRuleAction action = allActions.GetRecord(definition.BPBusinessRuleDefinitionId);
+                    if (action == null)
+                        throw new VRBusinessException("BPBusinessRuleAction");
+                    var effectiveAction = new BPBusinessRuleEffectiveAction()
+                    {
+                        RuleDefinitionId = definition.BPBusinessRuleDefinitionId,
+                        //check action
+                        Action = action.Details.Settings.Action,
+                        IsInherited = false
+                    };
+                    defaultActions.Add(definition.BPBusinessRuleDefinitionId, effectiveAction);
+                }
+            }
+            return defaultActions;
+        }
+       
+
         #endregion
 
         #region private methods

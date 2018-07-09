@@ -18,7 +18,24 @@ namespace Vanrise.BusinessProcess.Business
 
             return result.FindAll(itm => itm.BPDefintionId == bpDefinitionId && itm.Name == key);
         }
-
+        public string GetRuleDefinitionDescription(Guid ruleDefinitionId)
+        {
+            var allRulesDefinitions = GetCachedBPBusinessRulesById();
+            var ruleDefinition = allRulesDefinitions.GetRecord(ruleDefinitionId);
+            ruleDefinition.ThrowIfNull("ruleDefinition");
+            ruleDefinition.Settings.ThrowIfNull("ruleDefinition.Settings");
+            return ruleDefinition.Settings.Description;
+        }
+        public BPBusinessRuleDefinition GetBusinessRuleDefinitionById(Guid ruleDefinitionId)
+        {
+            var allRulesDefinitions = GetCachedBPBusinessRulesById();
+            return allRulesDefinitions.GetRecord(ruleDefinitionId);
+        }
+        public List<BPBusinessRuleDefinition>GetAllBusinessRuleDefinitions ()
+        {
+            var allBusinessRuleDefinitions = GetCachedBPBusinessRules();
+            return allBusinessRuleDefinitions;
+        }
         public List<BPBusinessRuleDefinitionDetail> GetBusinessRuleDefintionsByBPDefinitionID(Guid bpDefinitionId)
         {
             List<BPBusinessRuleDefinition> result = GetCachedBPBusinessRules();
@@ -43,6 +60,8 @@ namespace Vanrise.BusinessProcess.Business
 
             return bpBusinessRuleDefinitionDetails;
         }
+
+      
         #endregion
 
         #region private methods

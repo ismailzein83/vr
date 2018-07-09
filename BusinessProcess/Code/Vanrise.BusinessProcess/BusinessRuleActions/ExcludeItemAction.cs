@@ -25,7 +25,10 @@ namespace Vanrise.BusinessProcess
         {
             return ActionSeverity.Warning;
         }
-
+        public override string GetDescription()
+        {
+            return "Excluded Item";
+        }
         
     }
 }

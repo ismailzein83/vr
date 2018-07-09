@@ -57,6 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionTypeFilter.cs" />
+    <Compile Include="ActionTypesInfoFilter.cs" />
     <Compile Include="BaseProcessInputArgument.cs" />
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBPDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
+    <Compile Include="BusinessRuleEffectiveActionQuery.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleAction.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleActionConfig.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleDefinitionDetail.cs" />
@@ -106,7 +109,9 @@
     <Compile Include="BusinessRules\BPValidationMessageUpdateInput.cs" />
     <Compile Include="BusinessRules\BPValidationMessageBeforeIdInput.cs" />
     <Compile Include="BusinessRules\BPValidationMessageDetail.cs" />
+    <Compile Include="BusinessRules\BusinessRuleEffectiveActionDetail.cs" />
     <Compile Include="CustomCodeTaskCompilationOutput.cs" />
+    <Compile Include="IActionTypesFilter.cs" />
     <Compile Include="IBusinessRuleConditionValidateContext.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
     <Compile Include="Tasks\BPTaskDetail.cs" />

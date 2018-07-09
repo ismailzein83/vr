@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BPBusinessRuleSetEffectiveActionManager.cs" />
     <Compile Include="BPBusinessRuleSetManager.cs" />
     <Compile Include="BPBusinessRuleActionManager.cs" />
     <Compile Include="BPBusinessRuleActionTypeManager.cs" />
