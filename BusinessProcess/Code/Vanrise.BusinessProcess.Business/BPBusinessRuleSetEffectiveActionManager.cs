@@ -86,11 +86,12 @@ namespace Vanrise.BusinessProcess.Business
             BPBusinessRuleDefinitionManager ruleDefinitionManager = new BPBusinessRuleDefinitionManager();
             return new BusinessRuleEffectiveActionDetail()
             {
+                Entity = bpBusinessRuleSetEffectiveAction,
                 RuleDefinitionId = bpBusinessRuleSetEffectiveAction.RuleDefinitionId,
                 IsOverriden = bpBusinessRuleSetEffectiveAction.IsInherited,
                 Description = ruleDefinitionManager.GetRuleDefinitionDescription(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
                 ActionDescription = bpBusinessRuleSetEffectiveAction.Action.GetDescription(),
-                ActionTypesIds = ruleDefinitionManager.GetBusinessRuleDefinitionById(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Settings.ActionTypes
+                ActionTypesIds = ruleDefinitionManager.GetBusinessRuleDefinitionById(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Settings.ActionTypes,
             };
         }
         private void UpdateEffectiveActions(Dictionary<Guid, BPBusinessRuleEffectiveAction> effectiveActions, int businessRuleSetId)
@@ -104,8 +105,12 @@ namespace Vanrise.BusinessProcess.Business
             foreach (var action in businessRuleSet.Details.ActionDetails)
             {
                 var effectiveAction = effectiveActions.GetRecord(action.BPBusinessRuleDefinitionId);
-                effectiveAction.IsInherited = true;
-                effectiveAction.Action = action.Settings.Action;
+                if (effectiveAction != null)
+                {
+                    effectiveAction.IsInherited = true;
+                    effectiveAction.Action = action.Settings.Action;
+                }
+
             }
         }
 
