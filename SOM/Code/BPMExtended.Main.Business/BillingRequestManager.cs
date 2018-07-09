@@ -28,7 +28,7 @@ namespace BPMExtended.Main.Business
                     var serviceDetail = new TelephoneServiceDetail
                     {
                         Description = service.Description,
-                        Id = service.Id,
+                        Code = service.Id,
                         IsMain = service.IsMain,
                         Name = service.Name,
                         Package = service.Package,
@@ -45,6 +45,10 @@ namespace BPMExtended.Main.Business
 
         }
 
+        /// <summary>
+        /// Should be obselete
+        /// </summary>
+        /// <returns></returns>
         public List<TelephoneServiceDetail> GetServices()
         {
             List<TelephoneService> telephoneServices = null;
@@ -60,7 +64,7 @@ namespace BPMExtended.Main.Business
                     var serviceDetail = new TelephoneServiceDetail
                     {
                         Description = service.Description,
-                        Id = service.Id,
+                        Code = service.Id,
                         IsMain = service.IsMain,
                         Name = service.Name,
                         Package = service.Package,
@@ -101,6 +105,7 @@ namespace BPMExtended.Main.Business
 
         }
 
+        //Should be moved to customer request manager
         public CreateCustomerRequestOutput CreateBSCSBillingAccount(CustomerObjectType customerObjectType, Guid accountOrContactId)
         {
             NewCustomerCreationSomRequestSetting newCustomerCreationSomRequestSetting = new NewCustomerCreationSomRequestSetting

@@ -8,16 +8,21 @@ namespace BPMExtended.Main.Entities
 {
     public class TelephoneServiceDetail
     {
-        public string Id { get; set; }
+        //Used in CRM
+        public string Code { get; set; }
         public string Name { get; set; }
+        public string RatePlanId { get; set; }
+        public decimal SubscriptionFee { get; set; }
+        public decimal RecurringCharge { get; set; }
+        public List<ServiceParameters> ServiceParams { get; set; }
+
+        //Not Used
         public string Description { get; set; }
         public bool IsMain { get; set; }
         public string Package { get; set; }
-        public decimal SubscriptionFee { get; set; }
         public decimal UsageFee { get; set; }
-        public string RatePlanId { get; set; }
-        public List<ServiceParameters> ServiceParams { get; set; }
     }
+
     public class ServiceParameters
     {
         public string Id { get; set; }
