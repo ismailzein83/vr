@@ -231,6 +231,10 @@ namespace Vanrise.Invoice.Data.SQL
                         generateInvoiceInputToSave.ActionBeforeGenerateInvoice(generateInvoiceInputToSave.Invoice);
                     }
 
+                    if(generateInvoiceInputToSave.ActionAfterGenerateInvoice != null)
+                    {
+                        generateInvoiceInputToSave.ActionAfterGenerateInvoice(generateInvoiceInputToSave.Invoice);
+                    }
                 }
 
                 var transactionOptions = new TransactionOptions

@@ -35,6 +35,7 @@ namespace Vanrise.Invoice.Entities
     }
     public class PreparedGenerateInvoiceInput
     {
+        public Func<Entities.Invoice, bool> ActionAfterGenerateInvoice { get; set; } 
         public IEnumerable<GeneratedInvoiceBillingTransaction> BillingTransactions { get; set; }
         public List<GeneratedInvoiceItemSet> InvoiceItemSets { get; set; }
         public Entities.Invoice Invoice { get; set; }
@@ -44,6 +45,8 @@ namespace Vanrise.Invoice.Entities
     }
     public class GenerateInvoiceInputToSave
     {
+        public Func<Entities.Invoice, bool> ActionAfterGenerateInvoice { get; set; }
+
         public Func<Entities.Invoice,bool> ActionBeforeGenerateInvoice { get; set; }
         public IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> MappedTransactions { get; set; }
         public Dictionary<string, List<string>> ItemSetNameStorageDic { get; set; }

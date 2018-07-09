@@ -56,6 +56,7 @@ namespace Vanrise.Invoice.Entities
         string ErrorMessage { set; }
         GenerateInvoiceResult GenerateInvoiceResult { set; }
         List<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
+        Func<Entities.Invoice, bool> ActionAfterGenerateInvoice { set; } 
         List<long> InvoiceToSettleIds { set; }
         bool NeedApproval { set; }
     }
