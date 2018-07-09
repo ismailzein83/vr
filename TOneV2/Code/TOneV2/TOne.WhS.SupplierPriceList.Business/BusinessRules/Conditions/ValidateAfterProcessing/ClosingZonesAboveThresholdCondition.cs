@@ -28,7 +28,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     if (allZones.ImportedZones != null && allZones.NotImportedZones != null)
                     {
                         var configManager = new ConfigManager();
-                        int acceptableZoneClosingPercentage = 0;// configManager.GetPurchaseAcceptableZoneClosingPercentage();
+                        int acceptableZoneClosingPercentage = configManager.GetPurchaseAcceptableZoneClosingPercentage();
                         double notImportedZoneCount = allZones.NotImportedZones.Where(a => a.HasChanged).Count();
                         double importedZoneCount = allZones.ImportedZones.Zones.Count();
 
