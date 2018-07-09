@@ -28,11 +28,11 @@ namespace TOne.WhS.SupplierPriceList.Business
                     if (allZones.ImportedZones != null && allZones.NotImportedZones != null)
                     {
                         var configManager = new ConfigManager();
-                        int acceptableZoneClosingPercentage = configManager.GetPurchaseAcceptableZoneClosingPercentage();
+                        int acceptableZoneClosingPercentage = 0;// configManager.GetPurchaseAcceptableZoneClosingPercentage();
                         double notImportedZoneCount = allZones.NotImportedZones.Where(a => a.HasChanged).Count();
-                        double ImportedZoneCount = allZones.ImportedZones.Zones.Count();
+                        double importedZoneCount = allZones.ImportedZones.Zones.Count();
 
-                        double percentageOfClosing = (notImportedZoneCount / (notImportedZoneCount + ImportedZoneCount)) * 100;
+                        double percentageOfClosing = (notImportedZoneCount / (notImportedZoneCount + importedZoneCount)) * 100;
                         if (percentageOfClosing > acceptableZoneClosingPercentage)
                         {
                             context.Message = string.Format("More than {0}% of zones will be closed", acceptableZoneClosingPercentage);
