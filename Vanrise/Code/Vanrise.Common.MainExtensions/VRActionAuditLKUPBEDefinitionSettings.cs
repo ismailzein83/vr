@@ -35,16 +35,16 @@ namespace Vanrise.Common.MainExtensions
                         switch (this.Type)
                         {
                             case VRActionAuditLKUPType.URL:
-                                lkUpBEItem.BusinessEntityDefinitionId = Guid.Parse("1D4C92FB-AA45-4015-8C6D-A8951B0E5575");
+                                lkUpBEItem.BusinessEntityDefinitionId = new Guid("527083e4-f795-46ae-a17e-cd2cff13e7a6");
                                 break;
                             case VRActionAuditLKUPType.Module:
-                                lkUpBEItem.BusinessEntityDefinitionId = Guid.Parse("D85CC4AA-36A5-413F-A19A-0BE0DA9E7FDA");
+                                lkUpBEItem.BusinessEntityDefinitionId = new Guid("a1eb7032-2d31-4f4e-8cec-5dddd14f4e17");
                                 break;
                             case VRActionAuditLKUPType.Entity:
-                                lkUpBEItem.BusinessEntityDefinitionId = Guid.Parse("310C3F65-3F22-47D7-8D99-763ECCF98B81");
+                                lkUpBEItem.BusinessEntityDefinitionId = new Guid("2da03147-fe67-4cda-979e-c4abadc35079");
                                 break;
                             case VRActionAuditLKUPType.Action:
-                                lkUpBEItem.BusinessEntityDefinitionId = Guid.Parse("56693F28-C36F-48DA-82BD-B4B9DF018858");
+                                lkUpBEItem.BusinessEntityDefinitionId = new Guid("9a09b2b1-dd18-49c9-9913-3ba97916a1cb");
                                 break;
                         }
                         LKUPEntityItems.Add(item.VRActionAuditLKUPId.ToString(), lkUpBEItem);
