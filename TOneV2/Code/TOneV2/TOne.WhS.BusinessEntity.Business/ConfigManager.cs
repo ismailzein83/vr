@@ -442,6 +442,12 @@ namespace TOne.WhS.BusinessEntity.Business
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.AcceptableIncreasedRate;
         }
+
+        public int GetPurchaseAcceptableZoneClosingPercentage()
+        {
+            PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+            return purchaseAreaSettings.AcceptableZoneClosingPercentage;
+        }
         public int GetPurchaseAcceptableDecreasedRate()
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
