@@ -12,6 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public long MaximumCodeRange { get; set; }
         public int AcceptableIncreasedRate { get; set; }
         public int AcceptableDecreasedRate { get; set; }
+        public int AcceptableZoneClosingPercentage { get; set; }
         public bool CodeGroupVerfifcation { get; set; }
 	}
 
