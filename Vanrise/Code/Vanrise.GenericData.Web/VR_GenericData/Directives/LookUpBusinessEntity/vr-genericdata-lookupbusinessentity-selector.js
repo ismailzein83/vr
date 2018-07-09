@@ -104,7 +104,7 @@
                             }
 
                             if (selectedIds) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'LKUPBusinessEntityId', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'LKUPBusinessEntityItemId', attrs, ctrl);
                             }
                         });
 
@@ -117,7 +117,7 @@
 
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('LKUPBusinessEntityId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('LKUPBusinessEntityItemId', attrs, ctrl);
                 };
 
                 return api;
@@ -150,7 +150,7 @@
                     + ' onselectionchanged="ctrl.onselectionchanged"'
                     + ' onselectitem="ctrl.onselectitem"'
                     + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="LKUPBusinessEntityId"'
+                    + ' datavaluefield="LKUPBusinessEntityItemId"'
                     + ' datatextfield="Name"'
                     + ' ' + multipleselection
                     + ' ' + hideselectedvaluessection
