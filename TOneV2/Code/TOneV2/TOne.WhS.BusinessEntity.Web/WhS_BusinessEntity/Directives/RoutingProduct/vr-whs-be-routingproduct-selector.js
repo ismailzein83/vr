@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_BE_RoutingProductAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRUIUtilsService','WhS_BE_RoutingProductService',
+    function (WhS_BE_RoutingProductAPIService, UtilsService, VRUIUtilsService, WhS_BE_RoutingProductService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -15,11 +15,24 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 ondeselectitem: "=",
                 hideselectedvaluessection: "@",
                 onbeforeselectionchanged:"=",
-                label: '@'
+                label: '@',
+                showaddbutton:"@"
             },
             controller: function ($scope, $element, $attrs) {
 
                 var ctrl = this;
+
+
+                $scope.addNewRoutingProduct = function () {
+                    var onRoutingProductAdded = function (routingProductObj) {
+                        ctrl.datasource.push(routingProductObj.Entity);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(routingProductObj.Entity);
+                        else
+                            ctrl.selectedvalues = routingProductObj.Entity;
+                    };
+                    WhS_BE_RoutingProductService.addRoutingProduct(onRoutingProductAdded);
+                };
 
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
@@ -46,7 +59,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
 
         function getTemplate(attrs) {
-            var multipleselection = (attrs.ismultipleselection != undefined) ? 'ismultipleselection' : undefined;
+            var multipleselection = (attrs.ismultipleselection != undefined) ? 'ismultipleselection' : '';
 
             var labelAttribute = '', labelAttributeValue = '';
             if (attrs.label != undefined)
@@ -63,6 +76,11 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
             if (attrs.isrequired != undefined)
                 required = "isrequired";
 
+            var addClicked = '';
+            if (attrs.showaddbutton != undefined)
+                addClicked = 'onaddclicked="addNewRoutingProduct"';
+                
+
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
@@ -76,7 +94,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 stopreadonly = "stopreadonly";
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
+                + '<vr-select ' + multipleselection + ' ' + addClicked+ '  datatextfield="Name" datavaluefield="RoutingProductId" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
             + required + ' ' + labelAttribute + ' ' + '"  on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + labelAttributeValue + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + stopreadonly + ' ></vr-select>'
                + '</div>';
         }
