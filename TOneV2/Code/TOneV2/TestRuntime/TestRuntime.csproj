@@ -760,6 +760,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\MohamadYahfoufiTask.cs" />
     <Compile Include="Tasks\RabihTask.cs" />
     <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\RodiTask.cs" />
