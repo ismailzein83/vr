@@ -83,6 +83,10 @@
       <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
       <Name>Vanrise.BEBridge.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
+      <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
+      <Name>Vanrise.Caching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>

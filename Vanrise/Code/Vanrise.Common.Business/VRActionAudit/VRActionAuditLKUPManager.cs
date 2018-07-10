@@ -80,7 +80,7 @@ namespace Vanrise.Common.Business
 
         static Dictionary<LKUPDictKey, int> s_lkupIds = new Dictionary<LKUPDictKey, int>();
         #region private Class
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRActionAuditLKUPDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditLKUPDataManager>();
             object _updateHandle;

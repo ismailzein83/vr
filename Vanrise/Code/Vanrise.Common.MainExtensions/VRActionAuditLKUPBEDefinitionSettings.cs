@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Caching;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
@@ -54,9 +55,9 @@ namespace Vanrise.Common.MainExtensions
             return LKUPEntityItems;
         }
 
-        public override bool IsCacheExpired(object parameter, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(ref DateTime? lastCheckTime)
         {
-             throw new NotImplementedException();
+            return CacheManagerFactory.GetCacheManager<VRActionAuditLKUPManager.CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
     }
 }
