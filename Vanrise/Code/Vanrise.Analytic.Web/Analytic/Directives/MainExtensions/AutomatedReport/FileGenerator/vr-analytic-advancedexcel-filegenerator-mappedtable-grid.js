@@ -168,6 +168,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     for (var i = 0; i < mappedSheet.ColumnDefinitions.length; i++) {
                         var mappedCol = getMappedCol(mappedSheet.ColumnDefinitions[i], mappedSheet.SheetIndex, mappedSheet.RowIndex);
                         promises.push(mappedCol.directiveLoadDeferred.promise);
+                        promises.push(mappedCol.fieldSelectorLoadPromiseDeferred.promise);
                         $scope.scopeModel.mappedCols.push(mappedCol);
                     }
                 }
@@ -175,6 +176,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     for (var i = 0; i < mappedSheet.SubTableDefinitions.length; i++) {
                         var mappedSubTable = getMappedCol(mappedSheet.SubTableDefinitions[i], mappedSheet.SheetIndex, mappedSheet.RowIndex);
                         promises.push(mappedSubTable.directiveLoadDeferred.promise);
+                        promises.push(mappedSubTable.fieldSelectorLoadPromiseDeferred.promise);
+                        promises.push(mappedSubTable.subTableFieldSelectorLoadPromiseDeferred.promise);
                         $scope.scopeModel.mappedCols.push(mappedSubTable);
                     }
                 }
