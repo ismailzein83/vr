@@ -257,26 +257,6 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[ExecutionFlowDefinitionID]);
 
 
---[integration].[DataSource]------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('111F7C4D-B4E8-4744-B51A-2371C86E453F','Data Import ICX - Sample Datasource','10323CCB-CBFD-4BBE-91F3-FC80E2D91630','{"$type":"Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterState, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments","LastImportedId":0}','4D205C40-816B-4F40-8E81-B57E6E696867','{"$type":"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities","AdapterArgument":{"$type":"Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterArgument, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments","ConnectionString":"Server=192.168.110.185;Database=Mediation_Dev_CDR;User ID=Development;Password=dev!123","Query":"SELECT #TopRows# [Id]\n      ,[UserName]\n      ,[AcctSessionId]\n      ,[AcctInputOctets]\n      ,[AcctOutputOctets]\n      ,CONVERT(DATETIME, [RecordDate]) + CONVERT(DATETIME, [RecordTime])  AS RecordDateTime\n  FROM  [Mediation_WHS].[OgeroRadiusCDR]\nWhere  \n(Id > ISNULL(@RangeStart, 0)) AND\n(Id <= ISNULL(@RangeEnd, 9999999999999999))\nORDER BY [Id]","IdentifierColumnName":"Id","NumberOfParallelReader":3,"NumberOffSet":1000000,"MaxParallelRuntimeInstances":3,"CommandTimeoutInSeconds":0},"MapperCustomCode":"LogVerbose(\"Started\");\n\n\t\tvar dataList = new List<dynamic>();\n\t\tvar dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\n\t\tType dataRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\"ICX_RawData\");\n\t\t\n\t\tint batchSize = 50000;\n\t\tvar dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(\"ICX_RawData\");\n\t\t\n\t\tvar importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));\n\t\t\n\t\tGuid batchIdentifier = Guid.NewGuid();\n\t\t\n\t\tIDataReader reader = importedData.Reader;\n\t\t\n\t\tint rowCount = 0;\n\t\twhile (reader.Read())\n\t\t{\n\t\t\tdynamic dataRecord = Activator.CreateInstance(dataRuntimeType) as dynamic;\n\t\t\t\n\t\t\tdataRecord.RecordDateTime = Utils.GetReaderValue<DateTime>(reader, \"RecordDateTime\");\n\t\t\t\n\t\t\tstring userName = reader[\"UserName\"] as string;\n\t\t\tdataRecord.ISPName = userName.Substring(userName.IndexOf(\"@\") + 1);\n\t\t\tdataRecord.UserName = userName;\n\t\t\tdataRecord.SessionId = reader[\"AcctSessionId\"] as string;\n\t\t\tdataRecord.InputOctets = (decimal?) Utils.GetReaderValue<long?>(reader, \"AcctInputOctets\"); \n\t\t\tdataRecord.OutputOctets = (decimal?) Utils.GetReaderValue<long?>(reader, \"AcctOutputOctets\");\n\t\t\tdataRecord.DataSourceId = dataSourceId;\n\t\t\tdataRecord.BatchIdentifier = batchIdentifier;\t\t\t\n\t\t\tdataList.Add(dataRecord);\n\t\t\n\t\t\timportedData.LastImportedId = reader[\"Id\"];\n\t\t\n\t\t\trowCount++;\n\t\t\tif (rowCount == batchSize)\n\t\t\t\tbreak;\n\t\t}\n\t\t\n\t\tif (dataList.Count > 0)\n\t\t{\n\t\t\tlong startingId;\n\t\t\tVanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);\n\t\t\tlong currentDataId = startingId;\n\t\t\n\t\t\tforeach (var dataRecord in dataList)\n\t\t\t{\n\t\t\t\tdataRecord.Id = currentDataId;\n\t\t\t\tcurrentDataId++;\n\t\t\t}\n\t\t\tvar batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataList, \"#RECORDSCOUNT# of Raw dataList\", \"ICX_RawData\");\n\t\t\tmappedBatches.Add(\"Prepare Data Stage\", batch);\n\t\t}\n\t\telse\n\t\t\timportedData.IsEmpty = true;\n\t\t\n\t\tVanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\n\t\tresult.Result = Vanrise.Integration.Entities.MappingResult.Valid;\n\t\tLogVerbose(\"Finished\");\n\t\t\n\t\treturn result;","ExecutionFlowId":"07eeaf91-7f3c-4600-9897-d7d37f2d56d2"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings]))
-merge	[integration].[DataSource] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
-	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
-
-
 --[runtime].[ScheduleTask]--------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -295,6 +275,26 @@ when matched then
 when not matched by target then
 	insert([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
 	values(s.[Id],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);
+
+
+--[integration].[DataSource]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('111F7C4D-B4E8-4744-B51A-2371C86E453F','Data Import ICX - Sample Datasource','10323CCB-CBFD-4BBE-91F3-FC80E2D91630','{"$type":"Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterState, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments","LastImportedId":0}','4D205C40-816B-4F40-8E81-B57E6E696867','{"$type":"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities","AdapterArgument":{"$type":"Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.DBAdapterArgument, Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments","ConnectionString":"Server=192.168.110.185;Database=Mediation_Dev_CDR;User ID=Development;Password=dev!123","Query":"SELECT #TopRows# [Id]\n      ,[UserName]\n      ,[AcctSessionId]\n      ,[AcctInputOctets]\n      ,[AcctOutputOctets]\n      ,CONVERT(DATETIME, [RecordDate]) + CONVERT(DATETIME, [RecordTime])  AS RecordDateTime\n  FROM  [Mediation_WHS].[OgeroRadiusCDR]\nWhere  \n(Id > ISNULL(@RangeStart, 0)) AND\n(Id <= ISNULL(@RangeEnd, 9999999999999999))\nORDER BY [Id]","IdentifierColumnName":"Id","NumberOfParallelReader":3,"NumberOffSet":1000000,"MaxParallelRuntimeInstances":3,"CommandTimeoutInSeconds":0},"MapperCustomCode":"LogVerbose(\"Started\");\n\n\t\tvar dataList = new List<dynamic>();\n\t\tvar dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();\n\t\tType dataRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(\"ICX_RawData\");\n\t\t\n\t\tint batchSize = 50000;\n\t\tvar dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(\"ICX_RawData\");\n\t\t\n\t\tvar importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));\n\t\t\n\t\tGuid batchIdentifier = Guid.NewGuid();\n\t\t\n\t\tIDataReader reader = importedData.Reader;\n\t\t\n\t\tint rowCount = 0;\n\t\twhile (reader.Read())\n\t\t{\n\t\t\tdynamic dataRecord = Activator.CreateInstance(dataRuntimeType) as dynamic;\n\t\t\t\n\t\t\tdataRecord.RecordDateTime = Utils.GetReaderValue<DateTime>(reader, \"RecordDateTime\");\n\t\t\t\n\t\t\tstring userName = reader[\"UserName\"] as string;\n\t\t\tdataRecord.ISPName = userName.Substring(userName.IndexOf(\"@\") + 1);\n\t\t\tdataRecord.UserName = userName;\n\t\t\tdataRecord.SessionId = reader[\"AcctSessionId\"] as string;\n\t\t\tdataRecord.InputOctets = (decimal?) Utils.GetReaderValue<long?>(reader, \"AcctInputOctets\"); \n\t\t\tdataRecord.OutputOctets = (decimal?) Utils.GetReaderValue<long?>(reader, \"AcctOutputOctets\");\n\t\t\tdataRecord.DataSourceId = dataSourceId;\n\t\t\tdataRecord.BatchIdentifier = batchIdentifier;\t\t\t\n\t\t\tdataList.Add(dataRecord);\n\t\t\n\t\t\timportedData.LastImportedId = reader[\"Id\"];\n\t\t\n\t\t\trowCount++;\n\t\t\tif (rowCount == batchSize)\n\t\t\t\tbreak;\n\t\t}\n\t\t\n\t\tif (dataList.Count > 0)\n\t\t{\n\t\t\tlong startingId;\n\t\t\tVanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);\n\t\t\tlong currentDataId = startingId;\n\t\t\n\t\t\tforeach (var dataRecord in dataList)\n\t\t\t{\n\t\t\t\tdataRecord.Id = currentDataId;\n\t\t\t\tcurrentDataId++;\n\t\t\t}\n\t\t\tvar batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(dataList, \"#RECORDSCOUNT# of Raw dataList\", \"ICX_RawData\");\n\t\t\tmappedBatches.Add(\"Prepare Data Stage\", batch);\n\t\t}\n\t\telse\n\t\t\timportedData.IsEmpty = true;\n\t\t\n\t\tVanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\n\t\tresult.Result = Vanrise.Integration.Entities.MappingResult.Valid;\n\t\tLogVerbose(\"Finished\");\n\t\t\n\t\treturn result;","ExecutionFlowId":"07eeaf91-7f3c-4600-9897-d7d37f2d56d2"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings]))
+merge	[integration].[DataSource] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
 
 
 --[reprocess].[ReprocessDefinition]-----------------------------------------------------------------
