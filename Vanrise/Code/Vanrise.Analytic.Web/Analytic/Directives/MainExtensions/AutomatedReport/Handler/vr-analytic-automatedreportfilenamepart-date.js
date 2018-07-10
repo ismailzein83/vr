@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAutomatedreportserialnumberDate", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrAnalyticAutomatedreportfilenamepartDate", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,9 +11,9 @@ app.directive("vrAnalyticAutomatedreportserialnumberDate", ["UtilsService", "VRN
                 onReady: "=",
             },
             controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
+                var ctrl = this; 
 
-                var ctor = new AutomatedReportDateSerialNumberPart($scope, ctrl, $attrs);
+                var ctor = new AutomatedReportDateFileNamePart($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrAnalyticAutomatedreportserialnumberDate", ["UtilsService", "VRN
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/AutomatedReportDateSerialNumberPartTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/AutomatedReportDateFileNamePartTemplate.html"
 
         };
 
-        function AutomatedReportDateSerialNumberPart($scope, ctrl, $attrs) {
+        function AutomatedReportDateFileNamePart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var context;
             function initializeController() {
@@ -49,7 +49,7 @@ app.directive("vrAnalyticAutomatedreportserialnumberDate", ["UtilsService", "VRN
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.VRAutomatedReportDateSerialNumberPart, Vanrise.Analytic.MainExtensions",
+                        $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.VRAutomatedReportDateFileNamePart, Vanrise.Analytic.MainExtensions",
                         DateFormat: $scope.scopeModel.dateFormat,
                     };
                 };

@@ -22,10 +22,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         {
             input.ThrowIfNull("input");
             input.FileGenerator.ThrowIfNull("input.FileGenerator");
-            var generatedFile = _manager.DownloadAttachmentGenerator(input);
-            generatedFile.ThrowIfNull("generatedFile");
-            return GetExcelResponse(generatedFile.FileContent, generatedFile.FileName);
-           
+            var generatedFileOutput = _manager.DownloadAttachmentGenerator(input);
+            generatedFileOutput.ThrowIfNull("generatedFileOutput");
+            generatedFileOutput.GeneratedFile.ThrowIfNull("generatedFileOutput.GeneratedFile");
+            return GetExcelResponse(generatedFileOutput.GeneratedFile.FileContent, generatedFileOutput.FileName);
         }
     }
     public class DownloadAttachmentGeneratorInput

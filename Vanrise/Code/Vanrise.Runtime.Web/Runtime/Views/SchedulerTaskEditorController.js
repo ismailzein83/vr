@@ -269,25 +269,22 @@
         function insertTask() {
             var queriesAndHandlersValidatedPromise = UtilsService.createPromiseDeferred();
             if (taskActionDirectiveAPI.validate != undefined && typeof (taskActionDirectiveAPI.validate) == "function") {
-                taskActionDirectiveAPI.validate().then(function (response) {
-                    if (response != undefined) {
-                        if (UtilsService.getEnum(VR_Analytic_QueryHandlerValidatorResultEnum, "value", response.Result) == VR_Analytic_QueryHandlerValidatorResultEnum.Failed) {
-                            $scope.scopeModel.validationErrorMessage = response.ErrorMessage;
-                            queriesAndHandlersValidatedPromise.reject();
-                        }
-                        else {
-                            queriesAndHandlersValidatedPromise.resolve();
-                        }
-                    }
-                    else {
+                var promise = taskActionDirectiveAPI.validate();
+                if(promise!=undefined){
+                    promise.then(function () {
                         queriesAndHandlersValidatedPromise.resolve();
-                    }
-                });
+                    }).catch(function (errorMessage) {
+                        $scope.scopeModel.validationErrorMessage = errorMessage;
+                    });
+                }
+                else {
+                    queriesAndHandlersValidatedPromise.resolve();
+                }
             }
         else
-        {
-            queriesAndHandlersValidatedPromise.resolve();
-        }
+            {
+                queriesAndHandlersValidatedPromise.resolve();
+            }
                 queriesAndHandlersValidatedPromise.promise.then(function () {
                 $scope.isLoading = true;
                 var taskObject = buildTaskObjFromScope();
@@ -309,27 +306,21 @@
         function updateTask() {
             var queriesAndHandlersValidatedPromise = UtilsService.createPromiseDeferred();
             if (taskActionDirectiveAPI.validate != undefined && typeof (taskActionDirectiveAPI.validate) == "function") {
-                taskActionDirectiveAPI.validate().then(function (response) {
-                    if (response != undefined) {
-                        if (UtilsService.getEnum(VR_Analytic_QueryHandlerValidatorResultEnum, "value", response.Result) == VR_Analytic_QueryHandlerValidatorResultEnum.Failed) {
-                            $scope.scopeModel.validationErrorMessage = response.ErrorMessage;
-                            queriesAndHandlersValidatedPromise.reject();
-                        }
-                        else
-                        {
-                            queriesAndHandlersValidatedPromise.resolve();
-                        }
-                    }
-                    else {
+                var promise = taskActionDirectiveAPI.validate();
+                if (promise != undefined) {
+                    promise.then(function () {
                         queriesAndHandlersValidatedPromise.resolve();
-                    }
-                });
+                    }).catch(function (errorMessage) {
+                        $scope.scopeModel.validationErrorMessage = errorMessage;
+                    });
+                }
+                else {
+                    queriesAndHandlersValidatedPromise.resolve();
+                }
             }
-            else
-            {
+            else {
                 queriesAndHandlersValidatedPromise.resolve();
             }
-
             queriesAndHandlersValidatedPromise.promise.then(function () {
             $scope.isLoading = true;
             var taskObject = buildTaskObjFromScope();

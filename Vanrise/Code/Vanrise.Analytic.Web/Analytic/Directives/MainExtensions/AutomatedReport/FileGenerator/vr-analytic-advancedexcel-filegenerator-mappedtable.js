@@ -93,6 +93,8 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                 if (firstRowDirectiveData == undefined)
                     return null;
 
+                var mappedTableObject = mappedColumnsAPI.getData();
+
                 var mappedTable = {
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorTableDefinition, Vanrise.Analytic.MainExtensions',
                     SheetIndex: firstRowDirectiveData.SheetIndex,
@@ -100,9 +102,9 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     IncludeTitle: $scope.scopeModel.includeTitle,
                     IncludeHeaders: $scope.scopeModel.includeHeaders,
                     Title: $scope.scopeModel.includeTitle ? $scope.scopeModel.tableTitle : undefined,
-                    ColumnDefinitions: mappedColumnsAPI.getData()
+                    ColumnDefinitions: mappedTableObject!=undefined ? mappedTableObject.mappedColumns : undefined,
+                    //SubTableDefinitions: (mappedTableObject != undefined && mappedTableObject.mappedSubTables!=undefined) ? mappedTableObject.mappedSubTables: null,
                 };
-
                 return mappedTable;
             };
 

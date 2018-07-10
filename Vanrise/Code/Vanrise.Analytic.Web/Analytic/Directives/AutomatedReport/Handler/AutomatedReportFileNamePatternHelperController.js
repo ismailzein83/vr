@@ -2,16 +2,16 @@
 
     'use strict';
 
-    serialNumberPatternHelperController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService'];
+    fileNamePatternHelperController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService'];
 
-    function serialNumberPatternHelperController($scope, VRNavigationService, UtilsService, VRNotificationService) {
+    function fileNamePatternHelperController($scope, VRNavigationService, UtilsService, VRNotificationService) {
 
         var context;
 
         loadParameters();
         defineScope();
         load();
-
+         
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
@@ -21,19 +21,19 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.save = function (dataItem) {
-                return addSerialNumberPattern(dataItem);
+                return addFileNamePattern(dataItem);
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
 
-            function builSerialNumberPatternObjFromScope(dataItem) {
+            function buildFileNamePatternObjFromScope(dataItem) {
                 return "#" + dataItem.VariableName + "#";
             }
-            function addSerialNumberPattern(dataItem) {
-                var serialNumberPatternValue = builSerialNumberPatternObjFromScope(dataItem);
-                if ($scope.onSetSerialNumberPattern != undefined) {
-                    $scope.onSetSerialNumberPattern(serialNumberPatternValue);
+            function addFileNamePattern(dataItem) {
+                var fileNamePatternValue = buildFileNamePatternObjFromScope(dataItem);
+                if ($scope.onSetFileNamePattern != undefined) {
+                    $scope.onSetFileNamePattern(fileNamePatternValue);
                 }
                 $scope.modalContext.closeModal();
             }
@@ -44,7 +44,7 @@
             function loadAllControls() {
 
                 function setTitle() {
-                    $scope.title = 'Serial Number Pattern Helper';
+                    $scope.title = 'File Name Pattern Helper';
                 }
                 function loadStaticData() {
                     if (context != undefined) {
@@ -62,6 +62,6 @@
         }
 
     }
-    appControllers.controller('VR_Analytic_AutomatedreportSerialNumberPatternHelperController', serialNumberPatternHelperController);
+    appControllers.controller('VR_Analytic_AutomatedreportFileNamePatternHelperController', fileNamePatternHelperController);
 
 })(appControllers);

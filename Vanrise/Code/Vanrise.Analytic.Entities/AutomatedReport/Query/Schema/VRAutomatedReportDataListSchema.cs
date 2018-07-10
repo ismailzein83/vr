@@ -13,6 +13,7 @@ namespace Vanrise.Analytic.Entities
     }
     public class VRAutomatedReportDataSubTableSchema
     {
+        public string SubTableTitle { get; set; }
         public Dictionary<string, VRAutomatedReportDataFieldSchema> FieldSchemas { get; set; }
     }
 }

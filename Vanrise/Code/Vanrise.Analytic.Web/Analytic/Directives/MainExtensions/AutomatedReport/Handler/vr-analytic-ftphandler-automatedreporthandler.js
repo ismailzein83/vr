@@ -97,11 +97,12 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                         $scope.scopeModel.subdirectory = payload.settings.Subdirectory;
                         if (attachementGenerators != undefined) {
                             for (var i = 0; i < attachementGenerators.length; i++) {
+                                var generator = attachementGenerators[i];
                                 var gridItem = {
                                     id: i,
-                                    VRAutomatedReportFileGeneratorId: attachementGenerators[i].VRAutomatedReportFileGeneratorId,
-                                    Name: attachementGenerators[i].Name,
-                                    Settings: attachementGenerators[i].Settings,
+                                    VRAutomatedReportFileGeneratorId: generator.VRAutomatedReportFileGeneratorId,
+                                    Name: generator.Name,
+                                    Settings: generator.Settings,
                                 };
                                 $scope.scopeModel.columns.push(gridItem);
                             }

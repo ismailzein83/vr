@@ -17,8 +17,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         public DateCounterType? DateCounterType { get; set; }
         public int PaddingLeft { get; set; }
         public override string GetPartText(IVRAutomatedReportFileNamePartConcatenatedPartContext context)
-        { 
-            long initialSequenceValue = new Vanrise.Analytic.Business.ConfigManager().GetFileNamePartsInitialSequence();
+        {
+            long initialSequenceValue = 1;
             if (context.TaskId.HasValue)
             {
                 StringBuilder sequenceKey = new StringBuilder();

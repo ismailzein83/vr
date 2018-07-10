@@ -2,11 +2,9 @@
     <vr-modalbody>
         <vr-form name="formAutomatedReportHandlerEditor">
             <vr-row>
-                <vr-columns width="1/4row">
-                    <vr-textbox label="Name" value="scopeModel.Name" isrequired></vr-textbox>
-                </vr-columns>
+                <vr-analytic-automatedreport-filenamepattern on-ready="scopeModel.onFileNamePatternReady" isrequired="true" normal-col-num="3" label="File Name"></vr-analytic-automatedreport-filenamepattern>
             </vr-row>
-            <vr-analytic-automatedreporthandler-filegenerator on-ready="scopeModel.onFileGeneratorSelectorReady" normal-col-num="3"></vr-analytic-automatedreporthandler-filegenerator>
+            <vr-analytic-automatedreporthandler-filegenerator on-ready="scopeModel.onFileGeneratorSelectorReady" normal-col-num="2"></vr-analytic-automatedreporthandler-filegenerator>
         </vr-form>
     </vr-modalbody>
     <div>

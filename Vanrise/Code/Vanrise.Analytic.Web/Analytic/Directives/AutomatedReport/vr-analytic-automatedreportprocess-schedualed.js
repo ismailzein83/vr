@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VRAnalytic_AutomatedReportProcessScheduledService',  'VRUIUtilsService','VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService',
-    function (UtilsService,VRAnalytic_AutomatedReportProcessScheduledService, VRUIUtilsService, VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService) {
+app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VRAnalytic_AutomatedReportProcessScheduledService',  'VRUIUtilsService','VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService',"VR_Analytic_AutomatedReportQuerySourceEnum", "VR_Analytic_QueryHandlerValidatorResultEnum",
+    function (UtilsService, VRAnalytic_AutomatedReportProcessScheduledService, VRUIUtilsService, VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, VR_Analytic_AutomatedReportQuerySourceEnum, VR_Analytic_QueryHandlerValidatorResultEnum) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -58,7 +58,7 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
             };
 
             $scope.scopeModel.removeColumn = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.columns, dataItem.id, 'id');
+                var index = UtilsService.getItemIndexByVal($scope.scopeModel.columns, dataItem.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
                 if (index > -1) {
                     $scope.scopeModel.columns.splice(index, 1);
                 }
@@ -130,7 +130,6 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                         $scope.scopeModel.columns.push(gridItem);
                     }
                 }
-                loadHandlerSelector();
                 function loadHandlerSelector() {
                     var handlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     handlerSettingsReadyPromiseDeferred.promise.then(function () {
@@ -143,6 +142,7 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                     });
                     return handlerSettingsLoadPromiseDeferred.promise;
                 }
+                return UtilsService.waitMultiplePromises([loadHandlerSelector()]);
             };
 
             api.validate = function () {
@@ -152,7 +152,16 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 };
                 var validationPromise = UtilsService.createPromiseDeferred();
                 VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.ValidateQueryAndHandlerSettings(input).then(function (response) {
-                    validationPromise.resolve(response);
+                    if (response != undefined)
+                    {
+                        if((UtilsService.getEnum(VR_Analytic_QueryHandlerValidatorResultEnum, "value", response.Result) == VR_Analytic_QueryHandlerValidatorResultEnum.Failed)){
+                            validationPromise.reject(response.ErrorMessage);
+                        }
+                        else {
+                            validationPromise.resolve();
+                        }
+                    }
+
                 });
                 return validationPromise.promise;
             };
@@ -166,7 +175,7 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
             for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
                 var column = $scope.scopeModel.columns[i];
                 columns.push({
-                    $type: "Vanrise.Analytic.Entities.VRAutomatedReportQuery,Vanrise.Analytic.Entities",
+                    $type: "Vanrise.Analytic.Entities.VRAutomatedReportQuery, Vanrise.Analytic.Entities",
                     DefinitionId: column.DefinitionId,
                     VRAutomatedReportQueryId: column.VRAutomatedReportQueryId,
                     QueryTitle: column.QueryTitle,
@@ -225,7 +234,7 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 var automatedReportDataSchemaPromise = getAutomatedReportDataSchema();
                 var automatedReportDataSchemaPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var fields = {};
+                var fields = [];
                 automatedReportDataSchemaPromise.then(function (response) {
                     if (response != undefined) {
                         for (var queryId in response) {
@@ -235,16 +244,32 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                                     if (listSchemaName != "$type") {
                                         if (listSchemas[listSchemaName] != undefined) {
                                             var fieldSchemas = listSchemas[listSchemaName].FieldSchemas;
-                                            if (fieldSchemas != undefined) {
-                                                for (var fieldSchemaName in fieldSchemas) {
-                                                    if (fieldSchemaName != "$type") {
-                                                        var fieldSchema = fieldSchemas[fieldSchemaName];
-                                                        if (fieldSchema != undefined && fieldSchema != "$type") {
-                                                            var field = fieldSchema.Field;
-                                                            if (field != undefined) {
-                                                                fields[field.Name] = field.Title;
-                                                            }
+                                            for (var fieldSchemaName in fieldSchemas) {
+                                                if (fieldSchemaName != "$type") {
+                                                    var fieldSchema = fieldSchemas[fieldSchemaName];
+                                                    if (fieldSchema != undefined && fieldSchema != "$type") {
+                                                        var field = fieldSchema.Field;
+                                                        if (field != undefined) {
+                                                            fields.push({
+                                                                FieldName : field.Name,
+                                                                FieldTitle: field.Title,
+                                                                Source : VR_Analytic_AutomatedReportQuerySourceEnum.MainTable
+                                                            });
                                                         }
+                                                    }
+                                                }
+                                            }
+                                            var subTablesSchemas = listSchemas[listSchemaName].SubTablesSchemas;
+                                            for (var subTableId in subTablesSchemas) {
+                                                if (subTableId != "$type") {
+                                                    var subTableSchema = subTablesSchemas[subTableId];
+                                                    if (subTableSchema != undefined) {
+                                                        fields.push({
+                                                            FieldName: subTableSchema.SubTableTitle,
+                                                            SubTableId: subTableId,
+                                                            SubTableFields: subTableSchema.FieldSchemas,
+                                                            Source: VR_Analytic_AutomatedReportQuerySourceEnum.SubTable
+                                                        });
                                                     }
                                                 }
                                             }

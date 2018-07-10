@@ -33,10 +33,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var listNameSelectorAPI;
         var listNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var serialNumberPatternAPI;
-        var serialNumberPatternReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-
         var mappedTables = [];
         var tableIndex = 0;
 
@@ -50,6 +46,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var isEditMode;
 
         function initializeController() {
+            var promises = [excelWorkbookReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise];
 
                 $scope.scopeModel = {};
                 
@@ -62,10 +59,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     excelWorkbookReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onSerialNumberPatternReady = function (api) {
-                    serialNumberPatternAPI = api;
-                    serialNumberPatternReadyPromiseDeferred.resolve();
-                };
 
                 $scope.scopeModel.addMappedTable = function () {
                     var mappedTableItem = {
@@ -108,7 +101,9 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 $scope.scopeModel.onQuerySelectionChanged = function (query) {
                     if (query != undefined) {
                         $scope.scopeModel.listNames.length = 0;
+                        $scope.scopeModel.isLoadingListNames = true;
                         var listNameSelectorDataPromise = context.getQueryListNames(query.value);
+                        promises.push(listNameSelectorDataPromise);
                         listNameSelectorDataPromise.then(function (listNames) {
                             if (listNames != undefined) {
                                 for (var i = 0; i < listNames.length ; i++) {
@@ -120,10 +115,14 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                 }
                             }
                             listNameSelectorAPI.selectIfSingleItem();
+                        }).then(function () {
+                            $scope.scopeModel.isLoadingListNames = false;
                         });
                     }
                 };
-                UtilsService.waitMultiplePromises([excelWorkbookReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise]).then(function () {
+
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
                     defineAPI();
                 });
         }
@@ -181,7 +180,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 }
 
                 promises.push(loadMappedTables());
-                promises.push(loadSerialNumberPattern());
                 function loadMappedTables() {
                     var promises = [];
                     $scope.scopeModel.isLoadingTabs = true;
@@ -201,16 +199,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     });
 
                 }
-                function loadSerialNumberPattern() {
-                    var serialNumberPatternDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    serialNumberPatternReadyPromiseDeferred.promise.then(function () {
-                        var serialNumberPatternDirectivePayload = {};
-                        if (payload != undefined && payload.fileGenerator!=undefined)
-                            serialNumberPatternDirectivePayload.serialNumberPattern = payload.fileGenerator.SerialNumberPattern;
-                        VRUIUtilsService.callDirectiveLoad(serialNumberPatternAPI, serialNumberPatternDirectivePayload, serialNumberPatternDeferredLoadPromiseDeferred);
-                    });
-                    return serialNumberPatternDeferredLoadPromiseDeferred.promise;
-                }
                 return UtilsService.waitMultiplePromises(promises);
 
             };
@@ -219,7 +207,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
               var obj = {
                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGenerator,Vanrise.Analytic.MainExtensions",
                    FileTemplateId: $scope.scopeModel.file != undefined ? $scope.scopeModel.file.fileId : undefined,
-                   SerialNumberPattern: serialNumberPatternAPI.getData(),
                    CompressFile: $scope.scopeModel.compressFile,
                    TableDefinitions: getTables()
               };

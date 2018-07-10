@@ -1,6 +1,6 @@
-﻿<div vr-modalcontent ng-controller="VR_Analytic_AutomatedReportSerialNumberPartEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AutomatedReportFileNamePartEditorController" width="'35%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
-        <vr-form name="formSerialNumberPartEditor">
+        <vr-form name="formFileNamePartEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
@@ -24,7 +24,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formSerialNumberPartEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Save" formname="formFileNamePartEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

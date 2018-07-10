@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VRNotificationService", "VR_Analytic_AutomatedReportSerialNumberSettingsService",
-    function (UtilsService, VRNotificationService, VR_Analytic_AutomatedReportSerialNumberSettingsService) {
+app.directive("vrAnalyticAutomatedreportFilenameparts", ["UtilsService", "VRNotificationService", "VR_Analytic_AutomatedReportFileNameSettingsService",
+    function (UtilsService, VRNotificationService, VR_Analytic_AutomatedReportFileNameSettingsService) {
 
         var directiveDefinitionObject = {
 
@@ -13,19 +13,19 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SerialNumberParts($scope, ctrl, $attrs);
+                var ctor = new FileNameParts($scope, ctrl, $attrs);
                 ctor.initializeController();
-            },
+            }, 
             controllerAs: "ctrl",
             bindToController: true,
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPartsTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportFileNamePartsTemplate.html"
 
         }; 
 
-        function SerialNumberParts($scope, ctrl, $attrs) {
+        function FileNameParts($scope, ctrl, $attrs) {
 
             var gridAPI;
             this.initializeController = initializeController;
@@ -39,15 +39,15 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
                     return "At least one part should be added.";
                 };
 
-                ctrl.addSerialNumberPart = function () {
-                    var onSerialNumberPartAdded = function (serialNumberPart) {
-                        ctrl.datasource.push({ Entity: serialNumberPart });
+                ctrl.addFileNamePart = function () {
+                    var onFileNamePartAdded = function (fileNamePart) {
+                        ctrl.datasource.push({ Entity: fileNamePart });
                     };
 
-                    VR_Analytic_AutomatedReportSerialNumberSettingsService.addSerialNumberPart(onSerialNumberPartAdded, getContext());
+                    VR_Analytic_AutomatedReportFileNameSettingsService.addFileNamePart(onFileNamePartAdded, getContext());
                 };
 
-                ctrl.removeSerialNumberPart = function (dataItem) {
+                ctrl.removeFileNamePart = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -59,24 +59,24 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
                 var api = {};
 
                 api.getData = function () {
-                    var serialNumberParts = {};
+                    var fileNameParts = {};
                     if (ctrl.datasource != undefined) {
-                        serialNumberParts = [];
+                        fileNameParts = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            serialNumberParts.push(currentItem.Entity);
+                            fileNameParts.push(currentItem.Entity);
                         }
                     }
-                    return serialNumberParts;
+                    return fileNameParts;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.serialNumberParts != undefined) {
-                            for (var i = 0; i < payload.serialNumberParts.length; i++) {
-                                var serialNumberPart = payload.serialNumberParts[i];
-                                ctrl.datasource.push({ Entity: serialNumberPart });
+                        if (payload.fileNameParts != undefined) {
+                            for (var i = 0; i < payload.fileNameParts.length; i++) {
+                                var fileNamePart = payload.fileNameParts[i];
+                                ctrl.datasource.push({ Entity: fileNamePart });
                             }
                         }
                     }
@@ -90,7 +90,7 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editSerialNumberPart,
+                    clicked: editFileNamePart,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -98,20 +98,20 @@ app.directive("vrAnalyticAutomatedreportSerialnumberparts", ["UtilsService", "VR
                 };
             }
 
-            function editSerialNumberPart(serialNumberPartObj) {
-                var onSerialNumberPartUpdated = function (serialNumberPart) {
-                    var index = ctrl.datasource.indexOf(serialNumberPartObj);
-                    ctrl.datasource[index] = { Entity: serialNumberPart };
+            function editFileNamePart(fileNamePartObj) {
+                var onFileNamePartUpdated = function (fileNamePart) {
+                    var index = ctrl.datasource.indexOf(fileNamePartObj);
+                    ctrl.datasource[index] = { Entity: fileNamePart };
                 };
 
-                VR_Analytic_AutomatedReportSerialNumberSettingsService.editSerialNumberPart(serialNumberPartObj.Entity, onSerialNumberPartUpdated, getContext());
+                VR_Analytic_AutomatedReportFileNameSettingsService.editFileNamePart(fileNamePartObj.Entity, onFileNamePartUpdated, getContext());
             }
             function getContext() {
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
                 currentContext.getExtensionType = function () {
-                    return "VR_Analytic_AutomatedReportSerialNumberParts";
+                    return "VR_Analytic_AutomatedReportFileNumberParts";
                 };
                 return currentContext;
             }

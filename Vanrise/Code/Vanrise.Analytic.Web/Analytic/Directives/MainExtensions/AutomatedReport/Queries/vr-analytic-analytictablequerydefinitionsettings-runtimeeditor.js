@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrAnalyticAnalytictablequerydefinitionsettingsRuntimeeditor", ["VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService", "UtilsService", "VRUIUtilsService", "VR_Analytic_AnalyticItemConfigAPIService", "VR_Analytic_AnalyticTypeEnum", "VRNotificationService",
-function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsService, VRUIUtilsService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRNotificationService) {
+app.directive("vrAnalyticAnalytictablequerydefinitionsettingsRuntimeeditor", ["VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService", "UtilsService", "VRUIUtilsService", "VR_Analytic_AnalyticItemConfigAPIService", "VR_Analytic_AnalyticTypeEnum", "VRNotificationService", "VR_Analytic_AnalyticTableQuerySettingsSubtablesService",
+function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsService, VRUIUtilsService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRNotificationService, VR_Analytic_AnalyticTableQuerySettingsSubtablesService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -42,6 +42,9 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
         var orderTypeSelectorAPI;
         var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        //var subtablesDirectiveAPI;
+        //var subtablesDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var context;
         var dimensions = [];
 
@@ -78,7 +81,13 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 orderTypeSelectorReadyDeferred.resolve();
             };
 
+            //$scope.scopeModel.onSubtablesDirectiveReady = function (api) {
+            //    subtablesDirectiveAPI = api;
+            //    subtablesDirectiveReadyDeferred.resolve();
+            //};
+
             UtilsService.waitMultiplePromises([timePeriodSelectorReadyDeferred.promise, dimensionsSelectorReadyDeferred.promise, measuresSelectorReadyDeferred.promise, currencySelectorReadyDeferred.promise, recordFilterDirectiveReadyDeferred.promise, orderTypeSelectorReadyDeferred.promise]).then(function () {
+              
                 defineAPI();
             });
         }
@@ -93,7 +102,6 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             api.load = function (payload) {
                 $scope.scopeModel.withSummary = undefined;
                 $scope.scopeModel.topRecords = undefined;
-
                 analyticTableId = undefined;
                 if (payload != undefined) {
                     entity = payload.runtimeDirectiveEntity;
@@ -244,6 +252,18 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 return orderTypeSelectorLoadDeferred.promise;
                 }
 
+                //function loadSubtablesDirective() {
+                //    var subtablesLoadDeferred = UtilsService.createPromiseDeferred();
+                //    subtablesDirectiveReadyDeferred.promise.then(function () {
+                //        var payload = {
+                //            analyticTableId: analyticTableId,
+                //            subtables: entity != undefined ? entity.SubTables : undefined
+                //        };
+                //        VRUIUtilsService.callDirectiveLoad(subtablesDirectiveAPI, payload, subtablesLoadDeferred);
+                //    });
+                //    return subtablesLoadDeferred.promise;
+                //}
+
                 var rootPromiseNode = {
                     promises: [getAnalyticTableId()],
                     getChildNode: function () {
@@ -262,7 +282,8 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
             api.getData = function () {
                 var orderTypeEntity = orderTypeSelectorAPI.getData();
-                return {
+              
+              var obj = {
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.AnalyticTableQuerySettings,Vanrise.Analytic.MainExtensions',
                     TimePeriod: timePeriodSelectorAPI.getData(),
                     Dimensions: getDimensions(),
@@ -271,9 +292,11 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
                     WithSummary: $scope.scopeModel.withSummary,
                     TopRecords: $scope.scopeModel.topRecords,
+                    //SubTables: subtablesDirectiveAPI.getData(),
                     OrderType: orderTypeEntity!=undefined ? orderTypeEntity.OrderType: undefined,
-                    AdvancedOrderOptions: orderTypeEntity!=undefined ? orderTypeEntity.AdvancedOrderOptions: undefined,
-                };
+                    AdvancedOrderOptions: orderTypeEntity != undefined ? orderTypeEntity.AdvancedOrderOptions : undefined
+              };
+              return obj;
                 
             };
 
@@ -338,6 +361,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 return measures;
             }
         }
+       
     }
 
     return directiveDefinitionObject;

@@ -33,6 +33,7 @@ namespace Vanrise.Analytic.BP.Activities
                 handler.ThrowIfNull("handler");
                 handler.Settings.ThrowIfNull("handler.Settings");
                 queries.ThrowIfNull("queries");
+                context.WriteBusinessTrackingMsg(LogEntryType.Information, "Started executing the Automated Report process.");
                 handler.Settings.Execute(new VRAutomatedReportHandlerExecuteContext(queries, context.GetSharedInstanceData().InstanceInfo.TaskId, new AutomatedReportEvaluatorContext(context)));
             }
         }

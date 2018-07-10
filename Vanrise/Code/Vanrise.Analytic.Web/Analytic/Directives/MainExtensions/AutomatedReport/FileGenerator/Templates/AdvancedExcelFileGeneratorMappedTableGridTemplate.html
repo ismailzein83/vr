@@ -22,7 +22,18 @@
             </vr-select>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Column Header'" widthfactor="70" disablesorting="true">
-            <vr-textbox value="dataItem.editedTitle" isrequired></vr-textbox>
+            <vr-textbox value="dataItem.editedTitle" isrequired ng-if="dataItem.selectedField!=undefined && dataItem.selectedField.source!=undefined && dataItem.selectedField.source.value==0"></vr-textbox>
+            <vr-select ng-if="dataItem.selectedField!=undefined && dataItem.selectedField.source!=undefined && dataItem.selectedField.source.value==1"
+                       on-ready="dataItem.onSubTableFieldSelectorReady"
+                       datasource="dataItem.subTableFields"
+                       datatextfield="description"
+                       datavaluefield="value"
+                       selectedvalues="dataItem.selectedSubTableFields"
+                       entityname="Field"
+                       ismultipleselection="true"
+                       isrequired
+                       hideselectedvaluessection>
+            </vr-select>
         </vr-datagridcolumn>
     </vr-datagrid>
 </vr-validator>

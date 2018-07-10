@@ -24,8 +24,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public long FileTemplateId { get; set; }
 
-        public string FileName { get; set; }
-
         public bool CompressFile { get; set; }
 
         public List<AdvancedExcelFileGeneratorTableDefinition> TableDefinitions { get; set; }
@@ -38,9 +36,16 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             byte[] bytes = fileManager.GetFile(this.FileTemplateId).Content;
             Workbook TableDefinitionsWorkbook = new Workbook(new System.IO.MemoryStream(bytes));
             Common.Utilities.ActivateAspose();
+        
 
-            if (this.TableDefinitions != null && this.TableDefinitions.Count > 0)
+            if (this.TableDefinitions != null && TableDefinitions.Count > 0)
             {
+                int tablesCount = this.TableDefinitions.Count;
+                int tablesDone = 0;
+                int tablesLeft = tablesCount;
+
+                if (context.HandlerContext.EvaluatorContext != null)
+                    context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Started mapping tables.");
                 foreach (var tableDef in this.TableDefinitions)
                 {
                     tableDef.ColumnDefinitions.ThrowIfNull("tableDef.ColumnDefinitions");
@@ -50,7 +55,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     dataList.ThrowIfNull("dataList", dataListIdentifier);
                     dataList.Items.ThrowIfNull("dataList.Items", dataListIdentifier);
                     dataList.FieldInfos.ThrowIfNull("dataList.FieldInfos", dataListIdentifier);
-                    
+
+                    //Dictionary<int, bool> isSubTableByIndex = new Dictionary<int, bool>();
                     int titleRowIndex = tableDef.RowIndex;
                     int headerRowIndex = tableDef.RowIndex;
                     int dataRowIndex = tableDef.RowIndex;
@@ -97,21 +103,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                         if (tableDef.IncludeHeaders && setHeaders)
                                         {
                                             SetStyleAndValue(ref TableDefinitionsWorksheet, headerRowIndex, column.ColumnIndex, fieldInfo.FieldTitle, 14, true, TextAlignmentType.Left);
-                                            var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
-                                                () =>
-                                                {
-                                                    return new List<int>();
-                                                });
+                                            var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex);
                                             headerIndices.Add(column.ColumnIndex);
                                         }
                                         if (fieldInfo.FieldType.RenderDescriptionByDefault() && field.Value.Description!=null)
                                         {
-                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Description, 12, false, TextAlignmentType.Right);
-                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                                () =>
-                                                {
-                                                    return new List<int>();
-                                                });
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Description, 12, false, TextAlignmentType.Left);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex);
                                             dataIndices.Add(column.ColumnIndex);
                                             continue;
                                         }
@@ -123,35 +121,23 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                             var date = Convert.ToDateTime(field.Value.Value);
                                             GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
                                             SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 12, false, TextAlignmentType.Right);
-                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                            () =>
-                                            {
-                                                return new List<int>();
-                                            });
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex);
                                             dataIndices.Add(column.ColumnIndex);
                                             continue;
 
                                         }
                                         else if (field.Value.Value is int || field.Value.Value is double || field.Value.Value is decimal || field.Value.Value is long)
                                         {
-                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Left);
-                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                            () =>
-                                            {
-                                                return new List<int>();
-                                            });
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Right);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex);
                                             dataIndices.Add(column.ColumnIndex);
                                             continue;
 
                                         }
                                         else
                                         {
-                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Right);
-                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex,
-                                            () =>
-                                            {
-                                                return new List<int>();
-                                            });
+                                            SetStyleAndValue(ref TableDefinitionsWorksheet, dataRowIndex, column.ColumnIndex, field.Value.Value, 12, false, TextAlignmentType.Left);
+                                            var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex);
                                             dataIndices.Add(column.ColumnIndex);
                                         }
                                     }
@@ -163,60 +149,46 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     }
                     else
                     {
+                        if (context.HandlerContext.EvaluatorContext != null)
+                            context.HandlerContext.EvaluatorContext.WriteWarningBusinessTrackingMsg("No data was found for file.");
                         if (tableDef.IncludeHeaders && setHeaders)
                         {
                             foreach (var col in tableDef.ColumnDefinitions)
                             {
 
                                 SetStyleAndValue(ref TableDefinitionsWorksheet, headerRowIndex, col.ColumnIndex, col.FieldTitle, 14, true, TextAlignmentType.Left);
-                                var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex,
-                                             () =>
-                                             {
-                                                 return new List<int>();
-                                             });
+                                var headerIndices = colIndexByRow.GetOrCreateItem(headerRowIndex);
                                 headerIndices.Add(col.ColumnIndex);
                             }
                         }
                         setHeaders = false;
                     }
-                    SetBorders(colIndexByRow, ref TableDefinitionsWorksheet);   
+                    SetBorders(colIndexByRow, TableDefinitionsWorksheet);
+                    if (context.HandlerContext.EvaluatorContext != null)
+                    {
+                        tablesDone++;
+                        tablesLeft = tablesCount - tablesDone;
+                        if(tablesDone==1)
+                            context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished mapping 1 table. The number of tables left is {0} out of {1} tables.", tablesLeft, tablesCount);
+                        else
+                            context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished mapping {0} tables. The number of tables left is {1} out of {2} tables.", tablesDone, tablesLeft, tablesCount);
+                    }
                 }
-            }
-            var configManager = new Vanrise.Analytic.Business.ConfigManager();
-            var fileName = this.FileName; 
-
-            foreach (var fileNamePart in configManager.GetFileNameParts())
-            {
-                if (fileName != null && fileName.Contains(string.Format("#{0}#", fileNamePart.VariableName)))
-                {
-                    fileName = fileName.Replace(string.Format("#{0}#", fileNamePart.VariableName), fileNamePart.Settings.GetPartText(new VRAutomatedReportFileNamePartConcatenatedPartContext()
-                    { 
-                    TaskId = context.HandlerContext.TaskId}));
-                }
-            }
-            MemoryStream memoryStream = new MemoryStream();
-            memoryStream = TableDefinitionsWorkbook.SaveToStream();
-            if (this.CompressFile)
-            {
-                ZipUtility zipUtility = new ZipUtility();
-                var zippedFileContent = zipUtility.Zip(new ZipFileInfo(){
-                    Content = memoryStream.ToArray(),
-                    FileName = fileName + ".xls"
-                });
-                return new VRAutomatedReportGeneratedFile()
-                {
-                    FileName = fileName + ".zip",
-                    FileContent = zippedFileContent
-                };
             }
             else
             {
-                return new VRAutomatedReportGeneratedFile()
-                {
-                    FileName = fileName + ".xls",
-                    FileContent = memoryStream.ToArray()
-                };
+                if (context.HandlerContext.EvaluatorContext != null)
+                    context.HandlerContext.EvaluatorContext.WriteErrorBusinessTrackingMsg("No tables were mapped.");
             }
+          
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = TableDefinitionsWorkbook.SaveToStream();
+        
+            return new VRAutomatedReportGeneratedFile()
+            {
+                FileContent = memoryStream.ToArray()
+            };
+
         }
 
         public override void Validate(IVRAutomatedReportHandlerValidateContext context)
@@ -276,44 +248,95 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         var querySettings = matchingQuery.Settings.CastWithValidate<AnalyticTableQuerySettings>("matchingQuery.Settings");
                         querySettings.Dimensions.ThrowIfNull("querySettings.Dimensions", matchingQuery.VRAutomatedReportQueryId);
                         querySettings.Measures.ThrowIfNull("querySettings.Measures", matchingQuery.VRAutomatedReportQueryId);
-                        tableDefinition.ColumnDefinitions.ThrowIfNull("tableDefinition.ColumnDefinitions");
-                        
-                        List<string> missingTableFields = new List<string>();
-                        foreach (var tableDefinitionColumn in tableDefinition.ColumnDefinitions)
-                        {
-                            if (!querySettings.Dimensions.Any(x => x.DimensionName == tableDefinitionColumn.FieldName) && !querySettings.Measures.Any(x => x.MeasureName == tableDefinitionColumn.FieldName))
-                            {
-                                if (!missingTableFields.Contains(tableDefinitionColumn.FieldTitle))
-                                    missingTableFields.Add(tableDefinitionColumn.FieldTitle);
-                            }
 
-                        }
-                        if (missingTableFields != null && missingTableFields.Count == 1)
+                        if (tableDefinition.ColumnDefinitions != null && tableDefinition.ColumnDefinitions.Count>0)
                         {
-                            context.Result = QueryHandlerValidatorResult.Failed;
-                            context.ErrorMessage = string.Format("The field '{0}' was not found in query '{1}' after it has been edited.", missingTableFields.First(), matchingQuery.QueryTitle);
-                            break;
+                            List<string> missingTableFields = new List<string>();
+                            foreach (var tableDefinitionColumn in tableDefinition.ColumnDefinitions)
+                            {
+                                if (!querySettings.Dimensions.Any(x => x.DimensionName == tableDefinitionColumn.FieldName) && !querySettings.Measures.Any(x => x.MeasureName == tableDefinitionColumn.FieldName))
+                                {
+                                    if (!missingTableFields.Contains(tableDefinitionColumn.FieldTitle))
+                                        missingTableFields.Add(tableDefinitionColumn.FieldTitle);
+                                }
+
+                            }
+                            if (missingTableFields != null && missingTableFields.Count == 1)
+                            {
+                                context.Result = QueryHandlerValidatorResult.Failed;
+                                context.ErrorMessage = string.Format("The field '{0}' was not found in query '{1}' after it has been edited.", missingTableFields.First(), matchingQuery.QueryTitle);
+                                break;
+                            }
+                            else if (missingTableFields != null && missingTableFields.Count > 1)
+                            {
+                                string joinedFields;
+                                if (missingTableFields.Count == 2)
+                                {
+                                    joinedFields = string.Join(" and ", missingTableFields);
+                                }
+                                else
+                                {
+                                    joinedFields = string.Join(" , ", missingTableFields);
+                                }
+                                context.Result = QueryHandlerValidatorResult.Failed;
+                                context.ErrorMessage = string.Format("The fields '{0}' were not found in query '{1}' after it has been edited.", joinedFields, matchingQuery.QueryTitle);
+                                break;
+                            }
                         }
-                        else if (missingTableFields != null && missingTableFields.Count > 1)
+                        if (tableDefinition.SubTableDefinitions != null && tableDefinition.SubTableDefinitions.Count > 0)
                         {
-                            string joinedFields;
-                            if (missingTableFields.Count == 2)
+                            List<string> missingTableFields = new List<string>();
+                            if (querySettings.SubTables == null || querySettings.SubTables.Count == 0)
                             {
-                                joinedFields = string.Join(" and ", missingTableFields);
+                                context.Result = QueryHandlerValidatorResult.Failed;
+                                context.ErrorMessage = string.Format("No subtables were found in query '{0}'.", matchingQuery.QueryTitle);
+                                break;
                             }
-                            else
+                            foreach (var subTable in tableDefinition.SubTableDefinitions)
                             {
-                                joinedFields = string.Join(" , ", missingTableFields);
+                                var matchingSubTable = querySettings.SubTables.FindRecord(x => x.SubTableId == subTable.SubTableId);
+                                if (matchingSubTable == null)
+                                {
+                                    context.Result = QueryHandlerValidatorResult.Failed;
+                                    context.ErrorMessage = string.Format("A subtable from query '{0}' used in the handler has been deleted.", matchingQuery.QueryTitle);
+                                    break;
+                                }
+                                foreach (var field in subTable.SubTableFields)
+                                {
+                                    if (!matchingSubTable.Dimensions.Any(x => x == field.FieldName) && !matchingSubTable.Measures.Any(x => x == field.FieldName))
+                                    {
+                                        if (!missingTableFields.Contains(field.FieldName))
+                                            missingTableFields.Add(field.FieldName);
+                                    }
+                                }
+                                if (missingTableFields != null && missingTableFields.Count == 1)
+                                {
+                                    context.Result = QueryHandlerValidatorResult.Failed;
+                                    context.ErrorMessage = string.Format("The field '{0}' was not found in query '{1}' in subtable '{2}' after it has been edited.", missingTableFields.First(), matchingQuery.QueryTitle, subTable.SubTableName);
+                                    break;
+                                }
+                                else if (missingTableFields != null && missingTableFields.Count > 1)
+                                {
+                                    string joinedFields;
+                                    if (missingTableFields.Count == 2)
+                                    {
+                                        joinedFields = string.Join(" and ", missingTableFields);
+                                    }
+                                    else
+                                    {
+                                        joinedFields = string.Join(" , ", missingTableFields);
+                                    }
+                                    context.Result = QueryHandlerValidatorResult.Failed;
+                                    context.ErrorMessage = string.Format("The fields '{0}' were not found in query '{1}' in subtable '{2}' after it has been edited.", joinedFields, matchingQuery.QueryTitle, subTable.SubTableName);
+                                    break;
+                                }
                             }
-                            context.Result = QueryHandlerValidatorResult.Failed;
-                            context.ErrorMessage = string.Format("The fields '{0}' were not found in query '{1}' after it has been edited.", joinedFields, matchingQuery.QueryTitle);
-                            break;
                         }
                     }
                 }
             }
         }
-        private void SetBorders(Dictionary<int, List<int>> colIndexByRow, ref Worksheet TableDefinitionsWorksheet)
+        private void SetBorders(Dictionary<int, List<int>> colIndexByRow, Worksheet TableDefinitionsWorksheet)
         {
             if (colIndexByRow != null && colIndexByRow.Count > 0)
             {
@@ -330,9 +353,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 {
                                     Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, orderedColumnIndices.First());
                                     Style style = cell.GetStyle();
-                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                                    SetBorder(style, true, true, false, true);
                                     cell.SetStyle(style);
                                 }
                                 else
@@ -362,9 +383,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 {
                                     Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, orderedColumnIndices.First());
                                     Style style = cell.GetStyle();
-                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                                    style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+                                    SetBorder(style, false, true, true, true);
                                     cell.SetStyle(style);
                                 }
                                 foreach (var columnIndex in orderedColumnIndices)
@@ -391,8 +410,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 {
                                     Cell cell = TableDefinitionsWorksheet.Cells.GetCell(row.Key, orderedColumnIndices.First());
                                     Style style = cell.GetStyle();
-                                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                                    SetBorder(style, false, true, false, true);
                                     cell.SetStyle(style);
                                 }
                                 foreach (var columnIndex in orderedColumnIndices)
@@ -423,10 +441,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         {
                             Cell cell = TableDefinitionsWorksheet.Cells.GetCell(onlyRow.Key, orderedColumnIndices.First());
                             Style style = cell.GetStyle();
-                            style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
-                            style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
-                            style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                            style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                            SetBorder(style, true, true, true, true);
                             cell.SetStyle(style);
                         }
                         else
@@ -467,6 +482,25 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             style.HorizontalAlignment = alignment;
             cell.SetStyle(style);
         }
+        private void SetBorder(Style style, bool setTopBorder, bool setRightBorder, bool setBottomBorder, bool setLeftBorder)
+        {
+            if(setTopBorder)
+            {
+                style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+            }
+            if (setRightBorder)
+            {
+                style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+            }
+            if (setBottomBorder)
+            {
+                style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+            }
+            if (setLeftBorder)
+            {
+                style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+            }
+        }
     }
 
     public class AdvancedExcelFileGeneratorTableDefinition
@@ -488,6 +522,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public string Title { get; set; }
 
         public List<AdvancedExcelFileGeneratorTableColumnDefinition> ColumnDefinitions { get; set; }
+
+        public List<AdvancedExcelFileGeneratorSubTableDefinition> SubTableDefinitions { get; set; }
     }
 
     public class AdvancedExcelFileGeneratorTableColumnDefinition
@@ -498,9 +534,27 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public int ColumnIndex { get; set; }
 
-        public bool isSubTable { get; set; }
-
         public bool UseFieldDescription { get; set; }
+    }
+
+    public class AdvancedExcelFileGeneratorSubTableDefinition
+    {
+        public int ColumnIndex { get; set; }
+
+        public Guid SubTableId { get; set; }
+
+        public string SubTableName { get; set; }
+
+        //public List<string> SubTableFields { get; set; }
+
+        public List<AdvancedExcelFileGeneratorSubTableColumnDefinition> SubTableFields { get; set; }
+    }
+
+    public class AdvancedExcelFileGeneratorSubTableColumnDefinition
+    {
+        public string FieldName { get; set; }
+
+        public string FieldTitle { get; set; }
     }
 
     public class AdvancedExcelFileGeneratorMatrixDefinition

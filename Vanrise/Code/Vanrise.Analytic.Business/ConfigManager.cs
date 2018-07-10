@@ -18,11 +18,6 @@ namespace Vanrise.Analytic.Business
             return fileNameParts;
         }
 
-        public int GetFileNamePartsInitialSequence()
-        {
-            return GetFileNameParts().Count;
-        }
-
         public VRAutomatedReportSettings GetAutomatedReportSettings()
         {
             SettingManager settingManager = new SettingManager();

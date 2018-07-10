@@ -8,8 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public class VRAutomatedReportGeneratedFile
     {
-        public string FileName { get; set; }
-
         public byte[] FileContent { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAutomatedreportserialnumberSequence", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Analytic_AutomatedReport_DateCounterTypeEnum",
+app.directive("vrAnalyticAutomatedreportfilenamepartSequence", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Analytic_AutomatedReport_DateCounterTypeEnum",
 function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AutomatedReport_DateCounterTypeEnum) {
 
     var directiveDefinitionObject = {
@@ -16,9 +16,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_Aut
             var ctor = new SequenceCtor($scope, ctrl, $attrs);
             ctor.initializeController();
         },
-        controllerAs: "ctrl",
+        controllerAs: "ctrl", 
         bindToController: true,
-        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/AutomatedReportSequenceSerialNumberPartTemplate.html"
+        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/AutomatedReportSequenceFileNamePartTemplate.html"
     };
 
     function SequenceCtor($scope, ctrl, $attrs) {
@@ -37,7 +37,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_Aut
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.VRAutomatedReportSequenceSerialNumberPart, Vanrise.Analytic.MainExtensions",
+                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.VRAutomatedReportSequenceFileNamePart, Vanrise.Analytic.MainExtensions",
                     DateCounterType: $scope.scopeModel.selectedDateCounterType != undefined ? $scope.scopeModel.selectedDateCounterType.value : null,
                     PaddingLeft: $scope.scopeModel.paddingLeft,
                 };

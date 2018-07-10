@@ -28,39 +28,39 @@ app.directive("vrAnalyticAutomatedreportSettings", ["UtilsService", "VRNotificat
         function AutomatedReportSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var serialNumberPartsAPI;
-            var serialNumberPartsReadyDeferred = UtilsService.createPromiseDeferred();
+            var fileNamePartsAPI;
+            var fileNamePartsReadyDeferred = UtilsService.createPromiseDeferred();
 
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onSerialNumberPartsReady = function (api) {
-                    serialNumberPartsAPI = api;
-                    serialNumberPartsReadyDeferred.resolve();
+                $scope.scopeModel.onFileNamePartsReady = function (api) {
+                    fileNamePartsAPI = api;
+                    fileNamePartsReadyDeferred.resolve();
                 };
                 defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
-                var serialNumberParts;
+                var fileNameParts;
                 api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.data != undefined) {
-                            serialNumberParts = payload.data.SerialNumberParts;
+                            fileNameParts = payload.data.FileNameParts;
                         }
                         var promises = [];
 
-                        var serialNumberPartsPromise = loadSerialNumberParts();
-                        function loadSerialNumberParts() {
-                            var serialNumberPartsLoadDeferred = UtilsService.createPromiseDeferred();
-                            serialNumberPartsReadyDeferred.promise.then(function () {
+                        var fileNamePartsPromise = loadFileNameParts();
+                        function loadFileNameParts() {
+                            var fileNamePartsLoadDeferred = UtilsService.createPromiseDeferred();
+                            fileNamePartsReadyDeferred.promise.then(function () {
                                 var payload =
                                 {
-                                    serialNumberParts: serialNumberParts
+                                    fileNameParts: fileNameParts
                                 };
-                                VRUIUtilsService.callDirectiveLoad(serialNumberPartsAPI, payload, serialNumberPartsLoadDeferred);
+                                VRUIUtilsService.callDirectiveLoad(fileNamePartsAPI, payload, fileNamePartsLoadDeferred);
                             });
                         }
                         return UtilsService.waitMultiplePromises(promises);
@@ -70,7 +70,7 @@ app.directive("vrAnalyticAutomatedreportSettings", ["UtilsService", "VRNotificat
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Analytic.Entities.VRAutomatedReportSettings, Vanrise.Analytic.Entities",
-                        SerialNumberParts: serialNumberPartsAPI.getData(),
+                        FileNameParts: fileNamePartsAPI.getData(),
                     };
                 };
 

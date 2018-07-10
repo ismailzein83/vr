@@ -35,6 +35,23 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 
         public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
 
+        public List<AnalyticQuerySettingsSubTable> SubTables { get; set; }
+
+        public class AnalyticQuerySettingsSubTable
+        {
+            public string Title { get; set; }
+
+            public Guid SubTableId { get; set; }
+         
+            public List<string> Dimensions { get; set; }
+
+            public List<string> Measures { get; set; }
+
+            public AnalyticQueryOrderType? OrderType { get; set; }
+
+            public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
+        }
+
         public override VRAutomatedReportDataResult Execute(IVRAutomatedReportQueryExecuteContext context)
         {
             VRAutomatedReportDataResult automatedReportDataResult = new VRAutomatedReportDataResult
@@ -71,29 +88,27 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             var dateTimeRange = timePeriodManager.GetTimePeriod(this.TimePeriod);
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
 
-            DataRetrievalInput<AnalyticQuery> input = new DataRetrievalInput<AnalyticQuery>()
+            var query = new AnalyticQuery()
             {
-                DataRetrievalResultType = DataRetrievalResultType.Normal,
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = dimensionFields,
-                    MeasureFields = measureFields,
-                    FilterGroup = FilterGroup,
-                    CurrencyId = CurrencyId,
-                    WithSummary = WithSummary,
-                    TopRecords = TopRecords,
-                    OrderType = OrderType,
-                    AdvancedOrderOptions = AdvancedOrderOptions,
-                    TableId = analyticTableQueryDefinitionSettings.AnalyticTableId,
-                    FromTime = dateTimeRange.From,
-                    ToTime = dateTimeRange.To
-                }
+                DimensionFields = dimensionFields,
+                MeasureFields = measureFields,
+                FilterGroup = FilterGroup,
+                CurrencyId = CurrencyId,
+                WithSummary = WithSummary,
+                TopRecords = TopRecords,
+                OrderType = OrderType,
+                AdvancedOrderOptions = AdvancedOrderOptions,
+                TableId = analyticTableQueryDefinitionSettings.AnalyticTableId,
+                FromTime = dateTimeRange.From,
+                ToTime = dateTimeRange.To
             };
+            
             AnalyticManager analyticManager = new AnalyticManager();
-            var dataRecords = analyticManager.GetFilteredRecords(input) as AnalyticSummaryBigResult<AnalyticRecord>;
-            if (dataRecords != null && dataRecords.Data != null && dataRecords.Data.Count() > 0)
+            AnalyticRecord summaryRecord;
+            var dataRecords = analyticManager.GetAllFilteredRecords(query, out summaryRecord);
+            if (dataRecords != null &&  dataRecords.Count() > 0)
             {
-                foreach (var dataItem in dataRecords.Data)
+                foreach (var dataItem in dataRecords)
                 {
                     var item = new VRAutomatedReportDataItem
                     {
@@ -156,7 +171,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 
             VRAutomatedReportDataListSchema listSchemaItem = new VRAutomatedReportDataListSchema()
             {
-                FieldSchemas = new Dictionary<string, VRAutomatedReportDataFieldSchema>()
+                FieldSchemas = new Dictionary<string, VRAutomatedReportDataFieldSchema>(),
+                SubTablesSchemas = new Dictionary<Guid,VRAutomatedReportDataSubTableSchema>()
             };
             Dictionary<string, VRAutomatedReportDataFieldSchema> fieldSchema = new Dictionary<string, VRAutomatedReportDataFieldSchema>();
             VRAutomatedReportQueryDefinitionManager automatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
@@ -202,6 +218,55 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                         }
                     };
                     listSchemaItem.FieldSchemas.Add(measureName, dataFieldSchema);
+                }
+            }
+
+            if (this.SubTables != null && this.SubTables.Count > 0)
+            {
+                foreach (var subtable in this.SubTables)
+                {
+                    VRAutomatedReportDataSubTableSchema subTableSchema = new VRAutomatedReportDataSubTableSchema
+                    {
+                        SubTableTitle = subtable.Title,
+                        FieldSchemas = new Dictionary<string, VRAutomatedReportDataFieldSchema>()
+                    };
+                    foreach (var dimensionName in subtable.Dimensions)
+                    {
+                        var dimension = dimensions.GetRecord(dimensionName);
+                        if (dimension != null)
+                        {
+                            var dataFieldSchema = new VRAutomatedReportDataFieldSchema()
+                            {
+                                Field = new DataRecordField()
+                                {
+                                    Name = dimensionName,
+                                    Title = dimension.Title,
+                                    Type = dimension.Config != null ? dimension.Config.FieldType : null
+                                }
+                            };
+                            subTableSchema.FieldSchemas.Add(dimensionName, dataFieldSchema);
+                        }
+                    }
+
+                    foreach (var measureName in subtable.Measures)
+                    {
+                        var measure = measures.GetRecord(measureName);
+                        if (measure != null)
+                        {
+                            var dataFieldSchema = new VRAutomatedReportDataFieldSchema()
+                            {
+                                Field = new DataRecordField()
+                                {
+                                    Name = measureName,
+                                    Title = measure.Title,
+                                    Type = measure.Config != null ? measure.Config.FieldType : null
+                                }
+                            };
+                            subTableSchema.FieldSchemas.Add(measureName, dataFieldSchema);
+                        }
+                    }
+
+                    listSchemaItem.SubTablesSchemas.Add(subtable.SubTableId, subTableSchema);
                 }
             }
             automatedReportSchema.ListSchemas.Add("Main", listSchemaItem);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
+using Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators;
 using Vanrise.Common;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
@@ -26,23 +27,53 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         {
             if (this.AttachementGenerators != null && this.AttachementGenerators.Count > 0 && this.FTPCommunicatorSettings != null)
             {
+                AdvancedExcelFileGeneratorManager fileGeneratorManager = new AdvancedExcelFileGeneratorManager();
+                int totalFiles = this.AttachementGenerators.Count;
+                int filesDone = 0;
+                int filesLeft = totalFiles;
+                if (context.EvaluatorContext != null)
+                {
+                    if(totalFiles==1)
+                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate is 1 file.");
+                    else
+                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate is {0} files.", totalFiles);
+                }
                 using (FTPCommunicator ftpCommunicator = new FTPCommunicator(this.FTPCommunicatorSettings))
                 {
                     foreach (var generator in this.AttachementGenerators)
                     {
-                        generator.Settings.ThrowIfNull("attachement.Settings");
-                        VRAutomatedReportGeneratedFile generatedFile = generator.Settings.GenerateFile(new VRAutomatedReportFileGeneratorGenerateFileContext()
+                        generator.Settings.ThrowIfNull("generator.Settings");
+                        VRAutomatedReportFileGeneratorGenerateFileContext generateFileContext = new VRAutomatedReportFileGeneratorGenerateFileContext
                         {
                             HandlerContext = context
+                        };
+                        var generatedFileOutput = fileGeneratorManager.GenerateFileOutput(generator, generateFileContext);
 
-                        });
-                        if (generatedFile != null)
+                        if (generatedFileOutput != null)
                         {
-                            MemoryStream stream = new MemoryStream(generatedFile.FileContent);
+                           
+                            generatedFileOutput.GeneratedFile.ThrowIfNull("generatedFileOutput.GeneratedFile");
+                            MemoryStream stream = new MemoryStream(generatedFileOutput.GeneratedFile.FileContent);
                             string errorMessage = null;
-                            if (!ftpCommunicator.TryWriteFile(stream, generatedFile.FileName, this.Subdirectory, out errorMessage))
+
+                            if (!ftpCommunicator.TryWriteFile(stream, generatedFileOutput.FileName, this.Subdirectory, out errorMessage))
                             {
-                                throw new Exception(errorMessage);
+                                if (context.EvaluatorContext != null)
+                                    context.EvaluatorContext.WriteErrorBusinessTrackingMsg(errorMessage);
+                                else
+                                    throw new Exception(errorMessage);
+                            }
+                            else
+                            {
+                                if (context.EvaluatorContext != null)
+                                {
+                                    filesDone++;
+                                    filesLeft = totalFiles - filesDone;
+                                    if (filesDone == 1)
+                                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished transferring 1 file to directory {0} using FTP. The number of files left is {1} out of {2} files.", this.FTPCommunicatorSettings.Directory, filesLeft, totalFiles);
+                                    else
+                                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished generating {0} files to directory {1} using FTP. The number of files left is {2} out of {3} files.", filesDone, this.FTPCommunicatorSettings.Directory, filesLeft, totalFiles);
+                                }
                             }
                         }
                     }

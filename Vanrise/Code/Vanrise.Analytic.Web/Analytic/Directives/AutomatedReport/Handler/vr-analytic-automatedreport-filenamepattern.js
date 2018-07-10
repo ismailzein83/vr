@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAutomatedreportSerialnumberpattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRModalService", "VR_Analytic_AutomatedReportAPIService",
+app.directive("vrAnalyticAutomatedreportFilenamepattern", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRModalService", "VR_Analytic_AutomatedReportAPIService",
     function (UtilsService, VRNotificationService, VRUIUtilsService, VRModalService, VR_Analytic_AutomatedReportAPIService) {
 
         var directiveDefinitionObject = {
@@ -15,7 +15,7 @@ app.directive("vrAnalyticAutomatedreportSerialnumberpattern", ["UtilsService", "
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SerialNumberPattern($scope, ctrl, $attrs);
+                var ctor = new FileNamePattern($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -31,39 +31,52 @@ app.directive("vrAnalyticAutomatedreportSerialnumberpattern", ["UtilsService", "
             var withemptyline = 'withemptyline';
             if (attrs.hidelabel != undefined)
                 withemptyline = '';
-            var label = "Serial Number Pattern";
+            var label = "File Name Pattern";
             if (attrs.label != undefined)
                 label = attrs.label;
             var template = '<vr-columns colnum="{{ctrl.normalColNum*2/3}}">'
                              + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
+                             +'<vr-validator validate="scopeModel.validateFileName()">'
                              + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
+                             +'</vr-validator>'
                          + '</vr-columns>'
                          + '<vr-columns colnum="{{ctrl.normalColNum/3}}" withemptyline>'
-                            + '<vr-button type="Help" data-onclick="scopeModel.openSerialNumberPatternHelper" standalone></vr-button>'
+                            + '<vr-button type="Help" data-onclick="scopeModel.openFileNamePatternHelper" standalone></vr-button>'
                          + '</vr-columns>';
             return template;
 
         }
-        function SerialNumberPattern($scope, ctrl, $attrs) {
+        function FileNamePattern($scope, ctrl, $attrs) {
             var context;
             var parts;
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.openSerialNumberPatternHelper = function () {
+                $scope.scopeModel.openFileNamePatternHelper = function () {
                     var modalSettings = {};
 
                     modalSettings.onScopeReady = function (modalScope) {
-                        modalScope.onSetSerialNumberPattern = function (serialNumberPatternValue) {
+                        modalScope.onSetFileNamePattern = function (fileNamePatternValue) {
                             if (ctrl.value == undefined)
                                 ctrl.value = "";
-                            ctrl.value += serialNumberPatternValue;
+                            ctrl.value += fileNamePatternValue;
                         };
                     };
                     var parameter = {
                         context: getContext()
                     };
-                    VRModalService.showModal('/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportSerialNumberPatternHelper.html', parameter, modalSettings);
+                    VRModalService.showModal('/Client/Modules/Analytic/Directives/AutomatedReport/Handler/Templates/AutomatedReportFileNamePatternHelper.html', parameter, modalSettings);
+                };
+
+                $scope.scopeModel.validateFileName = function () {
+                    if (ctrl.value != undefined) {
+                        var fileName = ctrl.value;
+                        if (fileName.includes('/') || fileName.includes('\\') || fileName.includes(':') || fileName.includes('*') || fileName.includes('?')
+            || fileName.includes('"') || fileName.includes('<') || fileName.includes('>') || fileName.includes('|')) {
+                            return 'A file name cannot contain any of the following characters: /, \\, :, *, ?, ", <, > and |.';
+                        }
+                    }
+                    return null;
                 };
                 defineAPI();
             }
@@ -74,13 +87,13 @@ app.directive("vrAnalyticAutomatedreportSerialnumberpattern", ["UtilsService", "
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        if (payload.serialNumberPattern != undefined)
-                            ctrl.value = payload.serialNumberPattern;
+                        if (payload.fileNamePattern != undefined)
+                            ctrl.value = payload.fileNamePattern;
                         var promises = [];
 
                         function loadParts() {
                             return VR_Analytic_AutomatedReportAPIService.GetAutomatedReportSettings().then(function (response) {
-                                parts = response.SerialNumberParts;
+                                parts = response.FileNameParts;
                             });
                         }
                         promises.push(loadParts());

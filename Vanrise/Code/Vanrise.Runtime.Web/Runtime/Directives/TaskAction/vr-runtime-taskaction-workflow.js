@@ -134,11 +134,6 @@ function (UtilsService, VRUIUtilsService) {
                 if (bpDefenitionDirectiveAPI != undefined && bpDefenitionDirectiveAPI.validate != undefined && typeof (bpDefenitionDirectiveAPI.validate) == "function") {
                     return bpDefenitionDirectiveAPI.validate();
                 }
-                else {
-                    var validatePromise = UtilsService.createPromiseDeferred();
-                    validatePromise.resolve();
-                    return validatePromise.promise;
-                }
             };
 
             if (ctrl.onReady != null)

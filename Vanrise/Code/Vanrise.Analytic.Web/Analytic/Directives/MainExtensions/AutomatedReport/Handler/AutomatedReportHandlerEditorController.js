@@ -7,6 +7,9 @@
         var isEditMode;
         var attachementGeneratorEntity;
 
+        var fileNamePatternAPI;
+        var fileNamePatternReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var fileGeneratorAPI;
         var fileGeneratorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -29,6 +32,11 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onFileNamePatternReady = function (api) {
+                fileNamePatternAPI = api;
+                fileNamePatternReadyPromiseDeferred.resolve();
+            };
+
             $scope.scopeModel.onFileGeneratorSelectorReady = function (api) {
                 fileGeneratorAPI = api;
                 fileGeneratorReadyPromiseDeferred.resolve();
@@ -40,8 +48,10 @@
                     FileGenerator: buildObjFromScope(),
                     Queries: context.getQueryInfo()
                 };
-                VR_Analytic_AdvancedExcelFileGeneratorAPIService.DownloadAttachmentGenerator(input).then(function (response) {
-                    UtilsService.downloadFile(response.data, response.headers);
+
+                return VR_Analytic_AdvancedExcelFileGeneratorAPIService.DownloadAttachmentGenerator(input).then(function (response) {
+                    if (response != undefined)
+                        UtilsService.downloadFile(response.data, response.headers);
                 });
             };
 
@@ -77,7 +87,18 @@
 
                 if (attachementGeneratorEntity == undefined)
                     return;
-                $scope.scopeModel.Name = attachementGeneratorEntity.Name;
+            }
+
+            function loadFileNamePattern() {
+                var fileNamePatternDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                fileNamePatternReadyPromiseDeferred.promise.then(function () {
+                    var fileNamePatternDirectivePayload =
+                       {
+                           fileNamePattern: attachementGeneratorEntity!=undefined ? attachementGeneratorEntity.Name : undefined
+                       };
+                    VRUIUtilsService.callDirectiveLoad(fileNamePatternAPI, fileNamePatternDirectivePayload, fileNamePatternDeferredLoadPromiseDeferred);
+                });
+                return fileNamePatternDeferredLoadPromiseDeferred.promise;
             }
 
             function loadFileGeneratorSelector() {
@@ -91,7 +112,7 @@
                 });
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFileGeneratorSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFileGeneratorSelector, loadFileNamePattern])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -102,8 +123,9 @@
 
         function buildObjFromScope() {
             var obj = {
+                //$type: "Vanrise.Analytic.Entities.VRAutomatedReportFileGenerator, Vanrise.Analytic.Entities",
                 VRAutomatedReportFileGeneratorId: attachementGeneratorEntity != undefined ? attachementGeneratorEntity.VRAutomatedReportFileGeneratorId: UtilsService.guid() ,
-                Name: $scope.scopeModel.Name,
+                Name: fileNamePatternAPI.getData(),
                 Settings: fileGeneratorAPI.getData(),
             };
             return obj;

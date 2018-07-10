@@ -1,11 +1,9 @@
-﻿<vr-row>
-    <vr-columns width="1/4row">
+﻿
+<vr-row>
+    <vr-columns colnum="2">
         <vr-fileupload tempfile="true" label="Excel Template" extension="xls,xlsx,csv,xlsb" value="scopeModel.file" isrequired="true"></vr-fileupload>
     </vr-columns>
-    <vr-analytic-automatedreport-serialnumberpattern on-ready="scopeModel.onSerialNumberPatternReady" isrequired="true" normal-col-num="3" label="File Name"></vr-analytic-automatedreport-serialnumberpattern>
-    </vr-row>
-<vr-row>
-    <vr-columns width="1/2row">
+    <vr-columns colnum="3">
         <vr-switch value="scopeModel.compressFile" label="Compress File"></vr-switch>
     </vr-columns>
 </vr-row>
@@ -33,15 +31,17 @@
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-select on-ready="scopeModel.onListNameSelectorReady"
-                                   datasource="scopeModel.listNames"
-                                   datatextfield="description"
-                                   datavaluefield="value"
-                                   selectedvalues="scopeModel.listNameSelected"
-                                   entityname="List"
-                                   label="List"
-                                   isrequired="scopeModel.tables.length==0">
-                        </vr-select>
+                        <span vr-loader="scopeModel.isLoadingListNames">
+                            <vr-select on-ready="scopeModel.onListNameSelectorReady"
+                                       datasource="scopeModel.listNames"
+                                       datatextfield="description"
+                                       datavaluefield="value"
+                                       selectedvalues="scopeModel.listNameSelected"
+                                       entityname="List"
+                                       label="List"
+                                       isrequired="scopeModel.tables.length==0">
+                            </vr-select>
+                        </span>
                     </vr-columns>
                     <vr-columns width="1/4row" withemptyline>
                         <vr-button type="Add" data-onclick="scopeModel.addMappedTable" standalone="true" vr-disabled="scopeModel.disableAddMappedTable()"></vr-button>
