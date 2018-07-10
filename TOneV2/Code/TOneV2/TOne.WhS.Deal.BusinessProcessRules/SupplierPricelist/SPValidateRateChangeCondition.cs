@@ -26,11 +26,13 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             foreach (var importedZone in countryZones.ImportedZones.Zones)
             {
                 var importedRate = importedZone.ImportedNormalRate;
+
+                if (importedRate.NewRates != null || importedRate.NewRates.Count == 0)
+                    continue;
+
                 var rate = importedRate.NewRates.First();
                 DateTime effectivedate = DateTime.Now;
 
-                if (importedRate.ChangeType == RateChangeType.Deleted)
-                    effectivedate = importedRate.EED.Value;
                 if (importedRate.ChangeType == RateChangeType.Decrease || importedRate.ChangeType == RateChangeType.Increase)
                     effectivedate = importedRate.BED;
 
