@@ -36,7 +36,19 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public string Password { get; set; }
         public string DirectorytoMoveFile { get; set; }
         public int? ActionAfterImport { get; set; }
-        public FileCheckCriteriaEnum FileCheckCriteria { get; set; }
+
+        FileCheckCriteriaEnum _fileCheckCriteria = FileCheckCriteriaEnum.DateAndNameCheck;
+        public FileCheckCriteriaEnum FileCheckCriteria
+        {
+            get
+            {
+                return _fileCheckCriteria;
+            }
+            set
+            {
+                _fileCheckCriteria = value;
+            }
+        }
         public string LastImportedFile { get; set; }
         public bool CompressedFiles { get; set; }
         public CompressionTypes CompressionType { get; set; }
