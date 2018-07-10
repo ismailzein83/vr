@@ -31,7 +31,7 @@ function (UtilsService, VRNotificationService, VRModalService, VRCommon_ExcelFil
                     };
                 };
                 VRCommon_ExcelFileUploaderService.addExcelSheets(onExcelAdded);
-            }
+            };
             defineAPI();
         }
 
