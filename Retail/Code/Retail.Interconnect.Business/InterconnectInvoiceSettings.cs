@@ -54,7 +54,7 @@ namespace Retail.Interconnect.Business
 
         public override Vanrise.Invoice.Entities.InvoiceGenerator GetInvoiceGenerator()
         {
-            return new InterconnectInvoiceGenerator(this.AccountBEDefinitionId, this.InvoiceTransactionTypeId, this.UsageTransactionTypeIds);
+            return new InterconnectInvoiceGenerator(this.AccountBEDefinitionId, this.InvoiceTransactionTypeId, this.UsageTransactionTypeIds, this.Type);
         }
 
         public override IEnumerable<string> GetPartnerIds(Vanrise.Invoice.Entities.IExtendedSettingsPartnerIdsContext context)

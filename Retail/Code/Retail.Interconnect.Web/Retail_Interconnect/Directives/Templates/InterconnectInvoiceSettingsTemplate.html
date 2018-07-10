@@ -15,4 +15,12 @@
                                                        ismultipleselection
                                                        isrequired="true">
     </vr-accountbalance-billingtransactiontype-selector>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.invoiceType"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedInvoiceType"
+                   label="Invoice Type">
+        </vr-select>
+    </vr-columns>
 </vr-row>

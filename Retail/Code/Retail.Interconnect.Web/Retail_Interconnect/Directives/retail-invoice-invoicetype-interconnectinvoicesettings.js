@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService","retail_Interconnect_InvoiceType",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, retail_Interconnect_InvoiceType) {
 
         var directiveDefinitionObject = {
 
@@ -39,7 +39,7 @@ app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsServ
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.invoiceType = UtilsService.getArrayEnum(retail_Interconnect_InvoiceType);
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorAPI = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
@@ -63,7 +63,7 @@ app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsServ
 
                 api.load = function (payload) {
                     var promises = [];
-                    
+                    $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceType, payload.extendedSettingsEntity.Type, "value");
                     promises.push(getBusinessEntityDefinitionSelectorLoadPromise());
                     promises.push(loadSingleBillingTransactionTypeSelector());
                     promises.push(loadMultiBillingTransactionTypeSelector());
@@ -126,7 +126,9 @@ app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsServ
                         $type: "Retail.Interconnect.Business.InterconnectInvoiceSettings, Retail.Interconnect.Business",
                         AccountBEDefinitionId: beDefinitionSelectorAPI.getSelectedIds(),
                         InvoiceTransactionTypeId: singleBillingTransactionTypeSelectorAPI.getSelectedIds(),
-                        UsageTransactionTypeIds: multiBillingTransactionTypeSelectorAPI.getSelectedIds()
+                        UsageTransactionTypeIds: multiBillingTransactionTypeSelectorAPI.getSelectedIds(),
+                        Type: $scope.scopeModel.selectedInvoiceType != undefined ? $scope.scopeModel.selectedInvoiceType.value : undefined
+
                     };
                 };
 

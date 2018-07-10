@@ -21,11 +21,14 @@ namespace Retail.Interconnect.Business
          Guid _acountBEDefinitionId;
          Guid _invoiceTransactionTypeId;
          List<Guid> _usageTransactionTypeIds;
-         public InterconnectInvoiceGenerator(Guid acountBEDefinitionId, Guid invoiceTransactionTypeId, List<Guid> usageTransactionTypeIds)
+         InterconnectInvoiceType _type;
+
+         public InterconnectInvoiceGenerator(Guid acountBEDefinitionId, Guid invoiceTransactionTypeId, List<Guid> usageTransactionTypeIds ,InterconnectInvoiceType type)
          {
              this._acountBEDefinitionId = acountBEDefinitionId;
              this._invoiceTransactionTypeId = invoiceTransactionTypeId;
              this._usageTransactionTypeIds = usageTransactionTypeIds;
+             this._type = type;
          }
 
         #endregion
@@ -268,11 +271,15 @@ namespace Retail.Interconnect.Business
                 Dimension = dimentionFilterName,
                 FilterValues = new List<object> { dimentionFilterValue }
             };
-            DimensionFilter billingTypeFilter = new DimensionFilter()
-            {
-                Dimension = "BillingType",
-                FilterValues = new List<object> { 1 }
-            };
+           
+                DimensionFilter billingTypeFilter = new DimensionFilter();
+                
+                billingTypeFilter.Dimension = "BillingType";
+                if (_type == InterconnectInvoiceType.Customer)
+                { billingTypeFilter.FilterValues = new List<object> { 1 };}
+                else { billingTypeFilter.FilterValues = new List<object> { 2 }; }
+        
+            
             analyticQuery.Query.Filters.Add(billingTypeFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
