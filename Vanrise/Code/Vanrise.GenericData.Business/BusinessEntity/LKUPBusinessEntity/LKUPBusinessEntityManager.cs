@@ -77,7 +77,7 @@ namespace Vanrise.GenericData.Business
 
         private Dictionary<string, LKUPBusinessEntityItem> GetCachedLKUPItems(Guid businessEntityDefinitionId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedLKUPItems",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedLKUPItems",businessEntityDefinitionId,
                () =>
                {
                    LKUPBusinessEntityDefinitionManager _manager = new LKUPBusinessEntityDefinitionManager();
@@ -100,9 +100,16 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
-
+            public override bool IsCacheExpired(Guid businessEntityDefinitionId, ref DateTime? lastCheckTime)
+            {
+                LKUPBusinessEntityDefinitionManager _manager = new LKUPBusinessEntityDefinitionManager();
+                var lookUpSettings = _manager.GetLookUpBEDefinitionSettings(businessEntityDefinitionId);
+                lookUpSettings.ThrowIfNull("lookUpSettings", businessEntityDefinitionId);
+                lookUpSettings.ExtendedSettings.ThrowIfNull("lookUpSettings.ExtendedSettings", businessEntityDefinitionId);
+                return lookUpSettings.ExtendedSettings.IsCacheExpired(businessEntityDefinitionId, ref lastCheckTime);
+            }
         }
         public class LKUPBusinessEntityExtendedSettingsContext : ILKUPBusinessEntityExtendedSettingsContext
         {
