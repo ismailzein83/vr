@@ -53,10 +53,13 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             DateTime maxAttemptDateTime;
             HashSet<DealZoneGroup> saleDealZoneGroups;
             HashSet<DealZoneGroup> costDealZoneGroups;
+
+            bool hasDealData = false;
             PrepareLists(batchRecords, out saleDealZoneGroups, out costDealZoneGroups, out mainCDRs, out partialPricedCDRs, out minAttemptDateTime, out maxAttemptDateTime);
 
             if (saleDealZoneGroups.Count > 0 || costDealZoneGroups.Count > 0)
             {
+                hasDealData = true;
                 Dictionary<DealZoneGroup, DealProgress> saleDealProgresses;
                 Dictionary<DealZoneGroup, DealProgress> costDealProgresses;
                 Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> saleDealDetailedProgresses;
@@ -130,7 +133,12 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
             DataRecordBatch mainTransformedBatch = DataRecordBatch.CreateBatchFromRecords(mainCDRs, queueItemType.BatchDescription, recordTypeId);
             DataRecordBatch partialPricedTransformedBatch = DataRecordBatch.CreateBatchFromRecords(partialPricedCDRs, queueItemType.BatchDescription, recordTypeId);
             DataRecordBatch billingTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingRecords, queueItemType.BatchDescription, recordTypeId);
-            DataRecordBatch trafficTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingRecords.Union(trafficRecords).ToList(), queueItemType.BatchDescription, recordTypeId);
+            
+            DataRecordBatch trafficTransformedBatch;
+            if(hasDealData)
+                trafficTransformedBatch = DataRecordBatch.CreateBatchFromRecords(billingRecords.Union(trafficRecords).ToList(), queueItemType.BatchDescription, recordTypeId);
+            else
+                trafficTransformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription, recordTypeId);
 
             SendOutputData(context, mainTransformedBatch, partialPricedTransformedBatch, billingTransformedBatch, trafficTransformedBatch);
         }
