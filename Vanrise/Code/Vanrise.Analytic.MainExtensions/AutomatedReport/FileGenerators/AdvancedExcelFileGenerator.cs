@@ -44,8 +44,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 int tablesDone = 0;
                 int tablesLeft = tablesCount;
 
-                if (context.HandlerContext.EvaluatorContext != null)
-                    context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Started mapping tables.");
                 foreach (var tableDef in this.TableDefinitions)
                 {
                     tableDef.ColumnDefinitions.ThrowIfNull("tableDef.ColumnDefinitions");
@@ -56,7 +54,6 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     dataList.Items.ThrowIfNull("dataList.Items", dataListIdentifier);
                     dataList.FieldInfos.ThrowIfNull("dataList.FieldInfos", dataListIdentifier);
 
-                    //Dictionary<int, bool> isSubTableByIndex = new Dictionary<int, bool>();
                     int titleRowIndex = tableDef.RowIndex;
                     int headerRowIndex = tableDef.RowIndex;
                     int dataRowIndex = tableDef.RowIndex;
@@ -114,8 +111,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                             continue;
                                         }
                                     }
-                                    if (field.Value.Value != null)
-                                    {
+                                    //if (field.Value.Value != null)
+                                    //{
                                         if (field.Value.Value is DateTime)
                                         {
                                             var date = Convert.ToDateTime(field.Value.Value);
@@ -140,7 +137,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                             var dataIndices = colIndexByRow.GetOrCreateItem(dataRowIndex);
                                             dataIndices.Add(column.ColumnIndex);
                                         }
-                                    }
+                                    //}
                                 }
                             }
                             setHeaders = false;

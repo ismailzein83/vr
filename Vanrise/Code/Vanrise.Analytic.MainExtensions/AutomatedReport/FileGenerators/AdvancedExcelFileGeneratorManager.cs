@@ -45,14 +45,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
 
             if (generateFileContext.HandlerContext.EvaluatorContext != null)
-                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Started generating {0}.", fileName);
+                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Started generating the file '{0}'.", fileName);
             var generatedFile = fileGenerator.Settings.GenerateFile(new VRAutomatedReportFileGeneratorGenerateFileContext()
             {
                 HandlerContext = generateFileContext.HandlerContext
             });
             generatedFile.ThrowIfNull("generatedFile");
             if (generateFileContext.HandlerContext.EvaluatorContext != null)
-                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished generating {0}.", fileName);
+                generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished generating the file '{0}'.", fileName);
             var advancedExcelFileGenerator = fileGenerator.Settings.CastWithValidate<AdvancedExcelFileGenerator>("fileGenerator.Settings");
             if (advancedExcelFileGenerator.CompressFile)
             {
