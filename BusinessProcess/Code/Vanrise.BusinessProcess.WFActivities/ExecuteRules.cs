@@ -23,6 +23,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 		public InArgument<bool> GetRulesFromParentProcess { get; set; }
 
 		public InArgument<bool> DoNotThrowExceptionOnRulesViolation { get; set; }
+        public InArgument<int?> BPBusinessRuleSetId { get; set; }
 
 		public OutArgument<bool> ViolatedRulesExist { get; set; }
 
@@ -36,6 +37,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 
 			bool writeMessagesToParentProcess = this.WriteMessagesToParentProcess.Get(context);
 			string parentMessagePrefix = this.ParentMessagePrefix.Get(context);
+
 
 			List<BPViolatedRule> violatedBusinessRulesByTarget = new List<BPViolatedRule>(); ;
 			bool stopExecutionFlag;
@@ -62,9 +64,10 @@ namespace Vanrise.BusinessProcess.WFActivities
 			else
 				rulesDefinitionId = context.GetSharedInstanceData().InstanceInfo.DefinitionID;
 
+            int? bPBusinessRuleSetId = this.BPBusinessRuleSetId.Get(context);
 			bpBusinessRules = bpBusinessRuleManager.GetBPBusinessRuleDefinitions(businessRulesKey, rulesDefinitionId);
 
-			IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules);
+			IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules, bPBusinessRuleSetId);
 			ExecuteValidation(rules, importedDataToValidate, context, violatedBusinessRulesByTarget, out stopExecutionFlag);
 			AppendValidationMessages(context, violatedBusinessRulesByTarget, writeMessagesToParentProcess, parentMessagePrefix, out errorMessages);
 
@@ -77,24 +80,25 @@ namespace Vanrise.BusinessProcess.WFActivities
 			}
 		}
 
-		private IEnumerable<BusinessRule> BuildBusinessRules(List<BPBusinessRuleDefinition> bpBusinessRules)
+        private IEnumerable<BusinessRule> BuildBusinessRules(List<BPBusinessRuleDefinition> bpBusinessRules, int? bPBusinessRuleSetId)
 		{
 			if (bpBusinessRules == null)
 				return null;
 			List<BusinessRule> rules = new List<BusinessRule>();
 			BPBusinessRuleActionManager bpRuleActionManager = new BPBusinessRuleActionManager();
 
+
 			foreach (BPBusinessRuleDefinition bpBusinessRule in bpBusinessRules)
 			{
-				BPBusinessRuleAction action = bpRuleActionManager.GetBusinessRuleAction(bpBusinessRule.BPBusinessRuleDefinitionId);
-				BusinessRule rule = new BusinessRule()
-				{
-					BPBusinessRuleDefinitionId = bpBusinessRule.BPBusinessRuleDefinitionId,
-					Condition = bpBusinessRule.Settings.Condition,
-					Action = action.Details.Settings.Action,
-					ExecutionDependsOnRules = bpBusinessRule.Settings.ExecutionDependsOnRules
-				};
-				rules.Add(rule);
+                BusinessRuleAction effectiveAction = bpRuleActionManager.GetEffectiveRuleAction(bpBusinessRule.BPBusinessRuleDefinitionId, bPBusinessRuleSetId);
+                BusinessRule rule = new BusinessRule()
+                {
+                    BPBusinessRuleDefinitionId = bpBusinessRule.BPBusinessRuleDefinitionId,
+                    Condition = bpBusinessRule.Settings.Condition,
+                    Action = effectiveAction,
+                    ExecutionDependsOnRules = bpBusinessRule.Settings.ExecutionDependsOnRules
+                };
+                rules.Add(rule);
 			}
 			return rules;
 		}

@@ -109,7 +109,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			var carrierAccount = GetCarrierAccount(carrierAccountId);
 
 			carrierAccount.ThrowIfNull("Carrier Account", carrierAccountId);
-			carrierAccount.SupplierSettings.ThrowIfNull("CarrierAccount.CustomerSetting", carrierAccountId);
+			carrierAccount.SupplierSettings.ThrowIfNull("CarrierAccount.SupplierSettings", carrierAccountId);
 
 			var autoImportEmail = carrierAccount.SupplierSettings.AutoImportSettings.Email;
 

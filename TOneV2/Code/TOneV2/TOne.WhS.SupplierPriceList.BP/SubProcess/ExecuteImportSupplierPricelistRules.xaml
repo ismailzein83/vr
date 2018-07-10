@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -17,6 +18,7 @@
     <x:Property Name="ImportedDataToValidate" Type="InArgument(scg:IEnumerable(vbe:IRuleTarget))" />
     <x:Property Name="ReceivedPricelistRecordId" Type="InArgument(x:Int32)" />
     <x:Property Name="BusinessRulesKey" Type="InArgument(x:String)" />
+    <x:Property Name="BPBusinessRuleSetId" Type="InArgument(s:Nullable(x:Int32))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.SupplierPriceList.BP.SubProcess.ExecuteImportSupplierPricelistRules_1</sap2010:WorkflowViewState.IdRef>
@@ -65,6 +67,11 @@
       <Variable x:TypeArguments="scg:List(vbe:BPValidationMessage)" Name="ErrorMessages" />
     </Sequence.Variables>
     <vbw:ExecuteRules GetRulesFromParentProcess="{x:Null}" ParentMessagePrefix="{x:Null}" WriteMessagesToParentProcess="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
+      <vbw:ExecuteRules.BPBusinessRuleSetId>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
+        </InArgument>
+      </vbw:ExecuteRules.BPBusinessRuleSetId>
       <vbw:ExecuteRules.BusinessRulesKey>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">BusinessRulesKey</mca:CSharpValue>
@@ -120,7 +127,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbBA+A3wOAgEBQwVdGAIBI14FegoCAQJGC0ZZAgFAUAtQdwIBOVULVXcCATJaC1pjAgErSwtLVgIBJGELYXMCAQNlCXgUAgEKZgt2OAIBDXcLd5wBAgELbhFuoAECARxzEXN1AgEVaRFpZwIBDndbd5kBAgEM</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbBFAA4MBDgIBAUUFZBgCASdlBYEBCgIBAk0LTVkCAVBXC1d3AgFIXAtcdwIBQGELYWMCAThSC1JWAgEwSAtIZwIBKGgLaHMCAQNsCX8UAgELbQt9OAIBDn4LfpwBAgEMdRF1oAECAR96EXp1AgEXcBFwZwIBD35bfpkBAgEN</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

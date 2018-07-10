@@ -23,7 +23,7 @@
 
 		// Pricing Settings
 		var bpBusinessRuleSetDirectiveAPI;
-		var bpBusinessRuleSetSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		var bpBusinessRuleSetSelectorReadyDeferred;
 
 		// Customer Settings
 		var customerTimeZoneSelectorAPI;
@@ -166,10 +166,7 @@
 			};
 
 			// Pricing Settings
-			$scope.scopeModel.onBPBusinessRuleSetSelectorReady = function (api) {
-				bpBusinessRuleSetDirectiveAPI = api;
-				bpBusinessRuleSetSelectorReadyDeferred.resolve();
-			};
+
 
 			// Customer Settings
 			$scope.scopeModel.onCustomerTimeSelectorReady = function (api) {
@@ -234,6 +231,13 @@
 				VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeZoneSelectorAPI, undefined, setLoader, supplierTimeZoneSelectorReadyDeferred);
 
 			};
+            
+			$scope.scopeModel.onBPBusinessRuleSetSelectorReady = function (api) {
+			    bpBusinessRuleSetDirectiveAPI = api;
+			    var setLoader = function (value) { $scope.scopeModel.isLoadingBPBusinessRuleSetSelector = value; };
+			    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpBusinessRuleSetDirectiveAPI, undefined, setLoader, bpBusinessRuleSetSelectorReadyDeferred);
+			};
+
 			$scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
 				zoneServiceConfigSelectorAPI = api;
 				var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
@@ -341,7 +345,7 @@
 			});
 		}
 		function getCarrierAccountHistory() {
-			return WhS_BE_CarrierAccountAPIService.GetCarrierAccountHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+		    return WhS_BE_CarrierAccountAPIService.GetCarrierAccountHistoryDetailbyHistoryId(context.historyId).then(function (response) {
 				carrierAccountEntity = response;
 
 			});
@@ -384,7 +388,8 @@
 					pricingSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
 				}
 				function setSupplierGlobalVars() {
-					supplierTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+				    supplierTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+				    bpBusinessRuleSetSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 					zoneServiceConfigSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 					supplierRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 				}
@@ -409,7 +414,7 @@
 		}
 
 		function loadDefinitionTab() {
-			return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector]);
+		    return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector]); 
 		}
 		function loadStaticData() {
 			if (!isEditMode && !isViewHistoryMode) {
@@ -422,7 +427,6 @@
 					if (carrierAccountEntity.AccountType == $scope.scopeModel.carrierAccountTypes[i].value)
 						$scope.scopeModel.selectedCarrierAccountType = $scope.scopeModel.carrierAccountTypes[i];
 
-				if (carrierAccountEntity != undefined) {
 					if (carrierAccountEntity.CarrierAccountSettings != undefined) {
 						$scope.scopeModel.mask = carrierAccountEntity.CarrierAccountSettings.Mask;
 						$scope.scopeModel.nominalCapacity = carrierAccountEntity.CarrierAccountSettings.NominalCapacity;
@@ -443,7 +447,6 @@
 						$scope.scopeModel.customerInvoiceTimeZone = carrierAccountEntity.CustomerSettings.InvoiceTimeZone;
 
 					}
-				}
 			}
 		}
 		function loadCarrierProfileSelector() {
@@ -506,18 +509,7 @@
 			return loadCompanySettingSelectorPromiseDeferred.promise;
 		}
 
-		function loadBPBusinessRuleSetSelector() {
-			var loadBPBusinessRuleSetSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-			bpBusinessRuleSetSelectorReadyDeferred.promise.then(function () {
-				var payload = {
-					filter: { BPDefinitionId: "6EF1A7A7-9B70-4A8F-B94E-F9BB5E347CF2" },
-					selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.BPBusinessRuleSetId : undefined)
-				};
 
-				VRUIUtilsService.callDirectiveLoad(bpBusinessRuleSetDirectiveAPI, payload, loadBPBusinessRuleSetSelectorPromiseDeferred);
-			});
-			return loadBPBusinessRuleSetSelectorPromiseDeferred.promise;
-		}
 
 		function loadCustomerSettingsTab() {
 			var promises = [];
@@ -645,7 +637,7 @@
 
 
 		function loadSupplierSettingsTab() {
-			return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector]);
+		    return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadBPBusinessRuleSetSelector]);
 		}
 		function loadSupplierTimeZoneSelector() {
 			var supplierTimeZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -660,6 +652,20 @@
 
 			return supplierTimeZoneSelectorLoadDeferred.promise;
 		}
+
+		function loadBPBusinessRuleSetSelector() {
+		    var loadBPBusinessRuleSetSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+		    bpBusinessRuleSetSelectorReadyDeferred.promise.then(function () {
+
+		        var payload = {
+		            filter: "",
+		            selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != undefined ? carrierAccountEntity.SupplierSettings.BPBusinessRuleSetId : undefined)
+		        };
+		        VRUIUtilsService.callDirectiveLoad(bpBusinessRuleSetDirectiveAPI, payload, loadBPBusinessRuleSetSelectorPromiseDeferred);
+		    });
+		    return loadBPBusinessRuleSetSelectorPromiseDeferred.promise;
+		}
+
 		function loadZoneServiceConfigSelector() {
 			var zoneServiceConfigSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 

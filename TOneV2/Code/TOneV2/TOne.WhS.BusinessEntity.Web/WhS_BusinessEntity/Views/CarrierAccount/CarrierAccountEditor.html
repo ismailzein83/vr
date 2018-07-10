@@ -1,157 +1,159 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModel.isLoading" width="'75%'">
-	<vr-modalbody>
-		<vr-form name="formCarrierAccountEditor">
-			<vr-tabs>
-				<vr-tab header="'Definition'">
-					<vr-row>
-						<vr-columns width="1/2row">
-							<vr-textbox value="scopeModel.name" label="Suffix"></vr-textbox>
-						</vr-columns>
-						<span vr-disabled="scopeModel.disableCarrierProfile">
-							<vr-whs-be-carrierprofile-selector normal-col-num="6" showaddbutton isrequired onselectionchanged="scopeModel.onCarrierProfileSelectionChanged" on-ready="scopeModel.onCarrierProfileSelectorReady">
-							</vr-whs-be-carrierprofile-selector>
-						</span>
-						<vr-columns width="1/2row">
-							<vr-textbox value="scopeModel.mask" label="Alias Name"></vr-textbox>
-						</vr-columns>
-						<vr-whs-be-activationstatus-selector on-ready="scopeModel.onActivationStatusSelectorReady" normal-col-num="6" isrequired hideremoveicon></vr-whs-be-activationstatus-selector>
-						<span vr-disabled="scopeModel.disableCarrierAccountType">
-							<vr-columns width="1/2row">
-								<vr-select on-ready="scopeModel.onCarrierAccountTypeSelectorReady"
-										   label="Account Type"
-										   datasource="scopeModel.carrierAccountTypes"
-										   selectedvalues="scopeModel.selectedCarrierAccountType"
-										   onselectionchanged="scopeModel.onCarrierAccountTypeChanged"
-										   datavaluefield="value"
-										   datatextfield="description"
-										   isrequired
-										   hideremoveicon>
-								</vr-select>
-							</vr-columns>
-						</span>
-						<vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>
-						<vr-common-company-setting-selector on-ready="scopeModel.onCompanySettingSelectorReady" normal-col-num="6"></vr-common-company-setting-selector>
+    <vr-modalbody>
+        <vr-form name="formCarrierAccountEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Suffix"></vr-textbox>
+                        </vr-columns>
+                        <span vr-disabled="scopeModel.disableCarrierProfile">
+                            <vr-whs-be-carrierprofile-selector normal-col-num="6" showaddbutton isrequired onselectionchanged="scopeModel.onCarrierProfileSelectionChanged" on-ready="scopeModel.onCarrierProfileSelectorReady">
+                            </vr-whs-be-carrierprofile-selector>
+                        </span>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.mask" label="Alias Name"></vr-textbox>
+                        </vr-columns>
+                        <vr-whs-be-activationstatus-selector on-ready="scopeModel.onActivationStatusSelectorReady" normal-col-num="6" isrequired hideremoveicon></vr-whs-be-activationstatus-selector>
+                        <span vr-disabled="scopeModel.disableCarrierAccountType">
+                            <vr-columns width="1/2row">
+                                <vr-select on-ready="scopeModel.onCarrierAccountTypeSelectorReady"
+                                           label="Account Type"
+                                           datasource="scopeModel.carrierAccountTypes"
+                                           selectedvalues="scopeModel.selectedCarrierAccountType"
+                                           onselectionchanged="scopeModel.onCarrierAccountTypeChanged"
+                                           datavaluefield="value"
+                                           datatextfield="description"
+                                           isrequired
+                                           hideremoveicon>
+                                </vr-select>
+                            </vr-columns>
+                        </span>
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>
+                        <vr-common-company-setting-selector on-ready="scopeModel.onCompanySettingSelectorReady" normal-col-num="6"></vr-common-company-setting-selector>
 
-						<vr-columns width="1/2row">
-							<vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<vr-switch value="scopeModel.isInterconnectSwitch" label="Interconnect Switch"></vr-switch>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
-					<vr-row>
-						<vr-columns width="fullrow">
-							<vr-section header="General Settings">
-								<vr-row>
-									<span vr-loader="scopeModel.isLoadingCustomerTimeZoneSelector">
-										<vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6" showaddbutton></vr-common-timezone-selector>
-									</span>
-									<vr-columns width="1/2row">
-										<vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
-									</vr-columns>
-									<span ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan" vr-loader="scopeModel.isLoadingSellingNumberPlanSelector">
-										<vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlanSelectorReady"
-																			  selectedvalues="scopeModel.sellingNumberPlan"
-																			  onselectionchanged="scopeModel.onSellingNumberPlanChanged"
-																			  normal-col-num="6"
-																			  isrequired="scopeModel.showSellingNumberPlan"
-																			  hideremoveicon showaddbutton>
-										</vr-whs-be-sellingnumberplan-selector>
-									</span>
-									<span vr-disabled="scopeModel.isSellingProductSelectorDisabled" vr-loader="scopeModel.isLoadingSellingProductSelector">
-										<vr-whs-be-sellingproduct-selector on-ready="scopeModel.onSellingProductSelectorReady"
-																		   normal-col-num="6"
-																		   isrequired="true"
-																		   hideremoveicon showaddbutton>
-										</vr-whs-be-sellingproduct-selector>
-									</span>
-									<span vr-loader="scopeModel.isLoadingCustomerRoutingStatusSelector">
-										<vr-whs-be-routingstatus-selector on-ready="scopeModel.onCustomerRoutingStatusSelectorReady"
-																		  normal-col-num="6"
-																		  isrequired="true"
-																		  hideremoveicon>
-										</vr-whs-be-routingstatus-selector>
-									</span>
-								</vr-row>
-							</vr-section>
-						</vr-columns>
-					</vr-row>
-					<vr-tabs>
-						<vr-tab header="'Pricelist Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPriceListSettingsEditor">
-							<vr-whs-be-pricelistsettings-editor on-ready="scopeModel.onPriceListSettingsEditorReady"></vr-whs-be-pricelistsettings-editor>
-						</vr-tab>
-						<vr-tab header="'Pricing Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPricingSettingsEditor">
-							<vr-whs-be-pricingsettings-editor on-ready="scopeModel.onPricingSettingsEditorReady"></vr-whs-be-pricingsettings-editor>
-						</vr-tab>
-					</vr-tabs>
-				</vr-tab>
+                        <vr-columns width="1/2row">
+                            <vr-textbox type="number" decimalprecision="0" minvalue="0" value="scopeModel.nominalCapacity" label="Nominal Capacity" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.isInterconnectSwitch" label="Interconnect Switch"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="General Settings">
+                                <vr-row>
+                                    <span vr-loader="scopeModel.isLoadingCustomerTimeZoneSelector">
+                                        <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6" showaddbutton></vr-common-timezone-selector>
+                                    </span>
+                                    <vr-columns width="1/2row">
+                                        <vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
+                                    </vr-columns>
+                                    <span ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan" vr-loader="scopeModel.isLoadingSellingNumberPlanSelector">
+                                        <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlanSelectorReady"
+                                                                              selectedvalues="scopeModel.sellingNumberPlan"
+                                                                              onselectionchanged="scopeModel.onSellingNumberPlanChanged"
+                                                                              normal-col-num="6"
+                                                                              isrequired="scopeModel.showSellingNumberPlan"
+                                                                              hideremoveicon showaddbutton>
+                                        </vr-whs-be-sellingnumberplan-selector>
+                                    </span>
+                                    <span vr-disabled="scopeModel.isSellingProductSelectorDisabled" vr-loader="scopeModel.isLoadingSellingProductSelector">
+                                        <vr-whs-be-sellingproduct-selector on-ready="scopeModel.onSellingProductSelectorReady"
+                                                                           normal-col-num="6"
+                                                                           isrequired="true"
+                                                                           hideremoveicon showaddbutton>
+                                        </vr-whs-be-sellingproduct-selector>
+                                    </span>
+                                    <span vr-loader="scopeModel.isLoadingCustomerRoutingStatusSelector">
+                                        <vr-whs-be-routingstatus-selector on-ready="scopeModel.onCustomerRoutingStatusSelectorReady"
+                                                                          normal-col-num="6"
+                                                                          isrequired="true"
+                                                                          hideremoveicon>
+                                        </vr-whs-be-routingstatus-selector>
+                                    </span>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-tabs>
+                        <vr-tab header="'Pricelist Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPriceListSettingsEditor">
+                            <vr-whs-be-pricelistsettings-editor on-ready="scopeModel.onPriceListSettingsEditorReady"></vr-whs-be-pricelistsettings-editor>
+                        </vr-tab>
+                        <vr-tab header="'Pricing Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPricingSettingsEditor">
+                            <vr-whs-be-pricingsettings-editor on-ready="scopeModel.onPricingSettingsEditorReady"></vr-whs-be-pricingsettings-editor>
+                        </vr-tab>
+                    </vr-tabs>
+                </vr-tab>
 
-				<vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
-					<vr-row>
-						<vr-columns width="fullrow">
-							<vr-section header="General Settings">
-								<vr-row>
-									<span vr-loader="scopeModel.isLoadingSupplierTimeZoneSelector">
-										<vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" normal-col-num="6" showaddbutton></vr-common-timezone-selector>
-									</span>
-									<span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfigSelector">
-										<vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
-																				selectedvalues="scopeModel.zoneServiceConfigSelectedValues"
-																				normal-col-num="6"
-																				isrequired="true"
-																				ismultipleselection="true">
-										</vr-whs-be-zone-service-config-selector>
-									</span>
-									<span vr-loader="scopeModel.isLoadingSupplierRoutingStatusSelector">
-										<vr-whs-be-routingstatus-selector on-ready="scopeModel.onSupplierRoutingStatusSelectorReady" normal-col-num="6" isrequired hideremoveicon></vr-whs-be-routingstatus-selector>
-									</span>
-									<vr-columns width="1/2row">
-										<vr-textbox value="scopeModel.supplierEffectiveDateDayOffset" label="Effective Date Day Offset" type="number" minvalue="0" maxvalue="10000"></vr-textbox>
-									</vr-columns>
-									<vr-columns width="1/2row">
-										<businessprocess-bp-business-rule-set-selector on-ready="scopeModel.onBPBusinessRuleSetSelectorReady" label="Rule Set"></businessprocess-bp-business-rule-set-selector>
-									</vr-columns>
-								</vr-row>
-							</vr-section>
-						</vr-columns>
-					</vr-row>
-					<vr-tabs>
-						<vr-tab header="'Automatic Import'">
-							<vr-row>
-								<vr-columns width="fullrow">
-										<vr-row removeline>
-											<vr-columns width="1/2row">
-												<vr-switch value="scopeModel.isAutoImportActive" label="Active"></vr-switch>
-											</vr-columns>
-										</vr-row>
-										<vr-row removeline>
-											<vr-columns width="1/2row">
-												<vr-textbox type="email" value="scopeModel.automaticPriceListEmail" label="Email" isrequired="scopeModel.isAutoImportActive" vr-disabled="!scopeModel.isAutoImportActive"></vr-textbox>
-											</vr-columns>
-											<vr-columns width="1/2row">
-												<vr-textbox value="scopeModel.automaticPriceListSubjectCode" label="Subject Code" isrequired="scopeModel.isAutoImportActive" vr-disabled="!scopeModel.isAutoImportActive"></vr-textbox>
-											</vr-columns>
-											<vr-columns width="1/2row">
-												<vr-textbox value="scopeModel.automaticPriceListAtttachmentCode" label="Atttachment Code" vr-disabled="!scopeModel.isAutoImportActive"></vr-textbox>
-											</vr-columns>
-										</vr-row>
-								</vr-columns>
-							</vr-row>
-						</vr-tab>
-					</vr-tabs>
-				</vr-tab>
-			</vr-tabs>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Save" formname="formCarrierAccountEditor" data-onclick="scopeModel.saveCarrierAccount" haspermission="hasSaveCarrierAccountPermission"></vr-button>
-				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-			</div>
-		</vr-actionbar>
+                <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="General Settings">
+                                <vr-row>
+                                    <span vr-loader="scopeModel.isLoadingSupplierTimeZoneSelector">
+                                        <vr-common-timezone-selector on-ready="scopeModel.onSupplierTimeSelectorReady" normal-col-num="6" showaddbutton></vr-common-timezone-selector>
+                                    </span>
+                                    <span ng-show="scopeModel.showZoneServiceConfig" vr-loader="scopeModel.isLoadingZoneServiceConfigSelector">
+                                        <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceConfigSelectorReady"
+                                                                                selectedvalues="scopeModel.zoneServiceConfigSelectedValues"
+                                                                                normal-col-num="6"
+                                                                                isrequired="true"
+                                                                                ismultipleselection="true">
+                                        </vr-whs-be-zone-service-config-selector>
+                                    </span>
+                                    <span vr-loader="scopeModel.isLoadingSupplierRoutingStatusSelector">
+                                        <vr-whs-be-routingstatus-selector on-ready="scopeModel.onSupplierRoutingStatusSelectorReady" normal-col-num="6" isrequired hideremoveicon></vr-whs-be-routingstatus-selector>
+                                    </span>
+                                    <vr-columns width="1/2row">
+                                        <vr-textbox value="scopeModel.supplierEffectiveDateDayOffset" label="Effective Date Day Offset" type="number" minvalue="0" maxvalue="10000"></vr-textbox>
+                                    </vr-columns>
+                                    <vr-columns width="1/2row">
+                                        <span vr-loader="scopeModel.isLoadingBPBusinessRuleSetSelector">
+                                            <businessprocess-bp-business-rule-set-selector on-ready="scopeModel.onBPBusinessRuleSetSelectorReady" label="Rule Set"></businessprocess-bp-business-rule-set-selector>
+                                        </span>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-tabs>
+                        <vr-tab header="'Automatic Import'">
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-row removeline>
+                                        <vr-columns width="1/2row">
+                                            <vr-switch value="scopeModel.isAutoImportActive" label="Active"></vr-switch>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-row removeline>
+                                        <vr-columns width="1/2row">
+                                            <vr-textbox type="email" value="scopeModel.automaticPriceListEmail" label="Email" isrequired="scopeModel.isAutoImportActive" vr-disabled="!scopeModel.isAutoImportActive"></vr-textbox>
+                                        </vr-columns>
+                                        <vr-columns width="1/2row">
+                                            <vr-textbox value="scopeModel.automaticPriceListSubjectCode" label="Subject Code" isrequired="scopeModel.isAutoImportActive" vr-disabled="!scopeModel.isAutoImportActive"></vr-textbox>
+                                        </vr-columns>
+                                        <vr-columns width="1/2row">
+                                            <vr-textbox value="scopeModel.automaticPriceListAtttachmentCode" label="Atttachment Code" vr-disabled="!scopeModel.isAutoImportActive"></vr-textbox>
+                                        </vr-columns>
+                                    </vr-row>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                    </vr-tabs>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCarrierAccountEditor" data-onclick="scopeModel.saveCarrierAccount" haspermission="hasSaveCarrierAccountPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
 
-	</div>
+    </div>
 </div>

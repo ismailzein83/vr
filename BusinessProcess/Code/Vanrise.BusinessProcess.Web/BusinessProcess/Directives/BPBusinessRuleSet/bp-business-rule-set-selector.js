@@ -73,9 +73,8 @@ app.directive('businessprocessBpBusinessRuleSetSelector', ['BusinessProcess_BPBu
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
-                    var serializedFilter;
+                    var serializedFilter="";
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
 
