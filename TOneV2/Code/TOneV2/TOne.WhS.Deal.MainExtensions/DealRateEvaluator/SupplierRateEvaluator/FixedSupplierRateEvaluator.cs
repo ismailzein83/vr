@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
-using Vanrise.Common;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Deal.MainExtensions
 {
@@ -13,17 +11,23 @@ namespace TOne.WhS.Deal.MainExtensions
         public decimal Rate { get; set; }
         public override void EvaluateRate(IDealSupplierRateEvaluatorContext context)
         {
-            var suplierRates = context.ZoneIds.Select(zoneId => new DealRate
+            var supplierRates = new List<DealRate>();
+            foreach (var dealZoneItem in context.SupplierZoneItem)
             {
-                ZoneId = zoneId,
-                BED = context.DealBED,
-                EED = context.DealEED,
-                Rate = Rate,
-                CurrencyId = context.CurrencyId
-            });
+                DealRate dealRate = new DealRate
+                {
+                    ZoneId = dealZoneItem.ZoneId,
+                    BED = dealZoneItem.BED,
+                    EED = dealZoneItem.EED,
+                    Rate = Rate,
+                    CurrencyId = context.CurrencyId
+                };
+                if (!dealRate.EED.HasValue || dealRate.BED < dealRate.EED.Value)
+                    supplierRates.Add(dealRate);
+            }
 
-            if (suplierRates.Any())
-                context.SupplierRates = suplierRates;
+            if (supplierRates.Any())
+                context.SupplierRates = supplierRates;
         }
         public override string GetDescription()
         {

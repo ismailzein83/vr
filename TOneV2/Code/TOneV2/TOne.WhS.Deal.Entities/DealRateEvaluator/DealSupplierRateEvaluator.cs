@@ -19,7 +19,7 @@ namespace TOne.WhS.Deal.Entities
         DateTime? DealEED { get; }
         int CurrencyId { get; }
         IEnumerable<DealRate> SupplierRates { get; set; }
-        IEnumerable<long> ZoneIds { get; set; }
+        IEnumerable<DealSupplierZoneGroupZoneItem> SupplierZoneItem { get; set; }
         Dictionary<long, SupplierRate> SupplierZoneRateByZoneId { get; set; }
 
     }

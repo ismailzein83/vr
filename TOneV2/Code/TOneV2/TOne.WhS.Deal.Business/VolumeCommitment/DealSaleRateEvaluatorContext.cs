@@ -12,7 +12,7 @@ namespace TOne.WhS.Deal.Business
         public DateTime DealBED { get; set; }
         public DateTime? DealEED { get; set; }
         public int CurrencyId { get; set; }
-        public IEnumerable<long> ZoneIds { get; set; }
+        public IEnumerable<DealSaleZoneGroupZoneItem> SaleZoneGroupItem { get; set; }
         public List<DealRate> SaleRates { get; set; }
         public Func<string, int, IEnumerable<SaleRateHistoryRecord>> GetCustomerZoneRatesFunc { get; set; }
     }

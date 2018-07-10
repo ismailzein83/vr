@@ -18,13 +18,13 @@ namespace TOne.WhS.Deal.MainExtensions
             var saleRates = new List<DealRate>();
             var saleZoneManager = new SaleZoneManager();
 
-            foreach (var zoneId in context.ZoneIds)
+            foreach (var zoneItem in context.SaleZoneGroupItem)
             {
-                var zoneName = saleZoneManager.GetSaleZoneName(zoneId);
-                var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
+                var zoneName = saleZoneManager.GetSaleZoneName(zoneItem.ZoneId);
+                var countryId = saleZoneManager.GetSaleZoneCountryId(zoneItem.ZoneId);
 
                 if (!countryId.HasValue)
-                    throw new DataIntegrityValidationException(string.Format("Zone: {0} is not assigned to a countryId", zoneId));
+                    throw new DataIntegrityValidationException(string.Format("Zone: {0} is not assigned to a countryId", zoneItem.ZoneId));
 
                 IEnumerable<SaleRateHistoryRecord> saleRateHistoryRecords = context.GetCustomerZoneRatesFunc(zoneName, countryId.Value);
 
@@ -33,14 +33,16 @@ namespace TOne.WhS.Deal.MainExtensions
 
                 foreach (var saleRate in saleRateHistoryRecords)
                 {
-                    saleRates.Add(new DealRate
+                    DealRate dealRate = new DealRate
                     {
-                        ZoneId = zoneId,
+                        ZoneId = zoneItem.ZoneId,
                         Rate = Business.Helper.GetDiscountedRateValue(saleRate.Rate, Discount),
-                        BED = Utilities.Max(saleRate.BED, context.DealBED),
-                        EED = saleRate.EED.MinDate(context.DealEED),
+                        BED = Utilities.Max(saleRate.BED, zoneItem.BED),
+                        EED = saleRate.EED.MinDate(zoneItem.EED),
                         CurrencyId = saleRate.CurrencyId
-                    });
+                    };
+                    if (!dealRate.EED.HasValue || dealRate.BED < dealRate.EED.Value)
+                        saleRates.Add(dealRate);
                 }
             }
             if (saleRates.Any())

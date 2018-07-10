@@ -153,21 +153,21 @@ namespace TOne.WhS.Deal.Business
                     if (Items != null && (context.DealZoneGroupPart == DealZoneGroupPart.Both || context.DealZoneGroupPart == DealZoneGroupPart.Cost))
                     {
                         List<BaseDealSupplierZoneGroup> dealSupplierZoneGroups = new List<BaseDealSupplierZoneGroup>();
-
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
                         {
                             var zoneIds = volCommitmentDealItem.SaleZones.Select(z => z.ZoneId);
+                            List<DealSupplierZoneGroupZoneItem> supplierZones = Helper.BuildSupplierZones(zoneIds, BeginDate, realEED);
                             BaseDealSupplierZoneGroup dealSupplierZoneGroup;
 
                             if (context.EvaluateRates)
-                                dealSupplierZoneGroup = new DealSupplierZoneGroup() { Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, zoneIds, realEED) };
+                                dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, supplierZones, realEED) };
                             else
-                                dealSupplierZoneGroup = new DealSupplierZoneGroupWithoutRate() { Tiers = BuildSupplierTiersWithoutRate(volCommitmentDealItem.Tiers) };
+                                dealSupplierZoneGroup = new DealSupplierZoneGroupWithoutRate { Tiers = BuildSupplierTiersWithoutRate(volCommitmentDealItem.Tiers) };
 
                             dealSupplierZoneGroup.DealId = context.DealId;
                             dealSupplierZoneGroup.DealSupplierZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber;
                             dealSupplierZoneGroup.SupplierId = CarrierAccountId;
-                            dealSupplierZoneGroup.Zones = BuildSupplierZones(zoneIds, realEED);
+                            dealSupplierZoneGroup.Zones = supplierZones;
                             dealSupplierZoneGroup.BED = BeginDate;
                             dealSupplierZoneGroup.EED = realEED;
 
@@ -184,18 +184,18 @@ namespace TOne.WhS.Deal.Business
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
                         {
                             var zoneIds = volCommitmentDealItem.SaleZones.Select(z => z.ZoneId);
-
+                            List<DealSaleZoneGroupZoneItem> saleZones = Helper.BuildSaleZones(zoneIds, BeginDate, realEED);
                             BaseDealSaleZoneGroup dealSaleZoneGroup;
 
                             if (context.EvaluateRates)
-                                dealSaleZoneGroup = new DealSaleZoneGroup() { Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, zoneIds, realEED) };
+                                dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, saleZones, realEED) };
                             else
-                                dealSaleZoneGroup = new DealSaleZoneGroupWithoutRate() { Tiers = BuildSaleTiersWithoutRate(volCommitmentDealItem.Tiers) };
+                                dealSaleZoneGroup = new DealSaleZoneGroupWithoutRate { Tiers = BuildSaleTiersWithoutRate(volCommitmentDealItem.Tiers) };
 
                             dealSaleZoneGroup.DealId = context.DealId;
                             dealSaleZoneGroup.DealSaleZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber;
                             dealSaleZoneGroup.CustomerId = CarrierAccountId;
-                            dealSaleZoneGroup.Zones = BuildSaleZones(zoneIds, realEED);
+                            dealSaleZoneGroup.Zones = saleZones;
                             dealSaleZoneGroup.BED = BeginDate;
                             dealSaleZoneGroup.EED = realEED;
 
@@ -214,12 +214,22 @@ namespace TOne.WhS.Deal.Business
             if (zoneIds == null || !zoneIds.Any())
                 throw new NullReferenceException("zoneIds");
 
-            return zoneIds.Select(zoneId => new DealSaleZoneGroupZoneItem
+            var saleZoneItems = new List<DealSaleZoneGroupZoneItem>();
+            var saleZoneManager = new SaleZoneManager();
+            foreach (var zoneId in zoneIds)
             {
-                ZoneId = zoneId,
-                BED = BeginDate,
-                EED = dealEED
-            }).ToList();
+                var saleZone = saleZoneManager.GetSaleZone(zoneId);
+                DateTime? zoneEED = (saleZone.EED.HasValue && dealEED.HasValue)
+                   ? Utilities.Min(saleZone.EED.Value, dealEED.Value)
+                   : (saleZone.EED ?? dealEED);
+                saleZoneItems.Add(new DealSaleZoneGroupZoneItem
+                {
+                    ZoneId = zoneId,
+                    BED = BeginDate,
+                    EED = zoneEED
+                });
+            }
+            return saleZoneItems;
         }
 
         private void SetRateLocatorContext(IEnumerable<long> zoneIds, out Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc)
@@ -234,7 +244,8 @@ namespace TOne.WhS.Deal.Business
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
 
-        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, IEnumerable<long> zoneIds, DateTime? dealEED)
+
+        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<DealSaleZoneGroupZoneItem> saleZones, DateTime? dealEED)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 throw new NullReferenceException("volCommitmentDealItemTiers");
@@ -244,16 +255,17 @@ namespace TOne.WhS.Deal.Business
 
             var dealSaleZoneGroupTiers = new List<DealSaleZoneGroupTier>();
             int previousVolumeAssigned = 0;
+            IEnumerable<long> saleZoneIds = saleZones.Select(z => z.ZoneId);
 
             Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc;
-            SetRateLocatorContext(zoneIds, out getCustomerZoneRatesFunc);
+            SetRateLocatorContext(saleZoneIds, out getCustomerZoneRatesFunc);
 
             var context = new DealSaleRateEvaluatorContext
             {
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = dealEED,
-                ZoneIds = zoneIds,
+                SaleZoneGroupItem = saleZones,
                 CurrencyId = CurrencyId
             };
 
@@ -264,20 +276,21 @@ namespace TOne.WhS.Deal.Business
                 if (saleEvaluatedRate == null)
                     throw new NullReferenceException("DealSaleRateEvaluator");
 
-                context.ZoneIds = zoneIds;
+                context.SaleZoneGroupItem = saleZones;
 
                 Dictionary<long, List<DealRate>> exceptionDealRates = null;
                 if (volCommitmentDealItemTier.ExceptionZoneRates != null && volCommitmentDealItemTier.ExceptionZoneRates.Any())
                 {
                     exceptionDealRates = GetExceptionSaleDealRate(volCommitmentDealItemTier.ExceptionZoneRates, dealEED);
-                    context.ZoneIds = zoneIds.Except(exceptionDealRates.Keys); //exclude exception from zones to evaluat
+                    var zoneIds = saleZoneIds.Except(exceptionDealRates.Keys);
+                    context.SaleZoneGroupItem = Helper.BuildSaleZones(zoneIds, BeginDate, dealEED);
                 }
 
                 Dictionary<long, List<DealRate>> dealRatesByZoneId = null;
-                if (context.ZoneIds != null && context.ZoneIds.Any())
+                if (context.SaleZoneGroupItem != null && context.SaleZoneGroupItem.Any())
                 {
                     saleEvaluatedRate.EvaluateRate(context);
-                    dealRatesByZoneId = Business.Helper.StructureDealRateByZoneId(context.SaleRates);
+                    dealRatesByZoneId = Helper.StructureDealRateByZoneId(context.SaleRates);
                 }
 
                 Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = MergeExceptionAndDealRate(exceptionDealRates, dealRatesByZoneId);
@@ -339,7 +352,7 @@ namespace TOne.WhS.Deal.Business
                 {
                     DealBED = BeginDate,
                     DealEED = dealEED,
-                    ZoneIds = exceptionZoneRate.Zones.Select(z => z.ZoneId),
+                    SaleZoneGroupItem = Helper.BuildSaleZones(exceptionZoneRate.Zones.Select(z => z.ZoneId), BeginDate, dealEED),
                     GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                     CurrencyId = CurrencyId
                 };
@@ -347,7 +360,7 @@ namespace TOne.WhS.Deal.Business
                 if (zoneExceptioncontext.SaleRates != null)
                     dealRates.AddRange(zoneExceptioncontext.SaleRates);
             }
-            Dictionary<long, List<DealRate>> dealRateByZoneId = Business.Helper.StructureDealRateByZoneId(dealRates);
+            Dictionary<long, List<DealRate>> dealRateByZoneId = Helper.StructureDealRateByZoneId(dealRates);
             return dealRateByZoneId;
         }
 
@@ -355,20 +368,7 @@ namespace TOne.WhS.Deal.Business
 
         #region Supplier Methods
 
-        private List<DealSupplierZoneGroupZoneItem> BuildSupplierZones(IEnumerable<long> zoneIds, DateTime? dealEED)
-        {
-            if (zoneIds == null || !zoneIds.Any())
-                throw new NullReferenceException("zoneIds");
-
-            return zoneIds.Select(zoneId => new DealSupplierZoneGroupZoneItem
-            {
-                ZoneId = zoneId,
-                BED = BeginDate,
-                EED = dealEED
-            }).ToList();
-        }
-
-        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, IEnumerable<long> zoneIds, DateTime? dealEED)
+        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<DealSupplierZoneGroupZoneItem> supplierZones, DateTime? dealEED)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 throw new NullReferenceException("volCommitmentDealItemTiers");
@@ -377,7 +377,8 @@ namespace TOne.WhS.Deal.Business
             IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume ?? Int32.MaxValue);
 
             var supplierRateManager = new SupplierRateManager();
-            var supplierRatesByZoneId = supplierRateManager.GetSupplierRateByZoneId(zoneIds.ToList(), BeginDate, EndDate);
+            List<long> supplierZoneIds = supplierZones.Select(z => z.ZoneId).ToList();
+            var supplierRatesByZoneId = supplierRateManager.GetSupplierRateByZoneId(supplierZoneIds, BeginDate, EndDate);
 
             var context = new DealSupplierRateEvaluatorContext
             {
@@ -396,20 +397,21 @@ namespace TOne.WhS.Deal.Business
                 if (supplierEvaluatedRate == null)
                     throw new NullReferenceException("DealSupplierRateEvaluator");
 
-                context.ZoneIds = zoneIds;
+                context.SupplierZoneItem = supplierZones;
 
                 Dictionary<long, List<DealRate>> exceptionDealRates = null;
                 if (volCommitmentDealItemTier.ExceptionZoneRates != null)
                 {
                     exceptionDealRates = GetExceptionSupplierDealRate(volCommitmentDealItemTier.ExceptionZoneRates, supplierRatesByZoneId, dealEED);
-                    context.ZoneIds = context.ZoneIds.Except(exceptionDealRates.Keys);  //exclude exception from zones to evaluate
+                    var zoneIds = supplierZoneIds.Except(exceptionDealRates.Keys);
+                    context.SupplierZoneItem = Helper.BuildSupplierZones(zoneIds, BeginDate, dealEED);
                 }
 
                 Dictionary<long, List<DealRate>> supplierRateByZoneId = null;
-                if (context.ZoneIds != null && context.ZoneIds.Any())
+                if (context.SupplierZoneItem != null && context.SupplierZoneItem.Any())
                 {
                     supplierEvaluatedRate.EvaluateRate(context);
-                    supplierRateByZoneId = Business.Helper.StructureDealRateByZoneId(context.SupplierRates);
+                    supplierRateByZoneId = Helper.StructureDealRateByZoneId(context.SupplierRates);
                 }
 
                 Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = MergeExceptionAndDealRate(exceptionDealRates, supplierRateByZoneId);
@@ -481,14 +483,14 @@ namespace TOne.WhS.Deal.Business
                     DealBED = BeginDate,
                     DealEED = dealEED,
                     SupplierZoneRateByZoneId = supplierRatesByZoneId,
-                    ZoneIds = exceptionZoneRate.Zones.Select(z => z.ZoneId)
+                    SupplierZoneItem = Helper.BuildSupplierZones(exceptionZoneRate.Zones.Select(z => z.ZoneId), BeginDate, dealEED)
                 };
                 supplierEvaluatedRate.EvaluateRate(zoneExceptioncontext);
 
                 if (zoneExceptioncontext.SupplierRates != null)
                     dealRates.AddRange(zoneExceptioncontext.SupplierRates);
             }
-            Dictionary<long, List<DealRate>> dealRateByZoneId = Business.Helper.StructureDealRateByZoneId(dealRates);
+            Dictionary<long, List<DealRate>> dealRateByZoneId = Helper.StructureDealRateByZoneId(dealRates);
             return dealRateByZoneId;
         }
 

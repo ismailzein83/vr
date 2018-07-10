@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.Deal.Entities;
-using Vanrise.Common;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Deal.MainExtensions
 {
@@ -14,17 +13,18 @@ namespace TOne.WhS.Deal.MainExtensions
         {
             var saleRates = new List<DealRate>();
 
-            foreach (var zoneId in context.ZoneIds)
+            foreach (var zoneItem in context.SaleZoneGroupItem)
             {
-                saleRates.Add(new DealRate
+                DealRate dealRate = new DealRate
                 {
-                    ZoneId = zoneId,
-                    BED = context.DealBED,
-                    EED = context.DealEED,
+                    ZoneId = zoneItem.ZoneId,
+                    BED = zoneItem.BED,
+                    EED = zoneItem.EED,
                     Rate = Rate,
                     CurrencyId = context.CurrencyId
-                });
-
+                };
+                if (!dealRate.EED.HasValue || dealRate.BED < dealRate.EED.Value)
+                    saleRates.Add(dealRate);
             }
             if (saleRates.Any())
                 context.SaleRates = saleRates;

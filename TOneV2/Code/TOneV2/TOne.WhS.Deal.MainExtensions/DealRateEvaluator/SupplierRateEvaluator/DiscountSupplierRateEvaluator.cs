@@ -19,23 +19,25 @@ namespace TOne.WhS.Deal.MainExtensions
             var supplierRateManager = new SupplierRateManager();
             var supplierDealRates = new List<DealRate>();
 
-            foreach (var zoneId in context.ZoneIds)
+            foreach (var supplierZoneItem in context.SupplierZoneItem)
             {
-                SupplierRate supplierRate = context.SupplierZoneRateByZoneId.GetRecord(zoneId);
+                SupplierRate supplierRate = context.SupplierZoneRateByZoneId.GetRecord(supplierZoneItem.ZoneId);
 
                 if (supplierRate == null)
                     continue;
 
                 var supplierCurrencyId = supplierRateManager.GetCurrencyId(supplierRate);
 
-                supplierDealRates.Add(new DealRate
-                {
-                    ZoneId = zoneId,
-                    Rate = Business.Helper.GetDiscountedRateValue(supplierRate.Rate, Discount),
-                    BED = Utilities.Max(supplierRate.BED, context.DealBED),
-                    EED = supplierRate.EED.MinDate(context.DealEED),
-                    CurrencyId = supplierCurrencyId
-                });
+                DealRate dealRate = new DealRate
+                 {
+                     ZoneId = supplierZoneItem.ZoneId,
+                     Rate = Business.Helper.GetDiscountedRateValue(supplierRate.Rate, Discount),
+                     BED = Utilities.Max(supplierRate.BED, supplierZoneItem.BED),
+                     EED = supplierRate.EED.MinDate(supplierZoneItem.EED),
+                     CurrencyId = supplierCurrencyId
+                 };
+                if (!dealRate.EED.HasValue || dealRate.BED < dealRate.EED.Value)
+                    supplierDealRates.Add(dealRate);
             }
             if (supplierDealRates.Any())
                 context.SupplierRates = supplierDealRates;

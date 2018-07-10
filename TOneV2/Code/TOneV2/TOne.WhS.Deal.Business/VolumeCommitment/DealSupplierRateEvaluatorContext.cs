@@ -10,7 +10,7 @@ namespace TOne.WhS.Deal.Business
         public DateTime DealBED { get; set; }
         public DateTime? DealEED { get; set; }
         public int CurrencyId { get; set; }
-        public IEnumerable<long> ZoneIds { get; set; }
+        public IEnumerable<DealSupplierZoneGroupZoneItem> SupplierZoneItem { get; set; }
         public IEnumerable<DealRate> SupplierRates { get; set; }
         public Dictionary<long, SupplierRate> SupplierZoneRateByZoneId { get; set; }
 

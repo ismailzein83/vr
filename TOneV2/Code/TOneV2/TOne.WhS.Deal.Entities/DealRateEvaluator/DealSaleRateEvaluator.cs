@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Entities
         DateTime DealBED { get; }
         DateTime? DealEED { get; }
         List<DealRate> SaleRates { get; set; }
-        IEnumerable<long> ZoneIds { get; set; }
+        IEnumerable<DealSaleZoneGroupZoneItem> SaleZoneGroupItem { get; set; }
         Func<string, int, IEnumerable<SaleRateHistoryRecord>> GetCustomerZoneRatesFunc { get; }
     }
 }
