@@ -177,8 +177,11 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                 else
                     partialPricedCDRs.Add(record);
 
-                dealDefinitionManager.FillOrigSaleDealValues(record);
-                dealDefinitionManager.FillOrigCostDealValues(record);
+                if (saleValid)
+                    dealDefinitionManager.FillOrigSaleDealValues(record);
+
+                if (costValid)
+                    dealDefinitionManager.FillOrigCostDealValues(record);
 
                 int? saleOrigDealId = record.OrigSaleDealId;
                 int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
@@ -916,9 +919,6 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                                 continue;
                             }
 
-                            dealDefinitionManager.FillOrigSaleDealValues(record);
-                            dealDefinitionManager.FillOrigCostDealValues(record);
-
                             decimal? recordSaleRateId = record.OrigSaleRateId;
                             decimal? recordSaleCurrencyId = record.OrigSaleCurrencyId;
                             decimal? recordCostRateId = record.OrigCostRateId;
@@ -945,8 +945,19 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                             DateTime attemptDateTime = record.GetFieldValue(salePropertyNames[PropertyName.AttemptDateTime]);//same value for sale and cost
                             DateTime batchStart = new DateTime(attemptDateTime.Year, attemptDateTime.Month, attemptDateTime.Day, attemptDateTime.Hour, ((int)(attemptDateTime.Minute / intervalOffsetInMinutes)) * intervalOffsetInMinutes, 0);
 
+                            if (saleValid)
+                            {
+                                dealDefinitionManager.FillOrigSaleDealValues(record);
+                            }
+                            else
+                            {
+                                record.OrigSaleDealId = null;
+                                record.OrigSaleDealZoneGroupNb = null;
+                            }
+
                             int? saleOrigDealId = record.OrigSaleDealId;
                             int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
+
                             if (saleOrigDealId.HasValue && saleOrigZoneGroupNb.HasValue)
                             {
                                 var saleZoneId = record.GetFieldValue(salePropertyNames[PropertyName.Zone]);
@@ -959,8 +970,19 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                                 FillDataFromOriginalValues(record, salePropertyNames);
                             }
 
+                            if (costValid)
+                            {
+                                dealDefinitionManager.FillOrigCostDealValues(record);
+                            }
+                            else
+                            {
+                                record.OrigCostDealId = null;
+                                record.OrigCostDealZoneGroupNb = null;
+                            }
+
                             int? costOrigDealId = record.OrigCostDealId;
                             int? costOrigZoneGroupNb = record.OrigCostDealZoneGroupNb;
+
                             if (costOrigDealId.HasValue && costOrigZoneGroupNb.HasValue)
                             {
                                 var supplierZoneId = record.GetFieldValue(costPropertyNames[PropertyName.Zone]);
