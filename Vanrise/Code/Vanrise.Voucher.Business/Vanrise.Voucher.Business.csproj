@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extentions\UnlockVoucherAction.cs" />
     <Compile Include="Extentions\ActivateVouchersAction.cs" />
     <Compile Include="Extentions\AfterSaveVoucherCardsGenerationHandler.cs" />
     <Compile Include="ConfigManager.cs" />
