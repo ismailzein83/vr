@@ -20,7 +20,6 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var dealDefinitionManager = new DealDefinitionManager();
             var allDataByZone = context.Target as AllDataByZone;
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
@@ -30,16 +29,18 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             var zoneMessages = new List<String>();
             foreach (var dataByZone in allDataByZone.DataByZoneList)
             {
-                if (dataByZone.NormalRateToChange != null || dataByZone.NormalRateToClose != null)
-                {
-                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(ratePlanContext.OwnerId, dataByZone.ZoneId, dataByZone.NormalRateToChange.BED, true);
-                    if (dealId.HasValue)
-                    {
-                        var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                        var zoneName = new SaleZoneManager().GetSaleZoneName(dataByZone.ZoneId);
-                        zoneMessages.Add(String.Format("zone {0} in deal {1}", zoneName, deal.Name));
-                    }
-                }
+                if (dataByZone.NormalRateToChange == null && dataByZone.NormalRateToClose == null)
+                    return true;
+
+                DateTime effectiveDate = dataByZone.NormalRateToChange != null
+                    ? dataByZone.NormalRateToChange.BED
+                    : dataByZone.NormalRateToClose.CloseEffectiveDate;
+
+                var zoneName = new SaleZoneManager().GetSaleZoneName(dataByZone.ZoneId);
+                string dealMessage = Helper.GetDealZoneMessage(ratePlanContext.OwnerId, dataByZone.ZoneId, zoneName, effectiveDate, true);
+                if (dealMessage != null)
+                    zoneMessages.Add(dealMessage);
+
             }
             if (zoneMessages.Any())
             {

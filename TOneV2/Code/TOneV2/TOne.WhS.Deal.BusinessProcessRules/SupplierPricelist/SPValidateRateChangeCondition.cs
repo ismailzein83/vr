@@ -26,17 +26,17 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             foreach (var importedZone in countryZones.ImportedZones.Zones)
             {
                 var importedRate = importedZone.ImportedNormalRate;
-                if (importedRate.ChangeType != RateChangeType.NotChanged)
-                {
-                    var rate = importedRate.NewRates.First();
-                    //TODO: by mis we need to check on EED for deleted rates and for BED on increase and decrease
-                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.BED, false);
-                    if (dealId.HasValue)
-                    {
-                        var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                        zoneMessages.Add(string.Format("zone '{0}' in deal '{1}'", importedRate.ZoneName, deal.Name));
-                    }
-                }
+                var rate = importedRate.NewRates.First();
+                DateTime effectivedate = DateTime.Now;
+
+                if (importedRate.ChangeType == RateChangeType.Deleted)
+                    effectivedate = importedRate.EED.Value;
+                if (importedRate.ChangeType == RateChangeType.Decrease || importedRate.ChangeType == RateChangeType.Increase)
+                    effectivedate = importedRate.BED;
+
+                string dealMessage = Helper.GetDealZoneMessage(importSPLContext.SupplierId, rate.Zone.ZoneId, importedRate.ZoneName, effectivedate, false);
+                if (dealMessage != null)
+                    zoneMessages.Add(dealMessage);
             }
             if (zoneMessages.Any())
             {

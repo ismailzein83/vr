@@ -30,22 +30,19 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            foreach (var changedCountrie in customerCountryToChange.ChangedExistingCustomerCountries)
+            var countryId = customerCountryToChange.CountryId;
+            var countrySaleZones = salezoneManager.GetSaleZonesByCountryId(ratePlanContext.OwnerSellingNumberPlanId, countryId, ratePlanContext.EffectiveDate);
+            foreach (var saleZone in countrySaleZones)
             {
-                var countryId = changedCountrie.CustomerCountryEntity.CountryId;
-                var countrySalezones = salezoneManager.GetSaleZonesByCountryId(ratePlanContext.OwnerSellingNumberPlanId, countryId, ratePlanContext.EffectiveDate);
-                foreach (var saleZone in countrySalezones)
+                var dealId = dealDefinitionManager.IsZoneIncludedInDeal(ratePlanContext.OwnerId, saleZone.SaleZoneId, ratePlanContext.EffectiveDate, true);
+                if (dealId.HasValue)
                 {
-                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(ratePlanContext.OwnerId, saleZone.SaleZoneId, ratePlanContext.EffectiveDate, true);
-                    if (dealId.HasValue)
-                    {
-                        //  var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                        var countryName = new CountryManager().GetCountryName(countryId);
-                        zoneMessages.Add(countryName);
-                        break;
-                    }
+                    var countryName = new CountryManager().GetCountryName(countryId);
+                    zoneMessages.Add(countryName);
+                    break;
                 }
             }
+
             if (zoneMessages.Any())
             {
                 string zoneMessagesString = string.Join(",", zoneMessages);

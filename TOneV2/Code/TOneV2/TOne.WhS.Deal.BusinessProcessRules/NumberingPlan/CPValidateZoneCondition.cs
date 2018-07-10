@@ -20,7 +20,6 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var dealDefinitionManager = new DealDefinitionManager();
             var countryToProcess = context.Target as CountryToProcess;
             var customerCountryManager = new CustomerCountryManager();
 
@@ -48,13 +47,9 @@ namespace TOne.WhS.Deal.BusinessProcessRules
                                     throw new DataIntegrityValidationException("ZoneToProcess has no existing zones");
                                 foreach (var existingZone in zoneToProcess.ExistingZones)
                                 {
-                                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(carrierAccountInfo.CarrierAccountId, existingZone.ZoneId,
-                                            codePreparationContext.EffectiveDate, true);
-                                    if (dealId.HasValue)
-                                    {
-                                        var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                                        zoneMessages.Add(string.Format("zone '{0}' in deal '{1}'", existingZone.Name, deal.Name));
-                                    }
+                                    string dealMessage = Helper.GetDealZoneMessage(carrierAccountInfo.CarrierAccountId, existingZone.ZoneId, existingZone.Name, codePreparationContext.EffectiveDate, true);
+                                    if (dealMessage != null)
+                                        zoneMessages.Add(dealMessage);
                                 }
                             }
                         }

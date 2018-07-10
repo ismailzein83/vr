@@ -17,24 +17,14 @@ namespace TOne.WhS.Deal.BusinessProcessRules
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
             var countryZones = context.Target as AllZones;
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
             var zoneMessages = new List<string>();
-            foreach (var notImportedZone in countryZones.NotImportedZones)
+            foreach (var notImportedZone in countryZones.NotImportedZones.Where(c => c.HasChanged))
             {
                 if (notImportedZone.EED.HasValue)
-                {
-                    var dealId = dealDefinitionManager.IsZoneIncludedInDeal(importSPLContext.SupplierId,
-                        notImportedZone.ZoneId, notImportedZone.EED.Value, false);
-                    if (dealId.HasValue)
-                    {
-                        var deal = new DealDefinitionManager().GetDealDefinition(dealId.Value);
-                        zoneMessages.Add(string.Format("zone '{0}' in deal '{1}'", notImportedZone.ZoneName, deal.Name));
-                    }
-                }
-
+                    zoneMessages.Add(Helper.GetDealZoneMessage(importSPLContext.SupplierId, notImportedZone.ZoneId, notImportedZone.ZoneName, notImportedZone.EED.Value, false));
             }
             if (zoneMessages.Any())
             {
