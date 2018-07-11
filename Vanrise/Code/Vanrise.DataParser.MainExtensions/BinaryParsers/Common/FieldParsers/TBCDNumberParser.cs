@@ -11,10 +11,23 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
         public string FieldName { get; set; }
         public bool AIsZero { get; set; }
         public bool RemoveHexa { get; set; }
+        public int? ByteOffset { get; set; }
+
         public override void Execute(IBinaryFieldParserContext context)
         {
-            context.Record.SetFieldValue(this.FieldName, ParserHelper.GetTBCDNumber(context.FieldValue, this.RemoveHexa, this.AIsZero));
-        }
+            byte[] newByteArray;
+            if (ByteOffset.HasValue)
+            {
+                int newByteArrayLength = context.FieldValue.Length - ByteOffset.Value;
+                newByteArray = new byte[newByteArrayLength];
+                Array.Copy(context.FieldValue, ByteOffset.Value, newByteArray, 0, newByteArrayLength);
+            }
+            else
+            {
+                newByteArray = context.FieldValue;
+            }
 
+            context.Record.SetFieldValue(this.FieldName, ParserHelper.GetTBCDNumber(newByteArray, this.RemoveHexa, this.AIsZero));
+        }
     }
 }

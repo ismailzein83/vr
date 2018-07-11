@@ -10,9 +10,6 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordPar
         public override Guid ConfigId { get { return new Guid("69826C72-B45A-4165-B52A-12BDDE67723F"); } }
         public int HeaderLengthPosition { get; set; }
         public int HeaderBytesLength { get; set; }
-        public int FileLengthPosition { get; set; }
-        public int FileBytesLength { get; set; }
-
         public BinaryRecordParser RecordParser { get; set; }
 
         public override void Execute(IBinaryRecordParserContext context)

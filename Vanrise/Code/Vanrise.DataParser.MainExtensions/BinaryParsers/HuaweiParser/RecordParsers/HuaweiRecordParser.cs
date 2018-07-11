@@ -47,4 +47,14 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordPar
             }
         }
     }
+
+    public class SkipTagValueRecordParser : BinaryRecordParserSettings
+    {
+        public override Guid ConfigId { get { return new Guid("AD4EA28E-46F4-4D0F-9EE8-DA5803ED7DAD"); } }
+
+        public override void Execute(IBinaryRecordParserContext context)
+        {
+
+        }
+    }
 }
