@@ -133,11 +133,8 @@
     <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiCDRType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiBadCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\OgeroHuaweiCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\OgeroRadiusCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\OgeroRadiusCDRType.sql" />
-    <Build Include="Mediation_WHS\Tables\OgeroHuaweiBadCDR.sql" />
-    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiBadCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\JazzHuaweiDiscardedCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiDiscardedCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\EricssonLocalCDR.sql" />
@@ -148,5 +145,11 @@
     <Build Include="Mediation_WHS\User Defined Types\EricssonLocalBadCDRType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalCDRType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\EricssonInternationalBadCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiMGCFCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiIMSCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiIMSBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiMGCFCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiIMSCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiIMSBadCDRType.sql" />
   </ItemGroup>
 </Project>

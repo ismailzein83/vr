@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[OgeroHuaweiCDRType] AS TABLE (
+﻿CREATE TABLE [Mediation_WHS].[OgeroHuaweiIMSBadCDR] (
     [Id]                        BIGINT           NULL,
     [RecordType]                INT              NULL,
     [SipMethod]                 VARCHAR (100)    NULL,
@@ -23,7 +23,6 @@
     [SIPRequestTime]            DATETIME         NULL,
     [SIPResponseTime]           DATETIME         NULL,
     [SDPMediaName]              VARCHAR (100)    NULL,
-    [SDPMediaDescription]       VARCHAR (100)    NULL,
     [SDPSessionDescription]     VARCHAR (MAX)    NULL,
     [ServiceReasonReturnCode]   INT              NULL,
     [ContentType]               VARCHAR (100)    NULL,
@@ -40,12 +39,10 @@
     [AccountingRecordType]      INT              NULL,
     [OnlineChargingFlag]        INT              NULL,
     [VisitedNetworkId]          VARCHAR (500)    NULL,
+    [SDPMediaDescription]       VARCHAR (100)    NULL,
     [FileName]                  VARCHAR (100)    NULL,
-    [DataSourceId]              UNIQUEIDENTIFIER NULL);
-
-
-
-
+    [DataSourceId]              UNIQUEIDENTIFIER NULL
+);
 
 
 

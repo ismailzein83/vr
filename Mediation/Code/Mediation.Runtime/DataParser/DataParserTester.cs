@@ -29,10 +29,11 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetEricssonIraqParserSettings(), "Ericsson_Iraq");
                 CreateMediationSettingsFile(GetNokiaParserSettings(), "Nokia_Iraq");
                 CreateMediationSettingsFile(GetEricssonParserSettings_GPRS(), "Ericsson_GPRS");
-                CreateMediationSettingsFile(GetHuaweiParserSettings_Ogero(), "Huawei_Ogero");
-                CreateMediationSettingsFile(GetWHSEricssonOgeroParserSettings(), "WHS_Ericsson");
-                CreateMediationSettingsFile(GetICXNokiaSiemensParserSettings(), "ICX_NokiaSiemens");
-                CreateMediationSettingsFile(GetICXAlcatelParserSettings(), "ICX_Alcatel");
+                CreateMediationSettingsFile(GetWHSEricssonOgero_ParserSettings(), "WHS_Ericsson");
+                CreateMediationSettingsFile(GetICXNokiaSiemens_ParserSettings(), "ICX_NokiaSiemens");
+                CreateMediationSettingsFile(GetICXAlcatel_ParserSettings(), "ICX_Alcatel");
+                CreateMediationSettingsFile(GetHuaweiIMSOgero_ParserSettings(), "HuaweiIMS_Ogero");
+                CreateMediationSettingsFile(GetHuaweiMGCFOgero_ParserSettings(), "HuaweiMGCF_Ogero");
             }
             catch (Exception ex)
             {
@@ -8528,7 +8529,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson Ogero
 
-        public string GetWHSEricssonOgeroParserSettings()
+        public string GetWHSEricssonOgero_ParserSettings()
         {
             //HexTLVParserType hexParser = new HexTLVParserType
             //{
@@ -11522,18 +11523,16 @@ namespace Mediation.Runtime.DataParser
 
         #endregion
 
-        #region Huawei Ogero
+        #region Huawei IMS Ogero
 
-        private string GetHuaweiParserSettings_Ogero()
+        private string GetHuaweiIMSOgero_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.HeaderRecordParser
                 {
-                    FileLengthPosition = 2,
-                    FileBytesLength = 2,
-                    HeaderLengthPosition = 6,
-                    HeaderBytesLength = 2,
+                    HeaderLengthPosition = 4,
+                    HeaderBytesLength = 4,
                     RecordParser = new BinaryRecordParser
                     {
                         Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.HuaweiRecordParser
@@ -11543,7 +11542,7 @@ namespace Mediation.Runtime.DataParser
                              RecordByteLength = 2,
                              RecordTypePosition = 4,
                              RecordTypeByteLength = 2,
-                             SubRecordsParsersByRecordType = GetHuaweiOgeroSubRecordsParsers()
+                             SubRecordsParsersByRecordType = GetHuaweiIMSOgero_SubRecordsParsers()
                          }
                     }
                 }
@@ -11562,7 +11561,7 @@ namespace Mediation.Runtime.DataParser
             return Serializer.Serialize(parserType.Settings);
         }
 
-        private Dictionary<string, BinaryRecordParser> GetHuaweiOgeroSubRecordsParsers()
+        private Dictionary<string, BinaryRecordParser> GetHuaweiIMSOgero_SubRecordsParsers()
         {
             Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
@@ -11570,7 +11569,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    RecordType = "Ogero_Huawei_CDR",
+                    RecordType = "Ogero_HuaweiIMS_CDR",
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_BF_FieldParsers_Huawei_Ogero()
@@ -11579,13 +11578,29 @@ namespace Mediation.Runtime.DataParser
                     { 
                         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
                     },
-                    CompositeFieldsParsers = GetOgeroHuaweiFileNameCompositeParsers()
+                    CompositeFieldsParsers = GetHuaweiOgeroCompositeFieldsParsers()
                 }
             });
 
+            //parsers.Add("BF3F", new BinaryRecordParser
+            //{
+            //    Settings = new CreateRecordRecordParser
+            //    {
+            //        RecordType = "Ogero_Huawei_CDR",
+            //        FieldParsers = new BinaryFieldParserCollection
+            //        {
+            //            FieldParsersByTag = Get_BF_FieldParsers_Huawei_Ogero()
+            //        },
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> 
+            //        { 
+            //            new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
+            //        },
+            //        CompositeFieldsParsers = GetHuaweiOgeroCompositeFieldsParsers()
+            //    }
+            //});
+
             return parsers;
         }
-
         private Dictionary<string, BinaryFieldParser> Get_BF_FieldParsers_Huawei_Ogero()
         {
             Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
@@ -12218,7 +12233,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Huawei_Ogero()
         {
             Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
@@ -12241,7 +12255,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
         private Dictionary<string, BinaryFieldParser> Get_B4_FieldParsers_Huawei_Ogero()
         {
             Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
@@ -12540,8 +12553,7 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
-        private List<CompositeFieldsParser> GetOgeroHuaweiFileNameCompositeParsers()
+        private List<CompositeFieldsParser> GetHuaweiOgeroCompositeFieldsParsers()
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
             compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
@@ -12551,9 +12563,1093 @@ namespace Mediation.Runtime.DataParser
 
         #endregion
 
+        #region  Huawei MGCF Ogero
+
+        private string GetHuaweiMGCFOgero_ParserSettings()
+        {
+            BinaryParserType hexParser = new BinaryParserType
+            {
+                RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = new Dictionary<string, BinaryRecordParser>() 
+                    { 
+                        {"30", new BinaryRecordParser() 
+                               { 
+                                   Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.SplitByTagRecordParser()
+                                   {
+                                       SubRecordsParsersByTag = GetHuaweiMGCFOgero_SubRecordsParsers()
+                                   }
+                               }
+                        }
+                    }
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                Name = "Huawei MGCF Ogero Parser",
+                ParserTypeId = new Guid("D6896CC8-22EF-4FAA-BEF4-4644EE5323F9"),
+                Settings = new ParserTypeSettings
+                {
+                    ExtendedSettings = hexParser
+                }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+
+        private Dictionary<string, BinaryRecordParser> GetHuaweiMGCFOgero_SubRecordsParsers()
+        {
+            Dictionary<string, BinaryRecordParser> secondLevelSubRecordsParsersByTag = new Dictionary<string, BinaryRecordParser>();
+
+            secondLevelSubRecordsParsersByTag.Add("A0", new BinaryRecordParser()
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.SkipTagValueRecordParser()
+            });
+
+            secondLevelSubRecordsParsersByTag.Add("A1", new BinaryRecordParser()
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.SplitByTagRecordParser()
+                {
+                    SubRecordsParsersByTag = GetHuaweiMGCFOgero_RecordTypeParsers()
+                }
+            });
+
+            secondLevelSubRecordsParsersByTag.Add("A2", new BinaryRecordParser()
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.SkipTagValueRecordParser()
+            });
+
+            secondLevelSubRecordsParsersByTag.Add("A3", new BinaryRecordParser()
+            {
+                Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.SkipTagValueRecordParser()
+            });
+
+            return secondLevelSubRecordsParsersByTag;
+        }
+        private Dictionary<string, BinaryRecordParser> GetHuaweiMGCFOgero_RecordTypeParsers()
+        {
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
+
+            //Outgiong Record Type
+            parsers.Add("A4", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    RecordType = "Ogero_HuaweiMGCF_CDR",
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = GetHuaweiMGCFOgero_OutgoingTypeFieldParsers()
+                    },
+                    CompositeFieldsParsers = GetHuaweiMGCFOgero_CompositeFieldsParsers()
+                }
+            });
+
+            //Transit Record Type
+            parsers.Add("A5", new BinaryRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    RecordType = "Ogero_HuaweiMGCF_CDR",
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = GetHuaweiMGCFOgero_TransitTypeFieldParsers()
+                    },
+                    CompositeFieldsParsers = GetHuaweiMGCFOgero_CompositeFieldsParsers()
+                }
+            });
+
+            return parsers;
+        }
+
+        private Dictionary<string, BinaryFieldParser> GetHuaweiMGCFOgero_TransitTypeFieldParsers()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("80", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "RecordingEntity",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("A2", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"81", new BinaryFieldParser
+                                   {
+                                        Settings = new StringParser
+                                        {
+                                             FieldName = "MSCIncomingRoute"                                          
+                                        }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("A3", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"81", new BinaryFieldParser
+                                   {
+                                        Settings = new StringParser
+                                        {
+                                             FieldName = "MSCOutgoingRoute"                                          
+                                        }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("84", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("85", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("SeizureTime")
+
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("AnswerTime")
+
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("ReleaseTime")
+            });
+
+            parsers.Add("8A", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8C", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForTerm",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("AD", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"80", new BinaryFieldParser
+                                   {
+                                        Settings = new NumberFieldParser
+                                        {
+                                             FieldName = "Diagnostics",
+                                             NumberType = NumberType.Int
+                                        }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "CallReference"
+                }
+            });
+
+            parsers.Add("8F", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "SequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("97", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "PartialRecordType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("BF8102", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"83", new BinaryFieldParser
+                                   {
+                                       Settings = new HexaParser
+                                       {
+                                           FieldName = "BasicService"
+                                       }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("BF8105", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"80", new BinaryFieldParser
+                                   {
+                                       Settings = new NumberFieldParser
+                                       {
+                                           FieldName = "AdditionalChgInfo",
+                                           NumberType = NumberType.Int
+                                       }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("9F810E", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("9F8111", new BinaryFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "ChargeAreaCode"
+                }
+            });
+
+            parsers.Add("9F8120", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "RoamingNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("9F8126", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCOutgoingCircuit",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8127", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCIncomingCircuit",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F812A", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallEmlppPriority",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8134", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallerPortedFlag",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F813E", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "SubscriberCategory",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8143", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CUGOutgoingAccessIndicator",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8146", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCIncomingRouteAttribute",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8147", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCOutgoingRouteAttribute",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8148", new BinaryFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "NetworkCallReference"
+                }
+            });
+
+            parsers.Add("9F8149", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("SetupTime")
+            });
+
+            parsers.Add("9F814A", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("AlertingTime")
+            });
+
+            parsers.Add("9F814B", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "VoiceIndicator",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F814C", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "BCategory",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F814D", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F815A", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8161", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "AudioDataType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8168", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F816D", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "ChargeLevel",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F817B", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CMNFlag",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F817C", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "ICIDValue"
+                }
+            });
+
+            parsers.Add("9F817D", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OrigIOI"
+                }
+            });
+
+            parsers.Add("9F817E", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "TermIOI"
+                }
+            });
+
+            parsers.Add("9F817F", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CalledPortedFlag",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8202", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "IntermediateChargingInd",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8205", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCOutgoingRouteNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8206", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCIncomingRouteNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8233", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RingingDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            return parsers;
+        }
+        private Dictionary<string, BinaryFieldParser> GetHuaweiMGCFOgero_OutgoingTypeFieldParsers()
+        {
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
+
+            parsers.Add("80", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("81", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CallingNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("82", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("83", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "RecordingEntity",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("A4", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"81", new BinaryFieldParser
+                                   {
+                                        Settings = new StringParser
+                                        {
+                                             FieldName = "MSCIncomingRoute"                                          
+                                        }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("A5", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"81", new BinaryFieldParser
+                                   {
+                                        Settings = new StringParser
+                                        {
+                                             FieldName = "MSCOutgoingRoute"                                          
+                                        }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("86", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("SeizureTime")
+
+            });
+
+            parsers.Add("87", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("AnswerTime")
+
+            });
+
+            parsers.Add("88", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("ReleaseTime")
+            });
+
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8B", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForTerm",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("AC", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"80", new BinaryFieldParser
+                                   {
+                                        Settings = new NumberFieldParser
+                                        {
+                                             FieldName = "Diagnostics",
+                                             NumberType = NumberType.Int
+                                        }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("8D", new BinaryFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "CallReference"
+                }
+            });
+
+            parsers.Add("8E", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "SequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("96", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "PartialRecordType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("BF8102", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"83", new BinaryFieldParser
+                                   {
+                                       Settings = new HexaParser
+                                       {
+                                           FieldName = "BasicService"
+                                       }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("BF8105", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
+                        { 
+                            {"80", new BinaryFieldParser
+                                   {
+                                       Settings = new NumberFieldParser
+                                       {
+                                           FieldName = "AdditionalChgInfo",
+                                           NumberType = NumberType.Int
+                                       }                            
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("9F810E", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "OriginalCalledNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("9F8111", new BinaryFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "ChargeAreaCode"
+                }
+            });
+
+            parsers.Add("9F8120", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "RoamingNumber",
+                    AIsZero = false,
+                    RemoveHexa = true,
+                    ByteOffset = 1
+                }
+            });
+
+            parsers.Add("9F8126", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCOutgoingCircuit",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            //parsers.Add("9F8127", new BinaryFieldParser
+            //{
+            //    Settings = new NumberFieldParser
+            //    {
+            //        FieldName = "MSCIncomingCircuit",
+            //        NumberType = NumberType.Int
+            //    }
+            //});
+
+            parsers.Add("9F812A", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallEmlppPriority",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8134", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallerPortedFlag",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F813E", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "SubscriberCategory",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8143", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CUGOutgoingAccessIndicator",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8146", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCIncomingRouteAttribute",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8147", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCOutgoingRouteAttribute",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8148", new BinaryFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "NetworkCallReference"
+                }
+            });
+
+            parsers.Add("9F8149", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("SetupTime")
+            });
+
+            parsers.Add("9F814A", new BinaryFieldParser
+            {
+                Settings = GetDateTimeParser("AlertingTime")
+            });
+
+            parsers.Add("9F814B", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "VoiceIndicator",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F814C", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "BCategory",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F814D", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F815A", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "DisconnectParty",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8161", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "AudioDataType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8168", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F816D", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "ChargeLevel",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            //parsers.Add("9F817B", new BinaryFieldParser
+            //{
+            //    Settings = new NumberFieldParser
+            //    {
+            //        FieldName = "CMNFlag",
+            //        NumberType = NumberType.Int
+            //    }
+            //});
+
+            parsers.Add("9F817B", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "ICIDValue"
+                }
+            });
+
+            parsers.Add("9F817C", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OrigIOI"
+                }
+            });
+
+            parsers.Add("9F817D", new BinaryFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "TermIOI"
+                }
+            });
+
+            parsers.Add("9F817F", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CalledPortedFlag",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8202", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "IntermediateChargingInd",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8205", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCOutgoingRouteNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8206", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "MSCIncomingRouteNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F8233", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RingingDuration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            return parsers;
+        }
+
+        private List<CompositeFieldsParser> GetHuaweiMGCFOgero_CompositeFieldsParsers()
+        {
+            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
+            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
+            return compositeParsers;
+        }
+        private DateTimeParser GetDateTimeParser(string fieldName)
+        {
+            DateTimeParser dateTimeParser = new DateTimeParser()
+            {
+                FieldName = fieldName,
+                DateTimeParsingType = DateTimeParsingType.DateTime,
+                IsBCD = true,
+                YearIndex = 0,
+                MonthIndex = 1,
+                DayIndex = 2,
+                HoursIndex = 3,
+                MinutesIndex = 4,
+                SecondsIndex = 5,
+                TimeShiftIndicatorIndex = 6,
+                HoursTimeShiftIndex = 7,
+                MinutesTimeShiftIndex = 8
+            };
+
+            return dateTimeParser;
+        }
+
+        #endregion
+
         #region Nokia Siemens Ogero
 
-        public string GetICXNokiaSiemensParserSettings()
+        public string GetICXNokiaSiemens_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -12631,7 +13727,7 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(106, trunkIdOutgoingPackage_106);
 
-            PackageFieldParser connectionIdentificationPackage_110 = new DirectLengthPackageFieldParser() 
+            PackageFieldParser connectionIdentificationPackage_110 = new DirectLengthPackageFieldParser()
             {
                 FieldParser = new ConnectionIdentificationPackageParser()
                 {
@@ -12715,7 +13811,6 @@ namespace Mediation.Runtime.DataParser
 
             return packages;
         }
-
         private List<CompositeFieldsParser> GetNokiaSiemensCompositeParsers()
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
@@ -12728,7 +13823,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Alcatel Ogero
 
-        public string GetICXAlcatelParserSettings()
+        public string GetICXAlcatel_ParserSettings()
         {
             BinaryParserType hexParser = new BinaryParserType
             {
@@ -12861,7 +13956,6 @@ namespace Mediation.Runtime.DataParser
 
             return positionedFieldParsers;
         }
-
         private List<CompositeFieldsParser> GetAlcatelCompositeParsers()
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();

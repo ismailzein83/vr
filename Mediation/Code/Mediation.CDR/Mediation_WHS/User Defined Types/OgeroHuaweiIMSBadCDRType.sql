@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[OgeroHuaweiBadCDRType] AS TABLE (
+﻿CREATE TYPE [Mediation_WHS].[OgeroHuaweiIMSBadCDRType] AS TABLE (
     [Id]                        BIGINT           NULL,
     [RecordType]                INT              NULL,
     [SipMethod]                 VARCHAR (100)    NULL,
@@ -42,8 +42,4 @@
     [VisitedNetworkId]          VARCHAR (500)    NULL,
     [FileName]                  VARCHAR (100)    NULL,
     [DataSourceId]              UNIQUEIDENTIFIER NULL);
-
-
-
-
 
