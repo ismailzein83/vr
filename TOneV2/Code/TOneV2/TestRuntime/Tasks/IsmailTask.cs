@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
+using System.Linq;
 
 namespace TestRuntime
 {
@@ -14,6 +16,7 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            CallGetAnalyticRecords();
             var runtimeNodeConfigSettings = new Vanrise.Runtime.Entities.RuntimeNodeConfigurationSettings
             {
                 Processes = new Dictionary<Guid, RuntimeProcessConfiguration>()
@@ -657,7 +660,98 @@ namespace TestRuntime
             //    }
             //});
         }
-                
+
+
+        private void CallGetAnalyticRecords()
+        {
+            var analyticManager = new Vanrise.Analytic.Business.AnalyticManager();
+            var analyticQuery = new Vanrise.Analytic.Entities.AnalyticQuery
+            {
+                TableId = new Guid("58dd0497-498d-40f2-8687-08f8356c63cc"),
+                FromTime = DateTime.Parse("2010-01-01"),
+                DimensionFields = new List<string> { "Customer", "MasterZone" },
+                MeasureFields = new List<string> { "Attempts" },
+                SubTables = new List<Vanrise.Analytic.Entities.AnalyticQuerySubTable>
+                {
+                    new  Vanrise.Analytic.Entities.AnalyticQuerySubTable
+                    {
+                         Dimensions = new List<string> { "Supplier" },
+                         Measures = new List<string> { "PDDInSeconds", "SaleNet"},
+                         OrderType = Vanrise.Analytic.Entities.AnalyticQueryOrderType.ByAllMeasures
+                    },                    
+                    new  Vanrise.Analytic.Entities.AnalyticQuerySubTable
+                    {
+                         Dimensions = new List<string> { "CDRType" },
+                         Measures = new List<string> { "Attempts"},
+                         OrderType = Vanrise.Analytic.Entities.AnalyticQueryOrderType.ByAllMeasures
+                    },                    
+                    new  Vanrise.Analytic.Entities.AnalyticQuerySubTable
+                    {
+                         Dimensions = new List<string> { "Switch" },
+                         Measures = new List<string> { "GlobalProfit", "Netting"},
+                         OrderType = Vanrise.Analytic.Entities.AnalyticQueryOrderType.ByAllMeasures
+                    }
+                },
+                WithSummary = true
+            };
+            Vanrise.Analytic.Entities.AnalyticRecord summaryRecord;
+            List<Vanrise.Analytic.Entities.AnalyticResultSubTable> resultSubTables;
+            var rslt = analyticManager.GetAllFilteredRecords(analyticQuery, out summaryRecord, out resultSubTables);
+            string serializedResultSubTables = Serializer.Serialize(resultSubTables);
+            string serializedRslt = Serializer.Serialize(rslt);
+
+            //List<AnalyticCustomRecord> customRecords = new List<AnalyticCustomRecord>();
+            //foreach (var record in rslt)
+            //{
+            //    var customRecord = new AnalyticCustomRecord
+            //    {
+            //        CountCDRs = (int)record.MeasureValues["CountCDRs"].Value,
+            //        TotalDuration = (decimal)record.MeasureValues["TotalDuration"].Value,
+            //        CalculatedCountCDRs = record.SubTables[0].MeasureValues.Sum(itm => (int)itm["CountCDRs"].Value),
+            //        CalculatedTotalDuration = record.SubTables[0].MeasureValues.Sum(itm => (decimal)itm["TotalDuration"].Value)
+            //    };
+            //    if (customRecord.CountCDRs != customRecord.CalculatedCountCDRs || customRecord.TotalDuration - customRecord.CalculatedTotalDuration > 0.000000000001M)
+            //        throw new Exception("Invalid SubTables Measures");
+            //    customRecords.Add(customRecord);
+            //}
+            //string serializedCustomRecords = Serializer.Serialize(customRecords);
+
+            //if (summaryRecord != null)
+            //{
+            //    string serializedSummary = Serializer.Serialize(summaryRecord);
+
+            //    List<AnalyticCustomRecord> customVerticalRecords = new List<AnalyticCustomRecord>();
+            //    int colIndex = 0;
+            //    foreach (var subTableSummaryMeasures in summaryRecord.SubTables[0].MeasureValues)
+            //    {
+            //        var customRecord = new AnalyticCustomRecord
+            //        {
+            //            CountCDRs = (int)subTableSummaryMeasures["CountCDRs"].Value,
+            //            TotalDuration = (decimal)subTableSummaryMeasures["TotalDuration"].Value,
+            //            CalculatedCountCDRs = rslt.Sum(record => (int)record.SubTables[0].MeasureValues[colIndex]["CountCDRs"].Value),
+            //            CalculatedTotalDuration = rslt.Sum(record => (decimal)record.SubTables[0].MeasureValues[colIndex]["TotalDuration"].Value),
+            //        };
+            //        if (customRecord.CountCDRs != customRecord.CalculatedCountCDRs || customRecord.TotalDuration - customRecord.CalculatedTotalDuration > 0.000000000001M)
+            //            throw new Exception("Invalid SubTables Measures");
+            //        customVerticalRecords.Add(customRecord);
+            //        colIndex++;
+            //    }
+            //    string serializedCustomVerticalRecords = Serializer.Serialize(customVerticalRecords);
+            //}
+
+
+        }
+
+        private class AnalyticCustomRecord
+        {
+            public int CountCDRs { get; set; }
+
+            public int CalculatedCountCDRs { get; set; }
+
+            public decimal TotalDuration { get; set; }
+
+            public decimal CalculatedTotalDuration { get; set; }
+        }
 
         private static void Lock(string transactionName, int maxConcurrency = 1)
         {
