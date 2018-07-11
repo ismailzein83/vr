@@ -9,7 +9,7 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common.Business;
 
-namespace TOne.WhS.SupplierPriceList.Business
+namespace TOne.WhS.SupplierPriceList.Business   //This rule is no longer used.. We are keeping it in case we need it later
 {
     public class MultipleCountryCondition : BusinessRuleCondition
     {
