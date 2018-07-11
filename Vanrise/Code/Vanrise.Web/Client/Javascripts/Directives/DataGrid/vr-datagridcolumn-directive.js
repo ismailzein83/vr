@@ -145,8 +145,6 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                                     dataGridCtrl.showColumn(colDef);
                                 else
                                     dataGridCtrl.hideColumn(colDef);
-
-                                dataGridCtrl.switchColumnVisibility(colDef);
                             }
                         })
                     });
