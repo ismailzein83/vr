@@ -101,7 +101,7 @@
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
             modalScope.$on('modal.show', function () {
-                if (ctrl.isMobile) {
+                if (MobileService.isMobile()) {
                     var vpH = window.innerHeight;
                     document.documentElement.style.height = vpH.toString() + "px";
                     document.body.style.height = vpH.toString() + "px";
