@@ -60,6 +60,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchDataManager.cs" />
+    <Compile Include="CDRDataManager.cs" />
+    <Compile Include="ComplaintDataManager.cs" />
+    <Compile Include="InteractionDataManager.cs" />
+    <Compile Include="PaymentDataManager.cs" />
+    <Compile Include="InvoiceDataManager.cs" />
+    <Compile Include="ServiceDataManager.cs" />
+    <Compile Include="ContractDataManager.cs" />
+    <Compile Include="CustomerInfoDataManager.cs" />
     <Compile Include="MasterDataManager.cs" />
     <Compile Include="MemberDataManager.cs" />
     <Compile Include="RoomDataManager.cs" />

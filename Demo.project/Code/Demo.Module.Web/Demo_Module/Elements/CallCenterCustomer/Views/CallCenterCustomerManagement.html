@@ -1,0 +1,35 @@
+﻿
+<vr-panel ng-controller="Demo_Module_CallCenterCustomerManagementController" vr-loader="scopeModel.isLoading">
+    <vr-form name="formFilter">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <demo-module-customerinfo on-ready="scopeModel.onCustomerInfoReady"></demo-module-customerinfo>
+            </vr-columns>
+        </vr-row>  
+                   <vr-tabs>
+                        <vr-tab header="'Contract'">
+                            <demo-module-contract on-ready="scopeModel.onContractReady" ></demo-module-contract>
+                        </vr-tab>
+                        <vr-tab header="'Billing'">
+                            <demo-module-billing on-ready="scopeModel.onBillingGridReady"></demo-module-billing>             
+                        </vr-tab>
+                        <vr-tab header="'CDRs'">
+                            <demo-module-cdr on-ready="scopeModel.onCDRReady"></demo-module-cdr>
+                        </vr-tab>
+                        <vr-tab header="'Complaints'">
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <demo-module-complaint-grid on-ready="scopeModel.onComplaintReady"></demo-module-complaint-grid>
+                                    </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                        <vr-tab header="'Interaction'">
+                            <demo-module-interaction on-ready="scopeModel.onInteractionReady"></demo-module-interaction>
+                        </vr-tab>
+                    </vr-tabs>
+
+    </vr-form>
+
+</vr-panel>
+
+

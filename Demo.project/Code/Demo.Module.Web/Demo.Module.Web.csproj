@@ -127,6 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Demo_Module\Constant\CDRTypeEnum.js" />
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
     <Content Include="Demo_Module\Directives\Building\demo-module-building-selector.js" />
     <Content Include="Demo_Module\Directives\Building\demo-module-building-grid.js" />
@@ -196,6 +197,47 @@
     <Content Include="Demo_Module\Directives\University\demo-module-university-grid.js" />
     <Content Include="Demo_Module\Directives\University\demo-module-university-selector.js" />
     <Content Include="Demo_Module\Directives\University\Templates\UniversityGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-billing.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-cdr.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-complaint-grid.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-contract.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-interaction.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-invoice-grid.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-payment-grid.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-service-grid.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\demo-module-customerinfo.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\BillingTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\CdrTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\ComplaintGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\ContractTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\InteractionTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\InvoiceGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\PaymentGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\ServiceGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Directives\Templates\CustomerInfoTemplate.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\Call-Button.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\call-image.jpg" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\share-icon.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\forward-icon.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\hangup.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\icon-send.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\no-record.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Images\voice.png" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\CDRAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\InteractionAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\ComplaintAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\InvoiceAPIService - Copy.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\PaymentAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\InvoiceAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\ServiceAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\ContractAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\APIServices\CustomerInfoAPIService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\CustomerInfoService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Services\InteractionService.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallCenterCustomerManagement.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallCenterCustomerManagementController.js" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallEditor.html" />
+    <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallEditorController.js" />
     <Content Include="Demo_Module\Elements\Master\Directives\demo-module-master-grid.js" />
     <Content Include="Demo_Module\Elements\Master\Directives\Templates\MasterGridTemplate.html" />
     <Content Include="Demo_Module\Elements\Master\Services\APIServices\MasterAPIService.js" />
@@ -274,6 +316,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CDRController.cs" />
+    <Compile Include="Controllers\ComplaintController.cs" />
+    <Compile Include="Controllers\InteractionController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\ContractController.cs" />
+    <Compile Include="Controllers\CustomerInfoController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\RoomController.cs" />

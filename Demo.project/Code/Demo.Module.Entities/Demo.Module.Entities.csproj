@@ -57,6 +57,15 @@
     <Compile Include="Branch\BranchQuery.cs" />
     <Compile Include="Branch\Setting\Dimensions\Dimensions.cs" />
     <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
+    <Compile Include="CallCenterCustomer\CDR.cs" />
+    <Compile Include="CallCenterCustomer\CDRQuery.cs" />
+    <Compile Include="CallCenterCustomer\Complaint.cs" />
+    <Compile Include="CallCenterCustomer\Contract.cs" />
+    <Compile Include="CallCenterCustomer\CustomerInfo.cs" />
+    <Compile Include="CallCenterCustomer\Interaction.cs" />
+    <Compile Include="CallCenterCustomer\Invoice.cs" />
+    <Compile Include="CallCenterCustomer\Payment.cs" />
+    <Compile Include="CallCenterCustomer\Service.cs" />
     <Compile Include="Master\Master.cs" />
     <Compile Include="Master\MasterDetails.cs" />
     <Compile Include="Master\MasterQuery.cs" />

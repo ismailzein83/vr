@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="scopeModel.services"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="ServiceId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'ServiceId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'Status'" type="'Text'" getcolor="scopeModel.getStatusColor"></vr-datagridcolumn>
+
+</vr-datagrid>

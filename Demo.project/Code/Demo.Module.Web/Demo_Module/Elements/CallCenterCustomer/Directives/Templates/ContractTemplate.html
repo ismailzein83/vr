@@ -1,0 +1,16 @@
+﻿<vr-row>
+        <vr-columns width="normal">
+            <vr-label > MobileNumber : </vr-label> <vr-label isvalue>{{scopeModel.MobileNumber}}</vr-label>
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-label width="normal"> MSISDN : </vr-label> <vr-label isvalue>{{scopeModel.MSISDN}}</vr-label>
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-label width="normal"> RatePlan : </vr-label> <vr-label isvalue>{{scopeModel.RatePlan}}</vr-label> <br />
+        </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <demo-module-service-grid on-ready="scopeModel.onGridReady"></demo-module-service-grid>
+    </vr-columns>
+</vr-row>

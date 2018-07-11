@@ -1,0 +1,96 @@
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+    .controls {
+        width: 60%;
+    }
+
+        .controls img {
+            float: right;
+            margin: 0 0 8px 4px;
+            cursor: pointer;
+        }
+
+    .interaction {
+        width: 60%;
+        height: 200px;
+        border: 2px double #DDD;
+        padding: 8px;
+        margin: 20px 0 0 0;
+        overflow-y: auto;
+    }
+
+    .interaction ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .interaction ul li span{
+            clear: both;
+            border-radius: 30px;
+        }
+
+
+            .interaction ul li span:first-child {
+                padding: 10px;
+            }
+
+    .him {
+        background: #eee;
+        float: left;
+        border-bottom-left-radius: 5px !important;
+    }
+    .himspan {
+        float: left;
+        font-size: 10px;
+        padding: 2px;
+    }
+
+    .me{
+        float: right;
+        background: #00ADEF;
+        color: #fff;
+        border-bottom-right-radius: 5px !important;
+    }
+
+    .mespan {
+        float: right;
+        font-size: 10px;
+        padding: 2px;
+    }
+
+
+</style>
+
+<br/>
+<div class="controls">
+    <img style="width: 30px; margin-top: 8px;" src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/share-icon.png" />
+    <img style="width: 30px; margin-top: 8px;" src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/forward-icon.png" />
+    <img ng-click="scopeModel.call()" style="width: 30px; margin-top: 8px;" src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/Call-Button.png" />
+</div>
+<br/>
+
+<div class="interaction">
+
+    <ul>
+        <li ng-repeat="msg in scopeModel.messages">
+
+            <span ng-class="msg.SenderType == 1?'me':'him'">{{ msg.Message }} </span><br/>
+            <span ng-class="msg.SenderType == 1?'mespan':'himspan'">{{msg.Time | date : "h:mm a"}}</span>
+        </li>
+
+       
+        
+           
+    </ul>
+</div>
+<br/>
+
+    <div style="width: 60%;">
+        <vr-textarea style="float: left; width: 95%;" placeholder="Type a message ...."  rows="2"></vr-textarea>
+        <img style="width: 30px; float: right; margin-top: 8px;" src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/icon-send.png" />
+    </div>
+
+
+

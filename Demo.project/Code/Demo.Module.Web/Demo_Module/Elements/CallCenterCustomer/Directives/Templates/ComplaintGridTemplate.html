@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="scopeModel.complaints"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="ComplaintId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'ComplaintId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Category'" field="'Category'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'Status'" type="'Text'" getcolor="scopeModel.getStatusColor"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Agent'" field="'Agent'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Notes'" field="'Notes'" type="'Text'" ></vr-datagridcolumn>
+</vr-datagrid>

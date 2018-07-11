@@ -1,0 +1,41 @@
+﻿
+<vr-form name="formFilter">
+
+    <vr-row>
+        <vr-columns width="normal">
+            <vr-datetimepicker label="From" type="date" value="scopeModel.fromDate" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-datetimepicker label="To" type="date" value="scopeModel.toDate" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
+        </vr-columns>
+        <vr-columns width="normal">
+            <vr-select on-ready="scopeModel.onSelectorReady" ismultipleselection datatextfield="description" datavaluefield="value"
+                       label="Type"  datasource="scopeModel.types" selectedvalues="scopeModel.selectedvalues">
+            </vr-select>
+        </vr-columns>
+        <br />
+        <vr-columns width="normal">
+            <vr-button type="Search" standalone formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+        </vr-columns>
+
+    </vr-row>
+</vr-form>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="scopeModel.cdr"
+                     on-ready="scopeModel.onGridReady"
+                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="scopeModel.gridMenuActions"
+                     idfield="CDRId"
+                     enableautoexport="true">
+            <vr-datagridcolumn headertext="'ID'" field="'CDRId'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'Datetime'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Direction'" field="'Direction'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Phone Number'" field="'PhoneNumber'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Duration'" field="'Duration'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Type'" field="'Type'" type="'Text'"></vr-datagridcolumn>
+
+        </vr-datagrid>
+        </vr-columns>
+</vr-row>

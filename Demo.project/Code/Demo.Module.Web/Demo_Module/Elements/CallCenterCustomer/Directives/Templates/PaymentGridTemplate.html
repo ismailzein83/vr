@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="scopeModel.payments"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="PaymentId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'PaymentId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Notes'" field="'Notes'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Reference Number'" field="'ReferenceNumber'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Amount'" field="'Amount'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Payment Date'" field="'PaymentDate'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>

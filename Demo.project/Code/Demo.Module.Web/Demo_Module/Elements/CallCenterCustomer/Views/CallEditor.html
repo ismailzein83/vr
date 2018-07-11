@@ -1,0 +1,42 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_CallEditorController" width="small">
+    <div class="modal-header vr-modal-header" style="background-color: transparent !important; border-bottom: 0; cursor: move; ">
+        <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">×</span></button>
+    </div>
+    <vr-modalbody>
+      
+                <div style="display: block; margin: auto;  height: 80px; width: 80px;">
+                    <img style="width: 100%; height: 100%;" src="Client/Images/member.png" />
+                </div>
+
+                <div class="Callcontrols" style="text-align:center">
+                    <p id="demo"></p>
+                    <img src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/voice.png" />
+                    <img src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/no-record.png" />
+                    <img src="Client/Modules/Demo_Module/Elements/CallCenterCustomer/Images/hangup.png" />
+                </div>
+</vr-modalbody>
+   
+</div>
+
+<style>
+
+    .modal-header .close {
+        color: rgb(0, 0, 0);
+    }
+
+    .modal-header  {
+        padding: 2px 7px;
+    }
+    
+     .Callcontrols img {
+        margin: 10px 0 0 8px;
+        width: 28px;
+    }
+    .modal-body{
+        padding:40px !important;
+    }
+    .modal-content {
+        background: linear-gradient(to bottom right, rgb(152, 224, 251), white) !important;
+    }
+</style>
+

@@ -1,0 +1,17 @@
+﻿<vr-datagrid datasource="scopeModel.invoices"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="InvoiceId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'InvoiceId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Serial Number'" field="'SerialNumber'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'From Date'" field="'FromDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'To Date'" field="'ToDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Issue Date'" field="'IssueDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Due Date'" field="'DueDate'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Amount'" field="'Amount'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" type="'Text'"></vr-datagridcolumn>
+
+</vr-datagrid>

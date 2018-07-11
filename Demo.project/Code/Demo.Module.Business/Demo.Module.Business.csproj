@@ -82,6 +82,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchManager.cs" />
+    <Compile Include="CDRManager.cs" />
+    <Compile Include="ComplaintManager.cs" />
+    <Compile Include="InteractionManager.cs" />
+    <Compile Include="PaymentManager.cs" />
+    <Compile Include="InvoiceManager.cs" />
+    <Compile Include="ServiceManager.cs" />
+    <Compile Include="ContractManager.cs" />
+    <Compile Include="CustomerInfoManager.cs" />
     <Compile Include="MasterManager.cs" />
     <Compile Include="ItemShapeDescriptionContext.cs" />
     <Compile Include="MemberShapeDescriptionContext.cs" />

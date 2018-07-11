@@ -51,6 +51,14 @@
   <ItemGroup>
     <Compile Include="DemoModuleFactory.cs" />
     <Compile Include="IBranchDataManager.cs" />
+    <Compile Include="ICDRDataManager.cs" />
+    <Compile Include="IComplaintDataManager.cs" />
+    <Compile Include="IInteractionDataManager.cs" />
+    <Compile Include="IPaymentDataManager.cs" />
+    <Compile Include="IInvoiceDataManager.cs" />
+    <Compile Include="IServiceDataManager.cs" />
+    <Compile Include="IContractDataManager.cs" />
+    <Compile Include="ICustomerInfoDataManager.cs" />
     <Compile Include="IMasterDataManager.cs" />
     <Compile Include="IRoomDataManager.cs" />
     <Compile Include="IBuildingDataManager.cs" />
