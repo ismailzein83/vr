@@ -383,6 +383,9 @@
     <None Include="BatchScripts\MobileWebAPI\03-WebSite.bat" />
     <None Include="BatchScripts\MobileWebAPI\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\MobileWebAPI\All.bat" />
+    <None Include="BatchScripts\ZebraV2\All.bat" />
+    <None Include="BatchScripts\ZebraV2\DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\ZebraV2\WebSiteThemes.bat" />
     <None Include="BatchScripts\NtegraV2\All.bat" />
     <None Include="BatchScripts\NtegraV2\DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\NtegraV2\WebSiteThemes.bat" />
