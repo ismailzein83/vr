@@ -855,7 +855,7 @@
     <None Include="Retail_RA.PostDeployment.sql" />
     <None Include="Retail_RA_Overridden.PostDeployment.sql" />
     <None Include="Mediation_Jazz.Huawei.PostDeployment.sql" />
-    <None Include="Mediation_Ogero.Huawei.PostDeployment.sql" />
+    <None Include="Mediation_Ogero.HuaweiIMS.PostDeployment.sql" />
     <None Include="Mediation_Ogero.Radius.PostDeployment.sql" />
     <None Include="TOne_Jazz.PostDeployment.sql" />
     <None Include="Security.RemoteProvider.PostDeployment.sql" />
@@ -863,6 +863,7 @@
     <None Include="TOne.AutoImportSPL.PostDeployment.sql" />
     <None Include="Voucher.PostDeployment.sql" />
     <None Include="InterConnect_Data.PostDeployment.sql" />
+    <None Include="Mediation_Ogero.HuaweiMGCF.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
