@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationService', function (ButtonDirService, UtilsService, VRLocalizationService) {
+app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationService', 'VRModalService', 'MobileService', function (ButtonDirService, UtilsService, VRLocalizationService, VRModalService, MobileService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -10,15 +10,30 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
             isasynchronous: '=',
             formname: '=',
             haspermission: '=',
-            validationcontext: '='
+            validationcontext: '=',
+            showbutton: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            ctrl.isMobile = MobileService.isMobile();
+
             ctrl.isSubmitting = false;
 
-            ctrl.onInternalClick = function (evnt) {
-
+            ctrl.onInternalClick = function (evnt, btn) {
                 if (ctrl.menuActions != undefined) {
+                    if (ctrl.isMobile) {
+
+                        var modalSettings = {
+                            autoclose: true
+                        };
+                        modalSettings.onScopeReady = function (modalScope) {
+                            modalScope.btn = btn;
+                        };
+                        VRModalService.showModal("/Client/Javascripts/Directives/Button/MenuActionsModalPopup.html", null, modalSettings);
+                        return;
+                    }
+
+
                     var self = angular.element(evnt.currentTarget);
                     ctrl.showMenuActions = true;
 
@@ -56,6 +71,12 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
                         }
                     }
                 }
+            };
+
+            ctrl.showButton = function () {
+                if ($attrs.showbutton == undefined)
+                    return true;
+                else return ctrl.showbutton;
             };
 
             ctrl.menuActionClicked = function (action) {
@@ -139,6 +160,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
             }
         },
         controllerAs: 'ctrl',
+        require: "?^vrActionbar",
         bindToController: true,
         //link: function (scope, formElement, attributes, formController) {
         //    if(attributes.isinvalid != undefined)
@@ -161,7 +183,15 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
         compile: function (element, attrs) {
 
             return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
+                pre: function ($scope, iElem, iAttrs, parentCtrl) {
+                    if (parentCtrl != null && typeof (parentCtrl.addButton) == 'function') {
+                        var btnObj = $scope.ctrl;
+                        var btnProp = ButtonDirService.getButtonAttributes(iAttrs.type);
+                        btnObj.name = btnProp.text;
+                        btnObj.iconClass = btnProp.class;
+                        btnObj.showButtonVal = btnObj.showButton();
+                        parentCtrl.addButton(btnObj);
+                    }
                 }
             };
         },

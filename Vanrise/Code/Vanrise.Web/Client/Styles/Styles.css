@@ -5,7 +5,6 @@
 /* start main-menu*/
 .wrapper-toogled {
 	padding-left: 185px !important;
-	min-width: 1360px;
 }
 
 .wrapper-normal {
@@ -34,9 +33,9 @@
 	margin-right: 10px;
 }
 
-	.spaced-item > span:first-of-type {
-		padding-right: 5px;
-	}
+.spaced-item > span:first-of-type {
+	padding-right: 5px;
+}
 
 .pin-icon {
 	font-size: 17px;
@@ -106,14 +105,14 @@
 	width: 100%;
 }
 
-	.loading-container > img {
-		position: relative;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%,-50%);
-		width: 50px;
-		height: 50px;
-	}
+.loading-container > img {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width: 50px;
+	height: 50px;
+}
 
 .responsive-container {
 	white-space: normal;
@@ -134,12 +133,11 @@
 
 .vr-container {
 	padding: 0px 5px;
-	min-width: 1366px;
 }
 
-	.vr-container div[ng-view] {
-		padding: 0px 5px;
-	}
+.vr-container div[ng-view] {
+	padding: 0px 5px;
+}
 
 .flex-user-menu {
 	display: flex !important;
@@ -178,11 +176,11 @@
 	display: inline-block;
 }
 
-	.vr-nav-custom div .badge {
-		position: absolute;
-		top: 10px;
-		left: 8px;
-	}
+.vr-nav-custom div .badge {
+	position: absolute;
+	top: 10px;
+	left: 8px;
+}
 
 .badge {
 	padding: 3px 5px;

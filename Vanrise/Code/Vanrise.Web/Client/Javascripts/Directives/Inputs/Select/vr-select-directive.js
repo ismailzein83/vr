@@ -544,9 +544,10 @@
                     controller.selectedValuespageSize = 20;
                 };
                 controller.focusFilterInput = function () {
-                    setTimeout(function () {
-                        $('.filter-input').focus();
-                    }, 100);
+                    if (!controller.isMobile)
+                        setTimeout(function () {
+                            $('.filter-input').focus();
+                        }, 100);
                 };
                 function getDropDownDirection(id, getTopDirection) {
                     cleanUpPositionClass(id);
@@ -904,7 +905,7 @@
                                             + '   ' + validateButtonClass + '>'
                                             + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px );" ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'}" ng-class="ctrl.labelclass">{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
-                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
+                                            + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0 && !ctrl.isMobile "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
                     }
 

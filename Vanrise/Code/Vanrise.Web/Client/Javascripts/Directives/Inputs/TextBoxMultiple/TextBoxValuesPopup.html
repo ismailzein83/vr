@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="TextBoxValuesPopupController" vr-loader="isLoading">
+    <vr-modalbody>
+        <div style="position:relative;">
+            <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: -10px;right: -10px;font-size:22px"></span>
+
+            <div style="width : 100% ;padding-top:15px" ng-if="!ctrl.readOnly">
+                <div style="display:inline-block;width:calc(100% - 40px );padding: 0px 3px;">
+                    <vr-textbox value="ctrl.valuetext" type="ctrl.datatype" customvalidate="ctrl.validateInpute()" onenterpress="ctrl.addNewValue"></vr-textbox>
+                </div>
+                <div style="display:inline-block;width:30px"><vr-button vr-disabled="ctrl.disabledAdd()" type="Add" standalone data-onclick="ctrl.addNewValue"></vr-button></div>
+            </div>
+            <div style="width : 100%">
+                <div calss="items-container">
+                    <div style="padding:5px ;height:29px">
+                        Values:
+                        <a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); " ng-if="!ctrl.readOnly">
+                            Clear all
+                            <i class="glyphicon glyphicon-trash hand-cursor "></i>
+                        </a>
+                    </div>
+                    <div style="height: 100px; overflow: auto;padding-top:5px">
+                        <span class="label custom-label" ng-repeat="obj in ctrl.value track by $index">
+                            {{obj}}
+                            <span class="glyphicon glyphicon-remove hand-cursor" aria-hidden="true" ng-click="ctrl.removeValue(obj);" ng-if="!ctrl.readOnly"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vr-modalbody>
+</div>

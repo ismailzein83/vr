@@ -1,8 +1,8 @@
 ﻿(function (app) {
-    
+
     "use strict";
 
-    function serviceObj($modal, $rootScope, VRNavigationService, $q, UtilsService) {
+    function serviceObj($modal, $rootScope, VRNavigationService, $q, UtilsService, MobileService) {
         return ({
             showModal: showModal
         });
@@ -17,9 +17,9 @@
             modalScope.modalContext = {};
 
             var onhideModal = function () {
-
+               
             };
-            modalScope.modalContext.closeModal = function () {
+            modalScope.modalContext.closeModal = function () {              
                 if (modalInstance) modalInstance.hide();
                 deferred.resolve();
                 modalScope.$destroy();
@@ -69,39 +69,55 @@
 
                 if (settings.onScopeReady != undefined)
                     settings.onScopeReady(modalScope);
-                
+
                 if (UtilsService.isContextReadOnly(modalScope) === true) {
-                  
+
                     setTimeout(function () {
                         $('.modal-header').eq($('.modal-dialog').length - 1).addClass('vr-modal-readonly');
                         $('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly', 'true');
                     }, 100);
-                   
+
                 }
-                   
-                if (settings.autoclose != undefined ) {
+
+                if (settings.autoclose != undefined) {
                     backdrop = settings.autoclose;
                 }
-                   
+
             }
 
             modalScope.$on('modal.hide.before', function () {
                 if ($('.modal-header').eq($('.modal-dialog').length - 2).attr('readonly') == undefined) {
                     $('.modal-header').eq($('.modal-dialog').length - 2).removeClass('vr-modal-header-inback');
                     $('.modal-header').eq($('.modal-dialog').length - 2).addClass('vr-modal-header');
-
+                }
+                if ($('.modal-dialog').length > 1) {
+                    $('body').addClass('full-body');
+                }
+                else {
+                    $('body').removeClass('full-body');
+                    document.documentElement.style.removeProperty('height');
+                    document.body.style.removeProperty('height');
                 }
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
+            modalScope.$on('modal.show', function () {
+                if (ctrl.isMobile) {
+                    var vpH = window.innerHeight;
+                    document.documentElement.style.height = vpH.toString() + "px";
+                    document.body.style.height = vpH.toString() + "px";
+                }                
+            });
+                          
             //modalScope.$on("$destroy", function () {
             //   // $(window).off("resize.Viewport");
             //});
-            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: "am-fade-and-scale" ,onHide:onhideModal });
+            var animationClass = MobileService.isMobile() ? "" : "am-fade-and-scale";
+            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: animationClass, onHide: onhideModal});
             return deferred.promise;
         }
     }
 
-    serviceObj.$inject = ['$modal', '$rootScope', 'VRNavigationService', '$q', 'UtilsService'];
+    serviceObj.$inject = ['$modal', '$rootScope', 'VRNavigationService', '$q', 'UtilsService', 'MobileService'];
     app.service('VRModalService', serviceObj);
 
 

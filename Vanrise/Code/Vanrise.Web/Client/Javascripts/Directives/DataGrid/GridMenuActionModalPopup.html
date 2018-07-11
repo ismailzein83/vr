@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="GridMenuActionPopupController" vr-loader="isLoading">
+    <vr-modalbody>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
+        <ul role="menu" class="gid-cell-menu am-fade-and-slide-top " style="list-style-type:none;">
+            <li role="presentation" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable">
+                <div class="mark-select action-item">
+                    <div class="hand-cursor" ng-click="exportActionAndCloseModal()">
+                        <span style="font-size:16px">
+                            <span style="color:black;text-align:center" aria-hidden="true">Export</span>
+                            <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="ctrl.isExporting" />
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li role="presentation">
+                <div ng-repeat="menuAction in ctrl.getGridMenuActions()" class="mark-select action-item">
+                    <span class="hand-cursor" style="padding-left:4px;color:black;text-align:center;font-size:16px !important" aria-hidden="true" ng-click="executeGridActionAndCloseModal(menuAction)">{{menuAction.name}}</span>
+                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="menuAction.isExecuting" />
+                </div>
+            </li>
+            <li role="separator" class="divider" ng-show="ctrl.getGridMenuActions().length > 0"></li>
+            <li role="presentation">
+                <div ng-repeat="colDef in ctrl.columnDefs" ng-if="!colDef.nonHiddable" class="mark-select action-item" ng-click="ctrl.switchColumnVisibility(colDef)" style="font-size:16px">
+                    <span style="float: right; color: #000;" class="vr-gridmenu-checkitem" ng-show="!colDef.isHidden">✔</span>
+                    <span style="color:black;text-align:center" aria-hidden="true">{{colDef.name}}</span>
+                </div>
+            </li>
+        </ul>
+    </vr-modalbody>
+</div>

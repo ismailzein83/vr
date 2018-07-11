@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrPagination', ['UISettingsService', function (UISettingsService) {
+app.directive('vrPagination', ['UISettingsService', 'MobileService', function (UISettingsService, MobileService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -14,6 +14,7 @@ app.directive('vrPagination', ['UISettingsService', function (UISettingsService)
             });
             var pagerCtrl = this;
             pagerCtrl.topCounts = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100];
+            pagerCtrl.isMobile = MobileService.isMobile();
             if (pagerCtrl.pagersettings != undefined) {
                 pagerCtrl.pagersettings.itemsPerPage = parseInt(UISettingsService.getUIParameterValue('GridPageSize') || pagerCtrl.topCounts[1]);
                 pagerCtrl.pagersettings.getPageInfo = function () {
@@ -34,7 +35,7 @@ app.directive('vrPagination', ['UISettingsService', function (UISettingsService)
                         pagerCtrl.pagersettings.pageChanged();
                 };
 
-                pagerCtrl.pagersettings.showBoundaryLinks = true;
+                pagerCtrl.pagersettings.showBoundaryLinks = pagerCtrl.isMobile? false: true;
                 pagerCtrl.pagersettings.showDirectionLinks = true;
                 pagerCtrl.pagersettings.maxSize = 10;
 

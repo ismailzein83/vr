@@ -268,11 +268,14 @@
                 var type = 'text';
                 var isolationFormStart = "";
                 var isolationFormEnd = "";
-                if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name) {
-                    type = 'password';                    
+
+                if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name) {              
+                    type = 'password';
                     isolationFormStart = "<form>";
                     isolationFormEnd = "</form>";
                 }
+
+               
                 var keypress = '';
                 var keypressclass = '';
                 if (attrs.tonextinput != undefined) {
@@ -283,7 +286,7 @@
                 //    format = 'format="number"'; '+format+'
                 var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
                             + '<vr-validator validate="ctrl.validate()" vr-input>'
-                            +   isolationFormStart + ' <input  tabindex="{{ctrl.tabindex}}" autocomplete="false" ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)"/>' + isolationFormEnd
+                            + isolationFormStart + ' <input  tabindex="{{ctrl.tabindex}}" autocomplete="false" ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)"/>' + isolationFormEnd
                             + '</vr-validator>'
                             + '<span ng-if="(ctrl.hint!=undefined)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrModalcontent', ['VRLocalizationService', function (VRLocalizationService) {
+app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', function (VRLocalizationService, MobileService) {
 
     var directiveDefinitionObject = {
         restrict: 'A',
@@ -41,17 +41,22 @@ app.directive('vrModalcontent', ['VRLocalizationService', function (VRLocalizati
 
                 }
             }
+            var centredModal = "";
+            if (MobileService.isMobile()) {
+                centredModal = "centred-model";
+            }
             var style = "";
             var direction = VRLocalizationService.isLocalizationRTL() && 'right' || 'left';
-             if ($('.modal-dialog').length > 0) {
-                 style = "top:" + ($('.modal-dialog').length) * 10 + "px;" + direction + ":" + ($('.modal-dialog').length) * 10 + "px;";
-                if ($('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly') == undefined) {
-                    $('.modal-header').eq($('.modal-dialog').length - 1).removeClass('vr-modal-header');
-                    $('.modal-header').eq($('.modal-dialog').length - 1).addClass('vr-modal-header-inback');
-                }
-               
+               if ($('.modal-dialog').length > 0) {
+                if (!MobileService.isMobile()) {
+                    style = "top:" + ($('.modal-dialog').length) * 10 + "px;" + direction + ":" + ($('.modal-dialog').length) * 10 + "px;";
+                    if ($('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly') == undefined) {
+                        $('.modal-header').eq($('.modal-dialog').length - 1).removeClass('vr-modal-header');
+                        $('.modal-header').eq($('.modal-dialog').length - 1).addClass('vr-modal-header-inback');
+                    }
+                }               
             }
-             var newElement = '<div class="modal-dialog ' + classmodal + '" ' + resClass + ' style="' + style + '" >'
+            var newElement = '<div class="modal-dialog ' + classmodal  +' '+' '+ centredModal +'" ' + resClass + ' style="' + style + '" >'
                                   + '  <div class="modal-content" >'
                                     + '    <div class="modal-header vr-modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'

@@ -1,13 +1,20 @@
 ﻿'use strict';
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService", "VRNotificationService", "VR_Sec_RegisteredApplicationAPIService",
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService, VRNotificationService, VR_Sec_RegisteredApplicationAPIService) {
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService", "VRNotificationService", "VR_Sec_RegisteredApplicationAPIService", "MobileService",
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService, VRNotificationService, VR_Sec_RegisteredApplicationAPIService, MobileService) {
+
     (function () {
         document.getElementById("mainBodyContainer").style.display = "block";
     })();
-
-    Waves.displayEffect();
+    $scope.isMobile = MobileService.isMobile();
+    if (!$scope.isMobile) {
+        Waves.displayEffect();
+        document.body.addEventListener("touchmove", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }, false);
+    }
     $rootScope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
     });
@@ -50,7 +57,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     //        $scope.isLoadingRemoteApplications = false;
     //    });
     //};
-    
+
     //$scope.redirectToApplication = function (remoteApplication) {
     //    return SecurityService.redirectToApplication(remoteApplication.URL);
     //}
@@ -242,7 +249,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     };
     $scope.menuItemsCurrent = null;
     $scope.setIndex = function (item) {
-        $('.vr-menu-item').slideUp();
+        // $('.vr-menu-item').slideUp();
         if ($scope.menuItemsCurrent != null && $scope.menuItemsCurrent.Id == item.Id) {
             $scope.menuItemsCurrent = null;
             $('#collapse-' + item.Id).removeClass('vr-menu-item-selected');
@@ -336,6 +343,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
     $rootScope.$on('$viewContentLoaded', function (event) {
         checkGoogleTracking();
+        // $('.navbar-toggle').click();
     });
     function checkGoogleTracking() {
         var status = UISettingsService.getGoogleTrackingStatus();
@@ -384,6 +392,9 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             selectedMenuItem = matchMenuItem;
             setMenuItemSelectedFlag(selectedMenuItem, true);
         }
+        if ($('#navbar').attr("aria-expanded") == 'true') {
+            $('.navbar-toggle').click();
+        }
 
     }
 
@@ -405,6 +416,8 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         if (menuItem.parent != null && menuItem.Childs != null && isSelected == true) {
             $scope.menusubItemsCurrent = menuItem;
         }
+
+        //
     }
 
     var pathArray = location.href.split("/");

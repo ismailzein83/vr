@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', 'UtilsService', 'VRNotificationService', 'VR_Common_EntityPersonalizationAPIService', 'VRModalService', 'VRLocalizationService', function (ActionBarDirService, MultiTranscludeService, UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAPIService, VRModalService, VRLocalizationService) {
+app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', 'UtilsService', 'VRNotificationService', 'VR_Common_EntityPersonalizationAPIService', 'VRModalService', 'VRLocalizationService', 'MobileService', function (ActionBarDirService, MultiTranscludeService, UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAPIService, VRModalService, VRLocalizationService, MobileService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -13,13 +13,14 @@ app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', '
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            ctrl.isMobile = MobileService.isMobile();
             var ctor = new ActionBarCtor($scope, ctrl, $attrs);
             ctor.initializeController();
         },
         link: function (scope, elem, attr, ctrl, transcludeFn) {
             MultiTranscludeService.transclude(elem, transcludeFn);
         },
-        controllerAs: 'ctrl',
+        controllerAs: 'actionBarCtrl',
         bindToController: true,
         templateUrl: function (element, attrs) {
             return ActionBarDirService.dTemplate;
@@ -29,6 +30,33 @@ app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', '
     function ActionBarCtor($scope, ctrl, $attrs) {
 
         ctrl.showMenuOption = false;
+
+        ctrl.buttonsList = [];
+
+        ctrl.addButton = function (btn) {
+            ctrl.buttonsList.push(btn);
+        };
+
+        ctrl.openAllActionPopup = function () {
+            var modalSettings = {
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.actionBarCtrl = ctrl;
+            };
+            VRModalService.showModal("/Client/Javascripts/Directives/ActionBar/AllActionsModalPopup.html", null, modalSettings);
+        };
+
+        ctrl.getFirstTowButtons = function () {
+            var firstTowList = [];
+            for (var i = 0; i < ctrl.buttonsList.length ; i++) {
+                var btn = ctrl.buttonsList[i];
+                if (btn.showbutton == undefined ||  btn.showbutton == true)
+                    firstTowList.push(btn);
+                if (firstTowList.length == 2)
+                    return firstTowList;
+            }
+            return firstTowList;
+        };
 
         $scope.$on("hide-all-menu", function (event, args) {
             ctrl.showMenuOption = false;

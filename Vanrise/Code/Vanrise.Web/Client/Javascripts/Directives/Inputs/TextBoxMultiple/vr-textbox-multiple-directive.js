@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService', 'VRLocalizationService'];
+    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService', 'VRLocalizationService', 'VRModalService', 'MobileService'];
 
-    function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService, VRLocalizationService) {
+    function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService, VRLocalizationService, VRModalService, MobileService) {
 
         return {
             restrict: 'E',
@@ -21,7 +21,7 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
+                ctrl.isMobile = MobileService.isMobile();
                 var validationOptions = {};
                 if ($attrs.isrequired != undefined)
                     validationOptions.arrayValidation = true;
@@ -233,6 +233,16 @@
                         setTimeout(function () {
 
                             $('#' + ctrl.id).on('click', '.dropdown-toggle', function () {
+                                if (ctrl.isMobile) {
+                                    var modalSettings = {
+                                    };
+                                    modalSettings.onScopeReady = function (modalScope) {
+                                        modalScope.ctrl = ctrl;
+                                    };
+                                    VRModalService.showModal("/Client/Javascripts/Directives/Inputs/TextBoxMultiple/TextBoxValuesPopup.html", null, modalSettings);
+                                    return;
+                                }
+
                                 $scope.$root.$broadcast("hide-all-select");
                                 var self = $(this);
                                 var selfHeight = $(this).parent().height();

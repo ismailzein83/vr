@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent ng-controller="AllActionsModalPopupController" vr-loader="isLoading">
+    <vr-modalbody>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
+        <div class="actionbar-popup-modal" style="padding-top:15px">
+            <div ng-class="btn.menuActions.length > 0?'sub-menu':''" ng-repeat="btn in actionBarCtrl.buttonsList" style="position:relative;display:block;" ng-if="btn.isExculdedOnreadOnly()" ng-mouseleave="btn.showMenuActions = false" ng-hide="btn.hideTemplate">
+                <button ng-class="" ng-show="btn.showbutton == undefined ||  btn.showbutton == true" style="border-radius: 0px; color: #333; " type="button" class="btn btn-default" aria-label="Left Align" ng-click="clickActionAndCloseModal(btn)" ng-disabled="btn.isDisabled()">
+                    <div ng-if="btn.menuActions.length > 0" class="sub-menu-prefix" ng-class="btn.showSubMenu?'opened':'closed'"></div>
+                    <span ng-class="btn.iconClass" aria-hidden="true" ng-show="btn.showIcon()"></span>
+                    {{btn.name}}
+                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width: 14px;" ng-show="btn.showLoader()">
+                </button>
+                <div ng-if="btn.menuActions.length > 0" ng-init="btn.showSubMenu = true" ng-show="btn.showbutton == undefined ||  btn.showbutton == true" class="sub-menu-container">
+                    <div ng-show="btn.showSubMenu">
+                        <button ng-hide="btnAction.disable" ng-repeat="btnAction in btn.menuActions" ng-click="clickActionAndCloseModal(btn,btnAction)" style="border-radius: 0px; color: #333; " type="button" class="btn btn-default">
+                            {{btnAction.name}}
+                            <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width: 14px;" ng-show="btnAction.isSubmitting">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </vr-modalbody>
+</div>

@@ -25,192 +25,264 @@
     @Styles.Render("~/Content/Styles")
     @Styles.Render("~/Content/Themes")
 </head>
-<body @ViewBag.RTLClass>
+<body @ViewBag.RTLClass ng-class="isMobile?'mobile-view':''" style="overscroll-behavior-y: contain;">
     <div ng-show="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
     <div ng-show="!spinner" ng-cloak id="mainBodyContainer" style="display:none">
-        <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
-            <div class="container">
-                <div class="navbar-header">
-                    <img src="/Images/logoonheader.png" class="minilogo hand-cursor" ng-click="goToHomePage()" title="Home" />
-                    <div class="vr-logout-span">
 
-                        @*<div class="vr-logout-span" ng-show="remoteApplications!=undefined && remoteApplications.length > 0">
+        <div class="normal-view" ng-if="!isMobile">
+            <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+                <div class="container">
+                    <div class="navbar-header">
+                        <img src="/Images/logoonheader.png" class="minilogo hand-cursor" ng-click="goToHomePage()" title="Home" />
+                        <div class="vr-logout-span">
+
+                            @*<div class="vr-logout-span" ng-show="remoteApplications!=undefined && remoteApplications.length > 0">
+                                <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                                    <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-retweet"></span>
+                                        <label class="vr-user-separator">|</label>
+                                    </div>
+                                    <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
+                                        <li ng-repeat="remoteApplication in remoteApplications">
+                                            <a href="" ng-click="redirectToApplication(remoteApplication)">{{remoteApplication.Name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>*@
+
                             <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                                 <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
-                                    <span class="glyphicon glyphicon-retweet"></span>
+                                    <div class="vr-user-icon">
+                                        <vr-preview-image height="26px" width="26px" value="userPhotoFileId" usericon="userPhotoFileId!=null"> </vr-preview-image>
+                                    </div>
+                                    <label class="vr-user-label">{{userDisplayName}}</label>
                                     <label class="vr-user-separator">|</label>
                                 </div>
                                 <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
-                                    <li ng-repeat="remoteApplication in remoteApplications">
-                                        <a href="" ng-click="redirectToApplication(remoteApplication)">{{remoteApplication.Name}}</a>
+                                    <li role="presentation">
+                                        <a href="" ng-click="openEditProfileModal()">Edit My Profile</a>
+                                    </li>
+                                    <li role="presentation" ng-if="@ViewBag.IsLocalizationEnabled">
+                                        <a href="" ng-click="openEditMyLanguageModal()">Edit My Language</a>
+                                    </li>
+                                    <li role="presentation" ng-if="supportPasswordManagement">
+                                        <a href="" ng-click="openResetPasswordModal()">Change My Password</a>
+                                    </li>
+                                    <li role="presentation" ng-if="@ViewBag.HasRemoteApplications">
+                                        <a href="" ng-click="openRemoteApplicationsModal()">Switch Application</a>
+                                    </li>
+
+                                    <li role="presentation">
+                                        <a href="" ng-click="logout()">Logout</a>
                                     </li>
                                 </ul>
                             </div>
-                        </div>*@
-
-                        <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
-                            <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
-                                <div class="vr-user-icon">
-                                    <vr-preview-image height="26px" width="26px" value="userPhotoFileId" usericon="userPhotoFileId!=null"> </vr-preview-image>
-                                </div>
-                                <label class="vr-user-label">{{userDisplayName}}</label>
-                                <label class="vr-user-separator">|</label>
-                            </div>
-                            <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
-                                <li role="presentation">
-                                    <a href="" ng-click="openEditProfileModal()">Edit My Profile</a>
-                                </li>
-                                <li role="presentation" ng-if="@ViewBag.IsLocalizationEnabled">
-                                    <a href="" ng-click="openEditMyLanguageModal()">Edit My Language</a>
-                                </li>
-                                <li role="presentation" ng-if="supportPasswordManagement">
-                                    <a href="" ng-click="openResetPasswordModal()">Change My Password</a>
-                                </li>
-                                <li role="presentation" ng-if="@ViewBag.HasRemoteApplications">
-                                    <a href="" ng-click="openRemoteApplicationsModal()">Switch Application</a>
-                                </li>
-                                
-                                <li role="presentation">
-                                    <a href="" ng-click="logout()">Logout</a>
-                                </li>
-                            </ul>
                         </div>
-                    </div>
 
 
-                    <div class="menu-icon support-call">
-                        <a href="" ng-click="openSupportModal()" style="position:relative"><img style="position:absolute;left:110px" src="Client/Images/support.png" class="vr-support" /></a>
-                    </div>
-                    <div class="menu-icon" title="Alert(s)">
-                        <img src="Client/Images/01.png" class="img1" />
-                        <span class="badge bg-custom">0</span>
-                    </div>
-                    <div class="warning-icon" title="Notification(s)">
-                        <img src="Client/Images/02.png" class="img2" />
-                        <span class="badge bg-custom">0</span>
+                        <div class="menu-icon support-call">
+                            <a href="" ng-click="openSupportModal()" style="position:relative"><img style="position:absolute;left:110px" src="Client/Images/support.png" class="vr-support" /></a>
+                        </div>
+                        <div class="menu-icon" title="Alert(s)">
+                            <img src="Client/Images/01.png" class="img1" />
+                            <span class="badge bg-custom">0</span>
+                        </div>
+                        <div class="warning-icon" title="Notification(s)">
+                            <img src="Client/Images/02.png" class="img2" />
+                            <span class="badge bg-custom">0</span>
+                        </div>
                     </div>
                 </div>
+            </nav>
+            <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
+                <div class="inner-sub ">
+                    <h4 class="vr-page-title" ng-bind="currentPage.Title"></h4>
+                </div>
             </div>
-        </nav>
-        <div class="sub-header" ng-class="toogled==true?'sub-header-open':'sub-header-closed'">
-            <div class="inner-sub ">
-                <h4 class="vr-page-title" ng-bind="currentPage.Title"></h4>
-            </div>
-        </div>
-        <div id="wrapper" ng-class="toogled==true?'wrapper-toogled':'wrapper-normal'">
-            <!-- Sidebar -->
-            <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'200px'}:{'width':'0px'}">
+            <div id="wrapper" ng-class="toogled==true?'wrapper-toogled':'wrapper-normal'">
+                <!-- Sidebar -->
+                <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'200px'}:{'width':'0px'}">
 
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-if="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
-                    <div class="panel panel-default toggle-panel ">
-                        <div class="panel-heading dll-menu" style="height: 36px;">
-                            <span title="@ViewBag.CompanyName" class="vr-company-name">@ViewBag.CompanyName</span>
-                            <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin pin-icon" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon':'pined-icon'"></span>
-                            <span class=" hand-cursor glyphicon glyphicon-chevron-left toogle-icon" ng-click="hideToogled()" ng-if="pinned==true"></span>
-                        </div>
-                    </div>
-                    <div style="overflow-x:hidden;position:absolute;width:200px;height:calc(100% - 115px);">
-                        <div class="panel panel-default menu-item-list" ng-repeat="item in menuItems">
-                            <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
-
-                                <span ng-if="item.Childs.length > 0">
-                                    <span class="glyphicon " style="top: -4px; "><img ng-src="{{::item.Icon}}" /></span>
-                                    <span class="vr-module-name" title="{{::item.Name}}">{{::item.Name}}</span>
-                                    <span class=" hand-cursor  toggel">
-                                        <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 7px;"></span>
-                                    </span>
-                                </span>
-
-                                <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
-                                    <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
-                                        <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
-                                    </li>
-                                </ul>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-if="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
+                        <div class="panel panel-default toggle-panel ">
+                            <div class="panel-heading dll-menu" style="height: 36px;">
+                                <span title="@ViewBag.CompanyName" class="vr-company-name">@ViewBag.CompanyName</span>
+                                <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin pin-icon" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon':'pined-icon'"></span>
+                                <span class=" hand-cursor glyphicon glyphicon-chevron-left toogle-icon" ng-click="hideToogled()" ng-if="pinned==true"></span>
                             </div>
-                            <div id="collapse-{{::item.Id}}" ng-if="menuItemsCurrent.Id == item.Id " class="slideanimation">
-                                <div class="panel-body">
-                                    <div ng-repeat="c in item.Childs">
-                                        <ul class="nav">
-                                            <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
-                                                <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Location}}">{{::c.Name}} </a>
-                                            </li>
-                                        </ul>
-                                        <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
-                                            <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
-                                            <ul class="nav slideanimation inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
-                                                <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
-                                                    <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                        </div>
+                        <div style="overflow-x:hidden;position:absolute;width:200px;height:calc(100% - 115px);">
+                            <div class="panel panel-default menu-item-list" ng-repeat="item in menuItems">
+                                <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
+
+                                    <span ng-if="item.Childs.length > 0">
+                                        <span class="glyphicon " style="top: -4px; "><img ng-src="{{::item.Icon}}" /></span>
+                                        <span class="vr-module-name" title="{{::item.Name}}">{{::item.Name}}</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 7px;"></span>
+                                        </span>
+                                    </span>
+
+                                    <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
+                                        <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
+                                            <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="collapse-{{::item.Id}}" ng-if="menuItemsCurrent.Id == item.Id " class="slideanimation">
+                                    <div class="panel-body">
+                                        <div ng-repeat="c in item.Childs">
+                                            <ul class="nav">
+                                                <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
+                                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Location}}">{{::c.Name}} </a>
                                                 </li>
                                             </ul>
+                                            <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
+                                                <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
+                                                <ul class="nav slideanimation inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
+                                                    <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
+                                                        <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-
-                    </div>
-                    <div class="clock">
-                        <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
-
-                        <span style="color: #6a6a6a;font-weight:bold" ng-bind="$root.clock  | date:'HH:mm:ss'"> </span>
-                        <div style="font-size: 10px;">@ViewBag.ProductVersion</div>
-                    </div>
-
-                </div>
-
-                <div id="collapsedmenu" style="background-color: #ddd; height: 100%; width: 40px; position: fixed;" ng-if="toogled==false">
-                    <div class="dropdown dropdown-custom-serf leftdiv">
-                        <div class="dropdown-toggle dropdown-item" style="font-size: 17px;top:9px;left:5px;display:block">
-                            <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin collapsed-pin-icon" ng-class="pinned==true?'unpined-icon':'pined-icon'" style="font-size: 17px !important;" ng-click="pinpanel()"></span>
-                            <span class=" hand-cursor glyphicon glyphicon-chevron-right collapsed-toggle-icon" style="font-size: 17px !important;" ng-click="showToogled()" ng-if="pinned==true"></span>
-                        </div>
-                    </div>
-                    <div ng-mouseout="mouseout()" ng-mouseover="mouseover()">
-                        <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-class="item.isSelected? 'bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" ng-mouseenter="showMenu($event,item.Id)" ng-mouseleave="hideMenu($event)">
-                            <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" id="dropdownMenuCu-{{::$index}}" style="top: 5px;" aria-expanded="true" data-toggle="dropdown">
-                                <img ng-src="{{::item.Icon}}" />
-                            </div>
-                            <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{::$index}}" ng-if="currentMenuIndex==item.Id">
-                                <li class="title-groupe" role="presentation">
-                                    <label class="title-label"> {{::item.Name}}</label>
-                                </li>
-                                <span ng-repeat="c in item.Childs">
-                                    <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-class="c.isSelected?'selected-node':''">
-                                        <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>
-                                    </li>
-                                    <li ng-if="c.Childs != undefined" class="innerlist">
-                                        <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)">{{::c.Name}}</div>
-                                        <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
-                                            <li ng-repeat="a in c.Childs" class="innerlist">
-                                                <a class="menulink child-menu-link" ng-class="a.isSelected?'selected-url bold-item':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </span>
-                            </ul>
-                        </div>
-                        <div class="clock collapsed-clock" style="z-index:-1">
-
+                        <div class="clock">
                             <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
 
-                            <span style="color: #6a6a6a; font-weight: bold" ng-bind="$root.clock  | date:'HH:mm'"></span>
+                            <span style="color: #6a6a6a;font-weight:bold" ng-bind="$root.clock  | date:'HH:mm:ss'"> </span>
                             <div style="font-size: 10px;">@ViewBag.ProductVersion</div>
                         </div>
+
                     </div>
 
+                    <div id="collapsedmenu" style="background-color: #ddd; height: 100%; width: 40px; position: fixed;" ng-if="toogled==false">
+                        <div class="dropdown dropdown-custom-serf leftdiv">
+                            <div class="dropdown-toggle dropdown-item" style="font-size: 17px;top:9px;left:5px;display:block">
+                                <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin collapsed-pin-icon" ng-class="pinned==true?'unpined-icon':'pined-icon'" style="font-size: 17px !important;" ng-click="pinpanel()"></span>
+                                <span class=" hand-cursor glyphicon glyphicon-chevron-right collapsed-toggle-icon" style="font-size: 17px !important;" ng-click="showToogled()" ng-if="pinned==true"></span>
+                            </div>
+                        </div>
+                        <div ng-mouseout="mouseout()" ng-mouseover="mouseover()">
+                            <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-class="item.isSelected? 'bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" ng-mouseenter="showMenu($event,item.Id)" ng-mouseleave="hideMenu($event)">
+                                <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" id="dropdownMenuCu-{{::$index}}" style="top: 5px;" aria-expanded="true" data-toggle="dropdown">
+                                    <img ng-src="{{::item.Icon}}" />
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{::$index}}" ng-if="currentMenuIndex==item.Id">
+                                    <li class="title-groupe" role="presentation">
+                                        <label class="title-label"> {{::item.Name}}</label>
+                                    </li>
+                                    <span ng-repeat="c in item.Childs">
+                                        <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-class="c.isSelected?'selected-node':''">
+                                            <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>
+                                        </li>
+                                        <li ng-if="c.Childs != undefined" class="innerlist">
+                                            <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)">{{::c.Name}}</div>
+                                            <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
+                                                <li ng-repeat="a in c.Childs" class="innerlist">
+                                                    <a class="menulink child-menu-link" ng-class="a.isSelected?'selected-url bold-item':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </span>
+                                </ul>
+                            </div>
+                            <div class="clock collapsed-clock" style="z-index:-1">
+
+                                <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
+
+                                <span style="color: #6a6a6a; font-weight: bold" ng-bind="$root.clock  | date:'HH:mm'"></span>
+                                <div style="font-size: 10px;">@ViewBag.ProductVersion</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- /#sidebar-wrapper -->
+                <!-- Page Content -->
+                <div id="page-content-wrapper">
+                    <div class="container-fluid vr-container">
+                        <div class="col-lg-12" ng-view id="mainNgView"></div>
+                    </div>
+                    <!-- /#page-content-wrapper -->
                 </div>
             </div>
+        </div>
+        <div class="mobile-view" ng-if="isMobile">
+            <nav class="navbar navbar-default vr-mobile-navbar">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand hand-cursor">@ViewBag.CompanyName</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse vr-collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="panel-default menu-item-list" ng-repeat="item in menuItems">
+                                <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
 
-            <!-- /#sidebar-wrapper -->
-            <!-- Page Content -->
-            <div id="page-content-wrapper">
+                                    <span ng-if="item.Childs.length > 0">
+                                        <span class="glyphicon " style="top: -4px; "><img ng-src="{{::item.Icon}}" /></span>
+                                        <span class="vr-module-name" title="{{::item.Name}}">{{::item.Name}}</span>
+                                        <span class=" hand-cursor  toggel">
+                                            <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 7px;"></span>
+                                        </span>
+                                    </span>
+
+                                    <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
+                                        <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
+                                            <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="collapse-{{::item.Id}}" ng-if="menuItemsCurrent.Id == item.Id ">
+                                    <div class="panel-body">
+                                        <div ng-repeat="c in item.Childs">
+                                            <ul class="nav">
+                                                <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
+                                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Location}}">{{::c.Name}} </a>
+                                                </li>
+                                            </ul>
+                                            <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
+                                                <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
+                                                <ul class="nav  inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
+                                                    <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
+                                                        <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div><!--/.container-fluid -->
+            </nav>
+            <div>
+                <h4 class="vr-page-title" ng-bind="currentPage.Title"></h4>
+            </div>
+            <div id="page-content-wrapper" class="vr-mobile-content-wrapper">
+
                 <div class="container-fluid vr-container">
                     <div class="col-lg-12" ng-view id="mainNgView"></div>
                 </div>
                 <!-- /#page-content-wrapper -->
             </div>
         </div>
+
+
     </div>
+
 </body>
 @Scripts.Render("~/bundles/helpers")
 @Scripts.Render("~/bundles/JQuery")

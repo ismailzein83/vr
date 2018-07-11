@@ -1,0 +1,12 @@
+﻿<div vr-modalcontent ng-controller="RowActionPopupController" vr-loader="isLoading">
+    <vr-modalbody>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
+        <ul role="menu" class="gid-cell-menu am-fade-and-slide-top" style="list-style-type:none;padding-top:15px">
+            <li role="presentation">
+                <div ng-repeat="action in ctrl.getMenuActions(dataItem)" class="mark-select action-item" style=" ">
+                    <div ng-hide="action.disable" class=" hand-cursor" ng-click="clickActionAndCloseModal(action, dataItem)"><span style="font-size:24px">{{action.name}}</span></div>
+                </div>
+            </li>
+        </ul>
+    </vr-modalbody>
+</div>

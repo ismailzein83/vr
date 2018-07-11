@@ -16,6 +16,12 @@
                 closeModal();
             };
 
+            $scope.clearSelectionAndCloseModal = function ($event, isSingle) {
+                $scope.ctrl.clearAllSelected($event, isSingle);
+                if (isSingle)
+                    closeModal();
+            };
+
             $scope.closeModal = closeModal;
 
         }

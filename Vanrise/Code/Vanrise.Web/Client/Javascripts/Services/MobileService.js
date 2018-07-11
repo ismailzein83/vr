@@ -2,11 +2,19 @@
 
     "use strict";
 
-    MobileService.$inject = ['VRNotificationService', 'UtilsService'];
+    MobileService.$inject = ['UtilsService'];
 
-    function MobileService(VRNotificationService, UtilsService) {
+    function MobileService( UtilsService) {
 
-        function isMobile() {
+        function isMobile() {            
+            return isMobileView();
+        }
+
+        function isMobileView() {           
+            return window.innerWidth < 768;
+        }
+
+        function isMobileOS() {
             var check = false;
             var webkitVer = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.appVersion)[1], 10); // also matches AppleWebKit
             var isGoogle = webkitVer && navigator.vendor.indexOf('Google') === 0;  // Also true for Opera Mobile and maybe others

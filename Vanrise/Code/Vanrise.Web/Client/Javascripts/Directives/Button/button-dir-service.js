@@ -3,7 +3,8 @@
 app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
     return ({
-        getTemplate: getTemplate
+        getTemplate: getTemplate,
+        getButtonAttributes: getButtonAttributes
     });
 
     function getTemplate(attrs) {

@@ -1,18 +1,18 @@
-﻿<div class="action-bar" ng-class="ctrl.showpersonalizationmenu?'include-personalization':''" >
-    <div ng-show="ctrl.showpersonalizationmenu">
-        <div class="vr-menu-box hand-cursor menu-out-div" ng-click="ctrl.toggelOptionMenu($event)">
+﻿<div class="action-bar" ng-class="actionBarCtrl.showpersonalizationmenu?'include-personalization':''">
+    <div ng-show="actionBarCtrl.showpersonalizationmenu">
+        <div class="vr-menu-box hand-cursor menu-out-div" ng-click="actionBarCtrl.toggelOptionMenu($event)">
             <span class="vr-half-circle hand-cursor"></span>
             <span class="glyphicon glyphicon-wrench vr-action-menu-dote hand-cursor"></span>
         </div>
-        <ul class="vr-menu-list out-div" ng-show="ctrl.showMenuOption==true" click-outside="ctrl.toggelOptionMenu($event, false)" outside-if-not="menu-out-div">
-            <li role="presentation"><a ng-click="ctrl.savePersonalizationSettings()">Save Settings</a></li>
-            <li role="presentation"><a ng-click="ctrl.resetPersonalizationSettings()">Reset to Default</a></li>
+        <ul class="vr-menu-list out-div" ng-show="actionBarCtrl.showMenuOption==true" click-outside="actionBarCtrl.toggelOptionMenu($event, false)" outside-if-not="menu-out-div">
+            <li role="presentation"><a ng-click="actionBarCtrl.savePersonalizationSettings()">Save Settings</a></li>
+            <li role="presentation"><a ng-click="actionBarCtrl.resetPersonalizationSettings()">Reset to Default</a></li>
         </ul>
     </div>
     <div class="btn-group action-bar-left">
-        <button ng-show="ctrl.showcollapsebutton" ng-click="ctrl.issectioncollapsed = !ctrl.issectioncollapsed" style="border-bottom-color: transparent; border-color: transparent; border-radius: 15px; background-color: transparent; color: #FFF;z-index: 1; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
-            <span ng-hide="ctrl.issectioncollapsed" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-            <span ng-show="ctrl.issectioncollapsed" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+        <button ng-show="actionBarCtrl.showcollapsebutton" ng-click="actionBarCtrl.issectioncollapsed = !actionBarCtrl.issectioncollapsed" style="border-bottom-color: transparent; border-color: transparent; border-radius: 15px; background-color: transparent; color: #FFF;z-index: 1; " data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" type="button" class="btn btn-default btncustom" aria-label="Left Align">
+            <span ng-hide="actionBarCtrl.issectioncollapsed" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+            <span ng-show="actionBarCtrl.issectioncollapsed" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
         </button>
         <div class="btn-group" transclude-id="leftSection">
         </div>
@@ -20,7 +20,19 @@
 
     <div class="btn-group" style="position: absolute;width: calc(100% - 15px);">
         <div class="buttons-container">
-            <div transclude-id="buttons"></div>
+            <div transclude-id="buttons" ng-show="!actionBarCtrl.isMobile"></div>
+            <div ng-if="actionBarCtrl.isMobile" ng-repeat="btn in actionBarCtrl.getFirstTowButtons()" style="position:relative;display:inline-block;" ng-if="btn.isExculdedOnreadOnly()" ng-mouseleave="btn.showMenuActions = false" ng-hide="btn.hideTemplate">
+                <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="btn.onInternalClick($event,btn)" ng-disabled="btn.isDisabled()">
+                    {{btn.name}}
+                    <span ng-class="btn.iconClass" aria-hidden="true" ng-show="btn.showIcon()"></span>
+                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width: 14px;" ng-show="btn.showLoader()">
+                </button>
+            </div>
+            <div ng-show="actionBarCtrl.isMobile && actionBarCtrl.buttonsList.length > 2" style="position:relative;display:inline-block;">
+                <button ng-click="actionBarCtrl.openAllActionPopup()" style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="btn.onInternalClick($event)" ng-disabled="btn.isDisabled()">
+                    <span class="glyphicon glyphicon-option-vertical"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

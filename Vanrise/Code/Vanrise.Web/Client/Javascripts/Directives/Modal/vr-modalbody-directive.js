@@ -1,15 +1,16 @@
 ﻿'use strict';
 
-app.directive('vrModalbody', [function () {
+app.directive('vrModalbody', ['MobileService', function (MobileService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: false,
         compile: function (tElement, tAttrs) {
             var maxHeightPart = "";
-            var draggablemodal = "draggablemodal";
+            var draggablemodal = MobileService.isMobile() ? "" : "draggablemodal";
 
-            var maxHeigth = window.innerHeight - 122 ;
+            var modalHeightTrim = MobileService.isMobile() ? 100 : 122;
+            var maxHeigth = window.innerHeight - modalHeightTrim;
 
             //if (tAttrs.maxheight != undefined)
             //    maxHeigth = tAttrs.maxheight;
@@ -19,7 +20,7 @@ app.directive('vrModalbody', [function () {
                 draggablemodal = '';
 
             var newElement = '<div class="modal-body"  ' + draggablemodal + ' ng-style="{ ' + maxHeightPart + ' }" >'
-                                +  tElement.html()                             
+                                + tElement.html()
                             + '</div>';
             tElement.html(newElement);
         }

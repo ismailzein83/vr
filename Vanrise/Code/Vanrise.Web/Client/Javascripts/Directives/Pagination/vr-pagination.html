@@ -1,27 +1,36 @@
 ﻿<vr-form name="formNavigation">
     <div class="vr-pager-container" style="overflow:hidden;height:25px;position:relative" ng-init="pagerCtrl.setDefaultSetting()">
-        <div style="display:inline-block;width:80px">
-            <vr-label class="vr-pagination-pagesize">
-                <span style=" ">Page Size: </span>
-            </vr-label>
-            <div style="float: left; ">
-                <vr-select hideremoveicon datasource="pagerCtrl.topCounts" selectedvalues="pagerCtrl.pagersettings.itemsPerPage" data-onselectionchanged="pagerCtrl.pageSizeChanged" nocaret noborder openup></vr-select>
-            </div>
-        </div>
-        <div style="top:  calc(50% + 3px) ;left: 50%;transform: translate(-50%,-50%);position:absolute" id="paginationContainer">
+        <div style="position: absolute;left: 50%;transform: translate(-50%,1px);" ng-if="pagerCtrl.isMobile">
             <div ng-init="pagerCtrl.pagersettings.currentPage = 1" ng-show="pagerCtrl.pagersettings.numberOfPages > 1">
-                <pagination total-items="pagerCtrl.pagersettings.totalDataCount" ng-model="pagerCtrl.pagersettings.currentPage" max-size="pagerCtrl.pagersettings.maxSize" class="pagination-sm vr-custom-pagination" num-pages="pagerCtrl.pagersettings.numberOfPages"
-                            items-per-page="pagerCtrl.pagersettings.itemsPerPage" direction-links="pagerCtrl.pagersettings.showDirectionLinks" boundary-links="pagerCtrl.pagersettings.showBoundaryLinks" rotate="false" ng-change="pagerCtrl.pageChanged()"
-                            previous-text="&lt;" next-text="&gt;" first-text="&lt;&lt;" last-text="&gt;&gt;"></pagination>
+                <pagination total-items="pagerCtrl.pagersettings.totalDataCount" ng-model="pagerCtrl.pagersettings.currentPage" max-size="1" class="pagination-sm vr-custom-pagination" num-pages="pagerCtrl.pagersettings.numberOfPages"
+                            items-per-page="pagerCtrl.pagersettings.itemsPerPage" direction-links="true" boundary-links="false" rotate="false" ng-change="pagerCtrl.pageChanged()"
+                            previous-text="Previous" next-text="Next"></pagination>
             </div>
         </div>
-        <div class="vr-pagination-info">
-            <vr-label>
-                <span>Page {{pagerCtrl.pagersettings.currentPage}} of {{pagerCtrl.pagersettings.numberOfPages}}, </span>
-            </vr-label>
-            <vr-label>
-                <span>Total count ({{pagerCtrl.pagersettings.totalDataCount}})</span>
-            </vr-label>
+        <div ng-if="!pagerCtrl.isMobile">
+            <div style="display:inline-block;width:80px">
+                <vr-label class="vr-pagination-pagesize">
+                    <span style=" ">Page Size: </span>
+                </vr-label>
+                <div style="float: left; ">
+                    <vr-select hideremoveicon datasource="pagerCtrl.topCounts" selectedvalues="pagerCtrl.pagersettings.itemsPerPage" data-onselectionchanged="pagerCtrl.pageSizeChanged" nocaret noborder openup></vr-select>
+                </div>
+            </div>
+            <div style="top:  calc(50% + 3px) ;left: 50%;transform: translate(-50%,-50%);position:absolute" id="paginationContainer">
+                <div ng-init="pagerCtrl.pagersettings.currentPage = 1" ng-show="pagerCtrl.pagersettings.numberOfPages > 1">
+                    <pagination total-items="pagerCtrl.pagersettings.totalDataCount" ng-model="pagerCtrl.pagersettings.currentPage" max-size="pagerCtrl.pagersettings.maxSize" class="pagination-sm vr-custom-pagination" num-pages="pagerCtrl.pagersettings.numberOfPages"
+                                items-per-page="pagerCtrl.pagersettings.itemsPerPage" direction-links="pagerCtrl.pagersettings.showDirectionLinks" boundary-links="pagerCtrl.pagersettings.showBoundaryLinks" rotate="false" ng-change="pagerCtrl.pageChanged()"
+                                previous-text="&lt;" next-text="&gt;" first-text="&lt;&lt;" last-text="&gt;&gt;"></pagination>
+                </div>
+            </div>
+            <div class="vr-pagination-info">
+                <vr-label>
+                    <span>Page {{pagerCtrl.pagersettings.currentPage}} of {{pagerCtrl.pagersettings.numberOfPages}}, </span>
+                </vr-label>
+                <vr-label>
+                    <span>Total count ({{pagerCtrl.pagersettings.totalDataCount}})</span>
+                </vr-label>
+            </div>
         </div>
     </div>
 </vr-form>
