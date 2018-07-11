@@ -162,6 +162,7 @@ as (select * from (values
 
 ('6B36007E-3333-40D3-B574-510C8338E6C0','WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration'	,'{"Editor":"whs-spl-supplierpricelistconfiguration-basic"}'),
 ('13CDF53A-3780-41D3-9FE1-0054458171C3','Pricelist Date','Pricelist Date','VR_ExcelConversion_FieldMapping'									,'{"Editor":"whs-spl-excelconversion-fieldmapping-pricelistdatefield"}'),
+('2C3ED299-C955-44B3-A708-E9B53A24CB0E','Select Minimum BED','Select Minimum BED'	,'VR_BP_BPBusinessRuleActionType','{"Description":"Select Minimum BED","Editor":"whs-spl-business-rule-action-selectserviceminbed"}'),
 
 ('63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65','Swap Deal','Swap Deal','WhS_Deal_DealSettings','{}'),
 
