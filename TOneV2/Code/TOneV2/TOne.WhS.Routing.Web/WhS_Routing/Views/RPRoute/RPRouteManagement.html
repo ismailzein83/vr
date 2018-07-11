@@ -1,5 +1,5 @@
 ﻿<vr-panel ng-controller="WhS_Routing_RPRouteManagementController">
-    <vr-form name="formFilter" validationcontext="filterGroupValid">
+    <vr-form name="formFilter" validationcontext="filterGroupValid" vr-loader="isLoading">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilterData">
             <vr-row removeline>
                 <vr-columns width="fullrow">
@@ -74,7 +74,7 @@
             </vr-row>
         </div>
         <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed" showpersonalizationmenu="true" on-ready="onActionBarSettingsReady">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" validationcontext="filterGroupValid" data-onclick="searchClicked"></vr-button>
                 </div>

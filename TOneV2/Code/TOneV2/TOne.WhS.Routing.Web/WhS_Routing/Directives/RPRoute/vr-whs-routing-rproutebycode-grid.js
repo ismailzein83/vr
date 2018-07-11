@@ -109,6 +109,15 @@ app.directive('vrWhsRoutingRproutebycodeGrid', ['VRNotificationService', 'UISett
                     return gridAPI.retrieveData(query);
                 };
 
+                //api.setPersonalizationItem = function (personalization) {
+                //    if (personalization != undefined && personalization.CodeGridPersonalization != undefined)
+                //        gridAPI.setPersonalizationItem(personalization.CodeGridPersonalization);
+                //};
+
+                //api.getPersonalizationItem = function () {
+                //    return gridAPI.getPersonalizationItem();
+                //};
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }

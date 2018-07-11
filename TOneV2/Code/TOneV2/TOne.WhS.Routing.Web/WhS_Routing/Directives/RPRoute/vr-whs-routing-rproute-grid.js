@@ -27,7 +27,6 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
             var routingDatabaseId;
             var policies;
-            var defaultPolicyId;
             var selectedPolicyConfigId;
             var customerId;
             var showInSystemCurrency;
@@ -104,7 +103,6 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
                     routingDatabaseId = query.RoutingDatabaseId;
                     policies = query.FilteredPolicies;
-                    defaultPolicyId = query.DefaultPolicyId;
                     selectedPolicyConfigId = query.PolicyConfigId;
                     customerId = query.CustomerId;
                     showInSystemCurrency = query.ShowInSystemCurrency;
@@ -119,6 +117,15 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
                     return gridAPI.retrieveData(query);
                 };
+
+                //api.setPersonalizationItem = function (personalization) {
+                //    if (personalization != undefined && personalization.ZoneGridPersonalization != undefined)
+                //        gridAPI.setPersonalizationItem(personalization.ZoneGridPersonalization);
+                //};
+
+                //api.getPersonalizationItem = function () {
+                //    return gridAPI.getPersonalizationItem();
+                //};
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
