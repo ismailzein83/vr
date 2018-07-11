@@ -19,12 +19,14 @@ namespace Vanrise.Analytic.Business
         Dictionary<string, AnalyticMeasureExternalSource> _measureExternalSources;
         Dictionary<string, AnalyticMeasureExternalSourceResult> _measureExternalSourceResults;
         List<string> _dimensionNamesFromQueryFilters;
+        DateTime _queryToTime;
 
         public AnalyticTableQueryContext(AnalyticQuery query)
         {
             if (query == null)
                 throw new ArgumentNullException("query");
             _query = query;
+            _queryToTime = _query.ToTime.HasValue ? _query.ToTime.Value : AnalyticManager.GenerateQueryToTime();
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
             var analyticTableId = query.TableId;
@@ -134,6 +136,40 @@ namespace Vanrise.Analytic.Business
                 return _query;
             }
         }
+
+        public DateTime FromTime
+        {
+            get
+            {
+                return _query.FromTime;
+            }
+        }
+
+        public DateTime ToTime
+        {
+            get
+            {
+                return _queryToTime;
+            }
+        }
+
+        public TimeGroupingUnit? TimeGroupingUnit 
+        {
+            get        
+            {
+                return _query.TimeGroupingUnit;
+
+            }
+        }
+
+        public int? TopRecords
+        {
+            get
+            {
+                return _query.TopRecords;
+            }
+        }
+
 
         public AnalyticMeasureExternalSourceResult GetMeasureExternalSourceResult(string sourceName)
         {

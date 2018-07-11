@@ -37,11 +37,16 @@ namespace Vanrise.Analytic.Entities
     {
         AnalyticQuery Query { get; }
 
-        AnalyticRecord Record { get; }
+        DBAnalyticRecord DBRecord { get; }
 
         bool IsSummaryRecord { get; }
 
         string MeasureName { get; }
+
+        int? SubTableIndex { get; set; }
+
+        string RecordGroupingKey { get; }
+        string SubTableRecordGroupingKey { get; }
     }
 
     public class AnalyticMeasureExternalSourceRecord

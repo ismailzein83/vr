@@ -15,8 +15,6 @@ namespace Vanrise.Analytic.Business
         {
             if (analyticTableQueryContext == null)
                 throw new ArgumentNullException("analyticTableQueryContext");
-            if (analyticTableQueryContext.Query == null)
-                throw new ArgumentNullException("analyticTableQueryContext.Query");
             if (record == null)
                 throw new NullReferenceException("record");
             _record = record;
@@ -32,12 +30,12 @@ namespace Vanrise.Analytic.Business
         
         public DateTime GetQueryFromTime()
         {
-            return _analyticTableQueryContext.Query.FromTime;
+            return _analyticTableQueryContext.FromTime;
         }
 
         public DateTime GetQueryToTime()
         {
-            return _analyticTableQueryContext.Query.ToTime.HasValue ? _analyticTableQueryContext.Query.ToTime.Value : DateTime.Now;
+            return _analyticTableQueryContext.ToTime;
         }
     }
 }

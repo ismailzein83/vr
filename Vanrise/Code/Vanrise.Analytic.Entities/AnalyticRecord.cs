@@ -92,5 +92,13 @@ namespace Vanrise.Analytic.Entities
         List<string> GetDimensionNamesFromQueryFilters();
 
         AnalyticMeasureExternalSourceResult GetMeasureExternalSourceResult(string sourceName);
+
+        DateTime FromTime{ get; }
+
+        DateTime ToTime { get; }
+
+        TimeGroupingUnit? TimeGroupingUnit { get; }
+
+        int? TopRecords { get; }
     }
 }

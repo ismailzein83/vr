@@ -10,38 +10,37 @@ namespace Vanrise.Analytic.Business
     {
         IAnalyticTableQueryContext _analyticTableQueryContext;
         AnalyticQuery _query;
-        string _recordGroupingKey;
-        DBAnalyticRecord _sqlRecord;
+        DBAnalyticRecord _dbRecord;
         HashSet<string> _allDimensions;
-        AnalyticRecord _analyticRecord;
         bool _isSummaryRecord;
+        int? _subTableIndex;
+        string _recordGroupingKey;
+        string _subTableRecordGroupingKey;
 
-        internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions,
-            AnalyticRecord analyticRecord, bool isSummaryRecord)
+        internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, HashSet<string> allDimensions,
+            bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey)
         {
             if (analyticTableQueryContext == null)
                 throw new ArgumentNullException("analyticTableQueryContext");
-            if (analyticTableQueryContext.Query == null)
-                throw new ArgumentNullException("analyticTableQueryContext.Query");
-            if (sqlRecord == null)
-                throw new ArgumentNullException("sqlRecord");
+            if (dbRecord == null)
+                throw new ArgumentNullException("dbRecord");
             if (allDimensions == null)
                 throw new ArgumentNullException("allDimensions");
 
-            analyticRecord.ThrowIfNull("analyticRecord");
             _analyticTableQueryContext = analyticTableQueryContext;
             _query = _analyticTableQueryContext.Query;
-            _recordGroupingKey = recordGroupingKey;
-            _sqlRecord = sqlRecord;
+            _dbRecord = dbRecord;
             _allDimensions = allDimensions;
-            _analyticRecord = analyticRecord;
             _isSummaryRecord = isSummaryRecord;
+            _subTableIndex = subTableIndex;
+            _recordGroupingKey = recordGroupingKey;
+            _subTableRecordGroupingKey = subTableRecordGroupingKey;
         }
 
         public dynamic GetAggregateValue(string aggregateName)
         {
             DBAnalyticRecordAggValue aggValue;
-            if (!_sqlRecord.AggValuesByAggName.TryGetValue(aggregateName, out aggValue))
+            if (!_dbRecord.AggValuesByAggName.TryGetValue(aggregateName, out aggValue))
                 throw new NullReferenceException(String.Format("aggValue. AggName '{0}'", aggregateName));
             return aggValue.Value;
         }
@@ -54,7 +53,7 @@ namespace Vanrise.Analytic.Business
         public List<dynamic> GetAllDimensionValues(string dimensionName)
         {
             DBAnalyticRecordGroupingValue groupingValue;
-            if (!_sqlRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
+            if (!_dbRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
                 throw new NullReferenceException(String.Format("groupingValue. dimensionName '{0}'", dimensionName));
 
             var allValues = groupingValue.AllValues;
@@ -71,12 +70,12 @@ namespace Vanrise.Analytic.Business
 
         public DateTime GetQueryFromTime()
         {
-            return _query.FromTime;
+            return _analyticTableQueryContext.FromTime;
         }
 
         public DateTime GetQueryToTime()
         {
-            return _query.ToTime.HasValue ? _query.ToTime.Value : DateTime.Now;
+            return _analyticTableQueryContext.ToTime;
         }
 
         public bool IsFilterIncluded(string filterName)
@@ -92,9 +91,12 @@ namespace Vanrise.Analytic.Business
                 var getValueContext = new AnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext
                 {
                     Query = _query,
-                    Record = _analyticRecord,
+                    DBRecord = _dbRecord,
                     IsSummaryRecord = _isSummaryRecord,
-                    MeasureName = measureName
+                    MeasureName = measureName,
+                    SubTableIndex = _subTableIndex,
+                    RecordGroupingKey = _recordGroupingKey,
+                    SubTableRecordGroupingKey = _subTableRecordGroupingKey
                 };
                 return externalSourceRslt.GetMatchRecordMeasureValue(getValueContext);
             }
@@ -110,11 +112,26 @@ namespace Vanrise.Analytic.Business
         {
             public AnalyticQuery Query { get; set; }
 
-            public AnalyticRecord Record { get; set; }
+            public DBAnalyticRecord DBRecord { get; set; }
 
             public bool IsSummaryRecord { get; set; }
 
             public string MeasureName { get; set; }
+
+            public int? SubTableIndex { get; set; }
+
+
+            public string RecordGroupingKey
+            {
+                get;
+                set;
+            }
+
+            public string SubTableRecordGroupingKey
+            {
+                get;
+                set;
+            }
         }
 
         #endregion

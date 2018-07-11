@@ -26,12 +26,21 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             context.AnalyticQuery.ThrowIfNull("context.AnalyticQuery");
 
             var originalQuery = context.AnalyticQuery;
-            var mappedQuery = originalQuery.VRDeepCopy();
-            mappedQuery.TableId = this.AnalyticTableId;
+            var mappedQuery = new AnalyticQuery
+            {
+                TableId = this.AnalyticTableId,
+                FromTime = originalQuery.FromTime,
+                ToTime = originalQuery.ToTime,
+                CurrencyId = originalQuery.CurrencyId,
+                LastHours = originalQuery.LastHours,
+                TimeGroupingUnit = originalQuery.TimeGroupingUnit,
+                WithSummary = originalQuery.WithSummary
+            };
 
-            var dimensionNames = GetAllDimensionNames(mappedQuery);
 
-            Dictionary<string, string> mappedDimensionNames = new Dictionary<string, string>();
+            var dimensionNames = GetAllDimensionNames(originalQuery);
+
+            Dictionary<string, string> dimensionMappings = new Dictionary<string, string>();
             if (dimensionNames != null)
             {
                 foreach (var dimName in dimensionNames)
@@ -42,15 +51,15 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                         dimensionMappingRule.Settings.ThrowIfNull("dimensionMappingRule.Settings");
                         var tryMapDimensionContext = new DimensionMappingRuleTryMapDimensionContext
                         {
-                            DimensionName = dimName,
-                            AnalyticQuery = mappedQuery
+                            DimensionName = dimName//,
+                            //AnalyticQuery = mappedQuery
                         };
 
                         if (dimensionMappingRule.Settings.TryMapDimension(tryMapDimensionContext))
                         {
                             isMatchRuleFound = true;
                             if (tryMapDimensionContext.MappedDimensionName != null)
-                                mappedDimensionNames.Add(dimName, tryMapDimensionContext.MappedDimensionName);
+                                dimensionMappings.Add(dimName, tryMapDimensionContext.MappedDimensionName);
                             break;
                         }
                     }
@@ -58,11 +67,60 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                         throw new Exception(String.Format("No DimensionMappingRule found for dimension '{0}'", dimName));
                 }
             }
+            
+            mappedQuery.MeasureFields = MapMeasures(originalQuery.MeasureFields);
 
-            List<string> measures = new List<string>();
-            if (originalQuery.MeasureFields != null)
+            mappedQuery.DimensionFields = MapDimensionFields(originalQuery.DimensionFields, dimensionMappings);
+            mappedQuery.ParentDimensions = MapDimensionFields(originalQuery.ParentDimensions, dimensionMappings);
+            mappedQuery.Filters = MapDimensionFilters(originalQuery.Filters, dimensionMappings);
+            mappedQuery.FilterGroup = MapFilterGroup(originalQuery.FilterGroup, dimensionMappings);
+
+            Dictionary<int, int> subTablesIndexMapping;
+            mappedQuery.SubTables = MapSubTables(originalQuery.SubTables, dimensionMappings, out subTablesIndexMapping);
+
+            AnalyticManager analyticManager = new AnalyticManager();
+            AnalyticRecord summaryRecord;
+            List<AnalyticResultSubTable> resultSubTables;
+            var analyticRecords = analyticManager.GetAllFilteredRecords(mappedQuery, out summaryRecord, out resultSubTables);
+            if (analyticRecords != null)
+                return new AnalyticTableMeasureExternalSourceResult(analyticRecords, summaryRecord, mappedQuery, dimensionMappings, subTablesIndexMapping, resultSubTables);
+            else
+                return null;
+        }
+
+        private List<AnalyticQuerySubTable> MapSubTables(List<AnalyticQuerySubTable> originalSubTables, Dictionary<string, string> mappedDimensionNames, out Dictionary<int, int> subTablesIndexMapping)
+        {
+            List<AnalyticQuerySubTable> subTables = null;
+            subTablesIndexMapping = new Dictionary<int, int>();
+            if(originalSubTables != null)
             {
-                foreach (var origMeasure in originalQuery.MeasureFields)
+                for(int originalSubTableIndex = 0;originalSubTableIndex < originalSubTables.Count;originalSubTableIndex++)
+                {
+                    var originalSubTable = originalSubTables[originalSubTableIndex];
+                    var mappedMeasures = MapMeasures(originalSubTable.Measures);
+                    if(mappedMeasures != null && mappedMeasures.Count > 0)
+                    {
+                        if (subTables == null)
+                            subTables = new List<AnalyticQuerySubTable>();
+                        var subTable = new AnalyticQuerySubTable
+                        {
+                            Dimensions = MapDimensionFields(originalSubTable.Dimensions, mappedDimensionNames),
+                            Measures = mappedMeasures
+                        };
+                        subTables.Add(subTable);
+                        subTablesIndexMapping.Add(originalSubTableIndex, subTables.Count - 1);
+                    }                    
+                }
+            }
+            return subTables;
+        }
+
+        private List<string> MapMeasures(List<string> originalMeasures)
+        {
+            List<string> measures = new List<string>();
+            if (originalMeasures != null)
+            {
+                foreach (var origMeasure in originalMeasures)
                 {
                     var tryMapMeasureContext = new MeasureMappingRuleTryMapMeasureContext { MeasureName = origMeasure };
 
@@ -80,72 +138,62 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                     }
                 }
             }
-            mappedQuery.MeasureFields = measures.Distinct().ToList();
-
-            MapQueryDimensionFields(mappedQuery, mappedDimensionNames);
-            MapQueryFilters(mappedQuery, mappedDimensionNames);
-            MapQueryFilterGroup(mappedQuery, mappedDimensionNames);
-
-            AnalyticManager analyticManager = new AnalyticManager();
-            AnalyticRecord summaryRecord;
-            var analyticRecords = analyticManager.GetAllFilteredRecords(mappedQuery, out summaryRecord);
-            if (analyticRecords != null)
-                return new AnalyticTableMeasureExternalSourceResult(analyticRecords, summaryRecord, mappedQuery, mappedDimensionNames);
-            else
-                return null;
+            return measures.Distinct().ToList();
         }
 
-        private void MapQueryDimensionFields(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
+        private List<string> MapDimensionFields(List<string> originalDimensionFields, Dictionary<string, string> mappedDimensionNames)
         {
-            if (mappedQuery.DimensionFields != null)
+            List<string> mappedDimensions = null;
+            if (originalDimensionFields != null)
             {
-                var originalDimensionFields = mappedQuery.DimensionFields;
-                mappedQuery.DimensionFields = null;
                 foreach (var origDimField in originalDimensionFields)
                 {
                     string mappedDimension;
                     if (mappedDimensionNames.TryGetValue(origDimField, out mappedDimension))
                     {
-                        if (mappedQuery.DimensionFields == null)
-                            mappedQuery.DimensionFields = new List<string>();
-                        mappedQuery.DimensionFields.Add(mappedDimension);
+                        if (mappedDimensions == null)
+                            mappedDimensions = new List<string>();
+                        mappedDimensions.Add(mappedDimension);
                     }
                 }
             }
+            return mappedDimensions;
         }
 
-        private void MapQueryFilters(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
+        private List<DimensionFilter> MapDimensionFilters(List<DimensionFilter> originalFilters, Dictionary<string, string> mappedDimensionNames)
         {
-            if (mappedQuery.Filters != null)
+            List<DimensionFilter> mappedFilters = null;  
+            if (originalFilters != null)
             {
-                var originalFilters = mappedQuery.Filters;
-                mappedQuery.Filters = null;
                 foreach (var originalFilter in originalFilters)
                 {
                     string mappedDimension;
                     if (mappedDimensionNames.TryGetValue(originalFilter.Dimension, out mappedDimension))
                     {
                         DimensionFilter mappedFilter = new DimensionFilter { Dimension = mappedDimension, FilterValues = originalFilter.FilterValues };
-                        if (mappedQuery.Filters == null)
-                            mappedQuery.Filters = new List<DimensionFilter>();
-                        mappedQuery.Filters.Add(mappedFilter);
+                        if (mappedFilters == null)
+                            mappedFilters = new List<DimensionFilter>();
+                        mappedFilters.Add(mappedFilter);
                     }
                 }
             }
+            return mappedFilters;
         }
 
-        private void MapQueryFilterGroup(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
+        private RecordFilterGroup MapFilterGroup(RecordFilterGroup originalFilterGroup, Dictionary<string, string> mappedDimensionNames)
         {
-            if (mappedQuery.FilterGroup != null)
+            RecordFilterGroup mappedFilterGroup = null;
+            if (originalFilterGroup != null)
             {
-                bool filterBecomesEmpty;
-                MapFilterGroup(mappedQuery.FilterGroup, mappedDimensionNames, out filterBecomesEmpty);
-                if (filterBecomesEmpty)
-                    mappedQuery.FilterGroup = null;
+                var filterGroupCopy = originalFilterGroup.VRDeepCopy();
+                MapFieldsInFilterGroup(filterGroupCopy, mappedDimensionNames);
+                if (filterGroupCopy.Filters != null && filterGroupCopy.Filters.Count > 0)
+                    mappedFilterGroup = filterGroupCopy;
             }
+            return mappedFilterGroup;
         }
 
-        private void MapFilterGroup(GenericData.Entities.RecordFilterGroup filterGroup, Dictionary<string, string> mappedDimensionNames, out bool filterBecomesEmpty)
+        private void MapFieldsInFilterGroup(RecordFilterGroup filterGroup, Dictionary<string, string> mappedDimensionNames)
         {
             if (filterGroup.Filters != null && filterGroup.Filters.Count > 0)
             {
@@ -166,46 +214,38 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                         RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
                         if (childFilterGroup != null)
                         {
-                            bool subFilterBecomesEmpty;
-                            MapFilterGroup(childFilterGroup, mappedDimensionNames, out subFilterBecomesEmpty);
-                            if (subFilterBecomesEmpty)
+                            MapFieldsInFilterGroup(childFilterGroup, mappedDimensionNames);
+                            if (childFilterGroup.Filters == null || childFilterGroup.Filters.Count == 0)
                                 filterGroup.Filters.RemoveAt(i);
                         }
                     }
                 }
-                filterBecomesEmpty = filterGroup.Filters.Count == 0;
-            }
-            else
-            {
-                filterBecomesEmpty = true;
             }
         }
 
         private HashSet<string> GetAllDimensionNames(AnalyticQuery query)
         {
-            HashSet<string> dimensionNames = new HashSet<string>();
+            List<string> dimensionNames = new List<string>();
             if (query.DimensionFields != null)
-            {
-                foreach (var dim in query.DimensionFields)
-                {
-                    dimensionNames.Add(dim);
-                }
-            }
+                dimensionNames.AddRange(query.DimensionFields);
+            if(query.ParentDimensions != null)
+                dimensionNames.AddRange(query.ParentDimensions); 
             if (query.Filters != null)
+                dimensionNames.AddRange(query.Filters.Select(itm => itm.Dimension));
+            if (query.FilterGroup != null)
+                AddDimensionsNamesFromFilterGroup(dimensionNames, query.FilterGroup);
+            if(query.SubTables != null)
             {
-                foreach (var filter in query.Filters)
+                foreach(var subTable in query.SubTables)
                 {
-                    dimensionNames.Add(filter.Dimension);
+                    if(subTable.Dimensions != null)
+                        dimensionNames.AddRange(subTable.Dimensions);
                 }
             }
-            if (query.FilterGroup != null)
-            {
-                AddDimensionsNamesFromFilterGroup(dimensionNames, query.FilterGroup);
-            }
-            return dimensionNames;
+            return dimensionNames.ToHashSet();
         }
 
-        private void AddDimensionsNamesFromFilterGroup(HashSet<string> dimensionNames, RecordFilterGroup filterGroup)
+        private void AddDimensionsNamesFromFilterGroup(List<string> dimensionNames, RecordFilterGroup filterGroup)
         {
             if (filterGroup.Filters != null)
             {
@@ -228,7 +268,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
         {
             public string DimensionName { get; set; }
 
-            public AnalyticQuery AnalyticQuery { get; set; }
+            //public AnalyticQuery AnalyticQuery { get; set; }
 
             public string MappedDimensionName { get; set; }
         }

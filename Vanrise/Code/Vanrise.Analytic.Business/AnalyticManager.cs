@@ -61,6 +61,12 @@ namespace Vanrise.Analytic.Business
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord)
         {
+            List<AnalyticResultSubTable> resultSubTables;
+            return GetAllFilteredRecords(query, out summaryRecord, out resultSubTables);
+        }
+
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
+        {
             SetQueryToTimeIfNull(query);
             if (query.LastHours.HasValue)
             {
@@ -73,16 +79,59 @@ namespace Vanrise.Analytic.Business
             var dataManager = dataProvider.CreateDataManager(queryContext);
             HashSet<string> includeDBDimensions = null;
 
-            IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(query, out includeDBDimensions);
+            var queryForDataManager = BuildQueryForDataManager(query);
+            IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(queryForDataManager, out includeDBDimensions);
 
+            List<string> allDimensionNamesList = new List<string>();
+
+            if (query.DimensionFields != null)
+                allDimensionNamesList.AddRange(query.DimensionFields);
+            if (query.ParentDimensions != null)
+                allDimensionNamesList.AddRange(query.ParentDimensions);
+            HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
             if (dbRecords != null)
-                return ProcessSQLRecords(queryContext, query.DimensionFields, query.ParentDimensions, query.MeasureFields, query.MeasureStyleRules, query.Filters, query.FilterGroup,
-                    dbRecords, includeDBDimensions, query.WithSummary, out summaryRecord);
+            {
+                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = BuildMeasureStyleRulesDictionary(query.MeasureStyleRules);
+                FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, includeDBDimensions, query.Filters, query.FilterGroup);
+                return ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
+                    query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, out summaryRecord, out resultSubTables);
+            }
             else
             {
+                resultSubTables = null;
                 summaryRecord = null;
                 return null;
             }
+        }
+
+        private AnalyticQuery BuildQueryForDataManager(AnalyticQuery query)
+        {
+            var queryForDataManager = query.VRDeepCopy();
+            List<string> queryDimensions = queryForDataManager.DimensionFields != null ? new List<string>(queryForDataManager.DimensionFields) : null;
+            List<string> queryMeasures = queryForDataManager.MeasureFields != null ? new List<string>(queryForDataManager.MeasureFields) : null;
+            if (query.SubTables != null)
+            {
+                foreach (var subTable in query.SubTables)
+                {
+                    if (subTable.Dimensions != null)
+                    {
+                        if (queryDimensions == null)
+                            queryDimensions = new List<string>();
+                        queryDimensions.AddRange(subTable.Dimensions);
+                    }
+                    if (subTable.Measures != null)
+                    {
+                        if (queryMeasures == null)
+                            queryMeasures = new List<string>();
+                        queryMeasures.AddRange(subTable.Measures);
+                    }
+                }
+            }
+            if (queryDimensions != null && queryDimensions.Count > 0)
+                queryForDataManager.DimensionFields = queryDimensions.Distinct().ToList();
+            if (queryMeasures != null && queryMeasures.Count > 0)
+                queryForDataManager.MeasureFields = queryMeasures.Distinct().ToList();
+            return queryForDataManager;
         }
 
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
@@ -245,6 +294,8 @@ namespace Vanrise.Analytic.Business
             return true;
         }
 
+        const string DIMENSION_GROUPING_SEPARATOR = "^*^";
+
         public static string GetRecordDimensionsGroupingKey(List<string> requestedDimensionNames, DateTime? recordTime, Func<string, object> getDimensionValue)
         {
             StringBuilder builder = new StringBuilder();
@@ -255,7 +306,26 @@ namespace Vanrise.Analytic.Business
                 foreach (var dimensionName in requestedDimensionNames)
                 {
                     Object dimensionValue = getDimensionValue(dimensionName);
-                    builder.AppendFormat("^*^{0}", dimensionValue != null ? dimensionValue : "");
+                    builder.Append(DIMENSION_GROUPING_SEPARATOR);
+                    if (dimensionValue != null)
+                        builder.Append(dimensionValue);
+                }
+            }
+            return builder.ToString();
+        }
+
+        public static string GetDimensionValuesGroupingKey(DateTime? recordTime, DimensionValue[] dimensionValues)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (recordTime.HasValue)
+                builder.Append(recordTime.Value.ToString());
+            if (dimensionValues != null)
+            {
+                foreach (var dimensionValue in dimensionValues)
+                {
+                    builder.Append(DIMENSION_GROUPING_SEPARATOR);
+                    if (dimensionValue != null && dimensionValue.Value != null)
+                        builder.Append(dimensionValue.Value);
                 }
             }
             return builder.ToString();
@@ -268,25 +338,12 @@ namespace Vanrise.Analytic.Business
         private void SetQueryToTimeIfNull(AnalyticQuery query)
         {
             if (!query.ToTime.HasValue)
-                query.ToTime = DateTime.Today.AddDays(1);
+                query.ToTime = GenerateQueryToTime();
         }
 
-        private List<AnalyticRecord> ProcessSQLRecords(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> parentDimensionNames, List<string> measureNames, List<MeasureStyleRule> measureStyleRules, List<DimensionFilter> dimensionFilters,
-           RecordFilterGroup filterGroup, IEnumerable<DBAnalyticRecord> dbRecords, HashSet<string> availableDimensions, bool withSummary, out AnalyticRecord summaryRecord)
+        internal static DateTime GenerateQueryToTime()
         {
-            List<string> allDimensionNamesList = new List<string>();
-
-
-            Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = BuildMeasureStyleRulesDictionary(measureStyleRules);
-
-            if (requestedDimensionNames != null)
-                allDimensionNamesList.AddRange(requestedDimensionNames);
-            if (parentDimensionNames != null)
-                allDimensionNamesList.AddRange(parentDimensionNames);
-            HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
-            FillCalculatedDimensions(analyticTableQueryContext, requestedDimensionNames, dbRecords, availableDimensions, dimensionFilters, filterGroup);
-            List<AnalyticRecord> records = ApplyFinalGroupingAndFiltering(analyticTableQueryContext, dbRecords, requestedDimensionNames, allDimensionNames, measureNames, measureStyleRulesDictionary, dimensionFilters, filterGroup, withSummary, out summaryRecord);
-            return records;
+            return DateTime.Today.AddDays(1);
         }
 
         private Dictionary<string, MeasureStyleRule> BuildMeasureStyleRulesDictionary(List<MeasureStyleRule> measureStyleRules)
@@ -308,12 +365,12 @@ namespace Vanrise.Analytic.Business
 
         }
 
-        private void FillCalculatedDimensions(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, IEnumerable<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions, List<DimensionFilter> dimensionFilters,
+        private void FillCalculatedDimensions(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<string> allGroupingDimensionNames, IEnumerable<DBAnalyticRecord> sqlRecords, HashSet<string> availableDimensions, List<DimensionFilter> dimensionFilters,
            RecordFilterGroup filterGroup)
         {
             List<string> dimensionNamesToCalculate = new List<string>();
-            if (requestedDimensionNames != null)
-                dimensionNamesToCalculate.AddRange(requestedDimensionNames);
+            if (allGroupingDimensionNames != null)
+                dimensionNamesToCalculate.AddRange(allGroupingDimensionNames);
             var filterDimensions = analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
             if (filterDimensions != null && filterDimensions.Count > 0)
                 dimensionNamesToCalculate.AddRange(filterDimensions);
@@ -363,20 +420,26 @@ namespace Vanrise.Analytic.Business
 
         private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords,
             List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
-            List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup, bool withSummary, out AnalyticRecord summaryRecord)
+            List<DimensionFilter> dimensionFilters, List<AnalyticQuerySubTable> querySubTables, RecordFilterGroup filterGroup, bool withSummary, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
             Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
-            DBAnalyticRecord summarySQLRecord = null;
+            DBAnalyticRecord summaryDBRecord = null;
+            bool buildSummaryRecord = withSummary || (querySubTables != null && querySubTables.Count > 0);//building summary record is also needed to order the records of the sub table(s)
+            List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesDBRecords = null;
+            List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesSummaryDBRecords = null;
+            if (querySubTables != null)
+                InitializeSubTablesInProcessObjects(querySubTables, buildSummaryRecord, ref subTablesDBRecords, ref subTablesSummaryDBRecords);
+
             foreach (var dbRecord in dbRecords)
             {
                 if (!ApplyFilters(analyticTableQueryContext, dbRecord, dimensionFilters, filterGroup))
                     continue;
-                string groupingKey = GetDimensionGroupingKey(requestedDimensionNames, dbRecord);
+                string recordGroupingKey = GetDimensionGroupingKey(requestedDimensionNames, dbRecord);
                 DBAnalyticRecord matchRecord;
-                if (!groupedRecordsByDimensionsKey.TryGetValue(groupingKey, out matchRecord))
+                if (!groupedRecordsByDimensionsKey.TryGetValue(recordGroupingKey, out matchRecord))
                 {
                     matchRecord = dbRecord;
-                    groupedRecordsByDimensionsKey.Add(groupingKey, matchRecord);
+                    groupedRecordsByDimensionsKey.Add(recordGroupingKey, matchRecord);
                 }
                 else
                 {
@@ -388,56 +451,61 @@ namespace Vanrise.Analytic.Business
                         groupingValue.Value.AllValues = new List<dynamic>();
                     groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
                 }
-                if (withSummary)
+                if (buildSummaryRecord)
                 {
-                    if (summarySQLRecord == null)
+                    if (summaryDBRecord == null)
                     {
-                        summarySQLRecord = new DBAnalyticRecord { GroupingValuesByDimensionName = new Dictionary<string, DBAnalyticRecordGroupingValue>(), AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
-                        foreach (var groupingValueEntry in dbRecord.GroupingValuesByDimensionName)
-                        {
-                            summarySQLRecord.GroupingValuesByDimensionName.Add(groupingValueEntry.Key, groupingValueEntry.Value.Clone() as DBAnalyticRecordGroupingValue);
-                        }
-                        foreach (var aggValueEntry in dbRecord.AggValuesByAggName)
-                        {
-                            summarySQLRecord.AggValuesByAggName.Add(aggValueEntry.Key, aggValueEntry.Value.Clone() as DBAnalyticRecordAggValue);
-                        }
+                        summaryDBRecord = CloneAnalyticDBRecord(dbRecord);
                     }
                     else
-                        UpdateAggregateValues(analyticTableQueryContext, summarySQLRecord, dbRecord);
+                    {
+                        UpdateAggregateValues(analyticTableQueryContext, summaryDBRecord, dbRecord);
+                    }
 
-                    foreach (var groupingValue in summarySQLRecord.GroupingValuesByDimensionName)
+                    foreach (var groupingValue in summaryDBRecord.GroupingValuesByDimensionName)
                     {
                         if (groupingValue.Value.AllValues == null)
                             groupingValue.Value.AllValues = new List<dynamic>();
                         groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
                     }
                 }
+                if (querySubTables != null)
+                    ReflectDBRecordToSubTablesDBRecords(dbRecord, analyticTableQueryContext, recordGroupingKey, querySubTables, subTablesDBRecords, subTablesSummaryDBRecords, buildSummaryRecord);
             }
             List<AnalyticRecord> analyticRecords = new List<AnalyticRecord>();
             HashSet<DateTime> timeForMissingData = null;
-            if (analyticTableQueryContext.Query.TimeGroupingUnit.HasValue)
+            if (analyticTableQueryContext.TimeGroupingUnit.HasValue)
             {
                 timeForMissingData = new HashSet<DateTime>();
-                DateTime fromTime = GetStartDateTime(analyticTableQueryContext.Query.FromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
-                var toTime = analyticTableQueryContext.Query.ToTime.HasValue ? analyticTableQueryContext.Query.ToTime.Value : DateTime.Now;
+                DateTime fromTime = GetStartDateTime(analyticTableQueryContext.FromTime, analyticTableQueryContext.TimeGroupingUnit.Value);
+                var toTime = analyticTableQueryContext.ToTime;
                 timeForMissingData.Add(fromTime);
-                fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
+                fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.TimeGroupingUnit.Value);
                 while (fromTime <= toTime)
                 {
                     timeForMissingData.Add(fromTime);
-                    fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
+                    fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.TimeGroupingUnit.Value);
                 }
             }
+            List<SubTableAnalyticRecordInProcessByParentGroupingKey> subTablesRecordsByParentGroupingKey;
+            List<SubTableAnalyticRecordInProcessByGroupingKey> subTablesSummaryRecordsByGroupingKey;
+            List<List<string>> subTablesOrderedDimensionKeys;
+            BuildSubTablesRecordsFromDBRecords(subTablesDBRecords, subTablesSummaryDBRecords, analyticTableQueryContext, allDimensionNames, measureStyleRulesDictionary, 
+                querySubTables, buildSummaryRecord, out resultSubTables, out subTablesRecordsByParentGroupingKey, out subTablesSummaryRecordsByGroupingKey, out subTablesOrderedDimensionKeys);
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
             {
+                string recordGroupingKey = dbRecordEntry.Key;
                 bool allMeasuresAreNull = true;
-                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Key, dbRecordEntry.Value, requestedDimensionNames,
-                    allDimensionNames, measureNames, measureStyleRulesDictionary, false, out allMeasuresAreNull);
-                if (analyticTableQueryContext.Query.TimeGroupingUnit.HasValue)
+                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Value, requestedDimensionNames,
+                    allDimensionNames, measureNames, measureStyleRulesDictionary, false, null, recordGroupingKey, null, out allMeasuresAreNull);
+                if (querySubTables != null)
+                    AddSubTablesMeasuresToRecord(analyticRecord, recordGroupingKey, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesRecordsByParentGroupingKey, subTablesOrderedDimensionKeys);
+
+                if (analyticTableQueryContext.TimeGroupingUnit.HasValue)
                 {
                     timeForMissingData.Remove(analyticRecord.Time.Value);
                 }
-                if (analyticTableQueryContext.Query.TopRecords.HasValue)
+                if (analyticTableQueryContext.TopRecords.HasValue)
                 {
                     if (!allMeasuresAreNull)
                         analyticRecords.Add(analyticRecord);
@@ -456,20 +524,239 @@ namespace Vanrise.Analytic.Business
                 }
             }
 
-            if (withSummary && summarySQLRecord != null)
+            if (withSummary && summaryDBRecord != null)
             {
                 bool allSummaryMeasuresAreNull;
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, null, summarySQLRecord, null, allDimensionNames, measureNames, null, true, out allSummaryMeasuresAreNull);
+                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, allDimensionNames, measureNames, measureStyleRulesDictionary, 
+                    true, null, null, null, out allSummaryMeasuresAreNull);
+                if (querySubTables != null)
+                    AddSubTablesMeasuresToSummaryRecord(summaryRecord, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesSummaryRecordsByGroupingKey, subTablesOrderedDimensionKeys);
             }
 
             else
+            {
                 summaryRecord = null;
+            }
             return analyticRecords;
+        }
+
+        private void InitializeSubTablesInProcessObjects(List<AnalyticQuerySubTable> querySubTables, bool buildSummaryRecord, ref List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesDBRecords, ref List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesSummaryDBRecords)
+        {
+            subTablesDBRecords = new List<Dictionary<string, SubTableDBAnalyticRecordInProcess>>();
+            if (buildSummaryRecord)
+                subTablesSummaryDBRecords = new List<Dictionary<string, SubTableDBAnalyticRecordInProcess>>();
+            foreach (var querySubTable in querySubTables)
+            {
+                subTablesDBRecords.Add(new Dictionary<string, SubTableDBAnalyticRecordInProcess>());
+                if (buildSummaryRecord)
+                    subTablesSummaryDBRecords.Add(new Dictionary<string, SubTableDBAnalyticRecordInProcess>());
+            }
+        }
+
+        private void ReflectDBRecordToSubTablesDBRecords(DBAnalyticRecord dbRecord, IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, List<AnalyticQuerySubTable> querySubTables, 
+            List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesDBRecords, List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesSummaryDBRecords,
+            bool buildSummaryRecord)
+        {
+            for (int subTableIndex = 0; subTableIndex < querySubTables.Count; subTableIndex++)
+            {
+                var querySubTable = querySubTables[subTableIndex];
+                var subTableRecordsByDimensionsKey = subTablesDBRecords[subTableIndex];
+                string subTableGroupingKey = GetDimensionGroupingKey(querySubTable.Dimensions, dbRecord);
+                string fullSubTableGroupingKey = String.Concat(recordGroupingKey, "^*^", subTableGroupingKey);
+                SubTableDBAnalyticRecordInProcess matchSubTableRecord;
+
+                if (!subTableRecordsByDimensionsKey.TryGetValue(fullSubTableGroupingKey, out matchSubTableRecord))
+                {
+                    matchSubTableRecord = new SubTableDBAnalyticRecordInProcess
+                    {
+                        GroupingKey = subTableGroupingKey,
+                        ParentRecordGroupingKey = recordGroupingKey,
+                        Record = CloneAnalyticDBRecord(dbRecord)
+                    };
+                    subTableRecordsByDimensionsKey.Add(fullSubTableGroupingKey, matchSubTableRecord);
+                }
+                else
+                {
+                    UpdateAggregateValues(analyticTableQueryContext, matchSubTableRecord.Record, dbRecord);
+                }
+                foreach (var groupingValue in matchSubTableRecord.Record.GroupingValuesByDimensionName)
+                {
+                    if (groupingValue.Value.AllValues == null)
+                        groupingValue.Value.AllValues = new List<dynamic>();
+                    groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
+                }
+                if (buildSummaryRecord)
+                {
+                    Dictionary<string, SubTableDBAnalyticRecordInProcess> subTableSummaryDBRecordsByDimensionKeys = subTablesSummaryDBRecords[subTableIndex];
+                    SubTableDBAnalyticRecordInProcess matchSubTableSummaryRecord;
+
+                    if (!subTableSummaryDBRecordsByDimensionKeys.TryGetValue(subTableGroupingKey, out matchSubTableSummaryRecord))
+                    {
+                        matchSubTableSummaryRecord = new SubTableDBAnalyticRecordInProcess
+                        {
+                            GroupingKey = subTableGroupingKey,
+                            Record = CloneAnalyticDBRecord(dbRecord)
+                        };
+                        subTableSummaryDBRecordsByDimensionKeys.Add(subTableGroupingKey, matchSubTableSummaryRecord);
+                    }
+                    else
+                    {
+                        UpdateAggregateValues(analyticTableQueryContext, matchSubTableSummaryRecord.Record, dbRecord);
+                    }
+                    foreach (var groupingValue in matchSubTableSummaryRecord.Record.GroupingValuesByDimensionName)
+                    {
+                        if (groupingValue.Value.AllValues == null)
+                            groupingValue.Value.AllValues = new List<dynamic>();
+                        groupingValue.Value.AllValues.Add(dbRecord.GroupingValuesByDimensionName[groupingValue.Key].Value);
+                    }
+                }
+            }
+        }
+
+        private void BuildSubTablesRecordsFromDBRecords(List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesDBRecords, List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesSummaryDBRecords,
+            IAnalyticTableQueryContext analyticTableQueryContext, HashSet<string> allDimensionNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
+            List<AnalyticQuerySubTable> querySubTables, bool buildSummaryRecord, out List<AnalyticResultSubTable> resultSubTables,
+            out List<SubTableAnalyticRecordInProcessByParentGroupingKey> subTablesRecordsByParentGroupingKey, out List<SubTableAnalyticRecordInProcessByGroupingKey> subTablesSummaryRecordsByGroupingKey, out List<List<string>> subTablesOrderedDimensionKeys)
+        {
+            resultSubTables = null;
+            subTablesRecordsByParentGroupingKey = null;
+            subTablesSummaryRecordsByGroupingKey = null;
+            subTablesOrderedDimensionKeys = null;
+            if (querySubTables != null)
+            {
+                resultSubTables = new List<AnalyticResultSubTable>();
+                subTablesRecordsByParentGroupingKey = new List<SubTableAnalyticRecordInProcessByParentGroupingKey>();
+                if (buildSummaryRecord)
+                    subTablesSummaryRecordsByGroupingKey = new List<SubTableAnalyticRecordInProcessByGroupingKey>();
+                subTablesOrderedDimensionKeys = new List<List<string>>();
+                for (int subTableIndex = 0; subTableIndex < querySubTables.Count; subTableIndex++)
+                {
+                    var querySubTable = querySubTables[subTableIndex];
+                    List<string> allQueryAndSubTableDimensionsList = new List<string>(allDimensionNames);
+                    if (querySubTable.Dimensions != null)
+                        allQueryAndSubTableDimensionsList.AddRange(querySubTable.Dimensions);
+                    HashSet<string> allQueryAndSubTableDimensions = allQueryAndSubTableDimensionsList.ToHashSet();
+                    var subTableDBRecords = subTablesDBRecords[subTableIndex];
+                    SubTableAnalyticRecordInProcessByParentGroupingKey subTableRecordsByParentGroupingKey = new SubTableAnalyticRecordInProcessByParentGroupingKey();
+                    subTablesRecordsByParentGroupingKey.Add(subTableRecordsByParentGroupingKey);
+                    foreach (var subtableDBRecord in subTableDBRecords.Values)
+                    {
+                        bool subTableAllMeasuresAreNull;
+                        AnalyticRecord subTableAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subtableDBRecord.Record, null,
+                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey, 
+                    out subTableAllMeasuresAreNull);//no need to fill dimensions values for sub table records 
+                        var subTableAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
+                        {
+                            GroupingKey = subtableDBRecord.GroupingKey,
+                            ParentRecordGroupingKey = subtableDBRecord.ParentRecordGroupingKey,
+                            Record = subTableAnalyticRecord
+                        };
+                        subTableRecordsByParentGroupingKey.GetOrCreateItem(subtableDBRecord.ParentRecordGroupingKey).Add(subTableAnalyticRecordInProcess.GroupingKey, subTableAnalyticRecordInProcess);
+                    }
+
+                    var subTableSummaryDBRecords = subTablesSummaryDBRecords[subTableIndex];
+                    SubTableAnalyticRecordInProcessByGroupingKey subTableSummaryRecordsByGroupingKey = new SubTableAnalyticRecordInProcessByGroupingKey();
+                    subTablesSummaryRecordsByGroupingKey.Add(subTableSummaryRecordsByGroupingKey);
+                    var subTableSummaryRecords = new List<SubTableAnalyticRecordInProcess>();
+                    foreach (var subTableSummaryDBRecord in subTableSummaryDBRecords.Values)
+                    {
+                        bool subTableSummaryAllMeasuresAreNull;
+                        AnalyticRecord subTableSummaryAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subTableSummaryDBRecord.Record, querySubTable.Dimensions,
+                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, true, subTableIndex, null, subTableSummaryDBRecord.GroupingKey, 
+                    out subTableSummaryAllMeasuresAreNull);//dimensions values are needed for summary sub table records to sort sub table records at the final stages
+                        var subTableSummaryAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
+                        {
+                            GroupingKey = subTableSummaryDBRecord.GroupingKey,
+                            Record = subTableSummaryAnalyticRecord
+                        };
+                        subTableSummaryRecordsByGroupingKey.Add(subTableSummaryAnalyticRecordInProcess.GroupingKey, subTableSummaryAnalyticRecordInProcess);
+                        subTableSummaryRecords.Add(subTableSummaryAnalyticRecordInProcess);
+                    }
+                    if (querySubTable.OrderType.HasValue)
+                    {
+                        subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, querySubTable.OrderType.Value, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
+                    }
+                    var resultSubTable = new AnalyticResultSubTable { DimensionValues = new List<DimensionValue[]>() };
+                    resultSubTables.Add(resultSubTable);
+                    List<string> subTableOrderedDimensionKeys = new List<string>();
+                    subTablesOrderedDimensionKeys.Add(subTableOrderedDimensionKeys);
+                    foreach (var subTableSummaryRecordInProcess in subTableSummaryRecords)
+                    {
+                        resultSubTable.DimensionValues.Add(subTableSummaryRecordInProcess.Record.DimensionValues);
+                        subTableOrderedDimensionKeys.Add(subTableSummaryRecordInProcess.GroupingKey);
+                    }
+                }
+            }
+        }
+
+        private void AddSubTablesMeasuresToRecord(AnalyticRecord analyticRecord, string recordGroupingKey, IAnalyticTableQueryContext analyticTableQueryContext, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, 
+            List<AnalyticQuerySubTable> querySubTables, List<SubTableAnalyticRecordInProcessByParentGroupingKey> subTablesRecordsByParentGroupingKey, List<List<string>> subTablesOrderedDimensionKeys)
+        {
+            analyticRecord.SubTables = new List<AnalyticRecordSubTable>();
+            for (int subTableIndex = 0; subTableIndex < querySubTables.Count; subTableIndex++)
+            {
+                AnalyticRecordSubTable recordSubTable = new AnalyticRecordSubTable { MeasureValues = new List<MeasureValues>() };
+                analyticRecord.SubTables.Add(recordSubTable);
+                var querySubTable = querySubTables[subTableIndex];
+                var subTableOrderedDimensionKeys = subTablesOrderedDimensionKeys[subTableIndex];
+                var subTableRecordsByParentGroupingKey = subTablesRecordsByParentGroupingKey[subTableIndex];
+                var subTableRecordsByGroupingKey = subTableRecordsByParentGroupingKey.GetRecord(recordGroupingKey);
+                foreach (var dimensionKey in subTableOrderedDimensionKeys)
+                {
+                    SubTableAnalyticRecordInProcess matchSubTableRecord = subTableRecordsByGroupingKey.GetRecord(dimensionKey);
+                    if (matchSubTableRecord != null)
+                        recordSubTable.MeasureValues.Add(matchSubTableRecord.Record.MeasureValues);
+                    else
+                        recordSubTable.MeasureValues.Add(CreateMeasuresFilledWithDefaultValues(analyticTableQueryContext, querySubTable.Measures, measureStyleRulesDictionary));
+                }
+            }
+        }
+
+        private void AddSubTablesMeasuresToSummaryRecord(AnalyticRecord summaryRecord, IAnalyticTableQueryContext analyticTableQueryContext, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
+            List<AnalyticQuerySubTable> querySubTables, List<SubTableAnalyticRecordInProcessByGroupingKey> subTablesSummaryRecordsByGroupingKey, List<List<string>> subTablesOrderedDimensionKeys)
+        {
+            summaryRecord.SubTables = new List<AnalyticRecordSubTable>();
+            for (int subTableIndex = 0; subTableIndex < querySubTables.Count; subTableIndex++)
+            {
+                AnalyticRecordSubTable summaryRecordSubTable = new AnalyticRecordSubTable { MeasureValues = new List<MeasureValues>() };
+                summaryRecord.SubTables.Add(summaryRecordSubTable);
+                var querySubTable = querySubTables[subTableIndex];
+                var subTableOrderedDimensionKeys = subTablesOrderedDimensionKeys[subTableIndex];
+                var subTableSummaryRecordsByGroupingKey = subTablesSummaryRecordsByGroupingKey[subTableIndex];
+                foreach (var dimensionKey in subTableOrderedDimensionKeys)
+                {
+                    SubTableAnalyticRecordInProcess matchSubTableSummaryRecord = subTableSummaryRecordsByGroupingKey.GetRecord(dimensionKey);
+                    if (matchSubTableSummaryRecord != null)
+                        summaryRecordSubTable.MeasureValues.Add(matchSubTableSummaryRecord.Record.MeasureValues);
+                    else
+                        summaryRecordSubTable.MeasureValues.Add(CreateMeasuresFilledWithDefaultValues(analyticTableQueryContext, querySubTable.Measures, measureStyleRulesDictionary));
+                }
+            }
+        }
+
+        private static DBAnalyticRecord CloneAnalyticDBRecord(DBAnalyticRecord dbRecord)
+        {
+            var summarySQLRecord = new DBAnalyticRecord { GroupingValuesByDimensionName = new Dictionary<string, DBAnalyticRecordGroupingValue>(), AggValuesByAggName = new Dictionary<string, DBAnalyticRecordAggValue>() };
+            foreach (var groupingValueEntry in dbRecord.GroupingValuesByDimensionName)
+            {
+                summarySQLRecord.GroupingValuesByDimensionName.Add(groupingValueEntry.Key, groupingValueEntry.Value.Clone() as DBAnalyticRecordGroupingValue);
+            }
+            foreach (var aggValueEntry in dbRecord.AggValuesByAggName)
+            {
+                summarySQLRecord.AggValuesByAggName.Add(aggValueEntry.Key, aggValueEntry.Value.Clone() as DBAnalyticRecordAggValue);
+            }
+            return summarySQLRecord;
         }
 
         private AnalyticRecord CreateAnalyticRecordFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, DateTime dateTime)
         {
-            AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dateTime, MeasureValues = new MeasureValues() };
+            AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dateTime, MeasureValues = CreateMeasuresFilledWithDefaultValues(analyticTableQueryContext, measureNames, measureStyleRulesDictionary) };            
+            return analyticRecord;
+        }
+
+        private MeasureValues CreateMeasuresFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary)
+        {
+            var measureValues = new MeasureValues();
             foreach (var measureName in measureNames)
             {
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
@@ -494,9 +781,9 @@ namespace Vanrise.Analytic.Business
                     }
 
                 }
-                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
+                measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
             }
-            return analyticRecord;
+            return measureValues;
         }
 
         private DateTime GetNextDateTime(DateTime time, TimeGroupingUnit timeGroupingUnit)
@@ -606,8 +893,9 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, string groupingKey, DBAnalyticRecord dbRecord, List<string> dimensionNames,
-            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, bool isSummaryRecord, out bool allMeasuresAreNull)
+        private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames,
+            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, 
+            bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, out bool allMeasuresAreNull)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dbRecord.Time, MeasureValues = new MeasureValues() };
 
@@ -626,7 +914,7 @@ namespace Vanrise.Analytic.Business
                 }
             }
 
-            var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext, groupingKey, dbRecord, allDimensionNames, analyticRecord, isSummaryRecord);
+            var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext, dbRecord, allDimensionNames, isSummaryRecord, subTableIndex, recordGroupingKey, subTableRecordGroupingKey);
             RecordFilterManager filterManager = new RecordFilterManager();
             allMeasuresAreNull = true;
 
@@ -668,6 +956,95 @@ namespace Vanrise.Analytic.Business
             return analyticRecord;
         }
 
+        private static IEnumerable<T> GetOrderedAnalyticRecords<T>(IAnalyticTableQueryContext queryContext, AnalyticQueryOrderType orderType, List<string> dimensions, List<string> measures,
+            AnalyticQueryAdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
+        {
+            IEnumerable<T> orderedRecords;
+            switch (orderType)
+            {
+                case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(queryContext, dimensions, allRecords, getAnalyticRecord); break;
+                case AnalyticQueryOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(measures, allRecords, getAnalyticRecord); break;
+                case AnalyticQueryOrderType.AdvancedMeasureOrder: orderedRecords = GetOrderedByAllAdvancedMeasureOrder(measures, advancedOrderOptions, allRecords, getAnalyticRecord); break;
+                default: orderedRecords = null; break;
+            }
+            return orderedRecords;
+        }
+
+        private static IEnumerable<T> GetOrderedByAllDimensions<T>(IAnalyticTableQueryContext queryContext, List<string> dimensions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
+        {
+            List<string> orderByDimensions = dimensions;
+            if (orderByDimensions == null || orderByDimensions.Count == 0)
+                throw new NullReferenceException("orderByDimensions");
+            IOrderedEnumerable<T> orderedRecords;
+            var firstDimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[0]);
+            if (firstDimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
+                orderedRecords = allRecords.OrderBy(record => getAnalyticRecord(record).DimensionValues[0].Value);
+            else
+                orderedRecords = allRecords.OrderBy(record => getAnalyticRecord(record).DimensionValues[0].Name);
+            if (orderByDimensions.Count > 1)
+            {
+                for (int i = 1; i < orderByDimensions.Count; i++)
+                {
+                    var dimensionIndex = i;
+                    var dimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[dimensionIndex]);
+                    if (dimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
+                        orderedRecords = orderedRecords.ThenBy(record => getAnalyticRecord(record).DimensionValues[dimensionIndex].Value);
+                    else
+                        orderedRecords = orderedRecords.ThenBy(record => getAnalyticRecord(record).DimensionValues[dimensionIndex].Name);
+                }
+            }
+            return orderedRecords;
+        }
+
+        private static IEnumerable<T> GetOrderedByAllMeasures<T>(List<string> measures, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
+        {
+            List<string> orderByMeasures = measures;
+            if (orderByMeasures == null || orderByMeasures.Count() == 0)
+                throw new NullReferenceException("orderByMeasures");
+            string firstMeasureName = orderByMeasures[0];
+            IOrderedEnumerable<T> orderedRecords = allRecords.OrderByDescending(record => getAnalyticRecord(record).MeasureValues[firstMeasureName].Value);
+            if (orderByMeasures.Count > 1)
+            {
+                for (int i = 1; i < orderByMeasures.Count; i++)
+                {
+                    string measureName = orderByMeasures[i];
+                    orderedRecords = orderedRecords.ThenByDescending(record => getAnalyticRecord(record).MeasureValues[measureName].Value);
+                }
+            }
+            return orderedRecords;
+        }
+
+        private static IEnumerable<T> GetOrderedByAllAdvancedMeasureOrder<T>(List<string> measures, AnalyticQueryAdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
+        {
+            if (measures == null)
+                throw new NullReferenceException("measures");
+            AnalyticQueryAdvancedMeasureOrderOptions advancedMeasureOrderOptions = advancedOrderOptions.CastWithValidate<AnalyticQueryAdvancedMeasureOrderOptions>("advancedOrderOptions");
+
+            if (advancedMeasureOrderOptions.MeasureOrders == null || advancedMeasureOrderOptions.MeasureOrders.Count == 0)
+                throw new NullReferenceException("advancedOrderOptions.MeasureOrders");
+            var measureOrders = advancedMeasureOrderOptions.MeasureOrders;
+            var firstMeasureOrder = measureOrders[0];
+            if (!measures.Contains(firstMeasureOrder.MeasureName))
+                throw new Exception(String.Format("Measure Order '{0}' is not available in the query measures", firstMeasureOrder.MeasureName));
+            IOrderedEnumerable<T> orderedRecords = firstMeasureOrder.OrderDirection == OrderDirection.Ascending ?
+                allRecords.OrderBy(record => getAnalyticRecord(record).MeasureValues[firstMeasureOrder.MeasureName].Value) :
+                allRecords.OrderByDescending(record => getAnalyticRecord(record).MeasureValues[firstMeasureOrder.MeasureName].Value);
+            if (measureOrders.Count > 1)
+            {
+                for (int i = 1; i < measureOrders.Count; i++)
+                {
+                    var measureOrder = measureOrders[i];
+                    if (!measures.Contains(measureOrder.MeasureName))
+                        throw new Exception(String.Format("Measure Order '{0}' is not available in the query measures", measureOrder.MeasureName));
+                    orderedRecords = measureOrder.OrderDirection == OrderDirection.Ascending ?
+                        orderedRecords.ThenBy(record => getAnalyticRecord(record).MeasureValues[measureOrder.MeasureName].Value) :
+                        orderedRecords.ThenByDescending(record => getAnalyticRecord(record).MeasureValues[measureOrder.MeasureName].Value);
+                }
+            }
+            return orderedRecords;
+        }
+
+
         #endregion
 
         #region Private Classes
@@ -697,13 +1074,7 @@ namespace Vanrise.Analytic.Business
                 IEnumerable<AnalyticRecord> orderedRecords;
                 if (query.OrderType.HasValue)
                 {
-                    switch (query.OrderType.Value)
-                    {
-                        case AnalyticQueryOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(query, allRecords); break;
-                        case AnalyticQueryOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(query, allRecords); break;
-                        case AnalyticQueryOrderType.AdvancedMeasureOrder: orderedRecords = GetOrderedByAllAdvancedMeasureOrder(query, allRecords); break;
-                        default: orderedRecords = null; break;
-                    }
+                    orderedRecords = AnalyticManager.GetOrderedAnalyticRecords(new AnalyticTableQueryContext(query), query.OrderType.Value, query.DimensionFields, query.MeasureFields, query.AdvancedOrderOptions, allRecords, record => record);
                 }
                 else
                     orderedRecords = allRecords.VROrderList(input);
@@ -722,81 +1093,6 @@ namespace Vanrise.Analytic.Business
                 if (input.Query.WithSummary)
                     analyticBigResult.Summary = _summaryRecord;
                 return analyticBigResult;
-            }
-
-            private IEnumerable<AnalyticRecord> GetOrderedByAllDimensions(AnalyticQuery query, IEnumerable<AnalyticRecord> allRecords)
-            {
-                var queryContext = new AnalyticTableQueryContext(query);
-                List<string> orderByDimensions = query.DimensionFields;
-                if (orderByDimensions == null || orderByDimensions.Count == 0)
-                    throw new NullReferenceException("orderByDimensions");
-                IOrderedEnumerable<AnalyticRecord> orderedRecords;
-                var firstDimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[0]);
-                if (firstDimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
-                    orderedRecords = allRecords.OrderBy(record => record.DimensionValues[0].Value);
-                else
-                    orderedRecords = allRecords.OrderBy(record => record.DimensionValues[0].Name);
-                if (orderByDimensions.Count > 1)
-                {
-                    for (int i = 1; i < orderByDimensions.Count; i++)
-                    {
-                        var dimensionIndex = i;
-                        var dimensionConfig = queryContext.GetDimensionConfig(orderByDimensions[dimensionIndex]);
-                        if (dimensionConfig.Config.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
-                            orderedRecords = orderedRecords.ThenBy(record => record.DimensionValues[dimensionIndex].Value);
-                        else
-                            orderedRecords = orderedRecords.ThenBy(record => record.DimensionValues[dimensionIndex].Name);
-                    }
-                }
-                return orderedRecords;
-            }
-
-            private IEnumerable<AnalyticRecord> GetOrderedByAllMeasures(AnalyticQuery query, IEnumerable<AnalyticRecord> allRecords)
-            {
-                List<string> orderByMeasures = query.MeasureFields;
-                if (orderByMeasures == null || orderByMeasures.Count() == 0)
-                    throw new NullReferenceException("orderByMeasures");
-                string firstMeasureName = orderByMeasures[0];
-                IOrderedEnumerable<AnalyticRecord> orderedRecords = allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureName].Value);
-                if (orderByMeasures.Count > 1)
-                {
-                    for (int i = 1; i < orderByMeasures.Count; i++)
-                    {
-                        string measureName = orderByMeasures[i];
-                        orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName].Value);
-                    }
-                }
-                return orderedRecords;
-            }
-
-            private IEnumerable<AnalyticRecord> GetOrderedByAllAdvancedMeasureOrder(AnalyticQuery query, IEnumerable<AnalyticRecord> allRecords)
-            {
-                if (query.MeasureFields == null)
-                    throw new NullReferenceException("query.MeasureFields");
-                AnalyticQueryAdvancedMeasureOrderOptions advancedMeasureOrderOptions = query.AdvancedOrderOptions.CastWithValidate<AnalyticQueryAdvancedMeasureOrderOptions>("query.AdvancedOrderOptions");
-
-                if (advancedMeasureOrderOptions.MeasureOrders == null || advancedMeasureOrderOptions.MeasureOrders.Count == 0)
-                    throw new NullReferenceException("query.AdvanceMeasureOrderOptions.MeasureOrders");
-                var measureOrders = advancedMeasureOrderOptions.MeasureOrders;
-                var firstMeasureOrder = measureOrders[0];
-                if (!query.MeasureFields.Contains(firstMeasureOrder.MeasureName))
-                    throw new Exception(String.Format("Measure Order '{0}' is not available in the query measures", firstMeasureOrder.MeasureName));
-                IOrderedEnumerable<AnalyticRecord> orderedRecords = firstMeasureOrder.OrderDirection == OrderDirection.Ascending ?
-                    allRecords.OrderBy(record => record.MeasureValues[firstMeasureOrder.MeasureName].Value) :
-                    allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureOrder.MeasureName].Value);
-                if (measureOrders.Count > 1)
-                {
-                    for (int i = 1; i < measureOrders.Count; i++)
-                    {
-                        var measureOrder = measureOrders[i];
-                        if (!query.MeasureFields.Contains(measureOrder.MeasureName))
-                            throw new Exception(String.Format("Measure Order '{0}' is not available in the query measures", measureOrder.MeasureName));
-                        orderedRecords = measureOrder.OrderDirection == OrderDirection.Ascending ?
-                            orderedRecords.ThenBy(record => record.MeasureValues[measureOrder.MeasureName].Value) :
-                            orderedRecords.ThenByDescending(record => record.MeasureValues[measureOrder.MeasureName].Value);
-                    }
-                }
-                return orderedRecords;
             }
 
             protected override ResultProcessingHandler<AnalyticRecord> GetResultProcessingHandler(DataRetrievalInput<AnalyticQuery> input, BigResult<AnalyticRecord> bigResult)
@@ -969,13 +1265,32 @@ namespace Vanrise.Analytic.Business
             }
         }
 
+        private class SubTableDBAnalyticRecordInProcess
+        {
+            public string GroupingKey { get; set; }
+
+            public string ParentRecordGroupingKey { get; set; }
+
+            public DBAnalyticRecord Record { get; set; }
+        }
+
+        private class SubTableAnalyticRecordInProcess
+        {
+            public string GroupingKey { get; set; }
+
+            public string ParentRecordGroupingKey { get; set; }
+
+            public AnalyticRecord Record { get; set; }
+        }
+
+        private class SubTableAnalyticRecordInProcessByGroupingKey : Dictionary<string, SubTableAnalyticRecordInProcess>
+        {
+        }
+
+        private class SubTableAnalyticRecordInProcessByParentGroupingKey : Dictionary<string, SubTableAnalyticRecordInProcessByGroupingKey>
+        {
+        }
+
         #endregion
-    }
-
-    internal class AnalyticMeasureExternalSourceProcessedResult
-    {
-        public AnalyticMeasureExternalSourceResult OriginalResult { get; set; }
-
-        public Dictionary<string, AnalyticMeasureExternalSourceRecord> RecordsByDimensionKey { get; set; }
     }
 }

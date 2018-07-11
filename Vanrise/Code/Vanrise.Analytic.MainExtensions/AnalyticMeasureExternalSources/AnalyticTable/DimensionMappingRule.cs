@@ -25,7 +25,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
     {
         string DimensionName { get; }
 
-        AnalyticQuery AnalyticQuery { get; }
+        //AnalyticQuery AnalyticQuery { get; }
 
         string MappedDimensionName { set; }
     }
