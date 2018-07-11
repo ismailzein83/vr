@@ -1021,4 +1021,30 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
     }
+
+    public class RPRouteFilterPersonalizationExtendedSetting : EntityPersonalizationExtendedSetting
+    {
+        public int RoutingDatabaseId {get; set;}
+        public int RouteFilter { get; set; }
+        public Guid PolicyConfigId {get; set;}
+        public int NumberOfOptions {get; set;}
+        public int RoutingProductFilter { get; set; }
+        public List<int> RoutingProductIds {get; set;}
+        public int? SimulatedRoutingProductId {get; set;}
+        public List<int> SaleZoneIds {get; set;}
+        public int? RouteStatus  {get; set;}       
+        public int LimitResult {get; set;}   
+        public int? CustomerId {get; set;}   
+        public bool ShowInSystemCurrency {get; set;}   
+        public bool IncludeBlockedSuppliers {get; set;}   
+        public decimal? MaxSupplierRate {get; set;}   
+        public string  CodePrefix { get; set; }   
+    }
+
+    public class RPRouteGridPersonalizationExtendedSetting : EntityPersonalizationExtendedSetting
+    {
+        public GridPersonalizationExtendedSetting ZoneGridPersonalization { get; set; }
+        public GridPersonalizationExtendedSetting CodeGridPersonalization { get; set; }
+    }
+
 }
