@@ -12,10 +12,12 @@
         $scope.scopeModel.invoiceTypeEntity;
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        
+
 
         var accountStatusSelectorAPI;
         var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var accountStatusSelectedDeferred;
 
         var generationCustomSectionDirectiveAPI;
         var generationCustomSectionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -47,8 +49,11 @@
                 accountStatusSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onAccountStatusSelectionChanged = function (value) {
+
                 if (value != undefined) {
-                    if (partnerSelectorAPI != undefined) {
+                    if (accountStatusSelectedDeferred != undefined)
+                        accountStatusSelectedDeferred.resolve();
+                    else {
                         var setLoader = function (value) {
                             $scope.isLoadingDirective = value;
                         };
@@ -58,9 +63,10 @@
                             invoiceTypeId: invoiceTypeId,
                             filter: accountStatusSelectorAPI.getData()
                         };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerSelectorAPI, partnerSelectorPayload, setLoader, partnerSelectorReadyDeferred);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerSelectorAPI, partnerSelectorPayload, setLoader);
                     }
                 }
+
             };
 
             $scope.scopeModel.onGenerationCustomSectionDirectiveReady = function (api) {
@@ -194,15 +200,21 @@
                 $scope.title = "Generate Invoice";
             }
             function loadPartnerSelectorDirective() {
+                var promises = [];
+                if (invoiceEntity != undefined) {
+                    accountStatusSelectedDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(accountStatusSelectedDeferred.promise);
+                }
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-                partnerSelectorReadyDeferred.promise.then(function () {
-                    partnerSelectorReadyDeferred = undefined;
+                promises.push(partnerSelectorReadyDeferred.promise);
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
+                    accountStatusSelectedDeferred = undefined;
                     var partnerSelectorPayload = {
                         context: getContext(),
                         extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings,
                         invoiceTypeId: invoiceTypeId,
                         filter: accountStatusSelectorAPI.getData()
-
                     };
                     if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
                         partnerSelectorPayload.selectedIds = invoiceEntity.Invoice.PartnerId;
