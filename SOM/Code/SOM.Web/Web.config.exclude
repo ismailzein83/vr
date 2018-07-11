@@ -62,7 +62,7 @@
     
     <add key="SOM_DBConnStringKey" value="ConfigurationDBConnString" />
     <add key="SOMTransaction_DBConnStringKey" value="TransactionDBConnString" />
-    <add key="ExposedConnectionStringNames" value="" />    
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString" />    
   </appSettings>
   
   <system.web>
