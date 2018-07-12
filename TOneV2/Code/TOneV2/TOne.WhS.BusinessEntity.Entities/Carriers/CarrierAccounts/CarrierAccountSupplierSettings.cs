@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
 		public int? EffectiveDateDayOffset { get; set; }
 
-		public int BPBusinessRuleSetId { get; set; }
+		public int? BPBusinessRuleSetId { get; set; }
 
 		public SupplierAutoImportSettings AutoImportSettings { get; set; }
 	}
