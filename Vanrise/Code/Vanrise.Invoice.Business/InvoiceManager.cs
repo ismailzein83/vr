@@ -1153,11 +1153,11 @@ namespace Vanrise.Invoice.Business
             generator.GenerateInvoice(context);
             if(context.GenerateInvoiceResult != GenerateInvoiceResult.Succeeded)
             {
-                actionAfterGenerateInvoice = context.ActionAfterGenerateInvoice;
                 errorMessage = context.ErrorMessage;
                 generateInvoiceResult = context.GenerateInvoiceResult;
                 return null;
             }
+            actionAfterGenerateInvoice = context.ActionAfterGenerateInvoice;
             billingTransactions = context.BillingTransactions;
            
             invoiceToSettleIds = context.InvoiceToSettleIds;

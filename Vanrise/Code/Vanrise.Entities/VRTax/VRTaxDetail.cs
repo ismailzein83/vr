@@ -10,5 +10,6 @@ namespace Vanrise.Entities
     {
         public Decimal Value { get; set; }
         public string TaxName { get; set; }
+        public bool IsVAT { get; set; }
     }
 }
