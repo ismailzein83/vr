@@ -1365,8 +1365,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 };
                 ctrl.expandRow = function (dataItem, evnt) {
-                    if (expandableRowTemplate != undefined || ctrl.isActionMenuVisible(dataItem)) {
-                        if (ctrl.isMobile && evnt) {
+                    if (expandableRowTemplate != undefined || (ctrl.isActionMenuVisible(dataItem) && ctrl.isMobile)) {
+                        if (evnt) {
                             var self = angular.element(evnt.currentTarget);
                             if (self.parents('.mobile-grid-row').length > 0 && !$('body').hasClass('full-mobile-body'))
                                 $('body').addClass('full-mobile-body');
