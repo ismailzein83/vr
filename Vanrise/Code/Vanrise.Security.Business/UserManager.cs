@@ -245,8 +245,7 @@ namespace Vanrise.Security.Business
 
                 if (passwordCheckRequired)
                 {
-                    addedUser.UserId = userId;
-                    new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedPassword, false);
+                    addedUser.UserId = userId;                    
                     Guid newUserId = _configManager.GetNewUserId();
                     if (_configManager.ShouldSendEmailOnNewUser())
                     {
@@ -257,6 +256,8 @@ namespace Vanrise.Security.Business
                         sendMailTask.Start();
                     }
                 }
+
+                new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedPassword, false);
 
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
