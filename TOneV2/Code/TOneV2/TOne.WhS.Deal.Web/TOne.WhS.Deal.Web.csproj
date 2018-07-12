@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -190,7 +192,9 @@
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\Templates\DealSupplierRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-discount.js" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-fixed.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealOverallProgressBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-overallprogress-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />

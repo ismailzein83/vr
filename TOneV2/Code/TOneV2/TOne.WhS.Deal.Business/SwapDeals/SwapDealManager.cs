@@ -54,6 +54,18 @@ namespace TOne.WhS.Deal.Business
             }
             return dealDefinitions;
         }
+        public IEnumerable<DealDefinition> GetSwapDealsBetweenDate(DateTime beginDate, DateTime endDate)
+        {
+            var dealDefinitions = new List<DealDefinition>();
+            var deals = GetCachedSwapDeals();
+            foreach (var dealDefinition in deals)
+            {
+                DateTime? dealEED = GetDealEED(dealDefinition.Settings);
+                if (dealDefinition.Settings.BeginDate >= beginDate && dealDefinition.Settings.EndDate < dealEED)
+                    dealDefinitions.Add(dealDefinition);
+            }
+            return dealDefinitions;
+        }
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
             var cachedEntities = this.GetCachedSwapDeals();
