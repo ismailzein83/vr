@@ -38,7 +38,8 @@ app.directive('vrWhsBeInternalautoimporttemplatesettingsEditor', ['WhS_BE_Intern
 					var autoImportTemplateSettingsEnumList = UtilsService.getArrayEnum(WhS_BE_InternalAutoImportEmailTypeEnum);
 					for (var i = 0, l = autoImportTemplateSettingsEnumList.length; i < l; i++) {
 
-						var autoImportTemplateSetting = autoImportTemplateSettingsEnumList[i];
+					    var autoImportTemplateSetting = autoImportTemplateSettingsEnumList[i];
+					    console.log(autoImportTemplateSetting)
 						var storedSettings = getStoredSettings(autoImportTemplateSetting, dataRetrievalInput.Query);
 						var dataItem = {
 							EmailType: autoImportTemplateSetting,

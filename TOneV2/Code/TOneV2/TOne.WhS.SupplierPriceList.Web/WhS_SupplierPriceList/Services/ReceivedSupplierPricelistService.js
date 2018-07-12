@@ -20,6 +20,7 @@
             if (status === WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToConfigurationError.value) return LabelColorsEnum.Error.color;
             if (status === WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToReceivedMailError.value) return LabelColorsEnum.Error.color;
             if (status === WhS_SupPL_ReceivedPricelistStatusEnum.ImportedManually.value) return LabelColorsEnum.Success.color;
+            if (status === WhS_SupPL_ReceivedPricelistStatusEnum.Rejected.value) return LabelColorsEnum.Error.color;
             return LabelColorsEnum.Info.color;
         };
 
