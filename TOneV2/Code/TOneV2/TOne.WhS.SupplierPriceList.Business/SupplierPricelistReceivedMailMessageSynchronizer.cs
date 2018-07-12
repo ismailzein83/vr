@@ -90,6 +90,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 						if (supplierPriceListTemplate == null)
 						{
+							context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}' because there is no mapping for this supplier.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject));
 							errors.Add(new SPLImportErrorDetail() { ErrorMessage = "No pricelist mapping is defined yet for this supplier." });
 							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.FailedDueToConfigurationError, errors, out recordId);
 							receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
@@ -116,10 +117,12 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 							BPInstanceManager bpClient = new BPInstanceManager();
 							bpClient.CreateNewProcess(new CreateProcessInput { InputArguments = supplierPriceListProcessInput });
+							context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Email from '{0}' with subject '{1}' has been received and sent for processing.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject));
 						}
 					}
 					else
 					{
+						context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}' because: '{2}'.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject, string.Join(";", errors)));
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, null, receivedMailMessage.Header.MessageSendTime, null, ReceivedPricelistStatus.FailedDueToReceivedMailError, errors, out recordId);
 						receivedSupplierPricelistManager.SendMailToSupplier(recordId, AutoImportEmailTypeEnum.Failed);
 						receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
