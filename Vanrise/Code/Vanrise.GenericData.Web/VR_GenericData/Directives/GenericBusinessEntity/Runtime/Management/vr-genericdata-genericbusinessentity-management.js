@@ -160,6 +160,20 @@
                             filters.push(filterData.Filters[i]);
                         }
 
+            }
+                }
+
+                if (fieldValues != undefined) {
+                    if (filters == undefined)
+                        filters = [];
+
+                    for (var key in fieldValues) {
+                        var filterValues = [];
+                        filterValues.push(fieldValues[key]);
+                        filters.push({
+                            FieldName: key,
+                            FilterValues: filterValues
+                        });
                     }
                 }
 
