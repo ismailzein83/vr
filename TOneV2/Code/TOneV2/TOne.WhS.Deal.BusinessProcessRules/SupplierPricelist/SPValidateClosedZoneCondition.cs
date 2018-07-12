@@ -24,7 +24,11 @@ namespace TOne.WhS.Deal.BusinessProcessRules
             foreach (var notImportedZone in countryZones.NotImportedZones.Where(c => c.HasChanged))
             {
                 if (notImportedZone.EED.HasValue)
-                    zoneMessages.Add(Helper.GetDealZoneMessage(importSPLContext.SupplierId, notImportedZone.ZoneId, notImportedZone.ZoneName, notImportedZone.EED.Value, false));
+                {
+                    string dealMessage = Helper.GetDealZoneMessage(importSPLContext.SupplierId, notImportedZone.ZoneId, notImportedZone.ZoneName, notImportedZone.EED.Value, false);
+                    if (dealMessage != null)
+                        zoneMessages.Add(dealMessage);
+                }
             }
             if (zoneMessages.Any())
             {

@@ -60,11 +60,8 @@ namespace Vanrise.BusinessProcess.Business
             }
             else
             {
-                var parentRuleSet = ruleSetManager.GetBusinessRuleSetsByID(ruleSet.ParentId.Value);
-                parentRuleSet.ThrowIfNull("parentRuleSet");
-                var action =  parentRuleSet.Details.ActionDetails.First(x => x.BPBusinessRuleDefinitionId == ruleDefinitionId);
-                action.ThrowIfNull("actionDefinition");
-                return action.Settings.Action;
+                var allEffectiveActions = GetCachedBPBusinessRuleSetsEffectiveActions().GetRecord(ruleSet.ParentId.Value);
+                return allEffectiveActions.FirstOrDefault(x => x.RuleDefinitionId == ruleDefinitionId).Action;
             }
         }
         public string GetParentActionDescription (int ruleSetId,Guid ruleDefinitionId)
