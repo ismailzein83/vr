@@ -106,8 +106,12 @@ namespace TOne.WhS.SupplierPriceList.Business
 
 			InternalAutoImportTemplate internalAutoImportTemplate = new BusinessEntity.Business.ConfigManager().GetInternalAutoImportTemplateByType(emailType);
 			if (internalAutoImportTemplate == null || internalAutoImportTemplate.EmailTemplateId == null || internalAutoImportTemplate.EmailTemplateId == Guid.Empty)
-				return;
-
+			{
+				if (emailType == AutoImportEmailTypeEnum.WaitingConfirmation)
+					throw new VRBusinessException(string.Format("There is no template selected for event '{0}'.", receivedPricelistRecordId));
+				else
+					return;
+			}
 			if (internalAutoImportTemplate.AttachPricelist && receivedPricelist.FileId.HasValue)
 			{
 				receivedPricelistFile = fileManager.GetFile(receivedPricelist.FileId.Value);
