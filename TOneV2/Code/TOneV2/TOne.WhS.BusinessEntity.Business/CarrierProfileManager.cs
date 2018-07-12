@@ -380,7 +380,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         taxItemDetails.Add(new VRTaxItemDetail
                         {
                             TaxName = "VAT",
-                            Value = carrierProfile.Settings.TaxSetting.VAT.Value
+                            Value = carrierProfile.Settings.TaxSetting.VAT.Value,
+                            IsVAT=true
                         });
                     }
                    

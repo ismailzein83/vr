@@ -12,8 +12,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Security.Business;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class SupplierInvoiceGenerator : InvoiceGenerator
@@ -117,9 +116,42 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         supplierInvoiceDetails.TotalAmountAfterCommission += ((supplierInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         supplierInvoiceDetails.TotalOriginalAmountAfterCommission += ((supplierInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-
                         supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
+                        
+                        
+                        if (evaluatedSupplierRecurringCharges != null)
+                         {
+                             foreach (var item in evaluatedSupplierRecurringCharges)
+                             {
+                                 item.AmountAfterTaxes += ((item.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                                  item.VAT = tax.IsVAT ? tax.Value : 0;
+                             }
+                         }
                     }
+
+                    context.ActionAfterGenerateInvoice = (invoice) =>
+                    {
+
+                        SupplierBillingRecurringChargeManager supplierBillingRecurringChargeManager = new SupplierBillingRecurringChargeManager();
+                        var userId = SecurityContext.Current.GetLoggedInUserId();
+                        foreach (var item in evaluatedSupplierRecurringCharges)
+                        {
+                            supplierBillingRecurringChargeManager.AddSupplierBillingRecurringCharge(new SupplierBillingRecurringCharge 
+                            {
+                                    InvoiceId = invoice.InvoiceId,
+                                     Amount = item.AmountAfterTaxes,
+                                     RecurringChargeId = item.RecurringChargeId,
+                                     VAT = item.VAT,
+                                     From = item.From,
+                                     To = item.To,
+                                     CreatedBy = userId,
+                                     FinancialAccountId = financialAccount.FinancialAccountId,
+                                     CurrencyId =item.CurrencyId,
+                            });
+                        }
+                        return true;
+                    };
+
                 }
 
                 if (!financialAccountInvoiceType.IgnoreFromBalance)

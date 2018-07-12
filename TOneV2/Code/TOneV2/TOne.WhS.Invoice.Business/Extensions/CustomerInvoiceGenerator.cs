@@ -13,8 +13,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Invoice.Business;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
@@ -125,7 +124,37 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceDetails.TotalAmountAfterCommission += ((customerInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         customerInvoiceDetails.TotalOriginalAmountAfterCommission += ((customerInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
+                        
+                        if (evaluatedCustomerRecurringCharges != null)
+                         {
+                             foreach (var item in evaluatedCustomerRecurringCharges)
+                             {
+                                 item.AmountAfterTaxes += ((item.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                                  item.VAT = tax.IsVAT ? tax.Value : 0;
+                             }
+                         }
                     }
+                    context.ActionAfterGenerateInvoice = (invoice) =>
+                    {
+                        CustomerBillingRecurringChargeManager customerBillingRecurringChargeManager = new CustomerBillingRecurringChargeManager();
+                        var userId = SecurityContext.Current.GetLoggedInUserId();
+                        foreach (var item in evaluatedCustomerRecurringCharges)
+                        {
+                            customerBillingRecurringChargeManager.AddCustomerBillingRecurringCharge(new CustomerBillingRecurringCharge 
+                            {
+                                     InvoiceId = invoice.InvoiceId,
+                                     Amount = item.AmountAfterTaxes,
+                                     RecurringChargeId = item.RecurringChargeId,
+                                     VAT = item.VAT,
+                                     From = item.From,
+                                     To = item.To,
+                                     CreatedBy = userId,
+                                     FinancialAccountId = financialAccount.FinancialAccountId,
+                                     CurrencyId =item.CurrencyId,
+                            });
+                        }
+                        return true;
+                    };
                 }
                 if ((minAmount.HasValue && customerInvoiceDetails.TotalAmountAfterCommission >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.TotalAmountAfterCommission != 0))
                 {
@@ -141,7 +170,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         context.NeedApproval = settings.NeedApproval;
                     }
-
+                   
                     context.Invoice = new GeneratedInvoice
                     {
                         InvoiceDetails = customerInvoiceDetails,
@@ -159,7 +188,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             #endregion
         }
-        
+       
         private List<CustomerInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate,decimal? commission, CommissionType? commissionType,IEnumerable<VRTaxItemDetail>  taxItemDetails)
         {
 

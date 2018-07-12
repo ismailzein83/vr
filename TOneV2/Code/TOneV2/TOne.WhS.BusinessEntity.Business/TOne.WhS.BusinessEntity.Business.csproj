@@ -149,6 +149,7 @@
     <Compile Include="CountrySoldToCustomerFilter.cs" />
     <Compile Include="Country\CountryNotEmptyFilter.cs" />
     <Compile Include="Country\CountryNotSoldToCustomerFilter.cs" />
+    <Compile Include="CustomerBillingRecurringChargeManager.cs" />
     <Compile Include="CustomerSellingProductManager.cs" />
     <Compile Include="Country\CustomerZoneManager.cs" />
     <Compile Include="CarrierAccounts\ReevaluateCarrierProfileStatusChangedHandler.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="SaleRate\SaleRateReadLastRateNoCache.cs" />
     <Compile Include="SaleZone\SaleZoneSoldCountryToCustomerFilter.cs" />
     <Compile Include="StateBackup\StateBackupCanRestoreContext.cs" />
+    <Compile Include="SupplierBillingRecurringChargeManager.cs" />
     <Compile Include="SupplierRate\QueryHandlers\SupplierRateForZoneQueryHandler.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseManager.cs" />
     <Compile Include="Switch\SyncWithinRouteBuildSwitchFilter.cs" />

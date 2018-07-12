@@ -1507,8 +1507,36 @@
                   <Parameter Name="NormalPrecisionValue">
                     <Value>=Parameters!NormalPrecisionValue.Value</Value>
                   </Parameter>
+                  <Parameter Name="Fax">
+                    <Value>=Parameters!Fax.Value</Value>
+                  </Parameter>
+                  <Parameter Name="BillingTime">
+                    <Value>=Parameters!BillingTime.Value</Value>
+                  </Parameter>
+                  <Parameter Name="InvoiceDueDate">
+                    <Value>=Parameters!InvoiceDueDate.Value</Value>
+                  </Parameter>
+                  <Parameter Name="SupplierVatID">
+                    <Value>=Parameters!VatID.Value</Value>
+                  </Parameter>
+                  <Parameter Name="SupplierRegAddress">
+                    <Value>=Parameters!RegAddress.Value</Value>
+                  </Parameter>
+                  <Parameter Name="RegNo">
+                    <Value>=Parameters!RegNo.Value</Value>
+                  </Parameter>
+                  <Parameter Name="Phone">
+                    <Value>=Parameters!Phone.Value</Value>
+                  </Parameter>
+                  <Parameter Name="VatID">
+                    <Value>=Parameters!VatID.Value</Value>
+                  </Parameter>
+                  <Parameter Name="Address">
+                    <Value>=Parameters!Address.Value</Value>
+                  </Parameter>
                 </Parameters>
                 <Top>0.14722in</Top>
+                <Left>0in</Left>
                 <Height>3in</Height>
                 <Width>7.71679in</Width>
                 <Style>
@@ -4501,6 +4529,8 @@
     </ReportParameter>
     <ReportParameter Name="SaleAmount">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="AmountAfterCommission">
@@ -4511,10 +4541,13 @@
     </ReportParameter>
     <ReportParameter Name="CarrierCompanyName">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="NormalPrecisionValue">
       <DataType>Integer</DataType>
+      <Nullable>true</Nullable>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

@@ -75,7 +75,11 @@ namespace TOne.WhS.BusinessEntity.Business
                         Amount = effectiveSupplierRecurringCharge.Amount,
                         From = period.From,
                         To = period.To,
-                        CurrencyId = effectiveSupplierRecurringCharge.CurrencyId
+                        CurrencyId = effectiveSupplierRecurringCharge.CurrencyId,
+                        AmountAfterTaxes = effectiveSupplierRecurringCharge.Amount,
+                        RecurringChargeId = effectiveSupplierRecurringCharge.ID
+
+
                     });
                     }
                 }

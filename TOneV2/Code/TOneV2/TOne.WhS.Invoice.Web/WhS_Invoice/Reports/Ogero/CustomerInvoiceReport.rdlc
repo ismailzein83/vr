@@ -89,7 +89,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.075in</Top>
-        <Left>0.9304in</Left>
+        <Left>0.96194in</Left>
         <Height>0.17in</Height>
         <Width>4.01042in</Width>
         <ZIndex>2</ZIndex>
@@ -2249,8 +2249,39 @@
               <Parameter Name="NormalPrecisionValue">
                 <Value>=Parameters!NormalPrecisionValue.Value</Value>
               </Parameter>
+              <Parameter Name="RegNo">
+                <Value>=Parameters!RegNo.Value</Value>
+              </Parameter>
+              <Parameter Name="BillingTime">
+                <Value>=Parameters!BillingTime.Value</Value>
+              </Parameter>
+              <Parameter Name="CustomerVatID">
+                <Value>=Parameters!CustomerVatID.Value</Value>
+              </Parameter>
+              <Parameter Name="Address">
+                <Value>=Parameters!Address.Value</Value>
+              </Parameter>
+              <Parameter Name="RegAddress">
+                <Value>=Parameters!RegAddress.Value</Value>
+              </Parameter>
+              <Parameter Name="Phone">
+                <Value>=Parameters!Phone.Value</Value>
+              </Parameter>
+              <Parameter Name="Fax">
+                <Value>=Parameters!Fax.Value</Value>
+              </Parameter>
+              <Parameter Name="VatID">
+                <Value>=Parameters!VatID.Value</Value>
+              </Parameter>
+              <Parameter Name="CustomerVatID">
+                <Value>=Parameters!CustomerVatID.Value</Value>
+              </Parameter>
+              <Parameter Name="Email">
+                <Value>=Parameters!Email.Value</Value>
+              </Parameter>
             </Parameters>
             <Top>0.14722in</Top>
+            <Left>0.01097in</Left>
             <Height>3in</Height>
             <Width>7.98583in</Width>
             <Style>
@@ -2265,9 +2296,9 @@
         </PageBreak>
         <KeepTogether>true</KeepTogether>
         <Top>8.47653in</Top>
-        <Left>0.1425in</Left>
+        <Left>0.13153in</Left>
         <Height>3.18888in</Height>
-        <Width>7.98583in</Width>
+        <Width>8.00139in</Width>
         <ZIndex>28</ZIndex>
         <Style>
           <Border>
@@ -4063,6 +4094,13 @@
       </ConnectionProperties>
       <rd:DataSourceID>3dd2f300-2fe8-404d-b9ea-c75c66980f12</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="HassanProjectDataSet">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>ff1b88cf-dc6d-4e2e-893e-f37f1fef326a</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="ItemsDetails">
@@ -4435,6 +4473,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Notes">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Email">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

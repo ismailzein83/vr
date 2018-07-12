@@ -221,7 +221,9 @@
     <Content Include="WhS_Invoice\Views\InvoiceCompareTemplate.html" />
     <Content Include="WhS_Invoice\Views\InvoiceCompareTemplateController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="web.config" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\ITPC\CustomerInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Reports\ITPC\CustomerInvoiceReport.rdlc" />
@@ -241,7 +243,9 @@
     <EmbeddedResource Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerRecurringChargeInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerRecurringChargeInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -270,8 +274,12 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\SupplierRecurringChargeInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\SupplierRecurringChargeInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -281,6 +289,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
