@@ -47,7 +47,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
         
         var context;
-        var dataRecordTypeFields = [];
+        var dataRecordTypeFields;
         var gridColumns =[];
 
         function initializeController() {
@@ -192,23 +192,25 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                         }
                         if (sortColumns != undefined) {
                             loadDataRecordTypeFields().then(function () {
-                            for (var i = 0; i < sortColumns.length; i++) {
-                                var sortColumn = sortColumns[i];
-                                $scope.scopeModel.sortColumns.push({
-                                    entity: sortColumn
-                                });
-                                gridColumns.push(sortColumn.FieldName);
-                                    for (var fieldName in dataRecordTypeFields) {
+                                for (var i = 0; i < sortColumns.length; i++) {
+                                    var sortColumn = sortColumns[i];
+                                    $scope.scopeModel.sortColumns.push({
+                                        entity: sortColumn
+                                    });
+                                    gridColumns.push(sortColumn.FieldName);
+                                    if (dataRecordTypeFields != undefined) {
+                                  for (var fieldName in dataRecordTypeFields) {
                                         if (fieldName != "$type") {
                                             if (sortColumn.FieldName == fieldName) {
                                                 $scope.scopeModel.selectedSortColumns.push({
-                                                    description: dataRecordTypeFields[fieldName].Title,
-                                                    value: fieldName
+                                                            description: dataRecordTypeFields[fieldName].Title,
+                                                            value: fieldName
                                                 });
+                                                }
                                             }
                                         }
-                                    }
                                 }
+                            }
                             });
                         }
                     }
