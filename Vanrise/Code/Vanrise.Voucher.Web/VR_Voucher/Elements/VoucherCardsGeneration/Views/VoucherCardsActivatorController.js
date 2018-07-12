@@ -48,7 +48,7 @@
             return VR_Voucher_VoucherCardsGenerationAPIService.GetVoucherCardsGeneration(voucherCardsGenerationId).then(function (response) {
                 totalnumberofcards = response.NumberOfCards;
                 if (response.InactiveCards != undefined)
-                { inactiveCards = response.Inactivecards; }
+                { inactiveCards = response.InactiveCards; }
                 else inactiveCards = totalnumberofcards;
                             });
         }
