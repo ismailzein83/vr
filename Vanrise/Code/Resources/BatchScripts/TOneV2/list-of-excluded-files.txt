@@ -21,3 +21,7 @@
 \images\CentralAuth-logoonheader.png
 \images\CentralAuth-login.png
 \images\CentralAuth-iconheader.ico
+
+\images\Zebra-logoonheader.png
+\images\Zebra-login.png
+\images\Zebra-iconheader.ico
