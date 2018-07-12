@@ -24,6 +24,8 @@ namespace Vanrise.BusinessProcess.Entities
 
         public List<Guid> ExecutionDependsOnRules { get; set; }
 
+        public string Title { get; set; }
+
         public string Description { get; set; }
     }
 }
