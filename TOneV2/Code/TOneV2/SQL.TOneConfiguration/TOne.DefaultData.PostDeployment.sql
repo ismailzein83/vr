@@ -36,32 +36,32 @@ UPDATE  [common].[Setting]
 SET		[Data] = '{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":155}'
 WHERE	ID='1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE' and [Data] is null
 
-declare @TariffRuleTypeIdTable as table
-(ID int)
-insert into @TariffRuleTypeIdTable 
-exec [rules].[sp_RuleType_InsertIfNotExistsAndGetID] 'Vanrise.GenericData.Pricing.TariffRule' 
+--declare @TariffRuleTypeIdTable as table
+--(ID int)
+--insert into @TariffRuleTypeIdTable 
+--exec [rules].[sp_RuleType_InsertIfNotExistsAndGetID] 'Vanrise.GenericData.Pricing.TariffRule' 
 
-declare @TariffRuleTypeId int
-select @TariffRuleTypeId=ID from @TariffRuleTypeIdTable
---[rules].[Rule]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([TypeID],[RuleDetails],[BED],[EED],[SourceID])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":155},"DefinitionId":"f24cb510-0b65-48c8-a723-1f6ebfeea9e8","RuleId":0,"Description":"Default Sale Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null),
-(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":155},"DefinitionId":"5aeb0dad-4bb8-44b4-acbe-c8c917e88b58","RuleId":0,"Description":"Default Purchase Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([TypeID],[RuleDetails],[BED],[EED],[SourceID]))
-merge	[rules].[Rule] as t
-using	cte_data as s
-on		1=1 and t.[RuleDetails] = s.[RuleDetails]
---when matched then
---	update set
---	[TypeID] = s.[TypeID],[RuleDetails] = s.[RuleDetails],[BED] = s.[BED],[EED] = s.[EED],[SourceID] = s.[SourceID]
-when not matched by target then
-	insert([TypeID],[RuleDetails],[BED],[EED],[SourceID])
-	values(s.[TypeID],s.[RuleDetails],s.[BED],s.[EED],s.[SourceID]);
+--declare @TariffRuleTypeId int
+--select @TariffRuleTypeId=ID from @TariffRuleTypeIdTable
+----[rules].[Rule]------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+--set nocount on;
+--;with cte_data([TypeID],[RuleDetails],[BED],[EED],[SourceID])
+--as (select * from (values
+----//////////////////////////////////////////////////////////////////////////////////////////////////
+--(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":155},"DefinitionId":"f24cb510-0b65-48c8-a723-1f6ebfeea9e8","RuleId":0,"Description":"Default Sale Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null),
+--(@TariffRuleTypeId,'{"$type":"Vanrise.GenericData.Pricing.TariffRule, Vanrise.GenericData.Pricing","Settings":{"$type":"Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings, Vanrise.Rules.Pricing.MainExtensions","ConfigId":"35acc9c2-0675-4347-ba3e-a81025c1be12","CallFee":0.0,"FirstPeriod":0,"FirstPeriodRate":0.0,"FractionUnit":0,"PricingUnit":60,"CurrencyId":155},"DefinitionId":"5aeb0dad-4bb8-44b4-acbe-c8c917e88b58","RuleId":0,"Description":"Default Purchase Tariff Rule","BeginEffectiveTime":"2016-12-23T00:00:00","RefreshTimeSpan":"01:00:00"}','2010-01-01 00:00:00.000',null,null)
+----\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+--)c([TypeID],[RuleDetails],[BED],[EED],[SourceID]))
+--merge	[rules].[Rule] as t
+--using	cte_data as s
+--on		1=1 and t.[RuleDetails] = s.[RuleDetails]
+----when matched then
+----	update set
+----	[TypeID] = s.[TypeID],[RuleDetails] = s.[RuleDetails],[BED] = s.[BED],[EED] = s.[EED],[SourceID] = s.[SourceID]
+--when not matched by target then
+--	insert([TypeID],[RuleDetails],[BED],[EED],[SourceID])
+--	values(s.[TypeID],s.[RuleDetails],s.[BED],s.[EED],s.[SourceID]);
 
 --[TOneWhS_BE].[ZoneServiceConfig]------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
