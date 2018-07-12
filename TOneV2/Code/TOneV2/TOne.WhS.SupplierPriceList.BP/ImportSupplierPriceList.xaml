@@ -385,9 +385,9 @@
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
       <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-        <OutArgument x:TypeArguments="x:Boolean">
+        <InOutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-        </OutArgument>
+        </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
@@ -466,9 +466,9 @@
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
       <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-        <OutArgument x:TypeArguments="x:Boolean">
+        <InOutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-        </OutArgument>
+        </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
@@ -531,9 +531,9 @@
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
       <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-        <OutArgument x:TypeArguments="x:Boolean">
+        <InOutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-        </OutArgument>
+        </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
@@ -694,9 +694,9 @@
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
       <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-        <OutArgument x:TypeArguments="x:Boolean">
+        <InOutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-        </OutArgument>
+        </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
@@ -1106,9 +1106,9 @@
                               </InArgument>
                             </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
                             <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-                              <OutArgument x:TypeArguments="x:Boolean">
+                              <InOutArgument x:TypeArguments="x:Boolean">
                                 <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-                              </OutArgument>
+                              </InOutArgument>
                             </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
                             <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
                               <InArgument x:TypeArguments="x:Int32">
@@ -1354,9 +1354,9 @@
             </InArgument>
           </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
           <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-            <OutArgument x:TypeArguments="x:Boolean">
+            <InOutArgument x:TypeArguments="x:Boolean">
               <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-            </OutArgument>
+            </InOutArgument>
           </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
           <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
             <InArgument x:TypeArguments="x:Int32">

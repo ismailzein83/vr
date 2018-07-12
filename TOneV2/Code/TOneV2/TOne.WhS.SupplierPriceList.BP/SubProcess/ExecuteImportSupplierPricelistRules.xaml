@@ -19,7 +19,7 @@
     <x:Property Name="ReceivedPricelistRecordId" Type="InArgument(x:Int32)" />
     <x:Property Name="BusinessRulesKey" Type="InArgument(x:String)" />
     <x:Property Name="BPBusinessRuleSetId" Type="InArgument(s:Nullable(x:Int32))" />
-    <x:Property Name="ProcessNeedsConfirmation" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="ProcessNeedsConfirmation" Type="InOutArgument(x:Boolean)" />
     <x:Property Name="AllWarningMessages" Type="InOutArgument(scg:List(vbe:BPValidationMessage))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
@@ -112,7 +112,7 @@
         </OutArgument>
       </vbw:ExecuteRules.WarningMessages>
     </vbw:ExecuteRules>
-    <ForEach x:TypeArguments="vbe:BPValidationMessage" DisplayName="ForEach&lt;BPValidationMessage&gt;">
+    <ForEach x:TypeArguments="vbe:BPValidationMessage" DisplayName="ForEach&lt;BPValidationMessage&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_2">
       <ForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(vbe:BPValidationMessage)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BPValidationMessage)">WarningMessages</mca:CSharpValue>
@@ -122,7 +122,7 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="vbe:BPValidationMessage" Name="msg" />
         </ActivityAction.Argument>
-        <AddToCollection x:TypeArguments="vbe:BPValidationMessage" DisplayName="AddToCollection&lt;BPValidationMessage&gt;">
+        <AddToCollection x:TypeArguments="vbe:BPValidationMessage" DisplayName="AddToCollection&lt;BPValidationMessage&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_2">
           <AddToCollection.Item>
             <InArgument x:TypeArguments="vbe:BPValidationMessage">
               <mca:CSharpValue x:TypeArguments="vbe:BPValidationMessage">msg</mca:CSharpValue>
@@ -131,10 +131,8 @@
           <InArgument x:TypeArguments="scg:ICollection(vbe:BPValidationMessage)">
             <mca:CSharpValue x:TypeArguments="scg:ICollection(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpValue>
           </InArgument>
-          <sap2010:WorkflowViewState.IdRef>AddToCollection`1_2</sap2010:WorkflowViewState.IdRef>
         </AddToCollection>
       </ActivityAction>
-      <sap2010:WorkflowViewState.IdRef>ForEach`1_2</sap2010:WorkflowViewState.IdRef>
     </ForEach>
     <If sap2010:WorkflowViewState.IdRef="If_2">
       <If.Condition>
@@ -184,7 +182,7 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbB1CA7wBDgIBAUkFchgCAXpzBYoBDwIBUosBBZ0BCgIBN54BBboBCgIBAmULZWkDAc8BUQtRWQMBwwFbC1t3AwG3AW8Lb3kDAasBYAtgdwMBnwFqC2pjAwGTAVYLVlYDAYcBTAtMZwIBe3YLdngCAW59CYcBGwIBU44BC44BYQIBOJIBCZsBEgIBRKEBC6EBcwIBA6UBCbgBFAIBD4QBDYQBfQIBYYABD4ABXwIBVJkBNZkBOQIBUZUBD5UBbgIBRaYBC7YBOAIBErcBC7cBnAECARCuARGuAaABAgErswERswF1AgEfqQERqQFnAgETtwFbtwGZAQIBEQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbB1CA7oBDgIBAUkFchgCAXpzBYgBDwIBUokBBZsBCgIBN5wBBbgBCgIBAmULZWkDAc8BUQtRWQMBwwFbC1t3AwG3AW8Lb3kDAasBYAtgdwMBnwFqC2pjAwGTAVYLVlYDAYcBTAtMZwIBe3YLdngCAW59CYYBGwIBU4wBC4wBYQIBOJABCZkBEgIBRJ8BC58BcwIBA6MBCbYBFAIBD4QBDYQBfQIBYYABD4ABXwIBVJcBNZcBOQIBUZMBD5MBbgIBRaQBC7QBOAIBErUBC7UBnAECARCsARGsAaABAgErsQERsQF1AgEfpwERpwFnAgETtQFbtQGZAQIBEQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
