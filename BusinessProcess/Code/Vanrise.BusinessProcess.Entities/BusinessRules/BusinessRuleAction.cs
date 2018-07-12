@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -15,6 +16,10 @@ namespace Vanrise.BusinessProcess.Entities
         public abstract void Execute(IBusinessRuleActionExecutionContext context);
 
         public abstract ActionSeverity GetSeverity();
-        public abstract string GetDescription();
+        public string GetDescription()
+        {
+            ExtensionConfigurationManager configManager = new ExtensionConfigurationManager();
+            return configManager.GetExtensionConfigurationTitle<BPBusinessRuleActionType>(BPBusinessRuleActionTypeId, BPBusinessRuleActionType.EXTENSION_TYPE);
+        }
     }
 }

@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BPBusinessRuleSetEffectiveActionController.cs" />
     <Compile Include="Controllers\CustomCodeTaskController.cs" />
     <Compile Include="Controllers\BPBusinessRuleDefinitionController.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetController.cs" />
@@ -253,6 +254,7 @@
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetEffectiveActionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\CustomCodeTaskAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPValidationMessageAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskTypeAPIService.js" />

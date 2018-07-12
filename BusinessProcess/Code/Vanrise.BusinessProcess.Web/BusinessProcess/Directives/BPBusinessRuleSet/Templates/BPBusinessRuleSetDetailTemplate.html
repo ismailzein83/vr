@@ -4,37 +4,39 @@
                    datasource="businessRuleSets" selectedvalues="scopeModel.selectedbusinessRuleSet"></vr-select>
     </vr-columns>
 </vr-row>-->
-<vr-row>
-    <vr-columns width="large">
-        <vr-select label="Business Rule Definition" datatextfield="Entity.Settings.Description" datavaluefield="BPBusinessRuleDefinitionId"
-                   datasource="businessRuleDefintions" selectedvalues="scopeModel.selectedbusinessRuleDefintion"></vr-select>
+<!--<vr-columns width="large">
+    <vr-select label="Business Rule Definition" datatextfield="Entity.Settings.Description" datavaluefield="BPBusinessRuleDefinitionId"
+               datasource="businessRuleDefintions" selectedvalues="scopeModel.selectedbusinessRuleDefintion"></vr-select>
 
-    </vr-columns>
-    <vr-columns colnum="2" withemptyline>
-        <div>
-            <vr-button type="Add" data-onclick="addBusinessRuleDefinition" standalone></vr-button>
-        </div>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="bpBusinessRules"
-                         idfield="Entity.BPBusinessRuleDefinitionId" ondeleterow="removeBusinessRule">
-                <vr-datagridcolumn headertext="'ID'" field="'Entity.BPBusinessRuleDefinitionId'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Name'" field="'Entity.Settings.Description'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Action'" disablesorting="true">
-                    <vr-select datatextfield="Description" datavaluefield="ExtensionConfigurationId"
-                               datasource="dataItem.ActionTypes" selectedvalues="dataItem.selectedAction" isrequired="true"></vr-select>
-                </vr-datagridcolumn>
+</vr-columns>-->
 
-                <vr-datagridcolumn disablesorting="true">
-                    <div ng-if="dataItem.selectedAction.Editor">
-                        <vr-directivewrapper directive="dataItem.selectedAction.Editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper>
-                    </div>
-                </vr-datagridcolumn>
-
-            </vr-datagrid>
-        </vr-validator>
-    </vr-columns>
-</vr-row>
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="bpBusinessRules"
+                 dataretrievalfunction="dataRetrievalFunction"
+                 on-ready="onGridReady"
+                 getrowstyle="getRowStyle"
+                 idfield="RuleDefinitionId" ondeleterow="removeBusinessRule">
+        <vr-datagridcolumn headertext="'ID'" field="'RuleDefinitionId'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Action'" field="'ActionDescription'" type="'Text'"isfielddynamic="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Override'" >
+            <vr-columns width="fullrow" ng-if="!dataItem.hideOverrideSettings() && dataItem.ActionTypesIds.length > 1">
+                <vr-switch value="dataItem.IsOverriden" onvaluechanged="dataItem.onInheritedSwitchChanged"> </vr-switch>
+            </vr-columns>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Action'">
+            <span ng-if="(!dataItem.hideOverrideSettings() && dataItem.IsOverriden)">
+                <vr-columns colnum="8" haschildcolumns>
+                    <bp-business-rule-actions-selective hidelabel on-ready="dataItem.onRuleActionsSelectiveReady"></bp-business-rule-actions-selective>
+                </vr-columns>
+            </span>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn field="'IsInherited'"  headertext="''">
+            <span ng-if="dataItem.hideOverrideSettings()">
+                <vr-columns width="fullrow">
+                    <span ng-click="dataItem.onResetClicked(dataItem)" style="cursor: pointer; text-decoration: underline">Reset to default</span>
+                </vr-columns>
+            </span>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

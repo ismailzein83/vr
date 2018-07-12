@@ -50,7 +50,7 @@ namespace Vanrise.BusinessProcess.Business
                         RuleDefinitionId = definition.BPBusinessRuleDefinitionId,
                         //check action
                         Action = action.Details.Settings.Action,
-                        IsInherited = false
+                        IsInherited = true
                     };
                     defaultActions.Add(definition.BPBusinessRuleDefinitionId, effectiveAction);
                 }

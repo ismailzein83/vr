@@ -10,5 +10,6 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public int? BusinessRuleSetDefinitionId { get; set; }
         public Guid BusinessProcessId { get; set; }
+        public int? ParentBusinessRuleSetId { get; set; }
     }
 }

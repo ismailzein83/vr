@@ -22,9 +22,5 @@ namespace Vanrise.BusinessProcess
         {
             return ActionSeverity.Error;
         }
-        public override string GetDescription()
-        {
-            return "Stop Execution";
-        }
     }
 }

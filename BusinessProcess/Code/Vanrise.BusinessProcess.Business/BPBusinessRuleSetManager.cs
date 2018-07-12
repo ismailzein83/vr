@@ -132,7 +132,7 @@ namespace Vanrise.BusinessProcess.Business
             });
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBPBusinessRuleSetDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleSetDataManager>();
             object _updateHandle;

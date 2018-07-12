@@ -44,9 +44,5 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             return ActionSeverity.Warning;
         }
-        public override string GetDescription()
-        {
-            return "warning";
-        }
     }
 }

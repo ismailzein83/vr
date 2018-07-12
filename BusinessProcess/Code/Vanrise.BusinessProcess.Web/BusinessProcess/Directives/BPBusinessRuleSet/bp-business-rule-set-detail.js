@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpBusinessRuleSetDetail", ["UtilsService", "VRNotificationService", "BusinessProcess_BPBusinessRuleSetAPIService", "BusinessProcess_BPBusinessRuleSetService", "VRUIUtilsService", "BusinessProcess_BPBusinessRuleDefintionAPIService",
-function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSetAPIService, BusinessProcess_BPBusinessRuleSetService, VRUIUtilsService, BusinessProcess_BPBusinessRuleDefintionAPIService) {
+app.directive("businessprocessBpBusinessRuleSetDetail", ["UtilsService", "VRNotificationService", "BusinessProcess_BPBusinessRuleSetService", "VRUIUtilsService", "BusinessProcess_BPSchedulerTaskService", "BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService",
+function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSetService, VRUIUtilsService, BusinessProcess_BPSchedulerTaskService, BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -12,8 +12,8 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
 
-            var bpBusinessRuleSetDetail = new BPBusinessRuleSetDetail($scope, ctrl, $attrs);
-            bpBusinessRuleSetDetail.initializeController();
+            var businessprocessBpBusinessRuleSetDetail = new BpBusinessRuleSetDetail($scope, ctrl, $attrs);
+            businessprocessBpBusinessRuleSetDetail.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
@@ -24,147 +24,138 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
 
     };
 
-    function BPBusinessRuleSetDetail($scope, ctrl, $attrs) {
+    function BpBusinessRuleSetDetail($scope, ctrl, $attrs) {
 
         var gridAPI;
-        var bpDefinitionId;
-        var existingBusinessRules;
-        $scope.businessRuleDefintions = [];
-        $scope.bpBusinessRules = [];
-        $scope.scopeModel = {};
-        var removedItems = [];
+        var ruleActionsSelectiveAPI;
+        var ruleActionsSelectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var isEditMode;
+        var bpBusinessRuleSetId;
+        var parentRuleSetId;
 
         this.initializeController = initializeController;
 
         function initializeController() {
+            $scope.bpBusinessRules = [];
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                    ctrl.onReady(getDirectiveAPI());
 
-            ctrl.isValid = function () {
-                if ($scope.bpBusinessRules.length > 0)
-                    return null;
-                return "You Should Select at least one business rule";
+                function getDirectiveAPI() {
+                    var directiveAPI = {};
+                    directiveAPI.load = function (payload) {
+                        if (payload != undefined) {
+                            isEditMode = payload.isEditMode;
+                            bpBusinessRuleSetId = payload.bpBusinessRuleSetId;
+                            parentRuleSetId = payload.parentRuleSetId;
+                            return gridAPI.retrieveData(payload.query);
+                        }
+                    };
+
+                    directiveAPI.getData = function () {
+                        var businessRuleSets = [];
+                        for (var i = 0; i < $scope.bpBusinessRules.length; i++) {
+                            var obj = $scope.bpBusinessRules[i];
+                            if (obj.IsOverriden) {
+                                obj.Entity.Action = obj.ruleActionsSelectiveAPI.getData();
+                                businessRuleSets.push(obj);
+                            }
+                            else if (!obj.IsInherited) {
+                                obj.Entity.Action = obj.Entity.Action;
+                                businessRuleSets.push(obj);
+                            }
+                        }
+                        return businessRuleSets;
+                    };
+
+                    directiveAPI.onBusinessRuleSetAdded = function (businessRuleSetObj) {
+                        gridAPI.itemAdded(businessRuleSetObj);
+                    };
+                    directiveAPI.onBusinessRuleSetUpdated = function (businessRuleSetObj) {
+                        gridAPI.itemUpdated(businessRuleSetObj);
+                    };
+                    return directiveAPI;
+                }
             };
 
-            if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
+            $scope.onRuleActionsSelectiveReady = function (api) {
+                ruleActionsSelectiveAPI = api;
+                ruleActionsSelectiveReadyPromiseDeferred.resolve();
+            };
+            $scope.getRowStyle = function (dataItem) {
+                return getRowStyle(dataItem);
+            };
 
-                ctrl.onReady(getDirectiveAPI());
+            function getRowStyle(dataItem) {
+                var rowStyle;
+                if (!dataItem.IsInherited)
+                    rowStyle = { CssClass: "bg-success" };
+                return rowStyle;
             }
-            function getDirectiveAPI() {
-                var directiveAPI = {};
-                directiveAPI.load = function (payload) {
-                    bpDefinitionId = payload.BPDefinitionId;
-                    if (payload.existingBusinessRules != undefined)
-                        existingBusinessRules = payload.existingBusinessRules;
-                    return UtilsService.waitMultipleAsyncOperations([loadBusinessRuleDefintions]);
-                };
 
-                directiveAPI.getData = function () {
-                    var obj = [];
-                    for (var x = 0; x < $scope.bpBusinessRules.length; x++) {
-                        $scope.bpBusinessRules[x].Data = $scope.bpBusinessRules[x].directiveAPI.getData();
-                        obj.push($scope.bpBusinessRules[x]);
-                    }
-                    return obj;
-                };
-
-                function loadBusinessRuleDefintions() {
-                    $scope.businessRuleDefintions.length = 0;
-                    BusinessProcess_BPBusinessRuleDefintionAPIService.GetBusinessRuleDefintionsByBPDefinitionID(bpDefinitionId).then(function (response) {
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetFilteredBPBusinessRuleSetsEffectiveActions(dataRetrievalInput)
+                    .then(function (response) {
                         if (response != undefined) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.businessRuleDefintions.push(response[i]);
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var dataItem = response.Data[i];
+                                extendDataItem(dataItem);
                             }
                         }
-
-                        fillexistingBusinessRules();
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
                     });
-                }
+            };
 
-                function fillexistingBusinessRules() {
-                    removedItems.length = 0;
-                    $scope.bpBusinessRules.length = 0;
-                    if (existingBusinessRules == undefined)
-                        return;
+            function extendDataItem(dataItem) {
 
-                    for (var m = 0; m < existingBusinessRules.ActionDetails.length; m++) {
-                        var currentRule = existingBusinessRules.ActionDetails[m];
+                if (!isEditMode && parentRuleSetId != undefined)
+                    dataItem.IsInherited = true;
 
-                        for (var n = 0; n < $scope.businessRuleDefintions.length; n++) {
-                            if (currentRule.BPBusinessRuleDefinitionId == $scope.businessRuleDefintions[n].Entity.BPBusinessRuleDefinitionId) {
-                                var matchedRule = $scope.businessRuleDefintions[n];
-                                for (var p = 0; p < matchedRule.ActionTypes.length; p++) {
+                dataItem.showReset = !dataItem.IsInherited;
+                dataItem.ruleActionsSelectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                                    if (matchedRule.ActionTypes[p].ExtensionConfigurationId == currentRule.Settings.Action.BPBusinessRuleActionTypeId) {
-                                        matchedRule.selectedAction = matchedRule.ActionTypes[p];
-                                    }
-                                }
-                                setOnDirectiveReady(matchedRule, currentRule);
-                                removedItems.push(matchedRule);
-                                $scope.businessRuleDefintions.splice($scope.businessRuleDefintions.indexOf(matchedRule), 1);
-                                $scope.bpBusinessRules.push(matchedRule);
-
-                                break;
-                            }
-                        }
-                    }
-                    $scope.bpBusinessRules.sort(function (b, a) {
-                        return b.Entity.BPBusinessRuleDefinitionId - a.Entity.BPBusinessRuleDefinitionId;
-                    });
-                }
-
-                function setOnDirectiveReady(matchedRule, currentRule) {
-                    matchedRule.onDirectiveReady = function (api) {
-                        matchedRule.directiveAPI = api;
-                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, matchedRule.directiveAPI, currentRule.Settings.Action.BPBusinessRuleActionTypeId, setLoader);
+                dataItem.onRuleActionsSelectiveReady = function (api) {
+                    dataItem.ruleActionsSelectiveAPI = api;
+                    dataItem.ruleActionsSelectiveReadyPromiseDeferred.resolve();
+                    var setLoader = function (value) { };
+                    var payload = {};
+                    payload.filter = {
+                        Filters: [{
+                            $type: "Vanrise.BusinessProcess.Entities.ActionTypeFilter,Vanrise.BusinessProcess.Entities",
+                            ActionTypesIds: dataItem.ActionTypesIds,
+                            ExcludedId: dataItem.Entity.Action.BPBusinessRuleActionTypeId
+                        }]
                     };
-                }
-                return directiveAPI;
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.ruleActionsSelectiveAPI, payload, setLoader);
+                };
+
+                dataItem.hideOverrideSettings = function () {
+                    return isEditMode && !dataItem.IsInherited && dataItem.showReset;
+                };
+
+                dataItem.onResetClicked = function (dataItem) {
+                    return BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetParentActionDescription(bpBusinessRuleSetId, dataItem.RuleDefinitionId).then(function (response) {
+                        if (response != undefined) {
+                            dataItem.ActionDescription = response;
+                            dataItem.showReset = false;
+                            dataItem.IsInherited = true;
+                            dataItem.CssClass = "";
+                        }
+                    })
+                      .catch(function (error) {
+                          VRNotificationService.notifyException(error, $scope);
+                      });
+
+                };
             }
         }
-
-        $scope.addBusinessRuleDefinition = function () {
-            if ($scope.scopeModel.selectedbusinessRuleDefintion != undefined) {
-
-                var dataItem = $scope.scopeModel.selectedbusinessRuleDefintion;
-
-                removedItems.push($scope.scopeModel.selectedbusinessRuleDefintion);
-                $scope.businessRuleDefintions.splice($scope.businessRuleDefintions.indexOf($scope.scopeModel.selectedbusinessRuleDefintion), 1);
-
-                dataItem.onDirectiveReady = function (api) {
-                    dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
-                };
-
-                $scope.bpBusinessRules.push(dataItem);
-
-                $scope.bpBusinessRules.sort(function (b, a) {
-                    return b.Entity.BPBusinessRuleDefinitionId - a.Entity.BPBusinessRuleDefinitionId;
-                });
-                $scope.scopeModel.selectedbusinessRuleDefintion = undefined;
-            }
-        };
-
-        $scope.removeBusinessRule = function (dataItem) {
-            var index = UtilsService.getItemIndexByVal($scope.bpBusinessRules, dataItem.Entity.BPBusinessRuleDefinitionId, 'Entity.BPBusinessRuleDefinitionId');
-            $scope.bpBusinessRules.splice(index, 1);
-
-            var currentIndex = -1;
-            for (var t = 0; t < removedItems.length; t++) {
-                if (dataItem.Entity.BPBusinessRuleDefinitionId == removedItems[t].Entity.BPBusinessRuleDefinitionId) {
-                    $scope.businessRuleDefintions.push(removedItems[t]);
-                    currentIndex = t;
-                    break;
-                }
-            }
-
-            $scope.businessRuleDefintions.sort(function (b, a) {
-                return b.Entity.BPBusinessRuleDefinitionId - a.Entity.BPBusinessRuleDefinitionId;
-            });
-            removedItems.splice(currentIndex, 1);
-        };
     }
 
     return directiveDefinitionObject;
 
 }]);
+

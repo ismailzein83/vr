@@ -9,10 +9,11 @@ namespace Vanrise.BusinessProcess.Entities
     public class ActionTypeFilter : IActionTypesFilter
     {
         public List<Guid> ActionTypesIds { get; set;}
+        public Guid ExcludedId { get; set; }
 
         public bool IsExcluded(IActionTypeFilterContext context)
         {
-            return !ActionTypesIds.Contains(context.ActionTypeId);
+            return !ActionTypesIds.Contains(context.ActionTypeId) || (ExcludedId == context.ActionTypeId);
         }
     }
 }
