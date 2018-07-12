@@ -46,10 +46,10 @@ namespace Retail.Interconnect.Business
 
         public override void GetInitialPeriodInfo(Vanrise.Invoice.Entities.IInitialPeriodInfoContext context)
         {
-            long accountId = Convert.ToInt32(context.PartnerId);
-            AccountBEManager accountBEManager = new AccountBEManager();
-            var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
-            context.PartnerCreationDate = account.CreatedTime;
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
+            context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
+
         }
 
         public override Vanrise.Invoice.Entities.InvoiceGenerator GetInvoiceGenerator()
@@ -63,11 +63,8 @@ namespace Retail.Interconnect.Business
             {
                 case PartnerRetrievalType.GetActive:
                 case PartnerRetrievalType.GetAll:
-                    AccountBEManager accountBEManager = new AccountBEManager();
-                    var financialAccounts = accountBEManager.GetFinancialAccounts(this.AccountBEDefinitionId);
-                    if (financialAccounts == null)
-                        return null;
-                    return financialAccounts.Select(x => x.AccountId.ToString());
+                    FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                    return financialAccountManager.GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
                 default:
                     return null;
             }
