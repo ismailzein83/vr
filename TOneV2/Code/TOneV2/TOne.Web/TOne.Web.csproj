@@ -671,6 +671,9 @@
     <Content Include="images\CentralAuth-iconheader.ico" />
     <Content Include="images\CentralAuth-login.png" />
     <Content Include="images\CentralAuth-logoonheader.png" />
+    <Content Include="images\Zebra-iconheader.ico" />
+    <Content Include="images\Zebra-login.png" />
+    <Content Include="images\Zebra-logoonheader.png" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
     <Content Include="Web.config.CentralAuth.exclude">
