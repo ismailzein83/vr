@@ -185,6 +185,12 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="s:Nullable(x:Int32)" Name="BPBusinessRuleSetId" />
+      <Variable x:TypeArguments="x:Boolean" Name="ProcessNeedsConfirmation" />
+      <Variable x:TypeArguments="scg:List(vbe:BPValidationMessage)" Name="AllWarningMessages">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:List(vbe:BPValidationMessage)">new List&lt;Vanrise.BusinessProcess.Entities.BPValidationMessage&gt;();</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <If sap2010:WorkflowViewState.IdRef="If_6">
       <If.Condition>
@@ -358,6 +364,11 @@
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
     <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ValidateCodesRates" DisplayName="ExecuteImportSupplierPricelistRules" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_1">
+      <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+        <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+        </InOutArgument>
+      </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
       <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
         <InArgument x:TypeArguments="s:Nullable(x:Int32)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
@@ -373,6 +384,11 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+      <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+        </OutArgument>
+      </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
@@ -429,6 +445,11 @@
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
     <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ValidateZones" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_2">
+      <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+        <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+        </InOutArgument>
+      </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
       <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
         <InArgument x:TypeArguments="s:Nullable(x:Int32)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
@@ -444,6 +465,11 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+      <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+        </OutArgument>
+      </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
@@ -484,6 +510,11 @@
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
     <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ISP_ValidateImportedZones" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_3">
+      <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+        <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+        </InOutArgument>
+      </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
       <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
         <InArgument x:TypeArguments="s:Nullable(x:Int32)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
@@ -499,6 +530,11 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+      <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+        </OutArgument>
+      </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
@@ -637,6 +673,11 @@
       </vbw:CombineLists.OutputList>
     </vbw:CombineLists>
     <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ValidateCountries" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_4">
+      <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+        <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+        </InOutArgument>
+      </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
       <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
         <InArgument x:TypeArguments="s:Nullable(x:Int32)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
@@ -652,6 +693,11 @@
           <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+      <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+        </OutArgument>
+      </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
@@ -1039,6 +1085,11 @@
                             </vbw:CombineLists.OutputList>
                           </vbw:CombineLists>
                           <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="SPL_ValidateCountryWhileProcessing" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_5">
+                            <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+                              <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+                                <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+                              </InOutArgument>
+                            </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
                             <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
                               <InArgument x:TypeArguments="s:Nullable(x:Int32)">
                                 <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
@@ -1054,6 +1105,11 @@
                                 <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
                               </InArgument>
                             </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+                            <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+                              <OutArgument x:TypeArguments="x:Boolean">
+                                <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+                              </OutArgument>
+                            </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
                             <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
                               <InArgument x:TypeArguments="x:Int32">
                                 <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
@@ -1270,6 +1326,11 @@
           </ActivityAction>
         </ForEach>
         <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ValidateAfterProcessing" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_6">
+          <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+            <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+              <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+            </InOutArgument>
+          </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
           <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
             <InArgument x:TypeArguments="s:Nullable(x:Int32)">
               <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
@@ -1292,6 +1353,11 @@
               <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
             </InArgument>
           </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+          <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+            </OutArgument>
+          </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
           <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
             <InArgument x:TypeArguments="x:Int32">
               <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
@@ -1399,14 +1465,69 @@
               </InArgument>
             </vbw:WriteTrackingMessage.Severity>
           </vbw:WriteTrackingMessage>
-          <If sap2010:WorkflowViewState.IdRef="If_5">
+          <If sap2010:WorkflowViewState.IdRef="If_10">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">!Input.IsAutoImport</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
-              <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_2" TaskTitle="Approve Price List Changes">
+              <If sap2010:WorkflowViewState.IdRef="If_9">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_19">
+                    <twsba1:SetReceivedPricelistAsWaitingConfirmation sap2010:WorkflowViewState.IdRef="SetReceivedPricelistAsWaitingConfirmation_1">
+                      <twsba1:SetReceivedPricelistAsWaitingConfirmation.ReceivedPricelistRecordId>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:SetReceivedPricelistAsWaitingConfirmation.ReceivedPricelistRecordId>
+                    </twsba1:SetReceivedPricelistAsWaitingConfirmation>
+                    <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_3" TaskTitle="Approve Price List Changes">
+                      <vbw:AssignTask.AssignedTo>
+                        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+                        </InArgument>
+                      </vbw:AssignTask.AssignedTo>
+                      <vbw:AssignTask.TaskData>
+                        <InArgument x:TypeArguments="vbe:BPTaskData">
+                          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskData()
+            {
+                SupplierPricelistType = Input.SupplierPricelistType,
+                PricelistDate = Input.PriceListDate,
+                CurrencyId = Input.CurrencyId,
+                FileId = Input.FileId
+            }</mca:CSharpValue>
+                        </InArgument>
+                      </vbw:AssignTask.TaskData>
+                      <vbw:AssignTask.TaskExecutionInformation>
+                        <OutArgument x:TypeArguments="twsbat:PreviewTaskExecutionInformation">
+                          <mca:CSharpReference x:TypeArguments="twsbat:PreviewTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
+                        </OutArgument>
+                      </vbw:AssignTask.TaskExecutionInformation>
+                    </vbw:AssignTask>
+                  </Sequence>
+                </If.Then>
+                <If.Else>
+                  <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Boolean">
+                        <mca:CSharpReference x:TypeArguments="x:Boolean">ContinueExecution.Decision</mca:CSharpReference>
+                      </OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </If.Else>
+              </If>
+            </If.Then>
+            <If.Else>
+              <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="Approve Price List Changes">
                 <vbw:AssignTask.AssignedTo>
                   <InArgument x:TypeArguments="vbe:BPTaskAssignee">
                     <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
@@ -1429,18 +1550,6 @@
                   </OutArgument>
                 </vbw:AssignTask.TaskExecutionInformation>
               </vbw:AssignTask>
-            </If.Then>
-            <If.Else>
-              <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
-                <Assign.To>
-                  <OutArgument x:TypeArguments="x:Boolean">
-                    <mca:CSharpReference x:TypeArguments="x:Boolean">ContinueExecution.Decision</mca:CSharpReference>
-                  </OutArgument>
-                </Assign.To>
-                <Assign.Value>
-                  <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-                </Assign.Value>
-              </Assign>
             </If.Else>
           </If>
           <If sap2010:WorkflowViewState.IdRef="If_2">
@@ -1544,13 +1653,36 @@
               </Sequence>
             </If.Then>
             <If.Else>
-              <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_7" Message="Process is canceled">
-                <vbw:WriteTrackingMessage.Severity>
-                  <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-                    <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-                  </InArgument>
-                </vbw:WriteTrackingMessage.Severity>
-              </vbw:WriteTrackingMessage>
+              <Sequence DisplayName="Rejection Scenario" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                <If DisplayName="SetReceivedPricelistAsRejected" sap2010:WorkflowViewState.IdRef="If_11">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <twsba1:SetReceivedPricelistAsRejected sap2010:WorkflowViewState.IdRef="SetReceivedPricelistAsRejected_1">
+                      <twsba1:SetReceivedPricelistAsRejected.ReceivedPricelistRecordId>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:SetReceivedPricelistAsRejected.ReceivedPricelistRecordId>
+                      <twsba1:SetReceivedPricelistAsRejected.ValidationWarningMessages>
+                        <InArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+                          <mca:CSharpValue x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:SetReceivedPricelistAsRejected.ValidationWarningMessages>
+                    </twsba1:SetReceivedPricelistAsRejected>
+                  </If.Then>
+                </If>
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_7" Message="Process is canceled">
+                  <vbw:WriteTrackingMessage.Severity>
+                    <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Severity>
+                </vbw:WriteTrackingMessage>
+              </Sequence>
             </If.Else>
           </If>
         </Sequence>
@@ -1598,35 +1730,35 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWz9AksDxg0OAgEBYQthcAMBvQZmC2bIAQMBggZrC2vIAQMBxwVwC3DIAQMBjAV1C3XQAQMB0QR6C3rQAQMBlgR/C3/QAQMB2wOEAQuEAcsBAwGgA4oBC4oBugEDAeUCkgELkgHTAQMBqgKbAQubAdYBAwHvAaUBC6UBrgEDAbQBqgELqgG2AQIBea0BNa0BPAIBeLgBC7gBgQECAT2/AQu/AakBAgECwwEF0gEKAwGMfdMBBd4BIgMBlXzfAQX0ASIDAah69QEFwQIoAwGyc8ICBeECFwMBz3DiAgXtAhgDAdhv7gIFjQMxAwH0bI4DBa0DIwMBkWquAwW+AxgDAZppvwMF3gMxAwG2Zt8DBe8DJQMBhGXwAwX/AxgDAY1kgAQFnwQxAwGpYaAEBeUEEAMB4FvmBAWFBSEDAf1YhgUFlgUnAwHLV5cFBaIFGAMB1FajBQXCBTEDAfBTwwUFyQUgAwGzU8oFBdAFJAMB91LRBQXcBSADAYBS3QUFpQsQAwHkGKYLBawLIgMBqBitCwW1DQoDAfMHtg0FvA0gAwG2B70NBb0NXQMBtQe+DQXEDSADAfgGxgELxgFcAwGNfcoBCdABMAMByH3bAQvbAV8DAdF81gEL1gFvAwGWfOwBC+wBdgMB2nvxAQvxAV8DAZ975wEL5wFeAwHkeuIBC+IBWAMBqXqbAgubAncDAe15qgILqgJcAwGyebQCC7QCXgMB93j9AQv9AVgDAbx4rwILrwJeAwGBeL4CC74CaQMBxneHAguHAoEBAwGLd/gBC/gBbwMB0HagAgugAogBAwGVdpYCC5YCeQMB2nWCAguCAlQDAZ91kQILkQJ0AwHkdLkCC7kCZwMBqXSMAguMAnkDAe5zpQILpQJhAwGzc94CC94CXwMB93LUAgvUAlYDAbxy2QIL2QJeAwGBcs8CC88CgAEDAcZxygILygJxAwGLccUCC8UCcQMB0HDlAgvlAuABAwGUcOoCC+oChQEDAdlvgAMLgANcAwGdb+4CQe4CVQMBnG/7Agv7An0DAeFu8QIL8QJ8AwGmbvYCC/YCZwMB622KAwuKA2cDAbBthQMLhQNqAwH1bJEDC5EDeAMBuWyWAwuWA3kDAf5roAMLoAOEAQMBw2uqAwuqA4ABAwGIa6UDC6UDcQMBzWqbAwubA3EDAZJqsQMLtgMVAwHWabsDC7sDfwMBm2nRAwvRA1wDAd9ovwNBvwNQAwHeaMwDC8wDdwMBo2jCAwvCA3wDAehnxwMLxwNnAwGtZ9sDC9sDZwMB8mbWAwvWA2oDAbdm7AML7AN5AwH7ZecDC+cDfAMBwGXiAwviA28DAYVl8wML9wMhAwHJZPwDC/wDgAEDAY5kkgQLkgRcAwHSY4AEQYAEXAMB0WONBAuNBHgDAZZjgwQLgwR8AwHbYogEC4gEZwMBoGKcBAucBGcDAeVhlwQLlwRqAwGqYaEEB7EEIQMB91+yBAfCBCEDAcVewwQH0wQhAwGTXdQEB+QEKQMB4VvpBAvpBHcDAaVb7gQL7gR3AwHqWoIFC4IFcQMBr1r9BAv9BHEDAfRZ8wQL8wSFAQMBuVn4BAv4BHEDAf5YiQULiQV3AwHCWI4FC44FgAEDAYdYkwULkwVxAwHMV5oFC5oFoAEDAZBXnwULnwWEAQMB1Va1BQu1BVwDAZlWowVBowVUAwGYVrAFC7AFfAMB3VWmBQumBXwDAaJVqwULqwVnAwHnVL8FC78FZwMBrFS6BQu6BWoDAfFTxgULxgWFAQMBtVPDBWDDBXwDAbRTzQULzQVbAwH4UtkFC9kFhQEDAbxS1AUL1AWTAgMBgVLhBQfhChIDAfIe4goHpAsoAwHlGKkLC6kLYwMBqRiwCwuwC1sDAfQHtAsJmA0UAwHlCZsNCbMNFAMBrwi5DQu5DYUBAwG4B7YNYbYNgwEDAbcHwQ0LwQ2FAQMB+ga+DWG+DYQBAwH5Bs0BD80BawMByX2kBA2kBIEBAwHuYK4EDa4EYQMBs2CpBA2pBFgDAfhftQQNtQSBAQMBvF+/BA2/BGEDAYFfugQNugRYAwHGXtAEDdAEYQMBil7GBA3GBIEBAwHPXcsEDcsEWAMBlF3hBA3hBGEDAdhc3AQN3ARYAwGdXNcEDdcEjwEDAeJb4gUJrwoTAwGbIrAKCdYKNQMBsR/XCgngChIDAfMelwsNlwuNAQMBth75Cg35CnIDAfodoQsNoQthAwG+HYgLDYgLfAMBgh3qCg3qCoQBAwHGHJwLDZwLjAEDAYoc5QoN5QqEAQMBzhv0Cg30CpMBAwGSG5ILDZILgwEDAdYajQsNjQuLAQMBmhrvCg3vCoQBAwHeGYMLDYMLfAMBohn+Cg3+CnwDAeYYtQsLuwsmAwHrF7wLC5IMEAMBkxOTDAuXDRADAeYJnA0Log0mAwGoCaMNC7INEAMBsAjlBQ/lBXwDAcRR7AUNrQoYAwGcIskKD8kKYAMB3yGwCkWwCl4DAd4hvQoPxAoYAwGiIbMKD7MKgAEDAeYguAoPuAprAwGqINMKD9MKawMB7h/OCg/OCm4DAbIf3go13go5AwGwH9oKD9oKegMB9B64CxG4C4sBAwHtF7ULZrULvgEDAewXvwsRvwtiAwGUE8MLD/cLFAMBghX6Cw+QDCADAc8TlgwRlgxqAwHnCZoMD/UMGgMBkwz4DA+VDRoDAaIKnw0Rnw2HAQMBqgmcDWacDYABAwGpCaYNEaYNYgMBsQiqDQ+wDUUDAewI7QUPrAoUAwGdIsYLFcYLbAMBgxXKCxPpCx4DAfsV7AsT9QscAwG+FY0MFY0MigEDAccUggwViAwgAwGMFPoLqwH6C8cBAwGLFP0LFf0LoQEDAdATmwwRoQwsAwHWEqIMEbIMJQMBpBGzDBG5DCwDAecQugwR3gwxAwHJDd8MEd8MswEDAccN4AwR9AwWAwGUDPkMEY0NFgMB4AqODRGUDSwDAaMKrQ0VrQ1xAwHtCPAFFfAFywEDAZ4i9AUTqgoeAwHbIssLFdELSAMBrxfSCxXoCyYDAfwV8ws/8wtDAwH6Fe8LGe8LegMBvxWeDBeeDJEBAwHYEpsMbJsMfAMB1xKqDBeqDGsDAZsSpQwXpQxpAwHgEa8MF68MYAMBpRG2DBe2DJEBAwHpELMMbbMMewMB6BDMDBfMDF8DAawQ2wwX2wyCAQMB8Q/WDBfWDGsDAbYPvQwXvQxkAwH7DsIMF8IMagMBwA7RDBfRDGEDAYUOxwwXxwxgAwHKDd8MgAHfDLABAwHIDeMMF+MMaAMBlQznDBXyDD4DAdAM/AwX/AxoAwHhCoANFYsNPQMBnAuRDReRDZEBAwGlCo4NbI4NgQEDAaQK9QUVqQogAwHcIs4LG84LdwMBsBflCxvlC5ABAwH0FtoLG+ALIAMBuRbSC7EB0gvNAQMBuBbVCxvVC6cBAwH9FeoMG+oMYwMBjA3vDBvvDHcDAdEMiA0biA2EAQMB2AuDDRuDDXcDAZ0L9gUXqAoiAwHdIvsFGYsGNwMBhlCMBhmnCiQDAd4igwYfgwaLAQMBhVGIBh+IBp0BAwHGUP4FH/4FbQMBh1CNBhvGBiYDAYxLxwYblggmAwHHN5cIG74ILgMByDa/CBveCEcDAcwz3wgb9Ag9AwHPMfUIG44KJgMB3SSPChuaCiQDAd4jmwobpgo2AwHfIo4GHZ4GOwMByE6fBh20BjsDActMtQYdxQZDAwGNS8sGHY0HOgMBy0SOBx2oBzoDAYpCqQcd1wc6AwHJPdgHHZUIQgMByDeaCCG2CBUDAYg3uwghuwicAQMByTbRCCHRCHIDAYk2vwhXvwh7AwGINswIIcwIlAEDAck1wgghwgiSAQMBijXHCCHHCH0DAcs02wgh2wh9AwGMNNYIIdYIgAEDAc0z4ggh4gh9AwGNM+cIIecIfQMBzjLxCCHxCIwBAwGPMuwIIewIfQMB0DH2CB2BCS8DAdAwggkdjQkvAwHRL44JHZkJLwMB0i6aCR2lCS8DAdMtpgkdsQkvAwHULLIJHb0JLwMB1Su+CR3JCS8DAdYqygkd1QkvAwHXKdYJHesJQAMB2ifsCR38CTsDAZwm/QkdjQpAAwHeJJcKIZcKfAMBniSSCiGSCoABAwHfI6MKIaMKmwEDAZ8jngohngq+AgMB4CKWBiOWBpEBAwHHT5EGI5EGjwEDAYhPmwYjmwaZAQMByU6nBiOnBo8BAwGJTqIGI6IGcAMByk2sBiOsBpEBAwGLTbEGI7EGmQEDAcxMvQYjvQaZAQMBjEy4BiO4Bp0BAwHNS8IGI8IGoAEDAY5LigcjigeOAQMBzEqAByOAB5cBAwGMSt0GI90GiQEDAcxJ9gYj9gaHAQMBjEmFByOFB3YDAcxI7AYj7AaRAQMBjEjOBiPOBo8BAwHMR/sGI/sGhwEDAYxH4gYj4gaZAQMBzEbxBiPxBoUBAwGMRtMGI9MGjwEDAcxF2AYj2AZxAwGMRecGI+cGkQEDAcxEmwcjmweRAQMBi0SWByOWB5gBAwHLQ6UHI6UHlwEDAYtDoAcjoAd9AwHLQpEHI5EHiwEDAYtCrAcjrAePAQMBykHUByPUB3YDAYpBygcjygeHAQMBykDAByPAB5EBAwGKQLEHI7EHiQEDAco/tgcjtgeZAQMBij/PByPPB48BAwHKPsUHI8UHfQMBij67ByO7B4QBAwHKPeoHI+oHhwEDAYk9kggjkgh3AwHJPI0II40IdgMBiTz5ByP5B24DAck77wcj7weRAQMBiTuDCCODCJYBAwHJOtsHI9sHngEDAYk64Acj4AeZAQMByTmICCOICI8BAwGJOf4HI/4HfQMByTjlByPlB5gBAwGJOPQHI/QHcQMByTf+CCP+CJIBAwGQMfkII/kIfwMB0TCKCSOKCZIBAwGRMIUJI4UJfwMB0i+WCSOWCZIBAwGSL5EJI5EJfwMB0y6iCSOiCaEBAwGTLp0JI50JjgEDAdQtrgkjrgmaAQMBlC2pCSOpCYcBAwHVLLoJI7oJmgEDAZUstQkjtQmHAQMB1ivGCSPGCZoBAwGWK8EJI8EJhwEDAdcq0gkj0gmpAQMBlyrNCSPNCZYBAwHYKegJI+gJogEDAZgp3gkj3gmRAQMB2SjjCSPjCY8BAwGaKNkJI9kJcQMB2yf0CSP0CY8BAwGbJ/kJI/kJmQEDAdwm7wkj7wmRAQMBnSaKCiOKCqMBAwHdJYAKI4AKkQEDAZ4lhQojhQqPAQMB3yQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="SetReceivedPricelistAsStarted_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1244,210">
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1530,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetSupplierSettings_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="ShifTime_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_2" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="StructureImportedZones_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_6" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_3" sap:VirtualizedContainerService.HintSize="1244,22" />
+      <sap2010:ViewStateData Id="GetSupplierSettings_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="ShifTime_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_2" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="StructureImportedZones_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_6" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_3" sap:VirtualizedContainerService.HintSize="1530,22" />
       <sap2010:ViewStateData Id="GetExistingZones_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingRates_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingZonesServices_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="1244,86">
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="1530,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -1634,13 +1766,13 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UpdateImportedBEDs_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_2" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_4" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1244,22" />
+      <sap2010:ViewStateData Id="UpdateImportedBEDs_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="StructureDataByCountries_2" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_4" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1530,22" />
       <sap2010:ViewStateData Id="PrepareExistingZones_4" sap:VirtualizedContainerService.HintSize="264,22" />
       <sap2010:ViewStateData Id="PrepareExistingCodes_4" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareExistingRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -1754,18 +1886,35 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,2056" />
-      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="1244,2102">
+      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="1530,2102">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="711,22" />
-      <sap2010:ViewStateData Id="AssignTask`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="711,212">
+      <sap2010:ViewStateData Id="GetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="997,22" />
+      <sap2010:ViewStateData Id="SetReceivedPricelistAsWaitingConfirmation_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="AssignTask`1_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_19" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="489,358">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="997,508">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -1794,15 +1943,31 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="711,794">
+      <sap2010:ViewStateData Id="SetReceivedPricelistAsRejected_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="464,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="733,1232">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Sequence_20" sap:VirtualizedContainerService.HintSize="486,396">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="997,794">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="1019,1528">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1828,24 +1993,24 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1244,1382">
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1530,1678">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="CleanTemporaryTables_2" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="1244,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1266,5450">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="CleanTemporaryTables_2" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1552,5746">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="1306,5530">
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="1592,5826">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>

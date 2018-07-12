@@ -59,5 +59,11 @@ namespace TOne.WhS.BusinessEntity.Entities
 
 		[Description("Failed")]
 		Failed = 2,
+
+        [Description("Waiting Confirmation")]
+        WaitingConfirmation = 3,
+
+        [Description("Rejected")]
+        Rejected = 4
 	}
 }

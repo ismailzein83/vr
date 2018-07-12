@@ -138,7 +138,9 @@
     <Compile Include="SetImportSPLContext.cs" />
     <Compile Include="SetReceivedPricelistAsCompleted.cs" />
     <Compile Include="SetReceivedPricelistAsCompletedWithNoChanges.cs" />
+    <Compile Include="SetReceivedPricelistAsRejected.cs" />
     <Compile Include="SetReceivedPricelistAsStarted.cs" />
+    <Compile Include="SetReceivedPricelistAsWaitingConfirmation.cs" />
     <Compile Include="ShifTime.cs" />
     <Compile Include="StructureImportedZones.cs" />
     <Compile Include="StructureDataByZones.cs" />

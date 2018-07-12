@@ -30,6 +30,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		[Description("Processing")]
 		Processing = 10,
 
+        [Description("Waiting Confirmation")]
+        WaitingConfirmation = 20,
+
 		[Description("Succeeded")]
 		Succeeded = 60,
 
@@ -49,6 +52,9 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		FailedDueToConfigurationError = 80,
 
 		[Description("Failed Due To Received Mail Error")]
-		FailedDueToReceivedMailError = 85
+		FailedDueToReceivedMailError = 85,
+
+        [Description("Rejected")]
+		Rejected = 90
 	}
 }

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeInternalautoimporttemplatesettingsEditor', ['WhS_BE_AutoImportEmailTypeEnum', 'VRUIUtilsService', 'UtilsService',
-	function (WhS_BE_AutoImportEmailTypeEnum, VRUIUtilsService, UtilsService) {
+app.directive('vrWhsBeInternalautoimporttemplatesettingsEditor', ['WhS_BE_InternalAutoImportEmailTypeEnum', 'VRUIUtilsService', 'UtilsService',
+	function (WhS_BE_InternalAutoImportEmailTypeEnum, VRUIUtilsService, UtilsService) {
 		return {
 			restrict: 'E',
 			scope: {
@@ -35,7 +35,7 @@ app.directive('vrWhsBeInternalautoimporttemplatesettingsEditor', ['WhS_BE_AutoIm
 
 				$scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 					var autoImportTemplateSettingsList = [];
-					var autoImportTemplateSettingsEnumList = UtilsService.getArrayEnum(WhS_BE_AutoImportEmailTypeEnum);
+					var autoImportTemplateSettingsEnumList = UtilsService.getArrayEnum(WhS_BE_InternalAutoImportEmailTypeEnum);
 					for (var i = 0, l = autoImportTemplateSettingsEnumList.length; i < l; i++) {
 
 						var autoImportTemplateSetting = autoImportTemplateSettingsEnumList[i];

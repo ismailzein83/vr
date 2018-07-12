@@ -19,6 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public bool SentToSupplier { get; set; }
 	}
 
+    //TODO: This should be changed from Error Message to Message (also change it in Database)
 	public class SPLImportErrorDetail
 	{
 		public string ErrorMessage { get; set; }

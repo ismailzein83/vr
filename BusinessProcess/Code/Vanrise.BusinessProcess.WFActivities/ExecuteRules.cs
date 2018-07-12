@@ -27,11 +27,17 @@ namespace Vanrise.BusinessProcess.WFActivities
 
 		public OutArgument<bool> ViolatedRulesExist { get; set; }
 
+        public OutArgument<List<BPValidationMessage>> WarningMessages { get; set; }
+
 		public OutArgument<List<BPValidationMessage>> ErrorMessages { get; set; }
+
+        public OutArgument<bool> NeedsConfirmation { get; set; }
 
 		protected override void Execute(CodeActivityContext context)
 		{
 			List<BPValidationMessage> errorMessages = null;
+            List<BPValidationMessage> warningMessages = null;
+
 			IEnumerable<IRuleTarget> importedDataToValidate = this.ImportedDataToValidate.Get(context);
 			string businessRulesKey = this.BusinessRulesKey.Get(context);
 
@@ -69,7 +75,10 @@ namespace Vanrise.BusinessProcess.WFActivities
 
 			IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules, bPBusinessRuleSetId);
 			ExecuteValidation(rules, importedDataToValidate, context, violatedBusinessRulesByTarget, out stopExecutionFlag);
-			AppendValidationMessages(context, violatedBusinessRulesByTarget, writeMessagesToParentProcess, parentMessagePrefix, out errorMessages);
+			AppendValidationMessages(context, violatedBusinessRulesByTarget, writeMessagesToParentProcess, parentMessagePrefix, out errorMessages, out warningMessages);
+
+            this.WarningMessages.Set(context, warningMessages);
+            this.NeedsConfirmation.Set(context, warningMessages.Count > 0);
 
 			if (stopExecutionFlag)
 			{
@@ -139,9 +148,11 @@ namespace Vanrise.BusinessProcess.WFActivities
 			}
 		}
 
-		private void AppendValidationMessages(CodeActivityContext context, List<BPViolatedRule> violatedBusinessRulesByTarget, bool writeMessagesToParentProcess, string parentMessagePrefix, out List<BPValidationMessage> errorMessages)
+        private void AppendValidationMessages(CodeActivityContext context, List<BPViolatedRule> violatedBusinessRulesByTarget, bool writeMessagesToParentProcess, string parentMessagePrefix, out List<BPValidationMessage> errorMessages, out List<BPValidationMessage> warningMessages)
 		{
 			errorMessages = new List<BPValidationMessage>();
+            warningMessages = new List<BPValidationMessage>();
+
 			long processIntanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 			long? parentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID;
 
@@ -161,8 +172,11 @@ namespace Vanrise.BusinessProcess.WFActivities
 				};
 
 				messages.Add(msg);
-				if (msg.Severity == ActionSeverity.Error)
-					errorMessages.Add(msg);
+
+                if (msg.Severity == ActionSeverity.Error)
+                    errorMessages.Add(msg);
+                else if (msg.Severity == ActionSeverity.Warning)
+                    warningMessages.Add(msg);                                   
 
 				if (writeMessagesToParentProcess)
 					context.WriteTrackingMessageToParentProcess(MapSeverity(msg.Severity), string.Concat(parentMessagePrefix, msg.Message));

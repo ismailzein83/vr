@@ -19,6 +19,8 @@
     <x:Property Name="ReceivedPricelistRecordId" Type="InArgument(x:Int32)" />
     <x:Property Name="BusinessRulesKey" Type="InArgument(x:String)" />
     <x:Property Name="BPBusinessRuleSetId" Type="InArgument(s:Nullable(x:Int32))" />
+    <x:Property Name="ProcessNeedsConfirmation" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="AllWarningMessages" Type="InOutArgument(scg:List(vbe:BPValidationMessage))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.SupplierPriceList.BP.SubProcess.ExecuteImportSupplierPricelistRules_1</sap2010:WorkflowViewState.IdRef>
@@ -65,6 +67,8 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="x:Boolean" Name="ViolatedRuleExist" />
       <Variable x:TypeArguments="scg:List(vbe:BPValidationMessage)" Name="ErrorMessages" />
+      <Variable x:TypeArguments="x:Boolean" Name="NeedsConfirmationResult" />
+      <Variable x:TypeArguments="scg:List(vbe:BPValidationMessage)" Name="WarningMessages" />
     </Sequence.Variables>
     <vbw:ExecuteRules GetRulesFromParentProcess="{x:Null}" ParentMessagePrefix="{x:Null}" WriteMessagesToParentProcess="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteRules_1">
       <vbw:ExecuteRules.BPBusinessRuleSetId>
@@ -92,12 +96,65 @@
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
         </InArgument>
       </vbw:ExecuteRules.ImportedDataToValidate>
+      <vbw:ExecuteRules.NeedsConfirmation>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">NeedsConfirmationResult</mca:CSharpReference>
+        </OutArgument>
+      </vbw:ExecuteRules.NeedsConfirmation>
       <vbw:ExecuteRules.ViolatedRulesExist>
         <OutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">ViolatedRuleExist</mca:CSharpReference>
         </OutArgument>
       </vbw:ExecuteRules.ViolatedRulesExist>
+      <vbw:ExecuteRules.WarningMessages>
+        <OutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">WarningMessages</mca:CSharpReference>
+        </OutArgument>
+      </vbw:ExecuteRules.WarningMessages>
     </vbw:ExecuteRules>
+    <ForEach x:TypeArguments="vbe:BPValidationMessage" DisplayName="ForEach&lt;BPValidationMessage&gt;">
+      <ForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(vbe:BPValidationMessage)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:BPValidationMessage)">WarningMessages</mca:CSharpValue>
+        </InArgument>
+      </ForEach.Values>
+      <ActivityAction x:TypeArguments="vbe:BPValidationMessage">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="vbe:BPValidationMessage" Name="msg" />
+        </ActivityAction.Argument>
+        <AddToCollection x:TypeArguments="vbe:BPValidationMessage" DisplayName="AddToCollection&lt;BPValidationMessage&gt;">
+          <AddToCollection.Item>
+            <InArgument x:TypeArguments="vbe:BPValidationMessage">
+              <mca:CSharpValue x:TypeArguments="vbe:BPValidationMessage">msg</mca:CSharpValue>
+            </InArgument>
+          </AddToCollection.Item>
+          <InArgument x:TypeArguments="scg:ICollection(vbe:BPValidationMessage)">
+            <mca:CSharpValue x:TypeArguments="scg:ICollection(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpValue>
+          </InArgument>
+          <sap2010:WorkflowViewState.IdRef>AddToCollection`1_2</sap2010:WorkflowViewState.IdRef>
+        </AddToCollection>
+      </ActivityAction>
+      <sap2010:WorkflowViewState.IdRef>ForEach`1_2</sap2010:WorkflowViewState.IdRef>
+    </ForEach>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">NeedsConfirmationResult</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+          </Assign.Value>
+        </Assign>
+      </If.Then>
+    </If>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
@@ -127,11 +184,15 @@
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbBFAA4MBDgIBAUUFZBgCASdlBYEBCgIBAk0LTVkCAVBXC1d3AgFIXAtcdwIBQGELYWMCAThSC1JWAgEwSAtIZwIBKGgLaHMCAQNsCX8UAgELbQt9OAIBDn4LfpwBAgEMdRF1oAECAR96EXp1AgEXcBFwZwIBD35bfpkBAgEN</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXFN1YlByb2Nlc3NcRXhlY3V0ZUltcG9ydFN1cHBsaWVyUHJpY2VsaXN0UnVsZXMueGFtbB1CA7wBDgIBAUkFchgCAXpzBYoBDwIBUosBBZ0BCgIBN54BBboBCgIBAmULZWkDAc8BUQtRWQMBwwFbC1t3AwG3AW8Lb3kDAasBYAtgdwMBnwFqC2pjAwGTAVYLVlYDAYcBTAtMZwIBe3YLdngCAW59CYcBGwIBU44BC44BYQIBOJIBCZsBEgIBRKEBC6EBcwIBA6UBCbgBFAIBD4QBDYQBfQIBYYABD4ABXwIBVJkBNZkBOQIBUZUBD5UBbgIBRaYBC7YBOAIBErcBC7cBnAECARCuARGuAaABAgErswERswF1AgEfqQERqQFnAgETtwFbtwGZAQIBEQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="ExecuteRules_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,212" />
       <sap2010:ViewStateData Id="UpdateReceivePricelistStatusAsFailed_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
@@ -142,14 +203,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,358" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,544">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,1046">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.SubProcess.ExecuteImportSupplierPricelistRules_1" sap:VirtualizedContainerService.HintSize="526,624" />
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.SubProcess.ExecuteImportSupplierPricelistRules_1" sap:VirtualizedContainerService.HintSize="526,1126" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
