@@ -167,6 +167,8 @@
     <Content Include="Client\Images\copy-icon.png" />
     <Content Include="Client\Images\currency-exchange.png" />
     <Content Include="Client\Images\loadingbar.gif" />
+    <Content Include="Client\Images\Zebra-01.png" />
+    <Content Include="Client\Images\Zebra-02.png" />
     <Content Include="Client\Javascripts\Directives\ActionBar\AllActionsModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\ActionBar\AllActionsModalPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Button\MenuActionsModalPopup.html" />
@@ -1213,6 +1215,7 @@
     <Content Include="Client\Styles\Styles.css" />
     <None Include="Client\Themes\theme-extented-blue.css.exclude" />
     <Content Include="Client\Themes\theme-extented-INSOFT.css.exclude" />
+    <Content Include="Client\Themes\theme-extented-Zebra.css.exclude" />
     <None Include="Client\Themes\theme-extented-red.css.exclude" />
     <None Include="Client\Themes\theme-extented-green.css.exclude" />
     <None Include="Client\Themes\theme-extented-cloudXPoint.css.exclude" />
