@@ -13,5 +13,7 @@ namespace Vanrise.GenericData.Entities
         List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId, List<string> neededColumns = null, RecordFilterGroup filterGroup = null);
         InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd);
         //void SetCacheExpired(Guid businessEntityDefinitionId);
+        UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate);
+        GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Object genericBusinessEntityId, Guid businessEntityDefinitionId);
     }
 }

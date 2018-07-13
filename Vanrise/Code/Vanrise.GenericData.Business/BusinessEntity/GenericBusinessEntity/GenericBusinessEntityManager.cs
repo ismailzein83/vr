@@ -198,6 +198,15 @@ namespace Vanrise.GenericData.Business
             }
             return null;
         }
+
+        public GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
+        {
+            var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+            if (genericBusinessEntity == null)
+                return null;
+            return GenericBusinessEntityDetailMapper(businessEntityDefinitionId, genericBusinessEntity);
+        }
+
         public string GetGenericBusinessEntityName(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
