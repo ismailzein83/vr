@@ -1315,8 +1315,13 @@
               <Parameter Name="TotalAmount">
                 <Value>=Parameters!TotalAmount.Value</Value>
               </Parameter>
+              <Parameter Name="Email">
+                <Value>=Parameters!Email.Value</Value>
+              </Parameter>
+              <Parameter Name="Attention">
+                <Value>=Parameters!Attention.Value</Value>
+              </Parameter>
             </Parameters>
-            <Left>0in</Left>
             <Height>3in</Height>
             <Width>7.69908in</Width>
             <Style>
@@ -1677,6 +1682,18 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Address">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Email">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Attention">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
