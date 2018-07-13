@@ -115,6 +115,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -150,6 +154,11 @@
     <Content Include="Client\CSViews\Security\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\Extensions\TestVRAPIDiscovery.cs" />
+    <Compile Include="App_Start\Extensions\VRAssembliesResolver.cs" />
+    <Compile Include="App_Start\Extensions\VRHttpActionSelector.cs" />
+    <Compile Include="App_Start\Extensions\VRHttpControllerDescriptor.cs" />
+    <Compile Include="App_Start\Extensions\VRHttpControllerSelector.cs" />
     <Compile Include="App_Start\InfoAppenderFilter.cs" />
     <Compile Include="App_Start\ActionAuditFilter.cs" />
     <Compile Include="App_Start\AuthorizationFilter.cs" />
