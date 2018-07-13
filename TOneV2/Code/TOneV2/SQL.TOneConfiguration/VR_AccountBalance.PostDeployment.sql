@@ -178,7 +178,8 @@ as (select * from (values
 ('7B2BCDF9-70CB-4EE3-8EB7-763BC44CCDD6','Supplier Payment',0,'{"ManualAdditionDisabled":false}'),
 ('ACD5923A-8057-4C21-9E7B-EBC76B9CE1DF','Customer Voice Usage',0,'{"ManualAdditionDisabled":true}'),
 ('3a9a321f-754f-40ae-a8f8-e06f299607f4','Customer Invoice',0,'{"ManualAdditionDisabled":true}'),
-('56cd572c-3815-4dfb-b1ed-ab8a550d5862','Supplier Invoice',1,'{"ManualAdditionDisabled":true}')
+('56cd572c-3815-4dfb-b1ed-ab8a550d5862','Supplier Invoice',1,'{"ManualAdditionDisabled":true}'),
+('e544addf-9b84-4360-bc96-1cfeca4634bd','Expenses',1,'{"ManualAdditionDisabled":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[IsCredit],[Settings]))
 merge	[VR_AccountBalance].[BillingTransactionType] as t
