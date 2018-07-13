@@ -4,6 +4,7 @@
 \Themes\theme-extented-cloudXPoint.css.exclude
 \Themes\theme-extented-nTegra.css.exclude
 \Themes\theme-extented-INSOFT.css.exclude
+\Themes\theme-extented-Zebra.css.exclude
 
 \Images\cloudXPoint-01.png
 \Images\cloudXPoint-02.png
