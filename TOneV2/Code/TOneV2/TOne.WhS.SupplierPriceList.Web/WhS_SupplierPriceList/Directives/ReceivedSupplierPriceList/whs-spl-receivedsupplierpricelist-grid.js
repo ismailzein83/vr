@@ -112,6 +112,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRUIUtils
 						&& dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToReceivedMailError.value
                         && dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.ImportedManually.value
                         && dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.Rejected.value
+                        && dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.WaitingConfirmation.value
 						&& dataItem.ReceivedPricelist.Status != WhS_SupPL_ReceivedPricelistStatusEnum.FailedDueToBusinessRuleError.value) {
 	                    var setAsCompletedMenuAction = {
 	                        name: "Set As Completed",
