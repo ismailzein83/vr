@@ -10,6 +10,32 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+--[bp].BPBusinessRuleDefinition----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[BPDefintionId],[Settings],[Rank])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('00EA83F1-40B4-487A-9CC6-F7FAFAD6C042','SPL_ValidateCountryWhileProcessing','6EF1A7A7-9B70-4A8F-B94E-F9BB5E347CF2','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Title":"Closing Zones Included in Deal","Description":"Closing zones that are included in a deal","Condition":{"$type":"TOne.WhS.Deal.BusinessProcessRules.SPValidateClosedZoneCondition, TOne.WhS.Deal.BusinessProcessRules"},"ActionTypes":["715F7F90-2C23-4185-AEB8-EDA947DE3978","FBFE2B36-12F6-40C1-8163-26CFE2D23501"]}',1),
+('9AA80FB6-20B9-4299-A61E-1E4A7E61982F','SPL_ValidateCountryWhileProcessing','6EF1A7A7-9B70-4A8F-B94E-F9BB5E347CF2','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Title":"Modifying Rates Included in Deal","Description":"Modifying rates of zones that are included in a deal","Condition":{"$type":"TOne.WhS.Deal.BusinessProcessRules.SPValidateRateChangeCondition, TOne.WhS.Deal.BusinessProcessRules"},"ActionTypes":["72C926F1-D019-408F-84AF-6613D2033473"]}',1),
+('7EA8C033-EB76-41FA-B5A2-9F29C46B6C0B','RatePlan_ValidateAfterProcessing','8ABA2EC4-04FD-4BB1-A593-B651943C6411','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Cannot modify rate if zone is linked to a deal","Condition":{"$type":"TOne.WhS.Deal.BusinessProcessRules.RPValidateRateChangeCondition, TOne.WhS.Deal.BusinessProcessRules"},"ActionTypes":["72C926F1-D019-408F-84AF-6613D2033473"]}',1),
+('9A33FB94-4E54-4C1F-B105-050E4DFE2252','RatePlan_ValidateAfterProcessing','8ABA2EC4-04FD-4BB1-A593-B651943C6411','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Cannot stop selling country if zone in this country related to a deal","Condition":{"$type":"TOne.WhS.Deal.BusinessProcessRules.RPValidateStopSellingCountryCondition, TOne.WhS.Deal.BusinessProcessRules"},"ActionTypes":["715f7f90-2c23-4185-aeb8-eda947de3978","FBFE2B36-12F6-40C1-8163-26CFE2D23501"]}',1),
+('6085251D-4AD4-4903-A332-55189097DE48','CP_ValidateAfterProcessing','3E7D6A05-3C43-460A-BA6C-6914BCCBB64F','{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleSettings, Vanrise.BusinessProcess.Entities","Description":"Zone is linked to a deal","Condition":{"$type":"TOne.WhS.Deal.BusinessProcessRules.CPValidateZoneCondition, TOne.WhS.Deal.BusinessProcessRules"},"ActionTypes":["715f7f90-2c23-4185-aeb8-eda947de3978","FBFE2B36-12F6-40C1-8163-26CFE2D23501"]}',4)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[BPDefintionId],[Settings],[Rank]))
+merge	[bp].[BPBusinessRuleDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[BPDefintionId] = s.[BPDefintionId],[Settings] = s.[Settings],[Rank] = s.[Rank]
+when not matched by target then
+	insert([ID],[Name],[BPDefintionId],[Settings],[Rank])
+	values(s.[ID],s.[Name],s.[BPDefintionId],s.[Settings],s.[Rank]);
+
+	--[bp].BPBusinessRuleAction------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Settings],[BusinessRuleDefinitionId])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','00EA83F1-40B4-487A-9CC6-F7FAFAD6C042'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.InformationAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"72c926f1-d019-408f-84af-6613d2033473"}}','9AA80FB6-20B9-4299-A61E-1E4A7E61982F'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.InformationAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"72c926f1-d019-408f-84af-6613d2033473"}}','7EA8C033-EB76-41FA-B5A2-9F29C46B6C0B'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','9A33FB94-4E54-4C1F-B105-050E4DFE2252'),('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','6085251D-4AD4-4903-A332-55189097DE48')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Settings],[BusinessRuleDefinitionId]))merge	[bp].[BPBusinessRuleAction] as tusing	cte_data as son		1=1 and t.[BusinessRuleDefinitionId] = s.[BusinessRuleDefinitionId]when matched then	update set	[Settings] = s.[Settings],[BusinessRuleDefinitionId] = s.[BusinessRuleDefinitionId]when not matched by target then	insert([Settings],[BusinessRuleDefinitionId])	values(s.[Settings],s.[BusinessRuleDefinitionId]);
+
+
 --[common].[ExtensionConfiguration]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
