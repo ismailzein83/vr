@@ -10,43 +10,34 @@ namespace Vanrise.Entities
     {
         public override Guid VRComponentTypeConfigId { get { return new Guid("BB07A3B5-E519-4A6C-B4C6-695069BBB64A"); } }
 
-        public Dictionary<Guid, DBReplicationSourceDBConnectionDefinition> SourceDBConnectionDefinitions { get; set; }
-
-        public Dictionary<Guid, DBReplicationTargetDBConnectionDefinition> TargetDBConnectionDefinitions { get; set; }
-
-        public List<DBReplicationTableDefinitionSettings> Tables { get; set; }
+        public Dictionary<Guid, DBReplicationDatabaseDefinition> DBConnectionDefinitions { get; set; }
     }
 
-    public class DBReplicationSourceDBConnectionDefinition
+    public class DBReplicationDatabaseDefinition
     {
         public string Name { get; set; }
+
+        public List<DBReplicationTableDefinition> Tables { get; set; }
     }
 
-    public class DBReplicationTargetDBConnectionDefinition
-    {
-        public string Name { get; set; }
-    }
-
-    public class DBReplicationTableDefinitionSettings
+    public class DBReplicationTableDefinition
     {
         public string TableName { get; set; }
 
-        public Guid SourceDBConnectionDefinitionId { get; set; }
-
-        public Guid TargetDBConnectionDefinitionId { get; set; }
+        public string TableSchema { get; set; }
 
         public string FilterDateTimeColumn { get; set; }
 
-        //public DBReplicationPreInsert DBReplicationPreInsert { get; set; }
+        public DBReplicationPreInsert DBReplicationPreInsert { get; set; }
     }
 
-    //public abstract class DBReplicationPreInsert 
-    //{
-    //    public abstract void Execute(IDBReplicationPreInsertExecuteContext context);
-    //}
+    public abstract class DBReplicationPreInsert
+    {
+        public abstract void Execute(IDBReplicationPreInsertExecuteContext context);
+    }
 
-    //public interface IDBReplicationPreInsertExecuteContext
-    //{
-    //    List<object> DataToInsert { get; set; }
-    //}
+    public interface IDBReplicationPreInsertExecuteContext
+    {
+        Object DataToInsert { get; set; }
+    }
 }

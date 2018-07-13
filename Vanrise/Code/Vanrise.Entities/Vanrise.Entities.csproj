@@ -79,8 +79,11 @@
     <Compile Include="Country\Criteria\IRuleCountryCriteria.cs" />
     <Compile Include="Country\Criteria\CountryCriteria.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
+    <Compile Include="DBReplication\Context.cs" />
+    <Compile Include="DBReplication\DBReplicationDefinition.cs" />
     <Compile Include="DBReplication\DBReplicationDefinitionSettings.cs" />
     <Compile Include="DBReplication\DBReplicationSettings.cs" />
+    <Compile Include="DBReplication\DBReplicationTableDetails.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
     <Compile Include="EntityPersonalization\EntityPersonalization.cs" />
     <Compile Include="EntityPersonalization\EntityPersonalizationDetail.cs" />

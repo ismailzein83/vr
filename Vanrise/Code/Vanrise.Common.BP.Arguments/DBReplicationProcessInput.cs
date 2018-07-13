@@ -14,6 +14,8 @@ namespace Vanrise.Common.BP.Arguments
 
         public DBReplicationSettings Settings { get; set; }
 
+        public Guid DBReplicationDefinitionId { get; set; }
+
         public override string GetTitle()
         {
             return String.Format("Database Replication from {0} to {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
