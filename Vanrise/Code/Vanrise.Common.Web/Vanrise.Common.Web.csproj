@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\DBReplicationDefinitionController.cs" />
     <Compile Include="Controllers\ExcelFileParserController.cs" />
     <Compile Include="Controllers\CompanyDefinitionsController.cs" />
     <Compile Include="Controllers\ExcelFileUploaderController.cs" />
@@ -525,6 +526,7 @@
     <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
+    <Content Include="Common\Services\APIServices\DBReplicationDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\ExcelFileParserAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanyDefinitionsAPIService.js" />
     <Content Include="Common\Services\APIServices\ExcelFileUploaderAPIService.js" />
