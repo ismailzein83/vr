@@ -129,7 +129,7 @@ namespace Vanrise.GenericData.Business
             recordType.Fields.ThrowIfNull("recordType.Fields", dataRecordStorage.DataRecordTypeId);
 
             RecordFilterGroup filterGroupObj = null;
-            if(filterGroup != null)
+            if (filterGroup != null)
             {
                 filterGroupObj = ConvertFilterGroup(filterGroup, recordType);
             }
@@ -150,7 +150,7 @@ namespace Vanrise.GenericData.Business
             {
                 return GetDataRecords(dataRecordStorageId, columnsNeeded).FindAllRecords(filterExpression);
             }
-           //     throw new NotSupportedException("This method only available for cached record storages");
+            //     throw new NotSupportedException("This method only available for cached record storages");
             return GetCachedDataRecords(dataRecordStorageId).FindAllRecords(filterExpression);
         }
 
@@ -178,12 +178,12 @@ namespace Vanrise.GenericData.Business
             return GetOrderedDataRecordResults(clonedInput, records, formulaFieldDirectDependencies, dependentDataRecordStorageFields, dataRecordFieldTypeDict, formulaDataRecordFieldsDict);
         }
 
-        public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, out Object insertedId, out bool hasInsertedId)
+        public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, out Object insertedId, out bool hasInsertedId, TempStorageInformation tempStorageInformation = null)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
 
-            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);
             storageDataManager.ThrowIfNull("storageDataManager");
 
             var dataRecordType = _recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
@@ -211,16 +211,16 @@ namespace Vanrise.GenericData.Business
             return insertActionSucc;
         }
 
-        public void AddDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records)
+        public void AddDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records, TempStorageInformation tempStorageInformation = null)
         {
-            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
             storageDataManager.InsertRecords(records);
         }
 
-        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues, RecordFilterGroup filterGroup)
+        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues, RecordFilterGroup filterGroup, TempStorageInformation tempStorageInformation = null)
         {
-            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);
             storageDataManager.ThrowIfNull("storageDataManager");
 
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
@@ -243,9 +243,9 @@ namespace Vanrise.GenericData.Business
             return updateActionSucc;
         }
 
-        public void UpdateDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
+        public void UpdateDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate, TempStorageInformation tempStorageInformation = null)
         {
-            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
             storageDataManager.UpdateRecords(records, fieldsToJoin, fieldsToUpdate);
         }
@@ -458,7 +458,7 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages) 
+        public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
             List<Guid> filterdRecrodsIds = new List<Guid>();

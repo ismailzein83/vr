@@ -118,7 +118,7 @@ namespace Vanrise.GenericData.Business
         protected override void InsertItemsToDB(List<GenericSummaryItem> itemsToAdd)
         {
             var dataRecords = GetDataRecordsFromSummaryItems(itemsToAdd);
-            new DataRecordStorageManager().AddDataRecords(_summaryTransformationDefinition.DataRecordStorageId, dataRecords);
+            new DataRecordStorageManager().AddDataRecords(_summaryTransformationDefinition.DataRecordStorageId, dataRecords, TempStorageInformation);
         }
 
         protected override void UpdateItemsInDB(List<GenericSummaryItem> itemsToUpdate)
@@ -132,7 +132,7 @@ namespace Vanrise.GenericData.Business
             summaryItemDataRecordType.Fields.ThrowIfNull("summaryItemDataRecordType.Fields");
             List<string> fieldsToUpdate = summaryItemDataRecordType.Fields.FindAllRecords(itm => itm.Formula == null).Select(itm => itm.Name).ToList();
 
-            new DataRecordStorageManager().UpdateDataRecords(_summaryTransformationDefinition.DataRecordStorageId, dataRecords, fieldsToJoin, fieldsToUpdate);
+            new DataRecordStorageManager().UpdateDataRecords(_summaryTransformationDefinition.DataRecordStorageId, dataRecords, fieldsToJoin, fieldsToUpdate, TempStorageInformation);
         }
 
         protected override GenericSummaryItem CreateSummaryItemFromRawItem(dynamic rawItem)
