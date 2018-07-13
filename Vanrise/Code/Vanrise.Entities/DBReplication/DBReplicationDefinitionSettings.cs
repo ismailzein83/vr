@@ -10,7 +10,7 @@ namespace Vanrise.Entities
     {
         public override Guid VRComponentTypeConfigId { get { return new Guid("BB07A3B5-E519-4A6C-B4C6-695069BBB64A"); } }
 
-        public Dictionary<Guid, DBReplicationDatabaseDefinition> DBConnectionDefinitions { get; set; }
+        public Dictionary<Guid, DBReplicationDatabaseDefinition> DatabaseDefinitions { get; set; }
     }
 
     public class DBReplicationDatabaseDefinition

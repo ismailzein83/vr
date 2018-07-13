@@ -19,11 +19,11 @@ namespace Vanrise.Entities
 
         public string TargetDatabaseName { get; set; }
 
-        public List<DBConnectionDefinition> DBConnectionDefinitions { get; set; }
+        public List<DBConnectionSettings> Settings { get; set; }
     }
 
-    public class DBConnectionDefinition
+    public class DBConnectionSettings
     {
-        public Guid DBReplicationDBConnectionDefinitionId { get; set; }
+        public Guid DatabaseDefinitionId { get; set; }
     }
 }
