@@ -372,7 +372,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                             $scope.selectedParameterDefinitions.push({
                                 DisplayName: selectedItem.DisplayName,
                                 Name: selectedItem.Name,
-                                Value: parameterDefinitions[key].Value
+                                Value: parameterDefinitions[key].Value,
+                                Hint: selectedItem.Hint
                             });
                         }
                     }
