@@ -639,6 +639,9 @@
               <Parameter Name="InvoiceDueDate">
                 <Value>=Parameters!InvoiceDueDate.Value</Value>
               </Parameter>
+              <Parameter Name="Attention">
+                <Value>=Parameters!Attention.Value</Value>
+              </Parameter>
             </Parameters>
             <Top>0.15764in</Top>
             <Height>2.11458in</Height>
@@ -3316,6 +3319,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Email">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Attention">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

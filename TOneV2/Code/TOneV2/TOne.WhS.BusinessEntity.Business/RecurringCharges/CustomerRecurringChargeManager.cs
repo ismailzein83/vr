@@ -101,7 +101,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                 Amount = Convert.ToDecimal(fieldValues.GetRecord("Amount")),
                                 CurrencyId = Convert.ToInt32(fieldValues.GetRecord("CurrencyId")),
                                 BED = (DateTime)fieldValues.GetRecord("BED"),
-                                EED = (DateTime)fieldValues.GetRecord("EED"),
+                                EED = (DateTime?)fieldValues.GetRecord("EED"),
                                 RecurringChargePeriod = (RecurringChargePeriod)fieldValues.GetRecord("RecurringChargePeriod")
                             };
                             customerRecurringChargesDic.Add(customerRecurringCharge.ID, customerRecurringCharge);
