@@ -71,12 +71,12 @@ namespace TOne.WhS.Deal.Business
                         DealEED = swapDealSetting.EndDate,
                         Rate = swapDealInbound.Rate,
                         DealDays = dealDays,
-                        ReachedAmount = swapDealInbound.Volume,
+                        EstimatedVolume = swapDealInbound.Volume,
                         GroupName = swapDealInbound.Name,
                         ExtraVolumeRate = swapDealInbound.ExtraVolumeRate,
                         EstimatedAmount = swapDealInbound.Volume * swapDealInbound.Rate,
                         Status = swapDealSetting.Status,
-                        RemainingDaysToEnd = daysToEnd
+                        RemainingDays = daysToEnd
                     };
                     saleProgressByGroupNb.Add(swapDealInbound.ZoneGroupNumber, saleDealInfo);
                 }
@@ -95,7 +95,7 @@ namespace TOne.WhS.Deal.Business
                         ExtraVolumeRate = swapDealOutbound.ExtraVolumeRate,
                         EstimatedAmount = swapDealOutbound.Volume * swapDealOutbound.Rate,
                         Status = swapDealSetting.Status,
-                        RemainingDaysToEnd = daysToEnd
+                        RemainingDays = daysToEnd
                     };
                     costProgressByGroupNb.Add(swapDealOutbound.ZoneGroupNumber, saleDealInfo);
                 }
@@ -113,7 +113,7 @@ namespace TOne.WhS.Deal.Business
                 ToTime = context.ToTime.Value
             };
             List<AnalyticRecord> saleRecords = analyticManager.GetAllFilteredRecords(saleAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> saleDataRecordObjects = GetAnalyticRecords(saleRecords, saleSwapDealInfoByDealId);
+            IEnumerable<DataRecordObject> saleDataRecordObjects = GetAnalyticRecords(saleRecords, saleSwapDealInfoByDealId, context.ToTime.Value);
 
             foreach (var dataRecord in saleDataRecordObjects)
             {
@@ -129,7 +129,7 @@ namespace TOne.WhS.Deal.Business
                 ToTime = context.ToTime.Value
             };
             List<AnalyticRecord> costRecords = analyticManager.GetAllFilteredRecords(costAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> costDataRecordObjects = GetAnalyticRecords(costRecords, costSwapDealInfoByDealId);
+            IEnumerable<DataRecordObject> costDataRecordObjects = GetAnalyticRecords(costRecords, costSwapDealInfoByDealId, context.ToTime.Value);
 
             foreach (var dataRecord in costDataRecordObjects)
             {
@@ -137,7 +137,7 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
-        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId)
+        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate)
         {
             var salePricedTrafficByDealId = new OverallDealnfoByDealId();
             var salePricedTrafficByDealIdPlus = new OverallDealnfoByDealId();
@@ -150,9 +150,11 @@ namespace TOne.WhS.Deal.Business
                 var saleDealId = saleRecord.DimensionValues[4];
                 var saleDealTierNb = saleRecord.DimensionValues[5];
 
+                decimal saleDurationValue = 0;
                 MeasureValue saleDuration;
                 saleRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
-                decimal saleDurationValue = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+                if (saleDuration != null && saleDuration.Value != null)
+                    saleDurationValue = Convert.ToDecimal(saleDuration.Value ?? 0.0);
 
                 var day = saleRecord.DimensionValues[2];
                 DateTime dateTimeValue;
@@ -173,10 +175,10 @@ namespace TOne.WhS.Deal.Business
                             switch (tierNb)
                             {
                                 case 1:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, "IN", salePricedTrafficByDealId);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, "IN", salePricedTrafficByDealId, toDateDate);
                                     break;
                                 case 2:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, "IN+", salePricedTrafficByDealIdPlus);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, "IN+", salePricedTrafficByDealIdPlus, toDateDate);
                                     break;
                             }
                         }
@@ -189,17 +191,16 @@ namespace TOne.WhS.Deal.Business
                         {
                             int groupNb = (int)origSaleDealZoneGroupNb.Value;
                             OverallDealInfo dealInfo = saleProgressByGroupNb.GetRecord(groupNb);
-                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, "IN+", salePricedTrafficByDealIdPlus);
+                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, "IN+", salePricedTrafficByDealIdPlus, toDateDate);
                         }
                     }
                 }
             }
-            IEnumerable<DataRecordObject> dataRecords = salePricedTrafficByDealId.Values.SelectMany(
-                progress => progress.Values)
-                .Select(DataRecordObjectMapper);
+            IEnumerable<DataRecordObject> dataRecords = salePricedTrafficByDealId.Values.SelectMany(progress => progress.Values)
+                                                         .Select(DataRecordObjectMapper);
             return dataRecords;
         }
-        private void AddOrUpdateDealInfo(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, OverallDealInfo dealInfo, string direction, OverallDealnfoByDealId trafficByDealId)
+        private void AddOrUpdateDealInfo(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, OverallDealInfo dealInfo, string direction, OverallDealnfoByDealId trafficByDealId, DateTime toDateDate)
         {
             OverallDealInfoByGroupNb saleTrafficByGroupNb = trafficByDealId.GetOrCreateItem(dealId);
 
@@ -208,6 +209,7 @@ namespace TOne.WhS.Deal.Business
             {
                 pricedDealInfo = new OverallDealInfo
                 {
+                    CarrierAccountId = dealInfo.CarrierAccountId,
                     Direction = direction,
                     EstimatedVolume = dealInfo.EstimatedVolume,
                     GroupName = dealInfo.GroupName,
@@ -217,19 +219,22 @@ namespace TOne.WhS.Deal.Business
                     DealEED = dealInfo.DealEED,
                     DealId = dealInfo.DealId,
                     Status = dealInfo.Status,
-                    RemainingDaysToEnd = dealInfo.RemainingDaysToEnd
+                    RemainingDays = dealInfo.RemainingDays
                 };
                 saleTrafficByGroupNb.Add(groupNb, pricedDealInfo);
             }
+            if (toDateDate == dateTimeValue)
+                pricedDealInfo.ToDateVolume += saleDurationValue;
+
             pricedDealInfo.ReachedVolume += saleDurationValue;
-            if (DateTime.Today == dateTimeValue)
-                pricedDealInfo.TodayVolume += saleDurationValue;
 
             pricedDealInfo.RemainingVolume = pricedDealInfo.EstimatedVolume - pricedDealInfo.ReachedVolume;
-            pricedDealInfo.RemainingVolumePrecentage = (pricedDealInfo.ReachedVolume / pricedDealInfo.EstimatedVolume) * 100;
+            pricedDealInfo.RemainingVolumePrecentage = pricedDealInfo.EstimatedVolume == 0
+                                                     ? 0
+                                                     : (pricedDealInfo.ReachedVolume / pricedDealInfo.EstimatedVolume) * 100;
             pricedDealInfo.DealAmount = pricedDealInfo.EstimatedVolume * pricedDealInfo.DealRate;
-            pricedDealInfo.EstimatedAmount = pricedDealInfo.EstimatedVolume * pricedDealInfo.DealRate;
-            pricedDealInfo.TodayAmount = pricedDealInfo.TodayAmount * pricedDealInfo.DealRate;
+            pricedDealInfo.ReachedAmount = pricedDealInfo.ReachedAmount * pricedDealInfo.DealRate;
+            pricedDealInfo.ToDateVolume = pricedDealInfo.ToDateVolume * pricedDealInfo.DealRate;
 
             pricedDealInfo.ExpectedDays = pricedDealInfo.ToDateVolume == 0
                                         ? 0
@@ -248,7 +253,7 @@ namespace TOne.WhS.Deal.Business
                 {"ReachedVolume", dealInfo.ReachedVolume},
                 {"ToDateVolume", dealInfo.ToDateVolume},
                 {"RemainngVolume", dealInfo.RemainingVolume},
-                {"RemaingVolumePrec", dealInfo.RemainingVolumePrecentage},
+                {"RemaingVolumePerc", dealInfo.RemainingVolumePrecentage},
                 {"RemainingDays", dealInfo.RemainingDays},
                 {"RemainingPerDays", dealInfo.RemainingPerDays},
                 {"ExpectedDays", dealInfo.ExpectedDays},
@@ -291,7 +296,6 @@ namespace TOne.WhS.Deal.Business
         public decimal? ExtraVolumeRate { get; set; }
         public int? DealDays { get; set; }
         public string Direction { get; set; }
-        public decimal TodayVolume { get; set; }
         public decimal RemainingVolume { get; set; }
         public decimal RemainingVolumePrecentage { get; set; }
         public int Days { get; set; }
@@ -305,9 +309,7 @@ namespace TOne.WhS.Deal.Business
         public decimal EstimatedAmount { get; set; }
         public decimal ReachedAmount { get; set; }
         public decimal ToDateAmount { get; set; }
-        public decimal TodayAmount { get; set; }
         public string Notes { get; set; }
-        public int RemainingDaysToEnd { get; set; }
 
     }
     #endregion
