@@ -11,7 +11,7 @@ namespace Mediation.Runtime
     {
         #region Alcatel
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Alcatel_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Alcatel_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
@@ -37,7 +37,7 @@ namespace Mediation.Runtime
 
         #region Ericsson
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("B9648105-8914-4C70-8550-F63D946F5B0C"), (parsedBatch) =>
@@ -52,7 +52,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_Iraq(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_Iraq(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("BA810002-0B4D-4563-9A0D-EE228D69A1A6"), (parsedBatch) =>
@@ -97,7 +97,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_WHS_Binary(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_WHS_Binary(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
@@ -119,7 +119,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_WHS_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_WHS_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             var cdrs = new List<dynamic>();
@@ -543,7 +543,7 @@ namespace Mediation.Runtime
 
         #region Teles
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Teles(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Teles(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
@@ -607,7 +607,7 @@ namespace Mediation.Runtime
 
         #region Huawei
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_Iraq(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_Iraq(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("3B0C2ED7-CC17-46C0-8F96-697BD185B273"), (parsedBatch) =>
@@ -650,7 +650,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_Iraq_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_Iraq_GPRS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("16b6af8d-6a15-46a1-9c19-ccfac1ebbdde"), (parsedBatch) =>
@@ -665,7 +665,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_Namibia(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_Namibia(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("e2a77834-86da-42ba-9501-c3eb81f5f60b"), (parsedBatch) =>
@@ -789,7 +789,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("504a12e9-61d2-4e31-b193-1d43749dc055"), (parsedBatch) =>
@@ -807,7 +807,7 @@ namespace Mediation.Runtime
 
         #region Nokia
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Nokia_EDR(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Nokia_EDR(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("230bedb5-a3ee-4cbe-802c-dfdaa2a2d438"), (parsedBatch) =>
@@ -850,7 +850,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_NokiaSiemens_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_NokiaSiemens_ICX(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
@@ -876,7 +876,7 @@ namespace Mediation.Runtime
 
         #region Radius
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Radius(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Radius(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var cdrs = new List<dynamic>();
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
