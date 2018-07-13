@@ -691,7 +691,7 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawei_Jazz(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawei_Jazz(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             var cdrs = new List<dynamic>();
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
@@ -713,69 +713,67 @@ namespace Mediation.Runtime
                 batchSize++;
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
 
-                string[] fields = cdrLine.Split(';');
-                cdr.Direction = fields[0];
-                cdr.SwitchType = fields[1];
-                cdr.InTrunk = fields[2];
-                cdr.OutTrunk = fields[3];
-                cdr.ANum = fields[4];
-                cdr.BNum = fields[5];
-                cdr.UserData = fields[9];
-                cdr.ICTRecordType = fields[10];
-                cdr.CauseForTermination = fields[11];
-
-                string startDateAsString = fields[6];
-                if (!string.IsNullOrEmpty(startDateAsString))
+                try
                 {
-                    int year = Convert.ToInt32(startDateAsString.Substring(0, 4));
-                    int month = Convert.ToInt32(startDateAsString.Substring(4, 2));
-                    int day = Convert.ToInt32(startDateAsString.Substring(6, 2));
-                    cdr.StartDate = new DateTime(year, month, day);
-                }
+                    string[] fields = cdrLine.Split(',');
+                    cdr.Direction = fields[0];
+                    cdr.SwitchType = fields[1];
+                    cdr.InTrunk = fields[2];
+                    cdr.OutTrunk = fields[3];
+                    cdr.ANum = fields[4];
+                    cdr.BNum = fields[5];
+                    cdr.ICTRecordType = fields[9];
+                    cdr.CauseForTermination = fields[10];
 
-                string startTimeAsString = fields[7];
-                if (!string.IsNullOrEmpty(startTimeAsString))
+                    string startDateAsString = fields[6];
+                    if (!string.IsNullOrEmpty(startDateAsString))
+                    {
+                        int year = Convert.ToInt32(startDateAsString.Substring(0, 4));
+                        int month = Convert.ToInt32(startDateAsString.Substring(4, 2));
+                        int day = Convert.ToInt32(startDateAsString.Substring(6, 2));
+                        cdr.StartDate = new DateTime(year, month, day);
+                    }
+
+                    string startTimeAsString = fields[7];
+                    if (!string.IsNullOrEmpty(startTimeAsString))
+                    {
+                        int hour = Convert.ToInt32(startTimeAsString.Substring(0, 2));
+                        int minute = Convert.ToInt32(startTimeAsString.Substring(2, 2));
+                        int second = Convert.ToInt32(startTimeAsString.Substring(4, 2));
+                        //int millisecond = Convert.ToInt32(startTimeAsString.Substring(6, 2));
+                        cdr.StartTime = new Time(hour, minute, second, 0);
+                    }
+
+                    string durationInSecondsAsString = fields[8];
+                    if (!string.IsNullOrEmpty(durationInSecondsAsString))
+                        cdr.DurationInSeconds = decimal.Parse(durationInSecondsAsString);
+                    cdr.ReasonForTermination = fields[11];
+                    cdr.CallReferenceNumber = fields[12];
+                    cdr.DCRCallId = fields[13];
+                    string sequenceNumberAsString = fields[14];
+                    if (!string.IsNullOrEmpty(sequenceNumberAsString))
+                    {
+                        cdr.SequenceNumber = long.Parse(sequenceNumberAsString);
+                    }
+
+                    cdr.CallTransactionType = fields[15];
+                    cdr.ThirdNumber = fields[16];
+                    cdr.Rfu1 = fields[17];
+                    cdr.Rfu2 = fields[18];
+                    cdr.Rfu3 = fields[19];
+                    cdr.Rfu4 = fields[20];
+                    cdr.Rfu5 = fields[21];
+
+                    cdr.FileName = fileName;
+
+                    cdrs.Add(cdr);
+                }
+                catch (Exception ex)
                 {
-                    int hour = Convert.ToInt32(startTimeAsString.Substring(0, 2));
-                    int minute = Convert.ToInt32(startTimeAsString.Substring(2, 2));
-                    int second = Convert.ToInt32(startTimeAsString.Substring(4, 2));
-                    //int millisecond = Convert.ToInt32(startTimeAsString.Substring(6, 2));
-                    cdr.StartTime = new Time(hour, minute, second, 0);
+                    failedRecordIdentifiers.Add(batchSize);
                 }
-
-                string durationAsString = fields[8];
-                if (!string.IsNullOrEmpty(durationAsString))
-                {
-                    int duration_hour = Convert.ToInt32(durationAsString.Substring(0, 2));
-                    int duration_minute = Convert.ToInt32(durationAsString.Substring(2, 2));
-                    int duration_second = Convert.ToInt32(durationAsString.Substring(4, 2));
-                    //int duration_millisecond = Convert.ToInt32(durationAsString.Substring(8, 2));
-
-                    decimal duration = (decimal)(new TimeSpan(0, duration_hour, duration_minute, duration_second).TotalSeconds);
-                    cdr.DurationInSeconds = duration;
-                }
-
-                cdr.ReasonForTermination = fields[12];
-                cdr.CallReferenceNumber = fields[13];
-                cdr.DCRCallId = fields[14];
-                string sequenceNumberAsString = fields[15];
-                if (!string.IsNullOrEmpty(sequenceNumberAsString))
-                {
-                    cdr.SequenceNumber = long.Parse(sequenceNumberAsString);
-                }
-
-                cdr.CallTransactionType = fields[16];
-                cdr.ThirdNumber = fields[17];
-                cdr.Rfu1 = fields[18];
-                cdr.Rfu2 = fields[19];
-                cdr.Rfu3 = fields[20];
-                cdr.Rfu4 = fields[21];
-                cdr.Rfu5 = fields[22];
-
-                cdr.FileName = fileName;
-
-                cdrs.Add(cdr);
             }
+
             long startingId;
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, batchSize, out startingId);
 
