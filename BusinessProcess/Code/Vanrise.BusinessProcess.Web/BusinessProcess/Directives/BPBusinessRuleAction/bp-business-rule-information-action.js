@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("bpBusinessRuleInformationAction", [function () {
+app.directive("businessprocessBpBusinessRuleInformationAction", [function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -55,3 +55,8 @@ app.directive("bpBusinessRuleInformationAction", [function () {
 
     return directiveDefinitionObject;
 }]);
+
+
+
+
+
