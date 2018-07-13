@@ -15,10 +15,10 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('FBFE2B36-12F6-40C1-8163-26CFE2D23501','Show warning','Show warning'				,'VR_BP_BPBusinessRuleActionType','{ "Description":"Show warning", "Editor":"businessprocess-bp-business-rule-warning-item-action"}'),
-('715F7F90-2C23-4185-AEB8-EDA947DE3978','Stop execution','Stop execution'			,'VR_BP_BPBusinessRuleActionType','{"Description":"Stop execution", "Editor":"businessprocess-bp-business-rule-stop-execution-action"}'),
+('FBFE2B36-12F6-40C1-8163-26CFE2D23501','Show warning','Show Warning'				,'VR_BP_BPBusinessRuleActionType','{ "Description":"Show warning", "Editor":"businessprocess-bp-business-rule-warning-item-action"}'),
+('715F7F90-2C23-4185-AEB8-EDA947DE3978','Stop execution','Stop Execution'			,'VR_BP_BPBusinessRuleActionType','{"Description":"Stop execution", "Editor":"businessprocess-bp-business-rule-stop-execution-action"}'),
 ('BA3427FE-B8BE-4546-B433-CE0D8CE9FCB1','Exclude','Exclude'							,'VR_BP_BPBusinessRuleActionType','{ "Description":"Exclude", "Editor":"businessprocess-bp-business-rule-exclude-item-action"}'),
-('72C926F1-D019-408F-84AF-6613D2033473','Show information','Show information'		,'VR_BP_BPBusinessRuleActionType','{"Description":"Show information","Editor":"businessprocess-bp-business-rule-information-action"}')
+('72C926F1-D019-408F-84AF-6613D2033473','Show information','Show Information'		,'VR_BP_BPBusinessRuleActionType','{"Description":"Show information","Editor":"businessprocess-bp-business-rule-information-action"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
