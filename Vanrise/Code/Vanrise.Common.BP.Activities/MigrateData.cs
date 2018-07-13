@@ -8,14 +8,14 @@ namespace Vanrise.Common.BP.Activities
 {
     public sealed class MigrateData : BaseCodeActivity
     {
-        [RequiredArgument]
-        public InArgument<DBReplicationSettings> DBReplicationSettings { get; set; }
+        //[RequiredArgument]
+        //public InArgument<DBReplicationSettings> DBReplicationSettings { get; set; }
 
-        [RequiredArgument]
-        public InArgument<DBReplicationDefinition> DBReplicatioDefinition { get; set; }
+        //[RequiredArgument]
+        //public InArgument<DBReplicationDefinition> DBReplicatioDefinition { get; set; }
 
-        [RequiredArgument]
-        public InArgument<IDBReplicationDataManager> DBReplicationDataManager { get; set; }
+        //[RequiredArgument]
+        //public InArgument<IDBReplicationDataManager> DBReplicationDataManager { get; set; }
         
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
