@@ -1,12 +1,15 @@
-﻿'use strict';
+﻿
+(function (appControllers) {
 
-app.service('VR_GenericData_GenericBEActionService',
-    ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService) {
+    'use strict';
+
+    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService'];
+
+    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService,  VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService) {
 
         var actionTypes = [];
 
-        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType, fieldValues) {
+        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues) {
 
             genericBusinessEntity.menuActions = [];
 
@@ -14,8 +17,7 @@ app.service('VR_GenericData_GenericBEActionService',
                 for (var j = 0; j < genericBusinessEntity.AvailableGridActionIds.length; j++) {
                     var actionId = genericBusinessEntity.AvailableGridActionIds[j];
                     var genericBEGridAction = UtilsService.getItemByVal(genericBEGridActions, actionId, "GenericBEGridActionId");
-                    if (genericBEGridAction != undefined)
-                    {
+                    if (genericBEGridAction != undefined) {
                         var genericBEAction = UtilsService.getItemByVal(genericBEActions, genericBEGridAction.GenericBEActionId, "GenericBEActionId");
                         if (genericBEAction != undefined && genericBEAction.Settings != undefined) {
                             var actionType = getActionTypeIfExist(genericBEAction.Settings.ActionTypeName);
@@ -24,7 +26,7 @@ app.service('VR_GenericData_GenericBEActionService',
                             }
                         }
                     }
-                   
+
                 }
             }
 
@@ -33,8 +35,7 @@ app.service('VR_GenericData_GenericBEActionService',
                     name: genericBEGridAction.Title,
                     clicked: function (selectedGenericBusinessEntity) {
                         var genericBusinessEntityId;
-                        if (idFieldType != undefined)
-                        {
+                        if (idFieldType != undefined) {
                             var fieldValue = selectedGenericBusinessEntity.FieldValues[idFieldType.Name];
                             if (fieldValue != undefined)
                                 genericBusinessEntityId = fieldValue.Value;
@@ -91,11 +92,16 @@ app.service('VR_GenericData_GenericBEActionService',
             };
             registerActionType(actionType);
         }
-    
+
         return ({
             defineGenericBEMenuActions: defineGenericBEMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditAccount: registerEditAccount,
         });
-    }]);
+    };
+
+    appControllers.service('VR_GenericData_GenericBEActionService', GenericBEActionService);
+
+})(appControllers);
+
