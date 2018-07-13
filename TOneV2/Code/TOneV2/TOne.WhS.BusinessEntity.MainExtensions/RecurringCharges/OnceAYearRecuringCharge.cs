@@ -26,21 +26,31 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     if (this.Date.Day >= context.FromDate.Day && this.Date.Day <= context.ToDate.Day)
                     {
                         for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
+                        {
+                            var fromDate = new DateTime(i, this.Date.Month, this.Date.Day);
+                            var toDate = fromDate.AddYears(1).AddDays(-1);
                             periodsList.Add(new RecurringChargePeriodOutput
                             {
-                                From = new DateTime(i, this.Date.Month, this.Date.Day),
-                                To = new DateTime(i+1, this.Date.Month, this.Date.Day -1),
+                                From = fromDate,
+                                To = toDate,
                             });
+                        }
+                           
                     }
                 }
                 else
                 {
                     for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
+                    {
+                        var fromDate = new DateTime(i, this.Date.Month, this.Date.Day);
+                        var toDate = fromDate.AddYears(1).AddDays(-1);
                         periodsList.Add(new RecurringChargePeriodOutput
                         {
-                            From = new DateTime(i, this.Date.Month, this.Date.Day),
-                            To = new DateTime(i + 1, this.Date.Month, this.Date.Day - 1),
+                            From = fromDate,
+                            To = toDate,
                         });
+                    }
+                       
                 }
             }
             context.Periods = periodsList;
