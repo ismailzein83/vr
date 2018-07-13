@@ -51,7 +51,7 @@ namespace TOne.WhS.Deal.Business
                 if (swapDealSetting.EndDate.HasValue)
                 {
                     DateTime endDate = swapDealSetting.EndDate.Value;
-                    daysToEnd = DateTime.Now>endDate ? 0 :(endDate - DateTime.Now).Days;
+                    daysToEnd = DateTime.Now > endDate ? 0 : (endDate - DateTime.Now).Days;
                 }
 
                 minDealBED = minDealBED > swapDealSetting.BeginDate
@@ -113,7 +113,7 @@ namespace TOne.WhS.Deal.Business
                 ToTime = context.ToTime.Value
             };
             List<AnalyticRecord> saleRecords = analyticManager.GetAllFilteredRecords(saleAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> saleDataRecordObjects = GetAnalyticRecords(saleRecords, saleSwapDealInfoByDealId, context.ToTime.Value);
+            IEnumerable<DataRecordObject> saleDataRecordObjects = GetAnalyticRecords(saleRecords, saleSwapDealInfoByDealId, context.ToTime.Value, "IN");
 
             foreach (var dataRecord in saleDataRecordObjects)
             {
@@ -129,7 +129,7 @@ namespace TOne.WhS.Deal.Business
                 ToTime = context.ToTime.Value
             };
             List<AnalyticRecord> costRecords = analyticManager.GetAllFilteredRecords(costAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> costDataRecordObjects = GetAnalyticRecords(costRecords, costSwapDealInfoByDealId, context.ToTime.Value);
+            IEnumerable<DataRecordObject> costDataRecordObjects = GetAnalyticRecords(costRecords, costSwapDealInfoByDealId, context.ToTime.Value, "OUT");
 
             foreach (var dataRecord in costDataRecordObjects)
             {
@@ -137,7 +137,7 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
-        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate)
+        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate, string Direction)
         {
             var salePricedTrafficByDealId = new OverallDealnfoByDealId();
             var salePricedTrafficByDealIdPlus = new OverallDealnfoByDealId();
@@ -175,10 +175,10 @@ namespace TOne.WhS.Deal.Business
                             switch (tierNb)
                             {
                                 case 1:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, "IN", salePricedTrafficByDealId, toDateDate);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, Direction, salePricedTrafficByDealId, toDateDate);
                                     break;
                                 case 2:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, "IN+", salePricedTrafficByDealIdPlus, toDateDate);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), salePricedTrafficByDealIdPlus, toDateDate);
                                     break;
                             }
                         }
@@ -191,7 +191,7 @@ namespace TOne.WhS.Deal.Business
                         {
                             int groupNb = (int)origSaleDealZoneGroupNb.Value;
                             OverallDealInfo dealInfo = saleProgressByGroupNb.GetRecord(groupNb);
-                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, "IN+", salePricedTrafficByDealIdPlus, toDateDate);
+                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), salePricedTrafficByDealIdPlus, toDateDate);
                         }
                     }
                 }
