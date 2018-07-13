@@ -24,19 +24,24 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             bool codeGroupExistInNotImportedData = false;
 
-            string mainBreakoutCode = null;
-            string zoneName = null;
+          
+            List<string> codesByZone=new List<string>();
+            List<string> codes=new List<string>();
 
             IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(allCodes.CountryId);
             foreach (NotImportedCode notImportedCode in allCodes.NotImportedCodes)
             {
-                if (codeGroupCodes.Any(x => x.Code == notImportedCode.Code))
+                foreach (var codeGroup in codeGroupCodes)
                 {
-                    mainBreakoutCode = notImportedCode.Code;
-                    zoneName = notImportedCode.ZoneName;
-                    codeGroupExistInNotImportedData = true;
-                    break;
+                    if (codeGroup.Code == notImportedCode.Code)
+                    {
+                        codes.Add(notImportedCode.Code);
+                        if (codeGroupExistInNotImportedData == false)
+                            codeGroupExistInNotImportedData = true;
+                    }
                 }
+                var zoneCodes = string.Format("'{0}({1})'", notImportedCode.ZoneName, string.Join<string>(",", codes));
+                codesByZone.Add(zoneCodes);
             }
             var pricelistCodeManager = new PriceListCodeManager();
 
@@ -48,7 +53,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             CountryManager countryManager = new CountryManager();
             string countryName = countryManager.GetCountryName(allCodes.CountryId);
 
-            context.Message = string.Format("Country '{2}' has code group '{0}' ended in zone '{1}'", mainBreakoutCode, zoneName, countryName);
+            context.Message = string.Format("In country '{0}',the following main breakout zone(s):'{1}',are closed.", countryName, codes);
             return false;
 
         }

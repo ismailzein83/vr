@@ -23,7 +23,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             var invalidCodes = new HashSet<string>();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
-            DateTime codeClosureDate = DateTime.Today.AddDays(importSPLContext.CodeCloseDateOffset.Days);
+            DateTime codeClosureDate = importSPLContext.CodeEffectiveDate;
 
             foreach (NotImportedCode notImportedCode in countryNotImportedCodes.NotImportedCodes)
             {
