@@ -63,7 +63,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     selectorAPI.clearDataSource();
 
                     var promises = [];
