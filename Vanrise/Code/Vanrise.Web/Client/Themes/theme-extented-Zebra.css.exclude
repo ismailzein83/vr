@@ -1,194 +1,194 @@
 ﻿.login-btn {
-    background-color: #777777 !important;
-    border-color: #777777 !important;
+    background-color: #FF0040 !important;
+    border-color: #FF0040 !important;
     color: #FFF;
     text-transform: uppercase;
     font-weight: 700;
 }
 
 .bg-custom {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
     color: #FFF !important;
 }
 
 .bgcolor-0 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-0 {
-    background: -webkit-linear-gradient(bottom, #BCBCBC, #777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC, #777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom, #BCBCBC, #FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC, #FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-1 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-1 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC, #0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC, #0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-2 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-2 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC, #777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC, #777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC, #FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC, #FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-3 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-3 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC, #0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-4 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-4 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-5 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-5 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-6 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-6 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-7 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-7 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-8 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-8 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-9 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-9 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-10 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-10 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-11 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-11 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-12 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-12 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-13 {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
 
 .bgcolor-grad-13 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .bgcolor-14 {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
 }
 
 .bgcolor-grad-14 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#777777); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC, #777777); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#777777); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #777777); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#FF0040); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC, #FF0040); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#FF0040); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #FF0040); /*Standard*/
 }
 
 .bgcolor-15 {
-    background: #AFAFAF !important;
+    background: #0080FF !important;
 }
 /*rgba(0, 0, 0, 0.01) linear-gradient(to bottom, #BCBCBC, #F00) repeat scroll 0% 0%*/
 .bgcolor-grad-15 {
-    background: -webkit-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom,#BCBCBC,#AFAFAF); /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, #BCBCBC, #AFAFAF); /*Standard*/
+    background: -webkit-linear-gradient(bottom,#BCBCBC,#0080FF); /*Safari 5.1-6*/
+    background: -o-linear-gradient(bottom,#BCBCBC,#0080FF); /*Opera 11.1-12*/
+    background: -moz-linear-gradient(bottom,#BCBCBC,#0080FF); /*Fx 3.6-15*/
+    background: linear-gradient(to bottom, #BCBCBC, #0080FF); /*Standard*/
 }
 
 .vr-modal-header {
-    background-color: #777777 !important;
+    background-color: #FF0040 !important;
     color: #FFF;
 }
 
@@ -202,11 +202,11 @@
 }
 
 .action-bar {
-    background-color: #777777;
+    background-color: #FF0040;
 }
 
     .action-bar .vr-half-circle {
-        background-color: #777777;
+        background-color: #FF0040;
     }
 
 .btncustom {
@@ -225,65 +225,65 @@
     }
 
 .drill-down-level-0 {
-    background: transparent linear-gradient(to top, #777777, #777777 ) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #FF0040, #FF0040 ) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-1 {
-    background: transparent linear-gradient(to top, #AFAFAF, #AFAFAF) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #0080FF, #0080FF) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-2 {
-    background: transparent linear-gradient(to top, #777777, #777777) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #FF0040, #FF0040) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-3 {
-    background: transparent linear-gradient(to top,#AFAFAF, #AFAFAF) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top,#0080FF, #0080FF) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-4 {
-    background: transparent linear-gradient(to top,#777777, #777777) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top,#FF0040, #FF0040) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-5 {
-    background: transparent linear-gradient(to top, #AFAFAF, #AFAFAF) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #0080FF, #0080FF) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-6 {
-    background: transparent linear-gradient(to top, #777777, #777777) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #FF0040, #FF0040) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-7 {
-    background: transparent linear-gradient(to top, #AFAFAF, #AFAFAF) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #0080FF, #0080FF) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-8 {
-    background: transparent linear-gradient(to top,#777777, #777777) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top,#FF0040, #FF0040) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .drill-down-level-9 {
-    background: transparent linear-gradient(to top, #AFAFAF, #AFAFAF) repeat scroll 0% 0%;
+    background: transparent linear-gradient(to top, #0080FF, #0080FF) repeat scroll 0% 0%;
     color: #FFF;
     border-bottom: 0px;
 }
 
 .vr-toolbox .item {
-    background-color: #AFAFAF !important;
+    background-color: #0080FF !important;
 }
