@@ -10,8 +10,6 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vcba="clr-namespace:Vanrise.Common.BP.Arguments;assembly=Vanrise.Common.BP.Arguments"
- xmlns:vcba1="clr-namespace:Vanrise.Common.BP.Activities;assembly=Vanrise.Common.BP.Activities"
- xmlns:vcd="clr-namespace:Vanrise.Common.Data;assembly=Vanrise.Common.Data"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -57,10 +55,6 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <Sequence.Variables>
-      <Variable x:TypeArguments="vcd:IDBReplicationDataManager" Name="DBReplicationDataManager" />
-      <Variable x:TypeArguments="ve:DBReplicationDefinition" Name="DBReplicationDefinition" />
-    </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Database Replication Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -68,18 +62,6 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="ve:DBReplicationDefinition">
-          <mca:CSharpReference x:TypeArguments="ve:DBReplicationDefinition">DBReplicationDefinition</mca:CSharpReference>
-        </OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="ve:DBReplicationDefinition">
-          <mca:CSharpValue x:TypeArguments="ve:DBReplicationDefinition">new Vanrise.Common.Business.DBReplicationDefinitionManager().GetDBReplicationDefinition(Input.DBReplicationDefinitionId)</mca:CSharpValue>
-        </InArgument>
-      </Assign.Value>
-    </Assign>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Database Replication Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -87,23 +69,20 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQ29tbW9uLkJQXERCUmVwbGljYXRpb25Qcm9jZXNzLnhhbWwQOwNzDgIBAUAFRiACASNHBVIOAgEaUwVjJQIBDWQFaiMCAQhrBXEgAgECQwtDhQECASVAYECIAQIBJE8LT9MBAgEfSgtKegIBG2ALYGcCARZbC1t+AgESVgtWcgIBDmcLZ3YCAQluC26FAQIBBGtga4gBAgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQ29tbW9uLkJQXERCUmVwbGljYXRpb25Qcm9jZXNzLnhhbWwHOQNJDgIBAToFQCACAQZBBUcgAgECPQs9hQECAQg6YDqIAQIBB0QLRIUBAgEEQWBBiAECAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="InitializeDBReplication_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="FinalizeDBReplication_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,434">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Common.BP.DBReplicationProcess_1" sap:VirtualizedContainerService.HintSize="304,514" />
+      <sap2010:ViewStateData Id="Vanrise.Common.BP.DBReplicationProcess_1" sap:VirtualizedContainerService.HintSize="262,288" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
