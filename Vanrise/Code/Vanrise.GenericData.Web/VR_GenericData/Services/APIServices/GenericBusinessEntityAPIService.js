@@ -9,7 +9,7 @@
 
         return {
             GetFilteredGenericBusinessEntities: GetFilteredGenericBusinessEntities,
-            GetGenericBusinessEntity: GetGenericBusinessEntity,
+            GetGenericBusinessEntityDetail: GetGenericBusinessEntityDetail,
             AddGenericBusinessEntity: AddGenericBusinessEntity,
             GetGenericBusinessEntityEditorRuntime:GetGenericBusinessEntityEditorRuntime,
             DoesUserHaveAddAccess:DoesUserHaveAddAccess,
@@ -34,6 +34,12 @@
                 businessEntityDefinitionId: businessEntityDefinitionId,
                     genericBusinessEntityId: genericBusinessEntityId,
         historyId: historyId
+            });
+        }
+        function GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBusinessEntityDetail'), {
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                genericBusinessEntityId: genericBusinessEntityId
             });
         }
         function GetGenericBusinessEntityInfo(businessEntityDefinitionId,serializedFilter) {

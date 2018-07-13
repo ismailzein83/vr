@@ -24,7 +24,7 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onGenericBEUpdated = onGenericBEUpdated;
             };
-            VRModalService.showModal('/Client/Modules/VR_Voucher/Elements/VoucherCardsGeneration/Views/VoucherCardsActivator.html', parameters, settings);
+             VRModalService.showModal('/Client/Modules/VR_Voucher/Elements/VoucherCardsGeneration/Views/VoucherCardsActivator.html', parameters, settings);
         }
 
     

@@ -6,6 +6,7 @@ using System.Web.Http;
 using Vanrise.Voucher.Business;
 using Vanrise.Voucher.Entities;
 using Vanrise.Web.Base;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Voucher.Web.Controllers
 {
@@ -30,10 +31,15 @@ namespace Vanrise.Voucher.Web.Controllers
         }
         [HttpPost]
         [Route("ActivateVoucherCards")]
-        public bool ActivateVoucherCards(VoucherCardsActivationInput voucherCardsActivationInput)
+        public object ActivateVoucherCards(VoucherCardsActivationInput voucherCardsActivationInput)
         {
             return _voucherCardsManager.ActivateVoucherCards(voucherCardsActivationInput);
         }
-
+        [HttpGet]
+        [Route("UnlockVoucher")]
+        public object UnlockVoucher(long voucherId)
+        {
+            return _voucherCardsManager.UnlockVoucher(voucherId);
+        }
     }
 }

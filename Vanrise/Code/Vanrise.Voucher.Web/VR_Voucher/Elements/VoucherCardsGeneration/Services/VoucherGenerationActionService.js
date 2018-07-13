@@ -1,16 +1,15 @@
 ﻿'use strict';
 
 app.service('VR_Voucher_VoucherGenerationActionService',
-    ['VRModalService', 'VRNotificationService', 'SecurityService', 'VR_Voucher_VoucherCardsGenerationService', 'VR_GenericData_GenericBEActionService',
-    function (VRModalService, VRNotificationService, SecurityService, VR_Voucher_VoucherCardsGenerationService, VR_GenericData_GenericBEActionService) {
+    ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'VR_Voucher_VoucherCardsGenerationService', 'VR_GenericData_GenericBEActionService',
+    function (VRModalService, UtilsService,VRNotificationService, SecurityService, VR_Voucher_VoucherCardsGenerationService, VR_GenericData_GenericBEActionService) {
 
 
-        function registerActivateAccount() {
+        function registerActivateAction() {
 
             var actionType = {
                 ActionTypeName: "ActivateVouchers",
                 ExecuteAction: function (payload) {
-                    console.log(payload);
                     if (payload == undefined)
                         return;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
@@ -20,13 +19,13 @@ app.service('VR_Voucher_VoucherGenerationActionService',
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedGenericBE);
                     };
-                    VR_Voucher_VoucherCardsGenerationService.activateVoucherGeneration(onGenericBEUpdated,genericBusinessEntityId, editorSize);
+                    VR_Voucher_VoucherCardsGenerationService.activateVoucherGeneration(onGenericBEUpdated, genericBusinessEntityId, editorSize);
                 }
             };
             VR_GenericData_GenericBEActionService.registerActionType(actionType);
         }
     
         return ({
-            registerActivateAccount: registerActivateAccount
+            registerActivateAction: registerActivateAction
         });
     }]);

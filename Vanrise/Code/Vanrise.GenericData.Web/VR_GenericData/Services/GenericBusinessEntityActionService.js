@@ -52,9 +52,32 @@
                             }
                         };
                         var promise = actionType.ExecuteAction(payload);
-                        //VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
 
-                        //});
+
+                        if (promise != undefined && promise.then != undefined) {
+						gridAPI.showLoader();
+						 var promiseDeffered = UtilsService.createPromiseDeferred();
+                            promise.then(function(response) {
+                                if(genericBEGridAction.ReloadGridItem && response) {
+                                    VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
+                                        if (payload != undefined)
+                                            payload.onItemUpdated(response);
+                                        promiseDeffered.resolve();
+                                    }).catch(function (error) {
+                                        promiseDeffered.reject(error);
+                                    });
+                                        } else {
+                                    promiseDeffered.resolve();
+                                }
+                                }).catch(function (error) {
+                                promiseDeffered.reject(error);
+                            }).finally(function () {
+                                gridAPI.hideLoader();
+                                        });
+						 return promiseDeffered.promise;
+
+                        }
+
                     }
                 });
             }

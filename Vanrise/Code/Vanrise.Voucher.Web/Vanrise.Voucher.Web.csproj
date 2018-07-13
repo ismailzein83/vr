@@ -98,6 +98,10 @@
     <Folder Include="VR_Voucher\Elements\VoucherCards\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
@@ -139,6 +143,7 @@
     <Content Include="VR_Voucher\Elements\VoucherCards\Services\VoucherCardsSerialNumberPartsService.js" />
     <Content Include="VR_Voucher\Elements\VoucherCardsGeneration\Views\VoucherCardsActivator.html" />
     <Content Include="VR_Voucher\Elements\VoucherCardsGeneration\Views\VoucherCardsActivatorController.js" />
+    <Content Include="VR_Voucher\Elements\VoucherCards\Services\VoucherActionService.js" />
     <Content Include="VR_Voucher\ModuleInitialization.js" />
   </ItemGroup>
   <PropertyGroup>

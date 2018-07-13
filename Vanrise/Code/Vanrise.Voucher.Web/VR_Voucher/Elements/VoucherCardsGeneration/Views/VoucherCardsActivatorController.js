@@ -81,9 +81,15 @@
         }
         function activate() {
             $scope.isLoading = true;
-
-            return VR_Voucher_VoucherCardsAPIService.ActivateVoucherCards(buildActivateVoucherCardsActivationInputObjFromScope()).then(function (response) {
-                
+            var VoucherCardsActivationInput = buildActivateVoucherCardsActivationInputObjFromScope();
+            
+            return VR_Voucher_VoucherCardsAPIService.ActivateVoucherCards(VoucherCardsActivationInput).then(function (response) {
+                if (response.Result == 0) {
+                    if ($scope.onGenericBEUpdated != undefined) {
+                        $scope.onGenericBEUpdated(response.UpdatedObject);
+                    }
+                }
+                else VRNotificationService.notifyException(error, $scope);
                     $scope.modalContext.closeModal();
             
             }).catch(function (error) {

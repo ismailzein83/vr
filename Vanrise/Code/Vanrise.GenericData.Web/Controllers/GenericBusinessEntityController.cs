@@ -31,6 +31,13 @@ namespace Vanrise.GenericData.Web.Controllers
             genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
             return _manager.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId, historyId);
         }
+        [HttpGet]
+        [Route("GetGenericBusinessEntityDetail")]
+        public GenericBusinessEntityDetail GetGenericBusinessEntity(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
+        {
+           genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
+           return _manager.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId);
+        }
 
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]
