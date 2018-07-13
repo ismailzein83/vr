@@ -122,7 +122,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 					}
 					else
 					{
-						context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}' because: '{2}'.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject, string.Join(";", errors)));
+						context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}'. Following are the error messages: '{2}'.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject, string.Join(" ", errors.Select(x => x.ErrorMessage))));
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, null, receivedMailMessage.Header.MessageSendTime, null, ReceivedPricelistStatus.FailedDueToReceivedMailError, errors, out recordId);
 						receivedSupplierPricelistManager.SendMailToSupplier(recordId, AutoImportEmailTypeEnum.Failed);
 						receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
