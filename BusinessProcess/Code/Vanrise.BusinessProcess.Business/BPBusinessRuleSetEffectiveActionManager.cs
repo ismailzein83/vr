@@ -146,6 +146,7 @@ namespace Vanrise.BusinessProcess.Business
                 RuleDefinitionId = bpBusinessRuleSetEffectiveAction.RuleDefinitionId,
                 IsInherited = bpBusinessRuleSetEffectiveAction.IsInherited,
                 Description = ruleDefinitionManager.GetRuleDefinitionDescription(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
+                Title = ruleDefinitionManager.GetRuleDefinitionTitle(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
                 ActionDescription = bpBusinessRuleSetEffectiveAction.Action.GetDescription(),
                 ActionTypesIds = ruleDefinitionManager.GetBusinessRuleDefinitionById(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Settings.ActionTypes,
             };
