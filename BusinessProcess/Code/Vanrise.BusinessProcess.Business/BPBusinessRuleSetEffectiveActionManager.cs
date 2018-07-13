@@ -153,42 +153,47 @@ namespace Vanrise.BusinessProcess.Business
         }
         private Dictionary<Guid, BPBusinessRuleEffectiveAction> UpdateEffectiveActions(int businessRuleSetId)
         {
-            Dictionary<Guid, BPBusinessRuleEffectiveAction> copy = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
+            Dictionary<Guid, BPBusinessRuleEffectiveAction> actions = null;
 
             BPBusinessRuleSetManager businessRuleSetManager = new BPBusinessRuleSetManager();
             var businessRuleSet = businessRuleSetManager.GetBusinessRuleSetsByID(businessRuleSetId);
             if (businessRuleSet.ParentId != null)
             {
-                copy = UpdateEffectiveActions(businessRuleSet.ParentId.Value);
+                actions = UpdateEffectiveActions(businessRuleSet.ParentId.Value);
             }
-            Dictionary<Guid, BPBusinessRuleEffectiveAction> copyFromPrevious = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
-            Dictionary<Guid, BPBusinessRuleEffectiveAction> defaultActions = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
-            BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager();
-            if (businessRuleSet.ParentId == null)
-                defaultActions = actionManager.GetDefaultBusinessRulesActions(businessRuleSet.BPDefinitionId);
-            else
-                defaultActions = copy;
-            foreach (var defaultAction in defaultActions)
+
+            if (actions == null)
+            {
+                BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager();
+                actions = actionManager.GetDefaultBusinessRulesActions(businessRuleSet.BPDefinitionId);
+            }
+
+            Dictionary<Guid, BPBusinessRuleEffectiveAction> actionsCopy = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
+
+            foreach (var action in actions)
             {
                 var ruleEffectiveAction = new BPBusinessRuleEffectiveAction()
                 {
-                    RuleDefinitionId = defaultAction.Value.RuleDefinitionId,
-                    Action = defaultAction.Value.Action,
+                    RuleDefinitionId = action.Value.RuleDefinitionId,
+                    Action = action.Value.Action,
                     IsInherited = true
                 };
-                copyFromPrevious.Add(defaultAction.Key, ruleEffectiveAction);
+                actionsCopy.Add(action.Key, ruleEffectiveAction);
             }
+
             foreach (var action in businessRuleSet.Details.ActionDetails)
             {
-                var effectiveAction = copyFromPrevious.GetRecord(action.BPBusinessRuleDefinitionId);
-                if (copyFromPrevious != null)
+                var effectiveAction = actionsCopy.GetRecord(action.BPBusinessRuleDefinitionId);
+                if (effectiveAction != null)
                 {
                     effectiveAction.IsInherited = false;
                     effectiveAction.Action = action.Settings.Action;
                 }
             }
-            return copyFromPrevious;
+            return actionsCopy;
         }
+      
+
 
         #endregion
     }
