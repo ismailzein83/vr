@@ -27,7 +27,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
         Name = 10,
         VatID = 11,
         CustomerVatID = 12,
-        CarrierCompanyName = 13
+        CarrierCompanyName = 13,
+        Email = 14,
+        Attention = 15
     }
     public class CarrierPartnerSettings : InvoicePartnerManager
     {
@@ -72,12 +74,22 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         string carrierCompanyName = null;
                         CompanySetting companySetting = null;
 
+                        string pricingContact = null;
+                        string pricingEmail = null;
                         if (financialAccount.CarrierProfileId.HasValue)
                         {
                             companySetting = carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
                             carrierProfile = carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
                             carrierName = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
                             carrierProfile.Settings.ThrowIfNull("carrierProfile.Settings", carrierProfile.CarrierProfileId);
+                            var pricingContactObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.PricingContactPerson);
+                            if (pricingContactObject != null)
+                                pricingContact = pricingContactObject.Description;
+
+                            var pricingEmailObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.PricingEmail);
+                            if (pricingEmailObject != null)
+                                pricingEmail = pricingEmailObject.Description;
+
                             carrierCompanyName = carrierProfile.Settings.Company;
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
                         }
@@ -90,9 +102,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             carrierProfile.Settings.ThrowIfNull("carrierProfile.Settings", carrierAccount.CarrierProfileId);
                             carrierCompanyName = carrierProfile.Settings.Company;
                             carrierName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
+                            var pricingContactObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.PricingContactPerson);
+                            if (pricingContactObject != null)
+                                pricingContact = pricingContactObject.Description;
 
+                            var pricingEmailObject = carrierProfile.Settings.Contacts.FindRecord(x => x.Type == CarrierContactType.PricingEmail);
+                            if (pricingEmailObject != null)
+                                pricingEmail = pricingEmailObject.Description;
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
                         }
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, pricingEmail, true);
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attention, pricingContact, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.CarrierCompanyName,carrierCompanyName , true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Carrier, carrierName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
