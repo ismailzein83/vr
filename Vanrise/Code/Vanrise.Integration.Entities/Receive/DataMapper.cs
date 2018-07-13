@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
 {    
     public abstract class DataMapper
     {
-        public abstract MappingOutput MapData(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches);
+        public abstract MappingOutput MapData(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers);
 
         private IDataSourceLogger _logger;
         public void SetLogger(IDataSourceLogger logger)
@@ -49,7 +49,8 @@ namespace Vanrise.Integration.Entities
     {
         Valid = 1,
         Invalid = 2,
-        Empty = 3
+        Empty = 3, 
+        PartialInvalid = 4
     }
     public class MappingOutput
     {

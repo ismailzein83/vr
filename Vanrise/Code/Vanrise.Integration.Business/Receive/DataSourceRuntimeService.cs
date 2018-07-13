@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -16,15 +17,18 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceRuntimeService : RuntimeService
     {
+        const int failedRecordIdentifiersThreshold = 100;
+
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
         IDataSourceRuntimeInstanceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceRuntimeInstanceDataManager>();
         DataSourceManager _dataSourceManager = new DataSourceManager();
+
         public override void Execute()
         {
             List<DataSourceRuntimeInstance> dataSourceRuntimeInstances = _dataManager.GetAll();
-            if(dataSourceRuntimeInstances != null && dataSourceRuntimeInstances.Count > 0)
+            if (dataSourceRuntimeInstances != null && dataSourceRuntimeInstances.Count > 0)
             {
-                foreach(var dsRuntimeInstance in dataSourceRuntimeInstances)
+                foreach (var dsRuntimeInstance in dataSourceRuntimeInstances)
                 {
                     bool isInstanceLockedAndExecuted = false;
                     TransactionLocker.Instance.TryLock(String.Concat("DataSourceRuntimeInstance_", dsRuntimeInstance.DataSourceRuntimeInstanceId),
@@ -48,7 +52,7 @@ namespace Vanrise.Integration.Business
                                 {
                                     _dataManager.DeleteInstance(dsRuntimeInstance.DataSourceRuntimeInstanceId);
                                 }
-                            }                            
+                            }
                         });
                     if (isInstanceLockedAndExecuted)
                         break;
@@ -176,7 +180,7 @@ namespace Vanrise.Integration.Business
 
                 logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string errorMessage = string.Format("Adapter failed due to error: {0}", ex.ToString());
                 logger.WriteError(errorMessage);
@@ -239,6 +243,7 @@ namespace Vanrise.Integration.Business
             };
             return batchInfo;
         }
+
         private MappingOutput ExecuteCustomCode(Guid dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems, IDataSourceLogger logger)
         {
             MappingOutput outputResult = new MappingOutput();
@@ -247,10 +252,36 @@ namespace Vanrise.Integration.Business
             DataMapper mapper = Activator.CreateInstance(mapperType) as DataMapper;
             mapper.SetLogger(logger);
 
+            List<object> failedRecordIdentifiers = new List<object>();
+
             try
             {
-                outputResult = mapper.MapData(dataSourceId, data, outputItems);
-                logger.WriteInformation("Mapped data successfully with output result {0}", outputResult.Result);
+                outputResult = mapper.MapData(dataSourceId, data, outputItems, failedRecordIdentifiers);
+
+                if (failedRecordIdentifiers == null || failedRecordIdentifiers.Count == 0)
+                {
+                    logger.WriteInformation("Batch mapped successfully");
+                }
+                else
+                {
+                    int failedRecordIdentifiersNumber = failedRecordIdentifiers.Count;
+                    var totalRecordsNumber = outputItems.Sum(itm => (itm != null && itm.Item != null) ? itm.Item.GetRecordCount() : 0) + failedRecordIdentifiersNumber;
+                    string message;
+
+                    if (failedRecordIdentifiersNumber <= failedRecordIdentifiersThreshold)
+                    {
+                        string concatenatedFailedRecordIdentifiers = string.Join<object>(", ", failedRecordIdentifiers);
+                        message = string.Format("{0} records failed out of {1} while mapping data. Failed records identifiers: {2}", failedRecordIdentifiersNumber, totalRecordsNumber, concatenatedFailedRecordIdentifiers);
+                    }
+                    else
+                    {
+                        message = string.Format("More than {0} records failed while mapping data", failedRecordIdentifiersThreshold);
+                    }
+
+                    outputResult.Message = message;
+                    outputResult.Result = MappingResult.PartialInvalid;
+                    logger.WriteWarning("Batch mapped partially");
+                }
             }
             catch (Exception ex)
             {
@@ -302,7 +333,7 @@ namespace Vanrise.Integration.Business
 
         private string BuildCustomClass(string customCode, out string fullTypeName)
         {
-            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(Guid dataSourceId, Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches)
+            string code = (new StringBuilder()).Append(@"public override Vanrise.Integration.Entities.MappingOutput MapData(Guid dataSourceId, Vanrise.Integration.Entities.IImportedData data, Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
                                                             {").Append(customCode).Append("}").ToString();
 
             StringBuilder classDefinitionBuilder = new StringBuilder().Append(@"
