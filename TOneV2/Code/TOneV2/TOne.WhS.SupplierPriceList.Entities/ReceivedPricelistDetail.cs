@@ -10,5 +10,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public string StatusDescription { get; set; }
         public string PriceListTypeDescription { get; set; }
         public bool SentToSupplier { get; set; }
+        public int CurrencyId { get; set; }
 	}
 }

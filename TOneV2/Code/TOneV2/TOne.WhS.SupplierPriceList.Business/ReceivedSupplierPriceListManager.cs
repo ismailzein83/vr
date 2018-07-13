@@ -182,6 +182,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 		}
 		private static ReceivedPricelistDetail ReceivedPriceListDetailMapper(ReceivedPricelist receivedPricelist)
 		{
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 			return new ReceivedPricelistDetail()
 			{
 				ReceivedPricelist = receivedPricelist,
@@ -190,6 +191,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 				PriceListTypeDescription = receivedPricelist.PricelistType.HasValue ? Vanrise.Common.Utilities.GetEnumDescription(receivedPricelist.PricelistType.Value) : null,
 				StatusDescription = Vanrise.Common.Utilities.GetEnumDescription(receivedPricelist.Status),
 				SupplierName = new CarrierAccountManager().GetCarrierAccountName(receivedPricelist.SupplierId),
+                CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(receivedPricelist.SupplierId)
 			};
 		}
 		#endregion
