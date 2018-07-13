@@ -51,7 +51,7 @@ namespace TOne.WhS.Deal.Business
                 if (swapDealSetting.EndDate.HasValue)
                 {
                     DateTime endDate = swapDealSetting.EndDate.Value;
-                    daysToEnd = (endDate - DateTime.Now).Days;
+                    daysToEnd = DateTime.Now>endDate ? 0 :(endDate - DateTime.Now).Days;
                 }
 
                 minDealBED = minDealBED > swapDealSetting.BeginDate
