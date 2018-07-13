@@ -32,6 +32,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                             string invalidCountryName = countryManager.GetCountryName(zoneData.CountryId);
                             if (invalidCountryName != null)
                                 invalidCountryNames.Add(invalidCountryName);
+                            break;
                         }
                     }
                 }
