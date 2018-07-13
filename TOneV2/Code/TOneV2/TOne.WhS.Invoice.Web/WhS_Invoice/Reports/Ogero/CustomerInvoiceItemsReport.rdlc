@@ -1215,7 +1215,7 @@
                 <Value>=Parameters!InvoiceDate.Value</Value>
               </Parameter>
               <Parameter Name="InvoiceDueDate">
-                <Value>=Parameters!InvoiceDate.Value</Value>
+                <Value>=Parameters!InvoiceDueDate.Value</Value>
               </Parameter>
               <Parameter Name="TotalAmount">
                 <Value>=Parameters!TotalAmount.Value</Value>
@@ -1678,6 +1678,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Email">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="InvoiceDueDate">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

@@ -49,6 +49,7 @@
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>22pt</FontSize>
                   <FontWeight>Bold</FontWeight>
+                  <Color>#4db823</Color>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -58,7 +59,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.25577in</Top>
+        <Top>1.88077in</Top>
         <Left>2.50025in</Left>
         <Height>0.375in</Height>
         <Width>3.47951in</Width>
@@ -91,7 +92,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.74424in</Top>
+        <Top>2.49424in</Top>
         <Left>0.07396in</Left>
         <Height>0.20833in</Height>
         <Width>0.90277in</Width>
@@ -126,7 +127,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.74424in</Top>
+        <Top>2.49424in</Top>
         <Left>5.23201in</Left>
         <Height>0.20833in</Height>
         <Width>1.10388in</Width>
@@ -160,7 +161,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.74424in</Top>
+        <Top>2.49424in</Top>
         <Left>1.00451in</Left>
         <Height>0.20833in</Height>
         <Width>1.9035in</Width>
@@ -194,7 +195,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.74424in</Top>
+        <Top>2.49424in</Top>
         <Left>6.35304in</Left>
         <Height>0.20833in</Height>
         <Width>1.19841in</Width>
@@ -211,7 +212,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.83452in</Top>
+        <Top>3.58452in</Top>
         <Left>1.72315in</Left>
         <Height>0.02083in</Height>
         <Width>6.04989in</Width>
@@ -223,22 +224,6 @@
           <BackgroundColor>Black</BackgroundColor>
         </Style>
       </Rectangle>
-      <Image Name="Image2">
-        <Source>Database</Source>
-        <Value>=Parameters!Image.Value</Value>
-        <MIMEType>image/png</MIMEType>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.46062in</Top>
-        <Left>0.16724in</Left>
-        <Height>0.73959in</Height>
-        <Width>2.2659in</Width>
-        <ZIndex>7</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
       <Tablix Name="Tablix2">
         <TablixBody>
           <TablixColumns>
@@ -934,11 +919,11 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>2.26042in</Top>
+        <Top>3.01042in</Top>
         <Left>0.05697in</Left>
         <Height>0.46875in</Height>
         <Width>7.71608in</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
         </Visibility>
@@ -1238,11 +1223,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>2.89583in</Top>
+        <Top>3.64583in</Top>
         <Left>1.72315in</Left>
         <Height>0.25in</Height>
         <Width>6.04989in</Width>
-        <ZIndex>9</ZIndex>
+        <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
         </Visibility>
@@ -1252,76 +1237,102 @@
           </Border>
         </Style>
       </Tablix>
-      <Subreport Name="SupplierRecurringChargeInvoiceReportName">
-        <ReportName>SupplierRecurringChargeInvoiceReport</ReportName>
-        <Parameters>
-          <Parameter Name="Image">
-            <Value>=Parameters!Image.Value</Value>
-          </Parameter>
-          <Parameter Name="Title">
-            <Value>=Parameters!Title.Value</Value>
-          </Parameter>
-          <Parameter Name="InvoiceDate">
-            <Value>=Parameters!InvoiceDate.Value</Value>
-          </Parameter>
-          <Parameter Name="InvoiceNb">
-            <Value>=Parameters!InvoiceNb.Value</Value>
-          </Parameter>
-          <Parameter Name="TotalAmount">
-            <Value>=Parameters!TotalAmount.Value</Value>
-          </Parameter>
-          <Parameter Name="Currency">
-            <Value>=Parameters!Currency.Value</Value>
-          </Parameter>
-          <Parameter Name="CarrierCompanyName">
-            <Value>=Parameters!CarrierCompanyName.Value</Value>
-          </Parameter>
-          <Parameter Name="NormalPrecisionValue">
-            <Value>=Parameters!NormalPrecisionValue.Value</Value>
-          </Parameter>
-          <Parameter Name="Fax">
-            <Value>=Parameters!Fax.Value</Value>
-          </Parameter>
-          <Parameter Name="BillingTime">
-            <Value>=Parameters!BillingTime.Value</Value>
-          </Parameter>
-          <Parameter Name="InvoiceDueDate">
-            <Value>=Parameters!InvoiceDate.Value</Value>
-          </Parameter>
-          <Parameter Name="SupplierVatID">
-            <Value>=Parameters!SupplierVatID.Value</Value>
-          </Parameter>
-          <Parameter Name="RegAddress">
-            <Value>=Parameters!SupplierRegAddress.Value</Value>
-          </Parameter>
-          <Parameter Name="RegNo">
-            <Value>=Parameters!RegNo.Value</Value>
-          </Parameter>
-          <Parameter Name="VatID">
-            <Value>=Parameters!VatID.Value</Value>
-          </Parameter>
-          <Parameter Name="Address">
-            <Value>=Parameters!Address.Value</Value>
-          </Parameter>
-          <Parameter Name="SupplierRegAddress">
-            <Value>=Parameters!SupplierRegAddress.Value</Value>
-          </Parameter>
-          <Parameter Name="Name">
-            <Value>=Parameters!Name.Value</Value>
-          </Parameter>
-          <Parameter Name="Phone">
-            <Value>=Parameters!Phone.Value</Value>
-          </Parameter>
-          <Parameter Name="VatID">
-            <Value>=Parameters!VatID.Value</Value>
-          </Parameter>
-          <Parameter Name="Address">
-            <Value>=Parameters!Address.Value</Value>
-          </Parameter>
-        </Parameters>
-        <Top>3.45361in</Top>
+      <Image Name="Image1">
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
+        <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
+        <Top>0.10317in</Top>
         <Left>0.07396in</Left>
-        <Height>2.47917in</Height>
+        <Height>1.5994in</Height>
+        <Width>3.24421in</Width>
+        <ZIndex>9</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
+      <Rectangle Name="Rectangle1">
+        <ReportItems>
+          <Subreport Name="SupplierRecurringChargeInvoiceReportName">
+            <ReportName>SupplierRecurringChargeInvoiceReport</ReportName>
+            <Parameters>
+              <Parameter Name="Title">
+                <Value>=Parameters!Title.Value</Value>
+              </Parameter>
+              <Parameter Name="Image">
+                <Value>=Parameters!Image.Value</Value>
+              </Parameter>
+              <Parameter Name="Name">
+                <Value>=Parameters!Name.Value</Value>
+              </Parameter>
+              <Parameter Name="RegAddress">
+                <Value>=Parameters!SupplierRegAddress.Value</Value>
+              </Parameter>
+              <Parameter Name="RegNo">
+                <Value>=Parameters!RegNo.Value</Value>
+              </Parameter>
+              <Parameter Name="VatID">
+                <Value>=Parameters!VatID.Value</Value>
+              </Parameter>
+              <Parameter Name="CarrierCompanyName">
+                <Value>=Parameters!CarrierCompanyName.Value</Value>
+              </Parameter>
+              <Parameter Name="Address">
+                <Value>=Parameters!Address.Value</Value>
+              </Parameter>
+              <Parameter Name="Phone">
+                <Value>=Parameters!Phone.Value</Value>
+              </Parameter>
+              <Parameter Name="Fax">
+                <Value>=Parameters!Fax.Value</Value>
+              </Parameter>
+              <Parameter Name="SupplierRegAddress">
+                <Value>=Parameters!SupplierRegAddress.Value</Value>
+              </Parameter>
+              <Parameter Name="SupplierVatID">
+                <Value>=Parameters!SupplierVatID.Value</Value>
+              </Parameter>
+              <Parameter Name="InvoiceNb">
+                <Value>=Parameters!InvoiceNb.Value</Value>
+              </Parameter>
+              <Parameter Name="InvoiceDate">
+                <Value>=Parameters!InvoiceDate.Value</Value>
+              </Parameter>
+              <Parameter Name="InvoiceDueDate">
+                <Value>=Parameters!InvoiceDueDate.Value</Value>
+              </Parameter>
+              <Parameter Name="BillingTime">
+                <Value>=Parameters!BillingTime.Value</Value>
+              </Parameter>
+              <Parameter Name="NormalPrecisionValue">
+                <Value>=Parameters!NormalPrecisionValue.Value</Value>
+              </Parameter>
+              <Parameter Name="Currency">
+                <Value>=Parameters!Currency.Value</Value>
+              </Parameter>
+              <Parameter Name="TotalAmount">
+                <Value>=Parameters!TotalAmount.Value</Value>
+              </Parameter>
+            </Parameters>
+            <Left>0in</Left>
+            <Height>3in</Height>
+            <Width>7.69908in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Subreport>
+        </ReportItems>
+        <PageBreak>
+          <BreakLocation>Start</BreakLocation>
+        </PageBreak>
+        <KeepTogether>true</KeepTogether>
+        <Top>4.01958in</Top>
+        <Left>0.07396in</Left>
+        <Height>3in</Height>
         <Width>7.69909in</Width>
         <ZIndex>10</ZIndex>
         <Style>
@@ -1329,12 +1340,12 @@
             <Style>None</Style>
           </Border>
         </Style>
-      </Subreport>
+      </Rectangle>
     </ReportItems>
-    <Height>5.98834in</Height>
+    <Height>7.10292in</Height>
     <Style />
   </Body>
-  <Width>7.8425in</Width>
+  <Width>7.81125in</Width>
   <Page>
     <PageFooter>
       <Height>0.44687in</Height>
