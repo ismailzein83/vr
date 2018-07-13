@@ -11,3 +11,5 @@
 \Images\INSOFT-02.png
 \Images\nTegra-01.png
 \Images\nTegra-02.png
+\Images\Zebra-01.png
+\Images\Zebra-02.png
