@@ -17,7 +17,9 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.ActionFilterC
         public RecordFilterGroup FilterGroup { get; set; }
         public override bool IsFilterMatch(IGenericBEActionFilterConditionContext context)
         {
-            throw new NotImplementedException();
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
+            var dataRecordDictFilterGenericFieldMatchContext = new DataRecordDictFilterGenericFieldMatchContext(context.Entity.FieldValues, context.DefinitionSettings.DataRecordTypeId);
+            return recordFilterManager.IsFilterGroupMatch(FilterGroup, dataRecordDictFilterGenericFieldMatchContext);
         }
     }
 }

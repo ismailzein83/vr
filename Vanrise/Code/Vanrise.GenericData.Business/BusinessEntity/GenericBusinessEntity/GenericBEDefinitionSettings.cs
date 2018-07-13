@@ -194,11 +194,14 @@ namespace Vanrise.GenericData.Business
     }
     public interface IGenericBEActionFilterConditionContext
     {
+        GenericBEDefinitionSettings DefinitionSettings { get; }
         GenericBusinessEntity Entity { get; }
     }
     public class GenericBEActionFilterConditionContext : IGenericBEActionFilterConditionContext
     {
         public GenericBusinessEntity Entity { get; set; }
+
+        public GenericBEDefinitionSettings DefinitionSettings { get; set; }
     }
 
     public abstract class GenericBECondition
