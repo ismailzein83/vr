@@ -23,7 +23,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.50485in</Top>
-        <Left>5.14119in</Left>
+        <Left>4.99536in</Left>
         <Height>0.27083in</Height>
         <Width>2.4613in</Width>
         <Style>
@@ -56,7 +56,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>2.24424in</Top>
         <Left>0.15163in</Left>
         <Height>0.20833in</Height>
         <Width>0.90277in</Width>
@@ -91,7 +91,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>2.24424in</Top>
         <Left>5.14119in</Left>
         <Height>0.20833in</Height>
         <Width>1.10388in</Width>
@@ -125,7 +125,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>2.24424in</Top>
         <Left>1.08218in</Left>
         <Height>0.20833in</Height>
         <Width>2.159in</Width>
@@ -159,7 +159,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>2.24424in</Top>
         <Left>6.26222in</Left>
         <Height>0.20833in</Height>
         <Width>1.34027in</Width>
@@ -176,7 +176,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.83452in</Top>
+        <Top>3.20952in</Top>
         <Left>1.99052in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
@@ -908,7 +908,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.26042in</Top>
+        <Top>2.63542in</Top>
         <Left>0.05499in</Left>
         <Height>0.46875in</Height>
         <Width>7.71854in</Width>
@@ -1180,7 +1180,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.8866in</Top>
+        <Top>3.2616in</Top>
         <Left>1.99052in</Left>
         <Height>0.19792in</Height>
         <Width>5.78338in</Width>
@@ -1194,57 +1194,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox10">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!Title.Value</Value>
-                <Style>
-                  <FontStyle>Italic</FontStyle>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>18pt</FontSize>
-                  <FontWeight>SemiBold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Center</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.28056in</Top>
-        <Left>3.17433in</Left>
-        <Height>0.375in</Height>
-        <Width>1.5in</Width>
-        <ZIndex>8</ZIndex>
-        <Style>
-          <Border />
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Image Name="Image2">
-        <Source>Database</Source>
-        <Value>=Parameters!Image.Value</Value>
-        <MIMEType>image/png</MIMEType>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.44097in</Top>
-        <Left>0.15163in</Left>
-        <Height>0.7368in</Height>
-        <Width>2.27546in</Width>
-        <ZIndex>9</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
       <Rectangle Name="Rectangle1">
         <ReportItems>
           <Subreport Name="CustomerRecurringChargeInvoiceReportName">
@@ -1328,17 +1277,69 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>8.27828cm</Top>
+        <Top>9.23078cm</Top>
         <Left>0.13967cm</Left>
         <Height>4.1924cm</Height>
         <Width>19.60603cm</Width>
-        <ZIndex>10</ZIndex>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Rectangle>
+      <Image Name="Image1">
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
+        <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
+        <Top>0.05616in</Top>
+        <Left>0.15163in</Left>
+        <Height>1.5994in</Height>
+        <Width>3.24421in</Width>
+        <ZIndex>9</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
+      <Textbox Name="Textbox12">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Statement Of Telephone Account</Value>
+                <Style>
+                  <FontStyle>Italic</FontStyle>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>18pt</FontSize>
+                  <FontWeight>SemiBold</FontWeight>
+                  <Color>#4db823</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>1.7998in</Top>
+        <Left>1.60577in</Left>
+        <Height>0.375in</Height>
+        <Width>5.30208in</Width>
+        <ZIndex>10</ZIndex>
+        <Style>
+          <Border />
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>13.96999cm</Height>
     <Style />
