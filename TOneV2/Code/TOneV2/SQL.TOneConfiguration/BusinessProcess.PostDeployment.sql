@@ -144,7 +144,7 @@ as (select * from (values
 ('BusinessProcess_BP/BPValidationMessage/GetUpdated',null),
 ('BusinessProcess_BP/BPValidationMessage/GetBeforeId',null),
 ('BusinessProcess_BP/BPValidationMessage/GetFilteredBPValidationMessage',null),
-('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null),
+--('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null),
 ('BusinessProcess_BP/BPBusinessRuleSet/UpdateBusinessRuleSet',null),
 ('BusinessProcess_BP/BPBusinessRuleSet/AddBusinessRuleSet',null),
 ('BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical','VR_SystemConfiguration: View'),

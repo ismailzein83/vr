@@ -67,7 +67,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 			var supplierMailAttachements = new List<VRMailAttachement>();
 
 			SupplierAutoImportTemplate supplierAutoImportTemplate = new BusinessEntity.Business.ConfigManager().GetSupplierAutoImportTemplateByType(emailType);
-			supplierAutoImportTemplate.ThrowIfNull(string.Format("There is no template selected for event {0}", Vanrise.Common.Utilities.GetEnumDescription(emailType)));
+			supplierAutoImportTemplate.ThrowIfNull(string.Format("There is no mail template selected for type: '{0}'", Vanrise.Common.Utilities.GetEnumDescription(emailType)));
 			if (supplierAutoImportTemplate.AttachPricelist && receivedPricelist.FileId.HasValue)
 			{
 				receivedPricelistFile = fileManager.GetFile(receivedPricelist.FileId.Value);
@@ -108,7 +108,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 			if (internalAutoImportTemplate == null || internalAutoImportTemplate.EmailTemplateId == null || internalAutoImportTemplate.EmailTemplateId == Guid.Empty)
 			{
 				if (emailType == AutoImportEmailTypeEnum.WaitingConfirmation)
-					throw new VRBusinessException(string.Format("There is no template selected for event '{0}'.", receivedPricelistRecordId));
+					throw new VRBusinessException(string.Format("There is no mail template selected for type: '{0}'.", receivedPricelistRecordId));
 				else
 					return;
 			}

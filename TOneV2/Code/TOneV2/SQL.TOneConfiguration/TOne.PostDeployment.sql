@@ -823,7 +823,10 @@ as (select * from (values
 ('WhS_Sales/PricingTemplate/UpdatePricingTemplate','WhS_BE_PricingTemplate: Edit'),
 ('WhS_BE/FinancialAccount/GetFilteredFinancialAccounts','FinancialAccount: View'),
 ('WhS_BE/FinancialAccount/AddFinancialAccount','FinancialAccount: Add'),
-('WhS_BE/FinancialAccount/UpdateFinancialAccount','FinancialAccount: Edit')
+('WhS_BE/FinancialAccount/UpdateFinancialAccount','FinancialAccount: Edit'),
+
+--TO BE removed when business rules set page is turned dynamic
+('BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets','WhS_BE_SupplierPricelist: Start Process')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
