@@ -34,6 +34,9 @@ namespace TOne.WhS.SupplierPriceList.Business
             Dictionary<int, SupplierPriceListTemplate> priceListTemplates = GetCachedSupplierPriceListTemplates();
             SupplierPriceListTemplate supplierPriceListTemplate = priceListTemplates.GetRecord(priceListTemplateId);
 
+            if (supplierPriceListTemplate == null)
+                throw new DataIntegrityValidationException(string.Format("Could not find Supplier Pricelist Template with ID: {0}", priceListTemplateId));
+
             SupplierPriceListSettings settings = supplierPriceListTemplate.ConfigDetails;
             if (getDraftIfExists && supplierPriceListTemplate.Draft != null)
             {
