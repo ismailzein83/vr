@@ -275,7 +275,7 @@ namespace Vanrise.Integration.Business
                     }
                     else
                     {
-                        message = string.Format("More than {0} records failed while mapping data", failedRecordIdentifiersThreshold);
+                        message = string.Format("     ", failedRecordIdentifiersThreshold);
                     }
 
                     outputResult.Message = message;

@@ -228,6 +228,11 @@
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Constant\TimeOffsetEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\vr-common-dbreplicationdefinition-selector.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationProcessInput\Templates\DBReplicationProcessTemplate.html" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationProcessInput\vr-common-dbreplication-process.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationSettings\Templates\DBReplicationSettingsTemplate.html" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationSettings\vr-common-dbreplication-settings.js" />
     <Content Include="Common\Directives\ExcelFileUploader\Templates\ExcelFileUploader.html" />
     <Content Include="Common\Directives\ExcelFileUploader\vr-common-excelfileuploader.js" />
     <Content Include="Common\Directives\MainExtensions\RuntimeService\Templates\DataGroupingDistributorRuntimeServiceTemplate.html" />
