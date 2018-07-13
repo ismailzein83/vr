@@ -81,6 +81,7 @@
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="DBReplication\Context.cs" />
     <Compile Include="DBReplication\DBReplicationDefinition.cs" />
+    <Compile Include="DBReplication\DBReplicationDefinitionInfo.cs" />
     <Compile Include="DBReplication\DBReplicationDefinitionSettings.cs" />
     <Compile Include="DBReplication\DBReplicationSettings.cs" />
     <Compile Include="DBReplication\DBReplicationTableDetails.cs" />
