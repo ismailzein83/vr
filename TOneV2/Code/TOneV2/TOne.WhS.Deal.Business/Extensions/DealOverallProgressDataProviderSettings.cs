@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.Deal.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
@@ -31,6 +32,9 @@ namespace TOne.WhS.Deal.Business
 
             var deals = new SwapDealManager().GetSwapDealsBetweenDate(context.FromTime.Value, context.ToTime.Value);
 
+            if (deals == null)
+                return;
+
             var minDealBED = DateTime.Now;
             foreach (var dealDefinition in deals)
             {
@@ -42,6 +46,13 @@ namespace TOne.WhS.Deal.Business
                 int? dealDays = null;
                 if (swapDealSetting.EndDate.HasValue)
                     dealDays = (swapDealSetting.EndDate.Value - swapDealSetting.BeginDate).Days;
+
+                int daysToEnd = 0;
+                if (swapDealSetting.EndDate.HasValue)
+                {
+                    DateTime endDate = swapDealSetting.EndDate.Value;
+                    daysToEnd = (endDate - DateTime.Now).Days;
+                }
 
                 minDealBED = minDealBED > swapDealSetting.BeginDate
                   ? swapDealSetting.BeginDate
@@ -60,9 +71,12 @@ namespace TOne.WhS.Deal.Business
                         DealEED = swapDealSetting.EndDate,
                         Rate = swapDealInbound.Rate,
                         DealDays = dealDays,
-                        DealVolume = swapDealInbound.Volume,
+                        ReachedAmount = swapDealInbound.Volume,
                         GroupName = swapDealInbound.Name,
-                        ExtraVolumeRate = swapDealInbound.ExtraVolumeRate
+                        ExtraVolumeRate = swapDealInbound.ExtraVolumeRate,
+                        EstimatedAmount = swapDealInbound.Volume * swapDealInbound.Rate,
+                        Status = swapDealSetting.Status,
+                        RemainingDaysToEnd = daysToEnd
                     };
                     saleProgressByGroupNb.Add(swapDealInbound.ZoneGroupNumber, saleDealInfo);
                 }
@@ -77,8 +91,11 @@ namespace TOne.WhS.Deal.Business
                         Rate = swapDealOutbound.Rate,
                         DealDays = dealDays,
                         GroupName = swapDealOutbound.Name,
-                        DealVolume = swapDealOutbound.Volume,
-                        ExtraVolumeRate = swapDealOutbound.ExtraVolumeRate
+                        EstimatedVolume = swapDealOutbound.Volume,
+                        ExtraVolumeRate = swapDealOutbound.ExtraVolumeRate,
+                        EstimatedAmount = swapDealOutbound.Volume * swapDealOutbound.Rate,
+                        Status = swapDealSetting.Status,
+                        RemainingDaysToEnd = daysToEnd
                     };
                     costProgressByGroupNb.Add(swapDealOutbound.ZoneGroupNumber, saleDealInfo);
                 }
@@ -141,9 +158,9 @@ namespace TOne.WhS.Deal.Business
                 DateTime dateTimeValue;
                 DateTime.TryParse(day.Name, out dateTimeValue);
 
-                if (origSaleDealId != null)
+                if (origSaleDealId != null && origSaleDealId.Value != null)
                 {
-                    if (saleDealId != null)
+                    if (saleDealId != null && saleDealId.Value != null)
                     {
                         int pricedDealId = (int)saleDealId.Value;
                         OverallDealInfoByGroupNb saleProgressByGroupNb;
@@ -176,8 +193,6 @@ namespace TOne.WhS.Deal.Business
                         }
                     }
                 }
-                MeasureValue duration;
-                saleRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
             }
             IEnumerable<DataRecordObject> dataRecords = salePricedTrafficByDealId.Values.SelectMany(
                 progress => progress.Values)
@@ -193,43 +208,57 @@ namespace TOne.WhS.Deal.Business
             {
                 pricedDealInfo = new OverallDealInfo
                 {
-                    CarrierName = new CarrierAccountManager().GetCarrierAccountName(dealInfo.CarrierAccountId),
                     Direction = direction,
-                    DealVolume = dealInfo.DealVolume,
+                    EstimatedVolume = dealInfo.EstimatedVolume,
                     GroupName = dealInfo.GroupName,
                     DealDays = dealInfo.DealDays,
-                    DealRate = dealInfo.Rate
+                    DealRate = dealInfo.Rate,
+                    DealBED = dealInfo.DealBED,
+                    DealEED = dealInfo.DealEED,
+                    DealId = dealInfo.DealId,
+                    Status = dealInfo.Status,
+                    RemainingDaysToEnd = dealInfo.RemainingDaysToEnd
                 };
                 saleTrafficByGroupNb.Add(groupNb, pricedDealInfo);
             }
-            pricedDealInfo.PassedVolume += saleDurationValue;
+            pricedDealInfo.ReachedVolume += saleDurationValue;
             if (DateTime.Today == dateTimeValue)
                 pricedDealInfo.TodayVolume += saleDurationValue;
-            pricedDealInfo.RemainingVolume = pricedDealInfo.DealVolume - pricedDealInfo.PassedVolume;
-            pricedDealInfo.RemainingVolumePrecentage = (pricedDealInfo.PassedVolume / pricedDealInfo.DealVolume) * 100;
-            pricedDealInfo.DealAmount = pricedDealInfo.DealVolume * pricedDealInfo.DealRate;
-            pricedDealInfo.PassedAmount = pricedDealInfo.PassedVolume * pricedDealInfo.DealRate;
+
+            pricedDealInfo.RemainingVolume = pricedDealInfo.EstimatedVolume - pricedDealInfo.ReachedVolume;
+            pricedDealInfo.RemainingVolumePrecentage = (pricedDealInfo.ReachedVolume / pricedDealInfo.EstimatedVolume) * 100;
+            pricedDealInfo.DealAmount = pricedDealInfo.EstimatedVolume * pricedDealInfo.DealRate;
+            pricedDealInfo.EstimatedAmount = pricedDealInfo.EstimatedVolume * pricedDealInfo.DealRate;
             pricedDealInfo.TodayAmount = pricedDealInfo.TodayAmount * pricedDealInfo.DealRate;
+
+            pricedDealInfo.ExpectedDays = pricedDealInfo.ToDateVolume == 0
+                                        ? 0
+                                        : (int)(pricedDealInfo.RemainingVolume / pricedDealInfo.ToDateVolume);
         }
 
         private DataRecordObject DataRecordObjectMapper(OverallDealInfo dealInfo)
         {
             var swapDealProgressObject = new Dictionary<string, object>
             {
-                {"Carrier", dealInfo.CarrierName},
-                {"Direction",dealInfo.Direction},
+                {"CarrierAccount", dealInfo.CarrierAccountId},
+                {"TrafficType",dealInfo.Direction},
+                {"Deal",dealInfo.DealId},
                 {"GroupName", dealInfo.GroupName},
-                {"DealVolume", dealInfo.DealVolume},
-                {"PassedVolume", dealInfo.PassedVolume},
-                {"TodaysVolume", dealInfo.TodayVolume},
+                {"EstimatedVolume", dealInfo.EstimatedVolume},
+                {"ReachedVolume", dealInfo.ReachedVolume},
+                {"ToDateVolume", dealInfo.ToDateVolume},
                 {"RemainngVolume", dealInfo.RemainingVolume},
                 {"RemaingVolumePrec", dealInfo.RemainingVolumePrecentage},
-                {"Days", dealInfo.DealDays},
+                {"RemainingDays", dealInfo.RemainingDays},
+                {"RemainingPerDays", dealInfo.RemainingPerDays},
+                {"ExpectedDays", dealInfo.ExpectedDays},
                 {"Rate", dealInfo.DealRate},
-                {"PassedAmount", dealInfo.PassedAmount},
-                {"TodayAmount", dealInfo.TodayAmount},
-                {"From", dealInfo.DealBED},
-                {"To", dealInfo.DealEED}
+                {"EstimatedAmount", dealInfo.EstimatedAmount},
+                {"ReachedAmount", dealInfo.ReachedAmount},
+                {"DealBED", dealInfo.DealBED},
+                {"DealEED", dealInfo.DealEED},
+                {"Status", dealInfo.Status},
+                {"Notes", dealInfo.Notes}
             };
             return new DataRecordObject(new Guid("AB46069D-0FFC-4027-9CCF-BD1AF8EC91F7"), swapDealProgressObject);
         }
@@ -252,25 +281,33 @@ namespace TOne.WhS.Deal.Business
         public long DealId { get; set; }
         public DateTime DealBED { get; set; }
         public DateTime? DealEED { get; set; }
+        public DealStatus Status { get; set; }
         public string GroupName { get; set; }
         public int CarrierAccountId { get; set; }
-        public int DealVolume { get; set; }
+        public decimal ReachedVolume { get; set; }
+        public int EstimatedVolume { get; set; }
+        public decimal ToDateVolume { get; set; }
         public decimal Rate { get; set; }
         public decimal? ExtraVolumeRate { get; set; }
         public int? DealDays { get; set; }
-        public string CarrierName { get; set; }
         public string Direction { get; set; }
-        public decimal PassedVolume { get; set; }
         public decimal TodayVolume { get; set; }
         public decimal RemainingVolume { get; set; }
         public decimal RemainingVolumePrecentage { get; set; }
         public int Days { get; set; }
+        public int RemainingDays { get; set; }
+        public int RemainingPerDays { get; set; }
+        public int ExpectedDays { get; set; }
         public int VolumeDaysExpected { get; set; }
         public int VolumeRemainingPerDay { get; set; }
         public decimal DealRate { get; set; }
         public decimal DealAmount { get; set; }
-        public decimal PassedAmount { get; set; }
+        public decimal EstimatedAmount { get; set; }
+        public decimal ReachedAmount { get; set; }
+        public decimal ToDateAmount { get; set; }
         public decimal TodayAmount { get; set; }
+        public string Notes { get; set; }
+        public int RemainingDaysToEnd { get; set; }
 
     }
     #endregion

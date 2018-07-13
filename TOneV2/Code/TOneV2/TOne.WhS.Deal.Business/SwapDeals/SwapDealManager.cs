@@ -58,6 +58,10 @@ namespace TOne.WhS.Deal.Business
         {
             var dealDefinitions = new List<DealDefinition>();
             var deals = GetCachedSwapDeals();
+
+            if (deals == null)
+                return null;
+
             foreach (var dealDefinition in deals)
             {
                 DateTime? dealEED = GetDealEED(dealDefinition.Settings);
