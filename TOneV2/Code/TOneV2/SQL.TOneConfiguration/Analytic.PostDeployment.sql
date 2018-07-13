@@ -227,3 +227,29 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[ConfigID],[Settings])
 	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
+
+
+--[common].[Setting]---------------------------------------101 to 200----------------------------------------
+--override technical settings
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('e435ae79-4382-472d-9f9d-d65053882d93','Automated Report','VR_Analytic_AutomatedReportSettings','General','{"Editor":"vr-analytic-automatedreport-settings"}','{"$type":"Vanrise.Analytic.Entities.VRAutomatedReportSettings, Vanrise.Analytic.Entities","FileNameParts":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.Entities.VRAutomatedReportFileNamePart, Vanrise.Analytic.Entities]], mscorlib","$values":[{"$type":"Vanrise.Analytic.Entities.VRAutomatedReportFileNamePart, Vanrise.Analytic.Entities","VariableName":"DateTime","Description":"Date Time (dd-MM-yyyy)","Settings":{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.VRAutomatedReportDateFileNamePart, Vanrise.Analytic.MainExtensions","ConfigId":"a194aac8-0675-4100-8a8b-1fbe4105fe09","DateFormat":"dd-MM-yyyy"}},{"$type":"Vanrise.Analytic.Entities.VRAutomatedReportFileNamePart, Vanrise.Analytic.Entities","VariableName":"YearlySequence","Description":"Yearly  Sequence","Settings":{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.VRAutomatedReportSequenceFileNamePart, Vanrise.Analytic.MainExtensions","ConfigId":"9cc73443-2a1a-4405-a1ed-1de27b9dcb42","DateCounterType":0,"PaddingLeft":0}}]}}',1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+----------------------------------------------------------------------------------------------------
+end
+
+
+
