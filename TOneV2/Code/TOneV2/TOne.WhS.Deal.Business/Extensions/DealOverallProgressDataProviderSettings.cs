@@ -139,24 +139,24 @@ namespace TOne.WhS.Deal.Business
 
         private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate, string Direction)
         {
-            var salePricedTrafficByDealId = new OverallDealnfoByDealId();
-            var salePricedTrafficByDealIdPlus = new OverallDealnfoByDealId();
+            var trafficByDealId = new OverallDealnfoByDealId();
+            var trafficByDealIdPlus = new OverallDealnfoByDealId();
 
-            foreach (var saleRecord in analyticRecords)
+            foreach (var record in analyticRecords)
             {
-                var origSaleDealZoneGroupNb = saleRecord.DimensionValues[0];
-                var saleDealZoneGroupNb = saleRecord.DimensionValues[1];
-                var origSaleDealId = saleRecord.DimensionValues[3];
-                var saleDealId = saleRecord.DimensionValues[4];
-                var saleDealTierNb = saleRecord.DimensionValues[5];
+                var origSaleDealZoneGroupNb = record.DimensionValues[0];
+                var saleDealZoneGroupNb = record.DimensionValues[1];
+                var origSaleDealId = record.DimensionValues[3];
+                var saleDealId = record.DimensionValues[4];
+                var saleDealTierNb = record.DimensionValues[5];
 
                 decimal saleDurationValue = 0;
                 MeasureValue saleDuration;
-                saleRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                record.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
                 if (saleDuration != null && saleDuration.Value != null)
                     saleDurationValue = Convert.ToDecimal(saleDuration.Value ?? 0.0);
 
-                var day = saleRecord.DimensionValues[2];
+                var day = record.DimensionValues[2];
                 DateTime dateTimeValue;
                 DateTime.TryParse(day.Name, out dateTimeValue);
 
@@ -175,10 +175,10 @@ namespace TOne.WhS.Deal.Business
                             switch (tierNb)
                             {
                                 case 1:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, Direction, salePricedTrafficByDealId, toDateDate);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, Direction, trafficByDealId, toDateDate);
                                     break;
                                 case 2:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), salePricedTrafficByDealIdPlus, toDateDate);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), trafficByDealIdPlus, toDateDate);
                                     break;
                             }
                         }
@@ -191,14 +191,16 @@ namespace TOne.WhS.Deal.Business
                         {
                             int groupNb = (int)origSaleDealZoneGroupNb.Value;
                             OverallDealInfo dealInfo = saleProgressByGroupNb.GetRecord(groupNb);
-                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), salePricedTrafficByDealIdPlus, toDateDate);
+                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), trafficByDealIdPlus, toDateDate);
                         }
                     }
                 }
             }
-            IEnumerable<DataRecordObject> dataRecords = salePricedTrafficByDealId.Values.SelectMany(progress => progress.Values)
+            IEnumerable<DataRecordObject> dataRecords = trafficByDealId.Values.SelectMany(progress => progress.Values)
                                                          .Select(DataRecordObjectMapper);
-            return dataRecords;
+            IEnumerable<DataRecordObject> dataRecordsPlus = trafficByDealIdPlus.Values.SelectMany(progress => progress.Values)
+                                                         .Select(DataRecordObjectMapper);
+            return dataRecords.Concat(dataRecordsPlus);
         }
         private void AddOrUpdateDealInfo(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, OverallDealInfo dealInfo, string direction, OverallDealnfoByDealId trafficByDealId, DateTime toDateDate)
         {
@@ -229,9 +231,9 @@ namespace TOne.WhS.Deal.Business
             pricedDealInfo.ReachedVolume += saleDurationValue;
 
             pricedDealInfo.RemainingVolume = pricedDealInfo.EstimatedVolume - pricedDealInfo.ReachedVolume;
-            pricedDealInfo.RemainingVolumePrecentage = pricedDealInfo.EstimatedVolume == 0
+            pricedDealInfo.RemainingVolumePrecentage = pricedDealInfo.ReachedAmount == 0
                                                      ? 0
-                                                     : (pricedDealInfo.ReachedVolume / pricedDealInfo.EstimatedVolume) * 100;
+                                                     : (pricedDealInfo.EstimatedVolume / pricedDealInfo.ReachedAmount) * 100;
             pricedDealInfo.DealAmount = pricedDealInfo.EstimatedVolume * pricedDealInfo.DealRate;
             pricedDealInfo.ReachedAmount = pricedDealInfo.ReachedAmount * pricedDealInfo.DealRate;
             pricedDealInfo.ToDateVolume = pricedDealInfo.ToDateVolume * pricedDealInfo.DealRate;
