@@ -18,12 +18,8 @@ namespace Vanrise.Voucher.Business
 {
     public class VoucherCardsManager
     {
-        #region Constructor
-        public static Guid _definitionId = VoucherCardDefinitionManager._definitionId;
-        static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
-        Type _recordRuntimeType;
-        #endregion
-        #region Public Methods
+        public static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
+
         public CheckVoucherAvailabilityOutput CheckVoucherAvailability(string pinCode, string lockedBy)
         {
             //encrypt the pin code
@@ -334,24 +330,9 @@ namespace Vanrise.Voucher.Business
             //List<long> voucherCardsIds
             throw new NotImplementedException();
         }
-        public HashSet<string> GetAllVoucherCardsPinCodes()
-        {
-            var genericBusinessEntityManager = new GenericBusinessEntityManager();
-            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, new List<string> { "PinCode" });
-            HashSet<string> pinCodes = new HashSet<string>();
-            if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
-            {
-                foreach (var genericBusinessEntity in genericBusinessEntities)
-                {
-                    string pinCode = genericBusinessEntity.FieldValues.GetRecord("PinCode") as string;
-                    pinCodes.Add(pinCode);
-                }
-            }
-            return pinCodes;
-        }
-        #endregion
-        #region Private Methods
 
+        static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
+        Type _recordRuntimeType;
         private Type GetRecordRuntimeTypeWithValidate(Guid dataRecordTypeId)
         {
             if (_recordRuntimeType == null)
@@ -375,7 +356,21 @@ namespace Vanrise.Voucher.Business
             activationCode = Cryptography.Encrypt(pinGuid.ToString(), decryptionKey);
             return Cryptography.Encrypt(pinNum.ToString(), decryptionKey);
         }
-        #endregion
+        public HashSet<string> GetAllVoucherCardsPinCodes()
+        {
+            var genericBusinessEntityManager = new GenericBusinessEntityManager();
+            var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, new List<string> { "PinCode" });
+            HashSet<string> pinCodes = new HashSet<string>();
+            if (genericBusinessEntities != null && genericBusinessEntities.Count > 0)
+            {
+                foreach (var genericBusinessEntity in genericBusinessEntities)
+                {
+                    string pinCode = genericBusinessEntity.FieldValues.GetRecord("PinCode") as string;
+                    pinCodes.Add(pinCode);
+                }
+            }
+            return pinCodes;
+        }
 
     }
 }

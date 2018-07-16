@@ -9,8 +9,7 @@ using Vanrise.Common;
 namespace Vanrise.Voucher.Business
 {
     public class ConfigManager
-    {   
-        #region  Public Methods
+    {
         public int GetSerialNumberPartInitialSequence()
         {
             return GetVoucherCardSettings().SerialNumberPartInitialSequence;
@@ -26,6 +25,5 @@ namespace Vanrise.Voucher.Business
             voucherCardSettings.ThrowIfNull("voucherCardSettings");
             return voucherCardSettings;
         }
-        #endregion
     }
 }

@@ -10,18 +10,14 @@ using Vanrise.GenericData.Entities;
 namespace Vanrise.Voucher.Business
 {
     public class VoucherTypeManager
-    {   
-        #region Constructor
+    {
         static Guid _definitionId = new Guid("73fa7201-b92b-4856-89f3-a38afb53323b");
-        #endregion
-        #region Public Methods
+
         public VoucherType GetVoucherType(long voucherTypeId)
         {
             return GetCachedVoucherTypes().GetRecord(voucherTypeId);
         }
-        #endregion
-        #region Private Methods
-        private Dictionary<long, VoucherType> GetCachedVoucherTypes()
+        private Dictionary<long,VoucherType> GetCachedVoucherTypes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedVoucherTypes", _definitionId, () =>
@@ -43,7 +39,7 @@ namespace Vanrise.Voucher.Business
                             Amount = (decimal)genericBusinessEntity.FieldValues.GetRecord("Amount"),
                             CurrencyId = (int)genericBusinessEntity.FieldValues.GetRecord("CurrencyId"),
                             Description = (string)genericBusinessEntity.FieldValues.GetRecord("Description"),
-                            Active = (bool)genericBusinessEntity.FieldValues.GetRecord("Active"),
+                            Active = (bool)genericBusinessEntity.FieldValues.GetRecord("Active") ,
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
@@ -57,6 +53,6 @@ namespace Vanrise.Voucher.Business
                 return result;
             });
         }
-        #endregion
+
     }
 }
