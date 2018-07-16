@@ -80,6 +80,7 @@
     <Compile Include="Controllers\AnalyticTableController.cs" />
     <Compile Include="Controllers\DAProfCalcNotificationController.cs" />
     <Compile Include="Controllers\DAProfCalcOutputSettingsController.cs" />
+    <Compile Include="Controllers\VRReportController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
     <Compile Include="Controllers\AutomatedReportHandlerController.cs" />
@@ -374,6 +375,8 @@
     <Content Include="Analytic\Directives\Runtime\Grid\vr-analytic-datagrid-analyticrecords.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\Templates\GenericSearchTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
+    <Content Include="Analytic\Directives\VRReport\Templates\VRReportGridTemplate.html" />
+    <Content Include="Analytic\Directives\VRReport\vr-analytic-vrreport-grid.js" />
     <Content Include="Analytic\Directives\VRRestAPIAnalyticQueryInterceptor\Templates\VRRestAPIAnalyticQueryInterceptorSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\VRRestAPIAnalyticQueryInterceptor\vr-analytic-restapianalyticqueryinterceptor-selective.js" />
     <Content Include="Analytic\ModuleInitialization.js" />
@@ -386,8 +389,10 @@
     <Content Include="Analytic\Services\APIServices\AutomatedReportQueryDefinitionSettingsAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerAPIService.js" />
     <Content Include="Analytic\Services\AnalyticTableQuerySettingsSubtablesService.js" />
+    <Content Include="Analytic\Services\APIServices\VRReportAPIService.js" />
     <Content Include="Analytic\Services\AutomatedReportProcessScheduledService.js" />
     <Content Include="Analytic\Services\AutomatedReportFileNameSettingsService.js" />
+    <Content Include="Analytic\Services\VRReportService.js" />
     <Content Include="Analytic\Services\DimensionMappingRulesService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcNotitificationAPIService.js" />
@@ -454,6 +459,10 @@
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReportController.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />
     <Content Include="Analytic\Views\Reports\AnalyticReportController.js" />
+    <Content Include="Analytic\Views\VRReport\VRReportEditor.html" />
+    <Content Include="Analytic\Views\VRReport\VRReportEditorController.js" />
+    <Content Include="Analytic\Views\VRReport\VRReportManagement.html" />
+    <Content Include="Analytic\Views\VRReport\VRReportManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

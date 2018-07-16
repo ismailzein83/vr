@@ -47,6 +47,7 @@
     <Compile Include="AnalyticItemConfigDataManager.cs" />
     <Compile Include="AnalyticReportDataManager.cs" />
     <Compile Include="AnalyticTableDataManager.cs" />
+    <Compile Include="VRReportDataManager.cs" />
     <Compile Include="DataAnalysisDefinitionDataManager.cs" />
     <Compile Include="DataAnalysisItemDefinitionDataManager.cs" />
     <Compile Include="GetDimensionValueContext.cs" />
