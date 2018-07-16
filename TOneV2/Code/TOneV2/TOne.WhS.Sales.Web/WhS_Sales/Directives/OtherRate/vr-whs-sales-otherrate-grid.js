@@ -72,12 +72,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 			        WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem);
 			        $scope.isNewRateBEDRequired = isNewRateBEDRequired($scope.NewRateBED, dataItem.NewRate);
 			};
-			$scope.getDecimalPrecision = function () {
-			    VRCommon_UISettingsAPIService.GetUIParameters().then(function (response) {
-			        console.log(response);
-			        return 4;
-			    });
-			}
+
 			$scope.decimalPrecision = UISettingsService.getLongPrecision();
 
 			$scope.onNewRateBlurred = function (dataItem) {
