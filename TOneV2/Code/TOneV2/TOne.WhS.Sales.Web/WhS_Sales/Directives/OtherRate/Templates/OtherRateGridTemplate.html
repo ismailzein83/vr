@@ -42,7 +42,7 @@
                                     onvaluechanged="viewScope.onNewRateChanged(dataItem)"
                                     onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
                                     customvalidate="viewScope.validateNewRate(dataItem)"
-                                    decimalprecision="4"
+                                    decimalprecision="{{viewScope.decimalPrecision}}"
                                     tonextinput>
                         </vr-textbox>
                     </span>
