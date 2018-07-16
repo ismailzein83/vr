@@ -95,7 +95,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                             haspermission: hasUpdateSystemEntityPermissionsPermission // System Entities:Assign Permissions
                         },
                         {
-                              name: "Change Provider",
+                            name: "Change Authentication Method",
                               clicked: changeProvider
                         }
                     ];

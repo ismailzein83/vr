@@ -64,5 +64,12 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.GetSecurityProviderConfigs();
         }
+
+        [HttpGet]
+        [Route("GetDefaultSecurityProviderId")]
+        public Guid GetDefaultSecurityProviderId()
+        {
+            return _manager.GetDefaultSecurityProviderId();
+        }
     }
 }

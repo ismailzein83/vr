@@ -119,6 +119,11 @@ namespace Vanrise.Security.Business
             return GetSecurityProviderbyId(defaultSecurityProviderId);
         }
 
+        public Guid GetDefaultSecurityProviderId()
+        {
+            return new ConfigManager().GetDefaultSecurityProviderId();
+        }
+
         public IEnumerable<SecurityProvider> GetSecurityProviders()
         {
             var cachedSecurityProviders = this.GetCachedSecurityProviders();

@@ -13,6 +13,7 @@
             GetSecurityProviderInfobyId: GetSecurityProviderInfobyId,
             GetSecurityProviderbyId: GetSecurityProviderbyId,
             GetSecurityProviderConfigs: GetSecurityProviderConfigs,
+            GetDefaultSecurityProviderId: GetDefaultSecurityProviderId,
             ChangeSecurityProviderStatus: ChangeSecurityProviderStatus
         });
 
@@ -43,6 +44,10 @@
 
         function GetSecurityProviderConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetSecurityProviderConfigs"));
+        }
+
+        function GetDefaultSecurityProviderId() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetDefaultSecurityProviderId"));
         }
 
         function ChangeSecurityProviderStatus(securityProviderId, isEnabled) {

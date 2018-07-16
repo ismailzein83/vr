@@ -163,7 +163,7 @@
 
  
         function setTitle() {
-            $scope.title = 'Change Provider';
+            $scope.title = 'Change Authentication Method';
         }
 
 

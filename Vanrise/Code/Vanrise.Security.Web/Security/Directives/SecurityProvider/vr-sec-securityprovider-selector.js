@@ -51,9 +51,9 @@ app.directive('vrSecSecurityproviderSelector', ['VR_Sec_SecurityProviderAPIServi
 
             var multipleselection = "";
 
-            var label = "Security Provider";
+            var label = "Authentication Method";
             if (attrs.ismultipleselection != undefined) {
-                label = "Security Providers";
+                label = "Authentication Methods";
                 multipleselection = "ismultipleselection";
             }
 
@@ -97,31 +97,53 @@ app.directive('vrSecSecurityproviderSelector', ['VR_Sec_SecurityProviderAPIServi
                     var selectedIds;
                     var filter;
                     var selectfirstitem = false;
+                    var promises = [];
+                    var defaultSecurityProviderId;
 
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                         selectfirstitem = payload.selectfirstitem == true;
                     }
-                    return VR_Sec_SecurityProviderAPIService.GetSecurityProvidersInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        ctrl.datasource.length = 0;
 
+                    if (!selectedIds) {
+                        var getDefaultSecurityProviderIdPromise = GetDefaultSecurityProviderId();
+                        promises.push(getDefaultSecurityProviderIdPromise);
+                    }
+
+                    function GetDefaultSecurityProviderId() {
+                        return VR_Sec_SecurityProviderAPIService.GetDefaultSecurityProviderId().then(function (response) {
+                            if (response != undefined && !selectedIds) {
+                                defaultSecurityProviderId = response;
+                            }
+
+                        });
+                    }
+
+                    var getSecurityProvidersInfoPromise = GetSecurityProvidersInfo();
+                    promises.push(getSecurityProvidersInfoPromise);
+
+                    function GetSecurityProvidersInfo(){
+                        return VR_Sec_SecurityProviderAPIService.GetSecurityProvidersInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                        ctrl.datasource.length = 0;
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
                         }
-
+                      
+                 
+                    });
+                    }
+            
+                    return UtilsService.waitMultiplePromises(promises).then(function(response){
                         if (selectedIds) {
-                            
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SecurityProviderId', attrs, ctrl);
-                        }
-
-                        else if (selectfirstitem) {
-                            var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].SecurityProviderId] : ctrl.datasource[0].SecurityProviderId;
-                            VRUIUtilsService.setSelectedValues(defaultValue, 'SecurityProviderId', attrs, ctrl);
+                        } else {
+                            VRUIUtilsService.setSelectedValues(defaultSecurityProviderId, 'SecurityProviderId', attrs, ctrl);
                         }
                     });
+
                 };
 
                 api.getSelectedIds = function () {
