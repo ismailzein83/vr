@@ -163,7 +163,7 @@
 
  
         function setTitle() {
-            $scope.scopeModel.title = 'Change Provider';
+            $scope.title = 'Change Provider';
         }
 
 
