@@ -12,13 +12,17 @@ namespace Vanrise.Voucher.Business
 {
     public class VoucherCardsGenerationsManager
     {
-       public static Guid _definitionId = new Guid("16fba68f-d080-4a5e-a7a8-054312ae7b6b");
-        GenericBusinessEntityManager _genericBEDManager= new GenericBusinessEntityManager();
-
-         public VoucherCardsGeneration GetVoucherCardsGeneration(long VoucherCardsGenerationId)
+        #region Constructor
+        public static Guid _definitionId = new Guid("16fba68f-d080-4a5e-a7a8-054312ae7b6b");
+        GenericBusinessEntityManager _genericBEDManager = new GenericBusinessEntityManager();
+        #endregion
+        #region Public Methods
+        public VoucherCardsGeneration GetVoucherCardsGeneration(long VoucherCardsGenerationId)
         {
             return GetCachedVoucherCardsGeneration().GetRecord(VoucherCardsGenerationId);
         }
+        #endregion
+        #region Private Mehtods
         private Dictionary<long, VoucherCardsGeneration> GetCachedVoucherCardsGeneration()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
@@ -55,5 +59,6 @@ namespace Vanrise.Voucher.Business
                 return result;
             });
         }
+        #endregion
     }
 }

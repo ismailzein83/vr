@@ -91,7 +91,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\VoucherCardsGenerationController.cs" />
     <Compile Include="Controllers\VoucherCardDefinitionController.cs" />
-    <Compile Include="Controllers\VoucherCardsContoller.cs" />
+    <Compile Include="Controllers\VoucherCardsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,8 +11,11 @@ namespace Vanrise.Voucher.Business
 {
     public class VoucherCardDefinitionManager
     {
+        #region Constructor
+        public static Guid _definitionId = new Guid("6761d9be-baff-4d80-a903-16947b705395");
         GenericBusinessEntityDefinitionManager _genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
-        Guid _definitionId = VoucherCardsManager._definitionId;
+        #endregion
+        #region Public Methods
         public List<VoucharCardSerialNumberPart> GetVoucherCardDefinition()
         {
             var genericBEDefinitionSettings = _genericBusinessEntityDefinitionManager.GetGenericBEDefinitionSettings(_definitionId);
@@ -20,6 +23,6 @@ namespace Vanrise.Voucher.Business
             genericBEDefinitionSettings.ExtendedSettings.ThrowIfNull("genericBEDefinitionSettings.ExtendedSettings", _definitionId);
             return genericBEDefinitionSettings.ExtendedSettings.CastWithValidate<VoucharCardsExtendedSettings>("VoucharCardsExtendedSettings").SerialNumberParts;
         }
-      
+        #endregion
     }
 }
