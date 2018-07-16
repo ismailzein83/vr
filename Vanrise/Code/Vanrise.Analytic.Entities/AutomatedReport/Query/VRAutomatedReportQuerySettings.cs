@@ -11,6 +11,11 @@ namespace Vanrise.Analytic.Entities
         public abstract VRAutomatedReportDataResult Execute(IVRAutomatedReportQueryExecuteContext context);
 
         public abstract VRAutomatedReportDataSchema GetSchema(IVRAutomatedReportQueryGetSchemaContext context);
+
+        public virtual Dictionary<string, VRAutomatedReportDataFieldSchema> GetFields(IVRAutomatedReportQueryGetFieldsContext context)
+        {
+            return null;
+        }
     }
 
     public interface IVRAutomatedReportQueryExecuteContext
@@ -19,6 +24,11 @@ namespace Vanrise.Analytic.Entities
     }
 
     public interface IVRAutomatedReportQueryGetSchemaContext
+    {
+        Guid QueryDefinitionId { get; }
+    }
+
+    public interface IVRAutomatedReportQueryGetFieldsContext
     {
         Guid QueryDefinitionId { get; }
     }
