@@ -446,6 +446,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Personalization",
                     class: "glyphicon glyphicon-user"
                 };
+            case "Activate":
+                return {
+                    text: "Activate",
+                    class: "glyphicon glyphicon-ok-circle"
+                };
         }
     }
 }]);
