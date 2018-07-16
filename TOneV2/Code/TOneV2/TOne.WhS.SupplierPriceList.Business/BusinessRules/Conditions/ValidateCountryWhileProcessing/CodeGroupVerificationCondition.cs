@@ -33,7 +33,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 foreach (var codeGroup in codeGroupCodes)
                 {
-                    if (codeGroup.Code == notImportedCode.Code)
+                    if (codeGroup.Code == notImportedCode.Code && notImportedCode.HasChanged==true)
                     {
                         codes.Add(notImportedCode.Code);
                         if (codeGroupExistInNotImportedData == false)
@@ -53,7 +53,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             CountryManager countryManager = new CountryManager();
             string countryName = countryManager.GetCountryName(allCodes.CountryId);
 
-            context.Message = string.Format("In country '{0}',the following main breakout zone(s):'{1}',are closed.", countryName, codes);
+            context.Message = string.Format("In country '{0}',the following main breakout zone(s):'{1}',are closed.", countryName, string.Join<string>(",", codesByZone));
             return false;
 
         }
