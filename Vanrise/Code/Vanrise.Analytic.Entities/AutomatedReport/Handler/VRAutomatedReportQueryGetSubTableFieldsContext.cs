@@ -7,8 +7,10 @@ using Vanrise.Analytic.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class VRAutomatedReportQueryGetFieldsContext : IVRAutomatedReportQueryGetFieldsContext
+    public class VRAutomatedReportQueryGetSubTableFieldsContext : IVRAutomatedReportQueryGetSubTableFieldsContext
     {
         public Guid QueryDefinitionId { get; set; }
+
+        public Guid SubTableId { get; set; }
     }
 }

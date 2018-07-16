@@ -74,7 +74,7 @@
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportFileGeneratorGenerateFileContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerExecuteContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerSettingsConfig.cs" />
-    <Compile Include="AutomatedReport\Handler\VRAutomatedReportQueryGetFieldsContext.cs" />
+    <Compile Include="AutomatedReport\Handler\VRAutomatedReportQueryGetSubTableFieldsContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportSettings.cs" />
     <Compile Include="AutomatedReport\Query\RecordSearchQueryDefinitionInfo.cs" />
     <Compile Include="AutomatedReport\Query\RecordSearchQueryDefinitionInfoFilter.cs" />

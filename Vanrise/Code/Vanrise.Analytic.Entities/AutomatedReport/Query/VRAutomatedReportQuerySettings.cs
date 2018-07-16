@@ -12,7 +12,7 @@ namespace Vanrise.Analytic.Entities
 
         public abstract VRAutomatedReportDataSchema GetSchema(IVRAutomatedReportQueryGetSchemaContext context);
 
-        public virtual Dictionary<string, VRAutomatedReportDataFieldSchema> GetFields(IVRAutomatedReportQueryGetFieldsContext context)
+        public virtual Dictionary<string, VRAutomatedReportDataFieldSchema> GetSubTableFields(IVRAutomatedReportQueryGetSubTableFieldsContext context)
         {
             return null;
         }
@@ -28,8 +28,10 @@ namespace Vanrise.Analytic.Entities
         Guid QueryDefinitionId { get; }
     }
 
-    public interface IVRAutomatedReportQueryGetFieldsContext
+    public interface IVRAutomatedReportQueryGetSubTableFieldsContext
     {
         Guid QueryDefinitionId { get; }
+
+        Guid SubTableId { get; }
     }
 }
