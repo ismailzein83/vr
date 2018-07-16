@@ -29,11 +29,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             List<string> codes=new List<string>();
 
             IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(allCodes.CountryId);
-            foreach (NotImportedCode notImportedCode in allCodes.NotImportedCodes)
+            var notImported = allCodes.NotImportedCodes.Where(c => c.HasChanged);
+            foreach (NotImportedCode notImportedCode in notImported)
             {
                 foreach (var codeGroup in codeGroupCodes)
                 {
-                    if (codeGroup.Code == notImportedCode.Code && notImportedCode.HasChanged==true)
+                    if (codeGroup.Code == notImportedCode.Code)
                     {
                         codes.Add(notImportedCode.Code);
                         if (codeGroupExistInNotImportedData == false)
