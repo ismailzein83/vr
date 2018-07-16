@@ -6,6 +6,7 @@ using TOne.WhS.Deal.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.Deal.Business
@@ -39,36 +40,39 @@ namespace TOne.WhS.Deal.Business
             foreach (var dealDefinition in deals)
             {
                 SwapDealSettings swapDealSetting = dealDefinition.Settings as SwapDealSettings;
+                swapDealSetting.ThrowIfNull("dealDefinition.Settings", dealDefinition.DealId);
 
-                if (swapDealSetting == null)
-                    continue;
+                int dealId = dealDefinition.DealId;
+                DateTime BeginDate = swapDealSetting.BeginDate;
+                DateTime? EndDate = swapDealSetting.EndDate;
+                int carrierAccountId = swapDealSetting.CarrierAccountId;
 
                 int? dealDays = null;
-                if (swapDealSetting.EndDate.HasValue)
-                    dealDays = (swapDealSetting.EndDate.Value - swapDealSetting.BeginDate).Days;
+                if (EndDate.HasValue)
+                    dealDays = (EndDate.Value - BeginDate).Days;
 
                 int daysToEnd = 0;
-                if (swapDealSetting.EndDate.HasValue)
+                if (EndDate.HasValue)
                 {
-                    DateTime endDate = swapDealSetting.EndDate.Value;
+                    DateTime endDate = EndDate.Value;
                     daysToEnd = DateTime.Now > endDate ? 0 : (endDate - DateTime.Now).Days;
                 }
 
-                minDealBED = minDealBED > swapDealSetting.BeginDate
-                  ? swapDealSetting.BeginDate
+                minDealBED = minDealBED > BeginDate
+                  ? BeginDate
                   : minDealBED;
 
-                OverallDealInfoByGroupNb saleProgressByGroupNb = saleSwapDealInfoByDealId.GetOrCreateItem(dealDefinition.DealId);
-                OverallDealInfoByGroupNb costProgressByGroupNb = costSwapDealInfoByDealId.GetOrCreateItem(dealDefinition.DealId);
+                OverallDealInfoByGroupNb saleProgressByGroupNb = saleSwapDealInfoByDealId.GetOrCreateItem(dealId);
+                OverallDealInfoByGroupNb costProgressByGroupNb = costSwapDealInfoByDealId.GetOrCreateItem(dealId);
 
                 foreach (var swapDealInbound in swapDealSetting.Inbounds)
                 {
                     OverallDealInfo saleDealInfo = new OverallDealInfo
                     {
-                        CarrierAccountId = swapDealSetting.CarrierAccountId,
-                        DealId = dealDefinition.DealId,
-                        DealBED = swapDealSetting.BeginDate,
-                        DealEED = swapDealSetting.EndDate,
+                        CarrierAccountId = carrierAccountId,
+                        DealId = dealId,
+                        DealBED = BeginDate,
+                        DealEED = EndDate,
                         Rate = swapDealInbound.Rate,
                         DealDays = dealDays,
                         EstimatedVolume = swapDealInbound.Volume,
@@ -84,10 +88,10 @@ namespace TOne.WhS.Deal.Business
                 {
                     OverallDealInfo saleDealInfo = new OverallDealInfo
                     {
-                        CarrierAccountId = swapDealSetting.CarrierAccountId,
-                        DealId = dealDefinition.DealId,
-                        DealBED = swapDealSetting.BeginDate,
-                        DealEED = swapDealSetting.EndDate,
+                        CarrierAccountId = carrierAccountId,
+                        DealId = dealId,
+                        DealBED = BeginDate,
+                        DealEED = EndDate,
                         Rate = swapDealOutbound.Rate,
                         DealDays = dealDays,
                         GroupName = swapDealOutbound.Name,
@@ -137,7 +141,7 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
-        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate, string Direction)
+        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate, string direction)
         {
             var trafficByDealId = new OverallDealnfoByDealId();
             var trafficByDealIdPlus = new OverallDealnfoByDealId();
@@ -175,10 +179,10 @@ namespace TOne.WhS.Deal.Business
                             switch (tierNb)
                             {
                                 case 1:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, Direction, trafficByDealId, toDateDate);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, direction, trafficByDealId, toDateDate);
                                     break;
                                 case 2:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), trafficByDealIdPlus, toDateDate);
+                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", direction), trafficByDealIdPlus, toDateDate);
                                     break;
                             }
                         }
@@ -191,7 +195,7 @@ namespace TOne.WhS.Deal.Business
                         {
                             int groupNb = (int)origSaleDealZoneGroupNb.Value;
                             OverallDealInfo dealInfo = saleProgressByGroupNb.GetRecord(groupNb);
-                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", Direction), trafficByDealIdPlus, toDateDate);
+                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", direction), trafficByDealIdPlus, toDateDate);
                         }
                     }
                 }
