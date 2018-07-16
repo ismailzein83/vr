@@ -155,6 +155,8 @@
     <Content Include="Security\Directives\RequiredPermission\vr-sec-requiredpermission-grid.js" />
     <Content Include="Security\Directives\MainExtensions\SecurityProvider\AuthenticateUser\Templates\EmailPasswordTemplate.html" />
     <Content Include="Security\Directives\MainExtensions\SecurityProvider\AuthenticateUser\vr-sec-securityprovider-authenticateuser-emailpassword.js" />
+    <Content Include="Security\Directives\SecurityProvider\MainExtensions\Templates\SecurityProviderStatusActionTemplate.html" />
+    <Content Include="Security\Directives\SecurityProvider\MainExtensions\vr-sec-securityprovider-securityproviderstatus.js" />
     <Content Include="Security\Directives\SecurityProvider\Templates\SecurityProviderSettingsTemplate.html" />
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-settings-selector.js" />
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-remoteselector.js" />
@@ -215,6 +217,7 @@
     <Content Include="Security\Services\ModuleService.js" />
     <Content Include="Security\Services\OrgChartService.js" />
     <Content Include="Security\Services\PermissionService.js" />
+    <Content Include="Security\Services\SecurityProviderStatusService.js" />
     <Content Include="Security\Services\SecurityService.js" />
     <Content Include="Security\Services\GroupService .js" />
     <Content Include="Security\Services\TenantService.js" />

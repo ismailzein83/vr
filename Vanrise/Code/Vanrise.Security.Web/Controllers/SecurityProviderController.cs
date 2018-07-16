@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 using Vanrise.Web.Base;
@@ -48,6 +49,13 @@ namespace Vanrise.Security.Web.Controllers
         public SecurityProvider GetSecurityProviderbyId(Guid securityProviderId)
         {
             return _manager.GetSecurityProviderbyId(securityProviderId);
+        }
+
+        [HttpGet]
+        [Route("ChangeSecurityProviderStatus")]
+        public UpdateOperationOutput<GenericBusinessEntityDetail> ChangeSecurityProviderStatus(Guid securityProviderId, bool isEnabled)
+        {
+            return _manager.ChangeSecurityProviderStatus(securityProviderId, isEnabled);
         }
 
         [HttpGet]

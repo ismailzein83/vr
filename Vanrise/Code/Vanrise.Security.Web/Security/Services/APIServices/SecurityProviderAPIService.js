@@ -12,7 +12,8 @@
             GetRemoteSecurityProvidersInfo: GetRemoteSecurityProvidersInfo,
             GetSecurityProviderInfobyId: GetSecurityProviderInfobyId,
             GetSecurityProviderbyId: GetSecurityProviderbyId,
-            GetSecurityProviderConfigs: GetSecurityProviderConfigs
+            GetSecurityProviderConfigs: GetSecurityProviderConfigs,
+            ChangeSecurityProviderStatus: ChangeSecurityProviderStatus
         });
 
         function GetSecurityProvidersInfo(filter) {
@@ -42,6 +43,15 @@
 
         function GetSecurityProviderConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetSecurityProviderConfigs"));
+        }
+
+        function ChangeSecurityProviderStatus(securityProviderId, isEnabled) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "ChangeSecurityProviderStatus"),
+                {
+                    securityProviderId: securityProviderId,
+                    isEnabled: isEnabled
+                }
+                );
         }
     }
 

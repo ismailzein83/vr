@@ -7,6 +7,7 @@ using Vanrise.Security.Data;
 using Vanrise.Security.Entities;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.Security.Business
 {
@@ -41,6 +42,75 @@ namespace Vanrise.Security.Business
             securityProvider.Settings.ExtendedSettings.ThrowIfNull("securityProvider.Settings.ExtendedSettings", securityProviderId);
 
             return securityProvider;
+        }
+
+        public UpdateOperationOutput<GenericBusinessEntityDetail> ChangeSecurityProviderStatus(Guid securityProviderId, bool isEnabled)
+        {
+            UserManager userManager = new UserManager();
+            ConfigManager configManager = new ConfigManager();
+            var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate();
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+
+            UpdateOperationOutput<GenericBusinessEntityDetail> updateOperationOutput = new UpdateOperationOutput<GenericBusinessEntityDetail>();
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (isEnabled)
+            {
+                genericBusinessEntityToUpdate.FieldValues = new Dictionary<string, object>();
+                genericBusinessEntityToUpdate.FieldValues.Add("IsEnabled", true);
+                genericBusinessEntityToUpdate.GenericBusinessEntityId = securityProviderId;
+                genericBusinessEntityToUpdate.BusinessEntityDefinitionId = beDefinitionId;
+
+                var updateObject = genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
+                if (updateObject.Result == UpdateOperationResult.Succeeded)
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = updateObject.UpdatedObject;
+                }
+                else
+                {
+                    updateOperationOutput.Result = updateObject.Result;
+                    updateOperationOutput.Message = updateObject.Message;
+                }
+
+            }
+            else
+            {
+                var defaultSecurityProviderId = configManager.GetDefaultSecurityProviderId();
+                if (defaultSecurityProviderId == securityProviderId)
+                {
+                    updateOperationOutput.Message = "Security provider id does not match the default one!";
+                    return updateOperationOutput;
+                }
+
+                IEnumerable<User> users = userManager.GetUsers();
+                var records = users.FindAllRecords(user => user.SecurityProviderId == securityProviderId);
+                if (records.Count() > 0)
+                {
+                    updateOperationOutput.Message = "User security provider id already exist!";
+                    return updateOperationOutput;
+                }
+
+                genericBusinessEntityToUpdate.FieldValues = new Dictionary<string, object>();
+                genericBusinessEntityToUpdate.FieldValues.Add("IsEnabled", false);
+                genericBusinessEntityToUpdate.GenericBusinessEntityId = securityProviderId;
+                genericBusinessEntityToUpdate.BusinessEntityDefinitionId = beDefinitionId;
+
+                var updateObject = genericBusinessEntityManager.UpdateGenericBusinessEntity(genericBusinessEntityToUpdate);
+                if (updateObject.Result == UpdateOperationResult.Succeeded)
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = updateObject.UpdatedObject;
+                }else
+                {
+                    updateOperationOutput.Result = updateObject.Result;
+                    updateOperationOutput.Message = updateObject.Message;
+                }
+            }
+
+            return updateOperationOutput;
+
         }
 
         public SecurityProvider GetDefaultSecurityProvider()
@@ -132,6 +202,7 @@ namespace Vanrise.Security.Business
                         {
                             SecurityProviderId = (Guid)genericBusinessEntity.FieldValues.GetRecord("SecurityProviderId"),
                             Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
+                            IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled"),
                             Settings = genericBusinessEntity.FieldValues.GetRecord("Settings") as SecurityProviderSettings
                         };
                         result.Add(securityProvider.SecurityProviderId, securityProvider);

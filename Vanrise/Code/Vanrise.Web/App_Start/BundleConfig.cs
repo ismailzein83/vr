@@ -139,7 +139,8 @@ namespace Vanrise.Web
 
             bundles.Add(new ScriptBundle("~/bundles/BaseModulesJavascripts").IncludeDirectory(
              "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
-             "~/Client/Modules/Security", "*.js", true));
+             "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
+             "~/Client/Modules/VR_GenericData", "*.js", true));
 
             foreach (var b in bundles)
                 b.Transforms.Add(new FileHashVersionBundleTransform());
