@@ -60,8 +60,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBReplicationProcessBPSettings.cs" />
     <Compile Include="BE360Degree\BE360DegreeManager.cs" />
     <Compile Include="BigData\BigDataManager.cs" />
     <Compile Include="BigData\BigDataRequestHandler.cs" />
@@ -190,6 +197,10 @@
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.BP.Arguments\Vanrise.Common.BP.Arguments.csproj">
+      <Project>{841b50ab-e1a4-46ba-9358-f6519c92a2e3}</Project>
+      <Name>Vanrise.Common.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Data\Vanrise.Common.Data.csproj">
       <Project>{1a117ff8-0bd7-424e-8510-dd2491194ea0}</Project>
