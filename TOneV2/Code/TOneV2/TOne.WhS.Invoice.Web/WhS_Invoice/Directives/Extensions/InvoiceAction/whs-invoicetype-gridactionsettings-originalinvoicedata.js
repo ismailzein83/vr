@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGridactionsettingsOriginalinvoicedata", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("whsInvoicetypeGridactionsettingsOriginalinvoicedata", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_Invoice_InvoiceTypeEnum",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_Invoice_InvoiceTypeEnum) {
 
         var directiveDefinitionObject = {
 
@@ -27,9 +27,16 @@ app.directive("whsInvoicetypeGridactionsettingsOriginalinvoicedata", ["UtilsServ
 
         function OriginalInvoiceDataAction($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var invoiceCarrierTypeDirectiveAPI;
+            var invoiceCarrierSelectorReadyPromiseDeffered= UtilsService.createPromiseDeferred();
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.invoiceCarrierType = UtilsService.getArrayEnum(WhS_Invoice_InvoiceTypeEnum);
+                $scope.scopeModel.onInvoiceCarrierTypeDirectiveReady = function (api) {
+                    invoiceCarrierTypeDirectiveAPI = api;
+                    invoiceCarrierSelectorReadyPromiseDeffered.resolve();
+                }
 
                 defineAPI();
             }
@@ -41,6 +48,8 @@ app.directive("whsInvoicetypeGridactionsettingsOriginalinvoicedata", ["UtilsServ
                     var invoiceActionEntity;
                     if (payload != undefined) {
                         invoiceActionEntity = payload.invoiceActionEntity;
+                        if (payload.invoiceActionEntity != undefined && payload.invoiceActionEntity.InvoiceCarrierType!=undefined)
+                        $scope.scopeModel.selectedValue = UtilsService.getItemByVal($scope.scopeModel.invoiceCarrierType, payload.invoiceActionEntity.InvoiceCarrierType, "value");
                         context = payload.context;
                     }
                     var promises = [];
@@ -54,6 +63,7 @@ app.directive("whsInvoicetypeGridactionsettingsOriginalinvoicedata", ["UtilsServ
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Invoice.Business.Extensions.OriginalInvoiceDataAction ,TOne.WhS.Invoice.Business",
+                        InvoiceCarrierType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined
                     };
                 };
 

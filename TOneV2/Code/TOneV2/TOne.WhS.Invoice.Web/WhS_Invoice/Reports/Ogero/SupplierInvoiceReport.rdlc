@@ -970,121 +970,6 @@
               </Border>
             </Style>
           </Rectangle>
-          <Tablix Name="Tablix2">
-            <TablixBody>
-              <TablixColumns>
-                <TablixColumn>
-                  <Width>1.2in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.8in</Width>
-                </TablixColumn>
-              </TablixColumns>
-              <TablixRows>
-                <TablixRow>
-                  <Height>0.36458in</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="TaxName">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!TaxName.Value</Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>TaxName</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Value">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Value.Value</Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Value</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-              </TablixRows>
-            </TablixBody>
-            <TablixColumnHierarchy>
-              <TablixMembers>
-                <TablixMember />
-                <TablixMember />
-              </TablixMembers>
-            </TablixColumnHierarchy>
-            <TablixRowHierarchy>
-              <TablixMembers>
-                <TablixMember>
-                  <Group Name="Details2" />
-                </TablixMember>
-              </TablixMembers>
-            </TablixRowHierarchy>
-            <DataSetName>TaxesDetails</DataSetName>
-            <Top>4.51264in</Top>
-            <Left>3.4925in</Left>
-            <Height>0.36458in</Height>
-            <Width>2in</Width>
-            <ZIndex>18</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Tablix>
           <Textbox Name="Textbox43">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -1108,7 +993,7 @@
             <Left>6.46046in</Left>
             <Height>0.17in</Height>
             <Width>1.39204in</Width>
-            <ZIndex>19</ZIndex>
+            <ZIndex>18</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1142,7 +1027,7 @@
             <Left>5.24682in</Left>
             <Height>0.17in</Height>
             <Width>1.1442in</Width>
-            <ZIndex>20</ZIndex>
+            <ZIndex>19</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1892,7 +1777,7 @@
             <Left>0.1425in</Left>
             <Height>0.5in</Height>
             <Width>7.70998in</Width>
-            <ZIndex>21</ZIndex>
+            <ZIndex>20</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
             </Visibility>
@@ -2371,7 +2256,7 @@
             <Left>0.1425in</Left>
             <Height>0.25in</Height>
             <Width>7.70999in</Width>
-            <ZIndex>22</ZIndex>
+            <ZIndex>21</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
             </Visibility>
@@ -2766,7 +2651,7 @@
             <Left>0.1425in</Left>
             <Height>0.25in</Height>
             <Width>7.71in</Width>
-            <ZIndex>23</ZIndex>
+            <ZIndex>22</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
             </Visibility>
@@ -2799,7 +2684,7 @@
             <Left>11.30572cm</Left>
             <Height>0.6cm</Height>
             <Width>8.65688cm</Width>
-            <ZIndex>24</ZIndex>
+            <ZIndex>23</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2819,7 +2704,7 @@
             <Left>0.1425in</Left>
             <Height>1.5994in</Height>
             <Width>3.24421in</Width>
-            <ZIndex>25</ZIndex>
+            <ZIndex>24</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3071,10 +2956,10 @@
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>0.57157cm</Top>
-            <Left>12.6922cm</Left>
+            <Left>12.37208cm</Left>
             <Height>4.06248cm</Height>
             <Width>7.81103cm</Width>
-            <ZIndex>26</ZIndex>
+            <ZIndex>25</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3110,7 +2995,7 @@
             <Left>4.37458cm</Left>
             <Height>0.6cm</Height>
             <Width>4.97563cm</Width>
-            <ZIndex>27</ZIndex>
+            <ZIndex>26</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3125,10 +3010,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>3.82097cm</Width>
+                  <Width>5.28604cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>5.69869cm</Width>
+                  <Width>4.16558cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3228,8 +3113,8 @@
             <Top>13.761cm</Top>
             <Left>10.51098cm</Left>
             <Height>0.6cm</Height>
-            <Width>9.51966cm</Width>
-            <ZIndex>28</ZIndex>
+            <Width>9.45162cm</Width>
+            <ZIndex>27</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3240,7 +3125,7 @@
         <Height>11.27999in</Height>
         <Style />
       </Body>
-      <Width>8.1225in</Width>
+      <Width>7.97839in</Width>
       <Page>
         <PageFooter>
           <Height>0.45833in</Height>

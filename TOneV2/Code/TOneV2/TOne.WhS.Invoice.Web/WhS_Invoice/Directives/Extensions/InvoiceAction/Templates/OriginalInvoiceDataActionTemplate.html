@@ -1,1 +1,13 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onInvoiceCarrierTypeDirectiveReady"
+                   datasource="scopeModel.invoiceCarrierType"
+                   selectedvalues="scopeModel.selectedValue"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   label="Invoice Carrier Type"
+                   hideremoveicon
+                   isrequired="true">
+        </vr-select>
+    </vr-columns>
+</vr-row>
