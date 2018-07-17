@@ -23,6 +23,7 @@ namespace TOne.WhS.Deal.Entities
 		public DateTime? EndDate { get; set; }
 		public abstract int GetCarrierAccountId();
 		public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
+        public abstract void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context);
         public abstract List<long> GetDealSaleZoneIds();
         public abstract List<long> GetDealSupplierZoneIds();
 		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
@@ -63,4 +64,39 @@ namespace TOne.WhS.Deal.Entities
 		public List<BaseDealSupplierZoneGroup> SupplierZoneGroups { get; set; }
 
 	}
+
+    public interface IDealGetRoutingZoneGroupsContext
+    {
+        int DealId { get; }
+
+        DealZoneGroupPart DealZoneGroupPart { get; }
+
+        List<DealRoutingSaleZoneGroup> SaleZoneGroups { set; }
+
+        List<DealRoutingSupplierZoneGroup> SupplierZoneGroups { set; }
+    }
+
+    public class DealRoutingSaleZoneGroup
+    {
+        public List<DealRoutingSaleZoneGroupTier> Tiers { get; set; } 
+    }
+
+    public class DealRoutingSaleZoneGroupTier
+    {
+        public int TierNumber { get; set; }
+
+        public decimal? SubstituteRate { get; set; }
+    }
+
+    public class DealRoutingSupplierZoneGroup
+    {
+        public List<DealRoutingSupplierZoneGroupTier> Tiers { get; set; }
+    }
+
+    public class DealRoutingSupplierZoneGroupTier
+    {
+        public int TierNumber { get; set; }
+
+        public decimal? SubstituteRate { get; set; }
+    }
 }

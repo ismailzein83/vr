@@ -207,6 +207,11 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
+        public override void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Sale Methods
 
         private List<DealSaleZoneGroupZoneItem> BuildSaleZones(IEnumerable<long> zoneIds, DateTime? dealEED)

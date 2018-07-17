@@ -180,6 +180,11 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
+        public override void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public override List<long> GetDealSaleZoneIds()
         {
             List<long> zoneIds = new List<long>();
