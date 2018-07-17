@@ -116,7 +116,10 @@
     <Compile Include="IAutomatedReportEvaluatorContext.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsInput.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsResult.cs" />
+    <Compile Include="VRReportGeneration\VRReportGenerationQuery.cs" />
     <Compile Include="VRReportGeneration\VRReportGeneration.cs" />
+    <Compile Include="VRReportGeneration\VRReportGenerationDetail.cs" />
+    <Compile Include="VRReportGeneration\VRReportGenerationInfo.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorConfig.cs" />
     <Compile Include="Config\AnalyticItemConfigDetail.cs" />
     <Compile Include="Config\AnalyticItemConfigInput.cs" />
