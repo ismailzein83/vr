@@ -97,16 +97,7 @@ namespace Vanrise.Voucher.Business
             var genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId, null, getGenericBEFilterGroup);
             var count = genericBusinessEntities.Count;
             if (genericBusinessEntities != null && count >= voucherCardsActivationInput.Numberofcards)
-            {
-                //var updateGenericBEFilterGroup = new RecordFilterGroup()
-                //   {
-                //LogicalOperator = RecordQueryLogicalOperator.And,
-                // Filters = new List<RecordFilter>()
-                //   {  
-                //new DateTimeRecordFilter(){FieldName = "ExpiryDate" , ComparisonPart = DateTimeRecordFilterComparisonPart.DateTime , CompareOperator = DateTimeRecordFilterOperator.Greater , Value = System.DateTime.Now  }
-
-                //   }
-                // };                
+            {             
                 for (var i = 0; i < voucherCardsActivationInput.Numberofcards; i++)
                 {
                     var voucharCardId = (long)genericBusinessEntities[i].FieldValues.GetRecord("ID");
