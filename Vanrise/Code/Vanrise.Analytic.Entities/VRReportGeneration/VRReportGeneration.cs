@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class VRReport
+    public class VRReportGeneration
     {
         public long ReportId { get; set; }
         public string Name { get; set; }
-        public VRReportSettings Settings { get; set; }
+        public string Description { get; set; }
+        public VRReportGenerationSettings Settings { get; set; }
     }
-    public class VRReportSettings
+    public class VRReportGenerationSettings
     {
         public List<VRAutomatedReportQuery> Queries { get; set; }
-        public VRReportAction Action { get; set; }
+        public VRReportGenerationAction ReportAction { get; set; }
     }
-    public abstract class VRReportAction
+    public abstract class VRReportGenerationAction
     {
-        public string ActionName { get; set; }
+        public abstract string ActionTypeName { get; }
         public abstract Guid ConfigId { get; }
     }
 }

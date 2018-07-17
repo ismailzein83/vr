@@ -91,6 +91,7 @@
     <Compile Include="RealTimeReport\Widgets\TimeVariationChartWidget.cs" />
     <Compile Include="TimeRangeFilters\LastPeriodFilter.cs" />
     <Compile Include="TimeRangeFilters\PreviousPeriodFilter.cs" />
+    <Compile Include="VRReportGeneration\DownloadFileAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">

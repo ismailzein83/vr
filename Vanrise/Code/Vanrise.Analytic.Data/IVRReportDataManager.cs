@@ -7,14 +7,14 @@ using Vanrise.Analytic.Entities;
 
 namespace Vanrise.Analytic.Data
 {
-    public interface IVRReportDataManager : IDataManager
+    public interface IVRReportGenerationDataManager : IDataManager
     {
-        List<VRReport> GetVRReportDefinitions();
+        List<VRReportGeneration> GetVRReportGenerations();
 
-        bool AreVRReportUpdated(ref object updateHandle);
+        bool AreVRReportGenerationUpdated(ref object updateHandle);
 
-        bool Insert(VRReport dataAnalysisDefinitionItem);
+        bool Insert(VRReportGeneration vrReportGeneration);
 
-        bool Update(VRReport dataAnalysisDefinitionItem);
+        bool Update(VRReportGeneration vrReportGeneration);
     }
 }
