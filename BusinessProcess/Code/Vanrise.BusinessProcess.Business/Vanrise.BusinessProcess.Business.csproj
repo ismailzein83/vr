@@ -81,6 +81,7 @@
     <Compile Include="BPBusinessRuleActionManager.cs" />
     <Compile Include="BPBusinessRuleActionTypeManager.cs" />
     <Compile Include="BPBusinessRuleDefinitionManager.cs" />
+    <Compile Include="BPDefintionArgumentStateManager.cs" />
     <Compile Include="BPDefinitionScheduleTaskFilter.cs" />
     <Compile Include="BPEventManager.cs" />
     <Compile Include="BPTaskTypeManager.cs" />

@@ -60,6 +60,7 @@
     <Compile Include="IBPBusinessRuleActionDataManager.cs" />
     <Compile Include="IBPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="IBPDataManager.cs" />
+    <Compile Include="IBPDefinitionArgumentStateDataManager.cs" />
     <Compile Include="IBPEventDataManager.cs" />
     <Compile Include="IBPInstanceDataManager.cs" />
     <Compile Include="IBPDefinitionDataManager.cs" />

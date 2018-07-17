@@ -73,6 +73,8 @@ namespace Vanrise.BusinessProcess.Entities
         //    return true;
         //}
 
+        public virtual bool StoreLastArgumentState { get { return false; } }
+
         public virtual bool CanRunBPInstance(IBPDefinitionCanRunBPInstanceContext context)
         {
             return true;

@@ -63,6 +63,7 @@
     <Compile Include="ActionTypeFilter.cs" />
     <Compile Include="ActionTypesInfoFilter.cs" />
     <Compile Include="BaseProcessInputArgument.cs" />
+    <Compile Include="BPDefinitionArgumentState.cs" />
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionCanCancelBPInstanceContext.cs" />

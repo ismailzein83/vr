@@ -48,7 +48,7 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             List<BPInstance> bpInstances = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, false);
             List<BPInstance> bpInstancesArchived = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, true);
-            if(bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+            if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
             {
                 bpInstances.AddRange(bpInstancesArchived);
                 bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(query.Top).ToList();
@@ -63,13 +63,13 @@ namespace Vanrise.BusinessProcess.Business
             var requiredPermissionSetManager = new RequiredPermissionSetManager();
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-            
+
             List<BPInstance> bpInstances;
-            if(maxTimeStamp == null) //first page
+            if (maxTimeStamp == null) //first page
             {
                 bpInstances = s_dataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
                 List<BPInstance> bpInstancesArchived = s_dataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
-                if(bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+                if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
                 {
                     bpInstances.AddRange(bpInstancesArchived);
                     bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(nbOfRows).ToList();
@@ -98,7 +98,7 @@ namespace Vanrise.BusinessProcess.Business
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
             List<BPInstance> bpInstances = dataManager.GetBeforeId(input, grantedPermissionSetIds, false);
             List<BPInstance> bpInstancesArchived = dataManager.GetBeforeId(input, grantedPermissionSetIds, true);
-            if(bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+            if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
             {
                 bpInstances.AddRange(bpInstancesArchived);
                 bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(input.NbOfRows).ToList();
@@ -150,6 +150,16 @@ namespace Vanrise.BusinessProcess.Business
             BPDefinition processDefinition = bpDefinitionManager.GetDefinition(createProcessInput.InputArguments.ProcessName);
             if (processDefinition == null)
                 throw new Exception(String.Format("No Process Definition found match with input argument '{0}'", createProcessInput.InputArguments.GetType()));
+
+            if (isViewedFromUI && processDefinition.Configuration != null && processDefinition.Configuration.ExtendedSettings != null &&
+                processDefinition.Configuration.ExtendedSettings.StoreLastArgumentState)
+            {
+                new BPDefintionArgumentStateManager().InsertOrUpdateBPDefinitionArgumentState(new BPDefinitionArgumentState() 
+                {
+                    BPDefinitionID = processDefinition.BPDefinitionID,
+                    InputArgument = createProcessInput.InputArguments
+                });
+            }
 
             int? viewInstanceRequiredPermissionSetId = null;
             RequiredPermissionSettings viewInstanceRequiredPermissions = bpDefinitionManager.GetViewInstanceRequiredPermissions(processDefinition, createProcessInput.InputArguments);
@@ -362,7 +372,7 @@ namespace Vanrise.BusinessProcess.Business
             };
         }
 
-        private BPInstanceDefinitionDetail BPInstanceDefinitionDetailMapper(BPDefinition bpDefinition,long bpInstanceId)
+        private BPInstanceDefinitionDetail BPInstanceDefinitionDetailMapper(BPDefinition bpDefinition, long bpInstanceId)
         {
             BPInstanceDefinitionDetail detail = new BPInstanceDefinitionDetail();
             detail.Entity = bpDefinition;
