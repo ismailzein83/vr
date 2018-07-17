@@ -13,7 +13,7 @@ namespace Vanrise.Security.Entities
         public Guid SecurityProviderId { get; set; }
 
         public string Name { get; set; }
-        public bool IsEnabled { get; set; }
+        public bool? IsEnabled { get; set; }
         public SecurityProviderSettings Settings { get; set; }
     }
 

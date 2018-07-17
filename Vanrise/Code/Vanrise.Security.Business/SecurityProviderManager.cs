@@ -207,7 +207,7 @@ namespace Vanrise.Security.Business
                         {
                             SecurityProviderId = (Guid)genericBusinessEntity.FieldValues.GetRecord("SecurityProviderId"),
                             Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
-                            IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled"),
+                            IsEnabled = (bool?)genericBusinessEntity.FieldValues.GetRecord("IsEnabled"),
                             Settings = genericBusinessEntity.FieldValues.GetRecord("Settings") as SecurityProviderSettings
                         };
                         result.Add(securityProvider.SecurityProviderId, securityProvider);
