@@ -18,6 +18,17 @@ namespace Vanrise.Web
 
             // Web API configuration and services
 
+            if (System.Configuration.ConfigurationManager.AppSettings["VRDontLoadDynamicAPIs"] != "true")
+            {
+                GlobalConfiguration.Configuration.Services.Replace(
+                typeof(System.Web.Http.Dispatcher.IHttpControllerSelector),
+                new VRHttpControllerSelector(config));
+
+                GlobalConfiguration.Configuration.Services.Replace(
+               typeof(System.Web.Http.Controllers.IHttpActionSelector),
+               new VRHttpActionSelector());
+            }
+
             //Web API Filters
             config.Filters.Add(new AuthenticationFilter());
             config.Filters.Add(new AuthorizationFilter());
