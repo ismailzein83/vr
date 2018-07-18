@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Invoice.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
 
 namespace TOne.WhS.Invoice.Business.Extensions
-{public enum InvoiceCarrierType { Customer = 0, Supplier = 1 };
+{
     public class OriginalInvoiceDataAction : InvoiceActionSettings
     {
         public override string ActionTypeName { get { return "OriginalInvoiceData"; } }

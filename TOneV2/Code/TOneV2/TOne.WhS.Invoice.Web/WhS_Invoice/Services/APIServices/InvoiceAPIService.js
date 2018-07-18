@@ -13,14 +13,15 @@
         function UpdateOriginalInvoiceData(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "UpdateOriginalInvoiceData"), input);
         }
-        function GetOriginalInvoiceDataRuntime(invoiceId) {
+        function GetOriginalInvoiceDataRuntime(invoiceId,invoiceCarrierType) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "GetOriginalInvoiceDataRuntime"), {
-                invoiceId: invoiceId
+                invoiceId: invoiceId,
+                invoiceCarrierType:invoiceCarrierType
             });
         }
         function GetInvoiceDetails(invoiceId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {
-                invoiceId: invoiceId,
+                invoiceId: invoiceId
             });
         }
         return ({

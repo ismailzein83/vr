@@ -8,6 +8,7 @@ using Vanrise.Web.Base;
 using System.Web.Http;
 using Vanrise.Invoice.Entities;
 using Vanrise.Entities;
+using TOne.WhS.Invoice.Business.Extensions;
 
 namespace TOne.WhS.Invoice.Web.Controllers
 {
@@ -50,10 +51,10 @@ namespace TOne.WhS.Invoice.Web.Controllers
 
         [HttpGet]
         [Route("GetOriginalInvoiceDataRuntime")]
-        public OriginalInvoiceDataRuntime GetOriginalInvoiceDataRuntime(long invoiceId)
+        public OriginalInvoiceDataRuntime GetOriginalInvoiceDataRuntime(long invoiceId,InvoiceCarrierType invoiceCarrierType)
         {
             InvoiceManager manager = new InvoiceManager();
-            return manager.GetOriginalInvoiceDataRuntime(invoiceId);
+            return manager.GetOriginalInvoiceDataRuntime(invoiceId,invoiceCarrierType);
         }
         [HttpGet]
         [Route("GetInvoiceDetails")]

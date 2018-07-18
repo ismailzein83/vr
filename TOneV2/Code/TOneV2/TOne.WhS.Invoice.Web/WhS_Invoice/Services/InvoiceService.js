@@ -7,13 +7,14 @@ app.service('WhS_Invoice_InvoiceService', ['VRModalService', 'UtilsService', 'VR
             var actionType = {
                 ActionTypeName: "CompareInvoiceAction",
                 actionMethod: function (payload) {
-                    openCompareAction(payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId);
+                    //console.log(payload)
+                    openCompareAction(payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId, payload.invoiceAction.Settings.InvoiceCarrierType);
                 }
             };
             VR_Invoice_InvoiceActionService.registerActionType(actionType);
         }
 
-        function openCompareAction(invoiceId, invoiceActionId, invoiceTypeId) {
+        function openCompareAction(invoiceId, invoiceActionId, invoiceTypeId,invoiceCarrierType) {
             var settings = {
 
             };
@@ -22,7 +23,8 @@ app.service('WhS_Invoice_InvoiceService', ['VRModalService', 'UtilsService', 'VR
             var parameters = {
                 invoiceId: invoiceId,
                 invoiceActionId: invoiceActionId,
-                invoiceTypeId: invoiceTypeId
+                invoiceTypeId: invoiceTypeId,
+                invoiceCarrierType:invoiceCarrierType
             };
             VRModalService.showModal('/Client/Modules/WhS_Invoice/Views/InvoiceCompareTemplate.html', parameters, settings);
         }
@@ -36,14 +38,14 @@ app.service('WhS_Invoice_InvoiceService', ['VRModalService', 'UtilsService', 'VR
                     var onOriginalInvoiceDataUpdated = function (data) {
                         promiseDeffered.resolve(data);
                     };
-                    openOriginalInvoiceData(onOriginalInvoiceDataUpdated, payload.invoice.Entity.InvoiceId, payload.invoice.Entity.InvoiceTypeId);
+                    openOriginalInvoiceData(onOriginalInvoiceDataUpdated, payload.invoice.Entity.InvoiceId, payload.invoice.Entity.InvoiceTypeId,payload.invoiceAction.Settings.InvoiceCarrierType);
                     return promiseDeffered.promise;
                 }
             };
             VR_Invoice_InvoiceActionService.registerActionType(actionType);
         }
 
-        function openOriginalInvoiceData(onOriginalInvoiceDataUpdated, invoiceId, invoiceTypeId) {
+        function openOriginalInvoiceData(onOriginalInvoiceDataUpdated, invoiceId, invoiceTypeId,invoiceCarrierType) {
             var settings = {
 
             };
@@ -52,7 +54,8 @@ app.service('WhS_Invoice_InvoiceService', ['VRModalService', 'UtilsService', 'VR
             };
             var parameters = {
                 invoiceId: invoiceId,
-                invoiceTypeId: invoiceTypeId
+                invoiceTypeId: invoiceTypeId,
+                invoiceCarrierType:invoiceCarrierType
             };
             VRModalService.showModal('/Client/Modules/WhS_Invoice/Views/OriginalInvoiceDataTemplate.html', parameters, settings);
         }

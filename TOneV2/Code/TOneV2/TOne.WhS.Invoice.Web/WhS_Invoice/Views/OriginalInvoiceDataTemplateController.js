@@ -9,6 +9,7 @@
         var invoiceAccountEntity;
         var invoiceId;
         var invoiceTypeId;
+        var invoiceCarrierType;
         var fileAPI;
         var originalInvoiceDataRuntime;
         loadParameters();
@@ -21,6 +22,7 @@
             if (parameters != undefined) {
                 invoiceId = parameters.invoiceId;
                 invoiceTypeId = parameters.invoiceTypeId;
+                invoiceCarrierType = parameters.invoiceCarrierType;
             }
         }
 
@@ -62,7 +64,7 @@
 
         function getOriginalInvoiceDataRuntime()
         {
-            return WhS_Invoice_InvoiceAPIService.GetOriginalInvoiceDataRuntime(invoiceId).then(function (response) {
+            return WhS_Invoice_InvoiceAPIService.GetOriginalInvoiceDataRuntime(invoiceId,invoiceCarrierType).then(function (response) {
                 originalInvoiceDataRuntime = response;
                 if (originalInvoiceDataRuntime != undefined)
                 {
@@ -170,6 +172,7 @@
                 Reference: $scope.scopeModel.reference,
                 AttachementFiles: attachementFileIds,
                 InvoiceId: invoiceId,
+                InvoiceCarrierType:invoiceCarrierType
             };
             return obj;
         }

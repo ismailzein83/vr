@@ -120,41 +120,82 @@ namespace TOne.WhS.Invoice.Business
                     }
                 }
             }
-           
-            var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
-            supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
-            supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
-            supplierInvoiceDetails.Reference = input.Reference;
-            supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
-            invoice.Details = supplierInvoiceDetails;
+            InvoiceCarrierType invoiceCarrierType = input.invoiceCarrierType;
+           switch (invoiceCarrierType)
+           {
+               case InvoiceCarrierType.Customer:
+                      var customerInvoiceDetails = invoice.Details as CustomerInvoiceDetails;
+                      customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
+                      customerInvoiceDetails.AttachementFiles = input.AttachementFiles;
+                      customerInvoiceDetails.Reference = input.Reference;
+                      customerInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
+              
+                      invoice.Details = customerInvoiceDetails;
+                   break;
+               case InvoiceCarrierType.Supplier:
+                     var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
+                     supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+                     supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
+                     supplierInvoiceDetails.Reference = input.Reference;
+                     supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
+
+                     invoice.Details = supplierInvoiceDetails;
+                   break;
+
+           }
+          
+
+            
             return invoiceManager.TryUpdateInvoice(invoice);
         }
 
 
-        public OriginalInvoiceDataRuntime GetOriginalInvoiceDataRuntime(long invoiceId)
+        public OriginalInvoiceDataRuntime GetOriginalInvoiceDataRuntime(long invoiceId, InvoiceCarrierType invoiceCarrierType)
         {
             Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
             var invoice = invoiceManager.GetInvoice(invoiceId);
             invoice.ThrowIfNull("invoice", invoiceId);
-            var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
-            supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
-            
-            
-            var originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
+
+
+            string reference = null;
+            Dictionary<int, OriginalDataCurrrency> originalAmountByCurrency = null;
+            List<AttachementFile> attachementFiles = null;
+            switch (invoiceCarrierType)
             {
-                Reference = supplierInvoiceDetails.Reference,
-            };
+                 case InvoiceCarrierType.Customer :
+                    var customerInvoiceDetails = invoice.Details as CustomerInvoiceDetails;
+                    customerInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+                    reference = customerInvoiceDetails.Reference;
+                    originalAmountByCurrency = customerInvoiceDetails.OriginalAmountByCurrency;
+                    attachementFiles = customerInvoiceDetails.AttachementFiles;
+
+                   break;
+
+                case InvoiceCarrierType.Supplier:
+                    var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
+                    supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+                    reference = supplierInvoiceDetails.Reference;
+                    originalAmountByCurrency = supplierInvoiceDetails.OriginalAmountByCurrency;
+                    attachementFiles = supplierInvoiceDetails.AttachementFiles;
+                    break;
+            }
+
+
+            var originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
+              {
+                  Reference = reference,
+              };
             CurrencyManager currencyManager = new CurrencyManager();
 
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
             var currencyItemSetName = invoiceItemManager.GetInvoiceItemsByItemSetNames(invoiceId, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
-            if(currencyItemSetName != null)
+            if (currencyItemSetName != null)
             {
                 originalInvoiceDataRuntime.OriginalDataCurrency = new Dictionary<int, OriginalDataCurrrency>();
-                foreach(var item in currencyItemSetName)
+                foreach (var item in currencyItemSetName)
                 {
                     var itemDetails = item.Details as InvoiceBySaleCurrencyItemDetails;
-                    if(itemDetails != null)
+                    if (itemDetails != null)
                     {
                         var currencySymbol = currencyManager.GetCurrencySymbol(itemDetails.CurrencyId);
                         currencySymbol.ThrowIfNull("currencySymbol", itemDetails.CurrencyId);
@@ -164,9 +205,10 @@ namespace TOne.WhS.Invoice.Business
                 }
             }
 
-            if (supplierInvoiceDetails.OriginalAmountByCurrency != null)
+
+            if (originalAmountByCurrency != null)
             {
-                foreach (var originalAmount in supplierInvoiceDetails.OriginalAmountByCurrency)
+                foreach (var originalAmount in originalAmountByCurrency)
                 {
                     var record = originalInvoiceDataRuntime.OriginalDataCurrency.GetRecord(originalAmount.Key);
                     if (record != null)
@@ -177,13 +219,13 @@ namespace TOne.WhS.Invoice.Business
                 }
             }
 
-            if (supplierInvoiceDetails.AttachementFiles != null && supplierInvoiceDetails.AttachementFiles.Count > 0)
+            if (attachementFiles != null && attachementFiles.Count > 0)
             {
                 originalInvoiceDataRuntime.AttachementFilesRuntime = new List<AttachementFileRuntime>();
-                var fileIds = supplierInvoiceDetails.AttachementFiles.Select(x => x.FileId);
+                var fileIds = attachementFiles.Select(x => x.FileId);
                 VRFileManager vrFileManager = new VRFileManager();
                 var files = vrFileManager.GetFilesInfo(fileIds);
-                foreach (var attachementFile in supplierInvoiceDetails.AttachementFiles)
+                foreach (var attachementFile in attachementFiles)
                 {
                     if (files != null)
                     {
