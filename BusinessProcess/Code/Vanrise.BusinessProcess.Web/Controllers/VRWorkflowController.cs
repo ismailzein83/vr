@@ -29,12 +29,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			return _manager.GetVRWorkflowEditorRuntime(vrWorkflowId);
 		}
 
-		[HttpPost]
+		/*[HttpPost]
 		[Route("GetVRWorkflowVariablesTypeDescription")]
 		public Dictionary<Guid, string> GetVRWorkflowVariablesTypeDescription(IEnumerable<VRWorkflowVariable> variables)
 		{
 			return _manager.GetVRWorkflowVariablesTypeDescription(variables);
-		}
+		}*/
 
 		[HttpPost]
 		[Route("GetVRWorkflowArgumentTypeDescription")]
@@ -42,13 +42,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 		{
 			return _manager.GetVRWorkflowArgumentTypeDescription(vrWorkflowArgumentType);
 		}
-
+		/*
 		[HttpPost]
 		[Route("GetVRWorkflowVariableTypeDescription")]
 		public string GetVRWorkflowVariableTypeDescription(VRWorkflowVariableType vrWorkflowVariableType)
 		{
 			return _manager.GetVRWorkflowVariableTypeDescription(vrWorkflowVariableType);
-		}
+		}*/
 
 		[HttpGet]
 		[Route("GetVRWorkflowVariableTypeExtensionConfigs")]
@@ -57,12 +57,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			return _manager.GetVRWorkflowVariableTypeExtensionConfigs();
 		}
 
-		[HttpGet]
+		/*[HttpGet]
 		[Route("GetVRWorkflowActivityExtensionConfigs")]
 		public IEnumerable<VRWorkflowActivityConfig> GetVRWorkflowActivityExtensionConfigs()
 		{
 			return _manager.GetVRWorkflowActivityExtensionConfigs();
-		}
+		}*/
 
 		[HttpPost]
 		[Route("InsertVRWorkflow")]
