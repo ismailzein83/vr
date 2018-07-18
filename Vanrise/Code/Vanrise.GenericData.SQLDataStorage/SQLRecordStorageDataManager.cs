@@ -354,6 +354,8 @@ namespace Vanrise.GenericData.SQLDataStorage
             if (queryFilters.Count > 0)
                 sb_Query.Append(string.Format(" Where {0} ", string.Join(" And ", queryFilters)));
 
+            sb_Query.Append(" OPTION (RECOMPILE) ");
+
             ExecuteReaderText(sb_Query.ToString(), (reader) =>
             {
                 while (reader.Read())
@@ -915,7 +917,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, orderDirection == OrderDirection.Ascending ? "ASC" : "DESC");
             StringBuilder str = new StringBuilder(string.Format(@"  select {0} {1} from {2} WITH (NOLOCK)
                                                                     where (@FromTime is null or {3} >= @FromTime) 
-                                                                    and (@ToTime is null or {3} <= @ToTime) {4} {5}",
+                                                                    and (@ToTime is null or {3} <= @ToTime) {4} {5} OPTION (RECOMPILE)",
                                                                     limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
                                                                     tableName, dateTimeColumn, recordFilterResult, orderResult));
             //input.SortByColumnName = dateTimeColumn;
