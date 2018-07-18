@@ -18,14 +18,16 @@
     [disconnect_timestamp]            BIGINT           NULL,
     [unique_identifier]               UNIQUEIDENTIFIER NULL,
     [file_name]                       NVARCHAR (200)   NULL,
-    [calling_first_ci]                INT              NULL,
-    [calling_last_ci]                 INT              NULL,
-    [called_first_ci]                 INT              NULL,
-    [called_last_ci]                  INT              NULL,
+    [calling_first_ci]                NVARCHAR (255)   NULL,
+    [calling_last_ci]                 NVARCHAR (255)   NULL,
+    [called_first_ci]                 NVARCHAR (255)   NULL,
+    [called_last_ci]                  NVARCHAR (255)   NULL,
     [intermediate_charging_indicator] INT              NULL,
     [intermediate_record_number]      INT              NULL,
     [global_call_reference]           NVARCHAR (50)    NULL,
     [cause_for_termination]           INT              NULL);
+
+
 
 
 

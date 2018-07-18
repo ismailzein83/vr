@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Mobile_EDR].[MobileCDR] (
+﻿CREATE TABLE [Mobile_EDR].[BadCDR] (
     [Id]                              BIGINT           IDENTITY (1, 1) NOT NULL,
     [call_reference]                  BIGINT           NULL,
     [record_type]                     INT              NULL,
@@ -27,42 +27,6 @@
     [intermediate_record_number]      INT              NULL,
     [global_call_reference]           NVARCHAR (50)    NULL,
     [cause_for_termination]           INT              NULL,
-    CONSTRAINT [PK_MobileCDR_1] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_BadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-GO
-
 
