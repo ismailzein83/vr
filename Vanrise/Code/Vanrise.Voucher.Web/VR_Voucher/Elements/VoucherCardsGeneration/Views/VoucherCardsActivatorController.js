@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VoucherCardsActivatorController.$inject = ['$scope', 'VR_Voucher_VoucherCardsAPIService', 'VR_Voucher_VoucherCardsGenerationAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    VoucherCardsActivatorController.$inject = ['$scope', 'VR_Voucher_VoucherCardsAPIService', 'VR_Voucher_VoucherCardsGenerationAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'UpdateOperationResultEnum'];
 
-    function VoucherCardsActivatorController($scope, VR_Voucher_VoucherCardsAPIService, VR_Voucher_VoucherCardsGenerationAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function VoucherCardsActivatorController($scope, VR_Voucher_VoucherCardsAPIService, VR_Voucher_VoucherCardsGenerationAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, UpdateOperationResultEnum) {
 
        
         var voucherCardsGenerationId;
@@ -84,7 +84,7 @@
             var VoucherCardsActivationInput = buildActivateVoucherCardsActivationInputObjFromScope();
             
             return VR_Voucher_VoucherCardsAPIService.ActivateVoucherCards(VoucherCardsActivationInput).then(function (response) {
-                if (response.Result == 0) {
+                if (response.Result == UpdateOperationResultEnum.Succeeded.value) {
                     if ($scope.onGenericBEUpdated != undefined) {
                         $scope.onGenericBEUpdated(response.UpdatedObject);
                     }
