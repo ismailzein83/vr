@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWorkflowCustomcode', ['UtilsService', 'VRUIUtilsService',
+app.directive('businessprocessVrWorkflowCustomcode', ['UtilsService', 'VRUIUtilsService',
 	function (UtilsService, VRUIUtilsService) {
 
 		var directiveDefinitionObject = {
@@ -34,14 +34,19 @@ app.directive('vrWorkflowCustomcode', ['UtilsService', 'VRUIUtilsService',
 				var api = {};
 
 				api.load = function (payload) {
-					if (payload != undefined && payload.data != undefined) {
-						$scope.scopeModel.customCode = payload.data.CustomCode;
+					if (payload != undefined) {
+						if (payload.Settings != undefined && payload.Settings.Code != null) {
+							$scope.scopeModel.customCode = payload.Settings.Code;
+						}
+						if (payload.Context != null) 
+							$scope.scopeModel.context = payload.Context;
 					}
 				};
 
 				api.getData = function () {
 					return {
-						CustomCode: $scope.scopeModel.customCode,
+						$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCustomLogicActivity, Vanrise.BusinessProcess.MainExtensions",
+						Code: $scope.scopeModel.customCode
 					};
 				};
 

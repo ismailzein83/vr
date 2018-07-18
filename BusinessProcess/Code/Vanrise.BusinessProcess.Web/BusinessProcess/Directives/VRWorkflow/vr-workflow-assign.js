@@ -1,13 +1,12 @@
 ﻿'use strict';
 
-app.directive('vrWorkflowAssign', ['UtilsService', 'VRUIUtilsService',
+app.directive('businessprocessVrWorkflowAssign', ['UtilsService', 'VRUIUtilsService',
 	function (UtilsService, VRUIUtilsService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
 			scope: {
-				onReady: '=',
-				isrequired: '='
+				onReady: '='
 			},
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
@@ -27,24 +26,33 @@ app.directive('vrWorkflowAssign', ['UtilsService', 'VRUIUtilsService',
 			this.initializeController = initializeController;
 			function initializeController() {
 				$scope.scopeModel = {};
-
 				defineAPI();
 			}
+
 			function defineAPI() {
 				var api = {};
 
 				api.load = function (payload) {
-					if (payload != undefined && payload.data != undefined) {
-						$scope.scopeModel.to = payload.data.To;
-						$scope.scopeModel.value = payload.data.Value;
+					if (payload != undefined) {
+						if (payload.Settings != undefined && payload.Settings.Items != null && payload.Settings.Items.length > 0) {
+							$scope.scopeModel.to = payload.Settings.Items[0].To;
+							$scope.scopeModel.value = payload.Settings.Items[0].Value;
+						}
+						if (payload.Context != null) 
+							$scope.scopeModel.context = payload.Context;
 					}
 				};
 
 				api.getData = function () {
-					console.log("r  "+$scope.x);
-					return {
+					var items = [{
 						To: $scope.scopeModel.to,
 						Value: $scope.scopeModel.value
+					}];
+					return {
+						$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignActivity, Vanrise.BusinessProcess.MainExtensions",
+						Items: items
+						//Title: "Assign",
+						//Editor: "businessprocess-vr-workflow-assign"
 					};
 				};
 

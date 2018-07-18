@@ -1,9 +1,9 @@
 ﻿<vr-row>
 	<vr-columns colnum="6">
-		<vr-workflow-activity-expressionbuilder ng-model="x" label="'To'" isrequired="true" value="scopeModel.to"></vr-workflow-activity-expressionbuilder>
+		<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'To'" isrequired="true" value="scopeModel.to"></businessprocess-vr-workflow-activity-expressionbuilder>
 	</vr-columns>
 
 	<vr-columns colnum="6">
-		<vr-workflow-activity-expressionbuilder label="'Value'" isrequired="true" value="scopeModel.value"></vr-workflow-activity-expressionbuilder>
+		<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Value'" isrequired="true" value="scopeModel.value"></businessprocess-vr-workflow-activity-expressionbuilder>
 	</vr-columns>
 </vr-row>

@@ -1,31 +1,33 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowEditorController" size="large">
-    <vr-modalbody>
-        <vr-form name="formEditVRWorkflow" vr-loader="scopeModel.isLoading">
-            <vr-tabs>
-                <vr-tab header="'Definition'">
-                    <vr-row>
-                        <vr-columns colnum="3">
-                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns colnum="3">
-                            <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Arguments'">
-                    <businessprocess-vr-workflow-arguments-grid on-ready="scopeModel.onArgumentsGridReady"></businessprocess-vr-workflow-arguments-grid>
-                </vr-tab>
-                <vr-tab header="'Workflow'">
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModel.saveVRWorkflow" formname="formEditVRWorkflow"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+	<vr-modalbody>
+		<vr-form name="formEditVRWorkflow" vr-loader="scopeModel.isLoading">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-row>
+						<vr-columns colnum="3">
+							<vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+						</vr-columns>
+						<vr-columns colnum="3">
+							<vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+				<vr-tab header="'Arguments'">
+					<businessprocess-vr-workflow-arguments-grid on-ready="scopeModel.onArgumentsGridReady"></businessprocess-vr-workflow-arguments-grid>
+				</vr-tab>
+				<vr-tab header="'Workflow'">
+					<businessprocess-vr-workflow-designer-directive on-ready="scopeModel.onWorkflowDesignerReady"></businessprocess-vr-workflow-designer-directive>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" data-onclick="scopeModel.saveVRWorkflow" formname="formEditVRWorkflow"></vr-button>
+				<vr-button type="Compile" data-onclick="scopeModel.tryCompileWorkflow"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

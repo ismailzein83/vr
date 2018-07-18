@@ -1,0 +1,24 @@
+<div vr-modalcontent ng-controller="VR_Workflow_VRWorkflowVariableEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+	<vr-modalbody maxheight="'700px'">
+		<vr-form name="formWorkflowVariableEditor">
+			<vr-row>
+				<vr-columns colnum="6">
+					<vr-validator validate="scopeModel.isVariableNameValid()">
+						<vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+					</vr-validator>
+				</vr-columns>
+			</vr-row>
+			<vr-row>
+				<businessprocess-vr-workflow-argumentvariabletype on-ready="scopeModel.onArgumentVariableTypeDirectiveReady" label="Type"></businessprocess-vr-workflow-argumentvariabletype>
+			</vr-row>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formWorkflowVariableEditor" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>

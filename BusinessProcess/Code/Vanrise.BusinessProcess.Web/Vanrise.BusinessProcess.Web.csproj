@@ -47,6 +47,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
@@ -180,7 +181,6 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
-    <Content Include="BusinessProcess\Constants\SPLDefinitionEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
@@ -224,6 +224,7 @@
     <Content Include="BusinessProcess\Directives\CustomCode\CustomCodeTaskCompilationResultController.js" />
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-argumentvariabletype.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-variables-grid.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityDirectiveTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityExpressionBuilderTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowArgumentEditor.html" />
@@ -235,6 +236,8 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowCustomCodeTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowDesignerDirectiveTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowSequenceTemplate.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowVariableEditor.html" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowVariablesGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowVariableTypesTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-activities.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-argumentdirection-selector.js" />
@@ -249,6 +252,7 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-designer-directive.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-sequence.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\VRWorkflowArgumentEditorController.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\VRWorkflowVariableEditorController.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
@@ -292,20 +296,27 @@
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\vr-businessprocess-runtimeservice.js" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\ActivityVariablesEditor.html" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\ActivityVariablesEditorController.js" />
     <Content Include="BusinessProcess\Views\VRWorkflow\ExpressionBuilderEditor.html" />
     <Content Include="BusinessProcess\Views\VRWorkflow\ExpressionBuilderEditorController.js" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowCompilationResult.html" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowCompilationResultController.js" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowEditor.html" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowEditorController.js" />
     <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowMain.html" />
     <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowMainController.js" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowManagement.html" />
+    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowManagementController.js" />
     <Content Include="BusinessProcess\VR_BusinessProcess_ModuleInitialization.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivitiesTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-management-grid.js" />
     <Content Include="BusinessProcess\Services\APIServices\VRWorkflowAPIService.js" />
     <Content Include="BusinessProcess\Services\VRWorkflowService.js" />
-    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowEditor.html" />
-    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowEditorController.js" />
-    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowManagement.html" />
-    <Content Include="BusinessProcess\Views\VRWorkflow\VRWorkflowManagementController.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

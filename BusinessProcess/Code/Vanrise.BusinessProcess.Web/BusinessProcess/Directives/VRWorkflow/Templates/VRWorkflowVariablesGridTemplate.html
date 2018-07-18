@@ -1,0 +1,16 @@
+<vr-row ng-if="ctrl.readOnly">
+	<vr-columns width="fullrow" withemptyline></vr-columns>
+</vr-row>
+<vr-row>
+	<vr-button type="Add" ng-if="!ctrl.readOnly" data-onclick="scopeModel.addVRWorkflowVariable" standalone></vr-button>
+	<vr-datagrid on-ready="scopeModel.onGridReady"
+				 datasource="scopeModel.datasource"
+				 menuactions="scopeModel.gridMenuActions"
+				 ondeleterow="(ctrl.readOnly)?undefined:scopeModel.removeVRWorkflowVariable"
+				 idfield="Entity.VRWorkflowVariableId"
+				 hidegridmenu>
+		<vr-datagridcolumn headertext="'ID'" field="'Entity.VRWorkflowVariableId'" fixedwidth="50" disablesorting></vr-datagridcolumn>
+		<vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+		<vr-datagridcolumn headertext="'Type'" field="'Entity.TypeDescription'" disablesorting></vr-datagridcolumn>
+	</vr-datagrid>
+</vr-row>

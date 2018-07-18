@@ -1,56 +1,84 @@
 ﻿(function (appControllers) {
 
-    "use strict";
+	"use strict";
 
-    BusinessProcess_VRWorkflowAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig', 'SecurityService'];
+	BusinessProcess_VRWorkflowAPIService.$inject = ['BaseAPIService', 'UtilsService', 'BusinessProcess_BP_ModuleConfig', 'SecurityService'];
 
-    function BusinessProcess_VRWorkflowAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig, SecurityService) {
-        var controllerName = 'VRWorkflow';
+	function BusinessProcess_VRWorkflowAPIService(BaseAPIService, UtilsService, BusinessProcess_BP_ModuleConfig, SecurityService) {
+		var controllerName = 'VRWorkflow';
 
-        function GetFilteredVRWorkflows(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetFilteredVRWorkflows"), input);
-        }
+		function GetFilteredVRWorkflows(input) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetFilteredVRWorkflows"), input);
+		}
 
-        function GetVRWorkflowEditorRuntime(vrWorkflowId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowEditorRuntime"), { vrWorkflowId: vrWorkflowId });
-        }
+		function GetVRWorkflowEditorRuntime(vrWorkflowId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowEditorRuntime"), { vrWorkflowId: vrWorkflowId });
+		}
 
-        function GetVRWorkflowVariableTypeExtensionConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowVariableTypeExtensionConfigs"), {});
-        }
+		function GetVRWorkflowVariablesTypeDescription(variables) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowVariablesTypeDescription"), variables);
+		}
 
-        function GetVRWorkflowArgumentTypeDescription(vrWorkflowArgumentType) {
-            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowArgumentTypeDescription"), vrWorkflowArgumentType);
-        }
+		function GetVRWorkflowVariableTypeExtensionConfigs() {
+			return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowVariableTypeExtensionConfigs"), {});
+		}
 
-        function InsertVRWorkflow(vrWorkflow) {
-            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "InsertVRWorkflow"), vrWorkflow);
-        }
+		function GetVRWorkflowActivityExtensionConfigs() {
+			return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowActivityExtensionConfigs"), {});
+		}
 
-        function UpdateVRWorkflow(vrWorkflow) {
-            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "UpdateVRWorkflow"), vrWorkflow);
-        }
+		function GetVRWorkflowArgumentTypeDescription(vrWorkflowArgumentType) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowArgumentTypeDescription"), vrWorkflowArgumentType);
+		}
 
-        function HasAddVRWorkflowPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, ['InsertVRWorkflow']));
-        }
+		function GetVRWorkflowVariableTypeDescription(vrWorkflowArgumentType) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowVariableTypeDescription"), vrWorkflowArgumentType);
+		}
 
-        function HasEditVRWorkflowPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, ['UpdateVRWorkflow']));
-        }
+		function InsertVRWorkflow(vrWorkflow) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "InsertVRWorkflow"), vrWorkflow);
+		}
 
-        return ({
-            GetFilteredVRWorkflows: GetFilteredVRWorkflows,
-            GetVRWorkflowEditorRuntime: GetVRWorkflowEditorRuntime,
-            GetVRWorkflowVariableTypeExtensionConfigs: GetVRWorkflowVariableTypeExtensionConfigs,
-            GetVRWorkflowArgumentTypeDescription: GetVRWorkflowArgumentTypeDescription,
-            InsertVRWorkflow: InsertVRWorkflow,
-            UpdateVRWorkflow: UpdateVRWorkflow,
-            HasAddVRWorkflowPermission: HasAddVRWorkflowPermission,
-            HasEditVRWorkflowPermission: HasEditVRWorkflowPermission
-        });
-    }
+		function TryCompileWorkflow(vrWorkflow) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "TryCompileWorkflow"), vrWorkflow);
+		}
 
-    appControllers.service('BusinessProcess_VRWorkflowAPIService', BusinessProcess_VRWorkflowAPIService);
+		function ExportCompilationResult(vrWorkflow) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, 'ExportCompilationResult'), vrWorkflow, {
+				returnAllResponseParameters: true,
+				responseTypeAsBufferArray: true
+			});
+		}
+
+		function UpdateVRWorkflow(vrWorkflow) {
+			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "UpdateVRWorkflow"), vrWorkflow);
+		}
+
+		function HasAddVRWorkflowPermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, ['InsertVRWorkflow']));
+		}
+
+		function HasEditVRWorkflowPermission() {
+			return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, ['UpdateVRWorkflow']));
+		}
+
+		return ({
+			GetFilteredVRWorkflows: GetFilteredVRWorkflows,
+			GetVRWorkflowEditorRuntime: GetVRWorkflowEditorRuntime,
+			GetVRWorkflowVariablesTypeDescription: GetVRWorkflowVariablesTypeDescription,
+			GetVRWorkflowVariableTypeExtensionConfigs: GetVRWorkflowVariableTypeExtensionConfigs,
+			GetVRWorkflowActivityExtensionConfigs: GetVRWorkflowActivityExtensionConfigs,
+			GetVRWorkflowArgumentTypeDescription: GetVRWorkflowArgumentTypeDescription,
+			GetVRWorkflowVariableTypeDescription: GetVRWorkflowVariableTypeDescription,
+			InsertVRWorkflow: InsertVRWorkflow,
+			UpdateVRWorkflow: UpdateVRWorkflow,
+			HasAddVRWorkflowPermission: HasAddVRWorkflowPermission,
+			HasEditVRWorkflowPermission: HasEditVRWorkflowPermission,
+			TryCompileWorkflow: TryCompileWorkflow,
+			ExportCompilationResult: ExportCompilationResult
+		});
+	}
+
+	appControllers.service('BusinessProcess_VRWorkflowAPIService', BusinessProcess_VRWorkflowAPIService);
 
 })(appControllers);

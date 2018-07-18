@@ -35,11 +35,12 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/VRWorkflowEditor.html', parameters, settings);
 		}
 
-		function addVRWorkflowArgument(vrWorkflowArgumentNames, onVRWorkflowArgumentAdded) {
+		function addVRWorkflowArgument(vrWorkflowArgumentNames, onVRWorkflowArgumentAdded, isVariableNameReserved) {
 
 			var modalSettings = {};
 			modalSettings.onScopeReady = function (modalScope) {
 				modalScope.onVRWorkflowArgumentAdded = onVRWorkflowArgumentAdded;
+				modalScope.isVariableNameReserved = isVariableNameReserved;
 			};
 
 			var modalParameters = {
@@ -48,11 +49,12 @@
 
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowArgumentEditor.html', modalParameters, modalSettings);
 		}
-		function editVRWorkflowArgument(vrWorkflowArgumentEntity, vrWorkflowArgumentNames, onVRWorkflowArgumentUpdated) {
+		function editVRWorkflowArgument(vrWorkflowArgumentEntity, vrWorkflowArgumentNames, onVRWorkflowArgumentUpdated, isVariableNameReserved) {
 
 			var settings = {};
 			settings.onScopeReady = function (modalScope) {
 				modalScope.onVRWorkflowArgumentUpdated = onVRWorkflowArgumentUpdated;
+				modalScope.isVariableNameReserved = isVariableNameReserved;
 			};
 
 			var parameters = {
@@ -61,6 +63,33 @@
 			};
 
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowArgumentEditor.html', parameters, settings);
+		}
+
+		function addVRWorkflowVariable(onVRWorkflowVariableAdded, isVariableNameReserved) {
+
+			var modalSettings = {};
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onVRWorkflowVariableAdded = onVRWorkflowVariableAdded;
+				modalScope.isVariableNameReserved = isVariableNameReserved;
+			};
+
+			var modalParameters = {
+			};
+
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowVariableEditor.html', modalParameters, modalSettings);
+		}
+		function editVRWorkflowVariable(vrWorkflowVariableEntity, onVRWorkflowVariableUpdated) {
+
+			var settings = {};
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onVRWorkflowVariableUpdated = onVRWorkflowVariableUpdated;
+			};
+
+			var parameters = {
+				vrWorkflowVariableEntity: vrWorkflowVariableEntity
+			};
+
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowVariableEditor.html', parameters, settings);
 		}
 
 		function registerObjectTrackingDrillDownToVRWorkflow() {
@@ -74,7 +103,7 @@
 
 				var query = {
 					ObjectId: vrWorkflow.VRWorkflowID,
-					EntityUniqueName: getEntityUniqueName(),
+					EntityUniqueName: getEntityUniqueName()
 
 				};
 				return vrWorkflow.objectTrackingGridAPI.load(query);
@@ -108,14 +137,46 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ExpressionBuilderEditor.html', parameter, modalSettings);
 		}
 
+		function openVariablesEditor(onSaveVariables, variables, parentVariables, reserveVariableName, eraseVariableName, isVariableNameReserved) {
+			var modalSettings = {};
+
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onSaveVariables = onSaveVariables;
+				modalScope.reserveVariableName = reserveVariableName;
+				modalScope.eraseVariableName = eraseVariableName;
+				modalScope.isVariableNameReserved = isVariableNameReserved;
+			};
+			var parameter = {
+				Variables: variables,
+				ParentVariables: parentVariables
+			};
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ActivityVariablesEditor.html', parameter, modalSettings);
+		}
+
+		function tryCompilationResult(errorMessages, workflowObj) {
+			var modalSettings = {};
+			var modalParameters = {
+				errorMessages: errorMessages,
+				workflowObj: workflowObj
+			};
+			modalSettings.onScopeReady = function (modalScope) {
+			};
+
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/VRWorkflowCompilationResult.html', modalParameters, modalSettings);
+		}
+
 		return ({
 			addVRWorkflow: addVRWorkflow,
 			editVRWorkflow: editVRWorkflow,
 			addVRWorkflowArgument: addVRWorkflowArgument,
 			editVRWorkflowArgument: editVRWorkflowArgument,
+			addVRWorkflowVariable: addVRWorkflowVariable,
+			editVRWorkflowVariable: editVRWorkflowVariable,
 			registerObjectTrackingDrillDownToVRWorkflow: registerObjectTrackingDrillDownToVRWorkflow,
 			getDrillDownDefinition: getDrillDownDefinition,
-			openExpressionBuilder: openExpressionBuilder
+			openExpressionBuilder: openExpressionBuilder,
+			openVariablesEditor: openVariablesEditor,
+			tryCompilationResult: tryCompilationResult
 		});
 	}
 

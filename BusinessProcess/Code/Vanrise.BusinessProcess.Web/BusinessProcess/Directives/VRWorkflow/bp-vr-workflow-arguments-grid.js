@@ -1,159 +1,172 @@
 ﻿'use strict';
 
 app.directive('businessprocessVrWorkflowArgumentsGrid', ['BusinessProcess_VRWorkflowService', 'UtilsService', 'VRUIUtilsService', 'VRWorkflowArgumentDirectionEnum', 'BusinessProcess_VRWorkflowAPIService',
-    function (BusinessProcess_VRWorkflowService, UtilsService, VRUIUtilsService, VRWorkflowArgumentDirectionEnum, BusinessProcess_VRWorkflowAPIService) {
+	function (BusinessProcess_VRWorkflowService, UtilsService, VRUIUtilsService, VRWorkflowArgumentDirectionEnum, BusinessProcess_VRWorkflowAPIService) {
 
-        var directiveDefinitionObject = {
-            restrict: 'E',
-            scope: {
-                onReady: '=',
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var ctor = new VrWorkflowArgumentsGridDirectiveCtor(ctrl, $scope, $attrs);
-                ctor.initializeController();
-            },
-            controllerAs: 'ctrl',
-            bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
+		var directiveDefinitionObject = {
+			restrict: 'E',
+			scope: {
+				onReady: '=',
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var ctor = new VrWorkflowArgumentsGridDirectiveCtor(ctrl, $scope, $attrs);
+				ctor.initializeController();
+			},
+			controllerAs: 'ctrl',
+			bindToController: true,
+			compile: function (element, attrs) {
+				return {
+					pre: function ($scope, iElem, iAttrs, ctrl) {
 
-                    }
-                };
-            },
-            templateUrl: "/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowArgumentsGridTemplate.html"
-        };
+					}
+				};
+			},
+			templateUrl: "/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowArgumentsGridTemplate.html"
+		};
 
-        function VrWorkflowArgumentsGridDirectiveCtor(ctrl, $scope, attrs) {
-            this.initializeController = initializeController;
+		function VrWorkflowArgumentsGridDirectiveCtor(ctrl, $scope, attrs) {
+			this.initializeController = initializeController;
 
-            var gridArgumentItem;
+			var gridArgumentItem;
 
-            var gridAPI;
+			var gridAPI;
 
-            var directionSelectorAPI;
-            var directionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+			var directionSelectorAPI;
+			var directionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var variableTypeDirectiveAPI;
-            var variableTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+			var variableTypeDirectiveAPI;
+			var variableTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            function initializeController() {
-                $scope.scopeModel = {};
-                $scope.scopeModel.datasource = [];
+			var reserveVariableName;
+			var reserveVariableNames;
+			var isVariableNameReserved;
+			var eraseVariableName;
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                };
+			function initializeController() {
+				$scope.scopeModel = {};
+				$scope.scopeModel.datasource = [];
 
-                $scope.scopeModel.addVRWorkflowArgument = function () {
-                    var onVRWorkflowArgumentAdded = function (addedArgument) {
-                        extendVRWorkflowArgument(addedArgument);
-                        getVRWorkflowArgumentTypeDescription(addedArgument).then(function () {
-                            $scope.scopeModel.datasource.push({ Entity: addedArgument });
-                        });
-                    };
+				$scope.scopeModel.onGridReady = function (api) {
+					gridAPI = api;
+				};
 
-                    var vrWorkflowArgumentNames = [];
-                    angular.forEach($scope.scopeModel.datasource, function (val) {
-                        vrWorkflowArgumentNames.push(val.Entity.Name);
-                    });
-                    BusinessProcess_VRWorkflowService.addVRWorkflowArgument(vrWorkflowArgumentNames, onVRWorkflowArgumentAdded);
-                };
+				$scope.scopeModel.addVRWorkflowArgument = function () {
+					var onVRWorkflowArgumentAdded = function (addedArgument) {
+						extendVRWorkflowArgument(addedArgument);
+						reserveVariableName(addedArgument.Name);
+						getVRWorkflowArgumentTypeDescription(addedArgument).then(function () {
+							$scope.scopeModel.datasource.push({ Entity: addedArgument });
+						});
+					};
 
-                $scope.scopeModel.removeVRWorkflowArgument = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Entity.VRWorkflowArgumentId, 'Entity.VRWorkflowArgumentId');
-                    $scope.scopeModel.datasource.splice(index, 1);
-                };
+					var vrWorkflowArgumentNames = [];
+					angular.forEach($scope.scopeModel.datasource, function (val) {
+						vrWorkflowArgumentNames.push(val.Entity.Name);
+					});
+					BusinessProcess_VRWorkflowService.addVRWorkflowArgument(vrWorkflowArgumentNames, onVRWorkflowArgumentAdded, isVariableNameReserved);
+				};
 
-                defineMenuActions();
-                defineAPI();
-            }
+				$scope.scopeModel.removeVRWorkflowArgument = function (dataItem) {
+					var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Entity.VRWorkflowArgumentId, 'Entity.VRWorkflowArgumentId');
+					$scope.scopeModel.datasource.splice(index, 1);
+					eraseVariableName(dataItem.Entity.Name);
+				};
 
-            function defineAPI() {
-                var api = {};
+				defineMenuActions();
+				defineAPI();
+			}
 
-                api.load = function (payload) {
-                    var promises = [];
+			function defineAPI() {
+				var api = {};
 
-                    var vrWorkflowArguments;
-                    var vrWorkflowArgumentEditorRuntimeDict;
+				api.load = function (payload) {
+					var promises = [];
 
-                    if (payload != undefined) {
-                        vrWorkflowArguments = payload.vrWorkflowArguments;
-                        vrWorkflowArgumentEditorRuntimeDict = payload.vrWorkflowArgumentEditorRuntimeDict;
-                    }
+					var vrWorkflowArguments;
+					var vrWorkflowArgumentEditorRuntimeDict;
 
-                    if (vrWorkflowArguments != undefined) {
-                        for (var i = 0; i < vrWorkflowArguments.length; i++) {
-                            gridArgumentItem = vrWorkflowArguments[i];
-                            extendVRWorkflowArgument(gridArgumentItem);
+					if (payload != undefined) {
+						reserveVariableName = payload.reserveVariableName;
+						reserveVariableNames = payload.reserveVariableNames;
+						isVariableNameReserved = payload.isVariableNameReserved;
+						eraseVariableName = payload.eraseVariableName;
+						vrWorkflowArguments = payload.vrWorkflowArguments;
+						vrWorkflowArgumentEditorRuntimeDict = payload.vrWorkflowArgumentEditorRuntimeDict;
+					}
 
-                            var vrWorkflowArgumentEditorRuntime = vrWorkflowArgumentEditorRuntimeDict[gridArgumentItem.VRWorkflowArgumentId];
-                            gridArgumentItem.TypeDescription = vrWorkflowArgumentEditorRuntime.VRWorkflowVariableTypeDescription;
+					if (vrWorkflowArguments != undefined) {
+						for (var i = 0; i < vrWorkflowArguments.length; i++) {
+							gridArgumentItem = vrWorkflowArguments[i];
+							extendVRWorkflowArgument(gridArgumentItem);
 
-                            $scope.scopeModel.datasource.push({ Entity: gridArgumentItem });
-                        }
-                    }
+							var vrWorkflowArgumentEditorRuntime = vrWorkflowArgumentEditorRuntimeDict[gridArgumentItem.VRWorkflowArgumentId];
+							gridArgumentItem.TypeDescription = vrWorkflowArgumentEditorRuntime.VRWorkflowVariableTypeDescription;
 
-                    return UtilsService.waitMultiplePromises(promises);
-                };
+							$scope.scopeModel.datasource.push({ Entity: gridArgumentItem });
+						}
+					}
 
-                api.getData = function () {
-                    var vrWorkflowArguments;
-                    if ($scope.scopeModel.datasource != undefined) {
-                        vrWorkflowArguments = [];
-                        for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                            vrWorkflowArguments.push($scope.scopeModel.datasource[i].Entity);
-                        }
-                    }
-                    return vrWorkflowArguments;
-                };
+					return UtilsService.waitMultiplePromises(promises);
+				};
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
+				api.getData = function () {
+					var vrWorkflowArguments;
+					if ($scope.scopeModel.datasource != undefined) {
+						vrWorkflowArguments = [];
+						for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+							vrWorkflowArguments.push($scope.scopeModel.datasource[i].Entity);
+						}
+					}
+					return vrWorkflowArguments;
+				};
 
-            function defineMenuActions() {
-                var defaultMenuActions = [{
-                    name: "Edit",
-                    clicked: editVRWorkflowArgument
-                }];
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
 
-                $scope.scopeModel.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
+			function defineMenuActions() {
+				var defaultMenuActions = [{
+					name: "Edit",
+					clicked: editVRWorkflowArgument
+				}];
 
-            function editVRWorkflowArgument(argumentObj) {
-                var onArgumentUpdated = function (updatedArgument) {
-                    extendVRWorkflowArgument(updatedArgument);
-                    getVRWorkflowArgumentTypeDescription(updatedArgument).then(function () {
-                        var index = $scope.scopeModel.datasource.indexOf(argumentObj);
-                        $scope.scopeModel.datasource[index] = { Entity: updatedArgument };
-                    });
-                };
+				$scope.scopeModel.gridMenuActions = function (dataItem) {
+					return defaultMenuActions;
+				};
+			}
 
-                var vrWorkflowArgumentNames = [];
-                angular.forEach($scope.scopeModel.datasource, function (val) {
-                    vrWorkflowArgumentNames.push(val.Entity.Name);
-                });
-                BusinessProcess_VRWorkflowService.editVRWorkflowArgument(argumentObj.Entity, vrWorkflowArgumentNames, onArgumentUpdated);
-            }
+			function editVRWorkflowArgument(argumentObj) {
+				var onArgumentUpdated = function (updatedArgument) {
+					extendVRWorkflowArgument(updatedArgument);
+					getVRWorkflowArgumentTypeDescription(updatedArgument).then(function () {
+						eraseVariableName(argumentObj.Entity.Name);
+						reserveVariableName(updatedArgument.Name);
+						var index = $scope.scopeModel.datasource.indexOf(argumentObj);
+						$scope.scopeModel.datasource[index] = { Entity: updatedArgument };
+					});
+				};
 
-            function extendVRWorkflowArgument(vrWorkflowArgument) {
-                var argumentDirectionObject = UtilsService.getEnum(VRWorkflowArgumentDirectionEnum, 'value', vrWorkflowArgument.Direction);
-                if (argumentDirectionObject != undefined) {
-                    vrWorkflowArgument.DirectionDescription = argumentDirectionObject.description;
-                }
-            }
+				var vrWorkflowArgumentNames = [];
+				angular.forEach($scope.scopeModel.datasource, function (val) {
+					vrWorkflowArgumentNames.push(val.Entity.Name);
+				});
+				BusinessProcess_VRWorkflowService.editVRWorkflowArgument(argumentObj.Entity, vrWorkflowArgumentNames, onArgumentUpdated, isVariableNameReserved);
+			}
 
-            function getVRWorkflowArgumentTypeDescription(vrWorkflowArgument) {
-                return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowArgumentTypeDescription(vrWorkflowArgument.Type).then(function (response) {
-                    vrWorkflowArgument.TypeDescription = response;
-                });
-            }
-        }
+			function extendVRWorkflowArgument(vrWorkflowArgument) {
+				var argumentDirectionObject = UtilsService.getEnum(VRWorkflowArgumentDirectionEnum, 'value', vrWorkflowArgument.Direction);
+				if (argumentDirectionObject != undefined) {
+					vrWorkflowArgument.DirectionDescription = argumentDirectionObject.description;
+				}
+			}
 
-        return directiveDefinitionObject;
-    }]);
+			function getVRWorkflowArgumentTypeDescription(vrWorkflowArgument) {
+				return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowArgumentTypeDescription(vrWorkflowArgument.Type).then(function (response) {
+					vrWorkflowArgument.TypeDescription = response;
+				});
+			}
+		}
+
+		return directiveDefinitionObject;
+	}]);

@@ -3,16 +3,16 @@
 		<vr-form>
 			<vr-row>
 				<vr-tabs>
-					<vr-tab header="'Arguments'">
+					<vr-tab header="'Arguments'" ng-if="scopeModel.arguments!= undefined && scopeModel.arguments.length>0">
 						<vr-columns haschildcolumns width="fullrow">
-							<vr-datalist scrollable datasource="scopeModel.arguments" onitemclicked="scopeModel.itemClicked" maxitemsperrow="6" ng-show="scopeModel.arguments.length>0">
+							<vr-datalist scrollable datasource="scopeModel.arguments" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.arguments.length>0">
 								<span title="{{dataItem.Name}}">
 									{{dataItem.Name}}
 								</span>
 							</vr-datalist>
 						</vr-columns>
 					</vr-tab>
-					<vr-tab header="'Variables'">
+					<vr-tab header="'Variables'" ng-if="scopeModel.variables!= undefined && scopeModel.variables.length>0">
 						<vr-columns haschildcolumns width="fullrow">
 							<vr-datalist scrollable datasource="scopeModel.variables" onitemclicked="scopeModel.insertText" maxitemsperrow="6" ng-show="scopeModel.variables.length>0">
 								<span title="{{dataItem.Name}}">

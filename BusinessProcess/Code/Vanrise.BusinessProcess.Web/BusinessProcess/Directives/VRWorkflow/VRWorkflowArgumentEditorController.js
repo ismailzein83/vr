@@ -1,151 +1,154 @@
 ﻿(function (appControllers) {
 
-    'use strict';
+	'use strict';
 
-    VRWorkflowArgumentEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService'];
+	VRWorkflowArgumentEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService'];
 
-    function VRWorkflowArgumentEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService) {
+	function VRWorkflowArgumentEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService) {
 
-        var vrWorkflowArgumentEntity;
-        var vrWorkflowArgumentNames = []; //for validation
-        var isEditMode;
+		var vrWorkflowArgumentEntity;
+		var vrWorkflowArgumentNames = []; //for validation
+		var isEditMode;
 
-        var argumentDirectionSelectorAPI;
-        var argumentDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		var argumentDirectionSelectorAPI;
+		var argumentDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var argumentVariableTypeDirectiveAPI;
-        var argumentVariableTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+		var argumentVariableTypeDirectiveAPI;
+		var argumentVariableTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        loadParameters();
-        defineScope();
-        load();
+		loadParameters();
+		defineScope();
+		load();
 
-        function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
+		function loadParameters() {
+			var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined) {
-                vrWorkflowArgumentEntity = parameters.vrWorkflowArgumentEntity;
-                vrWorkflowArgumentNames = parameters.vrWorkflowArgumentNames;
-            }
+			if (parameters != undefined) {
+				vrWorkflowArgumentEntity = parameters.vrWorkflowArgumentEntity;
+				vrWorkflowArgumentNames = parameters.vrWorkflowArgumentNames;
+			}
 
-            isEditMode = (vrWorkflowArgumentEntity != undefined);
-        }
+			isEditMode = (vrWorkflowArgumentEntity != undefined);
+		}
 
-        function defineScope() {
-            $scope.scopeModel = {};
+		function defineScope() {
+			$scope.scopeModel = {};
 
-            $scope.scopeModel.onArgumentDirectionSelectorReady = function (api) {
-                argumentDirectionSelectorAPI = api;
-                argumentDirectionSelectorReadyDeferred.resolve();
-            };
+			$scope.scopeModel.onArgumentDirectionSelectorReady = function (api) {
+				argumentDirectionSelectorAPI = api;
+				argumentDirectionSelectorReadyDeferred.resolve();
+			};
 
-            $scope.scopeModel.onArgumentVariableTypeDirectiveReady = function (api) {
-                argumentVariableTypeDirectiveAPI = api;
-                argumentVariableTypeDirectiveReadyDeferred.resolve();
-            };
+			$scope.scopeModel.onArgumentVariableTypeDirectiveReady = function (api) {
+				argumentVariableTypeDirectiveAPI = api;
+				argumentVariableTypeDirectiveReadyDeferred.resolve();
+			};
 
-            $scope.scopeModel.isArgumentNameValid = function () {
-                var argumentName = ($scope.scopeModel.name != undefined) ? $scope.scopeModel.name.toLowerCase() : null;
-                if (isEditMode && argumentName == vrWorkflowArgumentEntity.Name)
-                    return null;
+			$scope.scopeModel.isArgumentNameValid = function () {
+				var argumentName = ($scope.scopeModel.name != undefined) ? $scope.scopeModel.name.toLowerCase() : null;
+				if (isEditMode && argumentName == vrWorkflowArgumentEntity.Name.toLowerCase())
+					return null;
 
-                if (UtilsService.contains(vrWorkflowArgumentNames, argumentName))
-                    return 'Same argument name already exists';
+				if ($scope.isVariableNameReserved != undefined && $scope.isVariableNameReserved(argumentName))
+					return 'Same argument name already exists';
 
-                return null;
-            };
+				//if (UtilsService.contains(vrWorkflowArgumentNames, argumentName))
+				//    return 'Same argument name already exists';
 
-            $scope.scopeModel.save = function () {
-                return isEditMode ? updateVRWorkflowArgument() : addVRWorkflowArgument();
-            };
+				return null;
+			};
 
-            $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal();
-            };
-        }
+			$scope.scopeModel.save = function () {
+				return isEditMode ? updateVRWorkflowArgument() : addVRWorkflowArgument();
+			};
 
-        function load() {
-            $scope.scopeModel.isLoading = true;
-            loadAllControls();
-        }
+			$scope.scopeModel.close = function () {
+				$scope.modalContext.closeModal();
+			};
+		}
 
-        function loadAllControls() {
+		function load() {
+			$scope.scopeModel.isLoading = true;
+			loadAllControls();
+		}
 
-            function setTitle() {
-                if (isEditMode && vrWorkflowArgumentEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrWorkflowArgumentEntity.Name, 'Workflow Argument');
-                else
-                    $scope.title = UtilsService.buildTitleForAddEditor('Workflow Argument');
-            }
+		function loadAllControls() {
 
-            function loadStaticData() {
-                if (vrWorkflowArgumentEntity != undefined) {
-                    $scope.scopeModel.name = vrWorkflowArgumentEntity.Name;
-                }
-            }
+			function setTitle() {
+				if (isEditMode && vrWorkflowArgumentEntity != undefined)
+					$scope.title = UtilsService.buildTitleForUpdateEditor(vrWorkflowArgumentEntity.Name, 'Workflow Argument');
+				else
+					$scope.title = UtilsService.buildTitleForAddEditor('Workflow Argument');
+			}
 
-            function loadArgumentDirectionSelector() {
-                var argumentDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+			function loadStaticData() {
+				if (vrWorkflowArgumentEntity != undefined) {
+					$scope.scopeModel.name = vrWorkflowArgumentEntity.Name;
+				}
+			}
 
-                argumentDirectionSelectorReadyDeferred.promise.then(function () {
-                    var argumentDirectionSelectorPayload;
-                    if (vrWorkflowArgumentEntity != undefined) {
-                        argumentDirectionSelectorPayload = { selectedIds: vrWorkflowArgumentEntity.Direction };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(argumentDirectionSelectorAPI, argumentDirectionSelectorPayload, argumentDirectionSelectorLoadDeferred);
-                });
+			function loadArgumentDirectionSelector() {
+				var argumentDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                return argumentDirectionSelectorLoadDeferred.promise;
-            }
+				argumentDirectionSelectorReadyDeferred.promise.then(function () {
+					var argumentDirectionSelectorPayload;
+					if (vrWorkflowArgumentEntity != undefined) {
+						argumentDirectionSelectorPayload = { selectedIds: vrWorkflowArgumentEntity.Direction };
+					}
+					VRUIUtilsService.callDirectiveLoad(argumentDirectionSelectorAPI, argumentDirectionSelectorPayload, argumentDirectionSelectorLoadDeferred);
+				});
 
-            function loadArgumentVariableTypeDirective() {
-                var argumentVariableTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+				return argumentDirectionSelectorLoadDeferred.promise;
+			}
 
-                argumentVariableTypeDirectiveReadyDeferred.promise.then(function () {
-                    var argumentVariableTypeDirectivePayload;
-                    if (vrWorkflowArgumentEntity != undefined && vrWorkflowArgumentEntity.Type != undefined) {
-                        argumentVariableTypeDirectivePayload = { argumentVariableType: vrWorkflowArgumentEntity.Type };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(argumentVariableTypeDirectiveAPI, argumentVariableTypeDirectivePayload, argumentVariableTypeDirectiveLoadDeferred);
-                });
+			function loadArgumentVariableTypeDirective() {
+				var argumentVariableTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                return argumentVariableTypeDirectiveLoadDeferred.promise;
-            }
+				argumentVariableTypeDirectiveReadyDeferred.promise.then(function () {
+					var argumentVariableTypeDirectivePayload;
+					if (vrWorkflowArgumentEntity != undefined && vrWorkflowArgumentEntity.Type != undefined) {
+						argumentVariableTypeDirectivePayload = { argumentVariableType: vrWorkflowArgumentEntity.Type };
+					}
+					VRUIUtilsService.callDirectiveLoad(argumentVariableTypeDirectiveAPI, argumentVariableTypeDirectivePayload, argumentVariableTypeDirectiveLoadDeferred);
+				});
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadArgumentDirectionSelector, loadArgumentVariableTypeDirective]).then(function () {
+				return argumentVariableTypeDirectiveLoadDeferred.promise;
+			}
 
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
-        }
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadArgumentDirectionSelector, loadArgumentVariableTypeDirective]).then(function () {
 
-        function addVRWorkflowArgument() {
-            var vrWorkflowArgumentObj = buildVRWorkflowArgumentObjFromScope();
-            if ($scope.onVRWorkflowArgumentAdded != undefined) {
-                $scope.onVRWorkflowArgumentAdded(vrWorkflowArgumentObj);
-            }
-            $scope.modalContext.closeModal();
-        }
+			}).finally(function () {
+				$scope.scopeModel.isLoading = false;
+			}).catch(function (error) {
+				VRNotificationService.notifyExceptionWithClose(error, $scope);
+			});
+		}
 
-        function updateVRWorkflowArgument() {
-            var vrWorkflowArgumentObj = buildVRWorkflowArgumentObjFromScope();
-            if ($scope.onVRWorkflowArgumentUpdated != undefined) {
-                $scope.onVRWorkflowArgumentUpdated(vrWorkflowArgumentObj);
-            }
-            $scope.modalContext.closeModal();
-        }
+		function addVRWorkflowArgument() {
+			var vrWorkflowArgumentObj = buildVRWorkflowArgumentObjFromScope();
+			if ($scope.onVRWorkflowArgumentAdded != undefined) {
+				$scope.onVRWorkflowArgumentAdded(vrWorkflowArgumentObj);
+			}
+			$scope.modalContext.closeModal();
+		}
 
-        function buildVRWorkflowArgumentObjFromScope() {
-            return {
-                VRWorkflowArgumentId: vrWorkflowArgumentEntity != undefined ? vrWorkflowArgumentEntity.VRWorkflowArgumentId : UtilsService.guid(),
-                Name: $scope.scopeModel.name,
-                Direction: argumentDirectionSelectorAPI.getSelectedIds(),
-                Type: argumentVariableTypeDirectiveAPI.getData()
-            };
-        }
-    }
+		function updateVRWorkflowArgument() {
+			var vrWorkflowArgumentObj = buildVRWorkflowArgumentObjFromScope();
+			if ($scope.onVRWorkflowArgumentUpdated != undefined) {
+				$scope.onVRWorkflowArgumentUpdated(vrWorkflowArgumentObj);
+			}
+			$scope.modalContext.closeModal();
+		}
 
-    appControllers.controller('VR_Workflow_VRWorkflowArgumentEditorController', VRWorkflowArgumentEditorController);
+		function buildVRWorkflowArgumentObjFromScope() {
+			return {
+				VRWorkflowArgumentId: vrWorkflowArgumentEntity != undefined ? vrWorkflowArgumentEntity.VRWorkflowArgumentId : UtilsService.guid(),
+				Name: $scope.scopeModel.name,
+				Direction: argumentDirectionSelectorAPI.getSelectedIds(),
+				Type: argumentVariableTypeDirectiveAPI.getData()
+			};
+		}
+	}
+
+	appControllers.controller('VR_Workflow_VRWorkflowArgumentEditorController', VRWorkflowArgumentEditorController);
 })(appControllers);

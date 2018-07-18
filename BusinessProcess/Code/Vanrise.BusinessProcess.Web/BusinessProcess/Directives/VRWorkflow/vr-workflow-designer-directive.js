@@ -1,12 +1,12 @@
 ﻿'use strict';
 
-app.directive('vrWorkflowDesignerDirective', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_CustomCodeTaskService',
-	function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService, BusinessProcess_CustomCodeTaskService) {
+app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService', 'VRDragdropService', 'VRNotificationService',
+	function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService, VRDragdropService, VRNotificationService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
 			scope: {
-				onReady: '=',
+				onReady: '='
 			},
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
@@ -23,22 +23,128 @@ app.directive('vrWorkflowDesignerDirective', ['UtilsService', 'VRUIUtilsService'
 
 		function workflowDesigner(ctrl, $scope, $attrs) {
 
+			var workflowContainerAPI;
+			var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+			var rootActivity;
+			//var workflowArguments;
+			var getWorkflowArguments;
+			var reserveVariableName;
+			var reserveVariableNames;
+			var isVariableNameReserved;
+			var eraseVariableName;
+
 			this.initializeController = initializeController;
 			function initializeController() {
 				$scope.scopeModel = {};
+				$scope.scopeModel.datasource = [];
+				$scope.scopeModel.activityConfigs = [];
+
+				$scope.scopeModel.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+				$scope.scopeModel.dragdropsetting = {
+					groupCorrelation: $scope.scopeModel.dragdropGroupCorrelation,
+					canReceive: true,
+					canSend: true,
+					copyOnSend: true,
+					onItemReceived: function (itemAdded, dataSource, sourceList, itemAddedContext) {
+						var vRWorkflowActivity = {};
+						if (itemAdded.directiveAPI != null) {
+							vRWorkflowActivity.Settings = itemAdded.directiveAPI.getData().Settings;
+						}
+						else {
+							vRWorkflowActivity.Settings = {
+								Editor: (itemAdded.Editor) ? itemAdded.Editor : itemAdded.Settings.Editor,
+								Title: (itemAdded.Title) ? itemAdded.Title : itemAdded.Settings.Title
+							};
+						}
+						vRWorkflowActivity.VRWorkflowActivityId = UtilsService.guid();
+
+						vRWorkflowActivity.onDirectiveReady = function (api) {
+							if (vRWorkflowActivity.directiveAPI != null)
+								return;
+							vRWorkflowActivity.directiveAPI = api;
+							var setLoader = function (value) { $scope.x = value; };
+							var context = (itemAddedContext != undefined) ? itemAddedContext : { /*WorkflowArguments: workflowArguments,*/ getWorkflowArguments: getWorkflowArguments };
+							var payload = {
+								Context: context,
+								VRWorkflowActivityId: vRWorkflowActivity.VRWorkflowActivityId,
+								Settings: vRWorkflowActivity.Settings
+							};
+							VRUIUtilsService.callDirectiveLoad(vRWorkflowActivity.directiveAPI, payload);
+						};
+
+						return vRWorkflowActivity;
+					},
+
+					enableSorting: true
+				};
+
+				$scope.scopeModel.onWorkflowContainerReady = function (api) {
+					workflowContainerAPI = api;
+					workflowContainerReadyPromiseDeferred.resolve();
+				};
+
 				defineAPI();
 			}
+
 			function defineAPI() {
 				var api = {};
 
 				api.load = function (payload) {
-					if (payload != undefined && payload.data != undefined) {
-						$scope.scopeModel.expressionBuilderValue = payload.data.ExpressionBuilderValue;
+
+					if (payload != undefined) {
+						rootActivity = payload.rootActivity;
+						//workflowArguments = payload.workflowArguments;
+						getWorkflowArguments = payload.getWorkflowArguments;
+						reserveVariableName = payload.reserveVariableName;
+						reserveVariableNames = payload.reserveVariableNames;
+						isVariableNameReserved = payload.isVariableNameReserved;
+						eraseVariableName = payload.eraseVariableName;
+					}
+					return loadAllControls();
+
+					function loadAllControls() {
+						return UtilsService.waitMultipleAsyncOperations([loadWorkflowContainer, loadWorkflowActivityExtensionConfigs])
+							.catch(function (error) {
+								VRNotificationService.notifyExceptionWithClose(error, $scope);
+							});
+					}
+
+					function loadWorkflowContainer() {
+						var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
+						if (rootActivity != undefined) {
+							workflowContainerReadyPromiseDeferred.promise.then(function () {
+								var payload = {
+									/*workflowArguments: workflowArguments,*/
+									getWorkflowArguments: getWorkflowArguments,
+									vRWorkflowActivity: rootActivity,
+									reserveVariableName: reserveVariableName,
+									reserveVariableNames: reserveVariableNames,
+									isVariableNameReserved: isVariableNameReserved,
+									eraseVariableName: eraseVariableName
+								};
+								VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
+							});
+						}
+						else {
+							workflowContainerLoadDeferred.resolve();
+						}
+						return workflowContainerLoadDeferred.promise;
+					}
+
+					function loadWorkflowActivityExtensionConfigs() {
+						return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowActivityExtensionConfigs().then(function (response) {
+							if (response != null) {
+								for (var i = 0; i < response.length; i++) {
+									$scope.scopeModel.activityConfigs.push(response[i]);
+								}
+							}
+						});
 					}
 				};
 
 				api.getData = function () {
-					return $scope.scopeModel.expressionBuilderValue;
+					if (workflowContainerAPI != null)
+						return workflowContainerAPI.getData();
 				};
 
 				if (ctrl.onReady != null)

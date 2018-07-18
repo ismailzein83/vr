@@ -28,19 +28,19 @@
 			$scope.scopeModal.activitesTemplates.push({
 				id: UtilsService.guid(),
 				configId: "123",
-				editor: "vr-workflow-sequence",
+				editor: "businessprocess-vr-workflow-sequence",
 				Title: "Sequence"
 			});
 			$scope.scopeModal.activitesTemplates.push({
 				id: UtilsService.guid(),
 				configId: "124",
-				editor: "vr-workflow-assign",
+				editor: "businessprocess-vr-workflow-assign",
 				Title: "Assign"
 			});
 			$scope.scopeModal.activitesTemplates.push({
 				id: UtilsService.guid(),
 				configId: "543",
-				editor: "vr-workflow-customcode",
+				editor: "businessprocess-vr-workflow-customcode",
 				Title: "Custom Code"
 			});
 
@@ -58,9 +58,8 @@
 
 					var dataItem = {
 						id: UtilsService.guid(),
-						configId: itemAdded.configId,
 						editor: itemAdded.editor,
-						name: itemAdded.name || itemAdded.Title
+						name: itemAdded.Title || itemAdded.name
 					};
 					var data;
 					if (itemAdded.directiveAPI != null)
@@ -103,7 +102,7 @@
 
 			function setTitle() {
 				if (isEditMode && dataTransformationDefinitionEntity != undefined)
-					$scope.title = UtilsService.buildTitleForUpdateEditor(dataTransformationDefinitionEntity.Name, 'Workflow');
+					$scope.title = UtilsService.buildTitleForUpdateEditor('Workflow');
 				else
 					$scope.title = UtilsService.buildTitleForAddEditor('Workflow');
 			}

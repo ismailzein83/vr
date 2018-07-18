@@ -1,15 +1,16 @@
 ﻿'use strict';
 
-app.directive('vrWorkflowActivityExpressionbuilder', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_CustomCodeTaskService',
+app.directive('businessprocessVrWorkflowActivityExpressionbuilder', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_CustomCodeTaskService',
 	function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService, BusinessProcess_CustomCodeTaskService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
 			scope: {
-				onReady: '=',
 				isrequired: '=',
 				value: '=',
-				label: '='
+				label: '=',
+				getworkflowarguments: '=',
+				getactivityvariables: '='
 			},
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
@@ -31,33 +32,14 @@ app.directive('vrWorkflowActivityExpressionbuilder', ['UtilsService', 'VRUIUtils
 				if (ctrl.label == undefined)
 					ctrl.label = "Value";
 				$scope.scopeModel = {};
-				$scope.scopeModel.expressionBuilderValue = ctrl.value;
 				$scope.scopeModel.openExpressionBuilder = function () {
-					var args = [{ Name: "arg1" }, { Name: "arg2" }, { Name: "arg3" }, { Name: "ardasdg24" }, { Name: "argfgsadhfgsdhbsdkjf16" }, { Name: "arg27" }, { Name: "arg8" }, { Name: "arg9" }, { Name: "arg19" }, { Name: "arg25" }, { Name: "arg2" }, { Name: "arg3" }, { Name: "arg24" }, { Name: "arg16" }, { Name: "arg27" }, { Name: "arg8" }, { Name: "arg9" }, { Name: "arg19" }, { Name: "arg25" }];
-					var vars = [{ Name: "var1" }, { Name: "var2" }, { Name: "arg1" }, { Name: "arg2" }, { Name: "arg3" }, { Name: "ardasdg24" }, { Name: "argfgsadhfgsdhbsdkjf16" }, { Name: "arg27" }, { Name: "arg8" }, { Name: "arg9" }, { Name: "arg19" }, { Name: "arg25" }, { Name: "arg2" }, { Name: "arg3" }, { Name: "arg24" }, { Name: "arg16" }, { Name: "arg27" }, { Name: "arg8" }, { Name: "123456789012345" }, { Name: "12345678901234567" }, { Name: "1234567890123456" }];
+					var args = ctrl.getworkflowarguments();
+					var vars = ctrl.getactivityvariables();
 					var onSetExpressionBuilder = function (expressionBuilderValue) {
 						ctrl.value = expressionBuilderValue;
 					};
-					///BusinessProcess_VRWorkflowService
 					BusinessProcess_VRWorkflowService.openExpressionBuilder(onSetExpressionBuilder, args, vars, ctrl.value);
 				};
-				defineAPI();
-			}
-			function defineAPI() {
-				var api = {};
-
-				/*api.load = function (payload) {
-					if (payload != undefined && payload.data != undefined) {
-						$scope.scopeModel.expressionBuilderValue = payload.data.ExpressionBuilderValue;
-					}
-				};
-
-				api.getData = function () {
-					return $scope.scopeModel.expressionBuilderValue;
-				};
-
-				if (ctrl.onReady != null)
-					ctrl.onReady(api);*/
 			}
 		}
 		return directiveDefinitionObject;
