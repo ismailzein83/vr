@@ -1,75 +1,70 @@
 ﻿"use strict";
 
 app.directive("vrQueueingQueueitemheaderGrid", ["UtilsService", "VRNotificationService", "VR_Queueing_QueueingAPIService", "VR_Integration_DataSourceService",
-function (UtilsService, VRNotificationService, VR_Queueing_QueueingAPIService, VR_Integration_DataSourceService) {
+    function (UtilsService, VRNotificationService, VR_Queueing_QueueingAPIService, VR_Integration_DataSourceService) {
 
-    var directiveDefinitionObject = {
+        var directiveDefinitionObject = {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var importedBatchGrid = new ImportedBatchGrid($scope, ctrl, $attrs);
+                importedBatchGrid.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            compile: function (element, attrs) {
 
-        restrict: "E",
-        scope: {
-            onReady: "="
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var importedBatchGrid = new ImportedBatchGrid($scope, ctrl, $attrs);
-            importedBatchGrid.initializeController();
-        },
-        controllerAs: "ctrl",
-        bindToController: true,
-        compile: function (element, attrs) {
+            },
+            templateUrl: "/Client/Modules/Queueing/Directives/QueueItemHeader/Templates/QueueItemHeaderGridTemplate.html"
+        };
 
-        },
-        templateUrl: "/Client/Modules/Queueing/Directives/QueueItemHeader/Templates/QueueItemHeaderGridTemplate.html"
+        function ImportedBatchGrid($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-    };
+            var gridAPI;
 
-    function ImportedBatchGrid($scope, ctrl, $attrs) {
+            function initializeController() {
+                $scope.queueItemHeaders = [];
 
-        var gridAPI;
-        this.initializeController = initializeController;
-        function initializeController() {
+                $scope.gridReady = function (api) {
+                    gridAPI = api;
 
-            $scope.getStatusColor = function (dataItem, colDef) {
-                return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.Status);
-            };
-            $scope.queueItemHeaders = [];
-            $scope.gridReady = function (api) {
+                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
+                        ctrl.onReady(getDirectiveAPI());
 
-                gridAPI = api;
+                    function getDirectiveAPI() {
+                        var directiveAPI = {};
+                        directiveAPI.loadGrid = function (query) {
+                            return gridAPI.retrieveData(query);
+                        };
+                        return directiveAPI;
+                    }
+                };
 
+                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
+                    return VR_Queueing_QueueingAPIService.GetQueueItemHeaders(dataRetrievalInput)
+                        .then(function (response) {
 
-                    var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
+                            angular.forEach(response.Data, function (item) {
+                                item.Entity.ExecutionStatusDescription = VR_Integration_DataSourceService.getExecutionStatusDescription(item.Entity.Status);
+                            });
 
-                        return gridAPI.retrieveData(query);
-                    };
-                    return directiveAPI;
-                }
-            };
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
-                return VR_Queueing_QueueingAPIService.GetQueueItemHeaders(dataRetrievalInput)
-                    .then(function (response) {
-
-                        angular.forEach(response.Data, function (item) {
-                            item.Entity.ExecutionStatusDescription = VR_Integration_DataSourceService.getExecutionStatusDescription(item.Entity.Status);
+                            onResponseReady(response);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
                         });
+                };
 
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-            };
-
+                $scope.getStatusColor = function (dataItem, colDef) {
+                    return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.Status);
+                };
+            }
         }
 
-    }
-
-    return directiveDefinitionObject;
-
-}]);
+        return directiveDefinitionObject;
+    }]);
