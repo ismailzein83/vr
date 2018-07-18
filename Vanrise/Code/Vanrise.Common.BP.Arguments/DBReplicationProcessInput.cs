@@ -16,9 +16,11 @@ namespace Vanrise.Common.BP.Arguments
 
         public Guid DBReplicationDefinitionId { get; set; }
 
+        public int NumberOfDaysPerInterval { get; set; }
+
         public override string GetTitle()
         {
-            return String.Format("Database Replication from {0} to {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            return String.Format("Database Replication from {0} to {1}", FromTime.ToString("yyyy-MM-dd"), ToTime.ToString("yyyy-MM-dd"));
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
