@@ -157,6 +157,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetEffectiveActionController.cs" />
+    <Compile Include="Controllers\BPDefinitionArgumentStateController.cs" />
     <Compile Include="Controllers\CustomCodeTaskController.cs" />
     <Compile Include="Controllers\BPBusinessRuleDefinitionController.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetController.cs" />
@@ -255,6 +256,7 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\VRWorkflowVariableEditorController.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\BPDefinitionArgumentStateAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
