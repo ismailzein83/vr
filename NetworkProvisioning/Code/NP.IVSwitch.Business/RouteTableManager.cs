@@ -58,6 +58,35 @@ namespace NP.IVSwitch.Business
             return insertOperationOutput;
         }
 
+
+        public UpdateOperationOutput<RouteTableDetails> UpdateRouteTable(RouteTableInput routeTableItem)
+        {
+            IRouteTableDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
+            Helper.SetSwitchConfig(routeTableDataManager);
+
+            UpdateOperationOutput<RouteTableDetails> updateOperationOutput = new UpdateOperationOutput<RouteTableDetails>();
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSuccess = routeTableDataManager.Update(routeTableItem);
+            if (updateActionSuccess)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = RouteTableDetailMapper(routeTableItem.RouteTable);
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
+        }
+
+        public RouteTable GetRouteTableById(int routeTableId)
+        {
+            return GetCachedRouteTables().GetRecord(routeTableId);
+        }
+
         #endregion
 
         #region Private Classes

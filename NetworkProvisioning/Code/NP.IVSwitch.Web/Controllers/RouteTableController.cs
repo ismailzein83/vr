@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace NP.IVSwitch.Web.Controllers
@@ -25,9 +26,23 @@ namespace NP.IVSwitch.Web.Controllers
 
         [HttpPost]
         [Route("AddRouteTable")]
-        public Vanrise.Entities.InsertOperationOutput<RouteTableDetails> AddRoute(RouteTableInput routeTableItem)
+        public Vanrise.Entities.InsertOperationOutput<RouteTableDetails> AddRouteTable(RouteTableInput routeTableItem)
         {
             return _manager.AddRouteTable(routeTableItem);
+        }
+
+        [HttpPost]
+        [Route("UpdateRouteTable")]
+        public UpdateOperationOutput<RouteTableDetails> UpdateRouteTable(RouteTableInput routeTableItem)
+        {
+            return _manager.UpdateRouteTable(routeTableItem);
+        }
+
+        [HttpGet]
+        [Route("GetRouteTableById")]
+        public RouteTable GetRouteTableById(int routeTableId)
+        {
+            return _manager.GetRouteTableById(routeTableId);
         }
 
     }

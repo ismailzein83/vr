@@ -93,6 +93,23 @@ namespace NP.IVSwitch.Data.Postgres
 
         }
 
+        public bool Update(RouteTableInput routeTableInput)
+        {
+            String cmdText1 = @"UPDATE route_tables
+	                             SET  route_table_name=@route_table_name,description=@description,p_score=@p_score
+                                      WHERE  route_table_id = @route_table_id  ";
+
+            int recordsEffected = ExecuteNonQueryText(cmdText1, cmd =>
+            {
+                cmd.Parameters.AddWithValue("@route_table_name", routeTableInput.RouteTable.Name);
+                cmd.Parameters.AddWithValue("@description", routeTableInput.RouteTable.Description);
+                cmd.Parameters.AddWithValue("@p_score", routeTableInput.RouteTable.PScore);
+                cmd.Parameters.AddWithValue("@route_table_id", routeTableInput.RouteTable.RouteTableId);
+
+            }
+           );
+            return recordsEffected > 0;
+        }
 
         public List<RouteTable> GetRouteTables()
         {

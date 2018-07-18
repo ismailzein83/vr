@@ -16,7 +16,7 @@
                 modalScope.onRouteTableAdded = onRouteTableAdded;
 
             };
-            VRModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTable/RouteTableEditor.html', parameters, settings);
+            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTable/RouteTableEditor.html', parameters, settings);
         };
 
         function editRouteTable(routeTableId, onRouteTableUpdated) {
@@ -29,7 +29,7 @@
                 modalScope.onRouteTableUpdated = onRouteTableUpdated;
 
             };
-            VRModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTable/RouteTableEditor.html', parameters, settings);
+            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTable/RouteTableEditor.html', parameters, settings);
         };
 
 

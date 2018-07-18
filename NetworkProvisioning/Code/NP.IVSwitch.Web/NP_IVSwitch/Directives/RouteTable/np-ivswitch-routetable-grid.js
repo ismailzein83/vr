@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("npIvswitchRoutetableGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("npIvswitchRoutetableGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
+function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -29,7 +29,6 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
-                console.log("grid");
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveApi());
@@ -63,7 +62,18 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
         };
 
         function defineMenuActions() {
-            $scope.scopeModel.gridMenuActions = [];
+            $scope.scopeModel.gridMenuActions = [{
+                name: "Edit",
+                clicked: editRouteTable,
+
+            }];
+        };
+
+        function editRouteTable(routeTable) {
+            var onRouteTableUpdated = function (routeTable) {
+                gridApi.itemUpdated(routeTable);
+            };
+            NP_IVSwitch_RouteTableService.editRouteTable(routeTable.RouteTableId, onRouteTableUpdated);
         };
       
     };

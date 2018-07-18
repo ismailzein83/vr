@@ -17,10 +17,22 @@
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'AddRouteTable'), RouteTableItem);
         }
 
+        function UpdateRouteTable(RouteTableItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateRouteTable'), RouteTableItem);
+        }
+
+        function GetRouteTableById(routeTableId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, "GetRouteTableById"),
+                {
+                    routeTableId: routeTableId
+                });
+        }
 
         return ({
             GetFilteredRouteTables: GetFilteredRouteTables,
-            AddRouteTable: AddRouteTable
+            AddRouteTable: AddRouteTable,
+            GetRouteTableById: GetRouteTableById,
+            UpdateRouteTable: UpdateRouteTable
         });
     }
 
