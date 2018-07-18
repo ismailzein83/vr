@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationImportedbatchGrid", ["UtilsService", "VRNotificationService", "VR_Integration_DataSourceImportedBatchAPIService", "VR_Integration_DataSourceService",'VRUIUtilsService',
+app.directive("vrIntegrationImportedbatchGrid", ["UtilsService", "VRNotificationService", "VR_Integration_DataSourceImportedBatchAPIService", "VR_Integration_DataSourceService", 'VRUIUtilsService',
 function (UtilsService, VRNotificationService, VR_Integration_DataSourceImportedBatchAPIService, VR_Integration_DataSourceService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -20,50 +20,47 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
 
         },
         templateUrl: "/Client/Modules/Integration/Directives/DataSource/Templates/ImportedBatchGridTemplate.html"
-
     };
 
     function ImportedBatchGrid($scope, ctrl, $attrs) {
+        this.initializeController = initializeController;
 
         var gridAPI;
-        this.initializeController = initializeController;
         var gridDrillDownTabsObj;
+
         function initializeController() {
-
-            $scope.getStatusColor = function (dataItem, colDef) {
-                return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.ExecutionStatus);
-            };
-
             $scope.importedBatches = [];
+
             $scope.gridReady = function (api) {
-
                 gridAPI = api;
-                var drillDownDefinitions = [];
-                var drillDownDefinition = {};
 
+                var drillDownDefinitions = [];
+
+                var drillDownDefinition = {};
                 drillDownDefinition.title = "Queue Items";
                 drillDownDefinition.directive = "vr-queueing-queueitemheader-grid";
 
                 drillDownDefinition.loadDirective = function (directiveAPI, dataItem) {
                     dataItem.queueItemHeaderAPI = directiveAPI;
                     var query = dataItem.QueueItemIds.split(',').map(Number);
-                       return dataItem.queueItemHeaderAPI.loadGrid(query);
+                        return dataItem.queueItemHeaderAPI.loadGrid(query);
                 };
                 drillDownDefinitions.push(drillDownDefinition);
+
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
-                function getDirectiveAPI() {
 
+                function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-
                         return gridAPI.retrieveData(query);
                     };
                     return directiveAPI;
                 }
             };
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
                 return VR_Integration_DataSourceImportedBatchAPIService.GetFilteredDataSourceImportedBatches(dataRetrievalInput)
@@ -82,8 +79,11 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
             };
-        }
 
+            $scope.getStatusColor = function (dataItem, colDef) {
+                return VR_Integration_DataSourceService.getExecutionStatusColor(dataItem.ExecutionStatus);
+            };
+        }
     }
 
     return directiveDefinitionObject;
