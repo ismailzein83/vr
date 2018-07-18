@@ -111,6 +111,7 @@
     <Compile Include="LiveCdrManager.cs" />
     <Compile Include="MappingRuleHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteTableManager.cs" />
     <Compile Include="RouteManager.cs" />
     <Compile Include="CustomerRouteManager.cs" />
     <Compile Include="SwitchDashboardManager.cs" />

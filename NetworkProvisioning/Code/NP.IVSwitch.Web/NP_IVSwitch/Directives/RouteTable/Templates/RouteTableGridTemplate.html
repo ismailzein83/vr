@@ -1,0 +1,13 @@
+﻿<vr-datagrid datasource="scopeModel.routeTables"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="RouteTableId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'RouteTableId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'PScore'" field="'PScore'" type="'Number'"></vr-datagridcolumn>
+ 
+</vr-datagrid>

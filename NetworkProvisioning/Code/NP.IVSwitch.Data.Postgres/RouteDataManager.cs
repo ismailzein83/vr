@@ -147,7 +147,9 @@ namespace NP.IVSwitch.Data.Postgres
             int? routeId = InsertRoutes(route, groupId, tariffId);
             if (routeId.HasValue)
             {
-                RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString, IvSwitchSync.OwnerName);
+                RouteTableDataManager routeTableDataManager = new RouteTableDataManager {
+                    IvSwitchSync = IvSwitchSync
+                };
                 routeTableDataManager.InsertHelperRoute(routeId.Value, route.Description);
             }
             return routeId;

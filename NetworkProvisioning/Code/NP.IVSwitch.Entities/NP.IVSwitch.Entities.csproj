@@ -86,6 +86,8 @@
     <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
     <Compile Include="CustomerRoute\CustomerRouteQuery.cs" />
     <Compile Include="RouteTable\RouteTable.cs" />
+    <Compile Include="RouteTable\RouteTableDetails.cs" />
+    <Compile Include="RouteTable\RouteTableQuery.cs" />
     <Compile Include="Route\RouteCarrierAccountExtension.cs" />
     <Compile Include="Route\RouteEntityInfo.cs" />
     <Compile Include="Route\RouteInfoFilter.cs" />

@@ -128,6 +128,7 @@
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
     <Compile Include="Controllers\LiveCdrController.cs" />
+    <Compile Include="Controllers\RouteTableController.cs" />
     <Compile Include="Controllers\SwitchMappingController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
     <Compile Include="Controllers\FirewallController.cs" />
@@ -176,6 +177,8 @@
     <Content Include="NP_IVSwitch\Directives\Firewall\Templates\FirewallGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\LiveCdr\np-ivswitch-livecdr-grid.js" />
     <Content Include="NP_IVSwitch\Directives\LiveCdr\Templates\LiveCdrGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\RouteTable\np-ivswitch-routetable-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\RouteTable\Templates\RouteTableGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-selector.js" />
     <Content Include="NP_IVSwitch\Directives\Route\Templates\RouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-grid.js" />
@@ -195,10 +198,12 @@
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\LiveCdrAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\RouteTableAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchMappingAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CustomerRouteService.js" />
+    <Content Include="NP_IVSwitch\Services\RouteTableService.js" />
     <Content Include="NP_IVSwitch\Services\SwitchDashboardService.js" />
     <Content Include="NP_IVSwitch\Services\SwitchMappingService.js" />
     <Content Include="NP_IVSwitch\Services\EndPointService.js" />
@@ -228,6 +233,10 @@
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
     <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagement.html" />
     <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagementController.js" />
+    <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableEditor.html" />
+    <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableManagement.html" />
+    <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableManagementController.js" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditor.html" />
     <Content Include="NP_IVSwitch\Views\Route\RouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\SwitchDashboard\SwitchDashboard.html" />

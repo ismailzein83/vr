@@ -292,7 +292,7 @@ namespace NP.IVSwitch.Data.Postgres
             if (routeId == null) return null;
 
             var insertedRouteId = Convert.ToInt32(routeId);
-            RouteTableDataManager routeTableDataManager = new RouteTableDataManager(IvSwitchSync.RouteConnectionString, IvSwitchSync.OwnerName);
+            RouteTableDataManager routeTableDataManager = new RouteTableDataManager { IvSwitchSync = IvSwitchSync };
             routeTableDataManager.CreateRouteTable(insertedRouteId);
 
             return new AccessList

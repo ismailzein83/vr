@@ -11,7 +11,7 @@ namespace NP.IVSwitch.Entities.RouteTable
         public int RouteTableId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int PScore { get; set; }
+        public int? PScore { get; set; }
     }
     public class RouteTableInput
     {

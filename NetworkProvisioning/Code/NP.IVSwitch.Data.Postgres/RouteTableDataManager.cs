@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NP.IVSwitch.Entities.RouteTable;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,19 +9,13 @@ using Vanrise.Data.Postgres;
 
 namespace NP.IVSwitch.Data.Postgres
 {
-    public class RouteTableDataManager : BasePostgresDataManager
+    public class RouteTableDataManager : BasePostgresDataManager, IRouteTableDataManager
     {
-        private string ConnectionString { get; set; }
-        private string Owner { get; set; }
+        public TOne.WhS.RouteSync.IVSwitch.BuiltInIVSwitchSWSync IvSwitchSync { get; set; }
 
-        public RouteTableDataManager(string connectionString, string owner)
-        {
-            ConnectionString = connectionString;
-            Owner = owner;
-        }
         protected override string GetConnectionString()
         {
-            return ConnectionString;
+            return IvSwitchSync.MasterConnectionString;
         }
         public bool InsertHelperRoute(int routeId, string description)
         {
@@ -67,12 +63,74 @@ namespace NP.IVSwitch.Data.Postgres
                                                     WITH (
                                                       OIDS=FALSE
                                                     );",routeId.ToString()),
-                string.Format("ALTER TABLE  rt{0}  OWNER TO {1};",routeId.ToString(),Owner) 
+                string.Format("ALTER TABLE  rt{0}  OWNER TO {1};",routeId.ToString(),IvSwitchSync.OwnerName) 
 
             };
             ExecuteNonQuery(cmdText);
             return routeId;
         }
+
+        public bool Insert(RouteTableInput routeTableInput, out int insertedId)
+        {
+
+            String cmdText = @"INSERT INTO route_tables(route_table_name,description,p_score)
+	                             SELECT  @route_table_name,@description, @p_score 
+ 	                             returning  route_table_id;";
+
+            int? id = (int)ExecuteScalarText(cmdText, (cmd) =>
+            {
+                cmd.Parameters.AddWithValue("@route_table_name", routeTableInput.RouteTable.Name);
+                cmd.Parameters.AddWithValue("@description", routeTableInput.RouteTable.Description);
+                cmd.Parameters.AddWithValue("@p_score", routeTableInput.RouteTable.PScore);
+            });
+
+            bool result = id.HasValue;
+            if (result)
+                insertedId = (int)id;
+            else
+                insertedId = 0;
+            return result;
+
+        }
+
+
+        public List<RouteTable> GetRouteTables()
+        {
+            String cmdText = @"SELECT route_table_id,route_table_name,description,p_score FROM route_tables;";
+            return GetItemsText(cmdText, RouteTableMapper, (cmd) =>
+            {
+            });
+        }
+
+        private RouteTable RouteTableMapper(IDataReader reader)
+        {
+            RouteTable routeTable = new RouteTable();
+
+            var routeTableId = reader["route_table_id"];
+            var name = reader["route_table_name"] ;
+            var description = reader["description"] ;
+            var pScore = reader["p_score"];
+
+            if (routeTableId != DBNull.Value)
+            {
+                routeTable.RouteTableId = (int)routeTableId;
+            }
+            if (name != DBNull.Value)
+            {
+                routeTable.Name = (string)name;
+            }
+            if (description != DBNull.Value)
+            {
+                routeTable.Description = (string)description;
+            }
+            if (pScore != DBNull.Value)
+            {
+                routeTable.PScore = (int?)pScore;
+            }
+         
+            return routeTable;
+        }
+
 
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="ICodecProfileDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IFirewallDataManager.cs" />
+    <Compile Include="IRouteTableDataManager.cs" />
     <Compile Include="IRouteDataManager.cs" />
     <Compile Include="ICustomerRouteDataManager.cs" />
     <Compile Include="ITranslationRuleDataManager.cs" />
