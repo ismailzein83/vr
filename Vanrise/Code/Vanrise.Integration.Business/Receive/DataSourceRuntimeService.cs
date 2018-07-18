@@ -94,16 +94,16 @@ namespace Vanrise.Integration.Business
             logger.WriteVerbose("Preparing adapters to start the import process");
 
             BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
-
             adapter.SetLogger(logger);
             adapter.SetDataSourceManager(_dataSourceManager);
 
             IImportedData lastReceivedBatchData = null;
             Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
             {
-                lastReceivedBatchData = data;
                 logger.WriteInformation("New batch '{0}' imported", data.Description);
                 logger.WriteVerbose("Executing the custom code written for the mapper");
+
+                lastReceivedBatchData = data;
                 MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                 MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
 
@@ -129,7 +129,6 @@ namespace Vanrise.Integration.Business
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                 importedBatchEntry.BatchSize = data.BatchSize;
                 importedBatchEntry.BatchDescription = data.Description;
-
                 importedBatchEntry.Result = outputResult.Result;
                 importedBatchEntry.MapperMessage = outputResult.Message;
 
@@ -285,9 +284,9 @@ namespace Vanrise.Integration.Business
             }
             catch (Exception ex)
             {
-                logger.WriteError("An error occurred while mapping data. Error details: {0}", ex.ToString());
-                outputResult.Result = MappingResult.Invalid;
                 outputResult.Message = ex.ToString();
+                outputResult.Result = MappingResult.Invalid;
+                logger.WriteError("An error occurred while mapping data. Error details: {0}", ex.ToString());
             }
 
             return outputResult;
