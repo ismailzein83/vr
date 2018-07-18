@@ -23,6 +23,8 @@ namespace Vanrise.Integration.Business
         IDataSourceRuntimeInstanceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceRuntimeInstanceDataManager>();
         DataSourceManager _dataSourceManager = new DataSourceManager();
 
+        public override Guid ConfigId { get { return new Guid("BDD330B6-3557-4AFC-8C69-A23890DA82E7"); } }
+
         public override void Execute()
         {
             List<DataSourceRuntimeInstance> dataSourceRuntimeInstances = _dataManager.GetAll();
@@ -60,13 +62,11 @@ namespace Vanrise.Integration.Business
             }
         }
 
-        void ExecuteDataSource(DataSourceDetail dataSource)
+        private void ExecuteDataSource(DataSourceDetail dataSource)
         {
             DataSourceLogger logger = new DataSourceLogger();
-
             logger.DataSourceId = dataSource.Entity.DataSourceId;
             logger.WriteInformation("A new runtime instance started for the Data Source '{0}'", dataSource.Entity.Name);
-
             logger.WriteVerbose("Preparing queues and stages");
 
             QueuesByStages queuesByStages = null;
@@ -78,7 +78,6 @@ namespace Vanrise.Integration.Business
                 if (queuesByStages == null || queuesByStages.Count == 0)
                 {
                     logger.WriteError("No stages ready for use");
-
                     return;
                 }
                 else
@@ -98,6 +97,7 @@ namespace Vanrise.Integration.Business
 
             adapter.SetLogger(logger);
             adapter.SetDataSourceManager(_dataSourceManager);
+
             IImportedData lastReceivedBatchData = null;
             Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
             {
@@ -199,7 +199,7 @@ namespace Vanrise.Integration.Business
             }
         }
 
-        bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        private bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
         {
             if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
             {
@@ -232,7 +232,7 @@ namespace Vanrise.Integration.Business
             vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
         }
 
-        FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        private FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
         {
             FailedBatchInfo batchInfo = new FailedBatchInfo
             {
@@ -275,7 +275,7 @@ namespace Vanrise.Integration.Business
                     }
                     else
                     {
-                        message = string.Format("     ", failedRecordIdentifiersThreshold);
+                        message = string.Format("More than {0} records failed while mapping data", failedRecordIdentifiersThreshold);
                     }
 
                     outputResult.Message = message;
@@ -293,7 +293,7 @@ namespace Vanrise.Integration.Business
             return outputResult;
         }
 
-        Type GetMapperRuntimeType(Guid dataSourceId, IDataSourceLogger logger)
+        private Type GetMapperRuntimeType(Guid dataSourceId, IDataSourceLogger logger)
         {
             string cacheName = String.Format("DataSourceRuntimeService_GetMapperRuntimeType_{0}", dataSourceId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataSourceManager.CacheManager>().GetOrCreateObject(cacheName,
@@ -362,7 +362,5 @@ namespace Vanrise.Integration.Business
 
             return classDefinitionBuilder.ToString();
         }
-
-        public override Guid ConfigId { get { return new Guid("BDD330B6-3557-4AFC-8C69-A23890DA82E7"); } }
     }
 }
