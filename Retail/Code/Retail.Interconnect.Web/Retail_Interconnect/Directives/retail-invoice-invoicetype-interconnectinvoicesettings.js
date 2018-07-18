@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService","retail_Interconnect_InvoiceType",
+app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "retail_Interconnect_InvoiceType",
     function (UtilsService, VRNotificationService, VRUIUtilsService, retail_Interconnect_InvoiceType) {
 
         var directiveDefinitionObject = {
@@ -63,7 +63,8 @@ app.directive("retailInvoiceInvoicetypeInterconnectinvoicesettings", ["UtilsServ
 
                 api.load = function (payload) {
                     var promises = [];
-                    $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceType, payload.extendedSettingsEntity.Type, "value");
+                    if (payload != undefined && payload.extendedSettingsEntity != undefined)
+                    { $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceType, payload.extendedSettingsEntity.Type, "value"); }
                     promises.push(getBusinessEntityDefinitionSelectorLoadPromise());
                     promises.push(loadSingleBillingTransactionTypeSelector());
                     promises.push(loadMultiBillingTransactionTypeSelector());
