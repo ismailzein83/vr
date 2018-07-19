@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsService','VRLocalizationService', function ($parse, VR_GridColCSSClassEnum, UtilsService, VRLocalizationService) {
+app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsService', 'VRLocalizationService', 'MobileService', function ($parse, VR_GridColCSSClassEnum, UtilsService, VRLocalizationService, MobileService) {
     return {
         restrict: 'E',
         require: '^vrDatagrid',
@@ -8,9 +8,9 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
-                    
-                    var gridColumnAttribute = iAttrs.columnattributes != undefined ? $scope.$eval(iAttrs.columnattributes) : undefined;
 
+                    var gridColumnAttribute = iAttrs.columnattributes != undefined ? $scope.$eval(iAttrs.columnattributes) : undefined;
+                    var isMobile = MobileService.isMobile();
                     var col = {};
                     if (gridColumnAttribute != undefined) {
                         col = {
@@ -27,15 +27,16 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                             numberPrecision: gridColumnAttribute.NumberPrecision,
                             tag: gridColumnAttribute.Tag,
                             sysName: gridColumnAttribute.SysName,
+                            listViewWidth: gridColumnAttribute.listViewWidth,
+                            isHiddenInListView: gridColumnAttribute.isHiddenInListView
 
                         };
-                        if (gridColumnAttribute.GridColCSSClassValue != undefined)
-                        {
+                        if (gridColumnAttribute.GridColCSSClassValue != undefined) {
                             var cssClassObject = UtilsService.getEnum(VR_GridColCSSClassEnum, "value", gridColumnAttribute.GridColCSSClassValue);
                             if (cssClassObject != undefined)
                                 col.cssclass = cssClassObject.cssClass;
                         }
-                        
+
                     }
                     if (iAttrs.headertext != undefined)
                         col.headerText = $scope.$eval(iAttrs.headertext);
@@ -48,7 +49,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     else if (col.disableSorting == undefined)
                         col.disableSorting = false;
                     if (iAttrs.headerdescription != undefined)
-                        col.headerDescription =  $scope.$eval(iAttrs.headerdescription);
+                        col.headerDescription = $scope.$eval(iAttrs.headerdescription);
                     if (iAttrs.localizedheaderdescription != undefined)
                         col.headerDescription = VRLocalizationService.getResourceValue($scope.$eval(iAttrs.localizedheaderdescription), $scope.$eval(iAttrs.headerdescription));
                     if (iAttrs.isfielddynamic != undefined)
@@ -66,9 +67,9 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     if (iAttrs.expendablecolumn != undefined)
                         col.expendableColumn = true;
 
-                    if(iAttrs.invisibleheader != undefined)
+                    if (iAttrs.invisibleheader != undefined)
                         col.invisibleheader = true;
-                   
+
                     if (iAttrs.expendablecolumntitle != undefined)
                         col.expendableColumnTitle = $scope.$eval(iAttrs.expendablecolumntitle);
                     if (iAttrs.expendablecolumndescription != undefined)
@@ -88,6 +89,8 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                         col.fixedWidth = $scope.$eval(iAttrs.fixedwidth);
                     if (iAttrs.sysname != undefined)
                         col.sysName = $scope.$eval(iAttrs.sysname);
+                    if (iAttrs.listviewwidth != undefined)
+                        col.listViewWidth = $scope.$eval(iAttrs.listviewwidth);
                     if (iAttrs.getcolor != undefined)
                         col.getcolor = $scope.$eval(iAttrs.getcolor);
                     col.cellTemplate = cellTemplate;
@@ -97,11 +100,14 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
 
                     var columnIndex = iAttrs.columnindex != undefined ? $scope.$eval(iAttrs.columnindex) : undefined;
 
-                    var show = (iAttrs.initiallyhidden != undefined) != undefined ? !$scope.$eval(iAttrs.initiallyhidden) : true;
+                    var show = (iAttrs.initiallyhidden != undefined) != undefined ? !$scope.$eval(iAttrs.initiallyhidden): true;
+                    if (isMobile && (iAttrs.ishiddeninlistview != undefined)) {
+                        show = !$scope.$eval(iAttrs.ishiddeninlistview)
+                    }
 
-                    if(iAttrs.ngShow != undefined)
-                    show =  $scope.$eval(iAttrs.ngShow);
-                   
+                    if (iAttrs.ngShow != undefined)
+                        show = $scope.$eval(iAttrs.ngShow);
+
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
 
                     var headertextWatch;
@@ -112,7 +118,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                             if (colDef != undefined && val != undefined)
                                 dataGridCtrl.updateColumnHeader(colDef, val);
                         });
-                        if (col.headerText !=undefined &&  col.headerText.toUpperCase() === 'ID') {
+                        if (col.headerText != undefined && col.headerText.toUpperCase() === 'ID') {
                             dataGridCtrl.hideColumn(colDef);
                         }
                     }
@@ -140,7 +146,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                         ngshowWatch = $scope.$watch(function () {
                             return $parse(expr)($scope);
                         }, function (value) {
-                            if (colDef != undefined) {                                
+                            if (colDef != undefined) {
                                 if (value)
                                     dataGridCtrl.showColumn(colDef);
                                 else

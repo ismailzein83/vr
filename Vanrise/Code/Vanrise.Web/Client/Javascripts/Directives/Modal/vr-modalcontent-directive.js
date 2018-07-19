@@ -42,7 +42,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
                 }
             }
             var centredModal = "";
-            if (MobileService.isMobile()) {
+            if (MobileService.isMobile() && tAttrs.ismenu!=undefined) {
                 centredModal = "centred-model";
             }
             var style = "";

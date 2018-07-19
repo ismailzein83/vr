@@ -11,6 +11,7 @@ namespace Vanrise.Entities
     {
         public string Width { get; set; }
         public int? FixedWidth { get; set; }
+        public int? ListViewWidth { get; set; }
     }
     public static class GridColumnWidthFactorConstants
     {

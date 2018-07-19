@@ -34,7 +34,6 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (Mobi
                     };
                     scope.openTabsSelectorPopup = function () {
                         var modalSettings = {
-                            autoclose: true
                         };
                         modalSettings.onScopeReady = function (modalScope) {
                             modalScope.ctrl = tabsCtrl;

@@ -11,7 +11,8 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
             formname: '=',
             haspermission: '=',
             validationcontext: '=',
-            showbutton: "="
+            showbutton: "=",
+            disabledbtn:"="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -108,11 +109,14 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
                     return true;
                 if (ctrl.formname != undefined && ctrl.formname.validate() != null)
                     return true;
+                if (ctrl.disabledbtn != undefined)
+                    return ctrl.disabledbtn;
                 var isDisabled;
                 if (ctrl.isSubmitting == true)
                     isDisabled = true;
                 else
                     isDisabled = false;
+                
                 return isDisabled;
             };
             var types = {

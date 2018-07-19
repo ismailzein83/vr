@@ -25,7 +25,7 @@
     @Styles.Render("~/Content/Styles")
     @Styles.Render("~/Content/Themes")
 </head>
-<body @ViewBag.RTLClass ng-class="isMobile?'mobile-view':''" style="overscroll-behavior-y: contain;">
+<body @ViewBag.RTLClass ng-class="isMobile?'mobile-view':''" >
     <div ng-show="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
     <div ng-show="!spinner" ng-cloak id="mainBodyContainer" style="display:none">
 

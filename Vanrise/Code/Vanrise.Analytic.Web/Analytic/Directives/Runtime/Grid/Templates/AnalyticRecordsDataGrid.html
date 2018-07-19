@@ -5,12 +5,13 @@
 
         <vr-datagridcolumn ng-if="analyticrecordsctrl.groupingDimensions.length>0" ng-repeat="dimension in analyticrecordsctrl.groupingDimensions" headertext="dimension.Title" type="dimension.Type"
                            field="dimension.Type.indexOf('Date') > -1 || dimension.Type.indexOf('Number') > -1 ? 'DimensionValues[' + $index + '].Value' : 'DimensionValues[' + $index + '].Name'"
-                           widthfactor="dimension.Widthfactor" fixedwidth="dimension.ColumnSettings.FixedWidth" numberprecision="dimension.NumberPrecision" columnindex="$index" cssclass="dimension.cssClass">
+                           widthfactor="dimension.Widthfactor" listviewwidth="measure.ColumnSettings.ListViewWidth" fixedwidth="dimension.ColumnSettings.FixedWidth" numberprecision="dimension.NumberPrecision" columnindex="$index" cssclass="dimension.cssClass">
         </vr-datagridcolumn>
 
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.Type" numberprecision="measure.NumberPrecision"
                            field="'MeasureValues.' + measure.MeasureName + '.Value'" tag="measure.MeasureName" summaryfield="'MeasureValues.' + measure.MeasureName + '.Value'"
-                           widthfactor="{{measure.Widthfactor}}" fixedwidth="measure.FixedWidth" getcolor="analyticrecordsctrl.getMeasureColor" cssclass="measure.cssClass" initiallyhidden="measure.IsHidden">
+                           widthfactor="{{measure.Widthfactor}}" listviewwidth="measure.ColumnSettings.ListViewWidth" fixedwidth="measure.ColumnSettings
+.FixedWidth" getcolor="analyticrecordsctrl.getMeasureColor" cssclass="measure.cssClass" initiallyhidden="measure.IsHidden" ishiddeninlistview="measure.IsHiddenInListView">
         </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>

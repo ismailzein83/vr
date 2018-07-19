@@ -27,9 +27,9 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="DeselectAll"  data-onclick="scopeModel.deselectAllClicked" vr-disabled="scopeModel.disableDeselectAll()" ></vr-button>
-                <vr-button type="SelectAll" data-onclick="scopeModel.selectAllClicked" vr-disabled="scopeModel.disableSelectAll()" ></vr-button>
-                <vr-button type="Save" formname="excelFileParserEditor" data-onclick="scopeModel.savePesonilization" vr-disabled="scopeModel.disableDeselectAll()"></vr-button>
+                <vr-button type="DeselectAll" data-onclick="scopeModel.deselectAllClicked" vr-disabled="scopeModel.disableDeselectAll()" disabledbtn="scopeModel.disableDeselectAll()"></vr-button>
+                <vr-button type="SelectAll" data-onclick="scopeModel.selectAllClicked" vr-disabled="scopeModel.disableSelectAll()" disabledbtn="scopeModel.disableSelectAll()"></vr-button>
+                <vr-button type="Save" formname="excelFileParserEditor" data-onclick="scopeModel.savePesonilization" vr-disabled="scopeModel.disableDeselectAll()" disabledbtn="scopeModel.disableDeselectAll()"></vr-button>
                 <vr-button type="Cancel" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

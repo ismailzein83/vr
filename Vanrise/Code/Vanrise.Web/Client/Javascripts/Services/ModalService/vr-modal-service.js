@@ -90,8 +90,18 @@
                     $('.modal-header').eq($('.modal-dialog').length - 2).removeClass('vr-modal-header-inback');
                     $('.modal-header').eq($('.modal-dialog').length - 2).addClass('vr-modal-header');
                 }
+
                 if ($('.modal-dialog').length > 1) {
-                    $('body').addClass('full-body');
+                    $('body').addClass('full-mobile-body');
+                }
+                else
+                    $('body').removeClass('full-mobile-body');
+
+                if ($('.expandable-row-content').length > 1) {
+                    $('.expandable-row-content').addClass('full-view');
+                }
+                if (MobileService.isMobile() && $('.modal-dialog').length == 1) {
+                    $('.expandable-row-content').removeClass('full-view');
                 }
                 else {
                     $('body').removeClass('full-body');
@@ -105,9 +115,13 @@
                     var vpH = window.innerHeight;
                     document.documentElement.style.height = vpH.toString() + "px";
                     document.body.style.height = vpH.toString() + "px";
+                    if ($('.expandable-row-content').length > 1) {
+                        $('.expandable-row-content').addClass('full-view');
+                    }
+                  
                 }                
             });
-                          
+                   
             //modalScope.$on("$destroy", function () {
             //   // $(window).off("resize.Viewport");
             //});

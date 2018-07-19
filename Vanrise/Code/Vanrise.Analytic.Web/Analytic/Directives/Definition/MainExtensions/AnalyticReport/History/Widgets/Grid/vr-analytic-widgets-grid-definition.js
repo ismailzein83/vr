@@ -327,7 +327,8 @@
                                 Title: measure.Title,
                                 ColumnSettings: measure.measureGridWidthFactorAPI.getData(),
                                 ColumnStyleId: measure.measureGridStyleAPI.getSelectedIds(),
-                                IsHidden: measure.isHidden
+                                IsHidden: measure.isHidden,
+                                IsHiddenInListView: measure.isHiddenInListView
                             });
                         }
                     }
@@ -393,6 +394,7 @@
                     dataItem.Name = gridField.payload.MeasureName;
                     dataItem.Title = gridField.payload.Title;
                     dataItem.isHidden = gridField.payload.IsHidden;
+                    dataItem.isHiddenInListView = gridField.payload.IsHiddenInListView;
                     dataItemPayload.data = gridField.payload.ColumnSettings;
                     stylePayload = { selectedIds: gridField.payload.ColumnStyleId };
                 }

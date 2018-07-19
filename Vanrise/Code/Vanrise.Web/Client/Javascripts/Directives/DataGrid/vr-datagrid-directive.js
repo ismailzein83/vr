@@ -55,6 +55,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 				ctrl.layoutOption = UISettingsService.getGridLayoutOptions();
 
+				if(ctrl.isMobile)
+				    ctrl.layoutOption.verticalLine = false;
+
 				ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
 				var loadMoreDataFunction;
@@ -260,7 +263,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 					fixedWidth: col.fixedWidth,
 					invisibleHeader: col.invisibleheader,
 					cssClass: col.cssclass,
-					sysName: col.sysName
+					sysName: col.sysName,
+                    listViewWidth: col.listViewWidth
 				};
 
 				var colSys = getColumnBySysName(colDef.sysName);
@@ -467,39 +471,55 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 				//if(ctrl.margin !=undefined &&  innerWidth>1920)
 				//   totalWidth = initialTotalWidth - (ctrl.margin * (innerWidth / 1920));
 				angular.forEach(ctrl.columnDefs, function (col) {
-					if (col.isHidden != true) {
-						if (col.fixedWidth != undefined) {
-							col.width = col.fixedWidth + 'px';
-							col.mobileWidth = col.fixedWidth + 'px';
-						}
-						else {
-							col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + (totalfixedWidth * (totalWidth * col.widthFactor / totalWidthFactors) / 100) + "px)";
+				    if (col.isHidden != true) {
+				        var valueWidth = 0;				       
+				        if (col.fixedWidth != undefined) {
+				            col.width = col.fixedWidth + 'px';
+				            valueWidth = col.fixedWidth;
+				        }
+				        else {
+				            col.width = "calc(" + (totalWidth * col.widthFactor / totalWidthFactors) + "% - " + (totalfixedWidth * (totalWidth * col.widthFactor / totalWidthFactors) / 100) + "px)";
 
-							var colFixWidth = (1366 - totalfixedWidth) * ((totalWidth * col.widthFactor / totalWidthFactors) / 100);
-							if (col.type == "Number") {
-								var numberPrecision = UISettingsService.getNormalPrecision() || 2;
-								if (col.numberPrecision == "NoDecimal")
-								{ colFixWidth = 65 }
-								else if (col.numberPrecision == "LongPrecision")
-								{ colFixWidth = 65 }
-								else { colFixWidth = 65 }
-							}
-							else {
-								if (col.type == "LongDatetime")
-								{ colFixWidth = 120 }
-								else if (col.type == "Datetime")
-								{ colFixWidth = 100 }
-								else if (col.type == "Date")
-								{ colFixWidth = 80 }
-								else if (col.type == "Yearmonth")
-								{ colFixWidth = 50 }
-							}
-							col.mobileWidth = colFixWidth + "px";
-						}
-					}
+				            var colFixWidth = (1366 - totalfixedWidth) * ((totalWidth * col.widthFactor / totalWidthFactors) / 100);
+				            var maxColFixWidth = (1920 - totalfixedWidth) * ((totalWidth * col.widthFactor / totalWidthFactors) / 100);
+				            if (colFixWidth > innerWidth)
+				                colFixWidth = (innerWidth - totalfixedWidth) * ((totalWidth * col.widthFactor / totalWidthFactors) / 100);
+				            if (maxColFixWidth > innerWidth)
+				                colFixWidth = innerWidth * (totalWidth * col.widthFactor / totalWidthFactors) / 100;
+
+				            if (col.type == "Number") {
+				                var numberPrecision = UISettingsService.getNormalPrecision() || 2;
+				                if (col.numberPrecision == "NoDecimal")
+				                { colFixWidth = 65 }
+				                else if (col.numberPrecision == "LongPrecision")
+				                { colFixWidth = 65 }
+				                else { colFixWidth = 65 }
+				            }
+				            else {
+				                if (col.type == "LongDatetime")
+				                { colFixWidth = 120 }
+				                else if (col.type == "Datetime")
+				                { colFixWidth = 100 }
+				                else if (col.type == "Date")
+				                { colFixWidth = 80 }
+				                else if (col.type == "Yearmonth")
+				                { colFixWidth = 50 }
+				            }
+				            valueWidth = colFixWidth;				           	          
+				        }
+
+                        if (col.listViewWidth != undefined) { 
+                            valueWidth = col.listViewWidth;
+                        }
+				        var labelwidth = UtilsService.getHtmlStringWidth(col.name, '12px Open Sans');
+				        var totalwidth = valueWidth + parseInt(labelwidth);
+				        var unitFactor = innerWidth / visibleColCount;
+				        var unitCeildWidth = (Math.ceil(parseInt(totalwidth) / unitFactor));
+				        var parsedWidth = unitFactor * UtilsService.getUnitCeildWidthNextStepValue(unitCeildWidth);
+				        col.mobileWidth = parsedWidth + "px";
+				    }
 				});
-			}
-
+            }
 			function itemChanged(item, actionType) {
 				if (item.isDeleted) {//delete the item from the original data source
 					var deletedItemIndex = ctrl.datasource.indexOf(item);

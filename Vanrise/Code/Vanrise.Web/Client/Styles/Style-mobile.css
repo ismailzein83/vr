@@ -16,11 +16,15 @@
         overflow:hidden
     }*/
    
-    .modal-open {
+   .modal-open {
         overflow: hidden !important;
         touch-action:none;
-        
+        position:fixed;
+        width:100%;
     }
+
+   
+    
     .normal-view {
         display: none;
     }
@@ -35,7 +39,10 @@
     }
 
     body.full-mobile-body{
-         overflow:hidden
+         overflow: hidden !important;
+        touch-action:none;
+        position:fixed;
+        width:100%;
     }
 
     .wrapper-toogled {
@@ -105,12 +112,13 @@
     .mobile-view .grid-base-row {
         display: flex !important;
         flex-wrap: wrap;
+        width:100%;
     }
 
     .mobile-view .vr-datagrid-cell-container {
         display: inline-flex !important;
         max-width: 100%;
-        width: unset !important;
+        /*width: unset !important;*/
         padding: 0px 2px;
     }
 
@@ -120,7 +128,7 @@
 
     .mobile-view .vr-datagrid-cell {
         display: inline-flex !important;
-        height: 20px;
+        height: 24px;
         min-height: unset;
     }
 
@@ -141,6 +149,17 @@
         overflow-x: hidden;
     }
 
+
+    /*.input-group-addon {
+        font-size: 16px;
+    }*/
+    .mobile-view .expandable-row-content.full-view {
+        overflow: hidden !important;
+        touch-action:none;
+        position:fixed;
+        width:100%;        
+    }
+
     .mobile-view .mobile-label {
         width: 100%;
         display: block;
@@ -152,10 +171,15 @@
         font-size: 7px;
         padding: 2px 2px;
         text-transform: uppercase;
-        color: #fff;
+        color: #333;
         font-weight: bold;
-        background-color: #757070;
+        background-color: #f8f6f6;
+        text-decoration:underline;
         margin-top: 2px;
+    }
+
+    .mobile-view .summary-container .mobile-label {        
+        margin-top: 5px;
     }
 
     .mobile-view .mobile-gridrow-actionbar {
@@ -274,6 +298,7 @@
     .mobile-view .actionbar-popup-modal .sub-menu-prefix.closed:before {
         border-width: 0.35em 0 0.35em 0.45em;
     }
+
     .mobile-view .actionbar-popup-modal .sub-menu-prefix.opened:before {
         border-right: 0.35em solid transparent;
         border-top: 0.45em solid;
@@ -281,4 +306,47 @@
         border-left: 0.35em solid transparent;
         top: 13px;
     }
+
+    .mobile-view .vr-datagrid-celltext .vr-date-input {
+        padding: unset;
+        width: 100%;
+        height: 24px !important;
+    }
+
+    .mobile-view .vr-datagrid-celltext .form-control {
+        height: 24px !important;
+    }
+
+    .mobile-view .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
+         height: 24px !important;
+    }
+   
+}
+
+/*** Styles added to fix the issue with zoom in on iphone ***/
+/* iPhone < 5: */
+@media screen and (device-aspect-ratio: 2/3) {
+   .vr-date-input{ font-size: 16px !important; height: 24px; }
+}
+ 
+/* iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    .vr-date-input{ font-size: 16px !important; height: 24px; }
+
+}
+ 
+/* iPhone 6, iPhone 6s, iPhone 7 portrait/landscape */
+@media screen and (device-aspect-ratio: 375/667) {
+    .vr-date-input{ font-size: 16px !important; height: 24px; }
+}
+ 
+/* iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus portrait/landscape */
+@media screen and (device-aspect-ratio: 9/16) {
+    .vr-date-input{ font-size: 16px !important; height: 24px; }
+}
+
+ 
+/* iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus portrait/landscape */
+@media screen and (device-aspect-ratio: 9/16) {
+    .vr-date-input{ font-size: 16px !important; height: 24px; }
 }

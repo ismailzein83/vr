@@ -60,7 +60,7 @@
                         <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                     </div>
                 </div>
-                <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row">
+                <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row summary-container">
                     <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                 </div>
             </div>
@@ -125,7 +125,7 @@
 
     </div>
 
-    <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
+    <div id="divExpandableRowContent_{{$index}}" class="expandable-row-content" ng-class="dataItem.isRowExpanded ? 'row-content-expanded':''" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
         <div ng-if="!ctrl.isMobile" style="width:100%">
             <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
             <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': $parent.ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}"></div>

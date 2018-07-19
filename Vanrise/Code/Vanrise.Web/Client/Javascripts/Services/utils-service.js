@@ -924,6 +924,26 @@
             else
                 return undefined;
         }
+
+        function getHtmlStringWidth(text, font) {
+            $.fn.textWidth = function (text, font) {
+                if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
+                $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
+                return $.fn.textWidth.fakeEl.width();
+            };
+            return $.fn.textWidth(text, font);
+        }
+
+        function getUnitCeildWidthNextStepValue(x) {
+            var step = 1;
+            if (x <= step)
+                return step;
+            while (step < x) {
+                step = step * 2;
+            }
+            return step;
+        }
+
         return ({
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -988,7 +1008,9 @@
             areTimePeriodsOverlapped: areTimePeriodsOverlapped,
             linkExistingPromiseToPromiseDeferred: linkExistingPromiseToPromiseDeferred,
             waitPromiseNode: waitPromiseNode,
-            getDateObject: getDateObject
+            getDateObject: getDateObject,
+            getHtmlStringWidth: getHtmlStringWidth,
+            getUnitCeildWidthNextStepValue:getUnitCeildWidthNextStepValue
         });
     }
 
