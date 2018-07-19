@@ -47,7 +47,7 @@ namespace Vanrise.Integration.Business
             {
                 if (string.IsNullOrEmpty(batch.QueueItemIds))
                 {
-                    batch.ExecutionStatus = ItemExecutionFlowStatus.NoBacthes;
+                    batch.ExecutionStatus = ItemExecutionFlowStatus.NoBatches;
                     continue;
                 }
 
