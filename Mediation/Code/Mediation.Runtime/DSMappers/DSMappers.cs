@@ -789,12 +789,42 @@ namespace Mediation.Runtime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_HuawiIMS_Ogero_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
+            Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("504a12e9-61d2-4e31-b193-1d43749dc055"), (parsedBatch) =>
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("504a12e9-61d2-4e31-b193-1d43749dc055"), options, (parsedBatch) =>
             {
+                Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Huawei IMS Parsed CDRs", parsedBatch.RecordType);
+                switch (parsedBatch.RecordType)
+                {
+                    case "Ogero_HuaweiIMS_CDR":
+                        mappedBatches.Add("CDRTransformationStage", batch);
+                        break;
+                    default: break;
+                }
+            });
 
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_HuawiMGCF_Ogero_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("D6896CC8-22EF-4FAA-BEF4-4644EE5323F9"), options, (parsedBatch) =>
+            {
+                Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Huawei MGCF Parsed CDRs", parsedBatch.RecordType);
+                switch (parsedBatch.RecordType)
+                {
+                    case "Ogero_HuaweiMGCF_CDR":
+                        mappedBatches.Add("CDRTransformationStage", batch);
+                        break;
+                    default: break;
+                }
             });
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
@@ -810,13 +840,31 @@ namespace Mediation.Runtime
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Nokia_EDR(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+
             Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("230bedb5-a3ee-4cbe-802c-dfdaa2a2d438"), (parsedBatch) =>
             {
+                var utilityManager = new Vanrise.Common.Business.UtilityManager();
+                var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+
+                var dataRecordType = dataRecordTypeManager.GetDataRecordType(parsedBatch.RecordType);
+                dataRecordType.ThrowIfNull("dataRecordType");
+                dataRecordType.Settings.ThrowIfNull("dataRecordType.Settings", dataRecordType.DataRecordTypeId);
+                string dataRecordTypeDateTimeField = dataRecordType.Settings.DateTimeField;
+
+                foreach (dynamic record in parsedBatch.Records)
+                {
+                    DateTime? recordDateTime = record.GetFieldValue(dataRecordTypeDateTimeField);
+                    if (utilityManager.CheckIfDefaultOrInvalid(recordDateTime))
+                        throw new DataIntegrityValidationException("Invalid dateTime value");
+                }
+
                 switch (parsedBatch.RecordType)
                 {
                     case "MobileCDR":
+
                         List<dynamic> multiLegRecords = new List<dynamic>();
                         List<dynamic> normalRecords = new List<dynamic>();
+
                         foreach (dynamic record in parsedBatch.Records)
                         {
                             if (record.IntermediateChargingIndicator != 0)
@@ -825,8 +873,11 @@ namespace Mediation.Runtime
                                 multiLegRecords.Add(record);
                             }
                             else
+                            {
                                 normalRecords.Add(record);
+                            }
                         }
+
                         Vanrise.Integration.Entities.MappedBatchItem normalBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(normalRecords, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                         mappedBatches.Add("MobileTransformationStage", normalBatch);
 
@@ -835,6 +886,7 @@ namespace Mediation.Runtime
                             Vanrise.Integration.Entities.MappedBatchItem multiLegBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(multiLegRecords, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
                             mappedBatches.Add("NokiaMediationStage", multiLegBatch);
                         }
+
                         break;
 
                     case "SMS":
@@ -842,11 +894,14 @@ namespace Mediation.Runtime
                         mappedBatches.Add("SMSTransformationStage", batch);
                         break;
                 }
+
+
             });
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             LogVerbose("Finished");
+
             return result;
         }
 
