@@ -43,9 +43,13 @@ app.directive('vrToolbox', ['BaseDirService', function (BaseDirService) {
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
             var icontemplate = '';
-            if (attrs.dataiconfield != undefined && attrs.dataiconfield != '')
-                icontemplate = '<span class="icon"><vr-icon icontype="ctrl.getObjectIcon(item)"></vr-icon></span>';
-            var mainTemplate = '<div  ng-sortable="ctrl.config" class="vr-toolbox" >'
+			if (attrs.dataiconfield != undefined && attrs.dataiconfield != '')
+				icontemplate = '<span class="icon"><vr-icon icontype="ctrl.getObjectIcon(item)"></vr-icon></span>';
+
+			var layoutClass = "";
+			if (attrs.verticallayout != undefined)
+				layoutClass = "vertical-alignment";
+			var mainTemplate = '<div  ng-sortable="ctrl.config" class="vr-toolbox ' + layoutClass+'" >'
                                  + '<div class="item" ng-repeat="item in ctrl.datasource">'
                                      + icontemplate
                                      + '<span title="{{ctrl.getObjectText(item)}}">{{ctrl.getObjectText(item)}}</span>'
