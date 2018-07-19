@@ -18,9 +18,9 @@
    
    .modal-open {
         overflow: hidden !important;
-        touch-action:none;
+        /*touch-action:none;
         position:fixed;
-        width:100%;
+        width:100%;*/
     }
 
    
@@ -40,9 +40,9 @@
 
     body.full-mobile-body{
          overflow: hidden !important;
-        touch-action:none;
+        /*touch-action:none;
         position:fixed;
-        width:100%;
+        width:100%;*/
     }
 
     .wrapper-toogled {
