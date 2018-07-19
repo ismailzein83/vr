@@ -23,7 +23,7 @@
     [SIPRequestTime]            DATETIME         NULL,
     [SIPResponseTime]           DATETIME         NULL,
     [SDPMediaName]              VARCHAR (100)    NULL,
-    [SDPMediaDescription]       VARCHAR (100)    NULL,
+    [SDPMediaDescription]       VARCHAR (MAX)    NULL,
     [SDPSessionDescription]     VARCHAR (MAX)    NULL,
     [ServiceReasonReturnCode]   INT              NULL,
     [ContentType]               VARCHAR (100)    NULL,
@@ -40,6 +40,11 @@
     [AccountingRecordType]      INT              NULL,
     [OnlineChargingFlag]        INT              NULL,
     [VisitedNetworkId]          VARCHAR (500)    NULL,
+    [SessionPriority]           INT              NULL,
     [FileName]                  VARCHAR (100)    NULL,
     [DataSourceId]              UNIQUEIDENTIFIER NULL);
+
+
+
+
 

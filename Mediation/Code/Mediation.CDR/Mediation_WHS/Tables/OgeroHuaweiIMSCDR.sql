@@ -39,10 +39,15 @@
     [AccountingRecordType]      INT              NULL,
     [OnlineChargingFlag]        INT              NULL,
     [VisitedNetworkId]          VARCHAR (500)    NULL,
-    [SDPMediaDescription]       VARCHAR (100)    NULL,
+    [SDPMediaDescription]       VARCHAR (MAX)    NULL,
+    [SessionPriority]           INT              NULL,
     [FileName]                  VARCHAR (100)    NULL,
     [DataSourceId]              UNIQUEIDENTIFIER NULL
 );
+
+
+
+
 
 
 
