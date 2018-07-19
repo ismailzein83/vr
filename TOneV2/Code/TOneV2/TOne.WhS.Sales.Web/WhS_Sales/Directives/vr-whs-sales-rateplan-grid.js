@@ -74,6 +74,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	            $scope.normalPrecision = UISettingsService.getNormalPrecision();
 	            $scope.longPrecision = UISettingsService.getLongPrecision();
 	            $scope.layoutOption = UISettingsService.getGridLayoutOptions();
+	            if (ctrl.isMobile)
+	                $scope.layoutOption.verticalLine = false;
 
 	            $scope.onZoneLetterSelectionChanged = function () {
 	                var promises = [];
@@ -244,19 +246,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 	            columnsConfig = {};
 	            $scope.columnsConfig = columnsConfig;
-	            $scope.addColumnFixedAndRecalculate = function (colName, width) {
+	            $scope.addColumnFixedAndRecalculate = function (colName, width,colHeader,includeInListView) {
 	                var column = {
 	                    name: colName,
 	                    widthAsNb: width,
+	                    colHeader: colHeader,
+	                    includeInListView:includeInListView,
 	                    width: width + "px"
 	                };
 	                columnsConfig[colName] = column;
 	                recalculateColumnWidthes();
 	            };
-	            $scope.addColumnWidthFactorAndRecalculate = function (colName, width) {
+	            $scope.addColumnWidthFactorAndRecalculate = function (colName, width, colHeader, includeInListView) {
 	                var column = {
 	                    name: colName,
-	                    widthFactor: width
+	                    widthFactor: width,
+	                    colHeader: colHeader,
+	                    includeInListView: includeInListView,
 	                };
 	                columnsConfig[colName] = column;
 	                recalculateColumnWidthes();
@@ -265,22 +271,32 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	            function recalculateColumnWidthes() {
 	                sumFixedWidthes = 0;
 	                sumWidthFactors = 0;
+	                var colCount = 0;
 	                for (var colName in columnsConfig) {
 	                    var column = columnsConfig[colName];
 	                    if (column.widthFactor != undefined)
 	                        sumWidthFactors += column.widthFactor;
 	                    else
 	                        sumFixedWidthes += column.widthAsNb;
+	                    colCount++;
 	                }
 
 	                for (var colName in columnsConfig) {
 	                    var column = columnsConfig[colName];
+	                    var valueWidth = 0;
 	                    if (column.widthFactor != undefined) {
 	                        column.width = "calc(" + (100 * column.widthFactor / sumWidthFactors) + "% - " + (sumFixedWidthes * (100 * column.widthFactor / sumWidthFactors) / 100) + "px)";
-	                        column.mobileWidth = (1366 - sumFixedWidthes) * ((100 * column.widthFactor / sumWidthFactors) / 100) + "px";
+	                        valueWidth = (1366 - sumFixedWidthes) * ((100 * column.widthFactor / sumWidthFactors) / 100);
 	                    }
 	                    else
-	                        column.mobileWidth = column.width;
+	                        valueWidth = column.width;
+
+	                    var labelwidth = UtilsService.getHtmlStringWidth(column.colHeader, '12px Open Sans');
+	                    var totalwidth = valueWidth + parseInt(labelwidth);
+	                    var unitFactor = 40;
+	                    var unitCeildWidth = (Math.ceil(parseInt(totalwidth) / unitFactor));
+	                    var parsedWidth = unitFactor * UtilsService.getUnitCeildWidthNextStepValue(unitCeildWidth);
+	                    column.mobileWidth = parsedWidth + "px";
 	                }
 	            }
 
@@ -1173,7 +1189,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	            }
 	            for (var colName in columnsConfig) {
 	                var column = columnsConfig[colName];
-	                if (column.widthFactor != undefined)
+	                if (column.widthFactor != undefined && !ctrl.isMobile)
 	                    $('.rpcolumn_' + colName).css({ width: column.width });
 	            }
 
