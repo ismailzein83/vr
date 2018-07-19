@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data.SQL
@@ -59,7 +60,6 @@ namespace Vanrise.Queueing.Data.SQL
         public void EnqueueItem(QueueActivatorType queueActivatorType, Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, Guid? dataSourceId, string batchDescription, DateTime batchStart,
             DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
-
             StringBuilder queryItemBuilder = new StringBuilder();
             StringBuilder queryItemHeaderBuilder = new StringBuilder();
             foreach (var targetQueueItemId in targetQueuesItemsIds)
@@ -213,8 +213,8 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQueryText(query,
                (cmd) =>
                {
-                   cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
-                   cmd.Parameters.Add(new SqlParameter("@BatchEnd", batchEnd));
+                   cmd.Parameters.Add(new SqlParameter("@BatchStart", ToDBNullIfDefaultOrInvalid(batchStart)));
+                   cmd.Parameters.Add(new SqlParameter("@BatchEnd", ToDBNullIfDefaultOrInvalid(batchEnd)));
                    cmd.Parameters.Add(new SqlParameter("@DataSourceID", dataSourceId));
                    cmd.Parameters.Add(new SqlParameter("@BatchDescription", batchDescription));
                    cmd.Parameters.Add(new SqlParameter("@ExecutionFlowTriggerItemID", executionFlowTriggerItemID));
@@ -223,6 +223,7 @@ namespace Vanrise.Queueing.Data.SQL
                    cmd.Parameters.Add(new SqlParameter("@Status", (int)queueItemStatus));
                });
         }
+
         private DataTable BuildItemIdsTable(List<long> itemIds)
         {
             DataTable dt = new DataTable();
@@ -459,7 +460,6 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQuerySP("[queue].[sp_QueueItem_HasPendingItems]", out hasPendingItems, queueIdsToCheckAsString, from, to, onlyAssignedQueues);
             return (bool)hasPendingItems;
         }
-
 
         public bool HasPendingSummaryQueueItems(List<int> queueIdsToCheck, DateTime from, DateTime to)
         {

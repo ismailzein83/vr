@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing.Data.SQL
@@ -33,9 +31,19 @@ namespace Vanrise.Queueing.Data.SQL
 
         public void Insert(List<SummaryBatchActivator> summaryBatchActivators)
         {
-            foreach(var summaryBatchActivator in summaryBatchActivators)
+            DateTimeRange dateTimeRange = base.GetSQLDateTimeRange();
+
+            foreach (var summaryBatchActivator in summaryBatchActivators)
             {
-                ExecuteNonQuerySP("[queue].[sp_SummaryBatchActivator_Insert]", summaryBatchActivator.QueueId, summaryBatchActivator.BatchStart, summaryBatchActivator.BatchEnd, summaryBatchActivator.ActivatorId);
+                DateTime batchStart = summaryBatchActivator.BatchStart;
+                if (CheckIfDefaultOrInvalid(summaryBatchActivator.BatchStart))
+                    batchStart = dateTimeRange.From;
+
+                DateTime batchEnd = summaryBatchActivator.BatchEnd;
+                if (CheckIfDefaultOrInvalid(summaryBatchActivator.BatchEnd))
+                    batchEnd = dateTimeRange.From;
+
+                ExecuteNonQuerySP("[queue].[sp_SummaryBatchActivator_Insert]", summaryBatchActivator.QueueId, batchStart, batchEnd, summaryBatchActivator.ActivatorId);
             }
         }
 

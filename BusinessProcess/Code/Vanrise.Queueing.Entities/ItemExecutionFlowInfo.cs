@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Queueing.Entities
 {
-    public enum ItemExecutionFlowStatus { New = 0, Processing = 10, Failed = 20, Processed = 30, Suspended = 40 }
+    public enum ItemExecutionFlowStatus { New = 0, Processing = 10, Failed = 20, Processed = 30, Suspended = 40, NoBatches = 50 }
 
     public class ItemExecutionFlowInfo
     {
