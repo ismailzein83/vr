@@ -360,7 +360,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!CarrierCompanyName.Value</Value>
+                    <Value>=Parameters!Carrier.Value</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>

@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!CarrierCompanyName.Value</Value>
+                <Value>=Parameters!Carrier.Value</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>
@@ -1320,6 +1320,9 @@
               </Parameter>
               <Parameter Name="Attention">
                 <Value>=Parameters!Attention.Value</Value>
+              </Parameter>
+              <Parameter Name="Carrier">
+                <Value>=Parameters!Carrier.Value</Value>
               </Parameter>
             </Parameters>
             <Height>3in</Height>
