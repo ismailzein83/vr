@@ -57,6 +57,34 @@ namespace Vanrise.Data.SQL
             };
         }
 
+        protected object ToDBNullIfDefaultOrInvalid(DateTime? dateTime)
+        {
+            if (CheckIfDefaultOrInvalid(dateTime))
+                return DBNull.Value;
+
+            return dateTime.Value;
+        }
+
+        protected bool CheckIfDefaultOrInvalid(DateTime? dateTime)
+        {
+            if (base.ToDBNullIfDefault(dateTime) == DBNull.Value)
+                return true;
+
+            if (!IsWithinSQLDateTimeRange(dateTime.Value))
+                return true;
+
+            return false;
+        }
+
+        bool IsWithinSQLDateTimeRange(DateTime dateTime)
+        {
+            DateTimeRange dateTimeRange = GetSQLDateTimeRange();
+            if (dateTime < dateTimeRange.From || dateTime > dateTimeRange.To)
+                return false;
+
+            return true;
+        }
+
         protected int GetSQLQueryMaxParameterNumber()
         {
             return 2000; //Exactly 2100

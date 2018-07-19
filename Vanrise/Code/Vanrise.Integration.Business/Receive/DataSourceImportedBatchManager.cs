@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
@@ -34,19 +33,11 @@ namespace Vanrise.Integration.Business
             HashSet<long> queueItemIds = new HashSet<long>();
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
-                if(batch.QueueItemIds.Contains(','))
-                {
-                    string [] qIds = batch.QueueItemIds.Split(',');
-                    foreach (string qId in qIds)
-                    {
-                        queueItemIds.Add(long.Parse(qId));
-                    }
-                }
-                else
-                {
-                    if(!string.IsNullOrEmpty(batch.QueueItemIds))
-                        queueItemIds.Add(long.Parse(batch.QueueItemIds)); 
-                }
+                if (string.IsNullOrEmpty(batch.QueueItemIds))
+                    continue;
+
+                string[] qIds = batch.QueueItemIds.Split(',');
+                queueItemIds.UnionWith(qIds.Select(itm => long.Parse(itm)));
             }
 
             QueueingManager qManager = new QueueingManager();
@@ -54,28 +45,15 @@ namespace Vanrise.Integration.Business
 
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
-                if (batch.QueueItemIds.Contains(','))
+                if (string.IsNullOrEmpty(batch.QueueItemIds))
                 {
-                    string[] qIds = batch.QueueItemIds.Split(',');
-                    List<ItemExecutionFlowInfo> list = new List<ItemExecutionFlowInfo>();
-                    
-                    foreach (string qId in qIds)
-                    {
-                        long singleQueueItemId = long.Parse(qId);
-                        ItemExecutionFlowInfo itemExecutionFlowInfo;
-                        if (dicItemExecutionStatus.TryGetValue(singleQueueItemId, out itemExecutionFlowInfo))
-                            list.Add(itemExecutionFlowInfo);
-                    }
-                    
-                    batch.ExecutionStatus = qManager.GetExecutionFlowStatus(list);
+                    batch.ExecutionStatus = ItemExecutionFlowStatus.NoBacthes;
+                    continue;
                 }
-                else
-                {
-                    if (string.IsNullOrEmpty(batch.QueueItemIds))
-                        batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
-                    else
-                        batch.ExecutionStatus = dicItemExecutionStatus[long.Parse(batch.QueueItemIds)].Status;
-                }
+
+                string[] qIds = batch.QueueItemIds.Split(',');
+                List<ItemExecutionFlowInfo> list = qIds.Select(itm => dicItemExecutionStatus.GetRecord(long.Parse(itm))).ToList();
+                batch.ExecutionStatus = list.Count > 1 ? qManager.GetExecutionFlowStatus(list) : list.First().Status;
             }
 
             ResultProcessingHandler<DataSourceImportedBatch> handler = new ResultProcessingHandler<DataSourceImportedBatch>()

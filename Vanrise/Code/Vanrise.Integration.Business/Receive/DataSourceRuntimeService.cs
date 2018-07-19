@@ -132,39 +132,49 @@ namespace Vanrise.Integration.Business
                 importedBatchEntry.Result = outputResult.Result;
                 importedBatchEntry.MapperMessage = outputResult.Message;
 
-                List<long> queueItemsIds = new List<long>();
-                int totalRecordsCount = 0;
-
-                if (outputItems != null && outputItems.Count > 0)
+                if (outputResult.Result != MappingResult.Invalid)
                 {
-                    foreach (var outputItem in outputItems)
+                    List<long> queueItemsIds = new List<long>();
+                    int totalRecordsCount = 0;
+
+                    if (outputItems != null && outputItems.Count > 0)
                     {
-                        try
+                        foreach (var outputItem in outputItems)
                         {
-                            outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
-                            outputItem.Item.BatchDescription = data.Description;
-                            logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
+                            try
+                            {
+                                int currentBatchItemsCount = outputItem.Item.GetRecordCount();
+                                if (currentBatchItemsCount == 0)
+                                    continue;
 
-                            long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
-                            logger.WriteInformation("Enqueued the item successfully");
+                                outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
+                                outputItem.Item.BatchDescription = data.Description;
+                                logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
 
-                            queueItemsIds.Add(queueItemId);
-                            totalRecordsCount += outputItem.Item.GetRecordCount();
-                        }
-                        catch (Exception ex)
-                        {
-                            logger.WriteError("An error occurred while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
-                            throw;
+                                long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                                logger.WriteInformation("Enqueued the item successfully");
+
+                                queueItemsIds.Add(queueItemId);
+                                totalRecordsCount += currentBatchItemsCount;
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.WriteError("An error occurred while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
+                                throw;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
-                }
+                    else
+                    {
+                        logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
+                    }
 
-                importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
-                importedBatchEntry.RecordsCount = totalRecordsCount;
+                    if (totalRecordsCount == 0)
+                        importedBatchEntry.Result = MappingResult.Empty;
+
+                    importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
+                    importedBatchEntry.RecordsCount = totalRecordsCount;
+                }
 
                 long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
                 logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);

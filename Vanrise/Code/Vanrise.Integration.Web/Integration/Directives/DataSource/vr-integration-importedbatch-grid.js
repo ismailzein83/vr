@@ -42,7 +42,8 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceImported
 
                 drillDownDefinition.loadDirective = function (directiveAPI, dataItem) {
                     dataItem.queueItemHeaderAPI = directiveAPI;
-                    var query = dataItem.QueueItemIds.split(',').map(Number);
+                    var query = dataItem.QueueItemIds != undefined ? dataItem.QueueItemIds.split(',').map(Number) : undefined;
+                    if (query != undefined)
                         return dataItem.queueItemHeaderAPI.loadGrid(query);
                 };
                 drillDownDefinitions.push(drillDownDefinition);

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Data;
-using Vanrise.Caching;
-using Vanrise.Entities;
-using Vanrise.GenericData.Entities;
 using System.Reflection;
+using Vanrise.Common.Data;
+using Vanrise.Entities;
+
 namespace Vanrise.Common.Business
 {
     public class UtilityManager
@@ -16,6 +13,12 @@ namespace Vanrise.Common.Business
         {
             IUtilityDataManager dataManager = CommonDataManagerFactory.GetDataManager<IUtilityDataManager>();
             return dataManager.GetDateTimeRange();
+        }
+
+        public bool CheckIfDefaultOrInvalid(DateTime? dateTime)
+        {
+            IUtilityDataManager dataManager = CommonDataManagerFactory.GetDataManager<IUtilityDataManager>();
+            return dataManager.CheckIfDefaultOrInvalid(dateTime);
         }
 
         public static void GenerateDocumentationForEnums(IEnumerable<Assembly> assemblies)
@@ -62,6 +65,5 @@ namespace Vanrise.Common.Business
             }
             return result;
         }
-
     }
 }

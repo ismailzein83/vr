@@ -75,6 +75,9 @@
                 case VR_Integration_ExecutionStatusEnum.Processed.value:
                     color = LabelColorsEnum.Processed.color;
                     break;
+                case VR_Integration_ExecutionStatusEnum.NoBatches.value:
+                    color = LabelColorsEnum.Default.color;
+                    break;
             }
 
             return color;

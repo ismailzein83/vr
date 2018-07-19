@@ -10,5 +10,7 @@ namespace Vanrise.Common.Data
     public interface IUtilityDataManager : IDataManager
     {
         DateTimeRange GetDateTimeRange();
+
+        bool CheckIfDefaultOrInvalid(DateTime? dateTime);
     }
 }

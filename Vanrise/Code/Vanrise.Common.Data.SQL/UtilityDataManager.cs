@@ -15,5 +15,10 @@ namespace Vanrise.Common.Data.SQL
         {
             return base.GetSQLDateTimeRange();
         }
+
+        public bool CheckIfDefaultOrInvalid(DateTime? dateTime)
+        {
+            return base.CheckIfDefaultOrInvalid(dateTime);
+        }
     }
 }

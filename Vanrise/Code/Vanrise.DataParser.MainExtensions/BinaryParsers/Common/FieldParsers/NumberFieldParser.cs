@@ -12,6 +12,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
         public bool Reverse { get; set; }
         public int? FieldIndex { get; set; }
         public int? FieldBytesLength { get; set; }
+        public bool ConvertOutputToString { get; set; }
 
         public override void Execute(IBinaryFieldParserContext context)
         {
@@ -32,10 +33,18 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
                     //context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToDecimal(ParserHelper.ByteArrayToString(context.FieldValue)));
                     break;
                 case NumberType.Int:
-                    context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToInt32(ParserHelper.ByteArrayToString(input, this.Reverse)));
+                    int resultAsInt = ParserHelper.HexToInt32(ParserHelper.ByteArrayToString(input, this.Reverse));
+                    if (!ConvertOutputToString)
+                        context.Record.SetFieldValue(this.FieldName, resultAsInt);
+                    else
+                        context.Record.SetFieldValue(this.FieldName, resultAsInt.ToString());
                     break;
                 case NumberType.BigInt:
-                    context.Record.SetFieldValue(this.FieldName, ParserHelper.HexToInt64(ParserHelper.ByteArrayToString(input, this.Reverse)));
+                    long resultAsLong = ParserHelper.HexToInt64(ParserHelper.ByteArrayToString(input, this.Reverse));
+                    if (!ConvertOutputToString)
+                        context.Record.SetFieldValue(this.FieldName, resultAsLong);
+                    else
+                        context.Record.SetFieldValue(this.FieldName, resultAsLong.ToString());
                     break;
             }
         }
