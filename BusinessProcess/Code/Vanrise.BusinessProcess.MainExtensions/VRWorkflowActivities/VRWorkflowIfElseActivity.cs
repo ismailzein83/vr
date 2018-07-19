@@ -15,7 +15,17 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             get { return new Guid("40B7E3E9-F8E0-4C2C-9ED7-F79CC4A68473"); }
         }
 
-        public string Condition { get; set; }
+		public override string Editor
+		{
+			get { return "vr-workflow-ifelse"; }
+		}
+
+		public override string Title
+		{
+			get { return "IfElse"; }
+		}
+
+		public string Condition { get; set; }
 
         public VRWorkflowActivity TrueActivity { get; set; }
 

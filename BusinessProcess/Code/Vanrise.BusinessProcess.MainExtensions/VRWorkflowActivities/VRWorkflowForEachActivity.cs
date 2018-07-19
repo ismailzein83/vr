@@ -15,7 +15,17 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             get { return new Guid("BA3A107D-20DA-4456-AC70-A2948DFE3725"); }
         }
 
-        public string List { get; set; }
+		public override string Editor
+		{
+			get { return "vr-workflow-foreach"; }
+		}
+
+		public override string Title
+		{
+			get { return "ForEach"; }
+		}
+
+		public string List { get; set; }
 
         public string IterationVariableName { get; set; }
 

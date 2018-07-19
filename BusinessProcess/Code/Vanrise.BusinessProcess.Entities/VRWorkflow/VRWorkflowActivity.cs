@@ -3,42 +3,46 @@ using System.Collections.Generic;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class VRWorkflowActivity
-    {
-        public Guid VRWorkflowActivityId { get; set; }
+	public class VRWorkflowActivity
+	{
+		public Guid VRWorkflowActivityId { get; set; }
 
-        public VRWorkflowActivitySettings Settings { get; set; }
-    }
+		public VRWorkflowActivitySettings Settings { get; set; }
+	}
 
-    public class VRWorkflowActivityCollection : List<VRWorkflowActivity>
-    {
-    }
+	public class VRWorkflowActivityCollection : List<VRWorkflowActivity>
+	{
+	}
 
-    public abstract class VRWorkflowActivitySettings
-    {
-        public abstract Guid ConfigId { get; }
+	public abstract class VRWorkflowActivitySettings
+	{
+		public abstract Guid ConfigId { get; }
 
-        public abstract string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context);
-    }
+		public abstract string Editor { get; }
 
-    public interface IVRWorkflowActivityGenerateWFActivityCodeContext
-    {
-        void AddVariables(VRWorkflowVariableCollection variables);
+		public abstract string Title { get; }
 
-        void AddVariable(VRWorkflowVariable variable);
+		public abstract string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context);
+	}
 
-        VRWorkflowVariable GetVariableWithValidate(string variableName);
+	public interface IVRWorkflowActivityGenerateWFActivityCodeContext
+	{
+		void AddVariables(VRWorkflowVariableCollection variables);
 
-        IEnumerable<VRWorkflowVariable> GetAllVariables();
-        
-        IEnumerable<VRWorkflowArgument> GetAllWorkflowArguments();
+		void AddVariable(VRWorkflowVariable variable);
 
-        string GenerateUniqueNamespace(string nmSpace);
+		VRWorkflowVariable GetVariableWithValidate(string variableName);
 
-        void AddFullNamespaceCode(string namespaceCode);
+		IEnumerable<VRWorkflowVariable> GetAllVariables();
 
-        void AddUsingStatement(string usingStatement);
+		IEnumerable<VRWorkflowArgument> GetAllWorkflowArguments();
 
-        IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext();
-    }
+		string GenerateUniqueNamespace(string nmSpace);
+
+		void AddFullNamespaceCode(string namespaceCode);
+
+		void AddUsingStatement(string usingStatement);
+
+		IVRWorkflowActivityGenerateWFActivityCodeContext CreateChildContext();
+	}
 }

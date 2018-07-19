@@ -11,11 +11,21 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     public class VRWorkflowCustomLogicActivity : VRWorkflowActivitySettings
     {
         public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
+		{
+            get { return new Guid("F8D16729-620A-4780-80DD-2C37F1ED6A3C"); }
+		}
 
-        public string Code { get; set; }
+		public override string Editor
+		{
+			get { return "businessprocess-vr-workflow-customcode"; }
+		}
+
+		public override string Title
+		{
+			get { return "Custom Code"; }
+		}
+
+		public string Code { get; set; }
 
         public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
