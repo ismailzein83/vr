@@ -19,6 +19,11 @@ namespace Vanrise.GenericData.Entities
         public bool DontReflectToDB { get; set; }
         public bool DenyAPICall { get; set; }
         public RequiredPermissionSettings RequiredPermission { get; set; }
-
+        public List<DataRecordStorageFieldsPermission> FieldsPermissions { get; set; }
+    }
+    public class DataRecordStorageFieldsPermission
+    {
+        public List<string> FieldNames { get; set; }
+        public RequiredPermissionSettings RequiredPermission { get; set; }
     }
 }
