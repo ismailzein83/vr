@@ -177,6 +177,7 @@
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
     <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
+    <Content Include="WhS_Deal\Constant\SubstituteRateTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />
     <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-dealdefinition-selector.js" />
     <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-swapdeal-selector.js" />
@@ -224,6 +225,7 @@
     <Content Include="WhS_Deal\Directives\QueueActivators\Templates\QueueActivatorEvaluateSMSDealTemplate.html" />
     <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatedeal.js" />
     <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatesmsdeal.js" />
+    <Content Include="WhS_Deal\Directives\SubstituteRateType\vr-whs-deal-substituteratetype-selector.js" />
     <Content Include="WhS_Deal\Directives\ScheduleTask\Templates\DealEvaluatorTaskTemplate.html" />
     <Content Include="WhS_Deal\Directives\ScheduleTask\vr-whs-deal-dealevaluator-task.js" />
     <Content Include="WhS_Deal\Directives\Settings\DealSettings\Templates\DealTechnicalSettingsEditorTemplate.html" />

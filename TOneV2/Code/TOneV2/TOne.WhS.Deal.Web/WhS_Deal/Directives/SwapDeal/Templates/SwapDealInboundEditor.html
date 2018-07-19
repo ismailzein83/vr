@@ -17,10 +17,16 @@
             </vr-row>
             <vr-row>
                 <vr-columns width="1/4row">
-                    <vr-textbox label="Default Rate({{scopeModel.currency}})" value="scopeModel.rate" type="number" isrequired="true" minvalue="0"></vr-textbox>
+                    <vr-textbox label="Default Rate({{scopeModel.currency}})" value="scopeModel.rate" type="number" isrequired="true" minvalue="0" decimalprecision="{{::longPrecision}}"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/4row">
-                    <vr-textbox label="Extra Volume Rate({{scopeModel.currency}})" value="scopeModel.extraVolumeRate" type="number" minvalue="0"></vr-textbox>
+                    <vr-textbox label="Extra Volume Rate({{scopeModel.currency}})" value="scopeModel.extraVolumeRate" type="number" minvalue="0" decimalprecision="{{::longPrecision}}"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/4row">
+                    <vr-whs-deal-substituteratetype-selector on-ready="onSubstituteRateTypeSelectorReady" onselectionchanged="onSubstituteRateTypeChange" isrequired="true"></vr-whs-deal-substituteratetype-selector>
+                </vr-columns>
+                <vr-columns width="1/4row" ng-if="scopeModel.substituteRateTypeValue == 0">
+                    <vr-textbox label="Fixed Rate" value="scopeModel.fixedRate" type="number" isrequired="true" minvalue="0" decimalprecision="{{::longPrecision}}"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </vr-form>

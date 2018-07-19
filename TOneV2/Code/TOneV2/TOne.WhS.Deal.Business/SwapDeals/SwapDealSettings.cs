@@ -182,7 +182,26 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context)
         {
-            throw new NotImplementedException();
+            if (Status == DealStatus.Draft)
+                return;
+
+            switch (context.DealZoneGroupPart)
+            {
+                case DealZoneGroupPart.Both:
+                    context.SaleZoneGroups = BuildSaleRoutingZoneGroups();
+                    context.SupplierZoneGroups = BuildSupplierRoutingZoneGroups();
+                    break;
+
+                case DealZoneGroupPart.Sale:
+                    context.SaleZoneGroups = BuildSaleRoutingZoneGroups();
+                    break;
+
+                case DealZoneGroupPart.Cost:
+                    context.SupplierZoneGroups = BuildSupplierRoutingZoneGroups();
+                    break;
+
+                default: throw new NotSupportedException(string.Format("DealZoneRoutingGroupPart {0} not supported.", context.DealZoneGroupPart));
+            }
         }
 
         public override List<long> GetDealSaleZoneIds()
@@ -262,6 +281,39 @@ namespace TOne.WhS.Deal.Business
         #endregion
 
         #region Private Methods
+
+        private List<DealRoutingSupplierZoneGroup> BuildSupplierRoutingZoneGroups()
+        {
+            List<DealRoutingSupplierZoneGroup> supplierZoneGroups = new List<DealRoutingSupplierZoneGroup>();
+
+            if (Outbounds == null || Outbounds.Count == 0)
+                return null;
+            foreach (SwapDealOutbound swapDealOutbound in Outbounds)
+            {
+                supplierZoneGroups.Add(new DealRoutingSupplierZoneGroup
+                {
+                    Tiers = BuildRoutingSupplierTiers(swapDealOutbound)
+                });
+            }
+            return supplierZoneGroups;
+        }
+
+        private List<DealRoutingSaleZoneGroup> BuildSaleRoutingZoneGroups()
+        {
+            List<DealRoutingSaleZoneGroup> saleZoneGroups = new List<DealRoutingSaleZoneGroup>();
+
+            if (Inbounds == null || Inbounds.Count == 0)
+                return null;
+            foreach (SwapDealInbound swapDealInbound in Inbounds)
+            {
+                saleZoneGroups.Add(new DealRoutingSaleZoneGroup
+                {
+                    Tiers = BuildRoutingSaleTiers(swapDealInbound)
+                });
+            }
+
+            return saleZoneGroups;
+        }
 
         private void ValidateSaleAndCost(IValidateBeforeSaveContext validateBeforeSaveContext, ref bool validationResult)
         {
@@ -483,6 +535,84 @@ namespace TOne.WhS.Deal.Business
                 });
 
             return dealSupplierTiers.OrderBy(itm => itm.TierNumber);
+        }
+
+        private List<DealRoutingSupplierZoneGroupTier> BuildRoutingSupplierTiers(SwapDealOutbound swapDealOutbound)
+        {
+            Decimal? substituteRate = null;
+            Decimal? substituteExtraRate = null;
+
+            switch (swapDealOutbound.SubstituteRateType)
+            {
+                case SubstituteRateType.DealRate:
+                    substituteRate = swapDealOutbound.Rate;
+                    substituteExtraRate = swapDealOutbound.ExtraVolumeRate;
+                    break;
+                case SubstituteRateType.FixedRate:
+                    substituteRate = swapDealOutbound.FixedRate;
+                    substituteExtraRate = swapDealOutbound.FixedRate;
+                    break;
+                case SubstituteRateType.NormalRate:
+                    substituteRate = null;
+                    substituteExtraRate = null;
+                    break;
+            }
+
+            DealRoutingSupplierZoneGroupTier dealRoutingSupplierZoneGroupTier = new DealRoutingSupplierZoneGroupTier
+            {
+                TierNumber = 1,
+                SubstituteRate = substituteRate
+            };
+
+            var dealSupplierTiers = new List<DealRoutingSupplierZoneGroupTier> { dealRoutingSupplierZoneGroupTier };
+
+            if (swapDealOutbound.ExtraVolumeRate.HasValue)
+                dealSupplierTiers.Add(new DealRoutingSupplierZoneGroupTier
+                {
+                    TierNumber = 2,
+                    SubstituteRate = substituteExtraRate
+                });
+
+            return dealSupplierTiers;
+        }
+
+        private List<DealRoutingSaleZoneGroupTier> BuildRoutingSaleTiers(SwapDealInbound swapDealInbound)
+        {
+            Decimal? substituteRate = null;
+            Decimal? substituteExtraRate = null;
+
+            switch (swapDealInbound.SubstituteRateType)
+            {
+                case SubstituteRateType.DealRate:
+                    substituteRate = swapDealInbound.Rate;
+                    substituteExtraRate = swapDealInbound.ExtraVolumeRate;
+                    break;
+                case SubstituteRateType.FixedRate:
+                    substituteRate = swapDealInbound.FixedRate;
+                    substituteExtraRate = swapDealInbound.FixedRate;
+                    break;
+                case SubstituteRateType.NormalRate:
+                    substituteRate = null;
+                    substituteExtraRate = null;
+                    break;
+            }
+
+            DealRoutingSaleZoneGroupTier dealRoutingSaleZoneGroupTier = new DealRoutingSaleZoneGroupTier
+            {
+                TierNumber = 1,
+                SubstituteRate = substituteRate
+            };
+
+            var dealSaleTiers = new List<DealRoutingSaleZoneGroupTier> { dealRoutingSaleZoneGroupTier };
+
+            if (swapDealInbound.ExtraVolumeRate.HasValue)
+                dealSaleTiers.Add(new DealRoutingSaleZoneGroupTier
+                {
+                    TierNumber = 2,
+                    SubstituteRate = substituteExtraRate
+                });
+
+            return dealSaleTiers;
         }
 
         private Dictionary<long, List<DealRate>> GetDealSupplierRatesByZoneId(decimal rate, List<DealSupplierZoneGroupZoneItem> zones)

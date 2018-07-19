@@ -209,11 +209,62 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context)
         {
-            throw new NotImplementedException();
+            if (Status == DealStatus.Draft && Items == null)
+                return;
+
+            switch (DealType)
+            {
+                case VolCommitmentDealType.Buy:
+                    if (context.DealZoneGroupPart == DealZoneGroupPart.Both || context.DealZoneGroupPart == DealZoneGroupPart.Cost)
+                    {
+                        List<DealRoutingSupplierZoneGroup> supplierZoneGroups = new List<DealRoutingSupplierZoneGroup>();
+                        foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
+                        {
+                            supplierZoneGroups.Add(new DealRoutingSupplierZoneGroup
+                            {
+                                Tiers = BuildRoutingSupplierTiers(volCommitmentDealItem)
+                            });
+                        }
+                        context.SupplierZoneGroups = supplierZoneGroups;
+                    }
+                    break;
+
+                case VolCommitmentDealType.Sell:
+                    if (context.DealZoneGroupPart == DealZoneGroupPart.Both || context.DealZoneGroupPart == DealZoneGroupPart.Sale)
+                    {
+                        List<DealRoutingSaleZoneGroup> saleZoneGroups = new List<DealRoutingSaleZoneGroup>();
+                        foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
+                        {
+                            saleZoneGroups.Add(new DealRoutingSaleZoneGroup
+                            {
+                                Tiers = BuildRoutingSaleTiers(volCommitmentDealItem)
+                            });
+                        }
+                        context.SaleZoneGroups = saleZoneGroups;
+                    }
+                    break;
+            }
+
         }
 
         #region Sale Methods
 
+        private List<DealRoutingSaleZoneGroupTier> BuildRoutingSaleTiers(VolCommitmentDealItem item)
+        {
+            var dealSaleTiers = new List<DealRoutingSaleZoneGroupTier> { };
+
+            for (int i = 0; i < item.Tiers.Count(); i++)
+            {
+                DealRoutingSaleZoneGroupTier dealRoutingSaleZoneGroupTier = new DealRoutingSaleZoneGroupTier
+                {
+                    TierNumber = i + 1,
+                    SubstituteRate = null
+                };
+                dealSaleTiers.Add(dealRoutingSaleZoneGroupTier);
+            }
+
+            return dealSaleTiers;
+        }
         private List<DealSaleZoneGroupZoneItem> BuildSaleZones(IEnumerable<long> zoneIds, DateTime? dealEED)
         {
             if (zoneIds == null || !zoneIds.Any())
@@ -373,6 +424,21 @@ namespace TOne.WhS.Deal.Business
 
         #region Supplier Methods
 
+        private List<DealRoutingSupplierZoneGroupTier> BuildRoutingSupplierTiers(VolCommitmentDealItem item)
+        {
+            var dealSupplierTiers = new List<DealRoutingSupplierZoneGroupTier> { };
+
+            for (int i = 0; i < item.Tiers.Count(); i++)
+            {
+                DealRoutingSupplierZoneGroupTier dealRoutingSupplierZoneGroupTier = new DealRoutingSupplierZoneGroupTier
+                {
+                    TierNumber = i + 1,
+                    SubstituteRate = null
+                };
+                dealSupplierTiers.Add(dealRoutingSupplierZoneGroupTier);
+            }
+            return dealSupplierTiers;
+        }
         private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<DealSupplierZoneGroupZoneItem> supplierZones, DateTime? dealEED)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)

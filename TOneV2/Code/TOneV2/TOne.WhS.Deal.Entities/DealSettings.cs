@@ -76,6 +76,15 @@ namespace TOne.WhS.Deal.Entities
         List<DealRoutingSupplierZoneGroup> SupplierZoneGroups { set; }
     }
 
+    public class DealGetRoutingZoneGroupsContext : IDealGetRoutingZoneGroupsContext
+    {
+        public int DealId { get; set; }
+        public DealZoneGroupPart DealZoneGroupPart { get; set; }
+        public List<DealRoutingSaleZoneGroup> SaleZoneGroups { get; set; }
+        public List<DealRoutingSupplierZoneGroup> SupplierZoneGroups { get; set; }
+
+    }
+
     public class DealRoutingSaleZoneGroup
     {
         public List<DealRoutingSaleZoneGroupTier> Tiers { get; set; } 

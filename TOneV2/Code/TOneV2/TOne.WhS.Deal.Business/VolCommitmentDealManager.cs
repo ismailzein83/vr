@@ -66,7 +66,7 @@ namespace TOne.WhS.Deal.Business
             return VolCommitmentDealLoggableEntity.Instance;
         }
 
-        protected IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
+        public IEnumerable<DealDefinition> GetCachedVolCommitmentDeals()
         {
             return GetCachedDealsByConfigId().GetRecord(VolCommitmentDealSettings.VolCommitmentDealSettingsConfigId); ;
         }

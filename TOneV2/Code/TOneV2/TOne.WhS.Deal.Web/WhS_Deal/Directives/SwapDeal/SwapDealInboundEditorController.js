@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService','UISettingsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function SwapDealInboundEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealInboundEditorController($scope, UtilsService, UISettingsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
         var context;
         var swapDealInboundEntity;
@@ -12,6 +12,9 @@
 
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var substituteRateTypeApi;
+        var substituteRateTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -38,6 +41,8 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.longPrecision = UISettingsService.getLongPrecision();
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDealInbound() : insertSwapDealInbound();
@@ -84,6 +89,16 @@
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             };
+
+            $scope.onSubstituteRateTypeSelectorReady = function (api) {
+                substituteRateTypeApi = api;
+                substituteRateTypeReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onSubstituteRateTypeChange = function (val) {
+                if (val != undefined)
+                    $scope.scopeModel.substituteRateTypeValue = val.value;
+            };
         }
 
         function load() {
@@ -97,12 +112,23 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection, loadSubstituteRateTypeSelector]).then(function () {
                 swapDealInboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+            });
+        }
+
+        function loadSubstituteRateTypeSelector() {
+            var loadSubstituteRateTypePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            substituteRateTypeReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SubstituteRateType : undefined
+                }
+                VRUIUtilsService.callDirectiveLoad(substituteRateTypeApi, payload, loadSubstituteRateTypePromiseDeferred);
             });
         }
 
@@ -185,6 +211,7 @@
             $scope.scopeModel.volume = swapDealInboundEntity.Volume;
             $scope.scopeModel.rate = swapDealInboundEntity.Rate;
             $scope.scopeModel.extraVolumeRate = swapDealInboundEntity.ExtraVolumeRate;
+            $scope.scopeModel.fixedRate = swapDealInboundEntity.FixedRate;
         }
 
         function insertSwapDealInbound() {
@@ -219,7 +246,9 @@
                 Volume: $scope.scopeModel.volume,
                 Rate: $scope.scopeModel.rate,
                 ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
-                CountryId: countryDirectiveApi.getSelectedIds()
+                CountryId: countryDirectiveApi.getSelectedIds(),
+                SubstituteRateType: substituteRateTypeApi.getSelectedIds(),
+                FixedRate: $scope.scopeModel.fixedRate != undefined ? $scope.scopeModel.fixedRate : undefined
             };
             return obj;
         }

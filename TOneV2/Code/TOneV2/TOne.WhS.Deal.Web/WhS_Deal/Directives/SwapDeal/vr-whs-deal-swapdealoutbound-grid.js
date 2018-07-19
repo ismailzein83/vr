@@ -85,7 +85,9 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                                 ExtraVolumeRate: currentItem.ExtraVolumeRate,
                                 SupplierZones: currentItem.SupplierZones,
                                 CountryId: currentItem.CountryId,
-                                ZoneGroupNumber: currentItem.ZoneGroupNumber
+                                ZoneGroupNumber: currentItem.ZoneGroupNumber,
+                                SubstituteRateType: currentItem.SubstituteRateType,
+                                FixedRate : currentItem.FixedRate
                             });
                         }
                     }

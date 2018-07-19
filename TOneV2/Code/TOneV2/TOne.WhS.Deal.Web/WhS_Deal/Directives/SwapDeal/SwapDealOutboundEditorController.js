@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealOutboundEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealOutboundEditorController.$inject = ['$scope', 'UtilsService','UISettingsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function SwapDealOutboundEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealOutboundEditorController($scope, UtilsService, UISettingsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
         var swapDealOutboundEntity;
@@ -15,6 +15,9 @@
 
         var supplierZoneDirectiveAPI;
         var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var substituteRateTypeApi;
+        var substituteRateTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountId;
 
@@ -39,12 +42,14 @@
                 dealId = parameters.dealId;
             }
 
-
             isEditMode = (swapDealOutboundEntity != undefined);
         }
 
         function defineScope() {
+
             $scope.scopeModel = {};
+
+            $scope.longPrecision = UISettingsService.getLongPrecision();
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDealOutbound() : insertSwapDealOutbound();
@@ -66,6 +71,16 @@
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onSubstituteRateTypeSelectorReady = function (api) {
+                substituteRateTypeApi = api;
+                substituteRateTypeReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onSubstituteRateTypeChange = function (val) {
+                if (val != undefined)
+                    $scope.scopeModel.substituteRateTypeValue = val.value;
             };
 
             $scope.onCountrySelectionChanged = function () {
@@ -114,12 +129,23 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection, loadSubstituteRateTypeSelector]).then(function () {
                 swapDealOutboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
+            });
+        }
+
+        function loadSubstituteRateTypeSelector() {
+            var loadSubstituteRateTypePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            substituteRateTypeReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SubstituteRateType : undefined
+                }
+                VRUIUtilsService.callDirectiveLoad(substituteRateTypeApi, payload, loadSubstituteRateTypePromiseDeferred);
             });
         }
 
@@ -195,6 +221,7 @@
             $scope.scopeModel.volume = swapDealOutboundEntity.Volume;
             $scope.scopeModel.rate = swapDealOutboundEntity.Rate;
             $scope.scopeModel.extraVolumeRate = swapDealOutboundEntity.ExtraVolumeRate;
+            $scope.scopeModel.fixedRate = swapDealOutboundEntity.FixedRate;
         }
 
         function insertSwapDealOutbound() {
@@ -228,8 +255,9 @@
                 Volume: $scope.scopeModel.volume,
                 ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
                 Rate: $scope.scopeModel.rate,
-                CountryId: countryDirectiveApi.getSelectedIds()
-
+                CountryId: countryDirectiveApi.getSelectedIds(),
+                SubstituteRateType: substituteRateTypeApi.getSelectedIds(),
+                FixedRate: $scope.scopeModel.fixedRate != undefined ? $scope.scopeModel.fixedRate : undefined
             };
             return obj;
         }
