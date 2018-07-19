@@ -67,21 +67,40 @@ namespace TOne.WhS.Invoice.Business
                 ResultTooltipDescription = resultTooltipDescription
             };
         }
-        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId)
+        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId,InvoiceCarrierType invoiceCarrierType)
         {
 
             Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
             var invoice = invoiceManager.GetInvoiceDetail(invoiceId);
             invoice.ThrowIfNull("invoice", invoiceId);
-            var supplierInvoiceDetails = (SupplierInvoiceDetails)invoice.Entity.Details;         
-            supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
             string timezone = "";
-            if(supplierInvoiceDetails.TimeZoneId != null)
+            string currency = "";
+            switch (invoiceCarrierType)
             {
-                Vanrise.Entities.VRTimeZone timeZone = new Vanrise.Common.Business.VRTimeZoneManager().GetVRTimeZone((int)supplierInvoiceDetails.TimeZoneId);
-                timezone = timeZone.Name;
+                case InvoiceCarrierType.Customer:
+                    var customerInvoiceDetails = (CustomerInvoiceDetails)invoice.Entity.Details;
+                    customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
+                    currency = invoice.Entity.Details.CustomerCurrency;
+                    if (customerInvoiceDetails.TimeZoneId != null)
+                    {
+                        Vanrise.Entities.VRTimeZone timeZone = new Vanrise.Common.Business.VRTimeZoneManager().GetVRTimeZone((int)customerInvoiceDetails.TimeZoneId);
+                        timezone = timeZone.Name;
+                    }
+                    break;
+                case InvoiceCarrierType.Supplier:
+                    var supplierInvoiceDetails = (SupplierInvoiceDetails)invoice.Entity.Details;
+                    supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+                    currency = invoice.Entity.Details.SupplierCurrency;
+                    if (supplierInvoiceDetails.TimeZoneId != null)
+                    {
+                        Vanrise.Entities.VRTimeZone timeZone = new Vanrise.Common.Business.VRTimeZoneManager().GetVRTimeZone((int)supplierInvoiceDetails.TimeZoneId);
+                        timezone = timeZone.Name;
+                    }
+                    break;
+
             }
           
+
             return new ComparisonInvoiceDetail()
             {
                 To = invoice.PartnerName,
@@ -97,7 +116,7 @@ namespace TOne.WhS.Invoice.Business
                 IsPaid = invoice.Paid,
                 IssuedBy = invoice.UserName,
                 PartnerId = invoice.Entity.PartnerId,
-                Currency = invoice.Entity.Details.SupplierCurrency,
+                Currency = currency,
                 TimeZone = timezone
             };
         }

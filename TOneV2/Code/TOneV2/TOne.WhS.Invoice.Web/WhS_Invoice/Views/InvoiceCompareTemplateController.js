@@ -7,6 +7,7 @@
     function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService, WhS_Invoice_InvoiceCompareTemplateAPIService) {
 
         var invoiceAccountEntity;
+        var invoiceCarrierType;
         var invoiceId;
         var invoiceTypeId;
         var invoiceActionId;
@@ -31,6 +32,7 @@
                 invoiceId = parameters.invoiceId;
                 invoiceTypeId = parameters.invoiceTypeId;
                 invoiceActionId = parameters.invoiceActionId;
+                invoiceCarrierType = parameters.invoiceCarrierType;
             }
         }
 
@@ -138,7 +140,7 @@
            
             UtilsService.waitMultipleAsyncOperations([getInvoice, getInvoiceAction]).then(function () {
                 $scope.scopeModel.showGrid = true;
-                WhS_Invoice_InvoiceCompareTemplateAPIService.GetInvoiceCompareTemplate(invoiceTypeId, partnerId).then(function (response) {
+                WhS_Invoice_InvoiceCompareTemplateAPIService.GetInvoiceCompareTemplate(invoiceTypeId, partnerId,invoiceCarrierType).then(function (response) {
                     invoiceCompareTemplateEntity = response;
                    
                     loadAllControls();
@@ -149,7 +151,7 @@
 
         function getInvoice()
         {
-            return WhS_Invoice_InvoiceAPIService.GetInvoiceDetails(invoiceId).then(function (response) {
+            return WhS_Invoice_InvoiceAPIService.GetInvoiceDetails(invoiceId,invoiceCarrierType).then(function (response) {
                 invoiceEntity = response;
                 if (invoiceEntity != undefined) {                    
                         partnerId = invoiceEntity.PartnerId;
@@ -174,6 +176,7 @@
             });
         }
         function getInvoiceAction() {
+           
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceAction(invoiceTypeId, invoiceActionId).then(function (response) {
                 invoiceActionEntity = response;
                 if (invoiceActionEntity != undefined && invoiceActionEntity.Settings != undefined)

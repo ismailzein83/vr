@@ -10,10 +10,12 @@
         function SaveInvoiceCompareTemplate(invoiceComparisonTemplate) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "SaveInvoiceCompareTemplate"), invoiceComparisonTemplate);
         }
-        function GetInvoiceCompareTemplate(invoiceTypeId, partnerId) {
+        function GetInvoiceCompareTemplate(invoiceTypeId, partnerId, invoiceCarrierType) {
+         
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceCompareTemplate"), {
                 invoiceTypeId: invoiceTypeId,
-                partnerId: partnerId
+                partnerId: partnerId,
+                invoiceCarrierType:invoiceCarrierType
             });
         }
      

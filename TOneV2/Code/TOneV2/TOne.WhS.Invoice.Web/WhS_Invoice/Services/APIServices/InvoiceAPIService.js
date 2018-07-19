@@ -19,9 +19,10 @@
                 invoiceCarrierType:invoiceCarrierType
             });
         }
-        function GetInvoiceDetails(invoiceId) {
+        function GetInvoiceDetails(invoiceId,invoiceCarrierType) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, 'GetInvoiceDetails'), {
-                invoiceId: invoiceId
+                invoiceId: invoiceId,
+                invoiceCarrierType:invoiceCarrierType
             });
         }
         return ({

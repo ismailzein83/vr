@@ -26,7 +26,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal AmountAfterCommission { get; set; }
         public decimal OriginalAmountAfterCommission { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
-
+        public string CustomerCurrency { get; set; }
         public Decimal TotalAmountAfterCommission { get; set; }
         public Decimal TotalOriginalAmountAfterCommission { get; set; }
         public CommissionType? CommissionType { get; set; }

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_Invoice_InvoiceTypeEnum",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_Invoice_InvoiceTypeEnum) {
 
         var directiveDefinitionObject = {
 
@@ -27,6 +27,8 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
 
         function CompareInvoiceAction($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var invoiceCarrierTypeDirectiveAPI;
+            var invoiceCarrierSelectorReadyPromiseDeffered = UtilsService.createPromiseDeferred();
             var itemGroupingSelectedReadyPromiseDeferred;
             var context;
             function initializeController() {
@@ -35,6 +37,12 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
 
                 $scope.scopeModel.dimensionsItemGroupings = [];
                 $scope.scopeModel.measuresItemGroupings = [];
+                $scope.scopeModel.invoiceCarrierType = UtilsService.getArrayEnum(WhS_Invoice_InvoiceTypeEnum);
+                $scope.scopeModel.onInvoiceCarrierTypeDirectiveReady = function (api) {
+                    invoiceCarrierTypeDirectiveAPI = api;
+                    invoiceCarrierSelectorReadyPromiseDeffered.resolve();
+                }
+
 
                 $scope.scopeModel.onItemGroupingSelectionChanged = function (selectedGroupItem) {
                     if (context != undefined && selectedGroupItem != undefined) {
@@ -62,6 +70,8 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                         {
                             $scope.scopeModel.itemGroupings = context.getItemGroupingsInfo();
                         }
+                        if (payload.invoiceActionEntity != undefined && payload.invoiceActionEntity.InvoiceCarrierType != undefined)
+                            $scope.scopeModel.selectedValue = UtilsService.getItemByVal($scope.scopeModel.invoiceCarrierType, payload.invoiceActionEntity.InvoiceCarrierType, "value");
                     }
                     var promises = [];
 
@@ -115,7 +125,8 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                         AmountMeasureId: $scope.scopeModel.selectedAmountMeasure.MeasureItemFieldId,
                         DurationMeasureId: $scope.scopeModel.selectedDurationMeasure.MeasureItemFieldId,
                         RateMeasureId: $scope.scopeModel.selectedRateMeasure.MeasureItemFieldId,
-                        ItemGroupingId: $scope.scopeModel.selectedItemGrouping.ItemGroupingId
+                        ItemGroupingId: $scope.scopeModel.selectedItemGrouping.ItemGroupingId,
+                        InvoiceCarrierType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined
                     };
                 };
 

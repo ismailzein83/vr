@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Invoice.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
 
@@ -24,7 +25,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public Guid CurrencyDimensionId { get; set; }
         public Guid RateDimensionId { get; set; }
         public Guid RateTypeDimensionId { get; set; }
-
+        public InvoiceCarrierType InvoiceCarrierType { get; set; }
 
         public Guid RateMeasureId { get; set; }
         public Guid NumberOfCallsMeasureId { get; set; }

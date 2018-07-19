@@ -24,7 +24,7 @@ namespace TOne.WhS.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("GetInvoiceCompareTemplate")]
-        public InvoiceComparisonTemplate GetInvoiceCompareTemplate(Guid invoiceTypeId, string partnerId)
+        public InvoiceComparisonTemplate GetInvoiceCompareTemplate(Guid invoiceTypeId, string partnerId,InvoiceCarrierType invoiceCarrierType)
         {
             InvoiceComparisonTemplateManager manager = new InvoiceComparisonTemplateManager();
             return manager.GetInvoiceCompareTemplate(invoiceTypeId, partnerId);

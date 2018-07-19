@@ -58,10 +58,10 @@ namespace TOne.WhS.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("GetInvoiceDetails")]
-        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId)
+        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId,InvoiceCarrierType invoiceCarrierType)
         {
             InvoiceManager manager = new InvoiceManager();
-            return manager.GetInvoiceDetails(invoiceId);
+            return manager.GetInvoiceDetails(invoiceId, invoiceCarrierType);
         }
         
     }

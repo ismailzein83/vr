@@ -20,7 +20,7 @@ namespace TOne.WhS.Invoice.Business
       public InvoiceComparisonTemplate GetInvoiceCompareTemplate(Guid invoiceTypeId, string partnerId)
       {
           var invoiceComparisonTemplates = this.GetCachedInvoiceComparisonTemplates();
-          return invoiceComparisonTemplates.Values.FindRecord(x => x.InvoiceTypeId == invoiceTypeId && x.PartnerId == partnerId);
+          return invoiceComparisonTemplates.Values.FindRecord(x => x.InvoiceTypeId == invoiceTypeId && x.PartnerId == partnerId );
       }
       
       #endregion
