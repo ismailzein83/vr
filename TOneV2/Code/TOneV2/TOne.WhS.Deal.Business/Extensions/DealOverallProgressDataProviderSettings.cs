@@ -20,6 +20,12 @@ namespace TOne.WhS.Deal.Business
             get { return false; }
         }
 
+        private enum PropertyName
+        {
+            Duration,
+            Rate
+        }
+
         public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
         {
             if (!context.FromTime.HasValue)
@@ -28,13 +34,13 @@ namespace TOne.WhS.Deal.Business
             if (!context.ToTime.HasValue)
                 throw new NullReferenceException("context.ToTime");
 
-            var saleSwapDealInfoByDealId = new OverallDealnfoByDealId();
-            var costSwapDealInfoByDealId = new OverallDealnfoByDealId();
-
             var deals = new SwapDealManager().GetSwapDealsBetweenDate(context.FromTime.Value, context.ToTime.Value);
 
             if (deals == null)
                 return;
+
+            var saleDealInfos = new List<BaseDealInfo>();
+            var costDealInfos = new List<BaseDealInfo>();
 
             var minDealBED = DateTime.Now;
             foreach (var dealDefinition in deals)
@@ -43,36 +49,33 @@ namespace TOne.WhS.Deal.Business
                 swapDealSetting.ThrowIfNull("dealDefinition.Settings", dealDefinition.DealId);
 
                 int dealId = dealDefinition.DealId;
-                DateTime BeginDate = swapDealSetting.BeginDate;
-                DateTime? EndDate = swapDealSetting.EndDate;
+                DateTime dealBED = swapDealSetting.BeginDate;
+                DateTime? dealEED = swapDealSetting.EndDate;
                 int carrierAccountId = swapDealSetting.CarrierAccountId;
 
                 int? dealDays = null;
-                if (EndDate.HasValue)
-                    dealDays = (EndDate.Value - BeginDate).Days;
-
                 int daysToEnd = 0;
-                if (EndDate.HasValue)
+
+                if (dealEED.HasValue)
                 {
-                    DateTime endDate = EndDate.Value;
+                    dealDays = (dealEED.Value - dealBED).Days;
+                    DateTime endDate = dealEED.Value;
                     daysToEnd = DateTime.Now > endDate ? 0 : (endDate - DateTime.Now).Days;
                 }
 
-                minDealBED = minDealBED > BeginDate
-                  ? BeginDate
-                  : minDealBED;
+                minDealBED = minDealBED > dealBED
+                    ? dealBED
+                    : minDealBED;
 
-                OverallDealInfoByGroupNb saleProgressByGroupNb = saleSwapDealInfoByDealId.GetOrCreateItem(dealId);
-                OverallDealInfoByGroupNb costProgressByGroupNb = costSwapDealInfoByDealId.GetOrCreateItem(dealId);
 
                 foreach (var swapDealInbound in swapDealSetting.Inbounds)
                 {
-                    OverallDealInfo saleDealInfo = new OverallDealInfo
+                    BaseDealInfo saleDealInfo = new BaseDealInfo
                     {
                         CarrierAccountId = carrierAccountId,
                         DealId = dealId,
-                        DealBED = BeginDate,
-                        DealEED = EndDate,
+                        DealBED = dealBED,
+                        DealEED = dealEED,
                         Rate = swapDealInbound.Rate,
                         DealDays = dealDays,
                         EstimatedVolume = swapDealInbound.Volume,
@@ -82,16 +85,16 @@ namespace TOne.WhS.Deal.Business
                         Status = swapDealSetting.Status,
                         RemainingDays = daysToEnd
                     };
-                    saleProgressByGroupNb.Add(swapDealInbound.ZoneGroupNumber, saleDealInfo);
+                    saleDealInfos.Add(saleDealInfo);
                 }
                 foreach (var swapDealOutbound in swapDealSetting.Outbounds)
                 {
-                    OverallDealInfo saleDealInfo = new OverallDealInfo
+                    BaseDealInfo costDealInfo = new BaseDealInfo
                     {
                         CarrierAccountId = carrierAccountId,
                         DealId = dealId,
-                        DealBED = BeginDate,
-                        DealEED = EndDate,
+                        DealBED = dealBED,
+                        DealEED = dealEED,
                         Rate = swapDealOutbound.Rate,
                         DealDays = dealDays,
                         GroupName = swapDealOutbound.Name,
@@ -101,23 +104,23 @@ namespace TOne.WhS.Deal.Business
                         Status = swapDealSetting.Status,
                         RemainingDays = daysToEnd
                     };
-                    costProgressByGroupNb.Add(swapDealOutbound.ZoneGroupNumber, saleDealInfo);
+                    costDealInfos.Add(costDealInfo);
                 }
             }
 
             AnalyticManager analyticManager = new AnalyticManager();
             AnalyticRecord analyticRecordSummary;
-
             AnalyticQuery saleAnalyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                 DimensionFields = new List<string> { "OrigSaleDealZoneGroupNb", "SaleDealZoneGroupNb", "DayAsDate", "OrigSaleDeal", "SaleDeal", "SaleDealTierNb" },
-                MeasureFields = new List<string> { "SaleDuration", "SaleRate" },
+                MeasureFields = new List<string> { "SaleDuration", "TotalSaleRateDuration" },
                 FromTime = minDealBED,
                 ToTime = context.ToTime.Value
             };
+
             List<AnalyticRecord> saleRecords = analyticManager.GetAllFilteredRecords(saleAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> saleDataRecordObjects = GetAnalyticRecords(saleRecords, saleSwapDealInfoByDealId, context.ToTime.Value, "IN");
+            IEnumerable<DataRecordObject> saleDataRecordObjects = GetBillingRecords(saleDealInfos, saleRecords, context.ToTime.Value, true);
 
             foreach (var dataRecord in saleDataRecordObjects)
             {
@@ -128,23 +131,24 @@ namespace TOne.WhS.Deal.Business
             {
                 TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                 DimensionFields = new List<string> { "OrigCostDealZoneGroupNb", "CostDealZoneGroupNb", "DayAsDate", "OrigCostDeal", "CostDeal", "CostDealTierNb" },
-                MeasureFields = new List<string> { "CostDuration", "CostRate" },
+                MeasureFields = new List<string> { "CostDuration", "TotalCostRateDuration" },
                 FromTime = minDealBED,
                 ToTime = context.ToTime.Value
             };
+
             List<AnalyticRecord> costRecords = analyticManager.GetAllFilteredRecords(costAnalyticQuery, out analyticRecordSummary);
-            IEnumerable<DataRecordObject> costDataRecordObjects = GetAnalyticRecords(costRecords, costSwapDealInfoByDealId, context.ToTime.Value, "OUT");
+            IEnumerable<DataRecordObject> costDataRecordObjects = GetBillingRecords(costDealInfos, costRecords, context.ToTime.Value, false);
 
             foreach (var dataRecord in costDataRecordObjects)
             {
                 context.OnRecordLoaded(dataRecord, DateTime.Now);
             }
         }
-
-        private IEnumerable<DataRecordObject> GetAnalyticRecords(List<AnalyticRecord> analyticRecords, OverallDealnfoByDealId swapDealInfoByDealId, DateTime toDateDate, string direction)
+        private IEnumerable<DataRecordObject> GetBillingRecords(List<BaseDealInfo> dealInfos, List<AnalyticRecord> analyticRecords, DateTime toDateDate, bool isSale)
         {
-            var trafficByDealId = new OverallDealnfoByDealId();
-            var trafficByDealIdPlus = new OverallDealnfoByDealId();
+            Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale);
+            BillingDataByDealId trafficByDealId = new BillingDataByDealId();
+            BillingDataByDealId trafficByDealIdPlus = new BillingDataByDealId();
 
             foreach (var record in analyticRecords)
             {
@@ -156,9 +160,15 @@ namespace TOne.WhS.Deal.Business
 
                 decimal saleDurationValue = 0;
                 MeasureValue saleDuration;
-                record.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
+                record.MeasureValues.TryGetValue(propertyNames[PropertyName.Duration], out saleDuration);
                 if (saleDuration != null && saleDuration.Value != null)
                     saleDurationValue = Convert.ToDecimal(saleDuration.Value ?? 0.0);
+
+                decimal rateValue = 0;
+                MeasureValue rate;
+                record.MeasureValues.TryGetValue(propertyNames[PropertyName.Rate], out rate);
+                if (rate != null && rate.Value != null)
+                    rateValue = Convert.ToDecimal(rate.Value ?? 0.0);
 
                 var day = record.DimensionValues[2];
                 DateTime dateTimeValue;
@@ -169,103 +179,123 @@ namespace TOne.WhS.Deal.Business
                     if (saleDealId != null && saleDealId.Value != null)
                     {
                         int pricedDealId = (int)saleDealId.Value;
-                        OverallDealInfoByGroupNb saleProgressByGroupNb;
-                        if (swapDealInfoByDealId.TryGetValue(pricedDealId, out saleProgressByGroupNb))
+                        int pricedGroupNb = (int)saleDealZoneGroupNb.Value;
+                        int tierNb = (int)saleDealTierNb.Value;
+                        switch (tierNb)
                         {
-                            int pricedGroupNb = (int)saleDealZoneGroupNb.Value;
-                            OverallDealInfo dealInfo = saleProgressByGroupNb.GetRecord(pricedGroupNb);
-
-                            int tierNb = (int)saleDealTierNb.Value;
-                            switch (tierNb)
-                            {
-                                case 1:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, direction, trafficByDealId, toDateDate);
-                                    break;
-                                case 2:
-                                    AddOrUpdateDealInfo(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", direction), trafficByDealIdPlus, toDateDate);
-                                    break;
-                            }
+                            case 1:
+                                AddOrUpdateBilling(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, rateValue, trafficByDealId, toDateDate);
+                                break;
+                            case 2:
+                                AddOrUpdateBilling(pricedDealId, pricedGroupNb, saleDurationValue, dateTimeValue, rateValue, trafficByDealIdPlus, toDateDate);
+                                break;
                         }
                     }
                     else
                     {
                         int origSaleDealIdValue = (int)origSaleDealId.Value;
-                        OverallDealInfoByGroupNb saleProgressByGroupNb;
-                        if (swapDealInfoByDealId.TryGetValue(origSaleDealIdValue, out saleProgressByGroupNb))
-                        {
-                            int groupNb = (int)origSaleDealZoneGroupNb.Value;
-                            OverallDealInfo dealInfo = saleProgressByGroupNb.GetRecord(groupNb);
-                            AddOrUpdateDealInfo(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, dealInfo, string.Format("{0}+", direction), trafficByDealIdPlus, toDateDate);
-                        }
+                        int groupNb = (int)origSaleDealZoneGroupNb.Value;
+                        AddOrUpdateBilling(origSaleDealIdValue, groupNb, saleDurationValue, dateTimeValue, rateValue, trafficByDealIdPlus, toDateDate);
                     }
                 }
             }
-            IEnumerable<DataRecordObject> dataRecords = trafficByDealId.Values.SelectMany(progress => progress.Values)
-                                                         .Select(DataRecordObjectMapper);
-            IEnumerable<DataRecordObject> dataRecordsPlus = trafficByDealIdPlus.Values.SelectMany(progress => progress.Values)
-                                                         .Select(DataRecordObjectMapper);
-            return dataRecords.Concat(dataRecordsPlus);
-        }
-        private void AddOrUpdateDealInfo(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, OverallDealInfo dealInfo, string direction, OverallDealnfoByDealId trafficByDealId, DateTime toDateDate)
-        {
-            OverallDealInfoByGroupNb saleTrafficByGroupNb = trafficByDealId.GetOrCreateItem(dealId);
 
-            OverallDealInfo pricedDealInfo;
-            if (!saleTrafficByGroupNb.TryGetValue(groupNb, out pricedDealInfo))
+            string direction = isSale ? "IN" : "OUT";
+            List<DataRecordObject> records = GetDataRecordObject(dealInfos, trafficByDealId, direction);
+            List<DataRecordObject> recordsPlus = GetDataRecordObjectPlusTraffic(dealInfos, trafficByDealIdPlus, string.Format("{0}+", direction));
+
+            return records.Concat(recordsPlus);
+        }
+        private List<DataRecordObject> GetDataRecordObject(List<BaseDealInfo> dealInfos, BillingDataByDealId trafficByDealId, string direction)
+        {
+            List<DataRecordObject> datarecords = new List<DataRecordObject>();
+            foreach (var deal in dealInfos)
             {
-                pricedDealInfo = new OverallDealInfo
+                BillingDataByGroupNb billingDataByGroupNb;
+                if (trafficByDealId.TryGetValue(deal.DealId, out billingDataByGroupNb))
                 {
-                    CarrierAccountId = dealInfo.CarrierAccountId,
-                    Direction = direction,
-                    EstimatedVolume = dealInfo.EstimatedVolume,
-                    GroupName = dealInfo.GroupName,
-                    DealDays = dealInfo.DealDays,
-                    DealRate = dealInfo.Rate,
-                    DealBED = dealInfo.DealBED,
-                    DealEED = dealInfo.DealEED,
-                    DealId = dealInfo.DealId,
-                    Status = dealInfo.Status,
-                    RemainingDays = dealInfo.RemainingDays
-                };
-                saleTrafficByGroupNb.Add(groupNb, pricedDealInfo);
+                    foreach (var billingData in billingDataByGroupNb.Values)
+                    {
+                        DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData);
+                        datarecords.Add(dataRecordObject);
+                    }
+                }
+                else
+                {
+                    DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, null);
+                    datarecords.Add(dataRecordObject);
+                }
             }
+            return datarecords;
+        }
+        private List<DataRecordObject> GetDataRecordObjectPlusTraffic(List<BaseDealInfo> dealInfos, BillingDataByDealId trafficByDealId, string direction)
+        {
+            List<DataRecordObject> datarecords = new List<DataRecordObject>();
+            foreach (var deal in dealInfos)
+            {
+                BillingDataByGroupNb billingDataByGroupNb;
+                if (trafficByDealId.TryGetValue(deal.DealId, out billingDataByGroupNb))
+                {
+                    foreach (var billingData in billingDataByGroupNb.Values)
+                    {
+                        DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData);
+                        datarecords.Add(dataRecordObject);
+                    }
+                }
+            }
+            return datarecords;
+        }
+        private void AddOrUpdateBilling(int dealId, int groupNb, decimal saleDurationValue, DateTime dateTimeValue, decimal rate, BillingDataByDealId billingDataByDealId, DateTime toDateDate)
+        {
+            BillingDataByGroupNb billingByGroupNb = billingDataByDealId.GetOrCreateItem(dealId);
+            BillingData billing = billingByGroupNb.GetOrCreateItem(groupNb);
+
             if (toDateDate == dateTimeValue)
-                pricedDealInfo.ToDateVolume += saleDurationValue;
+                billing.ToDateVolume += saleDurationValue;
 
-            pricedDealInfo.ReachedVolume += saleDurationValue;
-
-            pricedDealInfo.RemainingVolume = pricedDealInfo.EstimatedVolume - pricedDealInfo.ReachedVolume;
-            pricedDealInfo.RemainingVolumePrecentage = pricedDealInfo.ReachedAmount == 0
-                                                     ? 0
-                                                     : (pricedDealInfo.EstimatedVolume / pricedDealInfo.ReachedAmount) * 100;
-            pricedDealInfo.DealAmount = pricedDealInfo.EstimatedVolume * pricedDealInfo.DealRate;
-            pricedDealInfo.ReachedAmount = pricedDealInfo.ReachedAmount * pricedDealInfo.DealRate;
-            pricedDealInfo.ToDateVolume = pricedDealInfo.ToDateVolume * pricedDealInfo.DealRate;
-
-            pricedDealInfo.ExpectedDays = pricedDealInfo.ToDateVolume == 0
-                                        ? 0
-                                        : (int)(pricedDealInfo.RemainingVolume / pricedDealInfo.ToDateVolume);
+            billing.ReachedVolume += saleDurationValue;
+            billing.Rate = rate;
         }
 
-        private DataRecordObject DataRecordObjectMapper(OverallDealInfo dealInfo)
+        private DataRecordObject CreateDataRecordObject(BaseDealInfo dealInfo, string direction, BillingData billingData)
         {
+            decimal rate = 0, reachedVolume = 0, toDateVolume = 0, remainingVolume = 0;
+
+            if (billingData != null)
+            {
+                rate = billingData.Rate;
+                reachedVolume = billingData.ReachedVolume;
+                toDateVolume = billingData.ToDateVolume;
+                var remains = dealInfo.EstimatedVolume - billingData.ReachedVolume;
+                remainingVolume = remains < 0 ? 0 : remains;
+            }
+            decimal remainingVolumePrecentage = reachedVolume == 0
+                ? 0
+                : dealInfo.EstimatedVolume / reachedVolume * 100;
+
+            decimal expectedDays = toDateVolume == 0 || remainingVolume == 0
+                                    ? 0
+                                    : (int)(remainingVolume / toDateVolume);
+
+            decimal reachedAmount = reachedVolume * rate;
+
             var swapDealProgressObject = new Dictionary<string, object>
             {
                 {"CarrierAccount", dealInfo.CarrierAccountId},
-                {"TrafficType",dealInfo.Direction},
-                {"Deal",dealInfo.DealId},
+                {"TrafficType", direction},
+                {"Deal", dealInfo.DealId},
                 {"GroupName", dealInfo.GroupName},
                 {"EstimatedVolume", dealInfo.EstimatedVolume},
-                {"ReachedVolume", dealInfo.ReachedVolume},
-                {"ToDateVolume", dealInfo.ToDateVolume},
-                {"RemainngVolume", dealInfo.RemainingVolume},
-                {"RemaingVolumePerc", dealInfo.RemainingVolumePrecentage},
-                {"RemainingDays", dealInfo.RemainingDays},
-                {"RemainingPerDays", dealInfo.RemainingPerDays},
-                {"ExpectedDays", dealInfo.ExpectedDays},
-                {"Rate", dealInfo.DealRate},
+                {"ReachedVolume", reachedVolume},
+                {"ToDateVolume", toDateVolume},
+                {"RemainngVolume", remainingVolume},
+                {"RemaingVolumePerc", remainingVolumePrecentage},
+                {"RemainingDays", dealInfo.RemainingDays < 0 ? 0 : dealInfo.RemainingDays},
+                {"RemainingPerDays", 0},
+                {"ExpectedDays", expectedDays},
+                {"Rate", rate},
                 {"EstimatedAmount", dealInfo.EstimatedAmount},
-                {"ReachedAmount", dealInfo.ReachedAmount},
+                {"ReachedAmount", reachedAmount},
                 {"DealBED", dealInfo.DealBED},
                 {"DealEED", dealInfo.DealEED},
                 {"Status", dealInfo.Status},
@@ -273,50 +303,50 @@ namespace TOne.WhS.Deal.Business
             };
             return new DataRecordObject(new Guid("AB46069D-0FFC-4027-9CCF-BD1AF8EC91F7"), swapDealProgressObject);
         }
+        private Dictionary<PropertyName, string> BuildPropertyNames(bool isSale)
+        {
+            string prefix = isSale ? "Sale" : "Cost";
+            Dictionary<PropertyName, string> propertyNames = new Dictionary<PropertyName, string>
+            {
+                {PropertyName.Duration, string.Format("{0}Duration", prefix)},
+                {PropertyName.Rate, string.Format("Total{0}RateDuration", prefix)}
+            };
+            return propertyNames;
+        }
     }
 
     #region public Class
 
-    public class OverallDealnfoByDealId : Dictionary<Int32, OverallDealInfoByGroupNb>
+    public class BillingDataByDealId : Dictionary<Int32, BillingDataByGroupNb>
     {
 
     }
 
-    public class OverallDealInfoByGroupNb : Dictionary<Int32, OverallDealInfo>
+    public class BillingDataByGroupNb : Dictionary<Int32, BillingData>
     {
 
     }
-
-    public class OverallDealInfo
+    public class BaseDealInfo
     {
-        public long DealId { get; set; }
+        public int DealId { get; set; }
         public DateTime DealBED { get; set; }
         public DateTime? DealEED { get; set; }
         public DealStatus Status { get; set; }
         public string GroupName { get; set; }
         public int CarrierAccountId { get; set; }
-        public decimal ReachedVolume { get; set; }
         public int EstimatedVolume { get; set; }
-        public decimal ToDateVolume { get; set; }
         public decimal Rate { get; set; }
         public decimal? ExtraVolumeRate { get; set; }
         public int? DealDays { get; set; }
-        public string Direction { get; set; }
-        public decimal RemainingVolume { get; set; }
-        public decimal RemainingVolumePrecentage { get; set; }
-        public int Days { get; set; }
         public int RemainingDays { get; set; }
-        public int RemainingPerDays { get; set; }
-        public int ExpectedDays { get; set; }
-        public int VolumeDaysExpected { get; set; }
-        public int VolumeRemainingPerDay { get; set; }
-        public decimal DealRate { get; set; }
-        public decimal DealAmount { get; set; }
         public decimal EstimatedAmount { get; set; }
-        public decimal ReachedAmount { get; set; }
-        public decimal ToDateAmount { get; set; }
         public string Notes { get; set; }
-
+    }
+    public class BillingData
+    {
+        public decimal ToDateVolume { get; set; }
+        public decimal ReachedVolume { get; set; }
+        public decimal Rate { get; set; }
     }
     #endregion
 }
