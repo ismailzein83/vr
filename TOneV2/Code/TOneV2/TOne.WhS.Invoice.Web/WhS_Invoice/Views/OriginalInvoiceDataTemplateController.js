@@ -37,7 +37,7 @@
                 fileAPI = api;
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
             $scope.scopeModel.addUploadedAttachement = function (obj) {
                 if (obj != undefined) {
@@ -142,7 +142,7 @@
             if ($scope.scopeModel.uploadedAttachements != undefined)
             {
                 attachementFileIds = [];
-                for(var i=0;i<$scope.scopeModel.uploadedAttachements.length;i++)
+                for(var i=0; i<$scope.scopeModel.uploadedAttachements.length; i++)
                 {
                     var uploadedAttachement = $scope.scopeModel.uploadedAttachements[i];
                     attachementFileIds.push({

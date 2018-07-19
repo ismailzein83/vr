@@ -41,7 +41,7 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                 $scope.scopeModel.onInvoiceCarrierTypeDirectiveReady = function (api) {
                     invoiceCarrierTypeDirectiveAPI = api;
                     invoiceCarrierSelectorReadyPromiseDeffered.resolve();
-                }
+                };
 
 
                 $scope.scopeModel.onItemGroupingSelectionChanged = function (selectedGroupItem) {
