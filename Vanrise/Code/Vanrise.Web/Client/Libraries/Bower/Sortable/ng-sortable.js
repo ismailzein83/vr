@@ -35,9 +35,9 @@
 				var scope = angular.element(el).scope();
 				var ngRepeat = [].filter.call(el.childNodes, function (node) {
 					return (
-							(node.nodeType === 8) &&
-							(node.nodeValue.indexOf('ngRepeat:') !== -1)
-						);
+						(node.nodeType === 8) &&
+						(node.nodeValue.indexOf('ngRepeat:') !== -1)
+					);
 				})[0];
 
 				if (!ngRepeat) {
@@ -72,7 +72,7 @@
 						source = getSource(el),
 						watchers = [],
 						sortable
-					;
+						;
 
 
 					function _emitEvent(/**Event*/evt, /*Mixed*/item) {
@@ -83,7 +83,8 @@
 							model: item || source && source.item(evt.item),
 							models: source && source.items(),
 							oldIndex: evt.oldIndex,
-							newIndex: evt.newIndex
+							newIndex: evt.newIndex,
+							source: getSource(evt.from).items()
 						});
 					}
 
@@ -106,8 +107,20 @@
 							removed = prevItems[oldIndex];
 
 							if (evt.clone) {
-								evt.from.removeChild(evt.clone);
-								removed = angular.copy(removed);
+								if (evt.clone.className.includes("vr-draggable-item")) {
+									prevItems.splice(oldIndex, 1);
+								}
+								else {
+									evt.from.removeChild(evt.clone);
+									removed = angular.copy(removed);
+								}
+
+								//if (evt.clone.className == "item ng-scope") {
+								//	evt.from.removeChild(evt.clone);
+								//	removed = angular.copy(removed);
+								//}
+								//else if (evt.clone.className == "ng-scope")
+								//	prevItems.splice(oldIndex, 1);
 							}
 							else {
 								prevItems.splice(oldIndex, 1);
@@ -129,31 +142,31 @@
 						opts[name] = opts[name] || options[name];
 						return opts;
 					}, {
-						onStart: function (/**Event*/evt) {
-							nextSibling = evt.item.nextSibling;
-							_emitEvent(evt);
-							scope.$apply();
-						},
-						onEnd: function (/**Event*/evt) {
-							_emitEvent(evt, removed);
-							scope.$apply();
-						},
-						onAdd: function (/**Event*/evt) {
-							_sync(evt);
-							_emitEvent(evt, removed);
-							scope.$apply();
-						},
-						onUpdate: function (/**Event*/evt) {
-							_sync(evt);
-							_emitEvent(evt);
-						},
-						onRemove: function (/**Event*/evt) {
-							_emitEvent(evt, removed);
-						},
-						onSort: function (/**Event*/evt) {
-							_emitEvent(evt);
-						}
-					}));
+							onStart: function (/**Event*/evt) {
+								nextSibling = evt.item.nextSibling;
+								_emitEvent(evt);
+								scope.$apply();
+							},
+							onEnd: function (/**Event*/evt) {
+								_emitEvent(evt, removed);
+								scope.$apply();
+							},
+							onAdd: function (/**Event*/evt) {
+								_sync(evt);
+								_emitEvent(evt, removed);
+								scope.$apply();
+							},
+							onUpdate: function (/**Event*/evt) {
+								_sync(evt);
+								_emitEvent(evt);
+							},
+							onRemove: function (/**Event*/evt) {
+								_emitEvent(evt, removed);
+							},
+							onSort: function (/**Event*/evt) {
+								_emitEvent(evt);
+							}
+						}));
 
 					$el.on('$destroy', function () {
 						angular.forEach(watchers, function (/** Function */unwatch) {

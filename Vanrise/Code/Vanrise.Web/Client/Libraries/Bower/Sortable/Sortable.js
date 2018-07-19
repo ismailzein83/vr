@@ -1,4 +1,4 @@
-﻿/**!
+/**!
  * Sortable
  * @author	RubaXa   <trash@rubaxa.org>
  * @license MIT
@@ -921,16 +921,19 @@
                     if (rootEl !== parentEl) {
                         newIndex = _index(dragEl, options.draggable);
 
-                        if (newIndex >= 0) {
+                        if (newIndex >= 0 && rootEl != null && dragEl != null && rootEl != null) {
                             // Add event
                             _dispatchEvent(null, parentEl, 'add', dragEl, rootEl, oldIndex, newIndex);
 
                             // Remove event
-                            _dispatchEvent(this, rootEl, 'remove', dragEl, rootEl, oldIndex, newIndex);
+                            if (rootEl != null && dragEl != null && rootEl != null)
+                                _dispatchEvent(this, rootEl, 'remove', dragEl, rootEl, oldIndex, newIndex);
 
                             // drag from one list and drop into another
-                            _dispatchEvent(null, parentEl, 'sort', dragEl, rootEl, oldIndex, newIndex);
-                            _dispatchEvent(this, rootEl, 'sort', dragEl, rootEl, oldIndex, newIndex);
+                            if (rootEl != null && dragEl != null && rootEl != null)
+                                _dispatchEvent(null, parentEl, 'sort', dragEl, rootEl, oldIndex, newIndex);
+                            if (rootEl != null && dragEl != null && rootEl != null)
+                                _dispatchEvent(this, rootEl, 'sort', dragEl, rootEl, oldIndex, newIndex);
                         }
                     }
                     else {
@@ -966,28 +969,28 @@
 
         _nulling: function () {
             rootEl =
-			dragEl =
-			parentEl =
-			ghostEl =
-			nextEl =
-			cloneEl =
-			lastDownEl =
+				dragEl =
+				parentEl =
+				ghostEl =
+				nextEl =
+				cloneEl =
+				lastDownEl =
 
-			scrollEl =
-			scrollParentEl =
+				scrollEl =
+				scrollParentEl =
 
-			tapEvt =
-			touchEvt =
+				tapEvt =
+				touchEvt =
 
-			moved =
-			newIndex =
+				moved =
+				newIndex =
 
-			lastEl =
-			lastCSS =
+				lastEl =
+				lastCSS =
 
-			putSortable =
-			activeGroup =
-			Sortable.active = null;
+				putSortable =
+				activeGroup =
+				Sortable.active = null;
 
             savedInputChecked.forEach(function (el) {
                 el.checked = true;
