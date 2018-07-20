@@ -138,6 +138,8 @@
     <Compile Include="Serializer.cs" />
     <Compile Include="VRDictionary.cs" />
     <Compile Include="VRWebAPIClient.cs" />
+    <Compile Include="VRXmlSerializer.cs" />
+    <Compile Include="VRXmlSerializerExtensions.cs" />
     <Compile Include="ZipUtility.cs" />
   </ItemGroup>
   <ItemGroup>
