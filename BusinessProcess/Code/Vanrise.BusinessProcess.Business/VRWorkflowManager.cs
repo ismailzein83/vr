@@ -49,8 +49,6 @@ namespace Vanrise.BusinessProcess.Business
 			StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;
                 using System.Collections.Generic;
-                using System.IO;
-                using System.Data;
                 using System.Linq;
                 using Vanrise.Common;
                 using Vanrise.BusinessProcess;

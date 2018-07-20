@@ -15,6 +15,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +47,9 @@
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
@@ -65,6 +70,7 @@
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignActivity.cs" />
     <Compile Include="VRWorkflowActivities\DeletedActivities\VRWorkflowAssignExpressionActivity.cs" />
     <Compile Include="VRWorkflowActivities\DeletedActivities\VRWorkflowAssignVariableActivity.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowCallHttpServiceActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowCustomLogicActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowForEachActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowIfElseActivity.cs" />
