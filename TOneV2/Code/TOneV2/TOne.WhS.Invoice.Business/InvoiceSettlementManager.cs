@@ -238,6 +238,18 @@ namespace TOne.WhS.Invoice.Business
                             var customerDetail = invoiceDetail.Entity.Details as CustomerInvoiceDetails;
                             customerDetail.ThrowIfNull("customerDetail");
 
+                            bool useOriginalAmount = false;
+                            decimal? originalAmount = null;
+                            if (customerDetail.OriginalAmountByCurrency != null)
+                            {
+                                var record = customerDetail.OriginalAmountByCurrency.GetRecord(currentInvoiceItemDetail.CurrencyId);
+                                if (record != null)
+                                {
+                                    useOriginalAmount = record.IncludeOriginalAmountInSettlement;
+                                    originalAmount = record.OriginalAmount;
+                                }
+                            }
+
                             customerInvoiceDetails.Add(new CustomerInvoiceDetail
                             {
                                 InvoiceId = invoiceDetail.Entity.InvoiceId,
@@ -255,7 +267,9 @@ namespace TOne.WhS.Invoice.Business
                                 ToDate = invoiceDetail.Entity.ToDate,
                                 SerialNumber = invoiceDetail.Entity.SerialNumber,
                                 TimeZoneDescription = customerDetail.TimeZoneId.HasValue ? vrTimeZoneManager.GetVRTimeZoneName(customerDetail.TimeZoneId.Value) : null,
-                                IsLocked = invoiceDetail.Entity.LockDate.HasValue
+                                IsLocked = invoiceDetail.Entity.LockDate.HasValue,
+                                OriginalAmount = originalAmount,
+                                UseOriginalAmount = useOriginalAmount,
                             });
                         }
                     }
