@@ -93,9 +93,13 @@
 
                 if ($('.modal-dialog').length > 1) {
                     $('body').addClass('full-mobile-body');
+                    document.ontouchmove = function(e) { e.preventDefault();}
                 }
-                else
+                else {
                     $('body').removeClass('full-mobile-body');
+                    document.ontouchmove = function(e) {return true; }
+                }
+
 
                 if ($('.expandable-row-content').length > 1) {
                     $('.expandable-row-content').addClass('full-view');
@@ -105,18 +109,16 @@
                 }
                 else {
                     $('body').removeClass('full-body');
-                    document.documentElement.style.removeProperty('height');
-                    document.body.style.removeProperty('height');
                 }
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
             modalScope.$on('modal.show', function () {
                 if (MobileService.isMobile()) {
-                    var vpH = window.innerHeight;
-                    document.documentElement.style.height = vpH.toString() + "px";
-                    document.body.style.height = vpH.toString() + "px";
+                     document.ontouchmove = function(e) {
+                                e.preventDefault();
+                     }
                     if ($('.expandable-row-content').length > 1) {
-                        $('.expandable-row-content').addClass('full-view');
+                        $('.expandable-row-content').addClass('full-view');                       
                     }
                   
                 }                
@@ -125,6 +127,9 @@
             //modalScope.$on("$destroy", function () {
             //   // $(window).off("resize.Viewport");
             //});
+
+          
+
             var animationClass = MobileService.isMobile() ? "" : "am-fade-and-scale";
             modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: animationClass, onHide: onhideModal});
             return deferred.promise;

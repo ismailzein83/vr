@@ -118,7 +118,7 @@
             </div>
         </div>
         <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row">
-            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
+            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-click="$parent.ctrl.rowClickDetails ==  true ? $parent.ctrl.expandRow(dataItem) : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
 
             </div>
         </div>

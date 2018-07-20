@@ -18,9 +18,7 @@
    
    .modal-open {
         overflow: hidden !important;
-        /*touch-action:none;
-        position:fixed;
-        width:100%;*/
+        width:100%;
     }
 
    
@@ -39,10 +37,8 @@
     }
 
     body.full-mobile-body{
-         overflow: hidden !important;
-        /*touch-action:none;
-        position:fixed;
-        width:100%;*/
+        overflow: hidden !important;
+        width:100%;
     }
 
     .wrapper-toogled {
@@ -118,7 +114,7 @@
     .mobile-view .vr-datagrid-cell-container {
         display: inline-flex !important;
         max-width: 100%;
-        /*width: unset !important;*/
+        width: unset !important;
         padding: 0px 2px;
     }
 

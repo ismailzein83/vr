@@ -59,6 +59,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 				    ctrl.layoutOption.verticalLine = false;
 
 				ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+				ctrl.rowClickDetails = false;
+				if ($attrs.rowclickdetails != undefined)
+				    ctrl.rowClickDetails = true;
 
 				var loadMoreDataFunction;
 				if ($attrs.loadmoredata != undefined)
@@ -508,15 +511,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 				            valueWidth = colFixWidth;				           	          
 				        }
 
-                        if (col.listViewWidth != undefined) { 
+				        if (col.listViewWidth != undefined) {
                             valueWidth = col.listViewWidth;
                         }
-				        var labelwidth = UtilsService.getHtmlStringWidth(col.name, '12px Open Sans');
-				        var totalwidth = valueWidth + parseInt(labelwidth);
-				        var unitFactor = innerWidth / visibleColCount;
-				        var unitCeildWidth = (Math.ceil(parseInt(totalwidth) / unitFactor));
-				        var parsedWidth = unitFactor * UtilsService.getUnitCeildWidthNextStepValue(unitCeildWidth);
-				        col.mobileWidth = parsedWidth + "px";
+				        //var labelwidth = UtilsService.getHtmlStringWidth(col.name, '12px Open Sans');
+				        //var totalwidth = valueWidth + parseInt(labelwidth);
+				        //var unitFactor = innerWidth;
+                        //var unitCeildWidth = (Math.ceil(parseInt(valueWidth) / unitFactor));
+                        //var parsedWidth = unitFactor * UtilsService.getUnitCeildWidthNextStepValue(valueWidth);
+                        col.mobileWidth = valueWidth + "px";
 				    }
 				});
             }
@@ -948,7 +951,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 						cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
 						cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
-						ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container" ng-click="' + currentColumnHtml + '.onSort()"><label class="mobile-label" >' + currentColumn.name + ': </label></div> <div ng-style=' + mobileStyle + '>'
+						ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container" ng-click="' + currentColumnHtml + '.onSort();$event.stopPropagation();"><label class="mobile-label" >' + currentColumn.name + ': </label></div> <div ng-style=' + mobileStyle + '>'
 							+ '<div class="vr-datagrid-celltext ">'
 							+ cellTemplate
 							+ '</div>'
@@ -962,7 +965,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 							+ '</div>';
 					}
 				}
-				if (ctrl.isMobile) {
+				if (ctrl.isMobile && ctrl.rowClickDetails == false) {
 					ctrl.rowHtml += '<div ng-if="!ctrl.isMainItemsShown" style="width:60px;display:inline-flex">'
 						+ '<span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary"> {{ dataItem.actionType}}</span>'
 						+ '</div>'

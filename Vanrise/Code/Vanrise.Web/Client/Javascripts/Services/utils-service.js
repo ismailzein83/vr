@@ -929,7 +929,9 @@
             $.fn.textWidth = function (text, font) {
                 if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
                 $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-                return $.fn.textWidth.fakeEl.width();
+                var width =  $.fn.textWidth.fakeEl.width();
+                $.fn.textWidth.fakeEl.remove();
+                return width;
             };
             return $.fn.textWidth(text, font);
         }
@@ -937,7 +939,7 @@
         function getUnitCeildWidthNextStepValue(x) {
             var step = 1;
             if (x <= step)
-                return step;
+                return step;           
             while (step < x) {
                 step = step * 2;
             }

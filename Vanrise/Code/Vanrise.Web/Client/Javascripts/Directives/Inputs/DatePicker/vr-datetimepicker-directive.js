@@ -96,7 +96,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 useCurrent: 'day',
                 allowInputToggle: $attrs.disablefocus == undefined || MobileService.isMobile(),
                 ignoreReadonly: MobileService.isMobile(),
-                focusOnShow: MobileService.isMobile()
+                focusOnShow: MobileService.isMobile(),
+                showClear:true
                 // locale:"ar"
             });
             divDatePicker
