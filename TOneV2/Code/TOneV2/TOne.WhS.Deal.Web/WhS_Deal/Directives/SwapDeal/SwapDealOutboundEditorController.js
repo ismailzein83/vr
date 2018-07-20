@@ -144,7 +144,7 @@
             substituteRateTypeReadyPromiseDeferred.promise.then(function () {
                 var payload = {
                     selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SubstituteRateType : undefined
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(substituteRateTypeApi, payload, loadSubstituteRateTypePromiseDeferred);
             });
         }
