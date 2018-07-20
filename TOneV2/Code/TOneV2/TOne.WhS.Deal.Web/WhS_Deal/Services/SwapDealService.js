@@ -21,12 +21,12 @@
         function editSwapDeal(dealId, onSwapDealUpdated, isReadOnly) {
             var parameters = {
                 dealId: dealId,
-                isReadOnly:isReadOnly
+                isReadOnly: isReadOnly
             };
 
             var settings = {};
 
-            settings.onScopeReady = function (modalScope) {    
+            settings.onScopeReady = function (modalScope) {
                 modalScope.onSwapDealUpdated = onSwapDealUpdated;
             };
 
@@ -34,8 +34,8 @@
         }
         function viewSwapDeal(dealId) {
             var parameters = {
-                dealId:dealId,
-                isReadOnly : true
+                dealId: dealId,
+                isReadOnly: true
             };
 
             var settings = {};
@@ -132,6 +132,7 @@
             var modalSettings = {
             };
             modalSettings.onScopeReady = function (modalScope) {
+                console.log(modalScope);
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal(editorUrl, modalParameters, modalSettings);

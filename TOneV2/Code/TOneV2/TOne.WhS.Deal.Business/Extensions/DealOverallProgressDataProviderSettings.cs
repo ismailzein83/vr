@@ -216,13 +216,13 @@ namespace TOne.WhS.Deal.Business
                 {
                     foreach (var billingData in billingDataByGroupNb.Values)
                     {
-                        DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData);
+                        DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData, null);
                         datarecords.Add(dataRecordObject);
                     }
                 }
                 else
                 {
-                    DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, null);
+                    DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, null, null);
                     datarecords.Add(dataRecordObject);
                 }
             }
@@ -238,7 +238,7 @@ namespace TOne.WhS.Deal.Business
                 {
                     foreach (var billingData in billingDataByGroupNb.Values)
                     {
-                        DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData);
+                        DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData, deal.ExtraVolumeRate);
                         datarecords.Add(dataRecordObject);
                     }
                 }
@@ -254,21 +254,26 @@ namespace TOne.WhS.Deal.Business
                 billing.ToDateVolume += saleDurationValue;
 
             billing.ReachedVolume += saleDurationValue;
-            billing.Rate = rate;
+            billing.TotalRateDuration = rate;
         }
 
-        private DataRecordObject CreateDataRecordObject(BaseDealInfo dealInfo, string direction, BillingData billingData)
+        private DataRecordObject CreateDataRecordObject(BaseDealInfo dealInfo, string direction, BillingData billingData, decimal? extraVolumeRate)
         {
-            decimal rate = 0, reachedVolume = 0, toDateVolume = 0, remainingVolume = 0;
+            decimal reachedVolume = 0, toDateVolume = 0, remainingVolume = 0, rate = 0;
 
             if (billingData != null)
             {
-                rate = billingData.Rate;
+                decimal totalRate = billingData.TotalRateDuration;
                 reachedVolume = billingData.ReachedVolume;
                 toDateVolume = billingData.ToDateVolume;
                 var remains = dealInfo.EstimatedVolume - billingData.ReachedVolume;
                 remainingVolume = remains < 0 ? 0 : remains;
+                rate = totalRate / billingData.ReachedVolume;
             }
+
+            if (extraVolumeRate.HasValue)
+                rate = extraVolumeRate.Value;
+
             decimal remainingVolumePrecentage = reachedVolume == 0
                 ? 0
                 : dealInfo.EstimatedVolume / reachedVolume * 100;
@@ -346,7 +351,7 @@ namespace TOne.WhS.Deal.Business
     {
         public decimal ToDateVolume { get; set; }
         public decimal ReachedVolume { get; set; }
-        public decimal Rate { get; set; }
+        public decimal TotalRateDuration { get; set; }
     }
     #endregion
 }

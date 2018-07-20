@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum'];
+    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'UtilsService', 'VRDateTimeService'];
 
-    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum) {
+    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, UtilsService, VRDateTimeService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,7 +20,7 @@
             templateUrl: '/Client/Modules/WhS_Deal/Directives/swapDeal/Templates/SwapDealGridTemplate.html'
         };
 
-        function SwapDealGrid($scope, ctrl, $attrs) { 
+        function SwapDealGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var gridDrillDownTabsObj;
@@ -74,7 +74,9 @@
                 $scope.scopeModel.gridMenuActions = function (dataItem) {
                     var menuActions = [];
                     var menuAction;
-                    if (dataItem.TypeDescription == WhS_Deal_DealAgreementTypeEnum.Commitment.description) {
+                    if (dataItem.TypeDescription == WhS_Deal_DealAgreementTypeEnum.Commitment.description
+                        && dataItem.SubscriberStatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description
+                        && dataItem.Entity.Settings.BeginDate > UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())) {
                         menuAction = {
                             name: "View",
                             clicked: viewDeal,
@@ -92,14 +94,23 @@
                 };
             }
             function editDeal(dataItem) {
-                var isReadOnly =  false;
-                if (dataItem.Entity != undefined && dataItem.Entity.Settings != undefined)
-                    isReadOnly = dataItem.Entity.Settings.DealType == WhS_Deal_DealAgreementTypeEnum.Commitment.value;
+                var isReadOnly = false;
+
+                var dealBED = UtilsService.getDateObject(dataItem.Entity.Settings.BeginDate);
+
+                var isEffective = VRDateTimeService.getNowDateTime().getTime() > dealBED.getTime();
+                if (dataItem.Entity != undefined && dataItem.Entity.Settings != undefined) {
+                    if (dataItem.TypeDescription === WhS_Deal_DealAgreementTypeEnum.Commitment.description && isEffective) {
+                        isReadOnly = true;
+                        if (dataItem.StatusDescription === WhS_Deal_DealStatusTypeEnum.Inactive.description)
+                            isReadOnly = false;
+                    }
+                }
                 var onDealUpdated = function (updatedDeal) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedDeal);
                     gridAPI.itemUpdated(updatedDeal);
                 };
-                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated , isReadOnly);
+                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated, isReadOnly);
             }
 
             function viewDeal(dataItem) {

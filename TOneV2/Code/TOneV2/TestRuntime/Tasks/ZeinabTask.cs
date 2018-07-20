@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
-//using Vanrise.BusinessProcess.Client;
-using Vanrise.BusinessProcess.Entities;
+using Vanrise.Caching.Runtime;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
-using TOne.WhS.DBSync.Business;
-using TOne.WhS.DBSync.Business.SwitchMigration;
-using TOne.WhS.DBSync.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace TestRuntime
@@ -19,22 +14,56 @@ namespace TestRuntime
     {
         public void Execute()
         {
-            #region Runtime
             var runtimeServices = new List<RuntimeService>();
 
-            BusinessProcessService bpService = new BusinessProcessService { Interval = new TimeSpan(0, 0, 2) };
+            BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
+
+            QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueRegulatorService);
+
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
+
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
+
+            //SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            //runtimeServices.Add(schedulerService);
+
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
+
+            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dsRuntimeService);
 
             BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpRegulatorRuntimeService);
 
-            //SchedulerService schedulerService = new SchedulerService { Interval = new TimeSpan(0, 0, 1) };
-            //runtimeServices.Add(schedulerService);
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingRuntimeService);
+
+            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingDistributorRuntimeService);
+
+            //DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            //DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dataGroupingDistributorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
             Console.ReadKey();
-            #endregion
         }
     }
+    public class InvoiceInfo
+    {
+        public string CustomerName { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime DueDate { get; set; }
+    }
+
+
 }
