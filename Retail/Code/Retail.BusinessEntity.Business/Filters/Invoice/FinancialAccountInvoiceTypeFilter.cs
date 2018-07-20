@@ -22,7 +22,15 @@ namespace Retail.BusinessEntity.Business
 
         public bool IsExcluded(IAccountFilterContext context)
         {
-            return false;
+            FinancialAccountManager manager = new FinancialAccountManager();
+            var financialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false);
+            if (financialAccounts != null)
+            {
+                var invoiceFinancialAccounts = financialAccounts.FindAllRecords(x=>x.InvoiceTypeIds.Contains(InvoiceTypeId));
+                if (invoiceFinancialAccounts != null && invoiceFinancialAccounts.Count() > 0)
+                    return false;
+            }
+            return true;
         }
     }
     public class FinancialAccountBalanceTypeFilter : IFinancialAccountFilter, IAccountFilter
@@ -40,7 +48,15 @@ namespace Retail.BusinessEntity.Business
 
         public bool IsExcluded(IAccountFilterContext context)
         {
-            return false;
+            FinancialAccountManager manager = new FinancialAccountManager();
+            var financialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false);
+            if (financialAccounts != null)
+            {
+                var invoiceFinancialAccounts = financialAccounts.FindAllRecords(x => x.BalanceAccountTypeId.HasValue && x.BalanceAccountTypeId == BalanceAccountTypeId);
+                if (invoiceFinancialAccounts != null && invoiceFinancialAccounts.Count() > 0)
+                    return false;
+            }
+            return true;
         }
     }
 

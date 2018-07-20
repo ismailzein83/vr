@@ -109,28 +109,29 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
 
                     return Retail_BE_FinancialAccountAPIService.GetFinancialAccountsInfo(accountBEDefinitionId, filter).then(function (response) {
                         selectorAPI.clearDataSource();
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
-                            } else if (setItemsSelected)
-                            {
-                                for (var i = 0, length = ctrl.datasource.length; i < length; i++) {
-                                    var item = ctrl.datasource[i];
-                                    if (attrs.ismultipleselection == undefined) {
-                                        if (item.IsEffectiveAndActive) {
-                                            selectedIds = item.FinancialAccountId;
-                                            break;
-                                        }
-                                    } else {
-                                        if (selectedIds == undefined)
-                                            selectedIds = [];
-                                        selectedIds.push(item.FinancialAccountId);
-                                    }
+                        if (response != undefined) {
+                            if (response.length > 0) {
+                                for (var i = 0; i < response.length; i++) {
+                                    ctrl.datasource.push(response[i]);
                                 }
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
+                                if (selectedIds != undefined) {
+                                    VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
+                                } else if (setItemsSelected) {
+                                    for (var i = 0, length = ctrl.datasource.length; i < length; i++) {
+                                        var item = ctrl.datasource[i];
+                                        if (attrs.ismultipleselection == undefined) {
+                                            if (item.IsEffectiveAndActive) {
+                                                selectedIds = item.FinancialAccountId;
+                                                break;
+                                            }
+                                        } else {
+                                            if (selectedIds == undefined)
+                                                selectedIds = [];
+                                            selectedIds.push(item.FinancialAccountId);
+                                        }
+                                    }
+                                    VRUIUtilsService.setSelectedValues(selectedIds, 'FinancialAccountId', attrs, ctrl);
+                                }
                             }
                         }
                     });
