@@ -183,7 +183,7 @@ namespace TOne.WhS.Invoice.Business
             {
                  case InvoiceCarrierType.Customer :
                     var customerInvoiceDetails = invoice.Details as CustomerInvoiceDetails;
-                    customerInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+                    customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
                     reference = customerInvoiceDetails.Reference;
                     originalAmountByCurrency = customerInvoiceDetails.OriginalAmountByCurrency;
                     attachementFiles = customerInvoiceDetails.AttachementFiles;
