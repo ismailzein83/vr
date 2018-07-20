@@ -15,6 +15,7 @@ namespace Vanrise.Entities
         public Guid VRMailMessageTypeId { get; set; }
 
         public VRMailMessageTemplateSettings Settings { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 
     public class VRMailMessageTemplateSettings

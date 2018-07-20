@@ -29,7 +29,15 @@ namespace Vanrise.Common.Business
         public IDataRetrievalResult<VRMailMessageTemplateDetail> GetFilteredMailMessageTemplates(DataRetrievalInput<VRMailMessageTemplateQuery> input)
         {
             var allVRMailMessageTemplates = GetCachedVRMailMessageTemplates();
-            Func<VRMailMessageTemplate, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            Func<VRMailMessageTemplate, bool> filterExpression = (x) =>
+            {
+                if (input.Query.Name != null && !x.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.MailMessageType != null && !input.Query.MailMessageType.Contains(x.VRMailMessageTypeId))
+                    return false;
+
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(VRMailMessageTemplateLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRMailMessageTemplates.ToBigResult(input, filterExpression, VRMailMessageTemplateDetailMapper));
         }

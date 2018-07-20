@@ -7,6 +7,9 @@
                 <vr-columns width="normal">
                     <vr-textbox label="Name" localizedlabel="VRRes.Name.VREnd" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-common-mailmessagetype-selector on-ready="scopeModel.onMailMessageTypeSelectorReady" ismultipleselection></vr-common-mailmessagetype-selector>
+                </vr-columns>
             </vr-row>
         </div>
 

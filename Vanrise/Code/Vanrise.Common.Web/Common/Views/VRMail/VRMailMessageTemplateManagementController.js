@@ -8,12 +8,20 @@
 
         var gridAPI;
 
+        var mailMessageTypeSelectorAPI;
+        var mailMessageTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
 
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onMailMessageTypeSelectorReady = function (api) {
+                mailMessageTypeSelectorAPI = api;
+                mailMessageTypeSelectorPromiseDeferred.resolve();
+            };
 
             $scope.scopeModel.search = function () {
                 var query = buildGridQuery();
@@ -36,12 +44,30 @@
             };
         }
         function load() {
-
+            $scope.scopeModel.isLoading = true;
+            loadAllControls();
         }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadMailMessageTypeSelector])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+        }
+        function loadMailMessageTypeSelector() {
+            var loadMailMessageTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            mailMessageTypeSelectorPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(mailMessageTypeSelectorAPI, undefined, loadMailMessageTypeSelectorPromiseDeferred);
+            });
+            return loadMailMessageTypeSelectorPromiseDeferred.promise;
+        }
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
+                MailMessageType: mailMessageTypeSelectorAPI.getSelectedIds()
             };
         }
     }

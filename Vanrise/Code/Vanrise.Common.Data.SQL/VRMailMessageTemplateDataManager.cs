@@ -63,7 +63,8 @@ namespace Vanrise.Common.Data.SQL
                 VRMailMessageTemplateId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
                 VRMailMessageTypeId = (Guid)reader["MessageTypeID"],
-                Settings = Vanrise.Common.Serializer.Deserialize<VRMailMessageTemplateSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<VRMailMessageTemplateSettings>(reader["Settings"] as string),
+                CreatedTime = (DateTime)reader["CreatedTime"]
             };
             return vrMailMessageTemplate;
         }
