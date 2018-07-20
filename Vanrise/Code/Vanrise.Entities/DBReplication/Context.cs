@@ -8,11 +8,15 @@ namespace Vanrise.Entities
 {
     public interface IDBReplicationInitializeContext
     {
-        Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListBySourceConnection { get; }
+        Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetLinkedServer { get; }
+
+        Action<string> WriteInformation { get; }
     }
     public class DBReplicationInitializeContext : IDBReplicationInitializeContext
     {
-        public Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListBySourceConnection { get; set; }
+        public Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetLinkedServer { get; set; }
+
+        public Action<string> WriteInformation { get; set; }
     }
 
     public interface IDBReplicationMigrateDataContext
@@ -20,6 +24,10 @@ namespace Vanrise.Entities
         DateTime FromTime { get; }
 
         DateTime ToTime { get; }
+
+        int NumberOfDaysPerInterval { get; }
+
+        Action<string> WriteInformation { get; }
     }
 
     public class DBReplicationMigrateDataContext : IDBReplicationMigrateDataContext
@@ -27,6 +35,10 @@ namespace Vanrise.Entities
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
+
+        public int NumberOfDaysPerInterval { get; set; }
+
+        public Action<string> WriteInformation { get; set; }
     }
 
     public interface IDBReplicationFinalizeContext
@@ -36,6 +48,43 @@ namespace Vanrise.Entities
 
     public class DBReplicationFinalizeContext : IDBReplicationFinalizeContext
     {
+        public Action<string> WriteInformation { get; set; }
+    }
+
+    public interface IDBReplicationTableMigrateDataContext
+    {
+        List<string> Columns { get; }
+        string TargetConnectionString { get; }
+        string TableSchema { get; }
+        string TargetTempTableName { get; }
+        string SourceTableName { get; }
+        DateTime FromTime { get; }
+        DateTime ToTime { get; }
+        string FilterDateTimeColumn { get; }
+        int NumberOfDaysPerInterval { get; }
+        Action<string> WriteInformation { get; }
+    }
+
+    public class DBReplicationTableMigrateDataContext : IDBReplicationTableMigrateDataContext
+    {
+        public List<string> Columns { get; set; }
+
+        public string TargetConnectionString { get; set; }
+
+        public string TableSchema { get; set; }
+
+        public string TargetTempTableName { get; set; }
+
+        public string SourceTableName { get; set; }
+
+        public DateTime FromTime { get; set; }
+
+        public DateTime ToTime { get; set; }
+
+        public string FilterDateTimeColumn { get; set; }
+
+        public int NumberOfDaysPerInterval { get; set; }
+
         public Action<string> WriteInformation { get; set; }
     }
 }

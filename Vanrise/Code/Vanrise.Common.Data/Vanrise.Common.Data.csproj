@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ICacheRefreshDataManager.cs" />
     <Compile Include="IDataEncryptionKeyDataManager.cs" />
+    <Compile Include="IDBReplicationDataManager.cs" />
     <Compile Include="IEnumerationDataManager.cs" />
     <Compile Include="IRegionDataManager.cs" />
     <Compile Include="IGenericLKUPItemDataManager.cs" />

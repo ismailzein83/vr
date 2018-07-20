@@ -10,6 +10,8 @@
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:vcba="clr-namespace:Vanrise.Common.BP.Arguments;assembly=Vanrise.Common.BP.Arguments"
+ xmlns:vcba1="clr-namespace:Vanrise.Common.BP.Activities;assembly=Vanrise.Common.BP.Activities"
+ xmlns:vcd="clr-namespace:Vanrise.Common.Data;assembly=Vanrise.Common.Data"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
@@ -47,14 +49,18 @@
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Common.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Common.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Common.Data</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Common.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vcd:IDBReplicationDataManager" Name="DBReplicationDataManager" />
+      <Variable x:TypeArguments="ve:DBReplicationDefinition" Name="DBReplicationDefinition" />
+    </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Database Replication Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -62,6 +68,64 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="ve:DBReplicationDefinition">
+          <mca:CSharpReference x:TypeArguments="ve:DBReplicationDefinition">DBReplicationDefinition</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="ve:DBReplicationDefinition">
+          <mca:CSharpValue x:TypeArguments="ve:DBReplicationDefinition">new Vanrise.Common.Business.DBReplicationDefinitionManager().GetDBReplicationDefinition(Input.DBReplicationDefinitionId)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <vcba1:InitializeDBReplication sap2010:WorkflowViewState.IdRef="InitializeDBReplication_1">
+      <vcba1:InitializeDBReplication.DBReplicatioDefinition>
+        <InArgument x:TypeArguments="ve:DBReplicationDefinition">
+          <mca:CSharpValue x:TypeArguments="ve:DBReplicationDefinition">DBReplicationDefinition</mca:CSharpValue>
+        </InArgument>
+      </vcba1:InitializeDBReplication.DBReplicatioDefinition>
+      <vcba1:InitializeDBReplication.DBReplicationDataManager>
+        <OutArgument x:TypeArguments="vcd:IDBReplicationDataManager">
+          <mca:CSharpReference x:TypeArguments="vcd:IDBReplicationDataManager">DBReplicationDataManager</mca:CSharpReference>
+        </OutArgument>
+      </vcba1:InitializeDBReplication.DBReplicationDataManager>
+      <vcba1:InitializeDBReplication.DBReplicationSettings>
+        <InArgument x:TypeArguments="ve:DBReplicationSettings">
+          <mca:CSharpValue x:TypeArguments="ve:DBReplicationSettings">Input.Settings</mca:CSharpValue>
+        </InArgument>
+      </vcba1:InitializeDBReplication.DBReplicationSettings>
+    </vcba1:InitializeDBReplication>
+    <vcba1:MigrateData sap2010:WorkflowViewState.IdRef="MigrateData_1">
+      <vcba1:MigrateData.DBReplicationDataManager>
+        <InArgument x:TypeArguments="vcd:IDBReplicationDataManager">
+          <mca:CSharpValue x:TypeArguments="vcd:IDBReplicationDataManager">DBReplicationDataManager</mca:CSharpValue>
+        </InArgument>
+      </vcba1:MigrateData.DBReplicationDataManager>
+      <vcba1:MigrateData.FromTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
+        </InArgument>
+      </vcba1:MigrateData.FromTime>
+      <vcba1:MigrateData.NumberOfDaysPerInterval>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.NumberOfDaysPerInterval</mca:CSharpValue>
+        </InArgument>
+      </vcba1:MigrateData.NumberOfDaysPerInterval>
+      <vcba1:MigrateData.ToTime>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
+        </InArgument>
+      </vcba1:MigrateData.ToTime>
+    </vcba1:MigrateData>
+    <vcba1:FinalizeDBReplication sap2010:WorkflowViewState.IdRef="FinalizeDBReplication_1">
+      <vcba1:FinalizeDBReplication.DBReplicationDataManager>
+        <InArgument x:TypeArguments="vcd:IDBReplicationDataManager">
+          <mca:CSharpValue x:TypeArguments="vcd:IDBReplicationDataManager">DBReplicationDataManager</mca:CSharpValue>
+        </InArgument>
+      </vcba1:FinalizeDBReplication.DBReplicationDataManager>
+    </vcba1:FinalizeDBReplication>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Database Replication Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -69,20 +133,24 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQ29tbW9uLkJQXERCUmVwbGljYXRpb25Qcm9jZXNzLnhhbWwHOQNJDgIBAToFQCACAQZBBUcgAgECPQs9hQECAQg6YDqIAQIBB0QLRIUBAgEEQWBBiAECAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz9DOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQ29tbW9uLkJQXERCUmVwbGljYXRpb25Qcm9jZXNzLnhhbWwVOwOJAQ4CAQFABUYgAgE0RwVSDgIBK1MFYyUCAR5kBXkZAgENegWAASMCAQiBAQWHASACAQJDC0OFAQIBNkBgQIgBAgE1TwtP0wECATBKC0p6AgEsYAtgZwIBJ1sLW34CASNWC1ZyAgEfcQtxZQIBGmcLZ3YCARZsC2xZAgESdgt2VwIBDn0LfXYCAQmEAQuEAYUBAgEEgQFggQGIAQIBAw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="InitializeDBReplication_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="MigrateData_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="FinalizeDBReplication_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,496">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Common.BP.DBReplicationProcess_1" sap:VirtualizedContainerService.HintSize="262,288" />
+      <sap2010:ViewStateData Id="Vanrise.Common.BP.DBReplicationProcess_1" sap:VirtualizedContainerService.HintSize="304,576" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

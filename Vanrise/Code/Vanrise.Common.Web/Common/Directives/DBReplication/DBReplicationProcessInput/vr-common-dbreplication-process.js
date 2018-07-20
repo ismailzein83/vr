@@ -134,7 +134,8 @@ app.directive('vrCommonDbreplicationProcess', ['UtilsService', 'VRUIUtilsService
 
                             if (dbDefinitionEntity != undefined && dbDefinitionEntity.InputArgument != undefined) {
                                 $scope.scopeModel.fromDate = dbDefinitionEntity.InputArgument.FromTime;
-                                $scope.scopeModel.toDate = dbDefinitionEntity.InputArgument.ToTime;
+                                var convertedToDate = new Date(dbDefinitionEntity.InputArgument.ToTime);
+                                $scope.scopeModel.toDate = new Date(convertedToDate.setDate(convertedToDate.getDate() - 1));
                                 $scope.scopeModel.numberOfDaysPerInterval = dbDefinitionEntity.InputArgument.NumberOfDaysPerInterval;
                             }
                         }
@@ -180,7 +181,7 @@ app.directive('vrCommonDbreplicationProcess', ['UtilsService', 'VRUIUtilsService
                         InputArguments: {
                             $type: "Vanrise.Common.BP.Arguments.DBReplicationProcessInput,Vanrise.Common.BP.Arguments",
                             FromTime: $scope.scopeModel.fromDate,
-                            ToTime: $scope.scopeModel.toDate,
+                            ToTime: new Date($scope.scopeModel.toDate.setDate($scope.scopeModel.toDate.getDate() + 1)),
                             Settings: dbReplicationSettingsGridAPI.getData(),
                             DBReplicationDefinitionId: dbReplicationDefinitionSelectorAPI.getSelectedIds(),
                             NumberOfDaysPerInterval: $scope.scopeModel.numberOfDaysPerInterval

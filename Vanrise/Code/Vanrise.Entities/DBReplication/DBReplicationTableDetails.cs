@@ -10,9 +10,7 @@ namespace Vanrise.Entities
 
         public string SourceConnectionStringName { get; set; }
 
-        public string TargetLinkedServerName { get; set; }
-
-        public string TargetDatabaseName { get; set; }
+        public string TargetConnectionString { get; set; }
 
         public string FilterDateTimeColumn { get; set; }
 
