@@ -75,7 +75,7 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
         function load() {
@@ -117,14 +117,15 @@
         function loadAllControls() {
             var loadBPDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
             bpDefinitionDirectiveReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, undefined, loadBPDefinitionPromiseDeferred);
+                var bpDefinitionPayload = { bpDefinitionId: bpDefinitionId };
+                VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, bpDefinitionPayload, loadBPDefinitionPromiseDeferred);
             });
             return loadBPDefinitionPromiseDeferred.promise;
         }
 
         function buildInstanceObjFromScope() {
             if (bpDefinitionDirectiveApi != undefined) {
-                return bpDefinitionDirectiveApi.getData()
+                return bpDefinitionDirectiveApi.getData();
             }
             else return null;
         }
