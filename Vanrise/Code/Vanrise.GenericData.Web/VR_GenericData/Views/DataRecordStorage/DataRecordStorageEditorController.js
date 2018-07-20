@@ -239,9 +239,6 @@
             if (isEditMode) {
                 var promises = [];
 
-                var fieldNamesLoadDeferred = UtilsService.createPromiseDeferred();
-                var requiredPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-
                 UtilsService.waitMultiplePromises([selectedDataRecordTypeDeferred.promise]).then(function () {
 
                     if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined) {
@@ -259,7 +256,7 @@
                                     selectedIds: dataItem.FieldNames
                                 },
                                 requiredPermissionPayload: { data: dataItem.RequiredPermission }
-                            }
+                            };
                             promises.push(fieldpermission.requiredPermissionLoadDeferred.promise);
                             promises.push(fieldpermission.fieldNamesLoadDeferred.promise);
                             fieldsPermissions.push(fieldpermission);
@@ -612,11 +609,12 @@
                         if (fieldsPermission.requiredPermissionsAPI != undefined) {
                             fieldsPermissionobj.RequiredPermission = fieldsPermission.requiredPermissionsAPI.getData();
                         }
+                        fieldsPermissions.push(fieldsPermissionobj);
                     }
-                    fieldsPermissions.push(fieldsPermissionobj);
+                    
                 }
             }
-            return fieldsPermissions
+            return fieldsPermissions;
         }
 
 
