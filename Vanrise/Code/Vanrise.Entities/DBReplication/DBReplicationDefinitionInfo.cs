@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Vanrise.Entities.DBReplication
+namespace Vanrise.Entities
 {
-    class DBReplicationDefinitionInfo
+    public class DBReplicationDefinitionInfo
     {
+        public Guid DBReplicationDefinitionId { get; set; }
+        public string Name { get; set; }
+    }
+    public class DBReplicationDefinitionInfoFilter
+    {
+
     }
 }

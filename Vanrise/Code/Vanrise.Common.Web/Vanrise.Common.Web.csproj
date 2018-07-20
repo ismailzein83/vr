@@ -229,10 +229,13 @@
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Constant\TimeOffsetEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\vr-common-dbdefinition-selector.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\vr-common-dbreplicationdefinition-selector.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationProcessInput\Templates\DBReplicationProcessTemplate.html" />
     <Content Include="Common\Directives\DBReplication\DBReplicationProcessInput\vr-common-dbreplication-process.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationSettings\Templates\DBReplicationSettingsGridTemplate.html" />
     <Content Include="Common\Directives\DBReplication\DBReplicationSettings\Templates\DBReplicationSettingsTemplate.html" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationSettings\vr-common-dbreplication-settings-grid.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationSettings\vr-common-dbreplication-settings.js" />
     <Content Include="Common\Directives\ExcelFileUploader\Templates\ExcelFileUploader.html" />
     <Content Include="Common\Directives\ExcelFileUploader\vr-common-excelfileuploader.js" />
@@ -577,6 +580,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
     <Content Include="Common\Services\CompanyDefinitionService.js" />
+    <Content Include="Common\Services\DBReplicationService.js" />
     <Content Include="Common\Services\ExcelFileUploaderService.js" />
     <Content Include="Common\Services\RegionService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />

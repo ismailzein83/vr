@@ -1,1 +1,22 @@
-﻿
+﻿<vr-row removeline vr-loader="scopeModel.isLoading">
+    <vr-columns colnum="4">
+        <vr-common-dbreplicationdefinition-selector on-ready="scopeModel.onDBReplicationDefinitionSelectorReady"
+                                                    onselectionchanged="scopeModel.onDBReplicationDefinitionSelectionChanged"
+                                                    isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedDBReplicationDefinition">
+        </vr-common-dbreplicationdefinition-selector>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-datetimepicker label="From" value="scopeModel.fromDate" type="date" customvalidate="scopemodel.validatetimerange()" isrequired="true"></vr-datetimepicker>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-datetimepicker label="To" value="scopeModel.toDate" type="date" customvalidate="scopeModel.validateTimeRange()" isrequired="true"></vr-datetimepicker>
+    </vr-columns>
+    <vr-columns colnum="4">
+        <vr-textbox value="scopeModel.numberOfDaysPerInterval" label="Number Of Days/Interval" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <span vr-loader="scopeModel.isGridLoading" ng-if="scopeModel.selectedDBReplicationDefinition != undefined">
+            <vr-common-dbreplication-settings-grid on-ready="scopeModel.onDBReplicationSettingsGridReady"></vr-common-dbreplication-settings-grid>
+        </span>
+    </vr-columns>
+</vr-row>

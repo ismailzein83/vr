@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Vanrise.Entities.DBReplication
+namespace Vanrise.Entities
 {
-    class DBDefinitionInfo
+    public class DBDefinitionInfo
     {
+        public Guid DBDefinitionId { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class DBDefinitionInfoFilter
+    {
+        public List<Guid> ExcludedDBDefinitionIds { get; set; }
+        public List<Guid> ForceDBDefinitionIds { get; set; }
     }
 }

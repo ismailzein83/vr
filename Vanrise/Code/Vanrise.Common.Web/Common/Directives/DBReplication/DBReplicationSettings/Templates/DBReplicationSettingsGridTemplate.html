@@ -1,1 +1,19 @@
-﻿
+﻿<vr-button type="Add" data-onclick="scopeModel.addDBReplicationSetting" standalone vr-disabled="scopeModel.disableAdd"></vr-button>
+<vr-validator validate="scopeModel.isValid()">
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.datasource"
+                 menuactions="scopeModel.gridMenuActions"
+                 ondeleterow="scopeModel.removeDBReplicationSetting"
+                 idfield="id"
+                 norowhighlightonclick="true" maxheight="300px">
+
+        <vr-datagridcolumn headertext="'Source Connection'" field="'SourceConnectionStringName'" disablesorting widthfactor="1"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Target Connection'" field="'TargetConnectionString'" disablesorting widthfactor="3"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Settings'" field="'DbDefinitions'" disablesorting widthfactor="3">
+            <span ng-repeat="dbDefinitions in dataItem.DbDefinitions">
+                '{{dbDefinitions.name}}'
+                <span ng-if="!$last">, </span>
+            </span>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

@@ -1,1 +1,29 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VR_Common_DbReplicationSettingsEditorController" width="'50%'">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formDBReplicationSettingsEditor">
+            <vr-row>
+                <vr-columns colnum="3">
+                    <vr-textbox value="scopeModel.sourceConnectionStringName" label="Source Connection String Name" isrequired></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="9">
+                    <vr-textbox value="scopeModel.targetConnectionString" label="Target Connection String" isrequired></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="3">
+                    <vr-common-dbdefinition-selector on-ready="scopeModel.onDBDefinitionSelectorReady"
+                                                     isrequired="true" ismultipleselection hideremoveicon>
+                    </vr-common-dbdefinition-selector>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDBReplicationSettingsEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

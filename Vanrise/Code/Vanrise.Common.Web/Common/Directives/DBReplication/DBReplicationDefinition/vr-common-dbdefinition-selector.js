@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommonDbreplicationdefinitionSelector', ['UtilsService', 'VRUIUtilsService', 'VRCommon_DBReplicationDefinitionAPIService',
+app.directive('vrCommonDbdefinitionSelector', ['UtilsService', 'VRUIUtilsService', 'VRCommon_DBReplicationDefinitionAPIService',
     function (UtilsService, VRUIUtilsService, VRCommon_DBReplicationDefinitionAPIService) {
         return {
             restrict: 'E',
@@ -22,7 +22,7 @@ app.directive('vrCommonDbreplicationdefinitionSelector', ['UtilsService', 'VRUIU
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
 
-                var ctor = new DbReplicationSelectorCtor(ctrl, $scope, $attrs);
+                var ctor = new DbDefinitionSelectorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'selectorCtrl',
@@ -32,12 +32,13 @@ app.directive('vrCommonDbreplicationdefinitionSelector', ['UtilsService', 'VRUIU
             }
         };
 
-        function DbReplicationSelectorCtor(ctrl, $scope, attrs) {
+        function DbDefinitionSelectorCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
 
             function initializeController() {
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -49,29 +50,36 @@ app.directive('vrCommonDbreplicationdefinitionSelector', ['UtilsService', 'VRUIU
 
                 api.load = function (payload) {
                     var dbReplicationDefinitionId;
+                    var selectedIds;
                     var filter;
 
                     if (payload != undefined) {
                         dbReplicationDefinitionId = payload.dbReplicationDefinitionId;
                         filter = payload.filter;
+                        selectedIds = payload.selectedIds;
                     }
 
-                    return VRCommon_DBReplicationDefinitionAPIService.GetDBReplicationDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VRCommon_DBReplicationDefinitionAPIService.GetDBDefinitionsInfo(dbReplicationDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
+                            ctrl.datasource = response;
+                        }
 
-                            if (dbReplicationDefinitionId != undefined) {
-                                VRUIUtilsService.setSelectedValues(dbReplicationDefinitionId, 'DBReplicationDefinitionId', attrs, ctrl);
-                            }
+                        if (selectedIds != undefined) {
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'DBDefinitionId', attrs, ctrl);
                         }
                     });
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('DBReplicationDefinitionId', attrs, ctrl);
+                    var selectedDBDefinitions = VRUIUtilsService.getIdSelectedIds('DBDefinitionId', attrs, ctrl);
+                    var selectedDBDefinitionIds = [];
+                    for (var i = 0; i < selectedDBDefinitions.length; i++) {
+                        selectedDBDefinitionIds.push({
+                            DatabaseDefinitionId: selectedDBDefinitions[i]
+                        });
+                    }
+                    return selectedDBDefinitionIds;
                 };
 
                 if (ctrl.onReady != null)
@@ -83,11 +91,11 @@ app.directive('vrCommonDbreplicationdefinitionSelector', ['UtilsService', 'VRUIU
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "DB Replication Definition";
+            var label = "DB Definition";
             var hideremoveicon = '';
 
             if (attrs.ismultipleselection != undefined) {
-                label = "DB Replication Definitions";
+                label = "DB Definitions";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
@@ -96,8 +104,8 @@ app.directive('vrCommonDbreplicationdefinitionSelector', ['UtilsService', 'VRUIU
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = 'hideremoveicon';
 
-            return  '<vr-select label="' + label + '" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="DBReplicationDefinitionId" isrequired="selectorCtrl.isrequired" '
-                       + ' datasource="selectorCtrl.datasource" on-ready="selectorCtrl.onSelectorReady" selectedvalues="selectorCtrl.selectedvalues" onselectionchanged="selectorCtrl.onselectionchanged" ' 
+            return '<vr-select label="' + label + '" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="DBDefinitionId" isrequired="selectorCtrl.isrequired" '
+                       + ' datasource="selectorCtrl.datasource" on-ready="selectorCtrl.onSelectorReady" selectedvalues="selectorCtrl.selectedvalues" onselectionchanged="selectorCtrl.onselectionchanged" '
                        + ' customvalidate="selectorCtrl.customvalidate">'
                     + '</vr-select>';
         }
