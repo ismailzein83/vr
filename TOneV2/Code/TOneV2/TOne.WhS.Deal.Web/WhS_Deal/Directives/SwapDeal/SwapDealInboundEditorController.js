@@ -131,7 +131,7 @@
 
             substituteRateTypeReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SubstituteRateType : undefined
+                    selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SubstituteRateType : Whs_Deal_SubstituteRateTypeEnum.NormalRate.value
                 };
                 VRUIUtilsService.callDirectiveLoad(substituteRateTypeApi, payload, loadSubstituteRateTypePromiseDeferred);
             });
