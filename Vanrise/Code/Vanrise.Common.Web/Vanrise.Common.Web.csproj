@@ -229,8 +229,10 @@
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Constant\TimeOffsetEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\Templates\DBReplicationDefinitionSettingsTemplate.html" />
     <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\vr-common-dbdefinition-selector.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\vr-common-dbreplicationdefinition-selector.js" />
+    <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\vr-common-dbreplicationdefinition-settings.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationProcessInput\Templates\DBReplicationProcessTemplate.html" />
     <Content Include="Common\Directives\DBReplication\DBReplicationProcessInput\vr-common-dbreplication-process.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationSettings\Templates\DBReplicationSettingsGridTemplate.html" />
