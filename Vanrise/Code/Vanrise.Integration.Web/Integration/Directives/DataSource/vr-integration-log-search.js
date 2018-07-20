@@ -130,7 +130,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
                 To: ($scope.selectedToDateTime != undefined) ? $scope.selectedToDateTime : null,
                 Top: $scope.top
             };
-            return query
+            return query;
         }
 
         function loadSeverities() {
