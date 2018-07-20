@@ -109,34 +109,53 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 var invoiceItemDetails = invoiceItem.Details as CustomerInvoiceBySaleCurrencyItemDetails;
                                 if (invoiceItemDetails != null && availableCustomerInvoices.Any(x => x.InvoiceId == customerInvoice.InvoiceId && x.CurrencyId == invoiceItemDetails.CurrencyId && x.IsSelected))
                                 {
-                                    var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
-                                    settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
-                                    settlementInvoiceItemSummaryDetail.DueToSystemAmount += invoiceItemDetails.AmountAfterCommissionWithTaxes;
-                                    settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
-                                    settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += invoiceItemDetails.AmountAfterCommissionWithTaxes;
-                                    settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+
+
+
+                                    OriginalDataCurrrency originalDataCurrrency;
 
                                     var settlementInvoiceDetailByCurrency = new SettlementInvoiceDetailByCurrency();
-                                    settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
-                                    settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
-                                    settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                     settlementInvoiceDetailByCurrency.InvoiceId = customerInvoice.InvoiceId;
+                                    settlementInvoiceDetailByCurrency.CurrencyId = invoiceItemDetails.CurrencyId;
                                     settlementInvoiceDetailByCurrency.TotalDuration = invoiceItemDetails.Duration;
                                     settlementInvoiceDetailByCurrency.NumberOfCalls = invoiceItemDetails.NumberOfCalls;
+
+                                    if (customerInvoiceDetails.OriginalAmountByCurrency != null && customerInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetails.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
+                                    {
+                                        var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+                                        settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmount += originalDataCurrrency.OriginalAmount.Value;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += originalDataCurrrency.OriginalAmount.Value;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += originalDataCurrrency.OriginalAmount.Value;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += customerInvoiceDetails.TotalNumberOfCalls;
+
+                                        settlementInvoiceDetailByCurrency.OriginalAmount = originalDataCurrrency.OriginalAmount.Value;
+                                        settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = originalDataCurrrency.OriginalAmount.Value;
+                                    }
+                                    else
+                                    {
+                                        var settlementInvoiceItemSummaryDetail = settlementInvoiceItemSummaryByCurrency.GetOrCreateItem(invoiceItemDetails.CurrencyId);
+                                        settlementInvoiceItemSummaryDetail.CurrencyId = invoiceItemDetails.CurrencyId;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmount += invoiceItemDetails.AmountAfterCommissionWithTaxes;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += invoiceItemDetails.AmountAfterCommissionWithTaxes;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+
+                                        settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
+                                        settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
+                                    }
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
-
-
-
                             }
                         }
                         bool multipleCurrencies = invoiceItems != null && invoiceItems.Count() > 1;
 
                         var sattlementInvoiceItemDetails = new SattlementInvoiceItemDetails
                         {
-                            Amount = multipleCurrencies ? default(decimal?): customerInvoiceDetails.TotalAmountAfterCommission,
+
+                            Amount = multipleCurrencies ? default(decimal?) : customerInvoiceDetails.TotalAmountAfterCommission,
                             DurationInSeconds = customerInvoiceDetails.Duration,
-                            CurrencyId = multipleCurrencies? default(int?):customerInvoiceDetails.SaleCurrencyId,
+                            CurrencyId = multipleCurrencies ? default(int?) : customerInvoiceDetails.SaleCurrencyId,
                             InvoiceId = customerInvoice.InvoiceId,
                             InvoiceTypeId = customerInvoice.InvoiceTypeId,
                             TotalNumberOfCalls = customerInvoiceDetails.TotalNumberOfCalls,
@@ -146,12 +165,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SerialNumber = customerInvoice.SerialNumber,
                             MultipleCurrencies = multipleCurrencies,
                             DueDate = customerInvoice.DueDate,
-                            FromDate =customerInvoice.FromDate,
-                            OriginalAmount = multipleCurrencies ? default(decimal?) : customerInvoiceDetails.TotalAmountAfterCommission,
+                            FromDate = customerInvoice.FromDate,
+                            OriginalAmount = !multipleCurrencies && customerInvoiceDetails.OriginalAmountByCurrency!=null && customerInvoiceDetails.OriginalAmountByCurrency.Count > 0 ? customerInvoiceDetails.OriginalAmountByCurrency.First().Value.OriginalAmount : default(decimal?),
                             TimeZoneId = customerInvoiceDetails.TimeZoneId,
                             ToDate = customerInvoice.ToDate,
-                         
                         };
+                         
+                    
                         customerInvoiceItemSet.Add(sattlementInvoiceItemDetails);
                     }
 
@@ -234,12 +254,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             AmountWithCommission = multipleCurrencies? default(decimal?) : supplierInvoiceDetails.TotalAmountAfterCommission,
                             Commission = supplierInvoiceDetails.Commission,
                             SerialNumber = supplierInvoice.SerialNumber,
-                            IssueDate = supplierInvoice.IssueDate,
-                          
+                            IssueDate = supplierInvoice.IssueDate,                          
                             MultipleCurrencies = multipleCurrencies,
                             DueDate = supplierInvoice.DueDate,
                             FromDate = supplierInvoice.FromDate,
-                            OriginalAmount = !multipleCurrencies && supplierInvoiceDetails.OriginalAmountByCurrency != null?  supplierInvoiceDetails.OriginalAmountByCurrency.First().Value.OriginalAmount :default(decimal?) ,
+                            OriginalAmount = !multipleCurrencies && supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.Count > 0 ? supplierInvoiceDetails.OriginalAmountByCurrency.First().Value.OriginalAmount : default(decimal?),
                             TimeZoneId = supplierInvoiceDetails.TimeZoneId,
                             ToDate = supplierInvoice.ToDate,
                         };
