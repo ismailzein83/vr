@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService','UISettingsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService', 'UISettingsService', 'Whs_Deal_SubstituteRateTypeEnum','VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function SwapDealInboundEditorController($scope, UtilsService, UISettingsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealInboundEditorController($scope, UtilsService, UISettingsService, Whs_Deal_SubstituteRateTypeEnum, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
         var context;
         var swapDealInboundEntity;
@@ -41,6 +41,8 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.FixedRateValue = Whs_Deal_SubstituteRateTypeEnum.FixedRate.value;
 
             $scope.longPrecision = UISettingsService.getLongPrecision();
 
@@ -98,6 +100,9 @@
             $scope.onSubstituteRateTypeChange = function (val) {
                 if (val != undefined)
                     $scope.scopeModel.substituteRateTypeValue = val.value;
+
+                if (val.value != Whs_Deal_SubstituteRateTypeEnum.FixedRate.value)
+                    $scope.scopeModel.fixedRate = null;
             };
         }
 

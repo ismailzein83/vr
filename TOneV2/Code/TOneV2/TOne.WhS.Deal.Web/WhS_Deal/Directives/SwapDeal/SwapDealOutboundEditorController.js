@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealOutboundEditorController.$inject = ['$scope', 'UtilsService','UISettingsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealOutboundEditorController.$inject = ['$scope', 'UtilsService', 'UISettingsService','Whs_Deal_SubstituteRateTypeEnum', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function SwapDealOutboundEditorController($scope, UtilsService, UISettingsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealOutboundEditorController($scope, UtilsService, UISettingsService, Whs_Deal_SubstituteRateTypeEnum, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
 
         var swapDealOutboundEntity;
@@ -49,6 +49,8 @@
 
             $scope.scopeModel = {};
 
+            $scope.scopeModel.FixedRateValue = Whs_Deal_SubstituteRateTypeEnum.FixedRate.value;
+
             $scope.longPrecision = UISettingsService.getLongPrecision();
 
             $scope.scopeModel.save = function () {
@@ -79,8 +81,11 @@
             };
 
             $scope.onSubstituteRateTypeChange = function (val) {
-                if (val != undefined)
+                if (val != undefined) 
                     $scope.scopeModel.substituteRateTypeValue = val.value;
+
+                if (val.value != Whs_Deal_SubstituteRateTypeEnum.FixedRate.value)
+                    $scope.scopeModel.fixedRate = null;
             };
 
             $scope.onCountrySelectionChanged = function () {
@@ -143,7 +148,7 @@
 
             substituteRateTypeReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SubstituteRateType : undefined
+                    selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SubstituteRateType : Whs_Deal_SubstituteRateTypeEnum.NormalRate.value
                 };
                 VRUIUtilsService.callDirectiveLoad(substituteRateTypeApi, payload, loadSubstituteRateTypePromiseDeferred);
             });

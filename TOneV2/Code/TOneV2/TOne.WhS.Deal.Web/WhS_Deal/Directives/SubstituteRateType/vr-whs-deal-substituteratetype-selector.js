@@ -95,7 +95,7 @@
                 + ' isrequired="ctrl.isrequired"'
                 + hideremoveicon
                 + ' entityName="' + label + '">'
-                + '</vr-select>'
+                + '</vr-select>';
         }
 
         return directiveDefinitionObject;
