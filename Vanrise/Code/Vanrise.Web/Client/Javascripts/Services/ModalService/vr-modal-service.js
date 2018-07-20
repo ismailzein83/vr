@@ -116,7 +116,7 @@
                 if (MobileService.isMobile()) {
                      document.ontouchmove = function(e) {
                                 e.preventDefault();
-                     }
+                     };
                     if ($('.expandable-row-content').length > 1) {
                         $('.expandable-row-content').addClass('full-view');                       
                     }
