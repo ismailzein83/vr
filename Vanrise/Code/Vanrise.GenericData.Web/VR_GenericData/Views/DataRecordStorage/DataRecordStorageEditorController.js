@@ -56,6 +56,7 @@
             $scope.scopeModel.dataRecordTypeFields = [];
             $scope.scopeModel.datasources = [];
             $scope.scopeModel.settingsEditor;
+            $scope.scopeModel.fieldsPermissions = [];
 
             $scope.scopeModel.createdByFieldSelectorReady = function (api) {
                 createdByFieldSelectorAPI = api;
@@ -108,9 +109,26 @@
                         };
                         var createdTimeFieldSetLoader = function (value) { $scope.scopeModel.isCreatedTimeSelectorLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, createdTimeFieldSelectorAPI, createdTimeFieldPayload, createdTimeFieldSetLoader);
+
+                        for (var i = 0; i < $scope.scopeModel.fieldsPermissions.length; i++) {
+
+                            if ($scope.scopeModel.fieldsPermissions[i] != undefined) {
+                                var fieldsPermission = $scope.scopeModel.fieldsPermissions[i];
+                                if (fieldsPermission != undefined) {
+                                    if (fieldsPermission.fieldNamesSelectorAPI != undefined) {
+                                        var fieldNamesPayload = {
+                                            dataRecordTypeId: option.DataRecordTypeId,
+                                        };
+                                        var fieldNamesSetLoader = function (value) { $scope.scopeModel.isFieldNamesSelectorLoading = value; };
+                                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, fieldsPermission.fieldNamesSelectorAPI, fieldNamesPayload, fieldNamesSetLoader);
+
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-             
+
                 if ((isEditMode && typeSelectorChangeCount <= 2) || (!isEditMode && typeSelectorChangeCount <= 1)) {
                     return;
                 }
@@ -157,6 +175,30 @@
             $scope.scopeModel.closeDataRecordStorage = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.addFieldsPermissions = function () {
+                var dataItem = {};
+
+                dataItem.onRequiredPermissionsReady = function (api) {
+                    dataItem.requiredPermissionsAPI = api;
+                };
+                dataItem.onFieldNamesSelectorReady = function (api) {
+                    dataItem.fieldNamesSelectorAPI = api;
+
+                    var dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                    var fieldNamesPayload = {};
+                    if (dataRecordTypeId != undefined) {
+                        fieldNamesPayload.dataRecordTypeId = dataRecordTypeId;
+                        var fieldNamesSetLoader = function (value) { $scope.scopeModel.isFieldNamesSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.fieldNamesSelectorAPI, fieldNamesPayload, fieldNamesSetLoader);
+                    }
+                };
+                $scope.scopeModel.fieldsPermissions.push(dataItem);
+            };
+            $scope.scopeModel.onRemoveField = function (dataItem) {
+                var index = $scope.scopeModel.fieldsPermissions.indexOf(dataItem);
+                if (index != -1)
+                    $scope.scopeModel.fieldsPermissions.splice(index, 1);
+            };
         }
         function load() {
             $scope.isLoading = true;
@@ -180,7 +222,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadCreatedTimeFieldSelector,loadModifiedTimeFieldSelector, loadCreatedByFieldSelector,loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFieldsPermissions, loadCreatedTimeFieldSelector, loadModifiedTimeFieldSelector, loadCreatedByFieldSelector, loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector]).then(function () {
                 selectedDataRecordTypeDeferred = undefined;
                 loadSettingsDirectiveOnPageLoad().then(function () {
                     dataRecordStorageEntity = undefined;
@@ -193,6 +235,71 @@
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
+        function loadFieldsPermissions() {
+            if (isEditMode) {
+                var promises = [];
+
+                var fieldNamesLoadDeferred = UtilsService.createPromiseDeferred();
+                var requiredPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                UtilsService.waitMultiplePromises([selectedDataRecordTypeDeferred.promise]).then(function () {
+
+                    if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined) {
+                        var fieldsPermissions = [];
+                        for (var i = 0; i < dataRecordStorageEntity.Settings.FieldsPermissions.length; i++) {
+                            var dataItem = dataRecordStorageEntity.Settings.FieldsPermissions[i];
+
+                            var fieldpermission = {
+                                fieldNamesreadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                fieldNamesLoadDeferred: UtilsService.createPromiseDeferred(),
+                                requiredPermissionLoadDeferred: UtilsService.createPromiseDeferred(),
+                                requiredPermissionreadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                fieldNamesPayload: {
+                                    dataRecordTypeId: dataRecordStorageEntity.DataRecordTypeId,
+                                    selectedIds: dataItem.FieldNames
+                                },
+                                requiredPermissionPayload: { data: dataItem.RequiredPermission }
+                            }
+                            promises.push(fieldpermission.requiredPermissionLoadDeferred.promise);
+                            promises.push(fieldpermission.fieldNamesLoadDeferred.promise);
+                            fieldsPermissions.push(fieldpermission);
+                        }
+                        for (var i = 0; i < fieldsPermissions.length; i++) {
+                            addfieldpermission(fieldsPermissions[i]);
+                        }
+                        function addfieldpermission(fieldpermission) {
+                            var dataItem = {};
+
+                            dataItem.onRequiredPermissionsReady = function (api) {
+                                dataItem.requiredPermissionsAPI = api;
+                                fieldpermission.requiredPermissionreadyPromiseDeferred.resolve();
+                            };
+                            fieldpermission.requiredPermissionreadyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(dataItem.requiredPermissionsAPI, fieldpermission.requiredPermissionPayload, fieldpermission.requiredPermissionLoadDeferred);
+                        });
+
+                            dataItem.onFieldNamesSelectorReady = function (api) {
+                                dataItem.fieldNamesSelectorAPI = api;
+                                fieldpermission.fieldNamesreadyPromiseDeferred.resolve();
+                            };
+                            fieldpermission.fieldNamesreadyPromiseDeferred.promise
+                       .then(function () {
+                           VRUIUtilsService.callDirectiveLoad(dataItem.fieldNamesSelectorAPI, fieldpermission.fieldNamesPayload, fieldpermission.fieldNamesLoadDeferred);
+                       });                        
+                            $scope.scopeModel.fieldsPermissions.push(dataItem);
+                        }
+
+                    }
+                    return UtilsService.waitMultiplePromises(promises);
+                });
+                
+            }
+        }
+
+
+
+
         function loadModifiedByFieldSelector() {
             if (isEditMode) {
                 var modifiedByFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -489,8 +596,31 @@
             obj.Settings.LastModifiedTimeField = modifiedTimeFieldSelectorAPI.getSelectedIds();
             obj.Settings.DontReflectToDB = $scope.scopeModel.dontReflectToDB;
             obj.Settings.DenyAPICall = $scope.scopeModel.denyAPICall;
+            obj.Settings.FieldsPermissions = buildFieldsPermissionsFromScope();
             return obj;
         }
+        function buildFieldsPermissionsFromScope() {
+            var fieldsPermissions = [];
+            for (var i = 0; i < $scope.scopeModel.fieldsPermissions.length; i++) {
+                if ($scope.scopeModel.fieldsPermissions[i] != undefined) {
+                    var fieldsPermission = $scope.scopeModel.fieldsPermissions[i];
+                    if (fieldsPermission != undefined) {
+                        var fieldsPermissionobj = {};
+                        if (fieldsPermission.fieldNamesSelectorAPI != undefined) {
+                            fieldsPermissionobj.FieldNames = fieldsPermission.fieldNamesSelectorAPI.getSelectedIds();
+                        }
+                        if (fieldsPermission.requiredPermissionsAPI != undefined) {
+                            fieldsPermissionobj.RequiredPermission = fieldsPermission.requiredPermissionsAPI.getData();
+                        }
+                    }
+                    fieldsPermissions.push(fieldsPermissionobj);
+                }
+            }
+            return fieldsPermissions
+        }
+
+
+
     }
 
     appControllers.controller('VR_GenericData_DataRecordStorageEditorController', DataRecordStorageEditorController);

@@ -40,7 +40,7 @@
                         <vr-columns width="1/3row" vr-loader="scopeModel.isCreatedBySelectorLoading">
                             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.createdByFieldSelectorReady" label="Created By Field" selectedvalues="scopeModel.createdByField"></vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
-                        <vr-columns width="1/3row" vr-loader="scopeModel.isModifiedTimeSelectorLoading" >
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isModifiedTimeSelectorLoading">
                             <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.modifiedTimeFieldSelectorReady" label="Modified Time Field" selectedvalues="scopeModel.modifiedTimeField"></vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>
                         <vr-columns width="1/3row" vr-loader="scopeModel.isCreatedTimeSelectorLoading">
@@ -62,11 +62,33 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Security'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-sec-requiredpermission-grid on-ready="scopeModel.onRequiredPermissionReady"></vr-sec-requiredpermission-grid>
-                        </vr-columns>
-                    </vr-row>
+
+                    <vr-section header="Required Permission">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                    <vr-section header="Fields Permission">
+
+                        <vr-button type="Add" data-onclick="scopeModel.addFieldsPermissions" standalone></vr-button>
+
+                        <vr-row>
+                            <vr-datalist maxitemsperrow="1" datasource="scopeModel.fieldsPermissions" isitemdraggable onremoveitem="scopeModel.onRemoveField">
+                                <vr-row>
+                                    <vr-columns width="1/3row" vr-loader="scopeModel.isFieldNamesSelectorLoading">
+                                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onFieldNamesSelectorReady" label="Field Names" selectedvalues="scopeModel.fieldNames" ismultipleselection></vr-genericdata-datarecordtypefields-selector>
+                                    </vr-columns>
+                                </vr-row>
+                                <vr-row>
+                                    <vr-columns width="fullrow">
+                                        <vr-sec-requiredpermission-grid on-ready="dataItem.onRequiredPermissionsReady"></vr-sec-requiredpermission-grid>
+                                    </vr-columns>
+                                </vr-row>
+                            </vr-datalist>
+                        </vr-row>
+                    </vr-section>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
