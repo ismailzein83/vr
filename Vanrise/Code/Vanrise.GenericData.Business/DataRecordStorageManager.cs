@@ -557,7 +557,8 @@ namespace Vanrise.GenericData.Business
 
         public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
-            return this.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds);
+            var userID = SecurityContext.Current.GetLoggedInUserId();
+            return this.DoesUserHaveAccess(userID, input.Query.DataRecordStorageIds) && DoesUserHaveFieldsAccess(userID, input.Query.DataRecordStorageIds,input.Query.Columns);
         }
 
         public bool DoesUserHaveAccess(int userId, List<Guid> dataRecordStorages)
@@ -571,6 +572,16 @@ namespace Vanrise.GenericData.Business
             return true;
         }
 
+        public bool DoesUserHaveFieldsAccess(int userId, List<Guid> dataRecordStorages,IEnumerable<string> fieldNames)
+        {
+            var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
+            foreach (var r in allRecordStorages)
+            {
+                if (!DoesUserHaveAccessForAllRecordStorageFields(userId, r.Settings.FieldsPermissions, fieldNames))
+                    return false;
+            }
+            return true;
+        }
         #endregion
 
         #region Private Methods
@@ -590,6 +601,27 @@ namespace Vanrise.GenericData.Business
             SecurityManager secManager = new SecurityManager();
             if (dataRecordStorage.Settings.RequiredPermission != null && !secManager.IsAllowed(dataRecordStorage.Settings.RequiredPermission, userId))
                 return false;
+            return true;
+        }
+
+        bool DoesUserHaveAccessForAllRecordStorageFields(int userId, List<DataRecordStorageFieldsPermission> FieldsPermissions, IEnumerable<string> fieldNames)
+        {
+            SecurityManager secManager = new SecurityManager();
+            if(FieldsPermissions != null && FieldsPermissions.Count > 0)
+            {
+                if (fieldNames != null)
+                {
+                    foreach(var fieldName in fieldNames)
+                    {
+                        var item = FieldsPermissions.FindRecord(x => x.FieldNames.Contains(fieldName));
+                        if (item != null)
+                        {
+                            if (!secManager.IsAllowed(item.RequiredPermission, userId))
+                                return false;
+                        }
+                    }
+                }
+            }
             return true;
         }
 

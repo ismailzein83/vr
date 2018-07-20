@@ -7,6 +7,8 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
 {
@@ -114,7 +116,27 @@ namespace Vanrise.Analytic.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<AnalyticReportConfiguration>(AnalyticReportConfiguration.EXTENSION_TYPE);
         }
-
+        public IEnumerable<Guid> CheckRecordStoragesAccess(Guid analyticReportId)
+        {
+            HashSet<Guid> availableDataRecordStorages = new HashSet<Guid>();
+            var analyticReport = GetAnalyticReportById(analyticReportId);
+            analyticReport.ThrowIfNull("analyticReport", analyticReportId);
+            analyticReport.Settings.ThrowIfNull("analyticReport.Settings", analyticReportId);
+            var dataRecordSearchPageSettings = analyticReport.Settings.CastWithValidate<DataRecordSearchPageSettings>("DataRecordSearchPageSettings");
+            if(dataRecordSearchPageSettings != null && dataRecordSearchPageSettings.Sources != null)
+            {
+                DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+                var userId = SecurityContext.Current.GetLoggedInUserId();
+               foreach(var source in dataRecordSearchPageSettings.Sources)
+               {
+                  if(dataRecordStorageManager.DoesUserHaveFieldsAccess(userId,source.RecordStorageIds,source.GridColumns.MapRecords(x=>x.FieldName)))
+                  {
+                      availableDataRecordStorages.UnionWith(source.RecordStorageIds);
+                  }
+               }
+            }
+            return availableDataRecordStorages;
+        }
         public AnalyticReportConfiguration GetAnalyticReportConfigTypeByName(string name)
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();

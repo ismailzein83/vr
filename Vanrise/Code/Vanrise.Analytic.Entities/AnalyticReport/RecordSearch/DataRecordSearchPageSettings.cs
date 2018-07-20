@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Analytic.Entities
 {
     public class DataRecordSearchPageSettings : AnalyticReportSettings
@@ -17,10 +17,11 @@ namespace Vanrise.Analytic.Entities
 
         public override bool DoesUserHaveAccess(Security.Entities.IViewUserAccessContext context)
         {
-            IDataRecordStorageManager _genericBusinessEntityManager = BusinessManagerFactory.GetManager<IDataRecordStorageManager>();
+            IDataRecordStorageManager _genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IDataRecordStorageManager>();
             foreach (var r in this.Sources)
             {
-                if (_genericBusinessEntityManager.DoesUserHaveAccess(context.UserId, r.RecordStorageIds) == true)
+                var fieldNames = r.GridColumns.MapRecords(x => x.FieldName);
+                if (_genericBusinessEntityManager.DoesUserHaveAccess(context.UserId, r.RecordStorageIds) && _genericBusinessEntityManager.DoesUserHaveFieldsAccess(context.UserId, r.RecordStorageIds, fieldNames))
                     return true;
             }
             return false;

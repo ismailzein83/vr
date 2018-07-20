@@ -61,7 +61,8 @@
                     settings: viewEntity.Settings,
                     itemActionSettings: itemActionSettings,
                     preDefinedFilter:preDefinedFilter,
-                    autoSearch: autoSearch
+                    autoSearch: autoSearch,
+                    analyticReportId: analyticReportId
                 };
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payLoad, loadDirectivePromiseDeferred);
             });

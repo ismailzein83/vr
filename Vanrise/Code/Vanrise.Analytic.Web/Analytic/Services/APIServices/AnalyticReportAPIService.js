@@ -41,6 +41,11 @@
         function GetAnalyticReportConfigTypes() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAnalyticReportConfigTypes'));
         }
+        function CheckRecordStoragesAccess(analyticReportId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'CheckRecordStoragesAccess'), {
+                analyticReportId: analyticReportId
+            });
+        }
         return ({
             GetAnalyticReportsInfo: GetAnalyticReportsInfo,
             GetFilteredAnalyticReports: GetFilteredAnalyticReports,
@@ -50,6 +55,7 @@
             AddAnalyticReport: AddAnalyticReport,
             HasAddAnalyticReportPermission:HasAddAnalyticReportPermission,
             GetAnalyticReportConfigTypes: GetAnalyticReportConfigTypes,
+            CheckRecordStoragesAccess: CheckRecordStoragesAccess
         });
     }
 
