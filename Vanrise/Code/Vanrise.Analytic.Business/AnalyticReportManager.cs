@@ -129,10 +129,11 @@ namespace Vanrise.Analytic.Business
                 var userId = SecurityContext.Current.GetLoggedInUserId();
                foreach(var source in dataRecordSearchPageSettings.Sources)
                {
-                  if(dataRecordStorageManager.DoesUserHaveFieldsAccess(userId,source.RecordStorageIds,source.GridColumns.MapRecords(x=>x.FieldName)))
-                  {
+                   if (dataRecordStorageManager.DoesUserHaveAccess(userId, source.RecordStorageIds) && dataRecordStorageManager.DoesUserHaveFieldsAccess(userId, source.RecordStorageIds, source.GridColumns.MapRecords(x => x.FieldName)))
+                   {
                       availableDataRecordStorages.UnionWith(source.RecordStorageIds);
-                  }
+                   }
+                 
                }
             }
             return availableDataRecordStorages;
