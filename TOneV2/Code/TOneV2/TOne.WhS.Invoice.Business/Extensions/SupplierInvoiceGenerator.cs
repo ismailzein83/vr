@@ -96,7 +96,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
             List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate);
-
+            AddRecurringChargeToSupplierCurrency(supplierInvoiceBySaleCurrency, evaluatedSupplierRecurringCharges);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, supplierInvoiceBySaleCurrency, evaluatedSupplierRecurringCharges);
             #region BuildSupplierInvoiceDetails
             SupplierInvoiceDetails supplierInvoiceDetails = BuilSupplierInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
@@ -181,6 +181,40 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             #endregion
         }
+
+        private void AddRecurringChargeToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
+        {
+            if (recurringChargeItems != null && recurringChargeItems.Count > 0)
+            {
+                if (supplierInvoiceBySaleCurrencyItemDetails == null)
+                    supplierInvoiceBySaleCurrencyItemDetails = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
+
+                foreach (var item in recurringChargeItems)
+                {
+                    var customerInvoiceBySaleCurrencyItemDetail = supplierInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId);
+                    if (customerInvoiceBySaleCurrencyItemDetail != null)
+                    {
+                        customerInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
+                    }
+                    else
+                    {
+                        supplierInvoiceBySaleCurrencyItemDetails.Add(new SupplierInvoiceBySaleCurrencyItemDetails
+                        {
+                            FromDate = item.From,
+                            ToDate = item.To,
+                            AmountAfterCommission = item.Amount,
+                            AmountAfterCommissionWithTaxes = item.Amount,
+                            NumberOfCalls = 0,
+                            Duration = item.Amount,
+                            CurrencyId = item.CurrencyId,
+                            Amount = item.Amount,
+                        });
+
+                    }
+                }
+            }
+        }
+
 
         private List<SupplierInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
         {
