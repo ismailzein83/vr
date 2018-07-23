@@ -96,7 +96,7 @@ namespace TOne.WhS.DBSync.Business
                 foreach (var rule in rules)
                     if (!_allSupplierZones.ContainsKey(rule.SupplierZoneId.ToString()))
                     {
-                        Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Option Block, Source Id: {0}, Supplier Zone Id {1}", sourceRule.SourceId, sourceRule.SupplierZoneId));
+                        Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Option Block, Source Id: {0}, Source Supplier Zone Id {1}, First Rule Source Supplier Zone Id {2}", rule.SourceId, rule.SupplierZoneId, sourceRule.SupplierZoneId));
                         this.TotalRowsFailed++;
                     }
                     else
@@ -176,7 +176,7 @@ namespace TOne.WhS.DBSync.Business
                     },
                 };
                 if (sourceRule.ExcludedCodesList != null && sourceRule.ExcludedCodesList.Count > 0)
-                    settings.Criteria.ExcludedDestinations = new ExcludedCodes() { Codes = sourceRule.ExcludedCodesList.ToList() }; 
+                    settings.Criteria.ExcludedDestinations = new ExcludedCodes() { Codes = sourceRule.ExcludedCodesList.ToList() };
             }
             return settings;
         }

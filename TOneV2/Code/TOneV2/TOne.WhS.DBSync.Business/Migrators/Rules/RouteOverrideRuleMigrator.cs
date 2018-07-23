@@ -206,7 +206,7 @@ namespace TOne.WhS.DBSync.Business
             foreach (var rule in rules)
                 if (!_allSaleZones.ContainsKey(rule.SaleZoneId.ToString()))
                 {
-                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Override, Source Id: {0}, Sale Zone Id {1}", sourceRule.SourceId, sourceRule.SaleZoneId));
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Override, Source Id: {0}, Source Sale Zone Id {1}, First Rule Source Sale Zone Id {2}", rule.SourceId, rule.SaleZoneId, sourceRule.SaleZoneId));
                     this.TotalRowsFailed++;
                 }
                 else
