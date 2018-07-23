@@ -70,7 +70,7 @@
                             </vr-columns>
                         </vr-row>
                     </vr-section>
-                    <vr-section header="Fields Permission">
+                    <vr-section header="Fields Permission" ng-show="scopeModel.selectedDataRecordType != undefined">
 
                         <vr-button type="Add" data-onclick="scopeModel.addFieldsPermissions" standalone></vr-button>
 
@@ -78,7 +78,7 @@
                             <vr-datalist maxitemsperrow="1" datasource="scopeModel.fieldsPermissions" isitemdraggable onremoveitem="scopeModel.onRemoveField">
                                 <vr-row>
                                     <vr-columns width="1/3row" vr-loader="scopeModel.isFieldNamesSelectorLoading">
-                                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onFieldNamesSelectorReady" label="Field Names" selectedvalues="scopeModel.fieldNames" ismultipleselection></vr-genericdata-datarecordtypefields-selector>
+                                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onFieldNamesSelectorReady" label="Field Names" selectedvalues="scopeModel.fieldNames" ismultipleselection isrequired="true"></vr-genericdata-datarecordtypefields-selector>
                                     </vr-columns>
                                 </vr-row>
                                 <vr-row>
