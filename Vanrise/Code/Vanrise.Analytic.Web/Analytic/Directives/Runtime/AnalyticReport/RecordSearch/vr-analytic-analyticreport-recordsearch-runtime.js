@@ -269,38 +269,35 @@
             }
 
             function setSourceSelector() {
-              //  var tabids = [];
                 $scope.drSearchPageStorageSources = [];
                 if (settings != undefined) {
-                    // $scope.drSearchPageStorageSources = settings.Sources;
-                    //for (var i = 0; i < settings.Sources.length; i++) {
-                    //    for (var j = 0; j < settings.Sources[i].RecordStorageIds.length; j++) {
-                    //        var id = settings.Sources[i].RecordStorageIds[j];
-                    //        if (tabids.indexOf(id) == -1)
-                    //            tabids[tabids.length] = id;
-                    //    }
-                    //}
-
                     return VR_Analytic_AnalyticReportAPIService.CheckRecordStoragesAccess(analyticReportId).then(function (response) {
-                        for (var i = 0; i < settings.Sources.length; i++) {
-                            var neededIds = settings.Sources[i].RecordStorageIds;
-                            if (checkIfAllow(settings.Sources[i].RecordStorageIds, response))
-                                $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i];
-                        }
+                        if (response != undefined && response.length > 0) {
+                            for (var i = 0; i < response.length; i++) {
 
-                        if (sourceName != undefined) {
-                            $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, sourceName, "Name");
-                        } else if ($scope.drSearchPageStorageSources.length > 0) {
-                            $scope.selectedDRSearchPageStorageSource = $scope.drSearchPageStorageSources[0];
-                        }
+                                var currenctSourceName = response[i];
+                                var source = UtilsService.getItemByVal(settings.Sources, currenctSourceName, "Name");
+                                if (source != undefined)
+                                    $scope.drSearchPageStorageSources.push(source);
+                            }
 
-                        if ($scope.drSearchPageStorageSources.length > 1) {
-                            $scope.showSourceSelector = true;
+                            if (sourceName != undefined) {
+                                $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, sourceName, "Name");
+                            } else if ($scope.drSearchPageStorageSources.length > 0) {
+                                $scope.selectedDRSearchPageStorageSource = $scope.drSearchPageStorageSources[0];
+                            }
+
+                            if ($scope.drSearchPageStorageSources.length > 1) {
+                                $scope.showSourceSelector = true;
+                            }
                         }
                     });
                 }
 
             }
+
+            
+
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
                 $scope.selectedOrderDirection = $scope.orderDirectionList[1];
@@ -308,20 +305,23 @@
                 $scope.maxNumberOfRecords = settings != undefined && settings.MaxNumberOfRecords != null ? settings.MaxNumberOfRecords : UISettingsService.getMaxSearchRecordCount();
             }
 
-            function loadTimeRangeDirective() {
+
+
+             function loadTimeRangeDirective() {
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
-                        period: period != undefined ? period : PeriodEnum.Today.value,
-                        fromDate: fromDate,
-                        toDate: toDate
-                    };
+                    period : period != undefined ? period: PeriodEnum.Today.value,
+                fromDate: fromDate,
+                toDate: toDate
+                };
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
 
                 });
                 return loadTimeDimentionPromiseDeferred.promise;
-            }
+                }
+
             function loadFields() {
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo($scope.selectedDRSearchPageStorageSource.DataRecordTypeId).then(function (response) {
                     if (response) {

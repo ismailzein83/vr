@@ -60,7 +60,7 @@ namespace Vanrise.Analytic.Web.Controllers
 
         [HttpGet]
         [Route("CheckRecordStoragesAccess")]
-        public IEnumerable<Guid> CheckRecordStoragesAccess(Guid analyticReportId)
+        public IEnumerable<string> CheckRecordStoragesAccess(Guid analyticReportId)
         {
             AnalyticReportManager manager = new AnalyticReportManager();
             return manager.CheckRecordStoragesAccess(analyticReportId);

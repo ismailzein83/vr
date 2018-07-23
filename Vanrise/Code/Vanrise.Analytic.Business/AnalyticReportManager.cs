@@ -116,9 +116,9 @@ namespace Vanrise.Analytic.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<AnalyticReportConfiguration>(AnalyticReportConfiguration.EXTENSION_TYPE);
         }
-        public IEnumerable<Guid> CheckRecordStoragesAccess(Guid analyticReportId)
+        public IEnumerable<string> CheckRecordStoragesAccess(Guid analyticReportId)
         {
-            HashSet<Guid> availableDataRecordStorages = new HashSet<Guid>();
+            HashSet<string> availableSources = new HashSet<string>();
             var analyticReport = GetAnalyticReportById(analyticReportId);
             analyticReport.ThrowIfNull("analyticReport", analyticReportId);
             analyticReport.Settings.ThrowIfNull("analyticReport.Settings", analyticReportId);
@@ -131,12 +131,12 @@ namespace Vanrise.Analytic.Business
                {
                    if (dataRecordStorageManager.DoesUserHaveAccess(userId, source.RecordStorageIds) && dataRecordStorageManager.DoesUserHaveFieldsAccess(userId, source.RecordStorageIds, source.GridColumns.MapRecords(x => x.FieldName)))
                    {
-                      availableDataRecordStorages.UnionWith(source.RecordStorageIds);
+                       availableSources.Add(source.Name);
                    }
                  
                }
             }
-            return availableDataRecordStorages;
+            return availableSources;
         }
         public AnalyticReportConfiguration GetAnalyticReportConfigTypeByName(string name)
         {
