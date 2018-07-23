@@ -279,7 +279,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                   + '<vr-validator validate="ctrl.validate()" vr-input>'
                      + '<div id="mainInput" ng-model="ctrl.value" class="form-control vr-file-upload"  style="border-radius: 4px;padding: 0px;">'
                             + '<div  class="vr-file">'
-                               +'<div ng-if=" ctrl.file !=null ">'
+                               + '<div ng-if=" ctrl.file !=null "  title="{{ctrl.file.name}}">'
                                + ' <a href="" class="vr-file-name" ng-click="ctrl.downloadFile()">{{ctrl.file.name}}</a>'
                                + ' <div ng-show=" ctrl.num < 100" class="progress-bar progress-bar-success  progress-bar-striped active vr-file-process" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: ctrl.num + \'%\'}"></div>'
                                + ' <div ng-show="complet == true " class="vr-file-process" ><span>Complete</span></div>'
