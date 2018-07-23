@@ -248,9 +248,11 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         public void SwapTables(int indexesCommandTimeoutInSeconds, bool syncSaleCodeZones)
         {
-            string createRouteIndexScript = string.Format(@"CREATE INDEX IX_route_CustomerId_cldsid_{0} ON {1} USING btree
-                                                      (customer_id COLLATE pg_catalog.default, cldsid) TABLESPACE pg_default;
-                                                      ALTER TABLE {1} CLUSTER ON IX_route_CustomerId_cldsid_{0};", Guid.NewGuid().ToString("N"), TempTableNameWithSchema);
+            string createRouteIndexScript = string.Format(@"CREATE INDEX IX_route_customerId_btree_{0} ON {1} USING btree
+                                                            (customer_id COLLATE pg_catalog.default) TABLESPACE pg_default;
+                                                            CREATE INDEX IX_route_clisid_gist_{0} ON {1} USING gist (clisid);
+                                                            CREATE INDEX IX_route_cldsid_gist_{0} ON {1} USING gist (cldsid);
+                                                            ALTER TABLE {1} CLUSTER ON IX_route_customerId_btree_{0};", Guid.NewGuid().ToString("N"), TempTableNameWithSchema);
             string swapRouteTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {3}; ", TableNameWithSchema, OldTableName, TempTableNameWithSchema, TableName);
 
             List<string> pgStrings = new List<string> { createRouteIndexScript, swapRouteTableScript };
