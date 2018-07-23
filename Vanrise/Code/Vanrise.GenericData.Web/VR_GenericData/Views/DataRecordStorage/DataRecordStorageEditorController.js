@@ -80,6 +80,7 @@
             };
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function (option) {
                 $scope.scopeModel.selectedDataRecordType = option;
+                $scope.scopeModel.fieldsPermissions.length = 0;
                 typeSelectorChangeCount++;
                 loadDataRecordFields();
                 if (option != undefined) {
@@ -110,22 +111,7 @@
                         var createdTimeFieldSetLoader = function (value) { $scope.scopeModel.isCreatedTimeSelectorLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, createdTimeFieldSelectorAPI, createdTimeFieldPayload, createdTimeFieldSetLoader);
 
-                        for (var i = 0; i < $scope.scopeModel.fieldsPermissions.length; i++) {
 
-                            if ($scope.scopeModel.fieldsPermissions[i] != undefined) {
-                                var fieldsPermission = $scope.scopeModel.fieldsPermissions[i];
-                                if (fieldsPermission != undefined) {
-                                    if (fieldsPermission.fieldNamesSelectorAPI != undefined) {
-                                        var fieldNamesPayload = {
-                                            dataRecordTypeId: option.DataRecordTypeId,
-                                        };
-                                        var fieldNamesSetLoader = function (value) { $scope.scopeModel.isFieldNamesSelectorLoading = value; };
-                                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, fieldsPermission.fieldNamesSelectorAPI, fieldNamesPayload, fieldNamesSetLoader);
-
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -180,6 +166,8 @@
 
                 dataItem.onRequiredPermissionsReady = function (api) {
                     dataItem.requiredPermissionsAPI = api;
+                    var requiredPermissionsSetLoader = function (value) { $scope.scopeModel.isRequiredPermissionsLoading = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.requiredPermissionsAPI, null, requiredPermissionsSetLoader);
                 };
                 dataItem.onFieldNamesSelectorReady = function (api) {
                     dataItem.fieldNamesSelectorAPI = api;
@@ -260,8 +248,6 @@
                             promises.push(fieldpermission.requiredPermissionLoadDeferred.promise);
                             promises.push(fieldpermission.fieldNamesLoadDeferred.promise);
                             fieldsPermissions.push(fieldpermission);
-                        }
-                        for (var i = 0; i < fieldsPermissions.length; i++) {
                             addfieldpermission(fieldsPermissions[i]);
                         }
                         function addfieldpermission(fieldpermission) {
@@ -283,14 +269,14 @@
                             fieldpermission.fieldNamesreadyPromiseDeferred.promise
                        .then(function () {
                            VRUIUtilsService.callDirectiveLoad(dataItem.fieldNamesSelectorAPI, fieldpermission.fieldNamesPayload, fieldpermission.fieldNamesLoadDeferred);
-                       });                        
+                       });
                             $scope.scopeModel.fieldsPermissions.push(dataItem);
                         }
 
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 });
-                
+
             }
         }
 
@@ -611,7 +597,7 @@
                         }
                         fieldsPermissions.push(fieldsPermissionobj);
                     }
-                    
+
                 }
             }
             return fieldsPermissions;
