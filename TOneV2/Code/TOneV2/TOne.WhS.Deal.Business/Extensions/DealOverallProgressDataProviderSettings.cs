@@ -82,7 +82,8 @@ namespace TOne.WhS.Deal.Business
                         ExtraVolumeRate = swapDealInbound.ExtraVolumeRate,
                         EstimatedAmount = swapDealInbound.Volume * swapDealInbound.Rate,
                         Status = swapDealSetting.Status,
-                        RemainingDays = daysToEnd
+                        RemainingDays = daysToEnd,
+                        GroupNumber = swapDealInbound.ZoneGroupNumber
                     };
                     saleDealInfos.Add(saleDealInfo);
                 }
@@ -101,7 +102,8 @@ namespace TOne.WhS.Deal.Business
                         ExtraVolumeRate = swapDealOutbound.ExtraVolumeRate,
                         EstimatedAmount = swapDealOutbound.Volume * swapDealOutbound.Rate,
                         Status = swapDealSetting.Status,
-                        RemainingDays = daysToEnd
+                        RemainingDays = daysToEnd,
+                        GroupNumber = swapDealOutbound.ZoneGroupNumber
                     };
                     costDealInfos.Add(costDealInfo);
                 }
@@ -214,7 +216,8 @@ namespace TOne.WhS.Deal.Business
                 BillingDataByGroupNb billingDataByGroupNb;
                 if (trafficByDealId.TryGetValue(deal.DealId, out billingDataByGroupNb))
                 {
-                    foreach (var billingData in billingDataByGroupNb.Values)
+                    BillingData billingData;
+                    if (billingDataByGroupNb.TryGetValue(deal.GroupNumber, out billingData))
                     {
                         DataRecordObject dataRecordObject = CreateDataRecordObject(deal, direction, billingData, deal.Rate);
                         datarecords.Add(dataRecordObject);
@@ -236,7 +239,8 @@ namespace TOne.WhS.Deal.Business
                 BillingDataByGroupNb billingDataByGroupNb;
                 if (trafficByDealId.TryGetValue(deal.DealId, out billingDataByGroupNb))
                 {
-                    foreach (var billingData in billingDataByGroupNb.Values)
+                    BillingData billingData;
+                    if (billingDataByGroupNb.TryGetValue(deal.GroupNumber, out billingData))
                     {
                         DataRecordObject dataRecordObject = CreatePlusDataRecordObject(deal, direction, billingData, deal.ExtraVolumeRate);
                         datarecords.Add(dataRecordObject);
@@ -303,17 +307,17 @@ namespace TOne.WhS.Deal.Business
 
         private DataRecordObject CreateDataRecordObject(BaseDealInfo dealInfo, string direction, BillingData billingData, decimal dealRate)
         {
-            decimal reachedVolume = 0, toDateVolume = 0, remainingVolume = 0, remainingVolumePrecentage = 0;
+            decimal reachedVolume = 0, toDateVolume = 0, remainingVolume = 0, remainingVolumePrecentage = 0, remainingVolumePerDays = 0;
 
             if (billingData != null)
             {
                 reachedVolume = billingData.ReachedVolume;
                 toDateVolume = billingData.ToDateVolume;
-                var remains = dealInfo.EstimatedVolume - billingData.ReachedVolume;
-                remainingVolume = remains < 0 ? 0 : remains;
+                remainingVolume = dealInfo.EstimatedVolume - billingData.ReachedVolume;
                 remainingVolumePrecentage = remainingVolume == 0
                     ? 0
                     : remainingVolume / dealInfo.EstimatedVolume * 100;
+                remainingVolumePerDays = dealInfo.RemainingDays == 0 ? 0 : remainingVolume / dealInfo.RemainingDays;
             }
 
             decimal expectedDays = toDateVolume == 0 || remainingVolume == 0
@@ -334,7 +338,7 @@ namespace TOne.WhS.Deal.Business
                 {"RemainngVolume", remainingVolume},
                 {"RemaingVolumePerc", remainingVolumePrecentage},
                 {"RemainingDays", dealInfo.RemainingDays < 0 ? 0 : dealInfo.RemainingDays},
-                {"RemainingPerDays", 0},
+                {"RemainingPerDays", remainingVolumePerDays},
                 {"ExpectedDays", expectedDays},
                 {"Rate", dealRate},
                 {"EstimatedAmount", dealInfo.EstimatedAmount},
@@ -384,6 +388,7 @@ namespace TOne.WhS.Deal.Business
         public int RemainingDays { get; set; }
         public decimal EstimatedAmount { get; set; }
         public string Notes { get; set; }
+        public int GroupNumber { get; set; }
     }
     public class BillingData
     {
