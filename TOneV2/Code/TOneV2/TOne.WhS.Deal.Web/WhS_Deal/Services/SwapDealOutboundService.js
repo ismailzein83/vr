@@ -23,10 +23,11 @@
             };
             VRModalService.showModal(editorUrl, parameters, settings);
         }
-        function viewSwapDealOutbound(swapDealOutbound, sellingNumberPlanId) {
+        function viewSwapDealOutbound(swapDealOutbound, sellingNumberPlanId, context) {
             var parameters = {
                 swapDealOutbound: swapDealOutbound,
-                sellingNumberPlanId: sellingNumberPlanId
+                sellingNumberPlanId: sellingNumberPlanId,
+                context: context
             };
 
             var settings = {};

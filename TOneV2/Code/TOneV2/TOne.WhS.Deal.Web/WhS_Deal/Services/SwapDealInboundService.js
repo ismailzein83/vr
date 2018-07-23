@@ -7,10 +7,11 @@
     function SwapDealInboundService(VRModalService, VRNotificationService, UtilsService) {
         var editorUrl = '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealInboundEditor.html';
 
-        function viewSwapDealInbound(swapDealInbound, sellingNumberPlanId) {
+        function viewSwapDealInbound(swapDealInbound, sellingNumberPlanId, context) {
             var parameters = {
                 swapDealInbound: swapDealInbound,
-                sellingNumberPlanId: sellingNumberPlanId
+                sellingNumberPlanId: sellingNumberPlanId,
+                context: context
             };
 
             var settings = {};

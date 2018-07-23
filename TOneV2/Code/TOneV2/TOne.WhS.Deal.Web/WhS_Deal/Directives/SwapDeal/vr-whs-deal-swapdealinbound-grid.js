@@ -147,7 +147,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
-                WhS_Deal_SwapDealInboundService.viewSwapDealInbound(dealInboundObj, sellingNumberPlanId);
+                WhS_Deal_SwapDealInboundService.viewSwapDealInbound(dealInboundObj, sellingNumberPlanId, context);
             }
 
             function deleteSwapDealInbound(swapDealInboundObj) {
