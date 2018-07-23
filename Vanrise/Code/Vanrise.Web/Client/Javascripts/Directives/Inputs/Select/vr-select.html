@@ -99,7 +99,7 @@
                                         {{ctrl.selectlbl}}
                                     </div>
                                     <div style="height: 208px; overflow-y: auto;padding-top:5px;overflow-x: hidden;" id="divSelectedValuesContainer{{ctrl.id}}">
-                                        <div id="divSelectedValuesBody{{ctrl.id}}">
+                                        <div id="divSelectedValuesBody{{ctrl.id}}" style="white-space:normal">
                                             <span class="label custom-label" style="position:relative;white-space:normal;text-align:unset" ng-repeat="obj in ctrl.selectedvalues | limitTo: ctrl.selectedValuespageSize " ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(obj)}}">
                                                 {{::ctrl.getObjectText(obj)}}
                                                 <span class="glyphicon glyphicon-eye-open hand-cursor view-selected-item" ng-click="ctrl.onViewHandler(obj)" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton"></span>
@@ -114,7 +114,7 @@
                                     {{ctrl.selectlbl}}
                                 </div>
                                 <div style="height: 208px; overflow-y: auto;padding-top:5px;overflow-x: hidden;" id="divSelectedValuesContainer{{ctrl.id}}">
-                                    <div id="divSelectedValuesBody{{ctrl.id}}">
+                                    <div id="divSelectedValuesBody{{ctrl.id}}" style="white-space:normal">
                                         <span class="label custom-label" style="position:relative" ng-repeat="obj in ctrl.selectedvalues | limitTo: ctrl.selectedValuespageSize " ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
                                             {{::ctrl.getObjectText(obj)}}
                                             <span ng-show="showeye" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton" ng-click="ctrl.onViewHandler(obj)" class="glyphicon glyphicon-eye-open view-icon"></span>
