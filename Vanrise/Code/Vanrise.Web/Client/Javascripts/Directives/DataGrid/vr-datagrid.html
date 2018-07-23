@@ -51,15 +51,15 @@
     <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
         <div id="gridBody">
             <div class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
-                <div ng-if="!ctrl.isMobile" style="display:flex;width: 100%;">
+                <div ng-if="!ctrl.isMobile" style="width:100%">
                     <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
                     </div>
                     <div style="margin:-2px" ng-style="{'width': ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="ctrl.expandableColumnWidth != undefined">
-                    </div>                    
-                    <div style="width:100%" class="mobile-grid-row">
-                        <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                     </div>
-                </div>
+                    <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
+                        <div vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
+                    </div>
+                </div>                
                 <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row summary-container">
                     <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                 </div>

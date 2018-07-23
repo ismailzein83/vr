@@ -984,8 +984,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 			}
 
 			function buildSummaryRowHtml() {
+                ctrl.summaryRowHtml = undefined;
 				if (ctrl.summaryDataItem != undefined) {
-					ctrl.summaryRowHtml = '';
+                ctrl.summaryRowHtml = '';
 					for (var i = 0; i < ctrl.columnDefs.length; i++) {
 						var currentColumn = ctrl.columnDefs[i];
 						var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
