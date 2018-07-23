@@ -205,7 +205,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             AmountAfterCommission = item.Amount,
                             AmountAfterCommissionWithTaxes = item.Amount,
                             NumberOfCalls = 0,
-                            Duration = item.Amount,
+                            Duration = 0,
                             CurrencyId = item.CurrencyId,
                             Amount = item.Amount,
                         });
