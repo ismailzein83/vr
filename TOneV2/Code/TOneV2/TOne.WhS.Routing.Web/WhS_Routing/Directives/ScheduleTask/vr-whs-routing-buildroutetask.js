@@ -91,12 +91,19 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
 
             function loadSwitchSelector(selectedIds) {
                 var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                var payload = undefined;
 
-                if (selectedIds != undefined) {
-                    payload = { selectedIds: selectedIds };
-                }
                 switchSelectorReadyDeferred.promise.then(function () {
+
+                    var payload = {
+                        filter: {
+                            Filters: [{
+                                $type: "TOne.WhS.BusinessEntity.Business.SyncWithinRouteBuildSwitchFilter, TOne.WhS.BusinessEntity.Business"
+                            }]
+                        }
+                    };
+                    if (selectedIds != undefined) {
+                        payload.selectedIds = selectedIds;
+                    }
                     VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, payload, switchSelectorLoadDeferred);
                 });
 
