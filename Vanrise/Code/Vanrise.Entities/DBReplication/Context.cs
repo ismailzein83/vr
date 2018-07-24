@@ -8,13 +8,13 @@ namespace Vanrise.Entities
 {
     public interface IDBReplicationInitializeContext
     {
-        Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetLinkedServer { get; }
+        Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetServer { get; }
 
         Action<string> WriteInformation { get; }
     }
     public class DBReplicationInitializeContext : IDBReplicationInitializeContext
     {
-        public Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetLinkedServer { get; set; }
+        public Dictionary<string, List<DBReplicationTableDetails>> DBReplicationTableDetailsListByTargetServer { get; set; }
 
         public Action<string> WriteInformation { get; set; }
     }
@@ -62,6 +62,8 @@ namespace Vanrise.Entities
         DateTime ToTime { get; }
         string FilterDateTimeColumn { get; }
         int NumberOfDaysPerInterval { get; }
+        string IdColumn { get; }
+        int? ChunkSize { get; }
         Action<string> WriteInformation { get; }
     }
 
@@ -84,6 +86,10 @@ namespace Vanrise.Entities
         public string FilterDateTimeColumn { get; set; }
 
         public int NumberOfDaysPerInterval { get; set; }
+
+        public string IdColumn { get; set; }
+
+        public int? ChunkSize { get; set; }
 
         public Action<string> WriteInformation { get; set; }
     }

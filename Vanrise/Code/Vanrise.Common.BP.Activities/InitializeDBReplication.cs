@@ -39,6 +39,8 @@ namespace Vanrise.Common.BP.Activities
                     {
                         DBReplicationPreInsert = table.DBReplicationPreInsert,
                         FilterDateTimeColumn = table.FilterDateTimeColumn,
+                        IdColumn = table.IdColumn,
+                        ChunkSize = table.ChunkSize,
                         TableSchema = table.TableSchema,
                         SourceConnectionStringName = dbConnectionEntity.SourceConnectionStringName,
                         TableName = table.TableName,
@@ -52,7 +54,7 @@ namespace Vanrise.Common.BP.Activities
 
             dbReplicationDataManager.Initialise(new DBReplicationInitializeContext()
             {
-                DBReplicationTableDetailsListByTargetLinkedServer = dbReplicationTableDetailsListByTargetLinkedServer,
+                DBReplicationTableDetailsListByTargetServer = dbReplicationTableDetailsListByTargetLinkedServer,
                 WriteInformation = (message) =>
                 {
                     context.ActivityContext.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);

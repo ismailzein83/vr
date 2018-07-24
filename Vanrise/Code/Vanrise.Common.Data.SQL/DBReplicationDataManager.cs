@@ -19,12 +19,12 @@ namespace Vanrise.Common.Data.SQL
         #region public methods
         public void Initialise(IDBReplicationInitializeContext context)
         {
-            if (context.DBReplicationTableDetailsListByTargetLinkedServer == null)
-                context.DBReplicationTableDetailsListByTargetLinkedServer.ThrowIfNull("context.DBReplicationTableDetailsListBySourceConnection");
+            if (context.DBReplicationTableDetailsListByTargetServer == null)
+                context.DBReplicationTableDetailsListByTargetServer.ThrowIfNull("context.DBReplicationTableDetailsListBySourceConnection");
 
             TableInfoListByTargetServer = new Dictionary<string, List<TableInfo>>();
 
-            foreach (var dbReplicationTableDetailsListKvp in context.DBReplicationTableDetailsListByTargetLinkedServer)
+            foreach (var dbReplicationTableDetailsListKvp in context.DBReplicationTableDetailsListByTargetServer)
             {
                 string targetServerConnectionString = dbReplicationTableDetailsListKvp.Key;
                 SqlConnectionStringBuilder targetConnectionString = new SqlConnectionStringBuilder(targetServerConnectionString);
@@ -94,9 +94,15 @@ namespace Vanrise.Common.Data.SQL
                         DropOriginalTables(context, tableInfo);
                         RenameTempTables(context, tableInfo);
                         CreateIndexes(context, tableInfo);
+                    }
+
+                    foreach (TableInfo tableInfo in tableInfoList)
+                    {
+                        DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                         CreateFKs(context, tableInfo);
                         context.WriteInformation(string.Format("Finalizing table {0} done", GetFullTableName(dbReplicationTableDetails.TableName, null, dbReplicationTableDetails.TableSchema)));
                     }
+
                     targetServerConnection.CommitTransaction();
                 }
                 catch (Exception ex)
@@ -237,6 +243,7 @@ namespace Vanrise.Common.Data.SQL
             columnsToInsert = new List<string>();
 
             Server server = sourcetable.Parent.Parent;
+            List<Column> columnsToBeAddedAtEnd = new List<Column>();
 
             foreach (Column source in sourcetable.Columns)
             {
@@ -269,10 +276,21 @@ namespace Vanrise.Common.Data.SQL
                     column.IsColumnSet = source.IsColumnSet;
                 }
 
-                copiedtable.Columns.Add(column);
-
                 if (string.Compare(column.Name, "timestamp", true) != 0 && !column.Computed)
+                {
                     columnsToInsert.Add(column.Name);
+                    copiedtable.Columns.Add(column);
+                }
+                else
+                {
+                    columnsToBeAddedAtEnd.Add(column);
+                }
+            }
+
+            if (columnsToBeAddedAtEnd.Count > 0)
+            {
+                foreach (var column in columnsToBeAddedAtEnd)
+                    copiedtable.Columns.Add(column);
             }
         }
 
@@ -304,7 +322,9 @@ namespace Vanrise.Common.Data.SQL
                 ToTime = context.ToTime,
                 FilterDateTimeColumn = dbReplicationTableDetails.FilterDateTimeColumn,
                 NumberOfDaysPerInterval = context.NumberOfDaysPerInterval,
-                WriteInformation = context.WriteInformation
+                WriteInformation = context.WriteInformation,
+                ChunkSize = dbReplicationTableDetails.ChunkSize,
+                IdColumn = dbReplicationTableDetails.IdColumn
             };
         }
 

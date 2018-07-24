@@ -62,15 +62,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BusinessProcess.Business">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBReplicationProcessBPSettings.cs" />
     <Compile Include="BE360Degree\BE360DegreeManager.cs" />
     <Compile Include="BigData\BigDataManager.cs" />
     <Compile Include="BigData\BigDataRequestHandler.cs" />

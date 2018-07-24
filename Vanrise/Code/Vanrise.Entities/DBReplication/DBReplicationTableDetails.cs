@@ -14,6 +14,10 @@ namespace Vanrise.Entities
 
         public string FilterDateTimeColumn { get; set; }
 
+        public string IdColumn { get; set; }
+
+        public int? ChunkSize { get; set; }
+
         public DBReplicationPreInsert DBReplicationPreInsert { get; set; }
     }
 }

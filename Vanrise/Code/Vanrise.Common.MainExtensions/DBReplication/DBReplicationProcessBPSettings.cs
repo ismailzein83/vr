@@ -1,8 +1,7 @@
 ﻿using System;
-using Vanrise.Common;
 using Vanrise.Common.BP.Arguments;
 
-namespace Vanrise.Common.Business
+namespace Vanrise.Common.MainExtensions.DBReplication
 {
     public class DBReplicationProcessBPSettings : Vanrise.BusinessProcess.Business.DefaultBPDefinitionExtendedSettings
     {

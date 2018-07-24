@@ -50,10 +50,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Country\Rules\StructureRulesBehaviors\RuleBehaviorByCountry.cs" />
     <Compile Include="Country\SelectiveCountryCriteriaGroup.cs" />
+    <Compile Include="DBReplication\DBReplicationProcessBPSettings.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateAction.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateActionActionArgument.cs" />
     <Compile Include="ExchangeRateUpdateService\XigniteCurrency.cs" />
@@ -86,6 +95,10 @@
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.BP.Arguments\Vanrise.Common.BP.Arguments.csproj">
+      <Project>{841b50ab-e1a4-46ba-9358-f6519c92a2e3}</Project>
+      <Name>Vanrise.Common.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
