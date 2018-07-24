@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Vanrise.DataParser.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.DataParser.Business
 {
@@ -31,7 +32,7 @@ namespace Vanrise.DataParser.Business
 
             for (int i = 0, start = 0; i < rawData.Length; start = i)
             {
-                // parse Tag
+                //Parsing Tag
                 bool constructedTlv = (rawData[i] & 0x20) != 0;
                 bool moreBytes = (rawData[i] & 0x1F) == 0x1F;
                 while (moreBytes && (rawData[++i] & 0x80) != 0) ;
@@ -41,11 +42,20 @@ namespace Vanrise.DataParser.Business
                 if (tag == 0 || tag == 255)
                     continue;
 
-                // parse Length
-                bool multiByteLength = (rawData[i] & 0x80) != 0;
-
-                int length = multiByteLength ? ParserHelper.GetInt(rawData, i + 1, rawData[i] & 0x1F) : rawData[i];
-                i = multiByteLength ? i + (rawData[i] & 0x1F) + 1 : i + 1;
+                //Parsing Length
+                int length;
+                bool hasFixedLength = rawData[i] != 0x80;
+                if (hasFixedLength)
+                {
+                    bool multiByteLength = (rawData[i] & 0x80) != 0;
+                    length = multiByteLength ? ParserHelper.GetInt(rawData, i + 1, rawData[i] & 0x1F) : rawData[i];
+                    i = multiByteLength ? i + (rawData[i] & 0x1F) + 1 : i + 1;
+                }
+                else
+                {
+                    i++;
+                    length = GetTagValueLength(rawData, i, tag);
+                }
 
                 // fill data
                 byte[] result = new byte[length];
@@ -61,6 +71,49 @@ namespace Vanrise.DataParser.Business
                 i += length;
                 onTagValueRead(tagValue);
             }
+        }
+
+        private static int GetTagValueLength(byte[] rawData, int startingIndex, int parentTag)
+        {
+            int numberOfByte80 = 1;
+
+            for (int currentIndex = startingIndex, start = startingIndex; currentIndex < rawData.Length; start = currentIndex)
+            {
+                //Parsing Tag
+                bool moreBytes = (rawData[currentIndex] & 0x1F) == 0x1F;
+                while (moreBytes && (rawData[++currentIndex] & 0x80) != 0) ;
+                currentIndex++;
+
+                int tag = ParserHelper.GetInt(rawData, start, currentIndex - start);
+                if (tag == 255)
+                    continue;
+
+                //Parsing Length
+                bool hasFixedLength = rawData[currentIndex] != 0x80;
+                bool multiByteLength = (rawData[currentIndex] & 0x80) != 0;
+                int length = multiByteLength ? ParserHelper.GetInt(rawData, currentIndex + 1, rawData[currentIndex] & 0x1F) : rawData[currentIndex];
+                currentIndex = multiByteLength ? currentIndex + (rawData[currentIndex] & 0x1F) + 1 : currentIndex + 1;
+                currentIndex += length;
+
+                if (length != 0 || (tag != 0 && hasFixedLength))
+                    continue;
+
+                //we are here in two cases:
+                //tag = !00 and length = 80
+                //tag = 00  and length = 00
+                if (tag != 0)
+                {
+                    numberOfByte80++;
+                }
+                else
+                {
+                    numberOfByte80--;
+                    if (numberOfByte80 == 0)
+                        return currentIndex - startingIndex;
+                }
+            }
+
+            throw new DataIntegrityValidationException(string.Format("Unknow Length for Tag: '{0}'", parentTag.ToString("X")));
         }
     }
 }
