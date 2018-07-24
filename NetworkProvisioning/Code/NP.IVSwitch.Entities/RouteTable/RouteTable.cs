@@ -20,7 +20,8 @@ namespace NP.IVSwitch.Entities.RouteTable
     }
     public class RouteTableEndPoint
     {
-        public Int16 CLIRouting { get; set; }
+        public int EndPointId { get; set; } 
+       // public Int16 CLIRouting { get; set; }
     }
     public class RouteTableRoute
     {
