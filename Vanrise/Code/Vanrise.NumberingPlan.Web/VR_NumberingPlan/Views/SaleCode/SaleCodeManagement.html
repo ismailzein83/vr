@@ -3,7 +3,7 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
             <vr-row removeline>
 
-                <vr-np-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" normal-col-num="2" selectedvalues="selectedSellingNumberPlan" onselectitem="onSellingNumberPlanSelectItem" isrequired="true"></vr-np-sellingnumberplan-selector>
+                <vr-np-sellingnumberplan-selector on-ready="onSellingNumberPlanDirectiveReady" normal-col-num="2" selectedvalues="selectedSellingNumberPlan" onselectionchanged="onSellingNumberPlanSelectItem" isrequired="true"></vr-np-sellingnumberplan-selector>
 
                 <vr-columns width="normal" ng-show="selectedSellingNumberPlan!=undefined" haschildcolumns>
                     <vr-np-salezone-selector ismultipleselection on-ready="onSaleZoneDirectiveReady"> </vr-np-salezone-selector>

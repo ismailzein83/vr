@@ -52,12 +52,12 @@
                 saleZoneReadyPromiseDeferred.resolve();
             };
 
-            $scope.onSellingNumberPlanSelectItem = function (selectedItem) {
-                if (selectedItem != undefined) {
+            $scope.onSellingNumberPlanSelectItem = function () {
+                if (sellingNumberPlanDirectiveAPI.getSelectedIds() != undefined) {
                     var setLoader = function (value) { $scope.isLoadingSaleZonesSelector = value; };
 
                     var payload = {
-                        sellingNumberPlanId: selectedItem.SellingNumberPlanId
+                        sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
