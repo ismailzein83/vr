@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.DBSync.Entities;
+﻿using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
-    public class RuleDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
+    public class RuleDBSyncDataManager : BaseSQLDataManager
     {
+        readonly string _tableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.Rule);
+        readonly string _schema = "rules";
+
         public RuleDBSyncDataManager()
             : base(GetConnectionStringName("RulesDBConnStringKey", "RulesDBConnString"))
         {
@@ -22,14 +20,11 @@ namespace TOne.WhS.DBSync.Data.SQL
             ExecuteNonQueryText(query, null);
         }
 
-        public string GetConnection()
+        public void SyncRoutingProductRules(bool useTempTables)
         {
-            return base.GetConnectionString();
-        }
-
-        public string GetSchema()
-        {
-            return "rules";
+            ExecuteNonQueryText(string.Format(@"Insert Into {0} ([TypeID], [RuleDetails], [BED], [EED], [SourceID], [IsDeleted], [CreatedTime], [CreatedBy], [LastModifiedTime], [LastModifiedBy])
+                                                SELECT [TypeID], [RuleDetails], [BED], [EED], [SourceID], [IsDeleted], [CreatedTime], [CreatedBy], [LastModifiedTime], [LastModifiedBy] FROM [rules].[Rule]
+                                                Where [RuleDetails] like '%""RoutingProductId"":%'", MigrationUtils.GetTableName(_schema, _tableName, useTempTables)), null);
         }
     }
 }

@@ -73,6 +73,7 @@ namespace TOne.WhS.DBSync.Business
         private void ApplyPreData()
         {
             _context.WriteInformation("Start Applying Pre Data");
+
             List<long> fileIds = new List<long>();
 
             SalePriceListTemplateDataManager salePriceListTemplateDataManager = new SalePriceListTemplateDataManager();
@@ -101,6 +102,13 @@ namespace TOne.WhS.DBSync.Business
 
             FileDBSyncDataManager fileManager = new FileDBSyncDataManager(_context.UseTempTables);
             fileManager.InsertFiles(vrFiles);
+
+            if (_context.DBTables != null && _context.DBTables.ContainsKey(DBTableName.Rule))
+            {
+                RuleDBSyncDataManager ruleDBSyncDataManager = new RuleDBSyncDataManager();
+                ruleDBSyncDataManager.SyncRoutingProductRules(_context.UseTempTables);
+            }
+
             _context.WriteInformation("Finish Applying Pre Data");
         }
 
