@@ -155,7 +155,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         return true;
                     };
                 }
-                if ((minAmount.HasValue && customerInvoiceDetails.TotalAmountAfterCommission >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.TotalAmountAfterCommission != 0))
+
+                CurrencyManager currencyManager = new CurrencyManager();
+                var systemCurrency = currencyManager.GetSystemCurrency();
+                systemCurrency.ThrowIfNull("systemCurrency");
+                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                decimal totalAmountAfterCommissionInSystemCurrency = currencyExchangeRateManager.ConvertValueToCurrency(customerInvoiceDetails.TotalAmountAfterCommission, currencyId, systemCurrency.CurrencyId, context.IssueDate);
+
+                decimal totalReccurringChargesInSystemCurrency =0;
+                foreach (var item in evaluatedCustomerRecurringCharges)
+                {
+                    totalReccurringChargesInSystemCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.AmountAfterTaxes, item.CurrencyId, systemCurrency.CurrencyId, context.IssueDate);
+                }
+                var totalAmountInSystemCurrency = totalReccurringChargesInSystemCurrency + totalAmountAfterCommissionInSystemCurrency;
+
+                if ((minAmount.HasValue && totalAmountInSystemCurrency >= minAmount.Value) || (!minAmount.HasValue && totalAmountInSystemCurrency != 0))
                 {
                     if (!financialAccountInvoiceType.IgnoreFromBalance)
                     {

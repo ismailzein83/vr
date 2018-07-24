@@ -13,6 +13,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Security.Business;
+using Vanrise.Invoice.Business;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class SupplierInvoiceGenerator : InvoiceGenerator
@@ -31,6 +32,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
             financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
 
+            PartnerManager partnerManager = new PartnerManager();
+            decimal? minAmount = partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             int? timeZoneId = null;
             decimal? commission = null;
             CommissionType? commissionType = null;
@@ -153,24 +156,44 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
 
                 }
+                CurrencyManager currencyManager = new CurrencyManager();
+                var systemCurrency = currencyManager.GetSystemCurrency();
+                systemCurrency.ThrowIfNull("systemCurrency");
+                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                decimal totalAmountAfterCommissionInSystemCurrency = currencyExchangeRateManager.ConvertValueToCurrency(supplierInvoiceDetails.TotalAmountAfterCommission, currencyId, systemCurrency.CurrencyId, context.IssueDate);
 
-                if (!financialAccountInvoiceType.IgnoreFromBalance)
+                decimal totalReccurringChargesInSystemCurrency = 0;
+                foreach (var item in evaluatedSupplierRecurringCharges)
                 {
-                    SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                    totalReccurringChargesInSystemCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.AmountAfterTaxes, item.CurrencyId, systemCurrency.CurrencyId, context.IssueDate);
                 }
-
-                ConfigManager configManager = new ConfigManager();
-                InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
-
-                if (settings != null)
+                var totalAmountInSystemCurrency = totalReccurringChargesInSystemCurrency + totalAmountAfterCommissionInSystemCurrency;
+                if ((minAmount.HasValue && totalAmountInSystemCurrency >= minAmount.Value) || (!minAmount.HasValue && totalAmountInSystemCurrency != 0))
                 {
-                    context.NeedApproval = settings.NeedApproval;
+                    if (!financialAccountInvoiceType.IgnoreFromBalance)
+                    {
+                        SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                    }
+
+                    ConfigManager configManager = new ConfigManager();
+                    InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
+
+                    if (settings != null)
+                    {
+                        context.NeedApproval = settings.NeedApproval;
+                    }
+                    context.Invoice = new GeneratedInvoice
+                    {
+                        InvoiceDetails = supplierInvoiceDetails,
+                        InvoiceItemSets = generatedInvoiceItemSets,
+                    };
                 }
-                context.Invoice = new GeneratedInvoice
+                else
                 {
-                    InvoiceDetails = supplierInvoiceDetails,
-                    InvoiceItemSets = generatedInvoiceItemSets,
-                };
+                    context.ErrorMessage = "Cannot generate invoice with amount less than threshold.";
+                    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                    return;
+                }
             }
             else
             {
