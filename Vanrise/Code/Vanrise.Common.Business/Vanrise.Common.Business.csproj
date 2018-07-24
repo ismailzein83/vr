@@ -111,7 +111,7 @@
     <Compile Include="VRActionAudit\VRObjectTrackingManager.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityManager.cs" />
     <Compile Include="VRBulkActionDraft\VRBulkActionDraftManager.cs" />
-    <Compile Include="VRConnections\SQLConnection.cs" />
+    <Compile Include="VRConnections\MainImplementations\SQLConnection.cs" />
     <Compile Include="VRConnections\VRConnectionManager.cs" />
     <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />
     <Compile Include="DataGrouping\Distribution\DataGroupingDistributor.cs" />
@@ -132,7 +132,8 @@
     <Compile Include="StatusDefinition\StatusDefinitionManager.cs" />
     <Compile Include="TextManipulationContext\TextManipulationActionContext.cs" />
     <Compile Include="TextManipulationManager.cs" />
-    <Compile Include="VRConnections\VRInterAppRestConnection.cs" />
+    <Compile Include="VRConnections\MainImplementations\VRHttpConnection.cs" />
+    <Compile Include="VRConnections\MainImplementations\VRInterAppRestConnection.cs" />
     <Compile Include="VREventHandler\VREventHandlerDetail.cs" />
     <Compile Include="VREventHandler\VREventHandlerInfo.cs" />
     <Compile Include="VREventHandler\VREventHandlerInfoFilter.cs" />
