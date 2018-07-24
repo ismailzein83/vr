@@ -67,9 +67,6 @@ namespace Vanrise.BusinessProcess.Business
 
             Func<BPDefinition, bool> filterExpression = (prod) =>
             {
-                if (prod.Configuration.BusinessRuleSetSupported == false)
-                    return false;
-
                 if (!DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), prod))
                     return false;
 

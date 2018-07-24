@@ -241,9 +241,16 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
     function loadBPDefinitions() {
         var loadBPDefinitionsPromiseDeferred = UtilsService.createPromiseDeferred();
         bpDefinitionReadyPromiseDeferred.promise.then(function () {
-            var payload = undefined;
+            var payload = {
+                filter: {
+                    $type: "Vanrise.BusinessProcess.Entities.BPDefinitionInfoFilter,Vanrise.BusinessProcess.Entities",
+                    Filters: [{
+                        $type: "Vanrise.BusinessProcess.Business.BPDefinitionRuleSetFilter,Vanrise.BusinessProcess.Business"
+                    }]
+                }
+            }
             if (isEditMode) {
-                payload = { selectedIds: bpBusinessRuleSet.BPDefinitionId };
+                payload.selectedIds = bpBusinessRuleSet.BPDefinitionId;
             }
             VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, payload, loadBPDefinitionsPromiseDeferred);
         });

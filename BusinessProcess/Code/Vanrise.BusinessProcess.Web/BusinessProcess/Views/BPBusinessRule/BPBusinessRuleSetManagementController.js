@@ -67,7 +67,15 @@
         function loadBPDefinitions() {
             var loadBPDefinitionsPromiseDeferred = UtilsService.createPromiseDeferred();
             bpDefinitionReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, undefined, loadBPDefinitionsPromiseDeferred);
+                var payload = {
+                    filter: {
+                        $type: "Vanrise.BusinessProcess.Entities.BPDefinitionInfoFilter,Vanrise.BusinessProcess.Entities",
+                        Filters: [{
+                            $type: "Vanrise.BusinessProcess.Business.BPDefinitionRuleSetFilter,Vanrise.BusinessProcess.Business"
+                        }]
+                    }
+                }
+                VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, payload, loadBPDefinitionsPromiseDeferred);
             });
 
             return loadBPDefinitionsPromiseDeferred.promise;
