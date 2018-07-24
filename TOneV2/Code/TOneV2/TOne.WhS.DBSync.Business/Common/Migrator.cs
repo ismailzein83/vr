@@ -15,9 +15,7 @@ namespace TOne.WhS.DBSync.Business
         public MigrationContext Context { get; set; }
         public int TotalRowsSuccess { get; set; }
         public int TotalRowsFailed { get; set; }
-
         public virtual bool IsLoadItemsApproach { get { return false; } }
-
         public virtual bool IsBuildAllItemsOnce { get { return false; } }
 
         protected Migrator(MigrationContext context)
