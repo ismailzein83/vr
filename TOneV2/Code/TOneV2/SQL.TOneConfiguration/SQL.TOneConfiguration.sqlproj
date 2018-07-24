@@ -864,6 +864,7 @@
     <None Include="Voucher.PostDeployment.sql" />
     <None Include="InterConnect_Data.PostDeployment.sql" />
     <None Include="Mediation_Ogero.HuaweiMGCF.PostDeployment.sql" />
+    <None Include="Mediation_Ogero.HuaweiEPC.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
