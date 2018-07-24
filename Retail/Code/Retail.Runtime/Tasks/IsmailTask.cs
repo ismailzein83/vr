@@ -34,8 +34,8 @@ namespace Retail.Runtime.Tasks
         public void Execute()
         {           
             
-            CallGetAnalyticRecords();
-            //GenerateVRWorkflow();
+            //CallGetAnalyticRecords();
+            GenerateVRWorkflow();
             //CreateWFProgrammatically();
             //Parallel.For(0, 1, (i) =>
             //    {
@@ -267,7 +267,16 @@ namespace Retail.Runtime.Tasks
             public decimal CalculatedTotalDuration { get; set; }
         }
 
-        
+        public class MyTestMethodOutput
+        {
+            public string Text1 { get; set; }
+
+            public string Text2 { get; set; }
+
+            public List<string> List { get; set; }
+
+            public List<MyTestMethodOutput> ListOfObjects { get; set; }
+        }
 
         private void GenerateVRWorkflow()
         {
@@ -312,6 +321,90 @@ namespace Retail.Runtime.Tasks
                             },
                             Activities = new VRWorkflowActivityCollection
                             {
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCallHttpServiceActivity
+                                    {
+                                        ConnectionId = new Guid("DA0609E8-6A15-4BB8-8DA6-66352CAA3A05"),
+                                         ActionPath = "\"api/MyTest/TestCall\"",
+                                         Method = VRWorkflowCallHttpServiceMethod.Get,
+                                         URLParameters = new List<VRWorkflowCallHttpServiceURLParameter>
+                                         {
+                                             new VRWorkflowCallHttpServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+                                         },
+                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
+                                         ResponseLogic = "Console.WriteLine(\"responseContent: {0}\", response.StringResponse);",
+                                         ErrorLogic = "Console.WriteLine(\"error occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+                                         ContinueWorkflowIfCallFailed = true,
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCallHttpServiceActivity
+                                    {
+                                         ActionPath = "\"api/MyTest/TestMethod\"",
+                                         Method = VRWorkflowCallHttpServiceMethod.Post,
+                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
+                                         //{
+                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+                                         //},
+                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.ApplicationJSON,
+                                         BuildBodyLogic = "return @\"{'Text':'test input1 to Test Method'}\";",
+                                         ResponseLogic = "Console.WriteLine(\"responseContent2: {0}\", response.StringResponse);Console.WriteLine();Console.WriteLine();Console.WriteLine();Console.WriteLine(\"Deserialized: {0}\", response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[2].Text1);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+                                         ErrorLogic = "Console.WriteLine(\"error2 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);this.Variable1 = error.ErrorMessage;Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+                                         ContinueWorkflowIfCallFailed = true
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCallHttpServiceActivity
+                                    {
+                                         ActionPath = "\"WebService1.asmx\"",
+                                         Method = VRWorkflowCallHttpServiceMethod.Post,
+                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
+                                         //{
+                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+                                         //},
+                                         Headers = new List<VRWorkflowCallHttpServiceHeader>
+                                         {
+                                             new VRWorkflowCallHttpServiceHeader { Key = "SOAPAction", Value = "\"http://tempuri.org/HelloWorld\""}
+                                         },                                         
+                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
+                                         BuildBodyLogic = "return @\"<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><HelloWorld xmlns='http://tempuri.org/' /></soap:Body></soap:Envelope>\";",
+                                         ResponseLogic = "Console.WriteLine(\"AA responseContent3: {0}\", response.StringResponse);",
+                                         ErrorLogic = "Console.WriteLine(\"error3 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+                                         ContinueWorkflowIfCallFailed = false
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCallHttpServiceActivity
+                                    {
+                                         ActionPath = "\"WebService1.asmx\"",
+                                         Method = VRWorkflowCallHttpServiceMethod.Post,
+                                         //URLParameters = new List<VRWorkflowCallServiceURLParameter>
+                                         //{
+                                         //    new VRWorkflowCallServiceURLParameter { Name = "input", Value = "\" input sent from workflow\""}
+                                         //},
+                                         Headers = new List<VRWorkflowCallHttpServiceHeader>
+                                         {
+                                             new VRWorkflowCallHttpServiceHeader { Key = "SOAPAction", Value = "\"http://tempuri.org/TestMethod\""}
+                                         },                                         
+                                         MessageFormat = VRWorkflowCallHttpServiceMessageFormat.TextXML,
+                                         BuildBodyLogic = "return @\"<?xml version='1.0' encoding='utf-8'?><soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'><soap:Body><TestMethod xmlns='http://tempuri.org/' ><input1><Text>Input 1 Text Value</Text></input1></TestMethod></soap:Body></soap:Envelope>\";",
+                                         ResponseLogic = "Console.WriteLine(\"AA responseContent4: {0}\", response.StringResponse);Console.WriteLine();Console.WriteLine();Console.WriteLine();Console.WriteLine(\"Deserialized4: {0}\", response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[2].Text1);this.Variable2 = response.DeserializeResponse<Retail.Runtime.Tasks.IsmailTask.MyTestMethodOutput>().ListOfObjects[1].Text1;Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+                                         ErrorLogic = "Console.WriteLine(\"error4 occured: '{0}'. Exception '{1}'\", error.ErrorMessage, error.Exception);Console.WriteLine();Console.WriteLine();Console.WriteLine();",
+                                         ContinueWorkflowIfCallFailed = false
+                                    }
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Value read from Http Service: {0}\", this.Variable2);"}
+                                },
+                                new VRWorkflowActivity
+                                {
+                                    Settings = new VRWorkflowCustomLogicActivity { Code = "Console.WriteLine(\"Error read from Http Service: {0}\", this.Variable1);"}
+                                },
                                 new VRWorkflowActivity
                                 {
                                     Settings = new VRWorkflowAssignActivity 
@@ -460,10 +553,32 @@ namespace Retail.Runtime.Tasks
                 }
             };
             Activity wfWorkflow;
-            List<string> errorMessage;
+            List<string> errorMessage; 
             if (new VRWorkflowManager().TryCompileWorkflow(workflow, out wfWorkflow, out errorMessage))
             {
-                var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { {"InputArg1", "this is teh value send in INputArg1"}, {"InputArg2", 43} });
+                Console.WriteLine("Compiled successfully");
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine(DateTime.Now);
+                    try
+                    {
+                        var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { { "InputArg1", "this is teh value send in INputArg1" }, { "InputArg2", 43 } });
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Workflow Error");
+                    }
+                }
+                while (Console.ReadKey().Key != ConsoleKey.Delete);
+            }
+            else
+            {
+                Console.WriteLine("Workflow not compiled");
+                foreach(var error in errorMessage)
+                {
+                    Console.WriteLine(error);
+                }
             }
         }
 
