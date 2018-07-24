@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
@@ -48,6 +49,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
+            var httpClient = new System.Net.Http.HttpClient();
             context.AddUsingStatement("using System.Net.Http;");
             StringBuilder nmSpaceCodeBuilder = new StringBuilder(@"                 
 
@@ -66,6 +68,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                     public class #CLASSNAME#ExecutionContext : #BASEEXECUTIONCLASSNAME#
                     {
+                        static Vanrise.Common.Business.VRConnectionManager s_connectionManager = new Vanrise.Common.Business.VRConnectionManager();
+
                         public #CLASSNAME#ExecutionContext(ActivityContext activityContext) 
                             : base (activityContext)
                         {
@@ -73,36 +77,19 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         public void Execute()
                         {
-                            using (var client = new System.Net.Http.HttpClient())
-                            {
-                                client.BaseAddress = new Uri(""http://localhost:1206"");
-                                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(""#MESSAGEFORMATVALUE#""));
-                                using (System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.#METHOD#, #ACTIONPATH# + ""#URLPARAMETERS#""))
-                                {
-                                    #HEADERS#
-                    
-                                    #BODY#
-                    
-                                    using (var responseTask = client.SendAsync(request))
-                                    {
-                                        responseTask.Wait();
-                                        if(responseTask.Exception == null && responseTask.Result.IsSuccessStatusCode)
-                                        {
-                                            #SETISSUCCEEDEDTRUE#
-                                            OnResponseReceived(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse(client, responseTask.Result, Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceMessageFormat.#MESSAGEFORMAT#));                                
-                                        }
-                                        else
-                                        {
-                                            #SETISSUCCEEDEDFALSE#
-                                            var fault = new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault(client, responseTask, Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceMessageFormat.#MESSAGEFORMAT#);
-                                            OnError(fault);
-                                            #ERRORHANDLING#
-                                        }     
-                                    }
-                                }
-                            }
-                           
+                            Guid connectionId = new Guid(""#CONNECTIONID#"");
+                            var vrConnection = s_connectionManager.GetVRConnection(connectionId);
+                            vrConnection.ThrowIfNull(""vrConnection"", connectionId);
+                            var vrHttpConnection = vrConnection.Settings.CastWithValidate<Vanrise.Common.Business.VRHttpConnection>(""vrConnection.Settings"", connectionId);
+
+                            #ASSIGNISSUCCEEDED#vrHttpConnection.TrySendRequest(#ACTIONPATH#, Vanrise.Entities.VRHttpMethod.#HTTPMETHOD#, Vanrise.Entities.VRHttpMessageFormat.#MESSAGEFORMAT#, #URLPARAMETERS#,
+                            #HEADERS#, #BODY#, (response) => OnResponseReceived(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse(response)),
+                            #THROWIFERROR#, (error) => OnError(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault(error)));
                         }
+
+                        #BUILDURLPARAMETERSMETHOD#
+
+                        #BUILDHEADERSMETHOD#
 
                         #BUILDBODYMETHOD#
                         
@@ -118,54 +105,57 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     }
                 }");
 
-
+            nmSpaceCodeBuilder.Replace("#CONNECTIONID#", this.ConnectionId.ToString());
             nmSpaceCodeBuilder.Replace("#ACTIONPATH#", this.ActionPath);
-            nmSpaceCodeBuilder.Replace("#METHOD#", this.Method.ToString());
+            nmSpaceCodeBuilder.Replace("#HTTPMETHOD#", this.Method.ToString());
 
             if (this.URLParameters != null && this.URLParameters.Count > 0)
             {
                 StringBuilder urlParametersBuilder = new StringBuilder();
-                int index = 0;
                 foreach (var prm in this.URLParameters)
                 {
-                    if (index == 0)
-                        urlParametersBuilder.Append("?");
-                    else
-                        urlParametersBuilder.Append(",");
-                    index++;
-                    urlParametersBuilder.Append(String.Concat("", prm.Name, "=\" + "));
-                    urlParametersBuilder.Append(prm.Value);
-                    urlParametersBuilder.Append(" + \"");
+                    urlParametersBuilder.AppendLine(String.Concat("parameters.Add(\"", prm.Name, "\", ", prm.Value, ");"));
                 }
-                nmSpaceCodeBuilder.Replace("#URLPARAMETERS#", urlParametersBuilder.ToString());
+                nmSpaceCodeBuilder.Replace("#BUILDURLPARAMETERSMETHOD#", String.Concat(@"Dictionary<string, string> GetUrlParameters() 
+                                            {
+                                                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                                                ", urlParametersBuilder.ToString(), @"
+                                                return parameters;
+                                            }"));
+                nmSpaceCodeBuilder.Replace("#URLPARAMETERS#", "GetUrlParameters()");
             }
             else
             {
-                nmSpaceCodeBuilder.Replace("#URLPARAMETERS#", "");
+                nmSpaceCodeBuilder.Replace("#BUILDURLPARAMETERSMETHOD#", "");
+                nmSpaceCodeBuilder.Replace("#URLPARAMETERS#", "null");
             }
 
-            if (this.Headers != null)
+            if (this.Headers != null && this.Headers.Count > 0)
             {
                 StringBuilder headersBuilder = new StringBuilder();
                 foreach (var header in this.Headers)
                 {
-                    headersBuilder.AppendLine(String.Concat("request.AddHeader(\"", header.Key, "\", ", header.Value, ");"));
+                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header.Key, "\", ", header.Value, ");"));
                 }
-                nmSpaceCodeBuilder.Replace("#HEADERS#", headersBuilder.ToString());
+                nmSpaceCodeBuilder.Replace("#BUILDHEADERSMETHOD#", String.Concat(@"Dictionary<string, string> GetHeaders() 
+                                            {
+                                                Dictionary<string, string> headers = new Dictionary<string, string>();
+                                                ", headersBuilder.ToString(), @"
+                                                return headers;
+                                            }"));
+                nmSpaceCodeBuilder.Replace("#HEADERS#", "GetHeaders()");
             }
             else
             {
-                nmSpaceCodeBuilder.Replace("#HEADERS#", "");
+                nmSpaceCodeBuilder.Replace("#BUILDHEADERSMETHOD#", "");
+                nmSpaceCodeBuilder.Replace("#HEADERS#", "null");
             }
 
-            string messageFormatValue = Utilities.GetEnumAttribute<VRWorkflowCallHttpServiceMessageFormat, VRWorkflowCallHttpServiceMessageFormatAttribute>(this.MessageFormat).Value;
-
             nmSpaceCodeBuilder.Replace("#MESSAGEFORMAT#", this.MessageFormat.ToString());
-            nmSpaceCodeBuilder.Replace("#MESSAGEFORMATVALUE#", messageFormatValue);
 
             if (this.BuildBodyLogic != null)
             {
-                nmSpaceCodeBuilder.Replace("#BODY#", String.Concat("request.Content = new System.Net.Http.StringContent(GetBody(), System.Text.Encoding.UTF8, \"", messageFormatValue, "\");"));
+                nmSpaceCodeBuilder.Replace("#BODY#", "GetBody()");
                 nmSpaceCodeBuilder.Replace("#BUILDBODYMETHOD#", String.Concat(@"string GetBody() 
                                             {
                                             ", this.BuildBodyLogic, @"
@@ -173,7 +163,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             }
             else
             {
-                nmSpaceCodeBuilder.Replace("#BODY#", "");
+                nmSpaceCodeBuilder.Replace("#BODY#", "null");
                 nmSpaceCodeBuilder.Replace("#BUILDBODYMETHOD#", "");
             }
 
@@ -197,24 +187,15 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             if (!String.IsNullOrEmpty(this.IsSucceeded))
             {
-                nmSpaceCodeBuilder.Replace("#SETISSUCCEEDEDTRUE#", string.Concat(this.IsSucceeded, " = true;"));
-                nmSpaceCodeBuilder.Replace("#SETISSUCCEEDEDFALSE#", string.Concat(this.IsSucceeded, " = false;"));
+                nmSpaceCodeBuilder.Replace("#ASSIGNISSUCCEEDED#", string.Concat(this.IsSucceeded, " = "));
             }
             else
             {
-                nmSpaceCodeBuilder.Replace("#SETISSUCCEEDEDTRUE#", "");
-                nmSpaceCodeBuilder.Replace("#SETISSUCCEEDEDFALSE#", "");
+                nmSpaceCodeBuilder.Replace("#ASSIGNISSUCCEEDED#", "");
             }
 
-            if (!this.ContinueWorkflowIfCallFailed)
-            {
-                nmSpaceCodeBuilder.Replace("#ERRORHANDLING#", "throw fault.Exception;");
-            }
-            else
-            {
-                nmSpaceCodeBuilder.Replace("#ERRORHANDLING#", "");
-            }
-
+            nmSpaceCodeBuilder.Replace("#THROWIFERROR#", this.ContinueWorkflowIfCallFailed ? "false" : "true");
+            
             string baseExecutionContextClassName = "CallServiceActivity_BaseExecutionContext";
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
@@ -233,28 +214,17 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
     public enum VRWorkflowCallHttpServiceMethod
     {
-        GET = 0,
-        POST = 1
+        Get = 0,
+        Post = 1,
+        Put = 2,
+        Delete = 3
     }
 
     public enum VRWorkflowCallHttpServiceMessageFormat
     {
-        [VRWorkflowCallHttpServiceMessageFormat("application/json")]
         ApplicationJSON = 0,
-        [VRWorkflowCallHttpServiceMessageFormat("application/xml")]
         ApplicationXML = 1,
-        [VRWorkflowCallHttpServiceMessageFormat("text/xml")]
         TextXML = 2
-    }
-
-    public class VRWorkflowCallHttpServiceMessageFormatAttribute : Attribute
-    {
-        public VRWorkflowCallHttpServiceMessageFormatAttribute(string value)
-        {
-            this.Value = value;
-        }
-
-        public string Value { get; set; }
     }
 
     public class VRWorkflowCallHttpServiceURLParameter
@@ -273,22 +243,18 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
     public class VRWorkflowCallHttpServiceResponse
     {
-        HttpClient _client;
-        HttpResponseMessage _response;
-        VRWorkflowCallHttpServiceMessageFormat _messageFormat;
+        VRHttpResponse _vrHttpResponse;
 
-        public VRWorkflowCallHttpServiceResponse(HttpClient client, HttpResponseMessage response, VRWorkflowCallHttpServiceMessageFormat messageFormat)
+        public VRWorkflowCallHttpServiceResponse(VRHttpResponse vrHttpResponse)
         {
-            _client = client;
-            _response = response;
-            _messageFormat = messageFormat;
+            _vrHttpResponse = vrHttpResponse;
         }
 
         public string StringResponse
         {
             get
             {
-                return GetResponseAsString();
+                return _vrHttpResponse.Response;
             }
         }
 
@@ -296,77 +262,38 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             get
             {
-                return _response.StatusCode;
+                return _vrHttpResponse.StatusCode;
             }
         }
 
         public T DeserializeResponse<T>()
         {
-            string responseAsString = StringResponse;
-            if (String.IsNullOrEmpty(responseAsString))
-            {
-                return default(T);
-            }
-            else
-            {
-                switch (_messageFormat)
-                {
-                    case VRWorkflowCallHttpServiceMessageFormat.ApplicationJSON:
-                        return Common.Serializer.Deserialize<T>(responseAsString);
-                    case VRWorkflowCallHttpServiceMessageFormat.ApplicationXML:
-                    case VRWorkflowCallHttpServiceMessageFormat.TextXML:
-                        return new VRXmlSerializer().Deserialize<T>(responseAsString);
-                    default: throw new NotSupportedException(String.Format("_messageFormat: '{0}'", _messageFormat.ToString()));
-                }
-
-            }
-        }
-
-        string _responseAsString;
-        string GetResponseAsString()
-        {
-            _responseAsString = _response.Content.ReadAsStringAsync().Result;
-            return _responseAsString;
+            return _vrHttpResponse.DeserializeResponse<T>();
         }
     }
 
     public class VRWorkflowCallHttpServiceFault
     {
-        HttpClient _client;
-        Task<HttpResponseMessage> _responseTask;
-        VRWorkflowCallHttpServiceMessageFormat _messageFormat;
+        VRHttpFault _vrHttpFault;
 
-        private Fault _soapFault;
-        private JSONFault _jsonFault;
-
-        public VRWorkflowCallHttpServiceFault(HttpClient client, Task<HttpResponseMessage> responseTask, VRWorkflowCallHttpServiceMessageFormat messageFormat)
+        public VRWorkflowCallHttpServiceFault(VRHttpFault vrHttpFault)
         {
-            _client = client;
-            _responseTask = responseTask;
-            _messageFormat = messageFormat;
+            _vrHttpFault = vrHttpFault;
         }
 
         public string StringResponse
         {
             get
             {
-                return GetResponseAsString();
+                return _vrHttpFault.StringResponse;
             }
         }
-
-        string _responseAsString;
-        string GetResponseAsString()
-        {
-            _responseAsString = _responseTask.Result.Content.ReadAsStringAsync().Result;
-            return _responseAsString;
-        }
-
+        
         public string ErrorMessage
         {
             get
             {
-                ParseFault();
-                return _errorMessage;
+                return _vrHttpFault.ErrorMessage;
             }
         }
 
@@ -374,8 +301,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             get
             {
-                ParseFault();
-                return _exception;
+                return _vrHttpFault.Exception;
             }
         }
 
@@ -383,69 +309,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             get
             {
-                return _responseTask.Result.StatusCode;
+                return _vrHttpFault.StatusCode;
             }
-        }
-
-        string _errorMessage;
-        Exception _exception;
-
-        void ParseFault()
-        {
-            if (_exception != null)
-                return;
-            if (_responseTask.Exception != null)
-            {
-                _exception = _responseTask.Exception;
-                _errorMessage = _exception.Message;
-            }
-            else
-            {
-                switch (_messageFormat)
-                {
-                    case VRWorkflowCallHttpServiceMessageFormat.ApplicationJSON:
-                        _jsonFault = Serializer.Deserialize<JSONFault>(GetResponseAsString());
-                        if (_jsonFault.Message != null && _jsonFault.ExceptionMessage != null)
-                        {
-                            _errorMessage = _jsonFault.Message;
-                            _exception = new Exception(string.Format("{0}: {1}. Stack Trace: {2}", _jsonFault.Message, _jsonFault.ExceptionMessage, _jsonFault.StackTrace));
-                        }
-                        break;
-                    case VRWorkflowCallHttpServiceMessageFormat.ApplicationXML:
-                    case VRWorkflowCallHttpServiceMessageFormat.TextXML:
-                        _soapFault = new VRXmlSerializer().Deserialize<Fault>(GetResponseAsString());
-                        if (_soapFault.faultcode != null && _soapFault.faultstring != null)
-                        {
-                            _errorMessage = _soapFault.faultstring;
-                            _exception = new Exception(string.Format("{0}: {1}", _soapFault.faultcode, _soapFault.faultstring));
-                        }
-                        break;
-                    default: throw new NotSupportedException(String.Format("_messageFormat: '{0}'", _messageFormat.ToString()));
-                }
-                if (_exception == null)
-                    _exception = new Exception(GetResponseAsString());
-            }
-            if (_errorMessage == null)
-                _errorMessage = _exception.Message;
-        }
-
-        /// <summary>
-        /// SOAP Fault
-        /// </summary>
-        private class Fault
-        {
-            public string faultcode { get; set; }
-
-            public string faultstring { get; set; }
-        }
-
-        private class JSONFault
-        {
-            public string Message { get; set; }
-
-            public string ExceptionMessage { get; set; }
-
-            public string StackTrace { get; set; }
         }
     }
 }
