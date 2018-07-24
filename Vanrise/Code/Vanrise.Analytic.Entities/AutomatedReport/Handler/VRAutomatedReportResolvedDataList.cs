@@ -9,6 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class VRAutomatedReportResolvedDataList
     {
+        public VRAutomatedReportResolvedDataItem SummaryDataItem { get; set; }
         public Dictionary<string, VRAutomatedReportFieldInfo> FieldInfos { get; set; }
         public Dictionary<Guid, VRAutomatedReportTableInfo> SubTablesInfo { get; set; }
         public List<VRAutomatedReportResolvedDataItem> Items { get; set; }
@@ -16,6 +17,7 @@ namespace Vanrise.Analytic.Entities
 
     public class VRAutomatedReportTableInfo
     {
+        public List<string> FieldsOrder { get; set; }
         public Dictionary<string, VRAutomatedReportTableFieldInfo> FieldsInfo { get; set; }
     }
     public class VRAutomatedReportTableFieldInfo

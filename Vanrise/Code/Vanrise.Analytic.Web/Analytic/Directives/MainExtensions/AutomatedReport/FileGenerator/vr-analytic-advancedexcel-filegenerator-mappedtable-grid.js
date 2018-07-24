@@ -34,11 +34,9 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
         var contextPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
         this.initializeController = initializeController;
 
         function initializeController() {
-
             $scope.scopeModel = {
             };
 
@@ -46,7 +44,6 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -56,7 +53,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     var directiveAPI = {
                     };
                     directiveAPI.load = function (query) {
-                        contextPromiseDeferred.resolve();
+                        contextPromiseDeferred.resolve(query.mappedSheet);
                         context = query.context;
                         return loadMappedColumns(query.mappedSheet);
                     };
@@ -75,9 +72,9 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     return directiveAPI;
                 }
 
-                contextPromiseDeferred.promise.then(function () {
-                    if (context.getSelectedQuery != undefined && typeof (context.getSelectedQuery) == "function") {
-                        selectedQueryId = context.getSelectedQuery().value;
+                contextPromiseDeferred.promise.then(function (mappedSheet) {
+                    if (context.getSelectedQueryId != undefined && typeof (context.getSelectedQueryId) == "function" ) {
+                        selectedQueryId = mappedSheet!=undefined ? mappedSheet.VRAutomatedReportQueryId : context.getSelectedQueryId();
                     }
                 });
 
@@ -113,15 +110,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                                 }
                             }
                             for (var i = 0; i < fieldsArray.length; i++) {
-                                var field = fieldsArray[i];
-                                if (field.source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable) {
-                                    var mappedCol = getMappedCol(undefined, undefined, undefined, fieldsArray[i]);
-                                    $scope.scopeModel.mappedCols.push(mappedCol);
-                                }
-                                else {
-                                    var mappedTable = getMappedTable(undefined, undefined, undefined, fieldsArray[i]);
-                                    $scope.scopeModel.mappedCols.push(mappedTable);
-                                }
+                                var mappedCol = getMappedCol(undefined, undefined, undefined, fieldsArray[i]);
+                                $scope.scopeModel.mappedCols.push(mappedCol);
                             }
                         }
                     });
@@ -177,7 +167,6 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                         var mappedSubTable = getMappedCol(mappedSheet.SubTableDefinitions[i], mappedSheet.SheetIndex, mappedSheet.RowIndex);
                         promises.push(mappedSubTable.directiveLoadDeferred.promise);
                         promises.push(mappedSubTable.fieldSelectorLoadPromiseDeferred.promise);
-                        promises.push(mappedSubTable.subTableFieldSelectorLoadPromiseDeferred.promise);
                         $scope.scopeModel.mappedCols.push(mappedSubTable);
                     }
                 }
@@ -261,12 +250,11 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
             function loadSubTableFields() {
                 mappedCol.subTableFields = [];
-                mappedCol.selectedSubTableFields = [];
-
                 mappedCol.subTableFieldSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                 mappedCol.onSubTableFieldSelectorReady = function (api) {
                     mappedCol.subTableFieldSelectorAPI = api;
                     if (mappedCol.selectedField != undefined && mappedCol.selectedField.source == VR_Analytic_AutomatedReportQuerySourceEnum.SubTable) {
+                        mappedCol.subTableFields.length = 0;
                         for (var i = 0; i < allFields.length; i++) {
                             var field = allFields[i];
                             if (field.FieldName == mappedCol.selectedField.value) {
@@ -286,16 +274,10 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                         if (mappedColumn != undefined && mappedColumn.SubTableFields != undefined) {
                             for (var i = 0; i < mappedColumn.SubTableFields.length; i++) {
                                 var field = mappedColumn.SubTableFields[i];
-                                var fieldInfo = UtilsService.getItemByVal(mappedCol.subTableFields, field.FieldName, "value");
-                                if (fieldInfo != null) {
-                                    mappedCol.selectedSubTableFields.push({
-                                        description: fieldInfo.description,
-                                        value: fieldInfo.value,
-                                        source: fieldInfo.source
-                                    });
-                                }
+                                mappedCol.selectedSubTableFields = UtilsService.getItemByVal(mappedCol.subTableFields, field.FieldName, "value");
                             }
                         }
+                        mappedCol.subTableFieldSelectorAPI.selectIfSingleItem();
                     }
                 };
                 return mappedCol.subTableFieldSelectorLoadPromiseDeferred.promise;
@@ -360,7 +342,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
             var mappedTable = {};
             mappedTable.mappedColumns = [];
-     
+            mappedTable.mappedSubTables = [];
+
             for (var i = 0; i < $scope.scopeModel.mappedCols.length; i++) {
 
                 var mappedCol = $scope.scopeModel.mappedCols[i];
@@ -378,7 +361,6 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     continue;
                 }
                 else {
-                    mappedTable.mappedSubTables = [];
                     var mappedSubTable = {
                         $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorSubTableDefinition, Vanrise.Analytic.MainExtensions"
                     };
@@ -386,16 +368,13 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     if (directiveData != undefined) {
                         mappedSubTable.ColumnIndex = directiveData.CellIndex;
                     }
-                    if (mappedCol.selectedSubTableFields != undefined && mappedCol.selectedSubTableFields.length > 0) {
+                    if (mappedCol.selectedSubTableFields != undefined) {
                         mappedSubTable.SubTableFields = [];
-                        for (var i = 0; i < mappedCol.selectedSubTableFields.length; i++) {
-                            var subTableField = mappedCol.selectedSubTableFields[i];
-                            mappedSubTable.SubTableFields.push({
-                                $type : "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorSubTableColumnDefinition, Vanrise.Analytic.MainExtensions",
-                                FieldName: subTableField.value,
-                                FileTitle: subTableField.description
-                            });
-                        }
+                        mappedSubTable.SubTableFields.push({
+                            $type : "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorSubTableColumnDefinition, Vanrise.Analytic.MainExtensions",
+                            FieldName: mappedCol.selectedSubTableFields.value,
+                            FileTitle: mappedCol.selectedSubTableFields.description
+                        });
                     }
                     mappedSubTable.SubTableName = mappedCol.selectedField.value;
                     mappedSubTable.SubTableId = mappedCol.selectedField.subTableId;

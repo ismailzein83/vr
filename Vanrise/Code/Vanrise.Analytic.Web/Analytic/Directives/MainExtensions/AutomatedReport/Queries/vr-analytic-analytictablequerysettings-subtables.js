@@ -43,7 +43,7 @@ function (UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTableQuerySettings
             };
 
             $scope.scopeModel.removeSubtable = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.subtables, dataItem.id, 'id');
+                var index = UtilsService.getItemIndexByVal($scope.scopeModel.subtables, dataItem.SubTableId, 'SubTableId');
                 if (index > -1) {
                     $scope.scopeModel.subtables.splice(index, 1);
                 }

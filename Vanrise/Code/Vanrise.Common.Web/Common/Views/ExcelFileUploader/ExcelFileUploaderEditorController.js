@@ -37,12 +37,12 @@
                return uploadExcelFile();
             };
 
-            $scope.title = UtilsService.buildTitleForAddEditor("Excel File Uploader");
+            $scope.title = UtilsService.buildTitleForAddEditor("Excel File");
 
             $scope.scopeModel.validateColumns = function () {
                 if ($scope.scopeModel.sheetsNames.length == 0) {
                     $scope.scopeModel.isDisabled = true;
-                    return 'Please, one record must be added at least.';
+                    return 'At least one record must be added.';
                 } else {
                     $scope.scopeModel.isDisabled = false;
                 }
@@ -56,9 +56,9 @@
                 while (columnName.length > 0) {
                     var nameToValidate = columnName[0];
                     columnName.splice(0, 1);
-                    if (!validateName(nameToValidate, columnName)) {//duplicate sheets names
+                    if (!validateName(nameToValidate, columnName)) {
                         $scope.scopeModel.isDisabled = true;
-                        return 'Two or more columns have the same Name';
+                        return 'Two or more sheets have the same name.';
                     }
                 }
                 function validateName(name, array) {
@@ -79,7 +79,7 @@
                 sheets.push(sheet.name);
             }
             var object = {
-                sheets: sheets
+                Sheets: sheets
             };
             return object;
         };
@@ -96,9 +96,6 @@
                     $scope.modalContext.closeModal();
                 }
                 
-            }).catch(function (error) {
-                $scope.scopeModel.isLoading = false;
-                VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
 

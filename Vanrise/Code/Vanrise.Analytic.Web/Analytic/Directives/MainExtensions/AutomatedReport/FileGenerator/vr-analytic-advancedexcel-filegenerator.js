@@ -33,20 +33,22 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var listNameSelectorAPI;
         var listNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var excelFileUploaderAPI;
+        var excelFileUploaderReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var fileUploadedPromiseDeferred;
+
         var mappedTables = [];
         var tableIndex = 0;
 
         var queries;
 
         var querySelected;
-        var querySelectedPromise;
-
-        var listNameSelected;
 
         var isEditMode;
 
         function initializeController() {
-            var promises = [excelWorkbookReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise];
+            var promises = [excelFileUploaderReadyDeferred.promise, excelWorkbookReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise];
 
                 $scope.scopeModel = {};
                 
@@ -63,10 +65,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 $scope.scopeModel.addMappedTable = function () {
                     var mappedTableItem = {
                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        VRAutomatedReportQueryId: $scope.scopeModel.querySelected.value,
+                        ListName: $scope.scopeModel.listNameSelected.value
                     };
-                    querySelected = $scope.scopeModel.querySelected;
-                    listNameSelected = $scope.scopeModel.listNameSelected.value;
 
                     addMappedTableTab(mappedTableItem);
                     tabsAPI.setLastTabSelected();
@@ -121,6 +123,11 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     }
                 };
 
+                
+                $scope.scopeModel.onExcelFileUploaderReady = function (api) {
+                    excelFileUploaderAPI = api;
+                    excelFileUploaderReadyDeferred.resolve();
+                };
 
                 UtilsService.waitMultiplePromises(promises).then(function () {
                     defineAPI();
@@ -165,15 +172,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 if (tableDefinitions != undefined) {
                     mappedTables = tableDefinitions;
                 }
-                if (mappedTables != undefined && mappedTables.length > 0) {
-                    var mappedTable = mappedTables[0];
-                    listNameSelected = mappedTable.ListName;
-                    querySelectedPromise = UtilsService.createPromiseDeferred();
-                    queryArrayPromise.promise.then(function () {
-                        querySelected = UtilsService.getItemByVal($scope.scopeModel.queries, mappedTable.VRAutomatedReportQueryId, "value");
-                        querySelectedPromise.resolve();
-                    });
-                }
                 if (fileId != undefined)
                 {
                     $scope.scopeModel.file = { fileId: fileId };
@@ -184,10 +182,13 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     var promises = [];
                     $scope.scopeModel.isLoadingTabs = true;
                     for (var i = 0 ; i < mappedTables.length; i++) {
+                        var mappedTable = mappedTables[i];
                         var mappedTableItem = {
-                            payload: mappedTables[i],
+                            payload: mappedTable,
                             readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            VRAutomatedReportQueryId: mappedTable.VRAutomatedReportQueryId,
+                            ListName: mappedTable.ListName
                         };
                         promises.push(mappedTableItem.loadPromiseDeferred.promise);
                         addMappedTableTab(mappedTableItem);
@@ -218,8 +219,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                         for (var i = 0; i < $scope.scopeModel.tables.length; i++) {
                             var table = $scope.scopeModel.tables[i];
                             var tableDefinition = table.directiveAPI.getData();
-                            tableDefinition.VRAutomatedReportQueryId = querySelected.value;
-                            tableDefinition.ListName = listNameSelected;
                             mappedTables.push(tableDefinition);
                         }
                     }
@@ -233,38 +232,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
        
         function addMappedTableTab(mappedTableItem) {
-            if (querySelectedPromise != undefined) {
-                querySelectedPromise.promise.then(function () {
-                    if (querySelected != undefined) {
-                        var mappedTableTab = {
-                            header: querySelected.description + " - " + listNameSelected + ' (' + tableIndex + ')',
-                            tableTabIndex: ++tableIndex,
-                            Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
-                            onDirectiveReady: function (api) {
-                                mappedTableTab.directiveAPI = api;
-                                mappedTableItem.readyPromiseDeferred.resolve();
-                            },
-                            loadPromiseDeferred: mappedTableItem.loadPromiseDeferred
-                        };
-
-                        var directivePayload = {
-                            context: getContext(),
-                            mappedTable: mappedTableItem.payload,
-                            showEditButton: false,
-                        };
-                        mappedTableItem.readyPromiseDeferred.promise.then(function () {
-                            VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
-                        });
-                        $scope.scopeModel.tables.push(mappedTableTab);
-                    }
-                    else {
-                        mappedTableItem.loadPromiseDeferred.reject("A query used in this handler has been deleted.");
-                    }
-                });
-            }
-            else {
+            querySelected = UtilsService.getItemByVal(queries, mappedTableItem.VRAutomatedReportQueryId, "VRAutomatedReportQueryId");
+            if (querySelected != undefined) {
                 var mappedTableTab = {
-                    header: querySelected.description + " - " + listNameSelected + ' (' + tableIndex + ')',
+                    header: querySelected.QueryTitle + " - " + mappedTableItem.ListName + ' (' + tableIndex + ')',
                     tableTabIndex: ++tableIndex,
                     Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
                     onDirectiveReady: function (api) {
@@ -273,11 +244,12 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     },
                     loadPromiseDeferred: mappedTableItem.loadPromiseDeferred
                 };
-
                 var directivePayload = {
                     context: getContext(),
                     mappedTable: mappedTableItem.payload,
                     showEditButton: false,
+                    VRAutomatedReportQueryId: mappedTableItem.VRAutomatedReportQueryId,
+                    ListName: mappedTableItem.ListName
                 };
                 mappedTableItem.readyPromiseDeferred.promise.then(function () {
                     VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
@@ -301,8 +273,9 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 return excelWorkbookAPI.getSelectedSheet();
             };
 
-            currentContext.getSelectedQuery = function () {
-                return querySelected;
+            currentContext.getSelectedQueryId = function () {
+                var selectedQuery = querySelected;
+                return selectedQuery.VRAutomatedReportQueryId;
             };
             return currentContext;
         }

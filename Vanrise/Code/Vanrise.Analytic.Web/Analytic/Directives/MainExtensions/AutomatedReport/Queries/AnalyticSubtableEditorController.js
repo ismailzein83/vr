@@ -15,9 +15,6 @@
         var measuresSelectorAPI;
         var measuresSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var orderTypeSelectorAPI;
-        var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -45,11 +42,6 @@
             $scope.scopeModel.onMeasureSelectorReady = function (api) {
                 measuresSelectorAPI = api;
                 measuresSelectorReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onOrderTypeSelectorReady = function (api) {
-                orderTypeSelectorAPI = api;
-                orderTypeSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.saveSubtable = function () {
@@ -119,24 +111,7 @@
                 });
                 return measuresSelectorLoadDeferred.promise;
             }
-            function loadOrderTypeSelector() {
-                var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                orderTypeSelectorReadyDeferred.promise.then(function () {
-                    var orderTypeSelectorPayload = {
-                        tableIds: [analyticTableId]
-                    };
-                    if (subtableEntity != undefined) {
-                        orderTypeSelectorPayload.orderTypeEntity = {
-                            OrderType: subtableEntity.OrderType,
-                            AdvancedOrderOptions: subtableEntity.AdvancedOrderOptions
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(orderTypeSelectorAPI, orderTypeSelectorPayload, orderTypeSelectorLoadDeferred);
-                });
-                return orderTypeSelectorLoadDeferred.promise;
-            }
-
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDimensionsSelector, loadMeasuresSelector, loadOrderTypeSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDimensionsSelector, loadMeasuresSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -146,13 +121,10 @@
         }
 
         function buildObjFromScope() {
-            var orderTypeEntity = orderTypeSelectorAPI.getData();
             var obj = {
               Title: getTitle(),
               Dimensions: dimensionsSelectorAPI.getSelectedIds(),
-              Measures: measuresSelectorAPI.getSelectedIds(),
-              OrderType: orderTypeEntity!=undefined ? orderTypeEntity.OrderType: undefined,
-              AdvancedOrderOptions: orderTypeEntity!=undefined ? orderTypeEntity.AdvancedOrderOptions: undefined,
+              Measures: measuresSelectorAPI.getSelectedIds()
             };
             return obj;
         }
@@ -181,15 +153,11 @@
         }
 
         function getTitle() {
-            if (dimensionsSelectorAPI.getSelectedIds() != undefined && measuresSelectorAPI.getSelectedIds() != undefined) {
+            if (dimensionsSelectorAPI.getSelectedIds() != undefined) {
                 var title = [];
                 var dimensions = dimensionsSelectorAPI.getSelectedIds();
-                var measures = measuresSelectorAPI.getSelectedIds();
                 for (var i = 0; i < dimensions.length; i++) {
                     title.push(dimensions[i]);
-                }
-                for (var i = 0; i < measures.length; i++) {
-                    title.push(measures[i]);
                 }
                 title.join(", ");
                 return title.toString();

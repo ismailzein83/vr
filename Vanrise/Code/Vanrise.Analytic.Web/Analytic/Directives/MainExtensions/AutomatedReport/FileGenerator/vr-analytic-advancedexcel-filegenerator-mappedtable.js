@@ -28,11 +28,14 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
         var mappedColumnsAPI;
         var mappedColumnsReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var mappedTable;
+        var mappedTablePayload;
         var context;
+
 
         function initializeController() {
             $scope.scopeModel = {};
+
+            $scope.scopeModel.includeHeaders = true;
 
             $scope.scopeModel.onFirstRowMappingReady = function (api) {
                 firstRowDirectiveAPI = api;
@@ -63,20 +66,24 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
             });
         }
         function defineAPI() {
-
             var api = {};
 
+            var vrAutomatedReportQueryId;
+            var listName;
 
             api.load = function (payload) {
+
                 var promises = [];
                 if (payload != undefined) {
-                    mappedTable = payload.mappedTable;
+                    mappedTablePayload = payload.mappedTable;
                     context = payload.context;
+                    vrAutomatedReportQueryId = payload.VRAutomatedReportQueryId;
+                    listName = payload.ListName;
                 }
-                if (mappedTable != undefined) {
-                    $scope.scopeModel.includeHeaders = mappedTable.IncludeHeaders;
-                    $scope.scopeModel.includeTitle = mappedTable.IncludeTitle;
-                    $scope.scopeModel.tableTitle = mappedTable.Title;
+                if (mappedTablePayload != undefined) {
+                    $scope.scopeModel.includeHeaders = mappedTablePayload.IncludeHeaders;
+                    $scope.scopeModel.includeTitle = mappedTablePayload.IncludeTitle;
+                    $scope.scopeModel.tableTitle = mappedTablePayload.Title;
                 }
 
                 var loadFirstRowDirectivePromise = loadFirstRowDirective();
@@ -94,16 +101,17 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     return null;
 
                 var mappedTableObject = mappedColumnsAPI.getData();
-
                 var mappedTable = {
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorTableDefinition, Vanrise.Analytic.MainExtensions',
                     SheetIndex: firstRowDirectiveData.SheetIndex,
                     RowIndex: firstRowDirectiveData.RowIndex,
                     IncludeTitle: $scope.scopeModel.includeTitle,
+                    VRAutomatedReportQueryId: vrAutomatedReportQueryId,
+                    ListName: listName,
                     IncludeHeaders: $scope.scopeModel.includeHeaders,
                     Title: $scope.scopeModel.includeTitle ? $scope.scopeModel.tableTitle : undefined,
-                    ColumnDefinitions: mappedTableObject!=undefined ? mappedTableObject.mappedColumns : undefined,
-                    //SubTableDefinitions: (mappedTableObject != undefined && mappedTableObject.mappedSubTables!=undefined) ? mappedTableObject.mappedSubTables: null,
+                    ColumnDefinitions: mappedTableObject != undefined ? mappedTableObject.mappedColumns : undefined,
+                    SubTableDefinitions: (mappedTableObject != undefined && mappedTableObject.mappedSubTables!=undefined) ? mappedTableObject.mappedSubTables: null,
                 };
                 return mappedTable;
             };
@@ -123,10 +131,10 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     showEditButton: false
                 };
 
-                if (mappedTable != undefined) {
+                if (mappedTablePayload != undefined) {
                     firstRowDirectivePayload.fieldMapping = {
-                        SheetIndex: mappedTable.SheetIndex,
-                        RowIndex: mappedTable.RowIndex,
+                        SheetIndex: mappedTablePayload.SheetIndex,
+                        RowIndex: mappedTablePayload.RowIndex,
                         CellIndex: 0
                     };
                 }
@@ -143,7 +151,7 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
             mappedColumnsReadyDeferred.promise.then(function () {
                 var mappedColumnsPayload = {
                     context: getContext(),
-                    mappedSheet: mappedTable,
+                    mappedSheet: mappedTablePayload,
                 };
                 VRUIUtilsService.callDirectiveLoad(mappedColumnsAPI, mappedColumnsPayload, mappedColumnsLoadDeferred);
             });
