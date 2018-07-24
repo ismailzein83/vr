@@ -11,5 +11,7 @@ namespace Vanrise.Common
     public interface IExtensionConfigurationManager : IBEManager
     {
         IEnumerable<Q> GetExtensionConfigurations<Q>(string type) where Q : ExtensionConfiguration;
+
+        string GetExtensionConfigurationTitle<T>(Guid extensionConfigId, string type) where T : ExtensionConfiguration;
     }
 }
