@@ -6,6 +6,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Idb;
+using TOne.WhS.RouteSync.TelesIdb.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.TelesIdb
@@ -32,10 +33,12 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public int NumberOfOptions { get; set; }
 
-        /// <summary>
-        /// Key = Carrier Account Id
-        /// </summary>
-        public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
+		public IEnumerable<ManualRoute> ManualRoutes { get; set; }
+
+		/// <summary>
+		/// Key = Carrier Account Id
+		/// </summary>
+		public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
         #region Public Methods
 
