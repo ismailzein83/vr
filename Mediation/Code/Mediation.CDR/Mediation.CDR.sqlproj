@@ -155,5 +155,9 @@
     <Build Include="Mobile_EDR\User Defined Types\BadCDRType_2.sql" />
     <Build Include="Mediation_WHS\Tables\OgeroHuaweiMGCFBadCDR_2.sql" />
     <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiMGCFBadCDRType_2.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiEPCCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroHuaweiEPCBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCBadCDRType.sql" />
   </ItemGroup>
 </Project>
