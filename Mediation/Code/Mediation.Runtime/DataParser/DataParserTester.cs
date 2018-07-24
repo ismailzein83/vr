@@ -2002,6 +2002,7 @@ namespace Mediation.Runtime.DataParser
                     RecordParserTemplateId = new Guid("8861E765-B865-43AB-AAF7-39DFB1079E04")
                 }
             });
+
             return subParser;
         }
 
@@ -2241,39 +2242,31 @@ namespace Mediation.Runtime.DataParser
         private List<CompositeFieldsParser> GetCompositeFieldParsers()
         {
             return new List<CompositeFieldsParser> 
-                    { 
-                        new DateTimeCompositeParser{DateFieldName = "Date",TimeFieldName = "StartTime",FieldName = "ConnectDateTime"},
-                        new DateTimeCompositeParser{DateFieldName = "Date",TimeFieldName = "StopTime",FieldName = "DisconnectDateTime"},
-                        new TimestampDateTimeCompositeParser {
-                        FieldName = "ConnectTimestamp",
-                        DateTimeFieldName = "ConnectDateTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                        },
-                        new TimestampDateTimeCompositeParser
-                        {
-                            FieldName = "DisconnectTimestamp",
-                            DateTimeFieldName = "DisconnectDateTime",
-                            DateTimeShift = new DateTime(1970, 01, 01)
-                        },
-                        new DateTimeCompositeParser
-                        {
-                            FieldName = "SetupTime",
-                            DateFieldName = "ConnectDateTime",
-                            TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging",
-                            SubtractTime = true
-                            
-                        },
-                        new GuidCompositeParser{FieldName="UniqueIdentifier"},
-                        new FileNameCompositeParser{
-                         FieldName = "FileName" 
-                        },
-                     new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "SetupTimestamp",
-                        DateTimeFieldName = "SetupTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    }
-                    };
+                   { 
+                       new FileNameCompositeParser { FieldName = "FileName" },
+                       new GuidCompositeParser { FieldName="UniqueIdentifier" },
+                       new DateTimeCompositeParser{ DateFieldName = "Date",TimeFieldName = "StartTime",FieldName = "ConnectDateTime" },
+                       new DateTimeCompositeParser{ DateFieldName = "Date",TimeFieldName = "StopTime",FieldName = "DisconnectDateTime" },
+                       new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
+                       new TimestampDateTimeCompositeParser 
+                       {
+                           FieldName = "ConnectTimestamp",
+                           DateTimeFieldName = "ConnectDateTime",
+                           DateTimeShift = new DateTime(1970, 01, 01)
+                       },
+                       new TimestampDateTimeCompositeParser
+                       {
+                           FieldName = "DisconnectTimestamp",
+                           DateTimeFieldName = "DisconnectDateTime",
+                           DateTimeShift = new DateTime(1970, 01, 01)
+                       },
+                       new TimestampDateTimeCompositeParser
+                       {
+                          FieldName = "SetupTimestamp",
+                          DateTimeFieldName = "SetupTime",
+                          DateTimeShift = new DateTime(1970, 01, 01)
+                       }
+                   };
         }
 
         private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS()
@@ -2391,7 +2384,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "GlobalCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
@@ -2462,7 +2456,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "GlobalCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
@@ -2712,7 +2707,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "GlobalCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
@@ -2862,7 +2858,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "GlobalCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
@@ -3047,7 +3044,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "GlobalCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
