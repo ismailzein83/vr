@@ -4,17 +4,9 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Business.Migrators;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
-using TOne.WhS.Routing.Business;
-using TOne.WhS.Routing.Business.RouteRules.Filters;
-using TOne.WhS.Routing.Business.RouteRules.Orders;
-using TOne.WhS.Routing.Entities;
-using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.GenericData.Pricing;
-using Vanrise.Rules;
 using Vanrise.Rules.Entities;
-using Vanrise.Rules.Pricing;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -30,9 +22,9 @@ namespace TOne.WhS.DBSync.Business
         public RuleMigrator(MigrationContext context)
             : base(context)
         {
-
-            _dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
             TableName = "Rules";
+            _dbSyncDataManager = new RulesDBSyncDataManager(context.UseTempTables);
+
             SettingManager settingManager = new SettingManager();
             var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
             _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
@@ -41,10 +33,12 @@ namespace TOne.WhS.DBSync.Business
             _allCodeGroups = (Dictionary<string, CodeGroup>)dtTableCodeGroups.Records;           
             RulesMigrationHelper.BuildSingleCodeGroupContriesCodeGroups(_allCodeGroups);
         }
+
         public override void FillTableInfo(bool useTempTables)
         {
 
         }
+
         public override IEnumerable<SourceRule> GetSourceItems()
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -102,10 +96,12 @@ namespace TOne.WhS.DBSync.Business
             RulesMigrationHelper.ClearSingleCodeGroupContriesCodeGroups();
             return routeRules;
         }
+
         public override Rule BuildItemFromSource(SourceRule sourceItem)
         {
             return sourceItem.Rule;
         }
+
         public override void AddItems(List<Rule> itemsToAdd)
         {
             _dbSyncDataManager.ApplyRouteRulesToTemp(itemsToAdd);

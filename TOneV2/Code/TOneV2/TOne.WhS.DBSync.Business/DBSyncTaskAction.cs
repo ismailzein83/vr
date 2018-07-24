@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using TOne.WhS.DBSync.Data.SQL;
-using TOne.WhS.DBSync.Entities;
-using Vanrise.Runtime.Entities;
-using Vanrise.Common;
-using Vanrise.Entities;
-using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Data.SQL;
 using TOne.WhS.BusinessEntity.MainExtensions;
-
+using TOne.WhS.DBSync.Data.SQL;
+using TOne.WhS.DBSync.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.Runtime.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
-
     public class DBSyncTaskAction : SchedulerTaskAction
     {
         List<IDManagerEntity> _idManagerEntities = new List<IDManagerEntity>();
@@ -30,7 +27,6 @@ namespace TOne.WhS.DBSync.Business
             _context = migrationContext;
         }
 
-
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
         {
             if (_context == null)
@@ -39,9 +35,9 @@ namespace TOne.WhS.DBSync.Business
             //Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(task.OwnerId);
             _context.WriteInformation("Database Sync Task Action Started");
             DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
-            MigrationManager migrationManager;
             if (dbSyncTaskActionArgument.DefaultRate <= 0)
                 throw new ArgumentException("Default Rate should be greater than zero");
+
             _context.DefaultRate = dbSyncTaskActionArgument.DefaultRate;
             _context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
             _context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
@@ -57,14 +53,15 @@ namespace TOne.WhS.DBSync.Business
             _context.EffectiveAfterDate = dbSyncTaskActionArgument.EffectiveAfter;
             _context.ParameterDefinitions = dbSyncTaskActionArgument.ParameterDefinitions == null ? new Dictionary<string, ParameterValue>() : dbSyncTaskActionArgument.ParameterDefinitions;
             _context.DBTables = FillDBTables(_context);
-            migrationManager = ConstructMigrationManager(_context);
+
+            MigrationManager migrationManager = ConstructMigrationManager(_context);
             PrepareBeforeApplyingRecords(_context, migrationManager);
 
             ApplyPreData();
-
             TransferData(_context);
             FinalizeMigration(_context, migrationManager);
             ApplyPostData();
+
             _context.WriteInformation("Database Sync Task Action Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
@@ -279,8 +276,6 @@ namespace TOne.WhS.DBSync.Business
             return migrationCredential;
         }
 
-
-
         private void TruncateTables(MigrationContext context, MigrationManager migrationManager)
         {
             if (!context.UseTempTables)
@@ -296,7 +291,6 @@ namespace TOne.WhS.DBSync.Business
                 migrationManager.CreateForeignKeys();
             }
         }
-
 
         private void FinalizeMigration(MigrationContext context, MigrationManager migrationManager)
         {
@@ -379,9 +373,11 @@ namespace TOne.WhS.DBSync.Business
                 case DBTableName.SaleRate:
                     migrator = new SaleRateMigrator(context);
                     break;
+
                 case DBTableName.SaleEntityRoutingProduct:
                     migrator = new SaleEntityRoutingProductMigrator(context);
                     break;
+
                 case DBTableName.SupplierRate:
                     migrator = new SupplierRateMigrator(context);
                     break;
@@ -393,12 +389,14 @@ namespace TOne.WhS.DBSync.Business
                 case DBTableName.SwitchConnectivity:
                     migrator = new SwitchConnectivityMigrator(context);
                     break;
+
                 case DBTableName.Rule:
                     migrator = new RuleMigrator(context);
                     break;
                 case DBTableName.ZoneServiceConfig:
                     migrator = new FlaggedServiceMigrator(context);
                     break;
+
                 case DBTableName.SupplierZoneService:
                     migrator = new SupplierZoneServicesMigrator(context);
                     break;
@@ -406,15 +404,19 @@ namespace TOne.WhS.DBSync.Business
                 case DBTableName.SaleEntityService:
                     migrator = new SaleZoneServicesMigrator(context);
                     break;
+
                 case DBTableName.VRTimeZone:
                     migrator = new VRTimeZoneMigrator(context);
                     break;
+
                 case DBTableName.FinancialAccount:
                     migrator = new FinancialAccountMigrator(context);
                     break;
+
                 case DBTableName.SwitchReleaseCause:
                     migrator = new SwitchReleaseCauseMigrator(context);
                     break;
+
                 //Default Case for Table names that do not require migrator
                 default:
                     migrator = null;

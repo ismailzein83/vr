@@ -15,6 +15,11 @@ namespace TOne.WhS.DBSync.Business
         public MigrationContext Context { get; set; }
         public int TotalRowsSuccess { get; set; }
         public int TotalRowsFailed { get; set; }
+
+        public virtual bool IsLoadItemsApproach { get { return false; } }
+
+        public virtual bool IsBuildAllItemsOnce { get { return false; } }
+
         protected Migrator(MigrationContext context)
         {
             Context = context;
@@ -66,7 +71,7 @@ namespace TOne.WhS.DBSync.Business
                         itemsToAdd.Add(item);
                     if (itemsToAdd.Count >= 500000)
                     {
-                        qItemsToAdd.Enqueue(itemsToAdd);                       
+                        qItemsToAdd.Enqueue(itemsToAdd);
                         itemsToAdd = new List<Q>();
                     }
                 };
@@ -77,7 +82,7 @@ namespace TOne.WhS.DBSync.Business
                     qItemsToAdd.Enqueue(itemsToAdd);
                 }
                 isLoadItemsRunning = false;
-                while(taskAddItems != null)
+                while (taskAddItems != null)
                 {
                     Thread.Sleep(250);
                 }
@@ -90,7 +95,7 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceItems != null)
                 {
                     List<Q> itemsToAdd = null;
-                    if(IsBuildAllItemsOnce)
+                    if (IsBuildAllItemsOnce)
                     {
                         itemsToAdd = BuildAllItemsFromSource(sourceItems);
                     }
@@ -112,7 +117,7 @@ namespace TOne.WhS.DBSync.Business
 
             if (context.GeneratedIdsInfoContext != null)
                 context.GeneratedIdsInfoContext.LastTakenId = TotalRowsSuccess;
-            if(TotalRowsFailed > 0)
+            if (TotalRowsFailed > 0)
                 Context.WriteWarning(string.Format("Migrating table '" + TableName + "' : {0} rows failed", TotalRowsFailed));
             Context.WriteInformation(string.Format("Migrating table '" + TableName + "' ended: {0} rows ", TotalRowsSuccess));
         }
@@ -126,26 +131,9 @@ namespace TOne.WhS.DBSync.Business
 
         }
 
-        public virtual bool IsLoadItemsApproach
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         public abstract IEnumerable<T> GetSourceItems();
 
         public abstract Q BuildItemFromSource(T sourceItem);
-
-        public virtual bool IsBuildAllItemsOnce
-        {
-            get
-            {
-                return false;
-            }
-        }
-
 
         public virtual List<Q> BuildAllItemsFromSource(IEnumerable<T> sourceItems)
         {
@@ -156,6 +144,5 @@ namespace TOne.WhS.DBSync.Business
         {
 
         }
-
     }
 }
