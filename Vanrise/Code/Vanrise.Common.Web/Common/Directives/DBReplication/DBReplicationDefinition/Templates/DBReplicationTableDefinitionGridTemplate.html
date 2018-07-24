@@ -1,1 +1,26 @@
-﻿
+﻿<vr-button type="Add" data-onclick="scopeModel.addDBReplicationTableDefinition" standalone></vr-button>
+
+<vr-validator validate="scopeModel.isGridValid()">
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.datasource"
+                 menuactions="scopeModel.gridMenuActions"
+                 ondeleterow="scopeModel.removeDBReplicationTableDefinition "
+                 idfield="id"
+                 norowhighlightonclick="true" maxheight="300px">
+        <vr-datagridcolumn headertext="'Table Name'">
+            <vr-textbox value="dataItem.TableName" isrequired></vr-textbox>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Table Schema'">
+            <vr-textbox value="dataItem.TableSchema" isrequired></vr-textbox>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Filter DateTime Column'">
+            <vr-textbox value="dataItem.FilterDateTimeColumn" customvalidate="viewScope.scopeModel.isDataItemValid(dataItem)"></vr-textbox>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Id Column'">
+            <vr-textbox value="dataItem.IdColumn" isrequired="dataItem.ChunkSize!=undefined" customvalidate="viewScope.scopeModel.isDataItemValid(dataItem)"></vr-textbox>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Chunk Size'">
+            <vr-textbox value="dataItem.ChunkSize" type="number" minvalue="1" isrequired="dataItem.IdColumn!=undefined" customvalidate="viewScope.scopeModel.isDataItemValid(dataItem)"></vr-textbox>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

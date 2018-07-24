@@ -1,1 +1,26 @@
-﻿
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <vr-row>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Settings'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-button type="Add" data-onclick="scopeModel.addDBReplicationDatabaseDefinition" standalone></vr-button>
+                <vr-validator validate="scopeModel.isGridValid()">
+                    <vr-datagrid on-ready="scopeModel.onGridReady"
+                                 datasource="scopeModel.datasource"
+                                 menuactions="scopeModel.gridMenuActions"
+                                 ondeleterow="scopeModel.removeDBReplicationDatabaseDefinition"
+                                 idfield="id"
+                                 norowhighlightonclick="true" maxheight="300px">
+                        <vr-datagridcolumn headertext="'Database Definition'" field="'Name'" disablesorting></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>

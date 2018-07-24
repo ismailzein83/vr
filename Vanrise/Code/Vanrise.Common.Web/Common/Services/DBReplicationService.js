@@ -36,9 +36,37 @@
             VRModalService.showModal('/Client/Modules/Common/Directives/DBReplication/DBReplicationSettings/Templates/DBReplicationSettingsTemplate.html', parameters, settings);
         }
 
+        function addDBReplicationDatabaseDefinition(onDBReplicationDatabaseDefinitionAdded) {
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onDBReplicationDatabaseDefinitionAdded = onDBReplicationDatabaseDefinitionAdded;
+            };
+
+            var parameters = {};
+
+            VRModalService.showModal('/Client/Modules/Common/Directives/DBReplication/DBReplicationDefinition/Templates/DBReplicationDatabaseDefinitionEditorTemplate.html', parameters, settings);
+        }
+
+        function editDBReplicationDatabaseDefinition(onDBReplicationDatabaseDefinitionUpdated, dbDefinitionSettingObj) {
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onDBReplicationDatabaseDefinitionUpdated = onDBReplicationDatabaseDefinitionUpdated;
+            };
+
+            var parameters = {
+                databaseDefinitionEntity: dbDefinitionSettingObj
+            };
+
+            VRModalService.showModal('/Client/Modules/Common/Directives/DBReplication/DBReplicationDefinition/Templates/DBReplicationDatabaseDefinitionEditorTemplate.html', parameters, settings);
+        }
+
         return {
             addDBReplicationSetting: addDBReplicationSetting,
-            editDBReplicationSetting: editDBReplicationSetting
+            editDBReplicationSetting: editDBReplicationSetting,
+            addDBReplicationDatabaseDefinition: addDBReplicationDatabaseDefinition,
+            editDBReplicationDatabaseDefinition: editDBReplicationDatabaseDefinition
         };
     }
 
