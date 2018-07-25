@@ -398,6 +398,7 @@ as (select * from (values
 ('4EC42931-14E9-4807-9104-10985446D26B','Specific Countries','Specific Countries','VR_Common_CountryCriteriaGroup'													,'{"Editor":"vr-common-country-countrycriteriagroup-selective"}'),
 
 ('80791C8A-5F81-4D2E-B3D7-4240CF967FA0','SMSMessageTypeSettings','SMS Message Type','VR_Common_VRComponentType'														,'{"Editor":"vr-common-smsmessagetype-settings"}'),
+('BB07A3B5-E519-4A6C-B4C6-695069BBB64A','DBReplicationDefinitionSettings','DBReplication Definition','VR_Common_VRComponentType'									,'{"Editor":"vr-common-dbreplicationdefinition-settings"}'),
 
 ('44E97625-1B35-478A-918E-60F9C58678B4','ExecuteDatabaseCommandSMSHandler','SQL SMS Handler','VRCommon_SMSSendHandlerSettings'														,'{"Editor":"vr-common-executedatabasecommand-smshandler"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -544,6 +545,27 @@ when not matched by target then
 	values(s.[ID],s.[UniqueName],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 END
+
+--[bp].[BPDefinition]----------------------1 to 1000------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Title],[FQTN],[Config])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('29CFE0E9-A2B9-4692-B787-DC6F62B1C2A0','Vanrise.Common.BP.Arguments.DBReplicationProcessInput','Database Replication Process','Vanrise.Common.BP.DBReplicationProcess, Vanrise.Common.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ManualExecEditor":"vr-common-dbreplication-process","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"ExtendedSettings":{"$type":"Vanrise.Common.MainExtensions.DBReplication.DBReplicationProcessBPSettings, Vanrise.Common.MainExtensions","StoreLastArgumentState":true},"Security":{"$type":"Vanrise.BusinessProcess.Entities.BPDefinitionSecurity, Vanrise.BusinessProcess.Entities","View":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"a99a836d-0c03-4946-a0e2-5a758354807b","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"StartNewInstance":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"a99a836d-0c03-4946-a0e2-5a758354807b","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Manage"]}}]}},"ScheduleTask":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"a99a836d-0c03-4946-a0e2-5a758354807b","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["Manage"]}}]}}},"BusinessRuleSetSupported":false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[FQTN],[Config]))
+merge	[bp].[BPDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config]
+when not matched by target then
+	insert([ID],[Name],[Title],[FQTN],[Config])
+	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
+----------------------------------------------------------------------------------------------------
+end
 
 --create user for online website to add users
 ----[sec].[User]--------------------------------------------------------------------------------
