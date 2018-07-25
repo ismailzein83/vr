@@ -4,6 +4,7 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
 
     var businessProcessDefinitionEntity;
     var businessProcessDefinitionId;
+
     var viewPermissionAPI;
     var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -19,7 +20,8 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
 
     function loadParameters() {
         var parameters = VRNavigationService.getParameters($scope);
-        if (parameters != undefined && parameters != null) {
+
+        if (parameters != undefined) {
             businessProcessDefinitionId = parameters.businessProcessDefinitionId;
         }
     }
@@ -31,25 +33,29 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
             viewPermissionAPI = api;
             viewPermissionReadyDeferred.resolve();
         };
+
         $scope.scopeModel.onStartNewInstanceRequiredPermissionReady = function (api) {
             startNewInstancePermissionAPI = api;
             startNewInstancePermissionReadyDeferred.resolve();
         };
+
         $scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
             scheduleTaskPermissionAPI = api;
             scheduleTaskPermissionReadyDeferred.resolve();
         };
+
         $scope.saveBPDefinition = function () {
             return update();
         };
+
         $scope.close = function () {
             $scope.modalContext.closeModal()
         };
-
     }
 
     function load() {
         $scope.scopeModel.isLoading = true;
+
         getBusinessProcessDefinition().then(function () {
             loadAllControls()
         }).catch(function () {
@@ -58,9 +64,8 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
         });
     }
 
-
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission, loadScheduleTaskRequiredPermission]).then(function () {
+        return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission, loadScheduleTaskRequiredPermission]).then(function () {
 
         }).finally(function () {
             $scope.scopeModel.isLoading = false;
@@ -68,19 +73,15 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
             VRNotificationService.notifyExceptionWithClose(error, $scope);
         });
 
-
         function setTitle() {
             $scope.title = UtilsService.buildTitleForUpdateEditor(businessProcessDefinitionEntity.Title, 'Business Process Editor');
         }
-        function loadStaticData() {
 
+        function loadStaticData() {
             $scope.scopeModel.title = businessProcessDefinitionEntity.Title;
             $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
             $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
         }
-
-
-
 
         function loadViewRequiredPermission() {
             var viewPermissionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -93,7 +94,6 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
                         data: businessProcessDefinitionEntity.Configuration.Security.View
                     };
                 }
-
                 VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, payload, viewPermissionLoadDeferred);
             });
 
@@ -111,7 +111,6 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
                         data: businessProcessDefinitionEntity.Configuration.Security.StartNewInstance
                     };
                 }
-
                 VRUIUtilsService.callDirectiveLoad(startNewInstancePermissionAPI, payload, startNewInstancePermissionLoadDeferred);
             });
 
@@ -129,7 +128,6 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
                         data: businessProcessDefinitionEntity.Configuration.Security.ScheduleTask
                     };
                 }
-
                 VRUIUtilsService.callDirectiveLoad(scheduleTaskPermissionAPI, payload, scheduleTaskPermissionLoadDeferred);
             });
 
@@ -153,11 +151,8 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
             StartNewInstance: startNewInstancePermissionAPI.getData(),
             ScheduleTask: scheduleTaskPermissionAPI.getData()
         };
-        
         return obj;
     }
-
-   
 
     function update() {
         $scope.scopeModel.isLoading = true;
@@ -174,6 +169,6 @@ function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNo
             $scope.scopeModel.isLoading = false;
         });
     }
-       
 }
+
 appControllers.controller('BusinessProcess_BP_TechnicalDefinitionEditorController', BPTechnicalDefinitionEditorController);
