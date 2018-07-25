@@ -11,5 +11,6 @@ namespace TOne.WhS.RouteSync.TelesIdb.Entities
 		public string Pref { get; set; }
 		public string Route { get; set; }
 		public bool IncludeSubcodes { get; set; }
+		public string Note { get; set; }
 	}
 }
