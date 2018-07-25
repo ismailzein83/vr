@@ -17,7 +17,8 @@ namespace Vanrise.BusinessProcess.Entities
         public Type WorkflowType { get; set; } // Type should inherit System.Activities.Activity
 
         public BPConfiguration Configuration { get; set; }
-      
+
+        public Guid? VRWorkflowId { get; set; }
     }
 
     public class BPConfiguration
