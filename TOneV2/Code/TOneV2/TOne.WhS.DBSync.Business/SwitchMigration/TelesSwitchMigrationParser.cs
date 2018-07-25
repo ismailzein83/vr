@@ -14,6 +14,7 @@ using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 using Vanrise.GenericData.Transformation.Entities;
 using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.RouteSync.TelesIdb.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -54,7 +55,8 @@ namespace TOne.WhS.DBSync.Business
                 MappingSeparator = ";",
                 NumberOfOptions = GetNumberOfOptions(parametersNode),
                 SupplierOptionsSeparator = GetSupplierOptionsSeparator(parametersNode),
-                NumberOfMappings = CheckUseTwoSuppliersMapping(parametersNode) ? 2 : default(int?)
+                NumberOfMappings = CheckUseTwoSuppliersMapping(parametersNode) ? 2 : default(int?),
+                ManualRoutes = GetManualRoutes(parametersNode)
             };
 
             int? switchSupplierMappingLength = GetSwitchSupplierMappingLength(context);
@@ -264,6 +266,36 @@ namespace TOne.WhS.DBSync.Business
                 return false;
 
             return true;
+        }
+
+        private IEnumerable<ManualRoute> GetManualRoutes(XmlNode parametersNode)
+        {
+            XmlNode routingOverridesTextNode = GetXmlNodeByParameterName(parametersNode, "$Routing_Overrides_Text");
+            if (routingOverridesTextNode == null)
+                return null;
+
+            string childValue = routingOverridesTextNode.FirstChild.Value;
+            if (string.IsNullOrEmpty(childValue))
+                return null;
+
+            string[] routingOverridesTextRows = childValue.Split('|');
+
+            List<ManualRoute> manualRoutes = new List<ManualRoute>();
+            foreach (var routingOverridesTextRow in routingOverridesTextRows)
+            {
+                if (string.IsNullOrEmpty(routingOverridesTextRow))
+                    continue;
+
+                string[] routingOverridesTextColumns = routingOverridesTextRow.Split(',');
+                manualRoutes.Add(new ManualRoute
+                {
+                    Pref = routingOverridesTextColumns[0],
+                    Route = routingOverridesTextColumns[1],
+                    IncludeSubcodes = (string.Compare(routingOverridesTextColumns[2], "true") == 0) ? true : false,
+                    Note = routingOverridesTextColumns[3]
+                });
+            }
+            return manualRoutes.Any() ? manualRoutes : null;
         }
 
         private void GetConnectionStrings(XmlNode parametersNode, out string connectionString, out string redundantConnectionString)
