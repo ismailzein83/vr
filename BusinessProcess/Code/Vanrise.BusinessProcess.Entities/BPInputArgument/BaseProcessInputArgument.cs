@@ -7,13 +7,9 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public abstract class BaseProcessInputArgument
     {
-        public virtual string ProcessName
-        {
-            get
-            {
-                return this.GetType().FullName;
-            }
-        }
+        public virtual string ProcessName { get { return this.GetType().FullName; } }
+
+        public virtual string EntityId { get; set; }
 
         public int UserId { get; set; }
 
@@ -24,7 +20,6 @@ namespace Vanrise.BusinessProcess.Entities
             return BusinessManagerFactory.GetManager<IBPDefinitionManager>().GetDefinitionTitle(this.ProcessName);
         }
 
-        public virtual string EntityId { get; set; }
         public virtual void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
 
