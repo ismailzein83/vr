@@ -85,7 +85,8 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
                     var codeGridPayload = {
                         ProcessInstanceId: processInstanceId,
                         ZoneName: zoneDataItem.ZoneName,
-                        OnlyModified: onlyModified
+                        OnlyModified: onlyModified,
+                        ShowZoneName : false
                     };
 
                     return zoneDataItem.codeGridAPI.load(codeGridPayload);

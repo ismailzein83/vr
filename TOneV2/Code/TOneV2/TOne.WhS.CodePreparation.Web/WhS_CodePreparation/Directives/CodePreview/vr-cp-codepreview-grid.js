@@ -31,6 +31,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
 
         function initializeController() {
 
+            $scope.showZoneName = true;
             $scope.changedCodes = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -42,6 +43,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, VR
                     var directiveAPI = {};
                     directiveAPI.load = function (query) {
                         zoneName = query.ZoneName;
+                        $scope.showZoneName = query.ShowZoneName != undefined ? query.ShowZoneName : true;
                         return gridAPI.retrieveData(query);
                     };
 

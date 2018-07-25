@@ -5,7 +5,7 @@
              menuactions="[]">
 
     <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Zone Name'" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Name'" ng-show="showZoneName" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn widthfactor="3">
         <vr-icon iconurl="dataItem.codeStatusIconUrl" tooltip="dataItem.codeStatusIconTooltip" inline></vr-icon>
     </vr-datagridcolumn>
