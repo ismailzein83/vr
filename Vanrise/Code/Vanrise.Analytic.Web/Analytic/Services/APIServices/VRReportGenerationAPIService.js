@@ -1,47 +1,51 @@
 ﻿
-//(function (appControllers) {
+(function (appControllers) {
 
-//    "use strict";
+    "use strict";
 
-//    VRReportGenerationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig'];
+    VRReportGenerationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Analytic_ModuleConfig'];
 
-//    function VRReportGenerationAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
+    function VRReportGenerationAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
 
-//        var controllerName = "VRReport";
+        var controllerName = "VRReportGeneration";
 
 
-//        function GetFilteredVRReportGenerations(input) {
-//            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetFilteredVRReportGenerations'), input);
-//        }
+        function GetFilteredVRReportGenerations(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetFilteredVRReportGenerations'), input);
+        }
 
-//        function GetVRReportGeneration(vRReportId) {
-//            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetVRReportGeneration'), {
-//                vRReportId: vRReportId
-//            });
-//        }
+        function GetVRReportGeneration(reportId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetVRReportGeneration'), {
+                reportId: reportId
+            });
+        }
 
-//        function AddVRReportGeneration(vRReportItem) {
-//            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'AddVRReportGeneration'), dataAnalysisDefinitionItem);
-//        }
+        function AddVRReportGeneration(vRReportGenerationItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'AddVRReportGeneration'), vRReportGenerationItem);
+        }
 
-//        function UpdateVRReportGeneration(vRReportItem) {
-//            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateVRReportGeneration'), dataAnalysisDefinitionItem);
-//        }
+        function UpdateVRReportGeneration(vRReportGenerationItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateVRReportGeneration'), vRReportGenerationItem);
+        }
       
-//        function GetVRReportGenerationsInfo(filter) {
-//            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetVRReportGenerationsInfo"), {
-//                filter: filter
-//            });
-//        }
+        function GetVRReportGenerationsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetVRReportGenerationsInfo"), {
+                filter: filter
+            });
+        }
+        function GetReportActionTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetReportActionTemplateConfigs'));
+        }
 
-//        return ({
-//            GetFilteredVRReports: GetFilteredVRReports,
-//            GetVRReport: GetVRReport,
-//            AddVRReport: AddVRReport,
-//            UpdateVRReport: UpdateVRReport,
-//            GetVRReportsInfo: GetVRReportsInfo
-//        });
-//    }
+        return ({
+            GetFilteredVRReportGenerations: GetFilteredVRReportGenerations,
+            GetVRReportGeneration: GetVRReportGeneration,
+            AddVRReportGeneration: AddVRReportGeneration,
+            UpdateVRReportGeneration: UpdateVRReportGeneration,
+            GetVRReportGenerationsInfo: GetVRReportGenerationsInfo,
+            GetReportActionTemplateConfigs: GetReportActionTemplateConfigs
+        });
+    }
 
-//    appControllers.service('VR_Analytic_VRReportGenerationAPIService', VRReportAPIService);
-//})(appControllers);
+    appControllers.service('VR_Analytic_ReportGenerationAPIService', VRReportGenerationAPIService);
+})(appControllers);

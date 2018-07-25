@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VRAnalytic_AutomatedReportProcessScheduledService', 'VRUIUtilsService', 'VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService', "VR_Analytic_AutomatedReportQuerySourceEnum", "VR_Analytic_QueryHandlerValidatorResultEnum",
+app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic_AutomatedReportProcessScheduledService', 'VRUIUtilsService', 'VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService', "VR_Analytic_AutomatedReportQuerySourceEnum", "VR_Analytic_QueryHandlerValidatorResultEnum",
     function (UtilsService, VRAnalytic_AutomatedReportProcessScheduledService, VRUIUtilsService, VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, VR_Analytic_AutomatedReportQuerySourceEnum, VR_Analytic_QueryHandlerValidatorResultEnum) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -21,14 +21,14 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                     }
                 };
             },
-            templateUrl: "/Client/Modules/Analytic/Directives/AutomatedReport/Templates/AutomatedReportProcessScheduled.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/VRReportGeneration/Templates/VrreportgenerationSettings.html"
         };
 
         function DirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var handlerSettingsAPI;
-            var handlerSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var reportActionAPI;
+            var reportActionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var automatedReportQueryAPI;
             var automatedReportQueryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -46,14 +46,16 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                     gridAPI = api;
                 };
 
-                $scope.scopeModel.onHandlerSettingsAutomatedReportReady = function (api) {
-                    handlerSettingsAPI = api;
-                    handlerSettingsReadyPromiseDeferred.resolve();
+                $scope.scopeModel.onReportActionReady = function (api) {
+                    reportActionAPI = api;
+                    reportActionReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onAutomatedReportQueryReady = function (api) {
                     automatedReportQueryAPI = api;
                     automatedReportQueryReadyPromiseDeferred.resolve();
                 };
+
 
                 defineAPI();
             }
@@ -61,77 +63,61 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 var api = {};
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Analytic.BP.Arguments.VRAutomatedReportProcessInput,Vanrise.Analytic.BP.Arguments",
-                        Name: $scope.scopeModel.name,
                         Queries: automatedReportQueryAPI.getData(),
-                        Handler: {
-                            Settings: handlerSettingsAPI.getData(),
-                        },
-                    };
-
+                        ReportAction:   reportActionAPI.getData()
+                }
                 };
 
 
                 api.load = function (payload) {
+                    var queries;
+                    var reportAction;
                     if (payload != undefined)
                         context = payload.context;
-                    if (payload != undefined && payload.data != undefined) {
 
-                        var queries = payload.data.Queries;
-                        var handler = payload.data.Handler;
+                    if (payload != undefined && payload.Settings != undefined) {
 
-                    }
-                    function loadHandlerSelector() {
-                        var handlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                        handlerSettingsReadyPromiseDeferred.promise.then(function () {
-                            var handlerPayload = {
-                                settings: handler != undefined && handler.Settings != undefined ? handler.Settings : undefined,
-                                context: getContext()
-                            };
-                            VRUIUtilsService.callDirectiveLoad(handlerSettingsAPI, handlerPayload, handlerSettingsLoadPromiseDeferred);
-
-                        });
-                        return handlerSettingsLoadPromiseDeferred.promise;
+                        queries = payload.Settings.Queries;
+                        reportAction = payload.Settings.ReportAction;
                     }
                     function loadAutomatedReportQuery() {
-                        var automatedReportQueryPayloadLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var automatedReportQueryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         automatedReportQueryReadyPromiseDeferred.promise.then(function () {
                             var automatedReportQueryPayload = {
                                 Queries: queries != undefined ? queries : undefined,
                                 context: getContext()
                             };
-                            VRUIUtilsService.callDirectiveLoad(automatedReportQueryAPI, automatedReportQueryPayload, automatedReportQueryPayloadLoadPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(automatedReportQueryAPI, automatedReportQueryPayload, automatedReportQueryLoadPromiseDeferred);
 
                         });
-                        return automatedReportQueryPayloadLoadPromiseDeferred.promise;
+                        return automatedReportQueryLoadPromiseDeferred.promise;
                     }
-                    return UtilsService.waitMultiplePromises([loadHandlerSelector(), loadAutomatedReportQuery()]);
-                };
-
-                api.validate = function () {
-                    var input = {
-                        Queries: getColumns(),
-                        HandlerSettings: handlerSettingsAPI.getData()
-                    };
-                    var validationPromise = UtilsService.createPromiseDeferred();
-                    VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.ValidateQueryAndHandlerSettings(input).then(function (response) {
-                        if (response != undefined) {
-                            if ((UtilsService.getEnum(VR_Analytic_QueryHandlerValidatorResultEnum, "value", response.Result) == VR_Analytic_QueryHandlerValidatorResultEnum.Failed)) {
-                                validationPromise.reject(response.ErrorMessage);
+                    function loadReportActionSelector() {
+                        var reportActionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        reportActionReadyPromiseDeferred.promise.then(function () {
+                            var reportActionPayload = {
+                                reportAction: reportAction,
+                                context: getContext()
                             }
-                            else {
-                                validationPromise.resolve();
-                            }
-                        }
+                            VRUIUtilsService.callDirectiveLoad(reportActionAPI, reportActionPayload, reportActionLoadPromiseDeferred);
 
-                    });
-                    return validationPromise.promise;
+                        });
+                        return reportActionLoadPromiseDeferred.promise;
+                    }
+                    return UtilsService.waitMultiplePromises([loadAutomatedReportQuery(), loadReportActionSelector()]);
 
-                };
+
+
+
+                };               
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+
+
+
             function getColumns() {
                 return automatedReportQueryAPI.getData();
             }
@@ -143,7 +129,6 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 currentContext.getQueryInfo = function () {
                     return getColumns();
                 };
-
                 currentContext.getQueryListNames = function (vrAutomatedReportQueryId) {
                     var automatedReportDataSchemaPromise = getAutomatedReportDataSchema();
                     var automatedReportDataSchemaPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -219,8 +204,8 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                     });
                     return automatedReportDataSchemaPromiseDeferred.promise;
                 };
-                return currentContext;
-            };
+                return currentContext
+            }
 
 
             function getSchemaList() {
@@ -243,7 +228,6 @@ app.directive("vrAnalyticAutomatedreportprocessSchedualed", ['UtilsService', 'VR
                 });
                 return automatedReportDataSchemaPromiseDeferred.promise;
             }
-
 
         }
 

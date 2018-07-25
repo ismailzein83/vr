@@ -9,66 +9,65 @@ using Vanrise.Data.SQL;
 
 namespace Vanrise.Analytic.Data.SQL
 {
-//    class VRReportDataManager : BaseSQLDataManager, IVRReportDataManager
-//    {
-//        #region ctor/Local Variables
-//        public VRReportDataManager()
-//            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
-//        {
+    class VRReportGenerationDataManager : BaseSQLDataManager, IVRReportGenerationDataManager
+    {
+        #region ctor/Local Variables
+        public VRReportGenerationDataManager()
+            : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
+        {
 
-//        }
+        }
 
-//        #endregion
-
-
-    //    #region Public Methods
-
-    //    public List<DataAnalysisDefinition> GetDataAnalysisDefinitions()
-    //    {
-    //        return GetItemsSP("Analytic.sp_DataAnalysisDefinition_GetAll", DataAnalysisDefinitionMapper);
-    //    }
-
-    //    public bool AreDataAnalysisDefinitionUpdated(ref object updateHandle)
-    //    {
-    //        return base.IsDataUpdated("Analytic.DataAnalysisDefinition", ref updateHandle);
-    //    }
-
-    //    public bool Insert(DataAnalysisDefinition dataAnalysisDefinitionItem)
-    //    {
-    //        string serializedSettings = dataAnalysisDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(dataAnalysisDefinitionItem.Settings) : null;
-    //        int affectedRecords = ExecuteNonQuerySP("Analytic.sp_DataAnalysisDefinition_Insert", dataAnalysisDefinitionItem.DataAnalysisDefinitionId, dataAnalysisDefinitionItem.Name, serializedSettings);
-
-    //        if (affectedRecords > 0)
-    //        {
-    //            return true;
-    //        }
-
-    //        return false;
-    //    }
-
-    //    public bool Update(DataAnalysisDefinition dataAnalysisDefinitionItem)
-    //    {
-    //        string serializedSettings = dataAnalysisDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(dataAnalysisDefinitionItem.Settings) : null;
-    //        int affectedRecords = ExecuteNonQuerySP("Analytic.sp_DataAnalysisDefinition_Update", dataAnalysisDefinitionItem.DataAnalysisDefinitionId, dataAnalysisDefinitionItem.Name, serializedSettings);
-    //        return (affectedRecords > 0);
-    //    }
-
-    //    #endregion
+        #endregion
 
 
-    //    #region Mappers
+        #region Public Methods
 
-    //    DataAnalysisDefinition DataAnalysisDefinitionMapper(IDataReader reader)
-    //    {
-    //        DataAnalysisDefinition dataAnalysisDefinition = new DataAnalysisDefinition
-    //        {
-    //            DataAnalysisDefinitionId = (Guid) reader["ID"],
-    //            Name = reader["Name"] as string,
-    //            Settings = Vanrise.Common.Serializer.Deserialize<DataAnalysisDefinitionSettings>(reader["Settings"] as string) 
-    //        };
-    //        return dataAnalysisDefinition;
-    //    }
+        public List<VRReportGeneration> GetVRReportGenerations()
+        {
+            return GetItemsSP("Analytic.sp_VRReportGeneration_GetAll", VRReportGenerationMapper);
+        }
 
-    //    #endregion
-    //}
+        public bool AreVRReportGenerationUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("Analytic.VRReportGeneration", ref updateHandle);
+        }
+
+        public bool Insert(VRReportGeneration vRReportGenerationItem, out long reportId)
+        {
+            object id;
+            string serializedSettings = vRReportGenerationItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vRReportGenerationItem.Settings) : null;
+            int nbOfRecordsAffected = ExecuteNonQuerySP("Analytic.sp_VRReportGeneration_Insert", out id, vRReportGenerationItem.Name, vRReportGenerationItem.Description, serializedSettings);
+           
+            bool result = (nbOfRecordsAffected > 0);
+            if (result)
+                reportId = (long)id;
+            else
+                reportId = 0;
+            return result;
+        }
+
+        public bool Update(VRReportGeneration vRReportGenerationItem)
+        {
+            string serializedSettings = vRReportGenerationItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vRReportGenerationItem.Settings) : null;
+            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_VRReportGeneration_Update", vRReportGenerationItem.ReportId, vRReportGenerationItem.Name, vRReportGenerationItem.Description, serializedSettings);
+            return (affectedRecords > 0);
+        }
+        #endregion
+
+        #region Mappers
+
+        VRReportGeneration VRReportGenerationMapper(IDataReader reader)
+        {
+            return new VRReportGeneration
+            {
+                ReportId = (long)reader["ID"],
+                Name = reader["Name"] as string,
+                Description=reader["Description"]as string,
+                Settings = Vanrise.Common.Serializer.Deserialize<VRReportGenerationSettings>(reader["Settings"] as string)
+            };
+        }
+
+        #endregion
+    }
 }

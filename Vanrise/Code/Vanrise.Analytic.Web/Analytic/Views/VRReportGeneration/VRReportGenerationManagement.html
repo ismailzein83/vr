@@ -1,5 +1,5 @@
 ﻿
-<!--<vr-panel ng-controller="VR_Analytic_VRReportManagementController">
+<vr-panel ng-controller="VR_Analytic_VRReportGenerationManagementController">
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed">
@@ -14,16 +14,16 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add" ></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.add"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
 
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-analytic-vrreport-grid on-ready="scopeModel.onGridReady"></vr-analytic-vrreport-grid>
+                <vr-analytic-reportgeneration-grid on-ready="scopeModel.onGridReady"></vr-analytic-reportgeneration-grid>
             </vr-columns>
         </vr-row>
 
     </vr-form>
-</vr-panel>-->
+</vr-panel>

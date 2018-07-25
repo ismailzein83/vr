@@ -1,40 +1,50 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    "use strict";
+    "use strict";
 
-//    VRReportService.$inject = [ 'VRModalService', 'VRUIUtilsService'];
+    VRReportGenerationService.$inject = ['VRModalService', 'VRUIUtilsService'];
 
-//    function VRReportService( VRModalService, VRUIUtilsService) {
+    function VRReportGenerationService(VRModalService, VRUIUtilsService) {
 
-//        function addVRReport(onVRReportAdded) {
-//            var settings = {};
+        function addVRReportGeneration(onVRReportGenerationAdded) {
+            var settings = {};
 
-//            settings.onScopeReady = function (modalScope) {
-//                modalScope.onVRReportAdded = onVRReportAdded
-//            };
-//            VRModalService.showModal('/Client/Modules/Analytic/Views/VRReport/VRReportEditor.html', null, settings);
-//        };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onVRReportGenerationAdded = onVRReportGenerationAdded
+            };
+            VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationEditor.html', null, settings);
+        };
 
-//        function editVRReport(vRReportId, onVRReportUpdated) {
-//            var settings = {};
+        function editVRReportGeneration(reportId, onVRReportGenerationUpdated) {
+            var settings = {};
 
-//            var parameters = {
-//                vRReportGenerationId: vRReportGenerationId,
-//            };
+            var parameters = {
+                reportId: reportId,
+            };
 
-//            settings.onScopeReady = function (modalScope) {
-//                modalScope.onVRReportUpdated = onVRReportUpdated;
-//            };
-//            VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/VRReport/VRReportGenerationEditor.html', parameters, settings);
-//        }       
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onVRReportGenerationUpdated = onVRReportGenerationUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationEditor.html', parameters, settings);
+        }
+        function generateVRReportGeneration(reportId) {
+            var settings = {};
+
+            var parameters = {
+                reportId: reportId,
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationGenerator.html', parameters, settings);
+        }
         
 
-//        return {
-//            addVRReportGeneration: addVRReportGeneration,
-//            editVRReportGeneration: editVRReportGeneration
-//        };
-//    }
+        return {
+            addVRReportGeneration: addVRReportGeneration,
+            editVRReportGeneration: editVRReportGeneration,
+            generateVRReportGeneration: generateVRReportGeneration
+        };
+    }
 
-//    appControllers.service('VR_Analytic_VRReportService', VRReportService);
+    appControllers.service('VR_Analytic_ReportGenerationService', VRReportGenerationService);
 
-//})(appControllers);
+})(appControllers);

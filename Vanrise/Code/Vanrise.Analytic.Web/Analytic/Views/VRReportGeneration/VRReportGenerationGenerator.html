@@ -1,0 +1,10 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_VRReportGenerationGeneratorController" vr-loader="scopeModel.isLoading" size="small">
+        <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Generate" formname="formVRReportGenerationEditor" data-onclick="scopeModel.generate"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

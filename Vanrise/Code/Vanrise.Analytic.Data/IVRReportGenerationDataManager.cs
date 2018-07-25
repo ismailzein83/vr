@@ -13,7 +13,7 @@ namespace Vanrise.Analytic.Data
 
         bool AreVRReportGenerationUpdated(ref object updateHandle);
 
-        bool Insert(VRReportGeneration vrReportGeneration);
+        bool Insert(VRReportGeneration vrReportGeneration, out long reportId);
 
         bool Update(VRReportGeneration vrReportGeneration);
     }

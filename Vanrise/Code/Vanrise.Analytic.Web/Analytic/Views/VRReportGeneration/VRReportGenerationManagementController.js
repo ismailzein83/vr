@@ -1,47 +1,46 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    "use strict";
+    "use strict";
 
-//    VRReportManagementController.$inject = ['$scope', 'VR_Analytic_VRReportService', 'VR_Analytic_VRReportAPIService', 'UtilsService', 'VRUIUtilsService'];
+    VRReportGenerationManagementController.$inject = ['$scope', 'VR_Analytic_ReportGenerationService', 'VR_Analytic_ReportGenerationAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-//    function VRReportManagementController($scope, VR_Analytic_VRReportService, VR_Analytic_VRReportAPIService, UtilsService, VRUIUtilsService) {
+    function VRReportGenerationManagementController($scope, VR_Analytic_ReportGenerationService ,VR_Analytic_ReportGenerationAPIService, UtilsService, VRUIUtilsService) {
 
-//        var gridAPI;
+        var gridAPI;
 
-//        defineScope();
-//        load();
+        defineScope();
+        load();
 
 
-//        function defineScope() {
-//            $scope.scopeModel = {};
+        function defineScope() {
+            $scope.scopeModel = {};
 
-//            $scope.scopeModel.search = function () {
-//                return gridAPI.load(buildGridQuery());
-//            };
-//            $scope.scopeModel.add = function () {
-//                var onVRReportAdded = function (addedonVRReport) {
-//                    gridAPI.onVRReportAddedAdded(addedonVRReport);
-//                };
+            $scope.scopeModel.search = function () {
+                return gridAPI.load(buildGridQuery());
+            };
+            $scope.scopeModel.add = function () {
+                var onVRReportGenerationAdded = function (addedonVRReportGeneration) {
+                    gridAPI.onVRReportGenerationAdded(addedonVRReportGeneration);
+                };
 
-//                VR_Analytic_VRReportService.addDataAnalysisDefinition(onVRReportAdded);
-//            };
+                VR_Analytic_ReportGenerationService.addVRReportGeneration(onVRReportGenerationAdded);
+            };
 
-//            $scope.scopeModel.onGridReady = function (api) {
-//                gridAPI = api;
-//                gridAPI.load({});
-//            };
-//        }
-//        function load() {
+            $scope.scopeModel.onGridReady = function (api) {
+                gridAPI = api;
+                gridAPI.load({});
+            };
+        }
+        function load() {
+        }
 
-//        }
+        function buildGridQuery() {
+            return {
+                Name: $scope.scopeModel.name,
+            };
+        }
+    }
 
-//        function buildGridQuery() {
-//            return {
-//                Name: $scope.scopeModel.name,
-//            };
-//        }
-//    }
+    appControllers.controller('VR_Analytic_VRReportGenerationManagementController', VRReportGenerationManagementController);
 
-//    appControllers.controller('VR_Analytic_VRReportManagementController', VRReportManagementController);
-
-//})(appControllers);
+})(appControllers);

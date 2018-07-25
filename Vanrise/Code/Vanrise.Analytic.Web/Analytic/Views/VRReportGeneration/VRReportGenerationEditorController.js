@@ -1,152 +1,167 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    "use strict";
+    "use strict";
+    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-//    DataAnalysisDefinitionEditorController.$inject = ['$scope', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
+    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
-//    function DataAnalysisDefinitionEditorController($scope, VR_Analytic_DataAnalysisDefinitionAPIService, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
+        var isEditMode;
+        var reportId;
+        var vRReportGenerationEntity;
 
-//        var isEditMode;
-
-//        var dataAnalysisDefinitionId;
-//        var dataAnalysisDefinitionEntity;
-
-//        var settingsDirectiveAPI;
-//        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-//        loadParameters();
-//        defineScope();
-//        load();
+        var settingsDirectiveAPI;
+        var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
 
-//        function loadParameters() {
-//            var parameters = VRNavigationService.getParameters($scope);
+        loadParameters();
+        defineScope();
+        load();
 
-//            if (parameters != undefined && parameters != null) {
-//                dataAnalysisDefinitionId = parameters.dataAnalysisDefinitionId;
-//            }
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null) {
+                reportId = parameters.reportId;
+            }
+            isEditMode = (reportId != undefined);
+        };
 
-//            isEditMode = (dataAnalysisDefinitionId != undefined);
-//        }
-//        function defineScope() {
-//            $scope.scopeModel = {};
+        function defineScope() {
 
-//            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
-//                settingsDirectiveAPI = api;
-//                settingsDirectiveReadyDeferred.resolve();
-//            };
+            $scope.scopeModel = {};
 
-//            $scope.scopeModel.save = function () {
-//                if (isEditMode) {
-//                    return update();
-//                }
-//                else {
-//                    return insert();
-//                }
-//            };
-//            $scope.scopeModel.close = function () {
-//                $scope.modalContext.closeModal()
-//            };
-//        }
-//        function load() {
-//            $scope.scopeModel.isLoading = true;
+            $scope.scopeModel.onSettingsDirectiveReady = function (api) {
+                settingsDirectiveAPI = api;
+                settingsDirectiveReadyDeferred.resolve();
+            };
 
-//            if (isEditMode) {
-//                GetDataAnalysisDefinition().then(function () {
-//                    loadAllControls();
-//                }).catch(function (error) {
-//                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-//                    $scope.scopeModel.isLoading = false;
-//                });
-//            }
-//            else {
-//                loadAllControls();
-//            }
-//        }
+            $scope.scopeModel.save = function () {
+                if (isEditMode)
+                    return update();
+                else
+                    return insert();
 
-//        function GetDataAnalysisDefinition() {
-//            return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
-//                dataAnalysisDefinitionEntity = response;
-//            });
-//        }
+            };
 
-//        function loadAllControls() {
-//            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective]).catch(function (error) {
-//                VRNotificationService.notifyExceptionWithClose(error, $scope);
-//            }).finally(function () {
-//                $scope.scopeModel.isLoading = false;
-//            });
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
 
-//            function setTitle() {
-//                if (isEditMode) {
-//                    var dataAnalysisDefinitionName = (dataAnalysisDefinitionEntity != undefined) ? dataAnalysisDefinitionEntity.Name : null;
-//                    $scope.title = UtilsService.buildTitleForUpdateEditor(dataAnalysisDefinitionName, 'Data Analysis Definition');
-//                }
-//                else {
-//                    $scope.title = UtilsService.buildTitleForAddEditor('Data Analysis Definition');
-//                }
-//            }
-//            function loadStaticData() {
-//                if (dataAnalysisDefinitionEntity == undefined)
-//                    return;
-//                $scope.scopeModel.name = dataAnalysisDefinitionEntity.Name;
-//            }
-//            function loadSettingsDirective() {
-//                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+        };
 
-//                settingsDirectiveReadyDeferred.promise.then(function () {
-//                    var settingsDirectivePayload;
-//                    if (dataAnalysisDefinitionEntity != undefined) {
-//                        settingsDirectivePayload = { dataAnalysisDefinitionSettings: dataAnalysisDefinitionEntity.Settings };
-//                    }
-//                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-//                });
+        function load() {
+            $scope.scopeModel.isLoading = true;
+            if (isEditMode) {
+                getVRReportGeneration().then(function () {
+                    loadAllControls().finally(function () {
+                        vRReportGenerationEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    $scope.scopeModel.isLoading = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+            }
+            else
+                loadAllControls();
+        };
 
-//                return settingsDirectiveLoadDeferred.promise;
-//            }
-//        }
+        function getVRReportGeneration() {
+            return VR_Analytic_ReportGenerationAPIService.GetVRReportGeneration(reportId).then(function (response) {
+                vRReportGenerationEntity = response;
+            });
+        };
 
-//        function insert() {
-//            $scope.scopeModel.isLoading = true;
-//            return VR_Analytic_DataAnalysisDefinitionAPIService.AddDataAnalysisDefinition(buildDataAnalysisDefinitionObjFromScope()).then(function (response) {
-//                if (VRNotificationService.notifyOnItemAdded('DataAnalysisDefinition', response, 'Name')) {
-//                    if ($scope.onDataAnalysisDefinitionAdded != undefined)
-//                        $scope.onDataAnalysisDefinitionAdded(response.InsertedObject);
-//                    $scope.modalContext.closeModal();
-//                }
-//            }).catch(function (error) {
-//                VRNotificationService.notifyException(error, $scope);
-//            }).finally(function () {
-//                $scope.scopeModel.isLoading = false;
-//            });
-//        }
-//        function update() {
-//            $scope.scopeModel.isLoading = true;
-//            return VR_Analytic_DataAnalysisDefinitionAPIService.UpdateDataAnalysisDefinition(buildDataAnalysisDefinitionObjFromScope()).then(function (response) {
-//                if (VRNotificationService.notifyOnItemUpdated('DataAnalysisDefinition', response, 'Name')) {
-//                    if ($scope.onDataAnalysisDefinitionUpdated != undefined) {
-//                        $scope.onDataAnalysisDefinitionUpdated(response.UpdatedObject);
-//                    }
-//                    $scope.modalContext.closeModal();
-//                }
-//            }).catch(function (error) {
-//                VRNotificationService.notifyException(error, $scope);
-//            }).finally(function () {
-//                $scope.scopeModel.isLoading = false;
-//            });
-//        }
+        function loadAllControls() {
 
-//        function buildDataAnalysisDefinitionObjFromScope() {
-//            var dataAnalysisDefinitionSettings = settingsDirectiveAPI.getData();
+            function setTitle() {
+                if (isEditMode && vRReportGenerationEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vRReportGenerationEntity.Name, "VR Report Generation");
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor("VR Report Generation");
+            };
 
-//            return {
-//                DataAnalysisDefinitionId: dataAnalysisDefinitionEntity != undefined ? dataAnalysisDefinitionEntity.DataAnalysisDefinitionId : undefined,
-//                Name: $scope.scopeModel.name,
-//                Settings: dataAnalysisDefinitionSettings
-//            };
-//        }
-//    }
+            function loadStaticData() {
+                if (vRReportGenerationEntity != undefined)
+                {
+                    $scope.scopeModel.name = vRReportGenerationEntity.Name;
+                    $scope.scopeModel.description = vRReportGenerationEntity.Description;
+                }
+            };
 
-//    appControllers.controller('VR_Analytic_DataAnalysisDefinitionController', DataAnalysisDefinitionEditorController);
+            function loadSettingsDirective() {
+                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-//})(appControllers);
+                settingsDirectiveReadyDeferred.promise.then(function () {
+                    var settingsDirectivePayload; 
+                    if (vRReportGenerationEntity != undefined) {
+                        settingsDirectivePayload = { Settings: vRReportGenerationEntity.Settings };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+                });
+
+                return settingsDirectiveLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSettingsDirective])
+             .catch(function (error) {
+                 VRNotificationService.notifyExceptionWithClose(error, $scope);
+             })
+               .finally(function () {
+                   $scope.scopeModel.isLoading = false;
+               });
+
+        };
+
+        function buildVRReportGenerationObjectFromScope() {
+            var settings = settingsDirectiveAPI.getData();
+            var object = {
+                ReportId: (reportId != undefined) ? reportId : undefined,
+                Name: $scope.scopeModel.name,
+                Description:$scope.scopeModel.description,
+                Settings: settings                    
+            };
+            return object;
+        };
+
+        function insert() {
+
+            $scope.scopeModel.isLoading = true;
+            var vRReportGenerationObject = buildVRReportGenerationObjectFromScope();
+            return VR_Analytic_ReportGenerationAPIService.AddVRReportGeneration(vRReportGenerationObject)
+            .then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded("VRReportGeneration", response, "Name")) {
+                    if ($scope.onVRReportGenerationAdded != undefined) {
+                        $scope.onVRReportGenerationAdded(response.InsertedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                $scope.scopeModel.isLoading = false;
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+
+        };
+
+        function update() {
+            $scope.scopeModel.isLoading = true;
+            var vRReportGenerationObject = buildVRReportGenerationObjectFromScope();
+            VR_Analytic_ReportGenerationAPIService.UpdateVRReportGeneration(vRReportGenerationObject).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated("VRReportGeneration", response, "Name")) {
+                    if ($scope.onVRReportGenerationUpdated != undefined) {
+                        $scope.onVRReportGenerationUpdated(response.UpdatedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                $scope.scopeModel.isLoading = false;
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+
+            });
+        };
+
+    };
+    appControllers.controller('VR_Analytic_VRReportGenerationEditorController', vRReportGenerationEditorController);
+})(appControllers);
