@@ -61,11 +61,21 @@ namespace Vanrise.Analytic.Business
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord)
         {
+            return GetAllFilteredRecords(query, false, out summaryRecord);
+        }
+
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, bool dontApplyOrdering, out AnalyticRecord summaryRecord)
+        {
             List<AnalyticResultSubTable> resultSubTables;
-            return GetAllFilteredRecords(query, out summaryRecord, out resultSubTables);
+            return GetAllFilteredRecords(query, dontApplyOrdering, out summaryRecord, out resultSubTables);
         }
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
+        {
+            return GetAllFilteredRecords(query, false, out summaryRecord, out resultSubTables);
+        }
+
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
             SetQueryToTimeIfNull(query);
             if (query.LastHours.HasValue)
@@ -93,8 +103,19 @@ namespace Vanrise.Analytic.Business
             {
                 Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = BuildMeasureStyleRulesDictionary(query.MeasureStyleRules);
                 FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, includeDBDimensions, query.Filters, query.FilterGroup);
-                return ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
+                var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
                     query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, out summaryRecord, out resultSubTables);
+                if(dontApplyOrdering || !query.OrderType.HasValue)
+                {
+                    return records;
+                }
+                else
+                {
+                    if (records == null)
+                        return null;
+                    else
+                        return GetOrderedAnalyticRecords(queryContext, query.OrderType.Value, query.DimensionFields, query.MeasureFields, query.AdvancedOrderOptions, records, record => record).ToList();
+                }
             }
             else
             {
@@ -1065,7 +1086,7 @@ namespace Vanrise.Analytic.Business
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
                 var analyticManager = new AnalyticManager();
-                return analyticManager.GetAllFilteredRecords(input.Query, out _summaryRecord);
+                return analyticManager.GetAllFilteredRecords(input.Query, true, out _summaryRecord);
             }
 
             protected override BigResult<AnalyticRecord> AllRecordsToBigResult(DataRetrievalInput<AnalyticQuery> input, IEnumerable<AnalyticRecord> allRecords)
