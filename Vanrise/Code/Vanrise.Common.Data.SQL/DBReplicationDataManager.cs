@@ -91,6 +91,11 @@ namespace Vanrise.Common.Data.SQL
                     {
                         DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                         DropFKs(context, tableInfo);
+                    }
+
+                    foreach (TableInfo tableInfo in tableInfoList)
+                    {
+                        DBReplicationTableDetails dbReplicationTableDetails = tableInfo.DBReplicationTableDetails;
                         DropOriginalTables(context, tableInfo);
                         RenameTempTables(context, tableInfo);
                         CreateIndexes(context, tableInfo);

@@ -126,7 +126,7 @@ namespace Vanrise.Common.Data.SQL
                 while (currentId <= maxValue)
                 {
                     StringBuilder strBuilderById = new StringBuilder();
-                    strBuilderById.AppendFormat("SELECT TOP {0} {1} FROM {2} WITH(NOLOCK) WHERE {3} >= {4}", context.ChunkSize.Value, concatColumns, sourceTableNameWithSchema, context.IdColumn, currentId);
+                    strBuilderById.AppendFormat("SELECT TOP {0} {1} FROM {2} WITH(NOLOCK) WHERE {3} >= {4} ORDER BY {3}", context.ChunkSize.Value, concatColumns, sourceTableNameWithSchema, context.IdColumn, currentId);
 
                     using (DataTable datable = new DataTable())
                     {
@@ -147,10 +147,17 @@ namespace Vanrise.Common.Data.SQL
                             bulkcopy.DestinationTableName = GetFullTableName(context.TargetTempTableName, null, context.TableSchema);
                             bulkcopy.WriteToServer(datable);
                         }
+                        DataRow firstRow = datable.Rows[0];
+                        long firstId = long.Parse(firstRow[context.IdColumn].ToString());
+
+                        DataRow lastRow = datable.Rows[datable.Rows.Count - 1];
+                        long lastId = long.Parse(lastRow[context.IdColumn].ToString());
+
+                        currentId = lastId + 1;
                         totalCount += datable.Rows.Count;
-                        context.WriteInformation(string.Format("Data Replication for table {0} from Id {1} to {2} done. Rows copied: {3}", GetFullTableName(context.SourceTableName, null, context.TableSchema), currentId, Math.Min(currentId + context.ChunkSize.Value - 1, maxValue), datable.Rows.Count));
+                        context.WriteInformation(string.Format("Data Replication for table {0} from Id {1} to {2} done. Rows copied: {3}", GetFullTableName(context.SourceTableName, null, context.TableSchema), firstId, lastId, datable.Rows.Count));
                     }
-                    currentId += context.ChunkSize.Value;
+                    //currentId += context.ChunkSize.Value;
                 }
                 context.WriteInformation(string.Format("Data Replication for table {0} done. Total rows copied: {1}", GetFullTableName(context.SourceTableName, null, context.TableSchema), totalCount));
             }
