@@ -61,6 +61,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 	        var otherRateGridAPI;
 
+	        var countryChangesEED;
+
 	        var allZonesLetter = "ALL ZONES";
 
 	        var isSellingProductGrid;
@@ -246,12 +248,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 	            columnsConfig = {};
 	            $scope.columnsConfig = columnsConfig;
-	            $scope.addColumnFixedAndRecalculate = function (colName, width,colHeader,includeInListView) {
+	            $scope.addColumnFixedAndRecalculate = function (colName, width, colHeader, includeInListView) {
 	                var column = {
 	                    name: colName,
 	                    widthAsNb: width,
 	                    colHeader: colHeader,
-	                    includeInListView:includeInListView,
+	                    includeInListView: includeInListView,
 	                    width: width + "px"
 	                };
 	                columnsConfig[colName] = column;
@@ -381,6 +383,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	                gridQuery = query;
 	                isSellingProductGrid = (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
 	                if (query != undefined) {
+	                    countryChangesEED = query.countryChangesEED;
 	                    ownerName = query.OwnerName;
 	                    setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
 	                }
@@ -675,6 +678,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	                zoneItem.CurrentRateEED = zoneItem.ZoneEED;
 	            }
 
+	            if (zoneItem.IsCountryEnded && countryChangesEED) {
+	                if (zoneItem.CurrentRateEED == undefined)
+	                    zoneItem.CurrentRateEED = countryChangesEED;
+	                else
+	                    zoneItem.CurrentRateEED = (compareDates(zoneItem.CurrentRateEED, countryChangesEED) == 2) ? zoneItem.CurrentRateEED : countryChangesEED;
+
+	                if (compareDates(zoneItem.CurrentRateEED, zoneItem.ZoneBED) == 2)
+	                    zoneItem.CurrentRateEED = zoneItem.ZoneBED;
+	            }
+
 	            zoneItem.validateNewRate = function () {
 	                return WhS_Sales_RatePlanUtilsService.validateNewRate(zoneItem, gridQuery.CurrencyId);
 	            };
@@ -821,8 +834,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	                if (month2 > month1)
 	                    return 2;
 
-	                var day1 = d1.getDay();
-	                var day2 = d2.getDay();
+	                var day1 = d1.getDate();
+	                var day2 = d2.getDate();
 	                if (day1 > day2)
 	                    return 1;
 	                if (day2 > day1)
