@@ -319,7 +319,7 @@ namespace TOne.WhS.Sales.Business
 				if (!applicableRateTypeIds.Contains(otherRate.TypeId))
 				{
 					isValid = false;
-					errorMessages.Add(string.Format("{0} Rate is not applicable for this zone.", otherRate.TypeName));
+					errorMessages.Add(string.Format("{0} Rules (Under Rules-Sale-RateType) is not configured for this zone and/or customer.", otherRate.TypeName));
 				}
 				else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage))
 				{
