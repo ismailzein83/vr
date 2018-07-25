@@ -12,6 +12,12 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-select label="Access Type" datasource="scopeModel.accessTypes" selectedvalues="scopeModel.selectedAccessLevel"
+                                       datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
                         <vr-analytic-reportgeneration-settings on-ready="scopeModel.onSettingsDirectiveReady"></vr-analytic-reportgeneration-settings>
                     </vr-row>
                 </vr-tab>

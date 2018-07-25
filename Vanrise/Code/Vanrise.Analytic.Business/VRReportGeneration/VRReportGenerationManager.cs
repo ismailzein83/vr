@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.Caching;
+using System.ComponentModel;
 
 namespace Vanrise.Analytic.Business
 {
@@ -18,9 +19,12 @@ namespace Vanrise.Analytic.Business
         public IDataRetrievalResult<VRReportGenerationDetail> GetFilteredVRReportGenerations(DataRetrievalInput<VRReportGenerationQuery> input)
         {
             var allVRReportGenerations = GetCachedVRReportGenerations();
+            var userid = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             Func<VRReportGeneration, bool> filterExpression = (vRReportGeneration) =>
             {
                 if (input.Query.Name != null && !vRReportGeneration.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.Owner == ReportOwner.OnlyMyReports && vRReportGeneration.CreatedBy != userid)
                     return false;
                 return true;
             };
@@ -35,14 +39,14 @@ namespace Vanrise.Analytic.Business
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             long reportId = -1;
-
+            vRReportGeneration.CreatedBy = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            vRReportGeneration.LastModifiedBy = vRReportGeneration.CreatedBy;
             bool insertActionSuccess = vRReportGenerationDataManager.Insert(vRReportGeneration, out reportId);
             if (insertActionSuccess)
-            {
-                vRReportGeneration.ReportId = reportId;
+            {                
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = VRReportGenerationDetailMapper(vRReportGeneration);
+                insertOperationOutput.InsertedObject = VRReportGenerationDetailMapper(this.GetVRReportGeneration(reportId));
             }
             else
             {
@@ -61,12 +65,13 @@ namespace Vanrise.Analytic.Business
             UpdateOperationOutput<VRReportGenerationDetail> updateOperationOutput = new UpdateOperationOutput<VRReportGenerationDetail>();
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+            vRReportGeneration.LastModifiedBy = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             bool updateActionSuccess = vRReportGenerationDataManager.Update(vRReportGeneration);
             if (updateActionSuccess)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = VRReportGenerationDetailMapper(vRReportGeneration);
+                updateOperationOutput.UpdatedObject = VRReportGenerationDetailMapper(this.GetVRReportGeneration(vRReportGeneration.ReportId));
             }
             else
             {
@@ -113,7 +118,12 @@ namespace Vanrise.Analytic.Business
             {
                 Name = vRReportGeneration.Name,
                 ReportId = vRReportGeneration.ReportId,
-                Description = vRReportGeneration.Description
+                Description = vRReportGeneration.Description,
+                CreatedBy = vRReportGeneration.CreatedBy,
+                CreatedTime = vRReportGeneration.CreatedTime,
+                AccessLevel = Utilities.GetEnumAttribute<AccessLevel, DescriptionAttribute>(vRReportGeneration.AccessLevel).Description,
+                LastModifiedBy = vRReportGeneration.LastModifiedBy,
+                LastModifiedTime = vRReportGeneration.LastModifiedTime
             };
         }
 

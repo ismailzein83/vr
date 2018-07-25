@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRReportGenerationManagementController.$inject = ['$scope', 'VR_Analytic_ReportGenerationService', 'VR_Analytic_ReportGenerationAPIService', 'UtilsService', 'VRUIUtilsService'];
+    VRReportGenerationManagementController.$inject = ['$scope', 'VR_Analytic_ReportGenerationService', 'VR_Analytic_ReportGenerationAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_Analytic_ReportOwner'];
 
-    function VRReportGenerationManagementController($scope, VR_Analytic_ReportGenerationService ,VR_Analytic_ReportGenerationAPIService, UtilsService, VRUIUtilsService) {
+    function VRReportGenerationManagementController($scope, VR_Analytic_ReportGenerationService, VR_Analytic_ReportGenerationAPIService, UtilsService, VRUIUtilsService, VR_Analytic_ReportOwner) {
 
         var gridAPI;
 
@@ -14,7 +14,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.reportOwners = UtilsService.getArrayEnum(VR_Analytic_ReportOwner);
             $scope.scopeModel.search = function () {
                 return gridAPI.load(buildGridQuery());
             };
@@ -37,6 +37,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
+                Owner: $scope.scopeModel.selectedReportOwner != undefined ? $scope.scopeModel.selectedReportOwner.value : undefined
             };
         }
     }

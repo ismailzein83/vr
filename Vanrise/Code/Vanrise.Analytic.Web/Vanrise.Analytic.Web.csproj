@@ -137,6 +137,7 @@
     <Content Include="Analytic\Constants\ModuleConfig.js" />
     <Content Include="Analytic\Constants\OrderTypeEnum.js" />
     <Content Include="Analytic\Constants\OrderDirectionEnum.js" />
+    <Content Include="Analytic\Constants\ReportOwner.js" />
     <Content Include="Analytic\Constants\SinceTimeEnum.js" />
     <Content Include="Analytic\Constants\StyleCodeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />

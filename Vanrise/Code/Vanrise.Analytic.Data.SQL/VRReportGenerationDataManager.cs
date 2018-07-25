@@ -37,7 +37,7 @@ namespace Vanrise.Analytic.Data.SQL
         {
             object id;
             string serializedSettings = vRReportGenerationItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vRReportGenerationItem.Settings) : null;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("Analytic.sp_VRReportGeneration_Insert", out id, vRReportGenerationItem.Name, vRReportGenerationItem.Description, serializedSettings);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("Analytic.sp_VRReportGeneration_Insert", out id, vRReportGenerationItem.Name, vRReportGenerationItem.Description, serializedSettings, vRReportGenerationItem.AccessLevel, vRReportGenerationItem.CreatedBy);
            
             bool result = (nbOfRecordsAffected > 0);
             if (result)
@@ -50,7 +50,7 @@ namespace Vanrise.Analytic.Data.SQL
         public bool Update(VRReportGeneration vRReportGenerationItem)
         {
             string serializedSettings = vRReportGenerationItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vRReportGenerationItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_VRReportGeneration_Update", vRReportGenerationItem.ReportId, vRReportGenerationItem.Name, vRReportGenerationItem.Description, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Analytic.sp_VRReportGeneration_Update", vRReportGenerationItem.ReportId, vRReportGenerationItem.Name, vRReportGenerationItem.Description,vRReportGenerationItem.AccessLevel, vRReportGenerationItem.LastModifiedBy, serializedSettings);
             return (affectedRecords > 0);
         }
         #endregion
@@ -64,7 +64,14 @@ namespace Vanrise.Analytic.Data.SQL
                 ReportId = (long)reader["ID"],
                 Name = reader["Name"] as string,
                 Description=reader["Description"]as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<VRReportGenerationSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<VRReportGenerationSettings>(reader["Settings"] as string),
+                AccessLevel = (AccessLevel)reader["AccessLevel"],
+                CreatedBy = GetReaderValue<int>(reader, "CreatedBy"),
+                CreatedTime = (DateTime)reader["CreatedTime"],
+                LastModifiedTime = (DateTime)reader["LastModifiedTime"],
+                LastModifiedBy = GetReaderValue<int>(reader, "LastModifiedBy")
+
+
             };
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,11 @@ namespace Vanrise.Analytic.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public VRReportGenerationSettings Settings { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public int CreatedBy { get; set; }
+        public int LastModifiedBy { get; set; }
+        public DateTime LastModifiedTime { get; set; }
+        public AccessLevel AccessLevel { get; set; }
     }
     public class VRReportGenerationSettings
     {
@@ -22,5 +28,12 @@ namespace Vanrise.Analytic.Entities
     {
         public abstract string ActionTypeName { get; }
         public abstract Guid ConfigId { get; }
+    }
+    public enum AccessLevel
+    {
+        [Description("Public")]
+        Public = 0,
+        [Description("Private")]
+        Private = 1
     }
 }

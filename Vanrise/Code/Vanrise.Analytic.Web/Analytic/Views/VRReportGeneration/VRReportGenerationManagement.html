@@ -7,6 +7,9 @@
                 <vr-columns width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Access Type" datasource="scopeModel.reportOwners" selectedvalues="scopeModel.selectedReportOwner"
+                               datavaluefield="value" datatextfield="description"></vr-columns>
             </vr-row>
         </div>
 

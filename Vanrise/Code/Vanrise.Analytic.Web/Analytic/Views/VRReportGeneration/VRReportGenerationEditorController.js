@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Analytic_AccessTypeEnum'];
 
-    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Analytic_AccessTypeEnum) {
 
         var isEditMode;
         var reportId;
@@ -28,7 +28,7 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-
+            $scope.scopeModel.accessTypes = UtilsService.getArrayEnum(VR_Analytic_AccessTypeEnum);
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
@@ -84,6 +84,7 @@
                 {
                     $scope.scopeModel.name = vRReportGenerationEntity.Name;
                     $scope.scopeModel.description = vRReportGenerationEntity.Description;
+                    $scope.scopeModel.selectedAccessLevel = UtilsService.getItemByVal($scope.scopeModel.accessTypes, vRReportGenerationEntity.AccessLevel, "value");
                 }
             };
 
@@ -117,6 +118,7 @@
                 ReportId: (reportId != undefined) ? reportId : undefined,
                 Name: $scope.scopeModel.name,
                 Description:$scope.scopeModel.description,
+                    AccessLevel: $scope.scopeModel.selectedAccessLevel !=undefined?$scope.scopeModel.selectedAccessLevel.value: undefined,
                 Settings: settings                    
             };
             return object;

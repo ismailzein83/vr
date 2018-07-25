@@ -3,11 +3,16 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.gridMenuActions"
-             idfield="VRReportGenerationsId"
+             idfield="ReportId"
              enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'VRReportGenerationsId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Access Level'" field="'AccessLevel'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created By'" field="'CreatedBy'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" field="'CreatedTime'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Modified By'" field="'LastModifiedBy'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Modified Time'" field="'LastModifiedTime'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Generate'" disablesorting fixedwidth="'100'" invisibleheader>
         <a href="" ng-click="viewScope.generateVRReportGeneration(dataItem)">Generate</a>
     </vr-datagridcolumn>
