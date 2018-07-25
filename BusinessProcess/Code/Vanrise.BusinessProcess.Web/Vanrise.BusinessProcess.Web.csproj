@@ -226,6 +226,7 @@
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-argumentvariabletype.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-variables-grid.js" />
+    <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-selector.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityDirectiveTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityExpressionBuilderTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowArgumentEditor.html" />
