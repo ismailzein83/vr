@@ -425,9 +425,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.BP.Arguments
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.BP.Activities", "Vanrise.Common.BP.Activities\Vanrise.Common.BP.Activities.csproj", "{1EDC58A6-0F86-4151-95D9-DD2C4488BDC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Invoice.Data.RDB", "Vanrise.Invoice.Data.RDB\Vanrise.Invoice.Data.RDB.csproj", "{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 181
+		SccNumberOfProjects = 182
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1151,6 +1153,10 @@ Global
 		SccProjectTopLevelParentUniqueName180 = Vanrise.sln
 		SccProjectName180 = Vanrise.Common.BP.Activities
 		SccLocalPath180 = Vanrise.Common.BP.Activities
+		SccProjectUniqueName181 = Vanrise.Invoice.Data.RDB\\Vanrise.Invoice.Data.RDB.csproj
+		SccProjectTopLevelParentUniqueName181 = Vanrise.sln
+		SccProjectName181 = Vanrise.Invoice.Data.RDB
+		SccLocalPath181 = Vanrise.Invoice.Data.RDB
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2623,6 +2629,14 @@ Global
 		{1EDC58A6-0F86-4151-95D9-DD2C4488BDC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1EDC58A6-0F86-4151-95D9-DD2C4488BDC0}.Release|x64.ActiveCfg = Release|Any CPU
 		{1EDC58A6-0F86-4151-95D9-DD2C4488BDC0}.Release|x86.ActiveCfg = Release|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2813,6 +2827,7 @@ Global
 		{52F8FDCF-5649-4674-B0EA-26EE958AE8A8} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 		{841B50AB-E1A4-46BA-9358-F6519C92A2E3} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 		{1EDC58A6-0F86-4151-95D9-DD2C4488BDC0} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{B4E1BAAD-091C-4E05-A92F-24C9BCE68397} = {216CC237-9395-438A-AACE-E462DD61E4EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
