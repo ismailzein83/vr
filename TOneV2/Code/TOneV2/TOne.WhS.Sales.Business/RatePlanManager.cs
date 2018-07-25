@@ -400,9 +400,18 @@ namespace TOne.WhS.Sales.Business
 			var rateTypeManager = new RateTypeManager();
 			var rateTypes = rateTypeManager.GetAllRateTypes();
 			var index = 3;
+            string requirmentText = " ( fill only if the related rate type rule is configured for this zone(s) and/or customer(s) )";
+
 			foreach (var rateType in rateTypes)
 			{
-				worksheet.Cells[0, index++].PutValue(rateType.Name);
+                string allText = string.Concat(rateType.Name, requirmentText);
+                Cell cell = worksheet.Cells[0, index++];
+                Style style = cell.GetStyle();
+                style.Number = 49;
+                cell.SetStyle(style);
+                cell.PutValue(allText);
+                cell.Characters(0, rateType.Name.Length).Font.IsBold = true;
+                cell.Characters(rateType.Name.Length + 1, allText.Length).Font.Color = System.Drawing.Color.Red;
 			}
 
 			byte[] array;
