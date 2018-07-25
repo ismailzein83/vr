@@ -13,33 +13,14 @@ namespace Vanrise.BusinessProcess.Business
 {
     public class BPDefinitionManager : IBPDefinitionManager
     {
-        #region public methods
+        #region Ctor/Properties
+
         static SecurityManager s_securityManager = new SecurityManager();
-        public IEnumerable<BPDefinition> GetBPDefinitions()
-        {
-            var cachedDefinitions = GetCachedBPDefinitions();
-            if (cachedDefinitions != null)
-                return cachedDefinitions.Values;
-            else
-                return null;
-        }
-        public IEnumerable<BPDefinition> GetBPDefinitions(BPDefinitionInfoFilter filter)
-        {
-            var cachedDefinitions = GetCachedBPDefinitions();
-            Func<BPDefinition, bool> filterExpression = null;
-            if (filter != null)
-            {
-                filterExpression = (prod) =>
-                {
-                    if (filter != null && filter.Filters != null && !CheckIfFilterIsMatch(prod, filter.Filters))
-                        return false;
-                    return true;
-                };
-            }
 
+        #endregion
 
-            return cachedDefinitions.FindAllRecords(filterExpression);
-        }
+        #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<BPDefinitionDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<BPDefinitionQuery> input, int? viewableByUserId = null)
         {
             var allBPDefinitions = GetCachedBPDefinitions();
@@ -102,69 +83,53 @@ namespace Vanrise.BusinessProcess.Business
 
             return updateOperationOutput;
         }
+
+        public IEnumerable<BPDefinition> GetBPDefinitions()
+        {
+            var cachedDefinitions = GetCachedBPDefinitions();
+            if (cachedDefinitions != null)
+                return cachedDefinitions.Values;
+            else
+                return null;
+        }
+
+        public IEnumerable<BPDefinition> GetBPDefinitions(BPDefinitionInfoFilter filter)
+        {
+            var cachedDefinitions = GetCachedBPDefinitions();
+            Func<BPDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (prod) =>
+                {
+                    if (filter != null && filter.Filters != null && !CheckIfFilterIsMatch(prod, filter.Filters))
+                        return false;
+                    return true;
+                };
+            }
+
+
+            return cachedDefinitions.FindAllRecords(filterExpression);
+        }
+
         public BPDefinition GetBPDefinition(Guid definitionId)
         {
             return GetCachedBPDefinitions().GetRecord(definitionId);
         }
+
         public BPDefinition GetDefinition(string processName)
         {
             return GetBPDefinitions().FirstOrDefault(itm => itm.Name == processName);
         }
+
         public string GetBPDefinitionName(BPDefinition bPDefinition)
         {
             return (bPDefinition != null) ? bPDefinition.Name : null;
         }
+
         public string GetDefinitionTitle(string processName)
         {
             var definition = GetDefinition(processName);
             return definition != null ? definition.Title : null;
-        }
-        public bool DoesUserHaveViewAccessInManagement(int userId)
-        {
-            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => !x.Configuration.NotVisibleInManagementScreen);
-            foreach (var bp in allPB)
-            {
-                if (DoesUserHaveViewAccess(userId, bp))
-                    return true;
-            }
-            return false;
-        }
-        public bool DoesUserHaveViewAccessInSchedule(int userId)
-        {
-            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => x.Configuration.ScheduledExecEditor != null);
-            foreach (var bp in allPB)
-            {
-                if (DoesUserHaveViewAccess(userId, bp))
-                    return true;
-            }
-            return false;
-        }
-        public bool DoesUserHaveScheduleTaskAccess(int userId)
-        {
-            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => x.Configuration.ScheduledExecEditor != null);
-            foreach (var bp in allPB)
-            {
-                if (DoesUserHaveScheduleTaskAccess(userId, bp))
-                    return true;
-            }
-            return false;
-        }
-        public bool DoesUserHaveViewAccess(string bPDefinitionName)
-        {
-            var bPDefinition = GetDefinition(bPDefinitionName);
-            return DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), bPDefinition);
-
-        }
-        public bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition)
-        {
-            var definitionContext = new BPDefinitionDoesUserHaveViewAccessContext { UserId = userId, BPDefinition = bPDefinition };
-            return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveViewAccess(definitionContext);
-        }
-
-        public bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition, BaseProcessInputArgument inputArg)
-        {
-            RequiredPermissionSettings viewInstanceRequiredPermissions = GetViewInstanceRequiredPermissions(bPDefinition, inputArg);
-            return s_securityManager.IsAllowed(viewInstanceRequiredPermissions, userId);
         }
 
         public RequiredPermissionSettings GetViewInstanceRequiredPermissions(BPDefinition bpDefinition, BaseProcessInputArgument inputArg)
@@ -177,12 +142,83 @@ namespace Vanrise.BusinessProcess.Business
             return GetBPDefinitionExtendedSettings(bpDefinition).GetViewInstanceRequiredPermissions(getViewInstanceRequiredPermissionsContext);
         }
 
+        public BPDefinitionExtendedSettings GetBPDefinitionExtendedSettings(BPDefinition bPDefinition)
+        {
+            if (bPDefinition != null && bPDefinition.Configuration != null && bPDefinition.Configuration.ExtendedSettings != null)
+                return bPDefinition.Configuration.ExtendedSettings;
+            return new DefaultBPDefinitionExtendedSettings();
+        }
+
+        public Dictionary<Guid, BPDefinition> GetCachedBPDefinitions()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
+               () =>
+               {
+                   IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+                   IEnumerable<BPDefinition> accounts = dataManager.GetBPDefinitions();
+                   return accounts.ToDictionary(cn => cn.BPDefinitionID, cn => cn);
+               });
+        }
+
+        #region Security
+
+        public bool DoesUserHaveViewAccessInManagement(int userId)
+        {
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => !x.Configuration.NotVisibleInManagementScreen);
+            foreach (var bp in allPB)
+            {
+                if (DoesUserHaveViewAccess(userId, bp))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveViewAccessInSchedule(int userId)
+        {
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => x.Configuration.ScheduledExecEditor != null);
+            foreach (var bp in allPB)
+            {
+                if (DoesUserHaveViewAccess(userId, bp))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveScheduleTaskAccess(int userId)
+        {
+            var allPB = GetCachedBPDefinitions().Select(x => x.Value).Where(x => x.Configuration.ScheduledExecEditor != null);
+            foreach (var bp in allPB)
+            {
+                if (DoesUserHaveScheduleTaskAccess(userId, bp))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveViewAccess(string bPDefinitionName)
+        {
+            var bPDefinition = GetDefinition(bPDefinitionName);
+            return DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), bPDefinition);
+
+        }
+
+        public bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition)
+        {
+            var definitionContext = new BPDefinitionDoesUserHaveViewAccessContext { UserId = userId, BPDefinition = bPDefinition };
+            return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveViewAccess(definitionContext);
+        }
+
+        public bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition, BaseProcessInputArgument inputArg)
+        {
+            RequiredPermissionSettings viewInstanceRequiredPermissions = GetViewInstanceRequiredPermissions(bPDefinition, inputArg);
+            return s_securityManager.IsAllowed(viewInstanceRequiredPermissions, userId);
+        }
+
         public bool DoesUserHaveScheduleTaskAccess(int userId, Guid bPDefinitionId)
         {
             var bPDefinition = GetBPDefinition(bPDefinitionId);
             return DoesUserHaveScheduleTaskAccess(userId, bPDefinition);
         }
-
 
         public bool DoesUserHaveScheduleTaskAccess(int userId, BPDefinition bPDefinition)
         {
@@ -240,14 +276,44 @@ namespace Vanrise.BusinessProcess.Business
 
         }
 
-        public BPDefinitionExtendedSettings GetBPDefinitionExtendedSettings(BPDefinition bPDefinition)
+        #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private bool DoesUserHaveBPPermission(int userId, RequiredPermissionSettings permission)
         {
-            if (bPDefinition != null && bPDefinition.Configuration != null && bPDefinition.Configuration.ExtendedSettings != null)
-                return bPDefinition.Configuration.ExtendedSettings;
-            return new DefaultBPDefinitionExtendedSettings();
+            SecurityManager secManager = new SecurityManager();
+            return secManager.IsAllowed(permission, userId);
+        }
+
+        private bool CheckIfFilterIsMatch(BPDefinition BPDefinition, List<IBPDefinitionFilter> filters)
+        {
+            var context = new BPDefinitionFilterContext { BPDefinitionId = BPDefinition.BPDefinitionID };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreBPDefinitionsUpdated(ref _updateHandle);
+            }
+        }
+
         private class BPDefinitionLoggableEntity : VRLoggableEntityBase
         {
             public static BPDefinitionLoggableEntity Instance = new BPDefinitionLoggableEntity();
@@ -291,49 +357,10 @@ namespace Vanrise.BusinessProcess.Business
                 return s_bPDefinitionManager.GetBPDefinitionName(bPDefinition);
             }
         }
-        #region private methods
 
-        private bool DoesUserHaveBPPermission(int userId, RequiredPermissionSettings permission)
-        {
-            SecurityManager secManager = new SecurityManager();
-            return secManager.IsAllowed(permission, userId);
-        }
-
-        public Dictionary<Guid, BPDefinition> GetCachedBPDefinitions()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
-               () =>
-               {
-                   IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
-                   IEnumerable<BPDefinition> accounts = dataManager.GetBPDefinitions();
-                   return accounts.ToDictionary(cn => cn.BPDefinitionID, cn => cn);
-               });
-        }
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreBPDefinitionsUpdated(ref _updateHandle);
-            }
-        }
-
-        private bool CheckIfFilterIsMatch(BPDefinition BPDefinition, List<IBPDefinitionFilter> filters)
-        {
-            var context = new BPDefinitionFilterContext { BPDefinitionId = BPDefinition.BPDefinitionID };
-            foreach (var filter in filters)
-            {
-                if (!filter.IsMatched(context))
-                    return false;
-            }
-            return true;
-        }
         #endregion
 
-        #region mapper
+        #region Mapper
 
         private BPDefinitionDetail BPDefinitionDetailMapper(BPDefinition bpDefinition, int? userID = null)
         {
@@ -367,7 +394,6 @@ namespace Vanrise.BusinessProcess.Business
                 Name = bpDefinition.Title
             };
         }
-
 
         #endregion
     }
