@@ -1,148 +1,176 @@
 ﻿(function (app) {
 
-    'use strict';
+	'use strict';
 
-    TelesIdbSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+	TelesIdbSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function TelesIdbSWSync(UtilsService, VRUIUtilsService, VRNotificationService) {
-        return {
-            restrict: "E",
-            scope: {
-                onReady: "="
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var ctor = new TelesIdbSWSyncronizerCtor($scope, ctrl, $attrs);
-                ctor.initializeController();
-            },
-            controllerAs: "Ctrl",
-            bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/TelesSynchronizer/Templates/TelesIdbSWSyncTemplate.html"
-        };
+	function TelesIdbSWSync(UtilsService, VRUIUtilsService, VRNotificationService) {
+		return {
+			restrict: "E",
+			scope: {
+				onReady: "="
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var ctor = new TelesIdbSWSyncronizerCtor($scope, ctrl, $attrs);
+				ctor.initializeController();
+			},
+			controllerAs: "Ctrl",
+			bindToController: true,
+			templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/TelesSynchronizer/Templates/TelesIdbSWSyncTemplate.html"
+		};
 
-        function TelesIdbSWSyncronizerCtor($scope, ctrl, $attrs) {
-            this.initializeController = initializeController;
+		function TelesIdbSWSyncronizerCtor($scope, ctrl, $attrs) {
+			this.initializeController = initializeController;
 
-            var idbDataManager;
-            var carrierMappings;
+			var idbDataManager;
+			var carrierMappings;
+			var manualRoutes;
 
-            var idbDataManagerSettingsDirectiveAPI;
-            var idbDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+			var idbDataManagerSettingsDirectiveAPI;
+			var idbDataManagerSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var telesIdbCarrierAccountMappingGridAPI;
-            var telesIdbCarrierAccountMappingGridReadyDeferred = UtilsService.createPromiseDeferred();
+			var telesIdbCarrierAccountMappingGridAPI;
+			var telesIdbCarrierAccountMappingGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-            function initializeController() {
-                $scope.scopeModel = {};
-                $scope.scopeModel.mappingSeparator = ';';
-                $scope.scopeModel.supplierMappingLength = '4';
+			var telesIdbManualRoutesGridAPI;
+			var telesIdbManualRoutesGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-                $scope.scopeModel.onIdbDataManagerSettingsDirectiveReady = function (api) {
-                    idbDataManagerSettingsDirectiveAPI = api;
-                    idbDataManagerSettingsDirectiveReadyDeferred.resolve();
-                };
+			function initializeController() {
+				$scope.scopeModel = {};
+				$scope.scopeModel.mappingSeparator = ';';
+				$scope.scopeModel.supplierMappingLength = '4';
 
-                $scope.scopeModel.onTelesIdbCarrierAccountMappingGridReady = function (api) {
-                    telesIdbCarrierAccountMappingGridAPI = api;
-                    telesIdbCarrierAccountMappingGridReadyDeferred.resolve();
-                };
+				$scope.scopeModel.onIdbDataManagerSettingsDirectiveReady = function (api) {
+					idbDataManagerSettingsDirectiveAPI = api;
+					idbDataManagerSettingsDirectiveReadyDeferred.resolve();
+				};
 
-                defineAPI();
-            }
-            function defineAPI() {
-                var api = {};
+				$scope.scopeModel.onTelesIdbCarrierAccountMappingGridReady = function (api) {
+					telesIdbCarrierAccountMappingGridAPI = api;
+					telesIdbCarrierAccountMappingGridReadyDeferred.resolve();
+				};
 
-                api.load = function (payload) {
-                    var promises = [];
+				$scope.scopeModel.onTelesIdbManualRoutesGridReady = function (api) {
+					telesIdbManualRoutesGridAPI = api;
+					telesIdbManualRoutesGridReadyDeferred.resolve();
+				};
 
-                    var telesIdbSWSync;
+				defineAPI();
+			}
+			function defineAPI() {
+				var api = {};
 
-                    if (payload != undefined) {
-                        telesIdbSWSync = payload.switchSynchronizerSettings;
+				api.load = function (payload) {
+					var promises = [];
 
-                        if (telesIdbSWSync != undefined) {
-                            $scope.scopeModel.mappingSeparator = telesIdbSWSync.MappingSeparator;
-                            $scope.scopeModel.numberOfMappings = telesIdbSWSync.NumberOfMappings;
-                            $scope.scopeModel.supplierMappingLength = telesIdbSWSync.SupplierMappingLength;
-                            $scope.scopeModel.supplierOptionsSeparator = telesIdbSWSync.SupplierOptionsSeparator;
-                            $scope.scopeModel.numberOfOptions = telesIdbSWSync.NumberOfOptions;
-                            idbDataManager = telesIdbSWSync.DataManager;
-                            carrierMappings = telesIdbSWSync.CarrierMappings;
-                        }
-                    }
+					var telesIdbSWSync;
 
-                    var switchSyncSettingsDirectiveLoadPromise = getSwitchSyncSettingsDirectiveLoadPromise();
-                    promises.push(switchSyncSettingsDirectiveLoadPromise);
+					if (payload != undefined) {
+						telesIdbSWSync = payload.switchSynchronizerSettings;
 
-                    var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise(payload);
-                    promises.push(carrierAccountMappingGridLoadPromise);
+						if (telesIdbSWSync != undefined) {
+							$scope.scopeModel.mappingSeparator = telesIdbSWSync.MappingSeparator;
+							$scope.scopeModel.numberOfMappings = telesIdbSWSync.NumberOfMappings;
+							$scope.scopeModel.supplierMappingLength = telesIdbSWSync.SupplierMappingLength;
+							$scope.scopeModel.supplierOptionsSeparator = telesIdbSWSync.SupplierOptionsSeparator;
+							$scope.scopeModel.numberOfOptions = telesIdbSWSync.NumberOfOptions;
+							idbDataManager = telesIdbSWSync.DataManager;
+							carrierMappings = telesIdbSWSync.CarrierMappings;
+							manualRoutes = telesIdbSWSync.ManualRoutes;
+						}
+					}
 
-                    return UtilsService.waitMultiplePromises(promises);
-                };
+					var switchSyncSettingsDirectiveLoadPromise = getSwitchSyncSettingsDirectiveLoadPromise();
+					promises.push(switchSyncSettingsDirectiveLoadPromise);
 
-                api.getData = function () {
+					var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise(payload);
+					promises.push(carrierAccountMappingGridLoadPromise);
 
-                    var data = {
-                        $type: "TOne.WhS.RouteSync.TelesIdb.TelesIdbSWSync, TOne.WhS.RouteSync.TelesIdb",
-                        DataManager: idbDataManagerSettingsDirectiveAPI.getData(),
-                        MappingSeparator: $scope.scopeModel.mappingSeparator,
-                        NumberOfMappings: $scope.scopeModel.numberOfMappings,
-                        SupplierMappingLength: $scope.scopeModel.supplierMappingLength,
-                        SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
-                        NumberOfOptions: $scope.scopeModel.numberOfOptions,
-                        CarrierMappings: telesIdbCarrierAccountMappingGridAPI.getData(),
-                    };
-                    return data;
-                };
+					var manualRoutesGridLoadPromise = getManualRoutesGridLoadPromise(payload);
+					promises.push(manualRoutesGridLoadPromise);
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    ctrl.onReady(api);
-                }
-            }
+					return UtilsService.waitMultiplePromises(promises);
+				};
 
-            function getSwitchSyncSettingsDirectiveLoadPromise() {
-                var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+				api.getData = function () {
 
-                idbDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
+					var data = {
+						$type: "TOne.WhS.RouteSync.TelesIdb.TelesIdbSWSync, TOne.WhS.RouteSync.TelesIdb",
+						DataManager: idbDataManagerSettingsDirectiveAPI.getData(),
+						MappingSeparator: $scope.scopeModel.mappingSeparator,
+						NumberOfMappings: $scope.scopeModel.numberOfMappings,
+						SupplierMappingLength: $scope.scopeModel.supplierMappingLength,
+						SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
+						NumberOfOptions: $scope.scopeModel.numberOfOptions,
+						CarrierMappings: telesIdbCarrierAccountMappingGridAPI.getData(),
+						ManualRoutes: telesIdbManualRoutesGridAPI.getData()
+					};
+					return data;
+				};
 
-                    var settingsDirectivePayload;
-                    if (idbDataManager != undefined) {
-                        settingsDirectivePayload = { idbDataManagersSettings: idbDataManager };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(idbDataManagerSettingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
-                });
+				if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+					ctrl.onReady(api);
+				}
+			}
 
-                return settingsDirectiveLoadDeferred.promise;
-            }
-            function getCarrierAccountMappingGridLoadPromise(payload) {
-                var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
+			function getSwitchSyncSettingsDirectiveLoadPromise() {
+				var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                telesIdbCarrierAccountMappingGridReadyDeferred.promise.then(function () {
+				idbDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
 
-                    var payload = {
-                        context: buildContext(),
-                        carrierMappings: carrierMappings
-                    };
-                    VRUIUtilsService.callDirectiveLoad(telesIdbCarrierAccountMappingGridAPI, payload, carrierAccountMappingGridLoadDeferred);
-                });
+					var settingsDirectivePayload;
+					if (idbDataManager != undefined) {
+						settingsDirectivePayload = { idbDataManagersSettings: idbDataManager };
+					}
+					VRUIUtilsService.callDirectiveLoad(idbDataManagerSettingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
+				});
 
-                return carrierAccountMappingGridLoadDeferred.promise;
-            }
+				return settingsDirectiveLoadDeferred.promise;
+			}
+			function getCarrierAccountMappingGridLoadPromise(payload) {
+				var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-            function buildContext() {
-                var context = {
-                    getMappingSeparator: function () {
-                        return $scope.scopeModel.mappingSeparator;
-                    },
-                    getSupplierMappingLength: function () {
-                        return $scope.scopeModel.supplierMappingLength;
-                    }
-                };
-                return context;
-            }
-        }
-    }
+				telesIdbCarrierAccountMappingGridReadyDeferred.promise.then(function () {
 
-    app.directive('whsRoutesyncTelesidbSwsync', TelesIdbSWSync);
+					var payload = {
+						context: buildContext(),
+						carrierMappings: carrierMappings
+					};
+					VRUIUtilsService.callDirectiveLoad(telesIdbCarrierAccountMappingGridAPI, payload, carrierAccountMappingGridLoadDeferred);
+				});
+
+				return carrierAccountMappingGridLoadDeferred.promise;
+			}
+
+			function getManualRoutesGridLoadPromise(payload) {
+				var manualRoutesGridLoadDeferred = UtilsService.createPromiseDeferred();
+
+				telesIdbManualRoutesGridReadyDeferred.promise.then(function () {
+
+					var payload = {
+						manualRoutes: manualRoutes
+					};
+					VRUIUtilsService.callDirectiveLoad(telesIdbManualRoutesGridAPI, payload, manualRoutesGridLoadDeferred);
+				});
+
+				return manualRoutesGridLoadDeferred.promise;
+			}
+
+			function buildContext() {
+				var context = {
+					getMappingSeparator: function () {
+						return $scope.scopeModel.mappingSeparator;
+					},
+					getSupplierMappingLength: function () {
+						return $scope.scopeModel.supplierMappingLength;
+					}
+				};
+				return context;
+			}
+		}
+	}
+
+	app.directive('whsRoutesyncTelesidbSwsync', TelesIdbSWSync);
 
 })(app);

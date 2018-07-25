@@ -187,8 +187,10 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\RadiusDataManagers\whs-routesync-mvtsradius-sqldatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\MVTSSynchronizer\Templates\MVTSRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\MVTSSynchronizer\whs-routesync-mvtsradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesIdbManualRoutesTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesIdbSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesRadiusSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-manualroutes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesradius-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\Templates\RouteSyncProcessManualTemplate.html" />

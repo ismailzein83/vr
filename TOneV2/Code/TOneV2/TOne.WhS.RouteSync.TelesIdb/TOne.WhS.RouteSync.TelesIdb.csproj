@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\RoutePrefIterator.cs" />
     <Compile Include="Entities\ManualRoute.cs" />
     <Compile Include="TelesIdbConvertedRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

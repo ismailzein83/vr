@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.Data
     {
         List<SwitchSyncData> GetSwitchSyncDataByIds(List<string> switchIds);
 
+		void ResetSwitchSyncData(string switchId);
+
         void ApplySwitchesSyncData(List<string> switchIds, int versionNumber);
     }
 }

@@ -18,5 +18,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
           
         }
-    }
+
+		public void ResetSwitchSyncData(string switchId)
+		{
+			throw new System.NotImplementedException();
+		}
+	}
 }

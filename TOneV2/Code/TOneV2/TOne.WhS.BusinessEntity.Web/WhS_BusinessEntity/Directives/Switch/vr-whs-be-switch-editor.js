@@ -180,10 +180,10 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                         if (ctrl.onswitchupdated != undefined) {
                             ctrl.onswitchupdated(response.UpdatedObject);
                         }
-                        updateSwitchPromiseDeferred.resolve();
+						updateSwitchPromiseDeferred.resolve(response);
                     } else {
                         $scope.validationMessages = response.ValidationMessages;
-                        updateSwitchPromiseDeferred.reject();
+						updateSwitchPromiseDeferred.reject(response);
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);

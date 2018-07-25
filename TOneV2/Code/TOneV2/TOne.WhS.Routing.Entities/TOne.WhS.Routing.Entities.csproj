@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="AnalyticMeasureInfo.cs" />
     <Compile Include="BusinessManagers\IRoutingDatabaseManager.cs" />
+    <Compile Include="BusinessManagers\ISwitchSyncDataManager.cs" />
     <Compile Include="BusinessManagers\RoutingManagerFactory.cs" />
     <Compile Include="BusinessManagers\IRoutingManagerFactory.cs" />
     <Compile Include="BusinessManagers\ICustomerZoneDetailsManager.cs" />

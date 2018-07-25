@@ -1,0 +1,34 @@
+﻿<vr-row haschildcolumns>
+	<vr-columns>
+		<vr-button type="Add" data-onclick="scopeModel.addRoute" standalone></vr-button>
+	</vr-columns>
+</vr-row>
+<vr-row haschildcolumns>
+	<vr-columns width="fullrow">
+		<vr-validator validate="scopeModel.validateRoutes()">
+			<vr-datagrid datasource="scopeModel.manualRoutes"
+						 on-ready="onGridReady"
+						 pagingtype="'PagingOnScroll'"
+						 maxheight="400px"
+						 ondeleterow="scopeModel.removeRoute">
+
+				<vr-datagridcolumn fixedwidth="'110'" headertext="'Include Subcodes'" disablesorting>
+					<vr-switch value="dataItem.IncludeSubcodes"></vr-switch>
+				</vr-datagridcolumn>
+
+				<vr-datagridcolumn widthfactor="1" headertext="'Pref'" disablesorting>
+					<vr-textbox value="dataItem.Pref" type="Text" isrequired="true"></vr-textbox>
+				</vr-datagridcolumn>
+
+				<vr-datagridcolumn widthfactor="4" headertext="'Route'" disablesorting>
+					<vr-textbox value="dataItem.Route" type="Text" isrequired="true"></vr-textbox>
+				</vr-datagridcolumn>
+
+				<vr-datagridcolumn widthfactor="2" headertext="'Note'" disablesorting>
+					<vr-textbox value="dataItem.Note" type="Text"></vr-textbox>
+				</vr-datagridcolumn>
+
+			</vr-datagrid>
+		</vr-validator>
+	</vr-columns>
+</vr-row>

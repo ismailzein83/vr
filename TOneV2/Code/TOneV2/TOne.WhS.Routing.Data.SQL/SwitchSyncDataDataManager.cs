@@ -6,58 +6,68 @@ using System.Linq;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
-    public class SwitchSyncDataDataManager : RoutingDataManager, ISwitchSyncDataDataManager
-    {
-        #region Public Methods
+	public class SwitchSyncDataDataManager : RoutingDataManager, ISwitchSyncDataDataManager
+	{
+		#region Public Methods
 
-        public List<SwitchSyncData> GetSwitchSyncDataByIds(List<string> switchIds)
-        {
-            if (switchIds == null || switchIds.Count == 0)
-                return null;
+		public List<SwitchSyncData> GetSwitchSyncDataByIds(List<string> switchIds)
+		{
+			if (switchIds == null || switchIds.Count == 0)
+				return null;
 
-            StringBuilder queryBuilder = new StringBuilder(query_GetSwitchSyncData);
-            queryBuilder.Replace("#FILTER#", string.Format("Where SwitchId in ('{0}')", string.Join("','", switchIds)));
+			StringBuilder queryBuilder = new StringBuilder(query_GetSwitchSyncData);
+			queryBuilder.Replace("#FILTER#", string.Format("Where SwitchId in ('{0}')", string.Join("','", switchIds)));
 
-            return GetItemsText(queryBuilder.ToString(), SwitchSyncDataMapper, (cmd) => { });
-        }
+			return GetItemsText(queryBuilder.ToString(), SwitchSyncDataMapper, (cmd) => { });
+		}
 
-        public void ApplySwitchesSyncData(List<string> switchIds, int versionNumber)
-        {
-            if (switchIds == null || switchIds.Count == 0)
-                return;
+		public void ApplySwitchesSyncData(List<string> switchIds, int versionNumber)
+		{
+			if (switchIds == null || switchIds.Count == 0)
+				return;
 
-            StringBuilder queryBuilder = new StringBuilder();
+			StringBuilder queryBuilder = new StringBuilder();
 
-            string applySwitchSyncDataQuery = query_ApplySwitchSyncData.Replace("#LastVersionNumber#", versionNumber.ToString());
+			string applySwitchSyncDataQuery = query_ApplySwitchSyncData.Replace("#LastVersionNumber#", versionNumber.ToString());
 
-            foreach (var switchId in switchIds)
-                queryBuilder.Append(applySwitchSyncDataQuery.Replace("#SWITCHID#", switchId));
+			foreach (var switchId in switchIds)
+				queryBuilder.Append(applySwitchSyncDataQuery.Replace("#SWITCHID#", switchId));
 
-            ExecuteNonQueryText(queryBuilder.ToString(), (cmd) => { });
-        }
+			ExecuteNonQueryText(queryBuilder.ToString(), (cmd) => { });
+		}
 
-        #endregion
+		public void ResetSwitchSyncData(string switchId)
+		{
+			StringBuilder queryBuilder = new StringBuilder(query_ResetSwitchSyncData);
+			queryBuilder.Replace("#FILTER#", ("WHERE SwitchId = '" + switchId + "'"));
+			ExecuteNonQueryText(queryBuilder.ToString(), (cmd) => { });
+		}
 
-        #region Private Methods
+		#endregion
 
-        private SwitchSyncData SwitchSyncDataMapper(IDataReader reader)
-        {
-            return new SwitchSyncData()
-            {
-                SwitchId = reader["SwitchId"] as string,
-                LastVersionNumber = (int)reader["LastVersionNumber"]
-            };
-        }
+		#region Private Methods
 
-        #endregion
+		private SwitchSyncData SwitchSyncDataMapper(IDataReader reader)
+		{
+			return new SwitchSyncData()
+			{
+				SwitchId = reader["SwitchId"] as string,
+				LastVersionNumber = (int)reader["LastVersionNumber"]
+			};
+		}
 
-        #region Queries
+		#endregion
 
-        private const string query_GetSwitchSyncData = @"Select SwitchId, LastVersionNumber 
+		#region Queries
+
+		private const string query_GetSwitchSyncData = @"Select SwitchId, LastVersionNumber 
                                                          From [dbo].[SwitchSyncData]
                                                          #FILTER#";
 
-        private const string query_ApplySwitchSyncData = @"IF NOT EXISTS(SELECT SwitchId FROM [dbo].[SwitchSyncData] Where SwitchId = '#SWITCHID#')
+		private const string query_ResetSwitchSyncData = @"DELETE FROM [dbo].[SwitchSyncData]
+                                                         #FILTER#";
+
+		private const string query_ApplySwitchSyncData = @"IF NOT EXISTS(SELECT SwitchId FROM [dbo].[SwitchSyncData] Where SwitchId = '#SWITCHID#')
                                                               Begin
         		                                                  Insert into [dbo].[SwitchSyncData] (SwitchId, LastVersionNumber) Values('#SWITCHID#', #LastVersionNumber#)
         	                                                  END
@@ -66,6 +76,6 @@ namespace TOne.WhS.Routing.Data.SQL
         		                                                  Update [dbo].[SwitchSyncData] set LastVersionNumber = #LastVersionNumber# Where SwitchId = '#SWITCHID#'
         	                                                  END ";
 
-        #endregion
-    }
+		#endregion
+	}
 }
