@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="ActionTypeFilter.cs" />
     <Compile Include="ActionTypesInfoFilter.cs" />
-    <Compile Include="BaseProcessInputArgument.cs" />
+    <Compile Include="BPInputArgument\BaseProcessInputArgument.cs" />
     <Compile Include="BPDefinitionArgumentState.cs" />
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="BPDefinitionDetail.cs" />
     <Compile Include="BPDefinitionInfo.cs" />
     <Compile Include="BPDefinitionInfoFilter.cs" />
+    <Compile Include="BPInputArgument\VRWorkflowInputArgument.cs" />
     <Compile Include="BPInstanceDefinitionDetail.cs" />
     <Compile Include="BPDefinitionQuery.cs" />
     <Compile Include="BPDefinitionSummary.cs" />
@@ -151,6 +152,8 @@
     <Compile Include="VRWorkflow\VRWorkflowActivity.cs" />
     <Compile Include="VRWorkflow\VRWorkflowArgument.cs" />
     <Compile Include="VRWorkflow\VRWorkflowDetail.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowFilter.cs" />
+    <Compile Include="VRWorkflow\VRWorkflowInfo.cs" />
     <Compile Include="VRWorkflow\VRWorkflowQuery.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariable.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariableType.cs" />
