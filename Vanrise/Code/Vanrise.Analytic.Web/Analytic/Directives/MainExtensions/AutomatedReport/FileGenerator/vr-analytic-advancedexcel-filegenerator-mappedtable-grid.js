@@ -103,9 +103,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                                 else {
                                     fieldsArray.push({
                                         description: field.FieldName,
-                                        value: field.FieldName,
+                                        value: field.SubTableId,
                                         source: field.Source,
-                                        subTableId: field.SubTableId
                                     });
                                 }
                             }
@@ -224,17 +223,16 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                                 else {
                                     mappedCol.fields.push({
                                         description: field.FieldName,
-                                        value: field.FieldName,
-                                        source: field.Source,
-                                        subTableId: field.SubTableId
+                                        value: field.SubTableId,
+                                        source: field.Source
                                     });
                                 }
                             }
                             mappedCol.fieldSelectorLoadPromiseDeferred.resolve();
                         }
                         if (mappedColumn != undefined) {
-                            if(mappedColumn.SubTableName!=undefined){
-                                mappedCol.selectedField = UtilsService.getItemByVal(mappedCol.fields, mappedColumn.SubTableName, "value");
+                            if (mappedColumn.SubTableId != undefined) {
+                                mappedCol.selectedField = UtilsService.getItemByVal(mappedCol.fields, mappedColumn.SubTableId, "value");
                             }
                             else if (mappedColumn.FieldName != undefined) {
                                 mappedCol.selectedField = UtilsService.getItemByVal(mappedCol.fields, mappedColumn.FieldName, "value");
@@ -257,19 +255,19 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                         mappedCol.subTableFields.length = 0;
                         for (var i = 0; i < allFields.length; i++) {
                             var field = allFields[i];
-                            if (field.FieldName == mappedCol.selectedField.value) {
+                            if (field.SubTableId !=undefined && field.SubTableId == mappedCol.selectedField.value) {
                                 var subTableFields = field.SubTableFields;
                                 for (var subTableFieldName in subTableFields) {
                                     if (subTableFieldName != "$type") {
                                         var field = subTableFields[subTableFieldName].Field;
                                         mappedCol.subTableFields.push({
-                                            description: field.Title,
-                                            value: field.Name,
-                                            source: VR_Analytic_AutomatedReportQuerySourceEnum.SubTable
-                                        });
-                                    }
+                                        description: field.Title,
+                                        value: field.Name,
+                                        source: VR_Analytic_AutomatedReportQuerySourceEnum.SubTable
+                                    });
                                 }
                             }
+                        }
                         }
                         if (mappedColumn != undefined && mappedColumn.SubTableFields != undefined) {
                             for (var i = 0; i < mappedColumn.SubTableFields.length; i++) {
@@ -376,8 +374,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                             FileTitle: mappedCol.selectedSubTableFields.description
                         });
                     }
-                    mappedSubTable.SubTableName = mappedCol.selectedField.value;
-                    mappedSubTable.SubTableId = mappedCol.selectedField.subTableId;
+                    mappedSubTable.SubTableName = mappedCol.selectedField.description;
+                    mappedSubTable.SubTableId = mappedCol.selectedField.value;
                     mappedTable.mappedSubTables.push(mappedSubTable);
                 }
             }

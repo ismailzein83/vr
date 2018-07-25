@@ -13,19 +13,24 @@
         <vr-switch value="scopeModel.includeTitle" label="Include Title"></vr-switch>
     </vr-columns>
     <vr-columns width="1/2row">
-        <vr-textbox value="scopeModel.tableTitle" isrequired="scopeModel.includeTitle" vr-disabled="!scopeModel.includeTitle" label="Title"></vr-textbox>
+        <span vr-disabled="!scopeModel.includeTitle">
+            <vr-textbox value="scopeModel.tableTitle" isrequired="scopeModel.includeTitle" label="Title"></vr-textbox>
+        </span>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <vr-columns colnum="10" withemptyline>
-        <vr-button type="Add" data-onclick="scopeModel.addMappedCol" standalone="true" vr-disabled="scopeModel.disableAddMappedCol()"></vr-button>
+    <vr-columns colnum="3" withemptyline>
+        <span vr-disabled="scopeModel.disableAddMappedCol">
+            <vr-button type="Add" data-onclick="scopeModel.addMappedCol" standalone="true"></vr-button>
+        </span>
     </vr-columns>
-   
+    <vr-columns colnum="3">
+        <vr-switch value="scopeModel.includeSummary" label="Include Summary" ng-show="scopeModel.showSummarySwitch"></vr-switch>
+    </vr-columns>
 </vr-row>
 <vr-row vr-loader="scopeModel.isLoadingMappedCol">
     <vr-columns width="fullrow">
         <vr-analytic-advancedexcel-filegenerator-mappedtable-grid on-ready="scopeModel.onMappedColumnsGridReady">
-
         </vr-analytic-advancedexcel-filegenerator-mappedtable-grid>
     </vr-columns>
 </vr-row>

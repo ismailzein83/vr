@@ -116,6 +116,13 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerAPIService, VRUIUtilsSe
                 }
                 return data;
             };
+
+            api.doesGeneratorHaveTables = function () {
+                if (directiveAPI != undefined && directiveAPI.doesGeneratorHaveTables != undefined && typeof (directiveAPI.doesGeneratorHaveTables) == "function") {
+                    return directiveAPI.doesGeneratorHaveTables();
+                }
+                return false;
+            };
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }

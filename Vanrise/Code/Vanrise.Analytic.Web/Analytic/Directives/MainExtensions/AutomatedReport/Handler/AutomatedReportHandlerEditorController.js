@@ -66,7 +66,12 @@
                 $scope.modalContext.closeModal();
             };
 
-
+            $scope.scopeModel.disableDownloadButton = function () {
+                if (fileGeneratorAPI != undefined && fileGeneratorAPI.doesGeneratorHaveTables != undefined && typeof (fileGeneratorAPI.doesGeneratorHaveTables)=="function") {
+                    return fileGeneratorAPI.doesGeneratorHaveTables();
+                }
+                return false;
+            };
 
         }
         function load() {

@@ -31,11 +31,15 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
         var mappedTablePayload;
         var context;
 
+        var vrAutomatedReportQueryId;
+        var listName;
 
         function initializeController() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.includeHeaders = true;
+            $scope.scopeModel.includeSummary = false;
+            $scope.scopeModel.disableAddMappedCol = false;
 
             $scope.scopeModel.onFirstRowMappingReady = function (api) {
                 firstRowDirectiveAPI = api;
@@ -55,12 +59,6 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                 mappedColumnsAPI.addAllFields();
             };
 
-            $scope.scopeModel.disableAddMappedCol = function () {
-                if (context!=undefined && context.getQueryInfo()!=undefined && context.getQueryInfo().length == 0) {
-                    return true;
-                }
-            };
-
             UtilsService.waitMultiplePromises([firstRowDirectiveReadyDeferred.promise, mappedColumnsReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
@@ -68,8 +66,8 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
         function defineAPI() {
             var api = {};
 
-            var vrAutomatedReportQueryId;
-            var listName;
+            vrAutomatedReportQueryId = undefined;
+            listName = undefined;
 
             api.load = function (payload) {
 
@@ -79,6 +77,35 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     context = payload.context;
                     vrAutomatedReportQueryId = payload.VRAutomatedReportQueryId;
                     listName = payload.ListName;
+                }
+                if (context != undefined && context.getQueryInfo != undefined && typeof(context.getQueryInfo)=="function"){
+                    var queries = context.getQueryInfo();
+                    if((queries==undefined)||(queries!=undefined && queries.length == 0)) {
+                        $scope.scopeModel.disableAddMappedCol = true;
+                    }
+                    if (queries != undefined && queries.length>0 && vrAutomatedReportQueryId != undefined) {
+                        for (var i = 0; i < queries.length; i++) {
+                            var query = queries[i];
+                            if (query.VRAutomatedReportQueryId == vrAutomatedReportQueryId) {
+                                if (query.Settings != undefined && query.Settings.WithSummary != undefined) {
+                                    $scope.scopeModel.showSummarySwitch = query.Settings.WithSummary;
+                                    if ($scope.scopeModel.showSummarySwitch) {
+                                        $scope.scopeModel.includeSummary = true;
+                                    }
+                                }
+                                else {
+                                    $scope.scopeModel.showSummarySwitch = false;
+                                }
+                            }
+                            else {
+                                $scope.scopeModel.showSummarySwitch = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $scope.scopeModel.showSummarySwitch = false;
+                    }
                 }
                 if (mappedTablePayload != undefined) {
                     $scope.scopeModel.includeHeaders = mappedTablePayload.IncludeHeaders;
@@ -109,6 +136,7 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     VRAutomatedReportQueryId: vrAutomatedReportQueryId,
                     ListName: listName,
                     IncludeHeaders: $scope.scopeModel.includeHeaders,
+                    IncludeSummary: $scope.scopeModel.includeSummary,
                     Title: $scope.scopeModel.includeTitle ? $scope.scopeModel.tableTitle : undefined,
                     ColumnDefinitions: mappedTableObject != undefined ? mappedTableObject.mappedColumns : undefined,
                     SubTableDefinitions: (mappedTableObject != undefined && mappedTableObject.mappedSubTables!=undefined) ? mappedTableObject.mappedSubTables: null,

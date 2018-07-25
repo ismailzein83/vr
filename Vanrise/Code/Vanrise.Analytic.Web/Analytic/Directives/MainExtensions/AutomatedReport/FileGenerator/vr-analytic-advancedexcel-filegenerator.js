@@ -226,6 +226,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 }
             };
 
+            api.doesGeneratorHaveTables = function () {
+                return $scope.scopeModel.tables.length==0;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
