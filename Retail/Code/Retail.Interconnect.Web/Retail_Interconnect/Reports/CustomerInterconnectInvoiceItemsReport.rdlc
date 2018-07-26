@@ -2,19 +2,6 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
-      <Rectangle Name="Rectangle4">
-        <KeepTogether>true</KeepTogether>
-        <Top>2.84807in</Top>
-        <Left>0.05294in</Left>
-        <Height>0.02083in</Height>
-        <Width>7.45207in</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <BackgroundColor>Black</BackgroundColor>
-        </Style>
-      </Rectangle>
       <Textbox Name="Textbox1">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -35,11 +22,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>0.73277in</Top>
-        <Left>5.3946in</Left>
+        <Top>0.51264in</Top>
+        <Left>4.96336in</Left>
         <Height>0.25in</Height>
         <Width>2.10833in</Width>
-        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -61,8 +47,9 @@
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
-                  <FontSize>22pt</FontSize>
+                  <FontSize>18pt</FontSize>
                   <FontWeight>Bold</FontWeight>
+                  <Color>#4db823</Color>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -72,11 +59,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.05221in</Top>
-        <Left>0.05294in</Left>
+        <Top>1.72585in</Top>
+        <Left>1.09253in</Left>
         <Height>0.48333in</Height>
-        <Width>7.45in</Width>
-        <ZIndex>2</ZIndex>
+        <Width>5.39633in</Width>
+        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -107,11 +94,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>1.655in</Top>
+        <Top>2.30362in</Top>
         <Left>0.05502in</Left>
         <Height>0.225in</Height>
         <Width>1in</Width>
-        <ZIndex>3</ZIndex>
+        <ZIndex>2</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -141,11 +128,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox4</rd:DefaultName>
-        <Top>1.655in</Top>
+        <Top>2.30362in</Top>
         <Left>1.09669in</Left>
         <Height>0.225in</Height>
         <Width>1.15833in</Width>
-        <ZIndex>4</ZIndex>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -176,11 +163,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.655in</Top>
+        <Top>2.30362in</Top>
         <Left>5.3946in</Left>
         <Height>0.25in</Height>
         <Width>1.125in</Width>
-        <ZIndex>5</ZIndex>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -210,11 +197,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>1.655in</Top>
+        <Top>2.30362in</Top>
         <Left>6.56127in</Left>
         <Height>0.25in</Height>
-        <Width>0.94167in</Width>
-        <ZIndex>6</ZIndex>
+        <Width>0.93671in</Width>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -225,35 +212,65 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Image Name="Image2">
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
+        <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
+        <Top>0.09388in</Top>
+        <Left>0.05502in</Left>
+        <Height>1.51251in</Height>
+        <Width>3.33125in</Width>
+        <ZIndex>6</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
+      <Rectangle Name="Rectangle4">
+        <KeepTogether>true</KeepTogether>
+        <Top>3.24288in</Top>
+        <Left>2.12923in</Left>
+        <Height>0.02083in</Height>
+        <Width>5.36875in</Width>
+        <ZIndex>7</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <BackgroundColor>Black</BackgroundColor>
+        </Style>
+      </Rectangle>
       <Tablix Name="Tablix1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.53783in</Width>
+              <Width>1.53705in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77728in</Width>
+              <Width>0.7765in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.12275in</Width>
+              <Width>0.12197in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76802in</Width>
+              <Width>0.76724in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84382in</Width>
+              <Width>0.84304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.34327in</Width>
+              <Width>1.34249in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53419in</Width>
+              <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73042in</Width>
+              <Width>0.72964in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79241in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -602,6 +619,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -636,6 +654,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -670,6 +689,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -704,6 +724,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -738,6 +759,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -772,6 +794,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -806,6 +829,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -840,6 +864,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -874,6 +899,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <BackgroundColor>= IIF(RowNumber("InterconnectInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -910,11 +936,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>2.27862in</Top>
-        <Left>0.05294in</Left>
+        <Top>2.67343in</Top>
+        <Left>0.05502in</Left>
         <Height>0.5in</Height>
-        <Width>7.44999in</Width>
-        <ZIndex>7</ZIndex>
+        <Width>7.44296in</Width>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -925,31 +951,25 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.53575in</Width>
+              <Width>1.02314in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77728in</Width>
+              <Width>0.12984in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.12275in</Width>
+              <Width>0.84382in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76802in</Width>
+              <Width>1.34327in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84798in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.34247in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>0.53499in</Width>
+              <Width>0.53419in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.73042in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79033in</Width>
+              <Width>0.76407in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -990,38 +1010,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox36">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox36</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="Textbox35">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1040,38 +1028,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox35</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox34">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox34</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1272,8 +1228,6 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -1282,41 +1236,25 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>2.93834in</Top>
-        <Left>0.05502in</Left>
+        <Top>3.31927in</Top>
+        <Left>2.12923in</Left>
         <Height>0.25in</Height>
-        <Width>7.44999in</Width>
-        <ZIndex>8</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Tablix>
-      <Image Name="Image2">
-        <Source>Database</Source>
-        <Value>=Parameters!Image.Value</Value>
-        <MIMEType>image/png</MIMEType>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.09388in</Top>
-        <Left>0.05502in</Left>
-        <Height>0.875in</Height>
-        <Width>2.53958in</Width>
+        <Width>5.36875in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
-      </Image>
+      </Tablix>
     </ReportItems>
-    <Height>9.94746cm</Height>
+    <Height>9.78871cm</Height>
     <Style />
   </Body>
   <Width>19.31069cm</Width>
   <Page>
     <PageFooter>
-      <Height>1.524cm</Height>
+      <Height>1.44462cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1339,10 +1277,10 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox27</rd:DefaultName>
-          <Top>0.18056in</Top>
-          <Left>6.45207in</Left>
+          <Top>0.21528in</Top>
+          <Left>6.17585in</Left>
           <Height>0.25in</Height>
-          <Width>1in</Width>
+          <Width>1.01042in</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -1354,9 +1292,10 @@
           </Style>
         </Textbox>
         <Line Name="Line2">
-          <Top>0.11111in</Top>
+          <Top>0.14584in</Top>
+          <Left>0.11128in</Left>
           <Height>0in</Height>
-          <Width>7.45207in</Width>
+          <Width>7.07499in</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
