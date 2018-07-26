@@ -463,15 +463,9 @@
     </Content>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Web.config.exclude" />
-    <None Include="Web.config.Debug.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
     <Content Include="Web.config.PartnerPortal.exclude" />
     <Content Include="Web.config.RingoPortal.exclude" />
     <Content Include="Web.config.MultinetPortal.exclude" />
-    <None Include="Web.config.Release.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
     <Content Include="Web.config.SupplierPricelist.exclude" />
   </ItemGroup>
   <ItemGroup>
