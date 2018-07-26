@@ -74,7 +74,7 @@
                             $type: "Vanrise.BusinessProcess.Business.BPDefinitionRuleSetFilter,Vanrise.BusinessProcess.Business"
                         }]
                     }
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, payload, loadBPDefinitionsPromiseDeferred);
             });
 
