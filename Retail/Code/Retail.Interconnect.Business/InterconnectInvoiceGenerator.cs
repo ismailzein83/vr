@@ -271,15 +271,18 @@ namespace Retail.Interconnect.Business
                 Dimension = dimentionFilterName,
                 FilterValues = new List<object> { dimentionFilterValue }
             };
-           
-                DimensionFilter billingTypeFilter = new DimensionFilter();
-                
-                billingTypeFilter.Dimension = "BillingType";
-                if (_type == InterconnectInvoiceType.Customer)
-                { billingTypeFilter.FilterValues = new List<object> { 1 };}
-                else { billingTypeFilter.FilterValues = new List<object> { 2 }; }
-        
-            
+
+            DimensionFilter billingTypeFilter = new DimensionFilter();
+
+            billingTypeFilter.Dimension = "BillingType";
+            if (_type == InterconnectInvoiceType.Customer)
+            { billingTypeFilter.FilterValues = new List<object> { 1 }; }
+            else
+            {
+                billingTypeFilter.FilterValues = new List<object> { 2 };
+            }
+
+            analyticQuery.Query.Filters.Add(dimensionFilter);
             analyticQuery.Query.Filters.Add(billingTypeFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
