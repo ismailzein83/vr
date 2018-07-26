@@ -218,6 +218,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     if (customerInvoiceBySaleCurrencyItemDetail != null)
                     {
                         customerInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
+                        customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += item.Amount;
+                        customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.Amount;
                     }
                     else
                     {
