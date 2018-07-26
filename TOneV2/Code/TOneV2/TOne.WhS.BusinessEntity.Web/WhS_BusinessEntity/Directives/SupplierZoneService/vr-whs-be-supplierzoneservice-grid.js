@@ -80,7 +80,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
                 if (dataItem.ZoneEED == undefined)
                 {
                     menuActions = [{
-                        name: "Edit",
+                        name: "Change",
                         clicked: editSupplierService,
                         haspermission: hasEditSupplierZoneServicePermission
                     }];
@@ -123,7 +123,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
             }
             function defineIconProperties() {
                 if (dataItem.Source == WhS_BE_SupplierEntityServiceSourceEnum.Supplier.value)
-                    dataItem.iconType = "inherited";
+                    dataItem.iconType = "Inherited From Supplier";
             }
         }
     }
