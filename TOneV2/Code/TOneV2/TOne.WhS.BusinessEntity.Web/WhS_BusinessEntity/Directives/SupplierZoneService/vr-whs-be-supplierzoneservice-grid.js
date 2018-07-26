@@ -123,7 +123,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
             }
             function defineIconProperties() {
                 if (dataItem.Source == WhS_BE_SupplierEntityServiceSourceEnum.Supplier.value)
-                    dataItem.iconType = "Inherited From Supplier";
+                    dataItem.iconType = "inherited";
             }
         }
     }
