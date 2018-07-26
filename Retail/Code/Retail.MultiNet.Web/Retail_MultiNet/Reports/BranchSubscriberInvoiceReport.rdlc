@@ -1929,7 +1929,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!NetAmount.Value,2)</Value>
+                              <Value>=FormatNumber(Round(Fields!NetAmount.Value,2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2257,7 +2257,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!Amount.Value,2)</Value>
+                              <Value>=FormatNumber(Round(Fields!Amount.Value,2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2872,7 +2872,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!Amount.Value, 2)</Value>
+                              <Value>=FormatNumber(System.Math.Round(Fields!Amount.Value, 2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2962,7 +2962,7 @@
         <Top>4.27515in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>4.13313in</Width>
+        <Width>4.13314in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
