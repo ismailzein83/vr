@@ -290,6 +290,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\DBReplication\vr-whs-be-dbreplicationpreinsert-switch.js" />
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\Templates\SaleAreaExclusiveSessionTypeEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\Templates\SupplierExclusiveSessionTypeEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\whs-be-saleareaexclusivesessiontype-editor.js" />

@@ -97,6 +97,7 @@
     <Compile Include="CodeCriteriaGroups\SelectiveCodeCriteriaGroup.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
     <Compile Include="DataRecordFieldFormulas\GatewayEvaluatorFieldFormula.cs" />
+    <Compile Include="DBReplication\SwitchDBReplicationPreInsert.cs" />
     <Compile Include="ExclusiveSessionTypes\SaleAreaExclusiveSessionType.cs" />
     <Compile Include="ExclusiveSessionTypes\SupplierExclusiveSessionType.cs" />
     <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidDefinitionSettings.cs" />
