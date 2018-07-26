@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess
 {
     internal class BusinessProcessRuntime
     {
-        
+
 
         #region ctor/Local Variables
 
@@ -25,14 +25,14 @@ namespace Vanrise.BusinessProcess
         {
             _serviceInstanceId = serviceInstanceId;
         }
-        
+
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
 
         Dictionary<Guid, BPDefinitionInitiator> _processDefinitionInitiators;
 
 
         #endregion
-        
+
         #region Process Execution
 
         public void ExecutePendings(Guid bpDefinitionId)
@@ -67,7 +67,11 @@ namespace Vanrise.BusinessProcess
                 foreach (var bpDefinition in definitions)
                 {
                     if (!_processDefinitionInitiators.ContainsKey(bpDefinition.BPDefinitionID))
+                    {
+                        if (bpDefinition.VRWorkflowId.HasValue)
+                            continue;
                         _processDefinitionInitiators.Add(bpDefinition.BPDefinitionID, new BPDefinitionInitiator(_serviceInstanceId, bpDefinition));
+                    }
                 }
             }
         }
