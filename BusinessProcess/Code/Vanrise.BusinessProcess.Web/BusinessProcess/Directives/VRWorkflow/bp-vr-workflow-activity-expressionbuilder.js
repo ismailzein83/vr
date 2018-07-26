@@ -33,8 +33,8 @@ app.directive('businessprocessVrWorkflowActivityExpressionbuilder', ['UtilsServi
 					ctrl.label = "Value";
 				$scope.scopeModel = {};
 				$scope.scopeModel.openExpressionBuilder = function () {
-					var args = ctrl.getworkflowarguments();
-					var vars = ctrl.getactivityvariables();
+					var args = (ctrl.getworkflowarguments != undefined) ? ctrl.getworkflowarguments() : undefined;
+					var vars = (ctrl.getactivityvariables != undefined) ? ctrl.getactivityvariables() : undefined;
 					var onSetExpressionBuilder = function (expressionBuilderValue) {
 						ctrl.value = expressionBuilderValue;
 					};

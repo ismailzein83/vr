@@ -99,17 +99,14 @@
 				var argumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
 
 				argumentsGridReadyDeferred.promise.then(function () {
-					var argumentsGridPayload;
-					if (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) {
-						argumentsGridPayload = {
-							vrWorkflowArguments: vrWorkflowEntity.Settings.Arguments,
-							vrWorkflowArgumentEditorRuntimeDict: vrWorkflowArgumentEditorRuntimeDict,
-							reserveVariableName: reserveVariableName,
-							reserveVariableNames: reserveVariableNames,
-							isVariableNameReserved: isVariableNameReserved,
-							eraseVariableName: eraseVariableName
-						};
-					}
+					var argumentsGridPayload = {
+						vrWorkflowArguments: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.Arguments : undefined,
+						vrWorkflowArgumentEditorRuntimeDict: vrWorkflowArgumentEditorRuntimeDict,
+						reserveVariableName: reserveVariableName,
+						reserveVariableNames: reserveVariableNames,
+						isVariableNameReserved: isVariableNameReserved,
+						eraseVariableName: eraseVariableName
+					};
 					VRUIUtilsService.callDirectiveLoad(argumentsGridAPI, argumentsGridPayload, argumentsGridLoadDeferred);
 				});
 
@@ -141,17 +138,15 @@
 
 				UtilsService.waitMultiplePromises([workflowDesignerReadyDeferred.promise, argumentsGridReadyDeferred.promise]).then(function () {
 					var workflowDesignerPayload;
-					if (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) {
-						workflowDesignerPayload = {
-							//workflowArguments: argumentsGridAPI.getData(),
-							getWorkflowArguments: argumentsGridAPI.getData,
-							rootActivity: vrWorkflowEntity.Settings.RootActivity,
-							reserveVariableName: reserveVariableName,
-							reserveVariableNames: reserveVariableNames,
-							isVariableNameReserved: isVariableNameReserved,
-							eraseVariableName: eraseVariableName
-						};
-					}
+					workflowDesignerPayload = {
+						//workflowArguments: argumentsGridAPI.getData(),
+						getWorkflowArguments: argumentsGridAPI.getData,
+						rootActivity: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.RootActivity : undefined,
+						reserveVariableName: reserveVariableName,
+						reserveVariableNames: reserveVariableNames,
+						isVariableNameReserved: isVariableNameReserved,
+						eraseVariableName: eraseVariableName
+					};
 					VRUIUtilsService.callDirectiveLoad(workflowDesignerAPI, workflowDesignerPayload, workflowDesignerLoadDeferred);
 				});
 				return workflowDesignerLoadDeferred.promise;
