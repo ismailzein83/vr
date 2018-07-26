@@ -235,7 +235,7 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowContainerTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowCustomCodeTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowDesignerDirectiveTemplate.html" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowForEachTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowForEachTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowSequenceTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\Templates\VRWorkflowVariableEditor.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\Templates\VRWorkflowVariablesGridTemplate.html" />
@@ -246,12 +246,12 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\MainExtensions\bp-vr-workflow-genericargumentvariabletype.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-activity-directive.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-activity-expressionbuilder.js" />
-    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\vr-workflow-assign.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflow-assign.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-container.js" />
-    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\vr-workflow-customcode.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflow-customcode.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-designer-directive.js" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\vr-workflow-foreach.js" />
-    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\vr-workflow-sequence.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflow-foreach.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflow-sequence.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Arguments\VRWorkflowArgumentEditorController.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\VRWorkflowVariableEditorController.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
