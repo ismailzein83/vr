@@ -59,7 +59,7 @@ namespace Vanrise.BusinessProcess
         public BPDefinitionInitiator(Guid serviceInstanceId, BPDefinition definition)
         {
             _serviceInstanceId = serviceInstanceId;
-            definition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", definition.BPDefinitionID);
+            //definition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", definition.BPDefinitionID);
 
             if (definition.WorkflowType == null && !definition.VRWorkflowId.HasValue)
                 throw new VRBusinessException(string.Format("WorkflowType or VRWorkflowId should have value for BPDefinitionID: '{0}'", definition.BPDefinitionID));
