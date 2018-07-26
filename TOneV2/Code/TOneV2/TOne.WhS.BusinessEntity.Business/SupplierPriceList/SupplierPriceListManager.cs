@@ -27,8 +27,8 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, SupplierPriceList> allPriceLists = GetCachedPriceLists();
             Func<SupplierPriceList, bool> filterExpression = (item) =>
                 (input.Query.SupplierIds == null || input.Query.SupplierIds.Contains(item.SupplierId))
-                && (input.Query.FromDate == null || item.CreateTime >= input.Query.FromDate)
-                && (!input.Query.ToDate.HasValue || item.CreateTime <= input.Query.ToDate)
+                && (input.Query.FromDate == null || item.EffectiveOn >= input.Query.FromDate)
+                && (!input.Query.ToDate.HasValue || item.EffectiveOn <= input.Query.ToDate)
                 && (input.Query.UserIds==null || input.Query.UserIds.Contains(item.UserId));
 
             ResultProcessingHandler<SupplierPriceListDetail> handler = new ResultProcessingHandler<SupplierPriceListDetail>()
