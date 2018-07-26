@@ -86,7 +86,7 @@ function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPr
                                     processInstanceId: dataItem.Entity.ProcessInstanceId,
                                     fileId: dataItem.Entity.FileId,
                                     supplierPricelistType: dataItem.Entity.PricelistType,
-                                    pricelistDate: dataItem.Entity.CreateTime,
+                                    pricelistDate: dataItem.Entity.EffectiveOn,
                                     currencyId: dataItem.Entity.CurrencyId
                                 };
                                 additionalMenuAction.clicked(payload);

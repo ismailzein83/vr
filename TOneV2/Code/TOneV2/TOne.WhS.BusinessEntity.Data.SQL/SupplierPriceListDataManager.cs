@@ -53,7 +53,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceID"),
                 SPLStateBackupId = GetReaderValue<long?>(reader, "SPLStateBackupID"),
                 UserId = GetReaderValue<int>(reader, "UserID"),
-                PricelistType = (SupplierPricelistType?)GetReaderValue<byte?>(reader, "PricelistType")
+                PricelistType = (SupplierPricelistType?)GetReaderValue<byte?>(reader, "PricelistType"),
+                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn")
             };
             return supplierPriceList;
         }
