@@ -8,7 +8,8 @@ CREATE PROCEDURE[TOneWhS_BE].[sp_SupplierBillingRecurringCharge_Insert]
 @From   datetime,
 @To datetime,
 @CurrencyId int,
-@CreatedBy int
+@CreatedBy int,
+@VAT decimal(22,6)
 
 AS
 BEGIN
@@ -17,6 +18,6 @@ BEGIN
 
 
 	SET NOCOUNT ON;
-insert into [TOneWhS_BE].[SupplierBillingRecurringCharge](FinancialAccountId,RecurringChargeId,InvoiceId,Amount,[From],[To],CurrencyId,CreatedBy) values(@FinancialAccountId,@RecurringChargeId,@InvoiceId,@Amount,@From,@To,@CurrencyId,@CreatedBy)
+insert into [TOneWhS_BE].[SupplierBillingRecurringCharge](FinancialAccountId,RecurringChargeId,InvoiceId,Amount,[From],[To],CurrencyId,CreatedBy,VAT) values(@FinancialAccountId,@RecurringChargeId,@InvoiceId,@Amount,@From,@To,@CurrencyId,@CreatedBy,@VAT)
 
 END

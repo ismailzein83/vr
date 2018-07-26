@@ -9,6 +9,9 @@
     [CurrencyId]         INT             NULL,
     [CreatedTime]        DATETIME        CONSTRAINT [DF_SupplierBillingRecurringCharge_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]          INT             NULL,
+    [VAT]                DECIMAL (22, 6) NULL,
     CONSTRAINT [PK_SupplierBillingRecurringCharge] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
