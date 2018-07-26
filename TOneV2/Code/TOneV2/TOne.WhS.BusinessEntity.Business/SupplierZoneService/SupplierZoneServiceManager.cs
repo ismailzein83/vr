@@ -203,7 +203,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         SupplierZoneServiceId = entity.SupplierZoneServiceId,
                         Source = entity.Source,
-                        BED = entity.BED,
+                        BED = entity.BED > supplierZone.BED ? entity.BED : supplierZone.BED,
                         EED = entity.EED,
                         ZoneName = supplierZone.Name,
                         SupplierZoneId = supplierZone.SupplierZoneId,
