@@ -39,10 +39,14 @@ namespace TOne.WhS.SupplierPriceList.Business
 				long processInstanceId = context.BPInstance.ProcessInstanceID;
 				SupplierPriceListManager SupplierPriceListManager = new SupplierPriceListManager();
 				SupplierPriceListManager.CleanTemporaryTables(processInstanceId);
-				receivedPricelistManager.UpdateReceivedPricelistStatus(supplierPriceListProcessInput.ReceivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToProcessingError);
 
-				var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-				receivedSupplierPricelistManager.SendMailToInternal(supplierPriceListProcessInput.ReceivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+                if (supplierPriceListProcessInput.IsAutoImport)
+                {
+                    receivedPricelistManager.UpdateReceivedPricelistStatus(supplierPriceListProcessInput.ReceivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToProcessingError);
+
+                    var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
+                    receivedSupplierPricelistManager.SendMailToInternal(supplierPriceListProcessInput.ReceivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+                }
 			}
 			base.OnBPExecutionCompleted(context);
 		}
