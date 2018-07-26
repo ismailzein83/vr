@@ -19,7 +19,7 @@ app.directive('businessprocessVrWorkflowCustomcode', ['UtilsService', 'VRUIUtils
 			compile: function (element, attrs) {
 
 			},
-			templateUrl: '/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowCustomCodeTemplate.html'
+			templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowCustomCodeTemplate.html'
 		};
 
 		function workflowCustomCode(ctrl, $scope, $attrs) {

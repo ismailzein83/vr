@@ -18,7 +18,7 @@ app.directive('businessprocessVrWorkflowAssign', ['UtilsService', 'VRUIUtilsServ
 			compile: function (element, attrs) {
 
 			},
-			templateUrl: '/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowAssignTemplate.html'
+			templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowAssignTemplate.html'
 		};
 
 		function workflowAssign(ctrl, $scope, $attrs) {

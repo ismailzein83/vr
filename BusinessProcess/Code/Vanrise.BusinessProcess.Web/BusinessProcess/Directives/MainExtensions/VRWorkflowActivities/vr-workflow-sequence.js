@@ -40,7 +40,7 @@ app.directive('businessprocessVrWorkflowSequence', ['UtilsService', 'VRUIUtilsSe
 			compile: function (element, attrs) {
 
 			},
-			templateUrl: '/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowSequenceTemplate.html'
+			templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowSequenceTemplate.html'
 		};
 
 		function workflowSequence(ctrl, $scope, $attrs) {

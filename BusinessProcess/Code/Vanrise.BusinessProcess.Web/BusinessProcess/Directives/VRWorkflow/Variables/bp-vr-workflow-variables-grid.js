@@ -23,7 +23,7 @@ app.directive('businessprocessVrWorkflowVariablesGrid', ['BusinessProcess_VRWork
 					}
 				};
 			},
-			templateUrl: "/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowVariablesGridTemplate.html"
+			templateUrl: "/Client/Modules/BusinessProcess/Directives/VRWorkflow/Variables/Templates/VRWorkflowVariablesGridTemplate.html"
 		};
 
 		function VrWorkflowVariablesGridDirectiveCtor(ctrl, $scope, attrs) {

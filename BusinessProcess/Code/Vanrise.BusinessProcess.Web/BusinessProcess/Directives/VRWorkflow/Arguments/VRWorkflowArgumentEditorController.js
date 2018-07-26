@@ -13,8 +13,8 @@
 		var argumentDirectionSelectorAPI;
 		var argumentDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var argumentVariableTypeDirectiveAPI;
-		var argumentVariableTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+		var variableTypeSelectorAPI;
+		var variableTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 		loadParameters();
 		defineScope();
@@ -39,9 +39,9 @@
 				argumentDirectionSelectorReadyDeferred.resolve();
 			};
 
-			$scope.scopeModel.onArgumentVariableTypeDirectiveReady = function (api) {
-				argumentVariableTypeDirectiveAPI = api;
-				argumentVariableTypeDirectiveReadyDeferred.resolve();
+			$scope.scopeModel.onVariableTypeSelectorReady = function (api) {
+			    variableTypeSelectorAPI = api;
+			    variableTypeSelectorReadyDeferred.resolve();
 			};
 
 			$scope.scopeModel.isArgumentNameValid = function () {
@@ -101,21 +101,22 @@
 				return argumentDirectionSelectorLoadDeferred.promise;
 			}
 
-			function loadArgumentVariableTypeDirective() {
-				var argumentVariableTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+			function loadVariableTypeDirective() {
+				var variableTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-				argumentVariableTypeDirectiveReadyDeferred.promise.then(function () {
-					var argumentVariableTypeDirectivePayload;
+				variableTypeSelectorReadyDeferred.promise.then(function () {
+
+					var variableTypeDirectivePayload = { selectIfSingleItem: true };
 					if (vrWorkflowArgumentEntity != undefined && vrWorkflowArgumentEntity.Type != undefined) {
-						argumentVariableTypeDirectivePayload = { argumentVariableType: vrWorkflowArgumentEntity.Type };
+					    variableTypeDirectivePayload.variableType = vrWorkflowArgumentEntity.Type;
 					}
-					VRUIUtilsService.callDirectiveLoad(argumentVariableTypeDirectiveAPI, argumentVariableTypeDirectivePayload, argumentVariableTypeDirectiveLoadDeferred);
+					VRUIUtilsService.callDirectiveLoad(variableTypeSelectorAPI, variableTypeDirectivePayload, variableTypeDirectiveLoadDeferred);
 				});
 
-				return argumentVariableTypeDirectiveLoadDeferred.promise;
+				return variableTypeDirectiveLoadDeferred.promise;
 			}
 
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadArgumentDirectionSelector, loadArgumentVariableTypeDirective]).then(function () {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadArgumentDirectionSelector, loadVariableTypeDirective]).then(function () {
 
 			}).finally(function () {
 				$scope.scopeModel.isLoading = false;
@@ -145,7 +146,7 @@
 				VRWorkflowArgumentId: vrWorkflowArgumentEntity != undefined ? vrWorkflowArgumentEntity.VRWorkflowArgumentId : UtilsService.guid(),
 				Name: $scope.scopeModel.name,
 				Direction: argumentDirectionSelectorAPI.getSelectedIds(),
-				Type: argumentVariableTypeDirectiveAPI.getData()
+				Type: variableTypeSelectorAPI.getData()
 			};
 		}
 	}

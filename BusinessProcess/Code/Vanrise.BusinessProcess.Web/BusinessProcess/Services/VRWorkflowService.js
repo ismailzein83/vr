@@ -47,7 +47,7 @@
 				vrWorkflowArgumentNames: vrWorkflowArgumentNames
 			};
 
-			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowArgumentEditor.html', modalParameters, modalSettings);
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Arguments/Templates/VRWorkflowArgumentEditor.html', modalParameters, modalSettings);
 		}
 		function editVRWorkflowArgument(vrWorkflowArgumentEntity, vrWorkflowArgumentNames, onVRWorkflowArgumentUpdated, isVariableNameReserved) {
 
@@ -62,7 +62,7 @@
 				vrWorkflowArgumentNames: vrWorkflowArgumentNames
 			};
 
-			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowArgumentEditor.html', parameters, settings);
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Arguments/Templates/VRWorkflowArgumentEditor.html', parameters, settings);
 		}
 
 		function addVRWorkflowVariable(onVRWorkflowVariableAdded, isVariableNameReserved) {
@@ -76,7 +76,7 @@
 			var modalParameters = {
 			};
 
-			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowVariableEditor.html', modalParameters, modalSettings);
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Variables/Templates/VRWorkflowVariableEditor.html', modalParameters, modalSettings);
 		}
 		function editVRWorkflowVariable(vrWorkflowVariableEntity, onVRWorkflowVariableUpdated) {
 
@@ -89,7 +89,7 @@
 				vrWorkflowVariableEntity: vrWorkflowVariableEntity
 			};
 
-			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowVariableEditor.html', parameters, settings);
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Variables/Templates/VRWorkflowVariableEditor.html', parameters, settings);
 		}
 
 		function registerObjectTrackingDrillDownToVRWorkflow() {
