@@ -50,6 +50,8 @@ namespace Vanrise.BusinessProcess
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
 
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
+        VRWorkflowManager _vrWorkflowManager = new VRWorkflowManager();
+
         Guid _definitionId;
         int _maxNbOfThreads;
 
@@ -58,11 +60,23 @@ namespace Vanrise.BusinessProcess
         {
             _serviceInstanceId = serviceInstanceId;
             definition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", definition.BPDefinitionID);
+
+            if (definition.WorkflowType == null && !definition.VRWorkflowId.HasValue)
+                throw new VRBusinessException(string.Format("WorkflowType or VRWorkflowId should have value for BPDefinitionID: '{0}'", definition.BPDefinitionID));
+
             _definition = definition;
             _definitionId = definition.BPDefinitionID;
             try
             {
-                _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
+                if (definition.WorkflowType != null)
+                    _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
+                else
+                {
+                    VRWorkflow vrWorkflow = _vrWorkflowManager.GetVRWorkflow(definition.VRWorkflowId.Value);
+                    List<string> errorMessages;
+                    if (!_vrWorkflowManager.TryCompileWorkflow(vrWorkflow, out _workflowDefinition, out errorMessages))
+                        throw new Exception(string.Join<string>(". ", errorMessages));
+                }
             }
             catch (Exception ex)
             {
@@ -80,7 +94,7 @@ namespace Vanrise.BusinessProcess
 
         bool _isRunning;
 
-        internal void RunPendingProcesses() 
+        internal void RunPendingProcesses()
         {
             lock (this)
             {
@@ -103,7 +117,7 @@ namespace Vanrise.BusinessProcess
                         if (instance.Status == BPInstanceStatus.New || instance.Status == BPInstanceStatus.Postponed)
                             RunProcess(instance);
                         else
-                            ResumeProcess(instance);                        
+                            ResumeProcess(instance);
                     }
                 }
             }
@@ -167,7 +181,7 @@ namespace Vanrise.BusinessProcess
         {
             return _runningInstances.Where(itm => !itm.Value.IsIdle).Count();
         }
-              
+
 
         #endregion
 
@@ -181,7 +195,7 @@ namespace Vanrise.BusinessProcess
                 inputs = new Dictionary<string, object>();
                 inputs.Add("Input", bpInstance.InputArgument);
             }
-            
+
             WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(_workflowDefinition, inputs) : new WorkflowApplication(_workflowDefinition);
             bpInstance.WorkflowInstanceID = wfApp.Id;
             BPRunningInstance runningInstance = new BPRunningInstance
@@ -193,7 +207,7 @@ namespace Vanrise.BusinessProcess
             _runningInstances.TryAdd(bpInstance.ProcessInstanceID, runningInstance);
 
             PrepareWFAppForExecution(runningInstance);
-            
+
             bpInstance.Status = BPInstanceStatus.Running;
             bpInstance.AssignmentStatus = BPInstanceAssignmentStatus.Executing;
             UpdateProcessStatus(bpInstance, false);
@@ -278,7 +292,7 @@ namespace Vanrise.BusinessProcess
             BPRunningInstance runningInstance;
             _runningInstances.TryRemove(bpInstance.ProcessInstanceID, out runningInstance);
             runningInstance.ThrowIfNull("runningInstance", bpInstance.ProcessInstanceID);
-            lock(runningInstance)
+            lock (runningInstance)
             {
                 runningInstance.IsWorkflowCompleted = true;
             }
