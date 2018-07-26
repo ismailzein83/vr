@@ -745,7 +745,10 @@ namespace TOne.WhS.BusinessEntity.Business
                             salePlzone.Codes.Add(ExistingCodeToSalePLCodeNotificationMapper(existingCode, countrySellDate, null));
                         }
                         if (salePlzone.Rate == null)
+                        {
                             salePlzone.Rate = GetRateNotificationFromExistingData(customerId, sellingProductId, existingSaleZone.ZoneId, existingSaleZone.ZoneName, country.CountryId, customerZoneRateHistoryLocator);
+                            salePlzone.Increment = GetIncrementDescription(customerId, existingSaleZone.ZoneId, salePlzone.Rate.BED);
+                        }
                     }
                 }
                 salePlZoneNotifications.AddRange(countryZoneNotificationsByZoneId.Values);
