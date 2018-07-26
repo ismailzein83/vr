@@ -58,6 +58,11 @@ app.directive("businessprocessBpTechnicalDefinitionManagementGrid", ["UtilsServi
                     return gridAPI.retrieveData(query);
                 };
 
+                directiveAPI.onBPTechnicalDefinitionAdded = function (addedBPTechnicalDefinition) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedBPTechnicalDefinition);
+                    gridAPI.itemAdded(addedBPTechnicalDefinition);
+                };
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(directiveAPI);
             }
@@ -68,7 +73,6 @@ app.directive("businessprocessBpTechnicalDefinitionManagementGrid", ["UtilsServi
                         name: "Edit",
                         clicked: edit,
                         haspermission: hasUpdateBPDefinitionPermission
-
                     }];
                     return menuActions;
                 };

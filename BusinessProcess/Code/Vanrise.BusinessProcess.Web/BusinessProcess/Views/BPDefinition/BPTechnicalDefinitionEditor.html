@@ -13,6 +13,9 @@
                         <vr-columns width="1/3row">
                             <vr-textbox typeof="number" decimalprecision="0" value="scopeModel.MaxConcurrentWorkflows" label="Max Instances Per Runtime"></vr-textbox>
                         </vr-columns>
+                        <span ng-if="scopeModel.loadVRWorklowSelector">
+                            <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
+                        </span>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Security'">

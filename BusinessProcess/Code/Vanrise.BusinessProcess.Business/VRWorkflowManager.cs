@@ -39,6 +39,13 @@ namespace Vanrise.BusinessProcess.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRWorkflows.ToBigResult(input, filterExpression, VRWorkflowDetailMapper));
         }
 
+        public IEnumerable<VRWorkflowInfo> GetVRWorkflowsInfo(VRWorkflowFilter filter)
+        {
+            Func<VRWorkflow, bool> filterExpression = null;
+
+            return this.GetCachedVRWorkflows().MapRecords(VRWorkflowInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
         public InsertOperationOutput<VRWorkflowDetail> InsertVRWorkflow(VRWorkflowToAdd vrWorkflowToAdd)
         {
             IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
@@ -522,6 +529,16 @@ namespace Vanrise.BusinessProcess.Business
                 LastModifiedTime = vrWorkflow.LastModifiedTime
             };
             return vrWorkflowDetail;
+        }
+
+        private VRWorkflowInfo VRWorkflowInfoMapper(VRWorkflow vrWorkflow)
+        {
+            VRWorkflowInfo vrWorkflowInfo = new VRWorkflowInfo()
+            {
+                VRWorkflowId = vrWorkflow.VRWorkflowId,
+                Name = vrWorkflow.Name
+            };
+            return vrWorkflowInfo;
         }
 
         #endregion

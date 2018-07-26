@@ -1,5 +1,4 @@
 ﻿<vr-panel ng-controller="BusinessProcess_BP_TechnicalDefinitionManagementController">
-
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
@@ -11,7 +10,8 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button> 
+                    <vr-button type="Add" formname="formFilter" data-onclick="add" haspermission=""></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
@@ -20,7 +20,5 @@
                 <businessprocess-bp-technical-definition-management-grid on-ready="onGridReady"></businessprocess-bp-technical-definition-management-grid>
             </vr-columns>
         </vr-row>
-
     </vr-form>
-
 </vr-panel>

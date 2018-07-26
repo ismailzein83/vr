@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BusinessProcess_BPDefinitionManagementController.$inject = ['$scope'];
+    BusinessProcess_BPDefinitionManagementController.$inject = ['$scope', 'BusinessProcess_BPDefinitionService', 'BusinessProcess_BPDefinitionAPIService'];
 
-    function BusinessProcess_BPDefinitionManagementController($scope) {
+    function BusinessProcess_BPDefinitionManagementController($scope, BusinessProcess_BPDefinitionService, BusinessProcess_BPDefinitionAPIService) {
         var gridAPI;
         defineScope();
 
@@ -13,6 +13,18 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPI.loadGrid({});
+            };
+
+            $scope.add = function () {
+                var onBPTechnicalDefinitionAdded = function (addedBPTechnicalDefinition) {
+                    gridAPI.onBPTechnicalDefinitionAdded(addedBPTechnicalDefinition);
+                };
+
+                BusinessProcess_BPDefinitionService.addBusinessProcessDefinition(onBPTechnicalDefinitionAdded);
+            };
+
+            $scope.hasAddBPDefinitionPermission = function () {
+                return BusinessProcess_BPDefinitionAPIService.HasAddBPDefinitionPermission()
             };
 
             $scope.searchClicked = function () {

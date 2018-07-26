@@ -50,6 +50,12 @@
 			});
 		}
 
+		function GetVRWorkflowsInfo(filter) {
+		    return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowsInfo"), {
+		        filter: filter
+		    });
+		}
+
 		function UpdateVRWorkflow(vrWorkflow) {
 			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "UpdateVRWorkflow"), vrWorkflow);
 		}
@@ -75,7 +81,8 @@
 			HasAddVRWorkflowPermission: HasAddVRWorkflowPermission,
 			HasEditVRWorkflowPermission: HasEditVRWorkflowPermission,
 			TryCompileWorkflow: TryCompileWorkflow,
-			ExportCompilationResult: ExportCompilationResult
+			ExportCompilationResult: ExportCompilationResult,
+			GetVRWorkflowsInfo: GetVRWorkflowsInfo
 		});
 	}
 

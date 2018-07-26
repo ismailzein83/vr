@@ -60,14 +60,40 @@ namespace Vanrise.BusinessProcess.Business
             return bpDefinitions.FindAllRecords(filterExpression).MapRecords(BPDefinitionInfoMapper);
         }
 
+        public InsertOperationOutput<BPDefinitionDetail> AddBPDefinition(BPDefinition bpDefinition)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BPDefinitionDetail>();
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+
+            bpDefinition.BPDefinitionID = Guid.NewGuid();
+            bpDefinition.Name = string.Concat("VRWorkflowInputArgument_", bpDefinition.BPDefinitionID.ToString("N"));
+
+            if (dataManager.InsertBPDefinition(bpDefinition))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(BPDefinitionLoggableEntity.Instance, bpDefinition);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = BPDefinitionDetailMapper(bpDefinition);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
         public UpdateOperationOutput<BPDefinitionDetail> UpdateBPDefinition(BPDefinition bPDefinition)
         {
-            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
-            bool updateActionSucc = dataManager.UpdateBPDefinition(bPDefinition);
             UpdateOperationOutput<BPDefinitionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BPDefinitionDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+
+            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+            bool updateActionSucc = dataManager.UpdateBPDefinition(bPDefinition);
 
             if (updateActionSucc)
             {

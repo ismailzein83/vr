@@ -7,8 +7,10 @@ namespace Vanrise.BusinessProcess.Data
     {
         List<BPDefinition> GetBPDefinitions();
 
-        bool AreBPDefinitionsUpdated(ref object updateHandle);
+        bool InsertBPDefinition(BPDefinition bpDefinition);
 
         bool UpdateBPDefinition(BPDefinition bPDefinition);
+
+        bool AreBPDefinitionsUpdated(ref object updateHandle);
     }
 }

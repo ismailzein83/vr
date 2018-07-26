@@ -92,5 +92,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			VRWorkflowCompilationOutput result = TryCompileWorkflow(vrWorkflow);
 			return base.GetExcelResponse(result.ErrorMessages.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(), "CompilationResult.xls");
 		}
+
+        [HttpGet]
+        [Route("GetVRWorkflowsInfo")]
+        public IEnumerable<VRWorkflowInfo> GetVRWorkflowsInfo(string filter = null)
+        {
+            VRWorkflowFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRWorkflowFilter>(filter) : null;
+            return _manager.GetVRWorkflowsInfo(deserializedFilter);
+        }
 	}
 }

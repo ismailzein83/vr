@@ -22,16 +22,16 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
 
-        //public bool InsertBPDefinition(BPDefinition bpDefinition)
-        //{
-        //    string serializedConfiguration = bpDefinition.Configuration != null ? Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration) : null;
-        //    int affectedRecords = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Insert]", bpDefinition.BPDefinitionID, bpDefinition.Name, bpDefinition.Title, bpDefinition.VRWorkflowId, serializedConfiguration);
-        //    return affectedRecords > 0 ? true : false;
-        //}
-
-        public bool UpdateBPDefinition(BPDefinition bPDefinition)
+        public bool InsertBPDefinition(BPDefinition bpDefinition)
         {
-            int recordesEffected = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Update]", bPDefinition.BPDefinitionID, bPDefinition.Title, Vanrise.Common.Serializer.Serialize(bPDefinition.Configuration));
+            string serializedConfiguration = bpDefinition.Configuration != null ? Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration) : null;
+            int affectedRecords = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Insert]", bpDefinition.BPDefinitionID, bpDefinition.Name, bpDefinition.Title, bpDefinition.VRWorkflowId, serializedConfiguration);
+            return affectedRecords > 0 ? true : false;
+        }
+
+        public bool UpdateBPDefinition(BPDefinition bpDefinition)
+        {
+            int recordesEffected = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Update]", bpDefinition.BPDefinitionID, bpDefinition.Title, bpDefinition.VRWorkflowId, Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration));
             return (recordesEffected > 0);
         }
 
@@ -51,6 +51,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 BPDefinitionID = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
+                VRWorkflowId = GetReaderValue<Guid?>(reader, "VRWorkflowId")
             };
 
             string workflowTypeAsString = reader["FQTN"] as string;

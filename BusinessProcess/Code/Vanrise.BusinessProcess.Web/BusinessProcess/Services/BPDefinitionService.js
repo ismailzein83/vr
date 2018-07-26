@@ -1,17 +1,25 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     BusinessProcess_BPDefinitionService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
+
     var drillDownDefinitions = [];
+
     function BusinessProcess_BPDefinitionService(VRModalService, VRCommon_ObjectTrackingService) {
 
-        return ({
-            editBusinessProcessDefinition: editBusinessProcessDefinition,
-            getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToBPDefinition: registerObjectTrackingDrillDownToBPDefinition,
-            openCompletionView: openCompletionView
-        });
+        function addBusinessProcessDefinition(onBPDefenitionAdded) {
 
+            var modalParameters = {
+            };
+
+            var modalSettings = {};
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onBPDefenitionAdded = onBPDefenitionAdded;
+            };
+
+            VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionEditor.html', modalParameters, modalSettings);
+        }
         function editBusinessProcessDefinition(businessProcessDefinitionId, onBPDefenitionUpdated) {
             var modalParameters = {
                 businessProcessDefinitionId: businessProcessDefinitionId
@@ -32,10 +40,8 @@
 
         function registerObjectTrackingDrillDownToBPDefinition() {
             var drillDownDefinition = {};
-
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
-
 
             drillDownDefinition.loadDirective = function (directiveAPI, bpDefinitionItem) {
                 bpDefinitionItem.objectTrackingGridAPI = directiveAPI;
@@ -48,8 +54,8 @@
             };
 
             addDrillDownDefinition(drillDownDefinition);
-
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
 
             drillDownDefinitions.push(drillDownDefinition);
@@ -73,7 +79,15 @@
 
             VRModalService.showModal(completionViewURL, parameters, settings);
         }
-    }
-    appControllers.service('BusinessProcess_BPDefinitionService', BusinessProcess_BPDefinitionService);
 
+        return ({
+            addBusinessProcessDefinition: addBusinessProcessDefinition,
+            editBusinessProcessDefinition: editBusinessProcessDefinition,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerObjectTrackingDrillDownToBPDefinition: registerObjectTrackingDrillDownToBPDefinition,
+            openCompletionView: openCompletionView
+        });
+    }
+
+    appControllers.service('BusinessProcess_BPDefinitionService', BusinessProcess_BPDefinitionService);
 })(appControllers);
