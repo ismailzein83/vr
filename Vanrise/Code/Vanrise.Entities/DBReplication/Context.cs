@@ -65,6 +65,7 @@ namespace Vanrise.Entities
         string IdColumn { get; }
         int? ChunkSize { get; }
         Action<string> WriteInformation { get; }
+        DBReplicationPreInsert DbReplicationPreInsert { get; }
     }
 
     public class DBReplicationTableMigrateDataContext : IDBReplicationTableMigrateDataContext
@@ -92,5 +93,7 @@ namespace Vanrise.Entities
         public int? ChunkSize { get; set; }
 
         public Action<string> WriteInformation { get; set; }
+
+        public DBReplicationPreInsert DbReplicationPreInsert { get; set; }
     }
 }

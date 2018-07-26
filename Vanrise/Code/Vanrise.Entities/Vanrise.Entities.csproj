@@ -64,6 +64,7 @@
     <Compile Include="City\CityInfoFilter.cs" />
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="DBReplication\DBDefinitionInfo.cs" />
+    <Compile Include="DBReplication\DBReplicationPreInsertConfig.cs" />
     <Compile Include="VRAPIDiscovery.cs" />
     <Compile Include="CompanyDefinitionConfig.cs" />
     <Compile Include="ComponentType\ComponentTypeInfo.cs" />

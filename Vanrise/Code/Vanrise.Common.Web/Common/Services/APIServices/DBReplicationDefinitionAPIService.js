@@ -21,9 +21,15 @@
             });
         }
 
+        function GetDBReplicationPreInsert() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDBReplicationPreInsert"), {
+            });
+        }
+
         return ({
             GetDBReplicationDefinitionsInfo: GetDBReplicationDefinitionsInfo,
-            GetDBDefinitionsInfo: GetDBDefinitionsInfo
+            GetDBDefinitionsInfo: GetDBDefinitionsInfo,
+            GetDBReplicationPreInsert: GetDBReplicationPreInsert
         });
     }
 

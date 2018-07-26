@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Entities.DBReplication;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Common.Web.Controllers
@@ -27,6 +28,13 @@ namespace Vanrise.Common.Web.Controllers
         {
             DBDefinitionInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<DBDefinitionInfoFilter>(filter) : null;
             return _manager.GetDBDefinitionsInfo(dbReplicationDefinitionId, deserializedFilter);
+        }
+
+        [HttpGet]
+        [Route("GetDBReplicationPreInsert")]
+        public IEnumerable<DBReplicationPreInsertConfig> GetDBReplicationPreInsert()
+        {
+            return _manager.GetDBReplicationPreInsert();
         }
     }
 }

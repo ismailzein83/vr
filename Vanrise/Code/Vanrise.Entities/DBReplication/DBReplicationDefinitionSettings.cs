@@ -37,11 +37,17 @@ namespace Vanrise.Entities
 
     public abstract class DBReplicationPreInsert
     {
+        public abstract Guid ConfigId { get; }
         public abstract void Execute(IDBReplicationPreInsertExecuteContext context);
     }
 
     public interface IDBReplicationPreInsertExecuteContext
     {
         DataTable DataToInsert { get; set; }
+    }
+
+    public class DBReplicationPreInsertExecuteContext : IDBReplicationPreInsertExecuteContext
+    {
+        public DataTable DataToInsert { get; set; }
     }
 }

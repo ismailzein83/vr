@@ -329,7 +329,8 @@ namespace Vanrise.Common.Data.SQL
                 NumberOfDaysPerInterval = context.NumberOfDaysPerInterval,
                 WriteInformation = context.WriteInformation,
                 ChunkSize = dbReplicationTableDetails.ChunkSize,
-                IdColumn = dbReplicationTableDetails.IdColumn
+                IdColumn = dbReplicationTableDetails.IdColumn,
+                DbReplicationPreInsert = dbReplicationTableDetails.DBReplicationPreInsert
             };
         }
 

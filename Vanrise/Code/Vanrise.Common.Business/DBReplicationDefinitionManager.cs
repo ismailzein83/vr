@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Entities;
+using Vanrise.Entities.DBReplication;
 
 namespace Vanrise.Common.Business
 {
@@ -60,6 +61,11 @@ namespace Vanrise.Common.Business
             return dbDefinitionsInfo.MapRecords(record => record, filterExpression);
         }
 
+        public IEnumerable<DBReplicationPreInsertConfig> GetDBReplicationPreInsert()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<DBReplicationPreInsertConfig>(DBReplicationPreInsertConfig.EXTENSION_TYPE);
+        }
         #endregion
 
         #region Private Methods

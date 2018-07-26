@@ -39,9 +39,17 @@ function (UtilsService, VRUIUtilsService) {
             };
 
             $scope.scopeModel.addDBReplicationTableDefinition = function () {
-                $scope.scopeModel.datasource.push({
+                var dbReplicationTableDefinition = {
                     id: UtilsService.guid()
-                });
+                };
+
+                dbReplicationTableDefinition.onPreInsertSelectorReady = function (api) {
+                    dbReplicationTableDefinition.preInsertSelectorAPI = api;
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dbReplicationTableDefinition.preInsertSelectorAPI, undefined, setLoader);
+                };
+
+                $scope.scopeModel.datasource.push(dbReplicationTableDefinition);
             };
 
             $scope.scopeModel.removeDBReplicationTableDefinition = function (dataItem) {
@@ -97,16 +105,39 @@ function (UtilsService, VRUIUtilsService) {
                 if (payload != undefined && payload.dbReplicationTablesDefinitions != undefined) {
                     for (var x = 0; x < payload.dbReplicationTablesDefinitions.length; x++) {
                         var currentItem = payload.dbReplicationTablesDefinitions[x];
-                        var obj = {
+                        var gridItem = {
                             TableName: currentItem.TableName,
                             TableSchema: currentItem.TableSchema,
                             FilterDateTimeColumn: currentItem.FilterDateTimeColumn,
                             IdColumn: currentItem.IdColumn,
-                            ChunkSize: currentItem.ChunkSize
+                            ChunkSize: currentItem.ChunkSize,
+                            readyPreInsertSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadPreInsertSelector: UtilsService.createPromiseDeferred()
                         };
-                        $scope.scopeModel.datasource.push(obj);
+                        gridItem.payload = payload;
+
+                        addItemtoGrid(gridItem);
                     }
                 }
+
+                function addItemtoGrid(gridItem) {
+                    promises.push(gridItem.loadPreInsertSelector.promise);
+
+                    gridItem.onPreInsertSelectorReady = function (api) {
+                        gridItem.preInsertSelectorAPI = api;
+                        gridItem.readyPreInsertSelectorPromiseDeferred.resolve();
+                    };
+                    console.log(gridItem.payload);
+                    UtilsService.waitMultiplePromises([gridItem.readyPreInsertSelectorPromiseDeferred.promise]).then(function () {
+                        var preInsertSelectorPayload = {
+                            selectedIds: gridItem.payload.DBReplicationPreInsert
+                        };
+                        VRUIUtilsService.callDirectiveLoad(gridItem.preInsertSelectorAPI, preInsertSelectorPayload, gridItem.loadPreInsertSelector);
+                    });
+
+                    $scope.scopeModel.datasource.push(gridItem);
+                }
+
                 return UtilsService.waitMultiplePromises(promises);
             };
 
@@ -124,7 +155,8 @@ function (UtilsService, VRUIUtilsService) {
                             TableSchema: currentItem.TableSchema,
                             FilterDateTimeColumn: currentItem.FilterDateTimeColumn,
                             IdColumn: currentItem.IdColumn,
-                            ChunkSize: currentItem.ChunkSize
+                            ChunkSize: currentItem.ChunkSize,
+                            DBReplicationPreInsert: currentItem.preInsertSelectorAPI.getData()
                         };
 
                         dbReplicationTableDefinitions.push(dbReplicationTableDefinition);
@@ -136,8 +168,6 @@ function (UtilsService, VRUIUtilsService) {
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
     }
-
     return directiveDefinitionObject;
 }]);

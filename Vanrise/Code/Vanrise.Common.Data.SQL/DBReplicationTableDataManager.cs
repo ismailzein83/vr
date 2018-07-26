@@ -90,6 +90,15 @@ namespace Vanrise.Common.Data.SQL
                             }
                         }
 
+                        if (context.DbReplicationPreInsert != null)
+                        {
+                            var dbReplicationPreInsertExecuteContext = new DBReplicationPreInsertExecuteContext
+                            {
+                                DataToInsert = datable
+                            };
+                            context.DbReplicationPreInsert.Execute(dbReplicationPreInsertExecuteContext);
+                        }
+
                         using (SqlBulkCopy bulkcopy = new SqlBulkCopy(context.TargetConnectionString, SqlBulkCopyOptions.KeepIdentity))
                         {
                             bulkcopy.DestinationTableName = GetFullTableName(context.TargetTempTableName, null, context.TableSchema);
@@ -140,6 +149,14 @@ namespace Vanrise.Common.Data.SQL
                             {
                                 sqlDataAdapter.Fill(datable);
                             }
+                        }
+
+                        if (context.DbReplicationPreInsert != null)
+                        {
+                            var dbReplicationPreInsertExecuteContext = new DBReplicationPreInsertExecuteContext{
+                                DataToInsert = datable
+                            };
+                            context.DbReplicationPreInsert.Execute(dbReplicationPreInsertExecuteContext);
                         }
 
                         using (SqlBulkCopy bulkcopy = new SqlBulkCopy(context.TargetConnectionString, SqlBulkCopyOptions.KeepIdentity))
