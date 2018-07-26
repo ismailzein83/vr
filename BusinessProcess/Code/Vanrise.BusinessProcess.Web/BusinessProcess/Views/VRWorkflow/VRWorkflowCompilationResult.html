@@ -2,7 +2,7 @@
 	<vr-modalbody vr-loader="isLoading" maxheight="'700px'">
 		<vr-form name="formValidateEditor">
 
-			<vr-datagrid datasource="dataSrouce" on-ready="onMainGridReady">
+			<vr-datagrid datasource="dataSrouce" on-ready="onMainGridReady" hidegridmenu>
 				<vr-datagridcolumn headertext="'Error Messages'" isfielddynamic>
 					<div class="responsive-container">
 						{{dataItem.Error}}
@@ -21,4 +21,3 @@
 		</vr-actionbar>
 	</div>
 </div>
-
