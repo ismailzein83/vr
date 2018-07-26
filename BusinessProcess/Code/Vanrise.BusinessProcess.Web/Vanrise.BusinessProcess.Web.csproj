@@ -182,6 +182,7 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
+    <Content Include="BusinessProcess\Constants\VRWorkflowTrackingMessageSeverityEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-information-action.js" />
@@ -224,6 +225,8 @@
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskCompilationResult.html" />
     <Content Include="BusinessProcess\Directives\CustomCode\CustomCodeTaskCompilationResultController.js" />
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflow-writetrackingmessage.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowWriteTrackingMessageTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variables-grid.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-selector.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityDirectiveTemplate.html" />

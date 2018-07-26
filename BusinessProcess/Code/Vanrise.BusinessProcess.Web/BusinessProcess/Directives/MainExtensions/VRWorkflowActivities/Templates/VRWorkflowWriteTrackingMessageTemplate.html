@@ -1,0 +1,10 @@
+﻿<vr-row>
+	<vr-columns colnum="3">
+        <vr-select on-ready="scopeModel.onSeveritySelectorReady" datasource="scopeModel.severityEnums" datavaluefield="value" datatextfield="description" 
+                   label="Severity" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedSeverity">
+    </vr-columns>
+    
+	<vr-columns colnum="9">
+		<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Message'" isrequired="true" value="scopeModel.message"></businessprocess-vr-workflow-activity-expressionbuilder>
+	</vr-columns>
+</vr-row>

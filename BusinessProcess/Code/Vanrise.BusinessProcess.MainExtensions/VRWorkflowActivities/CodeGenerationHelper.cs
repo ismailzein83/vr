@@ -14,16 +14,36 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             StringBuilder codeBuilder = new StringBuilder(@"                 
 
-                
                     public class #CLASSNAME#
                     {                        
                         System.Activities.WorkflowDataContext _workflowDataContext;
+                        System.Activities.ActivityContext _activityContext;
 
                         public #CLASSNAME#(ActivityContext activityContext)
                         {
+                            _activityContext = activityContext;
                             _workflowDataContext = activityContext.DataContext;
                         }
 
+                        public void WriteWarning(string message)
+                        {
+                            _activityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Warning, message);
+                        }
+
+                        public void WriteInformation(string message)
+                        {
+                            _activityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message);
+                        }
+
+                        public void WriteVerbose(string message)
+                        {
+                            _activityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Verbose, message);
+                        }
+
+                        public void WriteError(string message)
+                        {
+                            _activityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Error, message);
+                        }
                         #VARIABLESPROPERTIES#
                     }
 

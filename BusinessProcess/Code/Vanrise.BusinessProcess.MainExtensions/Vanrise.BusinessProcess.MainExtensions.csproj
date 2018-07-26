@@ -77,6 +77,7 @@
     <Compile Include="VRWorkflowActivities\VRWorkflowCallHttpServiceActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowCustomLogicActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowForEachActivity.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowWriteTrackingMessageActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowIfElseActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSequenceActivity.cs" />
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowGenericVariableType.cs" />
