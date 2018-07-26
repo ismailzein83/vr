@@ -34,9 +34,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             bool isApplicableToSupplier;
             List<InvoiceAvailableForSettlement> availableCustomerInvoices;
             List<InvoiceAvailableForSettlement> availableSupplierInvoices;
-            decimal? minAmount;
 
-            PrepareDataForProcessing(context.PartnerId, context.InvoiceTypeId, context.CustomSectionPayload, out  partnerType, out isApplicableToSupplier, out isApplicableToCustomer, out availableCustomerInvoices, out availableSupplierInvoices, out minAmount);
+            PrepareDataForProcessing(context.PartnerId, context.InvoiceTypeId, context.CustomSectionPayload, out  partnerType, out isApplicableToSupplier, out isApplicableToCustomer, out availableCustomerInvoices, out availableSupplierInvoices);
 
 
             IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices = null;
@@ -67,17 +66,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices,availableSupplierInvoices, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice);
 
-            GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier, minAmount);
-            if(generatedInvoice!=null)
-            {
-                context.Invoice = generatedInvoice;
-            }
-            else
-            {
-                context.ErrorMessage = "Cannot generate invoice with amount less than threshold.";
-                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-                return;
-            }
+            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier);
+         
 
             ConfigManager configManager = new ConfigManager();
             InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
@@ -427,7 +417,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return true;
         }
-        private void PrepareDataForProcessing(string partnerId, Guid invoiceTypeId, dynamic customSectionPayload, out string partnerType, out bool isApplicableToSupplier, out bool isApplicableToCustomer, out List<InvoiceAvailableForSettlement> availableCustomerInvoices, out List<InvoiceAvailableForSettlement> availableSupplierInvoices, out decimal? minAmount)
+        private void PrepareDataForProcessing(string partnerId, Guid invoiceTypeId, dynamic customSectionPayload, out string partnerType, out bool isApplicableToSupplier, out bool isApplicableToCustomer, out List<InvoiceAvailableForSettlement> availableCustomerInvoices, out List<InvoiceAvailableForSettlement> availableSupplierInvoices)
         {
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(partnerId));
@@ -437,8 +427,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             definitionSettings.FinancialAccountInvoiceTypes.ThrowIfNull("definitionSettings.FinancialAccountInvoiceTypes", financialAccount.FinancialAccountDefinitionId);
             var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == invoiceTypeId);
             financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
-            PartnerManager partnerManager = new PartnerManager();
-            minAmount = partnerManager.GetPartnerMinAmount(invoiceTypeId, partnerId);
 
             isApplicableToSupplier = financialAccountInvoiceType.IsApplicableToSupplier;
             isApplicableToCustomer = financialAccountInvoiceType.IsApplicableToCustomer;
@@ -491,7 +479,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return new Vanrise.Invoice.Business.InvoiceManager().GetInvoices(invoiceIds);
         }
 
-        private GeneratedInvoice BuildGeneratedInvoice(List<SattlementInvoiceItemDetails> customerInvoiceItemSet, List<SattlementInvoiceItemDetails> supplierInvoiceItemSet, Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, List<SettlementInvoiceDetailSummary> carrierSummary, List<SettlementInvoiceDetailSummary> systemSummary, Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier, decimal? minAmount)
+        private GeneratedInvoice BuildGeneratedInvoice(List<SattlementInvoiceItemDetails> customerInvoiceItemSet, List<SattlementInvoiceItemDetails> supplierInvoiceItemSet, Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, List<SettlementInvoiceDetailSummary> carrierSummary, List<SettlementInvoiceDetailSummary> systemSummary, Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier)
         {
 
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
@@ -506,13 +494,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
            };
 
 
-            CurrencyManager currencyManager = new CurrencyManager();
-            var systemCurrency = currencyManager.GetSystemCurrency();
-            systemCurrency.ThrowIfNull("systemCurrency");
-            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            decimal totalCustomerInvoicesAmountInSystemCurrency = 0;
-            decimal totalSupplierInvoicesAmountInSystemCurrency = 0;
-
             if (customerInvoiceItemSet != null && customerInvoiceItemSet.Count > 0)
             {
                 var customerItemSet = new GeneratedInvoiceItemSet
@@ -524,10 +505,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     sattlementInvoiceDetails.CustomerDuration += customerInvoice.DurationInSeconds;
                     sattlementInvoiceDetails.CustomerTotalNumberOfCalls += customerInvoice.TotalNumberOfCalls;
-                    if (customerInvoice.AmountWithCommission.HasValue && customerInvoice.CurrencyId.HasValue)
-                    {
-                        totalCustomerInvoicesAmountInSystemCurrency += currencyExchangeRateManager.ConvertValueToCurrency(customerInvoice.AmountWithCommission.Value, customerInvoice.CurrencyId.Value, systemCurrency.CurrencyId, customerInvoice.IssueDate);
-                    }
                     customerItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = customerInvoice,
@@ -552,10 +529,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     sattlementInvoiceDetails.SupplierDuration += supplierInvoice.DurationInSeconds;
                     sattlementInvoiceDetails.SupplierTotalNumberOfCalls += supplierInvoice.TotalNumberOfCalls;
-                    if (supplierInvoice.AmountWithCommission.HasValue && supplierInvoice.CurrencyId.HasValue)
-                    {
-                        totalSupplierInvoicesAmountInSystemCurrency += currencyExchangeRateManager.ConvertValueToCurrency(supplierInvoice.AmountWithCommission.Value, supplierInvoice.CurrencyId.Value, systemCurrency.CurrencyId, supplierInvoice.IssueDate);
-                    }
                     supplierItemSet.Items.Add(new GeneratedInvoiceItem
                             {
                                 Details = supplierInvoice,
@@ -566,44 +539,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 if (supplierItemSet.Items.Count > 0)
                     generatedInvoiceItemSets.Add(supplierItemSet);
             }
-            decimal supplierCustomerAmountDifference = Math.Abs(totalSupplierInvoicesAmountInSystemCurrency - totalCustomerInvoicesAmountInSystemCurrency);
 
-            if ((minAmount.HasValue && supplierCustomerAmountDifference >= minAmount.Value) || (!minAmount.HasValue && supplierCustomerAmountDifference != 0))
+            if (settlementInvoiceCurrencyByInvoice != null && settlementInvoiceCurrencyByInvoice.Count > 0)
             {
-                if (settlementInvoiceCurrencyByInvoice != null && settlementInvoiceCurrencyByInvoice.Count > 0)
-                {
-                    foreach (var settlementInvoiceCurrency in settlementInvoiceCurrencyByInvoice)
-                    {
-                        GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                        generatedInvoiceItemSet.SetName = string.Format("InvoiceByCurrency_{0}", settlementInvoiceCurrency.Key);
-                        generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-
-                        foreach (var value in settlementInvoiceCurrency.Value)
-                        {
-                            generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                            {
-                                Details = value,
-                                Name = " "
-                            });
-                        }
-                        if (generatedInvoiceItemSet.Items.Count > 0)
-                        {
-                            generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                        }
-                    }
-
-                }
-
-                if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
+                foreach (var settlementInvoiceCurrency in settlementInvoiceCurrencyByInvoice)
                 {
                     GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = "SettlementInvoiceSummary";
+                    generatedInvoiceItemSet.SetName = string.Format("InvoiceByCurrency_{0}", settlementInvoiceCurrency.Key);
                     generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-                    foreach (var settlementInvoiceItemSummaryDetail in settlementInvoiceItemSummaryByCurrency)
+
+                    foreach (var value in settlementInvoiceCurrency.Value)
                     {
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
-                            Details = settlementInvoiceItemSummaryDetail.Value,
+                            Details = value,
                             Name = " "
                         });
                     }
@@ -613,52 +562,71 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
                 }
 
-
-                if (systemSummary != null && systemSummary.Count > 0)
-                {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = "SystemSummary";
-                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-                    foreach (var summary in systemSummary)
-                    {
-                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                        {
-                            Details = summary,
-                            Name = " "
-                        });
-                    }
-                    if (generatedInvoiceItemSet.Items.Count > 0)
-                    {
-                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                    }
-                }
-
-                if (carrierSummary != null && carrierSummary.Count > 0)
-                {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = "CarrierSummary";
-                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-                    foreach (var summary in carrierSummary)
-                    {
-                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                        {
-                            Details = summary,
-                            Name = " "
-                        });
-                    }
-                    if (generatedInvoiceItemSet.Items.Count > 0)
-                    {
-                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                    }
-                }
-
-                return new GeneratedInvoice
-                {
-                    InvoiceDetails = sattlementInvoiceDetails,
-                    InvoiceItemSets = generatedInvoiceItemSets
-                };
             }
-            return null;
+
+            if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "SettlementInvoiceSummary";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                foreach (var settlementInvoiceItemSummaryDetail in settlementInvoiceItemSummaryByCurrency)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = settlementInvoiceItemSummaryDetail.Value,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+            }
+
+
+            if (systemSummary != null && systemSummary.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "SystemSummary";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                foreach (var summary in systemSummary)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = summary,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+            }
+
+            if (carrierSummary != null && carrierSummary.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "CarrierSummary";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                foreach (var summary in carrierSummary)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = summary,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+            }
+
+            return new GeneratedInvoice
+            {
+                InvoiceDetails = sattlementInvoiceDetails,
+                InvoiceItemSets = generatedInvoiceItemSets
+            };
         }
     }
 }
