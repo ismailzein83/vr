@@ -14,11 +14,20 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
 
         }
-        #region public methods
+
+        #region Public Methods
+
         public List<BPDefinition> GetBPDefinitions()
         {
             return GetItemsSP("bp.sp_BPDefinition_GetAll", BPDefinitionMapper);
         }
+
+        //public bool InsertBPDefinition(BPDefinition bpDefinition)
+        //{
+        //    string serializedConfiguration = bpDefinition.Configuration != null ? Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration) : null;
+        //    int affectedRecords = ExecuteNonQuerySP("[bp].[sp_BPDefinition_Insert]", bpDefinition.BPDefinitionID, bpDefinition.Name, bpDefinition.Title, bpDefinition.VRWorkflowId, serializedConfiguration);
+        //    return affectedRecords > 0 ? true : false;
+        //}
 
         public bool UpdateBPDefinition(BPDefinition bPDefinition)
         {
@@ -30,6 +39,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return base.IsDataUpdated("[bp].[BPDefinition]", ref updateHandle);
         }
+
         #endregion
 
         #region Mappers
@@ -41,11 +51,16 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 BPDefinitionID = GetReaderValue<Guid>(reader,"ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
-                WorkflowType = Type.GetType(reader["FQTN"] as string)
             };
+
+            string workflowTypeAsString = reader["FQTN"] as string;
+            if(!string.IsNullOrEmpty(workflowTypeAsString))
+                bpDefinition.WorkflowType = Type.GetType(workflowTypeAsString);
+
             string config = reader["Config"] as string;
             if (!String.IsNullOrWhiteSpace(config))
                 bpDefinition.Configuration = Serializer.Deserialize<BPConfiguration>(config);
+            
             return bpDefinition;
         }
         #endregion
