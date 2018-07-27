@@ -10,22 +10,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowIfElseActivity : VRWorkflowActivitySettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("40B7E3E9-F8E0-4C2C-9ED7-F79CC4A68473"); }
-        }
+        public override Guid ConfigId { get { return new Guid("40B7E3E9-F8E0-4C2C-9ED7-F79CC4A68473"); } }
 
-		public override string Editor
-		{
-			get { return "vr-workflow-ifelse"; }
-		}
+        public override string Editor { get { return "vr-workflow-ifelse"; } }
 
-		public override string Title
-		{
-			get { return "IfElse"; }
-		}
+        public override string Title { get { return "IfElse"; } }
 
-		public string Condition { get; set; }
+        public string Condition { get; set; }
 
         public VRWorkflowActivity TrueActivity { get; set; }
 
@@ -88,7 +79,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             {
                 Then = #TRUEACTIVITYCODE#");
 
-            if(this.FalseActivity != null)
+            if (this.FalseActivity != null)
             {
                 this.FalseActivity.Settings.ThrowIfNull("this.FalseActivity.Settings");
                 codeBuilder.Append(@",

@@ -12,10 +12,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowCallHttpServiceActivity : VRWorkflowActivitySettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("A9C74099-C36E-45E6-8318-44C7B9A2B381"); }
-        }
+        public override Guid ConfigId { get { return new Guid("A9C74099-C36E-45E6-8318-44C7B9A2B381"); } }
 
         public override string Editor { get { throw new NotImplementedException(); } }
 
@@ -195,7 +192,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             }
 
             nmSpaceCodeBuilder.Replace("#THROWIFERROR#", this.ContinueWorkflowIfCallFailed ? "false" : "true");
-            
+
             string baseExecutionContextClassName = "CallServiceActivity_BaseExecutionContext";
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
@@ -288,7 +285,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 return _vrHttpFault.StringResponse;
             }
         }
-        
+
         public string ErrorMessage
         {
             get

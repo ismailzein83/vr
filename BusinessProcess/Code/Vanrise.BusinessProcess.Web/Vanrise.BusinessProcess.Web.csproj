@@ -233,7 +233,7 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowActivityExpressionBuilderTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Arguments\Templates\VRWorkflowArgumentEditor.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Arguments\Templates\VRWorkflowArgumentsGridTemplate.html" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\MainExtensions\Templates\VRWorkflowGenericArgumentVariableTypeTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowGenericArgumentVariableTypeTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowAssignTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowContainerTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowCustomCodeTemplate.html" />
@@ -246,7 +246,7 @@
     <Content Include="BusinessProcess\Directives\VRWorkflow\Arguments\bp-vr-workflow-argumentdirection-selector.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Arguments\bp-vr-workflow-arguments-grid.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-variabletypes.js" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\MainExtensions\bp-vr-workflow-genericargumentvariabletype.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\bp-vr-workflow-genericargumentvariabletype.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-activity-directive.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-activity-expressionbuilder.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflow-assign.js" />
@@ -320,6 +320,7 @@
     <Content Include="BusinessProcess\Services\VRWorkflowService.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BusinessProcess\Directives\VRWorkflow\MainExtensions\Templates\" />
     <Folder Include="System\" />
   </ItemGroup>
   <PropertyGroup>

@@ -13,7 +13,6 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         public static string GenerateBaseExecutionClass(IVRWorkflowActivityGenerateWFActivityCodeContext context, string className)
         {
             StringBuilder codeBuilder = new StringBuilder(@"                 
-
                     public class #CLASSNAME#
                     {                        
                         System.Activities.WorkflowDataContext _workflowDataContext;
@@ -46,7 +45,6 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         }
                         #VARIABLESPROPERTIES#
                     }
-
                 ");
 
             codeBuilder.Replace("#VARIABLESPROPERTIES#", BuildVariablesPropertiesCode(context));
@@ -61,40 +59,39 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             StringBuilder variablesPropertiesCodeBuilder = new StringBuilder();
 
             string propertyGetter = @"
-get
-    {
-        if(_#VARIABLENAME#PropertyDescriptor == null)
-        {
-            _#VARIABLENAME#PropertyDescriptor = _workflowDataContext.GetProperties()[""#VARIABLENAME#""];
-            _#VARIABLENAME#PropertyDescriptor.ThrowIfNull(""_#VARIABLENAME#PropertyDescriptor"");
-        }
-        return #VARIABLEVALUETYPECAST#_#VARIABLENAME#PropertyDescriptor.GetValue(_workflowDataContext)#VARIABLEREFERENCETYPECAST#;
-    }
-";
+                get
+                    {
+                        if(_#VARIABLENAME#PropertyDescriptor == null)
+                        {
+                            _#VARIABLENAME#PropertyDescriptor = _workflowDataContext.GetProperties()[""#VARIABLENAME#""];
+                            _#VARIABLENAME#PropertyDescriptor.ThrowIfNull(""_#VARIABLENAME#PropertyDescriptor"");
+                        }
+                        return #VARIABLEVALUETYPECAST#_#VARIABLENAME#PropertyDescriptor.GetValue(_workflowDataContext)#VARIABLEREFERENCETYPECAST#;
+                    }
+                ";
 
             string propertySetter = @"
-set
-    {
-        if(_#VARIABLENAME#PropertyDescriptor == null)
-        {
-            _#VARIABLENAME#PropertyDescriptor = _workflowDataContext.GetProperties()[""#VARIABLENAME#""];
-            _#VARIABLENAME#PropertyDescriptor.ThrowIfNull(""_#VARIABLENAME#PropertyDescriptor"");
-        }
-        _#VARIABLENAME#PropertyDescriptor.SetValue(_workflowDataContext, value);
+                set
+                    {
+                        if(_#VARIABLENAME#PropertyDescriptor == null)
+                        {
+                            _#VARIABLENAME#PropertyDescriptor = _workflowDataContext.GetProperties()[""#VARIABLENAME#""];
+                            _#VARIABLENAME#PropertyDescriptor.ThrowIfNull(""_#VARIABLENAME#PropertyDescriptor"");
+                        }
+                        _#VARIABLENAME#PropertyDescriptor.SetValue(_workflowDataContext, value);
 
-    }
-";
+                    }
+                ";
 
             string variablePropertyTemplate = @"
+                System.ComponentModel.PropertyDescriptor _#VARIABLENAME#PropertyDescriptor;
+                    public #VARIABLETYPE# #VARIABLENAME#
+                    {
+                        #PROPERTYGETTER#
+                        #PROPERTYSETTER#
+                    }
+                ";
 
-System.ComponentModel.PropertyDescriptor _#VARIABLENAME#PropertyDescriptor;
-public #VARIABLETYPE# #VARIABLENAME#
-{
-#PROPERTYGETTER#
-#PROPERTYSETTER#
-}
-
-";
             foreach (var wfVariable in context.GetAllVariables())
             {
                 StringBuilder variablePropertyCodeBuilder = new StringBuilder(variablePropertyTemplate);

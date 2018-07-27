@@ -22,7 +22,7 @@ app.directive('businessprocessVrWorkflowGenericargumentvariabletype', ['UtilsSer
                     }
                 };
             },
-            templateUrl: "/Client/Modules/BusinessProcess/Directives/VRWorkflow/MainExtensions/Templates/VRWorkflowGenericArgumentVariableTypeTemplate.html"
+            templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflow/Templates/VRWorkflowGenericArgumentVariableTypeTemplate.html"
         };
 
         function GenericVariableTypeDirectiveCtor(ctrl, $scope, attrs) {

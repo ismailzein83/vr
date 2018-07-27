@@ -7,20 +7,11 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowWriteTrackingMessageActivity : VRWorkflowActivitySettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("A0DE8C69-7427-4F95-9A4D-9ECD8658D7B2"); }
-        }
+        public override Guid ConfigId { get { return new Guid("A0DE8C69-7427-4F95-9A4D-9ECD8658D7B2"); } }
 
-        public override string Editor
-        {
-            get { return "businessprocess-vr-workflow-writetrackingmessage"; }
-        }
+        public override string Editor { get { return "businessprocess-vr-workflow-writetrackingmessage"; } }
 
-        public override string Title
-        {
-            get { return "Write Tracking Message"; }
-        }
+        public override string Title { get { return "Write Tracking Message"; } }
 
         public string Message { get; set; }
 
@@ -30,7 +21,6 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
         {
             this.Message.ThrowIfNull("this.Message");
             StringBuilder nmSpaceCodeBuilder = new StringBuilder(@"                 
-
                 namespace #NAMESPACE#
                 {
                     public class #CLASSNAME# : CodeActivity

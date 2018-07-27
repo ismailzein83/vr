@@ -10,22 +10,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 {
     public class VRWorkflowForEachActivity : VRWorkflowActivitySettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("BA3A107D-20DA-4456-AC70-A2948DFE3725"); }
-        }
+        public override Guid ConfigId { get { return new Guid("BA3A107D-20DA-4456-AC70-A2948DFE3725"); } }
 
-		public override string Editor
-		{
-			get { return "vr-workflow-foreach"; }
-		}
+        public override string Editor { get { return "vr-workflow-foreach"; } }
 
-		public override string Title
-		{
-			get { return "ForEach"; }
-		}
+        public override string Title { get { return "ForEach"; } }
 
-		public string List { get; set; }
+        public string List { get; set; }
 
         public string IterationVariableName { get; set; }
 
@@ -41,7 +32,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             //    Body = new System.Activities.ActivityAction<string>
             //    {
             //         Argument = new System.Activities.DelegateInArgument<string>("item")
-                       
+
             //    }
             //};
 
@@ -89,7 +80,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#CLASSNAME#", className);
             nmSpaceCodeBuilder.Replace("#LISTNAME#", this.List);
             nmSpaceCodeBuilder.Replace("#ITERATIONVARIABLERUNTIMETYPE#", iterationVariableRuntimeType);
-            
+
 
             context.AddFullNamespaceCode(nmSpaceCodeBuilder.ToString());
 
