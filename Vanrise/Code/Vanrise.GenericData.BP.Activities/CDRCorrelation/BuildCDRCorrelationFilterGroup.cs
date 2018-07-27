@@ -29,7 +29,9 @@ namespace Vanrise.GenericData.BP.Activities
 
             bool newDataImported = false;
 
-            RecordFilterGroup recordFilter = null;
+            RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
+            recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1 } });
+
             if (!lastImportedId.HasValue)
             {
                 DataRecordStorageManager manager = new DataRecordStorageManager();
@@ -38,7 +40,6 @@ namespace Vanrise.GenericData.BP.Activities
                 if (minDate.HasValue)
                 {
                     newDataImported = true;
-                    recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
                     recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = settings.DatetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = minDate.Value });
                 }
             }
