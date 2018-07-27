@@ -6,7 +6,9 @@
                     <vr-textbox value="name" label="Name" localizedheadertext="VRRes.Name.VREnd" isrequired vr-disabled="isInEditMode"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-sec-tenant-selector on-ready="onTenantSelectorReady" vr-disabled="isInEditMode" customlabel="Parent Tenant" isrequired="true"></vr-sec-tenant-selector>
+                    <span vr-disabled="isInEditMode">
+                        <vr-sec-tenant-selector on-ready="onTenantSelectorReady" customlabel="Parent Tenant" isrequired="true"></vr-sec-tenant-selector>
+                    </span>
                 </vr-columns>
             </vr-row>
         </vr-form>

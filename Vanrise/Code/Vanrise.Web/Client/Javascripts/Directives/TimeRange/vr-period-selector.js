@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrPeriodSelector', [ 'UtilsService', 'VRUIUtilsService','PeriodEnum',
+app.directive('vrPeriodSelector', ['UtilsService', 'VRUIUtilsService', 'PeriodEnum',
 function (UtilsService, VRUIUtilsService, PeriodEnum) {
 
     var directiveDefinitionObject = {
@@ -12,7 +12,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
             isrequired: "=",
             selectedvalues: '=',
             hideremoveicon: "@",
-            label:'@'
+            label: '@'
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -57,9 +57,9 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
         if (attrs.label != undefined)
             label = "{{ctrl.label}}";
 
-        return '<div  vr-loader="isLoadingDirective">'
+        return '<div  vr-loader="isLoadingDirective" >'
             + '<vr-select  isrequired="ctrl.isrequired" ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="description" datavaluefield="value" '
-        + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged"  vr-disabled="ctrl.isdisabled"></vr-select>'
+        + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled" ></vr-select>'
             + '</div>';
     }
 
@@ -77,6 +77,11 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
             };
             api.getData = function () {
                 return ctrl.selectedvalues;
+            };
+            api.getInterval = function () {
+                if (ctrl.selectedvalues != undefined && ctrl.selectedvalues != -1)
+                    return ctrl.selectedvalues.getInterval();
+                return;
             };
             api.load = function (payload) {
                 var selectedIds;

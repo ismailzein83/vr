@@ -3,7 +3,7 @@
         <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
         <ul role="menu" class="gid-cell-menu am-fade-and-slide-top tabs-popup" style="list-style-type:none;padding-top:15px">
             <li role="presentation">
-                <div ng-repeat="tab in ctrl.tabs" class="mark-select action-item">
+                <div ng-repeat="tab in ctrl.tabs" class="mark-select action-item" ng-show="tab.showTab == undefined || tab.showTab == true">
                     <div class="hand-cursor tab-item" ng-click="selectTabAndCloseModal(tab)" ng-class="tab.isSelected ? 'selected-tab' : ''"><span style="font-size:20px">{{tab.header}}</span><span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign" title="has validation errors!" style="color: #D44A47;font-size: 18px;margin: 0px 5px;font-weight: bold;">*</span></div>
                 </div>
             </li>

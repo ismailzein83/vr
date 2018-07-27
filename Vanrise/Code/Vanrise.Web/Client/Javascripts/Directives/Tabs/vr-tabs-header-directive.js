@@ -24,6 +24,18 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (Mobi
                         return index != tabsCtrl.selectedTabIndex && scope.isMobile;
                     };
 
+                    scope.showTabSelctorButton = function () {                       
+                        var visibletabs = 0;
+                        for (var i = 0 ; i < tabsCtrl.tabs.length ; i++) {
+                            var tab = tabsCtrl.tabs[i];
+                            if (tab.showTab == undefined || tab.showTab == true)
+                                visibletabs++;
+                            if (visibletabs > 1)
+                                return true;
+                        }
+                        return false;
+                    };
+
                     scope.hasInvalidTab = function () {
                         for (var i = 0 ; i < tabsCtrl.tabs.length ; i++) {
                             var tab = tabsCtrl.tabs[i];
@@ -51,14 +63,14 @@ app.directive('vrTabsHeader', ['MobileService', 'VRModalService', function (Mobi
             var verticalflag = isvertical == true ? "vertical" : " ";
 
             var template = '<vr-tab-header-links ' + verticalflag + ' selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0">'
-                            + '      <vr-tab-header-link  ng-repeat="tab in ctrl.tabs" ng-show="tab.showTab == undefined || tab.showTab == true" isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
+                            + '      <vr-tab-header-link  ng-repeat="tab in ctrl.tabs" ng-show="tab.showTab == undefined || tab.showTab == true" isvisible="tab.showTab == undefined || tab.showTab == true"  isselected="tab.isSelected" >{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
                             + '</vr-tab-header-links>';
 
             if (MobileService.isMobile()) {
                 template = '';
                 template = '<vr-tab-header-links ' + verticalflag + ' selectedindex="ctrl.selectedTabIndex" onselectionchanged="ctrl.tabSelectionChanged()" ng-if="ctrl.tabs.length > 0">'
-                            + '      <vr-tab-header-link ng-click="openTabsSelectorPopup()" ng-repeat="tab in ctrl.tabs" ng-show="tab.showTab == undefined || tab.showTab == true" isselected="tab.isSelected" ng-hide="isTabHeaderHidden($index)">{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
-                            + '      <label class="hand-cursor" ng-show="isMobile && ctrl.tabs.length>1" ng-click="openTabsSelectorPopup()"><span class="glyphicon glyphicon-chevron-right" style="font-size:18px;"></span><span ng-if="hasInvalidTab()" class="tab-validation-sign"  title="has validation errors!">*</span></label>'
+                            + '      <vr-tab-header-link ng-click="openTabsSelectorPopup()" ng-repeat="tab in ctrl.tabs"  isvisible="tab.showTab == undefined || tab.showTab == true" isselected="tab.isSelected" ng-hide="isTabHeaderHidden($index)">{{ tab.header }} <i ng-if="tab.onremove"  class="glyphicon glyphicon-remove hand-cursor tab-remove-icon" ng-click="ctrl.removeTab(tab)"></i> <span ng-if="tab.validationContext.validate() != null" class="tab-validation-sign"  title="has validation errors!">*</span></vr-tab-header-link>'
+                            + '      <label class="hand-cursor" ng-click="openTabsSelectorPopup()" ng-show="showTabSelctorButton()"><span class="glyphicon glyphicon-chevron-right" style="font-size:18px;"></span><span ng-if="hasInvalidTab()" class="tab-validation-sign"  title="has validation errors!">*</span></label>'
                        + '</vr-tab-header-links>';
             }
             return starttemplate + template + endtemplate;

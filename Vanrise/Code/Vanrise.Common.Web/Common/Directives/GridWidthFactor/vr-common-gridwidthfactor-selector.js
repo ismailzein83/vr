@@ -102,7 +102,7 @@
             var hideremoveicon = (attrs.hideremoveicon != undefined && attrs.hideremoveicon != null) ? 'hideremoveicon' : null;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' 
-                + '<vr-select on-ready="ctrl.onSelectorReady"'
+                + '<span vr-disabled="ctrl.isdisabled"><vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
                  
                     + ' selectedvalues="ctrl.selectedvalues"'
@@ -112,13 +112,12 @@
                     + ' datavaluefield="value"'
                     + ' datatextfield="description"'
                     + ismultipleselection
-                    + ' vr-disabled="ctrl.isdisabled"'
                     + ' isrequired="ctrl.isrequired"'
                     + hideremoveicon
                     + ' entityName="' + label + '" '
                      + fullLabel +'>'
                
-                + '</vr-select>'
+                + '</vr-select></span>'
             +'</vr-columns>';
         }
 

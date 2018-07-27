@@ -151,14 +151,15 @@
                 <vr-tab header="'Summary to Summary Transformation'">
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionUpdateReady"
-                                                                                  selectedvalues="scopeModal.selectedDataTransformationDefinitionUpdate"
-                                                                                  onselectionchanged="scopeModal.onDataTransformationDefinitionUpdateSelectionChanged"
-                                                                                  vr-disabled="!scopeModal.enableTransformationforUpdate"
-                                                                                  isrequired="true"
-                                                                                  hideremoveicon>
+                            <span vr-disabled="!scopeModal.enableTransformationforUpdate">
+                                <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModal.onDataTransformationDefinitionUpdateReady"
+                                                                                      selectedvalues="scopeModal.selectedDataTransformationDefinitionUpdate"
+                                                                                      onselectionchanged="scopeModal.onDataTransformationDefinitionUpdateSelectionChanged"
+                                                                                      isrequired="true"
+                                                                                      hideremoveicon>
 
-                            </vr-genericdata-datatransformationdefinition-selector>
+                                </vr-genericdata-datatransformationdefinition-selector>
+                            </span>                            
                         </vr-columns>
                     </vr-row>
                     <vr-row>

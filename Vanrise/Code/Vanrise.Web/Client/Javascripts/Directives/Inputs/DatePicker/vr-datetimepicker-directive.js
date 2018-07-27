@@ -96,7 +96,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 useCurrent: 'day',
                 allowInputToggle: $attrs.disablefocus == undefined || MobileService.isMobile(),
                 ignoreReadonly: MobileService.isMobile(),
-                focusOnShow: MobileService.isMobile(),
+                focusOnShow: !MobileService.isMobile(),
                 showClear:true
                 // locale:"ar"
             });
@@ -114,6 +114,13 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     var elleft = baseleft;
                     $(dropDown).removeClass('pull-right');
                     $(dropDown).removeClass('dropdown-menu.top');
+                    if (MobileService.isMobile()) {
+                        $(dropDown).addClass('vr-datetime-mobile');
+                        $(dropDown).css({
+                            position: 'fixed', top: '50%', left: '50%', transform: ' translate(-50%,-50%)', bottom: 'unset'
+                        });
+                        return;
+                    }
                     var rtl = VRLocalizationService.isLocalizationRTL();
                     if (rtl) {
                         elleft = elleft - (228 - $(this).width());
@@ -144,6 +151,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     $(dropDown).css({
                         position: 'fixed', top: basetop, left: elleft, bottom: 'unset'
                     });
+
+
 
 
                 });

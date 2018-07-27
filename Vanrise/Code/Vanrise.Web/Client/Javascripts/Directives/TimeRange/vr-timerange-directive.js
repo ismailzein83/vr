@@ -85,15 +85,10 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
             };
 
             $scope.scopeModel.periodSelectionChanged = function () {
-                if (periodSelectedPromiseDeferred == undefined) {
-                    if (ctrl.period != undefined && ctrl.period.value != -1) {
-                        date = ctrl.period.getInterval();
-                        ctrl.from = date.from;
-                        ctrl.to = date.to;
-                    }
-                }
-                else {
-                    periodSelectedPromiseDeferred.resolve();
+                if (periodDirectiveAPI.getSelectedIds()!=-1 && periodDirectiveAPI.getInterval() !=undefined) {
+                    date = periodDirectiveAPI.getInterval();
+                    ctrl.from = date.from;
+                    ctrl.to = date.to;
                 }
             };
 
@@ -128,7 +123,6 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                 }
 
                 var loadPeriodPromiseDeferred = UtilsService.createPromiseDeferred();
-                periodSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 periodReadyPromiseDeferred.promise.then(function () {
                    
                     var payloadPeriod = {
@@ -141,7 +135,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                     }
                 });
                 var loadTimeRangeSelectorPromise = UtilsService.createPromiseDeferred();
-                UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise, periodSelectedPromiseDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([loadPeriodPromiseDeferred.promise]).then(function () {
                    if (ctrl.period != undefined || (payload && payload.period != undefined)) {
                        if (ctrl.period != undefined && ctrl.period.value!=-1) {
                            date = periodDirectiveAPI.getData().getInterval();
@@ -154,17 +148,13 @@ function (UtilsService, VRUIUtilsService, PeriodEnum, VRValidationService) {
                    else {
                        loadTimeRangeSelectorPromise.resolve();
                    }
-                   periodSelectedPromiseDeferred = undefined;
                });
                function setDateData(fromDate, toDate) {
-                   setTimeout(function () {
                        if (fromDate != undefined)
                            ctrl.from = fromDate;
                        if (toDate != undefined)
                            ctrl.to = toDate;
-                       UtilsService.safeApply($scope);
                        loadTimeRangeSelectorPromise.resolve();
-                   });
                }
                return loadTimeRangeSelectorPromise.promise;
             };

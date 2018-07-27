@@ -81,7 +81,7 @@
     </div>
 </div>
 <div ng-show="ctrl.showPager && ctrl.pagerSettings.totalDataCount > 5" ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
-    <vr-pagination pagersettings="ctrl.pagerSettings"></vr-pagination>
+    <vr-pagination pagersettings="ctrl.pagerSettings" on-ready="ctrl.pagerSettingOnReady"></vr-pagination>
 </div>
 <div ng-show="!ctrl.hidePagingInfo && !ctrl.showPager &&  ctrl.datasource.length > 0 && ctrl.pagerSettings.totalDataCount > 0 " ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
     <div class="vr-scroll-pager-info"> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
@@ -118,7 +118,7 @@
             </div>
         </div>
         <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row">
-            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-click="$parent.ctrl.rowClickDetails ==  true ? $parent.ctrl.expandRow(dataItem) : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
+            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-click="$parent.ctrl.rowClickDetails ==  true ? $parent.ctrl.expandRow(dataItem,$event) : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
 
             </div>
         </div>
@@ -141,7 +141,7 @@
                     Actions
                 </button>
             </div>
-            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row row-full-view" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
+            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row row-full-view" vr-htmlcompiler="$parent.ctrl.rowDetailsHtml" style="display: flex;"></div>
             <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': 'calc(100% + 15px)', 'display':'inline-block', 'padding': '5px 0px', 'margin':'0px -5px'}"></div>
         </div>
     </div>

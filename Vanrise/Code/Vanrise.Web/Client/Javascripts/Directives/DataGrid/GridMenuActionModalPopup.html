@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="GridMenuActionPopupController" vr-loader="isLoading" ismenu>
     <vr-modalbody>
         <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
-        <ul role="menu" class="gid-cell-menu am-fade-and-slide-top " style="list-style-type:none;">
+        <ul role="menu" class="gid-cell-menu am-fade-and-slide-top " style="list-style-type:none;padding-top:15px">
             <li role="presentation" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable">
                 <div class="mark-select action-item">
                     <div class="hand-cursor" ng-click="exportActionAndCloseModal()">

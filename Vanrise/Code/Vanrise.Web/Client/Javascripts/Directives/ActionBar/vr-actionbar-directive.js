@@ -39,6 +39,7 @@ app.directive('vrActionbar', ['ActionBarDirService', 'MultiTranscludeService', '
 
         ctrl.openAllActionPopup = function () {
             var modalSettings = {
+                autoclose: true
             };
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.actionBarCtrl = ctrl;

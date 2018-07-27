@@ -58,7 +58,7 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                    + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-np-sellingnumberplan-selector>'
                    + ' </span>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
-                   + '  <vr-select on-ready="ctrl.onSelectorReady"'
+                   + ' <span vr-disabled="ctrl.isdisabled"> <vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
                    + '  onblurdropdown="ctrl.onblurdropdown" '
@@ -67,11 +67,10 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isSaleZoneRequired()"'
-                   + '  vr-disabled="ctrl.isdisabled"'
                    + '  onselectitem="ctrl.onselectitem"'
                    + '  ondeselectitem="ctrl.ondeselectitem"'
                    + '  label="{{ctrl.label}}">'
-                   + '</vr-select>'
+                   + '</vr-select> </span>'
                    + '</vr-columns>';
         }
 

@@ -8,7 +8,8 @@ app.directive('vrTabHeaderLink', [function () {
         transclude: true,
         scope: {
             isselected: '=?',
-            onselectionchanged: '='
+            onselectionchanged: '=',
+            isvisible:"="
         },
         require: '^vrTabHeaderLinks',
         controller: function ($scope, $element, $attrs) {
@@ -34,7 +35,6 @@ app.directive('vrTabHeaderLink', [function () {
                     ctrl.selectionChanged = function () {
                         ctrl.isselected = ctrl.isSelected;
                     };
-
                     choicesCtrl.addChoiceCtrl(ctrl);
 
                     ctrl.choiceClicked = function () {
@@ -77,6 +77,14 @@ app.directive('vrTabHeaderLink', [function () {
                         }
                         if (ctrl.onselectionchanged && typeof (ctrl.onselectionchanged) == 'function') {
                             ctrl.onselectionchanged();
+                        }
+                    });
+                    var selectedWatch = $scope.$watch("ctrl.isvisible", function (value) {
+                        if (value == false && ctrl.isselected == true) {
+                            ctrl.isSelected = false;
+                            ctrl.isselected = false;
+                            choicesCtrl.selectedindex = -1;
+                            choicesCtrl.setDefaultChoiceSeletion();
                         }
                     });
                 },

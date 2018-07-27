@@ -93,12 +93,11 @@
 
                 if ($('.modal-dialog').length > 1) {
                     $('body').addClass('full-mobile-body');
-                    document.ontouchmove = function(e) { e.preventDefault();}
                 }
-                else {
+                else if ($('.expandable-row-content').length == 0) {
                     $('body').removeClass('full-mobile-body');
-                    document.ontouchmove = function(e) {return true; }
                 }
+                
 
 
                 if ($('.expandable-row-content').length > 1) {
@@ -107,20 +106,14 @@
                 if (MobileService.isMobile() && $('.modal-dialog').length == 1) {
                     $('.expandable-row-content').removeClass('full-view');
                 }
-                else {
-                    $('body').removeClass('full-body');
-                }
+
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
             modalScope.$on('modal.show', function () {
-                if (MobileService.isMobile()) {
-                     document.ontouchmove = function(e) {
-                                e.preventDefault();
-                     };
+                if (MobileService.isMobile()) {                   
                     if ($('.expandable-row-content').length > 1) {
                         $('.expandable-row-content').addClass('full-view');                       
                     }
-                  
                 }                
             });
                    

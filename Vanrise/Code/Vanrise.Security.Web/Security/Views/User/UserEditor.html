@@ -26,7 +26,9 @@
                 </vr-columns>
 
                 <vr-columns width="1/2row" ng-show="showTenantSelector">
-                    <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon vr-disabled="isInEditMode" customlabel="Tenant" localizedcustomlabel="VRRes.Tenant.VREnd"></vr-sec-tenant-selector>
+                    <span vr-disabled="isInEditMode">
+                        <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon customlabel="Tenant" localizedcustomlabel="VRRes.Tenant.VREnd"></vr-sec-tenant-selector>
+                    </span>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-sec-group-selector on-ready="onGroupSelectorReady" ismultipleselection></vr-sec-group-selector>

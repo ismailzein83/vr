@@ -6,7 +6,8 @@ app.directive('vrPagination', ['UISettingsService', 'MobileService', function (U
     var directiveDefinitionObject = {
         restrict: 'E',
         scope: {
-            pagersettings: '='
+            pagersettings: '=',
+            onReady:"="
         },
         controller: function ($scope, $element, $attrs) {
             $scope.$on("$destroy", function () {
@@ -39,6 +40,8 @@ app.directive('vrPagination', ['UISettingsService', 'MobileService', function (U
                 pagerCtrl.pagersettings.showDirectionLinks = true;
                 pagerCtrl.pagersettings.maxSize = 10;
 
+                if (pagerCtrl.onReady != null && typeof(pagerCtrl.onReady)=='function')
+                    pagerCtrl.onReady();
 
             }
             pagerCtrl.setDefaultSetting = function () {
@@ -47,6 +50,14 @@ app.directive('vrPagination', ['UISettingsService', 'MobileService', function (U
             function setDefaultSetting() {
                 setTimeout(function () {
                     var pagerwidth = $element.parents('.panel-body').first().width();
+                    pagerCtrl.pagersettings.itemsPerPage = parseInt(UISettingsService.getUIParameterValue('GridPageSize') || pagerCtrl.topCounts[1]);
+                    pagerCtrl.pagersettings.getPageInfo = function () {
+                        var fromRow = (pagerCtrl.pagersettings.currentPage - 1) * pagerCtrl.pagersettings.itemsPerPage + 1;
+                        return {
+                            fromRow: fromRow,
+                            toRow: fromRow + pagerCtrl.pagersettings.itemsPerPage - 1
+                        };
+                    };
                     if (pagerwidth > 0) {
                         if (pagerwidth - 250 < 300)
                             pagerCtrl.pagersettings.maxSize = 5;

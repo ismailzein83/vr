@@ -27,7 +27,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
-                },1)
+                }, 1)
             };
 
             ctrl.getTabStyle = function (ctrl) {
@@ -36,17 +36,17 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 var m = 1;
                 if (choiceCtrls.indexOf(ctrl) == choiceCtrls.length - 1)
                     m = 0;
-                
+
                 return { 'width': 'calc(' + 100 / choiceCtrls.length + '% - ' + m + 'px )', 'display': 'inline-block !important', 'max-width': '150px', 'vertical-align': 'top' };
 
-              
+
 
             };
 
             ctrl.getOuterStyle = function () {
                 if ($attrs.vertical != undefined)
-                    return { 'display': 'block'};               
-                return {  };
+                    return { 'display': 'block' };
+                return {};
             };
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
@@ -64,28 +64,34 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 setDefaultChoiceSeletion();
             };
             ctrl.isradio = $attrs.isradio != undefined;
-            function setDefaultChoiceSeletion() {
+            var setDefaultChoiceSeletion = function () {
                 if (choiceCtrls.length == 0 || ctrl.selectedindex > -1)
                     return;
                 var isAnySelected = false;
-                angular.forEach(choiceCtrls, function (t) {
+                var firstVisibleChoiceIndex = -1;
+                for (var i = 0 ; i < choiceCtrls.length ; i++) {
+                    var t = choiceCtrls[i];
                     if (t.isSelected)
                         isAnySelected = true;
-                });
-                if (!isAnySelected)
-                    setChoiceSelection(choiceCtrls[0], true);
+                    if (firstVisibleChoiceIndex == -1 && t.isvisible == true)
+                        firstVisibleChoiceIndex = i;
+                }
+                if (!isAnySelected && firstVisibleChoiceIndex != -1)
+                    setChoiceSelection(choiceCtrls[firstVisibleChoiceIndex], true);
             };
+            ctrl.setDefaultChoiceSeletion = setDefaultChoiceSeletion;
+
 
             function setChoiceSelection(choiceCtrl, isSelected) {
                 if (choiceCtrl.isSelected != isSelected) {
                     choiceCtrl.isSelected = isSelected;
                     choiceCtrl.selectionChanged();
                     if (isSelected == true)
-                        ctrl.selectedindex = choiceCtrls.indexOf(choiceCtrl);                        
+                        ctrl.selectedindex = choiceCtrls.indexOf(choiceCtrl);
                 }
             }
 
-            var selectedindexWatch =  $scope.$watch("ctrl.selectedindex", function (value) {
+            var selectedindexWatch = $scope.$watch("ctrl.selectedindex", function (value) {
                 if (choiceCtrls[ctrl.selectedindex] != undefined && !choiceCtrls[ctrl.selectedindex].isSelected)
                     ctrl.selectChoice(choiceCtrls[ctrl.selectedindex]);
                 else {
@@ -107,14 +113,14 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 var choiceCtrl = choiceCtrls[choiceIndex];
                 if (choiceCtrl != undefined)
                     ctrl.unselectChoice(choiceCtrl);
-            };           
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         },
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-            var verticalflag = attrs.vertical !=undefined? "vertical" : " ";
+            var verticalflag = attrs.vertical != undefined ? "vertical" : " ";
             element.html('<div class="btn-group btn-group-custom vr-tabs"  ' + verticalflag + ' >' + element.html() + '</div>');
 
             return {

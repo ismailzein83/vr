@@ -4,16 +4,14 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 .controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService", "VRNotificationService", "VR_Sec_RegisteredApplicationAPIService", "MobileService",
 function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService, VRNotificationService, VR_Sec_RegisteredApplicationAPIService, MobileService) {
 
+
     (function () {
         document.getElementById("mainBodyContainer").style.display = "block";
     })();
     $scope.isMobile = MobileService.isMobile();
     if (!$scope.isMobile) {
         Waves.displayEffect();
-        document.body.addEventListener("touchmove", function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }, false);
+        
     }
     $rootScope.$on("$destroy", function () {
         $(window).off("resize.Viewport");

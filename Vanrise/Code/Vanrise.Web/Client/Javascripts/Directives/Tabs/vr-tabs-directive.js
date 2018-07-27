@@ -10,6 +10,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
+            ctrl.selectedTabIndex = 0;
             ctrl.tabs = [];
             var isAddingTab = false;
             var tempTabs = [];
