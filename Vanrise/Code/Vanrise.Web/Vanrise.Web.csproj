@@ -176,6 +176,8 @@
     <Content Include="Client\Images\copy-icon.png" />
     <Content Include="Client\Images\currency-exchange.png" />
     <Content Include="Client\Images\loadingbar.gif" />
+    <Content Include="Client\Images\Ogero-01.png" />
+    <Content Include="Client\Images\Ogero-02.png" />
     <Content Include="Client\Images\Zebra-01.png" />
     <Content Include="Client\Images\Zebra-02.png" />
     <Content Include="Client\Javascripts\Directives\ActionBar\AllActionsModalPopup.html" />
@@ -1284,6 +1286,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Client\Themes\theme-extented-Ogero.css.exclude" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\FontStyle\fonts\BoldItalic\OpenSans-BoldItalic.eot" />
