@@ -81,6 +81,14 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Entities\Vanrise.GenericData.Transformation.Entities.csproj">
+      <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>
+      <Name>Vanrise.GenericData.Transformation.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation\Vanrise.GenericData.Transformation.csproj">
+      <Project>{7827b1a9-ac2a-4b72-87e7-101223ec0396}</Project>
+      <Name>Vanrise.GenericData.Transformation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
