@@ -91,6 +91,7 @@
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordStorageSettings.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataStoreSettings.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CorrelationDefinitionManager.cs" />
     <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataRecordFieldFormulaGetDependentFieldsContext.cs" />
     <Compile Include="DataRecordFieldTypeOnBeforeSaveContext.cs" />

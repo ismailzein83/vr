@@ -1,0 +1,52 @@
+﻿<vr-tabs>
+	<vr-tab header="'Definition'">
+		<vr-row>
+			<vr-columns width="1/4row">
+				<vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+			</vr-columns>
+		</vr-row>
+	</vr-tab>
+	<vr-tab header="'Settings'">
+		<vr-row>
+			<vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onDataTransformationSelectorDirectiveReady" onselectionchanged="onDataTransformationSelectionChanged"></vr-genericdata-datatransformationdefinition-selector>
+		</vr-row>
+
+		<vr-row>
+			<vr-columns width="1/2row">
+				<vr-genericdata-datarecordtype-selector label="'Input Data Record Type'" on-ready="scopeModel.onInputDataRecordTypeSelectorReady" isrequired="true" onselectionchanged="scopeModel.onInputRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
+			</vr-columns>
+			<vr-columns width="1/2row">
+				<vr-genericdata-datarecordstorage-selector label="'Input Data Record Storage'" on-ready="scopeModel.onInputDataRecordStorageSelectorReady" isrequired="true"></vr-genericdata-datarecordstorage-selector>
+			</vr-columns>
+		</vr-row>
+
+		<vr-row>
+			<vr-columns width="1/2row">
+				<vr-genericdata-datarecordtype-selector label="'Output Data Record Type'" on-ready="scopeModel.onOutputDataRecordTypeSelectorReady" isrequired="true" onselectionchanged="scopeModel.onOutputRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
+			</vr-columns>
+
+			<vr-columns width="1/2row">
+				<vr-genericdata-datarecordstorage-selector label="'Output Data Record Storage'" on-ready="scopeModel.onOutputDataRecordStorageSelectorReady" isrequired="true"></vr-genericdata-datarecordstorage-selector>
+			</vr-columns>
+		</vr-row>
+
+		<vr-row>
+			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
+				<vr-genericdata-datarecordtypefields-selector label="Calling Number Field" on-ready="scopeModel.onCallingNumberFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+			</vr-columns>
+
+			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
+				<vr-genericdata-datarecordtypefields-selector label="Called Number Field" on-ready="scopeModel.onCalledNumberFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+			</vr-columns>
+
+			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
+				<vr-genericdata-datarecordtypefields-selector label="Durateion Field" on-ready="scopeModel.onDurationFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+			</vr-columns>
+
+			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
+				<vr-genericdata-datarecordtypefields-selector label="Datetime Field" on-ready="scopeModel.onDatetimeFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+			</vr-columns>
+
+		</vr-row>
+	</vr-tab>
+</vr-tabs>

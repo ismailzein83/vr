@@ -56,6 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Correlation\LoadCDRs.cs" />
+    <Compile Include="Correlation\ProcessCDRs.cs" />
     <Compile Include="LoadRecordsFromStorages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
