@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 {
@@ -18,5 +20,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 
         public override string RuntimeEditor { get { return "vr-analytic-analytictablequerydefinitionsettings-runtimeeditor"; } }
 
+        public override bool DoesUserHaveAccess(IVRAutomatedReportQueryDefinitionExtendedSettingsContext context)
+        {
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
+            return analyticTableManager.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), AnalyticTableId);
+        }
     }
 }

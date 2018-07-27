@@ -25,7 +25,17 @@ namespace Vanrise.Analytic.Business
 
         public IEnumerable<RecordSearchQueryDefinitionInfo> GetVRAutomatedReportQueryDefinitionsInfo(RecordSearchQueryDefinitionInfoFilter filter)
         {
-            Func<VRAutomatedReportQueryDefinition, bool> filterExpression = null;
+            Func<VRAutomatedReportQueryDefinition, bool> filterExpression = (automatedReportQueryDefinition) =>
+            {
+                automatedReportQueryDefinition.ThrowIfNull("automatedReportQueryDefinition", automatedReportQueryDefinition.VRComponentTypeId);
+                automatedReportQueryDefinition.Settings.ThrowIfNull("automatedReportQueryDefinition.Settings", automatedReportQueryDefinition.VRComponentTypeId);
+                automatedReportQueryDefinition.Settings.ExtendedSettings.ThrowIfNull("automatedReportQueryDefinition.Settings.ExtendedSettings", automatedReportQueryDefinition.VRComponentTypeId);
+                
+                if (!automatedReportQueryDefinition.Settings.ExtendedSettings.DoesUserHaveAccess(new VRAutomatedReportQueryDefinitionExtendedSettingsContext()))
+                    return false;
+                return true;
+            };
+
             return _vrComponentTypeManager.GetComponentTypes<VRAutomatedReportQueryDefinitionSettings, VRAutomatedReportQueryDefinition>().MapRecords(RecordSearchQueryDefinitionInfoMapper, filterExpression);
         }
         public VRAutomatedReportQueryDefinitionSettings GetVRAutomatedReportQueryDefinitionSettings(Guid vrComponentTypeId)
