@@ -350,6 +350,9 @@
     <Reference Include="Vanrise.ExcelConversion.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
     </Reference>

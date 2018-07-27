@@ -450,8 +450,14 @@
     <Reference Include="Vanrise.ExcelConversion.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.BP">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.BP.Activities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Arguments">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
