@@ -2,9 +2,9 @@
 
 	'use strict';
 
-	VRCorrelationDefinitionSettings.$inject = ['UtilsService'];
+	CDRCorrelationDefinitionSettings.$inject = ['UtilsService'];
 
-	function VRCorrelationDefinitionSettings(UtilsService) {
+	function CDRCorrelationDefinitionSettings(UtilsService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
@@ -13,7 +13,7 @@
 			},
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
-				var ctor = new VRCorrelationDefinitionSettingsCtor(ctrl, $scope, $attrs);
+				var ctor = new CDRCorrelationDefinitionSettingsCtor(ctrl, $scope, $attrs);
 				ctor.initializeController();
 			},
 			controllerAs: 'ctrl',
@@ -25,10 +25,10 @@
 					}
 				};
 			},
-			templateUrl: '/Client/Modules/GenericData/Directives/Correlation/Templates/VRCorrelationDefinitionSettings.html'
+			templateUrl: '/Client/Modules/GenericData/Directives/CDRCorrelation/Templates/CDRCorrelationDefinitionSettings.html'
 		};
 
-		function VRCorrelationDefinitionSettingsCtor(ctrl, $scope, attrs) {
+		function CDRCorrelationDefinitionSettingsCtor(ctrl, $scope, attrs) {
 			this.initializeController = initializeController;
 
 			var inputDataRecordTypeId;
@@ -181,7 +181,7 @@
 						Name: $scope.scopeModel.name,
 						Settings:
 							{
-								$type: "Vanrise.GenericData.Entities.VRCorrelationDefinitionSettings, Vanrise.GenericData.Entities",
+								$type: "Vanrise.GenericData.Entities.CDRCorrelationDefinitionSettings, Vanrise.GenericData.Entities",
 								InputDataRecordTypeId: (inputDataRecordTypeSelectorAPI != undefined) ? inputDataRecordTypeSelectorAPI.getData() : null,
 								OutputDataRecordTypeId: (outputDataRecordTypeSelectorAPI != undefined) ? outputDataRecordTypeSelectorAPI.getData() : null,
 								InputDataRecordStorageId: (inputDataRecordStorageSelectorAPI != undefined) ? inputDataRecordStorageSelectorAPI.getData() : null,
@@ -329,6 +329,6 @@
 		}
 		return directiveDefinitionObject;
 	}
-	app.directive('vrCorrelationdefinitionSettings', VRCorrelationDefinitionSettings);
+	app.directive('vrGenericdataCDRCorrelationdefinitionSettings', CDRCorrelationDefinitionSettings);
 
 })(app);

@@ -48,7 +48,6 @@
     <Compile Include="IBEParentChildRelationDataManager.cs" />
     <Compile Include="IBusinessEntityDefinitionDataManager.cs" />
     <Compile Include="IBusinessEntityStatusHistoryDataManager.cs" />
-    <Compile Include="ICorrelationDefinitionDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDataRecordFieldChoiceDataManager.cs" />
     <Compile Include="IDataRecordFieldTypeConfigDataManager.cs" />

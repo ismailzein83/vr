@@ -3,7 +3,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-	public class VRCorrelationDefinitionSettings : VRComponentTypeSettings
+    public class CDRCorrelationDefinitionSettings : VRComponentTypeSettings
 	{
 		public override Guid VRComponentTypeConfigId
 		{
