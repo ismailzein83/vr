@@ -5,10 +5,6 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-   SELECT [ID]
-	  ,Name
-	  ,Title
-      ,[FQTN]
-      ,[Config]
-  FROM [bp].[BPDefinition] WITH(NOLOCK)
+	SELECT	[ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config]
+	FROM	[bp].[BPDefinition] WITH(NOLOCK)
 END

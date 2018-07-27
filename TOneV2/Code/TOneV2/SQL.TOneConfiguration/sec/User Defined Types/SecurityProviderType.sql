@@ -5,5 +5,8 @@
     [CreatedBy]        INT              NULL,
     [CreatedTime]      DATETIME         NULL,
     [LastModifiedTime] DATETIME         NULL,
-    [LastModifiedBy]   INT              NULL);
+    [LastModifiedBy]   INT              NULL,
+    [IsEnabled]        BIT              NULL);
+
+
 

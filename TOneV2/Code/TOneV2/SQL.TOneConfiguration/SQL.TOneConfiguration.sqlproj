@@ -782,6 +782,11 @@
     <Build Include="bp\Tables\BPDefintionArgumentState.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionArgumentState_InsertOrUpdate.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionArgumentState_GetAll.sql" />
+    <Build Include="bp\Tables\VRWorkflow.sql" />
+    <Build Include="bp\Stored Procedures\sp_VRWorkflow_Update.sql" />
+    <Build Include="bp\Stored Procedures\sp_VRWorkflow_Insert.sql" />
+    <Build Include="bp\Stored Procedures\sp_VRWorkflow_GetAll.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPDefinition_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
