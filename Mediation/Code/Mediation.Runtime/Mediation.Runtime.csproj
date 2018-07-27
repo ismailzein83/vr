@@ -238,6 +238,12 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
     </Reference>
