@@ -1327,6 +1327,9 @@
             </Parameters>
             <Height>3in</Height>
             <Width>7.69908in</Width>
+            <Visibility>
+              <Hidden>=IIf(Parameters!HasRecurringCharges.Value,true,false)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1697,6 +1700,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Attention">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="HasRecurringCharges">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

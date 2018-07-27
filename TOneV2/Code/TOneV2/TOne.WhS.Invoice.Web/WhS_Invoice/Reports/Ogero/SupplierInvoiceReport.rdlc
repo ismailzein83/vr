@@ -943,6 +943,9 @@
                   <Parameter Name="Attention">
                     <Value>=Parameters!Attention.Value</Value>
                   </Parameter>
+                  <Parameter Name="HasRecurringCharges">
+                    <Value>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Value>
+                  </Parameter>
                 </Parameters>
                 <Top>0.14722in</Top>
                 <Left>0.02679in</Left>
