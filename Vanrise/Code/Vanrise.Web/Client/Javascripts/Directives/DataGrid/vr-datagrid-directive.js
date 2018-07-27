@@ -58,7 +58,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	            ctrl.pagerSettingOnReady = function () {
 	                ctrl.pagerReadyPromiseDefferred.resolve();
-	            }
+	            };
 
 
 	            ctrl.layoutOption = UISettingsService.getGridLayoutOptions();
