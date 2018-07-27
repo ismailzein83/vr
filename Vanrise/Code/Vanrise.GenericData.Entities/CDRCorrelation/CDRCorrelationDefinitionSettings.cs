@@ -26,5 +26,7 @@ namespace Vanrise.GenericData.Entities
 		public string DurationFieldName { get; set; }
 
 		public string DatetimeFieldName { get; set; }
+
+        public string IdFieldName { get; set; }
 	}
 }
