@@ -10,4 +10,11 @@ namespace Vanrise.GenericData.Entities
     {
         public List<dynamic> Records { get; set; }
     }
+
+    public class DeleteRecordsBatch
+    {
+        public List<object> InputIdsToDelete { get; set; }
+
+        public DateTimeRange DateTimeRange { get; set; }
+    }
 }
