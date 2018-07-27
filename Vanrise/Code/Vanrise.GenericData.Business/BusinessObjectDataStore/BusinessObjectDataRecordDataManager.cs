@@ -70,7 +70,7 @@ namespace Vanrise.GenericData.Business
             return dataRecords;
         }
 
-        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var recordType = s_dataRecordTypeManager.GetDataRecordType(_dataRecordStorage.DataRecordTypeId);
             recordType.ThrowIfNull("recordType", _dataRecordStorage.DataRecordTypeId);

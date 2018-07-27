@@ -20,6 +20,12 @@ namespace Vanrise.GenericData.BP.Activities
         public DateTime ToTime { get; set; }
 
         public BaseQueue<RecordBatch> OutputQueue { get; set; }
+
+        public RecordFilterGroup RecordFilterGroup { get; set; }
+
+        public string OrderColumnName { get; set; }
+
+        public bool IsOrderAscending { get; set; }
     }
 
     public class LoadRecordsFromStoragesOutput
@@ -40,6 +46,12 @@ namespace Vanrise.GenericData.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> ToTime { get; set; }
 
+        public InArgument<RecordFilterGroup> RecordFilterGroup { get; set; }
+
+        public InArgument<string> OrderColumnName { get; set; }
+
+        public InArgument<bool> IsOrderAscending { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<RecordBatch>> OutputQueue { get; set; }
 
@@ -59,9 +71,13 @@ namespace Vanrise.GenericData.BP.Activities
             DataRecordStorageManager manager = new DataRecordStorageManager();
             RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
 
+            RecordFilterGroup recordFilterGroup = inputArgument.RecordFilterGroup;
+            string orderColumnName = inputArgument.OrderColumnName;
+            bool isOrderAscending = inputArgument.IsOrderAscending;
+
             foreach (Guid recordStorageId in inputArgument.RecordStorageIds)
             {
-                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, null, () => ShouldStop(handle), ((itm) =>
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, recordFilterGroup, () => ShouldStop(handle), ((itm) =>
                 {
                     eventCount++;
                     recordBatch.Records.Add(itm);
@@ -71,7 +87,7 @@ namespace Vanrise.GenericData.BP.Activities
 
                         recordBatch = new RecordBatch() { Records = new List<dynamic>() };
                     }
-                }));
+                }), orderColumnName, isOrderAscending);
             }
 
             if (recordBatch.Records.Count > 0)
@@ -90,7 +106,10 @@ namespace Vanrise.GenericData.BP.Activities
                 FromTime = this.FromTime.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 RecordStorageIds = this.RecordStorageIds.Get(context),
-                ToTime = this.ToTime.Get(context)
+                ToTime = this.ToTime.Get(context),
+                RecordFilterGroup = this.RecordFilterGroup.Get(context),
+                OrderColumnName = this.OrderColumnName.Get(context),
+                IsOrderAscending = this.IsOrderAscending.Get(context)
             };
         }
 

@@ -321,7 +321,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         }
 
-        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var recortTypeManager = new DataRecordTypeManager();
             var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
@@ -353,6 +353,9 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             if (queryFilters.Count > 0)
                 sb_Query.Append(string.Format(" Where {0} ", string.Join(" And ", queryFilters)));
+
+            if (!string.IsNullOrEmpty(orderColumnName))
+                sb_Query.Append(string.Format(" ORDER BY {0} {1} ", orderColumnName, isOrderAscending ? "" : "DESC"));
 
             sb_Query.Append(" OPTION (RECOMPILE) ");
 
@@ -1024,10 +1027,10 @@ namespace Vanrise.GenericData.SQLDataStorage
                 queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
                 queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());
             }
-            if (filterGroup!=null)
+            if (filterGroup != null)
             {
                 string recordFilterResult = string.Empty;
-                if(whereQuery.Length > 0)
+                if (whereQuery.Length > 0)
                 {
                     whereQuery.Append(" AND ");
                 }

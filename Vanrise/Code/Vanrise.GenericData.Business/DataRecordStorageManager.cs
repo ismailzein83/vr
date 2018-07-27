@@ -112,11 +112,11 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public void GetDataRecords(Guid dataRecordStorageId, DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
+        public void GetDataRecords(Guid dataRecordStorageId, DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
-            storageDataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady);
+            storageDataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady, orderColumnName, isOrderAscending);
         }
 
         public IEnumerable<DataRecord> GetAllDataRecords(Guid dataRecordStorageId, List<string> columnsNeeded = null, RecordFilterGroup filterGroup = null)
