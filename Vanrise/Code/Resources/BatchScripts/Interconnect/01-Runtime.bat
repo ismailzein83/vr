@@ -10,7 +10,7 @@ ECHO.
 ECHO Interconnect Runtime
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Interconnect\runtime-list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\App.config.Interconnect.exclude" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect\Reports"	/S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\Modules\Interconnect\Reports" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Interconnect\runtime-list-of-excluded-files.txt
+xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect\Reports"	/S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\Modules\Retail_Interconnect\Reports" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Interconnect\runtime-list-of-excluded-files.txt
 
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
