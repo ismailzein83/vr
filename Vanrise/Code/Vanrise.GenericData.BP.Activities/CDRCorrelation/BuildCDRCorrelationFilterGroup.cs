@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Activities;
+using System.Collections.Generic;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -37,7 +38,7 @@ namespace Vanrise.GenericData.BP.Activities
                 if (minDate.HasValue)
                 {
                     newDataImported = true;
-                    recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And };
+                    recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
                     recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = settings.DatetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = minDate.Value });
                 }
             }

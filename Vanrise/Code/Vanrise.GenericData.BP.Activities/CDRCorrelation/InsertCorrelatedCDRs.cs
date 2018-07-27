@@ -13,14 +13,15 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class InsertCorrelatedCDRsInput
     {
-        public List<CDRCorrelationDefinition> CDRCorrelationDefinition { get; set; }
+        public CDRCorrelationDefinition CDRCorrelationDefinition { get; set; }
 
         public BaseQueue<CDRCorrelationBatch> InputQueueToInsert { get; set; }
+
+        public BaseQueue<DeleteRecordsBatch> OutputQueueToDelete { get; set; }
     }
 
     public class InsertCorrelatedCDRsOutput
     {
-        public BaseQueue<List<Object>> OutputQueueToDelete { get; set; }
     }
 
     #endregion
@@ -34,22 +35,77 @@ namespace Vanrise.GenericData.BP.Activities
         public InOutArgument<BaseQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
 
         [RequiredArgument]
-        public OutArgument<BaseQueue<List<Object>>> OutputQueueToDelete { get; set; }
-
+        public InOutArgument<BaseQueue<DeleteRecordsBatch>> OutputQueueToDelete { get; set; }
 
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+            var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(inputArgument.CDRCorrelationDefinition.Settings.OutputDataRecordStorageId);
+            int maxDBNumberQuery = recordStorageDataManager.GetDBQueryMaxParameterNumber();
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
+                    {
+                        recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
+                        if (recordBatch.InputIdsToDelete.Count <= maxDBNumberQuery)
+                        {
+                            EnqueuItemsToDelete(inputArgument, recordBatch, recordBatch.InputIdsToDelete);
+                        }
+                        else
+                        {
+                            List<long> idsToDelete = new List<long>();
+                            foreach (var id in recordBatch.InputIdsToDelete)
+                            {
+                                idsToDelete.Add(id);
+                                if (idsToDelete.Count == maxDBNumberQuery)
+                                {
+                                    EnqueuItemsToDelete(inputArgument, recordBatch, idsToDelete);
+                                    idsToDelete = new List<long>();
+                                }
+                            }
+                            if (idsToDelete.Count > 0)
+                            {
+                                EnqueuItemsToDelete(inputArgument, recordBatch, idsToDelete);
+                            }
+                        }
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+
+            return new InsertCorrelatedCDRsOutput();
+        }
+
+        private void EnqueuItemsToDelete(InsertCorrelatedCDRsInput inputArgument, CDRCorrelationBatch recordBatch, List<long> idsToDelete)
+        {
+            RecordFilterGroup recordFilterGroup = GetRecordFilterGroup(idsToDelete, inputArgument.CDRCorrelationDefinition.Settings.IdFieldName);
+            DeleteRecordsBatch deleteRecordsBatch = new DeleteRecordsBatch() { DateTimeRange = recordBatch.DateTimeRange, RecordFilterGroup = recordFilterGroup };
+            inputArgument.OutputQueueToDelete.Enqueue(deleteRecordsBatch);
+        }
+
+        private RecordFilterGroup GetRecordFilterGroup(List<long> idsToDelete, string idFieldName)
+        {
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = new List<RecordFilter>() };
+            foreach (long id in idsToDelete)
+                recordFilterGroup.Filters.Add(new NumberRecordFilter { FieldName = idFieldName, CompareOperator = NumberRecordFilterOperator.Equals, Value = id });
+
+            return recordFilterGroup;
         }
 
         protected override InsertCorrelatedCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new InsertCorrelatedCDRsInput()
+            {
+                CDRCorrelationDefinition = this.CDRCorrelationDefinition.Get(context),
+                InputQueueToInsert = this.InputQueueToInsert.Get(context),
+                OutputQueueToDelete = this.OutputQueueToDelete.Get(context)
+            };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, InsertCorrelatedCDRsOutput result)
         {
-            throw new NotImplementedException();
         }
     }
 }

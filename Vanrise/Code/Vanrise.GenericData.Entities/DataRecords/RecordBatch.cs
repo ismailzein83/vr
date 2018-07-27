@@ -14,7 +14,7 @@ namespace Vanrise.GenericData.Entities
 
     public class DeleteRecordsBatch
     {
-        public List<object> InputIdsToDelete { get; set; }
+        public RecordFilterGroup RecordFilterGroup { get; set; }
 
         public DateTimeRange DateTimeRange { get; set; }
     }

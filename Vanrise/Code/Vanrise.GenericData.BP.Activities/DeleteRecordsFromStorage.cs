@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Activities;
-using Vanrise.Queueing;
-using Vanrise.GenericData.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.GenericData.Business;
-using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
+using Vanrise.Queueing;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -13,7 +11,7 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class DeleteRecordsFromStorageInput
     {
-        public BaseQueue<List<Object>> InputQueue { get; set; }
+        public BaseQueue<DeleteRecordsBatch> InputQueue { get; set; }
 
         public Guid DataRecordStorageId { get; set; }
     }
@@ -28,24 +26,42 @@ namespace Vanrise.GenericData.BP.Activities
     public sealed class DeleteRecordsFromStorage : DependentAsyncActivity<DeleteRecordsFromStorageInput, DeleteRecordsFromStorageOutput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<List<Object>>> InputQueue { get; set; }
+        public InArgument<BaseQueue<DeleteRecordsBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<Guid> DataRecordStorageId { get; set; }
 
         protected override DeleteRecordsFromStorageOutput DoWorkWithResult(DeleteRecordsFromStorageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+            var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(inputArgument.DataRecordStorageId);
+
+            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            {
+                bool hasItem = false;
+                do
+                {
+                    hasItem = inputArgument.InputQueue.TryDequeue((deletRecordBatch) =>
+                    {
+                        recordStorageDataManager.DeleteRecords(deletRecordBatch.DateTimeRange.From, deletRecordBatch.DateTimeRange.To, deletRecordBatch.RecordFilterGroup);
+                    });
+                } while (!ShouldStop(handle) && hasItem);
+            });
+
+            return new DeleteRecordsFromStorageOutput();
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, DeleteRecordsFromStorageOutput result)
         {
-            throw new NotImplementedException();
+
         }
 
         protected override DeleteRecordsFromStorageInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            throw new NotImplementedException();
+            return new DeleteRecordsFromStorageInput()
+            {
+                DataRecordStorageId = this.DataRecordStorageId.Get(context),
+                InputQueue = this.InputQueue.Get(context)
+            };
         }
     }
 }

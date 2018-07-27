@@ -8,11 +8,13 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vgba="clr-namespace:Vanrise.GenericData.BP.Arguments;assembly=Vanrise.GenericData.BP.Arguments"
  xmlns:vgba1="clr-namespace:Vanrise.GenericData.BP.Activities;assembly=Vanrise.GenericData.BP.Activities"
  xmlns:vge="clr-namespace:Vanrise.GenericData.Entities;assembly=Vanrise.GenericData.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vgba:CDRCorrelationProcessInput)" />
@@ -28,29 +30,33 @@
       <x:String>System.Text</x:String>
       <x:String>Vanrise.GenericData.BP.Arguments</x:String>
       <x:String>Vanrise.GenericData.Entities</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
-      <AssemblyReference>System.Activities</AssemblyReference>
-      <AssemblyReference>System.ServiceModel</AssemblyReference>
-      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
-      <AssemblyReference>System.Xaml</AssemblyReference>
-      <AssemblyReference>Vanrise.GenericData.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
-      <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -109,13 +115,165 @@
         </OutArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroup>
     </vgba1:BuildCDRCorrelationFilterGroup>
-    <vbw:SaveDefinitionObjectState ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
-      <vbw:SaveDefinitionObjectState.ObjectValue>
-        <InArgument x:TypeArguments="x:Object">
-          <mca:CSharpValue x:TypeArguments="x:Object">CDRCorrelationProcessState</mca:CSharpValue>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">newDataImported</mca:CSharpValue>
         </InArgument>
-      </vbw:SaveDefinitionObjectState.ObjectValue>
-    </vbw:SaveDefinitionObjectState>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="CorrelateCDRsSequence" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsToCorrelateStatus" />
+            <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="correlateCDRsStatus" />
+            <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="insertCorrelatedCDRsStatus" />
+            <Variable x:TypeArguments="x:Int64" Name="lastImportedId" />
+            <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="loadCDRsToCorrelateOutputQueue">
+              <Variable.Default>
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">new MemoryQueue&lt;RecordBatch&gt;()</mca:CSharpValue>
+              </Variable.Default>
+            </Variable>
+            <Variable x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)" Name="correlateCDRsOutputQueue">
+              <Variable.Default>
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">new MemoryQueue&lt;CDRCorrelationBatch&gt;()</mca:CSharpValue>
+              </Variable.Default>
+            </Variable>
+            <Variable x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)" Name="insertCorrelatedCDRsOutputQueue">
+              <Variable.Default>
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">new MemoryQueue&lt;DeleteRecordsBatch&gt;()</mca:CSharpValue>
+              </Variable.Default>
+            </Variable>
+          </Sequence.Variables>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+            <vgba1:LoadCDRsToCorrelate sap2010:WorkflowViewState.IdRef="LoadCDRsToCorrelate_1" IsOrderAscending="True">
+              <vgba1:LoadCDRsToCorrelate.IdFieldName>
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.IdFieldName</mca:CSharpValue>
+                </InArgument>
+              </vgba1:LoadCDRsToCorrelate.IdFieldName>
+              <vgba1:LoadCDRsToCorrelate.LastImportedId>
+                <OutArgument x:TypeArguments="x:Int64">
+                  <mca:CSharpReference x:TypeArguments="x:Int64">lastImportedId</mca:CSharpReference>
+                </OutArgument>
+              </vgba1:LoadCDRsToCorrelate.LastImportedId>
+              <vgba1:LoadCDRsToCorrelate.OrderColumnName>
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.DatetimeFieldName</mca:CSharpValue>
+                </InArgument>
+              </vgba1:LoadCDRsToCorrelate.OrderColumnName>
+              <vgba1:LoadCDRsToCorrelate.OutputQueue>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpReference>
+                </InOutArgument>
+              </vgba1:LoadCDRsToCorrelate.OutputQueue>
+              <vgba1:LoadCDRsToCorrelate.RecordFilterGroup>
+                <InArgument x:TypeArguments="vge:RecordFilterGroup">
+                  <mca:CSharpValue x:TypeArguments="vge:RecordFilterGroup">recordFilterGroup</mca:CSharpValue>
+                </InArgument>
+              </vgba1:LoadCDRsToCorrelate.RecordFilterGroup>
+              <vgba1:LoadCDRsToCorrelate.RecordStorageId>
+                <InArgument x:TypeArguments="s:Guid">
+                  <mca:CSharpValue x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpValue>
+                </InArgument>
+              </vgba1:LoadCDRsToCorrelate.RecordStorageId>
+              <vgba1:LoadCDRsToCorrelate.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsToCorrelateStatus</mca:CSharpReference>
+                </OutArgument>
+              </vgba1:LoadCDRsToCorrelate.Status>
+            </vgba1:LoadCDRsToCorrelate>
+            <vgba1:CorrelateCDRs sap2010:WorkflowViewState.IdRef="CorrelateCDRs_1">
+              <vgba1:CorrelateCDRs.CDRCorrelationDefinition>
+                <InArgument x:TypeArguments="vge:CDRCorrelationDefinition">
+                  <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpValue>
+                </InArgument>
+              </vgba1:CorrelateCDRs.CDRCorrelationDefinition>
+              <vgba1:CorrelateCDRs.DateTimeMargin>
+                <InArgument x:TypeArguments="x:TimeSpan">
+                  <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DateTimeMargin</mca:CSharpValue>
+                </InArgument>
+              </vgba1:CorrelateCDRs.DateTimeMargin>
+              <vgba1:CorrelateCDRs.DurationMargin>
+                <InArgument x:TypeArguments="x:TimeSpan">
+                  <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DurationMargin</mca:CSharpValue>
+                </InArgument>
+              </vgba1:CorrelateCDRs.DurationMargin>
+              <vgba1:CorrelateCDRs.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpValue>
+                </InArgument>
+              </vgba1:CorrelateCDRs.InputQueue>
+              <vgba1:CorrelateCDRs.OutputQueue>
+                <OutArgument x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">correlateCDRsOutputQueue</mca:CSharpReference>
+                </OutArgument>
+              </vgba1:CorrelateCDRs.OutputQueue>
+              <vgba1:CorrelateCDRs.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadCDRsToCorrelateStatus</mca:CSharpValue>
+                </InArgument>
+              </vgba1:CorrelateCDRs.PreviousActivityStatus>
+              <vgba1:CorrelateCDRs.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpReference>
+                </OutArgument>
+              </vgba1:CorrelateCDRs.Status>
+            </vgba1:CorrelateCDRs>
+            <vgba1:InsertCorrelatedCDRs sap2010:WorkflowViewState.IdRef="InsertCorrelatedCDRs_1">
+              <vgba1:InsertCorrelatedCDRs.CDRCorrelationDefinition>
+                <InArgument x:TypeArguments="vge:CDRCorrelationDefinition">
+                  <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpValue>
+                </InArgument>
+              </vgba1:InsertCorrelatedCDRs.CDRCorrelationDefinition>
+              <vgba1:InsertCorrelatedCDRs.InputQueueToInsert>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">correlateCDRsOutputQueue</mca:CSharpReference>
+                </InOutArgument>
+              </vgba1:InsertCorrelatedCDRs.InputQueueToInsert>
+              <vgba1:InsertCorrelatedCDRs.OutputQueueToDelete>
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">insertCorrelatedCDRsOutputQueue</mca:CSharpReference>
+                </InOutArgument>
+              </vgba1:InsertCorrelatedCDRs.OutputQueueToDelete>
+              <vgba1:InsertCorrelatedCDRs.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">correlateCDRsStatus</mca:CSharpValue>
+                </InArgument>
+              </vgba1:InsertCorrelatedCDRs.PreviousActivityStatus>
+              <vgba1:InsertCorrelatedCDRs.Status>
+                <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">insertCorrelatedCDRsStatus</mca:CSharpReference>
+                </OutArgument>
+              </vgba1:InsertCorrelatedCDRs.Status>
+            </vgba1:InsertCorrelatedCDRs>
+            <vgba1:DeleteRecordsFromStorage Status="{x:Null}" sap2010:WorkflowViewState.IdRef="DeleteRecordsFromStorage_1">
+              <vgba1:DeleteRecordsFromStorage.DataRecordStorageId>
+                <InOutArgument x:TypeArguments="s:Guid">
+                  <mca:CSharpReference x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpReference>
+                </InOutArgument>
+              </vgba1:DeleteRecordsFromStorage.DataRecordStorageId>
+              <vgba1:DeleteRecordsFromStorage.InputQueue>
+                <InArgument x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">
+                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">insertCorrelatedCDRsOutputQueue</mca:CSharpValue>
+                </InArgument>
+              </vgba1:DeleteRecordsFromStorage.InputQueue>
+              <vgba1:DeleteRecordsFromStorage.PreviousActivityStatus>
+                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">insertCorrelatedCDRsStatus</mca:CSharpValue>
+                </InArgument>
+              </vgba1:DeleteRecordsFromStorage.PreviousActivityStatus>
+            </vgba1:DeleteRecordsFromStorage>
+          </Parallel>
+          <vbw:SaveDefinitionObjectState ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
+            <vbw:SaveDefinitionObjectState.ObjectValue>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">new CDRCorrelationProcessState() {LastImportedId = lastImportedId }</mca:CSharpValue>
+              </InArgument>
+            </vbw:SaveDefinitionObjectState.ObjectValue>
+          </vbw:SaveDefinitionObjectState>
+        </Sequence>
+      </If.Then>
+    </If>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finish CDR Correlation Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -123,24 +281,37 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWwTOQN/DgIBAUAFRiACAT5HBVIOAgExUwVZJAIBKloFbywCARFwBXYlAgEKdwV9IAIBAkMLQ4UBAgFAQGBAgwECAT9PC0/dAQIBOEoLSn0CATJWC1aBAQIBK2ILYqkBAgEkbAtsbwIBHmcLZ2ECARhdC111AgEScwtzYwIBC3oLeoUBAgEEd2B3gQECAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw1PwOdAg4CAQFGBUwgAwGYA00FWA4DAYsDWQVfJAMBhANgBXUsAwHrAnYFlAIKAgEKlQIFmwIgAgECSQtJhQEDAZoDRmBGgwEDAZkDVQtV3QEDAZIDUAtQfQMBjANcC1yBAQMBhQNoC2ipAQMB/gJyC3JvAwH4Am0LbWEDAfICYwtjdQMB7AJ5C3lZAgELfQmSAhQCARGYAguYAoUBAgEElQJglQKBAQIBA4UBEYUBiAECASyKARGKAZgBAgEfjwERjwGWAQIBEpMBC4oCFgIBR4sCC5ECKwIBOZQBDbgBKQMBjgK5AQ3dASMDAbIB3gEN+AEqAgFw+QENiQIuAgFIjgIRjgKSAQIBOrABE7ABiQEDAd4CoQEToQGEAQMB0QKXAROXAX4DAcQCnAETnAFmAwG3AqsBE6sBbwMBqgK1ARO1AYABAwGdAqYBE6YBjAEDAZAClAFxlAF3AwGPAsYBE8YBZwMBgQLVARPVAXgDAfQBywETywGEAQMB5wHaARPaAXoDAdoB0AET0AGOAQMBzQG8ARO8AX0DAcABwQETwQFnAwGzAesBE+sBlAEDAaUB5gET5gGOAQMBmAHwARPwAXIDAYsB9QET9QGBAQIBfuEBE+EBfQIBcYYCE4YCeQIBY4ECE4ECjAECAVb8ARP8AZEBAgFJ</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,496">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1181,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1181,62" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="1181,22" />
+      <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_1" sap:VirtualizedContainerService.HintSize="1181,22" />
+      <sap2010:ViewStateData Id="LoadCDRsToCorrelate_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CorrelateCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="InsertCorrelatedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="DeleteRecordsFromStorage_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034,86" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="1034,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1056,272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.GenericData.BP.CDRCorrelationProcess_1" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1181,422" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1181,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1203,896">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.GenericData.BP.CDRCorrelationProcess_1" sap:VirtualizedContainerService.HintSize="1243,976" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
