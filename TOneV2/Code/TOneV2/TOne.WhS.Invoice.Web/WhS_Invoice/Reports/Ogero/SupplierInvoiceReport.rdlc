@@ -2996,6 +2996,9 @@
             <Height>0.6cm</Height>
             <Width>4.97563cm</Width>
             <ZIndex>26</ZIndex>
+            <Visibility>
+              <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3115,6 +3118,9 @@
             <Height>0.6cm</Height>
             <Width>9.45162cm</Width>
             <ZIndex>27</ZIndex>
+            <Visibility>
+              <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
