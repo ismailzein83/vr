@@ -137,7 +137,7 @@
 				$scope.scopeModel.onDataTransformationSelectorDirectiveReady = function (api) {
 					mergeDataTransformationAPI = api;
 					mergeDataTransformationSelectorReadyDeferred.resolve();
-				}
+				};
 
 				defineAPI();
 			}
