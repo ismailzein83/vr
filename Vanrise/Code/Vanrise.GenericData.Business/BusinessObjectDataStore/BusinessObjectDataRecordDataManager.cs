@@ -194,5 +194,11 @@ namespace Vanrise.GenericData.Business
         {
             throw new NotImplementedException();
         }
+
+
+        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

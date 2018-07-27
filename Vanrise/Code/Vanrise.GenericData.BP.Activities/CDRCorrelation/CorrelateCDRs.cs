@@ -3,6 +3,7 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation;
@@ -38,7 +39,7 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<CDRCorrelationDefinition> CDRCorrelationDefinition { get; set; }
 
         [RequiredArgument]
-        public OutArgument<BaseQueue<CDRCorrelationBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<CDRCorrelationBatch>> OutputQueue { get; set; }
 
         protected override void DoWork(CorrelateCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
@@ -111,18 +112,23 @@ namespace Vanrise.GenericData.BP.Activities
                                         DateTime to = cdrCorrelationBatch.DateTimeRange.To;
                                         if (to == default(DateTime) || to < recordDateTime)
                                             cdrCorrelationBatch.DateTimeRange.To = recordDateTime.AddSeconds(1);
-
-                                        inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
                                     }
                                     else
                                     {
                                         uncorrelatedCDRs.Add(cdr);
                                     }
                                 }
+                                if (cdrCorrelationBatch.OutputRecordsToInsert.Count > 0)
+                                {
+                                    inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
+                                }
+
+                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Process {0} CDRs. {1} CDRs correlated", recordBatch.Records.Count, cdrCorrelationBatch.OutputRecordsToInsert.Count);
                             }
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Correlate CDRs is done.");
         }
 
         private bool IsMatching(dynamic firstCDR, dynamic secondCDR, CDRCorrelationDefinition cdrCorrelationDefinition, int durationMarginInSeconds)
@@ -140,6 +146,11 @@ namespace Vanrise.GenericData.BP.Activities
             int firstCDRDuration = firstCDR.GetFieldValue(cdrCorrelationDefinition.Settings.DurationFieldName);
             int secondCDRCDRDuration = secondCDR.GetFieldValue(cdrCorrelationDefinition.Settings.DurationFieldName);
             if ((firstCDRDuration - secondCDRCDRDuration) > durationMarginInSeconds)
+                return false;
+
+            int firstRecordType = firstCDR.GetFieldValue("RecordType");
+            int secondRecordType = secondCDR.GetFieldValue("RecordType");
+            if (firstRecordType == secondRecordType)
                 return false;
 
             return true;

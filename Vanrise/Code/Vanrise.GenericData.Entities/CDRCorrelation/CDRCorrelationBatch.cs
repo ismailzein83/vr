@@ -19,6 +19,7 @@ namespace Vanrise.GenericData.Entities
         {
             OutputRecordsToInsert = new List<dynamic>();
             InputIdsToDelete = new List<long>();
+            DateTimeRange = new DateTimeRange();
         }
     }
 }

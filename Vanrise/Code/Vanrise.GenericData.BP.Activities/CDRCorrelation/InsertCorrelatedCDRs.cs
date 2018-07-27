@@ -50,40 +50,44 @@ namespace Vanrise.GenericData.BP.Activities
                     hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
                     {
                         recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
-                        if (recordBatch.InputIdsToDelete.Count <= maxDBNumberQuery)
-                        {
-                            EnqueuItemsToDelete(inputArgument, recordBatch, recordBatch.InputIdsToDelete);
-                        }
-                        else
-                        {
-                            List<long> idsToDelete = new List<long>();
-                            foreach (var id in recordBatch.InputIdsToDelete)
-                            {
-                                idsToDelete.Add(id);
-                                if (idsToDelete.Count == maxDBNumberQuery)
-                                {
-                                    EnqueuItemsToDelete(inputArgument, recordBatch, idsToDelete);
-                                    idsToDelete = new List<long>();
-                                }
-                            }
-                            if (idsToDelete.Count > 0)
-                            {
-                                EnqueuItemsToDelete(inputArgument, recordBatch, idsToDelete);
-                            }
-                        }
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}", recordBatch.OutputRecordsToInsert.Count);
+
+                        inputArgument.OutputQueueToDelete.Enqueue(new DeleteRecordsBatch() { IdsToDelete = recordBatch.InputIdsToDelete, DateTimeRange = recordBatch.DateTimeRange });
+
+                        //if (recordBatch.InputIdsToDelete.Count <= maxDBNumberQuery)
+                        //{
+                        //    EnqueuItemsToDelete(inputArgument, recordBatch, recordBatch.InputIdsToDelete);
+                        //}
+                        //else
+                        //{
+                        //    List<long> idsToDelete = new List<long>();
+                        //    foreach (var id in recordBatch.InputIdsToDelete)
+                        //    {
+                        //        idsToDelete.Add(id);
+                        //        if (idsToDelete.Count == maxDBNumberQuery)
+                        //        {
+                        //            EnqueuItemsToDelete(inputArgument, recordBatch, idsToDelete);
+                        //            idsToDelete = new List<long>();
+                        //        }
+                        //    }
+                        //    if (idsToDelete.Count > 0)
+                        //    {
+                        //        EnqueuItemsToDelete(inputArgument, recordBatch, idsToDelete);
+                        //    }
+                        //}
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
-
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs is done.");
             return new InsertCorrelatedCDRsOutput();
         }
 
-        private void EnqueuItemsToDelete(InsertCorrelatedCDRsInput inputArgument, CDRCorrelationBatch recordBatch, List<long> idsToDelete)
-        {
-            RecordFilterGroup recordFilterGroup = GetRecordFilterGroup(idsToDelete, inputArgument.CDRCorrelationDefinition.Settings.IdFieldName);
-            DeleteRecordsBatch deleteRecordsBatch = new DeleteRecordsBatch() { DateTimeRange = recordBatch.DateTimeRange, RecordFilterGroup = recordFilterGroup };
-            inputArgument.OutputQueueToDelete.Enqueue(deleteRecordsBatch);
-        }
+        //private void EnqueuItemsToDelete(InsertCorrelatedCDRsInput inputArgument, CDRCorrelationBatch recordBatch, List<long> idsToDelete)
+        //{
+        //    RecordFilterGroup recordFilterGroup = GetRecordFilterGroup(idsToDelete, inputArgument.CDRCorrelationDefinition.Settings.IdFieldName);
+        //    DeleteRecordsBatch deleteRecordsBatch = new DeleteRecordsBatch() { DateTimeRange = recordBatch.DateTimeRange, RecordFilterGroup = recordFilterGroup, EventsCount = idsToDelete.Count };
+        //    inputArgument.OutputQueueToDelete.Enqueue(deleteRecordsBatch);
+        //}
 
         private RecordFilterGroup GetRecordFilterGroup(List<long> idsToDelete, string idFieldName)
         {

@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.BP.Activities
             RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
             recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1 } });
 
-            if (!lastImportedId.HasValue)
+            if (lastImportedId.HasValue)
             {
                 DataRecordStorageManager manager = new DataRecordStorageManager();
                 DateTime? minDate = manager.GetMinDateTimeAfterId(settings.InputDataRecordStorageId, lastImportedId.Value, settings.IdFieldName, settings.DatetimeFieldName);

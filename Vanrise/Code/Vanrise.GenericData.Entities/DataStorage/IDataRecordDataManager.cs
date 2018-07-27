@@ -33,6 +33,8 @@ namespace Vanrise.GenericData.Entities
         int GetDBQueryMaxParameterNumber();
 
         DateTime? GetMinDateTimeAfterId(long id, string idFieldName, string dateTimeFieldName);
+
+        void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName);
     }
 
     public interface IDataRecordDataManagerGetFilteredDataRecordsContext

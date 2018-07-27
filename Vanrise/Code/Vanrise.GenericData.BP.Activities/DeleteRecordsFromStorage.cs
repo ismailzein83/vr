@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Activities;
 using Vanrise.BusinessProcess;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
@@ -14,6 +15,10 @@ namespace Vanrise.GenericData.BP.Activities
         public BaseQueue<DeleteRecordsBatch> InputQueue { get; set; }
 
         public Guid DataRecordStorageId { get; set; }
+
+        public string IdFieldName { get; set; }
+
+        public string DateTimeFieldName { get; set; }
     }
 
     public class DeleteRecordsFromStorageOutput
@@ -31,6 +36,12 @@ namespace Vanrise.GenericData.BP.Activities
         [RequiredArgument]
         public InOutArgument<Guid> DataRecordStorageId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<string> IdFieldName { get; set; }
+
+        [RequiredArgument]
+        public InArgument<string> DateTimeFieldName { get; set; }
+
         protected override DeleteRecordsFromStorageOutput DoWorkWithResult(DeleteRecordsFromStorageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(inputArgument.DataRecordStorageId);
@@ -40,13 +51,16 @@ namespace Vanrise.GenericData.BP.Activities
                 bool hasItem = false;
                 do
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue((deletRecordBatch) =>
+                    hasItem = inputArgument.InputQueue.TryDequeue((deleteRecordBatch) =>
                     {
-                        recordStorageDataManager.DeleteRecords(deletRecordBatch.DateTimeRange.From, deletRecordBatch.DateTimeRange.To, deletRecordBatch.RecordFilterGroup);
+                        recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From, deleteRecordBatch.DateTimeRange.To, deleteRecordBatch.IdsToDelete, inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
+                        //recordStorageDataManager.DeleteRecords(DateTime.Now, deletRecordBatch.DateTimeRange.To, deletRecordBatch.RecordFilterGroup);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}", deleteRecordBatch.IdsToDelete.Count);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
 
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete Initial CDRs is done.");
             return new DeleteRecordsFromStorageOutput();
         }
 
@@ -60,7 +74,9 @@ namespace Vanrise.GenericData.BP.Activities
             return new DeleteRecordsFromStorageInput()
             {
                 DataRecordStorageId = this.DataRecordStorageId.Get(context),
-                InputQueue = this.InputQueue.Get(context)
+                InputQueue = this.InputQueue.Get(context),
+                DateTimeFieldName = this.DateTimeFieldName.Get(context),
+                IdFieldName = this.IdFieldName.Get(context)
             };
         }
     }

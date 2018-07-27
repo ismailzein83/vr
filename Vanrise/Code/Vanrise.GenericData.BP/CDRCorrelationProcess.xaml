@@ -204,9 +204,9 @@
                 </InArgument>
               </vgba1:CorrelateCDRs.InputQueue>
               <vgba1:CorrelateCDRs.OutputQueue>
-                <OutArgument x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">
+                <InOutArgument x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)">correlateCDRsOutputQueue</mca:CSharpReference>
-                </OutArgument>
+                </InOutArgument>
               </vgba1:CorrelateCDRs.OutputQueue>
               <vgba1:CorrelateCDRs.PreviousActivityStatus>
                 <InArgument x:TypeArguments="vb:AsyncActivityStatus">
@@ -252,6 +252,16 @@
                   <mca:CSharpReference x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpReference>
                 </InOutArgument>
               </vgba1:DeleteRecordsFromStorage.DataRecordStorageId>
+              <vgba1:DeleteRecordsFromStorage.DateTimeFieldName>
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.DatetimeFieldName</mca:CSharpValue>
+                </InArgument>
+              </vgba1:DeleteRecordsFromStorage.DateTimeFieldName>
+              <vgba1:DeleteRecordsFromStorage.IdFieldName>
+                <InArgument x:TypeArguments="x:String">
+                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.IdFieldName</mca:CSharpValue>
+                </InArgument>
+              </vgba1:DeleteRecordsFromStorage.IdFieldName>
               <vgba1:DeleteRecordsFromStorage.InputQueue>
                 <InArgument x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:DeleteRecordsBatch)">insertCorrelatedCDRsOutputQueue</mca:CSharpValue>
@@ -273,6 +283,15 @@
           </vbw:SaveDefinitionObjectState>
         </Sequence>
       </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="No new CDRs to be correlated">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
     </If>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finish CDR Correlation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -281,14 +300,14 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw1PwOdAg4CAQFGBUwgAwGYA00FWA4DAYsDWQVfJAMBhANgBXUsAwHrAnYFlAIKAgEKlQIFmwIgAgECSQtJhQEDAZoDRmBGgwEDAZkDVQtV3QEDAZIDUAtQfQMBjANcC1yBAQMBhQNoC2ipAQMB/gJyC3JvAwH4Am0LbWEDAfICYwtjdQMB7AJ5C3lZAgELfQmSAhQCARGYAguYAoUBAgEElQJglQKBAQIBA4UBEYUBiAECASyKARGKAZgBAgEfjwERjwGWAQIBEpMBC4oCFgIBR4sCC5ECKwIBOZQBDbgBKQMBjgK5AQ3dASMDAbIB3gEN+AEqAgFw+QENiQIuAgFIjgIRjgKSAQIBOrABE7ABiQEDAd4CoQEToQGEAQMB0QKXAROXAX4DAcQCnAETnAFmAwG3AqsBE6sBbwMBqgK1ARO1AYABAwGdAqYBE6YBjAEDAZAClAFxlAF3AwGPAsYBE8YBZwMBgQLVARPVAXgDAfQBywETywGEAQMB5wHaARPaAXoDAdoB0AET0AGOAQMBzQG8ARO8AX0DAcABwQETwQFnAwGzAesBE+sBlAEDAaUB5gET5gGOAQMBmAHwARPwAXIDAYsB9QET9QGBAQIBfuEBE+EBfQIBcYYCE4YCeQIBY4ECE4ECjAECAVb8ARP8AZEBAgFJ</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw6PwOwAg4CAQFGBUwgAwG6A00FWA4DAa0DWQVfJAMBpgNgBXUsAwGNA3YFpwIKAgEKqAIFrgIgAgECSQtJhQEDAbwDRmBGgwEDAbsDVQtV3QEDAbQDUAtQfQMBrgNcC1yBAQMBpwNoC2ipAQMBoANyC3JvAwGaA20LbWEDAZQDYwtjdQMBjgN5C3lZAgELfQmcAhQCARmfAgmlAiQCARGrAgurAoUBAgEEqAJgqAKBAQIBA4UBEYUBiAECATSKARGKAZgBAgEnjwERjwGWAQIBGpMBC5QCFgIBT5UCC5sCKwIBQaICD6ICiQECAROfAmSfAoIBAgESlAENuAEpAwGwArkBDd0BIwMB1AHeAQ34ASoDAZIB+QENkwIuAgFQmAIRmAKSAQIBQrABE7ABiQEDAYADoQEToQGEAQMB8wKXAROXAX4DAeYCnAETnAFmAwHZAqsBE6sBbwMBzAK1ARO1AYABAwG/AqYBE6YBjAEDAbIClAFxlAF3AwGxAsYBE8YBZwMBowLVARPVAXgDAZYCywETywGEAQMBiQLaARPaAXoDAfwB0AET0AGOAQMB7wG8ARO8AX0DAeIBwQETwQFnAwHVAesBE+sBlAEDAccB5gET5gGOAQMBugHwARPwAXIDAa0B9QET9QGBAQMBoAHhARPhAX0DAZMBgQITgQKEAQMBhQGQAhOQAnkCAXiLAhOLAowBAgFrhgIThgJ+AgFe/AET/AGRAQIBUQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1181,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1181,62" />
-      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="1181,22" />
-      <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_1" sap:VirtualizedContainerService.HintSize="1181,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1281,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="1281,62" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="1281,22" />
+      <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_1" sap:VirtualizedContainerService.HintSize="1281,22" />
       <sap2010:ViewStateData Id="LoadCDRsToCorrelate_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="CorrelateCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="InsertCorrelatedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -302,16 +321,17 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1181,422" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1181,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1203,896">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1281,422" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1281,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1303,896">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.GenericData.BP.CDRCorrelationProcess_1" sap:VirtualizedContainerService.HintSize="1243,976" />
+      <sap2010:ViewStateData Id="Vanrise.GenericData.BP.CDRCorrelationProcess_1" sap:VirtualizedContainerService.HintSize="1343,976" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

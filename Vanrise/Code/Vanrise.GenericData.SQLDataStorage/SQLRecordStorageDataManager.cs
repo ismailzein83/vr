@@ -10,6 +10,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using System.Data.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
@@ -355,7 +356,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 sb_Query.Append(string.Format(" Where {0} ", string.Join(" And ", queryFilters)));
 
             if (!string.IsNullOrEmpty(orderColumnName))
-                sb_Query.Append(string.Format(" ORDER BY {0} {1} ", orderColumnName, isOrderAscending ? "" : "DESC"));
+                sb_Query.Append(string.Format(" ORDER BY {0} {1} ", GetColumnNameFromFieldName(orderColumnName), isOrderAscending ? "" : "DESC"));
 
             sb_Query.Append(" OPTION (RECOMPILE) ");
 
@@ -556,7 +557,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             DateTime? minDate = null;
             string tableName = GetTableNameWithSchema();
             string query = string.Format(@"Select Min({0}) as MinDate from {1} WITH (NOLOCK)
-                                           WHERE {2}  > {3}", dateTimeFieldName, tableName, idFieldName, id);
+                                           WHERE {2}  > {3}", GetColumnNameFromFieldName(dateTimeFieldName), tableName, GetColumnNameFromFieldName(idFieldName), id);
 
             ExecuteReaderText(query, (reader) =>
             {
@@ -567,6 +568,51 @@ namespace Vanrise.GenericData.SQLDataStorage
             }, null);
 
             return minDate;
+        }
+
+        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
+        {
+            string tableName = GetTableNameWithSchema();
+            if (idsToDelete != null && idsToDelete.Count > 0)
+            {
+                DataTable datatable = BuildTable(idsToDelete);
+                ExecuteNonQueryText(string.Format(@"DELETE w
+                                            FROM {0} w
+                                            INNER JOIN @Ids temp
+                                            ON temp.Id=w.{1}
+                                            WHERE {2} >= @From AND {2} < @To", tableName, GetColumnNameFromFieldName(idFieldName), GetColumnNameFromFieldName(dateTimeFieldName)),
+                (cmd) =>
+                {
+                    var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
+                    dtPrm.TypeName = "IDType";
+                    dtPrm.Value = datatable;
+                    cmd.Parameters.Add(dtPrm);
+
+                    var fromPrm = new SqlParameter("@From", SqlDbType.DateTime);
+                    fromPrm.Value = fromDate;
+
+                    var toPrm = new SqlParameter("@To", SqlDbType.DateTime);
+                    toPrm.Value = toDate;
+
+                    cmd.Parameters.Add(fromPrm);
+                    cmd.Parameters.Add(toPrm);
+                });
+            }
+        }
+
+        private DataTable BuildTable(List<long> idsToDelete)
+        {
+            DataTable datatable = new DataTable();
+            datatable.Columns.Add("ID", typeof(long));
+            datatable.BeginLoadData();
+            foreach (var id in idsToDelete)
+            {
+                DataRow dr = datatable.NewRow();
+                dr["ID"] = id;
+                datatable.Rows.Add(dr);
+            }
+            datatable.EndLoadData();
+            return datatable;
         }
 
         #region Private Methods
@@ -1071,5 +1117,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         }
 
         #endregion
+
+
+
     }
 }

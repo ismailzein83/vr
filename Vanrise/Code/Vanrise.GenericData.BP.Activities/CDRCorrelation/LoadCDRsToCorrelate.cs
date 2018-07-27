@@ -70,14 +70,17 @@ namespace Vanrise.GenericData.BP.Activities
             string orderColumnName = inputArgument.OrderColumnName;
             bool isOrderAscending = inputArgument.IsOrderAscending;
 
-            dynamic lastRecord = null;
+            long lastRecordId = 0;
 
             new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, null, null, recordFilterGroup, () => ShouldStop(handle), ((itm) =>
             {
                 eventCount++;
                 recordBatch.Records.Add(itm);
-                lastRecord = itm;
-                if (recordBatch.Records.Count >= 10000)
+                long itmRecordId = itm.GetFieldValue(inputArgument.IdFieldName);
+                if (itmRecordId > lastRecordId)
+                    lastRecordId = itmRecordId;
+
+                if (recordBatch.Records.Count >= 100000)
                 {
                     inputArgument.OutputQueue.Enqueue(recordBatch);
                     recordBatch = new RecordBatch() { Records = new List<dynamic>() };
@@ -87,10 +90,8 @@ namespace Vanrise.GenericData.BP.Activities
             if (recordBatch.Records.Count > 0)
                 inputArgument.OutputQueue.Enqueue(recordBatch);
 
-            long lastRecordId = lastRecord.GetFieldValue(inputArgument.IdFieldName);
-
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", eventCount);
-            output.LastImportedId = lastRecord;
+            output.LastImportedId = lastRecordId;
             return output;
         }
 
