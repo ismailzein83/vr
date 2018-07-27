@@ -10,7 +10,7 @@ using Vanrise.Queueing;
 
 namespace Vanrise.GenericData.BP.Activities
 {
-    public class ProcessCDRsInput
+    public class CorrelateCDRsInput
     {
         public BaseQueue<RecordBatch> InputQueue { get; set; }
 
@@ -20,10 +20,10 @@ namespace Vanrise.GenericData.BP.Activities
 
         public CDRCorrelationDefinition CDRCorrelationDefinition { get; set; }
 
-        public BaseQueue<RecordBatch> OutputQueue { get; set; }
+        public BaseQueue<CDRCorrelationBatch> OutputQueue { get; set; }
     }
 
-    public sealed class ProcessCDRs : DependentAsyncActivity<ProcessCDRsInput>
+    public sealed class CorrelateCDRs : DependentAsyncActivity<CorrelateCDRsInput>
     {
         [RequiredArgument]
         public InArgument<BaseQueue<RecordBatch>> InputQueue { get; set; }
@@ -38,22 +38,57 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<CDRCorrelationDefinition> CDRCorrelationDefinition { get; set; }
 
         [RequiredArgument]
-        public OutArgument<BaseQueue<RecordBatch>> OutputQueue { get; set; }
+        public OutArgument<BaseQueue<CDRCorrelationBatch>> OutputQueue { get; set; }
 
-        protected override void DoWork(ProcessCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(CorrelateCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            throw new NotImplementedException();
+           // CDRCorrelationDefinition cdrCorrelationDefinition = inputArgument.CDRCorrelationDefinition;
+
+           //TimeSpan dateTimeMargin = inputArgument.DateTimeMargin;
+           // TimeSpan durationMargin = inputArgument.DurationMargin;
+
+           // List<dynamic> uncorrelatedCDRs = new List<dynamic>(); 
+           // List<CDRCorrelationBatch> outputQueue = new List<CDRCorrelationBatch>();
+
+           // DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+           // {
+           //     bool hasItems = false;
+           //     do
+           //     {
+           //         hasItems = inputArgument.InputQueue.TryDequeue(
+           //             (recordBatch) =>
+           //             {
+           //                 if (recordBatch.Records != null && recordBatch.Records.Count > 0)
+           //                 {
+           //                     foreach(var cdr in recordBatch.Records)
+           //                     {
+           //                         DateTime cdrAttemptDateTime = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
+
+           //                         foreach(var uncorrelatedCDR in uncorrelatedCDRs)
+           //                         {
+           //                             DateTime uncorrelatedCDRAttemptDateTime = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
+
+           //                             if((cdrAttemptDateTime - dateTimeMargin) > uncorrelatedCDRAttemptDateTime)
+           //                             {
+
+           //                             }
+           //                         }
+           //                     }
+           //                 }
+           //             });
+           //     } while (!ShouldStop(handle) && hasItems);
+           // });
         }
 
-        protected override ProcessCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override CorrelateCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
-            return new ProcessCDRsInput()
+            return new CorrelateCDRsInput()
             {
                 InputQueue = this.InputQueue.Get(context),
-                CDRCorrelationDefinition = this.CDRCorrelationDefinition.Get(context),
-                OutputQueue = this.OutputQueue.Get(context),
                 DateTimeMargin = this.DateTimeMargin.Get(context),
-                DurationMargin = this.DurationMargin.Get(context)
+                DurationMargin = this.DurationMargin.Get(context),
+                CDRCorrelationDefinition = this.CDRCorrelationDefinition.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
             };
         }
     }
