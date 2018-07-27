@@ -760,3 +760,25 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+
+
+--[common].[MailMessageTemplate]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[MessageTypeID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('5E59E38B-E899-445F-8215-2B9A8404E05B','Supplier Invoice','318BED81-454A-424F-A92F-515F7A520AAB','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","From":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"Operator\",\"MainEmail\")"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"BCC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@String.Format(\"fff{0} {1}\", Model.GetVal(\"Invoice\",\"Partner\"), DateTime.Now) Invoice: @Model.GetVal(\"Invoice\",\"IssueDate\")"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"&lt;span style=\"color: rgb(97, 111, 119); font-family: &amp;quot;Open Sans&amp;quot;; font-size: 11px;\"&gt;Dear @Model.GetVal(\"Operator\",\"Name\")&lt;/span&gt;&lt;div&gt;&lt;span style=\"color: rgb(97, 111, 119); font-family: &amp;quot;Open Sans&amp;quot;; font-size: 11px;\"&gt;Please find the attached invoice of total amount @Model.GetVal(\"Invoice\",\"Amount\")&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=\"color: rgb(97, 111, 119); font-family: &amp;quot;Open Sans&amp;quot;; font-size: 11px;\"&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;"}}'),
+('8FD6AC60-10AF-4E0F-9B5D-2BE3F8FF837D','Customer invoice','2A1F76FF-211C-4222-8575-1E171FC73FF4','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","From":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"Operator\",\"MainEmail\")"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"BCC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@String.Format(\"fff{0} {1}\", Model.GetVal(\"Invoice\",\"Partner\"), DateTime.Now) Invoice: @Model.GetVal(\"Invoice\",\"IssueDate\")"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"&lt;span style=\"color: rgb(97, 111, 119); font-family: &amp;quot;Open Sans&amp;quot;; font-size: 11px;\"&gt;Dear @Model.GetVal(\"Operator\",\"Name\")&lt;/span&gt;&lt;div&gt;&lt;span style=\"color: rgb(97, 111, 119); font-family: &amp;quot;Open Sans&amp;quot;; font-size: 11px;\"&gt;Please find the attached invoice of total amount @Model.GetVal(\"Invoice\",\"Amount\")&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[MessageTypeID],[Settings]))
+merge	[common].[MailMessageTemplate] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[MessageTypeID],[Settings])
+	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);
