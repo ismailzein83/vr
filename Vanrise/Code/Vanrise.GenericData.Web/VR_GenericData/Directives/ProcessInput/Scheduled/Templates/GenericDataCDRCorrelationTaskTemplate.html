@@ -1,1 +1,12 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-genericdata-cdrcorrelationdefinition-selector on-ready="scopeModel.onCDRCorrelationDefinitionSelectorReady" isrequired="true" hideremoveicon>
+        </vr-genericdata-cdrcorrelationdefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-timespan label="DateTime Margin" value="scopeModel.dateTimeMargin" isrequired></vr-timespan>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-timespan label="Duration Margin" value="scopeModel.durationMargin" isrequired></vr-timespan>
+    </vr-columns>
+</vr-row>
