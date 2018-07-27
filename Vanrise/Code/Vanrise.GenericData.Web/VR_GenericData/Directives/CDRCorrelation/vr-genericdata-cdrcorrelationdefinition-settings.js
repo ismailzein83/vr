@@ -219,7 +219,7 @@
 					var directivePayload = {
 						DataRecordTypeId: inputDataRecordTypeId,
 						selectedIds: inputDataRecordStorageId
-					}
+					};
 					VRUIUtilsService.callDirectiveLoad(inputDataRecordStorageSelectorAPI, directivePayload, loadInputDataRecordStorageSelectorPromiseDeferred);
 				});
 
