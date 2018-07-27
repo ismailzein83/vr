@@ -112,26 +112,11 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
-            return Insert(billingTransaction, null, out billingTransactionId);
-        }
-
-        public bool Insert(BillingTransaction billingTransaction, long? invoiceId, out long billingTransactionId)
-        {
             billingTransactionId = new RDBQueryContext(GetDataProvider())
                 .Insert()
                 .IntoTable(TABLE_NAME)
                 .GenerateIdAndAssignToParameter("BillingTransactionId")
-                .ColumnValue("AccountID", billingTransaction.AccountId)
-                .ColumnValue("AccountTypeID", billingTransaction.AccountTypeId)
-                .ColumnValue("Amount", billingTransaction.Amount)
-                .ColumnValue("CurrencyId", billingTransaction.CurrencyId)
-                .ColumnValue("TransactionTypeID", billingTransaction.TransactionTypeId)
-                .ColumnValue("TransactionTime", billingTransaction.TransactionTime)
-                .ColumnValue("Notes", billingTransaction.Notes)
-                .ColumnValue("Reference", billingTransaction.Reference)
-                .ColumnValue("SourceID", billingTransaction.SourceId)
-                .ColumnValueIf(() => billingTransaction.Settings != null, ctx => ctx.ColumnValue("Settings", Vanrise.Common.Serializer.Serialize(billingTransaction.Settings)))
-                .ColumnValueIf(() => invoiceId.HasValue, ctx => ctx.ColumnValue("CreatedByInvoiceID", invoiceId.Value))
+                .AddInsertBillingTransactionColumns(billingTransaction)
                 .EndInsert()
                 .ExecuteScalar()
                 .LongValue;

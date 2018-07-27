@@ -51,6 +51,22 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
+
+        public IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction, Action<IRDBSortContextReady<T>> falseAction)
+        {
+            if (shouldAddSort())
+                trueAction(this);
+            else if (falseAction != null)
+                falseAction(this);
+            return this;
+        }
+
+        public IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction)
+        {
+            return AddSortIf(shouldAddSort, trueAction, null);
+        }
+
+
         public T EndSort()
         {
             return _parent;
@@ -66,6 +82,10 @@ namespace Vanrise.Data.RDB
         IRDBSortContextReady<T> ByColumn(string columnName, RDBSortDirection direction);
 
         IRDBSortContextReady<T> ByAlias(string alias, RDBSortDirection direction);
+
+        IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction, Action<IRDBSortContextReady<T>> falseAction);
+
+        IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction);
 
         T EndSort();
     }

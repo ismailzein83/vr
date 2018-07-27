@@ -51,7 +51,7 @@ namespace Vanrise.Data.RDB
             RDBTableColumnDefinition columnDef;
             if (!_columns.TryGetValue(context.ColumnName, out columnDef))
                 throw new Exception(String.Format("Column '{0}' not found", context.ColumnName));
-            return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, context.ColumnName, columnDef);
+            return RDBSchemaManager.GetColumnDBName(context.DataProvider, context.ColumnName, columnDef);
         }
 
 

@@ -160,7 +160,7 @@ namespace Vanrise.Data.RDB
         int IRDBQueryContextReady.ExecuteNonQuery(bool executeTransactional)
         {
             var resolvedQuery = ((IRDBQueryContextReady)this).GetResolvedQuery();
-            var context = new RDBDataProviderExecuteNonQueryContext(resolvedQuery, executeTransactional, _resolveQueryContext.ParameterValues);
+            var context = new RDBDataProviderExecuteNonQueryContext(resolvedQuery, executeTransactional, _resolveQueryContext.Parameters);
             return this.DataProvider.ExecuteNonQuery(context);
         }
 
@@ -203,7 +203,9 @@ namespace Vanrise.Data.RDB
 
         RDBFieldValue IRDBQueryContextReady.ExecuteScalar(bool executeTransactional)
         {
-            throw new NotImplementedException();
+            var resolvedQuery = ((IRDBQueryContextReady)this).GetResolvedQuery();
+            var context = new RDBDataProviderExecuteScalarContext(resolvedQuery, executeTransactional, _resolveQueryContext.Parameters);
+            return this.DataProvider.ExecuteScalar(context);
         }
 
         RDBFieldValue IRDBQueryContextReady.ExecuteScalar()
@@ -214,7 +216,7 @@ namespace Vanrise.Data.RDB
         void IRDBQueryContextReady.ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional)
         {
             var resolvedQuery = ((IRDBQueryContextReady)this).GetResolvedQuery();
-            var context = new RDBDataProviderExecuteReaderContext(resolvedQuery, executeTransactional, _resolveQueryContext.ParameterValues, onReaderReady);
+            var context = new RDBDataProviderExecuteReaderContext(resolvedQuery, executeTransactional, _resolveQueryContext.Parameters, onReaderReady);
             this.DataProvider.ExecuteReader(context);
         }
 
@@ -227,8 +229,8 @@ namespace Vanrise.Data.RDB
 
         private class RDBDataProviderExecuteNonQueryContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteNonQueryContext
         {
-            public RDBDataProviderExecuteNonQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, object> parameterValues)
-                : base(resolvedQuery, executeTransactional, parameterValues)
+            public RDBDataProviderExecuteNonQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
+                : base(resolvedQuery, executeTransactional, parameters)
             {
             }
         }
@@ -236,8 +238,8 @@ namespace Vanrise.Data.RDB
         private class RDBDataProviderExecuteReaderContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteReaderContext
         {
             Action<IRDBDataReader> _onReaderReady;
-            public RDBDataProviderExecuteReaderContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, object> parameterValues, Action<IRDBDataReader> onReaderReady)
-                : base(resolvedQuery, executeTransactional, parameterValues)
+            public RDBDataProviderExecuteReaderContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters, Action<IRDBDataReader> onReaderReady)
+                : base(resolvedQuery, executeTransactional, parameters)
             {
                 _onReaderReady = onReaderReady;
             }
@@ -245,6 +247,14 @@ namespace Vanrise.Data.RDB
             public void OnReaderReady(IRDBDataReader reader)
             {
                 _onReaderReady(reader);
+            }
+        }
+
+        private class RDBDataProviderExecuteScalarContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteScalarContext
+        {
+            public RDBDataProviderExecuteScalarContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
+                : base(resolvedQuery, executeTransactional, parameters)
+            {
             }
         }
 

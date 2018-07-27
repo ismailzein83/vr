@@ -24,9 +24,17 @@ namespace Vanrise.Data.RDB
 
     public class RDBTableDefinitionQuerySource : IRDBTableQuerySource
     {
-        public RDBTableDefinitionQuerySource(string tableName)
+        RDBSchemaManager _schemaManager;
+
+        public RDBTableDefinitionQuerySource(string tableName, RDBSchemaManager schemaManager)
         {
             this.TableName = tableName;
+            _schemaManager = schemaManager;
+        }
+
+        public RDBTableDefinitionQuerySource(string tableName)
+            : this(tableName, RDBSchemaManager.Current)
+        {
         }
 
         public string TableName { get; private set; }
@@ -38,13 +46,13 @@ namespace Vanrise.Data.RDB
 
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
         {
-            return RDBSchemaManager.Current.GetTableDBName(context.DataProvider, this.TableName);
+            return _schemaManager.GetTableDBName(context.DataProvider, this.TableName);
         }
 
 
         public string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context)
         {
-            return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, this.TableName, context.ColumnName);
+            return _schemaManager.GetColumnDBName(context.DataProvider, this.TableName, context.ColumnName);
         }
 
         public string GetUniqueName()
@@ -55,11 +63,11 @@ namespace Vanrise.Data.RDB
 
         public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
         {
-            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(context.DataProvider, this.TableName);
+            var tableDefinition = _schemaManager.GetTableDefinitionWithValidate(context.DataProvider, this.TableName);
             if(!String.IsNullOrEmpty( tableDefinition.IdColumnName ))
             {
                 context.IdColumnName = tableDefinition.IdColumnName;
-                context.IdColumnDefinition = RDBSchemaManager.Current.GetColumnDefinitionWithValidate(tableDefinition, this.TableName, tableDefinition.IdColumnName);
+                context.IdColumnDefinition = _schemaManager.GetColumnDefinitionWithValidate(tableDefinition, this.TableName, tableDefinition.IdColumnName);
             }
         }
     }
@@ -91,7 +99,7 @@ namespace Vanrise.Data.RDB
 
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
         {
-            return RDBSchemaManager.Current.GetTableDBName(context.DataProvider, this._tableDefinition);
+            return RDBSchemaManager.GetTableDBName(context.DataProvider, this._tableDefinition);
         }
 
         public string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context)
@@ -100,7 +108,7 @@ namespace Vanrise.Data.RDB
             RDBTableColumnDefinition columnDefinition;
             if (!this._tableDefinition.Columns.TryGetValue(columnName, out columnDefinition))
                 throw new Exception(String.Format(" Column '{0}' not found in table '{1}'", columnName, this._tableName));
-            return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, columnName, columnDefinition);
+            return RDBSchemaManager.GetColumnDBName(context.DataProvider, columnName, columnDefinition);
         }
 
 

@@ -14,6 +14,11 @@ namespace Vanrise.Data.RDB
             return new DataProvider.Providers.MSSQLRDBDataProvider(GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName));
         }
 
+        public static BaseRDBDataProvider CreateProvider(string moduleName, string connectionStringName)
+        {
+            return new DataProvider.Providers.MSSQLRDBDataProvider(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
+        }
+
         private static string GetConnectionString(string appSettingWithConnectionStringName, string defaultConnectionStringName)
         {
             if (String.IsNullOrEmpty(appSettingWithConnectionStringName))

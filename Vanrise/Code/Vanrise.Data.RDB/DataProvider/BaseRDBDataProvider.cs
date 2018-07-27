@@ -30,7 +30,7 @@ namespace Vanrise.Data.RDB
 
         public abstract void ExecuteReader(IRDBDataProviderExecuteReaderContext context);
 
-        public abstract Object ExecuteScalar(IRDBDataProviderExecuteScalarContext context);
+        public abstract RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context);
 
         public abstract int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context);
 
@@ -346,16 +346,16 @@ namespace Vanrise.Data.RDB
 
         bool ExecuteTransactional { get; }
 
-        Dictionary<string, Object> ParameterValues { get; }
+        Dictionary<string, RDBParameter> Parameters { get; }
     }
 
     public abstract class BaseRDBDataProviderExecuteQueryContext : IBaseRDBDataProviderExecuteQueryContext
     {
-        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, object> parameterValues)
+        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
         {
             this.ResolvedQuery = resolvedQuery;
             this.ExecuteTransactional = executeTransactional;
-            this.ParameterValues = parameterValues;
+            this.Parameters = parameters;
         }
 
         public RDBResolvedQuery ResolvedQuery
@@ -371,7 +371,7 @@ namespace Vanrise.Data.RDB
             private set;
         }
 
-        public Dictionary<string, object> ParameterValues
+        public Dictionary<string, RDBParameter> Parameters
         {
 
             get;

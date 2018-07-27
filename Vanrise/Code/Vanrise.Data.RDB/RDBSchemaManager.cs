@@ -87,7 +87,7 @@ namespace Vanrise.Data.RDB
             return GetTableDBName(provider, tableDefinition);
         }
 
-        internal string GetTableDBName(BaseRDBDataProvider provider, RDBTableDefinition tableDefinition)
+        internal static string GetTableDBName(BaseRDBDataProvider provider, RDBTableDefinition tableDefinition)
         {
             if (!String.IsNullOrEmpty(tableDefinition.DBSchemaName))
                 return String.Concat(tableDefinition.DBSchemaName, ".", tableDefinition.DBTableName);
@@ -108,7 +108,7 @@ namespace Vanrise.Data.RDB
             return GetColumnDBName(provider, columnName, columnDefinition);
         }
 
-        internal string GetColumnDBName(BaseRDBDataProvider provider, string columnName, RDBTableColumnDefinition columnDefinition)
+        internal static string GetColumnDBName(BaseRDBDataProvider provider, string columnName, RDBTableColumnDefinition columnDefinition)
         {
             return columnDefinition.DBColumnName != null ? columnDefinition.DBColumnName : columnName;
         }

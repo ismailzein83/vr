@@ -351,7 +351,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     queryBuilder.Append(",");
                 colIndex++;
                 queryBuilder.AppendLine();
-                queryBuilder.Append(RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value));
+                queryBuilder.Append(RDBSchemaManager.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value));
                 queryBuilder.Append(" ");
                 queryBuilder.Append(GetColumnDBType(colDefEntry.Key, colDefEntry.Value));
             }
@@ -416,17 +416,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
         {
-            _dataManager.ExecuteReader(context.ResolvedQuery.QueryText, context.ParameterValues, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
+            _dataManager.ExecuteReader(context.ResolvedQuery.QueryText, context.Parameters, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
         }
 
         public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
         {
-            return _dataManager.ExecuteNonQuery(context.ResolvedQuery.QueryText, context.ParameterValues);
+            return _dataManager.ExecuteNonQuery(context.ResolvedQuery.QueryText, context.Parameters);
         }
 
-        public override object ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
+        public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
         {
-            throw new NotImplementedException();
+            return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.ResolvedQuery.QueryText, context.Parameters));
         }
 
         public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
@@ -452,33 +452,46 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 return _connString;
             }
 
-            public void ExecuteReader(string sqlQuery, Dictionary<string, Object> parameterValues, Action<IDataReader> onReaderReady)
+            public void ExecuteReader(string sqlQuery, Dictionary<string, RDBParameter> parameters, Action<IDataReader> onReaderReady)
             {
                 base.ExecuteReaderText(sqlQuery, onReaderReady, (cmd) =>
                 {
-                    if (parameterValues != null)
+                    if (parameters != null)
                     {
-                        foreach (var prm in parameterValues)
-                        {
-                            cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter(prm.Key, prm.Value));
-                        }
+                        AddParameters(cmd, parameters);
                     }
                 });
             }
 
-            public int ExecuteNonQuery(string sqlQuery, Dictionary<string, Object> parameterValues)
+            public int ExecuteNonQuery(string sqlQuery, Dictionary<string, RDBParameter> parameters)
             {
-                var rslt = base.ExecuteNonQueryText(sqlQuery, (cmd) =>
+                return base.ExecuteNonQueryText(sqlQuery, (cmd) =>
                 {
-                    if (parameterValues != null)
+                    if (parameters != null)
                     {
-                        foreach (var prm in parameterValues)
-                        {
-                            cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter(prm.Key, prm.Value));
-                        }
+                        AddParameters(cmd, parameters);
                     }
                 });
-                return rslt;
+            }
+
+            public Object ExecuteScalar(string sqlQuery, Dictionary<string, RDBParameter> parameters)
+            {
+                return base.ExecuteScalarText(sqlQuery, (cmd) =>
+                {
+                    if (parameters != null)
+                    {
+                        AddParameters(cmd, parameters);
+                    }
+                });
+            }
+
+            private static void AddParameters(System.Data.Common.DbCommand cmd, Dictionary<string, RDBParameter> parameters)
+            {
+                foreach (var prm in parameters)
+                {
+                    if (prm.Value.Direction == RDBParameterDirection.In)
+                        cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter(prm.Value.DBParameterName, prm.Value.Value != null ? prm.Value.Value : DBNull.Value));
+                }
             }
 
             //private DbType GetSQLDBType(RDBDataType dataType, out int? size, out byte? precision)
@@ -505,141 +518,20 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             //}
         }
 
-        private class MSSQLRDBDataReader : IRDBDataReader
+        private class MSSQLRDBDataReader : CommonRDBDataReader
         {
-            IDataReader _originalReader;
             public MSSQLRDBDataReader(IDataReader originalReader)
+                : base(originalReader)
             {
-                _originalReader = originalReader;
             }
-
-            public bool NextResult()
+        }
+        
+        private class MSSQLRDBFieldValue : CommonRDBFieldValue
+        {
+            public MSSQLRDBFieldValue(object value)
+                : base(value)
             {
-                return _originalReader.NextResult();
-            }
 
-            public bool Read()
-            {
-                return _originalReader.Read();
-            }
-
-            public object this[string name]
-            {
-                get { return _originalReader[name]; }
-            }
-
-
-            public string GetString(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public int GetInt(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public int? GetNullableInt(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public long GetLong(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public long? GetNullableLong(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DateTime GetDateTime(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DateTime? GetNullableDateTime(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-
-            public int GetIntWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public long GetLongWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DateTime GetDateTimeWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Guid GetGuid(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Guid GetGuidWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Guid? GetNullableGuid(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool GetBoolean(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool GetBooleanWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool? GetNullableBoolean(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-
-            public decimal GetDecimal(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public decimal GetDecimalWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public decimal? GetNullableDecimal(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-
-            public byte[] GetBytes(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public byte[] GetBytesWithNullHandling(string fieldName)
-            {
-                throw new NotImplementedException();
-            }
-
-            public byte[] GetNullableBytes(string fieldName)
-            {
-                throw new NotImplementedException();
             }
         }
 

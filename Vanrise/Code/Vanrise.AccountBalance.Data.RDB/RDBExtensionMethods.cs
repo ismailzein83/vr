@@ -127,11 +127,54 @@ namespace Vanrise.AccountBalance.Data.RDB
                                         .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", false)
                                     .EndAnd()
                                     .And()
-                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", true)
-                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", true)
+                                        .NotNullCondition("IsDeleted")
+                                        .EqualsCondition("IsDeleted", true)
+                                        .NotNullCondition("IsBalanceUpdated")
+                                        .EqualsCondition("IsBalanceUpdated", true)
                                         .ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance", false)
                                     .EndAnd()
                                 .EndOr();
         }
+
+        public static IRDBInsertQueryColumnsAssigned<T> AddInsertBillingTransactionColumns<T>(this IRDBInsertQueryCanAssignColumns<T> insertQuery, BillingTransaction billingTransaction)
+        {
+            string serializedSettings = Vanrise.Common.Serializer.Serialize(billingTransaction.Settings);
+            return insertQuery
+                    .ColumnValue("AccountID", billingTransaction.AccountId)
+                    .ColumnValue("AccountTypeID", billingTransaction.AccountTypeId)
+                    .ColumnValue("Amount", billingTransaction.Amount)
+                    .ColumnValue("CurrencyId", billingTransaction.CurrencyId)
+                    .ColumnValue("TransactionTypeID", billingTransaction.TransactionTypeId)
+                    .ColumnValue("TransactionTime", billingTransaction.TransactionTime)
+                    .ColumnValue("Notes", billingTransaction.Notes)
+                    .ColumnValue("Reference", billingTransaction.Reference)
+                    .ColumnValue("SourceID", billingTransaction.SourceId)
+                    .ColumnValueIf(() => billingTransaction.Settings != null, ctx => ctx.ColumnValue("Settings", serializedSettings));
+        }
+
+        public static IRDBBatchQueryQueryAdded<T> InsertInvoiceBillingTransactions<T>(this IRDBBatchQuery<T> batchQueryContext, IEnumerable<BillingTransaction> billingTransactions, long invoiceId)
+        {
+            return batchQueryContext.Foreach(billingTransactions,
+                                                    (billingTransaction, ctx) =>
+                                                    ctx
+                                                    .AddQuery()
+                                                    .Insert()
+                                                    .IntoTable(BillingTransactionDataManager.TABLE_NAME)
+                                                    .AddInsertBillingTransactionColumns(billingTransaction)
+                                                    .ColumnValue("CreatedByInvoiceID", invoiceId)
+                                                    .EndInsert());
+        }
+
+        public static IRDBBatchQueryQueryAdded<T> SetInvoiceBillingTransactionsDeleted<T>(this IRDBBatchQuery<T> batchQueryContext, long invoiceId)
+        {
+            return batchQueryContext
+                    .AddQuery()
+                    .Update()
+                    .FromTable(BillingTransactionDataManager.TABLE_NAME)
+                    .Where().And().NotNullCondition("CreatedByInvoiceID").EqualsCondition("CreatedByInvoiceID", invoiceId).EndAnd()
+                    .ColumnValue("IsDeleted", true)
+                    .EndUpdate();
+        }
+
     }
 }

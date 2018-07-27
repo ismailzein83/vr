@@ -171,6 +171,25 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2 }
+    public class RDBDateTimePartExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression DateTimeExpression { get; set; }
+
+        public RDBDateTimePart Part { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            string datetimeExpression = this.DateTimeExpression.ToDBQuery(context);
+            switch (this.Part)
+            {
+                case RDBDateTimePart.DateOnly: return string.Format("Cast({0} as date)", datetimeExpression);
+                case RDBDateTimePart.TimeOnly: return string.Format("Cast({0} as time)", datetimeExpression);
+                default: throw new NotSupportedException(string.Format("Part '{0}'", this.Part.ToString()));
+            }
+        }
+    }
+
     public class RDBCaseExpression : BaseRDBExpression
     {
         public List<RDBCaseWhenExpression> Whens { get; set; }

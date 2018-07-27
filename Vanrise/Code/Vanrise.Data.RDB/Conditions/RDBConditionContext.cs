@@ -49,6 +49,16 @@ namespace Vanrise.Data.RDB
             return _parent;
         }
 
+        public T TrueCondition()
+        {
+            return CompareCondition(new RDBFixedIntExpression { Value = 1 }, RDBCompareConditionOperator.Eq, new RDBFixedIntExpression { Value = 1 });
+        }
+
+        public T FalseCondition()
+        {
+            return CompareCondition(new RDBFixedIntExpression { Value = 1 }, RDBCompareConditionOperator.Eq, new RDBFixedIntExpression { Value = 0 });
+        }
+
         public T CompareCondition(BaseRDBExpression expression1, RDBCompareConditionOperator oper, BaseRDBExpression expression2)
         {
             return this.Condition(new RDBCompareCondition
@@ -522,6 +532,11 @@ namespace Vanrise.Data.RDB
         public T ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<Guid> values)
         {
             return ListCondition(_tableAlias, columnName, oper, values);
+        }
+        
+        public RDBGroupConditionContext<T> ConditionGroup(RDBGroupConditionType groupConditionType)
+        {
+            return new RDBGroupConditionContext<T>(_parent, groupConditionType, _queryBuilderContext, _setCondition, _tableAlias);
         }
 
         public RDBAndConditionContext<T> And()

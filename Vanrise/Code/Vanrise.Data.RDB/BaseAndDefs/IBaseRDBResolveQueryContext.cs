@@ -10,15 +10,11 @@ namespace Vanrise.Data.RDB
     {
         BaseRDBDataProvider DataProvider { get; }
 
-        Dictionary<string, Object> ParameterValues { get; }
-
         Dictionary<string, RDBParameter> Parameters { get; }
 
         RDBParameter GetParameterWithValidate(string parameterName);
 
         int PrmIndex { get; set; }
-
-        void AddParameterValue(string parameterName, Object value);
 
         string GenerateUniqueDBParameterName();
 
@@ -29,13 +25,11 @@ namespace Vanrise.Data.RDB
     public abstract class BaseRDBResolveQueryContext : IBaseRDBResolveQueryContext
     {
         BaseRDBDataProvider _dataProvider;
-        Dictionary<string, Object> _parameterValues;
         IBaseRDBResolveQueryContext _parentContext;
 
         public BaseRDBResolveQueryContext(BaseRDBDataProvider dataProvider)
         {
             _dataProvider = dataProvider;
-            _parameterValues = new Dictionary<string,object>();
             this.Parameters = new Dictionary<string, RDBParameter>();
         }
 
@@ -43,18 +37,12 @@ namespace Vanrise.Data.RDB
         {
             _parentContext = parentContext;
             this._dataProvider = parentContext.DataProvider;
-            this._parameterValues = parentContext.ParameterValues;
             this.Parameters = parentContext.Parameters;
         }
 
         public BaseRDBDataProvider DataProvider
         {
             get { return _dataProvider; }
-        }
-
-        public Dictionary<string, Object> ParameterValues
-        {
-            get { return _parameterValues; }
         }
 
         public int PrmIndex
@@ -67,13 +55,6 @@ namespace Vanrise.Data.RDB
                 else
                     _prmIndex++;
             }
-        }
-
-        public void AddParameterValue(string parameterName, object value)
-        {
-            if (_parameterValues.ContainsKey(parameterName))
-                throw new Exception(String.Format("Parameter '{0}' already exists", parameterName));
-            _parameterValues.Add(parameterName, value);
         }
 
         int _prmIndex;
