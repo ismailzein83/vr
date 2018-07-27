@@ -241,6 +241,9 @@
     <Reference Include="Vanrise.GenericData.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Activities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.BP.Arguments">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Arguments.dll</HintPath>
     </Reference>
