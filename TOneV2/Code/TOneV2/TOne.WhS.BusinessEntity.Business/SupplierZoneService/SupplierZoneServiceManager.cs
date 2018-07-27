@@ -317,7 +317,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 EffectiveServices = services,
                 ReceivedServices = services,
-                BED = DateTime.Today,
+                BED = new DateTime(2000, 1, 1),
                 SupplierId = supplierId,
                 EED = null
             };
