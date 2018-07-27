@@ -200,6 +200,7 @@
                                 SQLDataType: column.sqlDataType,
                                 ValueExpression: column.selectedDataRecordTypeField.Name,
                                 IsUnique: column.isUnique,
+                                IsIdentity: column.isIdentity
                             });
                         }
                         return columns;
@@ -230,6 +231,7 @@
                     gridItem.sqlDataType = data.SQLDataType,
                     gridItem.selectedDataRecordTypeFieldName = data.ValueExpression,
                     gridItem.isUnique = data.IsUnique,
+                    gridItem.isIdentity = data.IsIdentity,
                     gridItem.isDisabled = true
                 }
 

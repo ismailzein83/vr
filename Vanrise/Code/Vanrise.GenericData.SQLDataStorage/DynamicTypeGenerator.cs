@@ -105,6 +105,9 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                     foreach (var columnSettings in dataRecordStorageSettings.Columns)
                     {
+                        if (columnSettings.IsIdentity)
+                            continue;
+
                         var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == columnSettings.ValueExpression);
                         matchField.ThrowIfNull("matchField", columnSettings.ValueExpression);
 
