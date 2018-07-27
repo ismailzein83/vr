@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', 'VR_Analytic_QueryHandlerValidatorResultEnum'];
+    newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
 
-    function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, VRDateTimeService, VR_Analytic_QueryHandlerValidatorResultEnum) {
+    function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
         var editMode;
         var taskId;
