@@ -502,6 +502,25 @@ when not matched by target then
 	insert([ID],[OldID],[Name],[Title],[AccountBEDefinitionID],[Settings])
 	values(s.[ID],s.[OldID],s.[Name],s.[Title],s.[AccountBEDefinitionID],s.[Settings]);
 
+--[sec].[Module]------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('59C0BA0A-DAF0-4140-AA72-3FE9787CA44C','Invoices',null,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,2,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[DefaultViewId] = s.[DefaultViewId],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
+	values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings]);
+
 --[sec].[View]--------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -689,26 +708,6 @@ when not matched by target then
 	values(s.[Name],s.[RequiredPermissions]);
 ----------------------------------------------------------------------------------------------------
 END
-
-
---[sec].[Module]------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('59C0BA0A-DAF0-4140-AA72-3FE9787CA44C','Invoices',null,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,2,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
-merge	[sec].[Module] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Url] = s.[Url],[DefaultViewId] = s.[DefaultViewId],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic],[Settings] = s.[Settings]
-when not matched by target then
-	insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
-	values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings]);
 
 --default data
 
