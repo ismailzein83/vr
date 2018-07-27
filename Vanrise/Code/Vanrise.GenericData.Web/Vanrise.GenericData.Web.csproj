@@ -130,6 +130,7 @@
     <Compile Include="Controllers\BEParentChildRelationDefinitionController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\BusinessObjectDataRecordStorageController.cs" />
+    <Compile Include="Controllers\CDRCorrelationController.cs" />
     <Compile Include="Controllers\DataRecordFieldChoiceController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordRuleEvaluatorDefinitionController.cs" />
@@ -224,6 +225,7 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
+    <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\DataProviderExtendedSettings\vr-genericdata-dataproviderextendedsettings-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\Templates\DataRecordRuleEvaluatorDefinitionSettingsTemplate.html" />
@@ -566,9 +568,13 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\Templates\VRDataRecordObjectTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjectfieldcomparison.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\VRObjectTypes\vr-genericdata-datarecordobjecttype.js" />
+    <Content Include="VR_GenericData\Directives\ProcessInput\Normal\Templates\GenericDataCDRCorrelationProcessTemplate.html" />
     <Content Include="VR_GenericData\Directives\ProcessInput\Normal\Templates\GenericDataDataRecordRuleEvaluatorManualTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ProcessInput\Normal\vr-genericdata-cdrcorrelation-process.js" />
     <Content Include="VR_GenericData\Directives\ProcessInput\Normal\vr-genericdata-datarecordruleevaluator-manual.js" />
+    <Content Include="VR_GenericData\Directives\ProcessInput\Scheduled\Templates\GenericDataCDRCorrelationTaskTemplate.html" />
     <Content Include="VR_GenericData\Directives\ProcessInput\Scheduled\Templates\GenericDataDataRecordRuleEvaluatorScheduledTemplate.html" />
+    <Content Include="VR_GenericData\Directives\ProcessInput\Scheduled\vr-genericdata-cdrcorrelation-task.js" />
     <Content Include="VR_GenericData\Directives\ProcessInput\Scheduled\vr-genericdata-datarecordruleevaluator-scheduled.js" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorStoreBatchTemplate.html" />
     <Content Include="VR_GenericData\Directives\QueueActivator\Templates\QueueActivatorGenerateSummaryTemplate.html" />
@@ -715,6 +721,7 @@
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessObjectDataRecordStorageAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\CDRCorrelationAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldChoiceAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordObjectTypeConfigAPIService.js" />
