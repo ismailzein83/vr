@@ -98,6 +98,7 @@
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationDefinitionInfo.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationBatch.cs" />
+    <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
     <Compile Include="DataStorage\DataRecordStorage\BusinessObjectDataRecordStorageConfig.cs" />
     <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />

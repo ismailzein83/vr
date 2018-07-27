@@ -31,6 +31,8 @@ namespace Vanrise.GenericData.Entities
         bool AreDataRecordsUpdated(ref object updateHandle);
 
         int GetDBQueryMaxParameterNumber();
+
+        DateTime? GetMinDateTimeAfterId(long id, string idFieldName, string dateTimeFieldName);
     }
 
     public interface IDataRecordDataManagerGetFilteredDataRecordsContext

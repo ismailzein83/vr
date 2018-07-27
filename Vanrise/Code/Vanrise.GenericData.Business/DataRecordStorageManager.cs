@@ -250,6 +250,13 @@ namespace Vanrise.GenericData.Business
             storageDataManager.UpdateRecords(records, fieldsToJoin, fieldsToUpdate);
         }
 
+        public DateTime? GetMinDateTimeAfterId(Guid dataRecordStorageId, long id, string idFieldName, string dateTimeFieldName)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            return storageDataManager.GetMinDateTimeAfterId(id, idFieldName, dateTimeFieldName);
+        }
+
         #endregion
 
         #region Public Methods
@@ -558,7 +565,7 @@ namespace Vanrise.GenericData.Business
         public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
             var userID = SecurityContext.Current.GetLoggedInUserId();
-            return this.DoesUserHaveAccess(userID, input.Query.DataRecordStorageIds) && DoesUserHaveFieldsAccess(userID, input.Query.DataRecordStorageIds,input.Query.Columns);
+            return this.DoesUserHaveAccess(userID, input.Query.DataRecordStorageIds) && DoesUserHaveFieldsAccess(userID, input.Query.DataRecordStorageIds, input.Query.Columns);
         }
 
         public bool DoesUserHaveAccess(int userId, List<Guid> dataRecordStorages)
@@ -572,7 +579,7 @@ namespace Vanrise.GenericData.Business
             return true;
         }
 
-        public bool DoesUserHaveFieldsAccess(int userId, List<Guid> dataRecordStorages,IEnumerable<string> fieldNames)
+        public bool DoesUserHaveFieldsAccess(int userId, List<Guid> dataRecordStorages, IEnumerable<string> fieldNames)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
             foreach (var r in allRecordStorages)
@@ -607,11 +614,11 @@ namespace Vanrise.GenericData.Business
         bool DoesUserHaveAccessForAllRecordStorageFields(int userId, List<DataRecordStorageFieldsPermission> FieldsPermissions, IEnumerable<string> fieldNames)
         {
             SecurityManager secManager = new SecurityManager();
-            if(FieldsPermissions != null && FieldsPermissions.Count > 0)
+            if (FieldsPermissions != null && FieldsPermissions.Count > 0)
             {
                 if (fieldNames != null)
                 {
-                    foreach(var fieldName in fieldNames)
+                    foreach (var fieldName in fieldNames)
                     {
                         var item = FieldsPermissions.FindRecord(x => x.FieldNames.Contains(fieldName));
                         if (item != null)

@@ -551,6 +551,24 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.GetSQLQueryMaxParameterNumber();
         }
 
+        public DateTime? GetMinDateTimeAfterId(long id, string idFieldName, string dateTimeFieldName)
+        {
+            DateTime? minDate = null;
+            string tableName = GetTableNameWithSchema();
+            string query = string.Format(@"Select Min({0}) as MinDate from {1} WITH (NOLOCK)
+                                           WHERE {2}  > {3}", dateTimeFieldName, tableName, idFieldName, id);
+
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    minDate = GetReaderValue<DateTime?>(reader, "MinDate");
+                }
+            }, null);
+
+            return minDate;
+        }
+
         #region Private Methods
 
         private string GetTableNameWithSchema()

@@ -188,5 +188,11 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
+
+        public DateTime? GetMinDateTimeAfterId(long id, string idFieldName, string dateTimeFieldName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,12 +1,18 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.GenericData.BP.CDRCorrelationProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:vgba="clr-namespace:Vanrise.GenericData.BP.Arguments;assembly=Vanrise.GenericData.BP.Arguments"
+ xmlns:vgba1="clr-namespace:Vanrise.GenericData.BP.Activities;assembly=Vanrise.GenericData.BP.Activities"
+ xmlns:vge="clr-namespace:Vanrise.GenericData.Entities;assembly=Vanrise.GenericData.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(vgba:CDRCorrelationProcessInput)" />
@@ -21,23 +27,113 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Vanrise.GenericData.BP.Arguments</x:String>
+      <x:String>Vanrise.GenericData.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
-      <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWwBJQMlggECAQE=" />
+  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vge:CDRCorrelationProcessState" Name="CDRCorrelationProcessState" />
+      <Variable x:TypeArguments="vge:CDRCorrelationDefinition" Name="CDRCorrelationDefinition" />
+      <Variable x:TypeArguments="x:Boolean" Name="newDataImported" />
+      <Variable x:TypeArguments="vge:RecordFilterGroup" Name="recordFilterGroup" />
+    </Sequence.Variables>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting CDR Correlation Process.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="vge:CDRCorrelationDefinition">
+          <mca:CSharpReference x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="vge:CDRCorrelationDefinition">
+          <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">new Vanrise.GenericData.Business.CDRCorrelationDefinitionManager().GetCDRCorrelationDefinition(Input.CDRCorrelationDefinitionId)</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <vbw:GetDefinitionObjectState x:TypeArguments="vge:CDRCorrelationProcessState" ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="GetDefinitionObjectState`1_1">
+      <vbw:GetDefinitionObjectState.Result>
+        <OutArgument x:TypeArguments="vge:CDRCorrelationProcessState">
+          <mca:CSharpReference x:TypeArguments="vge:CDRCorrelationProcessState">CDRCorrelationProcessState</mca:CSharpReference>
+        </OutArgument>
+      </vbw:GetDefinitionObjectState.Result>
+    </vbw:GetDefinitionObjectState>
+    <vgba1:BuildCDRCorrelationFilterGroup sap2010:WorkflowViewState.IdRef="BuildCDRCorrelationFilterGroup_1">
+      <vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationDefinition>
+        <InArgument x:TypeArguments="vge:CDRCorrelationDefinition">
+          <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpValue>
+        </InArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationDefinition>
+      <vgba1:BuildCDRCorrelationFilterGroup.LastImportedId>
+        <InArgument x:TypeArguments="s:Nullable(x:Int64)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int64)">CDRCorrelationProcessState != null ? CDRCorrelationProcessState.LastImportedId : null</mca:CSharpValue>
+        </InArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.LastImportedId>
+      <vgba1:BuildCDRCorrelationFilterGroup.NewDataImported>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">newDataImported</mca:CSharpReference>
+        </OutArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.NewDataImported>
+      <vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroup>
+        <OutArgument x:TypeArguments="vge:RecordFilterGroup">
+          <mca:CSharpReference x:TypeArguments="vge:RecordFilterGroup">recordFilterGroup</mca:CSharpReference>
+        </OutArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroup>
+    </vgba1:BuildCDRCorrelationFilterGroup>
+    <vbw:SaveDefinitionObjectState ObjectKey="{x:Null}" sap2010:WorkflowViewState.IdRef="SaveDefinitionObjectState_1">
+      <vbw:SaveDefinitionObjectState.ObjectValue>
+        <InArgument x:TypeArguments="x:Object">
+          <mca:CSharpValue x:TypeArguments="x:Object">CDRCorrelationProcessState</mca:CSharpValue>
+        </InArgument>
+      </vbw:SaveDefinitionObjectState.ObjectValue>
+    </vbw:SaveDefinitionObjectState>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finish CDR Correlation Process.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWwTOQN/DgIBAUAFRiACAT5HBVIOAgExUwVZJAIBKloFbywCARFwBXYlAgEKdwV9IAIBAkMLQ4UBAgFAQGBAgwECAT9PC0/dAQIBOEoLSn0CATJWC1aBAQIBK2ILYqkBAgEkbAtsbwIBHmcLZ2ECARhdC111AgEScwtzYwIBC3oLeoUBAgEEd2B3gQECAQM=</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,496">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>

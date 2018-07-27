@@ -59,6 +59,7 @@
     <Compile Include="CDRCorrelation\BuildCDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelation\CorrelateCDRs.cs" />
     <Compile Include="CDRCorrelation\InsertCorrelatedCDRs.cs" />
+    <Compile Include="CDRCorrelation\LoadCDRsToCorrelate.cs" />
     <Compile Include="DeleteRecordsFromStorage.cs" />
     <Compile Include="LoadRecordsFromStorages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
