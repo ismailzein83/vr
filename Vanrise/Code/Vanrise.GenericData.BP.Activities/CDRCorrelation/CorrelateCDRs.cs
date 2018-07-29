@@ -3,8 +3,8 @@ using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Transformation;
 using Vanrise.Queueing;
@@ -47,7 +47,8 @@ namespace Vanrise.GenericData.BP.Activities
             TimeSpan durationMargin = inputArgument.DurationMargin;
             CDRCorrelationDefinition cdrCorrelationDefinition = inputArgument.CDRCorrelationDefinition;
 
-            List<dynamic> uncorrelatedCDRs = new List<dynamic>();
+            List<MobileCDR> uncorrelatedCDRs = new List<MobileCDR>();
+            Dictionary<string, List<MobileCDR>> uncorrelatedCDRsByCDPNDict = new Dictionary<string, List<MobileCDR>>();
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -56,51 +57,52 @@ namespace Vanrise.GenericData.BP.Activities
                 {
                     hasItems = inputArgument.InputQueue.TryDequeue((recordBatch) =>
                         {
+                            DateTime batchStartTime = DateTime.Now;
+
                             if (recordBatch.Records != null && recordBatch.Records.Count > 0)
                             {
+                                DateTime maxDateTime = DateTime.MinValue;
                                 CDRCorrelationBatch cdrCorrelationBatch = new CDRCorrelationBatch();
 
                                 foreach (var cdr in recordBatch.Records)
                                 {
-                                    dynamic correlatedCDR = null;
-                                    DateTime cdrAttemptDateTime = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
+                                    MobileCDR matchingMobileCDR = null;
+                                    MobileCDR mobileCDR = new MobileCDR(cdr, cdrCorrelationDefinition);
 
-                                    for (var index = uncorrelatedCDRs.Count - 1; index >= 0; index--)
+                                    maxDateTime = mobileCDR.AttemptDateTime;
+                                    List<MobileCDR> uncorrelatedCDRsByCDPN = uncorrelatedCDRsByCDPNDict.GetRecord(mobileCDR.CDPN);
+                                    if (uncorrelatedCDRsByCDPN != null && uncorrelatedCDRsByCDPN.Count > 0)
                                     {
-                                        var uncorrelatedCDR = uncorrelatedCDRs[index];
-
-                                        DateTime uncorrelatedCDRAttemptDateTime = uncorrelatedCDR.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
-                                        if ((cdrAttemptDateTime - uncorrelatedCDRAttemptDateTime) > dateTimeMargin)
+                                        for (var index = 0; index < uncorrelatedCDRsByCDPN.Count; index++)
                                         {
-                                            while (index >= 0)
+                                            var uncorrelatedCDR = uncorrelatedCDRsByCDPN[index];
+
+                                            if (IsMatching(mobileCDR, uncorrelatedCDR, cdrCorrelationDefinition, dateTimeMargin, durationMargin.Seconds))
                                             {
-                                                uncorrelatedCDR = uncorrelatedCDRs[index];
-                                                uncorrelatedCDRs.Remove(uncorrelatedCDR);
-                                                index--;
-                                            }
-                                            break;
-                                        }
+                                                matchingMobileCDR = uncorrelatedCDR;
 
-                                        if (IsMatching(cdr, uncorrelatedCDR, cdrCorrelationDefinition, durationMargin.Seconds))
-                                        {
-                                            correlatedCDR = uncorrelatedCDR;
-                                            uncorrelatedCDRs.Remove(uncorrelatedCDR);
-                                            break;
+                                                uncorrelatedCDRs.Remove(matchingMobileCDR);
+                                                if (uncorrelatedCDRsByCDPN.Count > 1)
+                                                    uncorrelatedCDRsByCDPN.Remove(matchingMobileCDR);
+                                                else
+                                                    uncorrelatedCDRsByCDPNDict.Remove(matchingMobileCDR.CDPN);
+                                                break;
+                                            }
                                         }
                                     }
 
-                                    if (correlatedCDR != null)
+                                    if (matchingMobileCDR != null)
                                     {
                                         var output = new DataTransformer().ExecuteDataTransformation(cdrCorrelationDefinition.Settings.MergeDataTransformationDefinitionId, (context) =>
                                         {
-                                            context.SetRecordValue("InputList", new List<dynamic> { cdr, correlatedCDR });
+                                            context.SetRecordValue("InputList", new List<dynamic> { mobileCDR.CDR, matchingMobileCDR.CDR });
                                         });
 
                                         DateTime recordDateTime = output.GetRecordValue("RecordDateTime");
                                         List<dynamic> correlatedCDRList = output.GetRecordValue("OutputList");
 
-                                        long cdrId = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
-                                        long correlatedCDRId = correlatedCDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
+                                        long cdrId = mobileCDR.CDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
+                                        long correlatedCDRId = matchingMobileCDR.CDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
 
                                         cdrCorrelationBatch.OutputRecordsToInsert.Add(correlatedCDRList.First());
                                         cdrCorrelationBatch.InputIdsToDelete.AddRange(new List<long> { cdrId, correlatedCDRId });
@@ -115,42 +117,65 @@ namespace Vanrise.GenericData.BP.Activities
                                     }
                                     else
                                     {
-                                        uncorrelatedCDRs.Add(cdr);
+                                        uncorrelatedCDRs.Add(mobileCDR);
+                                        List<MobileCDR> tempCorrelatedCDRs = uncorrelatedCDRsByCDPNDict.GetOrCreateItem(mobileCDR.CDPN);
+                                        tempCorrelatedCDRs.Add(mobileCDR);
                                     }
                                 }
-                                if (cdrCorrelationBatch.OutputRecordsToInsert.Count > 0)
+
+                                //Cleaning List And Dict
+                                DateTime minDateTime = maxDateTime.AddSeconds(-dateTimeMargin.Seconds);
+                                for (var index = uncorrelatedCDRs.Count - 1; index >= 0; index--)
                                 {
-                                    inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
+                                    MobileCDR currentMobileCDR = uncorrelatedCDRs[index];
+                                    if (currentMobileCDR.AttemptDateTime >= minDateTime)
+                                        continue;
+
+                                    while (index >= 0)
+                                    {
+                                        currentMobileCDR = uncorrelatedCDRs[index];
+                                        uncorrelatedCDRs.Remove(currentMobileCDR);
+
+                                        List<MobileCDR> tempCorrelatedCDRs = uncorrelatedCDRsByCDPNDict.GetOrCreateItem(currentMobileCDR.CDPN);
+                                        if (tempCorrelatedCDRs.Count > 1)
+                                            tempCorrelatedCDRs.Remove(currentMobileCDR);
+                                        else
+                                            uncorrelatedCDRsByCDPNDict.Remove(currentMobileCDR.CDPN);
+
+                                        index--;
+                                    }
+                                    break;
                                 }
 
-                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Process {0} CDRs. {1} CDRs correlated", recordBatch.Records.Count, cdrCorrelationBatch.OutputRecordsToInsert.Count);
+                                if (cdrCorrelationBatch.OutputRecordsToInsert.Count > 0)
+                                    inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
+
+                                double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Process {0} CDRs. {1} CDRs correlated. ElapsedTime: {2} (s)",
+                                    recordBatch.Records.Count, cdrCorrelationBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
                             }
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Correlate CDRs is done.");
         }
 
-        private bool IsMatching(dynamic firstCDR, dynamic secondCDR, CDRCorrelationDefinition cdrCorrelationDefinition, int durationMarginInSeconds)
+        private bool IsMatching(MobileCDR firstMobileCDR, MobileCDR secondMobileCDR, CDRCorrelationDefinition cdrCorrelationDefinition, TimeSpan dateTimeMargin, int durationMarginInSeconds)
         {
-            string firstCDRCGPN = firstCDR.GetFieldValue(cdrCorrelationDefinition.Settings.CallingNumberFieldName);
-            string secondCDRCGPN = secondCDR.GetFieldValue(cdrCorrelationDefinition.Settings.CallingNumberFieldName);
-            if (string.Compare(firstCDRCGPN, secondCDRCGPN) != 0)
+            if ((firstMobileCDR.AttemptDateTime - secondMobileCDR.AttemptDateTime) > dateTimeMargin)
                 return false;
 
-            string firstCDRCDPN = firstCDR.GetFieldValue(cdrCorrelationDefinition.Settings.CalledNumberFieldName);
-            string secondCDRCDPN = secondCDR.GetFieldValue(cdrCorrelationDefinition.Settings.CalledNumberFieldName);
-            if (string.Compare(firstCDRCDPN, secondCDRCDPN) != 0)
+            if (Math.Abs(firstMobileCDR.Duration - secondMobileCDR.Duration) > durationMarginInSeconds)
                 return false;
 
-            int firstCDRDuration = firstCDR.GetFieldValue(cdrCorrelationDefinition.Settings.DurationFieldName);
-            int secondCDRCDRDuration = secondCDR.GetFieldValue(cdrCorrelationDefinition.Settings.DurationFieldName);
-            if ((firstCDRDuration - secondCDRCDRDuration) > durationMarginInSeconds)
+            if (string.Compare(firstMobileCDR.CGPN, secondMobileCDR.CGPN) != 0)
                 return false;
 
-            int firstRecordType = firstCDR.GetFieldValue("RecordType");
-            int secondRecordType = secondCDR.GetFieldValue("RecordType");
-            if (firstRecordType == secondRecordType)
+            //if (string.Compare(firstCorrelatedCDR.CDPN, secondCorrelatedCDR.CDPN) != 0)
+            //    return false;
+
+            if (firstMobileCDR.RecordType == secondMobileCDR.RecordType)
                 return false;
 
             return true;
@@ -166,6 +191,31 @@ namespace Vanrise.GenericData.BP.Activities
                 CDRCorrelationDefinition = this.CDRCorrelationDefinition.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)
             };
+        }
+    }
+
+    public class MobileCDR
+    {
+        public int RecordType { get; set; }
+
+        public DateTime AttemptDateTime { get; set; }
+
+        public int Duration { get; set; }
+
+        public string CGPN { get; set; }
+
+        public string CDPN { get; set; }
+
+        public dynamic CDR { get; set; }
+
+        public MobileCDR(dynamic cdr, CDRCorrelationDefinition cdrCorrelationDefinition)
+        {
+            RecordType = cdr.GetFieldValue("RecordType");
+            AttemptDateTime = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
+            Duration = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DurationFieldName);
+            CGPN = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.CallingNumberFieldName);
+            CDPN = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.CalledNumberFieldName);
+            CDR = cdr;
         }
     }
 }

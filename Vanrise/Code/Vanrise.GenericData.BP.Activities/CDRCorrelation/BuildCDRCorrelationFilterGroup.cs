@@ -40,6 +40,7 @@ namespace Vanrise.GenericData.BP.Activities
                 if (minDate.HasValue)
                 {
                     newDataImported = true;
+                    minDate.Value.AddMinutes(-5);
                     recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = settings.DatetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = minDate.Value });
                 }
             }

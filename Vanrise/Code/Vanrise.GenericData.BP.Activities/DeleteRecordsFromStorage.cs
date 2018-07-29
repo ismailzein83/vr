@@ -53,9 +53,13 @@ namespace Vanrise.GenericData.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((deleteRecordBatch) =>
                     {
-                        recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From, deleteRecordBatch.DateTimeRange.To, deleteRecordBatch.IdsToDelete, inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
+                        DateTime batchStartTime = DateTime.Now;
+                        recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From.AddMinutes(-1), deleteRecordBatch.DateTimeRange.To.AddMinutes(1), deleteRecordBatch.IdsToDelete, inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
                         //recordStorageDataManager.DeleteRecords(DateTime.Now, deletRecordBatch.DateTimeRange.To, deletRecordBatch.RecordFilterGroup);
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}", deleteRecordBatch.IdsToDelete.Count);
+
+                        double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1} (s)",
+                            deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString());
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

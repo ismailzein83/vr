@@ -49,8 +49,12 @@ namespace Vanrise.GenericData.BP.Activities
                 {
                     hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
                     {
+                        DateTime batchStartTime = DateTime.Now;
                         recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}", recordBatch.OutputRecordsToInsert.Count);
+
+                        double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
+                            recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
 
                         inputArgument.OutputQueueToDelete.Enqueue(new DeleteRecordsBatch() { IdsToDelete = recordBatch.InputIdsToDelete, DateTimeRange = recordBatch.DateTimeRange });
 
