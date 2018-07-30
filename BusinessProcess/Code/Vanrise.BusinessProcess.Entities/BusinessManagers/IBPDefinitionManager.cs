@@ -13,5 +13,7 @@ namespace Vanrise.BusinessProcess.Entities
         string GetDefinitionTitle(string processName);
 
         bool DoesUserHaveViewAccess(string bPDefinitionName);
+
+        BPDefinition GetBPDefinition(Guid definitionId);
     }
 }

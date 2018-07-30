@@ -14,7 +14,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
-    public class VRWorkflowManager
+    public class VRWorkflowManager : IVRWorkflowManager
     {
         #region Public Methods
 
@@ -302,7 +302,8 @@ namespace Vanrise.BusinessProcess.Business
             {
                 Type activityType = compilationOutput.OutputAssembly.GetType(fullTypeName);
                 activity = Activator.CreateInstance(activityType).CastWithValidate<System.Activities.Activity>("activity", workflow.VRWorkflowId);
-                return TryCompileActivityExpressions(activity, out errorMessages);
+                errorMessages = null;
+                return true;
             }
             else
             {

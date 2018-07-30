@@ -75,7 +75,16 @@ namespace Vanrise.BusinessProcess
                     VRWorkflow vrWorkflow = _vrWorkflowManager.GetVRWorkflow(definition.VRWorkflowId.Value);
                     List<string> errorMessages;
                     if (!_vrWorkflowManager.TryCompileWorkflow(vrWorkflow, out _workflowDefinition, out errorMessages))
-                        throw new Exception(string.Join<string>(". ", errorMessages));
+                    {
+                        StringBuilder errorsBuilder = new StringBuilder();
+                        if (errorMessages != null)
+                        {
+                            foreach (var errorMessage in errorMessages)
+                                errorsBuilder.AppendLine(errorMessage);
+                        }
+                        throw new Exception(String.Format("Compile Error when building executor type for workflow Id '{0}'. Errors: {1}",
+                            definition.VRWorkflowId.Value, errorsBuilder));
+                    }
                 }
             }
             catch (Exception ex)
@@ -190,10 +199,18 @@ namespace Vanrise.BusinessProcess
         private void RunProcess(BPInstance bpInstance)
         {
             IDictionary<string, object> inputs = null;
-            if (bpInstance.InputArgument != null)
+            if (!_definition.VRWorkflowId.HasValue)
             {
-                inputs = new Dictionary<string, object>();
-                inputs.Add("Input", bpInstance.InputArgument);
+                if (bpInstance.InputArgument != null)
+                {
+                    inputs = new Dictionary<string, object>();
+                    inputs.Add("Input", bpInstance.InputArgument);
+                }
+            }
+            else
+            {
+                VRWorkflowInputArgument inputArgument = bpInstance.InputArgument.CastWithValidate<VRWorkflowInputArgument>("bpInstance.InputArgument", bpInstance.ProcessInstanceID);
+                inputs = inputArgument.Arguments;
             }
 
             WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(_workflowDefinition, inputs) : new WorkflowApplication(_workflowDefinition);

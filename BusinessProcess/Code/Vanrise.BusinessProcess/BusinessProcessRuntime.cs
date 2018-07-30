@@ -67,11 +67,7 @@ namespace Vanrise.BusinessProcess
                 foreach (var bpDefinition in definitions)
                 {
                     if (!_processDefinitionInitiators.ContainsKey(bpDefinition.BPDefinitionID))
-                    {
-                        if (bpDefinition.VRWorkflowId.HasValue)
-                            continue;
                         _processDefinitionInitiators.Add(bpDefinition.BPDefinitionID, new BPDefinitionInitiator(_serviceInstanceId, bpDefinition));
-                    }
                 }
             }
         }

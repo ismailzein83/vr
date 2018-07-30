@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 
-namespace Vanrise.BusinessProcess.Entities
+namespace Vanrise.BusinessProcess.BP.Arguments
 {
     public class VRWorkflowInputArgument : BaseProcessInputArgument
     {
@@ -14,8 +15,8 @@ namespace Vanrise.BusinessProcess.Entities
 
         public override string GetTitle()
         {
-            var bpDefinition = BusinessManagerFactory.GetManager<IBPDefinitionManager>().GetBPDefinition(this.BPDefinitionId);
-            var vrWorkflow = BusinessManagerFactory.GetManager<IVRWorkflowManager>().GetVRWorkflow(bpDefinition.VRWorkflowId.Value);
+            var bpDefinition = new BPDefinitionManager().GetBPDefinition(this.BPDefinitionId);
+            var vrWorkflow = new VRWorkflowManager().GetVRWorkflow(bpDefinition.VRWorkflowId.Value);
             return vrWorkflow.Title;
         }
     }

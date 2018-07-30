@@ -92,6 +92,7 @@
     <Compile Include="BPTrackingMessageDetail.cs" />
     <Compile Include="BPViewSettings.cs" />
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IVRWorkflowManager.cs" />
     <Compile Include="BusinessManagers\IBPDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessRuleEffectiveActionQuery.cs" />
