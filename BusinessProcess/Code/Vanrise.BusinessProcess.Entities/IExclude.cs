@@ -9,6 +9,6 @@ namespace Vanrise.BusinessProcess.Entities
     public interface IExclude
     {
         bool IsExcluded { get; set; }
-        abstract void SetAsExcluded();
+        void SetAsExcluded();
     }
 }
