@@ -6360,59 +6360,59 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("17", new BinaryRecordParser
-            {
-                Settings = new PositionedFieldsRecordParser
-                {
-                    FieldParsers = Get_PositionedFieldParsers_PSTN_Originated_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{
-                      FieldName = "RecordType",
-                      Value = 17
-                     },
-                    new ParsedRecordFieldConstantValue
-                    {
-                        FieldName = "SwitchId",
-                        Value = 3
-                    },
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "PSTN_Originated"
-                            }
-                    },
-                    CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
-                    RecordType = "MobileCDR"
+            //recordParsers.Add("17", new BinaryRecordParser
+            //{
+            //    Settings = new PositionedFieldsRecordParser
+            //    {
+            //        FieldParsers = Get_PositionedFieldParsers_PSTN_Originated_Call(),
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{
+            //          FieldName = "RecordType",
+            //          Value = 17
+            //         },
+            //        new ParsedRecordFieldConstantValue
+            //        {
+            //            FieldName = "SwitchId",
+            //            Value = 3
+            //        },
+            //                new ParsedRecordFieldConstantValue
+            //                {
+            //                 FieldName = "RecordTypeName",
+            //                 Value = "PSTN_Originated"
+            //                }
+            //        },
+            //        CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
+            //        RecordType = "MobileCDR"
 
-                }
-            });
+            //    }
+            //});
 
-            recordParsers.Add("18", new BinaryRecordParser
-            {
-                Settings = new PositionedFieldsRecordParser
-                {
-                    FieldParsers = Get_PositionedFieldParsers_PSTN_Terminated_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{
-                      FieldName = "RecordType",
-                      Value = 18
-                     },
-                    new ParsedRecordFieldConstantValue
-                    {
-                        FieldName = "SwitchId",
-                        Value = 3
-                    },
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "PSTN_Terminated"
-                            }
-                    },
-                    CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
-                    RecordType = "MobileCDR"
+            //recordParsers.Add("18", new BinaryRecordParser
+            //{
+            //    Settings = new PositionedFieldsRecordParser
+            //    {
+            //        FieldParsers = Get_PositionedFieldParsers_PSTN_Terminated_Call(),
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{
+            //          FieldName = "RecordType",
+            //          Value = 18
+            //         },
+            //        new ParsedRecordFieldConstantValue
+            //        {
+            //            FieldName = "SwitchId",
+            //            Value = 3
+            //        },
+            //                new ParsedRecordFieldConstantValue
+            //                {
+            //                 FieldName = "RecordTypeName",
+            //                 Value = "PSTN_Terminated"
+            //                }
+            //        },
+            //        CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
+            //        RecordType = "MobileCDR"
 
-                }
-            });
+            //    }
+            //});
 
             recordParsers.Add("19", new BinaryRecordParser
             {
