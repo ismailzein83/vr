@@ -63,7 +63,13 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 								return;
 							vRWorkflowActivity.directiveAPI = api;
 							var setLoader = function (value) { $scope.x = value; };
-							var context = (itemAddedContext != undefined) ? itemAddedContext : { /*WorkflowArguments: workflowArguments,*/ getWorkflowArguments: getWorkflowArguments };
+							var context = (itemAddedContext != undefined) ? itemAddedContext : {
+								getWorkflowArguments: getWorkflowArguments,
+								reserveVariableName : reserveVariableName,
+								reserveVariableNames : reserveVariableNames,
+								isVariableNameReserved : isVariableNameReserved,
+								eraseVariableName : eraseVariableName
+							};
 							var payload = {
 								Context: context,
 								VRWorkflowActivityId: vRWorkflowActivity.VRWorkflowActivityId,
@@ -93,7 +99,6 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 
 					if (payload != undefined) {
 						rootActivity = payload.rootActivity;
-						//workflowArguments = payload.workflowArguments;
 						getWorkflowArguments = payload.getWorkflowArguments;
 						reserveVariableName = payload.reserveVariableName;
 						reserveVariableNames = payload.reserveVariableNames;
@@ -114,7 +119,6 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 						if (rootActivity != undefined) {
 							workflowContainerReadyPromiseDeferred.promise.then(function () {
 								var payload = {
-									/*workflowArguments: workflowArguments,*/
 									getWorkflowArguments: getWorkflowArguments,
 									vRWorkflowActivity: rootActivity,
 									reserveVariableName: reserveVariableName,

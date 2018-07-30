@@ -74,34 +74,12 @@ app.directive('businessprocessVrWorkflowContainer', ['UtilsService', 'VRUIUtilsS
 				defineAPI();
 			}
 
-
-			/*function reserveVariableName(name) {
-				allVariableNames.push(name);
-			}
-
-			function reserveVariableNames(variables) {
-				if (variables != undefined && variables.length > 0)
-					allVariableNames = allVariableNames.concat(variables.map(a => a.Name));
-			}
-
-			function isVariableNameReserved(name) {
-				var variableName = (name != undefined) ? name.toLowerCase() : null;
-				return UtilsService.contains(allVariableNames, variableName);
-			}
-
-			function eraseVariableName(name) {
-				var variableIndex = allVariableNames.indexOf(name);
-				if (variableIndex > 0)
-					allVariableNames.splice(variableIndex, 1);
-			}*/
-
 			function extendDataItem(dataItem) {
 				dataItem.onDirectiveReady = function (api) {
 					dataItem.directiveAPI = api;
 					var setLoader = function (value) { };
 					var directivePayload = {
 						Context: {
-							//WorkflowArguments: workflowArguments,
 							getWorkflowArguments: getWorkflowArguments,
 							reserveVariableName: reserveVariableName,
 							reserveVariableNames: reserveVariableNames,
@@ -127,14 +105,12 @@ app.directive('businessprocessVrWorkflowContainer', ['UtilsService', 'VRUIUtilsS
 						eraseVariableName = payload.eraseVariableName;
 
 						getWorkflowArguments = payload.getWorkflowArguments;
-						//workflowArguments = payload.workflowArguments;
 						if (getWorkflowArguments != undefined)
 							workflowArguments = getWorkflowArguments();
 						if (workflowArguments != undefined)
 							allVariableNames = allVariableNames.concat(workflowArguments.map(a => a.Name));
 						if (payload.vRWorkflowActivity != null) {
 							extendDataItem(payload.vRWorkflowActivity);
-							//ctrl.datasource = [payload.vRWorkflowActivity];
 							$scope.scopeModel.datasource = [payload.vRWorkflowActivity];
 						}
 					}
