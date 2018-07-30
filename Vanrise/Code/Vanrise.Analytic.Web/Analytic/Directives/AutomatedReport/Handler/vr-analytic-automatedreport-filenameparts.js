@@ -111,7 +111,7 @@ app.directive("vrAnalyticAutomatedreportFilenameparts", ["UtilsService", "VRNoti
                 if (currentContext == undefined)
                     currentContext = {};
                 currentContext.getExtensionType = function () {
-                    return "VR_Analytic_AutomatedReportFileNumberParts";
+                    return "VR_Analytic_AutomatedReportFileNameParts";
                 };
                 return currentContext;
             }
