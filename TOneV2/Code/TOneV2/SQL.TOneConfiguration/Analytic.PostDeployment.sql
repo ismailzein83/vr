@@ -48,7 +48,9 @@ Post-Deployment Script Template
 ('A5B07696-61B4-4371-B52C-770667E0EB05','VR_AutomatedReportQueryDefinition_Settings','Automated Report Query Definition','VR_Common_VRComponentType','{"Editor":"vr-analytic-automatedreportquerydefinition-settings"}'),
 ('6531E07F-CA21-4579-9E38-86A7B835A221','FTP Handler','FTP','VR_Analytic_HandlerSettings_AutomatedReport','{"Editor":"vr-analytic-ftphandler-automatedreporthandler"}'),
 ('C05375FD-4C3A-44B2-ACEE-A0EDEE56B488','Send Email Handler','Send Email','VR_Analytic_HandlerSettings_AutomatedReport','{"Editor":"vr-analytic-sendemailhandler-automatedreporthandler"}'),
-('9FAAE9B2-931E-4B3F-BDA4-B0F3B7647488','Advanced Excel File Generator','Excel File','VR_Analytic_FileGenerator_AutomatedReport','{"Editor":"vr-analytic-advancedexcel-filegenerator"}')
+('9FAAE9B2-931E-4B3F-BDA4-B0F3B7647488','Advanced Excel File Generator','Excel File','VR_Analytic_FileGenerator_AutomatedReport','{"Editor":"vr-analytic-advancedexcel-filegenerator"}'),
+('9CC73443-2A1A-4405-A1ED-1DE27B9DCB42','Sequence','Sequence','VR_Analytic_AutomatedReportFileNameParts','{"Editor":"vr-analytic-automatedreportfilenamepart-sequence"}'),
+('A194AAC8-0675-4100-8A8B-1FBE4105FE09','Date','Date','VR_Analytic_AutomatedReportFileNameParts','{"Editor":"vr-analytic-automatedreportfilenamepart-date"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
 --[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
