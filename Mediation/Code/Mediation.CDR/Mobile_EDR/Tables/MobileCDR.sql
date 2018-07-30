@@ -64,12 +64,14 @@ CREATE TABLE [Mobile_EDR].[MobileCDR] (
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_MobileCDR_Id]
     ON [Mobile_EDR].[MobileCDR]([Id] ASC);
 
 
 GO
-CREATE CLUSTERED INDEX [IX_MobileCDR_ConnectDateTime_Id]
-    ON [Mobile_EDR].[MobileCDR]([connect_date_time] ASC, [Id] ASC);
+CREATE CLUSTERED INDEX [IX_MobileCDR_SetupTime_Id]
+    ON [Mobile_EDR].[MobileCDR]([setup_time] ASC, [Id] ASC);
 
