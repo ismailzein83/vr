@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowWritetrackingmessage', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowTrackingMessageSeverityEnum',
+app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowTrackingMessageSeverityEnum',
 	function (UtilsService, VRUIUtilsService, VRWorkflowTrackingMessageSeverityEnum) {
 
 	    var directiveDefinitionObject = {

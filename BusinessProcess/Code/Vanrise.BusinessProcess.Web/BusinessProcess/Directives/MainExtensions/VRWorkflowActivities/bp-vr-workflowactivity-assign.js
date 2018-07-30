@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowAssign', ['UtilsService', 'VRUIUtilsService',
+app.directive('businessprocessVrWorkflowactivityAssign', ['UtilsService', 'VRUIUtilsService',
 	function (UtilsService, VRUIUtilsService) {
 
 		var directiveDefinitionObject = {

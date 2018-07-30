@@ -9,7 +9,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
     {
         public override Guid ConfigId { get { return new Guid("9292B3BE-256F-400F-9BC6-A0423FA0B30F"); } }
 
-        public override string Editor { get { return "businessprocess-vr-workflow-sequence"; } }
+        public override string Editor { get { return "businessprocess-vr-workflowactivity-sequence"; } }
 
         public override string Title { get { return "Sequence"; } }
 
