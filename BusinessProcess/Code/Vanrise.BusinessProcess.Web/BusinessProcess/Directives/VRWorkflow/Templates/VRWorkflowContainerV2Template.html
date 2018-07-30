@@ -1,0 +1,5 @@
+﻿<div ng-sortable="ctrl.itemsSortable" ng-class="scopeModel.dragdropsetting?'empty-vrcontainergrid-drop' : '' ">
+	<div ng-repeat="dataItem in scopeModel.datasource" class="vr-draggable-item">
+		<businessprocess-vr-workflow-activity-directive on-remove="scopeModel.onRemove" on-ready="dataItem.onDirectiveReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-activity-directive>
+	</div>
+</div>
