@@ -787,6 +787,10 @@
     <Build Include="bp\Stored Procedures\sp_VRWorkflow_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_VRWorkflow_GetAll.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_Insert.sql" />
+    <Build Include="Analytic\Tables\VRReportGeneration.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_VRReportGeneration_Update.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_VRReportGeneration_Insert.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_VRReportGeneration_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
