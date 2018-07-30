@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
 {
@@ -30,8 +31,11 @@ namespace Vanrise.Analytic.Business
                 automatedReportQueryDefinition.ThrowIfNull("automatedReportQueryDefinition", automatedReportQueryDefinition.VRComponentTypeId);
                 automatedReportQueryDefinition.Settings.ThrowIfNull("automatedReportQueryDefinition.Settings", automatedReportQueryDefinition.VRComponentTypeId);
                 automatedReportQueryDefinition.Settings.ExtendedSettings.ThrowIfNull("automatedReportQueryDefinition.Settings.ExtendedSettings", automatedReportQueryDefinition.VRComponentTypeId);
-                
-                if (!automatedReportQueryDefinition.Settings.ExtendedSettings.DoesUserHaveAccess(new VRAutomatedReportQueryDefinitionExtendedSettingsContext()))
+
+                if (!automatedReportQueryDefinition.Settings.ExtendedSettings.DoesUserHaveAccess(new VRAutomatedReportQueryDefinitionExtendedSettingsContext()
+                {
+                    LoggedInUserId = SecurityContext.Current.GetLoggedInUserId()
+                }))
                     return false;
                 return true;
             };

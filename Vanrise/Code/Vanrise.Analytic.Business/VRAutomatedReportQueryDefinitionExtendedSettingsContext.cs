@@ -9,6 +9,6 @@ namespace Vanrise.Analytic.Business
 {
     public class VRAutomatedReportQueryDefinitionExtendedSettingsContext : IVRAutomatedReportQueryDefinitionExtendedSettingsContext
     {
-
+        public int LoggedInUserId { get; set; }
     }
 }

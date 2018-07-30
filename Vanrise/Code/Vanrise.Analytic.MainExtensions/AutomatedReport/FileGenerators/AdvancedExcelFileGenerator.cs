@@ -220,22 +220,27 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             endIndex = newEndIndex;
         }
 
-        private void CheckAndSetNumericalOrDateTimeValues(Worksheet worksheet, VRAutomatedReportResolvedDataFieldValue fieldValue, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int u, ref object previousValue, ref int startIndex, ref int endIndex)
+        private void CheckAndSetNumericalOrDateTimeValues(Worksheet worksheet, VRAutomatedReportResolvedDataFieldValue fieldValue, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int iteration, ref object previousValue, ref int startIndex, ref int endIndex)
         {
-            if (previousValue == null && u > 0)
+            if (iteration > 0)
             {
-                MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
-                SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
-            }
-
-            if (previousValue != null && !previousValue.Equals(fieldValue.Value) && u > 0)
-            {
-                 MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
-                 SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
-            }
-            else if (previousValue != null && previousValue.Equals(fieldValue.Value) && u > 0)
-            {
-                endIndex = fieldStartingIndex;
+                if (previousValue == null)
+                {
+                    MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
+                    SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                }
+                else
+                {
+                    if (!previousValue.Equals(fieldValue.Value))
+                    {
+                        MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
+                        SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                    }
+                    else
+                    {
+                        endIndex = fieldStartingIndex;
+                    }
+                }
             }
             else
             {
@@ -243,25 +248,34 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
         }
 
-        private void CheckAndSetStringValues(Worksheet worksheet, string value, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int u, ref object previousValue, ref int startIndex, ref int endIndex)
+        private void CheckAndSetStringValues(Worksheet worksheet, string value, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int iteration, ref object previousValue, ref int startIndex, ref int endIndex)
         {
-            if (previousValue == null && value!=null && u > 0)
+            if (iteration > 0)
             {
-                MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
-                SetFlagValues(ref previousValue, value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
-            }
-            if (previousValue != null && !previousValue.ToString().Equals(value) && u > 0)
-            {
-                MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
-                SetFlagValues(ref previousValue, value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
-            }
-            else if (previousValue != null && previousValue.ToString().Equals(value) && u > 0)
-            {
-                endIndex = fieldStartingIndex;
-            }
-            else if(previousValue==null && value ==null && u>0)
-            {
-                endIndex = fieldStartingIndex;
+                if (previousValue == null)
+                {
+                    if (value != null)
+                    {
+                        MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
+                        SetFlagValues(ref previousValue, value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                    }
+                    else
+                    {
+                        endIndex = fieldStartingIndex;
+                    }
+                }
+                else
+                {
+                    if (!previousValue.ToString().Equals(value))
+                    {
+                        MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
+                        SetFlagValues(ref previousValue, value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                    }
+                    else
+                    {
+                        endIndex = fieldStartingIndex;
+                    }
+                }
             }
             else
             {
@@ -316,15 +330,15 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     object previousValue = null;
                                     int startIndex = -1;
                                     int endIndex = -1;
-                                    for (int u = 0; u < fieldValues.FieldValues.Count; u++)
+                                    for (int iteration = 0; iteration < fieldValues.FieldValues.Count; iteration++)
                                     {
-                                        var fieldValue = fieldValues.FieldValues[u];
+                                        var fieldValue = fieldValues.FieldValues[iteration];
                                         if (fieldValue != null)
                                         {
                                             if (fieldValues.FieldType.RenderDescriptionByDefault())
                                             {
                                                 SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Description, 14, true, TextAlignmentType.Center, true);
-                                                CheckAndSetStringValues(worksheet, fieldValue.Description, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, u, ref previousValue, ref startIndex, ref endIndex);
+                                                CheckAndSetStringValues(worksheet, fieldValue.Description, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
                                                 fieldStartingIndex++;
                                             }
                                             else
@@ -333,32 +347,35 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 {
                                                     var date = Convert.ToDateTime(fieldValue.Value);
                                                     SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 14, true, TextAlignmentType.Center, true);
-                                                    CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, u, ref previousValue, ref startIndex, ref endIndex);
+                                                    CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
                                                     fieldStartingIndex++;
                                                 }
                                                 else if (fieldValue.Value is int || fieldValue.Value is double || fieldValue.Value is decimal || fieldValue.Value is long)
                                                 {
                                                     SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                    CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, u, ref previousValue, ref startIndex, ref endIndex);
+                                                    CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
                                                     fieldStartingIndex++;
                                                 }
                                                 else if (fieldValue.Value is string)
                                                 {
                                                     SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                    CheckAndSetStringValues(worksheet, fieldValue.Value.ToString(), subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, u, ref previousValue, ref startIndex, ref endIndex);
+                                                    CheckAndSetStringValues(worksheet, fieldValue.Value.ToString(), subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
                                                     fieldStartingIndex++;
                                                 }
                                                 else
                                                 {
                                                     SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                    if (previousValue != fieldValue.Value && u > 0)
+                                                    if (iteration > 0)
                                                     {
-                                                        MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
-                                                        SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
-                                                    }
-                                                    else if (previousValue == fieldValue.Value && u > 0)
-                                                    {
-                                                        endIndex = fieldStartingIndex;
+                                                        if (previousValue != fieldValue.Value)
+                                                        {
+                                                            MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
+                                                            SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                                                        }
+                                                        else
+                                                        {
+                                                            endIndex = fieldStartingIndex;
+                                                        }
                                                     }
                                                     else
                                                     {

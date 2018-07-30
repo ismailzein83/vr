@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Business;
-using Vanrise.Security.Business;
 using Vanrise.Common;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
@@ -31,7 +30,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             foreach(var dataRecordStorage in this.DataRecordStorages){
                 dataRecordStorageIds.Add(dataRecordStorage.DataRecordStorageId);
             }
-            return dataRecordStorageManager.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), dataRecordStorageIds);
+            return dataRecordStorageManager.DoesUserHaveAccess(context.LoggedInUserId, dataRecordStorageIds);
         }
     }
 

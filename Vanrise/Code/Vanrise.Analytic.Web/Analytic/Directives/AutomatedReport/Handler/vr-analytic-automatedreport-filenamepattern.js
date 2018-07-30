@@ -70,11 +70,7 @@ app.directive("vrAnalyticAutomatedreportFilenamepattern", ["UtilsService", "VRNo
 
                 $scope.scopeModel.validateFileName = function () {
                     if (ctrl.value != undefined) {
-                        var fileName = ctrl.value;
-                        if (fileName.includes('/') || fileName.includes('\\') || fileName.includes(':') || fileName.includes('*') || fileName.includes('?')
-            || fileName.includes('"') || fileName.includes('<') || fileName.includes('>') || fileName.includes('|')) {
-                            return 'A file name cannot contain any of the following characters: /, \\, :, *, ?, ", <, > and |.';
-                        }
+                        return UtilsService.validateFileName(ctrl.value);
                     }
                     return null;
                 };

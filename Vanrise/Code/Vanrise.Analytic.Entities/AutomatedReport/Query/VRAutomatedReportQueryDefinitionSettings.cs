@@ -26,6 +26,6 @@ namespace Vanrise.Analytic.Entities
 
     public interface IVRAutomatedReportQueryDefinitionExtendedSettingsContext
     {
-
+        int LoggedInUserId { get; }
     }
 }

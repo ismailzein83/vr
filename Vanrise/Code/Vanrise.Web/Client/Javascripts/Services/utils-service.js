@@ -946,6 +946,15 @@
             return step;
         }
 
+        function validateFileName(fileName) {
+            if (fileName.includes('/') || fileName.includes('\\') || fileName.includes(':') || fileName.includes('*') || fileName.includes('?')
+            || fileName.includes('"') || fileName.includes('<') || fileName.includes('>') || fileName.includes('|')) {
+                return 'A file name cannot contain any of the following characters: /, \\, :, *, ?, ", <, > and |.';
+            }
+            else {
+                return null;
+            }
+        }
         return ({
             replaceAll: replaceAll,
             waitMultipleAsyncOperations: waitMultipleAsyncOperations,
@@ -1012,7 +1021,8 @@
             waitPromiseNode: waitPromiseNode,
             getDateObject: getDateObject,
             getHtmlStringWidth: getHtmlStringWidth,
-            getUnitCeildWidthNextStepValue:getUnitCeildWidthNextStepValue
+            getUnitCeildWidthNextStepValue: getUnitCeildWidthNextStepValue,
+            validateFileName: validateFileName
         });
     }
 
