@@ -1,10 +1,12 @@
 ﻿<div vr-modalcontent ng-controller="VRCommon_ExcelFileUploaderEditorController" vr-loader="scopeModel.isLoading" width="small">
     <vr-modalbody>
         <vr-form name="formEditor">
-     <vr-row>
-        <vr-button type="Add" data-onclick="scopeModel.addSheet" standalone></vr-button>
-    </vr-row>
     <vr-section title="Excel Sheets">
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-button type="Add" data-onclick="scopeModel.addSheet" standalone></vr-button>
+            </vr-columns>
+        </vr-row>
         <vr-row>
             <vr-columns width="1/2row">
                 <vr-validator validate="scopeModel.validateColumns()">
