@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Security.Entities;
 namespace Vanrise.GenericData.Business
 {
+    public enum GenericBEDefinitionType { RecordStorage = 0 , Remote = 1}
     public class GenericBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
         public static Guid s_configId = new Guid("6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6");
@@ -41,6 +42,12 @@ namespace Vanrise.GenericData.Business
         {
             return new DataRecordTypeManager().GetDataRecordTypeFields(this.DataRecordTypeId);
         }
+
+        public GenericBEDefinitionType GenericBEType { get; set; }
+        public Guid? VRConnectionId { get; set; }
+        public Guid? RemoteGenericBEDefinitionId { get; set; }
+
+
         public override string GroupSelectorUIControl { get; set; }
 
         public bool HideAddButton { get; set; }
