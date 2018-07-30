@@ -228,6 +228,7 @@
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings-temp.js" />
     <Content Include="VR_GenericData\Directives\DataProviderExtendedSettings\vr-genericdata-dataproviderextendedsettings-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\Templates\DataRecordRuleEvaluatorDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\vr-genericdata-datarecordruleevaluatordefinition-selector.js" />
