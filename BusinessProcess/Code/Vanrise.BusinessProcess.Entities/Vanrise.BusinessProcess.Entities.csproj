@@ -115,6 +115,7 @@
     <Compile Include="BusinessRules\BusinessRuleEffectiveActionDetail.cs" />
     <Compile Include="CustomCodeTaskCompilationOutput.cs" />
     <Compile Include="IBusinessRuleConditionValidateContext.cs" />
+    <Compile Include="IExclude.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
     <Compile Include="Tasks\BPTaskDetail.cs" />
     <Compile Include="Tasks\BPTask.cs" />
