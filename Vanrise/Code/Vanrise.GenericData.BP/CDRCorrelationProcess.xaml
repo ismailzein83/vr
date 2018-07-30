@@ -47,15 +47,15 @@
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP</AssemblyReference>
     </sco:Collection>
@@ -99,6 +99,11 @@
           <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpValue>
         </InArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationDefinition>
+      <vgba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
+        <InArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DateTimeMargin</mca:CSharpValue>
+        </InArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
       <vgba1:BuildCDRCorrelationFilterGroup.LastImportedId>
         <InArgument x:TypeArguments="s:Nullable(x:Int64)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int64)">CDRCorrelationProcessState != null ? CDRCorrelationProcessState.LastImportedId : null</mca:CSharpValue>
@@ -300,7 +305,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw6PwOwAg4CAQFGBUwgAwG6A00FWA4DAa0DWQVfJAMBpgNgBXUsAwGNA3YFpwIKAgEKqAIFrgIgAgECSQtJhQEDAbwDRmBGgwEDAbsDVQtV3QEDAbQDUAtQfQMBrgNcC1yBAQMBpwNoC2ipAQMBoANyC3JvAwGaA20LbWEDAZQDYwtjdQMBjgN5C3lZAgELfQmcAhQCARmfAgmlAiQCARGrAgurAoUBAgEEqAJgqAKBAQIBA4UBEYUBiAECATSKARGKAZgBAgEnjwERjwGWAQIBGpMBC5QCFgIBT5UCC5sCKwIBQaICD6ICiQECAROfAmSfAoIBAgESlAENuAEpAwGwArkBDd0BIwMB1AHeAQ34ASoDAZIB+QENkwIuAgFQmAIRmAKSAQIBQrABE7ABiQEDAYADoQEToQGEAQMB8wKXAROXAX4DAeYCnAETnAFmAwHZAqsBE6sBbwMBzAK1ARO1AYABAwG/AqYBE6YBjAEDAbIClAFxlAF3AwGxAsYBE8YBZwMBowLVARPVAXgDAZYCywETywGEAQMBiQLaARPaAXoDAfwB0AET0AGOAQMB7wG8ARO8AX0DAeIBwQETwQFnAwHVAesBE+sBlAEDAccB5gET5gGOAQMBugHwARPwAXIDAa0B9QET9QGBAQMBoAHhARPhAX0DAZMBgQITgQKEAQMBhQGQAhOQAnkCAXiLAhOLAowBAgFrhgIThgJ+AgFe/AET/AGRAQIBUQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw7PwO1Ag4CAQFGBUwgAwHAA00FWA4DAbMDWQVfJAMBrANgBXosAwGNA3sFrAIKAgEKrQIFswIgAgECSQtJhQEDAcIDRmBGgwEDAcEDVQtV3QEDAboDUAtQfQMBtANcC1yBAQMBrQNtC22pAQMBpgN3C3dvAwGgA3ILcmEDAZoDYwtjdQMBlANoC2hfAwGOA34LflkCAQuCAQmhAhQCARmkAgmqAiQCARGwAguwAoUBAgEErQJgrQKBAQIBA4oBEYoBiAECATSPARGPAZgBAgEnlAERlAGWAQIBGpgBC5kCFgIBT5oCC6ACKwIBQacCD6cCiQECAROkAmSkAoIBAgESmQENvQEpAwGwAr4BDeIBIwMB1AHjAQ39ASoDAZIB/gENmAIuAgFQnQIRnQKSAQIBQrUBE7UBiQEDAYADpgETpgGEAQMB8wKcAROcAX4DAeYCoQEToQFmAwHZArABE7ABbwMBzAK6ARO6AYABAwG/AqsBE6sBjAEDAbICmQFxmQF3AwGxAssBE8sBZwMBowLaARPaAXgDAZYC0AET0AGEAQMBiQLfARPfAXoDAfwB1QET1QGOAQMB7wHBARPBAX0DAeIBxgETxgFnAwHVAfABE/ABlAEDAccB6wET6wGOAQMBugH1ARP1AXIDAa0B+gET+gGBAQMBoAHmARPmAX0DAZMBhgIThgKEAQMBhQGVAhOVAnkCAXiQAhOQAowBAgFriwITiwJ+AgFegQITgQKRAQIBUQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

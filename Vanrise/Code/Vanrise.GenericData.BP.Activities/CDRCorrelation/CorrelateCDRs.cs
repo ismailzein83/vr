@@ -96,6 +96,7 @@ namespace Vanrise.GenericData.BP.Activities
                                         var output = new DataTransformer().ExecuteDataTransformation(cdrCorrelationDefinition.Settings.MergeDataTransformationDefinitionId, (context) =>
                                         {
                                             context.SetRecordValue("InputList", new List<dynamic> { mobileCDR.CDR, matchingMobileCDR.CDR });
+                                            context.SetRecordValue("DateTimeFieldName", cdrCorrelationDefinition.Settings.DatetimeFieldName);
                                         });
 
                                         DateTime recordDateTime = output.GetRecordValue("RecordDateTime");
@@ -123,29 +124,7 @@ namespace Vanrise.GenericData.BP.Activities
                                     }
                                 }
 
-                                //Cleaning List And Dict
-                                DateTime minDateTime = maxDateTime.AddSeconds(-dateTimeMargin.Seconds);
-                                for (var index = uncorrelatedCDRs.Count - 1; index >= 0; index--)
-                                {
-                                    MobileCDR currentMobileCDR = uncorrelatedCDRs[index];
-                                    if (currentMobileCDR.AttemptDateTime >= minDateTime)
-                                        continue;
-
-                                    while (index >= 0)
-                                    {
-                                        currentMobileCDR = uncorrelatedCDRs[index];
-                                        uncorrelatedCDRs.Remove(currentMobileCDR);
-
-                                        List<MobileCDR> tempCorrelatedCDRs = uncorrelatedCDRsByCDPNDict.GetOrCreateItem(currentMobileCDR.CDPN);
-                                        if (tempCorrelatedCDRs.Count > 1)
-                                            tempCorrelatedCDRs.Remove(currentMobileCDR);
-                                        else
-                                            uncorrelatedCDRsByCDPNDict.Remove(currentMobileCDR.CDPN);
-
-                                        index--;
-                                    }
-                                    break;
-                                }
+                                CleaningListAndDict(uncorrelatedCDRs, uncorrelatedCDRsByCDPNDict, maxDateTime, dateTimeMargin);
 
                                 if (cdrCorrelationBatch.OutputRecordsToInsert.Count > 0)
                                     inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
@@ -159,6 +138,32 @@ namespace Vanrise.GenericData.BP.Activities
             });
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Correlate CDRs is done.");
+        }
+
+        private static void CleaningListAndDict(List<MobileCDR> uncorrelatedCDRs, Dictionary<string, List<MobileCDR>> uncorrelatedCDRsByCDPNDict, DateTime maxDateTime, TimeSpan dateTimeMargin)
+        {
+            DateTime minDateTime = maxDateTime.AddSeconds(-dateTimeMargin.TotalSeconds);
+            for (var index = uncorrelatedCDRs.Count - 1; index >= 0; index--)
+            {
+                MobileCDR currentMobileCDR = uncorrelatedCDRs[index];
+                if (currentMobileCDR.AttemptDateTime >= minDateTime)
+                    continue;
+
+                while (index >= 0)
+                {
+                    currentMobileCDR = uncorrelatedCDRs[index];
+                    uncorrelatedCDRs.Remove(currentMobileCDR);
+
+                    List<MobileCDR> tempCorrelatedCDRs = uncorrelatedCDRsByCDPNDict.GetOrCreateItem(currentMobileCDR.CDPN);
+                    if (tempCorrelatedCDRs.Count > 1)
+                        tempCorrelatedCDRs.Remove(currentMobileCDR);
+                    else
+                        uncorrelatedCDRsByCDPNDict.Remove(currentMobileCDR.CDPN);
+
+                    index--;
+                }
+                break;
+            }
         }
 
         private bool IsMatching(MobileCDR firstMobileCDR, MobileCDR secondMobileCDR, CDRCorrelationDefinition cdrCorrelationDefinition, TimeSpan dateTimeMargin, int durationMarginInSeconds)

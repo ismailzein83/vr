@@ -6,11 +6,13 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.BP.Activities
 {
-
     public sealed class BuildCDRCorrelationFilterGroup : CodeActivity
     {
         [RequiredArgument]
         public InArgument<CDRCorrelationDefinition> CDRCorrelationDefinition { get; set; }
+
+        [RequiredArgument]
+        public InArgument<TimeSpan> DateTimeMargin { get; set; }
 
         [RequiredArgument]
         public InArgument<long?> LastImportedId { get; set; }
@@ -24,13 +26,14 @@ namespace Vanrise.GenericData.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             CDRCorrelationDefinition cdrCorrelationDefinition = this.CDRCorrelationDefinition.Get(context);
+            TimeSpan dateTimeMargin = this.DateTimeMargin.Get(context);
             long? lastImportedId = this.LastImportedId.Get(context);
+
             CDRCorrelationDefinitionSettings settings = cdrCorrelationDefinition.Settings;
 
             bool newDataImported = false;
 
             RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
-            recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1 } });
 
             if (lastImportedId.HasValue)
             {
@@ -40,7 +43,7 @@ namespace Vanrise.GenericData.BP.Activities
                 if (minDate.HasValue)
                 {
                     newDataImported = true;
-                    minDate.Value.AddMinutes(-5);
+                    minDate.Value.AddSeconds(-dateTimeMargin.TotalSeconds).AddSeconds(-1);
                     recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = settings.DatetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = minDate.Value });
                 }
             }
@@ -48,6 +51,8 @@ namespace Vanrise.GenericData.BP.Activities
             {
                 newDataImported = true;
             }
+
+            recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1 } });
 
             this.RecordFilterGroup.Set(context, recordFilter);
             this.NewDataImported.Set(context, newDataImported);
