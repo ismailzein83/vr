@@ -1329,7 +1329,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -1346,6 +1346,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1693,7 +1694,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -2571,7 +2572,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -2653,7 +2654,7 @@
             <Top>4.95771in</Top>
             <Left>0.1425in</Left>
             <Height>0.25in</Height>
-            <Width>7.71in</Width>
+            <Width>7.70998in</Width>
             <ZIndex>22</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
@@ -2995,9 +2996,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox19</rd:DefaultName>
             <Top>13.761cm</Top>
-            <Left>4.37458cm</Left>
+            <Left>4.4972cm</Left>
             <Height>0.6cm</Height>
-            <Width>4.97563cm</Width>
+            <Width>4.45371cm</Width>
             <ZIndex>26</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
@@ -3016,10 +3017,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>5.28604cm</Width>
+                  <Width>4.47294cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.16558cm</Width>
+                  <Width>1.73543cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3080,7 +3081,9 @@
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox38</rd:DefaultName>
@@ -3117,9 +3120,9 @@
             </TablixRowHierarchy>
             <DataSetName>RecurringChargeItem</DataSetName>
             <Top>13.761cm</Top>
-            <Left>10.51098cm</Left>
+            <Left>13.73693cm</Left>
             <Height>0.6cm</Height>
-            <Width>9.45162cm</Width>
+            <Width>6.20837cm</Width>
             <ZIndex>27</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
@@ -3134,7 +3137,7 @@
         <Height>11.27999in</Height>
         <Style />
       </Body>
-      <Width>7.97839in</Width>
+      <Width>7.94611in</Width>
       <Page>
         <PageFooter>
           <Height>0.45833in</Height>
