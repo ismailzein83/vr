@@ -16,5 +16,8 @@
     <vr-datagridcolumn headertext="'Generate'" disablesorting fixedwidth="'100'" invisibleheader>
         <a href="" ng-click="viewScope.generateVRReportGeneration(dataItem)">Generate</a>
     </vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 
 </vr-datagrid>

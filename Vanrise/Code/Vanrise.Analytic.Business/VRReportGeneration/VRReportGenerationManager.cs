@@ -30,7 +30,13 @@ namespace Vanrise.Analytic.Business
             };
             return DataRetrievalManager.Instance.ProcessResult(input, allVRReportGenerations.ToBigResult(input, filterExpression, VRReportGenerationDetailMapper));
 
-        }        
+        }
+        public VRReportGeneration GetVRReportGenerationHistoryDetailbyHistoryId(int reportId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var vRReportGeneration = s_vrObjectTrackingManager.GetObjectDetailById(reportId);
+            return vRReportGeneration.CastWithValidate<VRReportGeneration>("VRReportGeneration : historyId ", reportId);
+        }
 
         public InsertOperationOutput<VRReportGenerationDetail> AddVRReportGeneration(VRReportGeneration vRReportGeneration)
         {
@@ -46,7 +52,9 @@ namespace Vanrise.Analytic.Business
             {                
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = VRReportGenerationDetailMapper(this.GetVRReportGeneration(reportId));
+                VRReportGeneration addedVRReportGeneration = this.GetVRReportGeneration(reportId);
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRReportGenerationLoggableEntity.Instance, addedVRReportGeneration);
+                insertOperationOutput.InsertedObject = VRReportGenerationDetailMapper(addedVRReportGeneration);
             }
             else
             {
@@ -56,9 +64,24 @@ namespace Vanrise.Analytic.Business
         }
         public VRReportGeneration GetVRReportGeneration(long reportId)
         {
-            return GetCachedVRReportGenerations().GetRecord(reportId);
+            return GetVRReportGeneration(reportId, false);
         }
-
+        public VRReportGeneration GetVRReportGeneration(long reportId, bool isViewedFromUI)
+        {
+            var vRReportGeneration = GetCachedVRReportGenerations().GetRecord(reportId);
+            if (vRReportGeneration != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(VRReportGenerationLoggableEntity.Instance, vRReportGeneration);
+            return vRReportGeneration;
+        }
+        public string GetVRReportGenerationName(long reportId)
+        {
+            var vRReportGeneration = GetVRReportGeneration(reportId);
+            if (vRReportGeneration != null)
+                return vRReportGeneration.Name;
+            else
+                return null;
+        }
+        
         public UpdateOperationOutput<VRReportGenerationDetail> UpdateVRReportGeneration(VRReportGeneration vRReportGeneration)
         {
             IVRReportGenerationDataManager vRReportGenerationDataManager = AnalyticDataManagerFactory.GetDataManager<IVRReportGenerationDataManager>();
@@ -71,7 +94,9 @@ namespace Vanrise.Analytic.Business
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = VRReportGenerationDetailMapper(this.GetVRReportGeneration(vRReportGeneration.ReportId));
+                VRReportGeneration updatedVRReportGeneration = this.GetVRReportGeneration(vRReportGeneration.ReportId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRReportGenerationLoggableEntity.Instance, updatedVRReportGeneration);
+                updateOperationOutput.UpdatedObject = VRReportGenerationDetailMapper(updatedVRReportGeneration);
             }
             else
             {
@@ -95,6 +120,51 @@ namespace Vanrise.Analytic.Business
                 return vRReportGenerationDataManager.AreVRReportGenerationUpdated(ref _updateHandle);
             }
         }
+
+        private class VRReportGenerationLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRReportGenerationLoggableEntity Instance = new VRReportGenerationLoggableEntity();
+
+            private VRReportGenerationLoggableEntity()
+            {
+
+            }
+
+            static VRReportGenerationManager s_vRReportGeneration = new VRReportGenerationManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Analytic_ReportGeneration"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Analytic"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "ReportGeneration"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Analytic_ReportGeneration_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRReportGeneration vRReportGeneration = context.Object.CastWithValidate<VRReportGeneration>("context.Object");
+                return vRReportGeneration.ReportId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRReportGeneration vRReportGeneration = context.Object.CastWithValidate<VRReportGeneration>("context.Object");
+                return s_vRReportGeneration.GetVRReportGenerationName(vRReportGeneration.ReportId);
+            }
+        }
+
         #endregion
 
         #region Private Methods

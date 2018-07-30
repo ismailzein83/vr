@@ -8,7 +8,8 @@
         var isEditMode;
         var reportId;
         var vRReportGenerationEntity;
-
+        var isViewHistoryMode;
+        var context;
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -21,8 +22,10 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 reportId = parameters.reportId;
+                context = parameters.context;
             }
             isEditMode = (reportId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
         };
 
         function defineScope() {
@@ -39,13 +42,11 @@
                     return update();
                 else
                     return insert();
-
             };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
         };
 
         function load() {
@@ -60,10 +61,25 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
+            else if (isViewHistoryMode) {
+                getVRReportGenerationHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        vRReportGenerationEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+            }
             else
                 loadAllControls();
         };
 
+        function getVRReportGenerationHistory() {
+            return VR_Analytic_ReportGenerationAPIService.GetVRReportGenerationHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+                vRReportGenerationEntity = response;
+            });
+        }
         function getVRReportGeneration() {
             return VR_Analytic_ReportGenerationAPIService.GetVRReportGeneration(reportId).then(function (response) {
                 vRReportGenerationEntity = response;
@@ -75,6 +91,8 @@
             function setTitle() {
                 if (isEditMode && vRReportGenerationEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(vRReportGenerationEntity.Name, "VR Report Generation");
+                else if (isViewHistoryMode && vRReportGenerationEntity != undefined)
+                    $scope.title = "View Report Generation: " + vRReportGenerationEntity.Name;
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("VR Report Generation");
             };

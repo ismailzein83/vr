@@ -48,6 +48,12 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetReportActionTemplateConfigs();
         }
+        [HttpGet]
+        [Route("GetVRReportGenerationHistoryDetailbyHistoryId")]
+        public VRReportGeneration GetVRReportGenerationHistoryDetailbyHistoryId(int vRReportGenerationHistoryId)
+        {
+            return _manager.GetVRReportGenerationHistoryDetailbyHistoryId(vRReportGenerationHistoryId);
+        }
        
     }
 }

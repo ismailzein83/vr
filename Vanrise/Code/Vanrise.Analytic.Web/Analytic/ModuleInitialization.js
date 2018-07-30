@@ -4,4 +4,5 @@
 	VR_Analytic_AnalyticItemConfigService.registerObjectTrackingDrillDownToAnalyticItemConfig();
 	VR_Analytic_AnalyticItemActionService.registerOpenRecordSearch();
 	VR_Analytic_ReportGenerationActionService.registerDownloadFileAction();
+	VR_Analytic_ReportGenerationActionService.registerHistoryViewAction();
 }]);

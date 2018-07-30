@@ -9,7 +9,12 @@
 
         var controllerName = "VRReportGeneration";
 
+        function GetVRReportGenerationHistoryDetailbyHistoryId(vRReportGenerationHistoryId) {
 
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetVRReportGenerationHistoryDetailbyHistoryId'), {
+                vRReportGenerationHistoryId: vRReportGenerationHistoryId
+            });
+        }
         function GetFilteredVRReportGenerations(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetFilteredVRReportGenerations'), input);
         }
@@ -27,7 +32,7 @@
         function UpdateVRReportGeneration(vRReportGenerationItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateVRReportGeneration'), vRReportGenerationItem);
         }
-      
+
         function GetVRReportGenerationsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetVRReportGenerationsInfo"), {
                 filter: filter
@@ -43,7 +48,8 @@
             AddVRReportGeneration: AddVRReportGeneration,
             UpdateVRReportGeneration: UpdateVRReportGeneration,
             GetVRReportGenerationsInfo: GetVRReportGenerationsInfo,
-            GetReportActionTemplateConfigs: GetReportActionTemplateConfigs
+            GetReportActionTemplateConfigs: GetReportActionTemplateConfigs,
+            GetVRReportGenerationHistoryDetailbyHistoryId: GetVRReportGenerationHistoryDetailbyHistoryId
         });
     }
 
