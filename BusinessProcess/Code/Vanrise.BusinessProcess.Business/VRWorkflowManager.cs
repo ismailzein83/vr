@@ -247,7 +247,7 @@ namespace Vanrise.BusinessProcess.Business
             public Guid VRWorkflowId { get; set; }
         }
 
-        private bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out List<string> errorMessages)
+        public bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out List<string> errorMessages)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;
