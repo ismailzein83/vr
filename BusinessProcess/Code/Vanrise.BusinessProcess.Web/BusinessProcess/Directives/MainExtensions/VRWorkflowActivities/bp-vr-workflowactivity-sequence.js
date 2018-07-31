@@ -3,164 +3,174 @@
 app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService',
 	function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService) {
 
-		var directiveDefinitionObject = {
-			restrict: 'E',
-			scope: {
-				onReady: '=',
-				isrequired: '=',
-				normalColNum: '@',
-				dragdropsetting: '='
-			},
-			controller: function ($scope, $element, $attrs) {
-				var ctrl = this;
+	    var directiveDefinitionObject = {
+	        restrict: 'E',
+	        scope: {
+	            onReady: '=',
+	            isrequired: '=',
+	            normalColNum: '@',
+	            dragdropsetting: '='
+	        },
+	        controller: function ($scope, $element, $attrs) {
+	            var ctrl = this;
 
-				ctrl.itemsSortable = { handle: '.handeldrag', animation: 100 };
-				ctrl.itemsSortable.sort = true;
-				if (ctrl.dragdropsetting != undefined && typeof (ctrl.dragdropsetting) == 'object') {
-					ctrl.itemsSortable.group = {
-						name: ctrl.dragdropsetting.groupCorrelation.getGroupName(),
-						pull: true,
-						put: ctrl.dragdropsetting.canReceive
-					};
+	            ctrl.itemsSortable = { handle: '.handeldrag', animation: 100 };
+	            ctrl.itemsSortable.sort = true;
+	            if (ctrl.dragdropsetting != undefined && typeof (ctrl.dragdropsetting) == 'object') {
+	                ctrl.itemsSortable.group = {
+	                    name: ctrl.dragdropsetting.groupCorrelation.getGroupName(),
+	                    pull: true,
+	                    put: ctrl.dragdropsetting.canReceive
+	                };
 
-					ctrl.itemsSortable.onAdd = function (/**Event*/evt) {
-						var itemAddedContext = (ctrl.getChildContext != undefined) ? ctrl.getChildContext() : undefined;
-						var obj = evt.model;
-						if (ctrl.dragdropsetting.onItemReceived != undefined && typeof (ctrl.dragdropsetting.onItemReceived) == 'function')
-							obj = ctrl.dragdropsetting.onItemReceived(evt.model, evt.models, evt.source, itemAddedContext);
-						evt.models[evt.newIndex] = obj;
-					};
-				}
+	                ctrl.itemsSortable.onAdd = function (/**Event*/evt) {
+	                    var itemAddedContext = (ctrl.getChildContext != undefined) ? ctrl.getChildContext() : undefined;
+	                    var obj = evt.model;
+	                    if (ctrl.dragdropsetting.onItemReceived != undefined && typeof (ctrl.dragdropsetting.onItemReceived) == 'function')
+	                        obj = ctrl.dragdropsetting.onItemReceived(evt.model, evt.models, evt.source, itemAddedContext);
+	                    evt.models[evt.newIndex] = obj;
+	                };
+	            }
 
-				var ctor = new workflowSequence(ctrl, $scope, $attrs);
-				ctor.initializeController();
-			},
-			controllerAs: 'ctrl',
-			bindToController: true,
-			compile: function (element, attrs) {
+	            var ctor = new workflowSequence(ctrl, $scope, $attrs);
+	            ctor.initializeController();
+	        },
+	        controllerAs: 'ctrl',
+	        bindToController: true,
+	        compile: function (element, attrs) {
 
-			},
-			templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowSequenceTemplate.html'
-		};
+	        },
+	        templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowSequenceTemplate.html'
+	    };
 
-		function workflowSequence(ctrl, $scope, $attrs) {
-			var context;
-			var variables;
-			var parentVariables;
-			this.initializeController = initializeController;
-			function initializeController() {
-				$scope.scopeModel = {};
-				$scope.scopeModel.datasource = [];
-				$scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
-				$scope.scopeModel.onRemove = function (vRWorkflowActivityId) {
-					for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-						if ($scope.scopeModel.datasource[i].VRWorkflowActivityId == vRWorkflowActivityId) {
-							$scope.scopeModel.datasource.splice(i, 1);
-							break;
-						}
-					}
-				};
-				defineAPI();
-			}
+	    function workflowSequence(ctrl, $scope, $attrs) {
+	        this.initializeController = initializeController;
 
-			function defineAPI() {
-				var api = {};
+	        var context;
+	        var variables;
+	        var parentVariables;
 
-				api.load = function (payload) {
+	        function initializeController() {
+	            $scope.scopeModel = {};
+	            $scope.scopeModel.datasource = [];
+	            $scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
 
-					ctrl.getChildContext = function () {
-						var childContext = { /*ParentVariables: []*/ };
+	            $scope.scopeModel.onRemove = function (vRWorkflowActivityId) {
+	                for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+	                    if ($scope.scopeModel.datasource[i].VRWorkflowActivityId == vRWorkflowActivityId) {
+	                        $scope.scopeModel.datasource.splice(i, 1);
+	                        break;
+	                    }
+	                }
+	            };
 
-						if (context != undefined) {
-							childContext.getWorkflowArguments = context.getWorkflowArguments;
-							//childContext.WorkflowArguments = context.WorkflowArguments;
-							childContext.reserveVariableName = context.reserveVariableName;
-							childContext.reserveVariableNames = context.reserveVariableNames;
-							childContext.eraseVariableName = context.eraseVariableName;
-							childContext.isVariableNameReserved = context.isVariableNameReserved;
-							childContext.getParentVariables = function () {
-								var parentVars = [];
-								if (context.getParentVariables != undefined)
-									parentVars = parentVars.concat(context.getParentVariables());
-								if (variables != undefined)
-									parentVars = parentVars.concat(variables);
-								return parentVars;
-							};
-							//if (context.ParentVariables != undefined)
-							//	childContext.ParentVariables = childContext.ParentVariables.concat(context.ParentVariables);
-							//if (variables != undefined)
-							//	childContext.ParentVariables = childContext.ParentVariables.concat(variables);
-						}
-						return childContext;
-					};
+	            ctrl.getChildContext = function () {
+	                var childContext = { /*ParentVariables: []*/ };
 
-					function extendDataItem(dataItem) {
-						dataItem.onDirectiveReady = function (api) {
-							if (dataItem.directiveAPI != null)
-								return;
-							dataItem.directiveAPI = api;
-							var setLoader = function (value) { };
-							var directivePayload = {
-								Context: (ctrl.getChildContext != undefined) ? ctrl.getChildContext() : undefined,
-								VRWorkflowActivityId: dataItem.VRWorkflowActivityId,
-								Settings: dataItem.Settings
-							};
-							VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, directivePayload, setLoader);
-						};
-					}
+	                if (context != undefined) {
+	                    childContext.getWorkflowArguments = context.getWorkflowArguments;
+	                    //childContext.WorkflowArguments = context.WorkflowArguments;
+	                    childContext.reserveVariableName = context.reserveVariableName;
+	                    childContext.reserveVariableNames = context.reserveVariableNames;
+	                    childContext.eraseVariableName = context.eraseVariableName;
+	                    childContext.isVariableNameReserved = context.isVariableNameReserved;
+	                    childContext.getParentVariables = function () {
+	                        var parentVars = [];
+	                        if (context.getParentVariables != undefined)
+	                            parentVars = parentVars.concat(context.getParentVariables());
+	                        if (variables != undefined)
+	                            parentVars = parentVars.concat(variables);
+	                        return parentVars;
+	                    };
+	                    //if (context.ParentVariables != undefined)
+	                    //	childContext.ParentVariables = childContext.ParentVariables.concat(context.ParentVariables);
+	                    //if (variables != undefined)
+	                    //	childContext.ParentVariables = childContext.ParentVariables.concat(variables);
+	                }
+	                return childContext;
+	            };
 
-					//Variable Menu Action
-					function openVariablesEditor() {
-						var onSaveVariables = function (activityVariables) {
-							variables = activityVariables;
-						};
-						if (context != undefined)
-							BusinessProcess_VRWorkflowService.openVariablesEditor(onSaveVariables, variables, (context.getParentVariables != undefined) ? context.getParentVariables() : undefined, context.reserveVariableName, context.eraseVariableName, context.isVariableNameReserved);
-						else BusinessProcess_VRWorkflowService.openVariablesEditor(onSaveVariables, variables, undefined, undefined, undefined, undefined);
-					}
-					var variableEditorAction = {
-						name: "Variables",
-						clicked: openVariablesEditor
-					};
+	            defineAPI();
+	        }
 
-					if (payload != undefined) {
-						context = payload.Context;
-						if (payload.Settings != undefined)
-							variables = payload.Settings.Variables;
+	        function defineAPI() {
+	            var api = {};
 
-						if (context != undefined && context.reserveVariableNames != undefined && variables != undefined && variables.length > 0)
-							context.reserveVariableNames(variables);
+	            api.load = function (payload) {
 
-						if (payload.Settings != undefined && payload.Settings.Activities != undefined && payload.Settings.Activities.length > 0) {
-							for (var i = 0; i < payload.Settings.Activities.length; i++) {
-								extendDataItem(payload.Settings.Activities[i]);
-							}
-							$scope.scopeModel.datasource = payload.Settings.Activities;
-						}
+	                console.log(payload);
 
-						if (payload.SetMenuAction != undefined)
-							payload.SetMenuAction(variableEditorAction);
-					}
-				};
+	                if (payload != undefined) {
+	                    context = payload.Context;
+	                    if (payload.Settings != undefined)
+	                        variables = payload.Settings.Variables;
 
-				api.getData = function () {
+	                    if (context != undefined && context.reserveVariableNames != undefined && variables != undefined && variables.length > 0)
+	                        context.reserveVariableNames(variables);
 
-					var activities = [];
-					for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-						var item = $scope.scopeModel.datasource[i];
-						if (item.directiveAPI != null)
-							activities.push(item.directiveAPI.getData());
-					}
-					return {
-						$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowSequenceActivity, Vanrise.BusinessProcess.MainExtensions",
-						Activities: activities,
-						Variables: variables
-					};
-				};
+	                    if (payload.Settings != undefined && payload.Settings.Activities != undefined && payload.Settings.Activities.length > 0) {
+	                        for (var i = 0; i < payload.Settings.Activities.length; i++) {
+	                            extendDataItem(payload.Settings.Activities[i]);
+	                        }
+	                        $scope.scopeModel.datasource = payload.Settings.Activities;
+	                    }
 
-				if (ctrl.onReady != null)
-					ctrl.onReady(api);
-			}
-		}
-		return directiveDefinitionObject;
+	                    if (payload.SetMenuAction != undefined)
+	                        payload.SetMenuAction(getVariableEditorAction());
+	                }
+	            };
+
+	            api.getData = function () {
+
+	                var activities = [];
+	                for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+	                    var item = $scope.scopeModel.datasource[i];
+	                    if (item.directiveAPI != null)
+	                        activities.push(item.directiveAPI.getData());
+	                }
+	                return {
+	                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowSequenceActivity, Vanrise.BusinessProcess.MainExtensions",
+	                    Activities: activities,
+	                    Variables: variables
+	                };
+	            };
+
+	            if (ctrl.onReady != null)
+	                ctrl.onReady(api);
+	        }
+
+	        function getVariableEditorAction() {
+	            return {
+	                name: "Variables",
+	                clicked: openVariablesEditor
+	            };
+	        }
+	        function openVariablesEditor() {
+	            var onSaveVariables = function (activityVariables) {
+	                variables = activityVariables;
+	            };
+
+	            if (context != undefined)
+	                BusinessProcess_VRWorkflowService.openVariablesEditor(onSaveVariables, variables, (context.getParentVariables != undefined) ? context.getParentVariables() : undefined, context.reserveVariableName, context.eraseVariableName, context.isVariableNameReserved);
+	            else
+	                BusinessProcess_VRWorkflowService.openVariablesEditor(onSaveVariables, variables, undefined, undefined, undefined, undefined);
+	        }
+	        function extendDataItem(dataItem) {
+	            dataItem.onDirectiveReady = function (api) {
+	                if (dataItem.directiveAPI != null)
+	                    return;
+
+	                dataItem.directiveAPI = api;
+	                var setLoader = function (value) { };
+	                var directivePayload = {
+	                    Context: (ctrl.getChildContext != undefined) ? ctrl.getChildContext() : undefined,
+	                    VRWorkflowActivityId: dataItem.VRWorkflowActivityId,
+	                    Settings: dataItem.Settings
+	                };
+	                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, directivePayload, setLoader);
+	            };
+	        }
+	    }
+
+	    return directiveDefinitionObject;
 	}]);
