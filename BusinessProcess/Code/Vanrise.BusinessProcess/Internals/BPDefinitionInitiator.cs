@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using System.Threading;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Activities.DurableInstancing;
-using Vanrise.BusinessProcess.Entities;
-using Vanrise.BusinessProcess.Data;
-using Vanrise.Common;
-using Vanrise.Runtime;
+using System.Linq;
 using Vanrise.BusinessProcess.Business;
+using Vanrise.BusinessProcess.Data;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 using Vanrise.Entities;
-using Vanrise.Security.Entities;
 using Vanrise.Security.Business;
-using System.Runtime.DurableInstancing;
-using System.Runtime.Remoting.Messaging;
-using System.Runtime.Serialization;
-using System.IO;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.BusinessProcess
 {
@@ -47,6 +38,17 @@ namespace Vanrise.BusinessProcess
 
         Activity _workflowDefinition;
 
+        Activity WorkflowDefinition
+        {
+            get
+            {
+                if (_workflowDefinition != null)
+                    return _workflowDefinition;
+                else
+                    return _vrWorkflowManager.GetVRWorkflowActivity(_definition.VRWorkflowId.Value);
+            }
+        }
+
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
 
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
@@ -59,7 +61,6 @@ namespace Vanrise.BusinessProcess
         public BPDefinitionInitiator(Guid serviceInstanceId, BPDefinition definition)
         {
             _serviceInstanceId = serviceInstanceId;
-            //definition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", definition.BPDefinitionID);
 
             if (definition.WorkflowType == null && !definition.VRWorkflowId.HasValue)
                 throw new VRBusinessException(string.Format("WorkflowType or VRWorkflowId should have value for BPDefinitionID: '{0}'", definition.BPDefinitionID));
@@ -69,22 +70,10 @@ namespace Vanrise.BusinessProcess
             try
             {
                 if (definition.WorkflowType != null)
-                    _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
-                else
                 {
-                    VRWorkflow vrWorkflow = _vrWorkflowManager.GetVRWorkflow(definition.VRWorkflowId.Value);
-                    List<string> errorMessages;
-                    if (!_vrWorkflowManager.TryCompileWorkflow(vrWorkflow, out _workflowDefinition, out errorMessages))
-                    {
-                        StringBuilder errorsBuilder = new StringBuilder();
-                        if (errorMessages != null)
-                        {
-                            foreach (var errorMessage in errorMessages)
-                                errorsBuilder.AppendLine(errorMessage);
-                        }
-                        throw new Exception(String.Format("Compile Error when building executor type for workflow Id '{0}'. Errors: {1}",
-                            definition.VRWorkflowId.Value, errorsBuilder));
-                    }
+                    _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
+                    if (_workflowDefinition == null)
+                        throw new Exception(String.Format("'{0}' is not of type Activity", definition.WorkflowType));
                 }
             }
             catch (Exception ex)
@@ -92,8 +81,7 @@ namespace Vanrise.BusinessProcess
                 Vanrise.Common.LoggerFactory.GetLogger().WriteError("Unable to create instance from type '{0}' for BPDefinitionID: '{1}'. Error: {2}", definition.WorkflowType, definition.BPDefinitionID, ex.ToString());
                 throw;
             }
-            if (_workflowDefinition == null)
-                throw new Exception(String.Format("'{0}' is not of type Activity", definition.WorkflowType));
+
             _maxNbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : s_defaultMaxConcurrentWorkflowsPerDefinition;
         }
 
@@ -213,7 +201,7 @@ namespace Vanrise.BusinessProcess
                 inputs = inputArgument.Arguments;
             }
 
-            WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(_workflowDefinition, inputs) : new WorkflowApplication(_workflowDefinition);
+            WorkflowApplication wfApp = inputs != null ? new WorkflowApplication(WorkflowDefinition, inputs) : new WorkflowApplication(WorkflowDefinition);
             bpInstance.WorkflowInstanceID = wfApp.Id;
             BPRunningInstance runningInstance = new BPRunningInstance
             {
@@ -245,7 +233,7 @@ namespace Vanrise.BusinessProcess
                     runningInstance = new BPRunningInstance
                     {
                         BPInstance = bpInstance,
-                        WFApplication = new WorkflowApplication(_workflowDefinition)
+                        WFApplication = new WorkflowApplication(WorkflowDefinition)
                     };
                     PrepareWFAppForExecution(runningInstance);
                     if (!_runningInstances.TryAdd(bpInstance.ProcessInstanceID, runningInstance))

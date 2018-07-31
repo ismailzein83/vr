@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -213,7 +214,40 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
-        public bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out List<string> errorMessages)
+        public System.Activities.Activity GetVRWorkflowActivity(Guid vrWorkflowId)
+        {
+            var cacheName = new GetVRWorkflowActivityCacheName { VRWorkflowId = vrWorkflowId };
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+              () =>
+              {
+                  var vrWorkflow = GetVRWorkflow(vrWorkflowId);
+                  if (vrWorkflow == null)
+                      throw new NullReferenceException(String.Format("vrWorkflow '{0}'", vrWorkflowId));
+                  Activity workflowActivity;
+                  List<string> errorMessages;
+
+                  if (TryCompileWorkflow(vrWorkflow, out workflowActivity, out errorMessages))
+                      return workflowActivity;
+                  else
+                  {
+                      StringBuilder errorsBuilder = new StringBuilder();
+                      if (errorMessages != null)
+                      {
+                          foreach (var errorMessage in errorMessages)
+                              errorsBuilder.AppendLine(errorMessage);
+                      }
+                      throw new Exception(String.Format("Compile Error when building for VRWorkflow Id '{0}'. Errors: {1}",
+                          vrWorkflowId, errorsBuilder));
+                  }
+              });
+        }
+
+        private struct GetVRWorkflowActivityCacheName
+        {
+            public Guid VRWorkflowId { get; set; }
+        }
+
+        private bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out List<string> errorMessages)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;

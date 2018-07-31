@@ -1,233 +1,264 @@
 ﻿(function (appControllers) {
 
-	"use strict";
+    "use strict";
 
-	VRWorkflowEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService'];
+    VRWorkflowEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService'];
 
-	function VRWorkflowEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
+    function VRWorkflowEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
 
-		var isEditMode;
-		var allVariableNames = [];
+        var isEditMode;
+        var allVariableNames = [];
 
-		var vrWorkflowEntity;
-		var vrWorkflowId;
-		var vrWorkflowArgumentEditorRuntimeDict;
+        var vrWorkflowEntity;
+        var vrWorkflowId;
+        var vrWorkflowArgumentEditorRuntimeDict;
 
-		var argumentsGridAPI;
-		var argumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var argumentsGridAPI;
+        var argumentsGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var workflowDesignerAPI;
-		var workflowDesignerReadyDeferred = UtilsService.createPromiseDeferred();
+        var workflowDesignerAPI;
+        var workflowDesignerReadyDeferred = UtilsService.createPromiseDeferred();
 
-		loadParameters();
-		defineScope();
-		load();
+        loadParameters();
+        defineScope();
+        load();
 
-		function loadParameters() {
-			var parameters = VRNavigationService.getParameters($scope);
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-			if (parameters != undefined) {
-				vrWorkflowId = parameters.vrWorkflowId;
-			}
+            if (parameters != undefined) {
+                vrWorkflowId = parameters.vrWorkflowId;
+            }
 
-			isEditMode = (vrWorkflowId != undefined);
-		}
+            isEditMode = (vrWorkflowId != undefined);
+        }
 
-		function defineScope() {
-			$scope.scopeModel = {};
+        function defineScope() {
+            $scope.scopeModel = {};
 
-			$scope.scopeModel.onArgumentsGridReady = function (api) {
-				argumentsGridAPI = api;
-				argumentsGridReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onArgumentsGridReady = function (api) {
+                argumentsGridAPI = api;
+                argumentsGridReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onWorkflowDesignerReady = function (api) {
-				workflowDesignerAPI = api;
-				workflowDesignerReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onWorkflowDesignerReady = function (api) {
+                workflowDesignerAPI = api;
+                workflowDesignerReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.saveVRWorkflow = function () {
-				return (isEditMode) ? updateVRWorkflow() : addVRWorkflow();
-			};
+            $scope.scopeModel.saveVRWorkflow = function () {
+                var promiseDeferred = UtilsService.createPromiseDeferred();
+                tryCompileWorkflow().then(function (response) {
+                    if (response) {
+                        var savePromise;
+                        if (isEditMode)
+                            savePromise = updateVRWorkflow();
+                        else
+                            savePromise = addVRWorkflow();
 
-			$scope.scopeModel.close = function () {
-				$scope.modalContext.closeModal();
-			};
-		}
+                        savePromise.then(function () {
+                            promiseDeferred.resolve();
+                        }).catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            promiseDeferred.reject();
+                        });
+                    }
+                    else {
+                        promiseDeferred.resolve();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    promiseDeferred.reject();
+                });
 
-		function load() {
-			$scope.scopeModel.isLoading = true;
-			if (isEditMode) {
-				getVRWorkflowEditorRuntime(vrWorkflowId).then(function () {
-					loadAllControls();
-				}).catch(function (error) {
-					VRNotificationService.notifyExceptionWithClose(error, $scope);
-					$scope.scopeModel.isLoading = false;
-				});
-			}
-			else {
-				loadAllControls();
-			}
-		}
+                return promiseDeferred.promise;
+            };
 
-		function getVRWorkflowEditorRuntime(vrWorkflowId) {
-			return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowEditorRuntime(vrWorkflowId).then(function (response) {
-				if (response != undefined) {
-					vrWorkflowEntity = response.Entity;
-					vrWorkflowArgumentEditorRuntimeDict = response.VRWorkflowArgumentEditorRuntimeDict;
-				}
-			});
-		}
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal();
+            };
+        }
 
-		function loadAllControls() {
+        function load() {
+            $scope.scopeModel.isLoading = true;
+            if (isEditMode) {
+                getVRWorkflowEditorRuntime(vrWorkflowId).then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+            else {
+                loadAllControls();
+            }
+        }
 
-			function setTitle() {
-				if (vrWorkflowEntity != undefined)
-					$scope.title = UtilsService.buildTitleForUpdateEditor(vrWorkflowEntity.Title, 'Workflow');
-				else
-					$scope.title = UtilsService.buildTitleForAddEditor('Workflow');
-			}
+        function getVRWorkflowEditorRuntime(vrWorkflowId) {
+            return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowEditorRuntime(vrWorkflowId).then(function (response) {
+                if (response != undefined) {
+                    vrWorkflowEntity = response.Entity;
+                    vrWorkflowArgumentEditorRuntimeDict = response.VRWorkflowArgumentEditorRuntimeDict;
+                }
+            });
+        }
 
-			function loadStaticData() {
-				if (vrWorkflowEntity != undefined) {
-					$scope.scopeModel.name = vrWorkflowEntity.Name;
-					$scope.scopeModel.title = vrWorkflowEntity.Title;
-				}
-			}
+        function loadAllControls() {
 
-			function loadArgumentsGrid() {
-				var argumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
+            function setTitle() {
+                if (vrWorkflowEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrWorkflowEntity.Title, 'Workflow');
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor('Workflow');
+            }
 
-				argumentsGridReadyDeferred.promise.then(function () {
-					var argumentsGridPayload = {
-						vrWorkflowArguments: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.Arguments : undefined,
-						vrWorkflowArgumentEditorRuntimeDict: vrWorkflowArgumentEditorRuntimeDict,
-						reserveVariableName: reserveVariableName,
-						reserveVariableNames: reserveVariableNames,
-						isVariableNameReserved: isVariableNameReserved,
-						eraseVariableName: eraseVariableName
-					};
-					VRUIUtilsService.callDirectiveLoad(argumentsGridAPI, argumentsGridPayload, argumentsGridLoadDeferred);
-				});
+            function loadStaticData() {
+                if (vrWorkflowEntity != undefined) {
+                    $scope.scopeModel.name = vrWorkflowEntity.Name;
+                    $scope.scopeModel.title = vrWorkflowEntity.Title;
+                }
+            }
 
-				return argumentsGridLoadDeferred.promise;
-			}
+            function loadArgumentsGrid() {
+                var argumentsGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-			function reserveVariableName(name) {
-				allVariableNames.push(name);
-			}
+                argumentsGridReadyDeferred.promise.then(function () {
+                    var argumentsGridPayload = {
+                        vrWorkflowArguments: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.Arguments : undefined,
+                        vrWorkflowArgumentEditorRuntimeDict: vrWorkflowArgumentEditorRuntimeDict,
+                        reserveVariableName: reserveVariableName,
+                        reserveVariableNames: reserveVariableNames,
+                        isVariableNameReserved: isVariableNameReserved,
+                        eraseVariableName: eraseVariableName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(argumentsGridAPI, argumentsGridPayload, argumentsGridLoadDeferred);
+                });
 
-			function reserveVariableNames(variables) {
-				if (variables != undefined && variables.length > 0)
-					allVariableNames = allVariableNames.concat(variables.map(a => a.Name));
-			}
+                return argumentsGridLoadDeferred.promise;
+            }
 
-			function isVariableNameReserved(name) {
-				var variableName = (name != undefined) ? name.toLowerCase() : null;
-				return UtilsService.contains(allVariableNames, variableName);
-			}
+            function reserveVariableName(name) {
+                allVariableNames.push(name);
+            }
 
-			function eraseVariableName(name) {
-				var variableIndex = allVariableNames.indexOf(name);
-				if (variableIndex > 0)
-					allVariableNames.splice(variableIndex, 1);
-			}
+            function reserveVariableNames(variables) {
+                if (variables != undefined && variables.length > 0)
+                    allVariableNames = allVariableNames.concat(variables.map(a => a.Name));
+            }
 
-			function loadWorkflowDesigner() {
-				var workflowDesignerLoadDeferred = UtilsService.createPromiseDeferred();
+            function isVariableNameReserved(name) {
+                var variableName = (name != undefined) ? name.toLowerCase() : null;
+                return UtilsService.contains(allVariableNames, variableName);
+            }
 
-				UtilsService.waitMultiplePromises([workflowDesignerReadyDeferred.promise, argumentsGridReadyDeferred.promise]).then(function () {
-					var workflowDesignerPayload;
-					workflowDesignerPayload = {
-						//workflowArguments: argumentsGridAPI.getData(),
-						getWorkflowArguments: argumentsGridAPI.getData,
-						rootActivity: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.RootActivity : undefined,
-						reserveVariableName: reserveVariableName,
-						reserveVariableNames: reserveVariableNames,
-						isVariableNameReserved: isVariableNameReserved,
-						eraseVariableName: eraseVariableName
-					};
-					VRUIUtilsService.callDirectiveLoad(workflowDesignerAPI, workflowDesignerPayload, workflowDesignerLoadDeferred);
-				});
-				return workflowDesignerLoadDeferred.promise;
-			}
+            function eraseVariableName(name) {
+                var variableIndex = allVariableNames.indexOf(name);
+                if (variableIndex > 0)
+                    allVariableNames.splice(variableIndex, 1);
+            }
 
-			return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadArgumentsGrid, loadWorkflowDesigner]).then(function () {
+            function loadWorkflowDesigner() {
+                var workflowDesignerLoadDeferred = UtilsService.createPromiseDeferred();
 
-			}).catch(function (error) {
-				VRNotificationService.notifyExceptionWithClose(error, $scope);
-			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
-			});
-		}
+                UtilsService.waitMultiplePromises([workflowDesignerReadyDeferred.promise, argumentsGridReadyDeferred.promise]).then(function () {
+                    var workflowDesignerPayload;
+                    workflowDesignerPayload = {
+                        //workflowArguments: argumentsGridAPI.getData(),
+                        getWorkflowArguments: argumentsGridAPI.getData,
+                        rootActivity: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.RootActivity : undefined,
+                        reserveVariableName: reserveVariableName,
+                        reserveVariableNames: reserveVariableNames,
+                        isVariableNameReserved: isVariableNameReserved,
+                        eraseVariableName: eraseVariableName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(workflowDesignerAPI, workflowDesignerPayload, workflowDesignerLoadDeferred);
+                });
+                return workflowDesignerLoadDeferred.promise;
+            }
 
-		function addVRWorkflow() {
-			$scope.scopeModel.isLoading = true;
-			return BusinessProcess_VRWorkflowAPIService.InsertVRWorkflow(buildVRWorkflowObjFromScope()).then(function (response) {
-				if (VRNotificationService.notifyOnItemAdded('Workflow', response, 'Name')) {
-					if ($scope.onVRWorkflowAdded != undefined) {
-						$scope.onVRWorkflowAdded(response.InsertedObject);
-					}
-					$scope.modalContext.closeModal();
-				}
-			}).catch(function (error) {
-				VRNotificationService.notifyException(error, $scope);
-			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
-			});
-		}
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadArgumentsGrid, loadWorkflowDesigner]).then(function () {
 
-		function updateVRWorkflow() {
-			$scope.scopeModel.isLoading = true;
-			return BusinessProcess_VRWorkflowAPIService.UpdateVRWorkflow(buildVRWorkflowObjFromScope()).then(function (response) {
-				if (VRNotificationService.notifyOnItemUpdated('Workflow', response, 'Name')) {
-					if ($scope.onVRWorkflowUpdated != undefined) {
-						$scope.onVRWorkflowUpdated(response.UpdatedObject);
-					}
-					$scope.modalContext.closeModal();
-				}
-			}).catch(function (error) {
-				VRNotificationService.notifyException(error, $scope);
-			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
-			});
-		}
-		$scope.scopeModel.tryCompileWorkflow = function () {
-			tryCompileWorkflow();
-		};
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
-		function tryCompileWorkflow() {
-			$scope.scopeModel.isLoading = true;
-			var workflowObj = buildVRWorkflowObjFromScope();
-			return BusinessProcess_VRWorkflowAPIService.TryCompileWorkflow(workflowObj).then(function (response) {
-				//console.log(response);
-				if (response.Result)
-					VRNotificationService.showSuccess("Workflow compiled successfully.");
-				else BusinessProcess_VRWorkflowService.tryCompilationResult(response.ErrorMessages, workflowObj);
-			}).catch(function (error) {
-				VRNotificationService.notifyException(error, $scope);
-			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
-			});
-		}
+        function addVRWorkflow() {
+            $scope.scopeModel.isLoading = true;
+            return BusinessProcess_VRWorkflowAPIService.InsertVRWorkflow(buildVRWorkflowObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Workflow', response, 'Name')) {
+                    if ($scope.onVRWorkflowAdded != undefined) {
+                        $scope.onVRWorkflowAdded(response.InsertedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
-		function buildVRWorkflowObjFromScope() {
-			var vrWorkflowObj = {
-				Name: $scope.scopeModel.name,
-				Title: $scope.scopeModel.title,
-				Settings: {
-					Arguments: argumentsGridAPI.getData(),
-					RootActivity: workflowDesignerAPI.getData()
-				}
-			};
+        function updateVRWorkflow() {
+            $scope.scopeModel.isLoading = true;
+            return BusinessProcess_VRWorkflowAPIService.UpdateVRWorkflow(buildVRWorkflowObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Workflow', response, 'Name')) {
+                    if ($scope.onVRWorkflowUpdated != undefined) {
+                        $scope.onVRWorkflowUpdated(response.UpdatedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+        $scope.scopeModel.tryCompileWorkflow = function () {
+            return tryCompileWorkflow();
+        };
 
-			if (isEditMode) {
-				vrWorkflowObj.VRWorkflowId = vrWorkflowId;
-			}
+        function tryCompileWorkflow() {
+            var promiseDeferred = UtilsService.createPromiseDeferred();
+            $scope.scopeModel.isLoading = true;
+            var workflowObj = buildVRWorkflowObjFromScope();
+            BusinessProcess_VRWorkflowAPIService.TryCompileWorkflow(workflowObj).then(function (response) {
+                if (response.Result) {
+                    VRNotificationService.showSuccess("Workflow compiled successfully.");
+                    promiseDeferred.resolve(true);
+                }
+                else {
+                    BusinessProcess_VRWorkflowService.tryCompilationResult(response.ErrorMessages, workflowObj);
+                    promiseDeferred.resolve(false);
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+                promiseDeferred.reject(error);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+            return promiseDeferred.promise;
+        }
 
-			return vrWorkflowObj;
-		}
-	}
+        function buildVRWorkflowObjFromScope() {
+            var vrWorkflowObj = {
+                Name: $scope.scopeModel.name,
+                Title: $scope.scopeModel.title,
+                Settings: {
+                    Arguments: argumentsGridAPI.getData(),
+                    RootActivity: workflowDesignerAPI.getData()
+                }
+            };
 
-	appControllers.controller('BusinessProcess_VR_WorkflowEditorController', VRWorkflowEditorController);
+            if (isEditMode) {
+                vrWorkflowObj.VRWorkflowId = vrWorkflowId;
+            }
+
+            return vrWorkflowObj;
+        }
+    }
+
+    appControllers.controller('BusinessProcess_VR_WorkflowEditorController', VRWorkflowEditorController);
 })(appControllers);
