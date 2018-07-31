@@ -460,7 +460,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Statement Invoice</Value>
+                    <Value>Supplier Invoice</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -1346,7 +1346,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2654,7 +2653,7 @@
             <Top>4.95771in</Top>
             <Left>0.1425in</Left>
             <Height>0.25in</Height>
-            <Width>7.70998in</Width>
+            <Width>7.71in</Width>
             <ZIndex>22</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>

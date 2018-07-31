@@ -2310,7 +2310,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Statement Of Telephone Account</Value>
+                <Value>Customer Invoice</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
