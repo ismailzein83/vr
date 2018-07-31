@@ -56,7 +56,7 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                     return {
                         Name: fileNamePatternAPI.getData(),
                         Settings: fileGeneratorSelectorAPI.getData()
-                    }
+                    };
                 };
 
                 api.load = function (payload) {                    
@@ -89,7 +89,7 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                             var fileGeneratorSelectorPayload = {
                                 fileGenerator: settings,
                                 context: getContext()
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoad(fileGeneratorSelectorAPI, fileGeneratorSelectorPayload, fileGeneratorSelectorLoadPromiseDeferred);
 
                         });
@@ -105,7 +105,7 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
-                return currentContext
+                return currentContext;
             }
         }
         return directiveDefinitionObject;
