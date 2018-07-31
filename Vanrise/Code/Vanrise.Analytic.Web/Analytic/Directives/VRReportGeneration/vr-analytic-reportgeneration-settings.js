@@ -65,7 +65,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                     return {
                         Queries: automatedReportQueryAPI.getData(),
                         ReportAction:   reportActionAPI.getData()
-                }
+                };
                 };
 
 
@@ -98,7 +98,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                             var reportActionPayload = {
                                 reportAction: reportAction,
                                 context: getContext()
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoad(reportActionAPI, reportActionPayload, reportActionLoadPromiseDeferred);
 
                         });
@@ -204,7 +204,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                     });
                     return automatedReportDataSchemaPromiseDeferred.promise;
                 };
-                return currentContext
+                return currentContext;
             }
 
 
