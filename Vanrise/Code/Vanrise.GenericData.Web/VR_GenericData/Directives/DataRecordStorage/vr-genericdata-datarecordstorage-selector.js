@@ -151,6 +151,7 @@
                                  + ' ' + customvalidate
                                  + ' ' + multipleselection
                                  + ' ' + hideselectedvaluessection
+                                 + ' ' + hideremoveicon
                                  + ' isrequired="ctrl.isrequired"'
                                  + ' ' + lableplace
                                  + ' entityName="' + label + '"'

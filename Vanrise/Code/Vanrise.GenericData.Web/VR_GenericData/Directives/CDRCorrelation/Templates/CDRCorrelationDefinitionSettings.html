@@ -1,52 +1,82 @@
 ﻿<vr-tabs>
-	<vr-tab header="'Definition'">
-		<vr-row>
-			<vr-columns width="1/4row">
-				<vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
-			</vr-columns>
-		</vr-row>
-	</vr-tab>
-	<vr-tab header="'Settings'">
-		<vr-row>
-			<vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onDataTransformationSelectorDirectiveReady" onselectionchanged="onDataTransformationSelectionChanged"></vr-genericdata-datatransformationdefinition-selector>
-		</vr-row>
+    <vr-tab header="'Definition'">
+        <vr-row>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Settings'">
+        <vr-row>
+            <vr-section header="Input" vr-loader="scopeModel.isInputSectionLoading">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onInputDataRecordTypeSelectorReady"
+                                                                onselectionchanged="scopeModel.onInputRecordTypeSelectionChanged"
+                                                                selectedvalues="scopeModel.selectedInputDataRecordType"
+                                                                label="Data Record Type" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtype-selector>
+                    </vr-columns>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onInputDataRecordStorageSelectorReady"
+                                                                   label="Data Record Storage" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordstorage-selector>
+                    </vr-columns>
+                </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCallingNumberFieldSelectorDirectiveReady"
+                                                                          label="Calling Number Field" isrequired="true" hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
 
-		<vr-row>
-			<vr-columns width="1/2row">
-				<vr-genericdata-datarecordtype-selector label="'Input Data Record Type'" on-ready="scopeModel.onInputDataRecordTypeSelectorReady" isrequired="true" onselectionchanged="scopeModel.onInputRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
-			</vr-columns>
-			<vr-columns width="1/2row">
-				<vr-genericdata-datarecordstorage-selector label="'Input Data Record Storage'" on-ready="scopeModel.onInputDataRecordStorageSelectorReady" isrequired="true"></vr-genericdata-datarecordstorage-selector>
-			</vr-columns>
-		</vr-row>
+                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCalledNumberFieldSelectorDirectiveReady"
+                                                                          label="Called Number Field" isrequired="true" hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDurationFieldSelectorDirectiveReady"
+                                                                          label="Duration Field" isrequired="true" hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
 
-		<vr-row>
-			<vr-columns width="1/2row">
-				<vr-genericdata-datarecordtype-selector label="'Output Data Record Type'" on-ready="scopeModel.onOutputDataRecordTypeSelectorReady" isrequired="true" onselectionchanged="scopeModel.onOutputRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
-			</vr-columns>
-
-			<vr-columns width="1/2row">
-				<vr-genericdata-datarecordstorage-selector label="'Output Data Record Storage'" on-ready="scopeModel.onOutputDataRecordStorageSelectorReady" isrequired="true"></vr-genericdata-datarecordstorage-selector>
-			</vr-columns>
-		</vr-row>
-
-		<vr-row>
-			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
-				<vr-genericdata-datarecordtypefields-selector label="Calling Number Field" on-ready="scopeModel.onCallingNumberFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
-			</vr-columns>
-
-			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
-				<vr-genericdata-datarecordtypefields-selector label="Called Number Field" on-ready="scopeModel.onCalledNumberFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
-			</vr-columns>
-
-			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
-				<vr-genericdata-datarecordtypefields-selector label="Durateion Field" on-ready="scopeModel.onDurationFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
-			</vr-columns>
-
-			<vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
-				<vr-genericdata-datarecordtypefields-selector label="Datetime Field" on-ready="scopeModel.onDatetimeFieldSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
-			</vr-columns>
-
-		</vr-row>
-	</vr-tab>
+                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDatetimeFieldSelectorDirectiveReady"
+                                                                          label="Date Time Field" isrequired="true" hideremoveicon>
+                            </vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                    </vr-row>
+            </vr-section>
+        </vr-row>
+        <vr-row>
+            <vr-section header="Output">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onOutputDataRecordTypeSelectorReady"
+                                                                onselectionchanged="scopeModel.onOutputRecordTypeSelectionChanged"
+                                                                selectedvalues="scopeModel.selectedOutputDataRecordType"
+                                                                label="Data Record Type" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtype-selector>
+                    </vr-columns>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedOutputDataRecordType != undefined" vr-loader="scopeModel.isOutputDataRecordStorageLoading">
+                        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onOutputDataRecordStorageSelectorReady"
+                                                                   label="Data Record Storage" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordstorage-selector>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
+        </vr-row>
+        <vr-row>
+            <vr-section header="Settings">
+                <vr-columns width="1/2row">
+                    <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onDataTransformationSelectorDirectiveReady" hideremoveicon
+                                                                          isrequired="true" customlabel="'Correlate Data Transformation'">
+                    </vr-genericdata-datatransformationdefinition-selector>
+                </vr-columns>
+            </vr-section>
+        </vr-row>
+    </vr-tab>
 </vr-tabs>

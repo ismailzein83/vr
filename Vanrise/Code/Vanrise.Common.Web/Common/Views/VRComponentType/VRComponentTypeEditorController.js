@@ -70,12 +70,16 @@
                 promises.push(getgetVRComponentTypePromise);
             }
 
-            return UtilsService.waitMultiplePromises(promises).then(function () {
-                loadAllControls();
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                loadAllControls().then(function () {
+
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-                $scope.scopeModel.isLoading = false;
-            }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
