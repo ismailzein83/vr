@@ -29,8 +29,8 @@ namespace Vanrise.Common.Data.SQL
                 string targetServerConnectionString = dbReplicationTableDetailsListKvp.Key;
                 SqlConnectionStringBuilder targetConnectionString = new SqlConnectionStringBuilder(targetServerConnectionString);
                 string targetServerAddress = targetConnectionString.DataSource;
-
-                Server targetServer = new Server(targetServerAddress);
+                ServerConnection serverConnection = new ServerConnection(targetServerAddress, targetConnectionString.UserID,targetConnectionString.Password);
+                Server targetServer = new Server(serverConnection);
 
                 List<TableInfo> tableInfoList = TableInfoListByTargetServer.GetOrCreateItem(targetServerAddress);
                 foreach (var dbReplicationTableDetails in dbReplicationTableDetailsListKvp.Value)

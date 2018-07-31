@@ -114,7 +114,7 @@ function (UtilsService, VRUIUtilsService) {
                             readyPreInsertSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
                             loadPreInsertSelector: UtilsService.createPromiseDeferred()
                         };
-                        gridItem.payload = payload;
+                        gridItem.payload = currentItem.DBReplicationPreInsert;
 
                         addItemtoGrid(gridItem);
                     }
@@ -127,10 +127,9 @@ function (UtilsService, VRUIUtilsService) {
                         gridItem.preInsertSelectorAPI = api;
                         gridItem.readyPreInsertSelectorPromiseDeferred.resolve();
                     };
-                    console.log(gridItem.payload);
                     UtilsService.waitMultiplePromises([gridItem.readyPreInsertSelectorPromiseDeferred.promise]).then(function () {
                         var preInsertSelectorPayload = {
-                            selectedIds: gridItem.payload.DBReplicationPreInsert
+                            DBReplicationPreInsert: gridItem.payload
                         };
                         VRUIUtilsService.callDirectiveLoad(gridItem.preInsertSelectorAPI, preInsertSelectorPayload, gridItem.loadPreInsertSelector);
                     });

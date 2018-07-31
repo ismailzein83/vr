@@ -37,18 +37,27 @@ app.directive('vrCommonDbreplicationpreinsertSelective', ['UtilsService', 'VRUIU
 
             var selectorAPI;
 
+            var context;
+
             var directiveAPI;
             var directiveReadyDeferred;
 
             function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.selectedvalues = undefined;
 
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
 
-                ctrl.onDirectiveReady = function (api) {
+                $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
+                    var setLoader = function (value) {
+                        ctrl.isLoadingDirective = value;
+                    };
+                    var directivePayload = { context: getContext() };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -58,7 +67,16 @@ app.directive('vrCommonDbreplicationpreinsertSelective', ['UtilsService', 'VRUIU
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
                     var promises = [];
-                    var readyPreInsertSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    if (payload != undefined) {
+                        context = payload.context;
+
+                        if (payload.DBReplicationPreInsert != undefined) {
+                            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(loadDirective());
+                        }
+                    }
+
                     promises.push(getDBReplicationPreInsertConfigs());
 
                     function getDBReplicationPreInsertConfigs() {
@@ -67,12 +85,26 @@ app.directive('vrCommonDbreplicationpreinsertSelective', ['UtilsService', 'VRUIU
                                 for (var i = 0; i < response.length; i++) {
                                     ctrl.datasource.push(response[i]);
                                 }
-
                                 if (payload != undefined && payload.DBReplicationPreInsert != undefined) {
-                                    UtilsService.getItemByVal(ctrl.datasource, payload.DBReplicationPreInsert.ConfigId, 'ExtensionConfigurationId');
+                                    $scope.scopeModel.selectedvalues = UtilsService.getItemByVal(ctrl.datasource, payload.DBReplicationPreInsert.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
+                    }
+
+                    function loadDirective() {
+                        var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        directiveReadyDeferred.promise.then(function () {
+                            directiveReadyDeferred = undefined;
+                            var directivePayload = { context: getContext() };
+                            if (payload != undefined)
+                                directivePayload.Settings = payload.DBReplicationPreInsert;
+
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+                        });
+
+                        return directiveLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -80,10 +112,10 @@ app.directive('vrCommonDbreplicationpreinsertSelective', ['UtilsService', 'VRUIU
 
                 api.getData = function () {
                     var data;
-                    if (ctrl.selectedvalues != undefined && directiveAPI != undefined) {
+                    if ($scope.scopeModel.selectedvalues != undefined && directiveAPI != undefined) {
                         data = directiveAPI.getData();
                         if (data != undefined)
-                            data.ConfigId = ctrl.selectedvalues.ExtensionConfigurationId;
+                            data.ConfigId = $scope.scopeModel.selectedvalues.ExtensionConfigurationId;
                     }
                     return data;
                 };
@@ -91,8 +123,15 @@ app.directive('vrCommonDbreplicationpreinsertSelective', ['UtilsService', 'VRUIU
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-        }
 
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
+
+        }
 
         function getTemplate(attrs) {
 
@@ -111,12 +150,11 @@ app.directive('vrCommonDbreplicationpreinsertSelective', ['UtilsService', 'VRUIU
                 hideremoveicon = 'hideremoveicon';
 
             return '<vr-select' + ' ' + multipleselection + ' ' + hideremoveicon + ' datatextfield="Title" datavaluefield="DBReplicationDefinitionId" isrequired="selectorCtrl.isrequired" '
-                       + ' datasource="selectorCtrl.datasource" on-ready="selectorCtrl.onSelectorReady" selectedvalues="selectorCtrl.selectedvalues" onselectionchanged="selectorCtrl.onselectionchanged" '
+                       + ' datasource="selectorCtrl.datasource" on-ready="selectorCtrl.onSelectorReady" selectedvalues="scopeModel.selectedvalues" onselectionchanged="selectorCtrl.onselectionchanged" '
                        + ' customvalidate="selectorCtrl.customvalidate">'
                     + '</vr-select>'
-
-            + '<vr-directivewrapper ng-if="selectorCtrl.selectedvalues != undefined" directive="selectorCtrl.selectedvalues.Editor"'
-                 + 'on-ready="selectorCtrl.onDirectiveReady">'
-                + '</vr-directivewrapper>';
+            + '<vr-directivewrapper ng-if="scopeModel.selectedvalues != undefined" directive="scopeModel.selectedvalues.Editor" vr-loader="selectorCtrl.isLoadingDirective"'
+                 + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{selectorCtrl.normalColNum}}" isrequired="selectorCtrl.isrequired" customvalidate="selectorCtrl.customvalidate">'
+            + '</vr-directivewrapper>';
         }
     }]);
