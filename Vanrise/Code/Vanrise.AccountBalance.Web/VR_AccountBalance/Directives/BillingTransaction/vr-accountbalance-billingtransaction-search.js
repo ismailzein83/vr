@@ -41,7 +41,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
         function initializeController() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.selectedPeriod = PeriodEnum.CurrentYear.value;
             $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
                 timeRangeDirectiveAPI = api;
                 timeRangeReadyPromiseDeferred.resolve();

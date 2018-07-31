@@ -2,7 +2,7 @@
     <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onTransactionTypeSelectorReady" normal-col-num="2" ismultipleselection></vr-accountbalance-billingtransactiontype-selector>
  
     <vr-columns colnum="6" haschildcolumns>
-        <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromTime" to="scopeModel.toTime" period="selectedPeriod" isrequired="false"></vr-timerange>
+        <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromTime" to="scopeModel.toTime" period="scopeModel.selectedPeriod" isrequired="false"></vr-timerange>
     </vr-columns>
     <vr-columns colnum="1" withemptyline haschildcolumns>
         <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked" vr-disabled="scopeModel.fromTime==undefined || scopeModel.fromTime== null ||  scopeModel.validateDateTime()!=null"></vr-button>
