@@ -17,8 +17,11 @@
     [OutIP]              VARCHAR (50)     NULL,
     [ExtraFields]        NVARCHAR (MAX)   NULL,
     [QueueItemId]        BIGINT           NULL,
+    [FileName]           NVARCHAR (100)   NULL,
     CONSTRAINT [IX_CDR_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

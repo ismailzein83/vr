@@ -16,5 +16,8 @@
     [OutTrunk]           VARCHAR (50)     NULL,
     [OutIP]              VARCHAR (50)     NULL,
     [ExtraFields]        NVARCHAR (MAX)   NULL,
+    [FileName]           NVARCHAR (100)   NULL,
     [QueueItemId]        BIGINT           NULL);
+
+
 
