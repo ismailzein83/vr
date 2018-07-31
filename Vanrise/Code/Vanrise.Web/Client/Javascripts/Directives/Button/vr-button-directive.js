@@ -12,7 +12,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
             haspermission: '=',
             validationcontext: '=',
             showbutton: "=",
-            disabledbtn:"="
+            disabledbtn: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -116,7 +116,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
                     isDisabled = true;
                 else
                     isDisabled = false;
-                
+
                 return isDisabled;
             };
             var types = {
@@ -126,7 +126,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
 
             ctrl.isExculdedOnreadOnly = function () {
                 var readOnly = UtilsService.isContextReadOnly($scope);
-                return !readOnly || types[$attrs.type] != undefined;
+                return !readOnly || types[$attrs.type] != undefined || $attrs.stopreadonly != undefined;
 
             };
             var menu;
