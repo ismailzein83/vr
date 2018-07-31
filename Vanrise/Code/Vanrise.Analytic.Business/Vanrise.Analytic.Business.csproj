@@ -82,6 +82,7 @@
     <Compile Include="VRAutomatedReportQueryDefinitionExtendedSettingsContext.cs" />
     <Compile Include="VRAutomatedReportQueryDefinitionManager.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationManager.cs" />
+    <Compile Include="VRReportGeneration\VRReportGenerationViewSettings.cs" />
     <Compile Include="VRRestAPIDataProvider\GetRemoteAnalyticDataProviderContext.cs" />
     <Compile Include="VRRestAPIDataProvider\RemoteAnalyticDataProvider.cs" />
     <Compile Include="VRRestAPIDataProvider\VRRestAPIAnalyticDataProvider.cs" />
