@@ -9,7 +9,7 @@ namespace TOne.WhS.Deal.Entities
     public class SwapDealQuery 
     {
         public string Name { get; set; }
-
         public List<int> CarrierAccountIds { get; set; }
+        public List<DealStatus> Status { get; set; }
     }
 }

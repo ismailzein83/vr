@@ -9,6 +9,10 @@
         var supplierApi;
         var customerApi;
         var typeApi;
+
+        var statusSelectorAPI;
+        var statusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -24,6 +28,10 @@
             $scope.scopeModel.onVolCommitmentTypeDirectiveReady = function (api) {
                 typeApi = api;
                 typeApi.load();
+            };
+            $scope.scopeModel.onStatusSelectorReady = function (api) {
+                statusSelectorAPI = api;
+                statusSelectorPromiseDeferred.resolve();
             };
             $scope.scopeModel.hasAddVolCommitmentDealPermission = function () {
                 return WhS_Deal_VolCommitmentDealAPIService.HasAddDealPermission();
@@ -49,7 +57,20 @@
         }
 
         function load() {
+            $scope.scopeModel.isLoading = true;
+            UtilsService.waitMultipleAsyncOperations([loadStatusSelector]).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
+        function loadStatusSelector() {
+            var statusSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            statusSelectorPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(statusSelectorAPI, undefined, statusSelectorLoadDeferred);
+            });
+            return statusSelectorLoadDeferred.promise;
         }
 
         function addVolumeCommitment() {
@@ -61,6 +82,7 @@
 
         function getFilterObject() {
             var filter = {
+                Status: statusSelectorAPI.getSelectedIds(),
                 Name: $scope.scopeModel.description
             };
 

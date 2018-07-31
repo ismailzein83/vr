@@ -174,6 +174,7 @@
     <Content Include="WhS_Deal\Constant\DealContractTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\DealStatusTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Deal\Constant\ReoccuringTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
     <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
@@ -185,6 +186,7 @@
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\Templates\DealSupplierRateEvaluatorTemplate.html" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-salerateevaluator-selective.js" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-supplierrateevaluator-selective.js" />
+    <Content Include="WhS_Deal\Directives\DealStatus\vr-whs-deal-status-selector.js" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorDiccount.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\vr-whs-deal-salerateevaluator-fixed.js" />
@@ -225,6 +227,7 @@
     <Content Include="WhS_Deal\Directives\QueueActivators\Templates\QueueActivatorEvaluateSMSDealTemplate.html" />
     <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatedeal.js" />
     <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatesmsdeal.js" />
+    <Content Include="WhS_Deal\Directives\ReoccurDeal\vr-whs-deal-reoccuringtype-selector.js" />
     <Content Include="WhS_Deal\Directives\SubstituteRateType\vr-whs-deal-substituteratetype-selector.js" />
     <Content Include="WhS_Deal\Directives\ScheduleTask\Templates\DealEvaluatorTaskTemplate.html" />
     <Content Include="WhS_Deal\Directives\ScheduleTask\vr-whs-deal-dealevaluator-task.js" />
@@ -285,6 +288,7 @@
     <Content Include="WhS_Deal\Services\APIServices\VolCommitmentDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAPIService.js" />
     <Content Include="WhS_Deal\Services\APIServices\SwapDealAnalysisAPIService.js" />
+    <Content Include="WhS_Deal\Services\ReoccurDealService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisService.js" />
     <Content Include="WhS_Deal\Services\SwapDealAnalysisSettingsService.js" />
     <Content Include="WhS_Deal\Services\SwapDealBuyRouteRuleService.js" />
@@ -292,6 +296,8 @@
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
     <Content Include="WhS_Deal\Services\VolumeCommitmentService.js" />
+    <Content Include="WhS_Deal\Directives\ReoccurDeal\ReoccurDealEditor.html" />
+    <Content Include="WhS_Deal\Directives\ReoccurDeal\ReoccurDealEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\InboundRateCalcMethodEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\OutboundRateCalcMethodEditorController.js" />
     <Content Include="WhS_Deal\Views\SwapDealAnalysisSettings\Templates\InboundRateCalcMethodEditor.html" />

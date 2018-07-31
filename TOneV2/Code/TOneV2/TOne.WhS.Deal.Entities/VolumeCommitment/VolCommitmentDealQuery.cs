@@ -17,10 +17,9 @@ namespace TOne.WhS.Deal.Entities
     public class VolCommitmentDealQuery
     {
         public string Name { get; set; }
-
         public List<int> CarrierAccountIds { get; set; }
-
         public VolCommitmentDealType? Type { get; set; }
+        public List<DealStatus> Status { get; set; }
 
     }
 }

@@ -1,12 +1,17 @@
 ﻿<vr-panel ng-controller="WhS_Deal_SwapDealManagementController" vr-loader="scopeModel.isLoading">
 	<vr-form name="formFilter">
 		<div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
-			<vr-row removeline>
+            <vr-row removeline>
                 <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="2" getexchangecarriers
-                                                   ismultipleselection="true"  onselectionchanged="scopeModel.onCarrierAccountSelectionChanged"></vr-whs-be-carrieraccount-selector>
+                                                   ismultipleselection="true" onselectionchanged="scopeModel.onCarrierAccountSelectionChanged"></vr-whs-be-carrieraccount-selector>
                 <vr-columns width="normal">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
+
+                <vr-columns width="normal">
+                    <vr-whs-deal-status-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection></vr-whs-deal-status-selector>
+                </vr-columns>
+
             </vr-row>
 		</div>
 		<vr-row removeline>

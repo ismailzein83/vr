@@ -8,7 +8,10 @@
 
 	    var carrierAccountSelectorAPI;
 	    var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-		var gridAPI;
+        var gridAPI;
+
+        var statusSelectorAPI;
+        var statusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
 		defineScope();
 		load();
@@ -30,7 +33,11 @@
 			$scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
 			    carrierAccountSelectorAPI = api;
 			    carrierAccountSelectorReadyDeferred.resolve();
-			};
+            };
+            $scope.scopeModel.onStatusSelectorReady = function (api) {
+                statusSelectorAPI = api;
+                statusSelectorPromiseDeferred.resolve();
+            };
 			$scope.scopeModel.analyze = function () {
 				var onSwapDealAnalyzed = function () { };
 				WhS_Deal_SwapDealService.analyzeSwapDeal(onSwapDealAnalyzed);
@@ -45,7 +52,7 @@
 
 		function load() {
 			$scope.scopeModel.isLoading = true;
-			UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector]).catch(function (error) {
+			UtilsService.waitMultipleAsyncOperations([loadCarrierAccountSelector, loadStatusSelector]).catch(function (error) {
 			    VRNotificationService.notifyException(error, $scope);
 			}).finally(function () {
 			    $scope.scopeModel.isLoading = false;
@@ -60,10 +67,20 @@
 		        VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, undefined, carrierAccountSelectorLoadDeferred);
 		    });
 		    return carrierAccountSelectorLoadDeferred.promise;
-		}
-		function getFilterObject() {
+        }
+
+        function loadStatusSelector() {
+            var statusSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            statusSelectorPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(statusSelectorAPI, undefined, statusSelectorLoadDeferred);
+            });
+            return statusSelectorLoadDeferred.promise;
+        }
+
+        function getFilterObject() {
 		    return {
-		        CarrierAccountIds: carrierAccountSelectorAPI.getSelectedIds(),
+                CarrierAccountIds: carrierAccountSelectorAPI.getSelectedIds(),
+                Status: statusSelectorAPI.getSelectedIds(),
 		        Name: $scope.scopeModel.description
 		    };
 		}

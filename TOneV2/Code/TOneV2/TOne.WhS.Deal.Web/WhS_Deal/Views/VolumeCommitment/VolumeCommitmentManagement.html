@@ -5,6 +5,11 @@
                 <vr-whs-deal-volcommitmenttype-selector normal-col-num="2" selectedvalues="scopeModel.Type" on-ready="scopeModel.onVolCommitmentTypeDirectiveReady"> </vr-whs-deal-volcommitmenttype-selector>
                 <vr-whs-be-supplier-selector normal-col-num="2" ng-if="scopeModel.Type && scopeModel.Type.value == 0 " ismultipleselection on-ready="scopeModel.onSupplierDirectiveReady"></vr-whs-be-supplier-selector>
                 <vr-whs-be-customer-selector normal-col-num="2" ng-if="scopeModel.Type && scopeModel.Type.value == 1 " ismultipleselection on-ready="scopeModel.onCustomerDirectiveReady"></vr-whs-be-customer-selector>
+                
+                <vr-columns width="normal">
+                    <vr-whs-deal-status-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection></vr-whs-deal-status-selector>
+                </vr-columns>
+
                 <vr-columns width="normal">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
