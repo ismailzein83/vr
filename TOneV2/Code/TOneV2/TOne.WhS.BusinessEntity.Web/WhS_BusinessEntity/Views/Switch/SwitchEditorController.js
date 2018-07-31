@@ -39,7 +39,7 @@
 				var savePromise = switchEditorDirectiveAPI.save().then(function (response) { savePromiseResponse = response });
 				var rootPromiseNode = {
 					promises: [savePromise]
-				}
+				};
 
 				if (isEditMode) {
 					rootPromiseNode.getChildNode = function () {

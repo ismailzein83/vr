@@ -36,7 +36,7 @@ app.directive("whsInvoicetypeGridactionsettingsOriginalinvoicedata", ["UtilsServ
                 $scope.scopeModel.onInvoiceCarrierTypeDirectiveReady = function (api) {
                     invoiceCarrierTypeDirectiveAPI = api;
                     invoiceCarrierSelectorReadyPromiseDeffered.resolve();
-                }
+                };
 
                 defineAPI();
             }
