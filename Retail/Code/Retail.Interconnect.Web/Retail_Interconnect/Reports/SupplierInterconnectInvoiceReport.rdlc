@@ -687,23 +687,165 @@
           </Border>
         </Style>
       </Tablix>
+      <Rectangle Name="Rectangle3">
+        <ReportItems>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!CompanyName.Value</Value>
+                    <Style>
+                      <FontStyle>Italic</FontStyle>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>White</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.18939in</Top>
+            <Left>0.51646in</Left>
+            <Height>0.25in</Height>
+            <Width>1.575in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Registration Address</Value>
+                    <Style>
+                      <FontStyle>Italic</FontStyle>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
+                      <TextDecoration>Underline</TextDecoration>
+                      <Color>White</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox2</rd:DefaultName>
+            <Top>0.49495in</Top>
+            <Left>0.51646in</Left>
+            <Height>0.25in</Height>
+            <Width>1.575in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!RegAddress.Value</Value>
+                    <Style>
+                      <FontStyle>Italic</FontStyle>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
+                      <Color>White</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox3</rd:DefaultName>
+            <Top>0.81439in</Top>
+            <Left>0.51646in</Left>
+            <Height>0.25in</Height>
+            <Width>1.575in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <KeepTogether>true</KeepTogether>
+        <Top>0.45386cm</Top>
+        <Left>12.46905cm</Left>
+        <Height>3.963cm</Height>
+        <Width>7.80379cm</Width>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <BackgroundImage>
+            <Source>Embedded</Source>
+            <Value>ID5</Value>
+            <BackgroundRepeat>Clip</BackgroundRepeat>
+          </BackgroundImage>
+        </Style>
+      </Rectangle>
+      <Image Name="Image2">
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
+        <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
+        <Top>0.17869in</Top>
+        <Left>0.13052in</Left>
+        <Height>1.5994in</Height>
+        <Width>3.24421in</Width>
+        <ZIndex>5</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
       <Tablix Name="Tablix3">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.16944in</Width>
+              <Width>0.85601in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.25347in</Width>
+              <Width>0.18599in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.16598in</Width>
+              <Width>0.89676in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.13123in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.41111in</Width>
+              <Width>1.34363in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.10417in</Width>
@@ -715,7 +857,7 @@
               <Width>0.13009in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.31875in</Width>
+              <Width>2.11436in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.078in</Width>
@@ -996,7 +1138,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox151">
+                    <Textbox Name="Textbox21">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1017,7 +1159,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox151</rd:DefaultName>
+                      <rd:DefaultName>Textbox21</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>White</Color>
@@ -1410,7 +1552,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox152">
+                    <Textbox Name="Textbox26">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1430,7 +1572,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox152</rd:DefaultName>
+                      <rd:DefaultName>Textbox26</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1512,11 +1654,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>3.93565in</Top>
+        <Top>3.95875in</Top>
         <Left>0.13052in</Left>
         <Height>0.5in</Height>
-        <Width>7.85091in</Width>
-        <ZIndex>4</ZIndex>
+        <Width>7.92891in</Width>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1627,11 +1769,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>4.5051in</Top>
+        <Top>4.5282in</Top>
         <Left>5.11211in</Left>
         <Height>0.36458in</Height>
         <Width>1.91422in</Width>
-        <ZIndex>5</ZIndex>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1645,19 +1787,19 @@
               <Width>3.0898cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.58422cm</Width>
+              <Width>3.41282cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.26458cm</Width>
+              <Width>0.26459cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.33376cm</Width>
+              <Width>3.33375cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.33042cm</Width>
+              <Width>0.33043cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.34962cm</Width>
+              <Width>5.37048cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.19813cm</Width>
@@ -1987,164 +2129,22 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
-        <Top>12.67236cm</Top>
-        <Left>4.15084cm</Left>
+        <Top>12.73104cm</Top>
+        <Left>2.49948cm</Left>
         <Height>0.64736cm</Height>
-        <Width>16.122cm</Width>
-        <ZIndex>6</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Tablix>
-      <Rectangle Name="Rectangle3">
-        <ReportItems>
-          <Textbox Name="Textbox1">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!CompanyName.Value</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>12pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>0.18939in</Top>
-            <Left>0.51646in</Left>
-            <Height>0.25in</Height>
-            <Width>1.575in</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox2">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Registration Address</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>9pt</FontSize>
-                      <TextDecoration>Underline</TextDecoration>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox2</rd:DefaultName>
-            <Top>0.49495in</Top>
-            <Left>0.51646in</Left>
-            <Height>0.25in</Height>
-            <Width>1.575in</Width>
-            <ZIndex>1</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox3">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!RegAddress.Value</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>9pt</FontSize>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox3</rd:DefaultName>
-            <Top>0.81439in</Top>
-            <Left>0.51646in</Left>
-            <Height>0.25in</Height>
-            <Width>1.575in</Width>
-            <ZIndex>2</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-        </ReportItems>
-        <KeepTogether>true</KeepTogether>
-        <Top>0.45386cm</Top>
-        <Left>12.46905cm</Left>
-        <Height>3.963cm</Height>
-        <Width>7.80379cm</Width>
-        <ZIndex>7</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <BackgroundImage>
-            <Source>Embedded</Source>
-            <Value>ID5</Value>
-            <BackgroundRepeat>Clip</BackgroundRepeat>
-          </BackgroundImage>
-        </Style>
-      </Rectangle>
-      <Image Name="Image2">
-        <Source>Database</Source>
-        <Value>=Parameters!Image.Value</Value>
-        <MIMEType>image/png</MIMEType>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.17869in</Top>
-        <Left>0.13052in</Left>
-        <Height>1.5994in</Height>
-        <Width>3.24421in</Width>
+        <Width>17.97147cm</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
-      </Image>
+      </Tablix>
     </ReportItems>
     <Height>23.43361cm</Height>
     <Style />
   </Body>
-  <Width>20.33974cm</Width>
+  <Width>20.63016cm</Width>
   <Page>
     <PageFooter>
       <Height>0.9525cm</Height>

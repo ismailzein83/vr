@@ -230,10 +230,10 @@
       </Image>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>3.26719in</Top>
-        <Left>2.12507in</Left>
+        <Top>3.29844in</Top>
+        <Left>2.14637in</Left>
         <Height>0.02083in</Height>
-        <Width>5.39709in</Width>
+        <Width>5.36875in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -246,31 +246,31 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.53783in</Width>
+              <Width>1.53705in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77728in</Width>
+              <Width>0.7765in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.12275in</Width>
+              <Width>0.12197in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76802in</Width>
+              <Width>0.76724in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84382in</Width>
+              <Width>0.84304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.34327in</Width>
+              <Width>0.83507in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53419in</Width>
+              <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73042in</Width>
+              <Width>1.23705in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79241in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -936,10 +936,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>2.69774in</Top>
+        <Top>2.72899in</Top>
         <Left>0.07216in</Left>
         <Height>0.5in</Height>
-        <Width>7.45in</Width>
+        <Width>7.44296in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -957,19 +957,19 @@
               <Width>0.12984in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84382in</Width>
+              <Width>0.81861in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.34327in</Width>
+              <Width>0.83742in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53419in</Width>
+              <Width>0.53106in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73042in</Width>
+              <Width>1.23705in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.79241in</Width>
+              <Width>0.79163in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1236,10 +1236,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
-        <Top>3.34358in</Top>
-        <Left>2.12507in</Left>
+        <Top>3.37483in</Top>
+        <Left>2.14637in</Left>
         <Height>0.25in</Height>
-        <Width>5.39709in</Width>
+        <Width>5.36875in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
