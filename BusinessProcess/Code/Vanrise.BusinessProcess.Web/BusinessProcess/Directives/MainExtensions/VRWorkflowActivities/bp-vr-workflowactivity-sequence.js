@@ -98,8 +98,6 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 
 	            api.load = function (payload) {
 
-	                console.log(payload);
-
 	                if (payload != undefined) {
 	                    context = payload.Context;
 	                    if (payload.Settings != undefined)

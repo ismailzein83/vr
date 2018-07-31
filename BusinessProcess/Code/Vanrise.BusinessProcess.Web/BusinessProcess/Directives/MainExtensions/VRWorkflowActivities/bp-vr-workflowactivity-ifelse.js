@@ -67,7 +67,7 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	                    };
 	                }
 	                return childContext;
-	            }
+	            };
 
 	            defineAPI();
 	        }
@@ -113,7 +113,7 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	                                    Editor: "businessprocess-vr-workflowactivity-sequence",
 	                                    Title: "Sequence"
 	                                }
-	                            }
+	                            };
 	                        }
 
 	                        var trueWorkflowContainerPayload = {
