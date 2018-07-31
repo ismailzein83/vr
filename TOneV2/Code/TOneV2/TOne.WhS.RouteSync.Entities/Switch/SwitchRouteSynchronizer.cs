@@ -46,6 +46,8 @@ namespace TOne.WhS.RouteSync.Entities
         {
             throw new NotImplementedException();
         }
+
+        public abstract void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context);
     }
 
     public enum RouteSyncDeliveryMethod { Batches = 0, AllRoutes = 1 }
@@ -257,4 +259,8 @@ namespace TOne.WhS.RouteSync.Entities
 
         public SwitchSyncOutput SwitchSyncOutput { get; set; }
     }
+
+    public interface ISwitchRouteSynchronizerRemoveConnectionContext { }
+
+    public class SwitchRouteSynchronizerRemoveConnectionContext : ISwitchRouteSynchronizerRemoveConnectionContext { }
 }

@@ -36,5 +36,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
 
             return masterDataManager.GetAccessListStatus(query, endPointStatuses);
         }
+
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            CdrConnectionString = null;
+            base.RemoveConnection(context);
+        }
     }
 }

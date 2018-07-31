@@ -35,5 +35,10 @@ namespace TOne.WhS.RouteSync.Huawei
         {
             throw new NotImplementedException();
         }
+
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

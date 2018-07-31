@@ -8,14 +8,13 @@ app.directive('vrWhsBeDbreplicationpreinsertSwitch', [
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new DBReplicationPreInsertSwitchCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
+            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/DBReplication/Templates/DBReplicationPreInsertSwitchTemplate.html'
         };
 
         function DBReplicationPreInsertSwitchCtor(ctrl, $scope, attrs) {
@@ -36,8 +35,9 @@ app.directive('vrWhsBeDbreplicationpreinsertSwitch', [
                     };
                 };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != null) {
                     ctrl.onReady(api);
+                }
             }
         }
     }]);

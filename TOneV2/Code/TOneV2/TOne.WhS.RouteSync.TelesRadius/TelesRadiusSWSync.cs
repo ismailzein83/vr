@@ -85,6 +85,11 @@ namespace TOne.WhS.RouteSync.TelesRadius
         {
             this.DataManager.ApplySwitchRouteSyncRoutes(context);
         }
+
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            this.DataManager = null;
+        }
     }
 
     public class CarrierMapping

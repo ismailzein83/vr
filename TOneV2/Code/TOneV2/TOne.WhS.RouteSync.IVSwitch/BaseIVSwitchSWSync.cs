@@ -117,6 +117,13 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return masterDataManager.UpdateEndPointState(suspendedEndPoints);
         }
 
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            this.MasterConnectionString = null;
+            this.RouteConnectionString = null;
+            this.TariffConnectionString = null;
+        }
+
         private string GetRouteTableName(int routeTableId)
         {
             return string.Format("rt{0}", routeTableId);

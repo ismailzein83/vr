@@ -260,6 +260,11 @@ namespace TOne.WhS.RouteSync.TelesIdb
 			context.SwitchSyncOutput = applyDifferentialRoutesContext.SwitchSyncOutput;
 		}
 
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            this.DataManager = null;
+        }
+
 		#endregion
 
 		#region Private Methods
@@ -406,7 +411,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
 		}
 
 		#endregion
-	}
+    }
 
 	public class CarrierMapping
 	{

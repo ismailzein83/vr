@@ -251,7 +251,10 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
             context.SwitchSyncOutput = switchSyncOutput;
         }
-
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            this.DataManager = null;
+        }
         #endregion
 
         #region Private Methods
@@ -449,5 +452,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
         }
 
         #endregion
+
+      
     }
 }

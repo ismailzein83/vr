@@ -164,6 +164,10 @@
       <Project>{9e22928e-0cf2-459d-979f-3551145ad291}</Project>
       <Name>TOne.WhS.DBSync.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

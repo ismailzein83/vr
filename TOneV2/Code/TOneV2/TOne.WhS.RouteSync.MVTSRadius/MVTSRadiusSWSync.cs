@@ -130,6 +130,10 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             context.SwitchSyncOutput = swapTableContext.SwitchSyncOutput;
         }
 
+        public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
+        {
+            this.DataManager = null;
+        }
         public class CarrierMapping
         {
             public int CarrierId { get; set; }
