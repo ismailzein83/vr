@@ -295,10 +295,17 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 var column = columnDefinitionsDic.GetRecord(col);
                 if (column != null)
                 {
-                    var fieldInfo = fieldInfos.GetRecord(column.FieldName);
-                    if (fieldInfo != null)
+                    if (column.FieldTitle != null)
                     {
-                        SetStyleAndValue(worksheet, headerRowIndex, columnIndexState, fieldInfo.FieldTitle, 14, true, TextAlignmentType.Center, true);
+                        SetStyleAndValue(worksheet, headerRowIndex, columnIndexState, column.FieldTitle, 14, true, TextAlignmentType.Center, true);
+                    }
+                    else
+                    {
+                        var fieldInfo = fieldInfos.GetRecord(column.FieldName);
+                        if (fieldInfo != null)
+                        {
+                            SetStyleAndValue(worksheet, headerRowIndex, columnIndexState, fieldInfo.FieldTitle, 14, true, TextAlignmentType.Center, true);
+                        }
                     }
                 }
                 else
