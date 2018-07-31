@@ -24,6 +24,8 @@ namespace TOne.WhS.Deal.Business
                     return false;
                 if (input.Query.CarrierAccountIds != null && !input.Query.CarrierAccountIds.Contains((deal.Settings as VolCommitmentDealSettings).CarrierAccountId))
                     return false;
+                if (input.Query.Status != null && !input.Query.Status.Contains(deal.Settings.Status))
+                    return false;
                 return true;
             };
 
