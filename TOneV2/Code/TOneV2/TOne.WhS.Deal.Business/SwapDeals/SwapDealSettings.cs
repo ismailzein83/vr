@@ -24,7 +24,7 @@ namespace TOne.WhS.Deal.Business
 
     public enum DealType
     {
-        [Description("Gentelmen")]
+        [Description("Gentlemen")]
         Gentelmen = 0,
 
         [Description("Commitment")]
@@ -108,11 +108,11 @@ namespace TOne.WhS.Deal.Business
                         validationResult = false;
                     }
 
-                    if (DealType == DealType.Commitment)
-                    {
-                        validateBeforeSaveContext.ValidateMessages.Add("You Cannot update a deal of type commitment");
-                        validationResult = false;
-                    }
+                    //if (DealType == DealType.Commitment)
+                    //{
+                    //    validateBeforeSaveContext.ValidateMessages.Add("You Cannot update a deal of type commitment");
+                    //    validationResult = false;
+                    //}
                 }
 
             }
