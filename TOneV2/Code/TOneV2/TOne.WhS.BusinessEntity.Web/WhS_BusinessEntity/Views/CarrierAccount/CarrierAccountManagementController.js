@@ -2,10 +2,11 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService'];
+    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService','WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService'];
 
-    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountAPIService) {
+    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountAPIService) {
         var gridAPI;
+        var carrierAccountGridReadyPromise = UtilsService.createPromiseDeferred();;
         var carrierProfileDirectiveAPI;
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -28,8 +29,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                var filter = {};
-                api.loadGrid(filter);
+                carrierAccountGridReadyPromise.resolve();
             };
 
             $scope.onActivationStatusDirectiveReady = function (api) {
@@ -53,6 +53,7 @@
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
             };
+
 
             $scope.onCarrierTypeSelectionChanged = function () {
                 if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Customer) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
@@ -98,19 +99,6 @@
             $scope.hadAddCarrierAccountPermission = function () {
                 return WhS_BE_CarrierAccountAPIService.HasAddCarrierAccountPermission();
             };
-
-            function getFilterObject() {
-                var data = {
-                    AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
-                    CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
-                    Name: $scope.name,
-                    SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
-                    SellingProductsIds: sellingProductSelectorAPI.getSelectedIds(),
-                    ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
-                    Services: serviceDirectiveAPI.getSelectedIds()
-                };
-                return data;
-            }
         }
 
         function load() {
@@ -118,7 +106,12 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType])
+            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType]).then( function () {
+                    carrierAccountGridReadyPromise.promise.then(function () {
+                        gridAPI.loadGrid(getFilterObject())
+
+                    });
+                })
                 .catch(function (error) {
                     $scope.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -146,9 +139,10 @@
         }
 
         function loadCarrierActivationStatusType() {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
             var loadActivationStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             activationStatusSelectorReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, undefined, loadActivationStatusSelectorPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, { selectedIds: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value]}, loadActivationStatusSelectorPromiseDeferred);
             });
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
@@ -159,6 +153,19 @@
             };
 
             WhS_BE_CarrierAccountService.addCarrierAccount(onCarrierAccountAdded);
+        }
+
+        function getFilterObject() {
+            var data = {
+                AccountsTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountTypes, "value"),
+                CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
+                Name: $scope.name,
+                SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                SellingProductsIds: sellingProductSelectorAPI.getSelectedIds(),
+                ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
+                Services: serviceDirectiveAPI.getSelectedIds()
+            };
+            return data;
         }
     }
 
