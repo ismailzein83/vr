@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<CDRCorrelationProcessState> CDRCorrelationProcessState { get; set; }
 
         [RequiredArgument]
-        public OutArgument<List<RecordFilterGroup>> RecordFilterGroups { get; set; }
+        public OutArgument<List<CDRCorrelationFilterGroup>> CDRCorrelationFilterGroups { get; set; }
 
         [RequiredArgument]
         public OutArgument<bool> NewDataImported { get; set; }
@@ -36,18 +36,15 @@ namespace Vanrise.GenericData.BP.Activities
             CDRCorrelationDefinition cdrCorrelationDefinition = this.CDRCorrelationDefinition.Get(context);
             TimeSpan dateTimeMargin = this.DateTimeMargin.Get(context);
             TimeSpan batchIntervalTime = this.BatchIntervalTime.Get(context);
-
             CDRCorrelationProcessState cdrCorrelationProcessState = this.CDRCorrelationProcessState.Get(context);
 
+            DataRecordStorageManager manager = new DataRecordStorageManager();
             CDRCorrelationDefinitionSettings settings = cdrCorrelationDefinition.Settings;
 
-            bool newDataImported = false;
-            List<RecordFilterGroup> recordFilterGroups = new List<RecordFilterGroup>();
-
-
             long? lastImportedId = null;
+            bool newDataImported = false;
+            List<CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = new List<CDRCorrelationFilterGroup>();
 
-            DataRecordStorageManager manager = new DataRecordStorageManager();
             DateTime? overallMinDate;
             DateTime? overallMaxDate;
             long? overallMaxId = manager.GetMaxId(settings.InputDataRecordStorageId, settings.IdFieldName, settings.DatetimeFieldName, out overallMaxDate, out overallMinDate);
@@ -59,49 +56,54 @@ namespace Vanrise.GenericData.BP.Activities
 
                 if (minDate.HasValue)
                 {
-                    lastImportedId = maxId;
-
                     newDataImported = true;
+                    lastImportedId = maxId;
                     DateTime minDateMinusMargin = minDate.Value.AddSeconds(-1 * dateTimeMargin.TotalSeconds);
-                    recordFilterGroups = BuildRecordFilterGroups(minDateMinusMargin, overallMaxDate.Value, batchIntervalTime, settings.DatetimeFieldName, maxId.Value, settings.IdFieldName);
+                    cdrCorrelationFilterGroups = BuildRecordFilterGroups(minDateMinusMargin, overallMaxDate.Value, batchIntervalTime, settings.DatetimeFieldName, maxId.Value, settings.IdFieldName);
                 }
             }
             else
             {
                 if (overallMaxId.HasValue) // no data exist in the table
                 {
-                    lastImportedId = overallMaxId;
                     newDataImported = true;
-                    recordFilterGroups = BuildRecordFilterGroups(overallMinDate.Value, overallMaxDate.Value, batchIntervalTime, settings.DatetimeFieldName, overallMaxId.Value, settings.IdFieldName);
+                    lastImportedId = overallMaxId;
+                    cdrCorrelationFilterGroups = BuildRecordFilterGroups(overallMinDate.Value, overallMaxDate.Value, batchIntervalTime, settings.DatetimeFieldName, overallMaxId.Value, settings.IdFieldName);
                 }
             }
 
-            this.RecordFilterGroups.Set(context, recordFilterGroups);
+            this.CDRCorrelationFilterGroups.Set(context, cdrCorrelationFilterGroups);
             this.NewDataImported.Set(context, newDataImported);
             this.LastImportedId.Set(context, lastImportedId);
         }
 
-        private List<RecordFilterGroup> BuildRecordFilterGroups(DateTime minDate, DateTime maxDate, TimeSpan batchIntervalTime, string datetimeFieldName, long maxId, string idFieldName)
+        private List<CDRCorrelationFilterGroup> BuildRecordFilterGroups(DateTime minDate, DateTime maxDate, TimeSpan batchIntervalTime, string datetimeFieldName, long maxId, string idFieldName)
         {
-            List<RecordFilterGroup> recordFilterGroups = new List<RecordFilterGroup>();
+            List<CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = new List<CDRCorrelationFilterGroup>();
             List<DateTimeRange> dateTimeRanges = Vanrise.Common.Utilities.GenerateDateTimeRanges(minDate, maxDate, batchIntervalTime).ToList();
 
             for (int i = 0; i < dateTimeRanges.Count; i++)
             {
                 DateTimeRange dateTimeRange = dateTimeRanges[i];
+                DateTime from = dateTimeRange.From;
+                DateTime? to = null;
 
                 RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
-                recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = dateTimeRange.From });
+                recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = from });
 
                 if (i != dateTimeRanges.Count - 1)
-                    recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.Less, Value = dateTimeRange.To });
+                {
+                    to = dateTimeRange.To;
+                    recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.Less, Value = to });
+                }
 
                 recordFilter.Filters.Add(new NumberRecordFilter { FieldName = idFieldName, CompareOperator = NumberRecordFilterOperator.LessOrEquals, Value = maxId });
                 recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1 } });
 
-                recordFilterGroups.Add(recordFilter);
+                cdrCorrelationFilterGroups.Add(new CDRCorrelationFilterGroup() { RecordFilterGroup = recordFilter, From = from, To = to });
             }
-            return recordFilterGroups;
+
+            return cdrCorrelationFilterGroups;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.BP.Activities
 
         public MemoryQueue<RecordBatch> OutputQueue { get; set; }
 
-        public List<RecordFilterGroup> RecordFilterGroups { get; set; }
+        public List<CDRCorrelationFilterGroup> CDRCorrelationFilterGroups { get; set; }
 
         public string OrderColumnName { get; set; }
 
@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<string> IdFieldName { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<RecordFilterGroup>> RecordFilterGroups { get; set; }
+        public InArgument<List<CDRCorrelationFilterGroup>> CDRCorrelationFilterGroups { get; set; }
 
         [RequiredArgument]
         public InArgument<string> OrderColumnName { get; set; }
@@ -68,20 +68,31 @@ namespace Vanrise.GenericData.BP.Activities
                 throw new NullReferenceException("inputArgument.OutputQueue");
 
             LoadCDRsToCorrelateOutput output = new LoadCDRsToCorrelateOutput() { };
-            long eventCount = 0;
+            long totalRecordsCount = 0;
 
             RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
 
-            List<RecordFilterGroup> recordFilterGroups = inputArgument.RecordFilterGroups;
+            List<CDRCorrelationFilterGroup> cdrRCorrelationFilterGroups = inputArgument.CDRCorrelationFilterGroups;
             string orderColumnName = inputArgument.OrderColumnName;
             bool isOrderAscending = inputArgument.IsOrderAscending;
 
-
-            foreach (RecordFilterGroup recordFilterGroup in recordFilterGroups)
+            foreach (CDRCorrelationFilterGroup cdrCorrelationFilterGroup in cdrRCorrelationFilterGroups)
             {
-                new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, null, null, recordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                string rangeMessage;
+                if (cdrCorrelationFilterGroup.To.HasValue)
+                    rangeMessage = string.Format("Range From {0}, To {1}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"), cdrCorrelationFilterGroup.To.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                else
+                    rangeMessage = string.Format("From {0}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has started.", rangeMessage));
+
+                long batchRecordsCount = 0;
+                DateTime batchStartTime = DateTime.Now;
+
+                new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, null, null, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
                 {
-                    eventCount++;
+                    totalRecordsCount++;
+                    batchRecordsCount++;
                     recordBatch.Records.Add(itm);
 
                     if (recordBatch.Records.Count >= batchSize)
@@ -92,13 +103,19 @@ namespace Vanrise.GenericData.BP.Activities
                 }), orderColumnName, isOrderAscending);
 
                 if (recordBatch.Records.Count > 0)
+                {
                     inputArgument.OutputQueue.Enqueue(recordBatch);
+                    recordBatch = new RecordBatch() { Records = new List<dynamic>() };
+                }
+
+                double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. Time Elapsed: {2} (s)", rangeMessage, batchRecordsCount, elapsedTime));
 
                 while (inputArgument.OutputQueue.Count >= maximumOutputQueueSize)
                     Thread.Sleep(1000);
             }
 
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", eventCount);
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", totalRecordsCount);
             return output;
         }
 
@@ -109,7 +126,7 @@ namespace Vanrise.GenericData.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 IdFieldName = this.IdFieldName.Get(context),
                 RecordStorageId = this.RecordStorageId.Get(context),
-                RecordFilterGroups = this.RecordFilterGroups.Get(context),
+                CDRCorrelationFilterGroups = this.CDRCorrelationFilterGroups.Get(context),
                 OrderColumnName = this.OrderColumnName.Get(context),
                 IsOrderAscending = this.IsOrderAscending.Get(context)
             };

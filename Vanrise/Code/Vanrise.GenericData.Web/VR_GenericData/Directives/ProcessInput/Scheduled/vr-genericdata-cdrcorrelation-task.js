@@ -9,23 +9,15 @@ app.directive("vrGenericdataCdrcorrelationTask", ['UtilsService', 'VRUIUtilsServ
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                var ctor = new CDRCorrelationTaskDirective($scope, ctrl);
+                var ctor = new CDRCorrelationTaskDirectiveCtor($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/ProcessInput/Scheduled/Templates/GenericDataCDRCorrelationTaskTemplate.html"
         };
 
-        function CDRCorrelationTaskDirective($scope, ctrl) {
+        function CDRCorrelationTaskDirectiveCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
             var cdrCorrelationDefinitionSelectorAPI;
@@ -52,6 +44,11 @@ app.directive("vrGenericdataCdrcorrelationTask", ['UtilsService', 'VRUIUtilsServ
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.dateTimeMargin = payload.data.DateTimeMargin;
                         $scope.scopeModel.durationMargin = payload.data.DurationMargin;
+                        $scope.scopeModel.batchIntervalTime = payload.data.BatchIntervalTime;
+                    } else {
+                        $scope.scopeModel.dateTimeMargin = "00:00:05";
+                        $scope.scopeModel.durationMargin = "00:00:05";
+                        $scope.scopeModel.batchIntervalTime = "01:00:00";
                     }
 
                     var loadCDRCorrelationDefinitionSelectorPromise = loadCDRCorrelationDefinitionSelector();
@@ -75,17 +72,18 @@ app.directive("vrGenericdataCdrcorrelationTask", ['UtilsService', 'VRUIUtilsServ
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.getExpressionsData = function () {
-                    return { "ScheduleTime": "ScheduleTime" };
-                };
-
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.BP.Arguments.CDRCorrelationProcessInput,Vanrise.GenericData.BP.Arguments",
+                        CDRCorrelationDefinitionId: cdrCorrelationDefinitionSelectorAPI.getSelectedIds(),
                         DateTimeMargin: $scope.scopeModel.dateTimeMargin,
                         DurationMargin: $scope.scopeModel.durationMargin,
-                        CDRCorrelationDefinitionId: cdrCorrelationDefinitionSelectorAPI.getSelectedIds()
+                        BatchIntervalTime: $scope.scopeModel.batchIntervalTime
                     };
+                };
+
+                api.getExpressionsData = function () {
+                    return { "ScheduleTime": "ScheduleTime" };
                 };
 
                 if (ctrl.onReady != null)

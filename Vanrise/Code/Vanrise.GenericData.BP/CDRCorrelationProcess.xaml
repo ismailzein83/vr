@@ -65,8 +65,8 @@
       <Variable x:TypeArguments="vge:CDRCorrelationProcessState" Name="CDRCorrelationProcessState" />
       <Variable x:TypeArguments="vge:CDRCorrelationDefinition" Name="CDRCorrelationDefinition" />
       <Variable x:TypeArguments="x:Boolean" Name="newDataImported" />
-      <Variable x:TypeArguments="scg:List(vge:RecordFilterGroup)" Name="recordFilterGroups" />
       <Variable x:TypeArguments="s:Nullable(x:Int64)" Name="lastImportedId" />
+      <Variable x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)" Name="cdrCorrelationFilterGroups" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting CDR Correlation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -105,6 +105,11 @@
           <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpValue>
         </InArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationDefinition>
+      <vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationFilterGroups>
+        <OutArgument x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)">cdrCorrelationFilterGroups</mca:CSharpReference>
+        </OutArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationFilterGroups>
       <vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationProcessState>
         <InArgument x:TypeArguments="vge:CDRCorrelationProcessState">
           <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationProcessState">CDRCorrelationProcessState</mca:CSharpValue>
@@ -125,11 +130,6 @@
           <mca:CSharpReference x:TypeArguments="x:Boolean">newDataImported</mca:CSharpReference>
         </OutArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.NewDataImported>
-      <vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroups>
-        <OutArgument x:TypeArguments="scg:List(vge:RecordFilterGroup)">
-          <mca:CSharpReference x:TypeArguments="scg:List(vge:RecordFilterGroup)">recordFilterGroups</mca:CSharpReference>
-        </OutArgument>
-      </vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroups>
     </vgba1:BuildCDRCorrelationFilterGroup>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -161,6 +161,11 @@
           </Sequence.Variables>
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
             <vgba1:LoadCDRsToCorrelate sap2010:WorkflowViewState.IdRef="LoadCDRsToCorrelate_1" IsOrderAscending="True">
+              <vgba1:LoadCDRsToCorrelate.CDRCorrelationFilterGroups>
+                <InArgument x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)">
+                  <mca:CSharpValue x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)">cdrCorrelationFilterGroups</mca:CSharpValue>
+                </InArgument>
+              </vgba1:LoadCDRsToCorrelate.CDRCorrelationFilterGroups>
               <vgba1:LoadCDRsToCorrelate.IdFieldName>
                 <InArgument x:TypeArguments="x:String">
                   <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.IdFieldName</mca:CSharpValue>
@@ -176,11 +181,6 @@
                   <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpReference>
                 </InOutArgument>
               </vgba1:LoadCDRsToCorrelate.OutputQueue>
-              <vgba1:LoadCDRsToCorrelate.RecordFilterGroups>
-                <InArgument x:TypeArguments="scg:List(vge:RecordFilterGroup)">
-                  <mca:CSharpValue x:TypeArguments="scg:List(vge:RecordFilterGroup)">recordFilterGroups</mca:CSharpValue>
-                </InArgument>
-              </vgba1:LoadCDRsToCorrelate.RecordFilterGroups>
               <vgba1:LoadCDRsToCorrelate.RecordStorageId>
                 <InArgument x:TypeArguments="s:Guid">
                   <mca:CSharpValue x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpValue>
@@ -310,7 +310,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw8PwO6Ag4CAQFHBU0gAwHMA04FWQ4DAb0DWgVgJAMBtQNhBYUBLAMBgwOGAQWxAgoCAQuyAgW4AiACAQJKC0qFAQMBzgNHYEeDAQMBzQNWC1bdAQMBxQNRC1F9AwG+A10LXYEBAwG2A4IBC4IBegMBrgNkC2RiAwGnA24LbnkDAaADeAt4agMBmQN9C31hAwGSA2kLaXUDAYsDcwtzXwMBhAOJAQuJAVkCAQyNAQmmAhQCARypAgmvAiQCARO1Agu1AoUBAgEEsgJgsgKBAQIBA5QBEZQBigECATeZARGZAZgBAgEqngERngGWAQIBHaIBC54CFgIBUp8CC6UCKwIBRKwCD6wCiQECARWpAmSpAoIBAgEUowENwgEpAwGzAsMBDecBIwMB1wHoAQ2CAioDAZUBgwINnQIuAgFTogIRogKSAQIBRbUBE7UBegMB9gK6ARO6AYkBAwHpAqsBE6sBhAEDAdwCpgETpgF+AwHPAr8BE78BgAEDAcICsAETsAGOAQMBtQKjAXGjAXcDAbQC0AET0AFnAwGmAt8BE98BeAMBmQLVARPVAYQBAwGMAuQBE+QBegMB/wHaARPaAY4BAwHyAcYBE8YBfQMB5QHLARPLAWcDAdgB9QET9QGUAQMBygHwARPwAY4BAwG9AfoBE/oBcgMBsAH/ARP/AYEBAwGjAesBE+sBfQMBlgGLAhOLAoQBAwGIAZoCE5oCeQIBe5UCE5UCjAECAW6QAhOQAn4CAWGGAhOGApEBAgFU</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw8PwO6Ag4CAQFHBU0gAwHMA04FWQ4DAb0DWgVgJAMBtQNhBYUBLAMBgwOGAQWxAgoCAQuyAgW4AiACAQJKC0qFAQMBzgNHYEeDAQMBzQNWC1bdAQMBxQNRC1F9AwG+A10LXYEBAwG2A2QLZGIDAa4DbgtuigEDAacDcwtzeQMBoAN9C31qAwGZA4IBC4IBYQMBkgNpC2l1AwGLA3gLeF8DAYQDiQELiQFZAgEMjQEJpgIUAgEcqQIJrwIkAgETtQILtQKFAQIBBLICYLICgQECAQOUARGUAYoBAgE3mQERmQGYAQIBKp4BEZ4BlgECAR2iAQueAhYCAVKfAgulAisCAUSsAg+sAokBAgEVqQJkqQKCAQIBFKMBDcIBKQMBswLDAQ3nASMDAdcB6AENggIqAwGVAYMCDZ0CLgIBU6ICEaICkgECAUWmAROmAYoBAwH2AroBE7oBiQEDAekCsAETsAGEAQMB3AKrAROrAX4DAc8CvwETvwGAAQMBwgK1ARO1AY4BAwG1AqMBcaMBdwMBtALQARPQAWcDAaYC3wET3wF4AwGZAtUBE9UBhAEDAYwC5AET5AF6AwH/AdoBE9oBjgEDAfIBxgETxgF9AwHlAcsBE8sBZwMB2AH1ARP1AZQBAwHKAfABE/ABjgEDAb0B+gET+gFyAwGwAf8BE/8BgQEDAaMB6wET6wF9AwGWAYsCE4sChAEDAYgBmgITmgJ5AgF7lQITlQKMAQIBbpACE5ACfgIBYYYCE4YCkQECAVQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -113,7 +113,7 @@ namespace Vanrise.GenericData.BP.Activities
                                             cdrCorrelationBatch.DateTimeRange.From = recordDateTime;
 
                                         DateTime to = cdrCorrelationBatch.DateTimeRange.To;
-                                        if (to == default(DateTime) || to < recordDateTime)
+                                        if (to == default(DateTime) || to <= recordDateTime)
                                             cdrCorrelationBatch.DateTimeRange.To = recordDateTime.AddSeconds(1);
                                     }
                                     else
