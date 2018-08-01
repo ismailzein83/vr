@@ -7,67 +7,26 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBIfQuery<T> : BaseRDBQuery, IRDBIfQuery<T>, IRDBIfQueryReady<T>, IRDBIfQueryConditionDefined<T>, IRDBIfQueryTrueQueryDefined<T>, IRDBIfQueryFalseQueryDefined<T>
+    public class RDBIfQuery : BaseRDBQuery
     {
-        T _parent;
         RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBIfQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
+        public RDBIfQuery(RDBQueryBuilderContext queryBuilderContext)
         {
-            _parent = parent;
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public BaseRDBCondition Condition { get; set; }
+        internal BaseRDBCondition Condition { get; set; }
 
         internal string _trueQueryText;
 
-        RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>> _trueQueryContext;
-        IRDBQueryReady _trueQuery;
-        public IRDBQueryReady TrueQuery
-        {
-            get
-            {
-                if (_trueQuery == null)
-                {
-                    _trueQueryContext.ThrowIfNull("_trueQueryContext");
-                    _trueQueryContext.Query.ThrowIfNull("_trueQueryContext.Query");
-                    _trueQuery = _trueQueryContext.Query;
-                }
-                return _trueQuery;
-            }
-            set
-            {
-                _trueQuery = value;
-            }
-        }
+        RDBQueryContext _trueQueryContext;
+        RDBQueryContext _falseQueryContext;
 
-        RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>> _falseQueryContext;
-        IRDBQueryReady _falseQuery;
-        public IRDBQueryReady FalseQuery
-        {
-            get
-            {
-                if (_falseQuery == null)
-                {
-                    if (_falseQueryContext != null)//false query context is not mandatory
-                    {
-                        _falseQueryContext.Query.ThrowIfNull("_falseQueryContext.Query");
-                        _falseQuery = _falseQueryContext.Query;
-                    }
-                }
-                return _falseQuery;
-            }
-            set
-            {
-                _falseQuery = value;
-            }
-        }
-
-        protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
+        public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.Append(" IF ");            
+            queryBuilder.Append(" IF ");
             var conditionContext = new RDBConditionToDBQueryContext(context, _queryBuilderContext);
             queryBuilder.AppendLine(this.Condition.ToDBQuery(conditionContext));
             queryBuilder.AppendLine(" BEGIN ");
@@ -77,16 +36,16 @@ namespace Vanrise.Data.RDB
             }
             else
             {
-                var trueQueryContext = new RDBQueryGetResolvedQueryContext(context);
-                queryBuilder.AppendLine(this.TrueQuery.GetResolvedQuery(trueQueryContext).QueryText);
+                _trueQueryContext.ThrowIfNull("_trueQueryContext");
+                queryBuilder.AppendLine(_trueQueryContext.GetResolvedQuery().QueryText);
             }
             queryBuilder.AppendLine(" END ");
-            if (FalseQuery != null)
+            if (_falseQueryContext != null)
             {
                 queryBuilder.AppendLine(" ELSE ");
                 queryBuilder.AppendLine(" BEGIN ");
                 var falseQueryContext = new RDBQueryGetResolvedQueryContext(context);
-                queryBuilder.AppendLine(this.FalseQuery.GetResolvedQuery(falseQueryContext).QueryText);
+                queryBuilder.AppendLine(_falseQueryContext.GetResolvedQuery().QueryText);
                 queryBuilder.AppendLine(" END ");
             }
             return new RDBResolvedQuery
@@ -95,69 +54,23 @@ namespace Vanrise.Data.RDB
             };
         }
 
-        public RDBConditionContext<IRDBIfQueryConditionDefined<T>> IfCondition()
+        public RDBConditionContext IfCondition()
         {
-            return new RDBConditionContext<IRDBIfQueryConditionDefined<T>>(this, _queryBuilderContext, (condition) => this.Condition = condition, null);
+            return new RDBConditionContext(_queryBuilderContext, (condition) => this.Condition = condition, null);
         }
 
 
-        public RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>> ThenQuery()
+        public RDBQueryContext ThenQuery()
         {
-            _trueQueryContext = new RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>>(this, _queryBuilderContext.CreateChildContext());
+            _trueQueryContext = new RDBQueryContext(_queryBuilderContext.CreateChildContext());
             return _trueQueryContext;
         }
 
 
-        public RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>> ElseQuery()
+        public RDBQueryContext ElseQuery()
         {
-            _falseQueryContext = new RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>>(this, _queryBuilderContext.CreateChildContext());
+            _falseQueryContext = new RDBQueryContext(_queryBuilderContext.CreateChildContext());
             return _falseQueryContext;
         }
-
-
-        public T EndIf()
-        {
-            return _parent;
-        }
-    }
-
-    public interface IRDBIfQueryReady<T> : IRDBQueryReady
-    {
-        T EndIf();
-    }
-
-    public interface IRDBIfQuery<T> : IRDBIfQueryCanDefineCondition<T>
-    {
-
-    }
-
-    public interface IRDBIfQueryConditionDefined<T> : IRDBIfQueryCanDefineTrueQuery<T>
-    {
-
-    }
-
-    public interface IRDBIfQueryTrueQueryDefined<T> : IRDBIfQueryReady<T>, IRDBIfQueryCanDefineFalseQuery<T>
-    {
-
-    }
-
-    public interface IRDBIfQueryFalseQueryDefined<T> : IRDBIfQueryReady<T>
-    {
-
-    }
-
-    public interface IRDBIfQueryCanDefineCondition<T>
-    {
-        RDBConditionContext<IRDBIfQueryConditionDefined<T>> IfCondition();
-    }
-
-    public interface IRDBIfQueryCanDefineTrueQuery<T>
-    {
-        RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>> ThenQuery();
-    }
-
-    public interface IRDBIfQueryCanDefineFalseQuery<T>
-    {
-        RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>> ElseQuery();
     }
 }

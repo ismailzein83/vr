@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBParameterDeclarationQuery<T> : BaseRDBQuery, IRDBParameterDeclarationQuery<T>, IRDBParameterDeclarationQueryReady<T>
+    public class RDBParameterDeclarationQuery : BaseRDBQuery
     {
-         T _parent;
         RDBQueryBuilderContext _queryBuilderContext;
         
-        public RDBParameterDeclarationQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
+        public RDBParameterDeclarationQuery(RDBQueryBuilderContext queryBuilderContext)
         {
-            _parent = parent;
             _queryBuilderContext = queryBuilderContext;
         }
 
         List<RDBParameter> _parameterDeclarations = new List<RDBParameter>();
 
-        public IRDBParameterDeclarationQueryReady<T> AddParameter(string name, RDBDataType type)
+        public void AddParameter(string name, RDBDataType type)
         {
             _parameterDeclarations.Add(new RDBParameter
                 {
@@ -28,15 +26,9 @@ namespace Vanrise.Data.RDB
                     Type = type,
                     Direction = RDBParameterDirection.Declared
                 });
-            return this;
         }
-
-        public T EndParameterDeclaration()
-        {
-            return _parent;
-        }
-
-        protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
+        
+        public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             foreach(var prm in _parameterDeclarations)
             {
@@ -44,20 +36,5 @@ namespace Vanrise.Data.RDB
             }
             return new RDBResolvedQuery { QueryText = String.Empty };
         }
-    }
-
-    public interface IRDBParameterDeclarationQuery<T> : IRDBParameterDeclarationQueryCanAddParameter<T>
-    {
-
-    }
-
-    public interface IRDBParameterDeclarationQueryReady<T> : IRDBParameterDeclarationQueryCanAddParameter<T>
-    {
-        T EndParameterDeclaration();
-    }
-
-    public interface IRDBParameterDeclarationQueryCanAddParameter<T>
-    {
-        IRDBParameterDeclarationQueryReady<T> AddParameter(string name, RDBDataType type);
     }
 }

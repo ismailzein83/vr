@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBNullOrConditionContext<T> : RDBConditionContext<T>
+    public class RDBNullOrConditionContext : RDBConditionContext
     {
-        public RDBNullOrConditionContext(T parent, RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias, string columnName)
+        public RDBNullOrConditionContext(RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias, string columnName)
             : base(queryBuilderContext, tableAlias)
         {
-            base.Parent = parent;
             base.SetConditionAction = (condition) =>
             {
                 var conditions = new List<BaseRDBCondition>();

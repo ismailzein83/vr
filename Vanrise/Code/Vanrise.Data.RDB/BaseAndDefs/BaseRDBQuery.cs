@@ -13,7 +13,7 @@ namespace Vanrise.Data.RDB
             return this.GetResolvedQuery(context);
         }
 
-        protected abstract RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context);
+        public abstract RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context);
     }
 
     public interface IRDBQueryGetResolvedQueryContext : IBaseRDBResolveQueryContext

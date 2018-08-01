@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Entities;
 using Vanrise.Data.RDB;
 
 namespace Vanrise.AccountBalance.Data.RDB
@@ -30,6 +31,54 @@ namespace Vanrise.AccountBalance.Data.RDB
                 IdColumnName = "ID",
                 CreatedTimeColumnName = "CreatedTime"
             });
+        }
+
+        #region Private Methods
+
+        BaseRDBDataProvider GetDataProvider()
+        {
+            return RDBDataProviderFactory.CreateProvider("VR_AccountBalance", "VR_AccountBalance_TransactionDBConnStringKey", "VR_AccountBalance_TransactionDBConnString");
+        }
+
+        #endregion
+
+        public void AddQueryInsertAccountUsageOverrides(RDBQueryContext queryContext, IEnumerable<AccountUsageOverride> accountUsageOverrides)
+        {
+            foreach (var accountUsageOverride in accountUsageOverrides)
+            {
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(TABLE_NAME);
+                insertQuery.ColumnValue("AccountTypeID", accountUsageOverride.AccountTypeId);
+                insertQuery.ColumnValue("AccountID", accountUsageOverride.AccountId);
+                insertQuery.ColumnValue("TransactionTypeID", accountUsageOverride.TransactionTypeId);
+                insertQuery.ColumnValue("PeriodStart", accountUsageOverride.PeriodStart);
+                insertQuery.ColumnValue("PeriodEnd", accountUsageOverride.PeriodEnd);
+                insertQuery.ColumnValue("OverriddenByTransactionID", accountUsageOverride.OverriddenByTransactionId);
+            }
+        }
+
+        public void AddQueryDeleteAccountUsageOverrideByTransactionIds(RDBQueryContext queryContext, IEnumerable<long> billingTransactionIds)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, billingTransactionIds);
+        }
+
+        internal bool IsAccountOverriddenInPeriod(Guid accountTypeId, Guid transactionTypeId, string accountId, DateTime periodStart, DateTime periodEnd)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(AccountUsageOverrideDataManager.TABLE_NAME, "au_override", 1);
+            selectQuery.SelectColumns().Column("ID");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("AccountID", accountId);
+            whereAndCondition.EqualsCondition("TransactionTypeID", transactionTypeId);
+            whereAndCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq, periodStart);
+            whereAndCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.GEq, periodEnd);
+
+            return  queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
     }
 }

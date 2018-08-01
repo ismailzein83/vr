@@ -104,6 +104,32 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    public enum RDBConditionGroupOperator {  AND = 0, OR = 1}
+    public class RDBConditionGroup : BaseRDBCondition
+    {
+        public RDBConditionGroupOperator Operator { get; set; }
+        
+        public List<BaseRDBCondition> Conditions { get; set; }
+
+        public override string ToDBQuery(IRDBConditionToDBQueryContext context)
+        {
+            if (this.Conditions == null || this.Conditions.Count == 0)
+                return null;
+            List<string> validConditionsAsStrings = this.Conditions.Select(itm => itm.ToDBQuery(context)).Where(itm => !String.IsNullOrEmpty(itm)).ToList();
+            if (validConditionsAsStrings.Count > 0)
+            {
+                if (validConditionsAsStrings.Count == 1)
+                    return validConditionsAsStrings[0];
+                else
+                return string.Concat(" (", string.Join(string.Concat(" ", this.Operator.ToString(), " "), validConditionsAsStrings), ") ");
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
     public class RDBNullCondition : BaseRDBCondition
     {
         public BaseRDBExpression Expression { get; set; }
@@ -124,9 +150,9 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBExistsCondition<T> : BaseRDBCondition
+    public class RDBExistsCondition : BaseRDBCondition
     {
-        public RDBSelectQuery<T> SelectQuery { get; set; }
+        public RDBSelectQuery SelectQuery { get; set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
@@ -135,9 +161,9 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNotExistsCondition<T> : BaseRDBCondition
+    public class RDBNotExistsCondition : BaseRDBCondition
     {
-        public RDBSelectQuery<T> SelectQuery { get; set; }
+        public RDBSelectQuery SelectQuery { get; set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {

@@ -6,124 +6,121 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBSelectQuery<T> : BaseRDBQuery, IRDBSelectQuery<T>, ISelectQueryTableDefined<T>, ISelectQueryJoined<T>, ISelectQueryColumnsSelected<T>, ISelectQueryFiltered<T>, ISelectQueryGroupByDefined<T>, ISelectQueryAggregateColumnsSelected<T>, ISelectQuerySortDefined<T>, IRDBTableQuerySource
+    public class RDBSelectQuery : BaseRDBQuery, IRDBTableQuerySource
     {
-         T _parent;
+        RDBQueryBuilderContext _queryBuilderContext;
 
-         internal T Parent
-         {
-             set
-             {
-                 _parent = value;
-             }
-         }
-         RDBQueryBuilderContext _queryBuilderContext;
-
-        public RDBSelectQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
-        {
-            _parent = parent;
-            _queryBuilderContext = queryBuilderContext;
-        }
-
-        public RDBSelectQuery(RDBQueryBuilderContext queryBuilderContext)            
+        public RDBSelectQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }
 
-        private IRDBTableQuerySource _table;
+        IRDBTableQuerySource _table;
 
-        private string _tableAlias;
+        string _tableAlias;
 
-        private long? _nbOfRecords;
+        long? _nbOfRecords;
 
-        private List<RDBSelectColumn> _columns;
+        List<RDBSelectColumn> _columns;
 
-        private List<RDBJoin> _joins;
+        List<RDBJoin> _joins;
 
-        private BaseRDBCondition _condition;
+        BaseRDBCondition _condition;
 
-        private RDBGroupBy _groupBy;
+        RDBConditionGroup _conditionGroup;
 
-        private List<RDBSelectSortColumn> _sortColumns;
+        RDBGroupBy _groupBy;
 
-        public ISelectQueryTableDefined<T> FromNoTable()
-        {
-
-            return this;
-        }
-
-        public ISelectQueryTableDefined<T> From(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords)
+        List<RDBSelectSortColumn> _sortColumns;
+        
+        public void From(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords)
         {
             this._table = table; 
             _queryBuilderContext.SetMainQueryTable(table);
             this._tableAlias = tableAlias;
             _queryBuilderContext.AddTableAlias(table, tableAlias);
             this._nbOfRecords = nbOfRecords;
-            return this;
         }
 
-        public ISelectQueryTableDefined<T> From(IRDBTableQuerySource table, string tableAlias)
+        public void From(IRDBTableQuerySource table, string tableAlias)
         {
-            return From(table, tableAlias, null);
+            From(table, tableAlias, null);
         }
 
-        public ISelectQueryTableDefined<T> From(string tableName, string tableAlias, long? nbOfRecords)
+        public void From(string tableName, string tableAlias, long? nbOfRecords)
         {
-            return From(new RDBTableDefinitionQuerySource(tableName), tableAlias, nbOfRecords);
+            From(new RDBTableDefinitionQuerySource(tableName), tableAlias, nbOfRecords);
         }
-        public ISelectQueryTableDefined<T> From(string tableName, string tableAlias)
+        public void From(string tableName, string tableAlias)
         {
-            return From(tableName, tableAlias, null);
+            From(tableName, tableAlias, null);
         }
 
-        public IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias, long? nbOfRecords)
+        public RDBSelectQuery FromSelect(string inlineQueryAlias, long? nbOfRecords)
         {
-            var selectQuery = new RDBSelectQuery<ISelectQueryTableDefined<T>>(this, _queryBuilderContext.CreateChildContext());
+            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
             From(selectQuery, inlineQueryAlias, nbOfRecords);
             return selectQuery;
         }
 
-        public IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias)
+        public RDBSelectQuery FromSelect(string inlineQueryAlias)
         {
             return FromSelect(inlineQueryAlias, null);
         }
 
-        public RDBJoinContext<ISelectQueryJoined<T>> Join()
+        RDBJoinContext _joinContext;
+        public RDBJoinContext Join()
             {
-                this._joins = new List<RDBJoin>();
-                return new RDBJoinContext<ISelectQueryJoined<T>>(this, _queryBuilderContext, this._joins);
+                if (_joinContext == null)
+                {
+                    this._joins = new List<RDBJoin>();
+                    _joinContext = new RDBJoinContext(_queryBuilderContext, this._joins);
+                }
+                return _joinContext;
             }
-        
 
-        public RDBSelectColumnsContext<ISelectQueryColumnsSelected<T>> SelectColumns()
+
+        RDBSelectColumnsContext _selectColumnsContext;
+        public RDBSelectColumnsContext SelectColumns()
+        {
+            if (_selectColumnsContext == null)
             {
                 this._columns = new List<RDBSelectColumn>();
-                return new RDBSelectColumnsContext<ISelectQueryColumnsSelected<T>>(this, _queryBuilderContext, this._columns, this._table, this._tableAlias);
+                _selectColumnsContext = new RDBSelectColumnsContext(_queryBuilderContext, this._columns, this._table, this._tableAlias);
             }
+            return _selectColumnsContext;
+        }
         
 
-        public RDBSelectAggregateContext<ISelectQueryAggregateColumnsSelected<T>> SelectAggregates()
+        public RDBSelectAggregateContext SelectAggregates()
             {
                 this._columns = new List<RDBSelectColumn>();
-                return new RDBSelectAggregateContext<ISelectQueryAggregateColumnsSelected<T>>(this, this._columns, this._table, this._tableAlias);
-            }
-        
-
-        public RDBConditionContext<ISelectQueryFiltered<T>> Where()
-            {
-                return new RDBConditionContext<ISelectQueryFiltered<T>>(this, _queryBuilderContext, (condition) => this._condition = condition, this._tableAlias);
+                return new RDBSelectAggregateContext(this._columns, this._table, this._tableAlias);
             }
 
-        public RDBGroupByContext<ISelectQueryGroupByDefined<T>> GroupBy()
+        RDBConditionContext _conditionContext;
+        public RDBConditionContext Where()
+        {
+            if (_conditionContext == null)
+                _conditionContext = new RDBConditionContext(_queryBuilderContext, (condition) => this._condition = condition, this._tableAlias);
+            return _conditionContext;
+        }
+
+        public RDBGroupByContext GroupBy()
             {
                 this._groupBy = new RDBGroupBy { Columns = new List<RDBSelectColumn>(), AggregateColumns = new List<RDBSelectColumn>() };
-                return new RDBGroupByContext<ISelectQueryGroupByDefined<T>>(this, _queryBuilderContext, this._groupBy, this._table, this._tableAlias);
+                return new RDBGroupByContext(_queryBuilderContext, this._groupBy, this._table, this._tableAlias);
             }
 
-        RDBSortContext<ISelectQuerySortDefined<T>> ISelectQueryCanSort<T>.Sort()
+        RDBSortContext _sortContext;
+        public RDBSortContext Sort()
         {
-            this._sortColumns = new List<RDBSelectSortColumn>();
-            return new RDBSortContext<ISelectQuerySortDefined<T>>(this, this._sortColumns, this._table, this._tableAlias);
+            if (_sortContext == null)
+            {
+                this._sortColumns = new List<RDBSelectSortColumn>();
+                _sortContext = new RDBSortContext(this._sortColumns, this._table, this._tableAlias);
+            }
+            return _sortContext;
         }
 
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
@@ -153,16 +150,11 @@ namespace Vanrise.Data.RDB
             return _queryAsTableSourceUniqueName;
         }
 
-        protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
+        public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             var resolveSelectQueryContext = new RDBDataProviderResolveSelectQueryContext(this._table, this._tableAlias, this._nbOfRecords, this._columns, this._joins,
              this._condition, this._groupBy, this._sortColumns, context, _queryBuilderContext);
             return context.DataProvider.ResolveSelectQuery(resolveSelectQueryContext);
-        }
-
-        public T EndSelect()
-        {
-            return _parent;
         }
 
 
@@ -193,94 +185,5 @@ namespace Vanrise.Data.RDB
         public string ColumnAlias { get; set; }
 
         public RDBSortDirection SortDirection { get; set; }
-    }
-
-    public interface ISelectQueryReady<T> : IRDBQueryReady
-    {
-        T EndSelect();
-    }
-
-    public interface IRDBSelectQuery<T> : ISelectQueryCanDefineTable<T>
-    {
-
-    }
-
-    public interface ISelectQueryTableDefined<T> : ISelectQueryCanSelectColumns<T>, ISelectQueryCanFilter<T>, ISelectQueryCanGroupBy<T>, ISelectQueryCanJoin<T>, ISelectQueryCanSelectAggregate<T>
-    {
-
-    }
-
-    public interface ISelectQueryJoined<T> : ISelectQueryCanFilter<T>, ISelectQueryCanSelectColumns<T>, ISelectQueryCanGroupBy<T>, ISelectQueryCanSelectAggregate<T>
-    {
-        
-    }
-
-    public interface ISelectQueryColumnsSelected<T> : ISelectQueryReady<T>, ISelectQueryCanSort<T>
-    {
-       
-    }
-
-    public interface ISelectQueryFiltered<T> : ISelectQueryCanSelectColumns<T>, ISelectQueryCanGroupBy<T>, ISelectQueryCanSelectAggregate<T>
-    {
-
-    }
-
-    public interface ISelectQueryGroupByDefined<T> : ISelectQueryReady<T>, ISelectQueryCanSort<T>
-    {
-    }
-
-    public interface ISelectQuerySortDefined<T> : ISelectQueryReady<T>
-    {
-    }
-
-    public interface ISelectQueryAggregateColumnsSelected<T> : ISelectQueryReady<T>, ISelectQueryCanSort<T>
-    {
-
-    }
-
-    public interface ISelectQueryCanDefineTable<T>
-    {
-        ISelectQueryTableDefined<T> FromNoTable();
-
-        ISelectQueryTableDefined<T> From(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords);
-
-        ISelectQueryTableDefined<T> From(IRDBTableQuerySource table, string tableAlias);
-
-        ISelectQueryTableDefined<T> From(string tableName, string tableAlias, long? nbOfRecords);
-
-        ISelectQueryTableDefined<T> From(string tableName, string tableAlias);
-
-        IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias, long? nbOfRecords);
-
-        IRDBSelectQuery<ISelectQueryTableDefined<T>> FromSelect(string inlineQueryAlias);
-    }
-    public interface ISelectQueryCanSelectColumns<T>
-    {
-        RDBSelectColumnsContext<ISelectQueryColumnsSelected<T>> SelectColumns();
-    }
-
-    public interface ISelectQueryCanFilter<T>
-    {
-        RDBConditionContext<ISelectQueryFiltered<T>> Where();
-    }
-
-    public interface ISelectQueryCanGroupBy<T>
-    {
-        RDBGroupByContext<ISelectQueryGroupByDefined<T>> GroupBy();
-    }
-
-    public interface ISelectQueryCanJoin<T>
-    {
-        RDBJoinContext<ISelectQueryJoined<T>> Join();
-    }
-
-    public interface ISelectQueryCanSort<T>
-    {
-        RDBSortContext<ISelectQuerySortDefined<T>> Sort();
-    }
-
-    public interface ISelectQueryCanSelectAggregate<T>
-    {
-        RDBSelectAggregateContext<ISelectQueryAggregateColumnsSelected<T>> SelectAggregates();
     }
 }

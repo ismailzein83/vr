@@ -6,55 +6,29 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBAndConditionContext<T> : RDBConditionContext<RDBAndConditionContext<T>>
+    public class RDBAndConditionContext : RDBConditionContext
     {
-        T _parent;
-        Action<BaseRDBCondition> _setCondition;
-        List<BaseRDBCondition> _conditions;
-
-        public RDBAndConditionContext(T parent, RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias)
+        public RDBAndConditionContext(RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias)
             : base(queryBuilderContext, tableAlias)
         {
-            _parent = parent;
-            _setCondition = setCondition;
-            _conditions = new List<BaseRDBCondition>();
-            base.Parent = this;
-            base.SetConditionAction = (condition) => _conditions.Add(condition);
-        }
-
-        public T EndAnd()
-        {
-            _setCondition(new RDBAndCondition { Conditions = _conditions });
-            return _parent;
+            var conditions = new List<BaseRDBCondition>();
+            setCondition(new RDBAndCondition { Conditions = conditions });
+            base.SetConditionAction = (condition) => conditions.Add(condition);
         }
     }
 
     public enum RDBGroupConditionType {  And = 0, Or = 1}
-    public class RDBGroupConditionContext<T> : RDBConditionContext<RDBGroupConditionContext<T>>
+    public class RDBGroupConditionContext : RDBConditionContext
     {
-        T _parent;
-        RDBGroupConditionType _groupConditionType;
-        Action<BaseRDBCondition> _setCondition;
-        List<BaseRDBCondition> _conditions;
-
-        public RDBGroupConditionContext(T parent, RDBGroupConditionType groupConditionType, RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias)
+        public RDBGroupConditionContext(RDBGroupConditionType groupConditionType, RDBQueryBuilderContext queryBuilderContext, Action<BaseRDBCondition> setCondition, string tableAlias)
             : base(queryBuilderContext, tableAlias)
         {
-            _parent = parent;
-            _groupConditionType = groupConditionType;
-            _setCondition = setCondition;
-            _conditions = new List<BaseRDBCondition>();
-            base.Parent = this;
-            base.SetConditionAction = (condition) => _conditions.Add(condition);
-        }
-
-        public T EndConditionGroup()
-        {
-            if (_groupConditionType == RDBGroupConditionType.And)
-                _setCondition(new RDBAndCondition { Conditions = _conditions });
+            var conditions = new List<BaseRDBCondition>();
+            if (groupConditionType == RDBGroupConditionType.And)
+                setCondition(new RDBAndCondition { Conditions = conditions });
             else
-                _setCondition(new RDBOrCondition { Conditions = _conditions });
-            return _parent;
+                setCondition(new RDBOrCondition { Conditions = conditions });
+            base.SetConditionAction = (condition) => conditions.Add(condition);
         }
     }
 }

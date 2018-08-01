@@ -50,23 +50,50 @@ namespace Vanrise.Invoice.Data.RDB
 
         public Entities.BillingPeriodInfo GetBillingPeriodInfoById(string partnerId, Guid invoiceTypeId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "billPer")
-                        .Where().And()
-                                    .EqualsCondition("InvoiceTypeID", invoiceTypeId)
-                                    .EqualsCondition("PartnerID", partnerId)
-                                .EndAnd()
-                        .SelectColumns().AllTableColumns("billPer").EndColumns()
-                        .EndSelect()
-                        .GetItem(BillingPeriodInfoMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "billPer");
+            selectQuery.SelectColumns().AllTableColumns("billPer");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("InvoiceTypeID", invoiceTypeId);
+            whereAndCondition.EqualsCondition("PartnerID", partnerId);
+
+            return queryContext.GetItem(BillingPeriodInfoMapper);
         }
 
         public bool InsertOrUpdateBillingPeriodInfo(Entities.BillingPeriodInfo billingPeriodInfo)
         {
-            new RDBQueryContext(GetDataProvider()).InsertOrUpdateBillingPeriodInfo(billingPeriodInfo)
-                .ExecuteNonQuery();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            AddInsertOrUpdateBillingPeriodInfo(queryContext, billingPeriodInfo);
+
+            queryContext.ExecuteNonQuery();
             return true;
+        }
+
+        public void AddInsertOrUpdateBillingPeriodInfo(RDBQueryContext queryContext, Entities.BillingPeriodInfo billingPeriodInfo)
+        {
+            var ifQuery = queryContext.AddIfQuery();
+            var ifExistsSelectQuery = ifQuery.IfCondition().ExistsCondition();
+            ifExistsSelectQuery.From(BillingPeriodInfoDataManager.TABLE_NAME, "billPer");
+            ifExistsSelectQuery.SelectColumns().FixedValue(1, "dum");
+
+            var ifExistsSelectQueryWhereAndCondition = ifExistsSelectQuery.Where().And();
+            ifExistsSelectQueryWhereAndCondition.EqualsCondition("InvoiceTypeID", billingPeriodInfo.InvoiceTypeId);
+            ifExistsSelectQueryWhereAndCondition.EqualsCondition("PartnerID", billingPeriodInfo.PartnerId);
+
+            var updateQuery = ifQuery.ThenQuery().AddUpdateQuery();
+            updateQuery.FromTable(BillingPeriodInfoDataManager.TABLE_NAME);
+            updateQuery.ColumnValue("NextPeriodStart", billingPeriodInfo.NextPeriodStart);
+            var updateQueryAndCondition = updateQuery.Where().And();
+            updateQueryAndCondition.EqualsCondition("InvoiceTypeID", billingPeriodInfo.InvoiceTypeId);
+            updateQueryAndCondition.EqualsCondition("PartnerID", billingPeriodInfo.PartnerId);
+
+            var insertQuery = ifQuery.ElseQuery().AddInsertQuery();
+            insertQuery.IntoTable(BillingPeriodInfoDataManager.TABLE_NAME);
+            insertQuery.ColumnValue("InvoiceTypeID", billingPeriodInfo.InvoiceTypeId);
+            insertQuery.ColumnValue("PartnerID", billingPeriodInfo.PartnerId);
+            insertQuery.ColumnValue("NextPeriodStart", billingPeriodInfo.NextPeriodStart);
         }
     }
 }

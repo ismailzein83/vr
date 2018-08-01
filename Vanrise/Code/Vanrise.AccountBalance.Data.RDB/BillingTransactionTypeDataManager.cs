@@ -53,12 +53,17 @@ namespace Vanrise.AccountBalance.Data.RDB
         #region IBillingTransactionTypeDataManager
         public IEnumerable<BillingTransactionType> GetBillingTransactionTypes()
         {
-            return new RDBQueryContext(GetDataProvider())
-                .Select()
-                .From(TABLE_NAME, "transType")
-                .SelectColumns().AllTableColumns("transType").EndColumns()
-                .EndSelect()
-                .GetItems(BillingTransactionTypeMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "transType");
+            selectQuery.SelectColumns().AllTableColumns("transType");            
+            return queryContext.GetItems(BillingTransactionTypeMapper);
+            //return new RDBQueryContext(GetDataProvider())
+            //    .Select()
+            //    .From(TABLE_NAME, "transType")
+            //    .SelectColumns().AllTableColumns("transType").EndColumns()
+            //    .EndSelect()
+            //    .GetItems(BillingTransactionTypeMapper);
         }
 
         public bool AreBillingTransactionTypeUpdated(ref object updateHandle)

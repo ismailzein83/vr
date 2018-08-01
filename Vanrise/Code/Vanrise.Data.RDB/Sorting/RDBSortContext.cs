@@ -6,22 +6,20 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBSortContext<T> : IRDBSortContextReady<T>
+    public class RDBSortContext
     {
-        T _parent;
         List<RDBSelectSortColumn> _columns;
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        public RDBSortContext(T parent, List<RDBSelectSortColumn> columns, IRDBTableQuerySource table, string tableAlias)
+        public RDBSortContext(List<RDBSelectSortColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
-            _parent = parent;
             _columns = columns;
             _table = table;
             _tableAlias = tableAlias;
         }
 
-        public IRDBSortContextReady<T> ByExpression(BaseRDBExpression expression, RDBSortDirection direction)
+        public RDBSortContext ByExpression(BaseRDBExpression expression, RDBSortDirection direction)
         {
             _columns.Add(new RDBSelectSortColumn
                 {
@@ -31,17 +29,17 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IRDBSortContextReady<T> ByColumn(string tableAlias, string columnName, RDBSortDirection direction)
+        public RDBSortContext ByColumn(string tableAlias, string columnName, RDBSortDirection direction)
         {
             return ByExpression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, direction);
         }
 
-        public IRDBSortContextReady<T> ByColumn(string columnName, RDBSortDirection direction)
+        public RDBSortContext ByColumn(string columnName, RDBSortDirection direction)
         {
             return ByColumn(this._tableAlias, columnName, direction);
         }
 
-        public IRDBSortContextReady<T> ByAlias(string alias, RDBSortDirection direction)
+        public RDBSortContext ByAlias(string alias, RDBSortDirection direction)
         {
             _columns.Add(new RDBSelectSortColumn
             {
@@ -50,43 +48,5 @@ namespace Vanrise.Data.RDB
             });
             return this;
         }
-
-
-        public IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction, Action<IRDBSortContextReady<T>> falseAction)
-        {
-            if (shouldAddSort())
-                trueAction(this);
-            else if (falseAction != null)
-                falseAction(this);
-            return this;
-        }
-
-        public IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction)
-        {
-            return AddSortIf(shouldAddSort, trueAction, null);
-        }
-
-
-        public T EndSort()
-        {
-            return _parent;
-        }
-    }
-
-    public interface IRDBSortContextReady<T>
-    {
-        IRDBSortContextReady<T> ByExpression(BaseRDBExpression expression, RDBSortDirection direction);
-
-        IRDBSortContextReady<T> ByColumn(string tableAlias, string columnName, RDBSortDirection direction);
-
-        IRDBSortContextReady<T> ByColumn(string columnName, RDBSortDirection direction);
-
-        IRDBSortContextReady<T> ByAlias(string alias, RDBSortDirection direction);
-
-        IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction, Action<IRDBSortContextReady<T>> falseAction);
-
-        IRDBSortContextReady<T> AddSortIf(Func<bool> shouldAddSort, Action<IRDBSortContextReady<T>> trueAction);
-
-        T EndSort();
     }
 }

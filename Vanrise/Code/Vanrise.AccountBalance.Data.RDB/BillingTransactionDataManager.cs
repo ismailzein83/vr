@@ -90,206 +90,272 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public IEnumerable<BillingTransaction> GetFilteredBillingTransactions(BillingTransactionQuery query)
         {
-            return new RDBQueryContext(GetDataProvider())
-                   .Select()
-                   .From(TABLE_NAME, "bt")
-                   .Join()
-                   .JoinLiveBalance("liveBalance", "bt")
-                   .EndJoin()
-                   .Where().And()
-                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                .ConditionIf(() => query.AccountsIds != null && query.AccountsIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds))
-                                .ConditionIf(() => query.TransactionTypeIds != null && query.TransactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, query.TransactionTypeIds))
-                                .CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, query.FromTime)
-                                .ConditionIf(() => query.ToTime.HasValue, ctx => ctx.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, query.ToTime.Value))
-                                .EqualsCondition("AccountTypeID", query.AccountTypeId)
-                                .LiveBalanceActiveAndEffectiveCondition("liveBalance", query.Status, query.EffectiveDate, query.IsEffectiveInFuture)
-                           .EndAnd()
-                   .SelectColumns().AllTableColumns("bt").EndColumns()
-                   .EndSelect()                   
-                   .GetItems(BillingTransactionMapper);  
+            LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().AllTableColumns("bt");
+
+            var joinContext = selectQuery.Join();
+            liveBalanceDataManager.JoinLiveBalance(joinContext, "liveBalance", "bt");
+            
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
+                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
+            if (query.TransactionTypeIds != null && query.TransactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, query.TransactionTypeIds);
+            whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, query.FromTime);
+            if (query.ToTime.HasValue)
+                whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, query.ToTime.Value);
+            whereAndCondition.EqualsCondition("AccountTypeID", query.AccountTypeId);
+            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "liveBalance", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
+            
+            return queryContext.GetItems(BillingTransactionMapper);
         }
 
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
-            billingTransactionId = new RDBQueryContext(GetDataProvider())
-                .Insert()
-                .IntoTable(TABLE_NAME)
-                .GenerateIdAndAssignToParameter("BillingTransactionId")
-                .AddInsertBillingTransactionColumns(billingTransaction)
-                .EndInsert()
-                .ExecuteScalar()
-                .LongValue;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            AddQueryInsertBillingTransaction(queryContext, billingTransaction, null, true);
+            billingTransactionId = queryContext.ExecuteScalar().LongValue;
             return true;
         }
 
         public void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady)
         {
-            new RDBQueryContext(GetDataProvider())
-                   .Select()
-                   .From(TABLE_NAME, "bt")
-                   .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .BillingTransactionsToUpdateBalanceCondition()                                
-                           .EndAnd()
-                    .SelectColumns().AllTableColumns("bt").EndColumns()
-                    .EndSelect()
-                    .ExecuteReader((reader) =>
-                    {
-                        while (reader.Read())
-                        {
-                            onBillingTransactionReady(BillingTransactionMapper(reader));
-                        }
-                    });
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().AllTableColumns("bt");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            AddBillingTransactionsToUpdateBalanceCondition(whereAndCondition);
+
+            queryContext.ExecuteReader((reader) =>
+            {
+                while (reader.Read())
+                {
+                    onBillingTransactionReady(BillingTransactionMapper(reader));
+                }
+            });
         }
 
         public IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionTypeIds, Guid accountTypeId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                   .Select()
-                   .From(TABLE_NAME, "bt")
-                   .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                .NotNullCondition("SourceID")
-                                .ConditionIf(() => billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds))
-                           .EndAnd()
-                    .SelectColumns().AllTableColumns("bt").EndColumns()
-                    .EndSelect()
-                    .GetItems(BillingTransactionMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().AllTableColumns("bt");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            whereAndCondition.NotNullCondition("SourceID");
+            if (billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds);
+
+            return queryContext.GetItems(BillingTransactionMapper);
         }
 
         public List<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "bt")
-                        .Where().And()
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                    .ConditionIf(() => accountIds != null && accountIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
-                                    .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
-                                .EndAnd()
-                        .SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID").EndColumns()
-                        .EndSelect()
-                        .GetItems(BillingTransactionMetaDataMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            if (accountIds != null && accountIds.Count() > 0)
+                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+            
+            return queryContext.GetItems(BillingTransactionMetaDataMapper);
         }
 
         public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByTransactionTypes(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime, List<Guid> transactionTypeIds)
         {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
             var btAccountTimesTempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
             btAccountTimesTempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             btAccountTimesTempTableColumns.Add("TransactionTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            var btAccountTimesTempTableQuery = new RDBTempTableQuery(btAccountTimesTempTableColumns);
 
-            return new RDBQueryContext(GetDataProvider())
-                .StartBatchQuery()
-                .AddQuery().CreateTempTable(btAccountTimesTempTableQuery)
-                .Foreach(billingTransactionsByTime, (item, batchQuery) =>
-                    {
-                        batchQuery.AddQuery().Insert().IntoTable(btAccountTimesTempTableQuery).ColumnValue("AccountID", item.AccountId).ColumnValue("TransactionTime", item.TransactionTime);
-                    })
-                .AddQuery()
-                    .Select()
-                    .From(TABLE_NAME, "bt")
-                    .Join()
-                    .Join(RDBJoinType.Inner, btAccountTimesTempTableQuery, "btAccountTimes")
-                        .And()
-                            .EqualsCondition("bt", "AccountID", new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "AccountID" })
-                            .CompareCondition("bt", "TransactionTime", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "TransactionTime" })
-                        .EndAnd()
-                    .EndJoin()
-                    .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
-                            .EndAnd()
-                    .SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID").EndColumns()
-                    .EndSelect()
-                .EndBatchQuery()
-                .GetItems(BillingTransactionMetaDataMapper);
+            var btAccountTimesTempTableQuery = queryContext.CreateTempTable();
+            btAccountTimesTempTableQuery.AddColumns(btAccountTimesTempTableColumns);
+            
+            foreach (var item in billingTransactionsByTime)
+            {
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(btAccountTimesTempTableQuery);
+                insertQuery.ColumnValue("AccountID", item.AccountId);
+                insertQuery.ColumnValue("TransactionTime", item.TransactionTime);
+            }
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID");
+
+            var joinContext = selectQuery.Join();
+            var joinCondition = joinContext.Join(RDBJoinType.Inner, btAccountTimesTempTableQuery, "btAccountTimes");
+            var joinAndCondition = joinCondition.And();
+            joinAndCondition.EqualsCondition("bt", "AccountID", new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "AccountID" });
+            joinAndCondition.CompareCondition("bt", "TransactionTime", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "TransactionTime" });
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+
+            return queryContext.GetItems(BillingTransactionMetaDataMapper);
         }
 
         public IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, string accountId, Vanrise.Entities.VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
-    //        SELECT	bt.[ID],bt.AccountID,bt.AccountTypeID, TransactionTypeID,Amount,bt.CurrencyId,TransactionTime,Notes,Reference,IsBalanceUpdated,ClosingPeriodId, SourceID, Settings, bt.IsDeleted, IsSubtractedFromBalance
-    //FROM VR_AccountBalance.BillingTransaction bt with(nolock)
-    //Inner Join [VR_AccountBalance].LiveBalance vrlb
-    //    on vrlb.AccountTypeID = bt.AccountTypeID and 
-    //       vrlb.AccountID = bt.AccountID and 
-    //       ISNULL(vrlb.IsDeleted, 0) = 0 and
-    //       (@Status IS NULL OR vrlb.[Status] = @Status) AND
-    //       (@EffectiveDate IS NULL OR ((vrlb.BED <= @EffectiveDate OR vrlb.BED IS NULL) AND (vrlb.EED > @EffectiveDate OR vrlb.EED IS NULL))) AND
-    //       (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrlb.EED IS NULL or vrlb.EED >=  GETDATE()))  OR  (@IsEffectiveInFuture = 0 and  vrlb.EED <=  GETDATE()))
+            var liveBalanceDataManager = new LiveBalanceDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().AllTableColumns("bt");
 
-    //where isnull(bt.IsDeleted, 0) = 0
-    //    and bt.AccountTypeID = @AccountTypeID 
-    //    AND bt.AccountId= @AccountId
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "bt")
-                        .Join().JoinLiveBalance("liveBalance", "bt")
-                        .EndJoin()
-                        .Where().And()
-                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .EqualsCondition("AccountID", accountId)
-                                    .LiveBalanceActiveAndEffectiveCondition("liveBalance", status, effectiveDate, isEffectiveInFuture)
-                                .EndAnd()
-                        .SelectColumns().AllTableColumns("bt").EndColumns()
-                        .EndSelect()
-                        .GetItems(BillingTransactionMapper);
+            var joinContext = selectQuery.Join();
+            liveBalanceDataManager.JoinLiveBalance(joinContext, "liveBalance", "bt");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("AccountID", accountId);
+            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "liveBalance", status, effectiveDate, isEffectiveInFuture);
+
+            return queryContext.GetItems(BillingTransactionMapper);
 
         }
 
         public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypeIds, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "bt")
-                        .Where().And()
-                                    .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                                    .ConditionIf(() => accountTypeIds != null && accountTypeIds.Count() > 0, ctx => ctx.ListCondition("AccountTypeID", RDBListConditionOperator.IN, accountTypeIds))
-                                    .ConditionIf(() => accountIds != null && accountIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
-                                    .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
-                                    .CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, fromDate)
-                                    .ConditionIfNotDefaultValue(toDate, ctx => ctx.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, toDate.Value))
-                                .EndAnd()
-                        .SelectColumns().AllTableColumns("bt").EndColumns()
-                        .EndSelect()
-                        .GetItems(BillingTransactionMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.SelectColumns().AllTableColumns("bt");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            if (accountTypeIds != null && accountTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("AccountTypeID", RDBListConditionOperator.IN, accountTypeIds);
+            if (accountIds != null && accountIds.Count() > 0)
+                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+            whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, fromDate);
+            if (!toDate.HasValue)
+                whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, toDate.Value);
+
+            return queryContext.GetItems(BillingTransactionMapper);
         }
 
         public BillingTransaction GetLastBillingTransaction(Guid accountTypeId, string accountId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                   .Select()
-                   .From(TABLE_NAME, "bt", 1)
-                   .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .EqualsCondition("AccountID", accountId)
-                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
-                           .EndAnd()
-                   .SelectColumns().AllTableColumns("bt").EndColumns()
-                   .Sort().ByColumn("TransactionTime", RDBSortDirection.DESC).EndSort()
-                   .EndSelect()
-                   .GetItem(BillingTransactionMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt", 1);
+            selectQuery.SelectColumns().AllTableColumns("bt");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("AccountID", accountId);
+            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+
+            var sortContext = selectQuery.Sort();
+            sortContext.ByColumn("TransactionTime", RDBSortDirection.DESC);
+
+            return queryContext.GetItem(BillingTransactionMapper);
         }
 
         public bool HasBillingTransactionData(Guid accountTypeId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "bt", 1)
-                        .Where().And()
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .BillingTransactionsToUpdateBalanceCondition()
-                                .EndAnd()
-                        .SelectColumns().Column("ID").EndColumns()
-                        .EndSelect()                        
-                        .ExecuteScalar().NullableLongValue.HasValue;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt", 1);
+            selectQuery.SelectColumns().Column("ID");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            AddBillingTransactionsToUpdateBalanceCondition(whereAndCondition);
+
+            return queryContext.ExecuteScalar().NullableLongValue.HasValue; 
         }
 
         #endregion
+
+        public void AddQueryInsertBillingTransaction(RDBQueryContext queryContext, BillingTransaction billingTransaction, long? createdByInvoiceId, bool generateId)
+        {
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            if (generateId)
+                insertQuery.GenerateIdAndAssignToParameter("BillingTransactionId");
+            insertQuery.ColumnValue("AccountID", billingTransaction.AccountId);
+            insertQuery.ColumnValue("AccountTypeID", billingTransaction.AccountTypeId);
+            insertQuery.ColumnValue("Amount", billingTransaction.Amount);
+            insertQuery.ColumnValue("CurrencyId", billingTransaction.CurrencyId);
+            insertQuery.ColumnValue("TransactionTypeID", billingTransaction.TransactionTypeId);
+            insertQuery.ColumnValue("TransactionTime", billingTransaction.TransactionTime);
+            insertQuery.ColumnValue("Notes", billingTransaction.Notes);
+            insertQuery.ColumnValue("Reference", billingTransaction.Reference);
+            insertQuery.ColumnValue("SourceID", billingTransaction.SourceId);
+            if (billingTransaction.Settings != null)
+            {
+                string serializedSettings = Vanrise.Common.Serializer.Serialize(billingTransaction.Settings);
+                insertQuery.ColumnValue("Settings", serializedSettings);
+            }
+            if (createdByInvoiceId.HasValue)
+                insertQuery.ColumnValue("CreatedByInvoiceID", createdByInvoiceId.Value);
+        }
+
+        private void AddBillingTransactionsToUpdateBalanceCondition(RDBConditionContext conditionContext)
+        {
+            var orCondition = conditionContext.Or();
+            var andCondition1 = orCondition.And();
+            andCondition1.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            andCondition1.ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", false);
+            var andCondition2 = orCondition.Or();
+            andCondition2.NotNullCondition("IsDeleted");
+            andCondition2.EqualsCondition("IsDeleted", true);
+            andCondition2.NotNullCondition("IsBalanceUpdated");
+            andCondition2.EqualsCondition("IsBalanceUpdated", true);
+            andCondition2.ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance", false);
+        }
+
+        public void AddQuerySetBillingTransactionsAsBalanceUpdated(RDBQueryContext queryContext, IEnumerable<long> billingTransactionIds)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(BillingTransactionDataManager.TABLE_NAME);
+            updateQuery.ColumnValue("IsBalanceUpdated", true);
+            updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, billingTransactionIds);
+        }
+
+        public void AddQuerySetBillingTransactionsAsSubtractedFromBalance(RDBQueryContext queryContext, IEnumerable<long> billingTransactionIds)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.ColumnValue("IsSubtractedFromBalance", true);
+            updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, billingTransactionIds);
+        }
+
+        public void AddQuerySetInvoiceBillingTransactionsDeleted(RDBQueryContext queryContext, long invoiceId)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.ColumnValue("IsDeleted", true);
+            var whereAndCondition = updateQuery.Where().And();
+            whereAndCondition.NotNullCondition("CreatedByInvoiceID");
+            whereAndCondition.EqualsCondition("CreatedByInvoiceID", invoiceId);
+        }
+
     }
 }

@@ -12,12 +12,19 @@ namespace Vanrise.Data.RDB
         Dictionary<string, RDBTableColumnDefinition> _columns;
         string _tempTableName;
 
-        public RDBTempTableQuery(Dictionary<string, RDBTableColumnDefinition> columns)
+        RDBQueryBuilderContext _queryBuilderContext;
+
+        public RDBTempTableQuery(RDBQueryBuilderContext queryBuilderContext)
+        {
+            _queryBuilderContext = queryBuilderContext;
+        }
+
+        public void AddColumns(Dictionary<string, RDBTableColumnDefinition> columns)
         {
             this._columns = columns;
         }
 
-        protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
+        public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             Dictionary<string, object> parameterValues = new Dictionary<string, object>();
             var resolveQueryContext = new RDBDataProviderResolveTempTableCreationQueryContext(_columns, context);

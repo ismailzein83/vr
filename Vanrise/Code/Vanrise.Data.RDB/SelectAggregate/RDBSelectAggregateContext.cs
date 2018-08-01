@@ -7,40 +7,37 @@ using System.Threading.Tasks;
 namespace Vanrise.Data.RDB
 {
     public enum RDBNonCountAggregateType { SUM = 0, AVG = 1, MAX = 2, MIN = 3 }
-    public class RDBSelectAggregateContext<T> : IRDBSelectAggregateContextReady<T>
+    public class RDBSelectAggregateContext
     {
-        T _parent;
         List<RDBSelectColumn> _columns;
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        public RDBSelectAggregateContext(T parent, List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
+        public RDBSelectAggregateContext(List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
-            _parent = parent;
             _columns = columns;
             _table = table;
             _tableAlias = tableAlias;
         }
 
-        IRDBSelectAggregateContextReady<T> Column(BaseRDBExpression expression, string alias)
+        void Column(BaseRDBExpression expression, string alias)
         {
             _columns.Add(new RDBSelectColumn
             {
                 Expression = expression,
                 Alias = alias
             });
-            return this;
         }
 
-        public IRDBSelectAggregateContextReady<T> Count(string alias)
+        public void Count(string alias)
         {
-            return Column(new RDBCountExpression(), alias);
+            Column(new RDBCountExpression(), alias);
         }
 
-        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression, string alias)
+        public void Aggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression, string alias)
         {
             BaseRDBExpression aggregateExpression = CreateNonCountAggregate(aggregateType, expression);
-            return Column(aggregateExpression, alias);
+            Column(aggregateExpression, alias);
         }
 
         public static BaseRDBExpression CreateNonCountAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression)
@@ -57,39 +54,19 @@ namespace Vanrise.Data.RDB
             return aggregateExpression;
         }
 
-        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, string alias)
+        public void Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, string alias)
         {
-            return Aggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, alias);
+             Aggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, alias);
         }
 
-        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName, string alias)
+        public void Aggregate(RDBNonCountAggregateType aggregateType, string columnName, string alias)
         {
-            return Aggregate(aggregateType, _tableAlias, columnName, alias);
+             Aggregate(aggregateType, _tableAlias, columnName, alias);
         }
 
-        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName)
+        public void Aggregate(RDBNonCountAggregateType aggregateType, string columnName)
         {
-            return Aggregate(aggregateType, columnName, columnName);
+             Aggregate(aggregateType, columnName, columnName);
         }
-
-        public T EndSelectAggregates()
-        {
-            return _parent;
-        }
-    }
-
-    public interface IRDBSelectAggregateContextReady<T>
-    {
-        IRDBSelectAggregateContextReady<T> Count(string alias);
-
-        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression, string alias);
-
-        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, string alias);
-
-        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName, string alias);
-
-        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName);
-
-        T EndSelectAggregates();
     }
 }

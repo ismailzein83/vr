@@ -25,21 +25,8 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBQueryContext<T> : BaseRDBQueryContext, IRDBQueryContextReady
-    {
-        T _parent;
-        protected T Parent
-        {
-            get
-            {
-                return _parent;
-            }
-            set
-            {
-                _parent = value;
-            }
-        }
-        
+    public class RDBQueryContext : BaseRDBQueryContext
+    {        
         BaseRDBQuery _query;
 
         public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
@@ -56,123 +43,127 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        internal RDBQueryContext(BaseRDBDataProvider dataProvider)
-            : this(default(T), dataProvider)
+        internal List<BaseRDBQuery> Queries
+        {
+            get;
+            private set;
+        }
+
+        public RDBQueryContext(BaseRDBDataProvider dataProvider)
+            :this(new RDBQueryBuilderContext(dataProvider))
         {
         }
 
         internal RDBQueryContext(RDBQueryBuilderContext queryBuilderContext)
-            : this(default(T), queryBuilderContext)
-        {
-        }
-
-        internal RDBQueryContext(T parent, BaseRDBDataProvider dataProvider)
-            :this(parent, new RDBQueryBuilderContext(dataProvider))
-        {
-        }
-
-        internal RDBQueryContext(T parent, RDBQueryBuilderContext queryBuilderContext)
             : base(queryBuilderContext.DataProvider)
         {
-            _parent = parent;
             QueryBuilderContext = queryBuilderContext;
+            this.Queries = new List<BaseRDBQuery>();
         }
 
-        public IRDBSelectQuery<T> Select()
-            {
-                var query = new RDBSelectQuery<T>(_parent, QueryBuilderContext);
-                this._query = query;
-                return query;
-            }
-        
-
-        public IRDBInsertQuery<T> Insert()
-            {
-                var query = new RDBInsertQuery<T>(_parent, QueryBuilderContext);
-                this._query = query;
-                return query;
-            }
-        
-
-        public IRDBUpdateQuery<T> Update()
-            {
-                var query = new RDBUpdateQuery<T>(_parent, QueryBuilderContext);
-                this._query = query;
-                return query;
-            }
-
-        public IRDBDeleteQuery<T> Delete()
+        public RDBSelectQuery AddSelectQuery()
         {
-            var query = new RDBDeleteQuery<T>(_parent, QueryBuilderContext);
-            this._query = query;
-            return query;
-        }
-        
-        public IRDBIfQuery<T> If()
-            {
-                var query = new RDBIfQuery<T>(_parent, QueryBuilderContext);
-                this._query = query;
-                return query;
-
-            }
-
-
-        public IRDBBatchQuery<T> StartBatchQuery()
-        {
-            var batchQuery = new RDBBatchQuery<T>(_parent, this.QueryBuilderContext);
-            this._query= batchQuery;
-            return batchQuery;
-        }
-
-        public T CreateTempTable(RDBTempTableQuery tempTable)
-        {
-            this._query = tempTable;
-            return _parent;
-        }
-
-        public IRDBParameterDeclarationQuery<T> DeclareParameters()
-        {
-            var query = new RDBParameterDeclarationQuery<T>(_parent, this.QueryBuilderContext);
-            this._query = query;
+            var query = new RDBSelectQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
             return query;
         }
 
-        public IRDBSetParameterValuesQuery<T> SetParameterValues()
+
+        public RDBInsertQuery AddInsertQuery()
         {
-            var query = new RDBSetParameterValuesQuery<T>(_parent, this.QueryBuilderContext);
-            this._query = query;
+            var query = new RDBInsertQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
             return query;
+        }
+
+        public RDBUpdateQuery AddUpdateQuery()
+        {
+            var query = new RDBUpdateQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBDeleteQuery AddDeleteQuery()
+        {
+            var query = new RDBDeleteQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBIfQuery AddIfQuery()
+        {
+            var query = new RDBIfQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+
+        }
+
+        public RDBTempTableQuery CreateTempTable()
+        {
+            var query = new RDBTempTableQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBParameterDeclarationQuery DeclareParameters()
+        {
+            var query = new RDBParameterDeclarationQuery(this.QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBSetParameterValuesQuery SetParameterValues()
+        {
+            var query = new RDBSetParameterValuesQuery(this.QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public IRDBBulkInsertQueryContext StartBulkInsert()
+        {
+            return new RDBBulkInsertQueryContext(QueryBuilderContext.CreateChildContext());
         }
 
         RDBQueryGetResolvedQueryContext _resolveQueryContext;
-        RDBResolvedQuery IRDBQueryContextReady.GetResolvedQuery()
-        {
-            
+        public RDBResolvedQuery GetResolvedQuery()
+        {            
             _resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
-            var resolvedQuery = ((IRDBQueryReady)this._query).GetResolvedQuery(_resolveQueryContext);
+
+            StringBuilder queryBuilder = new StringBuilder();
+            foreach (var subQuery in Queries)
+            {
+                var subQueryContext = new RDBQueryGetResolvedQueryContext(_resolveQueryContext);
+                RDBResolvedQuery resolvedSubQuery = subQuery.GetResolvedQuery(subQueryContext);
+                queryBuilder.AppendLine(resolvedSubQuery.QueryText);
+                queryBuilder.AppendLine();
+            }
+            
             var resolveParametersContext = new RDBDataProviderResolveParameterDeclarationsContext(_resolveQueryContext);
             var resolvedParameterDeclarations = this.DataProvider.ResolveParameterDeclarations(resolveParametersContext);
+            var resolvedQuery = new RDBResolvedQuery();
             if (resolvedParameterDeclarations != null && !string.IsNullOrEmpty(resolvedParameterDeclarations.QueryText))
-                resolvedQuery.QueryText = String.Concat(resolvedParameterDeclarations.QueryText, "\n", resolvedQuery.QueryText);
+                resolvedQuery.QueryText = String.Concat(resolvedParameterDeclarations.QueryText, "\n", queryBuilder.ToString());
+            else
+                resolvedQuery.QueryText = queryBuilder.ToString();
             return resolvedQuery;
         }
 
-        int IRDBQueryContextReady.ExecuteNonQuery(bool executeTransactional)
+        public int ExecuteNonQuery(bool executeTransactional)
         {
-            var resolvedQuery = ((IRDBQueryContextReady)this).GetResolvedQuery();
+            var resolvedQuery = this.GetResolvedQuery();
             var context = new RDBDataProviderExecuteNonQueryContext(resolvedQuery, executeTransactional, _resolveQueryContext.Parameters);
             return this.DataProvider.ExecuteNonQuery(context);
         }
 
-        int IRDBQueryContextReady.ExecuteNonQuery()
+        public int ExecuteNonQuery()
         {
-            return ((IRDBQueryContextReady)this).ExecuteNonQuery(false);
+            return this.ExecuteNonQuery(false);
         }
 
-        List<Q> IRDBQueryContextReady.GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder, bool executeTransactional)
+        public List<Q> GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder, bool executeTransactional)
         {
             List<Q> items = new List<Q>();
-            ((IRDBQueryContextReady)this).ExecuteReader((reader) =>
+            ExecuteReader((reader) =>
             {
                 while (reader.Read())
                 {
@@ -183,15 +174,15 @@ namespace Vanrise.Data.RDB
         }
 
 
-        List<Q> IRDBQueryContextReady.GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder)
+        public List<Q> GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder)
         {
-            return ((IRDBQueryContextReady)this).GetItems(objectBuilder, false);
+            return GetItems(objectBuilder, false);
         }
 
-        Q IRDBQueryContextReady.GetItem<Q>(Func<IRDBDataReader, Q> objectBuilder)
+        public Q GetItem<Q>(Func<IRDBDataReader, Q> objectBuilder)
         {
             Q item = default(Q);
-            ((IRDBQueryContextReady)this).ExecuteReader((reader) =>
+            ExecuteReader((reader) =>
             {
                 if (reader.Read())
                 {
@@ -201,28 +192,28 @@ namespace Vanrise.Data.RDB
             return item;
         }
 
-        RDBFieldValue IRDBQueryContextReady.ExecuteScalar(bool executeTransactional)
+        public RDBFieldValue ExecuteScalar(bool executeTransactional)
         {
-            var resolvedQuery = ((IRDBQueryContextReady)this).GetResolvedQuery();
+            var resolvedQuery = GetResolvedQuery();
             var context = new RDBDataProviderExecuteScalarContext(resolvedQuery, executeTransactional, _resolveQueryContext.Parameters);
             return this.DataProvider.ExecuteScalar(context);
         }
 
-        RDBFieldValue IRDBQueryContextReady.ExecuteScalar()
+        public RDBFieldValue ExecuteScalar()
         {
-            return ((IRDBQueryContextReady)this).ExecuteScalar(false);
+            return ExecuteScalar(false);
         }
 
-        void IRDBQueryContextReady.ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional)
+        public void ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional)
         {
-            var resolvedQuery = ((IRDBQueryContextReady)this).GetResolvedQuery();
+            var resolvedQuery = GetResolvedQuery();
             var context = new RDBDataProviderExecuteReaderContext(resolvedQuery, executeTransactional, _resolveQueryContext.Parameters, onReaderReady);
             this.DataProvider.ExecuteReader(context);
         }
 
-        void IRDBQueryContextReady.ExecuteReader(Action<IRDBDataReader> onReaderReady)
+        public void ExecuteReader(Action<IRDBDataReader> onReaderReady)
         {
-            ((IRDBQueryContextReady)this).ExecuteReader(onReaderReady, false);
+            ExecuteReader(onReaderReady, false);
         }
 
         #region Private Classes
@@ -259,43 +250,6 @@ namespace Vanrise.Data.RDB
         }
 
         #endregion
-    }
-
-    public class RDBQueryContext : RDBQueryContext<IRDBQueryContextReady>
-    {
-        public RDBQueryContext(BaseRDBDataProvider dataProvider)
-            : base(dataProvider)
-        {
-            base.Parent = this;
-        }
-
-        public IRDBBulkInsertQueryContext StartBulkInsert()
-        {
-            return new RDBBulkInsertQueryContext(QueryBuilderContext);
-        }
-    }
-
-    public interface IRDBQueryContextReady
-    {
-        RDBResolvedQuery GetResolvedQuery();
-
-        int ExecuteNonQuery(bool executeTransactional);
-
-        int ExecuteNonQuery();
-
-        List<T> GetItems<T>(Func<IRDBDataReader, T> objectBuilder, bool executeTransactional);
-
-        List<T> GetItems<T>(Func<IRDBDataReader, T> objectBuilder);
-
-        T GetItem<T>(Func<IRDBDataReader, T> objectBuilder);
-
-        RDBFieldValue ExecuteScalar(bool executeTransactional);
-
-        RDBFieldValue ExecuteScalar();
-
-        void ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional);
-
-        void ExecuteReader(Action<IRDBDataReader> onReaderReady);
     }
 
     public class RDBQueryBuilderContext

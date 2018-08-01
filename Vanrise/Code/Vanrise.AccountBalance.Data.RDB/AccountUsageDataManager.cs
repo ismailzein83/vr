@@ -78,17 +78,17 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public IEnumerable<AccountUsageInfo> GetAccountsUsageInfoByPeriod(Guid accountTypeId, DateTime periodStart, Guid transactionTypeId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "au")
-                        .Where().And()
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .EqualsCondition("PeriodStart", periodStart)
-                                    .EqualsCondition("TransactionTypeID", transactionTypeId)
-                                .EndAnd()
-                        .SelectColumns().Columns("ID", "AccountID", "TransactionTypeID", "IsOverridden").EndColumns()
-                        .EndSelect()
-                        .GetItems(AccountUsageInfoMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().Columns("ID", "AccountID", "TransactionTypeID", "IsOverridden");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("PeriodStart", periodStart);
+            whereAndCondition.EqualsCondition("TransactionTypeID", transactionTypeId);
+
+            return queryContext.GetItems(AccountUsageInfoMapper);
         }
 
         public AccountUsageInfo TryAddAccountUsageAndGet(Guid accountTypeId, Guid transactionTypeId, string accountId, DateTime periodStart, DateTime periodEnd, int currencyId, decimal usageBalance)
@@ -99,136 +99,137 @@ namespace Vanrise.AccountBalance.Data.RDB
                 TransactionTypeId = transactionTypeId
             };
             bool accountUsageFound = false;
-            new RDBQueryContext(GetDataProvider())
-                    .Select()
-                    .From(TABLE_NAME, "au")
-                    .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .EqualsCondition("AccountID", accountId)
-                                .EqualsCondition("TransactionTypeID", transactionTypeId)
-                                .EqualsCondition("PeriodStart", periodStart)
-                            .EndAnd()
-                    .SelectColumns().Columns("ID", "IsOverridden").EndColumns()
-                    .EndSelect()
-                    .ExecuteReader(reader =>
-                    {
-                        if(reader.Read())
-                        {
-                            accountUsageFound = true;
-                            accountUsageInfo.AccountUsageId = reader.GetLong("ID");
-                            accountUsageInfo.IsOverridden = reader.GetBooleanWithNullHandling("IsOverridden");
-                        }
-                    });
-            if(!accountUsageFound)
-            {
-                accountUsageInfo.IsOverridden = new RDBQueryContext(GetDataProvider())
-                    .Select()
-                    .From(AccountUsageOverrideDataManager.TABLE_NAME, "au_override", 1)
-                    .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .EqualsCondition("AccountID", accountId)
-                                .EqualsCondition("TransactionTypeID", transactionTypeId)
-                                .CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq, periodStart)
-                                .CompareCondition("PeriodEnd", RDBCompareConditionOperator.GEq, periodEnd)
-                            .EndAnd()
-                    .SelectColumns().Column("ID").EndColumns()
-                    .EndSelect()
-                    .ExecuteScalar().NullableLongValue.HasValue;
 
-                accountUsageInfo.AccountUsageId = new RDBQueryContext(GetDataProvider())
-                    .Insert()
-                    .IntoTable(TABLE_NAME)
-                    .GenerateIdAndAssignToParameter("AccountUsageId")
-                    .ColumnValue("AccountTypeID", accountTypeId)
-                    .ColumnValue("AccountID", accountId)
-                    .ColumnValue("TransactionTypeID", transactionTypeId)
-                    .ColumnValue("CurrencyId", currencyId)
-                    .ColumnValue("PeriodStart", periodStart)
-                    .ColumnValue("PeriodEnd", periodEnd)
-                    .ColumnValue("UsageBalance", usageBalance)
-                    .ColumnValue("IsOverridden", accountUsageInfo.IsOverridden)
-                    .ColumnValueIf(() => accountUsageInfo.IsOverridden, ctx => ctx.ColumnValue("OverriddenAmount", 0))
-                    .EndInsert()
-                    .ExecuteScalar().LongValue;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().Columns("ID", "IsOverridden");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("AccountID", accountId);
+            whereAndCondition.EqualsCondition("TransactionTypeID", transactionTypeId);
+            whereAndCondition.EqualsCondition("PeriodStart", periodStart);
+
+            queryContext.ExecuteReader(reader =>
+            {
+                if (reader.Read())
+                {
+                    accountUsageFound = true;
+                    accountUsageInfo.AccountUsageId = reader.GetLong("ID");
+                    accountUsageInfo.IsOverridden = reader.GetBooleanWithNullHandling("IsOverridden");
+                }
+            });
+
+            if (!accountUsageFound)
+            {
+                AccountUsageOverrideDataManager accountUsageOverrideDataManager = new AccountUsageOverrideDataManager();
+                accountUsageInfo.IsOverridden = accountUsageOverrideDataManager.IsAccountOverriddenInPeriod(accountTypeId, transactionTypeId, accountId, periodStart, periodEnd);                
+
+                queryContext = new RDBQueryContext(GetDataProvider());
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(TABLE_NAME);
+                insertQuery.GenerateIdAndAssignToParameter("AccountUsageId");
+
+                insertQuery.ColumnValue("AccountTypeID", accountTypeId);
+                insertQuery.ColumnValue("AccountID", accountId);
+                insertQuery.ColumnValue("TransactionTypeID", transactionTypeId);
+                insertQuery.ColumnValue("CurrencyId", currencyId);
+                insertQuery.ColumnValue("PeriodStart", periodStart);
+                insertQuery.ColumnValue("PeriodEnd", periodEnd);
+                insertQuery.ColumnValue("UsageBalance", usageBalance);
+                insertQuery.ColumnValue("IsOverridden", accountUsageInfo.IsOverridden);
+                if (accountUsageInfo.IsOverridden)
+                    insertQuery.ColumnValue("OverriddenAmount", 0);
+
+                accountUsageInfo.AccountUsageId = queryContext.ExecuteScalar().LongValue;
             }
             return accountUsageInfo;
         }
 
         public IEnumerable<AccountUsage> GetAccountUsageForSpecificPeriodByAccountIds(Guid accountTypeId, Guid transactionTypeId, DateTime datePeriod, List<string> accountIds)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "au")
-                        .Where().And()
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .ConditionIf(() => accountIds != null && accountIds.Count > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
-                                    .EqualsCondition("PeriodStart", datePeriod)
-                                    .EqualsCondition("TransactionTypeID", transactionTypeId)
-                                .EndAnd()
-                        .SelectColumns().AllTableColumns("au").EndColumns()
-                        .EndSelect()
-                        .GetItems(AccountUsageMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            if (accountIds != null && accountIds.Count > 0)
+                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+            whereAndCondition.EqualsCondition("PeriodStart", datePeriod);
+            whereAndCondition.EqualsCondition("TransactionTypeID", transactionTypeId);
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         public List<AccountUsage> GetAccountUsageErrorData(Guid accountTypeId, Guid transactionTypeId, Guid correctionProcessId, DateTime periodDate)
         {
-            return new RDBQueryContext(GetDataProvider())
-                         .Select()
-                         .From(TABLE_NAME, "au")
-                         .Where().And()
-                                     .EqualsCondition("AccountTypeID", accountTypeId)
-                                     .EqualsCondition("PeriodStart", periodDate)
-                                     .EqualsCondition("TransactionTypeID", transactionTypeId)
-                                     .ConditionIfColumnNotNull("CorrectionProcessID").CompareCondition("CorrectionProcessID", RDBCompareConditionOperator.NEq, correctionProcessId)
-                                 .EndAnd()
-                         .SelectColumns().AllTableColumns("au").EndColumns()
-                         .EndSelect()
-                         .GetItems(AccountUsageMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("PeriodStart", periodDate);
+            whereAndCondition.EqualsCondition("TransactionTypeID", transactionTypeId);
+            whereAndCondition.ConditionIfColumnNotNull("CorrectionProcessID").CompareCondition("CorrectionProcessID", RDBCompareConditionOperator.NEq, correctionProcessId);
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         public IEnumerable<AccountUsage> GetAccountUsageForBillingTransactions(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds, DateTime fromTime, DateTime? toTime, Vanrise.Entities.VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
-            return new RDBQueryContext(GetDataProvider())
-                         .Select()
-                         .From(TABLE_NAME, "au")
-                         .Join()
-                         .JoinLiveBalance("lb", "au")
-                         .EndJoin()
-                         .Where().And()
-                                     .EqualsCondition("AccountTypeID", accountTypeId)
-                                     .ConditionIf(() => accountIds != null && accountIds.Count > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
-                                     .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
-                                     .CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, fromTime)
-                                     .ConditionIfNotDefaultValue(toTime, ctx => ctx.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq, toTime.Value))
-                                     .ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false)
-                                     .LiveBalanceActiveAndEffectiveCondition("lb", status, effectiveDate, isEffectiveInFuture)
-                                 .EndAnd()
-                         .SelectColumns().AllTableColumns("au").EndColumns()
-                         .EndSelect()
-                         .GetItems(AccountUsageMapper);
+            LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var joinContext = selectQuery.Join();
+            liveBalanceDataManager.JoinLiveBalance(joinContext, "lb", "au");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            if (accountIds != null && accountIds.Count > 0)
+                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+            if (transactionTypeIds != null && transactionTypeIds.Count > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+            whereAndCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, fromTime);
+            if (toTime.HasValue)
+                whereAndCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq, toTime.Value);
+            whereAndCondition.ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false);
+            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "lb", status, effectiveDate, isEffectiveInFuture);
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, string accountId, Vanrise.Entities.VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
-            return new RDBQueryContext(GetDataProvider())
-                         .Select()
-                         .From(TABLE_NAME, "au")
-                         .Join()
-                         .JoinLiveBalance("lb", "au")
-                         .EndJoin()
-                         .Where().And()
-                                     .EqualsCondition("AccountTypeID", accountTypeId)
-                                     .EqualsCondition("AccountID", accountId)
-                                     .ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false)
-                                     .LiveBalanceActiveAndEffectiveCondition("lb", status, effectiveDate, isEffectiveInFuture)
-                                 .EndAnd()
-                         .SelectColumns().AllTableColumns("au").EndColumns()
-                         .EndSelect()
-                         .GetItems(AccountUsageMapper);
+            LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var joinContext = selectQuery.Join();
+            liveBalanceDataManager.JoinLiveBalance(joinContext, "lb", "au");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("AccountID", accountId);
+            whereAndCondition.ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false);
+            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "lb", status, effectiveDate, isEffectiveInFuture);
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         public IEnumerable<AccountUsage> GetAccountUsagesByTransactionAccountUsageQueries(IEnumerable<TransactionAccountUsageQuery> transactionAccountUsageQueries)
         {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
             var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
             tempTableColumns.Add("TransactionID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             tempTableColumns.Add("TransactionTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
@@ -236,130 +237,185 @@ namespace Vanrise.AccountBalance.Data.RDB
             tempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             tempTableColumns.Add("PeriodStart", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             tempTableColumns.Add("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            var tempTableQuery = new RDBTempTableQuery(tempTableColumns);
-            return new RDBQueryContext(GetDataProvider())
-                        .StartBatchQuery()
-                            .AddQuery().CreateTempTable(tempTableQuery)
-                            .Foreach(transactionAccountUsageQueries, (queryItem, ctx) =>
-                                        ctx.AddQuery()
-                                            .Insert()
-                                            .IntoTable(tempTableQuery)
-                                            .ColumnValue("TransactionID", queryItem.TransactionId)
-                                            .ColumnValue("TransactionTypeID", queryItem.TransactionTypeId)
-                                            .ColumnValue("AccountTypeID", queryItem.AccountTypeId)
-                                            .ColumnValue("AccountID", queryItem.AccountId)
-                                            .ColumnValue("PeriodStart", queryItem.PeriodStart)
-                                            .ColumnValue("PeriodEnd", queryItem.PeriodEnd)
-                                            .EndInsert()
-                                            )
-                            .AddQuery().Select()
-                                        .From(TABLE_NAME, "au")
-                                        .Join().Join(RDBJoinType.Inner, tempTableQuery, "queryTable")
-                                                    .And()
-                                                        .EqualsCondition("au", "AccountTypeID", "queryTable", "AccountTypeID")
-                                                        .EqualsCondition("au", "AccountID", "queryTable", "AccountID")
-                                                        .EqualsCondition("au", "TransactionTypeID", "queryTable", "TransactionTypeID")
-                                                        .CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodStart" })
-                                                        .CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodEnd" })
-                                                    .EndAnd()
-                                        .EndJoin()
-                                        .SelectColumns().AllTableColumns("au").EndColumns()
-                                        .EndSelect()
-                           .EndBatchQuery()
-                           .GetItems(AccountUsageMapper);
+            
+            var tempTableQuery = queryContext.CreateTempTable();
+            tempTableQuery.AddColumns(tempTableColumns);             
+
+            foreach (var queryItem in transactionAccountUsageQueries)
+            {
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(tempTableQuery);
+                insertQuery.ColumnValue("TransactionID", queryItem.TransactionId);
+                insertQuery.ColumnValue("TransactionTypeID", queryItem.TransactionTypeId);
+                insertQuery.ColumnValue("AccountTypeID", queryItem.AccountTypeId);
+                insertQuery.ColumnValue("AccountID", queryItem.AccountId);
+                insertQuery.ColumnValue("PeriodStart", queryItem.PeriodStart);
+                insertQuery.ColumnValue("PeriodEnd", queryItem.PeriodEnd);
+            }
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+            
+            selectQuery.Join().Join(RDBJoinType.Inner, tempTableQuery, "queryTable");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("au", "AccountTypeID", "queryTable", "AccountTypeID");
+            whereAndCondition.EqualsCondition("au", "AccountID", "queryTable", "AccountID");
+            whereAndCondition.EqualsCondition("au", "TransactionTypeID", "queryTable", "TransactionTypeID");
+            whereAndCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodStart" });
+            whereAndCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodEnd" });
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         public IEnumerable<AccountUsage> GetOverridenAccountUsagesByDeletedTransactionIds(IEnumerable<long> deletedTransactionIds)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "au")
-                        .Join()
-                            .JoinSelect(RDBJoinType.Inner, "usageOverride")
-                                .From(AccountUsageOverrideDataManager.TABLE_NAME, "usageOverride")
-                                .Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds)
-                                .SelectColumns().Columns("AccountTypeID", "AccountID", "TransactionTypeID", "PeriodStart", "PeriodEnd").EndColumns()
-                                .EndSelect()
-                            .And()
-                                .EqualsCondition("au", "AccountTypeID", "usageOverride", "AccountTypeID")
-                                .EqualsCondition("au", "AccountID", "usageOverride", "AccountID")
-                                .EqualsCondition("au", "TransactionTypeID", "usageOverride", "TransactionTypeID")
-                                .CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, new RDBColumnExpression { TableAlias = "usageOverride", ColumnName = "PeriodStart" })
-                                .CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = "usageOverride", ColumnName = "PeriodEnd" })
-                            .EndAnd()
-                        .EndJoin()
-                        .SelectColumns().AllTableColumns("au").EndColumns()
-                        .EndSelect()
-                        .GetItems(AccountUsageMapper);                        
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var joinContext = selectQuery.Join();
+            var joinSelectQuery = joinContext.JoinSelect(RDBJoinType.Inner, "usageOverride");
+            joinSelectQuery.From(AccountUsageOverrideDataManager.TABLE_NAME, "usageOverride");
+            joinSelectQuery.SelectColumns().Columns("AccountTypeID", "AccountID", "TransactionTypeID", "PeriodStart", "PeriodEnd");
+
+            joinSelectQuery.Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds);
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("au", "AccountTypeID", "usageOverride", "AccountTypeID");
+            whereAndCondition.EqualsCondition("au", "AccountID", "usageOverride", "AccountID");
+            whereAndCondition.EqualsCondition("au", "TransactionTypeID", "usageOverride", "TransactionTypeID");
+            whereAndCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq, new RDBColumnExpression { TableAlias = "usageOverride", ColumnName = "PeriodStart" });
+            whereAndCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = "usageOverride", ColumnName = "PeriodEnd" });
+
+            return queryContext.GetItems(AccountUsageMapper);                 
         }
 
         public AccountUsage GetLastAccountUsage(Guid accountTypeId, string accountId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "au", 1)
-                        .Where().And()
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .EqualsCondition("AccountID", accountId)
-                                    .ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false)
-                                .EndAnd()
-                        .SelectColumns().AllTableColumns("au").EndColumns()
-                        .Sort().ByColumn("PeriodEnd", RDBSortDirection.DESC).EndSort()
-                        .EndSelect()
-                        .GetItem(AccountUsageMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au", 1);
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereAndCondition.EqualsCondition("AccountID", accountId);
+            whereAndCondition.ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false);
+
+            selectQuery.Sort().ByColumn("PeriodEnd", RDBSortDirection.DESC);
+
+            return queryContext.GetItem(AccountUsageMapper);
         }
 
         public IEnumerable<AccountUsage> GetAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "au")
-                        .Where().And()
-                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                    .ConditionIf(() => accountIds != null && accountIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds))
-                                    .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
-                                    .ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false)
-                                .EndAnd()
-                        .SelectColumns().AllTableColumns("au").EndColumns()
-                        .EndSelect()
-                        .GetItems(AccountUsageMapper);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            if (accountIds != null && accountIds.Count() > 0)
+                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+            whereAndCondition.ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false);
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         public IEnumerable<AccountUsage> GetAccountUsagesByTransactionTypes(Guid accountTypeId, List<AccountUsageByTime> accountUsagesByTime, List<Guid> transactionTypeIds)
         {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
             var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
             tempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             tempTableColumns.Add("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            var tempTableQuery = new RDBTempTableQuery(tempTableColumns);
-            return new RDBQueryContext(GetDataProvider())
-                        .StartBatchQuery()
-                            .AddQuery().CreateTempTable(tempTableQuery)
-                            .Foreach(accountUsagesByTime, (usageByTime, ctx) =>
-                                        ctx.AddQuery()
-                                            .Insert()
-                                            .IntoTable(tempTableQuery)
-                                            .ColumnValue("AccountID", usageByTime.AccountId)
-                                            .ColumnValue("PeriodEnd", usageByTime.EndPeriod)
-                                            .EndInsert())
-                            .AddQuery().Select()
-                                        .From(TABLE_NAME, "au")
-                                        .Join().Join(RDBJoinType.Inner, tempTableQuery, "queryTable")
-                                                .And()
-                                                    .EqualsCondition("au", "AccountID", "queryTable", "AccountID")
-                                                    .CompareCondition("PeriodEnd", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodEnd" })
-                                                .EndAnd()
-                                        .EndJoin()
-                                        .Where().And()
-                                                    .EqualsCondition("AccountTypeID", accountTypeId)
-                                                    .ConditionIf(() => transactionTypeIds != null && transactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds))
-                                                    .ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false)
-                                                .EndAnd()
-                                        .SelectColumns().AllTableColumns("au").EndColumns()
-                                       .EndSelect()
-                            .EndBatchQuery()
-                            .GetItems(AccountUsageMapper);
+
+            var tempTableQuery = queryContext.CreateTempTable();
+            tempTableQuery.AddColumns(tempTableColumns);
+
+            foreach (var usageByTime in accountUsagesByTime)
+            {
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(tempTableQuery);
+                insertQuery.ColumnValue("AccountID", usageByTime.AccountId);
+                insertQuery.ColumnValue("PeriodEnd", usageByTime.EndPeriod);
+            }
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.SelectColumns().AllTableColumns("au");
+
+            var joinContext = selectQuery.Join();
+            var joinAndCondition = joinContext.Join(RDBJoinType.Inner, tempTableQuery, "queryTable").And();
+            joinAndCondition.EqualsCondition("au", "AccountID", "queryTable", "AccountID");
+            joinAndCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "queryTable", ColumnName = "PeriodEnd" });
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+            whereAndCondition.ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden", false);
+
+            return queryContext.GetItems(AccountUsageMapper);
         }
 
         #endregion
+
+        public void AddQueryOverrideAccountUsages(RDBQueryContext queryContext, IEnumerable<long> accountUsageIds)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.ColumnValue("IsOverridden", true);
+            updateQuery.ColumnValue("OverriddenAmount", new RDBColumnExpression { ColumnName = "UsageBalance" });
+            updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, accountUsageIds);
+        }
+
+        public void AddQueryRollbackOverridenAccountUsages(RDBQueryContext queryContext, IEnumerable<long> accountUsageIds)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.ColumnValue("IsOverridden", new RDBNullExpression());
+            updateQuery.ColumnValue("OverriddenAmount", new RDBNullExpression());
+            updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, accountUsageIds);
+        }
+
+        public void AddQueryUpdateAccountUsageFromBalanceUsageQueue(RDBQueryContext queryContext, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
+        {
+            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition> 
+                {
+                    {"ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt}},
+                    {"UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6}}
+                };
+            var tempTableQuery = queryContext.CreateTempTable();
+            tempTableQuery.AddColumns(tempTableColumns);
+
+            foreach (var auToUpdate in accountsUsageToUpdate)
+            {
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(tempTableQuery);
+                insertQuery.ColumnValue("ID", auToUpdate.AccountUsageId);
+                insertQuery.ColumnValue("UpdateValue", auToUpdate.Value);
+            }
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            var joinContext = updateQuery.Join("au");
+            joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "auToUpdate", "ID", "au", "ID");
+
+            updateQuery.ColumnValue("UsageBalance", new RDBArithmeticExpression
+                                     {
+                                         Operator = RDBArithmeticExpressionOperator.Add,
+                                         Expression1 = new RDBColumnExpression { TableAlias = "au", ColumnName = "UsageBalance", DontAppendTableAlias = true },
+                                         Expression2 = new RDBColumnExpression { TableAlias = "auToUpdate", ColumnName = "UpdateValue" }
+                                     });
+            if(correctionProcessId.HasValue)
+                updateQuery.ColumnValue("CorrectionProcessID", correctionProcessId.Value);
+        }
     }
 }

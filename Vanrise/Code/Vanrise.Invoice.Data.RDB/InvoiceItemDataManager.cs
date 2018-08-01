@@ -63,30 +63,26 @@ namespace Vanrise.Invoice.Data.RDB
         {
             if (invoiceItemSets != null && invoiceItemSets.Count() > 0)
             {
-                new RDBQueryContext(GetDataProvider())
-                    .StartBatchQuery()
-                    .Foreach(invoiceItemSets, 
-                        (itemSet, ctx) =>
+                var queryContext = new RDBQueryContext(GetDataProvider());
+
+                foreach (var itemSet in invoiceItemSets)
+                {
+                    if (itemSet.Items != null && itemSet.Items.Count > 0)
+                    {
+                        foreach (var item in itemSet.Items)
                         {
-                            if (itemSet.Items != null && itemSet.Items.Count > 0)
-                            {
-                                ctx.Foreach(itemSet.Items,
-                                    (item, ctx2) =>
-                                    {
-                                        string serializedDetails = Vanrise.Common.Serializer.Serialize(item.Details);
-                                        ctx2.AddQuery()
-                                            .Insert().IntoTable(TABLE_NAME)
-                                            .ColumnValue("InvoiceID", invoiceId)
-                                            .ColumnValue("ItemSetName", itemSet.SetName)
-                                            .ColumnValue("Name", item.Name)
-                                            .ColumnValue("Details", serializedDetails)
-                                            .EndInsert();
-                                    });
-                            }
+                            var insertQuery = queryContext.AddInsertQuery();
+                            insertQuery.IntoTable(TABLE_NAME);
+                            insertQuery.ColumnValue("InvoiceID", invoiceId);
+                            insertQuery.ColumnValue("ItemSetName", itemSet.SetName);
+                            insertQuery.ColumnValue("Name", item.Name);
+                            string serializedDetails = Vanrise.Common.Serializer.Serialize(item.Details);
+                            insertQuery.ColumnValue("Details", serializedDetails);
                         }
-                            )
-                    .EndBatchQuery()
-                    .ExecuteNonQuery();
+                    }
+                }
+
+                queryContext.ExecuteNonQuery();
             }
         }
     }

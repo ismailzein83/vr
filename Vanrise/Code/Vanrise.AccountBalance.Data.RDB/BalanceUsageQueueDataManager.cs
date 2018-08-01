@@ -53,22 +53,22 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public void LoadUsageBalance<T>(Guid accountTypeId, Entities.BalanceUsageQueueType balanceUsageQueueType, Action<Entities.BalanceUsageQueue<T>> onUsageBalanceUpdateReady)
         {
-            new RDBQueryContext(GetDataProvider())
-                    .Select()
-                    .From(TABLE_NAME, "usageQueue")
-                    .Where().And()
-                                .EqualsCondition("AccountTypeID", accountTypeId)
-                                .EqualsCondition("QueueType", (int)balanceUsageQueueType)
-                            .EndAnd()
-                    .SelectColumns().AllTableColumns("usageQueue").EndColumns()
-                    .EndSelect()
-                    .ExecuteReader(reader =>
-                    {
-                        while (reader.Read())
-                        {
-                            onUsageBalanceUpdateReady(BalanceUsageQueueMapper<T>(reader));
-                        }
-                    });
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "usageQueue");
+            selectQuery.SelectColumns().AllTableColumns("usageQueue");
+
+            var whereCondition = selectQuery.Where().And();
+            whereCondition.EqualsCondition("AccountTypeID", accountTypeId);
+            whereCondition.EqualsCondition("QueueType", (int)balanceUsageQueueType);
+
+            queryContext.ExecuteReader(reader =>
+            {
+                while (reader.Read())
+                {
+                    onUsageBalanceUpdateReady(BalanceUsageQueueMapper<T>(reader));
+                }
+            });
         }
 
         public bool UpdateUsageBalance<T>(Guid accountTypeId, Entities.BalanceUsageQueueType balanceUsageQueueType, T updateUsageBalancePayload)
@@ -78,28 +78,36 @@ namespace Vanrise.AccountBalance.Data.RDB
             {
                 binaryArray = Common.ProtoBufSerializer.Serialize(updateUsageBalancePayload);
                 binaryArray = Common.Compressor.Compress(binaryArray);
+            
             }
-            return new RDBQueryContext(GetDataProvider())
-                        .Insert()
-                        .IntoTable(TABLE_NAME)
-                        .ColumnValue("AccountTypeID", accountTypeId)
-                        .ColumnValue("QueueType", (int)balanceUsageQueueType)
-                        .ColumnValue("UsageDetails", binaryArray)
-                        .EndInsert()
-                        .ExecuteNonQuery() > 0;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.ColumnValue("AccountTypeID", accountTypeId);
+            insertQuery.ColumnValue("QueueType", (int)balanceUsageQueueType);
+            insertQuery.ColumnValue("UsageDetails", binaryArray);
+            return queryContext.ExecuteNonQuery() > 0;
         }
 
         public bool HasUsageBalanceData(Guid accountTypeId)
         {
-            return new RDBQueryContext(GetDataProvider())
-                        .Select()
-                        .From(TABLE_NAME, "usageQueue", 1)
-                        .Where().EqualsCondition("AccountTypeID", accountTypeId)
-                        .SelectColumns().Column("ID").EndColumns()
-                        .EndSelect()
-                        .ExecuteScalar().NullableLongValue.HasValue;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "usageQueue", 1);
+            selectQuery.SelectColumns().Column("ID");
+
+            selectQuery.Where().EqualsCondition("AccountTypeID", accountTypeId);
+
+            return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
 
         #endregion
+
+        public void AddQueryDeleteBalanceUsageQueue(RDBQueryContext queryContext, long balanceUsageQueueId)
+        {
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition("ID", balanceUsageQueueId);
+        }
     }
 }

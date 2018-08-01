@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBGroupByHavingContext<T>
+    public class RDBGroupByHavingContext
     { 
-        T _parent;
         Action<BaseRDBCondition> _setCondition;
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        public RDBGroupByHavingContext(T parent, Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table, string tableAlias)
+        public RDBGroupByHavingContext(Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table, string tableAlias)
         {
-            _parent = parent;
             _setCondition = setCondition;
             _table = table;
             _tableAlias = tableAlias;
@@ -24,14 +22,6 @@ namespace Vanrise.Data.RDB
 
         public RDBGroupByHavingContext()
         {
-        }
-
-        internal T Parent
-        {
-            set
-            {
-                _parent = value;
-            }
         }
 
         internal Action<BaseRDBCondition> SetConditionAction
@@ -50,7 +40,7 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        public T CompareCount(RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
+        public void CompareCount(RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
         {
             _setCondition(new RDBCompareCondition
             {
@@ -58,50 +48,48 @@ namespace Vanrise.Data.RDB
                 Operator = oper,
                 Expression2 = compareToValue
             });
-            return _parent;
         }
 
-        public T CompareCount(RDBCompareConditionOperator oper, long value)
+        public void CompareCount(RDBCompareConditionOperator oper, long value)
         {
-            return CompareCount(oper, new RDBFixedLongExpression { Value = value });
+             CompareCount(oper, new RDBFixedLongExpression { Value = value });
         }
 
 
-        public T CompareAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression valueToAggregate, RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
+        public void CompareAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression valueToAggregate, RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
         {
-            BaseRDBExpression aggregateExpression = RDBSelectAggregateContext<T>.CreateNonCountAggregate(aggregateType, valueToAggregate);
+            BaseRDBExpression aggregateExpression = RDBSelectAggregateContext.CreateNonCountAggregate(aggregateType, valueToAggregate);
             _setCondition(new RDBCompareCondition
             {
                 Expression1 = aggregateExpression,
                 Operator = oper,
                 Expression2 = compareToValue
             });
-            return _parent;
         }
 
-        public T CompareAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression valueToAggregate, RDBCompareConditionOperator oper, Decimal value)
+        public void CompareAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression valueToAggregate, RDBCompareConditionOperator oper, Decimal value)
         {
-            return CompareAggregate(aggregateType, valueToAggregate, oper, new RDBFixedDecimalExpression { Value = value});
+             CompareAggregate(aggregateType, valueToAggregate, oper, new RDBFixedDecimalExpression { Value = value});
         }
 
-        public T CompareAggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, RDBCompareConditionOperator oper, Decimal value)
+        public void CompareAggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, RDBCompareConditionOperator oper, Decimal value)
         {
-            return CompareAggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, oper, value);
+             CompareAggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, oper, value);
         }
 
-        public T CompareAggregate(RDBNonCountAggregateType aggregateType, string columnName, RDBCompareConditionOperator oper, Decimal value)
+        public void CompareAggregate(RDBNonCountAggregateType aggregateType, string columnName, RDBCompareConditionOperator oper, Decimal value)
         {
-            return CompareAggregate(aggregateType, _tableAlias, columnName, oper, value);
+             CompareAggregate(aggregateType, _tableAlias, columnName, oper, value);
         }
 
-        public RDBGroupByHavingAndConditionContext<T> And()
+        public RDBGroupByHavingAndConditionContext And()
         {
-            return new RDBGroupByHavingAndConditionContext<T>(_parent, _setCondition, _table);
+            return new RDBGroupByHavingAndConditionContext(_setCondition, _table);
         }
 
-        public RDBGroupByHavingOrConditionContext<T> Or()
+        public RDBGroupByHavingOrConditionContext Or()
         {
-            return new RDBGroupByHavingOrConditionContext<T>(_parent, _setCondition, _table);
+            return new RDBGroupByHavingOrConditionContext(_setCondition, _table);
         }
     }
 }

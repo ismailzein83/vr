@@ -24,7 +24,7 @@ namespace Vanrise.Invoice.Data.RDB
             columns.Add("PartnerID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add("SettlementInvoiceId", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add("SplitInvoiceGroupId", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("InvoiceSettingID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier});
+            columns.Add("InvoiceSettingID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add("SerialNumber", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add("FromDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add("ToDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -77,7 +77,7 @@ namespace Vanrise.Invoice.Data.RDB
             {
                 Details = Vanrise.Common.Serializer.Deserialize(reader.GetString("Details")),
                 FromDate = reader.GetDateTimeWithNullHandling("FromDate"),
-                InvoiceId =reader.GetLong("ID"),
+                InvoiceId = reader.GetLong("ID"),
                 InvoiceTypeId = reader.GetGuid("InvoiceTypeId"),
                 IssueDate = reader.GetDateTimeWithNullHandling("IssueDate"),
                 PartnerId = reader.GetString("PartnerId"),
@@ -144,11 +144,12 @@ namespace Vanrise.Invoice.Data.RDB
 
         public bool SaveInvoices(List<GenerateInvoiceInputToSave> generateInvoicesInputToSave, out List<long> insertedInvoiceIds)
         {
+            BillingTransactionDataManager billingTransactionDataManager = new BillingTransactionDataManager();
             insertedInvoiceIds = null;
             if (generateInvoicesInputToSave != null)
             {
                 var dataProvider = GetDataProvider();
-            insertedInvoiceIds = new List<long>();
+                insertedInvoiceIds = new List<long>();
 
                 Guid? splitInvoiceGroupId = Guid.NewGuid();
 
@@ -167,32 +168,31 @@ namespace Vanrise.Invoice.Data.RDB
                         serializedSettings = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Settings);
                     }
                     string serializedDetails = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Details);
-                    long insertedInvoiceId = new RDBQueryContext(dataProvider)
-                                                    .Insert()
-                                                    .IntoTable(TABLE_NAME)
-                                                    .GenerateIdAndAssignToParameter("ID")
-                                                    .ColumnValue("UserId", generateInvoiceInputToSave.Invoice.UserId)
-                                                    .ColumnValue("PartnerID", generateInvoiceInputToSave.Invoice.PartnerId)
-                                                    .ColumnValueDBNullIfDefaultValue("SplitInvoiceGroupId", splitInvoiceGroupId)
-                                                    .ColumnValue("InvoiceSettingID", generateInvoiceInputToSave.Invoice.InvoiceSettingId)
-                                                    .ColumnValue("SerialNumber", generateInvoiceInputToSave.Invoice.SerialNumber)
-                                                    .ColumnValue("FromDate", generateInvoiceInputToSave.Invoice.FromDate)
-                                                    .ColumnValue("ToDate", generateInvoiceInputToSave.Invoice.ToDate)
-                                                    .ColumnValue("IssueDate", generateInvoiceInputToSave.Invoice.IssueDate)
-                                                    .ColumnValue("DueDate", generateInvoiceInputToSave.Invoice.DueDate)
-                                                    .ColumnValue("Details", serializedDetails)
-                                                    .ColumnValue("Notes", generateInvoiceInputToSave.Invoice.Note)
-                                                    .ColumnValue("SourceId", generateInvoiceInputToSave.Invoice.SourceId)
-                                                    .ColumnValue("IsDraft", true)
-                                                    .ColumnValue("IsAutomatic", generateInvoiceInputToSave.Invoice.IsAutomatic)
-                                                    .ColumnValue("Settings", serializedSettings)
-                                                    .ColumnValueDBNullIfDefaultValue("SentDate", generateInvoiceInputToSave.Invoice.SentDate)
-                                                    .ColumnValueDBNullIfDefaultValue("NeedApproval", generateInvoiceInputToSave.Invoice.NeedApproval)
-                                                    .EndInsert()
-                                                    .ExecuteScalar()
-                                                    .LongValue;
-
-                   
+                    var queryContext = new RDBQueryContext(dataProvider);
+                    var insertQuery = queryContext.AddInsertQuery();
+                    insertQuery.IntoTable(TABLE_NAME);
+                    insertQuery.GenerateIdAndAssignToParameter("ID");
+                    insertQuery.ColumnValue("UserId", generateInvoiceInputToSave.Invoice.UserId);
+                    insertQuery.ColumnValue("PartnerID", generateInvoiceInputToSave.Invoice.PartnerId);
+                    if (splitInvoiceGroupId.HasValue)
+                        insertQuery.ColumnValue("SplitInvoiceGroupId", splitInvoiceGroupId.Value);
+                    insertQuery.ColumnValue("InvoiceSettingID", generateInvoiceInputToSave.Invoice.InvoiceSettingId);
+                    insertQuery.ColumnValue("SerialNumber", generateInvoiceInputToSave.Invoice.SerialNumber);
+                    insertQuery.ColumnValue("FromDate", generateInvoiceInputToSave.Invoice.FromDate);
+                    insertQuery.ColumnValue("ToDate", generateInvoiceInputToSave.Invoice.ToDate);
+                    insertQuery.ColumnValue("IssueDate", generateInvoiceInputToSave.Invoice.IssueDate);
+                    insertQuery.ColumnValue("DueDate", generateInvoiceInputToSave.Invoice.DueDate);
+                    insertQuery.ColumnValue("Details", serializedDetails);
+                    insertQuery.ColumnValue("Notes", generateInvoiceInputToSave.Invoice.Note);
+                    insertQuery.ColumnValue("SourceId", generateInvoiceInputToSave.Invoice.SourceId);
+                    insertQuery.ColumnValue("IsDraft", true);
+                    insertQuery.ColumnValue("IsAutomatic", generateInvoiceInputToSave.Invoice.IsAutomatic);
+                    insertQuery.ColumnValue("Settings", serializedSettings);
+                    if (generateInvoiceInputToSave.Invoice.SentDate.HasValue)
+                        insertQuery.ColumnValue("SentDate", generateInvoiceInputToSave.Invoice.SentDate.Value);
+                    if (generateInvoiceInputToSave.Invoice.NeedApproval.HasValue)
+                        insertQuery.ColumnValue("NeedApproval", generateInvoiceInputToSave.Invoice.NeedApproval.Value);
+                    long insertedInvoiceId = queryContext.ExecuteScalar().LongValue;
 
                     insertedInvoiceIds.Add(insertedInvoiceId);
 
@@ -230,44 +230,51 @@ namespace Vanrise.Invoice.Data.RDB
                     }
                 }
 
-                new RDBQueryContext(dataProvider)
-                    .StartBatchQuery()
-                    .Foreach(generateInvoicesInputToSave, 
-                        (generateInvoiceInputToSave, ctx) =>
-                            ctx.AddQueryIf(() => generateInvoiceInputToSave.InvoiceToSettleIds != null && generateInvoiceInputToSave.InvoiceToSettleIds.Count > 0,
-                                ctx2 =>                            
-                                ctx2.StartBatchQuery()
-                                    .AddQuery().Update()
-                                                .FromTable(TABLE_NAME)
-                                                .Where().ListCondition("ID", RDBListConditionOperator.IN, generateInvoiceInputToSave.InvoiceToSettleIds)
-                                                .ColumnValue("SettlementInvoiceId", generateInvoiceInputToSave.Invoice.InvoiceId)
-                                                .EndUpdate()
-                                    .AddQueryIf(() => generateInvoiceInputToSave.InvoiceIdToDelete.HasValue, 
-                                                    ctx3 =>
-                                                    ctx3.Update().FromTable(TABLE_NAME)
-                                                    .Where().EqualsCondition("SettlementInvoiceId", generateInvoiceInputToSave.InvoiceIdToDelete.Value)
-                                                    .ColumnValue("SettlementInvoiceId", new RDBNullExpression())
-                                                    .EndUpdate()
-                                                    )
-                                    .EndBatchQuery()
-                                            )
-                               .AddQueryIf(() => generateInvoiceInputToSave.MappedTransactions != null && generateInvoiceInputToSave.MappedTransactions.Count() > 0,
-                                             ctx2 =>
-                                                 ctx2.StartBatchQuery()
-                                                     .InsertInvoiceBillingTransactions(generateInvoiceInputToSave.MappedTransactions, generateInvoiceInputToSave.Invoice.InvoiceId)
-                                                     .EndBatchQuery()
-                                                    )
-                               .AddQueryIf(() => generateInvoiceInputToSave.InvoiceIdToDelete.HasValue,
-                                                ctx2 =>
-                                                    ctx2.StartBatchQuery()
-                                                        .AddQuery().Update().FromTable(TABLE_NAME).Where().EqualsCondition("ID", generateInvoiceInputToSave.InvoiceIdToDelete.Value).ColumnValue("IsDeleted", true).EndUpdate()
-                                                        .SetInvoiceBillingTransactionsDeleted(generateInvoiceInputToSave.InvoiceIdToDelete.Value)
-                                                        .EndBatchQuery()
-                                          )
-                                .AddQuery().Update().FromTable(TABLE_NAME).Where().EqualsCondition("ID", generateInvoiceInputToSave.Invoice.InvoiceId).ColumnValue("IsDraft", false).EndUpdate()                    
-                            )
-                    .EndBatchQuery()
-                    .ExecuteNonQuery(true);
+                var queryContext2 = new RDBQueryContext(dataProvider);
+
+                foreach (var generateInvoiceInputToSave in generateInvoicesInputToSave)
+                {
+                    if (generateInvoiceInputToSave.InvoiceToSettleIds != null && generateInvoiceInputToSave.InvoiceToSettleIds.Count > 0)
+                    {
+                        var updateQuery = queryContext2.AddUpdateQuery();
+                        updateQuery.FromTable(TABLE_NAME);
+                        updateQuery.ColumnValue("SettlementInvoiceId", generateInvoiceInputToSave.Invoice.InvoiceId);
+                        updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, generateInvoiceInputToSave.InvoiceToSettleIds);
+
+                        if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
+                        {
+                            var updateQuery2 = queryContext2.AddUpdateQuery();
+                            updateQuery2.FromTable(TABLE_NAME);
+                            updateQuery2.ColumnValue("SettlementInvoiceId", new RDBNullExpression());
+                            updateQuery2.Where().EqualsCondition("SettlementInvoiceId", generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                        }
+                    }
+
+                    if (generateInvoiceInputToSave.MappedTransactions != null && generateInvoiceInputToSave.MappedTransactions.Count() > 0)
+                    {
+                        foreach (var billingTransaction in generateInvoiceInputToSave.MappedTransactions)
+                        {
+                            billingTransactionDataManager.AddQueryInsertBillingTransaction(queryContext2, billingTransaction, generateInvoiceInputToSave.Invoice.InvoiceId, false);
+                        }
+                    }
+
+                    if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
+                    {
+                        var updateQuery = queryContext2.AddUpdateQuery();
+                        updateQuery.FromTable(TABLE_NAME);
+                        updateQuery.ColumnValue("IsDeleted", true);
+                        updateQuery.Where().EqualsCondition("ID", generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+
+                        billingTransactionDataManager.AddQuerySetInvoiceBillingTransactionsDeleted(queryContext2, generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                    }
+
+                    var updateInvoiceQuery = queryContext2.AddUpdateQuery();
+                    updateInvoiceQuery.FromTable(TABLE_NAME);
+                    updateInvoiceQuery.ColumnValue("IsDraft", false);
+                    updateInvoiceQuery.Where().EqualsCondition("ID", generateInvoiceInputToSave.Invoice.InvoiceId);
+                }
+
+                queryContext2.ExecuteNonQuery(true);
             }
             return true;
         }
@@ -369,42 +376,55 @@ namespace Vanrise.Invoice.Data.RDB
 
         public bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate)
         {
+            BillingTransactionDataManager billingTransactionDataManager = new BillingTransactionDataManager();
             BillingPeriodInfoDataManager billingPeriodInfoDataManager = new BillingPeriodInfoDataManager();
             var billingPeriodInfo = billingPeriodInfoDataManager.GetBillingPeriodInfoById(partnerId, invoiceTypeId);
-
             var nextPeriodStart = toDate.AddDays(1);
-            new RDBQueryContext(GetDataProvider())
-                .StartBatchQuery()
-                .AddQuery().Update().FromTable(TABLE_NAME).Where().EqualsCondition("ID", invoiceId).ColumnValue("IsDeleted", true).EndUpdate()
-                .AddQueryIf(() => billingPeriodInfo.NextPeriodStart.Date == nextPeriodStart.Date, ctx => ctx.InsertOrUpdateBillingPeriodInfo(new BillingPeriodInfo
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.ColumnValue("IsDeleted", true);
+            updateQuery.Where().EqualsCondition("ID", invoiceId);
+
+            if (billingPeriodInfo.NextPeriodStart.Date == nextPeriodStart.Date)
+            {
+                billingPeriodInfoDataManager.AddInsertOrUpdateBillingPeriodInfo(queryContext, new BillingPeriodInfo
                             {
                                 InvoiceTypeId = invoiceTypeId,
                                 NextPeriodStart = fromDate,
                                 PartnerId = partnerId
-                            }))
-                .SetInvoiceBillingTransactionsDeleted(invoiceId)
-                .EndBatchQuery()
-                .ExecuteNonQuery(true);
+                            });
+            }
+
+            billingTransactionDataManager.AddQuerySetInvoiceBillingTransactionsDeleted(queryContext, invoiceId);
+
+            queryContext.ExecuteNonQuery(true);
             return true;
         }
 
         public void LoadInvoices(Guid invoiceTypeId, DateTime? from, DateTime? to, Vanrise.GenericData.Entities.RecordFilterGroup filterGroup, Vanrise.GenericData.Entities.OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded)
         {
-            new RDBQueryContext(GetDataProvider())
-                    .Select()
-                    .From(TABLE_NAME, "inv")
-                    .Where()
-                        .And()
-                            .EqualsCondition("InvoiceTypeID", invoiceTypeId)
-                            .ConditionIfNotDefaultValue(from, (ctx) => ctx.CompareCondition("CreatedTime", RDBCompareConditionOperator.GEq, from.Value))
-                            .ConditionIfNotDefaultValue(to, (ctx) => ctx.CompareCondition("CreatedTime", RDBCompareConditionOperator.LEq, to.Value))
-                            .ConditionIf(() => filterGroup != null, ctx => ctx.RecordFilterGroupCondition(filterGroup, (fieldName) => new RDBColumnExpression { TableAlias = "inv", ColumnName = GetColumnNameFromFieldName(fieldName) }))
-                        .EndAnd()
-                    .SelectColumns().AllTableColumns("inv").EndColumns()
-                    .Sort().AddSortIf(() => orderDirection.HasValue, ctx => ctx.ByColumn("ID", orderDirection.Value == OrderDirection.Ascending ? RDBSortDirection.ASC : RDBSortDirection.DESC))
-                    .EndSort()
-                    .EndSelect()
-                    .ExecuteReader(
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "inv");
+            selectQuery.SelectColumns().AllTableColumns("inv");
+
+            var whereAndCondition = selectQuery.Where().And();
+            whereAndCondition.EqualsCondition("InvoiceTypeID", invoiceTypeId);
+            if (from.HasValue)
+                whereAndCondition.CompareCondition("CreatedTime", RDBCompareConditionOperator.GEq, from.Value);
+            if (to.HasValue)
+                whereAndCondition.CompareCondition("CreatedTime", RDBCompareConditionOperator.LEq, to.Value);
+            if (filterGroup != null)
+                RecordFilterRDBBuilder.RecordFilterGroupCondition(whereAndCondition, filterGroup, (fieldName) => new RDBColumnExpression { TableAlias = "inv", ColumnName = GetColumnNameFromFieldName(fieldName) });
+
+            if (orderDirection.HasValue)
+                selectQuery.Sort().ByColumn("ID", orderDirection.Value == OrderDirection.Ascending ? RDBSortDirection.ASC : RDBSortDirection.DESC);
+
+            queryContext.ExecuteReader(
                         (reader) =>
                         {
                             while (reader.Read())
@@ -423,114 +443,112 @@ namespace Vanrise.Invoice.Data.RDB
     public static class RecordFilterRDBBuilder
     {       
 
-        public static T RecordFilterGroupCondition<T>(this RDBConditionContext<T> conditionContext, RecordFilterGroup filterGroup, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        public static void RecordFilterGroupCondition(RDBConditionContext conditionContext, RecordFilterGroup filterGroup, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
             if (filterGroup == null || filterGroup.Filters == null)
-                return conditionContext.TrueCondition();
+                return;
 
-            RDBGroupConditionContext<T> groupConditionContext = conditionContext.ConditionGroup(filterGroup.LogicalOperator == RecordQueryLogicalOperator.And ? RDBGroupConditionType.And : RDBGroupConditionType.Or);
+            var groupConditionContext = conditionContext.ConditionGroup(filterGroup.LogicalOperator == RecordQueryLogicalOperator.And ? RDBGroupConditionType.And : RDBGroupConditionType.Or);
 
             foreach (var filter in filterGroup.Filters)
             {
                 RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
                 if (childFilterGroup != null)
                 {
-                    groupConditionContext.RecordFilterGroupCondition(childFilterGroup, getExpressionFromFieldName);
+                    RecordFilterGroupCondition(groupConditionContext, childFilterGroup, getExpressionFromFieldName);
                     continue;
                 }
 
                 EmptyRecordFilter emptyFilter = filter as EmptyRecordFilter;
                 if (emptyFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(emptyFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, emptyFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 NonEmptyRecordFilter nonEmptyFilter = filter as NonEmptyRecordFilter;
                 if (nonEmptyFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(nonEmptyFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, nonEmptyFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 StringRecordFilter stringFilter = filter as StringRecordFilter;
                 if (stringFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(stringFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, stringFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 NumberRecordFilter numberFilter = filter as NumberRecordFilter;
                 if (numberFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(numberFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, numberFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 DateTimeRecordFilter dateTimeFilter = filter as DateTimeRecordFilter;
                 if (dateTimeFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(dateTimeFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, dateTimeFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 BooleanRecordFilter booleanFilter = filter as BooleanRecordFilter;
                 if (booleanFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(booleanFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, booleanFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 NumberListRecordFilter numberListFilter = filter as NumberListRecordFilter;
                 if (numberListFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(numberListFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, numberListFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 StringListRecordFilter stringListRecordFilter = filter as StringListRecordFilter;
                 if (stringListRecordFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(stringListRecordFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, stringListRecordFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 ObjectListRecordFilter objectListRecordFilter = filter as ObjectListRecordFilter;
                 if (objectListRecordFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(objectListRecordFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, objectListRecordFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 AlwaysFalseRecordFilter alwaysFalseFilter = filter as AlwaysFalseRecordFilter;
                 if (alwaysFalseFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(alwaysFalseFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, alwaysFalseFilter, getExpressionFromFieldName);
                     continue;
                 }
 
                 AlwaysTrueRecordFilter alwaysTrueFilter = filter as AlwaysTrueRecordFilter;
                 if (alwaysTrueFilter != null)
                 {
-                    groupConditionContext.RecordFilterCondition(alwaysTrueFilter, getExpressionFromFieldName);
+                    RecordFilterCondition(groupConditionContext, alwaysTrueFilter, getExpressionFromFieldName);
                     continue;
                 }
             }
-
-            return groupConditionContext.EndConditionGroup();
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, EmptyRecordFilter emptyFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, EmptyRecordFilter emptyFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.NullCondition(getExpressionFromFieldName(emptyFilter.FieldName));
+            groupConditionContext.NullCondition(getExpressionFromFieldName(emptyFilter.FieldName));
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, NonEmptyRecordFilter nonEmptyFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, NonEmptyRecordFilter nonEmptyFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.NotNullCondition(getExpressionFromFieldName(nonEmptyFilter.FieldName));
+            groupConditionContext.NotNullCondition(getExpressionFromFieldName(nonEmptyFilter.FieldName));
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, StringRecordFilter stringFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, StringRecordFilter stringFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
             RDBCompareConditionOperator compareOperator;
             switch (stringFilter.CompareOperator)
@@ -545,10 +563,10 @@ namespace Vanrise.Invoice.Data.RDB
                 case StringRecordFilterOperator.NotEndsWith:compareOperator = RDBCompareConditionOperator.NotEndWith; break;
                 default: throw new NotSupportedException(string.Format("stringFilter.CompareOperator '{0}'", stringFilter.CompareOperator.ToString()));
             }
-            return groupConditionContext.CompareCondition(getExpressionFromFieldName(stringFilter.FieldName), compareOperator, new RDBFixedTextExpression { Value = stringFilter.Value });
+            groupConditionContext.CompareCondition(getExpressionFromFieldName(stringFilter.FieldName), compareOperator, new RDBFixedTextExpression { Value = stringFilter.Value });
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, NumberRecordFilter numberFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, NumberRecordFilter numberFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
             RDBCompareConditionOperator compareOperator;
             switch (numberFilter.CompareOperator)
@@ -561,12 +579,10 @@ namespace Vanrise.Invoice.Data.RDB
                 case NumberRecordFilterOperator.LessOrEquals: compareOperator = RDBCompareConditionOperator.LEq; break;
                 default: throw new NotSupportedException(string.Format("numberFilter.CompareOperator '{0}'", numberFilter.CompareOperator.ToString()));
             }
-            return groupConditionContext.CompareCondition(getExpressionFromFieldName(numberFilter.FieldName), compareOperator, new RDBFixedDecimalExpression { Value = numberFilter.Value });
+            groupConditionContext.CompareCondition(getExpressionFromFieldName(numberFilter.FieldName), compareOperator, new RDBFixedDecimalExpression { Value = numberFilter.Value });
         }
 
-        #region Date Filter Commented
-
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, DateTimeRecordFilter dateTimeFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, DateTimeRecordFilter dateTimeFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
             BaseRDBExpression fieldDateExpression = getExpressionFromFieldName(dateTimeFilter.FieldName);
             BaseRDBExpression fieldDatePartExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, fieldDateExpression);
@@ -579,21 +595,22 @@ namespace Vanrise.Invoice.Data.RDB
                 case DateTimeRecordFilterComparisonPart.DateTime:
                 case DateTimeRecordFilterComparisonPart.DateOnly:
                 case DateTimeRecordFilterComparisonPart.TimeOnly:
-                    return groupConditionContext.GetDateTimeRecordFilterQuery(dateTimeFilter, fieldDatePartExpression, startDateExpression);
+                    GetDateTimeRecordFilterQuery(groupConditionContext, dateTimeFilter, fieldDatePartExpression, startDateExpression);
+                    break;
                 case DateTimeRecordFilterComparisonPart.YearMonth:
-                    return groupConditionContext.GetYearMonthRecordFilterQuery(dateTimeFilter, fieldDatePartExpression, startDateExpression, firstDateTimeValue);
-
+                    GetYearMonthRecordFilterQuery(groupConditionContext, dateTimeFilter, fieldDatePartExpression, startDateExpression, firstDateTimeValue);
+                    break;
                 case DateTimeRecordFilterComparisonPart.YearWeek:
-                    return groupConditionContext.GetYearWeekRecordFilterQuery(dateTimeFilter, fieldDatePartExpression, startDateExpression, firstDateTimeValue);
-
+                    GetYearWeekRecordFilterQuery(groupConditionContext, dateTimeFilter, fieldDatePartExpression, startDateExpression, firstDateTimeValue);
+                    break;
                 case DateTimeRecordFilterComparisonPart.Hour:
-                    return groupConditionContext.GetHourRecordFilterQuery(dateTimeFilter, fieldDatePartExpression, startDateExpression, firstDateTimeValue);
-
+                    GetHourRecordFilterQuery(groupConditionContext, dateTimeFilter, fieldDatePartExpression, startDateExpression, firstDateTimeValue);
+                    break;
                 default: throw new NotSupportedException(string.Format("dateTimeFilter.ComparisonPart '{0}'", dateTimeFilter.ComparisonPart));
             }
         }
 
-        private static RDBGroupConditionContext<T> GetDateTimeRecordFilterQuery<T>(this RDBGroupConditionContext<T> groupConditionContext, DateTimeRecordFilter dateTimeFilter,
+        private static void GetDateTimeRecordFilterQuery(RDBGroupConditionContext groupConditionContext, DateTimeRecordFilter dateTimeFilter,
             BaseRDBExpression fieldDatePartExpression, BaseRDBExpression startDateExpression)
         {
             RDBCompareConditionOperator? compareOperator = null;
@@ -607,32 +624,35 @@ namespace Vanrise.Invoice.Data.RDB
                 case DateTimeRecordFilterOperator.Less: compareOperator = RDBCompareConditionOperator.L; break;
                 case DateTimeRecordFilterOperator.LessOrEquals: compareOperator = RDBCompareConditionOperator.LEq; break;
             }
-            if(compareOperator.HasValue)
-                return groupConditionContext.CompareCondition(fieldDatePartExpression, compareOperator.Value, startDateExpression);
-
-            dateTimeFilter.Value2.ThrowIfNull("dateTimeFilter.Value2", dateTimeFilter.FieldName);            
+            if (compareOperator.HasValue)
+            {
+                groupConditionContext.CompareCondition(fieldDatePartExpression, compareOperator.Value, startDateExpression);
+                return;
+            }
+            dateTimeFilter.Value2.ThrowIfNull("dateTimeFilter.Value2", dateTimeFilter.FieldName);
             DateTime secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
             BaseRDBExpression secondDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = secondDateTimeValue });
             if (dateTimeFilter.CompareOperator == DateTimeRecordFilterOperator.Between)
-            {                
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, dateTimeFilter.ExcludeValue2 ? RDBCompareConditionOperator.L : RDBCompareConditionOperator.LEq, secondDateExpression)
-                                                .EndAnd();
+            {
+                var andCondition = groupConditionContext.And();
+                andCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                andCondition.CompareCondition(fieldDatePartExpression, dateTimeFilter.ExcludeValue2 ? RDBCompareConditionOperator.L : RDBCompareConditionOperator.LEq, secondDateExpression);
+
+                return;
             }
 
             if (dateTimeFilter.CompareOperator == DateTimeRecordFilterOperator.NotBetween)
             {
-                return groupConditionContext.Or()
-                                                .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                .CompareCondition(fieldDatePartExpression, dateTimeFilter.ExcludeValue2 ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, secondDateExpression)
-                                            .EndOr();
+                var orCondition = groupConditionContext.Or();
+                orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                orCondition.CompareCondition(fieldDatePartExpression, dateTimeFilter.ExcludeValue2 ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, secondDateExpression);
+                return;
             }
 
             throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator.ToString()));
         }
 
-        private static RDBGroupConditionContext<T> GetYearMonthRecordFilterQuery<T>(this RDBGroupConditionContext<T> groupConditionContext, DateTimeRecordFilter dateTimeFilter,
+        private static void GetYearMonthRecordFilterQuery(RDBGroupConditionContext groupConditionContext, DateTimeRecordFilter dateTimeFilter,
             BaseRDBExpression fieldDatePartExpression, BaseRDBExpression startDateExpression, DateTime firstDateTimeValue)
         {
 
@@ -646,58 +666,54 @@ namespace Vanrise.Invoice.Data.RDB
                 case DateTimeRecordFilterOperator.Equals:
                     endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression)
-                                                .EndAnd();
-
+                    var andCondition = groupConditionContext.And();
+                    andCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                                                    andCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.NotEquals:
                     endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.Or()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression)
-                                                .EndOr();
-
+                    var orCondition = groupConditionContext.Or();
+                    orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                                                    orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Greater:
                     endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.GreaterOrEquals:
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Less:
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.LessOrEquals:
                     endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Between:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);                    
                     endDate = GetFirstDayOfNextMonth(secondDateTimeValue);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression)
-                                                .EndAnd();
-
+                    var andCondition2 = groupConditionContext.And();
+                    andCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                    andCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.NotBetween:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = GetFirstDayOfNextMonth(secondDateTimeValue);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.Or()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression)
-                                                .EndOr();
-
+                   var orCondition2=  groupConditionContext.Or();
+                   orCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                   orCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
             }
         }
 
-        private static RDBGroupConditionContext<T> GetYearWeekRecordFilterQuery<T>(this RDBGroupConditionContext<T> groupConditionContext, DateTimeRecordFilter dateTimeFilter,
+        private static void GetYearWeekRecordFilterQuery(RDBGroupConditionContext groupConditionContext, DateTimeRecordFilter dateTimeFilter,
              BaseRDBExpression fieldDatePartExpression, BaseRDBExpression startDateExpression, DateTime firstDateTimeValue)
         {
             DateTime secondDateTimeValue;
@@ -710,58 +726,54 @@ namespace Vanrise.Invoice.Data.RDB
                 case DateTimeRecordFilterOperator.Equals:
                     endDate = firstDateTimeValue.AddDays(7);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression)
-                                                .EndAnd();
-
+                    var andCondition = groupConditionContext.And();
+                    andCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                    andCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.NotEquals:
                     endDate = firstDateTimeValue.AddDays(7);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.Or()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression)
-                                                .EndOr();
-
+                    var orCondition = groupConditionContext.Or();
+                    orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                    orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Greater:
                     endDate = firstDateTimeValue.AddDays(7);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.GreaterOrEquals:
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Less:
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.LessOrEquals:
                     endDate = firstDateTimeValue.AddDays(7);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Between:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = secondDateTimeValue.AddDays(7);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression)
-                                                .EndAnd();
-
+                   var andCondition2 =  groupConditionContext.And();
+                   andCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                   andCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.NotBetween:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = secondDateTimeValue.AddDays(7);
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.Or()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression)
-                                                .EndOr();
-
+                    var orCondition2= groupConditionContext.Or();
+                    orCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                    orCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
             }
         }
 
-        private static RDBGroupConditionContext<T> GetHourRecordFilterQuery<T>(this RDBGroupConditionContext<T> groupConditionContext, DateTimeRecordFilter dateTimeFilter,
+        private static void GetHourRecordFilterQuery(RDBGroupConditionContext groupConditionContext, DateTimeRecordFilter dateTimeFilter,
              BaseRDBExpression fieldDatePartExpression, BaseRDBExpression startDateExpression, DateTime firstDateTimeValue)
         {
             DateTime secondDateTimeValue;
@@ -780,11 +792,10 @@ namespace Vanrise.Invoice.Data.RDB
                         endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
 
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L, endDateExpression)
-                                                .EndAnd();
-
+                   var andCondition =  groupConditionContext.And();
+                   andCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                   andCondition.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.NotEquals:
                     endDate = firstDateTimeValue.AddHours(1);
                     isMidnight = CheckMidnight(endDate);
@@ -792,11 +803,10 @@ namespace Vanrise.Invoice.Data.RDB
                         endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
 
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.Or()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, endDateExpression)
-                                                .EndOr();
-
+                    var orCondition = groupConditionContext.Or();
+                    orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                    orCondition.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Greater:
                     endDate = firstDateTimeValue.AddHours(1);
                     isMidnight = CheckMidnight(endDate);
@@ -804,14 +814,14 @@ namespace Vanrise.Invoice.Data.RDB
                         endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
 
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, endDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.GreaterOrEquals:
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Less:
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.LessOrEquals:
                     endDate = firstDateTimeValue.AddHours(1);
                     isMidnight = CheckMidnight(endDate);
@@ -819,8 +829,8 @@ namespace Vanrise.Invoice.Data.RDB
                         endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
 
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L, endDateExpression);
-
+                     groupConditionContext.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.Between:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = secondDateTimeValue.AddHours(1);
@@ -829,11 +839,10 @@ namespace Vanrise.Invoice.Data.RDB
                         endDate = new DateTime(secondDateTimeValue.Year, secondDateTimeValue.Month, secondDateTimeValue.Day, 23, 59, 59, 998);
 
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.And()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L, endDateExpression)
-                                                .EndAnd();
-
+                    var andCondition2 = groupConditionContext.And();
+                    andCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.GEq, startDateExpression);
+                    andCondition2.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.LEq : RDBCompareConditionOperator.L, endDateExpression);
+                     return;
                 case DateTimeRecordFilterOperator.NotBetween:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = secondDateTimeValue.AddHours(1);
@@ -842,11 +851,10 @@ namespace Vanrise.Invoice.Data.RDB
                         endDate = new DateTime(secondDateTimeValue.Year, secondDateTimeValue.Month, secondDateTimeValue.Day, 23, 59, 59, 998);
 
                     endDateExpression = GetDateExpressionBasedOnDatePart(dateTimeFilter.ComparisonPart, new RDBFixedDateTimeExpression { Value = endDate });
-                    return groupConditionContext.Or()
-                                                    .CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression)
-                                                    .CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, endDateExpression)
-                                                .EndOr();
-
+                    var orCondition2 = groupConditionContext.Or();
+                    orCondition2.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
+                    orCondition2.CompareCondition(fieldDatePartExpression, isMidnight ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, endDateExpression);
+                     return;
                 default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
             }
         }
@@ -910,27 +918,27 @@ namespace Vanrise.Invoice.Data.RDB
             return false;
         }
 
-        #endregion
+       
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, BooleanRecordFilter booleanFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, BooleanRecordFilter booleanFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.CompareCondition(getExpressionFromFieldName(booleanFilter.FieldName), RDBCompareConditionOperator.Eq, new RDBFixedBooleanExpression { Value = booleanFilter.IsTrue });
+            groupConditionContext.CompareCondition(getExpressionFromFieldName(booleanFilter.FieldName), RDBCompareConditionOperator.Eq, new RDBFixedBooleanExpression { Value = booleanFilter.IsTrue });
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, NumberListRecordFilter numberListFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, NumberListRecordFilter numberListFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.RecordFilterCondition(numberListFilter.FieldName, numberListFilter.CompareOperator, numberListFilter.Values.Select<Decimal, BaseRDBExpression>(value => new RDBFixedDecimalExpression { Value = value }).ToList(), getExpressionFromFieldName);
+            RecordFilterCondition(groupConditionContext, numberListFilter.FieldName, numberListFilter.CompareOperator, numberListFilter.Values.Select<Decimal, BaseRDBExpression>(value => new RDBFixedDecimalExpression { Value = value }).ToList(), getExpressionFromFieldName);
             
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, StringListRecordFilter stringListRecordFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, StringListRecordFilter stringListRecordFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.RecordFilterCondition(stringListRecordFilter.FieldName, stringListRecordFilter.CompareOperator, stringListRecordFilter.Values.Select<string, BaseRDBExpression>(value => new RDBFixedTextExpression { Value = value }).ToList(), getExpressionFromFieldName);
+            RecordFilterCondition(groupConditionContext, stringListRecordFilter.FieldName, stringListRecordFilter.CompareOperator, stringListRecordFilter.Values.Select<string, BaseRDBExpression>(value => new RDBFixedTextExpression { Value = value }).ToList(), getExpressionFromFieldName);
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, ObjectListRecordFilter stringListRecordFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, ObjectListRecordFilter stringListRecordFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.RecordFilterCondition(stringListRecordFilter.FieldName, stringListRecordFilter.CompareOperator, stringListRecordFilter.Values.Select(ObjectToExpression).ToList(), getExpressionFromFieldName);
+            RecordFilterCondition(groupConditionContext, stringListRecordFilter.FieldName, stringListRecordFilter.CompareOperator, stringListRecordFilter.Values.Select(ObjectToExpression).ToList(), getExpressionFromFieldName);
             
         }
 
@@ -959,19 +967,19 @@ namespace Vanrise.Invoice.Data.RDB
             throw new NotSupportedException(string.Format("value type '{0}'", value.GetType()));
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, string fieldName, ListRecordFilterOperator compareOperator, List<BaseRDBExpression> values, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, string fieldName, ListRecordFilterOperator compareOperator, List<BaseRDBExpression> values, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.ListCondition(getExpressionFromFieldName(fieldName), compareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, values);
+            groupConditionContext.ListCondition(getExpressionFromFieldName(fieldName), compareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, values);
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, AlwaysFalseRecordFilter alwaysFalseFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, AlwaysFalseRecordFilter alwaysFalseFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.FalseCondition();
+            groupConditionContext.FalseCondition();
         }
 
-        private static RDBGroupConditionContext<T> RecordFilterCondition<T>(this RDBGroupConditionContext<T> groupConditionContext, AlwaysTrueRecordFilter alwaysTrueFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
+        private static void RecordFilterCondition(RDBGroupConditionContext groupConditionContext, AlwaysTrueRecordFilter alwaysTrueFilter, Func<string, BaseRDBExpression> getExpressionFromFieldName)
         {
-            return groupConditionContext.TrueCondition();
+            groupConditionContext.TrueCondition();
         }
     }
 }
