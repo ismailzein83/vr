@@ -19,57 +19,75 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Vanrise.Security.Entities.ContextFactory.GetContext().HasPermissionToActions("WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition"))
+            try
             {
-                if (!IsPostBack)
+                if (Vanrise.Security.Entities.ContextFactory.GetContext().HasPermissionToActions("WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition"))
                 {
-                    int reportId = Convert.ToInt32(Request.QueryString["reportId"]);
-
-                    Guid tempPayloadId;
-                    if (!Guid.TryParse(Request.QueryString["tempPayloadId"], out tempPayloadId))
+                    if (!IsPostBack)
                     {
-                        throw new Exception("error while parsing tempPayloadId");
+                        int reportId = Convert.ToInt32(Request.QueryString["reportId"]);
+
+                        Guid tempPayloadId;
+                        if (!Guid.TryParse(Request.QueryString["tempPayloadId"], out tempPayloadId))
+                        {
+                            throw new Exception("error while parsing tempPayloadId");
+                        }
+
+                        VRTempPayloadManager vrTempPayloadManager = new VRTempPayloadManager();
+                        var payload = vrTempPayloadManager.GetVRTempPayload(tempPayloadId);
+                        var parameters = payload.Settings as ReportParameters;
+
+                        ReportDefinitionManager managerReport = new ReportDefinitionManager();
+                        RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(reportId);
+
+                        ReportDefinitionRDLCFile rdlcFile = rdlc.ReportDefinitionRDLCFiles.FindRecord(x => x.ReportDefinitionRDLCFileId == parameters.ReportDefinitionRDLCFileId);
+                        if (rdlcFile == null)
+                            rdlcFile = rdlc.ReportDefinitionRDLCFiles.First();
+
+                        parameters.RDLCFileTitle = rdlcFile.Title;
+                        ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                        ReportViewer1.LocalReport.ReportPath = Server.MapPath(rdlcFile.RDLCURL);
+
+                        IReportGenerator r = rdlc.GetReportGenerator();
+
+                        ReportViewer1.LocalReport.DataSources.Clear();
+                        foreach (var a in r.GenerateDataSources(parameters))
+                        {
+                            ReportDataSource ds = new ReportDataSource(a.Key, a.Value);
+                            ReportViewer1.LocalReport.DataSources.Add(ds);
+                        }
+                        List<ReportParameter> BillingRDLCReportParameters = new List<ReportParameter>();
+                        foreach (var p in r.GetRdlcReportParameters(parameters))
+                        {
+                            BillingRDLCReportParameters.Add(new ReportParameter(p.Key, p.Value.Value, p.Value.IsVisible));
+                        }
+                        ReportViewer1.LocalReport.SetParameters(BillingRDLCReportParameters.ToArray());
                     }
-
-                    VRTempPayloadManager vrTempPayloadManager = new VRTempPayloadManager();
-                    var payload = vrTempPayloadManager.GetVRTempPayload(tempPayloadId);
-                    var parameters = payload.Settings as ReportParameters;
-
-                    ReportDefinitionManager managerReport = new ReportDefinitionManager();
-                    RDLCReportDefinition rdlc = managerReport.GetRDLCReportDefinition(reportId);
-
-                    ReportDefinitionRDLCFile rdlcFile = rdlc.ReportDefinitionRDLCFiles.FindRecord(x => x.ReportDefinitionRDLCFileId == parameters.ReportDefinitionRDLCFileId);
-                    if (rdlcFile == null)
-                        rdlcFile = rdlc.ReportDefinitionRDLCFiles.First();
-
-                    parameters.RDLCFileTitle = rdlcFile.Title;
-                    ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                    ReportViewer1.LocalReport.ReportPath = Server.MapPath(rdlcFile.RDLCURL);
-
-                    IReportGenerator r = rdlc.GetReportGenerator();
-
-                    ReportViewer1.LocalReport.DataSources.Clear();
-                    foreach (var a in r.GenerateDataSources(parameters))
-                    {
-                        ReportDataSource ds = new ReportDataSource(a.Key, a.Value);
-                        ReportViewer1.LocalReport.DataSources.Add(ds);
-                    }
-                    List<ReportParameter> BillingRDLCReportParameters = new List<ReportParameter>();
-                    foreach (var p in r.GetRdlcReportParameters(parameters))
-                    {
-                        BillingRDLCReportParameters.Add(new ReportParameter(p.Key, p.Value.Value, p.Value.IsVisible));
-                    }
-                    ReportViewer1.LocalReport.SetParameters(BillingRDLCReportParameters.ToArray());
                 }
+                else
+                    throw new Exception("you are not authorized to perform this request");
             }
-            else
-                throw new Exception("you are not authorized to perform this request");
+            catch (Exception ex)
+            {
+                Vanrise.Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
+            }
+
+            
 
         }
         protected override void Render(HtmlTextWriter writer)
         {
-            base.Render(writer);
-            GC.Collect();
+            try
+            {
+                base.Render(writer);
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                Vanrise.Common.LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
+            }
         }
     }
 }
