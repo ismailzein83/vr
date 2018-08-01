@@ -9,9 +9,8 @@ app.directive("whsRoutesyncProcessScheduled", ["VRUIUtilsService", "UtilsService
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                var directiveConstructor = new DirectiveConstructor($scope, ctrl);
-                directiveConstructor.initializeController();
+                var ctor = new DirectiveCtor($scope, ctrl);
+                ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
@@ -25,9 +24,9 @@ app.directive("whsRoutesyncProcessScheduled", ["VRUIUtilsService", "UtilsService
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/ProcessInput/Scheduled/Templates/RouteSyncProcessScheduledTemplate.html"
         };
 
-        function DirectiveConstructor($scope, ctrl) {
-
+        function DirectiveCtor($scope, ctrl) {
             this.initializeController = initializeController;
+
             var routeSyncDefinitionSelectorAPI;
             var routeSyncDefinitionSelectorAPIReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -42,8 +41,40 @@ app.directive("whsRoutesyncProcessScheduled", ["VRUIUtilsService", "UtilsService
             }
 
             function defineAPI() {
-
                 var api = {};
+
+                api.load = function (payload) {
+
+                    var routeSyncDefinitionId;
+
+                    if (payload != undefined) {
+                        if(payload.data != undefined){
+                            routeSyncDefinitionId = payload.data.RouteSyncDefinitionId;
+                        }
+                    }
+
+                    var promises = [];
+
+                    var loadRouteSyncDefinitionSelectorPromise = loadRouteSyncDefinitionSelector();
+                    promises.push(loadRouteSyncDefinitionSelectorPromise);
+
+                    function loadRouteSyncDefinitionSelector() {
+                        var routeSyncDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        routeSyncDefinitionSelectorAPIReadyDeferred.promise.then(function () {
+
+                            var routeSyncDefinitionSelectorPayload = {
+                                selectedIds: routeSyncDefinitionId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(routeSyncDefinitionSelectorAPI, routeSyncDefinitionSelectorPayload, routeSyncDefinitionSelectorLoadDeferred);
+                        });
+
+                        return routeSyncDefinitionSelectorLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.RouteSync.BP.Arguments.RouteSyncProcessInput, TOne.WhS.RouteSync.BP.Arguments",
@@ -51,23 +82,9 @@ app.directive("whsRoutesyncProcessScheduled", ["VRUIUtilsService", "UtilsService
                     };
                 };
 
-                api.load = function (payload) {
-                    var promises = [];
-                    promises.push(loadRouteSyncDefinitionSelector());
-                    return UtilsService.waitMultiplePromises(promises);
-                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            }
-
-            function loadRouteSyncDefinitionSelector() {
-                var routeSyncDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                routeSyncDefinitionSelectorAPIReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(routeSyncDefinitionSelectorAPI, undefined, routeSyncDefinitionSelectorLoadDeferred);
-                });
-
-                return routeSyncDefinitionSelectorLoadDeferred.promise;
             }
         }
 
