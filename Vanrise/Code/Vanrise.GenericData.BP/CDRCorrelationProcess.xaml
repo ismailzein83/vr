@@ -65,7 +65,8 @@
       <Variable x:TypeArguments="vge:CDRCorrelationProcessState" Name="CDRCorrelationProcessState" />
       <Variable x:TypeArguments="vge:CDRCorrelationDefinition" Name="CDRCorrelationDefinition" />
       <Variable x:TypeArguments="x:Boolean" Name="newDataImported" />
-      <Variable x:TypeArguments="vge:RecordFilterGroup" Name="recordFilterGroup" />
+      <Variable x:TypeArguments="scg:List(vge:RecordFilterGroup)" Name="recordFilterGroups" />
+      <Variable x:TypeArguments="s:Nullable(x:Int64)" Name="lastImportedId" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting CDR Correlation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -94,31 +95,41 @@
       </vbw:GetDefinitionObjectState.Result>
     </vbw:GetDefinitionObjectState>
     <vgba1:BuildCDRCorrelationFilterGroup sap2010:WorkflowViewState.IdRef="BuildCDRCorrelationFilterGroup_1">
+      <vgba1:BuildCDRCorrelationFilterGroup.BatchIntervalTime>
+        <InArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.BatchIntervalTime</mca:CSharpValue>
+        </InArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.BatchIntervalTime>
       <vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationDefinition>
         <InArgument x:TypeArguments="vge:CDRCorrelationDefinition">
           <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationDefinition">CDRCorrelationDefinition</mca:CSharpValue>
         </InArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationDefinition>
+      <vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationProcessState>
+        <InArgument x:TypeArguments="vge:CDRCorrelationProcessState">
+          <mca:CSharpValue x:TypeArguments="vge:CDRCorrelationProcessState">CDRCorrelationProcessState</mca:CSharpValue>
+        </InArgument>
+      </vgba1:BuildCDRCorrelationFilterGroup.CDRCorrelationProcessState>
       <vgba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
         <InArgument x:TypeArguments="x:TimeSpan">
           <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DateTimeMargin</mca:CSharpValue>
         </InArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
       <vgba1:BuildCDRCorrelationFilterGroup.LastImportedId>
-        <InArgument x:TypeArguments="s:Nullable(x:Int64)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int64)">CDRCorrelationProcessState != null ? CDRCorrelationProcessState.LastImportedId : null</mca:CSharpValue>
-        </InArgument>
+        <OutArgument x:TypeArguments="s:Nullable(x:Int64)">
+          <mca:CSharpReference x:TypeArguments="s:Nullable(x:Int64)">lastImportedId</mca:CSharpReference>
+        </OutArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.LastImportedId>
       <vgba1:BuildCDRCorrelationFilterGroup.NewDataImported>
         <OutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">newDataImported</mca:CSharpReference>
         </OutArgument>
       </vgba1:BuildCDRCorrelationFilterGroup.NewDataImported>
-      <vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroup>
-        <OutArgument x:TypeArguments="vge:RecordFilterGroup">
-          <mca:CSharpReference x:TypeArguments="vge:RecordFilterGroup">recordFilterGroup</mca:CSharpReference>
+      <vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroups>
+        <OutArgument x:TypeArguments="scg:List(vge:RecordFilterGroup)">
+          <mca:CSharpReference x:TypeArguments="scg:List(vge:RecordFilterGroup)">recordFilterGroups</mca:CSharpReference>
         </OutArgument>
-      </vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroup>
+      </vgba1:BuildCDRCorrelationFilterGroup.RecordFilterGroups>
     </vgba1:BuildCDRCorrelationFilterGroup>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -132,10 +143,9 @@
             <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadCDRsToCorrelateStatus" />
             <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="correlateCDRsStatus" />
             <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="insertCorrelatedCDRsStatus" />
-            <Variable x:TypeArguments="x:Int64" Name="lastImportedId" />
-            <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="loadCDRsToCorrelateOutputQueue">
+            <Variable x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)" Name="loadCDRsToCorrelateOutputQueue">
               <Variable.Default>
-                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">new MemoryQueue&lt;RecordBatch&gt;()</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">new MemoryQueue&lt;RecordBatch&gt;()</mca:CSharpValue>
               </Variable.Default>
             </Variable>
             <Variable x:TypeArguments="vq:BaseQueue(vge:CDRCorrelationBatch)" Name="correlateCDRsOutputQueue">
@@ -156,26 +166,21 @@
                   <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.IdFieldName</mca:CSharpValue>
                 </InArgument>
               </vgba1:LoadCDRsToCorrelate.IdFieldName>
-              <vgba1:LoadCDRsToCorrelate.LastImportedId>
-                <OutArgument x:TypeArguments="x:Int64">
-                  <mca:CSharpReference x:TypeArguments="x:Int64">lastImportedId</mca:CSharpReference>
-                </OutArgument>
-              </vgba1:LoadCDRsToCorrelate.LastImportedId>
               <vgba1:LoadCDRsToCorrelate.OrderColumnName>
                 <InArgument x:TypeArguments="x:String">
                   <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.DatetimeFieldName</mca:CSharpValue>
                 </InArgument>
               </vgba1:LoadCDRsToCorrelate.OrderColumnName>
               <vgba1:LoadCDRsToCorrelate.OutputQueue>
-                <InOutArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
-                  <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpReference>
+                <InOutArgument x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">
+                  <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpReference>
                 </InOutArgument>
               </vgba1:LoadCDRsToCorrelate.OutputQueue>
-              <vgba1:LoadCDRsToCorrelate.RecordFilterGroup>
-                <InArgument x:TypeArguments="vge:RecordFilterGroup">
-                  <mca:CSharpValue x:TypeArguments="vge:RecordFilterGroup">recordFilterGroup</mca:CSharpValue>
+              <vgba1:LoadCDRsToCorrelate.RecordFilterGroups>
+                <InArgument x:TypeArguments="scg:List(vge:RecordFilterGroup)">
+                  <mca:CSharpValue x:TypeArguments="scg:List(vge:RecordFilterGroup)">recordFilterGroups</mca:CSharpValue>
                 </InArgument>
-              </vgba1:LoadCDRsToCorrelate.RecordFilterGroup>
+              </vgba1:LoadCDRsToCorrelate.RecordFilterGroups>
               <vgba1:LoadCDRsToCorrelate.RecordStorageId>
                 <InArgument x:TypeArguments="s:Guid">
                   <mca:CSharpValue x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpValue>
@@ -305,7 +310,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw7PwO1Ag4CAQFGBUwgAwHAA00FWA4DAbMDWQVfJAMBrANgBXosAwGNA3sFrAIKAgEKrQIFswIgAgECSQtJhQEDAcIDRmBGgwEDAcEDVQtV3QEDAboDUAtQfQMBtANcC1yBAQMBrQNtC22pAQMBpgN3C3dvAwGgA3ILcmEDAZoDYwtjdQMBlANoC2hfAwGOA34LflkCAQuCAQmhAhQCARmkAgmqAiQCARGwAguwAoUBAgEErQJgrQKBAQIBA4oBEYoBiAECATSPARGPAZgBAgEnlAERlAGWAQIBGpgBC5kCFgIBT5oCC6ACKwIBQacCD6cCiQECAROkAmSkAoIBAgESmQENvQEpAwGwAr4BDeIBIwMB1AHjAQ39ASoDAZIB/gENmAIuAgFQnQIRnQKSAQIBQrUBE7UBiQEDAYADpgETpgGEAQMB8wKcAROcAX4DAeYCoQEToQFmAwHZArABE7ABbwMBzAK6ARO6AYABAwG/AqsBE6sBjAEDAbICmQFxmQF3AwGxAssBE8sBZwMBowLaARPaAXgDAZYC0AET0AGEAQMBiQLfARPfAXoDAfwB1QET1QGOAQMB7wHBARPBAX0DAeIBxgETxgFnAwHVAfABE/ABlAEDAccB6wET6wGOAQMBugH1ARP1AXIDAa0B+gET+gGBAQMBoAHmARPmAX0DAZMBhgIThgKEAQMBhQGVAhOVAnkCAXiQAhOQAowBAgFriwITiwJ+AgFegQITgQKRAQIBUQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw8PwO6Ag4CAQFHBU0gAwHMA04FWQ4DAb0DWgVgJAMBtQNhBYUBLAMBgwOGAQWxAgoCAQuyAgW4AiACAQJKC0qFAQMBzgNHYEeDAQMBzQNWC1bdAQMBxQNRC1F9AwG+A10LXYEBAwG2A4IBC4IBegMBrgNkC2RiAwGnA24LbnkDAaADeAt4agMBmQN9C31hAwGSA2kLaXUDAYsDcwtzXwMBhAOJAQuJAVkCAQyNAQmmAhQCARypAgmvAiQCARO1Agu1AoUBAgEEsgJgsgKBAQIBA5QBEZQBigECATeZARGZAZgBAgEqngERngGWAQIBHaIBC54CFgIBUp8CC6UCKwIBRKwCD6wCiQECARWpAmSpAoIBAgEUowENwgEpAwGzAsMBDecBIwMB1wHoAQ2CAioDAZUBgwINnQIuAgFTogIRogKSAQIBRbUBE7UBegMB9gK6ARO6AYkBAwHpAqsBE6sBhAEDAdwCpgETpgF+AwHPAr8BE78BgAEDAcICsAETsAGOAQMBtQKjAXGjAXcDAbQC0AET0AFnAwGmAt8BE98BeAMBmQLVARPVAYQBAwGMAuQBE+QBegMB/wHaARPaAY4BAwHyAcYBE8YBfQMB5QHLARPLAWcDAdgB9QET9QGUAQMBygHwARPwAY4BAwG9AfoBE/oBcgMBsAH/ARP/AYEBAwGjAesBE+sBfQMBlgGLAhOLAoQBAwGIAZoCE5oCeQIBe5UCE5UCjAECAW6QAhOQAn4CAWGGAhOGApEBAgFU</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

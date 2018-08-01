@@ -6,6 +6,8 @@ using Vanrise.GenericData.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.GenericData.Business;
 using Vanrise.Entities;
+using System.Threading;
+using System.Configuration;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -17,9 +19,9 @@ namespace Vanrise.GenericData.BP.Activities
 
         public string IdFieldName { get; set; }
 
-        public BaseQueue<RecordBatch> OutputQueue { get; set; }
+        public MemoryQueue<RecordBatch> OutputQueue { get; set; }
 
-        public RecordFilterGroup RecordFilterGroup { get; set; }
+        public List<RecordFilterGroup> RecordFilterGroups { get; set; }
 
         public string OrderColumnName { get; set; }
 
@@ -28,7 +30,6 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class LoadCDRsToCorrelateOutput
     {
-        public long LastImportedId { get; set; }
     }
 
     #endregion
@@ -42,7 +43,7 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<string> IdFieldName { get; set; }
 
         [RequiredArgument]
-        public InArgument<RecordFilterGroup> RecordFilterGroup { get; set; }
+        public InArgument<List<RecordFilterGroup>> RecordFilterGroups { get; set; }
 
         [RequiredArgument]
         public InArgument<string> OrderColumnName { get; set; }
@@ -51,13 +52,18 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<bool> IsOrderAscending { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<RecordBatch>> OutputQueue { get; set; }
-
-        [RequiredArgument]
-        public OutArgument<long> LastImportedId { get; set; }
+        public InOutArgument<MemoryQueue<RecordBatch>> OutputQueue { get; set; }
 
         protected override LoadCDRsToCorrelateOutput DoWorkWithResult(LoadCDRsToCorrelateInput inputArgument, AsyncActivityHandle handle)
         {
+            int maximumOutputQueueSize;
+            if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_MaxCorrelateQueueSize"], out maximumOutputQueueSize))
+                maximumOutputQueueSize = 20;
+
+            int batchSize;
+            if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_BatchSize"], out batchSize))
+                batchSize = 100000;
+
             if (inputArgument.OutputQueue == null)
                 throw new NullReferenceException("inputArgument.OutputQueue");
 
@@ -66,32 +72,33 @@ namespace Vanrise.GenericData.BP.Activities
 
             RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
 
-            RecordFilterGroup recordFilterGroup = inputArgument.RecordFilterGroup;
+            List<RecordFilterGroup> recordFilterGroups = inputArgument.RecordFilterGroups;
             string orderColumnName = inputArgument.OrderColumnName;
             bool isOrderAscending = inputArgument.IsOrderAscending;
 
-            long lastRecordId = 0;
 
-            new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, null, null, recordFilterGroup, () => ShouldStop(handle), ((itm) =>
+            foreach (RecordFilterGroup recordFilterGroup in recordFilterGroups)
             {
-                eventCount++;
-                recordBatch.Records.Add(itm);
-                long itmRecordId = itm.GetFieldValue(inputArgument.IdFieldName);
-                if (itmRecordId > lastRecordId)
-                    lastRecordId = itmRecordId;
-
-                if (recordBatch.Records.Count >= 100000)
+                new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, null, null, recordFilterGroup, () => ShouldStop(handle), ((itm) =>
                 {
-                    inputArgument.OutputQueue.Enqueue(recordBatch);
-                    recordBatch = new RecordBatch() { Records = new List<dynamic>() };
-                }
-            }), orderColumnName, isOrderAscending);
+                    eventCount++;
+                    recordBatch.Records.Add(itm);
 
-            if (recordBatch.Records.Count > 0)
-                inputArgument.OutputQueue.Enqueue(recordBatch);
+                    if (recordBatch.Records.Count >= batchSize)
+                    {
+                        inputArgument.OutputQueue.Enqueue(recordBatch);
+                        recordBatch = new RecordBatch() { Records = new List<dynamic>() };
+                    }
+                }), orderColumnName, isOrderAscending);
+
+                if (recordBatch.Records.Count > 0)
+                    inputArgument.OutputQueue.Enqueue(recordBatch);
+
+                while (inputArgument.OutputQueue.Count >= maximumOutputQueueSize)
+                    Thread.Sleep(1000);
+            }
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", eventCount);
-            output.LastImportedId = lastRecordId;
             return output;
         }
 
@@ -102,7 +109,7 @@ namespace Vanrise.GenericData.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 IdFieldName = this.IdFieldName.Get(context),
                 RecordStorageId = this.RecordStorageId.Get(context),
-                RecordFilterGroup = this.RecordFilterGroup.Get(context),
+                RecordFilterGroups = this.RecordFilterGroups.Get(context),
                 OrderColumnName = this.OrderColumnName.Get(context),
                 IsOrderAscending = this.IsOrderAscending.Get(context)
             };
@@ -110,7 +117,6 @@ namespace Vanrise.GenericData.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadCDRsToCorrelateOutput result)
         {
-            this.LastImportedId.Set(context, result.LastImportedId);
         }
     }
 }

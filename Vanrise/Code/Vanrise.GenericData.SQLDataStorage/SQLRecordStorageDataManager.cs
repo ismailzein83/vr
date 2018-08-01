@@ -552,22 +552,52 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.GetSQLQueryMaxParameterNumber();
         }
 
-        public DateTime? GetMinDateTimeAfterId(long id, string idFieldName, string dateTimeFieldName)
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
         {
-            DateTime? minDate = null;
+            DateTime? minDateFromReader = null;
+            long? maxIdFromReader = null;
+
             string tableName = GetTableNameWithSchema();
-            string query = string.Format(@"Select Min({0}) as MinDate from {1} WITH (NOLOCK)
-                                           WHERE {2}  > {3}", GetColumnNameFromFieldName(dateTimeFieldName), tableName, GetColumnNameFromFieldName(idFieldName), id);
+            string query = string.Format(@"Select Min({0}) as MinDate, Max({1}) as MaxId from {2} WITH (NOLOCK)
+                                           WHERE {1} > {3}", GetColumnNameFromFieldName(dateTimeFieldName), GetColumnNameFromFieldName(idFieldName), tableName, id);
 
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
                 {
-                    minDate = GetReaderValue<DateTime?>(reader, "MinDate");
+                    minDateFromReader = GetReaderValue<DateTime?>(reader, "MinDate");
+                    maxIdFromReader = GetReaderValue<long?>(reader, "MaxId");
                 }
             }, null);
 
-            return minDate;
+            maxId = maxIdFromReader;
+            return minDateFromReader;
+        }
+
+        public long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
+        {
+            long? maxIdFromReader = null;
+            DateTime? maxDateFromReader = null;
+            DateTime? minDateFromReader = null;
+
+            string tableName = GetTableNameWithSchema();
+            string query = string.Format(@"Select Max({0}) as MaxId, Max({1}) as MaxDate, Min({1}) as MinDate from {2} WITH (NOLOCK)",
+                GetColumnNameFromFieldName(idFieldName), GetColumnNameFromFieldName(dateTimeFieldName), tableName);
+
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    maxIdFromReader = GetReaderValue<long?>(reader, "MaxId");
+                    maxDateFromReader = GetReaderValue<DateTime?>(reader, "MaxDate");
+                    minDateFromReader = GetReaderValue<DateTime?>(reader, "MinDate");
+                }
+            }, null);
+
+            minDate = minDateFromReader;
+            maxDate = maxDateFromReader;
+
+            return maxIdFromReader;
         }
 
         public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
@@ -1117,8 +1147,5 @@ namespace Vanrise.GenericData.SQLDataStorage
         }
 
         #endregion
-
-
-
     }
 }

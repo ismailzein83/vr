@@ -190,13 +190,19 @@ namespace Vanrise.GenericData.Business
         #endregion
 
 
-        public DateTime? GetMinDateTimeAfterId(long id, string idFieldName, string dateTimeFieldName)
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
         {
             throw new NotImplementedException();
         }
 
 
         public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
         {
             throw new NotImplementedException();
         }

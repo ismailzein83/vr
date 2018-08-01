@@ -250,11 +250,18 @@ namespace Vanrise.GenericData.Business
             storageDataManager.UpdateRecords(records, fieldsToJoin, fieldsToUpdate);
         }
 
-        public DateTime? GetMinDateTimeAfterId(Guid dataRecordStorageId, long id, string idFieldName, string dateTimeFieldName)
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(Guid dataRecordStorageId, long id, string idFieldName, string dateTimeFieldName, out long? maxId)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
-            return storageDataManager.GetMinDateTimeAfterId(id, idFieldName, dateTimeFieldName);
+            return storageDataManager.GetMinDateTimeWithMaxIdAfterId(id, idFieldName, dateTimeFieldName, out maxId);
+        }
+
+        public long? GetMaxId(Guid dataRecordStorageId, string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            return storageDataManager.GetMaxId(idFieldName, dateTimeFieldName, out maxDate, out minDate);
         }
 
         #endregion
@@ -1308,5 +1315,7 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
+
     }
 }
