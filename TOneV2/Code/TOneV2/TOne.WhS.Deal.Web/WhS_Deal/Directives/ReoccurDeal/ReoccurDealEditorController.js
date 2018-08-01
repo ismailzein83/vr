@@ -47,7 +47,7 @@
         }
 
         function setTitle() {
-            $scope.title = UtilsService.buildTitleForAddEditor('Reoccuring Deals for ' + dealName);
+            $scope.title = UtilsService.buildTitleForAddEditor('Recurring Deals for ' + dealName);
         }
 
         function loadReoccuringTypeSelector() {

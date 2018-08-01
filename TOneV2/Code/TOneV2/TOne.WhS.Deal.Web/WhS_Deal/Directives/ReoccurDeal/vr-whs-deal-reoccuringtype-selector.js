@@ -80,7 +80,7 @@
         }
 
         function getDirectiveTemplate(attrs) {
-            var label = 'Reoccuring Type';
+            var label = 'Recurring Type';
 
             var hideremoveicon = (attrs.hideremoveicon != undefined && attrs.hideremoveicon != null) ? 'hideremoveicon' : null;
 

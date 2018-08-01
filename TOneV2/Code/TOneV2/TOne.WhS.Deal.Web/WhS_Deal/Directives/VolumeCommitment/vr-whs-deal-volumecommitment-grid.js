@@ -81,7 +81,7 @@
 
                     if (dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description && dataItem.Entity.Settings.IsReoccurrable==true ) {
                     var reoccurMenuAction = {
-                        name: 'Reoccur',
+                        name: 'Recur',
                         clicked: reoccurDeal
                     };
                     menuActions.push(reoccurMenuAction);
