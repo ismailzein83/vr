@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -23,7 +24,28 @@ namespace Vanrise.Analytic.Entities
     {
         public List<VRAutomatedReportQuery> Queries { get; set; }
         public VRReportGenerationAction ReportAction { get; set; }
+        public VRReportGenerationFilter Filter { get; set; }
     }
+    public abstract class VRReportGenerationFilter
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract string RuntimeEditor { get; }
+    }
+    public abstract class VRReportGenerationRuntimeFilter
+    {
+        public abstract VRReportGenerationFilterContent GetFilterContent(IVRReportGenerationRuntimeFilterContext context);
+    }
+    public interface IVRReportGenerationRuntimeFilterContext
+    {
+        public VRReportGenerationFilter FilterDefinition { get; }
+    }
+    public class VRReportGenerationFilterContent
+    {
+        public DateTime FromTime { get; set; }
+        public DateTime? ToTime { get; set; }
+        public RecordFilterGroup FilterGroup { get; set; }
+    }
+
     public abstract class VRReportGenerationAction
     {
         public abstract string ActionTypeName { get; }
