@@ -373,6 +373,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 }
             }, (cmd) =>
             {
+                cmd.CommandTimeout = 0;
+
                 if (from.HasValue)
                     cmd.Parameters.Add(new SqlParameter("@FromTime", from.Value));
 
