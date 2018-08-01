@@ -181,6 +181,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.SQL.dll</HintPath>
     </Reference>
@@ -330,6 +333,9 @@
     </Reference>
     <Reference Include="Vanrise.Data.Postgres">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.Postgres.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
