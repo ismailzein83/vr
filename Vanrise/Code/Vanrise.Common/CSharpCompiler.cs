@@ -85,11 +85,14 @@ namespace Vanrise.Common
             if (results.Errors != null && results.Errors.Count > 0)
             {
                 output.ErrorMessages = new List<string>();
+                output.Errors = new List<CSharpCompilationError>();
+
                 foreach (CompilerError error in results.Errors)
                 {
                     if (!error.IsWarning)
                     {
                         output.ErrorMessages.Add(String.Format("Error {0}: {1}. Line Number {2}", error.ErrorNumber, error.ErrorText, error.Line));
+                        output.Errors.Add(new CSharpCompilationError() { ErrorNumber = error.ErrorNumber, ErrorText = error.ErrorText, LineNumber = error.Line });
                     }
                 }
             }
@@ -154,5 +157,16 @@ namespace Vanrise.Common
         public byte[] AssemblyFile { get; set; }
 
         public List<string> ErrorMessages { get; set; }
+
+        public List<CSharpCompilationError> Errors { get; set; }
+    }
+
+    public class CSharpCompilationError
+    {
+        public string ErrorText { get; set; }
+
+        public string ErrorNumber { get; set; }
+
+        public int LineNumber { get; set; }
     }
 }
