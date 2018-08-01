@@ -7,42 +7,28 @@ using System.Threading.Tasks;
 namespace Vanrise.Data.RDB
 {
     public class RDBGroupByHavingContext
-    { 
-        Action<BaseRDBCondition> _setCondition;
+    {
         IRDBTableQuerySource _table;
         string _tableAlias;
+        RDBConditionGroup _conditionGroup;
 
-        public RDBGroupByHavingContext(Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table, string tableAlias)
+        internal RDBGroupByHavingContext(RDBConditionGroup conditionGroup, IRDBTableQuerySource table, string tableAlias)
         {
-            _setCondition = setCondition;
+            _conditionGroup = conditionGroup;
             _table = table;
             _tableAlias = tableAlias;
         }
-
-
-        public RDBGroupByHavingContext()
+        
+        public RDBGroupByHavingContext ChildConditionGroup(RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
-        }
-
-        internal Action<BaseRDBCondition> SetConditionAction
-        {
-            set
-            {
-                _setCondition = value;
-            }
-        }
-
-        internal IRDBTableQuerySource Table
-        {
-            set
-            {
-                _table = value;
-            }
+            var childConditionGroup = new RDBConditionGroup(groupOperator);
+            this._conditionGroup.Conditions.Add(childConditionGroup);
+            return new RDBGroupByHavingContext(childConditionGroup, _table, _tableAlias);
         }
 
         public void CompareCount(RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
         {
-            _setCondition(new RDBCompareCondition
+            _conditionGroup.Conditions.Add(new RDBCompareCondition
             {
                 Expression1 = new RDBCountExpression(),
                 Operator = oper,
@@ -54,12 +40,11 @@ namespace Vanrise.Data.RDB
         {
              CompareCount(oper, new RDBFixedLongExpression { Value = value });
         }
-
-
+        
         public void CompareAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression valueToAggregate, RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
         {
             BaseRDBExpression aggregateExpression = RDBSelectAggregateContext.CreateNonCountAggregate(aggregateType, valueToAggregate);
-            _setCondition(new RDBCompareCondition
+            _conditionGroup.Conditions.Add(new RDBCompareCondition
             {
                 Expression1 = aggregateExpression,
                 Operator = oper,
@@ -80,16 +65,6 @@ namespace Vanrise.Data.RDB
         public void CompareAggregate(RDBNonCountAggregateType aggregateType, string columnName, RDBCompareConditionOperator oper, Decimal value)
         {
              CompareAggregate(aggregateType, _tableAlias, columnName, oper, value);
-        }
-
-        public RDBGroupByHavingAndConditionContext And()
-        {
-            return new RDBGroupByHavingAndConditionContext(_setCondition, _table);
-        }
-
-        public RDBGroupByHavingOrConditionContext Or()
-        {
-            return new RDBGroupByHavingOrConditionContext(_setCondition, _table);
         }
     }
 }

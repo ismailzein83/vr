@@ -13,7 +13,7 @@ namespace Vanrise.Data.RDB
         string _notExistConditionTableAlias;
         string _tableAlias;
 
-        public RDBUpdateQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBUpdateQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }
@@ -22,9 +22,9 @@ namespace Vanrise.Data.RDB
 
         List<RDBUpdateColumn> _columnValues;
 
-        BaseRDBCondition _condition;
+        RDBConditionGroup _conditionGroup;
 
-        BaseRDBCondition _notExistCondition;
+        RDBConditionGroup _notExistConditionGroup;
 
         List<RDBJoin> _joins;
 
@@ -41,10 +41,28 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public RDBConditionContext IfNotExists(string tableAlias)
+        RDBConditionContext _notExistsConditionContext;
+        public RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
             this._notExistConditionTableAlias = tableAlias;
-            return new RDBConditionContext(_queryBuilderContext, (condition) => this._notExistCondition = condition, this._notExistConditionTableAlias);
+            if(_notExistsConditionContext == null)
+            {
+                _notExistConditionGroup = new RDBConditionGroup(groupOperator);
+                _notExistsConditionContext = new RDBConditionContext(_queryBuilderContext, _notExistConditionGroup, this._notExistConditionTableAlias);
+            }
+            else
+            {
+                if (_notExistConditionGroup.Operator != groupOperator)
+                    throw new Exception("IfNotExists method is called multipe times with different values of groupOperator");
+                if(this._notExistConditionTableAlias != tableAlias)
+                    throw new Exception("IfNotExists method is called multipe times with different values of tableAlias");
+            }
+            return _notExistsConditionContext;
+        }
+
+        public RDBExpressionContext Column(string columnName)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
         }
 
         public void ColumnValue(string columnName, BaseRDBExpression value)
@@ -56,79 +74,99 @@ namespace Vanrise.Data.RDB
             });
         }
 
-        public void ColumnValue(string columnName, string value)
-        {
-            this.ColumnValue(columnName, new RDBFixedTextExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, string value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedTextExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, int value)
-        {
-            this.ColumnValue(columnName, new RDBFixedIntExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, int value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedIntExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, long value)
-        {
-            this.ColumnValue(columnName, new RDBFixedLongExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, long value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedLongExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, decimal value)
-        {
-            this.ColumnValue(columnName, new RDBFixedDecimalExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, decimal value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedDecimalExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, float value)
-        {
-            this.ColumnValue(columnName, new RDBFixedFloatExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, float value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedFloatExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, DateTime value)
-        {
-            this.ColumnValue(columnName, new RDBFixedDateTimeExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, DateTime value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedDateTimeExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, bool value)
-        {
-            this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, bool value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, Guid value)
-        {
-            this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, Guid value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
+        //}
 
-        public void ColumnValue(string columnName, byte[] value)
-        {
-            this.ColumnValue(columnName, new RDBFixedBytesExpression { Value = value });
-        }
+        //public void ColumnValue(string columnName, byte[] value)
+        //{
+        //    this.ColumnValue(columnName, new RDBFixedBytesExpression { Value = value });
+        //}
+
+        RDBJoinContext _joinContext;
 
         public RDBJoinContext Join(string tableAlias)
         {
-            this._tableAlias = tableAlias;
-            _queryBuilderContext.AddTableAlias(this._table, tableAlias);
-            this._joins = new List<RDBJoin>();
-            return new RDBJoinContext(_queryBuilderContext, this._joins);
+            if (_joinContext == null)
+            {
+                this._tableAlias = tableAlias;
+                _queryBuilderContext.AddTableAlias(this._table, tableAlias);
+                this._joins = new List<RDBJoin>();
+                _joinContext = new RDBJoinContext(_queryBuilderContext, this._joins, _tableAlias);
+            }
+            return _joinContext;
         }
 
-        public RDBConditionContext Where()
+
+        RDBConditionContext _conditionContext;
+        public RDBConditionContext Where(RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
-            return new RDBConditionContext(_queryBuilderContext, (condition) => this._condition = condition, _tableAlias);
+            if (_conditionContext == null)
+            {
+                _conditionGroup = new RDBConditionGroup(groupOperator);
+                _conditionContext = new RDBConditionContext(_queryBuilderContext, _conditionGroup, this._tableAlias);
+            }
+            else
+            {
+                if (_conditionGroup.Operator != groupOperator)
+                    throw new Exception("Where method is called multipe times with different values of groupOperator");
+            }
+            return _conditionContext;
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            if (this._notExistCondition != null)
+            if (this._notExistConditionGroup != null)
             {
                 var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
                 selectQuery.From(this._table, _notExistConditionTableAlias, 1);
                 selectQuery.SelectColumns().Column(new RDBNullExpression(), "nullColumn");
-                selectQuery.Where().Condition(this._notExistCondition);
+                selectQuery.ConditionGroup = this._notExistConditionGroup;
                 var rdbNotExistsCondition = new RDBNotExistsCondition()
                 {
                     SelectQuery = selectQuery
                 };
+                var conditionGroup = new RDBConditionGroup(RDBConditionGroupOperator.AND);
+                conditionGroup.Conditions.Add(rdbNotExistsCondition);
                 IRDBQueryReady ifQuery = new RDBIfQuery(_queryBuilderContext.CreateChildContext())
                 {
-                    Condition = rdbNotExistsCondition,
+                    ConditionGroup = conditionGroup,
                     _trueQueryText = ResolveUpdateQuery(context).QueryText
                 };
                 return ifQuery.GetResolvedQuery(context);
@@ -141,7 +179,7 @@ namespace Vanrise.Data.RDB
 
         private RDBResolvedQuery ResolveUpdateQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            var resolveUpdateQueryContext = new RDBDataProviderResolveUpdateQueryContext(this._table, this._tableAlias, this._columnValues, this._condition, this._joins, context, _queryBuilderContext);
+            var resolveUpdateQueryContext = new RDBDataProviderResolveUpdateQueryContext(this._table, this._tableAlias, this._columnValues, this._conditionGroup, this._joins, context, _queryBuilderContext);
             return context.DataProvider.ResolveUpdateQuery(resolveUpdateQueryContext);
         }
     }

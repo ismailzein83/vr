@@ -10,7 +10,7 @@ namespace Vanrise.Data.RDB
     { 
         RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBSetParameterValuesQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBSetParameterValuesQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }

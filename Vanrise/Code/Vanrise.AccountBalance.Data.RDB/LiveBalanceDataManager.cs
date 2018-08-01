@@ -111,10 +111,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb");
             selectQuery.SelectColumns().AllTableColumns("lb");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
             
             return queryContext.GetItem(LiveBalanceMapper);
         }
@@ -126,9 +126,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb");
             selectQuery.SelectColumns().AllTableColumns("lb");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
 
             queryContext.ExecuteReader(
                 reader =>
@@ -147,13 +147,13 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb", query.Top);
             selectQuery.SelectColumns().AllTableColumns("lb");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", query.AccountTypeId);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(query.AccountTypeId);
             if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
-                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
+                where.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
             if (query.Sign != null)
-                whereAndCondition.CompareCondition("CurrentBalance", ConvertBalanceCompareSign(query.Sign), query.Balance);
-            AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "lb", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
+                where.CompareCondition("CurrentBalance", ConvertBalanceCompareSign(query.Sign)).Value(query.Balance);
+            AddLiveBalanceActiveAndEffectiveCondition(where, "lb", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
 
             var sortContext = selectQuery.Sort();
             sortContext.ByColumn("CurrentBalance", query.OrderBy == "ASC" ? RDBSortDirection.ASC : RDBSortDirection.DESC);
@@ -213,9 +213,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb");
             selectQuery.SelectColumns().Columns("ID", "AccountID", "CurrencyID", "BED", "EED", "Status");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
 
             return queryContext.GetItems(LiveBalanceAccountInfoMapper);
         }
@@ -235,10 +235,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lv");
             selectQuery.SelectColumns().Columns("ID", "CurrencyID");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
 
             queryContext.ExecuteReader((reader) =>
             {
@@ -256,17 +256,17 @@ namespace Vanrise.AccountBalance.Data.RDB
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
                 insertQuery.GenerateIdAndAssignToParameter("ID");
-                insertQuery.ColumnValue("AccountTypeID", accountTypeId);
-                insertQuery.ColumnValue("AccountID", accountId);
-                insertQuery.ColumnValue("InitialBalance", initialBalance);
-                insertQuery.ColumnValue("CurrentBalance", currentBalance);
-                insertQuery.ColumnValue("CurrencyID", currencyId);
+                insertQuery.Column("AccountTypeID").Value(accountTypeId);
+                insertQuery.Column("AccountID").Value(accountId);
+                insertQuery.Column("InitialBalance").Value(initialBalance);
+                insertQuery.Column("CurrentBalance").Value(currentBalance);
+                insertQuery.Column("CurrencyID").Value(currencyId);
                 if (bed.HasValue)
-                    insertQuery.ColumnValue("BED", bed.Value);
+                    insertQuery.Column("BED").Value(bed.Value);
                 if(eed.HasValue)
-                insertQuery.ColumnValue("EED", eed.Value);
-                insertQuery.ColumnValue("Status", (int)status);
-                insertQuery.ColumnValue("IsDeleted", isDeleted);
+                    insertQuery.Column("EED").Value(eed.Value);
+                insertQuery.Column("Status").Value((int)status);
+                insertQuery.Column("IsDeleted").Value(isDeleted);
                 liveBalanceInfo.LiveBalanceId = queryContext.ExecuteScalar().LongValue;
                 liveBalanceInfo.CurrencyId = currencyId;
             }
@@ -308,12 +308,12 @@ namespace Vanrise.AccountBalance.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.ColumnValue("AccountTypeID", updateEntity.AccountTypeId);
-                    insertQuery.ColumnValue("AccountID", updateEntity.AccountId);
+                    insertQuery.Column("AccountTypeID").Value(updateEntity.AccountTypeId);
+                    insertQuery.Column("AccountID").Value(updateEntity.AccountId);
                     if (updateEntity.NextAlertThreshold.HasValue)
-                        insertQuery.ColumnValue("NextAlertThreshold", updateEntity.NextAlertThreshold.Value);
+                        insertQuery.Column("NextAlertThreshold").Value(updateEntity.NextAlertThreshold.Value);
                     if (updateEntity.AlertRuleId.HasValue)
-                        insertQuery.ColumnValue("AlertRuleID", updateEntity.AlertRuleId.Value);
+                        insertQuery.Column("AlertRuleID").Value(updateEntity.AlertRuleId.Value);
                 }
             }
 
@@ -321,12 +321,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
             
             var joinContext = updateQuery.Join("lb");
-            var joinAndCondition = joinContext.Join(RDBJoinType.Inner, tempTableQuery, "updateEntities").And();
-            joinAndCondition.EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID");
-            joinAndCondition.EqualsCondition("lb", "AccountID", "updateEntities", "AccountID");
+            var joinCondition = joinContext.Join(tempTableQuery, "updateEntities").On();
+            joinCondition.EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID");
+            joinCondition.EqualsCondition("lb", "AccountID", "updateEntities", "AccountID");
 
-            updateQuery.ColumnValue("NextAlertThreshold", new RDBColumnExpression { TableAlias = "updateEntities", ColumnName = "NextAlertThreshold" });
-            updateQuery.ColumnValue("AlertRuleID", new RDBColumnExpression { TableAlias = "updateEntities", ColumnName = "AlertRuleID" });
+            updateQuery.Column("NextAlertThreshold").Column("updateEntities", "NextAlertThreshold");
+            updateQuery.Column("AlertRuleID").Column("updateEntities", "AlertRuleID");
 
             queryContext.ExecuteNonQuery();
         }
@@ -350,12 +350,12 @@ namespace Vanrise.AccountBalance.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.ColumnValue("AccountTypeID", updateEntity.AccountTypeId);
-                    insertQuery.ColumnValue("AccountID", updateEntity.AccountId);
+                    insertQuery.Column("AccountTypeID").Value(updateEntity.AccountTypeId);
+                    insertQuery.Column("AccountID").Value(updateEntity.AccountId);
                     if (updateEntity.LastExecutedActionThreshold.HasValue)
-                        insertQuery.ColumnValue("LastExecutedActionThreshold", updateEntity.LastExecutedActionThreshold.Value);
+                        insertQuery.Column("LastExecutedActionThreshold").Value(updateEntity.LastExecutedActionThreshold.Value);
                     if (updateEntity.ActiveAlertsInfo != null)
-                        insertQuery.ColumnValue("ActiveAlertsInfo", Serializer.Serialize(updateEntity.ActiveAlertsInfo, true));
+                        insertQuery.Column("ActiveAlertsInfo").Value(Serializer.Serialize(updateEntity.ActiveAlertsInfo, true));
                 }
             }
 
@@ -363,12 +363,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
 
             var joinContext = updateQuery.Join("lb");
-            var joinAndCondition = joinContext.Join(RDBJoinType.Inner, tempTableQuery, "updateEntities").And();
-            joinAndCondition.EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID");
-            joinAndCondition.EqualsCondition("lb", "AccountID", "updateEntities", "AccountID");
+            var joinCondition = joinContext.Join(tempTableQuery, "updateEntities").On();
+            joinCondition.EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID");
+            joinCondition.EqualsCondition("lb", "AccountID", "updateEntities", "AccountID");
 
-            updateQuery.ColumnValue("LastExecutedActionThreshold", new RDBColumnExpression { TableAlias = "updateEntities", ColumnName = "LastExecutedActionThreshold" });
-            updateQuery.ColumnValue("ActiveAlertsInfo", new RDBColumnExpression { TableAlias = "updateEntities", ColumnName = "ActiveAlertsInfo" });
+            updateQuery.Column("LastExecutedActionThreshold").Column("updateEntities", "LastExecutedActionThreshold");
+            updateQuery.Column("ActiveAlertsInfo").Column("updateEntities", "ActiveAlertsInfo");
 
             queryContext.ExecuteNonQuery();
         }
@@ -380,10 +380,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb");
             selectQuery.SelectColumns().AllTableColumns("lb");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            AddLiveBalanceToAlertCondition(whereAndCondition, "lb");
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            AddLiveBalanceToAlertCondition(where, "lb");
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
 
             queryContext.ExecuteReader(reader =>
                     {
@@ -401,10 +401,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb");
             selectQuery.SelectColumns().AllTableColumns("lb");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            AddLiveBalanceToClearAlertCondition(whereAndCondition, "lb");
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            AddLiveBalanceToClearAlertCondition(where, "lb");
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
 
             queryContext.ExecuteReader(reader =>
             {
@@ -422,7 +422,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb", 1);
             selectQuery.SelectColumns().Column("ID");
 
-            var whereOrCondition = selectQuery.Where().And();
+            var whereOrCondition = selectQuery.Where();
             AddLiveBalanceToAlertCondition(whereOrCondition, "lb");
             AddLiveBalanceToClearAlertCondition(whereOrCondition, "lb");
 
@@ -440,12 +440,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-           updateQuery.ColumnValue("Status", (int)status);
-           updateQuery.ColumnValue("IsDeleted", isDeleted);
+            updateQuery.Column("Status").Value((int)status);
+           updateQuery.Column("IsDeleted").Value(isDeleted);
 
-            var whereAndCondition = updateQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
+            var where = updateQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -457,13 +457,13 @@ namespace Vanrise.AccountBalance.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
 
             if (bed.HasValue)
-                updateQuery.ColumnValue("BED", bed.Value);
+                updateQuery.Column("BED").Value(bed.Value);
             if (eed.HasValue)
-                updateQuery.ColumnValue("EED", eed.Value);
+                updateQuery.Column("EED").Value(eed.Value);
 
-            var whereAndCondition = updateQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
+            var where = updateQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -472,39 +472,39 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public void JoinLiveBalance(RDBJoinContext joinContext, string liveBalanceAlias, string originalTableAlias)
         {
-            var joinAndCondition = joinContext.Join(RDBJoinType.Left, LiveBalanceDataManager.TABLE_NAME, liveBalanceAlias).And();
-            joinAndCondition.EqualsCondition(liveBalanceAlias, "AccountTypeID", originalTableAlias, "AccountTypeID");
-            joinAndCondition.EqualsCondition(liveBalanceAlias, "AccountID", originalTableAlias, "AccountID");                    
+            var joinStatement = joinContext.Join(LiveBalanceDataManager.TABLE_NAME, liveBalanceAlias);
+            joinStatement.JoinType(RDBJoinType.Left);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(liveBalanceAlias, "AccountTypeID", originalTableAlias, "AccountTypeID");
+            joinCondition.EqualsCondition(liveBalanceAlias, "AccountID", originalTableAlias, "AccountID");                    
         }
 
         public void AddLiveBalanceActiveAndEffectiveCondition(RDBConditionContext conditionContext, string liveBalanceAlias, VRAccountStatus? accountStatus, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
-            var orCondition = conditionContext.Or();
+            var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(liveBalanceAlias, "AccountID");
-            var andCondition = orCondition.And();
+            var andCondition = orCondition.ChildConditionGroup();
 
-            andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "IsDeleted").EqualsCondition(liveBalanceAlias, "IsDeleted", false);
+            andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "IsDeleted").EqualsCondition(liveBalanceAlias, "IsDeleted").Value(false);
             if (accountStatus.HasValue)
-                andCondition.EqualsCondition(liveBalanceAlias, "Status", (int)accountStatus.Value);
+                andCondition.EqualsCondition(liveBalanceAlias, "Status").Value((int)accountStatus.Value);
 
             if (effectiveDate.HasValue)
             {
-                var andCondition2 = andCondition.And();
-                andCondition2.ConditionIfColumnNotNull(liveBalanceAlias, "BED").CompareCondition(liveBalanceAlias, "BED", RDBCompareConditionOperator.LEq, effectiveDate.Value);
-                andCondition2.ConditionIfColumnNotNull(liveBalanceAlias, "EED").CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.G, effectiveDate.Value);
+                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "BED").CompareCondition(liveBalanceAlias, "BED", RDBCompareConditionOperator.LEq).Value(effectiveDate.Value);
+                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.G).Value(effectiveDate.Value);
             }
 
             if(isEffectiveInFuture.HasValue)
             {
                 if(isEffectiveInFuture.Value)
                 {
-                    andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.GEq, new RDBNowDateTimeExpression());
+                    andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.GEq).DateNow();
                 }
                 else
                 {
-                    var andCondition2 = andCondition.And();
-                    andCondition2.NotNullCondition(liveBalanceAlias, "EED");
-                    andCondition2.CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.LEq, new RDBNowDateTimeExpression());
+                    andCondition.NotNullCondition(liveBalanceAlias, "EED");
+                    andCondition.CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.LEq).DateNow();
                 }
             }
         }
@@ -524,8 +524,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             {
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(tempTableQuery);
-                insertQuery.ColumnValue("ID", lvToUpdate.LiveBalanceId);
-                insertQuery.ColumnValue("UpdateValue", lvToUpdate.Value);
+                insertQuery.Column("ID").Value(lvToUpdate.LiveBalanceId);
+                insertQuery.Column("UpdateValue").Value(lvToUpdate.Value);
             }
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
@@ -533,23 +533,20 @@ namespace Vanrise.AccountBalance.Data.RDB
             var joinContext = updateQuery.Join("lv");
             joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "lvToUpdate", "ID", "lv", "ID");
 
-            updateQuery.ColumnValue("CurrentBalance", new RDBArithmeticExpression
-                                    {
-                                        Operator = RDBArithmeticExpressionOperator.Add,
-                                        Expression1 = new RDBColumnExpression { TableAlias = "lv", ColumnName = "CurrentBalance", DontAppendTableAlias = true },
-                                        Expression2 = new RDBColumnExpression { TableAlias = "lvToUpdate", ColumnName = "UpdateValue" }
-                                    });
+            var currentBalanceExpressionContext = updateQuery.Column("CurrentBalance").ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
+            currentBalanceExpressionContext.Expression1().Column("lv", "CurrentBalance", true);
+            currentBalanceExpressionContext.Expression2().Column("lvToUpdate", "UpdateValue");
         }
 
         private void AddLiveBalanceToAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
-            var andCondition = conditionContext.And();
-            andCondition.CompareCondition("CurrentBalance", RDBCompareConditionOperator.LEq, new RDBColumnExpression { TableAlias = liveBalanceAlias, ColumnName = "NextAlertThreshold" });
-            andCondition.ConditionIfColumnNotNull("LastExecutedActionThreshold").CompareCondition("NextAlertThreshold", RDBCompareConditionOperator.L, new RDBColumnExpression { TableAlias = liveBalanceAlias, ColumnName = "LastExecutedActionThreshold" });
+            var andCondition = conditionContext.ChildConditionGroup();
+            andCondition.CompareCondition("CurrentBalance", RDBCompareConditionOperator.LEq).Column(liveBalanceAlias, "NextAlertThreshold");
+            andCondition.ConditionIfColumnNotNull("LastExecutedActionThreshold").CompareCondition("NextAlertThreshold", RDBCompareConditionOperator.L).Column(liveBalanceAlias, "LastExecutedActionThreshold");
         }
         private void AddLiveBalanceToClearAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
-            conditionContext.CompareCondition("CurrentBalance", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = liveBalanceAlias, ColumnName = "LastExecutedActionThreshold" });
+            conditionContext.CompareCondition("CurrentBalance", RDBCompareConditionOperator.G).Column(liveBalanceAlias, "LastExecutedActionThreshold");
         }
 
     }

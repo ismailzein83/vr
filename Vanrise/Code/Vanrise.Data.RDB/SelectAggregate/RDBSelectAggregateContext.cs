@@ -13,7 +13,7 @@ namespace Vanrise.Data.RDB
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        public RDBSelectAggregateContext(List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
+        internal RDBSelectAggregateContext(List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
             _columns = columns;
             _table = table;

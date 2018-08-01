@@ -9,8 +9,8 @@ namespace Vanrise.Data.RDB
     public class RDBParameterDeclarationQuery : BaseRDBQuery
     {
         RDBQueryBuilderContext _queryBuilderContext;
-        
-        public RDBParameterDeclarationQuery(RDBQueryBuilderContext queryBuilderContext)
+
+        internal RDBParameterDeclarationQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }

@@ -58,9 +58,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "usageQueue");
             selectQuery.SelectColumns().AllTableColumns("usageQueue");
 
-            var whereCondition = selectQuery.Where().And();
-            whereCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereCondition.EqualsCondition("QueueType", (int)balanceUsageQueueType);
+            var whereCondition = selectQuery.Where();
+            whereCondition.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            whereCondition.EqualsCondition("QueueType").Value((int)balanceUsageQueueType);
 
             queryContext.ExecuteReader(reader =>
             {
@@ -83,9 +83,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
-            insertQuery.ColumnValue("AccountTypeID", accountTypeId);
-            insertQuery.ColumnValue("QueueType", (int)balanceUsageQueueType);
-            insertQuery.ColumnValue("UsageDetails", binaryArray);
+            insertQuery.Column("AccountTypeID").Value(accountTypeId);
+            insertQuery.Column("QueueType").Value((int)balanceUsageQueueType);
+            insertQuery.Column("UsageDetails").Value(binaryArray);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -96,7 +96,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "usageQueue", 1);
             selectQuery.SelectColumns().Column("ID");
 
-            selectQuery.Where().EqualsCondition("AccountTypeID", accountTypeId);
+            selectQuery.Where().EqualsCondition("AccountTypeID").Value(accountTypeId);
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -107,7 +107,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("ID", balanceUsageQueueId);
+            deleteQuery.Where().EqualsCondition("ID").Value(balanceUsageQueueId);
         }
     }
 }

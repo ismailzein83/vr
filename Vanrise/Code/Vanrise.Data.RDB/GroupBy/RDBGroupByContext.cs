@@ -13,7 +13,7 @@ namespace Vanrise.Data.RDB
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        public RDBGroupByContext(RDBQueryBuilderContext queryBuilderContext, RDBGroupBy groupBy, IRDBTableQuerySource table, string tableAlias)
+        internal RDBGroupByContext(RDBQueryBuilderContext queryBuilderContext, RDBGroupBy groupBy, IRDBTableQuerySource table, string tableAlias)
         {
             _queryBuilderContext = queryBuilderContext;
             _groupBy = groupBy;
@@ -21,21 +21,38 @@ namespace Vanrise.Data.RDB
             _tableAlias = tableAlias;
         }
 
+        RDBSelectColumnsContext _selectColumnsContext;
         public RDBSelectColumnsContext Select()
+        {
+            if (_selectColumnsContext != null)
             {
-                return new RDBSelectColumnsContext(_queryBuilderContext, _groupBy.Columns, _table, _tableAlias);
+                _groupBy.Columns = new List<RDBSelectColumn>();
+                _selectColumnsContext = new RDBSelectColumnsContext(_queryBuilderContext, _groupBy.Columns, _table, _tableAlias);
             }
-        
+            return _selectColumnsContext;
+        }
 
-       public RDBSelectAggregateContext SelectAggregates()
+        RDBSelectAggregateContext _selectAggregatesContext;
+        public RDBSelectAggregateContext SelectAggregates()
+        {
+            if (_selectAggregatesContext == null)
             {
-                return new RDBSelectAggregateContext(_groupBy.AggregateColumns, _table, _tableAlias);
+                _groupBy.AggregateColumns = new List<RDBSelectColumn>();
+                _selectAggregatesContext = new RDBSelectAggregateContext(_groupBy.AggregateColumns, _table, _tableAlias);
             }
-        
+            return _selectAggregatesContext;
+        }
 
-        public RDBGroupByHavingContext Having()
+        RDBGroupByHavingContext _havingContext;
+        public RDBGroupByHavingContext Having(RDBConditionGroupOperator conditionGroupOperator = RDBConditionGroupOperator.AND)
+        {
+            if (_havingContext == null)
             {
-                return new RDBGroupByHavingContext((condition) => _groupBy.HavingCondition = condition, _table, _tableAlias);
+                var conditionGroup = new RDBConditionGroup(conditionGroupOperator);
+                _groupBy.HavingCondition = conditionGroup;
+                _havingContext = new RDBGroupByHavingContext(conditionGroup, _table, _tableAlias);
             }
+            return _havingContext;
+        }
     }
 }

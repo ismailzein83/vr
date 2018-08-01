@@ -7,7 +7,7 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBColumnExpression : BaseRDBExpression
+    internal class RDBColumnExpression : BaseRDBExpression
     {
         public string TableAlias { get; set; }
 
@@ -28,7 +28,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedTextExpression : BaseRDBExpression
+    internal class RDBFixedTextExpression : BaseRDBExpression
     {
         public string Value { get; set; }
 
@@ -47,7 +47,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedIntExpression : BaseRDBExpression
+    internal class RDBFixedIntExpression : BaseRDBExpression
     {
         public int Value { get; set; }
 
@@ -57,7 +57,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedLongExpression : BaseRDBExpression
+    internal class RDBFixedLongExpression : BaseRDBExpression
     {
         public long Value { get; set; }
 
@@ -67,7 +67,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedDecimalExpression : BaseRDBExpression
+    internal class RDBFixedDecimalExpression : BaseRDBExpression
     {
         public Decimal Value { get; set; }
 
@@ -77,7 +77,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedFloatExpression : BaseRDBExpression
+    internal class RDBFixedFloatExpression : BaseRDBExpression
     {
         public float Value { get; set; }
 
@@ -87,7 +87,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedDateTimeExpression : BaseRDBExpression
+    internal class RDBFixedDateTimeExpression : BaseRDBExpression
     {
         public DateTime Value { get; set; }
 
@@ -106,7 +106,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedGuidExpression : BaseRDBExpression
+    internal class RDBFixedGuidExpression : BaseRDBExpression
     {
         public Guid Value { get; set; }
 
@@ -125,7 +125,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedBooleanExpression : BaseRDBExpression
+    internal class RDBFixedBooleanExpression : BaseRDBExpression
     {
         public bool Value { get; set; }
 
@@ -144,7 +144,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBFixedBytesExpression : BaseRDBExpression
+    internal class RDBFixedBytesExpression : BaseRDBExpression
     {
         public byte[] Value { get; set; }
 
@@ -163,7 +163,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNowDateTimeExpression : BaseRDBExpression
+    internal class RDBNowDateTimeExpression : BaseRDBExpression
     {
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
@@ -172,7 +172,7 @@ namespace Vanrise.Data.RDB
     }
 
     public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2 }
-    public class RDBDateTimePartExpression : BaseRDBExpression
+    internal class RDBDateTimePartExpression : BaseRDBExpression
     {
         public BaseRDBExpression DateTimeExpression { get; set; }
 
@@ -190,7 +190,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBCaseExpression : BaseRDBExpression
+    internal class RDBCaseExpression : BaseRDBExpression
     {
         public List<RDBCaseWhenExpression> Whens { get; set; }
 
@@ -220,7 +220,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBCaseWhenExpression
+    internal class RDBCaseWhenExpression
     {
         public BaseRDBCondition Condition { get; set; }
 
@@ -230,7 +230,7 @@ namespace Vanrise.Data.RDB
 
     public enum RDBArithmeticExpressionOperator { Add = 0, Substract = 1, Multiply = 2, Divide = 3 }
 
-    public class RDBArithmeticExpression : BaseRDBExpression
+    internal class RDBArithmeticExpression : BaseRDBExpression
     {
         public BaseRDBExpression Expression1 { get; set; }
 
@@ -254,7 +254,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNullExpression : BaseRDBExpression
+    internal class RDBNullExpression : BaseRDBExpression
     {
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
@@ -262,7 +262,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBCountExpression : BaseRDBExpression
+    internal class RDBCountExpression : BaseRDBExpression
     {
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
@@ -270,7 +270,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBSumExpression : BaseRDBExpression
+    internal class RDBSumExpression : BaseRDBExpression
     {
         public BaseRDBExpression Expression { get; set; }
 
@@ -280,7 +280,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBAvgExpression : BaseRDBExpression
+    internal class RDBAvgExpression : BaseRDBExpression
     {
         public BaseRDBExpression Expression { get; set; }
 
@@ -290,7 +290,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBMaxExpression : BaseRDBExpression
+    internal class RDBMaxExpression : BaseRDBExpression
     {
         public BaseRDBExpression Expression { get; set; }
 
@@ -300,7 +300,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBMinExpression : BaseRDBExpression
+    internal class RDBMinExpression : BaseRDBExpression
     {
         public BaseRDBExpression Expression { get; set; }
 
@@ -310,7 +310,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBParameterExpression : BaseRDBExpression
+    internal class RDBParameterExpression : BaseRDBExpression
     {
         public string ParameterName { get; set; }
 

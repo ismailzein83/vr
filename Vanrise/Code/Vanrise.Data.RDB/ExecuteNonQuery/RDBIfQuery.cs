@@ -11,12 +11,12 @@ namespace Vanrise.Data.RDB
     {
         RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBIfQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBIfQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }
 
-        internal BaseRDBCondition Condition { get; set; }
+        internal RDBConditionGroup ConditionGroup { get; set; }
 
         internal string _trueQueryText;
 
@@ -28,7 +28,7 @@ namespace Vanrise.Data.RDB
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(" IF ");
             var conditionContext = new RDBConditionToDBQueryContext(context, _queryBuilderContext);
-            queryBuilder.AppendLine(this.Condition.ToDBQuery(conditionContext));
+            queryBuilder.AppendLine(this.ConditionGroup.ToDBQuery(conditionContext));
             queryBuilder.AppendLine(" BEGIN ");
             if (this._trueQueryText != null)
             {
@@ -54,11 +54,21 @@ namespace Vanrise.Data.RDB
             };
         }
 
-        public RDBConditionContext IfCondition()
+        RDBConditionContext _conditionContext;
+        public RDBConditionContext IfCondition(RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
-            return new RDBConditionContext(_queryBuilderContext, (condition) => this.Condition = condition, null);
+            if (_conditionContext == null)
+            {
+                ConditionGroup = new RDBConditionGroup(groupOperator);
+                _conditionContext = new RDBConditionContext(_queryBuilderContext, ConditionGroup, null);
+            }
+            else
+            {
+                if (ConditionGroup.Operator != groupOperator)
+                    throw new Exception("IfCondition method is called multipe times with different values of groupOperator");
+            }
+            return _conditionContext;
         }
-
 
         public RDBQueryContext ThenQuery()
         {

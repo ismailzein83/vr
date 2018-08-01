@@ -14,7 +14,7 @@ namespace Vanrise.Data.RDB
 
         RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBTempTableQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBTempTableQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }
@@ -32,8 +32,6 @@ namespace Vanrise.Data.RDB
             _tempTableName = resolveQueryContext.TempTableName;
             return resolvedQuery;
         }
-
-        
 
         public string GetUniqueName()
         {

@@ -73,11 +73,11 @@ namespace Vanrise.Invoice.Data.RDB
                         {
                             var insertQuery = queryContext.AddInsertQuery();
                             insertQuery.IntoTable(TABLE_NAME);
-                            insertQuery.ColumnValue("InvoiceID", invoiceId);
-                            insertQuery.ColumnValue("ItemSetName", itemSet.SetName);
-                            insertQuery.ColumnValue("Name", item.Name);
+                            insertQuery.Column("InvoiceID").Value(invoiceId);
+                            insertQuery.Column("ItemSetName").Value(itemSet.SetName);
+                            insertQuery.Column("Name").Value(item.Name);
                             string serializedDetails = Vanrise.Common.Serializer.Serialize(item.Details);
-                            insertQuery.ColumnValue("Details", serializedDetails);
+                            insertQuery.Column("Details").Value(serializedDetails);
                         }
                     }
                 }

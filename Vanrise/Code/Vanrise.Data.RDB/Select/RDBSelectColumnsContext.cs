@@ -14,7 +14,7 @@ namespace Vanrise.Data.RDB
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        public RDBSelectColumnsContext(RDBQueryBuilderContext queryBuilderContext, List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
+        internal RDBSelectColumnsContext(RDBQueryBuilderContext queryBuilderContext, List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
             _queryBuilderContext = queryBuilderContext;
             _columns = columns;
@@ -22,16 +22,15 @@ namespace Vanrise.Data.RDB
             _tableAlias = tableAlias;
         }
 
-        public RDBSelectColumnsContext Columns(params string[] columnNames)
+        public void Columns(params string[] columnNames)
         {
             foreach (var colName in columnNames)
             {
                 Column(colName);
             }
-            return this;
         }
 
-        public RDBSelectColumnsContext AllTableColumns(string tableAlias)
+        public void AllTableColumns(string tableAlias)
         {
             var tableQuerySource = _queryBuilderContext.GetTableFromAlias(tableAlias);
             RDBTableDefinitionQuerySource table = tableQuerySource.CastWithValidate<RDBTableDefinitionQuerySource>("tableQuerySource", tableAlias);
@@ -39,20 +38,18 @@ namespace Vanrise.Data.RDB
             {
                 Column(tableAlias, colName, colName);
             }
-            return this;
         }
 
-        public RDBSelectColumnsContext Column(BaseRDBExpression expression, string alias)
+        public void Column(BaseRDBExpression expression, string alias)
         {
             _columns.Add(new RDBSelectColumn
             {
                 Expression = expression,
                 Alias = alias
             });
-            return this;
         }
 
-        public RDBSelectColumnsContext ColumnToParameter(BaseRDBExpression expression, string parameterName)
+        public void ColumnToParameter(BaseRDBExpression expression, string parameterName)
         {
             string dbParameterName = _queryBuilderContext.DataProvider.ConvertToDBParameterName(parameterName);
             _columns.Add(new RDBSelectColumn
@@ -60,92 +57,46 @@ namespace Vanrise.Data.RDB
                 Expression = expression,
                 SetDBParameterName = dbParameterName
             });
-            return this;
         }
 
-        public RDBSelectColumnsContext Column(string tableAlias, string columnName, string alias)
+        public void Column(string tableAlias, string columnName, string alias)
         {
-            return Column(new RDBColumnExpression
-            {
-                TableAlias = tableAlias,
-                ColumnName = columnName
-            },
-                     alias);
+            Column(new RDBColumnExpression
+           {
+               TableAlias = tableAlias,
+               ColumnName = columnName
+           },
+                    alias);
         }
 
-        public RDBSelectColumnsContext ColumnToParameter(string tableAlias, string columnName, string parameterName)
+        public void ColumnToParameter(string tableAlias, string columnName, string parameterName)
         {
-            return ColumnToParameter(new RDBColumnExpression
-            {
-                TableAlias = tableAlias,
-                ColumnName = columnName
-            },
-                     parameterName);
+            ColumnToParameter(new RDBColumnExpression
+           {
+               TableAlias = tableAlias,
+               ColumnName = columnName
+           },
+                    parameterName);
         }
 
-        //public RDBSelectColumnsContext Column(string tableName, string columnName, string alias)
-        //{
-        //    return Column(new RDBTableDefinitionQuerySource(tableName), columnName, alias);
-        //}
-
-        public RDBSelectColumnsContext Column(string columnName, string alias)
+        public void Column(string columnName, string alias)
         {
-            return Column(this._tableAlias, columnName, alias);
+            Column(this._tableAlias, columnName, alias);
         }
 
-        public RDBSelectColumnsContext ColumnToParameter(string columnName, string parameterName)
+        public void ColumnToParameter(string columnName, string parameterName)
         {
-            return ColumnToParameter(this._tableAlias, columnName, parameterName);
+            ColumnToParameter(this._tableAlias, columnName, parameterName);
         }
 
-        public RDBSelectColumnsContext Column(string columnName)
+        public void Column(string columnName)
         {
-            return Column(columnName, columnName);
+            Column(columnName, columnName);
         }
 
-        public RDBSelectColumnsContext Parameter(string parameterName, string alias)
+        public RDBExpressionContext Expression(string alias)
         {
-            return Column(new RDBParameterExpression { ParameterName = parameterName }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(string value, string alias)
-        {
-            return Column(new RDBFixedTextExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(int value, string alias)
-        {
-            return Column(new RDBFixedIntExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(long value, string alias)
-        {
-            return Column(new RDBFixedLongExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(Decimal value, string alias)
-        {
-            return Column(new RDBFixedDecimalExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(float value, string alias)
-        {
-            return Column(new RDBFixedFloatExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(DateTime value, string alias)
-        {
-            return Column(new RDBFixedDateTimeExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(bool value, string alias)
-        {
-            return Column(new RDBFixedBooleanExpression { Value = value }, alias);
-        }
-
-        public RDBSelectColumnsContext FixedValue(Guid value, string alias)
-        {
-            return Column(new RDBFixedGuidExpression { Value = value }, alias);
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => Column(exp, alias), _tableAlias);
         }
     }
 }

@@ -11,45 +11,61 @@ namespace Vanrise.Data.RDB
         RDBQueryBuilderContext _queryBuilderContext;
         string _tableAlias;
 
-        public RDBDeleteQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBDeleteQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public IRDBTableQuerySource Table { get; private set; }
+        IRDBTableQuerySource _table;
 
-        public BaseRDBCondition Condition { get; private set; }
+        RDBConditionGroup _conditionGroup;
 
-        public List<RDBJoin> Joins { get; private set; }
+        List<RDBJoin> _joins;
 
-        public RDBDeleteQuery FromTable(IRDBTableQuerySource table)
+        public void FromTable(IRDBTableQuerySource table)
         {
-            this.Table = table; 
+            this._table = table; 
             _queryBuilderContext.SetMainQueryTable(table);
-            return this;
         }
 
-        public RDBDeleteQuery FromTable(string tableName)
+        public void FromTable(string tableName)
         {
-            return FromTable(new RDBTableDefinitionQuerySource(tableName));
+            FromTable(new RDBTableDefinitionQuerySource(tableName));
         }
+
+        RDBJoinContext _joinContext;
 
         public RDBJoinContext Join(string tableAlias)
         {
-            this._tableAlias = tableAlias;
-            _queryBuilderContext.AddTableAlias(this.Table, tableAlias);
-            this.Joins = new List<RDBJoin>();
-            return new RDBJoinContext(_queryBuilderContext, this.Joins);
+            if (_joinContext == null)
+            {
+                this._tableAlias = tableAlias;
+                _queryBuilderContext.AddTableAlias(this._table, tableAlias);
+                this._joins = new List<RDBJoin>();
+                _joinContext = new RDBJoinContext(_queryBuilderContext, this._joins, _tableAlias);
+            }
+            return _joinContext;
         }
 
-        public RDBConditionContext Where()
+        RDBConditionContext _conditionContext;
+        public RDBConditionContext Where(RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
-            return new RDBConditionContext(_queryBuilderContext, (condition) => this.Condition = condition, _tableAlias);
+            if (_conditionContext == null)
+            {
+                _conditionGroup = new RDBConditionGroup(groupOperator);
+                _conditionContext = new RDBConditionContext(_queryBuilderContext, _conditionGroup, this._tableAlias);
+            }
+            else
+            {
+                if (_conditionGroup.Operator != groupOperator)
+                    throw new Exception("Where method is called multipe times with different values of groupOperator");
+            }
+            return _conditionContext;
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            var resolveDeleteQueryContext = new RDBDataProviderResolveDeleteQueryContext(this.Table, this._tableAlias, this.Condition, this.Joins, context, _queryBuilderContext);
+            var resolveDeleteQueryContext = new RDBDataProviderResolveDeleteQueryContext(this._table, this._tableAlias, this._conditionGroup, this._joins, context, _queryBuilderContext);
             return context.DataProvider.ResolveDeleteQuery(resolveDeleteQueryContext);
         }
     }

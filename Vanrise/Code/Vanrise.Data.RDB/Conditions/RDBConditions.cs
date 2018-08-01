@@ -8,7 +8,7 @@ namespace Vanrise.Data.RDB
 {
     public enum RDBCompareConditionOperator { Eq = 0, NEq = 1, G = 2, GEq = 3, L = 4, LEq = 5, Contains = 6, NotContains = 7, StartWith = 8, NotStartWith = 9, EndWith = 10, NotEndWith = 11 }
 
-    public class RDBCompareCondition : BaseRDBCondition
+    internal class RDBCompareCondition : BaseRDBCondition
     {
         public BaseRDBExpression Expression1 { get; set; }
 
@@ -60,7 +60,7 @@ namespace Vanrise.Data.RDB
 
     public enum RDBListConditionOperator { IN = 0, NotIN = 1 }
 
-    public class RDBListCondition : BaseRDBCondition
+    internal class RDBListCondition : BaseRDBCondition
     {
         public BaseRDBExpression Expression { get; set; }
 
@@ -75,41 +75,18 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public abstract class BaseRDBGroupCondition : BaseRDBCondition
-    {
-        public List<BaseRDBCondition> Conditions { get; set; }
-    }
-
-    public class RDBAndCondition : BaseRDBGroupCondition
-    {
-        public override string ToDBQuery(IRDBConditionToDBQueryContext context)
-        {
-            List<string> validConditionsAsStrings = this.Conditions.Select(itm => itm.ToDBQuery(context)).Where(itm => !String.IsNullOrEmpty(itm)).ToList();
-            if (validConditionsAsStrings.Count > 0)
-                return string.Concat(" (", string.Join(" AND ", validConditionsAsStrings), ") ");
-            else
-                return null;
-        }
-    }
-
-    public class RDBOrCondition : BaseRDBGroupCondition
-    {
-        public override string ToDBQuery(IRDBConditionToDBQueryContext context)
-        {
-            List<string> validConditionsAsStrings = this.Conditions.Select(itm => itm.ToDBQuery(context)).Where(itm => !String.IsNullOrEmpty(itm)).ToList();
-            if (validConditionsAsStrings.Count > 0)
-                return string.Concat(" (", string.Join(" OR ", validConditionsAsStrings), ") ");
-            else
-                return null;
-        }
-    }
-
     public enum RDBConditionGroupOperator {  AND = 0, OR = 1}
-    public class RDBConditionGroup : BaseRDBCondition
+    internal class RDBConditionGroup : BaseRDBCondition
     {
-        public RDBConditionGroupOperator Operator { get; set; }
+        public RDBConditionGroup(RDBConditionGroupOperator groupOperator)
+        {
+            this.Operator = groupOperator;
+            this.Conditions = new List<BaseRDBCondition>();
+        }
+
+        public RDBConditionGroupOperator Operator { get; private set; }
         
-        public List<BaseRDBCondition> Conditions { get; set; }
+        public List<BaseRDBCondition> Conditions { get; private set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
@@ -130,7 +107,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNullCondition : BaseRDBCondition
+    internal class RDBNullCondition : BaseRDBCondition
     {
         public BaseRDBExpression Expression { get; set; }
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
@@ -140,7 +117,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNotNullCondition : BaseRDBCondition
+    internal class RDBNotNullCondition : BaseRDBCondition
     {
         public BaseRDBExpression Expression { get; set; }
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
@@ -150,7 +127,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBExistsCondition : BaseRDBCondition
+    internal class RDBExistsCondition : BaseRDBCondition
     {
         public RDBSelectQuery SelectQuery { get; set; }
 
@@ -161,7 +138,7 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNotExistsCondition : BaseRDBCondition
+    internal class RDBNotExistsCondition : BaseRDBCondition
     {
         public RDBSelectQuery SelectQuery { get; set; }
 
@@ -171,13 +148,4 @@ namespace Vanrise.Data.RDB
             return string.Concat(" NOT EXISTS (", selectQueryAsDB, ")");
         }
     }
-
-    public class RDBAlwaysTrueCondition : BaseRDBCondition
-    {
-        public override string ToDBQuery(IRDBConditionToDBQueryContext context)
-        {
-            return " 1 = 1 ";
-        }
-    }
-
 }

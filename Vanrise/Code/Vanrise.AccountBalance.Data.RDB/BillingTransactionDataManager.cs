@@ -100,17 +100,17 @@ namespace Vanrise.AccountBalance.Data.RDB
             var joinContext = selectQuery.Join();
             liveBalanceDataManager.JoinLiveBalance(joinContext, "liveBalance", "bt");
             
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
             if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
-                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
+                where.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
             if (query.TransactionTypeIds != null && query.TransactionTypeIds.Count() > 0)
-                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, query.TransactionTypeIds);
-            whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, query.FromTime);
+                where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, query.TransactionTypeIds);
+            where.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq).Value(query.FromTime);
             if (query.ToTime.HasValue)
-                whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, query.ToTime.Value);
-            whereAndCondition.EqualsCondition("AccountTypeID", query.AccountTypeId);
-            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "liveBalance", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
+                where.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq).Value(query.ToTime.Value);
+            where.EqualsCondition("AccountTypeID").Value(query.AccountTypeId);
+            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(where, "liveBalance", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
             
             return queryContext.GetItems(BillingTransactionMapper);
         }
@@ -130,9 +130,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "bt");
             selectQuery.SelectColumns().AllTableColumns("bt");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            AddBillingTransactionsToUpdateBalanceCondition(whereAndCondition);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            AddBillingTransactionsToUpdateBalanceCondition(where);
 
             queryContext.ExecuteReader((reader) =>
             {
@@ -150,12 +150,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "bt");
             selectQuery.SelectColumns().AllTableColumns("bt");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
-            whereAndCondition.NotNullCondition("SourceID");
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.NotNullCondition("SourceID");
             if (billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0)
-                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds);
+                where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds);
 
             return queryContext.GetItems(BillingTransactionMapper);
         }
@@ -167,13 +167,13 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "bt");
             selectQuery.SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
             if (accountIds != null && accountIds.Count() > 0)
-                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+                where.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
-                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+                where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
             
             return queryContext.GetItems(BillingTransactionMetaDataMapper);
         }
@@ -193,8 +193,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             {
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(btAccountTimesTempTableQuery);
-                insertQuery.ColumnValue("AccountID", item.AccountId);
-                insertQuery.ColumnValue("TransactionTime", item.TransactionTime);
+                insertQuery.Column("AccountID").Value(item.AccountId);
+                insertQuery.Column("TransactionTime").Value(item.TransactionTime);
             }
 
             var selectQuery = queryContext.AddSelectQuery();
@@ -202,16 +202,15 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID");
 
             var joinContext = selectQuery.Join();
-            var joinCondition = joinContext.Join(RDBJoinType.Inner, btAccountTimesTempTableQuery, "btAccountTimes");
-            var joinAndCondition = joinCondition.And();
-            joinAndCondition.EqualsCondition("bt", "AccountID", new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "AccountID" });
-            joinAndCondition.CompareCondition("bt", "TransactionTime", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "TransactionTime" });
+            var joinCondition = joinContext.Join(btAccountTimesTempTableQuery, "btAccountTimes").On();
+            joinCondition.EqualsCondition("AccountID").Column("btAccountTimes", "AccountID");
+            joinCondition.CompareCondition("bt", "TransactionTime", RDBCompareConditionOperator.G).Column("btAccountTimes", "TransactionTime");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
-                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+                where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
 
             return queryContext.GetItems(BillingTransactionMetaDataMapper);
         }
@@ -227,11 +226,11 @@ namespace Vanrise.AccountBalance.Data.RDB
             var joinContext = selectQuery.Join();
             liveBalanceDataManager.JoinLiveBalance(joinContext, "liveBalance", "bt");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
-            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(whereAndCondition, "liveBalance", status, effectiveDate, isEffectiveInFuture);
+            var where = selectQuery.Where();
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
+            liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(where, "liveBalance", status, effectiveDate, isEffectiveInFuture);
 
             return queryContext.GetItems(BillingTransactionMapper);
 
@@ -244,17 +243,17 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "bt");
             selectQuery.SelectColumns().AllTableColumns("bt");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
             if (accountTypeIds != null && accountTypeIds.Count() > 0)
-                whereAndCondition.ListCondition("AccountTypeID", RDBListConditionOperator.IN, accountTypeIds);
+                where.ListCondition("AccountTypeID", RDBListConditionOperator.IN, accountTypeIds);
             if (accountIds != null && accountIds.Count() > 0)
-                whereAndCondition.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
+                where.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
-                whereAndCondition.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
-            whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, fromDate);
+                where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
+            where.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq).Value(fromDate);
             if (!toDate.HasValue)
-                whereAndCondition.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, toDate.Value);
+                where.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq).Value(toDate.Value);
 
             return queryContext.GetItems(BillingTransactionMapper);
         }
@@ -266,10 +265,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "bt", 1);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
-            whereAndCondition.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
+            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
 
             var sortContext = selectQuery.Sort();
             sortContext.ByColumn("TransactionTime", RDBSortDirection.DESC);
@@ -284,9 +283,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "bt", 1);
             selectQuery.SelectColumns().Column("ID");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            AddBillingTransactionsToUpdateBalanceCondition(whereAndCondition);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            AddBillingTransactionsToUpdateBalanceCondition(where);
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue; 
         }
@@ -299,43 +298,43 @@ namespace Vanrise.AccountBalance.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             if (generateId)
                 insertQuery.GenerateIdAndAssignToParameter("BillingTransactionId");
-            insertQuery.ColumnValue("AccountID", billingTransaction.AccountId);
-            insertQuery.ColumnValue("AccountTypeID", billingTransaction.AccountTypeId);
-            insertQuery.ColumnValue("Amount", billingTransaction.Amount);
-            insertQuery.ColumnValue("CurrencyId", billingTransaction.CurrencyId);
-            insertQuery.ColumnValue("TransactionTypeID", billingTransaction.TransactionTypeId);
-            insertQuery.ColumnValue("TransactionTime", billingTransaction.TransactionTime);
-            insertQuery.ColumnValue("Notes", billingTransaction.Notes);
-            insertQuery.ColumnValue("Reference", billingTransaction.Reference);
-            insertQuery.ColumnValue("SourceID", billingTransaction.SourceId);
+            insertQuery.Column("AccountID").Value(billingTransaction.AccountId);
+            insertQuery.Column("AccountTypeID").Value(billingTransaction.AccountTypeId);
+            insertQuery.Column("Amount").Value(billingTransaction.Amount);
+            insertQuery.Column("CurrencyId").Value(billingTransaction.CurrencyId);
+            insertQuery.Column("TransactionTypeID").Value(billingTransaction.TransactionTypeId);
+            insertQuery.Column("TransactionTime").Value(billingTransaction.TransactionTime);
+            insertQuery.Column("Notes").Value(billingTransaction.Notes);
+            insertQuery.Column("Reference").Value(billingTransaction.Reference);
+            insertQuery.Column("SourceID").Value(billingTransaction.SourceId);
             if (billingTransaction.Settings != null)
             {
                 string serializedSettings = Vanrise.Common.Serializer.Serialize(billingTransaction.Settings);
-                insertQuery.ColumnValue("Settings", serializedSettings);
+                insertQuery.Column("Settings").Value(serializedSettings);
             }
             if (createdByInvoiceId.HasValue)
-                insertQuery.ColumnValue("CreatedByInvoiceID", createdByInvoiceId.Value);
+                insertQuery.Column("CreatedByInvoiceID").Value(createdByInvoiceId.Value);
         }
 
         private void AddBillingTransactionsToUpdateBalanceCondition(RDBConditionContext conditionContext)
         {
-            var orCondition = conditionContext.Or();
-            var andCondition1 = orCondition.And();
-            andCondition1.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false);
-            andCondition1.ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", false);
-            var andCondition2 = orCondition.Or();
+            var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            var andCondition1 = orCondition.ChildConditionGroup();
+            andCondition1.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            andCondition1.ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated").Value(false);
+            var andCondition2 = orCondition.ChildConditionGroup();
             andCondition2.NotNullCondition("IsDeleted");
-            andCondition2.EqualsCondition("IsDeleted", true);
+            andCondition2.EqualsCondition("IsDeleted").Value(true);
             andCondition2.NotNullCondition("IsBalanceUpdated");
-            andCondition2.EqualsCondition("IsBalanceUpdated", true);
-            andCondition2.ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance", false);
+            andCondition2.EqualsCondition("IsBalanceUpdated").Value(true);
+            andCondition2.ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance").Value(false);
         }
 
         public void AddQuerySetBillingTransactionsAsBalanceUpdated(RDBQueryContext queryContext, IEnumerable<long> billingTransactionIds)
         {
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(BillingTransactionDataManager.TABLE_NAME);
-            updateQuery.ColumnValue("IsBalanceUpdated", true);
+            updateQuery.Column("IsBalanceUpdated").Value(true);
             updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, billingTransactionIds);
         }
 
@@ -343,7 +342,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.ColumnValue("IsSubtractedFromBalance", true);
+            updateQuery.Column("IsSubtractedFromBalance").Value(true);
             updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, billingTransactionIds);
         }
 
@@ -351,10 +350,10 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.ColumnValue("IsDeleted", true);
-            var whereAndCondition = updateQuery.Where().And();
-            whereAndCondition.NotNullCondition("CreatedByInvoiceID");
-            whereAndCondition.EqualsCondition("CreatedByInvoiceID", invoiceId);
+            updateQuery.Column("IsDeleted").Value(true);
+            var where = updateQuery.Where();
+            where.NotNullCondition("CreatedByInvoiceID");
+            where.EqualsCondition("CreatedByInvoiceID").Value(invoiceId);
         }
 
     }

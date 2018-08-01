@@ -48,12 +48,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             {
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.ColumnValue("AccountTypeID", accountUsageOverride.AccountTypeId);
-                insertQuery.ColumnValue("AccountID", accountUsageOverride.AccountId);
-                insertQuery.ColumnValue("TransactionTypeID", accountUsageOverride.TransactionTypeId);
-                insertQuery.ColumnValue("PeriodStart", accountUsageOverride.PeriodStart);
-                insertQuery.ColumnValue("PeriodEnd", accountUsageOverride.PeriodEnd);
-                insertQuery.ColumnValue("OverriddenByTransactionID", accountUsageOverride.OverriddenByTransactionId);
+                insertQuery.Column("AccountTypeID").Value(accountUsageOverride.AccountTypeId);
+                insertQuery.Column("AccountID").Value(accountUsageOverride.AccountId);
+                insertQuery.Column("TransactionTypeID").Value(accountUsageOverride.TransactionTypeId);
+                insertQuery.Column("PeriodStart").Value(accountUsageOverride.PeriodStart);
+                insertQuery.Column("PeriodEnd").Value(accountUsageOverride.PeriodEnd);
+                insertQuery.Column("OverriddenByTransactionID").Value(accountUsageOverride.OverriddenByTransactionId);
             }
         }
 
@@ -71,12 +71,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(AccountUsageOverrideDataManager.TABLE_NAME, "au_override", 1);
             selectQuery.SelectColumns().Column("ID");
 
-            var whereAndCondition = selectQuery.Where().And();
-            whereAndCondition.EqualsCondition("AccountTypeID", accountTypeId);
-            whereAndCondition.EqualsCondition("AccountID", accountId);
-            whereAndCondition.EqualsCondition("TransactionTypeID", transactionTypeId);
-            whereAndCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq, periodStart);
-            whereAndCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.GEq, periodEnd);
+            var where = selectQuery.Where();
+            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition("AccountID").Value(accountId);
+            where.EqualsCondition("TransactionTypeID").Value(transactionTypeId);
+            where.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq).Value(periodStart);
+            where.CompareCondition("PeriodEnd", RDBCompareConditionOperator.GEq).Value(periodEnd);
 
             return  queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
