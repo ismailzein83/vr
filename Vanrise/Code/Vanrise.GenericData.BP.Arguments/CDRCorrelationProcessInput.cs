@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.BP.Arguments
 
         public TimeSpan DurationMargin { get; set; }
 
+        public TimeSpan BatchIntervalTime { get; set; }
+
         public Guid CDRCorrelationDefinitionId { get; set; }
 
         public override string GetTitle()
