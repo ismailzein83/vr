@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'UtilsService', 'VRDateTimeService'];
+    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_ReoccurDealService', 'UtilsService', 'VRDateTimeService'];
 
-    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, UtilsService, VRDateTimeService) {
+    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, WhS_Deal_ReoccurDealService, UtilsService, VRDateTimeService) {
         return {
             restrict: 'E',
             scope: {
@@ -78,7 +78,7 @@
                         && dataItem.SubscriberStatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description
                         && dataItem.Entity.Settings.BeginDate > UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())) {
                         menuAction = {
-                            name: "View",
+                            name: 'View',
                             clicked: viewDeal,
                         };
                     }
@@ -90,6 +90,13 @@
                         };
                     }
                     menuActions.push(menuAction);
+                    if (dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description && dataItem.Entity.Settings.IsReoccurrable == true) {
+                        var reoccurMenuAction = {
+                            name: 'Reoccur',
+                            clicked: reoccurDeal
+                        };
+                        menuActions.push(reoccurMenuAction);
+                    }
                     return menuActions;
                 };
             }
@@ -111,6 +118,19 @@
                     gridAPI.itemUpdated(updatedDeal);
                 };
                 WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated, isReadOnly);
+            }
+
+            function reoccurDeal(dataItem) {
+                var onReoccur = function (dealId, reoccuringNumber, reoccuringType) {
+                    return WhS_Deal_SwapDealAPIService.ReoccurDeal(dealId, reoccuringNumber, reoccuringType).then(function (response) {
+                        for (var index in response.InsertedObject) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.InsertedObject[index]);
+                            gridAPI.itemAdded(response.InsertedObject[index]);
+                        }
+                        return response;
+                    });
+                };
+                WhS_Deal_ReoccurDealService.reoccurDeal(dataItem.Entity.DealId, dataItem.Entity.Name, onReoccur);
             }
 
             function viewDeal(dataItem) {

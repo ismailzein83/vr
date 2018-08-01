@@ -23,6 +23,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'UpdateDeal'), deal);
         }
 
+
+
         function HasAddDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['AddDeal']));
         }
@@ -44,6 +46,14 @@
             });
         }
 
+        function ReoccurDeal(dealId, reoccuringNumber, reoccuringType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "ReoccurDeal"), {
+                    dealId: dealId,
+                    reoccuringNumber: reoccuringNumber,
+                    reoccuringType: reoccuringType
+                });
+        }
+
         return ({
             GetFilteredSwapDeals: GetFilteredSwapDeals,
             GetDeal: GetDeal,
@@ -53,7 +63,8 @@
             HasEditDealPermission: HasEditDealPermission,
             GetSwapDealSettingData: GetSwapDealSettingData,
             GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId,
-            GetSwapDealSettingsDetail: GetSwapDealSettingsDetail
+            GetSwapDealSettingsDetail: GetSwapDealSettingsDetail,
+            ReoccurDeal: ReoccurDeal
         });
     }
 

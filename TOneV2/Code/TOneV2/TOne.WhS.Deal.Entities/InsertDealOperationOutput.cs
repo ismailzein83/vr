@@ -7,7 +7,7 @@ using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class InsertDealOperationOutput : Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail>
+    public class InsertDealOperationOutput<T> : Vanrise.Entities.InsertOperationOutput<T>
     {
         public List<string> ValidationMessages { get; set; }
     }

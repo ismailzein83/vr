@@ -36,18 +36,20 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
-            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext();
-            context.IsEditMode = false;
-            context.DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds();
-            context.DealSupplierZoneIds = deal.Settings.GetDealSupplierZoneIds();
-            InsertDealOperationOutput insertOperationOutput = new InsertDealOperationOutput();
+            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext
+            {
+                IsEditMode = false,
+                DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds(),
+                DealSupplierZoneIds = deal.Settings.GetDealSupplierZoneIds()
+            };
+            InsertDealOperationOutput<DealDefinitionDetail> insertOperationOutput = new InsertDealOperationOutput<DealDefinitionDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
             int insertedId = -1;
             if (deal.Settings.ValidateDataBeforeSave(context))
             {
+                deal.Settings.IsReoccurrable = true;
                 if (dataManager.Insert(deal, out insertedId))
                 {
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -69,17 +71,20 @@ namespace TOne.WhS.Deal.Business
 
             return insertOperationOutput;
         }
-      
-       
-       
+
+
+
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
-           
             var dealDefinition = GetDeal(deal.DealId);
             UpdateDealOperationOutput updateOperationOutput = new UpdateDealOperationOutput();
-            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext();
-            context.IsEditMode = true;
-            context.ExistingDeal = deal;
+            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext
+            {
+                DealId = deal.DealId,
+                IsEditMode = true,
+                ExistingDeal = deal,
+                DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds()
+            };
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
@@ -105,7 +110,7 @@ namespace TOne.WhS.Deal.Business
 
             return updateOperationOutput;
         }
-        
+
         public T GetDealSettings<T>(int dealId) where T : DealSettings
         {
             DealDefinition deal = GetDeal(dealId);
@@ -138,7 +143,7 @@ namespace TOne.WhS.Deal.Business
 
             return effectiveDeals.MinBy(item => item.Settings.BeginDate).Settings.BeginDate;
         }
-      
+
         #endregion
 
         #region Protected Methods
@@ -165,8 +170,8 @@ namespace TOne.WhS.Deal.Business
                 return cachedByConfig;
             });
         }
-      
-     
+
+
 
         protected Dictionary<int, DealDefinition> GetCachedDeals()
         {
@@ -176,7 +181,7 @@ namespace TOne.WhS.Deal.Business
                 IEnumerable<DealDefinition> deals = dataManager.GetDeals();
                 return deals.ToDictionary(deal => deal.DealId, deal => deal);
             });
-        }       
+        }
 
         #endregion
 

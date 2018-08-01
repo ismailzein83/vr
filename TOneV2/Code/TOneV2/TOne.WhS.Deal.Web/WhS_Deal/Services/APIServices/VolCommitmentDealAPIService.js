@@ -40,6 +40,13 @@
         function GetSupplierRateEvaluatorConfigurationTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetSupplierRateEvaluatorConfigurationTemplateConfigs"));
         }
+        function ReoccurDeal(dealId, reoccuringNumber, reoccuringType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "ReoccurDeal"), {
+                dealId: dealId,
+                reoccuringNumber: reoccuringNumber,
+                reoccuringType: reoccuringType
+            });
+        }
         return ({
             GetFilteredVolCommitmentDeals: GetFilteredVolCommitmentDeals,
             GetDeal: GetDeal,
@@ -49,7 +56,8 @@
             HasEditDealPermission: HasEditDealPermission,
             GetVolumeCommitmentHistoryDetailbyHistoryId: GetVolumeCommitmentHistoryDetailbyHistoryId,
             GetSaleRateEvaluatorConfigurationTemplateConfigs: GetSaleRateEvaluatorConfigurationTemplateConfigs,
-            GetSupplierRateEvaluatorConfigurationTemplateConfigs: GetSupplierRateEvaluatorConfigurationTemplateConfigs
+            GetSupplierRateEvaluatorConfigurationTemplateConfigs: GetSupplierRateEvaluatorConfigurationTemplateConfigs,
+            ReoccurDeal: ReoccurDeal
         });
     }
 

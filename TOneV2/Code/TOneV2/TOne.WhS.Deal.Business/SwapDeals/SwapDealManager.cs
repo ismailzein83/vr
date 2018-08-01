@@ -9,6 +9,8 @@ using TOne.WhS.Deal.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Deal.Entities.Settings;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Data;
+using Vanrise.Caching;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -112,6 +114,70 @@ namespace TOne.WhS.Deal.Business
                 throw new NullReferenceException("swapDealAnalysisSettingData");
             return swapDealAnalysisSettingData;
         }
+
+        public InsertDealOperationOutput<List<DealDefinitionDetail>> ReoccurDeal(int dealId, int reoccuringNumber, ReoccuringType reoccuringType)
+        {
+            InsertDealOperationOutput<List<DealDefinitionDetail>> insertOperationOutput = new InsertDealOperationOutput<List<DealDefinitionDetail>>
+            {
+                Result = Vanrise.Entities.InsertOperationResult.Failed,
+                InsertedObject = null
+            };
+            var deal = GetDeal(dealId);
+
+            if (deal == null)
+                throw new NullReferenceException(dealId.ToString());
+
+            if (!deal.Settings.IsReoccurrable)
+                return insertOperationOutput;
+
+            var dealDefinitionManager = new DealDefinitionManager();
+
+            //Getting Reoccured Deals
+            List<DealDefinition> reoccuredDeals = dealDefinitionManager.GetReoccurredDeals(deal, reoccuringNumber, reoccuringType);
+            if (!reoccuredDeals.Any())
+                return insertOperationOutput;
+
+            //Validation
+            insertOperationOutput.ValidationMessages = new List<string>();
+            var errorMessages = dealDefinitionManager.ValidatingDeals(reoccuredDeals);
+            if (errorMessages.Any())
+            {
+                insertOperationOutput.ValidationMessages.AddRange(errorMessages);
+                return insertOperationOutput;
+            }
+
+            //Inserting
+            IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+            deal.Settings.IsReoccurrable = false;
+            if (dataManager.Update(deal))
+            {
+                errorMessages = new List<string>();
+                insertOperationOutput.InsertedObject = new List<DealDefinitionDetail>();
+                foreach (var reoccuredDeal in reoccuredDeals)
+                {
+                    int insertedId = -1;
+                    if (dataManager.Insert(reoccuredDeal, out insertedId))
+                    {
+                        CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                        insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(reoccuredDeal));
+                        reoccuredDeal.DealId = insertedId;
+                    }
+                    else
+                    {
+                        errorMessages.Add(string.Format("Deal Already exist {0}", reoccuredDeal.Name));
+                    }
+                }
+            }
+            if (errorMessages.Any())
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+                insertOperationOutput.ValidationMessages.AddRange(errorMessages);
+            }
+
+            return insertOperationOutput;
+        }
+
         public override DealDefinitionDetail DealDeinitionDetailMapper(DealDefinition deal)
         {
             SwapDealDetail detail = new SwapDealDetail()
@@ -135,6 +201,7 @@ namespace TOne.WhS.Deal.Business
 
             return detail;
         }
+
 
         public override BaseDealLoggableEntity GetLoggableEntity()
         {

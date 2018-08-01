@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Web.Base;
-using Vanrise.Entities;
 using TOne.WhS.Deal.Entities.Settings;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Web.Controllers
 {
@@ -62,6 +59,13 @@ namespace TOne.WhS.Deal.Web.Controllers
         public SwapDealSettingsDetail GetSwapDealSettingsDetail(int dealId)
         {
             return _manager.GetSwapDealSettingsDetail(dealId);
+        }
+
+        [HttpGet]
+        [Route("ReoccurDeal")]
+        public InsertDealOperationOutput<List<DealDefinitionDetail>> ReoccurDeal(int dealId, int reoccuringNumber, ReoccuringType reoccuringType)
+        {
+            return _manager.ReoccurDeal(dealId, reoccuringNumber, reoccuringType);
         }
     }
 }

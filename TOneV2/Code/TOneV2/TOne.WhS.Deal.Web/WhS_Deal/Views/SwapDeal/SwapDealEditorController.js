@@ -442,7 +442,8 @@
                     LastOutboundGroupNumber: outboundData != undefined ? outboundData.lastOutboundGroupNumber : undefined,
                     Difference: $scope.scopeModel.difference,
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
-                    DeActivationDate: $scope.scopeModel.deActivationDate
+                    DeActivationDate: $scope.scopeModel.deActivationDate,
+                    IsReoccurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsReoccurrable:true
                 }
             };
             return obj;
@@ -519,10 +520,10 @@
                     return payload;
                 },
                 getDealBED: function () {
-                    return $scope.scopeModel.beginDate
+                    return $scope.scopeModel.beginDate;
                 },
                 getDealEED: function () {
-                    return $scope.scopeModel.endDate
+                    return $scope.scopeModel.endDate;
                 },
                 getCarrierAccountId: function () {
                     return carrierAccountSelectorAPI.getSelectedIds();

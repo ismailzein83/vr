@@ -326,7 +326,8 @@
                     LastGroupNumber: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.lastGroupNumber : undefined,
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     Status: $scope.scopeModel.selectedDealStatus.value,
-                    DeActivationDate: $scope.scopeModel.deActivationDate
+                    DeActivationDate: $scope.scopeModel.deActivationDate,
+                    IsReoccurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsReoccurrable : true
                 }
             };
             return obj;

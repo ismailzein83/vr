@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
-using Vanrise.Common.Business;
-using TOne.WhS.Deal.Entities;
 using Vanrise.Entities;
+using TOne.WhS.Deal.Entities;
+using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -250,6 +249,8 @@ namespace TOne.WhS.Deal.Business
         {
             return (secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate) && firstEndEffectiveDate > secondBeginEffectiveDate);
         }
+
+       // public 
         public List<long> AreZonesExcluded(OverlappedZonesContext context, bool isSale)
         {
             List<long> excludedSaleZones = new List<long>();
@@ -412,10 +413,69 @@ namespace TOne.WhS.Deal.Business
                 throw new DataIntegrityValidationException(string.Format("Cannot find the deal with Id {0}", dealId));
             return dealDefinition.Settings.GetSupplierZoneGroupName(groupNumber);
         }
+        public List<DealDefinition> GetReoccurredDeals(DealDefinition deal, int reoccuringNumber, ReoccuringType reoccuringType)
+        {
+            var reoccuredDeals = new List<DealDefinition>();
+            DateTime endDealDate = deal.Settings.EndDate.Value;
+            DateTime beginDealDate = deal.Settings.BeginDate;
+
+            var dealLifeSpan = endDealDate.Subtract(beginDealDate);
+            var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
+            for (int i = 0; i < reoccuringNumber; i++)
+            {
+                DealDefinition reoccuredDeal = new DealDefinition();
+                reoccuredDeal.Settings = deal.Settings.VRDeepCopy();
+                switch (reoccuringType)
+                {
+                    case ReoccuringType.Daily:
+                        reoccuredDeal.Settings.BeginDate = endDealDate.AddDays(1);
+                        reoccuredDeal.Settings.EndDate = reoccuredDeal.Settings.BeginDate.Add(dealLifeSpan);
+                        endDealDate = reoccuredDeal.Settings.EndDate.Value;
+                        break;
+
+                    case ReoccuringType.Monthly:
+                        reoccuredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths((monthsDifference + 1) * (i + 1));
+                        reoccuredDeal.Settings.EndDate = deal.Settings.EndDate.Value.AddMonths((monthsDifference + 1) * (i + 1));
+                        break;
+                }
+                reoccuredDeal.Name = string.Format("{0}-({1:yyyy/MM/dd}-{2:yyyy/MM/dd})", deal.Name, reoccuredDeal.Settings.BeginDate, reoccuredDeal.Settings.EndDate);
+                reoccuredDeal.Settings.IsReoccurrable = false;
+                reoccuredDeals.Add(reoccuredDeal);
+            }
+            reoccuredDeals[reoccuringNumber - 1].Settings.IsReoccurrable = true;
+            return reoccuredDeals;
+        }
+        public List<string> ValidatingDeals(List<DealDefinition> reoccuredDeals)
+        {
+            var errorMessages = new List<string>();
+            foreach (var reoccuredDeal in reoccuredDeals)
+            {
+                ValidateBeforeSaveContext contextDeal = new ValidateBeforeSaveContext()
+                {
+                    DealSaleZoneIds = reoccuredDeal.Settings.GetDealSaleZoneIds(),
+                    DealSupplierZoneIds =reoccuredDeal.Settings.GetDealSupplierZoneIds(),
+                    BED = reoccuredDeal.Settings.BeginDate,
+                    EED = reoccuredDeal.Settings.EndDate,
+                    DealId = reoccuredDeal.DealId,
+                    CustomerId = reoccuredDeal.Settings.GetCarrierAccountId(),
+                };
+
+
+                if (!reoccuredDeal.Settings.ValidateDataBeforeSave(contextDeal))
+                {
+                    foreach (var message in contextDeal.ValidateMessages)
+                    {
+                        errorMessages.Add(string.Format("{0}. Corresponding Deal: {1}", message, reoccuredDeal.Name));
+                    }
+                }
+            }
+            return errorMessages;
+        }
 
         #endregion
 
         #region Private Methods
+
 
         DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier, decimal rate, int currencyId)
         {
