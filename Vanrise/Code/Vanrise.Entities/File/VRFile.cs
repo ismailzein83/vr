@@ -21,6 +21,7 @@ namespace Vanrise.Entities
         public bool IsTemp { get; set; }
         public VRFileSettings Settings { get; set; }
         public DateTime CreatedTime { get; set; }
+        public Guid? FileUniqueId { get; set; }
     } 
 
     public class VRFileSettings

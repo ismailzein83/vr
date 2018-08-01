@@ -40,7 +40,8 @@ namespace Vanrise.Common.Web
                     Name = postedFile.FileName,
                     Extension = nameastab[nameastab.Length - 1],
                     ModuleName = moduleName,
-                    IsTemp = isTempFile
+                    IsTemp = isTempFile,
+                    FileUniqueId = Guid.NewGuid()
                 };
 
                 // VRFileManager sets the UserId property via SecurityContext
@@ -53,7 +54,8 @@ namespace Vanrise.Common.Web
                 return new FileUploadResult
                 {
                     FileId = id,
-                    Name = postedFile.FileName
+                    Name = postedFile.FileName,
+                    FileUniqueId = file.FileUniqueId
                 };
             }
             else
@@ -136,6 +138,22 @@ namespace Vanrise.Common.Web
         {
             VRFileManager manager = new VRFileManager(moduleName);
             VRFileInfo fileInfo = manager.GetFileInfo(fileId);
+            if (fileInfo == null)
+            {
+                return null;
+            }
+            else
+            {
+                return fileInfo;
+            }
+        }
+
+        [Route("GetFileInfoByFileUniqueId")]
+        [HttpGet]
+        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId, string moduleName = null)
+        {
+            VRFileManager manager = new VRFileManager(moduleName);
+            VRFileInfo fileInfo = manager.GetFileInfoByFileUniqueId(fileUniqueId);
             if (fileInfo == null)
             {
                 return null;

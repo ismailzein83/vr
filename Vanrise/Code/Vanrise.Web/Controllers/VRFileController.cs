@@ -35,8 +35,8 @@ namespace Vanrise.Web.Controllers
                     Content = ReadToEnd(postedFile.InputStream) ,
                     Name = postedFile.FileName ,
                     Extension = nameastab[nameastab.Length -1],
-                    CreatedTime = DateTime.Now 
-
+                    CreatedTime = DateTime.Now,
+                    FileUniqueId = Guid.NewGuid()
                 };
                 VRFileManager manager = new VRFileManager();
                 long id = manager.AddFile(file);
@@ -45,7 +45,8 @@ namespace Vanrise.Web.Controllers
                 result = Request.CreateResponse(HttpStatusCode.Created );
                 return new FileUploadResult
                 {
-                    FileId = id
+                    FileId = id,
+                    FileUniqueId = file.FileUniqueId
                 };
 
             }
@@ -114,6 +115,13 @@ namespace Vanrise.Web.Controllers
             VRFileManager manager = new VRFileManager();
             return manager.GetFileInfo(fileId);
 
+        }
+
+        [HttpGet]
+        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId)
+        {
+            VRFileManager manager = new VRFileManager();
+            return manager.GetFileInfoByFileUniqueId(fileUniqueId);
         }
         private static byte[] ReadToEnd(System.IO.Stream stream)
         {

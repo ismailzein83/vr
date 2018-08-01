@@ -11,5 +11,7 @@ namespace Vanrise.Entities
         public long FileId { get; set; }
 
         public string Name { get; set; }
+
+        public Guid? FileUniqueId { get; set; }
     }
 }

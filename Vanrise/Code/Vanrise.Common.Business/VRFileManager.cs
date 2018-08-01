@@ -54,6 +54,11 @@ namespace Vanrise.Common.Business
             return _datamanager.GetFile(fileId);
         }
 
+        public VRFile GetFileByFileUniqueId(Guid fileUniqueId)
+        {
+            return _datamanager.GetFileByFileUniqueId(fileUniqueId);
+        }
+
         public bool DoesUserHaveViewAccessToFile(VRFileInfo file)
         {
             if(file.Settings != null && file.Settings.ExtendedSettings != null)
@@ -70,6 +75,10 @@ namespace Vanrise.Common.Business
         public VRFileInfo GetFileInfo(long fileId)
         {
             return _datamanager.GetFileInfo(fileId);
+        }
+        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId)
+        {
+            return _datamanager.GetFileInfoByFileUniqueId(fileUniqueId);
         }
         public List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds)
         {

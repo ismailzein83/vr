@@ -43,7 +43,7 @@ namespace Vanrise.Common.Data.SQL
                 if (file.Settings.ExtendedSettings != null)
                     configId = file.Settings.ExtendedSettings.ConfigId;
             }
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime), file.FileUniqueId);
             return (id > 0) ? (long)fileId : badresult;
         }
 
@@ -52,10 +52,21 @@ namespace Vanrise.Common.Data.SQL
             return GetItemSP("[common].[sp_File_GetInfoById]", FileInfoMapper, fileId);
         }
 
+        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId)
+        {
+            return GetItemSP("[common].[sp_File_GetInfoByFileUniqueId]", FileInfoMapper, fileUniqueId);
+        }
+
         public VRFile GetFile(long fileId)
         {
             return GetItemSP("[common].[sp_File_GetFileById]", FileMapper, fileId);
         }
+        public VRFile GetFileByFileUniqueId(Guid fileUniqueId)
+        {
+            return GetItemSP("[common].[sp_File_GetFileByFileUniqueId]", FileMapper, fileUniqueId);
+        }
+
+
         public List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds)
         {
             string fileIdsAsString = null;
@@ -148,6 +159,7 @@ namespace Vanrise.Common.Data.SQL
             fileInfo.UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?);
             fileInfo.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
             fileInfo.IsTemp = GetReaderValue<bool>(reader, "IsTemp");
+            fileInfo.FileUniqueId = reader["FileUniqueId"] != DBNull.Value ? (Guid)reader["FileUniqueId"] : default(Guid?);
             string settingsAsString = reader["Settings"] as string;
             if (settingsAsString != null)
                 fileInfo.Settings = Serializer.Deserialize<VRFileSettings>(settingsAsString);
