@@ -29,6 +29,7 @@ namespace TOne.WhS.Deal.Entities
 		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
         public abstract string GetSaleZoneGroupName(int dealGroupNumber);
         public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
+        public bool IsReoccurrable {get;set;}
 	}
 
 	public interface IDealGetZoneGroupsContext
