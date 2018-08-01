@@ -121,6 +121,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytic\Constants\AccessLevel.js" />
     <Content Include="Analytic\Constants\AnalyticQueryHandlerValidatorResultEnum.js" />
     <Content Include="Analytic\Constants\AutomatedReportQuerySourceEnum.js" />
     <Content Include="Analytic\Constants\AnalyticSameDimensionTypeEnum.js" />

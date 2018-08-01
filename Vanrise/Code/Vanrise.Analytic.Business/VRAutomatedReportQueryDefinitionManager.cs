@@ -10,7 +10,7 @@ using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
 {
-     public class VRAutomatedReportQueryDefinitionManager
+    public class VRAutomatedReportQueryDefinitionManager
     {
 
         #region Ctor/Properties
@@ -46,7 +46,27 @@ namespace Vanrise.Analytic.Business
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<VRAutomatedReportQueryDefinitionSettings>(vrComponentTypeId);
         }
+        public bool DoesUserHaveAccessToAtLeastOneQuery(int userId)
+        {
+            foreach (VRAutomatedReportQueryDefinition vRAutomatedReportQueryDefinition in GetAllVRAutomatedReportQueryDefinitions())
+                if (DoesUserHaveAccess(vRAutomatedReportQueryDefinition.VRComponentTypeId, userId))
+                    return true;
+            return false;
+            ;
+        }
+        public bool DoesUserHaveAccess(Guid DefinitionId, int userId)
+        {
+            VRAutomatedReportQueryDefinitionSettings vRAutomatedReportQueryDefinitionSettings = GetVRAutomatedReportQueryDefinitionSettings(DefinitionId);
+            return vRAutomatedReportQueryDefinitionSettings.ExtendedSettings.DoesUserHaveAccess(new VRAutomatedReportQueryDefinitionExtendedSettingsContext()
+            {
+                LoggedInUserId = userId
+            });
+        }
 
+        private List<VRAutomatedReportQueryDefinition> GetAllVRAutomatedReportQueryDefinitions()
+        {
+            return _vrComponentTypeManager.GetComponentTypes<VRAutomatedReportQueryDefinitionSettings, VRAutomatedReportQueryDefinition>();
+        }
         public Dictionary<Guid, VRAutomatedReportDataSchema> GetAutomatedReportDataSchema(AutomatedReportQueries input)
         {
             Dictionary<Guid, VRAutomatedReportDataSchema> schema = new Dictionary<Guid, VRAutomatedReportDataSchema>();
@@ -73,7 +93,8 @@ namespace Vanrise.Analytic.Business
             input.ThrowIfNull("No queries nor handlers were added.");
             input.Queries.ThrowIfNull("No queries were added.");
             input.HandlerSettings.ThrowIfNull("input.HandlerSettings");
-            VRAutomatedReportHandlerValidateContext context = new VRAutomatedReportHandlerValidateContext{
+            VRAutomatedReportHandlerValidateContext context = new VRAutomatedReportHandlerValidateContext
+            {
                 Queries = input.Queries
             };
             input.HandlerSettings.Validate(context);
@@ -85,6 +106,8 @@ namespace Vanrise.Analytic.Business
         }
 
         #endregion
+
+
 
         #region Mappers
 
@@ -100,7 +123,7 @@ namespace Vanrise.Analytic.Business
                 RuntimeEditor = editor
             };
         }
-         
+
         #endregion
 
 

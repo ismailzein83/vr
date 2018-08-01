@@ -18,19 +18,42 @@ namespace Vanrise.Analytic.Business
         #region Public Methods
         public IDataRetrievalResult<VRReportGenerationDetail> GetFilteredVRReportGenerations(DataRetrievalInput<VRReportGenerationQuery> input)
         {
+            var vRAutomatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
             var allVRReportGenerations = GetCachedVRReportGenerations();
-            var userid = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             Func<VRReportGeneration, bool> filterExpression = (vRReportGeneration) =>
             {
                 if (input.Query.Name != null && !vRReportGeneration.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-                if (input.Query.Owner == ReportOwner.OnlyMyReports && vRReportGeneration.CreatedBy != userid)
+                if (input.Query.Owner == ReportOwner.OnlyMyReports && vRReportGeneration.CreatedBy != userId)
                     return false;
+                if (vRReportGeneration.CreatedBy != userId && vRReportGeneration.AccessLevel == AccessLevel.Private)
+                    return false;
+                foreach (VRAutomatedReportQuery vRAutomatedReportQuery in vRReportGeneration.Settings.Queries)
+                {
+                    if (!vRAutomatedReportQueryDefinitionManager.DoesUserHaveAccess(vRAutomatedReportQuery.DefinitionId, userId))
+                        return false;
+                }
+
                 return true;
             };
-            return DataRetrievalManager.Instance.ProcessResult(input, allVRReportGenerations.ToBigResult(input, filterExpression, VRReportGenerationDetailMapper));
+            bool doesUserHaveEditPermission = DoesUserHaveManageAccess();
+            return DataRetrievalManager.Instance.ProcessResult(input, allVRReportGenerations.ToBigResult(input, filterExpression, (vRReportGeneration) => { return VRReportGenerationDetailMapper(vRReportGeneration, doesUserHaveEditPermission); }));
 
         }
+        public bool DoesUserHaveManageAccess()
+        {
+            Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
+            int userid = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            return s_securityManager.HasPermissionToActions("VR_Analytic/VRReportGeneration/AddPublicVRReportGeneration&VR_Analytic/VRReportGeneration/UpdatePublicVRReportGeneration", userid);
+        }
+        public bool DoesUserHaveViewAccess()
+        {
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            var vRAutomatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
+            return vRAutomatedReportQueryDefinitionManager.DoesUserHaveAccessToAtLeastOneQuery(userId);
+        }
+
         public VRReportGeneration GetVRReportGenerationHistoryDetailbyHistoryId(int reportId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
@@ -40,6 +63,7 @@ namespace Vanrise.Analytic.Business
 
         public InsertOperationOutput<VRReportGenerationDetail> AddVRReportGeneration(VRReportGeneration vRReportGeneration)
         {
+            bool doesUserHaveManageAccess = DoesUserHaveManageAccess();           
             IVRReportGenerationDataManager vRReportGenerationDataManager = AnalyticDataManagerFactory.GetDataManager<IVRReportGenerationDataManager>();
             InsertOperationOutput<VRReportGenerationDetail> insertOperationOutput = new InsertOperationOutput<VRReportGenerationDetail>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
@@ -49,12 +73,12 @@ namespace Vanrise.Analytic.Business
             vRReportGeneration.LastModifiedBy = vRReportGeneration.CreatedBy;
             bool insertActionSuccess = vRReportGenerationDataManager.Insert(vRReportGeneration, out reportId);
             if (insertActionSuccess)
-            {                
+            {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 VRReportGeneration addedVRReportGeneration = this.GetVRReportGeneration(reportId);
                 VRActionLogger.Current.TrackAndLogObjectAdded(VRReportGenerationLoggableEntity.Instance, addedVRReportGeneration);
-                insertOperationOutput.InsertedObject = VRReportGenerationDetailMapper(addedVRReportGeneration);
+                insertOperationOutput.InsertedObject = VRReportGenerationDetailMapper(addedVRReportGeneration, doesUserHaveManageAccess);
             }
             else
             {
@@ -81,9 +105,10 @@ namespace Vanrise.Analytic.Business
             else
                 return null;
         }
-        
+
         public UpdateOperationOutput<VRReportGenerationDetail> UpdateVRReportGeneration(VRReportGeneration vRReportGeneration)
         {
+            bool doesUserHaveManageAccess = DoesUserHaveManageAccess();
             IVRReportGenerationDataManager vRReportGenerationDataManager = AnalyticDataManagerFactory.GetDataManager<IVRReportGenerationDataManager>();
             UpdateOperationOutput<VRReportGenerationDetail> updateOperationOutput = new UpdateOperationOutput<VRReportGenerationDetail>();
             updateOperationOutput.Result = UpdateOperationResult.Failed;
@@ -96,7 +121,7 @@ namespace Vanrise.Analytic.Business
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 VRReportGeneration updatedVRReportGeneration = this.GetVRReportGeneration(vRReportGeneration.ReportId);
                 VRActionLogger.Current.TrackAndLogObjectUpdated(VRReportGenerationLoggableEntity.Instance, updatedVRReportGeneration);
-                updateOperationOutput.UpdatedObject = VRReportGenerationDetailMapper(updatedVRReportGeneration);
+                updateOperationOutput.UpdatedObject = VRReportGenerationDetailMapper(updatedVRReportGeneration, doesUserHaveManageAccess);
             }
             else
             {
@@ -179,10 +204,11 @@ namespace Vanrise.Analytic.Business
                    return vRReportGenerations.ToDictionary(vRReportGeneration => vRReportGeneration.ReportId, vRReportGeneration => vRReportGeneration);
                });
         }
+
         #endregion
 
         #region Mappers
-        private VRReportGenerationDetail VRReportGenerationDetailMapper(VRReportGeneration vRReportGeneration)
+        private VRReportGenerationDetail VRReportGenerationDetailMapper(VRReportGeneration vRReportGeneration, bool doesUserHaveManageAccess)
         {
             return new VRReportGenerationDetail
             {
@@ -193,7 +219,8 @@ namespace Vanrise.Analytic.Business
                 CreatedTime = vRReportGeneration.CreatedTime,
                 AccessLevel = Utilities.GetEnumAttribute<AccessLevel, DescriptionAttribute>(vRReportGeneration.AccessLevel).Description,
                 LastModifiedBy = vRReportGeneration.LastModifiedBy,
-                LastModifiedTime = vRReportGeneration.LastModifiedTime
+                LastModifiedTime = vRReportGeneration.LastModifiedTime,
+                DoesUserHaveManageAccess = doesUserHaveManageAccess
             };
         }
 

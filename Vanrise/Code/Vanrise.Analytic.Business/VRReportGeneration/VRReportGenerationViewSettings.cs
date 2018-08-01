@@ -16,8 +16,8 @@ namespace Vanrise.Analytic.Business
 
         public override bool DoesUserHaveAccess(IViewUserAccessContext context)
         {
-            /// return true if it has permission on at least one query 
-            return true;
+            var vRAutomatedReportQueryDefinitionManager = new VRAutomatedReportQueryDefinitionManager();
+            return vRAutomatedReportQueryDefinitionManager.DoesUserHaveAccessToAtLeastOneQuery(context.UserId);
         }
     }
 }

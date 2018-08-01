@@ -41,6 +41,9 @@
         function GetReportActionTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetReportActionTemplateConfigs'));
         }
+        function DoesUserHaveManageAccess() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'DoesUserHaveManageAccess'));
+        }
 
         return ({
             GetFilteredVRReportGenerations: GetFilteredVRReportGenerations,
@@ -49,7 +52,8 @@
             UpdateVRReportGeneration: UpdateVRReportGeneration,
             GetVRReportGenerationsInfo: GetVRReportGenerationsInfo,
             GetReportActionTemplateConfigs: GetReportActionTemplateConfigs,
-            GetVRReportGenerationHistoryDetailbyHistoryId: GetVRReportGenerationHistoryDetailbyHistoryId
+            GetVRReportGenerationHistoryDetailbyHistoryId: GetVRReportGenerationHistoryDetailbyHistoryId,
+            DoesUserHaveManageAccess: DoesUserHaveManageAccess
         });
     }
 

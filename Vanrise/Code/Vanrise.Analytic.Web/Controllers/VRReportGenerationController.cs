@@ -18,7 +18,8 @@ namespace Vanrise.Analytic.Web.Controllers
         [HttpPost]
         [Route("GetFilteredVRReportGenerations")]
         public object GetFilteredVRReportGenerations(Vanrise.Entities.DataRetrievalInput<VRReportGenerationQuery> input)
-        {
+        {   if (!_manager.DoesUserHaveViewAccess())
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredVRReportGenerations(input));
         }
 
@@ -31,15 +32,19 @@ namespace Vanrise.Analytic.Web.Controllers
 
         [HttpPost]
         [Route("AddVRReportGeneration")]
-        public Vanrise.Entities.InsertOperationOutput<VRReportGenerationDetail> AddVRReportGeneration(VRReportGeneration vRReportGenerationItem)
+        public object AddVRReportGeneration(VRReportGeneration vRReportGenerationItem)
         {
+            if (!_manager.DoesUserHaveManageAccess() && vRReportGenerationItem.AccessLevel == AccessLevel.Public)
+                return GetUnauthorizedResponse();
             return _manager.AddVRReportGeneration(vRReportGenerationItem);
         }
 
         [HttpPost]
         [Route("UpdateVRReportGeneration")]
-        public Vanrise.Entities.UpdateOperationOutput<VRReportGenerationDetail> UpdateVRReportGeneration(VRReportGeneration vRReportGenerationItem)
+        public object UpdateVRReportGeneration(VRReportGeneration vRReportGenerationItem)
         {
+            if (!_manager.DoesUserHaveManageAccess() && vRReportGenerationItem.AccessLevel == AccessLevel.Public)
+                return GetUnauthorizedResponse();
             return _manager.UpdateVRReportGeneration(vRReportGenerationItem);
         }
         [HttpGet]
@@ -53,6 +58,12 @@ namespace Vanrise.Analytic.Web.Controllers
         public VRReportGeneration GetVRReportGenerationHistoryDetailbyHistoryId(int vRReportGenerationHistoryId)
         {
             return _manager.GetVRReportGenerationHistoryDetailbyHistoryId(vRReportGenerationHistoryId);
+        }
+        [HttpGet]
+        [Route("DoesUserHaveManageAccess")]
+        public bool DoesUserHaveManageAccess()
+        {
+            return _manager.DoesUserHaveManageAccess();
         }
        
     }

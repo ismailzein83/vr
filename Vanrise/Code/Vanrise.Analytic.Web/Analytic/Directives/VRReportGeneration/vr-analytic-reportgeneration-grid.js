@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAnalyticReportgenerationGrid', ['VR_Analytic_ReportGenerationAPIService', 'VR_Analytic_ReportGenerationService', 'VRNotificationService','VRCommon_ObjectTrackingService','VRUIUtilsService',
-    function (VR_Analytic_ReportGenerationAPIService, VR_Analytic_ReportGenerationService, VRNotificationService, VRCommon_ObjectTrackingService, VRUIUtilsService) {
+app.directive('vrAnalyticReportgenerationGrid', ['VR_Analytic_ReportGenerationAPIService', 'VR_Analytic_ReportGenerationService', 'VRNotificationService', 'VRCommon_ObjectTrackingService', 'VRUIUtilsService', 'VR_Analytic_AccessLevel',
+function (VR_Analytic_ReportGenerationAPIService, VR_Analytic_ReportGenerationService, VRNotificationService, VRCommon_ObjectTrackingService, VRUIUtilsService, VR_Analytic_AccessLevel) {
         return {
             restrict: 'E',
             scope: {
@@ -93,19 +93,27 @@ app.directive('vrAnalyticReportgenerationGrid', ['VR_Analytic_ReportGenerationAP
             };
 
             function defineMenuActions() {
-                $scope.scopeModel.gridMenuActions = [{
-                    name: "Edit",
-                    clicked: editVRReportGeneration
-                }];
-            };
+
+                $scope.scopeModel.gridMenuActions = function (dataItem) {
+
+                    var menuActions = [];
+                    if (dataItem.DoesUserHaveManageAccess || dataItem.AccessLevel == VR_Analytic_AccessLevel.Private.description) {
+                        var menuAction1 = {
+                            name: "Edit",
+                            clicked: editVRReportGeneration
+                        };
+                        menuActions.push(menuAction1);
+                    }
+                    return menuActions;
+                };
+            }
             function editVRReportGeneration(vRReportGeneration) {
                 var onVRReportGenerationUpdated = function (vRReportGeneration) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(vRReportGeneration);
                     gridApi.itemUpdated(vRReportGeneration);
                 };
                 VR_Analytic_ReportGenerationService.editVRReportGeneration(vRReportGeneration.ReportId, onVRReportGenerationUpdated);
-            };
-
+            };            
 
 
 

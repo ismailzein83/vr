@@ -1,15 +1,17 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Analytic_AccessTypeEnum'];
+    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Analytic_AccessLevel'];
 
-    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Analytic_AccessTypeEnum) {
+    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Analytic_AccessLevel) {
 
         var isEditMode;
         var reportId;
         var vRReportGenerationEntity;
+        var userManageAccess;
         var isViewHistoryMode;
         var context;
+        var accessLevels = [];        
         var settingsDirectiveAPI;
         var settingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -31,7 +33,9 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.accessTypes = UtilsService.getArrayEnum(VR_Analytic_AccessTypeEnum);
+            accessLevels = UtilsService.getArrayEnum(VR_Analytic_AccessLevel);
+            $scope.scopeModel.accessLevels = [];
+            $scope.scopeModel.accessLevels.push(UtilsService.getItemByVal(accessLevels, 'Private', 'description'));
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
@@ -51,28 +55,31 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (isEditMode) {
-                getVRReportGeneration().then(function () {
-                    loadAllControls().finally(function () {
-                        vRReportGenerationEntity = undefined;
+            doesUserHaveManageAccess().then(function () {
+
+                if (isEditMode) {
+                    getVRReportGeneration().then(function () {
+                        loadAllControls().finally(function () {
+                            vRReportGenerationEntity = undefined;
+                        });
+                    }).catch(function (error) {
+                        $scope.scopeModel.isLoading = false;
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
-                }).catch(function (error) {
-                    $scope.scopeModel.isLoading = false;
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-            }
-            else if (isViewHistoryMode) {
-                getVRReportGenerationHistory().then(function () {
-                    loadAllControls().finally(function () {
-                        vRReportGenerationEntity = undefined;
+                }
+                else if (isViewHistoryMode) {
+                    getVRReportGenerationHistory().then(function () {
+                        loadAllControls().finally(function () {
+                            vRReportGenerationEntity = undefined;
+                        });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.isLoading = false;
                     });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
-                });
-            }
-            else
-                loadAllControls();
+                }
+                else
+                    loadAllControls();
+            });
         };
 
         function getVRReportGenerationHistory() {
@@ -85,6 +92,12 @@
                 vRReportGenerationEntity = response;
             });
         };
+        function doesUserHaveManageAccess() {
+            return VR_Analytic_ReportGenerationAPIService.DoesUserHaveManageAccess().then(function (response) {
+                userManageAccess = response;
+                if (userManageAccess) $scope.scopeModel.accessLevels.push(UtilsService.getItemByVal(accessLevels, 'Public', 'description'));
+            });
+        }
 
         function loadAllControls() {
 
@@ -98,11 +111,11 @@
             };
 
             function loadStaticData() {
-                if (vRReportGenerationEntity != undefined)
-                {
+
+                if (vRReportGenerationEntity != undefined) {
                     $scope.scopeModel.name = vRReportGenerationEntity.Name;
                     $scope.scopeModel.description = vRReportGenerationEntity.Description;
-                    $scope.scopeModel.selectedAccessLevel = UtilsService.getItemByVal($scope.scopeModel.accessTypes, vRReportGenerationEntity.AccessLevel, "value");
+                    $scope.scopeModel.selectedAccessLevel = UtilsService.getItemByVal($scope.scopeModel.accessLevels, vRReportGenerationEntity.AccessLevel, "value");
                 }
             };
 
@@ -110,7 +123,7 @@
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
-                    var settingsDirectivePayload; 
+                    var settingsDirectivePayload;
                     if (vRReportGenerationEntity != undefined) {
                         settingsDirectivePayload = { Settings: vRReportGenerationEntity.Settings };
                     }
@@ -135,9 +148,9 @@
             var object = {
                 ReportId: (reportId != undefined) ? reportId : undefined,
                 Name: $scope.scopeModel.name,
-                Description:$scope.scopeModel.description,
-                    AccessLevel: $scope.scopeModel.selectedAccessLevel !=undefined?$scope.scopeModel.selectedAccessLevel.value: undefined,
-                Settings: settings                    
+                Description: $scope.scopeModel.description,
+                AccessLevel: $scope.scopeModel.selectedAccessLevel != undefined ? $scope.scopeModel.selectedAccessLevel.value : undefined,
+                Settings: settings
             };
             return object;
         };

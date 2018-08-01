@@ -21,7 +21,7 @@ namespace Vanrise.Analytic.Entities
 
         public virtual string RuntimeEditor { get; set; }
 
-        public abstract bool DoesUserHaveAccess(IVRAutomatedReportQueryDefinitionExtendedSettingsContext context);
+        public abstract bool  DoesUserHaveAccess(IVRAutomatedReportQueryDefinitionExtendedSettingsContext context);
     }
 
     public interface IVRAutomatedReportQueryDefinitionExtendedSettingsContext
