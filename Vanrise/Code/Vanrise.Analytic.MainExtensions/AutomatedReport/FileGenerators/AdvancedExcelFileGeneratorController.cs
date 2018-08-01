@@ -33,7 +33,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public VRAutomatedReportFileGenerator FileGenerator { get; set; }
 
         public List<VRAutomatedReportQuery> Queries { get; set; }
-        public VRReportGenerationFilter Filter { get; set; }
-        public VRReportGenerationRuntimeFilter RuntimeFilter { get; set; }
+        public VRReportGenerationFilter FilterDefinition { get; set; }
+        public VRReportGenerationRuntimeFilter FilterRuntime { get; set; }
     }
 }

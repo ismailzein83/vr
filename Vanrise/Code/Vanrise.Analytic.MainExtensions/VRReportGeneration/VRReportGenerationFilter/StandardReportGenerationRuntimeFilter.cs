@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.MainExtensions
     public class StandardReportGenerationRuntimeFilter : VRReportGenerationRuntimeFilter
     {
         public DateTime FromTime { get; set; }
-        public DateTime? ToTime { get; set; }
+        public DateTime ToTime { get; set; }
         public override VRReportGenerationFilterContent GetFilterContent(IVRReportGenerationRuntimeFilterContext context)
         {
             return new VRReportGenerationFilterContent

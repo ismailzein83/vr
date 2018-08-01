@@ -101,9 +101,28 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             var automatedReportQueryDefinitionSettings = reportQueryDefinitionManager.GetVRAutomatedReportQueryDefinitionSettings(context.QueryDefinitionId);
             automatedReportQueryDefinitionSettings.ThrowIfNull("automatedReportQueryDefinitionSettings", context.QueryDefinitionId);
             var analyticTableQueryDefinitionSettings = automatedReportQueryDefinitionSettings.ExtendedSettings.CastWithValidate<AnalyticTableQueryDefinitionSettings>("AnalyticTableQuerySettings");
-            VRTimePeriodManager timePeriodManager = new VRTimePeriodManager();
-            var dateTimeRange = timePeriodManager.GetTimePeriod(this.TimePeriod);
+          
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+
+            DateTime fromTime;
+            DateTime toTime;
+
+            if (context.FilterDefinition != null && context.FilterRuntime != null)
+            {
+                var filterContent = context.FilterRuntime.GetFilterContent(new VRReportGenerationRuntimeFilterContext
+                {
+                    FilterDefinition = context.FilterDefinition
+                });
+                fromTime = filterContent.FromTime;
+                toTime = filterContent.ToTime;
+            }
+            else
+            {
+                VRTimePeriodManager timePeriodManager = new VRTimePeriodManager();
+                var dateTimeRange = timePeriodManager.GetTimePeriod(this.TimePeriod);
+                fromTime = dateTimeRange.From;
+                toTime = dateTimeRange.To;
+            }
 
             var query = new AnalyticQuery()
             {
@@ -116,8 +135,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                 OrderType = OrderType,
                 AdvancedOrderOptions = AdvancedOrderOptions,
                 TableId = analyticTableQueryDefinitionSettings.AnalyticTableId,
-                FromTime = dateTimeRange.From,
-                ToTime = dateTimeRange.To,
+                FromTime = fromTime,
+                ToTime = toTime,
                 SubTables = analyticSubTables
             };
             

@@ -14,15 +14,15 @@ namespace Vanrise.Analytic.Entities
 
         public Guid? TaskId{get; set;}
         public IAutomatedReportEvaluatorContext EvaluatorContext { get; set; }
-        public VRReportGenerationFilter Filter {get;set;}
-        public VRReportGenerationRuntimeFilter RuntimeFilter { get; set; }
-        public VRAutomatedReportHandlerExecuteContext(List<VRAutomatedReportQuery> queries, Guid? taskId, IAutomatedReportEvaluatorContext evaluatorContext, VRReportGenerationFilter filter, VRReportGenerationRuntimeFilter runtimeFilter)
+        public VRReportGenerationFilter FilterDefinition { get; set; }
+        public VRReportGenerationRuntimeFilter FilterRuntime { get; set; }
+        public VRAutomatedReportHandlerExecuteContext(List<VRAutomatedReportQuery> queries, Guid? taskId, IAutomatedReportEvaluatorContext evaluatorContext, VRReportGenerationFilter filterDefinition, VRReportGenerationRuntimeFilter filterRuntime)
         {
             Queries = queries;
             TaskId = taskId;
             this.EvaluatorContext = evaluatorContext;
-            this.Filter = filter;
-            this.RuntimeFilter = runtimeFilter;
+            this.FilterDefinition = filterDefinition;
+            this.FilterRuntime = filterRuntime;
         }
 
         public VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName)
@@ -42,8 +42,8 @@ namespace Vanrise.Analytic.Entities
                     var automatedReportDataResult = matchingQuery.Settings.Execute(new VRAutomatedReportQueryExecuteContext()
                     {
                         QueryDefinitionId = matchingQuery.DefinitionId,
-                        Filter = Filter,
-                        RuntimeFilter = RuntimeFilter
+                        FilterDefinition = FilterDefinition,
+                        FilterRuntime = FilterRuntime
                     });
 
                     var querySchema = matchingQuery.Settings.GetSchema(new VRAutomatedReportQueryGetSchemaContext() 

@@ -63,8 +63,24 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                 }
             }
 
-            VRTimePeriodManager timePeriodManager = new VRTimePeriodManager();
-            var dateTimeRange = timePeriodManager.GetTimePeriod(this.TimePeriod);
+            DateTime fromTime;
+            DateTime toTime;
+            if (context.FilterDefinition != null && context.FilterRuntime != null)
+            {
+                var filterContent = context.FilterRuntime.GetFilterContent(new VRReportGenerationRuntimeFilterContext
+                {
+                    FilterDefinition = context.FilterDefinition
+                });
+                fromTime = filterContent.FromTime;
+                toTime = filterContent.ToTime;
+            }
+            else
+            {
+                VRTimePeriodManager timePeriodManager = new VRTimePeriodManager();
+                var dateTimeRange = timePeriodManager.GetTimePeriod(this.TimePeriod);
+                fromTime = dateTimeRange.From;
+                toTime = dateTimeRange.To;
+            }
 
             DataRetrievalInput<DataRecordQuery> input = new DataRetrievalInput<DataRecordQuery>()
             {
@@ -79,8 +95,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                     Direction = this.Direction,
                     SortColumns = this.SortColumns,
                     Filters = this.Filters,
-                    FromTime = dateTimeRange.From,
-                    ToTime = dateTimeRange.To
+                    FromTime = fromTime,
+                    ToTime = toTime
                 }
             };
             var dataRecords = dataRecordStorageManager.GetFilteredDataRecords(input) as BigResult<DataRecordDetail>;

@@ -42,7 +42,7 @@ namespace Vanrise.Analytic.Entities
     public class VRReportGenerationFilterContent
     {
         public DateTime FromTime { get; set; }
-        public DateTime? ToTime { get; set; }
+        public DateTime ToTime { get; set; }
         public RecordFilterGroup FilterGroup { get; set; }
     }
 
