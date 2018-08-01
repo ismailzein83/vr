@@ -36,8 +36,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var excelFileUploaderAPI;
         var excelFileUploaderReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var fileUploadedPromiseDeferred;
-
         var mappedTables = [];
         var tableIndex = 0;
 
@@ -74,6 +72,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     tabsAPI.setLastTabSelected();
                     $scope.scopeModel.querySelected = undefined;
                     $scope.scopeModel.listNameSelected = undefined;
+                    $scope.scopeModel.listNames.length = 0;
                 };
 
 
@@ -102,7 +101,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
                 $scope.scopeModel.onQuerySelectionChanged = function (query) {
                     if (query != undefined) {
-                        $scope.scopeModel.listNames.length = 0;
                         $scope.scopeModel.isLoadingListNames = true;
                         var listNameSelectorDataPromise = context.getQueryListNames(query.value);
                         promises.push(listNameSelectorDataPromise);

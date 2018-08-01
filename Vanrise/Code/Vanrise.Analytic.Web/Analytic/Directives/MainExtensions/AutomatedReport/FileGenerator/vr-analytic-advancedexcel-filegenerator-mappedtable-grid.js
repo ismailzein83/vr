@@ -28,8 +28,6 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
         var gridAPI;
         var context;
 
-        var fieldSelectorAPI;
-
         var selectedQueryId;
 
         var contextPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -50,8 +48,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
                 function getDirectiveAPI() {
 
-                    var directiveAPI = {
-                    };
+                    var directiveAPI = {};
+                    
                     directiveAPI.load = function (query) {
                         contextPromiseDeferred.resolve(query.mappedSheet);
                         context = query.context;
@@ -87,32 +85,15 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
             $scope.scopeModel.addAllFields = function () {
                 if (context != undefined && context.getQueryFields != undefined && typeof (context.getQueryFields) == "function") {
-                    var fieldsPromise = context.getQueryFields(selectedQueryId);
-                    var fieldsArray = [];
+                    var fieldsPromise = getAllFields(selectedQueryId);
                     fieldsPromise.then(function (fields) {
                         if (fields != undefined) {
                             for (var i = 0; i < fields.length; i++) {
-                                var field = fields[i];
-                                if (field.Source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable) {
-                                    fieldsArray.push({
-                                        description: field.FieldTitle,
-                                        value: field.FieldName,
-                                        source: field.Source
-                                    });
-                                }
-                                else {
-                                    fieldsArray.push({
-                                        description: field.FieldName,
-                                        value: field.SubTableId,
-                                        source: field.Source,
-                                    });
-                                }
-                            }
-                            for (var i = 0; i < fieldsArray.length; i++) {
-                                var mappedCol = getMappedCol(undefined, undefined, undefined, fieldsArray[i]);
+                                var mappedCol = getMappedCol(undefined, undefined, undefined, fields[i]);
                                 $scope.scopeModel.mappedCols.push(mappedCol);
                             }
                         }
+                      
                     });
                 }
             };
@@ -177,57 +158,27 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
         function getMappedCol(mappedColumn, sheetIndex, firstRowIndex, selectedField) {
             var allFields;
-            if (mappedColumn != undefined) {
-                $scope.scopeModel.isLoadingMappedCol = true;
-            }
 
             var mappedCol = {};
-            function loadFirstRowDirective() {
-                mappedCol.directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                mappedCol.onDirectiveReady = function (api) {
-                    mappedCol.directiveAPI = api;
-                    var directivePayload = {
-                        context: getCellFieldMappingContext(),
-                        showEditButton: false
-                    };
-                    if (mappedColumn != undefined) {
-                        directivePayload.fieldMapping = {
-                            SheetIndex: sheetIndex,
-                            RowIndex: firstRowIndex,
-                            CellIndex: mappedColumn.ColumnIndex
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(mappedCol.directiveAPI, directivePayload, mappedCol.directiveLoadDeferred);
-                };
-                return mappedCol.directiveLoadDeferred.promise;
-            }
-        
-            function loadFieldSelector() {
-                mappedCol.fieldSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                mappedCol.onFieldSelectorReady = function (api) {
-                    mappedCol.fields = [];
-                    mappedCol.fieldSelectorAPI = api;
-                    var fieldSelectorReadyPromiseDeferred = context.getQueryFields(selectedQueryId);
+
+            mappedCol.onFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            mappedCol.onFirstRowDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            mappedCol.onSubTableFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            mappedCol.fieldSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            mappedCol.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            mappedCol.fields = [];
+            mappedCol.onFieldSelectorReady = function (api) {
+                mappedCol.fieldSelectorAPI = api;
+                mappedCol.onFieldSelectorReadyDeferred.resolve();
+                
+                mappedCol.onFieldSelectorReadyDeferred.promise.then(function () {
+                    var fieldSelectorReadyPromiseDeferred = getAllFields(selectedQueryId);
                     fieldSelectorReadyPromiseDeferred.then(function (fields) {
                         if (fields != undefined) {
                             allFields = fields;
-                            for (var i = 0; i < fields.length; i++) {
-                                var field = fields[i];
-                                if (field.Source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable) {
-                                    mappedCol.fields.push({
-                                        description: field.FieldTitle,
-                                        value: field.FieldName,
-                                        source: field.Source
-                                    });
-                                }
-                                else {
-                                    mappedCol.fields.push({
-                                        description: field.FieldName,
-                                        value: field.SubTableId,
-                                        source: field.Source
-                                    });
-                                }
-                            }
+                            mappedCol.fields = fields;
                             mappedCol.fieldSelectorLoadPromiseDeferred.resolve();
                         }
                         if (mappedColumn != undefined) {
@@ -241,59 +192,92 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                         if (selectedField != undefined) {
                             mappedCol.selectedField = selectedField;
                         }
+                        mappedCol.fieldSelectorAPI.selectIfSingleItem();
                     });
-                };
-                return mappedCol.fieldSelectorLoadPromiseDeferred.promise;
-            }
+                });
+            };
 
-            function loadSubTableFields() {
-                mappedCol.subTableFields = [];
-                mappedCol.subTableFieldSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                mappedCol.onSubTableFieldSelectorReady = function (api) {
-                    mappedCol.subTableFieldSelectorAPI = api;
+            mappedCol.subTableFields = [];
+            mappedCol.onSubTableFieldSelectorReady = function (api) {
+               mappedCol.subTableFieldSelectorAPI = api;
+               mappedCol.onSubTableFieldSelectorReadyDeferred.resolve();
+               if (mappedColumn != undefined && mappedColumn.SubTableFields != undefined) {
+                    for (var i = 0; i < mappedColumn.SubTableFields.length; i++) {
+                        var field = mappedColumn.SubTableFields[i];
+                        mappedCol.selectedSubTableFields = UtilsService.getItemByVal(mappedCol.subTableFields, field.FieldName, "value");
+                    }
+                }
+            };
+
+            mappedCol.onDirectiveReady = function (api) {
+                mappedCol.directiveAPI = api;
+                mappedCol.onFirstRowDirectiveReadyDeferred.resolve();
+                mappedCol.onFirstRowDirectiveReadyDeferred.promise.then(function () {
+                    var directivePayload = {
+                        context: getCellFieldMappingContext(),
+                        showEditButton: false
+                    };
+                    if (mappedColumn != undefined) {
+                        directivePayload.fieldMapping = {
+                            SheetIndex: sheetIndex,
+                            RowIndex: firstRowIndex,
+                            CellIndex: mappedColumn.ColumnIndex
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(mappedCol.directiveAPI, directivePayload, mappedCol.directiveLoadDeferred);
+                });
+            };
+
+            
+
+            mappedCol.onFieldSelectionChanged = function (value) {
+                if(value!=undefined)
+                {
+                    if (value.source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable)
+                    {
+                        if (mappedColumn != undefined) {
+                            mappedCol.editedTitle = mappedColumn.FieldTitle;
+                            mappedColumn = undefined;
+                        }
+                        else {
+                            mappedCol.editedTitle = value.description;
+                        }
+                    }
+                    else
+                    {
+                        loadSubTableSelector();
+                        mappedColumn = undefined;
+                    }
+                }
+
+            };
+
+            function loadSubTableSelector() {
+                mappedCol.onSubTableFieldSelectorReadyDeferred.promise.then(function () {
                     if (mappedCol.selectedField != undefined && mappedCol.selectedField.source == VR_Analytic_AutomatedReportQuerySourceEnum.SubTable) {
                         mappedCol.subTableFields.length = 0;
-                        for (var i = 0; i < allFields.length; i++) {
+                        if(allFields!=undefined){
+                               for (var i = 0; i < allFields.length; i++) {
                             var field = allFields[i];
-                            if (field.SubTableId !=undefined && field.SubTableId == mappedCol.selectedField.value) {
-                                var subTableFields = field.SubTableFields;
-                                for (var subTableFieldName in subTableFields) {
+                            if (field.subTableFields != undefined && field.value == mappedCol.selectedField.value) {
+                                for (var subTableFieldName in field.subTableFields) {
                                     if (subTableFieldName != "$type") {
-                                        var field = subTableFields[subTableFieldName].Field;
+                                        var matchingField = field.subTableFields[subTableFieldName].Field;
                                         mappedCol.subTableFields.push({
-                                        description: field.Title,
-                                        value: field.Name,
-                                        source: VR_Analytic_AutomatedReportQuerySourceEnum.SubTable
+                                                description: matchingField.Title,
+                                                value: matchingField.Name,
+                                                source: VR_Analytic_AutomatedReportQuerySourceEnum.SubTable
                                     });
+                                    }
                                 }
-                            }
-                        }
-                        }
-                        if (mappedColumn != undefined && mappedColumn.SubTableFields != undefined) {
-                            for (var i = 0; i < mappedColumn.SubTableFields.length; i++) {
-                                var field = mappedColumn.SubTableFields[i];
-                                mappedCol.selectedSubTableFields = UtilsService.getItemByVal(mappedCol.subTableFields, field.FieldName, "value");
+                               }
                             }
                         }
                         mappedCol.subTableFieldSelectorAPI.selectIfSingleItem();
                     }
-                };
-                return mappedCol.subTableFieldSelectorLoadPromiseDeferred.promise;
+                });
             }
 
-
-            mappedCol.editedTitle = mappedColumn != undefined ? mappedColumn.FieldTitle : undefined;
-
-            mappedCol.onFieldSelectionChanged = function (value) {
-                if (value != undefined && value.source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable) {
-                    mappedCol.editedTitle = value.description;
-                }
-            };
-
-
-            UtilsService.waitMultiplePromises([loadFieldSelector(), loadFirstRowDirective(), loadSubTableFields()]).finally(function () {
-                $scope.scopeModel.isLoadingMappedCol = false;
-            });
             return mappedCol;
         };
 
@@ -381,6 +365,36 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
             }
 
             return mappedTable;
+        }
+
+        function getAllFields(selectedQueryId) {
+            var fieldsPromise = context.getQueryFields(selectedQueryId);
+            var fieldsArrayPromise = UtilsService.createPromiseDeferred();
+            var fieldsArray = [];
+            fieldsPromise.then(function (fields) {
+                if (fields != undefined) {
+                    for (var i = 0; i < fields.length; i++) {
+                        var field = fields[i];
+                        if (field.Source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable) {
+                            fieldsArray.push({
+                                description: field.FieldTitle,
+                                value: field.FieldName,
+                                source: field.Source
+                            });
+                        }
+                        else {
+                            fieldsArray.push({
+                                description: field.FieldName,
+                                value: field.SubTableId,
+                                source: field.Source,
+                                subTableFields: field.SubTableFields
+                            });
+                        }
+                    }
+                    fieldsArrayPromise.resolve(fieldsArray);
+                }
+            });
+            return fieldsArrayPromise.promise;
         }
     }
 
