@@ -61,12 +61,7 @@ namespace Vanrise.Analytic.Business
             {
                 LoggedInUserId = userId
             });
-        }
-
-        private List<VRAutomatedReportQueryDefinition> GetAllVRAutomatedReportQueryDefinitions()
-        {
-            return _vrComponentTypeManager.GetComponentTypes<VRAutomatedReportQueryDefinitionSettings, VRAutomatedReportQueryDefinition>();
-        }
+        }        
         public Dictionary<Guid, VRAutomatedReportDataSchema> GetAutomatedReportDataSchema(AutomatedReportQueries input)
         {
             Dictionary<Guid, VRAutomatedReportDataSchema> schema = new Dictionary<Guid, VRAutomatedReportDataSchema>();
@@ -106,7 +101,12 @@ namespace Vanrise.Analytic.Business
         }
 
         #endregion
-
+        #region Private Methods
+        private List<VRAutomatedReportQueryDefinition> GetAllVRAutomatedReportQueryDefinitions()
+        {
+            return _vrComponentTypeManager.GetComponentTypes<VRAutomatedReportQueryDefinitionSettings, VRAutomatedReportQueryDefinition>();
+        }
+        #endregion
 
 
         #region Mappers
