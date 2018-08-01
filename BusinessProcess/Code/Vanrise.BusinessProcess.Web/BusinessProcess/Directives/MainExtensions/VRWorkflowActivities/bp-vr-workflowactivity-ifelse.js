@@ -159,14 +159,8 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	                return {
 	                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowIfElseActivity, Vanrise.BusinessProcess.MainExtensions",
 	                    Condition: $scope.scopeModel.condition,
-	                    TrueActivity: {
-	                        VRWorkflowActivityId: UtilsService.guid(),
-	                        VRWorkflowActivitySettings: trueWorkflowContainerAPI != undefined ? trueWorkflowContainerAPI.getData() : null
-	                    },
-	                    FalseActivity: {
-	                        VRWorkflowActivityId: UtilsService.guid(),
-	                        VRWorkflowActivitySettings: falseWorkflowContainerAPI != undefined ? falseWorkflowContainerAPI.getData() : null
-	                    }
+	                    TrueActivity: trueWorkflowContainerAPI != undefined ? trueWorkflowContainerAPI.getData() : null,
+	                    FalseActivity:falseWorkflowContainerAPI != undefined ? falseWorkflowContainerAPI.getData() : null
 	                };
 	            };
 

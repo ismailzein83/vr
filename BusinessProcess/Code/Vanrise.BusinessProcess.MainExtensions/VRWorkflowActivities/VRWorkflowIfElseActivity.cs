@@ -14,7 +14,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-ifelse"; } }
 
-        public override string Title { get { return "IfElse"; } }
+        public override string Title { get { return "If Else"; } }
 
         public string Condition { get; set; }
 
