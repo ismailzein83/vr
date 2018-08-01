@@ -37,7 +37,7 @@ namespace Vanrise.Analytic.Entities
     }
     public interface IVRReportGenerationRuntimeFilterContext
     {
-        public VRReportGenerationFilter FilterDefinition { get; }
+        VRReportGenerationFilter FilterDefinition { get; }
     }
     public class VRReportGenerationFilterContent
     {

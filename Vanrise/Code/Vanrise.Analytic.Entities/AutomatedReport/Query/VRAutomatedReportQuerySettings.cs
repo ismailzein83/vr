@@ -21,6 +21,8 @@ namespace Vanrise.Analytic.Entities
     public interface IVRAutomatedReportQueryExecuteContext
     {
         Guid QueryDefinitionId { get; }
+        VRReportGenerationFilter Filter { get;}
+        VRReportGenerationRuntimeFilter RuntimeFilter { get; }
     }
 
     public interface IVRAutomatedReportQueryGetSchemaContext

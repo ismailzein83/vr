@@ -17,7 +17,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             input.FileGenerator.ThrowIfNull("input.FileGenerator");
             VRAutomatedReportFileGeneratorGenerateFileContext fileGeneratorContext = new VRAutomatedReportFileGeneratorGenerateFileContext
             {
-                HandlerContext = new VRAutomatedReportHandlerExecuteContext(input.Queries, null, null)
+                HandlerContext = new VRAutomatedReportHandlerExecuteContext(input.Queries, null, null, input.Filter, input.RuntimeFilter)
             };
             var generatedOutput = GenerateFileOutput(input.FileGenerator, fileGeneratorContext);
             generatedOutput.ThrowIfNull("generatedOutput");
