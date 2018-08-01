@@ -85,6 +85,7 @@
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEConditionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBESaveConditionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEViewDefinitionSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\RemoteGenericBEDefinitionInfoInput.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\StaticBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEFilterDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\LKUPBEDefinitionSettings\LKUPBEExtendedSettingsConfig.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="DataStorage\IGetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\TempStorageInformation.cs" />
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEDefinitionFilter.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityFilter.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
