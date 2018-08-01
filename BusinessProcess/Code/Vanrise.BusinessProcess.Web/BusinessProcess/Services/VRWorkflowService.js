@@ -137,7 +137,7 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ExpressionBuilderEditor.html', parameter, modalSettings);
 		}
 
-		function openVariablesEditor(onSaveVariables, variables, parentVariables, reserveVariableName, eraseVariableName, isVariableNameReserved) {
+		function openVariablesEditor(onSaveVariables, variables, parentVariables, reserveVariableName, eraseVariableName, isVariableNameReserved, reserveVariableNames) {
 			var modalSettings = {};
 
 			modalSettings.onScopeReady = function (modalScope) {
@@ -145,12 +145,54 @@
 				modalScope.reserveVariableName = reserveVariableName;
 				modalScope.eraseVariableName = eraseVariableName;
 				modalScope.isVariableNameReserved = isVariableNameReserved;
+				modalScope.reserveVariableNames = reserveVariableNames;
 			};
 			var parameter = {
 				Variables: variables,
 				ParentVariables: parentVariables
 			};
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ActivityVariablesEditor.html', parameter, modalSettings);
+		}
+
+		function openForeachEditor(dragdropsetting, foreachObj, getChildContext, context, onActivityUpdated) {
+			var modalSettings = {};
+
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onActivityUpdated = onActivityUpdated;
+			};
+			var parameter = {
+				dragdropsetting: dragdropsetting,
+				getChildContext: getChildContext,
+				context: context,
+				foreachObj: foreachObj
+			};
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityForEachEditor.html', parameter, modalSettings);
+		}
+
+		function openSequenceEditor(dragdropsetting, context, settings, onActivityUpdated) {
+			var modalSettings = {};
+
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onActivityUpdated = onActivityUpdated;
+			};
+			var parameter = {
+				dragdropsetting: dragdropsetting,
+				context: context,
+				settings: settings
+			};
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivitySequenceEditor.html', parameter, modalSettings);
+		}
+
+		function openCallHttpServiceEditor(obj, onActivityUpdated) {
+			var modalSettings = {};
+
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onActivityUpdated = onActivityUpdated;
+			};
+			var parameter = {
+				obj: obj
+			};
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityCallHttpServiceEditor.html', parameter, modalSettings);
 		}
 
 		function tryCompilationResult(errorMessages, workflowObj) {
@@ -176,7 +218,10 @@
 			getDrillDownDefinition: getDrillDownDefinition,
 			openExpressionBuilder: openExpressionBuilder,
 			openVariablesEditor: openVariablesEditor,
-			tryCompilationResult: tryCompilationResult
+			tryCompilationResult: tryCompilationResult,
+			openForeachEditor: openForeachEditor,
+			openSequenceEditor: openSequenceEditor,
+			openCallHttpServiceEditor: openCallHttpServiceEditor
 		});
 	}
 

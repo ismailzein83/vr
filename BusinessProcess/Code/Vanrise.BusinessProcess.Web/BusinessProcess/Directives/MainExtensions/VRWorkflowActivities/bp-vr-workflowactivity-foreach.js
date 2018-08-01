@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
-	function (UtilsService, VRUIUtilsService, VRNotificationService) {
+app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'BusinessProcess_VRWorkflowService',
+	function (UtilsService, VRUIUtilsService, VRNotificationService, BusinessProcess_VRWorkflowService) {
 
 		var directiveDefinitionObject = {
 			restrict: 'E',
@@ -75,6 +75,12 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 				};
 
 				api.load = function (payload) {
+
+					var editModeAction = {
+						name: "Edit",
+						clicked: openActivityEditor
+					};
+
 					var promises = [];
 					if (payload != undefined) {
 						if (payload.Settings != undefined) {
@@ -88,11 +94,28 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 							$scope.scopeModel.context = payload.Context;
 							context = payload.Context;
 						}
+						if (payload.SetMenuAction != undefined)
+							payload.SetMenuAction(editModeAction);
 					}
 
 					promises.push(loadWorkflowContainer());
 					promises.push(loadVariableTypeDirective());
 					UtilsService.waitMultiplePromises(promises);
+
+					function openActivityEditor() {
+						var onActivityUpdated = function (foreachObj) {
+							var promises = [];
+							$scope.scopeModel.List = foreachObj.List;
+							$scope.scopeModel.IterationVariableName = foreachObj.IterationVariableName;
+							$scope.scopeModel.IterationVariableType = foreachObj.IterationVariableType;
+							iterationVariableType = foreachObj.IterationVariableType;
+							activity = foreachObj.Activity;
+							promises.push(loadWorkflowContainer());
+							promises.push(loadVariableTypeDirective());
+							UtilsService.waitMultiplePromises(promises);
+						};
+						BusinessProcess_VRWorkflowService.openForeachEditor(ctrl.dragdropsetting, buildObjectFromScope(), ctrl.getChildContext, context, onActivityUpdated);
+					}
 
 					function loadWorkflowContainer() {
 						var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
@@ -122,7 +145,7 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 						variableTypeSelectorReadyDeferred.promise.then(function () {
 
 							var variableTypeDirectivePayload = { selectIfSingleItem: true };
-							if (iterationVariableType != undefined && iterationVariableType != undefined) {
+							if (iterationVariableType != undefined) {
 								variableTypeDirectivePayload.variableType = iterationVariableType;
 							}
 							VRUIUtilsService.callDirectiveLoad(variableTypeSelectorAPI, variableTypeDirectivePayload, variableTypeDirectiveLoadDeferred);
@@ -133,18 +156,22 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 				};
 
 				api.getData = function () {
-					return {
-						$type:
-							"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowForEachActivity, Vanrise.BusinessProcess.MainExtensions",
-						List: $scope.scopeModel.List,
-						IterationVariableName: $scope.scopeModel.IterationVariableName,
-						IterationVariableType: variableTypeSelectorAPI.getData(),
-						Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null
-					};
+					return buildObjectFromScope();
 				};
 
 				if (ctrl.onReady != null)
 					ctrl.onReady(api);
+			}
+
+			function buildObjectFromScope() {
+				return {
+					$type:
+						"Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowForEachActivity, Vanrise.BusinessProcess.MainExtensions",
+					List: $scope.scopeModel.List,
+					IterationVariableName: $scope.scopeModel.IterationVariableName,
+					IterationVariableType: variableTypeSelectorAPI.getData(),
+					Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null
+				};
 			}
 		}
 		return directiveDefinitionObject;

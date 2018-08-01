@@ -1,16 +1,19 @@
-﻿<vr-row>
+﻿<!--<vr-row>
+	<vr-label postspace largesize>Foreach</vr-label><vr-label largesize postspace isvalue>{{scopeModel.IterationVariableName}}</vr-label><vr-label largesize postspace>In</vr-label><vr-label isvalue largesize>{{scopeModel.List}}</vr-label>
+</vr-row>
+<vr-row ng-show="false">
 	<vr-columns width="1/2row">
-		<vr-textbox label="Foreach" value="scopeModel.IterationVariableName" isrequired="ctrl.isrequired"></vr-textbox>
+		<vr-textbox label="Foreach" value="scopeModel.IterationVariableName" isrequired="true"></vr-textbox>
 	</vr-columns>
 	<vr-columns width="1/2row">
 		<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'In'" isrequired="true" value="scopeModel.List"></businessprocess-vr-workflow-activity-expressionbuilder>
 	</vr-columns>
 </vr-row>
-<vr-row removeline haschildcolumns>
+<vr-row removeline ng-show="false">
 	<businessprocess-vr-workflow-variabletypes normal-col-num="6" on-ready="scopeModel.onVariableTypeSelectorReady"></businessprocess-vr-workflow-variabletypes>
 </vr-row>
 <vr-row removeline>
 	<vr-fieldset label="Body">
 		<businessprocess-vr-workflow-containerv2 single-activity="true" on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-containerv2>
 	</vr-fieldset>
-</vr-row>
+</vr-row>-->

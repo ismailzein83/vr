@@ -51,6 +51,15 @@
 			};
 
 			$scope.scopeModel.close = function () {
+				$scope.reserveVariableNames(variables);
+				var gridVariables = activityVariableGridAPI.getData();
+				
+				if (gridVariables != undefined && gridVariables.length > 0 && $scope.eraseVariableName != undefined) {
+					for (var i = 0; i < gridVariables.length; i++) {
+						if (variables.indexOf(gridVariables[i]) < 0)
+							$scope.eraseVariableName(gridVariables[i].Name)
+					}
+				}
 				$scope.modalContext.closeModal();
 			};
 		}
