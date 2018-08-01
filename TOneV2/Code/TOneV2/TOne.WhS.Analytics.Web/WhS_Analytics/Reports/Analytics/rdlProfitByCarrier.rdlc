@@ -760,8 +760,9 @@
                   </Style>
                 </ChartAxisTitle>
                 <Margin>True</Margin>
+                <Interval>2</Interval>
                 <ChartMajorGridLines>
-                  <Enabled>True</Enabled>
+                  <Enabled>False</Enabled>
                   <Style>
                     <Border>
                       <Style>Solid</Style>
@@ -887,7 +888,7 @@
         <DataSetName>ExchangeChart</DataSetName>
         <Top>1.375in</Top>
         <Height>4.75in</Height>
-        <Width>11.2in</Width>
+        <Width>14.29167in</Width>
         <ZIndex>1</ZIndex>
         <CustomProperties>
           <CustomProperty>
@@ -903,7 +904,7 @@
     <Height>6.125in</Height>
     <Style />
   </Body>
-  <Width>11.625in</Width>
+  <Width>14.29167in</Width>
   <Page>
     <PageHeader>
       <Height>2.625in</Height>
