@@ -80,12 +80,43 @@ namespace Mediation.Runtime.DataParser
             };
 
             return Serializer.Serialize(parserType.Settings);
+        }
 
+        private Dictionary<string, BinaryRecordParser> Get_30_SubRecordsParsersByTag()
+        {
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+
+            subParser.Add("30", new BinaryRecordParser
+            {
+                Settings = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = Get_30_SplitRecordsParsersByTag()
+                }
+            });
+
+            return subParser;
+        }
+
+        private Dictionary<string, BinaryRecordParser> Get_30_SplitRecordsParsersByTag()
+        {
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+
+            subParser.Add("A1", new BinaryRecordParser
+            {
+                Settings = new ExecuteTemplateRecordParser
+                {
+                    RecordParserTemplateId = new Guid("9AB5792A-BB25-412C-BFCD-791515F7C893")
+                }
+
+            });
+
+            return subParser;
         }
 
         private Dictionary<Guid, BinaryRecordParser> GetTemplates_Huawei()
         {
             Dictionary<Guid, BinaryRecordParser> templates = new Dictionary<Guid, BinaryRecordParser>();
+
             templates.Add(new Guid("9AB5792A-BB25-412C-BFCD-791515F7C893"), new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
@@ -117,6 +148,7 @@ namespace Mediation.Runtime.DataParser
                 }
 
             });
+
             parsers.Add("A4", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
@@ -165,18 +197,8 @@ namespace Mediation.Runtime.DataParser
                     CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
                 }
             });
+
             return parsers;
-        }
-
-        private List<CompositeFieldsParser> GetHuaweiNamibiaCompositeParsers()
-        {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
-            new FileNameCompositeParser{
-             FieldName = "FileName"
-            }
-            };
-
-            return fieldParsers;
         }
 
         private Dictionary<string, BinaryFieldParser> Get_A3_FieldParsers_Huawei()
@@ -436,7 +458,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "NetworkCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
@@ -784,7 +807,8 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "NetworkCallReference",
-                    NumberType = NumberType.BigInt
+                    NumberType = NumberType.BigInt,
+                    ConvertOutputToString = true
                 }
             });
 
@@ -1900,33 +1924,15 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, BinaryRecordParser> Get_30_SubRecordsParsersByTag()
+        private List<CompositeFieldsParser> GetHuaweiNamibiaCompositeParsers()
         {
-            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
+            new FileNameCompositeParser{
+             FieldName = "FileName"
+            }
+            };
 
-            subParser.Add("30", new BinaryRecordParser
-            {
-                Settings = new SplitByTagRecordParser
-                {
-                    SubRecordsParsersByTag = Get_30_SplitRecordsParsersByTag()
-                }
-            });
-
-            return subParser;
-        }
-
-        private Dictionary<string, BinaryRecordParser> Get_30_SplitRecordsParsersByTag()
-        {
-            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
-            subParser.Add("A1", new BinaryRecordParser
-            {
-                Settings = new ExecuteTemplateRecordParser
-                {
-                    RecordParserTemplateId = new Guid("9AB5792A-BB25-412C-BFCD-791515F7C893")
-                }
-
-            });
-            return subParser;
+            return fieldParsers;
         }
 
         #endregion
