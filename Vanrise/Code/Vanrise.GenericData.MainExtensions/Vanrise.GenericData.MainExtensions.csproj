@@ -103,6 +103,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\GenericBESerialNumberController.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\GenericBESerialNumberManager.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandlers\SerialNumberOnBeforeInsertHandler.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\GenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
