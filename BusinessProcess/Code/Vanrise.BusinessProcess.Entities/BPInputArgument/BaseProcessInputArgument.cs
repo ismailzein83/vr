@@ -19,7 +19,10 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return BusinessManagerFactory.GetManager<IBPDefinitionManager>().GetDefinitionTitle(this.ProcessName);
         }
+        public virtual void OnAfterSaveAction(IProcessInputArgumentOnAfterSaveActionContext context)
+        {
 
+        }
         public virtual void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
 
@@ -30,9 +33,16 @@ namespace Vanrise.BusinessProcess.Entities
 
         }
     }
-
+    public interface IProcessInputArgumentOnAfterSaveActionContext
+    {
+        Guid TaskId { get; }
+    }
     public interface IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext
     {
 
+    }
+    public class ProcessInputArgumentOnAfterSaveActionContext : IProcessInputArgumentOnAfterSaveActionContext
+    {
+        public Guid TaskId { get; set; }
     }
 }

@@ -13,5 +13,15 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
         public Guid BPDefinitionID { get; set; }
 
         public BaseProcessInputArgument ProcessInputArguments { get; set; }
+
+        public override void OnAfterSaveAction(IBaseTaskActionArgumentOnAfterSaveActionContext context)
+        {
+            if (ProcessInputArguments != null)
+                ProcessInputArguments.OnAfterSaveAction(new ProcessInputArgumentOnAfterSaveActionContext
+                {
+                    TaskId = context.TaskId
+                });
+        }
     }
+
 }
