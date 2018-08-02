@@ -54,7 +54,7 @@
                 carrierAccountSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
                 var payload = {
-                    context : context
+                    context: context
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountSelectorAPI, payload, setLoader, carrierAccountSelectorReadyDeferred);
                 var payload = { context: getContext() };
@@ -68,16 +68,16 @@
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onBEDChanged = function () {
-                
+                updateDescription();
             };
             $scope.scopeModel.onEEDChanged = function () {
-                
+
             };
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 loadVolumeCommitmentItems();
-               
+
             };
 
             $scope.scopeModel.onVolumeCommitmenetItemsReady = function (api) {
@@ -108,8 +108,7 @@
                 }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
-            $scope.scopeModel.showVolumeItemSection = function ()
-            {
+            $scope.scopeModel.showVolumeItemSection = function () {
                 return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
             };
             $scope.scopeModel.validateDealStatusDate = function () {
@@ -164,9 +163,8 @@
 
             });
         }
-        function loadVolumeCommitmentItems()
-        {
-            if (carrierAccountInfo != undefined ) {
+        function loadVolumeCommitmentItems() {
+            if (carrierAccountInfo != undefined) {
                 if (carrierAccountSelectedPromise != undefined)
                     carrierAccountSelectedPromise.resolve();
                 else {
@@ -254,7 +252,8 @@
         }
         function updateDescription() {
             setTimeout(function () {
-                $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(VRDateTimeService.getNowDateTime());
+                if ($scope.scopeModel.carrierAccount != undefined)
+                    $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate($scope.scopeModel.beginDate);
             });
         }
         function loadCurrencySelector() {
@@ -436,8 +435,7 @@
                 getCarrierAccountId: function () {
                     return carrierAccountSelectorAPI.getSelectedIds();
                 },
-                getVolumeCommitmentCurrency : function ()
-                {
+                getVolumeCommitmentCurrency: function () {
                     return currencyDirectiveAPI.getSelectedValues();
                 }
 
