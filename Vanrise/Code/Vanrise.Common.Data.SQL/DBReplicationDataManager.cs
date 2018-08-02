@@ -31,8 +31,9 @@ namespace Vanrise.Common.Data.SQL
                 string targetServerConnectionString = dbReplicationTableDetailsListKvp.Key;
                 SqlConnectionStringBuilder targetConnectionString = new SqlConnectionStringBuilder(targetServerConnectionString);
                 string targetServerAddress = targetConnectionString.DataSource;
-                ServerConnection serverConnection = new ServerConnection(targetServerAddress, targetConnectionString.UserID,targetConnectionString.Password);
-                Server targetServer = new Server(serverConnection);
+                ServerConnection targetServerConnection = new ServerConnection(targetServerAddress, targetConnectionString.UserID, targetConnectionString.Password);
+
+                Server targetServer = BuildServer(targetServerConnection); 
 
                 List<TableInfo> tableInfoList = TableInfoListByTargetServer.GetOrCreateItem(targetServerAddress);
                 foreach (var dbReplicationTableDetails in dbReplicationTableDetailsListKvp.Value)
@@ -43,7 +44,7 @@ namespace Vanrise.Common.Data.SQL
 
                     Server sourceServer = SourceServersByConnectionStringName.GetOrCreateItem(dbReplicationTableDetails.SourceConnectionStringName, () =>
                     {
-                        return new Server(sourceServerConnection);
+                        return BuildServer(sourceServerConnection);
                     });
 
                     Table table = GetTableReference(sourceServer, sourceSQLConnection.Database, dbReplicationTableDetails.TableName, dbReplicationTableDetails.TableSchema);
@@ -65,6 +66,15 @@ namespace Vanrise.Common.Data.SQL
                     context.WriteInformation(string.Format("Temporary table {0} created", GetFullTableName(dbReplicationTableDetails.TableName, null, dbReplicationTableDetails.TableSchema)));
                 }
             }
+        }
+
+        private Server BuildServer(ServerConnection serverConnection)
+        {
+            Server server = new Server(serverConnection);
+            server.ConnectionContext.ConnectTimeout = 0;
+            server.ConnectionContext.LockTimeout = 0;
+            server.ConnectionContext.StatementTimeout = 0;
+            return server;
         }
 
         public void MigrateData(IDBReplicationMigrateDataContext context)
