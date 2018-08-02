@@ -169,7 +169,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     entity = payload.runtimeDirectiveEntity;
                     definitionId = payload.definitionId;
                     context = payload.context;
-                    if (context != undefined) { $scope.scopeModel.hasNoExternalFilter = !context.hasExternalFilter(); }
+                    if (context != undefined && context.hasExternalFilter != undefined) { $scope.scopeModel.hasNoExternalFilter = !context.hasExternalFilter(); }
                     if (entity != undefined) {
                         $scope.scopeModel.limitResult = entity.LimitResult;
                         dataRecordStoragePayload = entity.DataRecordStorages;
