@@ -36,6 +36,8 @@
             accessLevels = UtilsService.getArrayEnum(VR_Analytic_AccessLevel);
             $scope.scopeModel.accessLevels = [];
             $scope.scopeModel.accessLevels.push(UtilsService.getItemByVal(accessLevels, 'Private', 'description'));
+            $scope.scopeModel.selectedAccessLevel = $scope.scopeModel.accessLevels[0];
+
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
                 settingsDirectiveReadyDeferred.resolve();
