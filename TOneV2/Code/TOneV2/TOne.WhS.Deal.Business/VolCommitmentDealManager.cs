@@ -41,9 +41,9 @@ namespace TOne.WhS.Deal.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedEntities.ToBigResult(input, filterExpression, DealDeinitionDetailMapper), handler);
         }
 
-        public InsertDealOperationOutput<List<DealDefinitionDetail>> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
+        public InsertDealOperationOutput<RecurredDealItem> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
         {
-            InsertDealOperationOutput<List<DealDefinitionDetail>> insertOperationOutput = new InsertDealOperationOutput<List<DealDefinitionDetail>>
+            InsertDealOperationOutput<RecurredDealItem> insertOperationOutput = new InsertDealOperationOutput<RecurredDealItem>
             {
                 Result = Vanrise.Entities.InsertOperationResult.Failed,
                 InsertedObject = null
@@ -54,14 +54,14 @@ namespace TOne.WhS.Deal.Business
                 throw new NullReferenceException(dealId.ToString());
 
             if (!deal.Settings.IsRecurrable)
-                return insertOperationOutput;
+                throw new VRBusinessException("This Deal is not Recurrable");
 
             var dealDefinitionManager = new DealDefinitionManager();
 
             //Getting Recurred Deals
             List<DealDefinition> recurredDeals = dealDefinitionManager.GetRecurredDeals(deal, recurringNumber, recurringType);
             if (!recurredDeals.Any())
-                return insertOperationOutput;
+                throw new VRBusinessException("No Recurred Deals were Generated");
 
             //Validation
             insertOperationOutput.ValidationMessages = new List<string>();
@@ -77,8 +77,12 @@ namespace TOne.WhS.Deal.Business
             deal.Settings.IsRecurrable = false;
             if (dataManager.Update(deal))
             {
+                RecurredDealItem recurredDealItem = new RecurredDealItem()
+                {
+                    UpdatedItem = DealDeinitionDetailMapper(deal)
+                };
+                recurredDealItem.InsertedItems = new List<DealDefinitionDetail>();
                 errorMessages = new List<string>();
-                insertOperationOutput.InsertedObject = new List<DealDefinitionDetail>();
                 foreach (var recurredDeal in recurredDeals)
                 {
                     int insertedId = -1;
@@ -86,7 +90,8 @@ namespace TOne.WhS.Deal.Business
                     {
                         CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                        insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(recurredDeal));
+                        recurredDealItem.InsertedItems.Add(DealDeinitionDetailMapper(recurredDeal));
+                        // insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(recurredDeal));
                         recurredDeal.DealId = insertedId;
                     }
                     else
@@ -94,8 +99,8 @@ namespace TOne.WhS.Deal.Business
                         errorMessages.Add(string.Format("Deal Already exist {0}", recurredDeal.Name));
                     }
                 }
+                insertOperationOutput.InsertedObject = recurredDealItem;
             }
-            ////
             if (errorMessages.Any())
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;

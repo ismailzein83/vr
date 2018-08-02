@@ -60,7 +60,7 @@
 
         function recurDeal() {
             $scope.scopeModel.isLoading = true;
-            var dealObject = buildSwapDealInboundObjFromScope();
+            var dealObject = buildRecurringDealObjFromScope();
                 $scope.onRecur(dealId, dealObject.RecurringNumber, dealObject.RecurringType).then(function (response) {
                     if (response.Result == 0)
                         $scope.modalContext.closeModal();
@@ -73,7 +73,7 @@
             });
         }
 
-        function buildSwapDealInboundObjFromScope() {
+        function buildRecurringDealObjFromScope() {
             var obj = {
                 RecurringNumber: $scope.scopeModel.RecurringNumber,
                 RecurringType: recurringTypeApi.getSelectedIds(),

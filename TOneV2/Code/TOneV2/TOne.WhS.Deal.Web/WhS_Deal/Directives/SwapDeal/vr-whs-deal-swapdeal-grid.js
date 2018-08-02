@@ -123,10 +123,11 @@
             function recurDeal(dataItem) {
                 var onRecur = function (dealId, recurringNumber, recurringType) {
                     return WhS_Deal_SwapDealAPIService.RecurDeal(dealId, recurringNumber, recurringType).then(function (response) {
-                        for (var index in response.InsertedObject) {
-                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.InsertedObject[index]);
-                            gridAPI.itemAdded(response.InsertedObject[index]);
+                        for (var index in response.InsertedObject.InsertedItems) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.InsertedObject.InsertedItems[index]);
+                            gridAPI.itemAdded(response.InsertedObject.InsertedItems[index]);
                         }
+                        gridAPI.itemUpdated(response.InsertedObject.UpdatedItem);
                         return response;
                     });
                 };

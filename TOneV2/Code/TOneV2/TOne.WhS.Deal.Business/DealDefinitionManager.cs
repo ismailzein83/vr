@@ -438,7 +438,7 @@ namespace TOne.WhS.Deal.Business
                         recurredDeal.Settings.EndDate = deal.Settings.EndDate.Value.AddMonths((monthsDifference + 1) * (i + 1));
                         break;
                 }
-                recurredDeal.Name = string.Format("{0}-({1:yyyy/MM/dd}-{2:yyyy/MM/dd})", deal.Name, recurredDeal.Settings.BeginDate, recurredDeal.Settings.EndDate);
+                recurredDeal.Name = string.Format("{0}-({1}-{2})", deal.Name, recurredDeal.Settings.BeginDate.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)), recurredDeal.Settings.EndDate.Value.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
                 recurredDeal.Settings.IsRecurrable = false;
                 recurredDeals.Add(recurredDeal);
             }
@@ -844,5 +844,11 @@ namespace TOne.WhS.Deal.Business
         }
 
         #endregion
+    }
+
+    public class RecurredDealItem
+    {
+        public DealDefinitionDetail UpdatedItem { get; set; }
+        public List<DealDefinitionDetail> InsertedItems { get; set; }
     }
 }
