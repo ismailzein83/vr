@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class BalanceUsageQueueDataManager : IBalanceUsageQueueDataManager
     {
-        public static string TABLE_NAME = "VR_AccountBalance_BalanceUsageQueue";
+        static string TABLE_NAME = "VR_AccountBalance_BalanceUsageQueue";
 
         static BalanceUsageQueueDataManager()
         {

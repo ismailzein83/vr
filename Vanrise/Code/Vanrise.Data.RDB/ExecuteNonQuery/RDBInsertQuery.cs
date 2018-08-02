@@ -30,6 +30,8 @@ namespace Vanrise.Data.RDB
         bool _addSelectGeneratedId;
         string _selectGeneratedIdAlias;
 
+        RDBSelectQuery _selectQuery;
+
         public void IntoTable(IRDBTableQuerySource table)
         {
             this._table = table;
@@ -129,6 +131,12 @@ namespace Vanrise.Data.RDB
         //     this.ColumnValue(columnName, new RDBFixedBytesExpression { Value = value });
         //}
 
+        public RDBSelectQuery FromSelect()
+        {
+            _selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
+            return _selectQuery;
+        }
+
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             RDBResolvedQuery resolvedQuery;
@@ -190,7 +198,7 @@ namespace Vanrise.Data.RDB
                 }
             }
 
-            var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, this._columnValues, generatedIdDBParameterName, context, _queryBuilderContext);
+            var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, this._columnValues, this._selectQuery, generatedIdDBParameterName, context, _queryBuilderContext);
             resolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
             return resolvedQuery;
         }

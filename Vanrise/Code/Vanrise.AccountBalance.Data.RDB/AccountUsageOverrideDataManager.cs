@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class AccountUsageOverrideDataManager : IAccountUsageOverrideDataManager
     {
-        public static string TABLE_NAME = "VR_AccountBalance_AccountUsageOverride";
+        static string TABLE_NAME = "VR_AccountBalance_AccountUsageOverride";
 
         static AccountUsageOverrideDataManager()
         {
@@ -75,10 +75,18 @@ namespace Vanrise.AccountBalance.Data.RDB
             where.EqualsCondition("AccountTypeID").Value(accountTypeId);
             where.EqualsCondition("AccountID").Value(accountId);
             where.EqualsCondition("TransactionTypeID").Value(transactionTypeId);
-            where.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq).Value(periodStart);
-            where.CompareCondition("PeriodEnd", RDBCompareConditionOperator.GEq).Value(periodEnd);
+            where.LessOrEqualCondition("PeriodStart").Value(periodStart);
+            where.GreaterOrEqualCondition("PeriodEnd").Value(periodEnd);
 
             return  queryContext.ExecuteScalar().NullableLongValue.HasValue;
+        }
+
+        internal void AddSelectAccountUsageOverrideToJoinSelect(RDBJoinSelectContext joinSelectContext, IEnumerable<long> deletedTransactionIds)
+        {            
+            var joinSelectQuery = joinSelectContext.SelectQuery();
+            joinSelectQuery.From(TABLE_NAME, "usageOverride");
+            joinSelectQuery.SelectColumns().Columns("AccountTypeID", "AccountID", "TransactionTypeID", "PeriodStart", "PeriodEnd");
+            joinSelectQuery.Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds);
         }
     }
 }

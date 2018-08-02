@@ -46,6 +46,56 @@ namespace Vanrise.Data.RDB
             return new RDBExpressionContext(_queryBuilderContext, setExpression, _tableAlias);
         }
 
+        public RDBExpressionContext GreaterThanCondition(string tableAlias, string columnName)
+        {
+            return CompareCondition(tableAlias, columnName, RDBCompareConditionOperator.G);
+        }
+
+        public RDBExpressionContext GreaterThanCondition(string columnName)
+        {
+            return GreaterThanCondition(_tableAlias, columnName);
+        }
+
+        public RDBExpressionContext GreaterOrEqualCondition(string tableAlias, string columnName)
+        {
+            return CompareCondition(tableAlias, columnName, RDBCompareConditionOperator.GEq);
+        }
+
+        public RDBExpressionContext GreaterOrEqualCondition(string columnName)
+        {
+            return GreaterOrEqualCondition(_tableAlias, columnName);
+        }
+
+        public RDBExpressionContext LessThanCondition(string tableAlias, string columnName)
+        {
+            return CompareCondition(tableAlias, columnName, RDBCompareConditionOperator.L);
+        }
+
+        public RDBExpressionContext LessThanCondition(string columnName)
+        {
+            return LessThanCondition(_tableAlias, columnName);
+        }
+
+        public RDBExpressionContext LessOrEqualCondition(string tableAlias, string columnName)
+        {
+            return CompareCondition(tableAlias, columnName, RDBCompareConditionOperator.LEq);
+        }
+
+        public RDBExpressionContext LessOrEqualCondition(string columnName)
+        {
+            return LessOrEqualCondition(_tableAlias, columnName);
+        }
+
+        public RDBExpressionContext NotEqualsCondition(string tableAlias, string columnName)
+        {
+            return CompareCondition(tableAlias, columnName, RDBCompareConditionOperator.NEq);
+        }
+
+        public RDBExpressionContext NotEqualsCondition(string columnName)
+        {
+            return NotEqualsCondition(_tableAlias, columnName);
+        }
+
         public RDBExpressionContext CompareCondition(string tableAlias, string columnName, RDBCompareConditionOperator oper)
         {
             return new RDBExpressionContext(_queryBuilderContext, (expression) => CompareCondition(tableAlias, columnName, oper, expression), _tableAlias);

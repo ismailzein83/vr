@@ -10,7 +10,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class AccountUsageDataManager : IAccountUsageDataManager
     {
-        public static string TABLE_NAME = "VR_AccountBalance_AccountUsage";
+        static string TABLE_NAME = "VR_AccountBalance_AccountUsage";
 
         static AccountUsageDataManager()
         {
@@ -175,7 +175,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             where.EqualsCondition("AccountTypeID").Value(accountTypeId);
             where.EqualsCondition("PeriodStart").Value(periodDate);
             where.EqualsCondition("TransactionTypeID").Value(transactionTypeId);
-            where.ConditionIfColumnNotNull("CorrectionProcessID").CompareCondition("CorrectionProcessID", RDBCompareConditionOperator.NEq).Value(correctionProcessId);
+            where.ConditionIfColumnNotNull("CorrectionProcessID").NotEqualsCondition("CorrectionProcessID").Value(correctionProcessId);
 
             return queryContext.GetItems(AccountUsageMapper);
         }
@@ -197,9 +197,9 @@ namespace Vanrise.AccountBalance.Data.RDB
                 where.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
             if (transactionTypeIds != null && transactionTypeIds.Count > 0)
                 where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
-            where.CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq).Value(fromTime);
+            where.GreaterOrEqualCondition("PeriodStart").Value(fromTime);
             if (toTime.HasValue)
-                where.CompareCondition("PeriodStart", RDBCompareConditionOperator.LEq).Value(toTime.Value);
+                where.LessOrEqualCondition("PeriodStart").Value(toTime.Value);
             where.ConditionIfColumnNotNull("IsOverridden").EqualsCondition("IsOverridden").Value(false);
             liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(where, "lb", status, effectiveDate, isEffectiveInFuture);
 
@@ -230,16 +230,13 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
-            tempTableColumns.Add("TransactionID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            tempTableColumns.Add("TransactionTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableColumns.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            tempTableColumns.Add("PeriodStart", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            tempTableColumns.Add("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumns(tempTableColumns);             
+            tempTableQuery.AddColumn("TransactionID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            tempTableQuery.AddColumn("TransactionTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            tempTableQuery.AddColumn("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            tempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableQuery.AddColumn("PeriodStart", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            tempTableQuery.AddColumn("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });   
 
             foreach (var queryItem in transactionAccountUsageQueries)
             {
@@ -262,8 +259,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             joinCondition.EqualsCondition("au", "AccountTypeID", "queryTable", "AccountTypeID");
             joinCondition.EqualsCondition("au", "AccountID", "queryTable", "AccountID");
             joinCondition.EqualsCondition("au", "TransactionTypeID", "queryTable", "TransactionTypeID");
-            joinCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq).Column("queryTable", "PeriodStart");
-            joinCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq).Column("queryTable", "PeriodEnd");
+            joinCondition.GreaterOrEqualCondition("PeriodStart").Column("queryTable", "PeriodStart");
+            joinCondition.LessOrEqualCondition("PeriodEnd").Column("queryTable", "PeriodEnd");
 
             return queryContext.GetItems(AccountUsageMapper);
         }
@@ -275,20 +272,16 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "au");
             selectQuery.SelectColumns().AllTableColumns("au");
 
-            var joinContext = selectQuery.Join();
-            var joinSelectContext = joinContext.JoinSelect("usageOverride");
-
-            var joinSelectQuery = joinSelectContext.SelectQuery();
-            joinSelectQuery.From(AccountUsageOverrideDataManager.TABLE_NAME, "usageOverride");
-            joinSelectQuery.SelectColumns().Columns("AccountTypeID", "AccountID", "TransactionTypeID", "PeriodStart", "PeriodEnd");
-            joinSelectQuery.Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds);
+            var joinSelectContext = selectQuery.Join().JoinSelect("usageOverride");
+            AccountUsageOverrideDataManager accountUsageOverrideDataManager = new AccountUsageOverrideDataManager();
+            accountUsageOverrideDataManager.AddSelectAccountUsageOverrideToJoinSelect(joinSelectContext, deletedTransactionIds);
 
             var joinSelectCondition = joinSelectContext.On();
             joinSelectCondition.EqualsCondition("au", "AccountTypeID", "usageOverride", "AccountTypeID");
             joinSelectCondition.EqualsCondition("au", "AccountID", "usageOverride", "AccountID");
             joinSelectCondition.EqualsCondition("au", "TransactionTypeID", "usageOverride", "TransactionTypeID");
-            joinSelectCondition.CompareCondition("PeriodStart", RDBCompareConditionOperator.GEq).Column("usageOverride", "PeriodStart");
-            joinSelectCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.LEq).Column("usageOverride", "PeriodEnd");
+            joinSelectCondition.GreaterOrEqualCondition("PeriodStart").Column("usageOverride", "PeriodStart");
+            joinSelectCondition.LessOrEqualCondition("PeriodEnd").Column("usageOverride", "PeriodEnd");
             
             return queryContext.GetItems(AccountUsageMapper);                 
         }
@@ -332,12 +325,9 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
-            tempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            tempTableColumns.Add("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumns(tempTableColumns);
+            tempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableQuery.AddColumn("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             foreach (var usageByTime in accountUsagesByTime)
             {
@@ -354,7 +344,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             var joinContext = selectQuery.Join();
             var joinCondition = joinContext.Join(tempTableQuery, "queryTable").On();
             joinCondition.EqualsCondition("au", "AccountID", "queryTable", "AccountID");
-            joinCondition.CompareCondition("PeriodEnd", RDBCompareConditionOperator.G).Column("queryTable", "PeriodEnd");
+            joinCondition.GreaterThanCondition("PeriodEnd").Column("queryTable", "PeriodEnd");
 
             var where = selectQuery.Where();
             where.EqualsCondition("AccountTypeID").Value(accountTypeId);
@@ -387,13 +377,9 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public void AddQueryUpdateAccountUsageFromBalanceUsageQueue(RDBQueryContext queryContext, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
-            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition> 
-                {
-                    {"ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt}},
-                    {"UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6}}
-                };
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumns(tempTableColumns);
+            tempTableQuery.AddColumn("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            tempTableQuery.AddColumn("UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
 
             foreach (var auToUpdate in accountsUsageToUpdate)
             {

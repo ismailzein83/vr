@@ -9,7 +9,7 @@ namespace Vanrise.Invoice.Data.RDB
 {
     public class BillingPeriodInfoDataManager : IBillingPeriodInfoDataManager
     {
-        public static string TABLE_NAME = "VR_Invoice_BillingPeriodInfo";
+        static string TABLE_NAME = "VR_Invoice_BillingPeriodInfo";
 
         static BillingPeriodInfoDataManager()
         {

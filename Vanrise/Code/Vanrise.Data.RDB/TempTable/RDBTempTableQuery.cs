@@ -9,7 +9,7 @@ namespace Vanrise.Data.RDB
 {
     public class RDBTempTableQuery : BaseRDBQuery, IRDBTableQuerySource
     {
-        Dictionary<string, RDBTableColumnDefinition> _columns;
+        Dictionary<string, RDBTableColumnDefinition> _columns = new Dictionary<string,RDBTableColumnDefinition>();
         string _tempTableName;
 
         RDBQueryBuilderContext _queryBuilderContext;
@@ -19,9 +19,17 @@ namespace Vanrise.Data.RDB
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public void AddColumns(Dictionary<string, RDBTableColumnDefinition> columns)
+        public void AddColumn(string columnName, RDBTableColumnDefinition columnDefinition)
         {
-            this._columns = columns;
+            this._columns.Add(columnName, columnDefinition);
+        }
+
+        public void AddColumnsFromTable(string tableName)
+        {
+            foreach(var columnEntry in RDBSchemaManager.Current.GetTableDefinitionWithValidate(_queryBuilderContext.DataProvider, tableName).Columns)
+            {
+                this._columns.Add(columnEntry.Key, columnEntry.Value);
+            }
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)

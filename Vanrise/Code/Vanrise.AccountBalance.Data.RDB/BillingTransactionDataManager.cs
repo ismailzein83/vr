@@ -11,7 +11,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class BillingTransactionDataManager : IBillingTransactionDataManager
     {
-        public static string TABLE_NAME = "VR_AccountBalance_BillingTransaction";
+        static string TABLE_NAME = "VR_AccountBalance_BillingTransaction";
         static BillingTransactionDataManager()
         {
             var columns = new Dictionary<string,RDBTableColumnDefinition>();
@@ -106,9 +106,9 @@ namespace Vanrise.AccountBalance.Data.RDB
                 where.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
             if (query.TransactionTypeIds != null && query.TransactionTypeIds.Count() > 0)
                 where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, query.TransactionTypeIds);
-            where.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq).Value(query.FromTime);
+            where.GreaterOrEqualCondition("TransactionTime").Value(query.FromTime);
             if (query.ToTime.HasValue)
-                where.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq).Value(query.ToTime.Value);
+                where.LessOrEqualCondition("TransactionTime").Value(query.ToTime.Value);
             where.EqualsCondition("AccountTypeID").Value(query.AccountTypeId);
             liveBalanceDataManager.AddLiveBalanceActiveAndEffectiveCondition(where, "liveBalance", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
             
@@ -182,12 +182,9 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var btAccountTimesTempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
-            btAccountTimesTempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            btAccountTimesTempTableColumns.Add("TransactionTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-
             var btAccountTimesTempTableQuery = queryContext.CreateTempTable();
-            btAccountTimesTempTableQuery.AddColumns(btAccountTimesTempTableColumns);
+            btAccountTimesTempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            btAccountTimesTempTableQuery.AddColumn("TransactionTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             
             foreach (var item in billingTransactionsByTime)
             {
@@ -204,7 +201,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             var joinContext = selectQuery.Join();
             var joinCondition = joinContext.Join(btAccountTimesTempTableQuery, "btAccountTimes").On();
             joinCondition.EqualsCondition("AccountID").Column("btAccountTimes", "AccountID");
-            joinCondition.CompareCondition("bt", "TransactionTime", RDBCompareConditionOperator.G).Column("btAccountTimes", "TransactionTime");
+            joinCondition.GreaterThanCondition("bt", "TransactionTime").Column("btAccountTimes", "TransactionTime");
 
             var where = selectQuery.Where();
             where.EqualsCondition("AccountTypeID").Value(accountTypeId);
@@ -251,9 +248,9 @@ namespace Vanrise.AccountBalance.Data.RDB
                 where.ListCondition("AccountID", RDBListConditionOperator.IN, accountIds);
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
                 where.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, transactionTypeIds);
-            where.CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq).Value(fromDate);
+            where.GreaterOrEqualCondition("TransactionTime").Value(fromDate);
             if (!toDate.HasValue)
-                where.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq).Value(toDate.Value);
+                where.LessOrEqualCondition("TransactionTime").Value(toDate.Value);
 
             return queryContext.GetItems(BillingTransactionMapper);
         }

@@ -176,21 +176,25 @@ namespace Vanrise.Data.RDB
     public interface IRDBDataProviderResolveInsertQueryContext : IBaseRDBResolveQueryContext
     {
         RDBQueryBuilderContext QueryBuilderContext { get; }
+
         IRDBTableQuerySource Table { get; }
 
-        List<RDBInsertColumn> ColumnValues { get;  }
+        List<RDBInsertColumn> ColumnValues { get; }
+
+        RDBSelectQuery SelectQuery { get; }
 
         string GeneratedIdDBParameterName { get; }
     }
     public class RDBDataProviderResolveInsertQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveInsertQueryContext
     {
-        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idParameterName,
+        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, RDBSelectQuery selectQuery, string idParameterName,
             IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
             : base(parentContext)
         {
             this.QueryBuilderContext = queryBuilderContext;
             this.Table = table;
             this.ColumnValues = columnValues;
+            this.SelectQuery = selectQuery;
             this.GeneratedIdDBParameterName = idParameterName;
         }
 
@@ -203,6 +207,8 @@ namespace Vanrise.Data.RDB
         public IRDBTableQuerySource Table { get; set; }
 
         public List<RDBInsertColumn> ColumnValues { get; private set; }
+
+        public RDBSelectQuery SelectQuery { get; private set; }
         
         public string GeneratedIdDBParameterName { get; private set; }
     }

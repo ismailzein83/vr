@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 {
     public class LiveBalanceDataManager : ILiveBalanceDataManager
     {
-        public static string TABLE_NAME = "VR_AccountBalance_LiveBalance";
+        static string TABLE_NAME = "VR_AccountBalance_LiveBalance";
 
         static LiveBalanceDataManager()
         {
@@ -293,14 +293,11 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
-            tempTableColumns.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            tempTableColumns.Add("NextAlertThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            tempTableColumns.Add("AlertRuleID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumns(tempTableColumns);
+            tempTableQuery.AddColumn("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            tempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableQuery.AddColumn("NextAlertThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            tempTableQuery.AddColumn("AlertRuleID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
 
             if (updateEntities != null)
             {
@@ -335,14 +332,11 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
-            tempTableColumns.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            tempTableColumns.Add("LastExecutedActionThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            tempTableColumns.Add("ActiveAlertsInfo", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumns(tempTableColumns);
+            tempTableQuery.AddColumn("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            tempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableQuery.AddColumn("LastExecutedActionThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            tempTableQuery.AddColumn("ActiveAlertsInfo", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
 
             if (updateEntities != null)
             {
@@ -491,34 +485,29 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             if (effectiveDate.HasValue)
             {
-                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "BED").CompareCondition(liveBalanceAlias, "BED", RDBCompareConditionOperator.LEq).Value(effectiveDate.Value);
-                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.G).Value(effectiveDate.Value);
+                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "BED").LessOrEqualCondition(liveBalanceAlias, "BED").Value(effectiveDate.Value);
+                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").GreaterThanCondition(liveBalanceAlias, "EED").Value(effectiveDate.Value);
             }
 
             if(isEffectiveInFuture.HasValue)
             {
                 if(isEffectiveInFuture.Value)
                 {
-                    andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.GEq).DateNow();
+                    andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").GreaterOrEqualCondition(liveBalanceAlias, "EED").DateNow();
                 }
                 else
                 {
                     andCondition.NotNullCondition(liveBalanceAlias, "EED");
-                    andCondition.CompareCondition(liveBalanceAlias, "EED", RDBCompareConditionOperator.LEq).DateNow();
+                    andCondition.LessOrEqualCondition(liveBalanceAlias, "EED").DateNow();
                 }
             }
         }
 
         private void AddQueryUpdateLiveBalances(RDBQueryContext queryContext, IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate)
         {
-            var tempTableColumns = new Dictionary<string, RDBTableColumnDefinition> 
-                {
-                    {"ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt}},
-                    {"UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6}}
-                };
-
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumns(tempTableColumns);
+            tempTableQuery.AddColumn("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            tempTableQuery.AddColumn("UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
 
             foreach (var lvToUpdate in liveBalancesToUpdate)
             {
@@ -541,12 +530,12 @@ namespace Vanrise.AccountBalance.Data.RDB
         private void AddLiveBalanceToAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
             var andCondition = conditionContext.ChildConditionGroup();
-            andCondition.CompareCondition("CurrentBalance", RDBCompareConditionOperator.LEq).Column(liveBalanceAlias, "NextAlertThreshold");
-            andCondition.ConditionIfColumnNotNull("LastExecutedActionThreshold").CompareCondition("NextAlertThreshold", RDBCompareConditionOperator.L).Column(liveBalanceAlias, "LastExecutedActionThreshold");
+            andCondition.LessOrEqualCondition("CurrentBalance").Column(liveBalanceAlias, "NextAlertThreshold");
+            andCondition.ConditionIfColumnNotNull("LastExecutedActionThreshold").LessThanCondition("NextAlertThreshold").Column(liveBalanceAlias, "LastExecutedActionThreshold");
         }
         private void AddLiveBalanceToClearAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
-            conditionContext.CompareCondition("CurrentBalance", RDBCompareConditionOperator.G).Column(liveBalanceAlias, "LastExecutedActionThreshold");
+            conditionContext.GreaterThanCondition("CurrentBalance").Column(liveBalanceAlias, "LastExecutedActionThreshold");
         }
 
     }

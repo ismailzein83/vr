@@ -10,22 +10,17 @@ using Vanrise.Common;
 namespace Vanrise.Data.RDB.DataProvider.Providers
 {
     public class MSSQLRDBDataProvider : BaseRDBDataProvider
-    {
-        public MSSQLRDBDataProvider()
-        {
-
-        }
-
+    {        
         string _connString;
         public MSSQLRDBDataProvider(string connString)
         {
             _connString = connString;
             _dataManager = new SQLDataManager(_connString);
         }
-        public const string MSSQL_DATAPROVIDER_UNIQUENAME = "MSSQL";
+        public const string UNIQUE_NAME = "MSSQL";
         public override string UniqueName
         {
-            get { return MSSQL_DATAPROVIDER_UNIQUENAME; }
+            get { return UNIQUE_NAME; }
         }
 
         SQLDataManager _dataManager;
