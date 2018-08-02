@@ -43,7 +43,7 @@
                             $type: 'Vanrise.Analytic.MainExtensions.StandardReportGenerationFilter,Vanrise.Analytic.MainExtensions'
                         };
                         return returnValue;
-                    }
+                    };
                     return api;
 
                 }
