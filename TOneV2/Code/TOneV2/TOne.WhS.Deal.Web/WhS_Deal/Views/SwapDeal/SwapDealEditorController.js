@@ -63,7 +63,7 @@
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
-               
+
                 if (carrierAccountInfo != undefined) {
                     updateDescription();
                     var payload = {
@@ -108,10 +108,10 @@
                 }
             };
             $scope.scopeModel.onBEDchanged = function () {
-                
+                updateDescription();
             };
             $scope.scopeModel.onEEDchanged = function () {
-                
+
             };
             $scope.scopeModel.onCurrencySelectReady = function (api) {
                 currencyDirectiveAPI = api;
@@ -164,8 +164,7 @@
                 var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
                 var originalExpiredDate = UtilsService.createDateFromString(originalEED);
-                if (isEditMode && originalExpiredDate < today && eed < originalExpiredDate)
-                {
+                if (isEditMode && originalExpiredDate < today && eed < originalExpiredDate) {
                     return "Deal expired, EED can only be extended";
                 }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
@@ -182,7 +181,7 @@
                     return 'Please select Deal BED and Deal EED';
                 if (dealInboundAPI != undefined && !dealInboundAPI.hasData())
                     return 'Please, one record must be added at least.';
-               
+
                 return null;
             };
 
@@ -197,7 +196,7 @@
                     return 'Please select Deal BED and Deal EED';
                 if (dealOutboundAPI != undefined && !dealOutboundAPI.hasData())
                     return 'Please,one record must be added at least.';
-               
+
                 return null;
             };
             $scope.scopeModel.onDealStatusChanged = function () {
@@ -265,7 +264,8 @@
         function updateDescription() {
             if (!isEditMode) {
                 setTimeout(function () {
-                    $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate(VRDateTimeService.getNowDateTime());
+                    if ($scope.scopeModel.carrierAccount != undefined)
+                        $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate($scope.scopeModel.beginDate);
                 });
             }
         }
@@ -330,7 +330,7 @@
                         lastInboundGroupNumber: dealEntity.Settings.LastInboundGroupNumber,
                         context: getContext(),
                         dealId: dealId,
-                       
+
                     };
 
                     var payloadOutbound = {
@@ -443,7 +443,7 @@
                     Difference: $scope.scopeModel.difference,
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
-                    IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable:true
+                    IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true
                 }
             };
             return obj;
@@ -530,7 +530,7 @@
                 },
                 getSwapDealCurrency: function () {
                     return currencyDirectiveAPI.getSelectedValues();
-}
+                }
             };
         }
         function getSelectedSaleZonesIdsFromItems(includedIds) {

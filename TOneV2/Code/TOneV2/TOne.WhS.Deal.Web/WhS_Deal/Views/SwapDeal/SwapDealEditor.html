@@ -87,7 +87,7 @@
                 </vr-tab>
                 <vr-tab header="'Selling Part'" vr-loader="scopeModel.isLoadingInbound">
                     <vr-row>
-                        <vr-columns width="fullrow">
+                        <vr-columns width="fullrow" vr-disabled="scopeModel.isCommitmentAgreement">
                             <vr-validator validate="scopeModel.validateSwapDealInbounds()">
                                 <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady" ng-show="scopeModel.dataForBoundsReady()"></vr-whs-deal-swapdealinbound-grid>
                             </vr-validator>
@@ -96,7 +96,7 @@
                 </vr-tab>
                 <vr-tab header="'Buying Part'" vr-loader="scopeModel.isLoadingOutbound">
                     <vr-row>
-                        <vr-columns width="fullrow">
+                        <vr-columns width="fullrow" vr-disabled="scopeModel.isCommitmentAgreement">
                             <vr-validator validate="scopeModel.validateSwapDealOutbounds()">
 
                                 <vr-whs-deal-swapdealoutbound-grid on-ready="scopeModel.onSwapDealOutboundDirectiveReady" ng-show="scopeModel.dataForBoundsReady()"></vr-whs-deal-swapdealoutbound-grid>
