@@ -7,8 +7,8 @@ app.directive('businessprocessVrWorkflowContainer', ['UtilsService', 'VRUIUtilsS
 			scope: {
 				onReady: "=",
 				dragdropsetting: '=',
-				//datasource: '='
 			},
+
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
 
@@ -40,28 +40,18 @@ app.directive('businessprocessVrWorkflowContainer', ['UtilsService', 'VRUIUtilsS
 		};
 
 		function DirectiveConstructor($scope, ctrl) {
-			//if (ctrl.datasource == undefined)
-			//ctrl.datasource = [];
 			this.initializeController = initializeController;
 			var allVariableNames = [];
-			//var workflowArguments;
 			var getWorkflowArguments;
 			var reserveVariableName;
 			var reserveVariableNames;
 			var isVariableNameReserved;
 			var eraseVariableName;
 
-			var compiled = false;
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.datasource = [];
 				$scope.scopeModel.onRemove = function (vRWorkflowActivityId) {
-					//for (var i = 0; i < ctrl.datasource.length; i++) {
-					//	if (ctrl.datasource[i].VRWorkflowActivityId == vRWorkflowActivityId) {
-					//		ctrl.datasource.splice(i, 1);
-					//		break;
-					//	}
-					//}
 					for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
 						if ($scope.scopeModel.datasource[i].VRWorkflowActivityId == vRWorkflowActivityId) {
 							$scope.scopeModel.datasource.splice(i, 1);
@@ -117,9 +107,6 @@ app.directive('businessprocessVrWorkflowContainer', ['UtilsService', 'VRUIUtilsS
 				};
 
 				api.getData = function () {
-					//if (ctrl.datasource.length > 0 && ctrl.datasource[0].directiveAPI != null) {
-					//	return ctrl.datasource[0].directiveAPI.getData();
-					//}
 					if ($scope.scopeModel.datasource.length > 0 && $scope.scopeModel.datasource[0].directiveAPI != null) {
 						return $scope.scopeModel.datasource[0].directiveAPI.getData();
 					}

@@ -53,7 +53,8 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 						else {
 							vRWorkflowActivity.Settings = {
 								Editor: (itemAdded.Editor) ? itemAdded.Editor : itemAdded.Settings.Editor,
-								Title: (itemAdded.Title) ? itemAdded.Title : itemAdded.Settings.Title
+								Title: (itemAdded.Title) ? itemAdded.Title : itemAdded.Settings.Title,
+								IsNew: true
 							};
 						}
 						vRWorkflowActivity.VRWorkflowActivityId = UtilsService.guid();
@@ -65,10 +66,10 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 							var setLoader = function (value) { $scope.x = value; };
 							var context = (itemAddedContext != undefined) ? itemAddedContext : {
 								getWorkflowArguments: getWorkflowArguments,
-								reserveVariableName : reserveVariableName,
-								reserveVariableNames : reserveVariableNames,
-								isVariableNameReserved : isVariableNameReserved,
-								eraseVariableName : eraseVariableName
+								reserveVariableName: reserveVariableName,
+								reserveVariableNames: reserveVariableNames,
+								isVariableNameReserved: isVariableNameReserved,
+								eraseVariableName: eraseVariableName
 							};
 							var payload = {
 								Context: context,
