@@ -1,8 +1,8 @@
 ﻿(function (app) {
     'use strict';
-    vrWhsDealReoccuringtypeSelector.$inject = ['Whs_Deal_ReoccuringTypeEnum', 'UtilsService', 'VRUIUtilsService'];
+    vrWhsDealRecurringtypeSelector.$inject = ['Whs_Deal_RecurringTypeEnum', 'UtilsService', 'VRUIUtilsService'];
 
-    function vrWhsDealReoccuringtypeSelector(Whs_Deal_ReoccuringTypeEnum, UtilsService, VRUIUtilsService) {
+    function vrWhsDealRecurringtypeSelector(Whs_Deal_RecurringTypeEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -22,8 +22,8 @@
                 if ($attrs.ismultipleselection != undefined && $attrs.ismultipleselection != null)
                     ctrl.selectedvalues = [];
 
-                var reoccuringTypeSelector = new ReoccuringTypeSelector(ctrl, $scope, $attrs);
-                reoccuringTypeSelector.initializeController();
+                var recurringTypeSelector = new RecurringTypeSelector(ctrl, $scope, $attrs);
+                recurringTypeSelector.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -39,7 +39,7 @@
             }
         };
 
-        function ReoccuringTypeSelector(ctrl, $scope, attrs) {
+        function RecurringTypeSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -59,7 +59,7 @@
 
                 directiveAPI.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    ctrl.datasource = UtilsService.getArrayEnum(Whs_Deal_ReoccuringTypeEnum);
+                    ctrl.datasource = UtilsService.getArrayEnum(Whs_Deal_RecurringTypeEnum);
                     var selectedIds;
 
                     if (payload) {
@@ -67,7 +67,7 @@
                     }
 
                     if (selectedIds != undefined) {
-                        ctrl.selectedvalues = UtilsService.getEnum(Whs_Deal_ReoccuringTypeEnum, 'value', selectedIds);
+                        ctrl.selectedvalues = UtilsService.getEnum(Whs_Deal_RecurringTypeEnum, 'value', selectedIds);
                     }
                 };
 
@@ -100,6 +100,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrWhsDealReoccuringtypeSelector', vrWhsDealReoccuringtypeSelector);
+    app.directive('vrWhsDealRecurringtypeSelector', vrWhsDealRecurringtypeSelector);
 
 })(app);

@@ -49,7 +49,7 @@ namespace TOne.WhS.Deal.Business
             int insertedId = -1;
             if (deal.Settings.ValidateDataBeforeSave(context))
             {
-                deal.Settings.IsReoccurrable = true;
+                deal.Settings.IsRecurrable = true;
                 if (dataManager.Insert(deal, out insertedId))
                 {
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();

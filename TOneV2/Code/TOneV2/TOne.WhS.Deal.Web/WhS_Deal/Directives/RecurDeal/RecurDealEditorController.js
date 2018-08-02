@@ -1,12 +1,12 @@
 ﻿(function (appControllers) {
     'use strict';
-    ReoccurDealEditorController.$inject = ['$scope','WhS_Deal_DealDefinitionAPIService','VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
-    function ReoccurDealEditorController($scope, WhS_Deal_DealDefinitionAPIService, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    RecurDealEditorController.$inject = ['$scope','WhS_Deal_DealDefinitionAPIService','VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    function RecurDealEditorController($scope, WhS_Deal_DealDefinitionAPIService, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var dealId;
         var dealName;
-        var reoccuringTypeApi;
-        var reoccuringTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var recurringTypeApi;
+        var recurringTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -24,12 +24,12 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.save = function () {
-                reoccurDeal();
+                recurDeal();
             };
 
-            $scope.onReoccuringTypeSelectorReady = function (api) {
-                reoccuringTypeApi = api;
-                reoccuringTypeReadyPromiseDeferred.resolve();
+            $scope.onRecurringTypeSelectorReady = function (api) {
+                recurringTypeApi = api;
+                recurringTypeReadyPromiseDeferred.resolve();
             };
         }
 
@@ -39,7 +39,7 @@
         }
 
         function loadAllControls() {
-            UtilsService.waitMultipleAsyncOperations([setTitle,loadReoccuringTypeSelector]).catch(function (error) {
+            UtilsService.waitMultipleAsyncOperations([setTitle,loadRecurringTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -50,19 +50,18 @@
             $scope.title = UtilsService.buildTitleForAddEditor('Recurring Deals for ' + dealName);
         }
 
-        function loadReoccuringTypeSelector() {
-            var reoccuringTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            reoccuringTypeReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(reoccuringTypeApi, undefined, reoccuringTypeSelectorLoadDeferred);
+        function loadRecurringTypeSelector() {
+            var recurringTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            recurringTypeReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(recurringTypeApi, undefined, recurringTypeSelectorLoadDeferred);
             });
-            return reoccuringTypeSelectorLoadDeferred.promise;
+            return recurringTypeSelectorLoadDeferred.promise;
         }
 
-        function reoccurDeal() {
+        function recurDeal() {
             $scope.scopeModel.isLoading = true;
             var dealObject = buildSwapDealInboundObjFromScope();
-                $scope.onReoccur(dealId, dealObject.ReoccuringNumber, dealObject.ReouccuringType).then(function (response) {
-                    console.log(response);
+                $scope.onRecur(dealId, dealObject.RecurringNumber, dealObject.RecurringType).then(function (response) {
                     if (response.Result == 0)
                         $scope.modalContext.closeModal();
                     else
@@ -76,8 +75,8 @@
 
         function buildSwapDealInboundObjFromScope() {
             var obj = {
-                ReoccuringNumber: $scope.scopeModel.reoccuringNumber,
-                ReouccuringType: reoccuringTypeApi.getSelectedIds(),
+                RecurringNumber: $scope.scopeModel.RecurringNumber,
+                RecurringType: recurringTypeApi.getSelectedIds(),
             };
             return obj;
         }
@@ -85,6 +84,6 @@
 
     }
 
-    appControllers.controller('WhS_Deal_ReoccurDealEditorController', ReoccurDealEditorController);
+    appControllers.controller('WhS_Deal_RecurDealEditorController', RecurDealEditorController);
 
 })(appControllers);

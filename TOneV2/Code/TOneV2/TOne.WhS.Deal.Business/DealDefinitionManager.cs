@@ -413,59 +413,59 @@ namespace TOne.WhS.Deal.Business
                 throw new DataIntegrityValidationException(string.Format("Cannot find the deal with Id {0}", dealId));
             return dealDefinition.Settings.GetSupplierZoneGroupName(groupNumber);
         }
-        public List<DealDefinition> GetReoccurredDeals(DealDefinition deal, int reoccuringNumber, ReoccuringType reoccuringType)
+        public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
-            var reoccuredDeals = new List<DealDefinition>();
+            var recurredDeals = new List<DealDefinition>();
             DateTime endDealDate = deal.Settings.EndDate.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
 
             var dealLifeSpan = endDealDate.Subtract(beginDealDate);
             var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
-            for (int i = 0; i < reoccuringNumber; i++)
+            for (int i = 0; i < recurringNumber; i++)
             {
-                DealDefinition reoccuredDeal = new DealDefinition();
-                reoccuredDeal.Settings = deal.Settings.VRDeepCopy();
-                switch (reoccuringType)
+                DealDefinition recurredDeal = new DealDefinition();
+                recurredDeal.Settings = deal.Settings.VRDeepCopy();
+                switch (recurringType)
                 {
-                    case ReoccuringType.Daily:
-                        reoccuredDeal.Settings.BeginDate = endDealDate.AddDays(1);
-                        reoccuredDeal.Settings.EndDate = reoccuredDeal.Settings.BeginDate.Add(dealLifeSpan);
-                        endDealDate = reoccuredDeal.Settings.EndDate.Value;
+                    case RecurringType.Daily:
+                        recurredDeal.Settings.BeginDate = endDealDate.AddDays(1);
+                        recurredDeal.Settings.EndDate = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
+                        endDealDate = recurredDeal.Settings.EndDate.Value;
                         break;
 
-                    case ReoccuringType.Monthly:
-                        reoccuredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths((monthsDifference + 1) * (i + 1));
-                        reoccuredDeal.Settings.EndDate = deal.Settings.EndDate.Value.AddMonths((monthsDifference + 1) * (i + 1));
+                    case RecurringType.Monthly:
+                        recurredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths((monthsDifference + 1) * (i + 1));
+                        recurredDeal.Settings.EndDate = deal.Settings.EndDate.Value.AddMonths((monthsDifference + 1) * (i + 1));
                         break;
                 }
-                reoccuredDeal.Name = string.Format("{0}-({1:yyyy/MM/dd}-{2:yyyy/MM/dd})", deal.Name, reoccuredDeal.Settings.BeginDate, reoccuredDeal.Settings.EndDate);
-                reoccuredDeal.Settings.IsReoccurrable = false;
-                reoccuredDeals.Add(reoccuredDeal);
+                recurredDeal.Name = string.Format("{0}-({1:yyyy/MM/dd}-{2:yyyy/MM/dd})", deal.Name, recurredDeal.Settings.BeginDate, recurredDeal.Settings.EndDate);
+                recurredDeal.Settings.IsRecurrable = false;
+                recurredDeals.Add(recurredDeal);
             }
-            reoccuredDeals[reoccuringNumber - 1].Settings.IsReoccurrable = true;
-            return reoccuredDeals;
+            recurredDeals[recurringNumber - 1].Settings.IsRecurrable = true;
+            return recurredDeals;
         }
-        public List<string> ValidatingDeals(List<DealDefinition> reoccuredDeals)
+        public List<string> ValidatingDeals(List<DealDefinition> recurredDeals)
         {
             var errorMessages = new List<string>();
-            foreach (var reoccuredDeal in reoccuredDeals)
+            foreach (var recurredDeal in recurredDeals)
             {
                 ValidateBeforeSaveContext contextDeal = new ValidateBeforeSaveContext()
                 {
-                    DealSaleZoneIds = reoccuredDeal.Settings.GetDealSaleZoneIds(),
-                    DealSupplierZoneIds =reoccuredDeal.Settings.GetDealSupplierZoneIds(),
-                    BED = reoccuredDeal.Settings.BeginDate,
-                    EED = reoccuredDeal.Settings.EndDate,
-                    DealId = reoccuredDeal.DealId,
-                    CustomerId = reoccuredDeal.Settings.GetCarrierAccountId(),
+                    DealSaleZoneIds = recurredDeal.Settings.GetDealSaleZoneIds(),
+                    DealSupplierZoneIds =recurredDeal.Settings.GetDealSupplierZoneIds(),
+                    BED = recurredDeal.Settings.BeginDate,
+                    EED = recurredDeal.Settings.EndDate,
+                    DealId = recurredDeal.DealId,
+                    CustomerId = recurredDeal.Settings.GetCarrierAccountId(),
                 };
 
 
-                if (!reoccuredDeal.Settings.ValidateDataBeforeSave(contextDeal))
+                if (!recurredDeal.Settings.ValidateDataBeforeSave(contextDeal))
                 {
                     foreach (var message in contextDeal.ValidateMessages)
                     {
-                        errorMessages.Add(string.Format("{0}. Corresponding Deal: {1}", message, reoccuredDeal.Name));
+                        errorMessages.Add(string.Format("{0}. Corresponding Deal: {1}", message, recurredDeal.Name));
                     }
                 }
             }

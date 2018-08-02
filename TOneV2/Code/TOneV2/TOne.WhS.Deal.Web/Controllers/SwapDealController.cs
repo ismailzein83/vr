@@ -62,10 +62,10 @@ namespace TOne.WhS.Deal.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReoccurDeal")]
-        public InsertDealOperationOutput<List<DealDefinitionDetail>> ReoccurDeal(int dealId, int reoccuringNumber, ReoccuringType reoccuringType)
+        [Route("RecurDeal")]
+        public InsertDealOperationOutput<List<DealDefinitionDetail>> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
         {
-            return _manager.ReoccurDeal(dealId, reoccuringNumber, reoccuringType);
+            return _manager.RecurDeal(dealId, recurringNumber, recurringType);
         }
     }
 }

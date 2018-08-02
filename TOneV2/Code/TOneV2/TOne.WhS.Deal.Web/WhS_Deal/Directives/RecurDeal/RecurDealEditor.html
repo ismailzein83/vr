@@ -1,15 +1,15 @@
-﻿<div vr-modalcontent ng-controller="WhS_Deal_ReoccurDealEditorController" vr-loader="scopeModel.isLoading" size="small">
+﻿<div vr-modalcontent ng-controller="WhS_Deal_RecurDealEditorController" vr-loader="scopeModel.isLoading" size="small">
     <vr-modalbody>
         <vr-form name="formEditor">
             <div>   
                 <vr-row>
                     <vr-columns width="2/3row">
-                        <vr-textbox label="Recurring Number" value="scopeModel.reoccuringNumber" type="number" isrequired="true" minvalue="0" decimalprecision="0"></vr-textbox>
+                        <vr-textbox label="Recurring Number" value="scopeModel.RecurringNumber" type="number" isrequired="true" minvalue="0" decimalprecision="0"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="2/3row">
-                        <vr-whs-deal-reoccuringtype-selector on-ready="onReoccuringTypeSelectorReady" isrequired="true"></vr-whs-deal-reoccuringtype-selector>
+                        <vr-whs-deal-recurringtype-selector on-ready="onRecurringTypeSelectorReady" isrequired="true"></vr-whs-deal-recurringtype-selector>
                     </vr-columns>
                 </vr-row>
             </div>

@@ -327,7 +327,7 @@
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     Status: $scope.scopeModel.selectedDealStatus.value,
                     DeActivationDate: $scope.scopeModel.deActivationDate,
-                    IsReoccurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsReoccurrable : true
+                    IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true
                 }
             };
             return obj;

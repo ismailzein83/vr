@@ -46,11 +46,11 @@
             });
         }
 
-        function ReoccurDeal(dealId, reoccuringNumber, reoccuringType) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "ReoccurDeal"), {
+        function RecurDeal(dealId, recurringNumber, recurringType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "RecurDeal"), {
                     dealId: dealId,
-                    reoccuringNumber: reoccuringNumber,
-                    reoccuringType: reoccuringType
+                    recurringNumber: recurringNumber,
+                    recurringType: recurringType
                 });
         }
 
@@ -64,7 +64,7 @@
             GetSwapDealSettingData: GetSwapDealSettingData,
             GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId,
             GetSwapDealSettingsDetail: GetSwapDealSettingsDetail,
-            ReoccurDeal: ReoccurDeal
+            RecurDeal: RecurDeal
         });
     }
 

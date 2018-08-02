@@ -115,7 +115,7 @@ namespace TOne.WhS.Deal.Business
             return swapDealAnalysisSettingData;
         }
 
-        public InsertDealOperationOutput<List<DealDefinitionDetail>> ReoccurDeal(int dealId, int reoccuringNumber, ReoccuringType reoccuringType)
+        public InsertDealOperationOutput<List<DealDefinitionDetail>> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)
         {
             InsertDealOperationOutput<List<DealDefinitionDetail>> insertOperationOutput = new InsertDealOperationOutput<List<DealDefinitionDetail>>
             {
@@ -127,19 +127,19 @@ namespace TOne.WhS.Deal.Business
             if (deal == null)
                 throw new NullReferenceException(dealId.ToString());
 
-            if (!deal.Settings.IsReoccurrable)
+            if (!deal.Settings.IsRecurrable)
                 return insertOperationOutput;
 
             var dealDefinitionManager = new DealDefinitionManager();
 
-            //Getting Reoccured Deals
-            List<DealDefinition> reoccuredDeals = dealDefinitionManager.GetReoccurredDeals(deal, reoccuringNumber, reoccuringType);
-            if (!reoccuredDeals.Any())
+            //Getting Recurred Deals
+            List<DealDefinition> recurredDeals = dealDefinitionManager.GetRecurredDeals(deal, recurringNumber, recurringType);
+            if (!recurredDeals.Any())
                 return insertOperationOutput;
 
             //Validation
             insertOperationOutput.ValidationMessages = new List<string>();
-            var errorMessages = dealDefinitionManager.ValidatingDeals(reoccuredDeals);
+            var errorMessages = dealDefinitionManager.ValidatingDeals(recurredDeals);
             if (errorMessages.Any())
             {
                 insertOperationOutput.ValidationMessages.AddRange(errorMessages);
@@ -148,24 +148,24 @@ namespace TOne.WhS.Deal.Business
 
             //Inserting
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            deal.Settings.IsReoccurrable = false;
+            deal.Settings.IsRecurrable = false;
             if (dataManager.Update(deal))
             {
                 errorMessages = new List<string>();
                 insertOperationOutput.InsertedObject = new List<DealDefinitionDetail>();
-                foreach (var reoccuredDeal in reoccuredDeals)
+                foreach (var recurredDeal in recurredDeals)
                 {
                     int insertedId = -1;
-                    if (dataManager.Insert(reoccuredDeal, out insertedId))
+                    if (dataManager.Insert(recurredDeal, out insertedId))
                     {
                         CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                        insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(reoccuredDeal));
-                        reoccuredDeal.DealId = insertedId;
+                        insertOperationOutput.InsertedObject.Add(DealDeinitionDetailMapper(recurredDeal));
+                        recurredDeal.DealId = insertedId;
                     }
                     else
                     {
-                        errorMessages.Add(string.Format("Deal Already exist {0}", reoccuredDeal.Name));
+                        errorMessages.Add(string.Format("Deal Already exist {0}", recurredDeal.Name));
                     }
                 }
             }

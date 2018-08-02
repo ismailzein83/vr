@@ -75,7 +75,7 @@
     <Compile Include="OverLappedZonesContext.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
     <Compile Include="Settings\SwapDealTechnicalSettingData.cs" />
-    <Compile Include="ReoccuringType.cs" />
+    <Compile Include="RecurringType.cs" />
     <Compile Include="SwapDeal\SubstituteRateType.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateOutboundRateInput.cs" />

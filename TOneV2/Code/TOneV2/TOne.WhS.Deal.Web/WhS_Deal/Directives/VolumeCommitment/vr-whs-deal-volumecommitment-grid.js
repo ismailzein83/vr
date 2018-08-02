@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService','WhS_Deal_DealStatusTypeEnum' ,'WhS_Deal_VolumeCommitmentService','WhS_Deal_ReoccurDealService', 'VRNotificationService', 'VRUIUtilsService'];
+    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService','WhS_Deal_DealStatusTypeEnum' ,'WhS_Deal_VolumeCommitmentService','WhS_Deal_RecurDealService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolumeCommitmentService, WhS_Deal_ReoccurDealService, VRNotificationService, VRUIUtilsService) {
+    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolumeCommitmentService, WhS_Deal_RecurDealService, VRNotificationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -79,20 +79,20 @@
                 };
                 menuActions.push(editMenuAction);
 
-                    if (dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description && dataItem.Entity.Settings.IsReoccurrable==true ) {
-                    var reoccurMenuAction = {
+                    if (dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Active.description && dataItem.Entity.Settings.IsRecurrable==true ) {
+                    var recurMenuAction = {
                         name: 'Recur',
-                        clicked: reoccurDeal
+                        clicked: recurDeal
                     };
-                    menuActions.push(reoccurMenuAction);
+                    menuActions.push(recurMenuAction);
                 }
 
                 return menuActions;
                 };
             }
-            function reoccurDeal(dataItem) {
-                var onReoccur = function (dealId, reoccuringNumber, reoccuringType) {
-                    return WhS_Deal_VolCommitmentDealAPIService.ReoccurDeal(dealId, reoccuringNumber, reoccuringType).then(function (response) {
+            function recurDeal(dataItem) {
+                var onRecur = function (dealId, recurringNumber, recurringType) {
+                    return WhS_Deal_VolCommitmentDealAPIService.RecurDeal(dealId, recurringNumber, recurringType).then(function (response) {
                         for (var index in response.InsertedObject) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(response.InsertedObject[index]);
                             gridAPI.itemAdded(response.InsertedObject[index]);
@@ -100,7 +100,7 @@
                         return response;
                     });
                 };
-                WhS_Deal_ReoccurDealService.reoccurDeal(dataItem.Entity.DealId, dataItem.Entity.Name, onReoccur);
+                WhS_Deal_RecurDealService.recurDeal(dataItem.Entity.DealId, dataItem.Entity.Name, onRecur);
             }
 
             function editVolumeCommitment(dataItem) {

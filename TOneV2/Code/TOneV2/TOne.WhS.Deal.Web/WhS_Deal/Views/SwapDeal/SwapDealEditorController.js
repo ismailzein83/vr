@@ -443,7 +443,7 @@
                     Difference: $scope.scopeModel.difference,
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
-                    IsReoccurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsReoccurrable:true
+                    IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable:true
                 }
             };
             return obj;

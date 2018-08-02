@@ -2,7 +2,7 @@
 
 namespace TOne.WhS.Deal.Entities
 {
-    public enum ReoccuringType
+    public enum RecurringType
     {
         [Description("Daily")]
         Daily = 0,
