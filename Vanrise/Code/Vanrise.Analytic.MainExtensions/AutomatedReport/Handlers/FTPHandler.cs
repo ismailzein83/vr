@@ -22,7 +22,17 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 
         public FTPCommunicatorSettings FTPCommunicatorSettings { get; set; }
 
-
+        public override void OnAfterSaveAction(IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext context)
+        {
+            if (AttachementGenerators != null)
+            {
+                foreach (var attachementGenerator in AttachementGenerators)
+                {
+                    if (attachementGenerator.Settings != null)
+                        attachementGenerator.Settings.OnAfterSaveAction(new VRAutomatedReportFileGeneratorOnAfterSaveActionContext { TaskId = context.TaskId, VRReportGenerationId = context.VRReportGenerationId });
+                }
+            }
+        }
         public override void Execute(IVRAutomatedReportHandlerExecuteContext context)
         {
             if (this.AttachementGenerators != null && this.AttachementGenerators.Count > 0 && this.FTPCommunicatorSettings != null)

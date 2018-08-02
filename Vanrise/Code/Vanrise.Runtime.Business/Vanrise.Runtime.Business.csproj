@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseTaskActionArgumentOnAfterSaveActionContext.cs" />
     <Compile Include="DefaultTaskActionExtentedSettings.cs" />
     <Compile Include="Filter\UserTaskFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

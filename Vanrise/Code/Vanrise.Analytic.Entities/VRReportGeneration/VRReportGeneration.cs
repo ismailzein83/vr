@@ -48,8 +48,21 @@ namespace Vanrise.Analytic.Entities
 
     public abstract class VRReportGenerationAction
     {
+
+        public virtual void OnAfterSaveAction(IVRReportGenerationActionOnAfterSaveActionContext context)
+        {
+
+        }
         public abstract string ActionTypeName { get; }
         public abstract Guid ConfigId { get; }
+    }
+    public interface IVRReportGenerationActionOnAfterSaveActionContext
+    {
+        long VRReportGenerationId { get; }
+    }
+    public class VRReportGenerationActionOnAfterSaveActionContext : IVRReportGenerationActionOnAfterSaveActionContext
+    {
+        public long VRReportGenerationId { get; set; }
     }
     public enum AccessLevel
     {

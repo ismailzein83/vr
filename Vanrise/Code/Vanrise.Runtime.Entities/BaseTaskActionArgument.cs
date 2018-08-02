@@ -8,6 +8,15 @@ namespace Vanrise.Runtime.Entities
 {
     public class BaseTaskActionArgument
     {
+
+        public virtual void OnAfterSaveAction(IBaseTaskActionArgumentOnAfterSaveActionContext context)
+        {
+
+        }
         public Dictionary<string, object> RawExpressions { get; set; }
+    }
+    public interface IBaseTaskActionArgumentOnAfterSaveActionContext
+    {
+        Guid TaskId { get; }
     }
 }

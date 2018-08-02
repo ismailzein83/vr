@@ -19,7 +19,14 @@ namespace Vanrise.Analytic.BP.Arguments
         public List<VRAutomatedReportQuery> Queries { get; set; }
 
         public VRAutomatedReportHandler Handler { get; set; }
-
+        public override void OnAfterSaveAction(IProcessInputArgumentOnAfterSaveActionContext context)
+        {
+            if (Handler != null && Handler.Settings != null)
+                Handler.Settings.OnAfterSaveAction(new VRAutomatedReportHandlerSettingsOnAfterSaveActionContext
+                {
+                    TaskId = context.TaskId
+                });
+        }
         //public override void PrepareArgumentForExecutionFromTask(Vanrise.BusinessProcess.Entities.IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext context)
         //{
         //    this.Queries = null;

@@ -75,6 +75,7 @@ namespace Vanrise.Analytic.Business
             bool insertActionSuccess = vRReportGenerationDataManager.Insert(vRReportGeneration, out reportId);
             if (insertActionSuccess)
             {
+                vRReportGeneration.Settings.ReportAction.OnAfterSaveAction(new VRReportGenerationActionOnAfterSaveActionContext { VRReportGenerationId = reportId });
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 VRReportGeneration addedVRReportGeneration = this.GetVRReportGeneration(reportId);
@@ -118,6 +119,7 @@ namespace Vanrise.Analytic.Business
             bool updateActionSuccess = vRReportGenerationDataManager.Update(vRReportGeneration);
             if (updateActionSuccess)
             {
+                vRReportGeneration.Settings.ReportAction.OnAfterSaveAction(new VRReportGenerationActionOnAfterSaveActionContext { VRReportGenerationId = vRReportGeneration.ReportId });
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 VRReportGeneration updatedVRReportGeneration = this.GetVRReportGeneration(vRReportGeneration.ReportId);

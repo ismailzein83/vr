@@ -164,6 +164,7 @@ namespace Vanrise.Runtime.Business
 
             if (insertActionSucc)
             {
+                taskObject.TaskSettings.TaskActionArgument.OnAfterSaveAction(new BaseTaskActionArgumentOnAfterSaveActionContext { TaskId = taskObject.TaskId });
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 _vrActionLogger.TrackAndLogObjectAdded(SchedulerTaskLoggableEntity.Instance, taskObject);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
@@ -186,6 +187,7 @@ namespace Vanrise.Runtime.Business
 
             if (updateActionSucc)
             {
+                taskObject.TaskSettings.TaskActionArgument.OnAfterSaveAction(new BaseTaskActionArgumentOnAfterSaveActionContext { TaskId = taskObject.TaskId });
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 _vrActionLogger.TrackAndLogObjectUpdated(SchedulerTaskLoggableEntity.Instance, taskObject);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;

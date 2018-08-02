@@ -22,5 +22,10 @@ namespace Vanrise.Analytic.MainExtensions.VRReportGeneration
             get { return new Guid("1654683D-6168-47F4-B157-661A1FE88A95"); }
         }
         public VRAutomatedReportFileGenerator FileGenerator { get; set; }
+        public override void OnAfterSaveAction(IVRReportGenerationActionOnAfterSaveActionContext context)
+        {
+            if (FileGenerator != null && FileGenerator.Settings != null)
+                FileGenerator.Settings.OnAfterSaveAction(new VRAutomatedReportFileGeneratorOnAfterSaveActionContext { VRReportGenerationId = context.VRReportGenerationId });
+        }
     }
 }

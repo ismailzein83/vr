@@ -9,7 +9,10 @@ namespace Vanrise.Analytic.Entities
     public abstract class VRAutomatedReportHandlerSettings
     {
         public abstract Guid ConfigId { get; }
+        public virtual void OnAfterSaveAction(IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext context)
+        {
 
+        }
         public abstract void Execute(IVRAutomatedReportHandlerExecuteContext context);
 
         public virtual void Validate(IVRAutomatedReportHandlerValidateContext context)
@@ -18,7 +21,16 @@ namespace Vanrise.Analytic.Entities
         }
 
     }
-
+    public interface IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext
+    {
+        Guid? TaskId { get;}
+        long? VRReportGenerationId { get; }
+    }
+    public class VRAutomatedReportHandlerSettingsOnAfterSaveActionContext : IVRAutomatedReportHandlerSettingsOnAfterSaveActionContext
+    {
+        public Guid? TaskId { get; set; }
+        public long? VRReportGenerationId { get; set; }
+    }
     public interface IVRAutomatedReportHandlerExecuteContext
     {
         Guid? TaskId { get; set; }
