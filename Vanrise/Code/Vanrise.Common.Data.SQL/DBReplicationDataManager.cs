@@ -15,6 +15,7 @@ namespace Vanrise.Common.Data.SQL
     {
         Dictionary<string, List<TableInfo>> TableInfoListByTargetServer;
         const string TempTableNameSuffix = "_temp";
+        Dictionary<string, Server> SourceServersByConnectionStringName;
 
         #region public methods
         public void Initialise(IDBReplicationInitializeContext context)
@@ -23,6 +24,7 @@ namespace Vanrise.Common.Data.SQL
                 context.DBReplicationTableDetailsListByTargetServer.ThrowIfNull("context.DBReplicationTableDetailsListBySourceConnection");
 
             TableInfoListByTargetServer = new Dictionary<string, List<TableInfo>>();
+            SourceServersByConnectionStringName = new Dictionary<string, Server>();
 
             foreach (var dbReplicationTableDetailsListKvp in context.DBReplicationTableDetailsListByTargetServer)
             {
@@ -38,7 +40,11 @@ namespace Vanrise.Common.Data.SQL
                     var sourceConnectionString = ConfigurationManager.ConnectionStrings[dbReplicationTableDetails.SourceConnectionStringName];
                     SqlConnection sourceSQLConnection = new SqlConnection(sourceConnectionString.ConnectionString);
                     ServerConnection sourceServerConnection = new ServerConnection(sourceSQLConnection);
-                    Server sourceServer = new Server(sourceServerConnection);
+
+                    Server sourceServer = SourceServersByConnectionStringName.GetOrCreateItem(dbReplicationTableDetails.SourceConnectionStringName, () =>
+                    {
+                        return new Server(sourceServerConnection);
+                    });
 
                     Table table = GetTableReference(sourceServer, sourceSQLConnection.Database, dbReplicationTableDetails.TableName, dbReplicationTableDetails.TableSchema);
                     TableInfo tableInfo = new TableInfo()
