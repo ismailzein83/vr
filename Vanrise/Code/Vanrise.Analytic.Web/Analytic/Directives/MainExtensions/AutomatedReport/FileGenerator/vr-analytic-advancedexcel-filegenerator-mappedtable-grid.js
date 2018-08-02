@@ -281,7 +281,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
             }
 
             return mappedCol;
-        };
+        }
 
         function getCellFieldMappingContext() {
 

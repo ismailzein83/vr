@@ -31,7 +31,7 @@ function (UtilsService, VR_Analytic_ReportGenerationAPIService, VRUIUtilsService
 
         var selectorAPI;
         var directiveAPI;
-        var directiveReadyDeferred ;
+        var directiveReadyDeferred;
 
         var context;
 

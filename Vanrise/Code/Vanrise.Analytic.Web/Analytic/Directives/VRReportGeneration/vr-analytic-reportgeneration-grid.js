@@ -68,7 +68,7 @@ function (VR_Analytic_ReportGenerationAPIService, VR_Analytic_ReportGenerationSe
                             gridApi.itemAdded(vRReportGeneration);
                         };
                         return directiveApi;
-                    };
+                    }
                 };
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
 
@@ -90,7 +90,7 @@ function (VR_Analytic_ReportGenerationAPIService, VR_Analytic_ReportGenerationSe
                 };
 
                 defineMenuActions();
-            };
+            }
 
             function defineMenuActions() {
 
@@ -113,11 +113,11 @@ function (VR_Analytic_ReportGenerationAPIService, VR_Analytic_ReportGenerationSe
                     gridApi.itemUpdated(vRReportGeneration);
                 };
                 VR_Analytic_ReportGenerationService.editVRReportGeneration(vRReportGeneration.ReportId, onVRReportGenerationUpdated);
-            };            
+            }            
 
 
 
-        };
+        }
         return directiveDefinitionObject;
     }]);
 

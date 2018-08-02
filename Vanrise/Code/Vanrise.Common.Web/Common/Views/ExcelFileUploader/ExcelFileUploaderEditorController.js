@@ -70,7 +70,7 @@
                 }
 
             };
-        };
+        }
 
         function buildExcelFileObjectFromScope() {
             var sheets = [];
@@ -82,7 +82,7 @@
                 Sheets: sheets
             };
             return object;
-        };
+        }
 
         function uploadExcelFile(){
             $scope.scopeModel.isLoading = true;
@@ -101,9 +101,9 @@
 
             });
 
-        };
+        }
 
-    };
+    }
 
     appControllers.controller('VRCommon_ExcelFileUploaderEditorController', excelFileUploadeController);
 })(appControllers);

@@ -113,7 +113,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                         $scope.scopeModel.topRecords = entity.TopRecords;
                     }
                    
-                };
+                }
                 function getAnalyticTableId() {
                     analyticTableIdDeferred = UtilsService.createPromiseDeferred();
                     VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.GetVRAutomatedReportQueryDefinitionSettings(definitionId).then(function (response) {
@@ -205,7 +205,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     });
 
                     return recordFilterDirectiveLoadDeferred.promise;
-                };
+                }
 
                 function loadDimensions() {
                     var loadDimensionsLoadDeferred = UtilsService.createPromiseDeferred();
@@ -316,7 +316,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 ctrl.onReady(api);
         }
         function getTimePeriod() {
-            return $scope.scopeModel.hasNoExternalFilter? timePeriodSelectorAPI.getData():undefined ;
+            return $scope.scopeModel.hasNoExternalFilter? timePeriodSelectorAPI.getData():undefined;
     }
         function buildContext() {
             var context = {

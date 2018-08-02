@@ -107,7 +107,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                         promises.push(listNameSelectorDataPromise);
                         listNameSelectorDataPromise.then(function (listNames) {
                             if (listNames != undefined) {
-                                for (var i = 0; i < listNames.length ; i++) {
+                                for (var i = 0; i < listNames.length; i++) {
                                     var listName = listNames[i];
                                     $scope.scopeModel.listNames.push({
                                         description: listName,
@@ -156,7 +156,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     queries = context.getQueryInfo();
                     queryNameSelectorReadyDeferred.promise.then(function () {
                         if (queries != undefined) {
-                            for (var i = 0; i < queries.length ; i++) {
+                            for (var i = 0; i < queries.length; i++) {
                                 var query = queries[i];
                                 $scope.scopeModel.queries.push({
                                     description: query.QueryTitle,
@@ -179,7 +179,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 function loadMappedTables() {
                     var promises = [];
                     $scope.scopeModel.isLoadingTabs = true;
-                    for (var i = 0 ; i < mappedTables.length; i++) {
+                    for (var i = 0; i < mappedTables.length; i++) {
                         var mappedTable = mappedTables[i];
                         var mappedTableItem = {
                             payload: mappedTable,

@@ -21,7 +21,7 @@
             if (parameters != undefined && parameters != null) {
                 reportId = parameters.reportId;
             }
-        };
+        }
 
         function defineScope() {
 
@@ -66,7 +66,7 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-        };
+        }
 
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -81,7 +81,7 @@
             });
 
 
-        };
+        }
 
         function getVRReportGeneration() {
             return VR_Analytic_ReportGenerationAPIService.GetVRReportGeneration(reportId).then(function (response) {
@@ -90,7 +90,7 @@
                     $scope.scopeModel.runtimeEditor = response.Settings.Filter.RuntimeEditor;
                 }
             });
-        };
+        }
 
         function loadAllControls() {
             var promises = [setTitle];
@@ -106,7 +106,7 @@
             if ($scope.scopeModel.runtimeEditor != undefined) { promises.push(loadRuntimeEditor); }
             function setTitle() {
                 $scope.title = "Generate " + vRReportGenerationEntity.Name;
-            };
+            }
 
             return UtilsService.waitMultipleAsyncOperations(promises)
              .catch(function (error) {
@@ -116,9 +116,9 @@
                    $scope.scopeModel.isLoading = false;
                });
 
-        };
+        }
 
 
-    };
+    }
     appControllers.controller('VR_Analytic_VRReportGenerationGeneratorController', vRReportGenerationGeneratorController);
 })(appControllers);

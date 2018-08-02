@@ -29,7 +29,7 @@
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationEditor.html', modalParameters, modalSettings);
-        };
+        }
         function registerHistoryViewAction() {
             var actionHistory = {
                 actionHistoryName: "VR_Analytic_ReportGeneration_ViewHistoryItem",
@@ -70,7 +70,7 @@
             registerDownloadFileAction: registerDownloadFileAction,
             registerHistoryViewAction: registerHistoryViewAction
         });
-    };
+    }
 
     appControllers.service('VR_Analytic_ReportGenerationActionService', VRReportGenerationActionService);
 

@@ -28,7 +28,7 @@
             }
             isEditMode = (reportId != undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
-        };
+        }
 
         function defineScope() {
 
@@ -53,7 +53,7 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-        };
+        }
 
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -82,7 +82,7 @@
                 else
                     loadAllControls();
             });
-        };
+        }
 
         function getVRReportGenerationHistory() {
             return VR_Analytic_ReportGenerationAPIService.GetVRReportGenerationHistoryDetailbyHistoryId(context.historyId).then(function (response) {
@@ -93,7 +93,7 @@
             return VR_Analytic_ReportGenerationAPIService.GetVRReportGeneration(reportId).then(function (response) {
                 vRReportGenerationEntity = response;
             });
-        };
+        }
         function doesUserHaveManageAccess() {
             return VR_Analytic_ReportGenerationAPIService.DoesUserHaveManageAccess().then(function (response) {
                 userManageAccess = response;
@@ -110,7 +110,7 @@
                     $scope.title = "View Report Generation: " + vRReportGenerationEntity.Name;
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("VR Report Generation");
-            };
+            }
 
             function loadStaticData() {
 
@@ -119,7 +119,7 @@
                     $scope.scopeModel.description = vRReportGenerationEntity.Description;
                     $scope.scopeModel.selectedAccessLevel = UtilsService.getItemByVal($scope.scopeModel.accessLevels, vRReportGenerationEntity.AccessLevel, "value");
                 }
-            };
+            }
 
             function loadSettingsDirective() {
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -143,7 +143,7 @@
                    $scope.scopeModel.isLoading = false;
                });
 
-        };
+        }
 
         function buildVRReportGenerationObjectFromScope() {
             var settings = settingsDirectiveAPI.getData();
@@ -155,7 +155,7 @@
                 Settings: settings
             };
             return object;
-        };
+        }
 
         function insert() {
 
@@ -176,7 +176,7 @@
                 $scope.scopeModel.isLoading = false;
             });
 
-        };
+        }
 
         function update() {
             $scope.scopeModel.isLoading = true;
@@ -195,8 +195,8 @@
                 $scope.scopeModel.isLoading = false;
 
             });
-        };
+        }
 
-    };
+    }
     appControllers.controller('VR_Analytic_VRReportGenerationEditorController', vRReportGenerationEditorController);
 })(appControllers);

@@ -216,7 +216,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                             });
                         }
                     }
-                };
+                }
 
 
 
@@ -299,7 +299,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     });
 
                     return recordFilterDirectiveLoadDeferred.promise;
-                };
+                }
 
                 function loadFieldsToSortSelector() {
                     var fieldsToSortSelectorLoadDeferred = UtilsService.createPromiseDeferred();
