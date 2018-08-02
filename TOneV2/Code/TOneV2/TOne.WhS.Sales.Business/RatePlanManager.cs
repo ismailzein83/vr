@@ -400,7 +400,7 @@ namespace TOne.WhS.Sales.Business
 			var rateTypeManager = new RateTypeManager();
 			var rateTypes = rateTypeManager.GetAllRateTypes();
 			var index = 3;
-            string requirmentText = " ( fill only if the related rate type rule is configured for this zone(s) and/or customer(s) )";
+            string requirmentText = " ( fill only if the related rate type rule is applicable for this zone(s) and customer(s) )";
 
 			foreach (var rateType in rateTypes)
 			{
