@@ -392,8 +392,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
         }
 
         function getTimePeriod() {
-            if ($scope.scopeModel.hasNoExternalFilter == true) return timePeriodSelectorAPI.getData()
-            else undefined;
+            return $scope.scopeModel.hasNoExternalFilter ? timePeriodSelectorAPI.getData(): undefined;
         }
         function buildContext() {
             var context = {

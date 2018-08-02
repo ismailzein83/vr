@@ -26,7 +26,7 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.RuntimeEditor;
+            $scope.scopeModel.runtimeEditor;
 
             $scope.scopeModel.onRuntimeEditorReady = function (api) {
                 runtimeEditorAPI = api;
@@ -38,7 +38,7 @@
                 if (vRReportGenerationEntity != undefined || vRReportGenerationEntity.Settings != undefined || vRReportGenerationEntity.Settings.ReportAction != undefined) {
                     var payload = {
                         vRReportGeneration: vRReportGenerationEntity,
-                        RuntimeFilter: runtimeEditorAPI.getData()
+                        runtimeFilter: runtimeEditorAPI!=undefined ?runtimeEditorAPI.getData():undefined
                     };
                     var actionTypeName = vRReportGenerationEntity.Settings.ReportAction.ActionTypeName;
                     var actionType = VR_Analytic_ReportGenerationActionService.getActionTypeIfExistByName(actionTypeName);
@@ -86,28 +86,29 @@
         function getVRReportGeneration() {
             return VR_Analytic_ReportGenerationAPIService.GetVRReportGeneration(reportId).then(function (response) {
                 vRReportGenerationEntity = response;
-                $scope.scopeModel.RuntimeEditor = response.Settings.Filter.RuntimeEditor;
+                if (response.Settings != undefined && response.Settings.Filter != undefined) {
+                    $scope.scopeModel.runtimeEditor = response.Settings.Filter.RuntimeEditor;
+                }
             });
         };
 
         function loadAllControls() {
-
+            var promises = [setTitle];
             function loadRuntimeEditor() {
                 var loadRuntimeEditorPromiseDeferred = UtilsService.createPromiseDeferred();
                 runtimeEditorReadyDeferred.promise.then(function () {
 
-                    var payLoad = {
-                    };
+                    var payLoad = undefined;
                     VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, payLoad, loadRuntimeEditorPromiseDeferred);
                 });
                 return loadRuntimeEditorPromiseDeferred.promise;
             }
-
+            if ($scope.scopeModel.runtimeEditor != undefined) { promises.push(loadRuntimeEditor); }
             function setTitle() {
                 $scope.title = "Generate " + vRReportGenerationEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle,loadRuntimeEditor])
+            return UtilsService.waitMultipleAsyncOperations(promises)
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })

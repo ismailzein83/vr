@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VrreportgenerationSettingsFilterStandardfilterDirective.$inject = [];
+    VrreportgenerationFilterStandardDirective.$inject = [];
 
-    function VrreportgenerationSettingsFilterStandardfilterDirective() {
+    function VrreportgenerationFilterStandardDirective() {
         return {
             restrict: 'E',
             scope: {
@@ -14,8 +14,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var vrreportgenerationSettingsFilterStandardfilter = new VrreportgenerationSettingsFilterStandardfilter(ctrl, $scope, $attrs);
-                vrreportgenerationSettingsFilterStandardfilter.initializeController();
+                var vrreportgenerationFilterStandard = new VrreportgenerationFilterStandard(ctrl, $scope, $attrs);
+                vrreportgenerationFilterStandard.initializeController();
             },
             controllerAs: 'Ctrl',
             bindToController: true,
@@ -23,7 +23,7 @@
                 return getDirectiveTemplate(attrs);
             }
         };
-        function VrreportgenerationSettingsFilterStandardfilter(ctrl, $scope, $attrs) {
+        function VrreportgenerationFilterStandard(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -55,6 +55,6 @@
         }
     }
 
-    app.directive('vrAnalyticReportgenerationSettingsFilterStandardfilter', VrreportgenerationSettingsFilterStandardfilterDirective);
+    app.directive('vrAnalyticReportgenerationFilterStandard', VrreportgenerationFilterStandardDirective);
 
 })(app);

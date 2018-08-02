@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VrreportgenerationSettingsFilterStandardfilterruntimeDirective.$inject = ['PeriodEnum'];
+    VrreportgenerationFilterStandardruntimeDirective.$inject = ['PeriodEnum'];
 
-    function VrreportgenerationSettingsFilterStandardfilterruntimeDirective(PeriodEnum) {
+    function VrreportgenerationFilterStandardruntimeDirective(PeriodEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -14,8 +14,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var vrreportgenerationSettingsFilterStandardfilterruntime = new VrreportgenerationSettingsFilterStandardfilterruntime(ctrl, $scope, $attrs);
-                vrreportgenerationSettingsFilterStandardfilterruntime.initializeController();
+                var vrreportgenerationFilterStandardruntime = new VrreportgenerationFilterStandardruntime(ctrl, $scope, $attrs);
+                vrreportgenerationFilterStandardruntime.initializeController();
             },
             controllerAs: 'Ctrl',
             bindToController: true,
@@ -24,7 +24,7 @@
             }
         };
 
-        function VrreportgenerationSettingsFilterStandardfilterruntime(ctrl, $scope, $attrs) {
+        function VrreportgenerationFilterStandardruntime(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var directiveAPI;
@@ -63,6 +63,6 @@
         }
     }
 
-    app.directive('vrAnalyticReportgenerationSettingsFilterStandardfilterruntime', VrreportgenerationSettingsFilterStandardfilterruntimeDirective);
+    app.directive('vrAnalyticReportgenerationFilterStandardruntime', VrreportgenerationFilterStandardruntimeDirective);
 
 })(app);
