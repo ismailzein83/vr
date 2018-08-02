@@ -155,7 +155,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                     var filter = filterAPI.getData();
                     if (filter != undefined) return true;
                     else return false;
-                }
+                };
                 currentContext.getQueryListNames = function (vrAutomatedReportQueryId) {
                     var automatedReportDataSchemaPromise = getAutomatedReportDataSchema();
                     var automatedReportDataSchemaPromiseDeferred = UtilsService.createPromiseDeferred();
