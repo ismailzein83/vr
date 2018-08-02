@@ -59,7 +59,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
             ruleActionsSelectiveReadyPromiseDeferred.resolve();
         };
         $scope.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
 
         $scope.createNewBusinessRuleSet = function () {
@@ -167,7 +167,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
             isEditMode: isEditMode,
             bpBusinessRuleSetId: bpBusinessRuleSetId,
             parentRuleSetId: parentRuleSetId
-        }
+        };
 
 
 
@@ -248,7 +248,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                         $type: "Vanrise.BusinessProcess.Business.BPDefinitionRuleSetFilter,Vanrise.BusinessProcess.Business"
                     }]
                 }
-            }
+            };
             if (isEditMode) {
                 payload.selectedIds = bpBusinessRuleSet.BPDefinitionId;
             }
