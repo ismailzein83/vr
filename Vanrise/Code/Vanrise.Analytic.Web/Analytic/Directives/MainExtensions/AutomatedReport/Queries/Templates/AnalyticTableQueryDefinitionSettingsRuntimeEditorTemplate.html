@@ -11,7 +11,9 @@
         <vr-textbox label="Top Records" value="scopeModel.topRecords" type="number"></vr-textbox>
     </vr-columns>
 </vr-row>
-<vr-common-timeperiod label="Time Period" on-ready="scopeModel.onTimePeriodSelectorReady" normal-col-num="6"></vr-common-timeperiod>
+<span ng-if="scopeModel.hasNoExternalFilter" >
+    <vr-common-timeperiod label="Time Period" on-ready="scopeModel.onTimePeriodSelectorReady" normal-col-num="6"></vr-common-timeperiod>
+</span>
 <vr-row>
     <vr-columns width="fullrow">
         <vr-section title="Subtables">

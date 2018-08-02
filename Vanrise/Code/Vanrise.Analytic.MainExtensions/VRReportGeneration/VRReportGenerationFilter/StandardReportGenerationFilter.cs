@@ -16,7 +16,7 @@ namespace Vanrise.Analytic.MainExtensions
 
         public override string RuntimeEditor
         {
-            get { return ""; }
+            get { return "vr-analytic-reportgeneration-settings-filter-standardfilterruntime"; }
         }
     }
 }

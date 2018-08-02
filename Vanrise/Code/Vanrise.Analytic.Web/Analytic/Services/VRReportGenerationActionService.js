@@ -51,7 +51,9 @@
                     var vRReportGeneration = payload.vRReportGeneration;
                     var input = {
                         FileGenerator: vRReportGeneration.Settings.ReportAction.FileGenerator,
-                        Queries: vRReportGeneration.Settings.Queries
+                        Queries: vRReportGeneration.Settings.Queries,
+                        FilterDefinition: vRReportGeneration.Settings.Filter,
+                        FilterRuntime: payload.RuntimeFilter
                     };
                     return VR_Analytic_AdvancedExcelFileGeneratorAPIService.DownloadAttachmentGenerator(input).then(function (response) {
                         if (response != undefined)

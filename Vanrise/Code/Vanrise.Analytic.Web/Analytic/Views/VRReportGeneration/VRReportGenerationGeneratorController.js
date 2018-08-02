@@ -8,7 +8,8 @@
         var isEditMode;
         var reportId;
         var vRReportGenerationEntity;
-
+        var runtimeEditorAPI;
+        var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
 
         loadParameters();
@@ -25,12 +26,20 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.RuntimeEditor;
 
+            $scope.scopeModel.onRuntimeEditorReady = function (api) {
+                runtimeEditorAPI = api;
+                runtimeEditorReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.generate = function () {
                 $scope.scopeModel.isLoading = true;
                 if (vRReportGenerationEntity != undefined || vRReportGenerationEntity.Settings != undefined || vRReportGenerationEntity.Settings.ReportAction != undefined) {
-                    var payload = { vRReportGeneration: vRReportGenerationEntity };
+                    var payload = {
+                        vRReportGeneration: vRReportGenerationEntity,
+                        RuntimeFilter: runtimeEditorAPI.getData()
+                    };
                     var actionTypeName = vRReportGenerationEntity.Settings.ReportAction.ActionTypeName;
                     var actionType = VR_Analytic_ReportGenerationActionService.getActionTypeIfExistByName(actionTypeName);
                     if (actionType != undefined) {
@@ -77,16 +86,28 @@
         function getVRReportGeneration() {
             return VR_Analytic_ReportGenerationAPIService.GetVRReportGeneration(reportId).then(function (response) {
                 vRReportGenerationEntity = response;
+                $scope.scopeModel.RuntimeEditor = response.Settings.Filter.RuntimeEditor;
             });
         };
 
         function loadAllControls() {
 
+            function loadRuntimeEditor() {
+                var loadRuntimeEditorPromiseDeferred = UtilsService.createPromiseDeferred();
+                runtimeEditorReadyDeferred.promise.then(function () {
+
+                    var payLoad = {
+                    };
+                    VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, payLoad, loadRuntimeEditorPromiseDeferred);
+                });
+                return loadRuntimeEditorPromiseDeferred.promise;
+            }
+
             function setTitle() {
                 $scope.title = "Generate " + vRReportGenerationEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle])
+            return UtilsService.waitMultipleAsyncOperations([setTitle,loadRuntimeEditor])
              .catch(function (error) {
                  VRNotificationService.notifyExceptionWithClose(error, $scope);
              })

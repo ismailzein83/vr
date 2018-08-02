@@ -133,6 +133,11 @@ namespace Vanrise.Analytic.Business
         {
             return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<VRReportGenerationActionReportActionConfig>(VRReportGenerationActionReportActionConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<VRReportGenerationFilterConfigConfig> GetFilterTemplateConfigs()
+        {
+            return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<VRReportGenerationFilterConfigConfig>(VRReportGenerationFilterConfigConfig.EXTENSION_TYPE);
+        }
+        
         #endregion
 
         #region Private Classes

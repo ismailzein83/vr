@@ -1,74 +1,76 @@
-﻿    <vr-row>
-        <vr-columns width="1/2row">
-            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedValues" ismultipleselection>
-            </vr-genericdata-datarecordstorage-selector>
-        </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-textbox label="Limit Result" value="scopeModel.limitResult" isrequired="true" type="number"></vr-textbox>
-        </vr-columns>
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" isrequired="true" selectedvalues="scopeModel.selectedValues" ismultipleselection>
+        </vr-genericdata-datarecordstorage-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Limit Result" value="scopeModel.limitResult" isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
 
-    </vr-row>
-    <vr-row>
-        <vr-columns width="1/2row">
-            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady"
-                                                          isrequired="true"
-                                                          ismultipleselection
-                                                          label="Fields"
-                                                          selectedvalues="scopeModel.selectedFields">
-            </vr-genericdata-datarecordtypefields-selector>
-        </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-select datasource="scopeModel.orderDirections"
-                       datatextfield="description"
-                       datavaluefield="value"
-                       label="Order Direction"
-                       selectedvalues="scopeModel.selectedOrderDirection"
-                       isrequired>
-            </vr-select>
-        </vr-columns>
-    </vr-row>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady"
+                                                      isrequired="true"
+                                                      ismultipleselection
+                                                      label="Fields"
+                                                      selectedvalues="scopeModel.selectedFields">
+        </vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.orderDirections"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   label="Order Direction"
+                   selectedvalues="scopeModel.selectedOrderDirection"
+                   isrequired>
+        </vr-select>
+    </vr-columns>
+</vr-row>
+<span ng-if="scopeModel.hasNoExternalFilter" >
     <vr-common-timeperiod label="Time Period" on-ready="scopeModel.onTimePeriodSelectorReady" normal-col-num="6"></vr-common-timeperiod>
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-section title="Sort Columns">
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-select datasource="scopeModel.fieldsToSort"
-                                   on-ready="scopeModel.onFieldsToSortReady"
-                                   datatextfield="description"
-                                   datavaluefield="value"
-                                   label="Sort Columns"
-                                   onselectionchanged="scopeModel.onFieldsToSortSelectionChanged"
-                                   ondeselectitem="scopeModel.onDeselectSortColumn"
-                                   selectedvalues="scopeModel.selectedSortColumns"
-                                   ismultipleselection="true"
-                                   hideselectedvaluessection>
-                        </vr-select>
-                    </vr-columns>
-                    <vr-columns width="2/3row">
-                        <vr-validator validate="scopeModel.validateSortColumns()">
-                            <vr-datagrid on-ready="scopeModel.onGridReady"
-                                         datasource="scopeModel.sortColumns"
-                                         ondeleterow="scopeModel.removeColumn"
-                                         maxheight="400px"
-                                         hidegridmenu>
-                                <vr-datagridcolumn headertext="'Field Name'" disablesorting>
-                                    <label value="dataItem.entity.FieldName">{{dataItem.entity.FieldName}}</label>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Descending'" disablesorting>
-                                    <vr-switch value="dataItem.entity.IsDescending"></vr-switch>
-                                </vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-validator>
-                    </vr-columns>
-                </vr-row>
-            </vr-section>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-section title="Advanced Filter" collapsible>
-                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-            </vr-section>
-        </vr-columns>
-    </vr-row>
+</span>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Sort Columns">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-select datasource="scopeModel.fieldsToSort"
+                               on-ready="scopeModel.onFieldsToSortReady"
+                               datatextfield="description"
+                               datavaluefield="value"
+                               label="Sort Columns"
+                               onselectionchanged="scopeModel.onFieldsToSortSelectionChanged"
+                               ondeselectitem="scopeModel.onDeselectSortColumn"
+                               selectedvalues="scopeModel.selectedSortColumns"
+                               ismultipleselection="true"
+                               hideselectedvaluessection>
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="2/3row">
+                    <vr-validator validate="scopeModel.validateSortColumns()">
+                        <vr-datagrid on-ready="scopeModel.onGridReady"
+                                     datasource="scopeModel.sortColumns"
+                                     ondeleterow="scopeModel.removeColumn"
+                                     maxheight="400px"
+                                     hidegridmenu>
+                            <vr-datagridcolumn headertext="'Field Name'" disablesorting>
+                                <label value="dataItem.entity.FieldName">{{dataItem.entity.FieldName}}</label>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Descending'" disablesorting>
+                                <vr-switch value="dataItem.entity.IsDescending"></vr-switch>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Advanced Filter" collapsible>
+            <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+        </vr-section>
+    </vr-columns>
+</vr-row>

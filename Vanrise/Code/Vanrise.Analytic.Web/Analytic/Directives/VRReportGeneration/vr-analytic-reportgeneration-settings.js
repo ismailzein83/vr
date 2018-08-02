@@ -31,6 +31,8 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
             var reportActionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var automatedReportQueryAPI;
             var automatedReportQueryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var filterAPI;
+            var filterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var context;
             var queries;
@@ -56,6 +58,11 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                     automatedReportQueryReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onFilterReady = function (api) {
+                    filterAPI = api;
+                    filterReadyPromiseDeferred.resolve();
+                };
+
 
                 defineAPI();
             }
@@ -64,7 +71,8 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                 api.getData = function () {
                     return {
                         Queries: automatedReportQueryAPI.getData(),
-                        ReportAction:   reportActionAPI.getData()
+                        ReportAction: reportActionAPI.getData(),
+                        Filter: filterAPI.getData()
                 };
                 };
 
@@ -72,6 +80,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                 api.load = function (payload) {
                     var queries;
                     var reportAction;
+                    var filter;
                     if (payload != undefined)
                         context = payload.context;
 
@@ -79,6 +88,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
 
                         queries = payload.Settings.Queries;
                         reportAction = payload.Settings.ReportAction;
+                        filter = payload.Settings.Filter;
                     }
                     function loadAutomatedReportQuery() {
                         var automatedReportQueryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -92,6 +102,18 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                         });
                         return automatedReportQueryLoadPromiseDeferred.promise;
                     }
+                    function loadFilter() {
+                        var filterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        filterReadyPromiseDeferred.promise.then(function () {
+                            var filterPayload = {
+                                filter: filter != undefined ? filter : undefined,
+                                context: getContext()
+                            };
+                            VRUIUtilsService.callDirectiveLoad(filterAPI, filterPayload, filterLoadPromiseDeferred);
+
+                        });
+                        return filterLoadPromiseDeferred.promise;
+                    }
                     function loadReportActionSelector() {
                         var reportActionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         reportActionReadyPromiseDeferred.promise.then(function () {
@@ -104,7 +126,7 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                         });
                         return reportActionLoadPromiseDeferred.promise;
                     }
-                    return UtilsService.waitMultiplePromises([loadAutomatedReportQuery(), loadReportActionSelector()]);
+                    return UtilsService.waitMultiplePromises([loadAutomatedReportQuery(), loadReportActionSelector(), loadFilter()]);
 
 
 
@@ -129,6 +151,11 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                 currentContext.getQueryInfo = function () {
                     return getColumns();
                 };
+                currentContext.hasExternalFilter = function () {
+                    var filter = filterAPI.getData();
+                    if (filter != undefined) return true;
+                    else return false;
+                }
                 currentContext.getQueryListNames = function (vrAutomatedReportQueryId) {
                     var automatedReportDataSchemaPromise = getAutomatedReportDataSchema();
                     var automatedReportDataSchemaPromiseDeferred = UtilsService.createPromiseDeferred();

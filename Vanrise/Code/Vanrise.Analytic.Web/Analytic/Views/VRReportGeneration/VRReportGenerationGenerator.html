@@ -1,8 +1,19 @@
 ﻿<div vr-modalcontent ng-controller="VR_Analytic_VRReportGenerationGeneratorController" vr-loader="scopeModel.isLoading" size="small">
-        <div>
+    <vr-modalbody>
+        <vr-form name="formVRReportGenerationGenerator">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-row removeline>
+                        <vr-directivewrapper directive="scopeModel.RuntimeEditor" on-ready="scopeModel.onRuntimeEditorReady"></vr-directivewrapper>
+                    </vr-row>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Generate" formname="formVRReportGenerationEditor" data-onclick="scopeModel.generate"></vr-button>
+                <vr-button type="Generate" formname="formVRReportGenerationGenerator" data-onclick="scopeModel.generate"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

@@ -89,6 +89,7 @@
   <ItemGroup>
     <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\" />
     <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Templates\" />
+    <Folder Include="Analytic\Directives\VRReportGeneration\MainExtensions\ReportGenerationFilter\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
@@ -331,6 +332,7 @@
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />
+    <Content Include="Analytic\Directives\VRReportGeneration\MainExtensions\ReportGenerationFilter\vr-analytic-reportgeneration-settings-filter-standardfilter.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\Templates\DataRecordSourceSubviewSettingsTemplate.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\vr-analytic-datarecordsource-subviewsettings.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Templates\DataRecordSearchPageItemDetailsTemplate.html" />
@@ -383,6 +385,8 @@
     <Content Include="Analytic\Directives\VRReportGeneration\Templates\VRReportGenerationGridTemplate.html" />
     <Content Include="Analytic\Directives\AutomatedReport\vr-analytic-vrautomatedreportquery.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-automatedreport-filegenerator.js" />
+    <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings-filter.js" />
+    <Content Include="Analytic\Directives\VRReportGeneration\MainExtensions\ReportGenerationFilter\vr-analytic-reportgeneration-settings-filter-standardfilterruntime.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings-reportaction.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-grid.js" />

@@ -54,6 +54,12 @@ namespace Vanrise.Analytic.Web.Controllers
             return _manager.GetReportActionTemplateConfigs();
         }
         [HttpGet]
+        [Route("GetFilterTemplateConfigs")]
+        public IEnumerable<VRReportGenerationFilterConfigConfig> GetFilterTemplateConfigs()
+        {
+            return _manager.GetFilterTemplateConfigs();
+        }
+        [HttpGet]
         [Route("GetVRReportGenerationHistoryDetailbyHistoryId")]
         public VRReportGeneration GetVRReportGenerationHistoryDetailbyHistoryId(int vRReportGenerationHistoryId)
         {

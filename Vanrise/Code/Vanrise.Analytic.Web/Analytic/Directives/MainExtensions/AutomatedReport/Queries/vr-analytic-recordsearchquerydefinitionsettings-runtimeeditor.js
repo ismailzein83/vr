@@ -5,7 +5,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
         restrict: "E",
         scope: {
             onReady: "="
-        }, 
+        },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             var runtimeEditor = new RuntimeEditor($scope, ctrl, $attrs);
@@ -18,7 +18,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
     function RuntimeEditor($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
-       
+
         var dataRecordStorageSelectorAPI;
         var dataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -45,15 +45,16 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-        
+
         var context;
         var dataRecordTypeFields;
-        var gridColumns =[];
+        var gridColumns = [];
 
         function initializeController() {
             $scope.scopeModel = {};
+            $scope.scopeModel.hasNoExternalFilter = true;
 
-            $scope.scopeModel.sortColumns =[];
+            $scope.scopeModel.sortColumns = [];
 
             $scope.scopeModel.fieldsToSort = [];
 
@@ -121,11 +122,11 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             };
 
             $scope.scopeModel.removeColumn = function (dataItem) {
-                if (dataItem != undefined && dataItem.entity !=undefined) {
-                var columnsDatasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.sortColumns, dataItem.entity.FieldName, 'entity.FieldName');
-                $scope.scopeModel.sortColumns.splice(columnsDatasourceIndex, 1);
-                var sortColumnsDataSourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSortColumns, dataItem.entity.FieldName, 'value');
-                $scope.scopeModel.selectedSortColumns.splice(sortColumnsDataSourceIndex, 1);
+                if (dataItem != undefined && dataItem.entity != undefined) {
+                    var columnsDatasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.sortColumns, dataItem.entity.FieldName, 'entity.FieldName');
+                    $scope.scopeModel.sortColumns.splice(columnsDatasourceIndex, 1);
+                    var sortColumnsDataSourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSortColumns, dataItem.entity.FieldName, 'value');
+                    $scope.scopeModel.selectedSortColumns.splice(sortColumnsDataSourceIndex, 1);
                 }
             };
 
@@ -168,12 +169,13 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     entity = payload.runtimeDirectiveEntity;
                     definitionId = payload.definitionId;
                     context = payload.context;
+                    if (context != undefined) { $scope.scopeModel.hasNoExternalFilter = !context.hasExternalFilter(); }
                     if (entity != undefined) {
                         $scope.scopeModel.limitResult = entity.LimitResult;
                         dataRecordStoragePayload = entity.DataRecordStorages;
                         columns = entity.Columns;
                         filterGroup = entity.FilterGroup;
-                        if(entity.Direction!=undefined)
+                        if (entity.Direction != undefined)
                             $scope.scopeModel.selectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirections, entity.Direction, "value");
                         sortColumns = entity.SortColumns;
                         if (dataRecordStoragePayload != undefined) {
@@ -199,27 +201,27 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                                     });
                                     gridColumns.push(sortColumn.FieldName);
                                     if (dataRecordTypeFields != undefined) {
-                                  for (var fieldName in dataRecordTypeFields) {
-                                        if (fieldName != "$type") {
-                                            if (sortColumn.FieldName == fieldName) {
-                                                $scope.scopeModel.selectedSortColumns.push({
-                                                            description: dataRecordTypeFields[fieldName].Title,
-                                                            value: fieldName
-                                                });
+                                        for (var fieldName in dataRecordTypeFields) {
+                                            if (fieldName != "$type") {
+                                                if (sortColumn.FieldName == fieldName) {
+                                                    $scope.scopeModel.selectedSortColumns.push({
+                                                        description: dataRecordTypeFields[fieldName].Title,
+                                                        value: fieldName
+                                                    });
                                                 }
                                             }
                                         }
+                                    }
                                 }
-                            }
                             });
                         }
                     }
                 };
 
-             
+
 
                 function getInitialData() {
-             
+
                     VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService.GetVRAutomatedReportQueryDefinitionSettings(definitionId).then(function (response) {
                         if (response != undefined && response.ExtendedSettings != undefined) {
                             if (entity == undefined) {
@@ -321,8 +323,17 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                         return {
                             promises: [loadDataRecordTypeFields()],
                             getChildNode: function () {
-                                return {
-                                    promises: [UtilsService.waitMultiplePromises([loadDataRecordStorageSelector(), loadTimePeriodSelector(), loadDataRecordTypeFieldsSelector(), loadRecordFilterDirective(), loadFieldsToSortSelector()])]
+                                var promises = [];
+                                promises.push(loadDataRecordStorageSelector());
+                                promises.push(loadDataRecordTypeFieldsSelector());
+                                promises.push(loadRecordFilterDirective());
+                                promises.push(loadFieldsToSortSelector());
+
+                                if($scope.scopeModel.hasNoExternalFilter)
+                                    promises.push(loadTimePeriodSelector());
+                                
+                                return {     
+                                    promises: [UtilsService.waitMultiplePromises(promises)]
                                 };
                             },
                         };
@@ -336,10 +347,10 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 var array = dataRecordStorageSelectorAPI.getSelectedIds();
                 var dataRecordStoragesArray = [];
                 for (var i = 0; i < array.length; i++) {
-                    dataRecordStoragesArray.push({ DataRecordStorageId: array [i]});
+                    dataRecordStoragesArray.push({ DataRecordStorageId: array[i] });
                 }
 
-                var columnNames =[];
+                var columnNames = [];
                 var columnsArray = [];
 
                 for (var i = 0; i < $scope.scopeModel.selectedFields.length; i++) {
@@ -355,11 +366,11 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 var obj = {
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQuerySettings,Vanrise.Analytic.MainExtensions',
                     DataRecordStorages: dataRecordStoragesArray,
-                    TimePeriod: timePeriodSelectorAPI.getData(),
+                    TimePeriod: getTimePeriod(),
                     Columns: columnsArray,
                     FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
                     LimitResult: $scope.scopeModel.limitResult,
-                    Direction:$scope.scopeModel.selectedOrderDirection.value,
+                    Direction: $scope.scopeModel.selectedOrderDirection.value,
                     SortColumns: getSortColumns()
                 };
                 function getSortColumns() {
@@ -380,6 +391,10 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                 ctrl.onReady(api);
         }
 
+        function getTimePeriod() {
+            if ($scope.scopeModel.hasNoExternalFilter == true) return timePeriodSelectorAPI.getData()
+            else undefined;
+        }
         function buildContext() {
             var context = {
                 getFields: function () {
@@ -424,9 +439,9 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     dataRecordTypeFields = response;
                     dataRecordTypeFieldsDeferred.resolve();
                     loadDataRecordTypeFieldsLoadDeferred.resolve();
-                 });
+                });
             });
-           
+
             return loadDataRecordTypeFieldsLoadDeferred.promise;
         }
     }

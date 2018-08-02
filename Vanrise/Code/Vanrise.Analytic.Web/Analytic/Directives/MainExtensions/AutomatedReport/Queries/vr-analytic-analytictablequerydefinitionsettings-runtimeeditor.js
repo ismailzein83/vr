@@ -50,6 +50,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
 
         function initializeController() {
             $scope.scopeModel = {};
+            $scope.scopeModel.hasNoExternalFilter = true;
 
             $scope.scopeModel.onTimePeriodSelectorReady = function (api) {
                 timePeriodSelectorAPI = api;
@@ -84,8 +85,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             $scope.scopeModel.onSubtablesDirectiveReady = function (api) {
                 subtablesDirectiveAPI = api;
                 subtablesDirectiveReadyDeferred.resolve();
-            };
-
+            };            
             UtilsService.waitMultiplePromises([timePeriodSelectorReadyDeferred.promise, dimensionsSelectorReadyDeferred.promise, measuresSelectorReadyDeferred.promise, currencySelectorReadyDeferred.promise, recordFilterDirectiveReadyDeferred.promise, orderTypeSelectorReadyDeferred.promise, subtablesDirectiveReadyDeferred.promise]).then(function () {
               
                 defineAPI();
@@ -107,6 +107,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     entity = payload.runtimeDirectiveEntity;
                     definitionId = payload.definitionId;
                     context = payload.context;
+                    if (context != undefined) { $scope.scopeModel.hasNoExternalFilter = !context.hasExternalFilter(); }
                     if (entity != undefined) {
                         $scope.scopeModel.withSummary = entity.WithSummary;
                         $scope.scopeModel.topRecords = entity.TopRecords;
@@ -263,15 +264,26 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
                     });
                     return subtablesLoadDeferred.promise;
                 }
-
                 var rootPromiseNode = {
                     promises: [getAnalyticTableId()],
                     getChildNode: function () {
                         return {
                             promises: [loadDimensions()],
                             getChildNode: function () {
+                                var promises = [];
+                                promises.push(loadRecordFilterDirective());
+
+                                promises.push(loadCurrencySelector());
+                                promises.push(loadDimensionsSelector());
+                                promises.push(loadMeasuresSelector());
+                                promises.push(loadOrderTypeSelector());
+                                promises.push(loadSubtablesDirective());
+
+                                if ($scope.scopeModel.hasNoExternalFilter)
+                                    promises.push(loadTimePeriodSelector());
+
                                 return {
-                                    promises: [UtilsService.waitMultiplePromises([loadRecordFilterDirective(), loadTimePeriodSelector(), loadCurrencySelector(), loadDimensionsSelector(), loadMeasuresSelector(), loadOrderTypeSelector(), loadSubtablesDirective()])]
+                                    promises: [UtilsService.waitMultiplePromises(promises)]
                                 };
                             },
                         };
@@ -285,7 +297,7 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
               
               var obj = {
                     $type: 'Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.AnalyticTableQuerySettings,Vanrise.Analytic.MainExtensions',
-                    TimePeriod: timePeriodSelectorAPI.getData(),
+                    TimePeriod: getTimePeriod(),
                     Dimensions: getDimensions(),
                     Measures: getMeasures(),
                     FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
@@ -303,7 +315,10 @@ function (VR_Analytic_AutomatedReportQueryDefinitionSettingsAPIService, UtilsSer
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
+        function getTimePeriod() {
+            if ($scope.scopeModel.hasNoExternalFilter == true) return timePeriodSelectorAPI.getData()
+            else undefined;
+    }
         function buildContext() {
             var context = {
                 getFields: function () {

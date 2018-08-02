@@ -154,6 +154,7 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
             currentContext.getQueryInfo = function () {
                 return getColumns();
             };
+            return currentContext;
         };        
 
        
