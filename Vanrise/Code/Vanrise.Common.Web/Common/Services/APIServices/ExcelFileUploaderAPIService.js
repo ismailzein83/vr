@@ -12,9 +12,9 @@
 
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UploadExcelFile"), excelUploaderInput);
         }
-     
+
         return ({
-            UploadExcelFile: UploadExcelFile,
+            UploadExcelFile: UploadExcelFile
         });
     }
 

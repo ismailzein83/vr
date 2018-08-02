@@ -88,10 +88,10 @@
             $scope.scopeModel.isLoading = true;
 
             var excelUploaderInput = buildExcelFileObjectFromScope();
-            return VRCommon_ExcelFileUploaderAPIService.UploadExcelFile(excelUploaderInput).then(function(response) {
+            return VRCommon_ExcelFileUploaderAPIService.UploadExcelFile(excelUploaderInput).then(function (response) {
                 if (response != undefined && response.IsSucceeded) {
                     if ($scope.onExcelAdded != undefined) {
-                        $scope.onExcelAdded(response.FileId);
+                        $scope.onExcelAdded(response.FileId, response.FileUniqueId);
                     }
                     $scope.modalContext.closeModal();
                 }

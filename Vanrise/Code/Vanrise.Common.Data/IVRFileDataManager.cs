@@ -13,10 +13,10 @@ namespace Vanrise.Common.Data
 
         long AddFile(VRFile file);
         VRFileInfo GetFileInfo(long fileId);
-        VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId);
+        VRFileInfo GetFileInfoByUniqueId(Guid fileUniqueId);
         List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds);
         VRFile GetFile(long fileId);
-        VRFile GetFileByFileUniqueId(Guid fileUniqueId);
+        VRFile GetFileByUniqueId(Guid fileUniqueId);
         bool SetFileUsed(long fileId);
 
         bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings);

@@ -26,7 +26,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             ctrl.tabindex = "";
             setTimeout(function () {
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
-                    ctrl.tabindex = "-1"
+                    ctrl.tabindex = "-1";
                 }
             }, 10);
 
@@ -69,7 +69,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     if (ctrl.tempfile != undefined && (ctrl.tempfile == "true" || ctrl.tempfile == true))
                         xhr.setRequestHeader('Temp-File', "true");
                 },
-                formData: function (form) { return form },
+                formData: function (form) { return form; },
                 replaceFileInput: true,
                 datatype: 'json',
                 add: function (e, data) {
@@ -124,11 +124,12 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     else {
                         ctrl.value = {
                             fileId: data.result.FileId,
-                            fileName: data.result.Name
+                            fileName: data.result.Name,
+                            fileUniqueId: data.result.FileUniqueId
                         };
                         var obj = ctrl.value;
                         isInternalSetValue = true;
-                        $timeout(function () { $scope.complet = true }, 2000);
+                        $timeout(function () { $scope.complet = true; }, 2000);
                         $scope.isUploading = false;
                         data.originalFiles.length = 0;
                         if ($attrs.onvaluechanged != undefined) {
@@ -146,24 +147,37 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 }
             });
             $scope.$watch('ctrl.value', function () {
-
                 if (isInternalSetValue) {
                     isInternalSetValue = false;
                     return;
                 }
                 if (ctrl.value != null) {
-                    BaseAPIService.get("/api/VRCommon/File/GetFileInfo", {
-                        fileId: ctrl.value.fileId,
+                    var input = {
                         moduleName: getModuleName()
-                    }).then(function (response) {
+                    };
+                    var url = "/api/VRCommon/File/";
+                    if (ctrl.value.fileUniqueId == undefined)
+                    {
+                        input.fileId = ctrl.value.fileId;
+                        url+="GetFileInfo";
+                    } else {
+                        input.fileUniqueId= ctrl.value.fileUniqueId;
+                        url += "GetFileInfoByUniqueId";
+                    }
+                    BaseAPIService.get(url, input).then(function (response) {
                         if (response != null) {
                             ctrl.value.fileName = response.Name;
+                            ctrl.value.fileId = response.FileId;
+                            ctrl.value.fileUniqueId = response.FileUniqueId;
+
                             ctrl.file = {
                                 name: response.Name,
                                 type: response.Extension,
                                 fileId: response.FileId,
+                                fileUniqueId: response.FileUniqueId,
                                 lastModifiedDate: response.lastModifiedDate
-                            };                            
+                            };
+
                         }
                         else
                             ctrl.file = {};
@@ -245,7 +259,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                             var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                             $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 5, left: selfOffset.left - 30 });
                             $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight, left: selfOffset.left });
-                        }, 1)
+                        }, 1);
                     };
                     ctrl.remove = function () {
                         $scope.complet = false;

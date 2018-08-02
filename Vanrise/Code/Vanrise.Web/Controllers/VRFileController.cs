@@ -118,10 +118,10 @@ namespace Vanrise.Web.Controllers
         }
 
         [HttpGet]
-        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId)
+        public VRFileInfo GetFileInfoByUniqueId(Guid fileUniqueId)
         {
             VRFileManager manager = new VRFileManager();
-            return manager.GetFileInfoByFileUniqueId(fileUniqueId);
+            return manager.GetFileInfoByUniqueId(fileUniqueId);
         }
         private static byte[] ReadToEnd(System.IO.Stream stream)
         {

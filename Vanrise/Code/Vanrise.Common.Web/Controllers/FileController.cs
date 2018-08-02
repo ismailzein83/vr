@@ -148,20 +148,12 @@ namespace Vanrise.Common.Web
             }
         }
 
-        [Route("GetFileInfoByFileUniqueId")]
+        [Route("GetFileInfoByUniqueId")]
         [HttpGet]
-        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId, string moduleName = null)
+        public VRFileInfo GetFileInfoByUniqueId(Guid fileUniqueId, string moduleName = null)
         {
             VRFileManager manager = new VRFileManager(moduleName);
-            VRFileInfo fileInfo = manager.GetFileInfoByFileUniqueId(fileUniqueId);
-            if (fileInfo == null)
-            {
-                return null;
-            }
-            else
-            {
-                return fileInfo;
-            }
+            return manager.GetFileInfoByUniqueId(fileUniqueId);
         }
 
         [Route("GetFileName")]

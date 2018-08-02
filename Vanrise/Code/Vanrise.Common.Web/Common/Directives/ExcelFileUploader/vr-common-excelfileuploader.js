@@ -27,9 +27,10 @@ function (UtilsService, VRNotificationService, VRModalService, VRCommon_ExcelFil
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.upload = function () {
-                var onExcelAdded = function (fileId) {
-                 var file = {
-                        fileId: fileId
+                var onExcelAdded = function (fileId, fileUniqueId) {
+                var file = {
+                        fileId: fileId,
+                        fileUniqueId: fileUniqueId
                     };
                     ctrl.value = file;
                 };
@@ -40,9 +41,16 @@ function (UtilsService, VRNotificationService, VRModalService, VRCommon_ExcelFil
 
         function defineAPI() {
             var api = {};
-
             api.load = function (payload) {
                 var promises = [];
+                if (payload != undefined && payload.fileUniqueId != undefined) {
+                    if (payload.fileUniqueId != undefined || payload.fileId != undefined) {
+                        ctrl.value = {
+                            fileUniqueId: payload.fileUniqueId,
+                            fileId: payload.fileId
+                        };
+                    }
+                }
                 return UtilsService.waitMultiplePromises(promises);
             };
 

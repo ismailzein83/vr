@@ -46,7 +46,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var isEditMode;
 
         function initializeController() {
-            var promises = [excelFileUploaderReadyDeferred.promise, excelWorkbookReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise];
+            var promises = [excelFileUploaderReadyDeferred.promise, queryNameSelectorReadyDeferred.promise, listNameSelectorReadyDeferred.promise];
 
                 $scope.scopeModel = {};
                 
@@ -101,6 +101,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
                 $scope.scopeModel.onQuerySelectionChanged = function (query) {
                     if (query != undefined) {
+                        $scope.scopeModel.listNames.length = 0;
                         $scope.scopeModel.isLoadingListNames = true;
                         var listNameSelectorDataPromise = context.getQueryListNames(query.value);
                         promises.push(listNameSelectorDataPromise);
@@ -139,15 +140,15 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 var promises = [];
                 var queryArrayPromise = UtilsService.createPromiseDeferred();
                 var tableDefinitions;
-                var fileId;
                 if (payload != undefined) {
                     context = payload.context;
                     var fileGenerator = payload.fileGenerator;
                     if (fileGenerator != undefined) {
                         tableDefinitions = fileGenerator.TableDefinitions;
-                        fileId = fileGenerator.FileTemplateId;
                         $scope.scopeModel.compressFile = fileGenerator.CompressFile;
+                        promises.push(excelWorkbookReadyDeferred.promise);
                     }
+
                 }
 
                 if (context != undefined) {
@@ -170,12 +171,11 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 if (tableDefinitions != undefined) {
                     mappedTables = tableDefinitions;
                 }
-                if (fileId != undefined)
-                {
-                    $scope.scopeModel.file = { fileId: fileId };
-                }
+
+
 
                 promises.push(loadMappedTables());
+                promises.push(loadExcelFileUploader());
                 function loadMappedTables() {
                     var promises = [];
                     $scope.scopeModel.isLoadingTabs = true;
@@ -198,14 +198,24 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     });
 
                 }
-                return UtilsService.waitMultiplePromises(promises);
+                function loadExcelFileUploader() {
+                    var excelFileUploaderLoadDeferred = UtilsService.createPromiseDeferred();
+                    excelFileUploaderReadyDeferred.promise.then(function () {
+                        var excelFileGeneratorPayload = {
+                            fileUniqueId: (payload != undefined && payload.fileGenerator != undefined) ? payload.fileGenerator.FileUniqueId : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(excelFileUploaderAPI, excelFileGeneratorPayload, excelFileUploaderLoadDeferred);
+                    });
+                    return excelFileUploaderLoadDeferred.promise;
+                }
 
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
               var obj = {
                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGenerator,Vanrise.Analytic.MainExtensions",
-                   FileTemplateId: $scope.scopeModel.file != undefined ? $scope.scopeModel.file.fileId : undefined,
+                   FileUniqueId: $scope.scopeModel.file != undefined ? $scope.scopeModel.file.fileUniqueId : undefined,
                    CompressFile: $scope.scopeModel.compressFile,
                    TableDefinitions: getTables()
               };

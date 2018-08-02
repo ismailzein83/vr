@@ -7,7 +7,7 @@
 <vr-row removeline>
     <vr-columns width="1/2row">
         <vr-section title="Excel Viewer">
-            <vr-excel-wb on-ready="scopeModel.onExcelWorkbookReady" fileid="scopeModel.file.fileId"></vr-excel-wb>
+            <vr-excel-wb on-ready="scopeModel.onExcelWorkbookReady" ng-if="scopeModel.file.fileId != undefined" fileid="scopeModel.file.fileId"></vr-excel-wb>
         </vr-section>
     </vr-columns>
 

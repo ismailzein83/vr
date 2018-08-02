@@ -52,18 +52,18 @@ namespace Vanrise.Common.Data.SQL
             return GetItemSP("[common].[sp_File_GetInfoById]", FileInfoMapper, fileId);
         }
 
-        public VRFileInfo GetFileInfoByFileUniqueId(Guid fileUniqueId)
+        public VRFileInfo GetFileInfoByUniqueId(Guid fileUniqueId)
         {
-            return GetItemSP("[common].[sp_File_GetInfoByFileUniqueId]", FileInfoMapper, fileUniqueId);
+            return GetItemSP("[common].[sp_File_GetInfoByUniqueId]", FileInfoMapper, fileUniqueId);
         }
 
         public VRFile GetFile(long fileId)
         {
             return GetItemSP("[common].[sp_File_GetFileById]", FileMapper, fileId);
         }
-        public VRFile GetFileByFileUniqueId(Guid fileUniqueId)
+        public VRFile GetFileByUniqueId(Guid fileUniqueId)
         {
-            return GetItemSP("[common].[sp_File_GetFileByFileUniqueId]", FileMapper, fileUniqueId);
+            return GetItemSP("[common].[sp_File_GetByUniqueId]", FileMapper, fileUniqueId);
         }
 
 

@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Excel;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Common.Business.ExcelFileUploader
 {
     public class ExcelFileUploaderManager
     {
+        VRFileManager fileManager = new VRFileManager();
 
         public ExcelUploaderOutput UploadExcelFile(ExcelUploaderInput input)
         {
@@ -24,7 +26,6 @@ namespace Vanrise.Common.Business.ExcelFileUploader
             VRFile file;
             VRExcelSheet excelSheet;
             VRExcelFile excelFile = new VRExcelFile();
-            VRFileManager fileManager = new VRFileManager();
                      
             foreach (string sheet in input.Sheets)
             {
@@ -41,13 +42,13 @@ namespace Vanrise.Common.Business.ExcelFileUploader
             {
                 Content = byteArray,
                 Name = "MyExcel.xlsx",
-                Extension = "xlsx"
+                Extension = "xlsx",
+                FileUniqueId = Guid.NewGuid()
             };
             output.FileId = fileManager.AddFile(file);
             output.IsSucceeded = true;
-
+            output.FileUniqueId = file.FileUniqueId.Value;
             return output;
         }
-
     }
 }
