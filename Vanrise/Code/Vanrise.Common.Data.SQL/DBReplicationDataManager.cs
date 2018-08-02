@@ -71,7 +71,7 @@ namespace Vanrise.Common.Data.SQL
         private Server BuildServer(ServerConnection serverConnection)
         {
             Server server = new Server(serverConnection);
-            server.ConnectionContext.ConnectTimeout = 0;
+            //server.ConnectionContext.ConnectTimeout = 0;
             server.ConnectionContext.LockTimeout = 0;
             server.ConnectionContext.StatementTimeout = 0;
             return server;
