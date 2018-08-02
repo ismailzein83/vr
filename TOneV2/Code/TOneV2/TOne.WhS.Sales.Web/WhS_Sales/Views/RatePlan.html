@@ -114,7 +114,7 @@
                 <div transclude-to="buttons">
                     <vr-button type="Load" validationcontext="LoadGroup" data-onclick="load" ></vr-button>
                     <vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton" showbutton="showSettingsButton"></vr-button>
-                    <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" ng-show="showBulkActionButton" showbutton="showBulkActionButton"></vr-button>
+                    <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" ng-show="showBulkActionButton" showbutton="false"></vr-button>
                     <vr-button type="ManageCountries" validationcontext="OwnerGroup" ng-show="showCarrierAccountSelector" data-onclick="manageCountries" showbutton="showCarrierAccountSelector"></vr-button>
                     <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="sellingProductApplyButtonMenuActions" ng-show="showSaveButton&&showSaveButtonForSellingProduct" showbutton="showSaveButton&&showSaveButtonForSellingProduct"></vr-button>
                     <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="customerApplyButtonMenuActions" ng-show="showSaveButton&&showSaveButtonForCustomer" showbutton="showSaveButton&&showSaveButtonForCustomer"></vr-button>

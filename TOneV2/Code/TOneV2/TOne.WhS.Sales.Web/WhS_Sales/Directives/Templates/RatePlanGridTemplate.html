@@ -82,11 +82,14 @@
         height: 24px;
     }
 
-        .row-toggle .toggle-icon {
-            top: calc(50% - 6px);
-            left: 4px;
-        }
+    .row-toggle .toggle-icon {
+        top: calc(50% - 6px);
+        left: 4px;
+    }
 
+    .vr-mobile-view .row-toggle .toggle-icon {
+        left: unset !important;
+    }
     .column-filter {
         font-size: 6px;
         float: right;
@@ -206,7 +209,7 @@
         padding: unset;
     }
 
-    .mobile-view .rate-plan-grid .mobile-label {     
+    .vr-mobile-view .rate-plan-grid .mobile-label {     
         margin-top: 4px;
     }
 </style>
@@ -935,17 +938,19 @@
                                                                 <div ng-if="columnsConfig.newRate.includeInListView && ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;width: 33% !important" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="mobile-label-container"><label class="mobile-label">N.Rate: </label></div>
-                                                                        <div class="vr-datagrid-celltext " ng-style="{'width': '65px'}">
+                                                                        <div class="vr-datagrid-celltext ">
                                                                             <span vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
-                                                                                <vr-textbox type="number"
-                                                                                            value="dataItem.NewRate"
-                                                                                            customvalidate="dataItem.validateNewRate()"
-                                                                                            decimalprecision="{{::longPrecision}}"
-                                                                                            onvaluechanged="onNewRateChanged(dataItem)"
-                                                                                            onblurtextbox="onNewRateBlurred(dataItem)"
-                                                                                            tonextinput>
-                                                                                </vr-textbox>
-                                                                                <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" style="top: 7px; position: absolute;left: 100px;" />
+                                                                                <span style="display:inline-block;width: calc(100% - 15px);">
+                                                                                    <vr-textbox type="number"
+                                                                                                value="dataItem.NewRate"
+                                                                                                customvalidate="dataItem.validateNewRate()"
+                                                                                                decimalprecision="{{::longPrecision}}"
+                                                                                                onvaluechanged="onNewRateChanged(dataItem)"
+                                                                                                onblurtextbox="onNewRateBlurred(dataItem)"
+                                                                                                tonextinput>
+                                                                                    </vr-textbox>
+                                                                                </span>
+                                                                                <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" style="top: 7px; position: absolute;" />
                                                                             </span>                                                                           
                                                                         </div>
                                                                     </div>
