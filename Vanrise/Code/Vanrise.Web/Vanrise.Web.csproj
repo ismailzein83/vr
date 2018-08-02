@@ -186,8 +186,10 @@
     <Content Include="Client\Javascripts\Directives\Button\MenuActionsModalPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-legend-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\GridMenuActionModalPopup.html" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\SortByColumnsModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\RowActionModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\GridMenuActionActionPopupController.js" />
+    <Content Include="Client\Javascripts\Directives\DataGrid\SortByColumnsModalPopupController.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\RowActionPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Diagram\vr-diagram-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\MobileOptionPopup.html" />

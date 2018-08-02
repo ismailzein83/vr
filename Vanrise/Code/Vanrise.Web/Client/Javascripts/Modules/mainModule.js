@@ -209,6 +209,15 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         };
         VRModalService.showModal('/Client/Modules/Security/Views/Security/RemoteApplications.html', parameters, modalSettings);
     };
+    $scope.openMobileUserActionPopup = function () {
+        var modalSettings = {
+            autoclose:true
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.mainCtrl = $scope;            
+        };
+        VRModalService.showModal('/Client/Modules/Security/Views/User/MobileUserActionPopup.html', null, modalSettings);
+    };
 
     $scope.openEditProfileModal = function () {
         var modalSettings = {

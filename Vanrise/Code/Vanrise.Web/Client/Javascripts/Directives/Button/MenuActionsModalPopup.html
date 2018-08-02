@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="MenuActionsModalPopup" vr-loader="isLoading" ismenu>
     <vr-modalbody>
-        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon" ></span>
         <div class="actionbar-popup-modal" style="padding-top:15px">
             <button ng-hide="btnAction.disable" ng-repeat="btnAction in btn.menuActions" ng-click="clickActionAndCloseModal(btn,btnAction)" style="border-radius: 0px; color: #333; " type="button" class="btn btn-default">
                 {{btnAction.name}}

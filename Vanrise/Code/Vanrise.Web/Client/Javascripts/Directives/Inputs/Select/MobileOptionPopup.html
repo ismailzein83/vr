@@ -14,7 +14,7 @@
         </div>-->
         <div style="position:relative;">
             <a href="" class="link" ng-click="clearSelectionAndCloseModal($event,true);" ng-if="!ctrl.isMultiple() && ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0" ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly">Clear Selected</a>
-            <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: -10px;right: -10px;font-size:22px"></span>
+            <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon" ></span>
             <div style="padding-top:15px">
                 <div ng-if="ctrl.isContainerVisible()" class="vr-select-multiple" style="display: inline-block; width: 100% !important;">
 

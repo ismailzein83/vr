@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="AllActionsModalPopupController" ismenu vr-loader="isLoading">
     <vr-modalbody>
-        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: 5px;right: 5px;font-size:22px"></span>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon" ></span>
         <div class="actionbar-popup-modal" style="padding-top:15px">
             <div ng-class="btn.menuActions.length > 0?'sub-menu':''" ng-repeat="btn in actionBarCtrl.buttonsList" style="position:relative;display:block;" ng-if="btn.isExculdedOnreadOnly()" ng-mouseleave="btn.showMenuActions = false" ng-hide="btn.hideTemplate">
                 <button ng-class="" ng-show="btn.showbutton == undefined ||  btn.showbutton == true" style="border-radius: 0px; color: #333; " type="button" class="btn btn-default" aria-label="Left Align" ng-click="clickActionAndCloseModal(btn)" ng-disabled="btn.isDisabled()">

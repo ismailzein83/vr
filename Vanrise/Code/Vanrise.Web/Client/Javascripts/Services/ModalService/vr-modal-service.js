@@ -66,7 +66,7 @@
                 modalScope.modalMaxHeight = settings.maxHeight;
 
                 modalScope.title = settings.title;
-
+                modalScope.showFooter = MobileService.isMobile();
                 if (settings.onScopeReady != undefined)
                     settings.onScopeReady(modalScope);
 

@@ -7,11 +7,11 @@
     function MobileService( UtilsService) {
 
         function isMobile() {            
-            return isMobileView();
+            return isMobileView() || isMobileOS();
         }
 
         function isMobileView() {           
-            return window.innerWidth < 768;
+            return window.innerWidth < 786;
         }
 
         function isMobileOS() {

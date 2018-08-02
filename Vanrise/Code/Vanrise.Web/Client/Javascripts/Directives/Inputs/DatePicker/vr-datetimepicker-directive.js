@@ -98,7 +98,6 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 ignoreReadonly: MobileService.isMobile(),
                 focusOnShow: !MobileService.isMobile(),
                 showClear:true
-                // locale:"ar"
             });
             divDatePicker
                 .on('dp.show', function (e) {
@@ -151,9 +150,6 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     $(dropDown).css({
                         position: 'fixed', top: basetop, left: elleft, bottom: 'unset'
                     });
-
-
-
 
                 });
 
@@ -374,16 +370,13 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 }
             };
             $scope.ctrl.toggleDate = function (e) {
-
-                e.preventDefault();
-                e.stopPropagation();
-
                 $('.date-section').addClass('in');
                 $('.time-section').removeClass('in');
-
                 // switch icon to time
                 $('.btn-switcher').addClass("glyphicon-time");
                 $('.btn-switcher').removeClass("glyphicon-calendar");
+                e.preventDefault();
+                e.stopPropagation();
             };
             $scope.ctrl.toggleTime = function (e) {
 

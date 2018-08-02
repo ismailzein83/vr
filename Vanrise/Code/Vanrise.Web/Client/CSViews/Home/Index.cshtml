@@ -25,11 +25,11 @@
     @Styles.Render("~/Content/Styles")
     @Styles.Render("~/Content/Themes")
 </head>
-<body @ViewBag.RTLClass ng-class="isMobile?'mobile-view':''" >
+<body @ViewBag.RTLClass ng-class="isMobile?'vr-mobile-view':''" ng-init="isLocalizationEnabled = @ViewBag.IsLocalizationEnabled ; hasRemoteApplications = @ViewBag.HasRemoteApplications;">
     <div ng-show="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
     <div ng-show="!spinner" ng-cloak id="mainBodyContainer" style="display:none">
 
-        <div class="normal-view" ng-if="!isMobile">
+        <div class="normal-view" ng-if="::!isMobile">
             <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
                 <div class="container">
                     <div class="navbar-header">
@@ -37,18 +37,18 @@
                         <div class="vr-logout-span">
 
                             @*<div class="vr-logout-span" ng-show="remoteApplications!=undefined && remoteApplications.length > 0">
-                                <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
-                                    <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
-                                        <span class="glyphicon glyphicon-retweet"></span>
-                                        <label class="vr-user-separator">|</label>
+                                    <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
+                                        <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
+                                            <span class="glyphicon glyphicon-retweet"></span>
+                                            <label class="vr-user-separator">|</label>
+                                        </div>
+                                        <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
+                                            <li ng-repeat="remoteApplication in remoteApplications">
+                                                <a href="" ng-click="redirectToApplication(remoteApplication)">{{remoteApplication.Name}}</a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenuCu-test">
-                                        <li ng-repeat="remoteApplication in remoteApplications">
-                                            <a href="" ng-click="redirectToApplication(remoteApplication)">{{remoteApplication.Name}}</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>*@
+                                </div>*@
 
                             <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                                 <div class="dropdown-toggle flex-user-menu" id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
@@ -213,7 +213,7 @@
                 </div>
             </div>
         </div>
-        <div class="mobile-view" ng-if="isMobile">
+        <div class="mobile-view" ng-if="::isMobile">
             <nav class="navbar navbar-default vr-mobile-navbar">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -223,6 +223,10 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
+                        <span class="mobile-info-item hand-cursor" ng-click="openMobileUserActionPopup()">
+                            <vr-preview-image height="26px" width="26px" value="userPhotoFileId" usericon="userPhotoFileId!=null" style="display:inline-block;position: relative;top: 5px;"> </vr-preview-image>
+                            <label class="vr-user-label  hand-cursor" style="position: relative; top: 15px;padding:0px 5px">{{userDisplayName}}</label>
+                        </span>
                         <a class="navbar-brand hand-cursor">@ViewBag.CompanyName</a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse vr-collapse">

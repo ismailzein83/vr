@@ -1,0 +1,20 @@
+﻿<div vr-modalcontent ng-controller="SortByColumnsModalPopupController" vr-loader="isLoading" ismenu>
+    <vr-modalbody>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon" ></span>
+        <div style="text-align: center;padding-top:15px">
+            <vr-choices isradio selectedindex="selectedSortDirectionIndex">
+                <vr-choice>Ascending</vr-choice>
+                <vr-choice>Desccending</vr-choice>
+            </vr-choices>
+        </div>
+        <ul role="menu" class="gid-cell-menu am-fade-and-slide-top" style="list-style-type:none;">
+            <li role="presentation">
+                <div ng-repeat="colDef in ctrl.columnDefs" ng-if="colDef.disableSorting==false" class="mark-select action-item" ng-click="sortByColumnAndCloseModal(colDef)" style="font-size:16px">
+                    <span style="color:black;text-align:center" aria-hidden="true">{{colDef.name}}</span>
+                    <span ng-show="colDef.sortDirection=='ASC'">&uarr;</span>
+                    <span ng-show="colDef.sortDirection=='DESC'">&darr;</span>
+                </div>
+            </li>
+        </ul>
+    </vr-modalbody>
+</div>

@@ -288,6 +288,8 @@
     <Content Include="Security\Views\Group\GroupEditorController.js" />
     <Content Include="Security\Views\Group\GroupManagement.html" />
     <Content Include="Security\Views\Group\GroupManagementController.js" />
+    <Content Include="Security\Views\User\MobileUserActionPopup.html" />
+    <Content Include="Security\Views\User\MobileUserActionPopupController.js" />
     <Content Include="Security\Views\User\UserEditor.html" />
     <Content Include="Security\Views\User\UserEditorController.js" />
     <Content Include="Security\Views\User\UserManagement.html" />

@@ -108,6 +108,20 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                }
 	            };
 
+	            ctrl.openGridSortingMenuOptions = function () {
+	                if (ctrl.isMobile) {
+	                    var modalSettings = {
+	                        autoclose: true
+	                    };
+	                    modalSettings.onScopeReady = function (modalScope) {
+	                        console.log(ctrl.columnDefs)
+	                        modalScope.ctrl = ctrl;
+	                    };
+	                    VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/SortByColumnsModalPopup.html", null, modalSettings);
+	                }
+	            };
+
+
 	            ctrl.toggelGridMenu = function (e) {
 	                var self = angular.element(e.currentTarget);
 
@@ -222,7 +236,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 			+ ' <div col-index="renderIndex" style="width:100%">'
 			+ '   <div class="vr-datagrid-celltext" style="overflow: hidden;"  ng-class="::colDef.textAlignmentClass" title="{{colDef.description}}" >'
 			+ '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
-			+ '   <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
+			+ '    <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
 			+ '<span ng-if="!colDef.rotateHeader"> {{colDef.name}}</span>'
 			+ '<p ng-if="colDef.rotateHeader" class="vr-rotate-header" >{{colDef.name}}</p>'
 			+ ' </div>'
@@ -276,7 +290,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                invisibleHeader: col.invisibleheader,
 	                cssClass: col.cssclass,
 	                sysName: col.sysName,
-	                listViewWidth: col.listViewWidth
+	                listViewWidth: col.listViewWidth,
+	                disableSorting: col.disableSorting
 	            };
 
 	            var colSys = getColumnBySysName(colDef.sysName);
@@ -297,10 +312,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                };
 	            }
 
-	            colDef.onSort = function () {
+	            colDef.onSort = function (direction) {
 	                if (col.onSortChanged != undefined && col.disableSorting == false) {
-
-	                    var sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
+	                    var sortDirection = "";
+	                    if (direction != undefined)
+	                        sortDirection = direction;
+	                    else
+	                        sortDirection = colDef.sortDirection != "ASC" ? "ASC" : "DESC";
 	                    var promise = col.onSortChanged(colDef, sortDirection);//this function should return a promise in case it is getting data
 	                    if (promise != undefined && promise != null)
 	                        promise.then(function () {
@@ -647,7 +665,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        modalScope.dataItem = dataItem;
 	                    };
 	                    VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/RowActionModalPopup.html", null, modalSettings);
-	                    return;
 	                }
 	            };
 
@@ -979,7 +996,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                    cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
 	                    cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
-	                    ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container" ng-click="' + currentColumnHtml + '.onSort();$event.stopPropagation();"><label class="mobile-label" >' + currentColumn.name + ': </label></div> <div ng-style=' + mobileStyle + '>'
+	                    ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container"><label class="mobile-label" >' + currentColumn.name + ': </label></div> <div ng-style=' + mobileStyle + '>'
 							+ '<div class="vr-datagrid-celltext ">'
 							+ cellTemplate
 							+ '</div>'

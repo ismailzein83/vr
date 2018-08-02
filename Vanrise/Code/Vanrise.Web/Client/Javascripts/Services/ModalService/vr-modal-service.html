@@ -1,6 +1,13 @@
 ﻿<div vr-modalcontent width="modalWidth" resclass="resClass">
-    <vr-modalbody maxheight="modalMaxHeight">
+    <vr-modalbody maxheight="modalMaxHeight" >
         <div ng-include="templateUrl"></div>
     </vr-modalbody>
+    <div ng-if="showFooter">
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+
+            </div>
+        </vr-actionbar>
+    </div>
 </div>
 

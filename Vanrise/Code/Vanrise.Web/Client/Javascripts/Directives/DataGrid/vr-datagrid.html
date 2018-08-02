@@ -42,6 +42,9 @@
             </div>
         </div>
         <div ng-if="ctrl.isMobile" style="display:flex;width: 100%;">
+            <span style="position: absolute;right: 30px;font-size: 17px;font-weight: bold;border-radius: 4px;" ng-click="ctrl.openGridSortingMenuOptions($event)">
+                <span class="glyphicon glyphicon-sort"></span>
+            </span>
             <span ng-click="ctrl.openGridMenu($event)" style="position: absolute;right: 4px">
                 <span class="glyphicon glyphicon-align-justify hand-cursor" style="font-size: 20px;"></span>
             </span>
@@ -59,7 +62,7 @@
                     <div ng-style="{'display':'inline-block', 'width': ctrl.dataColumnsSectionWidth}">
                         <div vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                     </div>
-                </div>                
+                </div>
                 <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row summary-container">
                     <div class="grid-base-row" vr-htmlcompiler="ctrl.summaryRowHtml" style="display: flex;"></div>
                 </div>

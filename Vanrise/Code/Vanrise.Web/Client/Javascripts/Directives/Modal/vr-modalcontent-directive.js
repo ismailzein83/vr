@@ -41,9 +41,12 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
 
                 }
             }
-            var centredModal = "";
-            if (MobileService.isMobile() && tAttrs.ismenu!=undefined) {
-                centredModal = "centred-model";
+            var modalCssClass = "";
+            if (MobileService.isMobile() ) {
+                if (tAttrs.ismenu != undefined)
+                    modalCssClass = "centered-model";
+                else
+                    modalCssClass = "full-view";
             }
             var style = "";
             var direction = VRLocalizationService.isLocalizationRTL() && 'right' || 'left';
@@ -56,7 +59,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
                     }
                 }               
             }
-            var newElement = '<div class="modal-dialog ' + classmodal  +' '+' '+ centredModal +'" ' + resClass + ' style="' + style + '" >'
+               var newElement = '<div class="modal-dialog ' + classmodal  +' '+' '+ modalCssClass +'" ' + resClass + ' style="' + style + '" >'
                                   + '  <div class="modal-content" >'
                                     + '    <div class="modal-header vr-modal-header" ng-show="title">'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'

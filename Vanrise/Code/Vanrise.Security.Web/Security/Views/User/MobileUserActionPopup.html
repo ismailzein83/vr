@@ -1,0 +1,24 @@
+﻿<div vr-modalcontent ng-controller="MobileUserActionPopupController" vr-loader="isLoading" ismenu>
+    <vr-modalbody>
+        <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon"></span>
+        <ul class="gid-cell-menu am-fade-and-slide-top" style="list-style-type:none;padding-top:15px">
+            <li role="presentation">
+                <div class="mark-select action-item" style="font-size:16px" ng-click="mainCtrl.openEditProfileModal();closeModal();">
+                    <span style="color:black;text-align:center" aria-hidden="true">Edit My Profile</span>
+                </div>
+                <div class="mark-select action-item" ng-click="mainCtrl.openEditMyLanguageModal();closeModal();" style="font-size:16px" ng-if="mainCtrl.isLocalizationEnabled">
+                    <span style="color:black;text-align:center" aria-hidden="true">Edit My Language</span>
+                </div>
+                <div class="mark-select action-item" ng-if="mainCtrl.supportPasswordManagement" ng-click="mainCtrl.openResetPasswordModal();closeModal();" style="font-size:16px">
+                    <span style="color:black;text-align:center" aria-hidden="true">Change My Password</span>
+                </div>
+                <div class="mark-select action-item" ng-if="mainCtrl.hasRemoteApplications" ng-click="mainCtrl.openRemoteApplicationsModal();closeModal();" style="font-size:16px">
+                    <span style="color:black;text-align:center" aria-hidden="true">Switch Application</span>
+                </div>
+                <div class="mark-select action-item" ng-click="mainCtrl.logout()" style="font-size:16px">
+                    <span style="color:black;text-align:center" aria-hidden="true">Logout</span>
+                </div>
+            </li>          
+        </ul>
+    </vr-modalbody>
+</div>
