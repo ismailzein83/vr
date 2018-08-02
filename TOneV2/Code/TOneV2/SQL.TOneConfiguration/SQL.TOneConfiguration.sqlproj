@@ -791,6 +791,8 @@
     <Build Include="Analytic\Stored Procedures\sp_VRReportGeneration_Update.sql" />
     <Build Include="Analytic\Stored Procedures\sp_VRReportGeneration_Insert.sql" />
     <Build Include="Analytic\Stored Procedures\sp_VRReportGeneration_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetInfoByUniqueId.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetByUniqueId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
