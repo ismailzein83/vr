@@ -15,7 +15,7 @@
                            entityname="Grouping" selectedvalues="scopeModel.selectedGroupingDimentions" datasource="scopeModel.groupingDimentions " ismultipleselection></vr-select>
             </vr-columns>
             <vr-columns colnum="6" haschildcolumns>
-                <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="longDateTime" from="scopeModel.fromdate" to="scopeModel.todate" period="selectedPeriod" isrequired="false"></vr-timerange>
+                <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="longDateTime" from="scopeModel.fromdate" to="scopeModel.todate" period="scopeModel.selectedPeriod" isrequired="false"></vr-timerange>
             </vr-columns>
             <span ng-if="scopeModel.showCurrency">
                 <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="2"></vr-common-currency-selector>

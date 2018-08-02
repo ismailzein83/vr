@@ -40,6 +40,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.selectedPeriod = PeriodEnum.Today.value;
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
@@ -362,7 +363,7 @@
                     FromTime: $scope.scopeModel.fromdate,
                     FilterGroup: buildFilterGroupObj(filterObj, widgetPayload.RecordFilter),
                     ToTime: $scope.scopeModel.todate,
-                    Period: $scope.selectedPeriod.value,
+                    Period: $scope.scopeModel.selectedPeriod.value,
                     CurrencyId: currencySelectorAPI != undefined?currencySelectorAPI.getSelectedIds():undefined
                 };
                 return query;
