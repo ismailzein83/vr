@@ -215,15 +215,16 @@ namespace Vanrise.Analytic.Business
         #region Mappers
         private VRReportGenerationDetail VRReportGenerationDetailMapper(VRReportGeneration vRReportGeneration, bool doesUserHaveManageAccess)
         {
+            var _userManager = new Vanrise.Security.Business.UserManager();
             return new VRReportGenerationDetail
             {
                 Name = vRReportGeneration.Name,
                 ReportId = vRReportGeneration.ReportId,
                 Description = vRReportGeneration.Description,
-                CreatedBy = vRReportGeneration.CreatedBy,
+                CreatedBy = _userManager.GetUserName(vRReportGeneration.CreatedBy),
                 CreatedTime = vRReportGeneration.CreatedTime,
                 AccessLevel = Utilities.GetEnumAttribute<AccessLevel, DescriptionAttribute>(vRReportGeneration.AccessLevel).Description,
-                LastModifiedBy = vRReportGeneration.LastModifiedBy,
+                LastModifiedBy = _userManager.GetUserName(vRReportGeneration.LastModifiedBy),
                 LastModifiedTime = vRReportGeneration.LastModifiedTime,
                 DoesUserHaveManageAccess = doesUserHaveManageAccess
             };
