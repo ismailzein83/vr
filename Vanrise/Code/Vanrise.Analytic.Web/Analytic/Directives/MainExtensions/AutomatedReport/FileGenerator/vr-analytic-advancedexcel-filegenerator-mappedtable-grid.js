@@ -252,6 +252,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
             };
 
+           mappedCol.subTableTitle = mappedColumn != undefined ? mappedColumn.SubTableTitle : undefined;
+
             function loadSubTableSelector() {
                 mappedCol.onSubTableFieldSelectorReadyDeferred.promise.then(function () {
                     if (mappedCol.selectedField != undefined && mappedCol.selectedField.source == VR_Analytic_AutomatedReportQuerySourceEnum.SubTable) {
@@ -359,6 +361,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                         });
                     }
                     mappedSubTable.SubTableName = mappedCol.selectedField.description;
+                    mappedSubTable.SubTableTitle = mappedCol.subTableTitle;
                     mappedSubTable.SubTableId = mappedCol.selectedField.value;
                     mappedTable.mappedSubTables.push(mappedSubTable);
                 }

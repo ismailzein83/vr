@@ -34,6 +34,9 @@
                        hideselectedvaluessection>
             </vr-select>
         </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Title'" widthfactor="70" disablesorting="true">
+            <vr-textbox value="dataItem.subTableTitle" ng-if="dataItem.selectedField!=undefined && dataItem.selectedField.source!=undefined && dataItem.selectedField.source.value==1"></vr-textbox>
+        </vr-datagridcolumn>
     </vr-datagrid>
 </vr-validator>
 <vr-row>
