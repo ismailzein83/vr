@@ -1272,9 +1272,6 @@
             <Left>0.00252in</Left>
             <Height>1.625in</Height>
             <Width>7.71639in</Width>
-            <Visibility>
-              <Hidden>=IIf(Parameters!HasRecurringCharges.Value,true,false)</Hidden>
-            </Visibility>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1291,6 +1288,9 @@
         <Height>4.1924cm</Height>
         <Width>19.60603cm</Width>
         <ZIndex>8</ZIndex>
+        <Visibility>
+          <Hidden>=IIf(Parameters!HasRecurringCharges.Value,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
