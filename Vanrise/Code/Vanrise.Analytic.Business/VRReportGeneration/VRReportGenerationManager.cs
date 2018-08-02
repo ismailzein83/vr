@@ -14,6 +14,7 @@ namespace Vanrise.Analytic.Business
 {
     public class VRReportGenerationManager
     {
+        Vanrise.Security.Business.UserManager _userManager = new Vanrise.Security.Business.UserManager();
 
         #region Public Methods
         public IDataRetrievalResult<VRReportGenerationDetail> GetFilteredVRReportGenerations(DataRetrievalInput<VRReportGenerationQuery> input)
@@ -63,7 +64,7 @@ namespace Vanrise.Analytic.Business
 
         public InsertOperationOutput<VRReportGenerationDetail> AddVRReportGeneration(VRReportGeneration vRReportGeneration)
         {
-            bool doesUserHaveManageAccess = DoesUserHaveManageAccess();           
+            bool doesUserHaveManageAccess = DoesUserHaveManageAccess();
             IVRReportGenerationDataManager vRReportGenerationDataManager = AnalyticDataManagerFactory.GetDataManager<IVRReportGenerationDataManager>();
             InsertOperationOutput<VRReportGenerationDetail> insertOperationOutput = new InsertOperationOutput<VRReportGenerationDetail>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
@@ -137,7 +138,7 @@ namespace Vanrise.Analytic.Business
         {
             return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<VRReportGenerationFilterConfigConfig>(VRReportGenerationFilterConfigConfig.EXTENSION_TYPE);
         }
-        
+
         #endregion
 
         #region Private Classes
@@ -215,16 +216,18 @@ namespace Vanrise.Analytic.Business
         #region Mappers
         private VRReportGenerationDetail VRReportGenerationDetailMapper(VRReportGeneration vRReportGeneration, bool doesUserHaveManageAccess)
         {
-            var _userManager = new Vanrise.Security.Business.UserManager();
+
             return new VRReportGenerationDetail
             {
                 Name = vRReportGeneration.Name,
                 ReportId = vRReportGeneration.ReportId,
                 Description = vRReportGeneration.Description,
-                CreatedBy = _userManager.GetUserName(vRReportGeneration.CreatedBy),
+                CreatedByDescription = _userManager.GetUserName(vRReportGeneration.CreatedBy),
+                CreatedBy = vRReportGeneration.CreatedBy,
                 CreatedTime = vRReportGeneration.CreatedTime,
                 AccessLevel = Utilities.GetEnumAttribute<AccessLevel, DescriptionAttribute>(vRReportGeneration.AccessLevel).Description,
-                LastModifiedBy = _userManager.GetUserName(vRReportGeneration.LastModifiedBy),
+                LastModifiedByDescription = _userManager.GetUserName(vRReportGeneration.LastModifiedBy),
+                LastModifiedBy = vRReportGeneration.LastModifiedBy,
                 LastModifiedTime = vRReportGeneration.LastModifiedTime,
                 DoesUserHaveManageAccess = doesUserHaveManageAccess
             };

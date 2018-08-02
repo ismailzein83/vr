@@ -12,8 +12,10 @@ namespace Vanrise.Analytic.Entities
         public string Description { get; set; }
         public string Name { get; set; }
         public DateTime CreatedTime { get; set; }
-        public String CreatedBy { get; set; }
-        public String LastModifiedBy { get; set; }
+        public int CreatedBy { get; set; }
+        public String CreatedByDescription { get; set; }
+        public int LastModifiedBy { get; set; }
+        public String LastModifiedByDescription { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public String AccessLevel { get; set; }
         public bool DoesUserHaveManageAccess { get; set; }
