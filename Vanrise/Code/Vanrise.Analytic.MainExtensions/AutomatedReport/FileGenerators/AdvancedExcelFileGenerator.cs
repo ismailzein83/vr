@@ -116,12 +116,15 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 var subTableInfoWithMostDimensions = presentSubTablesInfo.FirstOrDefault(x => x.Value.FieldsOrder.Count() == maximumDimensionCount);
                 var subTableDefWithMostDimensions = subTableDefinitions.FindRecord(x => x.SubTableId == subTableInfoWithMostDimensions.Key);
                 bool doAllTablesHaveSameDimensionCount = presentSubTablesInfo.All(x => x.Value.FieldsOrder.Count == maximumDimensionCount);
-                if (subTableDefWithMostDimensions != null && subTableDefWithMostDimensions.SubTableTitle != null && presentSubTablesInfo.Count > 1 && !doAllTablesHaveSameDimensionCount)
+                if (subTableDefWithMostDimensions != null && subTableDefWithMostDimensions.SubTableTitle != null)
                 {
-                    subTableDataRowIndex++;
-                    maxHeaderRows++;
-                    headerRowIndex++;
-                    colDataRowIndex++;
+                    if((presentSubTablesInfo.Count > 1 && !doAllTablesHaveSameDimensionCount )|| presentSubTablesInfo.Count==1)
+                    {
+                        subTableDataRowIndex++;
+                        maxHeaderRows++;
+                        headerRowIndex++;
+                        colDataRowIndex++;
+                    }
                 }
             }
             if (includeTitle)
