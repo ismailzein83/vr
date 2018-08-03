@@ -81,6 +81,7 @@
     <Compile Include="VRAutomatedReportFileGeneratorManager.cs" />
     <Compile Include="VRAutomatedReportQueryDefinitionExtendedSettingsContext.cs" />
     <Compile Include="VRAutomatedReportQueryDefinitionManager.cs" />
+    <Compile Include="VRReportGeneration\ReportGenerationFileSettings.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationManager.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationRuntimeFilterContext.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationViewSettings.cs" />

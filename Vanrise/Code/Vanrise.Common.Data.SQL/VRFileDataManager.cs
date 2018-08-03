@@ -92,6 +92,18 @@ namespace Vanrise.Common.Data.SQL
             }
             return (ExecuteNonQuerySP("[common].[sp_File_SetUsedAndUpdateSettings]", fileId, configId, settingAsString)>0);
         }
+        public bool SetFileUsedAndUpdateSettings(Guid fileUniqueId, VRFileSettings fileSettings)
+        {
+            Guid? configId = null;
+            string settingAsString = null;
+            if (fileSettings != null)
+            {
+                settingAsString = Serializer.Serialize(fileSettings);
+                if (fileSettings.ExtendedSettings != null)
+                    configId = fileSettings.ExtendedSettings.ConfigId;
+            }
+            return (ExecuteNonQuerySP("[common].[sp_File_SetUsedAndUpdateSettingsByFileUniqueId]", fileUniqueId, configId, settingAsString) > 0);
+        }
 
         public Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)
         {

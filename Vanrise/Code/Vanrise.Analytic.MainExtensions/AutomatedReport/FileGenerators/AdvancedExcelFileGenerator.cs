@@ -23,6 +23,25 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         {
             get { return new Guid("9FAAE9B2-931E-4B3F-BDA4-B0F3B7647488"); }
         }
+        public override void OnAfterSaveAction(IVRAutomatedReportFileGeneratorOnAfterSaveActionContext context)
+        {
+            VRFileManager fileManager = new VRFileManager();
+
+
+            var filesettings = new VRFileSettings
+            {
+                ExtendedSettings = new Vanrise.Analytic.Business.ReportGenerationFileSettings
+                {
+                    TaskId = context.TaskId,
+                    VRReportGenerationId = context.VRReportGenerationId
+                }
+            };
+
+            fileManager.SetFileUsedAndUpdateSettings(FileUniqueId, filesettings);
+
+
+
+        }
 
         public Guid FileUniqueId { get; set; }
 
@@ -78,7 +97,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 if (context.HandlerContext.EvaluatorContext != null)
                     context.HandlerContext.EvaluatorContext.WriteErrorBusinessTrackingMsg("No tables were mapped.");
             }
-          
+
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = tableDefinitionsWorkbook.SaveToStream();
             return new VRAutomatedReportGeneratedFile()
@@ -136,11 +155,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 subTableDataRowIndex++;
             }
         }
-        private void BuildColumnsAndSubTablesDefinitionsDic(List<AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitions, List<AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitions,out Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic,out Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic,out List<int> columnsIndexes)
+        private void BuildColumnsAndSubTablesDefinitionsDic(List<AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitions, List<AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitions, out Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, out Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, out List<int> columnsIndexes)
         {
             columnsIndexes = new List<int>();
-            columnDefinitionsDic = new Dictionary<int,AdvancedExcelFileGeneratorTableColumnDefinition>();
-            subTableDefinitionsDic = new Dictionary<int,AdvancedExcelFileGeneratorSubTableDefinition>();
+            columnDefinitionsDic = new Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition>();
+            subTableDefinitionsDic = new Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition>();
             if (columnDefinitions != null && columnDefinitions.Count > 0)
             {
                 foreach (var colDef in columnDefinitions)
@@ -323,9 +342,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         //        cell.SetStyle(style);
         //        count++;
         //    }
-   
+
         //}
-        private void BuildSubTableTitle(Worksheet worksheet,  string subTableTitle, int subTableTitleRowIndex, int subTableTitleColIndex, int subTableValuesCount)
+        private void BuildSubTableTitle(Worksheet worksheet, string subTableTitle, int subTableTitleRowIndex, int subTableTitleColIndex, int subTableValuesCount)
         {
             if (subTableTitle != null)
             {
@@ -371,7 +390,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         int subTableTitleColIndex = columnIndexState;
 
                         int adjustedSubTableFirstRowIndex = 0;
-                        if (subTableInfo != null && subTableInfo.FieldsInfo!=null && subTableInfo.FieldsInfo.Count>0 && subTableInfo.FieldsOrder != null && subTableInfo.FieldsOrder.Count>0)
+                        if (subTableInfo != null && subTableInfo.FieldsInfo != null && subTableInfo.FieldsInfo.Count > 0 && subTableInfo.FieldsOrder != null && subTableInfo.FieldsOrder.Count > 0)
                         {
                             subTableRows.Add(subTableInfo.FieldsOrder.Count);
                             if (maxSubTableDimensions > subTableInfo.FieldsOrder.Count)
@@ -383,7 +402,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             int valuesCount = 0;
                             List<FieldValueRange> parentRanges = new List<FieldValueRange>();
 
-                            foreach(var field in subTableInfo.FieldsOrder)
+                            foreach (var field in subTableInfo.FieldsOrder)
                             {
                                 var fieldStartingIndex = columnIndexState;
                                 var fieldValues = subTableInfo.FieldsInfo[field];
@@ -458,12 +477,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             }
                             columnIndexState += valuesCount - 1;
                         }
-                       BuildSubTableTitle(worksheet, subTableDef.SubTableTitle, subTableTitleRowIndex, subTableTitleColIndex, subTableValuesCount);
+                        BuildSubTableTitle(worksheet, subTableDef.SubTableTitle, subTableTitleRowIndex, subTableTitleColIndex, subTableValuesCount);
                     }
                 }
                 columnIndexState++;
             }
-            if (subTableRows!=null && subTableRows.Count>0)
+            if (subTableRows != null && subTableRows.Count > 0)
             {
                 subTableDataRowIndex += subTableRows.Max();
             }
@@ -485,7 +504,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 {
                     var summaryField = (summaryRecord != null && summaryRecord.Fields != null) ? summaryRecord.Fields.GetRecord(column.FieldName) : null;
                     var fieldInfo = fieldInfos.GetRecord(column.FieldName);
-                    if (summaryField != null && fieldInfo != null && fieldInfo.FieldType!=null)
+                    if (summaryField != null && fieldInfo != null && fieldInfo.FieldType != null)
                     {
                         if (fieldInfo.FieldType.RenderDescriptionByDefault())
                         {
@@ -578,7 +597,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         allColumnIndices.Add(columnIndexState);
                         var field = item.Fields.GetRecord(column.FieldName);
                         var fieldInfo = fieldInfos.GetRecord(column.FieldName);
-                        if (field!=null && fieldInfo != null && fieldInfo.FieldType!=null)
+                        if (field != null && fieldInfo != null && fieldInfo.FieldType != null)
                         {
                             if (fieldInfo.FieldType.RenderDescriptionByDefault())
                             {
@@ -607,7 +626,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         var subTableDef = subTableDefinitionsDic.GetRecord(col);
                         if (subTableDef != null)
                         {
-                            int subTableFirstRowIndex = subTableDataRowIndex+i;
+                            int subTableFirstRowIndex = subTableDataRowIndex + i;
                             item.SubTables.ThrowIfNull("item.SubTables");
                             var subTableItem = item.SubTables.GetRecord(subTableDef.SubTableId);
                             if (subTableItem != null && subTableItem.Fields != null && subTableItem.Fields.Count > 0 && subTableDef.SubTableFields != null && subTableDef.SubTableFields.Count > 0)
@@ -620,7 +639,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     if (measure != null && measure.FieldValues != null && measure.FieldValues.Count > 0)
                                     {
                                         valuesCount = measure.FieldValues.Count;
-                                        for(int o=0; o<measure.FieldValues.Count; o++)
+                                        for (int o = 0; o < measure.FieldValues.Count; o++)
                                         {
                                             var measureValue = measure.FieldValues[o];
                                             allColumnIndices.Add(fieldStartingIndex);
@@ -686,11 +705,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic;
             Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic;
             BuildColumnsAndSubTablesDefinitionsDic(tableDef.ColumnDefinitions, tableDef.SubTableDefinitions, out columnDefinitionsDic, out subTableDefinitionsDic, out columnsIndexes);
-            
+
             IOrderedEnumerable<int> sortedColumnsIndexes = columnsIndexes.OrderBy(x => x);
-            int subTableValuesCount=0;
+            int subTableValuesCount = 0;
             int summaryRowIndex;
-            if(tableDef.IncludeHeaders)
+            if (tableDef.IncludeHeaders)
             {
                 BuildTableHeaders(worksheet, headerRowIndex, ref subTableDataRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, dataList.FieldInfos, dataList.SubTablesInfo, out subTableValuesCount, maxHeaderRows, maxSubTableDimensions);
             }
@@ -698,7 +717,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             if (dataList.Items.Count > 0)
             {
                 BuildTableData(worksheet, allColumnIndices, dataList, subTableDataRowIndex, colDataRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, subTableValuesCount, out summaryRowIndex);
-                if(tableDef.IncludeSummary && dataList.SummaryDataItem!=null)
+                if (tableDef.IncludeSummary && dataList.SummaryDataItem != null)
                 {
                     BuildTableSummaryData(worksheet, dataList, summaryRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic);
                 }
@@ -707,13 +726,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             {
                 if (tableDef.IncludeHeaders)
                 {
-                   foreach (var col in tableDef.ColumnDefinitions)
-                   {
+                    foreach (var col in tableDef.ColumnDefinitions)
+                    {
                         SetStyleAndValue(worksheet, headerRowIndex, col.ColumnIndex, col.FieldTitle, 14, true, TextAlignmentType.Left, true);
-                   }
+                    }
                 }
             }
-            if (tableDef.IncludeTitle && tableDef.Title != null && allColumnIndices.Count>0)
+            if (tableDef.IncludeTitle && tableDef.Title != null && allColumnIndices.Count > 0)
             {
                 var orderedIndices = allColumnIndices.Distinct().OrderBy(x => x);
                 int difference = 1;
@@ -785,7 +804,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         querySettings.Dimensions.ThrowIfNull("querySettings.Dimensions", matchingQuery.VRAutomatedReportQueryId);
                         querySettings.Measures.ThrowIfNull("querySettings.Measures", matchingQuery.VRAutomatedReportQueryId);
 
-                        if (tableDefinition.ColumnDefinitions != null && tableDefinition.ColumnDefinitions.Count>0)
+                        if (tableDefinition.ColumnDefinitions != null && tableDefinition.ColumnDefinitions.Count > 0)
                         {
                             List<string> missingTableFields = new List<string>();
                             foreach (var tableDefinitionColumn in tableDefinition.ColumnDefinitions)
@@ -837,7 +856,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     context.ErrorMessage = string.Format("A subtable from query '{0}' used in the handler has been deleted.", matchingQuery.QueryTitle);
                                     break;
                                 }
-                                if (subTable.SubTableFields != null && subTable.SubTableFields.Count>0)
+                                if (subTable.SubTableFields != null && subTable.SubTableFields.Count > 0)
                                 {
                                     foreach (var field in subTable.SubTableFields)
                                     {
@@ -1009,7 +1028,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         private void SetStyleAndValue(Worksheet worksheet, int rowIndex, int columnIndex, object value, int fontSize, bool isBold, TextAlignmentType alignment, bool setBorders)
         {
-            if(fontSize!=16)
+            if (fontSize != 16)
                 worksheet.Cells.SetColumnWidth(columnIndex, 20);
             worksheet.Cells[rowIndex, columnIndex].PutValue(value);
             Cell cell = worksheet.Cells.GetCell(rowIndex, columnIndex);
@@ -1027,7 +1046,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         }
         private void SetBorder(Style style, bool setTopBorder, bool setRightBorder, bool setBottomBorder, bool setLeftBorder)
         {
-            if(setTopBorder)
+            if (setTopBorder)
             {
                 style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
             }

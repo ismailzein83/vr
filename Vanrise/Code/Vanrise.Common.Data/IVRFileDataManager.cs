@@ -20,6 +20,7 @@ namespace Vanrise.Common.Data
         bool SetFileUsed(long fileId);
 
         bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings);
+        bool SetFileUsedAndUpdateSettings(Guid fileUniqueId, VRFileSettings fileSettings);
 
         Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input);
     }

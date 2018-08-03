@@ -48,6 +48,10 @@ namespace Vanrise.Common.Business
         {
             return _datamanager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
         }
+        public bool SetFileUsedAndUpdateSettings(Guid fileUniqueId, VRFileSettings fileSettings)
+        {
+            return _datamanager.SetFileUsedAndUpdateSettings(fileUniqueId, fileSettings);
+        }
 
         public VRFile GetFile(long fileId)
         {
