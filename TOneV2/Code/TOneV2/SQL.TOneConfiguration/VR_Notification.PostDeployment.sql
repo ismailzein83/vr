@@ -60,10 +60,10 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('05234A49-DFA3-44C3-A552-80E6C793A67A','Action Rule Types','Action Rule Type','#/view/VR_Notification/Views/VRAlertRuleType/VRAlertRuleTypeManagement'	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Notification/VRAlertRuleType/GetFilteredVRAlertRuleTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',45),
+('05234A49-DFA3-44C3-A552-80E6C793A67A','Action Rule Types','Action Rule Types','#/view/VR_Notification/Views/VRAlertRuleType/VRAlertRuleTypeManagement'	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Notification/VRAlertRuleType/GetFilteredVRAlertRuleTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',45),
 ('FD44ED02-9708-4F38-A237-E6C0BF35B634','Alert Levels','Alert Levels','#/view/VR_Notification/Views/VRAlertLevel/VRAlertLevelManagement'				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VR_Notification/VRAlertRuleType/GetFilteredVRAlertRuleTypes',NULL,NULL,NULL,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',47),
 
-('FF5E429A-CFF0-4095-8AD0-987FD3CAD502','Action Rules','Action Rule','#/view/VR_Notification/Views/VRAlertRule/VRAlertRuleManagement'					,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.Notification.Business.VRAlertRuleViewSettings, Vanrise.Notification.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',100)
+('FF5E429A-CFF0-4095-8AD0-987FD3CAD502','Action Rules','Action Rules','#/view/VR_Notification/Views/VRAlertRule/VRAlertRuleManagement'					,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.Notification.Business.VRAlertRuleViewSettings, Vanrise.Notification.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',100)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
