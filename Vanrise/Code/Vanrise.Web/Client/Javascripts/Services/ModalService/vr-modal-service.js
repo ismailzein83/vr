@@ -17,9 +17,9 @@
             modalScope.modalContext = {};
 
             var onhideModal = function () {
-               
+
             };
-            modalScope.modalContext.closeModal = function () {              
+            modalScope.modalContext.closeModal = function () {
                 if (modalInstance) modalInstance.hide();
                 deferred.resolve();
                 modalScope.$destroy();
@@ -91,40 +91,41 @@
                     $('.modal-header').eq($('.modal-dialog').length - 2).addClass('vr-modal-header');
                 }
 
-                if ($('.modal-dialog').length > 1) {
-                    $('body').addClass('full-mobile-body');
-                }
-                else if ($('.expandable-row-content').length == 0) {
-                    $('body').removeClass('full-mobile-body');
-                }
-                
+                if (MobileService.isMobile()) {
+                    if ($('.modal-dialog').length > 1) {
+                        $('body').addClass('full-mobile-body');
+                    }
+                    if ($('.expandable-row-content').length == 0) {
+                        $('body').removeClass('full-mobile-body');
+                    }
 
+                    if ($('.expandable-row-content').length > 1) {
+                        $('.expandable-row-content').addClass('full-view');
+                    }
+                    if ($('.modal-dialog').length == 1) {
+                        $('.expandable-row-content').removeClass('full-view');
+                    }
+                }
 
-                if ($('.expandable-row-content').length > 1) {
-                    $('.expandable-row-content').addClass('full-view');
-                }
-                if (MobileService.isMobile() && $('.modal-dialog').length == 1) {
-                    $('.expandable-row-content').removeClass('full-view');
-                }
 
                 if (typeof (modalScope.modalContext.onModalHide) == "function") modalScope.modalContext.onModalHide();
             });
             modalScope.$on('modal.show', function () {
-                if (MobileService.isMobile()) {                   
+                if (MobileService.isMobile()) {
                     if ($('.expandable-row-content').length > 1) {
-                        $('.expandable-row-content').addClass('full-view');                       
+                        $('.expandable-row-content').addClass('full-view');
                     }
-                }                
+                }
             });
-                   
+
             //modalScope.$on("$destroy", function () {
             //   // $(window).off("resize.Viewport");
             //});
 
-          
+
 
             var animationClass = MobileService.isMobile() ? "" : "am-fade-and-scale";
-            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: animationClass, onHide: onhideModal});
+            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: animationClass, onHide: onhideModal });
             return deferred.promise;
         }
     }
