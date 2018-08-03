@@ -154,11 +154,12 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ActivityVariablesEditor.html', parameter, modalSettings);
 		}
 
-		function openForeachEditor(dragdropsetting, foreachObj, getChildContext, context, onActivityUpdated) {
+		function openForeachEditor(dragdropsetting, foreachObj, getChildContext, context, onActivityUpdated, remove) {
 			var modalSettings = {};
 
 			modalSettings.onScopeReady = function (modalScope) {
 				modalScope.onActivityUpdated = onActivityUpdated;
+				modalScope.remove = remove;
 			};
 			var parameter = {
 				dragdropsetting: dragdropsetting,
@@ -183,14 +184,16 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivitySequenceEditor.html', parameter, modalSettings);
 		}
 
-		function openCallHttpServiceEditor(obj, onActivityUpdated) {
+		function openCallHttpServiceEditor(obj, context, onActivityUpdated, remove) {
 			var modalSettings = {};
 
 			modalSettings.onScopeReady = function (modalScope) {
 				modalScope.onActivityUpdated = onActivityUpdated;
+				modalScope.remove = remove;
 			};
 			var parameter = {
-				obj: obj
+				obj: obj,
+				context: context
 			};
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityCallHttpServiceEditor.html', parameter, modalSettings);
 		}

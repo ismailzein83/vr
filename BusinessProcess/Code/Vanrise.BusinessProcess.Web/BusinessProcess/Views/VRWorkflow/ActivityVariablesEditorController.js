@@ -57,7 +57,7 @@
 				if (gridVariables != undefined && gridVariables.length > 0 && $scope.eraseVariableName != undefined) {
 					for (var i = 0; i < gridVariables.length; i++) {
 						if (variables.indexOf(gridVariables[i]) < 0)
-							$scope.eraseVariableName(gridVariables[i].Name)
+							$scope.eraseVariableName(gridVariables[i].Name);
 					}
 				}
 				$scope.modalContext.closeModal();

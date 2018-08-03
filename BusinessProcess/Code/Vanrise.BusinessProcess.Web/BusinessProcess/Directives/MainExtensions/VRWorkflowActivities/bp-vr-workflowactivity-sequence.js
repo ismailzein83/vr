@@ -37,9 +37,6 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 			},
 			controllerAs: 'ctrl',
 			bindToController: true,
-			compile: function (element, attrs) {
-
-			},
 			templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowSequenceTemplate.html'
 		};
 
@@ -69,7 +66,6 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 
 					if (context != undefined) {
 						childContext.getWorkflowArguments = context.getWorkflowArguments;
-						//childContext.WorkflowArguments = context.WorkflowArguments;
 						childContext.reserveVariableName = context.reserveVariableName;
 						childContext.reserveVariableNames = context.reserveVariableNames;
 						childContext.eraseVariableName = context.eraseVariableName;
@@ -82,10 +78,6 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 								parentVars = parentVars.concat(variables);
 							return parentVars;
 						};
-						//if (context.ParentVariables != undefined)
-						//	childContext.ParentVariables = childContext.ParentVariables.concat(context.ParentVariables);
-						//if (variables != undefined)
-						//	childContext.ParentVariables = childContext.ParentVariables.concat(variables);
 					}
 					return childContext;
 				};

@@ -1,157 +1,157 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//	"use strict";
+	"use strict";
 
-//	ForEachEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService'];
+	ForEachEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService'];
 
-//	function ForEachEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
+	function ForEachEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService) {
 
-//		var iterationVariableTypeSelectorAPI;
-//		var iterationVariableTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		var iterationVariableTypeSelectorAPI;
+		var iterationVariableTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-//		var workflowContainerAPI;
-//		var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+		var workflowContainerAPI;
+		var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-//		var dragdropsetting;
-//		var list;
-//		var iterationVariableName;
-//		var iterationVariableType;
-//		var activity;
-//		var contex;
-//		var getChildContext;
+		var dragdropsetting;
+		var list;
+		var iterationVariableName;
+		var iterationVariableType;
+		var activity;
+		var contex;
+		var getChildContext;
 
-//		loadParameters();
-//		defineScope();
-//		load();
+		loadParameters();
+		defineScope();
+		load();
 
-//		function loadParameters() {
-//			var parameters = VRNavigationService.getParameters($scope);
+		function loadParameters() {
+			var parameters = VRNavigationService.getParameters($scope);
 
-//			if (parameters != undefined) {
-//				dragdropsetting = parameters.dragdropsetting;
-//				contex = parameters.contex;
-//				getChildContext = parameters.getChildContext;
-//				if (parameters.foreachObj != undefined) {
-//					list = parameters.foreachObj.List;
-//					iterationVariableName = parameters.foreachObj.IterationVariableName;
-//					iterationVariableType = parameters.foreachObj.IterationVariableType;
-//					activity = parameters.foreachObj.Activity;
-//				}
-//			}
-//		}
+			if (parameters != undefined) {
+				dragdropsetting = parameters.dragdropsetting;
+				contex = parameters.contex;
+				getChildContext = parameters.getChildContext;
+				if (parameters.foreachObj != undefined) {
+					list = parameters.foreachObj.List;
+					iterationVariableName = parameters.foreachObj.IterationVariableName;
+					iterationVariableType = parameters.foreachObj.IterationVariableType;
+					activity = parameters.foreachObj.Activity;
+				}
+			}
+		}
 
-//		function defineScope() {
-//			$scope.scopeModel = {};
-//			$scope.scopeModel.activityConfigs = [];
-//			$scope.scopeModel.onIterationVariableTypeSelectorReady = function (api) {
-//				iterationVariableTypeSelectorAPI = api;
-//				iterationVariableTypeSelectorReadyDeferred.resolve();
-//			};
+		function defineScope() {
+			$scope.scopeModel = {};
+			$scope.modalContext.onModalHide = function () {
+				if ($scope.remove != undefined) {
+					$scope.remove();
+				}
+			};
+			$scope.scopeModel.activityConfigs = [];
+			$scope.scopeModel.onIterationVariableTypeSelectorReady = function (api) {
+				iterationVariableTypeSelectorAPI = api;
+				iterationVariableTypeSelectorReadyDeferred.resolve();
+			};
 
-//			$scope.scopeModel.onWorkflowContainerReady = function (api) {
-//				workflowContainerAPI = api;
-//				workflowContainerReadyPromiseDeferred.resolve();
-//			}
+			$scope.scopeModel.onWorkflowContainerReady = function (api) {
+				workflowContainerAPI = api;
+				workflowContainerReadyPromiseDeferred.resolve();
+			};
 
-//			$scope.scopeModel.saveActivity = function () {
-//				return updateActivity();
-//			};
+			$scope.scopeModel.saveActivity = function () {
+				return updateActivity();
+			};
 
-//			$scope.scopeModel.close = function () {
-//				$scope.modalContext.closeModal();
-//			};
+			$scope.scopeModel.close = function () {
+				if ($scope.remove != undefined) {
+					$scope.remove();
+				}
+				$scope.modalContext.closeModal();
+			};
+		}
 
+		function load() {
+			$scope.scopeModel.isLoading = true;
+			loadAllControls();
+		}
 
-//			$scope.$on("$destroy", function () {
-//				console.log("on destroy");
-//			});
+		function loadAllControls() {
 
-//			$scope.modalContext.onModalHide = function () {
-//				console.log("on onModalHide");
-//			};
-//		}
+			function setTitle() {
+				$scope.title = "Edit ForEach";
+			}
 
-//		function load() {
-//			$scope.scopeModel.isLoading = true;
-//			loadAllControls();
-//		}
+			function loadStaticData() {
+				$scope.scopeModel.dragdropsetting = dragdropsetting;
+				$scope.scopeModel.list = list;
+				$scope.scopeModel.iterationVariableName = iterationVariableName;
+				//$scope.scopeModel.iterationVariableType = iterationVariableType;
+				//$scope.scopeModel.activity = activity;
+				$scope.scopeModel.contex = contex;
+			}
 
-//		function loadAllControls() {
+			function loadVariableTypeSelector() {
+				var variableTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-//			function setTitle() {
-//				$scope.title = "Edit ForEach";
-//			}
+				iterationVariableTypeSelectorReadyDeferred.promise.then(function () {
 
-//			function loadStaticData() {
-//				$scope.scopeModel.dragdropsetting = dragdropsetting;
-//				$scope.scopeModel.list = list;
-//				$scope.scopeModel.iterationVariableName = iterationVariableName;
-//				//$scope.scopeModel.iterationVariableType = iterationVariableType;
-//				//$scope.scopeModel.activity = activity;
-//				$scope.scopeModel.contex = contex;
-//			}
+					var variableTypeDirectivePayload = { selectIfSingleItem: true };
+					if (iterationVariableType != undefined) {
+						variableTypeDirectivePayload.variableType = iterationVariableType;
+					}
+					VRUIUtilsService.callDirectiveLoad(iterationVariableTypeSelectorAPI, variableTypeDirectivePayload, variableTypeDirectiveLoadDeferred);
+				});
 
-//			function loadVariableTypeSelector() {
-//				var variableTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+				return variableTypeDirectiveLoadDeferred.promise;
+			}
 
-//				iterationVariableTypeSelectorReadyDeferred.promise.then(function () {
+			function loadWorkflowContainer() {
+				var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
 
-//					var variableTypeDirectivePayload = { selectIfSingleItem: true };
-//					if (iterationVariableType != undefined) {
-//						variableTypeDirectivePayload.variableType = iterationVariableType;
-//					}
-//					VRUIUtilsService.callDirectiveLoad(iterationVariableTypeSelectorAPI, variableTypeDirectivePayload, variableTypeDirectiveLoadDeferred);
-//				});
+				workflowContainerReadyPromiseDeferred.promise.then(function () {
+					var payload = {
+						vRWorkflowActivity: activity,
+						getChildContext: getChildContext
+					};
+					VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
+				});
+				return workflowContainerLoadDeferred.promise;
+			}
 
-//				return variableTypeDirectiveLoadDeferred.promise;
-//			}
+			function loadWorkflowActivityExtensionConfigs() {
+				return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowActivityExtensionConfigs().then(function (response) {
+					if (response != null) {
+						for (var i = 0; i < response.length; i++) {
+							$scope.scopeModel.activityConfigs.push(response[i]);
+						}
+					}
+				});
+			}
 
-//			function loadWorkflowContainer() {
-//				var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVariableTypeSelector, loadWorkflowActivityExtensionConfigs, loadWorkflowContainer]).then(function () {
+			}).catch(function (error) {
+				VRNotificationService.notifyExceptionWithClose(error, $scope);
+			}).finally(function () {
+				$scope.scopeModel.isLoading = false;
+			});
+		}
 
-//				workflowContainerReadyPromiseDeferred.promise.then(function () {
-//					var payload = {
-//						vRWorkflowActivity: activity,
-//						getChildContext: getChildContext
-//					};
-//					VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
-//				});
-//				return workflowContainerLoadDeferred.promise;
-//			}
+		function updateActivity() {
+			$scope.scopeModel.isLoading = true;
+			var updatedObject = {
+				List: $scope.scopeModel.list,
+				IterationVariableName: $scope.scopeModel.iterationVariableName,
+				IterationVariableType: iterationVariableTypeSelectorAPI.getData(),
+				Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null
+			};
 
-//			function loadWorkflowActivityExtensionConfigs() {
-//				return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowActivityExtensionConfigs().then(function (response) {
-//					if (response != null) {
-//						for (var i = 0; i < response.length; i++) {
-//							$scope.scopeModel.activityConfigs.push(response[i]);
-//						}
-//					}
-//				});
-//			}
+			if ($scope.onActivityUpdated != undefined) {
+				$scope.onActivityUpdated(updatedObject);
+			}
+			$scope.modalContext.closeModal();
+			$scope.scopeModel.isLoading = false;
+		}
+	}
 
-//			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVariableTypeSelector, loadWorkflowActivityExtensionConfigs, loadWorkflowContainer]).then(function () {
-//			}).catch(function (error) {
-//				VRNotificationService.notifyExceptionWithClose(error, $scope);
-//			}).finally(function () {
-//				$scope.scopeModel.isLoading = false;
-//			});
-//		}
-
-//		function updateActivity() {
-//			$scope.scopeModel.isLoading = true;
-//			var updatedObject = {
-//				List: $scope.scopeModel.list,
-//				IterationVariableName: $scope.scopeModel.iterationVariableName,
-//				IterationVariableType: iterationVariableTypeSelectorAPI.getData(),
-//				Activity: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null
-//			}
-//			if ($scope.onActivityUpdated != undefined) {
-//				$scope.onActivityUpdated(updatedObject);
-//			}
-//			$scope.modalContext.closeModal();
-//			$scope.scopeModel.isLoading = false;
-//		}
-//	}
-
-//	appControllers.controller('BusinessProcess_VR_WorkflowActivityForEachController', ForEachEditorController);
-//})(appControllers);
+	appControllers.controller('BusinessProcess_VR_WorkflowActivityForEachController', ForEachEditorController);
+})(appControllers);

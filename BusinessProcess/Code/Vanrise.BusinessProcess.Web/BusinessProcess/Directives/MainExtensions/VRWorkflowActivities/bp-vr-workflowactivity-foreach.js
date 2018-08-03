@@ -32,6 +32,7 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 			var iterationVariableType;
 
 			var context = {};
+			var isNew;
 			var activity;
 
 			this.initializeController = initializeController;
@@ -84,6 +85,7 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 					var promises = [];
 					if (payload != undefined) {
 						if (payload.Settings != undefined) {
+							isNew = payload.Settings.IsNew;
 							$scope.scopeModel.List = payload.Settings.List;
 							$scope.scopeModel.IterationVariableName = payload.Settings.IterationVariableName;
 							$scope.scopeModel.IterationVariableType = payload.Settings.IterationVariableType;
@@ -100,7 +102,10 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 
 					promises.push(loadWorkflowContainer());
 					promises.push(loadVariableTypeDirective());
-					UtilsService.waitMultiplePromises(promises);
+					return UtilsService.waitMultiplePromises(promises).then(function () {
+						if (isNew)
+							openActivityEditor();
+					});
 
 					function openActivityEditor() {
 						var onActivityUpdated = function (foreachObj) {
@@ -114,7 +119,7 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 							promises.push(loadVariableTypeDirective());
 							UtilsService.waitMultiplePromises(promises);
 						};
-						BusinessProcess_VRWorkflowService.openForeachEditor(ctrl.dragdropsetting, buildObjectFromScope(), ctrl.getChildContext, context, onActivityUpdated);
+						BusinessProcess_VRWorkflowService.openForeachEditor(ctrl.dragdropsetting, buildObjectFromScope(), ctrl.getChildContext, context, onActivityUpdated, (isNew) ? ctrl.remove : undefined);
 					}
 
 					function loadWorkflowContainer() {
