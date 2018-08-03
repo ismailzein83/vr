@@ -154,9 +154,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId")]
         public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId(int pricelistId, int ownerId)
         {
+            SalePriceListManager salePricelistManager = new SalePriceListManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var customerPriceListTemplateId = carrierAccountManager.GetCustomerPriceListTemplateId(ownerId);
-            var customerPriceListType = carrierAccountManager.GetCustomerPriceListType(ownerId);
+            var pricelist = salePricelistManager.GetPriceList(pricelistId);
+            if (pricelist == null)
+                throw new NullReferenceException();
+            var customerPriceListType = pricelist.PriceListType.Value;
 
             SalePriceListInput salePriceListInput = new SalePriceListInput { PriceListId = pricelistId, PricelistTemplateId = customerPriceListTemplateId, PriceListTypeId = (int)customerPriceListType };
 
