@@ -90,42 +90,44 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         private void EvaluateStartingRows(bool includeHeaders, bool includeTitle, Dictionary<Guid, VRAutomatedReportTableInfo> subTablesInfo, List<AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitions, ref int subTableDataRowIndex, ref int colDataRowIndex, ref int headerRowIndex, out int maxHeaderRows, out int maxSubTableDimensions)
         {
-            Dictionary<Guid, VRAutomatedReportTableInfo> presentSubTablesInfo = new Dictionary<Guid, VRAutomatedReportTableInfo>();
-            if(subTablesInfo!=null && subTablesInfo.Count > 0 && subTableDefinitions != null && subTableDefinitions.Count > 0)
-            {
-                foreach (var subTableDef in subTableDefinitions)
-                {
-                    presentSubTablesInfo.Add(subTableDef.SubTableId, subTablesInfo.GetRecord(subTableDef.SubTableId));
-                }
-            }
             if (includeHeaders)
             {
-                maxHeaderRows = presentSubTablesInfo.Max(x => x.Value.FieldsOrder.Count());
-                maxSubTableDimensions = maxHeaderRows;
-                headerRowIndex += maxHeaderRows - 1;
+                if (subTablesInfo != null && subTablesInfo.Count > 0 && subTableDefinitions != null && subTableDefinitions.Count > 0)
+                {
+                    Dictionary<Guid, VRAutomatedReportTableInfo> presentSubTablesInfo = new Dictionary<Guid, VRAutomatedReportTableInfo>();
+                    foreach (var subTableDef in subTableDefinitions)
+                    {
+                        presentSubTablesInfo.Add(subTableDef.SubTableId, subTablesInfo.GetRecord(subTableDef.SubTableId));
+                    }
+                    maxHeaderRows = presentSubTablesInfo.Max(x => x.Value.FieldsOrder.Count());
+                    maxSubTableDimensions = maxHeaderRows;
+                    headerRowIndex += maxHeaderRows - 1;
+                    int maximumDimensionCount = maxHeaderRows;
+                    var subTableInfoWithMostDimensions = presentSubTablesInfo.FirstOrDefault(x => x.Value.FieldsOrder.Count() == maximumDimensionCount);
+                    var subTableDefWithMostDimensions = subTableDefinitions.FindRecord(x => x.SubTableId == subTableInfoWithMostDimensions.Key);
+                    bool doAllTablesHaveSameDimensionCount = presentSubTablesInfo.All(x => x.Value.FieldsOrder.Count == maximumDimensionCount);
+                    if (subTableDefWithMostDimensions != null && subTableDefWithMostDimensions.SubTableTitle != null)
+                    {
+                        if ((presentSubTablesInfo.Count > 1 && !doAllTablesHaveSameDimensionCount) || presentSubTablesInfo.Count == 1)
+                        {
+                            subTableDataRowIndex++;
+                            maxHeaderRows++;
+                            headerRowIndex++;
+                            colDataRowIndex++;
+                        }
+                    }
+                }
+                else
+                {
+                    maxSubTableDimensions = 0;
+                    maxHeaderRows = 0;
+                }
                 colDataRowIndex = headerRowIndex + 1;
             }
             else
             {
                 maxSubTableDimensions = 0;
                 maxHeaderRows = 0;
-            }
-            if (presentSubTablesInfo.Count > 0)
-            {
-                int maximumDimensionCount = maxHeaderRows;
-                var subTableInfoWithMostDimensions = presentSubTablesInfo.FirstOrDefault(x => x.Value.FieldsOrder.Count() == maximumDimensionCount);
-                var subTableDefWithMostDimensions = subTableDefinitions.FindRecord(x => x.SubTableId == subTableInfoWithMostDimensions.Key);
-                bool doAllTablesHaveSameDimensionCount = presentSubTablesInfo.All(x => x.Value.FieldsOrder.Count == maximumDimensionCount);
-                if (subTableDefWithMostDimensions != null && subTableDefWithMostDimensions.SubTableTitle != null)
-                {
-                    if((presentSubTablesInfo.Count > 1 && !doAllTablesHaveSameDimensionCount )|| presentSubTablesInfo.Count==1)
-                    {
-                        subTableDataRowIndex++;
-                        maxHeaderRows++;
-                        headerRowIndex++;
-                        colDataRowIndex++;
-                    }
-                }
             }
             if (includeTitle)
             {
