@@ -246,9 +246,13 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         function addMappedTableTab(mappedTableItem) {
             querySelected = UtilsService.getItemByVal(queries, mappedTableItem.VRAutomatedReportQueryId, "VRAutomatedReportQueryId");
             if (querySelected != undefined) {
+                if ($scope.scopeModel.tables.length > 0) {
+                    var lastItem = $scope.scopeModel.tables[$scope.scopeModel.tables.length-1];
+                    tableIndex = lastItem.tableTabIndex + 1;
+                }
                 var mappedTableTab = {
                     header: querySelected.QueryTitle + " - " + mappedTableItem.ListName + ' (' + tableIndex + ')',
-                    tableTabIndex: ++tableIndex,
+                    tableTabIndex: tableIndex,
                     Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
                     onDirectiveReady: function (api) {
                         mappedTableTab.directiveAPI = api;

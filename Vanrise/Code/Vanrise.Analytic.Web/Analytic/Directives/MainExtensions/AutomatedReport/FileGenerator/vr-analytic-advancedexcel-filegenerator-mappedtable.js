@@ -111,6 +111,9 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     $scope.scopeModel.includeHeaders = mappedTablePayload.IncludeHeaders;
                     $scope.scopeModel.includeTitle = mappedTablePayload.IncludeTitle;
                     $scope.scopeModel.tableTitle = mappedTablePayload.Title;
+                    if ($scope.scopeModel.showSummarySwitch) {
+                        $scope.scopeModel.includeSummary = mappedTablePayload.IncludeSummary;
+                    }
                 }
 
                 var loadFirstRowDirectivePromise = loadFirstRowDirective();
