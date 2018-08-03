@@ -131,8 +131,7 @@
             };
             var modalSettings = {
             };
-            modalSettings.onScopeReady = function (modalScope) {
-                console.log(modalScope);
+            modalSettings.onScopeReady = function (modalScope) {                
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal(editorUrl, modalParameters, modalSettings);
