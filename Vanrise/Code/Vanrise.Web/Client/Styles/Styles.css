@@ -4385,15 +4385,15 @@ span.option-marketprice {
 	overflow: hidden;
 }
 
-.vr-draggable-item.sortable-ghost::before, businessprocess-vr-workflow-container .item.sortable-ghost::before {
-	content: "";
-	border-color: transparent;
-	border-left-color: #FF0000;
-	border-style: solid;
-	border-width: 0.35em 0.35em 0.35em 0.45em;
-	display: inline-block;
-	height: 0px;
-	width: 0px;
-	top: -5px;
-	position: relative;
-}
+	.vr-draggable-item.sortable-ghost::before, businessprocess-vr-workflow-container .item.sortable-ghost::before, businessprocess-vr-workflow-containerv2 .item.sortable-ghost::before, businessprocess-vr-workflowactivity-sequence .item.sortable-ghost::before {
+		content: "";
+		border-color: transparent;
+		border-left-color: #FF0000;
+		border-style: solid;
+		border-width: 0.35em 0.35em 0.35em 0.45em;
+		display: inline-block;
+		height: 0px;
+		width: 0px;
+		top: -5px;
+		position: relative;
+	}
