@@ -96,7 +96,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 };
                 
                 $scope.scopeModel.disableAddMappedTable = function () {
-                    return ($scope.scopeModel.querySelected == undefined || $scope.scopeModel.listNameSelected==undefined);
+                    return ($scope.scopeModel.querySelected == undefined || $scope.scopeModel.listNameSelected==undefined || $scope.scopeModel.file == undefined);
                 };
 
                 $scope.scopeModel.onQuerySelectionChanged = function (query) {
