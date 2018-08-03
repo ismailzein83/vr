@@ -19,7 +19,7 @@ app.directive('vrModalbody', ['MobileService', function (MobileService) {
             var isMenuPopup = tElement.parents(".modal-dialog").hasClass("centered-model");
             if (tAttrs.stopdrag != undefined)
                 draggablemodal = '';
-            if (MobileService.isMobile() && !isMenuPopup)
+            if (MobileService.isMobile() && !isMenuPopup && tAttrs.notification ==  undefined)
                 maxHeightPart += ',\'height\': \'100vh\',\'width\': \'100%\'';
             var newElement = '<div class="modal-body"  ' + draggablemodal + ' ng-style="{ ' + maxHeightPart + ' }" >'
                                 + tElement.html()
