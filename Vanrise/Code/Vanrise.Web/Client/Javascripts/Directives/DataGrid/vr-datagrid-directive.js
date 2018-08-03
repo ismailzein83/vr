@@ -114,7 +114,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        autoclose: true
 	                    };
 	                    modalSettings.onScopeReady = function (modalScope) {
-	                        console.log(ctrl.columnDefs)
 	                        modalScope.ctrl = ctrl;
 	                    };
 	                    VRModalService.showModal("/Client/Javascripts/Directives/DataGrid/SortByColumnsModalPopup.html", null, modalSettings);
