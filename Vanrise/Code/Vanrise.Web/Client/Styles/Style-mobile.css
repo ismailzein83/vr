@@ -267,7 +267,7 @@
         max-width: unset !important;
     }
 
-    .vr-tabs label > span {
+    .vr-mobile-view .vr-tabs label > span {
         width: auto !important;
     }
 
