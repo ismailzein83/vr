@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("ExportCodeCompareTemplate")]
         public object ExportCodeCompareTemplate(CodeCompareQuery query)
         {
-            string templateRelativePath = "~/Client/Modules/WhS_CodePreparation/Template/Code preperation sample.xls";
+            string templateRelativePath = "~/Client/Modules/WhS_CodePreparation/Template/Code preparation sample.xls";
             string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
             byte[] templateBytes = File.ReadAllBytes(templateAbsolutePath);
             byte[] templateWithDataBytes = new CodeCompareManager().ExportCodeCompareTemplate(templateBytes,query);

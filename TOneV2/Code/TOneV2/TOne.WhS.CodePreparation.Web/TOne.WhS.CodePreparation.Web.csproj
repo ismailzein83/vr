@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -212,9 +214,8 @@
     <Content Include="WhS_CodePreparation\Views\Notification.html" />
     <Content Include="WhS_CodePreparation\Views\NotificationController.js" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="WhS_CodePreparation\Template\Code preperation sample.xls" />
+    <Content Include="WhS_CodePreparation\Template\Code preparation sample.xls" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
