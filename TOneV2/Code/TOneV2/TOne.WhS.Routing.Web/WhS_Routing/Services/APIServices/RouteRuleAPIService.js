@@ -53,6 +53,10 @@
             });
         }
 
+        function GetRouteRuleConfiguration() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, 'GetRouteRuleConfiguration'));
+        }
+
         function BuildLinkedRouteRule(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "BuildLinkedRouteRule"), input);
         }
@@ -84,6 +88,7 @@
             GetRouteRuleSettingsTemplates: GetRouteRuleSettingsTemplates,
             GetRouteRuleCriteriaTemplates: GetRouteRuleCriteriaTemplates,
             GetRouteRuleHistoryDetailbyHistoryId: GetRouteRuleHistoryDetailbyHistoryId,
+            GetRouteRuleConfiguration: GetRouteRuleConfiguration,
             BuildLinkedRouteRule: BuildLinkedRouteRule,
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,

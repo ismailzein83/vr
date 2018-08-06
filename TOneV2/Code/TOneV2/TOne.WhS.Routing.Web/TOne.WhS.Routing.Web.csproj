@@ -274,8 +274,10 @@
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-view.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteRuleConfigurationTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration-grid.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeruleconfiguration.js" />
     <Content Include="WhS_Routing\Directives\RoutingExcludedDestinations\Templates\RoutingExcludedDestinationsTemplate.html" />
     <Content Include="WhS_Routing\Directives\RoutingExcludedDestinations\vr-whs-routing-excludeddestinations.js" />
     <Content Include="WhS_Routing\Directives\Routing\Templates\RouteStatusSelectorTemplate.html" />

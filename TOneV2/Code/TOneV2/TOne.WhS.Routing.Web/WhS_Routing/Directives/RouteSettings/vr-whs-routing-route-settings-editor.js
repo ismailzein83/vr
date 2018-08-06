@@ -36,6 +36,9 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
             var customerRouteSettingsAPI;
             var customerRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var routeRuleConfigurationAPI;
+            var routeRuleConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var routeOptionRuleConfigurationAPI;
             var routeOptionRuleConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -65,6 +68,11 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     customerRouteSettingsReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onRouteRuleConfigurationReady = function (api) {
+                    routeRuleConfigurationAPI = api;
+                    routeRuleConfigurationReadyPromiseDeferred.resolve();
+                };
+
                 $scope.scopeModel.onRouteOptionRuleConfigurationReady = function (api) {
                     routeOptionRuleConfigurationAPI = api;
                     routeOptionRuleConfigurationReadyPromiseDeferred.resolve();
@@ -82,11 +90,11 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
                 api.load = function (payload) {
 
-                    var promises = [];
                     var customerRoutePayload;
                     var productRoutePayload;
                     var subProcessSettingsPayload;
                     var customerRouteSettingsPayload;
+                    var routeRuleConfiguration;
                     var routeOptionRuleConfiguration;
                     var qualityConfiguration;
 
@@ -95,10 +103,12 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         productRoutePayload = payload.data.RouteDatabasesToKeep.ProductRouteConfiguration;
                         subProcessSettingsPayload = payload.data.SubProcessSettings;
                         customerRouteSettingsPayload = payload.data.RouteBuildConfiguration;
+                        routeRuleConfiguration = payload.data.RouteRuleConfiguration;
                         routeOptionRuleConfiguration = payload.data.RouteOptionRuleConfiguration;
                         qualityConfiguration = payload.data.QualityConfiguration;
                     }
 
+                    var promises = [];
 
                     //Loading Customer Route Database Configuration
                     var customerRouteDatabaseConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -128,6 +138,13 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     });
                     promises.push(customerRouteSettingsConfigurationLoadPromiseDeferred.promise);
 
+                    //Loading Route Rule Configuration
+                    var routeRuleConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    routeRuleConfigurationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(routeRuleConfigurationAPI, routeRuleConfiguration, routeRuleConfigurationLoadPromiseDeferred);
+                    });
+                    promises.push(routeRuleConfigurationLoadPromiseDeferred.promise);
+
                     //Loading Route Option Rule Configuration
                     var routeOptionRuleConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     routeOptionRuleConfigurationReadyPromiseDeferred.promise.then(function () {
@@ -154,6 +171,7 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         },
                         SubProcessSettings: subProcessSettingsAPI.getData(),
                         RouteBuildConfiguration: customerRouteSettingsAPI.getData(),
+                        RouteRuleConfiguration: routeRuleConfigurationAPI.getData(),
                         RouteOptionRuleConfiguration: routeOptionRuleConfigurationAPI.getData(),
                         QualityConfiguration: {
                             RouteRuleQualityConfigurationList: qualityConfigurationAPI.getData()
@@ -165,5 +183,6 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     ctrl.onReady(api);
             }
         }
+
         return directiveDefinitionObject;
     }]);

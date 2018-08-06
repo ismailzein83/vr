@@ -21,7 +21,7 @@ namespace TOne.WhS.Routing.Entities
                 {
                     _routeRuleConfiguration = new RouteRuleConfiguration
                     {
-                        DefaultFixedOptionLossValue = false,
+                        FixedOptionLossDefaultValue = false,
                         FixedOptionLossType = FixedOptionLossType.RemoveLoss
                     };
                 }

@@ -10,7 +10,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public FixedOptionLossType FixedOptionLossType { get; set; }
 
-        public bool DefaultFixedOptionLossValue { get; set; }
+        public bool FixedOptionLossDefaultValue { get; set; } 
     }
 
     public enum FixedOptionLossType

@@ -95,6 +95,13 @@ namespace TOne.WhS.Routing.Web.Controllers
         {
             return base.SetRulesDeleted(input.RuleIds);
         }
+
+        [HttpGet]
+        [Route("GetRouteRuleConfiguration")]
+        public RouteRuleConfiguration GetRouteRuleConfiguration()
+        {
+            return new TOne.WhS.Routing.Business.ConfigManager().GetRouteRuleConfiguration();
+        }
     }
 
     public class LinkedRouteRuleInput

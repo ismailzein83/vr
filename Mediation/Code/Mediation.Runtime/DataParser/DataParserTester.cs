@@ -323,12 +323,12 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
                             {"80", new BinaryFieldParser
-                                {
-                                     Settings = new HexaParser
-                                     {
-                                          FieldName = "Diagnostics"                                          
-                                     }                            
-                                }
+                                   {
+                                        Settings = new TBCDNumberParser
+                                        {
+                                             FieldName = "Diagnostics"                                          
+                                        }                            
+                                   }
                             }
                         }
                     }
@@ -672,12 +672,12 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
                             {"80", new BinaryFieldParser
-                                {
-                                     Settings = new HexaParser
-                                     {
-                                          FieldName = "Diagnostics"                                          
-                                     }                            
-                                }
+                                   {
+                                        Settings = new TBCDNumberParser
+                                        {
+                                             FieldName = "Diagnostics"                                          
+                                        }                            
+                                   }
                             }
                         }
                     }

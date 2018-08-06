@@ -1,0 +1,16 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onSelectorReady"
+                   datasource="scopeModel.datasource"
+                   selectedvalues="scopeModel.selectedvalues"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   label="Fixed Option Loss Type"
+                   entityname="Fixed Option Loss Type"
+                   isrequired="true" hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-switch value="scopeModel.fixedOptionLossDefaultValue" label="Fixed Option Loss Default Value"></vr-switch>
+    </vr-columns>
+</vr-row>

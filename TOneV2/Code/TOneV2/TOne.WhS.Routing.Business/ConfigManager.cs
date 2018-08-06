@@ -10,7 +10,7 @@ namespace TOne.WhS.Routing.Business
 {
     public class ConfigManager
     {
-        #region public methods
+        #region Public Methods
 
         public int? GetCustomerRouteMaxDOP()
         {
@@ -86,7 +86,6 @@ namespace TOne.WhS.Routing.Business
 
             return productRouteOptionRuleTypeConfiguration.RouteOptionRuleTypeConfiguration;
         }
-
 
         public SubProcessSettings GetSubProcessSettings()
         {
@@ -172,14 +171,25 @@ namespace TOne.WhS.Routing.Business
 
             return analyticMeasureInfos;
         }
+
         public Guid GetQualityAnalyticTableId()
         {
             TechnicalQualityConfiguration technicalQualityConfiguration = GetTechnicalQualityConfiguration();
             return technicalQualityConfiguration.QualityAnalyticTableId;
         }
+
+        public RouteRuleConfiguration GetRouteRuleConfiguration()
+        {
+            RouteSettingsData routeSettingsData = GetRouteSettingData();
+            if (routeSettingsData.RouteRuleConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.RouteRuleConfiguration");
+
+            return routeSettingsData.RouteRuleConfiguration;
+        }
+
         #endregion
 
-        #region private methods
+        #region Private Methods
 
         private TechnicalQualityConfiguration GetTechnicalQualityConfiguration()
         {
@@ -187,6 +197,7 @@ namespace TOne.WhS.Routing.Business
             routeTechnicalSettingData.TechnicalQualityConfiguration.ThrowIfNull("routeTechnicalSettingData.TechnicalQualityConfiguration");
             return routeTechnicalSettingData.TechnicalQualityConfiguration;
         }
+
         private RouteRuleDataTransformation GetRouteRuleDataTransformation()
         {
             RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RateOptionEnum', 'WhS_Routing_RateOptionTypeEnum',
-    function (UtilsService, VRUIUtilsService, WhS_Routing_RateOptionEnum, WhS_Routing_RateOptionTypeEnum) {
+app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RateOptionEnum', 'WhS_Routing_RateOptionTypeEnum', 'WhS_Routing_FixedOptionLossTypeEnum', 'WhS_Routing_RouteRuleAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Routing_RateOptionEnum, WhS_Routing_RateOptionTypeEnum, WhS_Routing_FixedOptionLossTypeEnum, WhS_Routing_RouteRuleAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,6 +34,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
             this.initializeController = initializeController;
 
             var supplierFilterSettings;
+            var routeRuleConfiguration;
 
             var gridAPI;
             var gridPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -51,6 +52,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel = {};
                 $scope.scopeModel.suppliers = [];
                 $scope.scopeModel.showBackupTabs = false;
+                $scope.scopeModel.showGrid = false;
 
                 $scope.getColor = function (dataItem) {
                     var cssClass = '';
@@ -208,6 +210,23 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
 
                     function getOptionsSectionLoadPromise() {
+                        //GetRouteRuleConfiguration
+                        var getRouteRuleConfigurationPromise = WhS_Routing_RouteRuleAPIService.GetRouteRuleConfiguration().then(function (response) {
+                            routeRuleConfiguration = response;
+
+                            switch (routeRuleConfiguration.FixedOptionLossType) {
+                                case WhS_Routing_FixedOptionLossTypeEnum.RemoveLoss.value:
+                                    $scope.scopeModel.removeLossType = "Remove Loss";
+                                    break;
+
+                                case WhS_Routing_FixedOptionLossTypeEnum.AcceptLoss.value:
+                                    $scope.scopeModel.removeLossType = "Accept Loss";
+                                    break;
+                            }
+
+                            $scope.scopeModel.showGrid = true;
+                        });
+
                         //Loading CarrierAccount Selector
                         var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
@@ -221,7 +240,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                         //Loading Options Grid 
                         var loadOptionGridPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([gridPromiseDeferred.promise, carrierAccountSelectorLoadPromiseDeferred.promise]).then(function () {
+                        UtilsService.waitMultiplePromises([gridPromiseDeferred.promise, getRouteRuleConfigurationPromise, carrierAccountSelectorLoadPromiseDeferred.promise]).then(function () {
                             var _promises = [];
                             for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
                                 var selectedSupplier = $scope.scopeModel.selectedSuppliers[i];
@@ -240,6 +259,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                                 loadOptionGridPromiseDeferred.resolve();
                             });
                         });
+
                         return loadOptionGridPromiseDeferred.promise.then(function () {
                             $scope.scopeModel.selectedSuppliers = [];
                         });
@@ -273,7 +293,8 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                                 NumberOfTries: supplier.NumberOfTries,
                                 Percentage: supplier.Percentage
                             };
-                            if (supplier.IsRemoveLoss) {
+                            if ((routeRuleConfiguration.FixedOptionLossType == WhS_Routing_FixedOptionLossTypeEnum.RemoveLoss.value && supplier.IsRemoveLoss) ||
+                                (routeRuleConfiguration.FixedOptionLossType == WhS_Routing_FixedOptionLossTypeEnum.AcceptLoss.value && !supplier.IsRemoveLoss)) {
                                 option.Filters = [{
                                     $type: "TOne.WhS.Routing.Business.RouteRules.Filters.RateOptionFilter, TOne.WhS.Routing.Business",
                                     RateOption: WhS_Routing_RateOptionEnum.MaximumLoss.value,
@@ -288,7 +309,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         }
                         return options;
                     }
-                        
+
                     function getOverallBackupOptions() {
                         if (!$scope.scopeModel.showBackupTabs || overallBackupOptionsDirectiveAPI == undefined)
                             return null;
@@ -318,6 +339,20 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     Percentage: currentOption != undefined ? currentOption.Percentage : undefined,
                     Backups: currentOption != undefined ? currentOption.Backups : undefined
                 };
+
+                if (currentOption != undefined) {
+                    switch (routeRuleConfiguration.FixedOptionLossType) {
+                        case WhS_Routing_FixedOptionLossTypeEnum.RemoveLoss.value:
+                            option.IsRemoveLoss = currentOption.Filters != undefined ? true : false;
+                            break;
+
+                        case WhS_Routing_FixedOptionLossTypeEnum.AcceptLoss.value:
+                            option.IsRemoveLoss = currentOption.Filters != undefined ? false : true;
+                            break;
+                    }
+                } else {
+                    option.IsRemoveLoss = routeRuleConfiguration.FixedOptionLossDefaultValue;
+                }
 
                 if ($scope.scopeModel.showRateServices) {
                     var services;
