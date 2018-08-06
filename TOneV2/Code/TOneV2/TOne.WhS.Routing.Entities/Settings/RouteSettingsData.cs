@@ -14,6 +14,27 @@ namespace TOne.WhS.Routing.Entities
 
         public RouteOptionRuleConfiguration RouteOptionRuleConfiguration { get; set; }
 
+        RoutRuleConfiguration _routRuleConfiguration;
+        public RoutRuleConfiguration RoutRuleConfiguration
+        {
+            get
+            {
+                if (_routRuleConfiguration == null)
+                {
+                    _routRuleConfiguration = new RoutRuleConfiguration
+                    {
+                        DefaultFixedOptionLossValue = false,
+                        FixedOptionLossType = FixedOptionLossType.RemoveLoss
+                    };
+                }
+                return _routRuleConfiguration;
+            }
+            set
+            {
+                _routRuleConfiguration = value;
+            }
+        }
+
         public QualityConfiguration QualityConfiguration { get; set; }
 
         public override bool IsValid(ISettingDataValidationContext context)
@@ -42,6 +63,6 @@ namespace TOne.WhS.Routing.Entities
                 return false;
             }
             return true;
-        }    
+        }
     }
 }
