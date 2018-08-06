@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_FaultTicketAPIService',
-    function (UtilsService, VRUIUtilsService, VRDateTimeService, WhS_BE_SaleZoneAPIService, WhS_BE_FaultTicketAPIService) {
+app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService',
+    function (UtilsService, VRUIUtilsService, VRDateTimeService) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
