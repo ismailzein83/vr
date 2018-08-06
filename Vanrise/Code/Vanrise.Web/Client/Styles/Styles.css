@@ -4291,6 +4291,10 @@ span.option-marketprice {
 	color: red;
 }
 
+.warning-font {
+	color: orange;
+}
+
 /* end custom style classes */
 
 
