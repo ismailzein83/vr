@@ -229,7 +229,7 @@
 
                 UtilsService.waitMultiplePromises([selectedDataRecordTypeDeferred.promise]).then(function () {
 
-                    if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined) {
+                    if (dataRecordStorageEntity != undefined && dataRecordStorageEntity.Settings != undefined && dataRecordStorageEntity.Settings.FieldsPermissions != undefined) {
                         var fieldsPermissions = [];
                         for (var i = 0; i < dataRecordStorageEntity.Settings.FieldsPermissions.length; i++) {
                             var dataItem = dataRecordStorageEntity.Settings.FieldsPermissions[i];
