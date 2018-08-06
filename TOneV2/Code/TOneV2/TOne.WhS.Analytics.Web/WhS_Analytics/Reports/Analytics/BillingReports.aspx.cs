@@ -62,6 +62,7 @@ namespace TOne.WhS.Analytics.Web.Reports.Analytics
                             BillingRDLCReportParameters.Add(new ReportParameter(p.Key, p.Value.Value, p.Value.IsVisible));
                         }
                         ReportViewer1.LocalReport.SetParameters(BillingRDLCReportParameters.ToArray());
+                        ReportViewer1.LocalReport.DisplayName = managerReport.GetRdlcDownloadedFileName(parameters.RDLCFileTitle,parameters.FromTime,parameters.ToTime);
                     }
                 }
                 else

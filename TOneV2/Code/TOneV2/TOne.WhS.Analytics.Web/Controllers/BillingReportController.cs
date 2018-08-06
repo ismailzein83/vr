@@ -16,12 +16,13 @@ namespace TOne.WhS.Analytics.Web.Controllers
     public class BillingReportController : BaseAPIController
     {
         BillingReportManager _manager = new BillingReportManager();
+        ReportDefinitionManager _reportDefinitionManager = new ReportDefinitionManager();
 
         [HttpPost]
         [Route("ExportCarrierProfile")]
         public object ExportCarrierProfile(BusinessCaseStatusQuery input)
         {
-            return GetExcelResponse(_manager.ExportCarrierProfile(input));
+            return GetExcelResponse(_manager.ExportCarrierProfile(input), _reportDefinitionManager.GetRdlcDownloadedFileName("BusinessCase Status", input.fromDate, input.toDate));
         }
     }
 }

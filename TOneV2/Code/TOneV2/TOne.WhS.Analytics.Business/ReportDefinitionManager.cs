@@ -27,27 +27,27 @@ namespace TOne.WhS.Analytics.Business
             {
                 Name = "Losses By Carrier",
                 ReportGeneratorFQTN = "TOne.WhS.Analytics.Business.BillingReports.LossesByCarrierReportGenerator, TOne.WhS.Analytics.Business",
-                ReportDefinitionId=31,
-                ReportURL="~/Client/Modules/WhS_Analytics/Reports/Analytics/rdlLossesByCarrier.rdlc",
+                ReportDefinitionId = 31,
+                ReportURL = "~/Client/Modules/WhS_Analytics/Reports/Analytics/rdlLossesByCarrier.rdlc",
                 ParameterSettings = new ReportParameterSettings
                 {
-                    RequiresFromTime=true,
-                    RequiresToTime=false,
-                    RequiresCustomerId=true,
-                    RequiresSupplierId=true,
-                    RequiresCustomerAMUId=true,
-                    RequiresSupllierAMUId=true,
-                    RequiresGroupByCustomer=false,
-                    RequiresIsCost=false,
-                    RequiresCurrencyId=false,
-                    RequiresSupplierGroup=false,
-                    RequiresCustomerGroup=false,
-                    RequiresGroupBySupplier=false,
-                    RequiresIsService=false,
-                    RequiresIsCommission=false,
-                    RequiresServicesForCustomer=false,
-                    RequiresMargin=true,
-                    RequiresPageBreak=true
+                    RequiresFromTime = true,
+                    RequiresToTime = false,
+                    RequiresCustomerId = true,
+                    RequiresSupplierId = true,
+                    RequiresCustomerAMUId = true,
+                    RequiresSupllierAMUId = true,
+                    RequiresGroupByCustomer = false,
+                    RequiresIsCost = false,
+                    RequiresCurrencyId = false,
+                    RequiresSupplierGroup = false,
+                    RequiresCustomerGroup = false,
+                    RequiresGroupBySupplier = false,
+                    RequiresIsService = false,
+                    RequiresIsCommission = false,
+                    RequiresServicesForCustomer = false,
+                    RequiresMargin = true,
+                    RequiresPageBreak = true
                 }
             };
             var ReportDefinitionRDLCFiles = new List<ReportDefinitionRDLCFile>();
@@ -72,6 +72,17 @@ namespace TOne.WhS.Analytics.Business
             string serializedReportDefinition = Vanrise.Common.Serializer.Serialize(reportDefinition);
 
             return dataManager.GetAllRDLCReportDefinition();
+        }
+
+        public string GetRdlcDownloadedFileName(string reportName, DateTime fromDate, DateTime? toDate)
+        {
+            StringBuilder fileName = new StringBuilder();
+
+            string fromAsString = fromDate.ToString("_ddMMyyyy");
+            string toAsString = toDate != null ? toDate.Value.ToString("_ddMMyyyy") : string.Empty;
+
+            fileName.Append(string.Format("{0}{1}{2}", reportName, fromAsString, toAsString));
+            return fileName.ToString();
         }
 
     }
