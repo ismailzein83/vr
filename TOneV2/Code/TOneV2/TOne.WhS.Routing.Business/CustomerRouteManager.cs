@@ -5,6 +5,7 @@ using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
@@ -238,17 +239,21 @@ namespace TOne.WhS.Routing.Business
             {
                 ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
 
+                IGeneralSettingsManager generalSettingsManager = BusinessManagerFactory.GetManager<IGeneralSettingsManager>();
+                int longPrecision = generalSettingsManager.GetLongPrecisionValue();
+                string rateFormat = string.Concat("#,##0.", new StringBuilder(longPrecision).Insert(0, "0", longPrecision).ToString());
+
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
                     SheetName = "Customer Routes",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() },
                     AutoFitColumns = true
                 };
-
+                string systemCurrencySymbol = new CurrencyManager().GetSystemCurrency().Symbol;
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 45 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 25 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate", Width = 8 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = string.Format("Rate ({0})", systemCurrencySymbol), Width = 10 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Linked Rules" });
@@ -268,7 +273,7 @@ namespace TOne.WhS.Routing.Business
                         row.Cells.Add(new ExportExcelCell { Value = record.Code });
                         row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
                         row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
-                        row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Rate.HasValue ? record.Rate.Value.ToString(rateFormat) : string.Empty });
                         row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.SaleZoneServiceIds.ToList()) });
                         row.Cells.Add(new ExportExcelCell { Value = record.IsBlocked });
                         row.Cells.Add(new ExportExcelCell { Value = record.LinkedRouteRuleCount });
@@ -280,8 +285,20 @@ namespace TOne.WhS.Routing.Business
                                 string optionPercentage = string.Empty;
                                 if (customerRouteOptionDetail.Percentage != null)
                                     optionPercentage = customerRouteOptionDetail.Percentage + "% ";
+                                StringBuilder backups = new StringBuilder();
+                                if (customerRouteOptionDetail.Backups != null && customerRouteOptionDetail.Backups.Count > 0)
+                                {
+                                    backups.Append(" <");
+                                    int count = customerRouteOptionDetail.Backups.Count;
+                                    for (var i = 0; i < count; i++)
+                                    {
+                                        var backup = customerRouteOptionDetail.Backups[i];
+                                        backups.Append(string.Format(" {0}{1} ", backup.SupplierName, i == count - 1 ? "" : ","));
+                                    }
+                                    backups.Append(">");
+                                }
 
-                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName);
+                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName, " (", customerRouteOptionDetail.SupplierRate.ToString(rateFormat), ")", backups.ToString());
                                 row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
                             }
 
