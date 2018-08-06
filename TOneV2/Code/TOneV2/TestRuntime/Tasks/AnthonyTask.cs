@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.MainExtensions;
 using Vanrise.BusinessProcess;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common.Business;
@@ -7,13 +8,102 @@ using Vanrise.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
+using System.Linq;
+using Vanrise.Common;
 
 namespace TestRuntime.Tasks
 {
+
+    //public class CompressedEricssonConvertedRoutesByParentCode : Dictionary<string, List<EricssonConvertedRouteForCompression>>
+    //{
+
+    //}
+    //public class CompressedEricssonConvertedRoutes : Dictionary<int, CompressedEricssonConvertedRoutesByParentCode>
+    //{
+    //}
+
+    //public class EricssonConvertedRouteForCompression
+    //{
+    //    public string Code { get; set; }
+    //    public int RCNumber { get; set; }
+    //    public bool CanBeGrouped { get; set; }
+    //}
+
+    //public struct CodeWithRCNumber
+    //{
+    //    public string Code { get; set; }
+    //    public int RCNumber { get; set; }
+    //}
+
     public class AnthonyTask : ITask
     {
         public void Execute()
         {
+            //List<CodeWithRCNumber> codesWithRCNumber = BuildCodesWithRCNumber();
+            //var compressedEricssonConvertedRoutesByCodeLength = new CompressedEricssonConvertedRoutes();
+
+            //foreach (CodeWithRCNumber codeWithRCNumber in codesWithRCNumber)
+            //{
+            //    string currentCode = codeWithRCNumber.Code;
+            //    var codeObjectsByParentPrefix = compressedEricssonConvertedRoutesByCodeLength.GetOrCreateItem(currentCode.Length);
+            //    string parentCode = currentCode.Substring(0, currentCode.Length - 1);
+            //    List<EricssonConvertedRouteForCompression> routes = codeObjectsByParentPrefix.GetOrCreateItem(parentCode);
+            //    routes.Add(new EricssonConvertedRouteForCompression() { Code = currentCode, RCNumber = codeWithRCNumber.RCNumber });
+            //}
+
+            //List<int> orderedKeys = compressedEricssonConvertedRoutesByCodeLength.Keys.OrderByDescending(itm => itm).ToList();
+            //Dictionary<string, List<EricssonConvertedRouteForCompression>> longestConvertedRoutes = compressedEricssonConvertedRoutesByCodeLength.GetRecord(orderedKeys[0]);
+            //foreach (var longestConvertedRoutesKvp in longestConvertedRoutes)
+            //{
+            //    List<EricssonConvertedRouteForCompression> routes = longestConvertedRoutesKvp.Value;
+            //    foreach (EricssonConvertedRouteForCompression route in routes)
+            //        route.CanBeGrouped = true;
+            //}
+
+            //for (int i = 1; i < orderedKeys.Count; i++)
+            //{
+            //    int currentKey = orderedKeys[i];
+            //    int childrenKey = currentKey + 1;
+
+            //    Dictionary<string, List<EricssonConvertedRouteForCompression>> currentConvertedRoutesForCompressionByCode = compressedEricssonConvertedRoutesByCodeLength.GetRecord(currentKey);
+            //    Dictionary<string, List<EricssonConvertedRouteForCompression>> childrenConvertedRoutesForCompressionByCode = compressedEricssonConvertedRoutesByCodeLength.GetRecord(childrenKey);
+            //    foreach (var convertedRoutesKvp in currentConvertedRoutesForCompressionByCode)
+            //    {
+            //        List<EricssonConvertedRouteForCompression> routes = convertedRoutesKvp.Value;
+
+            //        for (int j = routes.Count - 1; j >= 0; j--)
+            //        {
+            //            EricssonConvertedRouteForCompression route = routes[j];
+            //            string currentCode = route.Code;
+            //            List<EricssonConvertedRouteForCompression> ericssonConvertedRoutes = childrenConvertedRoutesForCompressionByCode.GetRecord(currentCode);
+            //            if (ericssonConvertedRoutes == null)
+            //            {
+            //                route.CanBeGrouped = true;
+            //                continue;
+            //            }
+
+            //            if (ericssonConvertedRoutes.Count != 10 || ericssonConvertedRoutes.FirstOrDefault(itm => !itm.CanBeGrouped) != null)
+            //            {
+            //                routes.Remove(route);
+            //                continue;
+            //            }
+
+            //            HashSet<int> distinctRCs = ericssonConvertedRoutes.Select(itm => itm.RCNumber).ToHashSet();
+            //            if (distinctRCs.Count > 1)
+            //            {
+            //                routes.Remove(route);
+            //                continue;
+            //            }
+
+            //            route.RCNumber = distinctRCs.First();
+            //            route.CanBeGrouped = true;
+            //            childrenConvertedRoutesForCompressionByCode.Remove(currentCode);
+            //        }
+            //    }
+            //}
+
+            //Console.ReadKey();
+
             //string result = BuildSerializedDatabaseDefinitions();
 
             var runtimeServices = new List<RuntimeService>();
@@ -59,6 +149,28 @@ namespace TestRuntime.Tasks
 
             Console.ReadKey();
         }
+
+        //private List<CodeWithRCNumber> BuildCodesWithRCNumber()
+        //{
+        //    //"9", "91", "92", "93", "94", "95", "96", "97", "98", "99", "90", "931" 
+        //    CodeWithRCNumber codeWithRC9 = new CodeWithRCNumber() { Code = "9", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC91 = new CodeWithRCNumber() { Code = "91", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC92 = new CodeWithRCNumber() { Code = "92", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC93 = new CodeWithRCNumber() { Code = "93", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC94 = new CodeWithRCNumber() { Code = "94", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC95 = new CodeWithRCNumber() { Code = "95", RCNumber = 2 };
+        //    CodeWithRCNumber codeWithRC96 = new CodeWithRCNumber() { Code = "96", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC97 = new CodeWithRCNumber() { Code = "97", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC98 = new CodeWithRCNumber() { Code = "98", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC99 = new CodeWithRCNumber() { Code = "99", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC90 = new CodeWithRCNumber() { Code = "90", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC931 = new CodeWithRCNumber() { Code = "931", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC932 = new CodeWithRCNumber() { Code = "932", RCNumber = 1 };
+        //    CodeWithRCNumber codeWithRC933 = new CodeWithRCNumber() { Code = "933", RCNumber = 1 };
+
+        //    List<CodeWithRCNumber> codesWithRCNumber = new List<CodeWithRCNumber>() { codeWithRC9, codeWithRC91, codeWithRC92, codeWithRC93, codeWithRC94, codeWithRC95, codeWithRC96, codeWithRC97, codeWithRC98, codeWithRC99, codeWithRC90 };
+        //    return codesWithRCNumber;
+        //}
 
         string BuildSerializedDatabaseDefinitions()
         {
@@ -106,8 +218,9 @@ namespace TestRuntime.Tasks
             DBReplicationDefinition DBReplicationDefinition = new Vanrise.Entities.DBReplicationDefinition()
             {
                 Name = "Database Replication",
-                VRComponentTypeId = new Guid("BB07A3B5-E519-4A6C-B4C6-695069BBB64A"),
-                Settings = new DBReplicationDefinitionSettings() { DatabaseDefinitions = databaseDefinitions }
+                VRComponentTypeId = Guid.NewGuid(),
+                Settings = new DBReplicationDefinitionSettings() { DatabaseDefinitions = databaseDefinitions },
+
             };
             string result = Vanrise.Common.Serializer.Serialize(DBReplicationDefinition.Settings);
             return result;
@@ -193,7 +306,7 @@ namespace TestRuntime.Tasks
             configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "SupplierRecurringChargesType", TableSchema = "TOneWhS_BE" });
             configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "SupplierZone", TableSchema = "TOneWhS_BE" });
             configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "SupplierZoneService", TableSchema = "TOneWhS_BE" });
-            configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "Switch", TableSchema = "TOneWhS_BE" });
+            configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "Switch", TableSchema = "TOneWhS_BE", DBReplicationPreInsert = new SwitchDBReplicationPreInsert() });
             configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "SwitchConnectivity", TableSchema = "TOneWhS_BE" });
             configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "SwitchReleaseCause", TableSchema = "TOneWhS_BE" });
             configurationDefinition.Tables.Add(new DBReplicationTableDefinition() { TableName = "VolumeCommitment", TableSchema = "TOneWhS_BE" });
