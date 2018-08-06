@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RoutRuleConfiguration
+    public class RouteRuleConfiguration
     {
         public FixedOptionLossType FixedOptionLossType { get; set; }
 

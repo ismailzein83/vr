@@ -113,7 +113,7 @@
     <Compile Include="RouteRuleQualityContext.cs" />
     <Compile Include="RoutingExcludedDestinations\RoutingExcludedDestinationsConfig.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\QualityConfiguration.cs" />
-    <Compile Include="Settings\RoutRuleConfiguration.cs" />
+    <Compile Include="Settings\RouteRuleConfiguration.cs" />
     <Compile Include="Settings\TechnicalQualityConfiguration.cs" />
     <Compile Include="RouteRuleSettings\SpecialRequestRouteOptionSettings.cs" />
     <Compile Include="ProcessRuleConfig.cs" />

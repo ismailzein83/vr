@@ -12,28 +12,28 @@ namespace TOne.WhS.Routing.Entities
 
         public RouteBuildConfiguration RouteBuildConfiguration { get; set; }
 
-        public RouteOptionRuleConfiguration RouteOptionRuleConfiguration { get; set; }
-
-        RoutRuleConfiguration _routRuleConfiguration;
-        public RoutRuleConfiguration RoutRuleConfiguration
+        RouteRuleConfiguration _routeRuleConfiguration;
+        public RouteRuleConfiguration RouteRuleConfiguration
         {
             get
             {
-                if (_routRuleConfiguration == null)
+                if (_routeRuleConfiguration == null)
                 {
-                    _routRuleConfiguration = new RoutRuleConfiguration
+                    _routeRuleConfiguration = new RouteRuleConfiguration
                     {
                         DefaultFixedOptionLossValue = false,
                         FixedOptionLossType = FixedOptionLossType.RemoveLoss
                     };
                 }
-                return _routRuleConfiguration;
+                return _routeRuleConfiguration;
             }
             set
             {
-                _routRuleConfiguration = value;
+                _routeRuleConfiguration = value;
             }
         }
+
+        public RouteOptionRuleConfiguration RouteOptionRuleConfiguration { get; set; }
 
         public QualityConfiguration QualityConfiguration { get; set; }
 
