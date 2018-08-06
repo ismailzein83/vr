@@ -255,6 +255,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\CustomerRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SettlementInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SupplierInvoiceReport.rdlc">
       <SubType>Designer</SubType>
