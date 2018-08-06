@@ -237,10 +237,12 @@
             });
         }
 
-        function getRouteRule() {
+        function getRouteRule() { 
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 if (routeRule != undefined) {
                     $scope.scopeModel.routeRuleName = routeRule != null ? routeRule.Name : '';
+                    $scope.scopeModel.routeRuleReason = routeRule != null ? routeRule.Reason : '';
+
                     routeRuleEntity = routeRule;
                     routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
                 }
@@ -479,6 +481,7 @@
             var routeRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
                 Name: $scope.scopeModel.routeRuleName,
+                Reason: $scope.scopeModel.routeRuleReason,
                 Criteria: routeRuleCriteriaAPI.getData(),
                 Settings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, routeRuleSettingsAPI, 'selectedRouteRuleSettingsTemplate'),
                 BeginEffectiveTime: $scope.scopeModel.beginEffectiveDate,

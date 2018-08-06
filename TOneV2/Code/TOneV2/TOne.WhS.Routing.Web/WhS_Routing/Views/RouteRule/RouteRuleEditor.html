@@ -12,7 +12,6 @@
                                                                        hideremoveicon>
                             </vr-whs-routing-routerulesettings-selector>
                         </vr-columns>
-
                         <vr-columns width="1/4row" ng-show="false">
                             <vr-whs-routing-routerulecriteria-selector on-ready="scopeModel.onRouteRuleCriteriaSelectorReady"
                                                                        selectedvalues="scopeModel.selectedRouteRuleCriteriaTemplate"
@@ -21,9 +20,13 @@
                                                                        hideremoveicon>
                             </vr-whs-routing-routerulecriteria-selector>
                         </vr-columns>
-
                         <vr-columns width="1/4row">
                             <vr-textbox value="scopeModel.routeRuleName" label="Name"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-textarea label="Reason" value="scopeModel.routeRuleReason"></vr-textarea>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

@@ -10,6 +10,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public string Name { get; set; }
 
+        public string Reason { get; set; }
+
         public BaseRouteRuleCriteria Criteria { get; set; }
 
         public RouteRuleSettings Settings { get; set; }

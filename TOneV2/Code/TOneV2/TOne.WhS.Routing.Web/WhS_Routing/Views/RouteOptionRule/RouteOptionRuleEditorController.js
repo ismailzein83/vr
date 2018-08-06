@@ -236,6 +236,7 @@
                     settingsEditorRuntime = routeOptionRule.SettingsEditorRuntime;
 
                     $scope.scopeModel.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
+                    $scope.scopeModel.routeOptionRuleReason = routeOptionRuleEntity != null ? routeOptionRuleEntity.Reason : '';
                     routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
                 } else {
                     VRNotificationService.showWarning("Matching Rule has been deleted!!");
@@ -524,6 +525,7 @@
             var routeOptionRule = {
                 RuleId: (routeRuleId != null) ? routeRuleId : 0,
                 Name: $scope.scopeModel.routeOptionRuleName,
+                Reason: $scope.scopeModel.routeOptionRuleReason,
                 Criteria: {
                     RoutingProductId: routingProductId,
                     //ExcludedCodes: $scope.scopeModel.excludedCodes,

@@ -25,6 +25,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public string Name { get; set; }
 
+        public string Reason { get; set; }
+
         public RouteOptionRuleCriteria Criteria { get; set; }
 
         public RouteOptionRuleSettings Settings { get; set; }
