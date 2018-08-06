@@ -26,8 +26,8 @@
                              disablesorting="true" enabledraggablerow="true"
                              hidegridmenu disabledraggablecolumns vr-loader="scopeModel.isLoadingSelectedSupplier">
 
-                    <vr-datagridcolumn headertext="'Supplier'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'" ng-if="scopeModel.showRateServices" columnindex="1"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Supplier'" field="'Name'" getcolor="getColor"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" getcolor="getColor" numberprecision="'LongPrecision'" ng-if="scopeModel.showRateServices" columnindex="1"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Services'" widthfactor="1" fixedwidth="60" ng-if="scopeModel.showRateServices" columnindex="2">
                         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
                     </vr-datagridcolumn>

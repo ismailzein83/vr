@@ -52,6 +52,14 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel.suppliers = [];
                 $scope.scopeModel.showBackupTabs = false;
 
+                $scope.getColor = function (dataItem) {
+                    var cssClass = '';
+                    if ($scope.scopeModel.Rate != undefined && $scope.scopeModel.Rate < dataItem.Rate)
+                        cssClass = 'warning-font';
+
+                    return cssClass;
+                };
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     gridPromiseDeferred.resolve();
