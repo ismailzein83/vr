@@ -107,7 +107,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         }
 
-        private void EvaluateStartingRows(bool includeHeaders, bool includeTitle, Dictionary<Guid, VRAutomatedReportTableInfo> subTablesInfo, List<AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitions, ref int subTableDataRowIndex, ref int colDataRowIndex, ref int headerRowIndex, out int maxHeaderRows, out int maxSubTableDimensions)
+        private void EvaluateStartingRows(bool includeHeaders, bool includeTitle, List<string> titles, Dictionary<Guid, VRAutomatedReportTableInfo> subTablesInfo, List<AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitions, ref int subTableDataRowIndex, ref int colDataRowIndex, ref int headerRowIndex, out int maxHeaderRows, out int maxSubTableDimensions)
         {
             if (includeHeaders)
             {
@@ -148,11 +148,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 maxSubTableDimensions = 0;
                 maxHeaderRows = 0;
             }
-            if (includeTitle)
+            if (includeTitle && titles!=null && titles.Count>0)
             {
-                headerRowIndex++;
-                colDataRowIndex++;
-                subTableDataRowIndex++;
+                int titlesCount = titles.Count;
+                headerRowIndex += titlesCount;
+                colDataRowIndex += titlesCount;
+                subTableDataRowIndex += titlesCount;
             }
         }
         private void BuildColumnsAndSubTablesDefinitionsDic(List<AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitions, List<AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitions, out Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, out Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, out List<int> columnsIndexes)
@@ -359,10 +360,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             int columnIndexState = sortedColumnsIndexes.First();
             List<int> subTableRows = new List<int>();
             subTableValuesCount = 0;
+            int lastCol = -1;
             foreach (var col in sortedColumnsIndexes)
             {
-                if (col > columnIndexState)
-                    columnIndexState = col;
+                if (lastCol > -1)
+                    columnIndexState += (col - lastCol);
+
                 var column = columnDefinitionsDic.GetRecord(col);
                 if (column != null)
                 {
@@ -480,7 +483,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         BuildSubTableTitle(worksheet, subTableDef.SubTableTitle, subTableTitleRowIndex, subTableTitleColIndex, subTableValuesCount);
                     }
                 }
-                columnIndexState++;
+                lastCol = col;
             }
             if (subTableRows != null && subTableRows.Count > 0)
             {
@@ -494,11 +497,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             var subTablesInfo = dataList.SubTablesInfo;
             var summaryRecord = dataList.SummaryDataItem;
             int columnIndexState = sortedColumnsIndexes.First();
+            int lastCol = -1;
 
             foreach (var col in sortedColumnsIndexes)
             {
-                if (col > columnIndexState)
-                    columnIndexState = col;
+                if (lastCol > -1)
+                    columnIndexState += (col - lastCol);
+
                 var column = columnDefinitionsDic.GetRecord(col);
                 if (column != null)
                 {
@@ -573,7 +578,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         }
                     }
                 }
-                columnIndexState++;
+                lastCol = col;
             }
         }
 
@@ -586,10 +591,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             {
                 var item = items[i];
                 int columnIndexState = sortedColumnsIndexes.First();
+                int lastCol = -1;
                 foreach (var col in sortedColumnsIndexes)
                 {
-                    if (col > columnIndexState)
-                        columnIndexState = col;
+                    if(lastCol>-1)
+                        columnIndexState += (col - lastCol);
 
                     var column = columnDefinitionsDic.GetRecord(col);
                     if (column != null)
@@ -685,7 +691,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             }
                         }
                     }
-                    columnIndexState++;
+                    lastCol = col;
                 }
                 colDataRowIndex++;
             }
@@ -699,7 +705,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             int subTableDataRowIndex = tableDef.RowIndex;
             int maxHeaderRows = 0;
             int maxSubTableDimensions = 0;
-            EvaluateStartingRows(tableDef.IncludeHeaders, tableDef.IncludeTitle, dataList.SubTablesInfo, tableDef.SubTableDefinitions, ref subTableDataRowIndex, ref colDataRowIndex, ref headerRowIndex, out maxHeaderRows, out maxSubTableDimensions);
+            EvaluateStartingRows(tableDef.IncludeHeaders, tableDef.IncludeTitle,tableDef.Titles, dataList.SubTablesInfo, tableDef.SubTableDefinitions, ref subTableDataRowIndex, ref colDataRowIndex, ref headerRowIndex, out maxHeaderRows, out maxSubTableDimensions);
             List<int> allColumnIndices = new List<int>();
             List<int> columnsIndexes;
             Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic;
@@ -732,7 +738,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     }
                 }
             }
-            if (tableDef.IncludeTitle && tableDef.Title != null && allColumnIndices.Count > 0)
+            if (tableDef.IncludeTitle && tableDef.Titles != null && allColumnIndices.Count > 0)
             {
                 var orderedIndices = allColumnIndices.Distinct().OrderBy(x => x);
                 int difference = 1;
@@ -741,8 +747,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 {
                     difference = orderedIndices.Last() - titleColumnIndex + 1;
                 }
-                worksheet.Cells.Merge(titleRowIndex, titleColumnIndex, 1, difference);
-                SetStyleAndValue(worksheet, titleRowIndex, titleColumnIndex, tableDef.Title, 16, true, TextAlignmentType.Center, false);
+                foreach (var title in tableDef.Titles)
+                {
+                    worksheet.Cells.Merge(titleRowIndex, titleColumnIndex, 1, difference);
+                    SetStyleAndValue(worksheet, titleRowIndex, titleColumnIndex, title, 16, true, TextAlignmentType.Center, false);
+                    titleRowIndex++;
+                }
             }
         }
 
@@ -1083,7 +1093,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
         public bool IncludeSummary { get; set; }
 
-        public string Title { get; set; }
+        public List<string> Titles { get; set; }
 
         public List<AdvancedExcelFileGeneratorTableColumnDefinition> ColumnDefinitions { get; set; }
 

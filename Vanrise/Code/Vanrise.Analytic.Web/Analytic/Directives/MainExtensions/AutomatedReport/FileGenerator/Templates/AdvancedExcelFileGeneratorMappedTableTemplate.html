@@ -6,26 +6,26 @@
     </vr-excelconversion-fieldmapping-cellfieldmapping>
 </vr-row>
 <vr-row>
-    <vr-columns width="1/4row">
+    <vr-columns width="1/3row">
         <vr-switch value="scopeModel.includeHeaders" label="Include Headers"></vr-switch>
     </vr-columns>
-    <vr-columns width="1/4row">
+    <vr-columns width="1/3row">
+        <vr-switch value="scopeModel.includeSummary" label="Include Summary" ng-show="scopeModel.showSummarySwitch"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/3row">
         <vr-switch value="scopeModel.includeTitle" label="Include Title"></vr-switch>
     </vr-columns>
-    <vr-columns width="1/2row">
-        <span vr-disabled="!scopeModel.includeTitle">
-            <vr-textbox value="scopeModel.tableTitle" isrequired="scopeModel.includeTitle" label="Title"></vr-textbox>
-        </span>
-    </vr-columns>
+</vr-row>
+<vr-row>
+    <span vr-disabled="!scopeModel.includeTitle" ng-show="scopeModel.includeTitle">
+        <vr-analytic-advancedexcel-filegenerator-mappedtable-titlesgrid on-ready="scopeModel.onTitlesGridDirectiveReady"></vr-analytic-advancedexcel-filegenerator-mappedtable-titlesgrid>
+    </span>
 </vr-row>
 <vr-row>
     <vr-columns colnum="3" withemptyline>
         <span vr-disabled="scopeModel.disableAddMappedCol">
             <vr-button type="Add" data-onclick="scopeModel.addMappedCol" standalone="true"></vr-button>
         </span>
-    </vr-columns>
-    <vr-columns colnum="3">
-        <vr-switch value="scopeModel.includeSummary" label="Include Summary" ng-show="scopeModel.showSummarySwitch"></vr-switch>
     </vr-columns>
 </vr-row>
 <vr-row vr-loader="scopeModel.isLoadingMappedCol">
