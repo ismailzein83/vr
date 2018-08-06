@@ -13,11 +13,11 @@ namespace Vanrise.Web.Base
 {
     public class BaseAPIController : ApiController
     {
-        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result)
+        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result, string excelFileName = null)
         {
             ExcelResult<T> excelResult = result as ExcelResult<T>;
             if (excelResult != null)
-                return GetExcelResponse(excelResult);
+                return GetExcelResponse(excelResult, excelFileName);
 
             RemoteExcelResult<T> remoteExcelResult = result as RemoteExcelResult<T>;
             if (remoteExcelResult != null && !dataRetrievalInput.IsAPICall)
@@ -32,12 +32,13 @@ namespace Vanrise.Web.Base
             return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms });
         }
 
-        protected object GetExcelResponse(ExcelResult excelResult)
+        protected object GetExcelResponse(ExcelResult excelResult, string excelFileName = null)
         {
+            var fileName = string.IsNullOrEmpty(excelFileName) ? "ExcelReport.xlsx" : string.Format("{0}.xlsx",excelFileName);
             if (excelResult.ExcelFileContent != null)
-                return GetExcelResponse(excelResult.ExcelFileContent, "ExcelReport.xlsx");
+                return GetExcelResponse(excelResult.ExcelFileContent, fileName);
             else
-                return GetExcelResponse(excelResult.ExcelFileStream, "ExcelReport.xlsx");
+                return GetExcelResponse(excelResult.ExcelFileStream, fileName);
         }
               
         protected object GetExcelResponse(Stream stream, string fileName)
