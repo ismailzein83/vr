@@ -13,11 +13,11 @@ namespace Vanrise.Web.Base
 {
     public class BaseAPIController : ApiController
     {
-        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result, string excelFileName = null)
+        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result)
         {
             ExcelResult<T> excelResult = result as ExcelResult<T>;
             if (excelResult != null)
-                return GetExcelResponse(excelResult, excelFileName);
+                return GetExcelResponse(excelResult);
 
             RemoteExcelResult<T> remoteExcelResult = result as RemoteExcelResult<T>;
             if (remoteExcelResult != null && !dataRetrievalInput.IsAPICall)
@@ -26,15 +26,28 @@ namespace Vanrise.Web.Base
             return result;
         }
 
+
+        protected object GetWebResponse<T>(DataRetrievalInput dataRetrievalInput, IDataRetrievalResult<T> result, string resultFileName = null)
+        {
+            ExcelResult<T> excelResult = result as ExcelResult<T>;
+            if (excelResult != null)
+                return GetExcelResponse(excelResult, resultFileName);
+
+            RemoteExcelResult<T> remoteExcelResult = result as RemoteExcelResult<T>;
+            if (remoteExcelResult != null && !dataRetrievalInput.IsAPICall)
+                return GetExcelResponseFromRemote(remoteExcelResult);
+
+            return result;
+        }
         protected object GetExcelResponseFromRemote(RemoteExcelResult remoteExcelResult)
         {
             MemoryStream ms = new MemoryStream(remoteExcelResult.Data);
             return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms });
         }
 
-        protected object GetExcelResponse(ExcelResult excelResult, string excelFileName = null)
+        protected object GetExcelResponse(ExcelResult excelResult, string resultFileName = null)
         {
-            var fileName = string.IsNullOrEmpty(excelFileName) ? "ExcelReport.xlsx" : string.Format("{0}.xlsx",excelFileName);
+            var fileName = string.IsNullOrEmpty(resultFileName) ? "ExcelReport.xlsx" : string.Format("{0}.xlsx",resultFileName);
             if (excelResult.ExcelFileContent != null)
                 return GetExcelResponse(excelResult.ExcelFileContent, fileName);
             else
