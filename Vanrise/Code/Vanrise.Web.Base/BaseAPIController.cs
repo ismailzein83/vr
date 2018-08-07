@@ -44,7 +44,13 @@ namespace Vanrise.Web.Base
             MemoryStream ms = new MemoryStream(remoteExcelResult.Data);
             return GetExcelResponse(new ExcelResult() { ExcelFileStream = ms });
         }
-
+        protected object GetExcelResponse(ExcelResult excelResult)
+        {
+            if (excelResult.ExcelFileContent != null)
+                return GetExcelResponse(excelResult.ExcelFileContent, "ExcelReport.xlsx");
+            else
+                return GetExcelResponse(excelResult.ExcelFileStream, "ExcelReport.xlsx");
+        }
         protected object GetExcelResponse(ExcelResult excelResult, string resultFileName = null)
         {
             var fileName = string.IsNullOrEmpty(resultFileName) ? "ExcelReport.xlsx" : string.Format("{0}.xlsx",resultFileName);
