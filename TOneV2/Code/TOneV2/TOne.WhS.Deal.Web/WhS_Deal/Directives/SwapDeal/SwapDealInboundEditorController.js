@@ -63,17 +63,19 @@
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
-                        payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
+                        payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
                         payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined;
                     }
                     else
                         payload = {
                             sellingNumberPlanId: sellingNumberPlanId,
                             filter: {
-                                CountryIds: [countryDirectiveApi.getSelectedIds()],
+                                CountryIds: countryDirectiveApi.getSelectedIds(),
                             },
                             selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
                         };
+                    console.log("get selected ids of country selector");
+                    console.log(countryDirectiveApi.getSelectedIds());
                     //console.log(payload.excludedZoneIds);
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 

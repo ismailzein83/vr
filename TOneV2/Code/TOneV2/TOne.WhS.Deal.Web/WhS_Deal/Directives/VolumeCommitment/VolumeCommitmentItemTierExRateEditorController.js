@@ -98,7 +98,7 @@
                 payload.filter = {
                     AvailableZoneIds: context.getSelectedZonesIds(),
                     ExcludedZoneIds: context.getExceptionsZoneIds(excZoneIds),
-                    CountryIds: [context.getCountryId()]
+                    CountryIds: context.getCountryId()
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
             });

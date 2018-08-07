@@ -8,7 +8,7 @@
                             <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/3row" haschildcolumns>
-                            <vr-common-country-selector on-ready="scopeModel.onCountryDirectiveReady" selectedvalues="scopeModel.country" isrequired="true" onselectionchanged="scopeModel.onCountrySelectionChanged"></vr-common-country-selector>
+                            <vr-common-country-selector on-ready="scopeModel.onCountryDirectiveReady" selectedvalues="scopeModel.country" isrequired="true" onselectionchanged="scopeModel.onCountrySelectionChanged" ismultipleselection></vr-common-country-selector>
                         </vr-columns>
                         <span vr-loader="scopeModel.isLoadingDirective" vr-disabled="scopeModel.country==undefined">
                             <vr-directivewrapper directive="scopeModel.zoneSelector" selectedvalues="scopeModel.selectedZones" onblurdropdown="scopeModel.onZoneSelectorSelection" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>

@@ -102,13 +102,13 @@
                     var payload = context != undefined ? context.getSupplierZoneSelectorPayload(swapDealOutboundEntity != undefined ? swapDealOutboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.supplierId = supplierId;
-                        payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
+                        payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
                         payload.selectedIds = zoneIds;
                     }
                     else {
                         payload = {
                             supplierId: supplierId,
-                            filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
+                            filter: { CountryIds: countryDirectiveApi.getSelectedIds() },
                             selectedIds: zoneIds,
                         };
 

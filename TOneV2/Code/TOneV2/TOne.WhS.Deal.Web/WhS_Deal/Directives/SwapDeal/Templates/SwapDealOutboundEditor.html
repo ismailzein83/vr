@@ -6,7 +6,7 @@
                     <vr-textbox label="Group Name" value="scopeModel.name" isrequired="true"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/4row" haschildcolumns>
-                    <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="country" isrequired="true" onselectionchanged="onCountrySelectionChanged"></vr-common-country-selector>
+                    <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="country" isrequired="true" onselectionchanged="onCountrySelectionChanged" ismultipleselection></vr-common-country-selector>
                 </vr-columns>
                 <span vr-loader="isLoadingSaleZonesSelector" vr-disabled="country == undefined">
                     <vr-whs-be-supplierzone-selector normal-col-num="3" selectedvalues="supplierzones" ismultipleselection isrequired="true" on-ready="onSupplierZoneDirectiveReady" />
