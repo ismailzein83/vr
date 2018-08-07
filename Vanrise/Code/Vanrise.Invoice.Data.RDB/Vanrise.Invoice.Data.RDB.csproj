@@ -48,6 +48,7 @@
     <Compile Include="InvoiceAccountDataManager.cs" />
     <Compile Include="InvoiceBulkActionsDraftDataManager.cs" />
     <Compile Include="InvoiceDataManager.cs" />
+    <Compile Include="InvoiceGenerationDraftDataManager.cs" />
     <Compile Include="InvoiceItemDataManager.cs" />
     <Compile Include="InvoiceSequenceDataManager.cs" />
     <Compile Include="InvoiceSettingDataManager.cs" />
