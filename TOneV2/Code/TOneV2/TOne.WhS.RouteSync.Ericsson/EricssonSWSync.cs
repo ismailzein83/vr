@@ -344,9 +344,29 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 		public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
 		{
-			if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
-				return true;
-			return true;
+            if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
+                return true;
+
+            HashSet<string> allBOs = new HashSet<string>();
+            HashSet<string> duplicatedBOs = new HashSet<string>();
+
+            foreach (var carrierMapping in this.CarrierMappings)
+            {
+                CustomerMapping customerMapping = carrierMapping.Value.CustomerMapping;
+                if (customerMapping == null || string.IsNullOrEmpty(customerMapping.BO))
+                    continue;
+
+                if (!allBOs.Contains(customerMapping.BO))
+                    allBOs.Add(customerMapping.BO);
+                else
+                    duplicatedBOs.Add(customerMapping.BO);
+            }
+
+            if (duplicatedBOs.Count == 0)
+                return true;
+
+            context.ValidationMessages = new List<string>() { string.Format("Duplicate BOs: {0}", string.Join(", ", duplicatedBOs)) };
+            return false;
 
 			//Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>();
 
