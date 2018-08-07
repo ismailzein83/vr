@@ -206,7 +206,7 @@ namespace Vanrise.Data.RDB
                 if (whenIndex == 0)
                     builder.Append(" CASE ");
                 builder.Append(" WHEN ");
-                builder.Append(when.Condition.ToDBQuery(conditionContext));
+                builder.Append(when.ConditionGroup.ToDBQuery(conditionContext));
                 builder.Append(" THEN ");
                 builder.Append(when.ValueExpression.ToDBQuery(context));
             }
@@ -222,7 +222,7 @@ namespace Vanrise.Data.RDB
 
     internal class RDBCaseWhenExpression
     {
-        public BaseRDBCondition Condition { get; set; }
+        public RDBConditionGroup ConditionGroup { get; set; }
 
         public BaseRDBExpression ValueExpression { get; set; }
 

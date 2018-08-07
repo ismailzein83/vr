@@ -471,12 +471,12 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        public RDBExpressionContext Expression1()
+        protected RDBExpressionContext Exp1()
         {
             return _expression1Context;
         }
 
-        public RDBExpressionContext Expression2()
+        protected RDBExpressionContext Exp2()
         {
             return _expression2Context;
         }
@@ -487,6 +487,16 @@ namespace Vanrise.Data.RDB
         public RDBCompareConditionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression, BaseRDBExpression> setExpressions)
             : base(queryBuilderContext, tableAlias,  setExpressions)
         {
+        }
+
+        public RDBExpressionContext Expression1()
+        {
+            return base.Exp1();
+        }
+
+        public RDBExpressionContext Expression2()
+        {
+            return base.Exp2();
         }
     }
 }

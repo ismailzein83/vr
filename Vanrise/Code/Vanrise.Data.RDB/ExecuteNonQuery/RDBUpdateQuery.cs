@@ -74,50 +74,10 @@ namespace Vanrise.Data.RDB
             });
         }
 
-        //public void ColumnValue(string columnName, string value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedTextExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, int value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedIntExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, long value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedLongExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, decimal value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedDecimalExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, float value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedFloatExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, DateTime value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedDateTimeExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, bool value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, Guid value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
-        //}
-
-        //public void ColumnValue(string columnName, byte[] value)
-        //{
-        //    this.ColumnValue(columnName, new RDBFixedBytesExpression { Value = value });
-        //}
+        public RDBExpressionContext Parameter(string parameterName)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => this._columnValues.Add(new RDBUpdateColumn { ExpressionToSet = new RDBParameterExpression { ParameterName = parameterName }, Value = exp }), _tableAlias);
+        }
 
         RDBJoinContext _joinContext;
 
@@ -188,6 +148,26 @@ namespace Vanrise.Data.RDB
     {
         public string ColumnName { get; set; }
 
+        public BaseRDBExpression ExpressionToSet { get; set; }
+
         public BaseRDBExpression Value { get; set; }
+    }
+
+    public class RDBUpdateExpressionContext : RDBTwoExpressionsContext
+    {
+        public RDBUpdateExpressionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression, BaseRDBExpression> setExpressions)
+            : base(queryBuilderContext, tableAlias, setExpressions)
+        {
+        }
+
+        public RDBExpressionContext ExpressionToSet()
+        {
+            return base.Exp1();
+        }
+
+        public RDBExpressionContext Value()
+        {
+            return base.Exp2();
+        }
     }
 }

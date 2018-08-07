@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.RDB;
+using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data.RDB
 {
@@ -36,6 +37,16 @@ namespace Vanrise.Invoice.Data.RDB
             return RDBDataProviderFactory.CreateProvider("VR_Invoice", "InvoiceDBConnStringKey", "InvoiceDBConnString");
         }
 
+        private InvoiceBulkActionsDraftSummary InvoiceBulkActionsDraftSummary(IRDBDataReader reader)
+        {
+            return new InvoiceBulkActionsDraftSummary()
+            {
+                TotalCount = reader.GetInt("TotalCount"),
+                MinimumFrom = reader.GetNullableDateTime("MinimumFrom"),
+                MaximumTo = reader.GetNullableDateTime("MaximumTo")
+            };
+        }
+
         #endregion
 
         #region IInvoiceBulkActionsDraftDataManager
@@ -64,12 +75,51 @@ namespace Vanrise.Invoice.Data.RDB
 
         public Entities.InvoiceBulkActionsDraftSummary UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Guid invoiceTypeId, bool isAllInvoicesSelected, List<long> targetInvoicesIds)
         {
-            throw new NotImplementedException();
+            InvoiceDataManager invoiceDataManager = new InvoiceDataManager();
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            var deleteWhereCondition = deleteQuery.Where();
+            deleteWhereCondition.EqualsCondition("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
+            if(isAllInvoicesSelected)
+            {
+                if (targetInvoicesIds != null)
+                {
+                    deleteWhereCondition.ListCondition("InvoiceId", RDBListConditionOperator.IN, targetInvoicesIds);
+
+                    foreach (var invoiceId in targetInvoicesIds)
+                    {
+                        var insertQuery = queryContext.AddInsertQuery();
+                        insertQuery.IntoTable(TABLE_NAME);
+                        insertQuery.Column("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
+                        insertQuery.Column("InvoiceTypeID").Value(invoiceTypeId);
+                        insertQuery.Column("InvoiceId").Value(invoiceId);
+                    }
+                }
+            }
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bulkActionDrft");
+
+            invoiceDataManager.AddJoinInvoiceToBulkActionDraft(selectQuery.Join(), "bulkActionDrft", "inv");
+
+            var selectAggregates = selectQuery.SelectAggregates();
+            selectAggregates.Count("TotalCount");
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MIN, "inv", "FromDate", "MinimumFrom");
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MAX, "inv", "ToDate", "MaximumTo");
+
+            return queryContext.GetItem(InvoiceBulkActionsDraftSummary);
         }
 
         public void ClearInvoiceBulkActionDrafts(Guid invoiceBulkActionIdentifier)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
+
+            queryContext.ExecuteNonQuery();
         }
 
         #endregion

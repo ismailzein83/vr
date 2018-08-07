@@ -38,14 +38,17 @@ namespace Vanrise.Data.RDB
         RDBGroupBy _groupBy;
 
         List<RDBSelectSortColumn> _sortColumns;
-        
-        public void From(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords)
+
+        bool _withNoLock;
+
+        public void From(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords, bool withNoLock = false)
         {
             this._table = table; 
             _queryBuilderContext.SetMainQueryTable(table);
             this._tableAlias = tableAlias;
             _queryBuilderContext.AddTableAlias(table, tableAlias);
             this._nbOfRecords = nbOfRecords;
+            this._withNoLock = withNoLock;
         }
 
         public void From(IRDBTableQuerySource table, string tableAlias)
@@ -53,9 +56,9 @@ namespace Vanrise.Data.RDB
             From(table, tableAlias, null);
         }
 
-        public void From(string tableName, string tableAlias, long? nbOfRecords)
+        public void From(string tableName, string tableAlias, long? nbOfRecords, bool withNoLock = false)
         {
-            From(new RDBTableDefinitionQuerySource(tableName), tableAlias, nbOfRecords);
+            From(new RDBTableDefinitionQuerySource(tableName), tableAlias, nbOfRecords, withNoLock);
         }
         public void From(string tableName, string tableAlias)
         {

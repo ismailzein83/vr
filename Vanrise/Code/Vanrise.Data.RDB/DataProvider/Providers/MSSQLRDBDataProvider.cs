@@ -254,8 +254,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 if (colIndex > 0)
                     columnQueryBuilder.Append(", ");
                 colIndex++;
-                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
-                columnQueryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
+                if (colVal.ColumnName != null)
+                {
+                    var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
+                    columnQueryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
+                }
+                else
+                {
+                    if (colVal.ExpressionToSet != null)
+                        throw new NullReferenceException("colVal.ColumnName & colVal.ExpressionToSet");
+                    columnQueryBuilder.Append(colVal.ExpressionToSet.ToDBQuery(rdbExpressionToDBQueryContext));
+                }
                 columnQueryBuilder.Append(" = ");
                 columnQueryBuilder.Append(colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext));
             }

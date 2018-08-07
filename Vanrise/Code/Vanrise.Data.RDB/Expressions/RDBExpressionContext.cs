@@ -137,6 +137,11 @@ namespace Vanrise.Data.RDB
             _setExpression(expression);
             _isExpressionSet = true;
         }
+
+        public RDBCaseExpressionContext CaseExpression()
+        {
+            return new RDBCaseExpressionContext(_queryBuilderContext, _tableAlias, (exp) => Expression(exp));
+        }
     }
 
     public class RDBArithmeticExpressionContext : RDBTwoExpressionsContext
@@ -144,6 +149,67 @@ namespace Vanrise.Data.RDB
         public RDBArithmeticExpressionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression, BaseRDBExpression> setExpressions)
             : base(queryBuilderContext, tableAlias, setExpressions)
         {
+        }
+
+        public RDBExpressionContext Expression1()
+        {
+            return base.Exp1();
+        }
+
+        public RDBExpressionContext Expression2()
+        {
+            return base.Exp2();
+        }
+    }
+
+    public class RDBCaseExpressionContext
+    {
+        RDBQueryBuilderContext _queryBuilderContext;
+        string _tableAlias;
+        RDBCaseExpression _caseExpression;
+
+        internal RDBCaseExpressionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression> setExpression)
+        {
+            _queryBuilderContext = queryBuilderContext;
+            _tableAlias = tableAlias;
+            _caseExpression = new RDBCaseExpression { Whens = new List<RDBCaseWhenExpression>() };
+            setExpression(_caseExpression);
+        } 
+
+        public RDBCaseExpressionWhenContext AddCase()
+        {
+            return new RDBCaseExpressionWhenContext(_queryBuilderContext, _tableAlias, _caseExpression.Whens);
+        }
+
+        public RDBExpressionContext Else()
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => _caseExpression.DefaultValueExpression = exp, _tableAlias);
+        }
+    }
+
+    public class RDBCaseExpressionWhenContext
+    {
+        RDBQueryBuilderContext _queryBuilderContext;
+        string _tableAlias;
+        RDBCaseWhenExpression _when;
+        internal RDBCaseExpressionWhenContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, List<RDBCaseWhenExpression> whens)
+        {
+            _queryBuilderContext = queryBuilderContext;
+            _tableAlias = tableAlias;
+            _when = new RDBCaseWhenExpression();
+            whens.Add(_when);
+        } 
+
+
+        public RDBConditionContext When(RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
+        {
+            _when.ConditionGroup = new RDBConditionGroup(groupOperator);
+            return new RDBConditionContext(_queryBuilderContext, _when.ConditionGroup, _tableAlias);
+        }
+
+        public RDBExpressionContext Then()
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => _when.ValueExpression = exp, _tableAlias);
         }
     }
 }
