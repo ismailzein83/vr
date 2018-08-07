@@ -95,6 +95,11 @@
     <Compile Include="ANumber\ANumberSupplierCodeDefinitionView.cs" />
     <Compile Include="ANumber\ANumberSaleCodeDefinitionView.cs" />
     <Compile Include="CodeCriteriaGroups\SelectiveCodeCriteriaGroup.cs" />
+    <Compile Include="CodeList\ExcludedCodes.cs" />
+    <Compile Include="CodeList\ExcludedRanges.cs" />
+    <Compile Include="CodeList\SpecificCodeResolver.cs" />
+    <Compile Include="CodeList\SpecificCountryCodeListResolver.cs" />
+    <Compile Include="CodeList\SpecificSaleZoneCodeListResolver.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
     <Compile Include="DataRecordFieldFormulas\GatewayEvaluatorFieldFormula.cs" />
     <Compile Include="DBReplication\SwitchDBReplicationPreInsert.cs" />

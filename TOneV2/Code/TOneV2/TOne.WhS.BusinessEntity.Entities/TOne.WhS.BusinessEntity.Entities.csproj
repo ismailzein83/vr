@@ -75,6 +75,7 @@
     <Compile Include="ANumber\ANumberGroup.cs" />
     <Compile Include="ANumber\ANumberSaleCode.cs" />
     <Compile Include="ANumber\ANumberSupplierCode.cs" />
+    <Compile Include="CodeList\CodeListResolver.cs" />
     <Compile Include="RecurringCharges\CustomerBillingRecurringCharge.cs" />
     <Compile Include="RecurringCharges\SupplierBillingRecurringCharge.cs" />
     <Compile Include="Settings\AutoImportSPLSettings.cs" />
