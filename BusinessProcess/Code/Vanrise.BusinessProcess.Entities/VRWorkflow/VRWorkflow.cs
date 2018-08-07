@@ -30,6 +30,8 @@ namespace Vanrise.BusinessProcess.Entities
         public VRWorkflowArgumentCollection Arguments { get; set; }
 
         public VRWorkflowActivity RootActivity { get; set; }
+
+        public VRWorkflowClassCollection Classes { get; set; }
     }
 
     public class VRWorkflowToAdd : BaseVRWorkflow
