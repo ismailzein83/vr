@@ -2664,40 +2664,6 @@
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Textbox27">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Head Of International Accounting Department</Value>
-                    <Style>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox13</rd:DefaultName>
-            <Top>19.38341cm</Top>
-            <Left>11.30572cm</Left>
-            <Height>0.6cm</Height>
-            <Width>8.65688cm</Width>
-            <ZIndex>23</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Image Name="Image2">
             <Source>Database</Source>
             <Value>=Parameters!Image.Value</Value>
@@ -2707,7 +2673,7 @@
             <Left>0.1425in</Left>
             <Height>1.5994in</Height>
             <Width>3.24421in</Width>
-            <ZIndex>24</ZIndex>
+            <ZIndex>23</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2962,7 +2928,7 @@
             <Left>12.37208cm</Left>
             <Height>4.06248cm</Height>
             <Width>7.81103cm</Width>
-            <ZIndex>25</ZIndex>
+            <ZIndex>24</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2998,7 +2964,7 @@
             <Left>4.4972cm</Left>
             <Height>0.6cm</Height>
             <Width>4.45371cm</Width>
-            <ZIndex>26</ZIndex>
+            <ZIndex>25</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
             </Visibility>
@@ -3122,7 +3088,7 @@
             <Left>13.73693cm</Left>
             <Height>0.6cm</Height>
             <Width>6.20837cm</Width>
-            <ZIndex>27</ZIndex>
+            <ZIndex>26</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
             </Visibility>
