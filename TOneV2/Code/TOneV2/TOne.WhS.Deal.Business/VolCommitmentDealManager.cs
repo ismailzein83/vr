@@ -123,7 +123,7 @@ namespace TOne.WhS.Deal.Business
             detail.CarrierAccountName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
             detail.TypeDescription = Utilities.GetEnumAttribute<VolCommitmentDealType, DescriptionAttribute>(settings.DealType).Description;
             detail.StatusDescription = Utilities.GetEnumAttribute<DealStatus, DescriptionAttribute>(settings.Status).Description;
-            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
+            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EEDToStore >= DateTime.Now.Date;
             detail.CurrencySymbole = new CurrencyManager().GetCurrencySymbol(settings.CurrencyId);
 
             return detail;
@@ -183,7 +183,7 @@ namespace TOne.WhS.Deal.Business
                                 row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(settings.DealType) });
                                 row.Cells.Add(new ExportExcelCell { Value = record.CarrierAccountName });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.BeginDate });
-                                row.Cells.Add(new ExportExcelCell { Value = settings.EndDate });
+                                row.Cells.Add(new ExportExcelCell { Value = settings.EEDToStore });
                                 row.Cells.Add(new ExportExcelCell { Value = record.IsEffective });
                             }
                         }

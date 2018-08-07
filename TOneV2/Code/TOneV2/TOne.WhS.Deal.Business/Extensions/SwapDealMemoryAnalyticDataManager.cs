@@ -36,7 +36,7 @@ namespace TOne.WhS.Deal.Business
                 {                    
                     if(!deal.Settings.EndDate.HasValue)
                         throw new NullReferenceException(String.Format("deal.Settings.EndDate '{0}'", deal.DealId));
-                    int nbOfDealDays = (int)(deal.Settings.EndDate.Value - deal.Settings.BeginDate).TotalDays;
+                    int nbOfDealDays = (int)(deal.Settings.EEDToStore.Value - deal.Settings.BeginDate).TotalDays;
                     List<DateTime> dealDays = new List<DateTime>();
 
                     DateTime queryToDate = query.ToTime.HasValue ? query.ToTime.Value.Date.AddDays(1) : DateTime.Today.AddDays(1);

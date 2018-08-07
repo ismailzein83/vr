@@ -416,7 +416,7 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
-            DateTime endDealDate = deal.Settings.EndDate.Value;
+            DateTime endDealDate = deal.Settings.EEDToStore.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
 
             var dealLifeSpan = endDealDate.Subtract(beginDealDate);
@@ -429,16 +429,16 @@ namespace TOne.WhS.Deal.Business
                 {
                     case RecurringType.Daily:
                         recurredDeal.Settings.BeginDate = endDealDate.AddDays(1);
-                        recurredDeal.Settings.EndDate = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
-                        endDealDate = recurredDeal.Settings.EndDate.Value;
+                        recurredDeal.Settings.EEDToStore = recurredDeal.Settings.BeginDate.Add(dealLifeSpan);
+                        endDealDate = recurredDeal.Settings.EEDToStore.Value;
                         break;
 
                     case RecurringType.Monthly:
                         recurredDeal.Settings.BeginDate = deal.Settings.BeginDate.AddMonths((monthsDifference + 1) * (i + 1));
-                        recurredDeal.Settings.EndDate = deal.Settings.EndDate.Value.AddMonths((monthsDifference + 1) * (i + 1));
+                        recurredDeal.Settings.EEDToStore = deal.Settings.EEDToStore.Value.AddMonths((monthsDifference + 1) * (i + 1));
                         break;
                 }
-                recurredDeal.Name = string.Format("{0}-({1}-{2})", deal.Name, recurredDeal.Settings.BeginDate.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)), recurredDeal.Settings.EndDate.Value.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
+                recurredDeal.Name = string.Format("{0}-({1}-{2})", deal.Name, recurredDeal.Settings.BeginDate.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)), recurredDeal.Settings.EEDToStore.Value.ToString(Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
                 recurredDeal.Settings.IsRecurrable = false;
                 recurredDeals.Add(recurredDeal);
             }
@@ -455,7 +455,7 @@ namespace TOne.WhS.Deal.Business
                     DealSaleZoneIds = recurredDeal.Settings.GetDealSaleZoneIds(),
                     DealSupplierZoneIds =recurredDeal.Settings.GetDealSupplierZoneIds(),
                     BED = recurredDeal.Settings.BeginDate,
-                    EED = recurredDeal.Settings.EndDate,
+                    EED = recurredDeal.Settings.EEDToStore,
                     DealId = recurredDeal.DealId,
                     CustomerId = recurredDeal.Settings.GetCarrierAccountId(),
                 };

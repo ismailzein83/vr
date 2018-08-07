@@ -12,9 +12,7 @@
     <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbole'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective'" field="'IsEffective'"><span ng-show="{{dataItem.IsEffective}}"><vr-icon icontype="dataItem.IsEffective"></vr-icon></span> </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.Settings.BeginDate'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'Entity.Settings.EndDate'" type="'Date'"></vr-datagridcolumn>
-   
- 
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.Settings.EEDToStore'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

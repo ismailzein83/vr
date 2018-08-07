@@ -50,7 +50,7 @@ namespace TOne.WhS.Deal.Business
 
                 int dealId = dealDefinition.DealId;
                 DateTime dealBED = swapDealSetting.BeginDate;
-                DateTime? dealEED = swapDealSetting.EndDate;
+                DateTime? dealEED = swapDealSetting.EEDToStore;
                 int carrierAccountId = swapDealSetting.CarrierAccountId;
 
                 int? dealDays = null;

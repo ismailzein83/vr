@@ -40,7 +40,7 @@ namespace TOne.WhS.Deal.Business
                 SaleZoneIds = saleZoneIds,
                 SupplierZoneIds = supplierZoneIds,
                 BED = swapDealSettings.BeginDate,
-                EED = swapDealSettings.EndDate
+                EED = swapDealSettings.EEDToStore
             };
         }
 
@@ -199,7 +199,7 @@ namespace TOne.WhS.Deal.Business
             detail.TypeDescription = Utilities.GetEnumAttribute<DealType, DescriptionAttribute>(settings.DealType).Description;
             detail.StatusDescription = Utilities.GetEnumAttribute<DealStatus, DescriptionAttribute>(settings.Status).Description;
             detail.ContractDescription = Utilities.GetEnumAttribute<DealContract, DescriptionAttribute>(settings.DealContract).Description;
-            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EndDate >= DateTime.Now.Date;
+            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EEDToStore >= DateTime.Now.Date;
             detail.BuyingAmount = settings.Outbounds.Sum(x => x.Volume * x.Rate);
             detail.BuyingVolume = settings.Outbounds.Sum(x => x.Volume);
             detail.SellingAmount = settings.Inbounds.Sum(x => x.Volume * x.Rate);
@@ -286,7 +286,7 @@ namespace TOne.WhS.Deal.Business
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
                                 row.Cells.Add(new ExportExcelCell { Value = record.CarrierAccountName });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.BeginDate });
-                                row.Cells.Add(new ExportExcelCell { Value = settings.EndDate });
+                                row.Cells.Add(new ExportExcelCell { Value = settings.EEDToStore });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.GracePeriod });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.Inbounds.Sum(x => x.Volume * x.Rate) });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.Inbounds.Sum(x => x.Volume) });

@@ -291,7 +291,7 @@
             $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
             $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, dealEntity.Settings.Status, 'value');
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
-            $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
+            $scope.scopeModel.endDate = dealEntity.Settings.EEDToStore;
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
@@ -431,7 +431,7 @@
                     $type: "TOne.WhS.Deal.Business.SwapDealSettings, TOne.WhS.Deal.Business",
                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
-                    EndDate: $scope.scopeModel.endDate,
+                    EEDToStore: $scope.scopeModel.endDate,
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     DealContract: $scope.scopeModel.selectedContractType.value,
                     DealType: $scope.scopeModel.selectedAgreementType.value,

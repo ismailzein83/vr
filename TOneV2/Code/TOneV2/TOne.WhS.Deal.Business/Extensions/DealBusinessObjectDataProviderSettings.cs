@@ -50,9 +50,9 @@ namespace TOne.WhS.Deal.Business
                     : 0;
 
                 int daysToEnd = 0, daysToGrace = 0;
-                if (swapDealSetting.EndDate.HasValue)
+                if (swapDealSetting.EEDToStore.HasValue)
                 {
-                    DateTime endDate = swapDealSetting.EndDate.Value;
+                    DateTime endDate = swapDealSetting.EEDToStore.Value;
                     daysToEnd = (endDate - DateTime.Now).Days;
                     DateTime graceDate = endDate.AddDays(swapDealSetting.GracePeriod);
                     daysToGrace = (graceDate - DateTime.Today).Days;
@@ -65,7 +65,7 @@ namespace TOne.WhS.Deal.Business
                         CarrierAccountId = swapDealSetting.CarrierAccountId,
                         DealId = dealDefinition.DealId,
                         DealBED = swapDealSetting.BeginDate,
-                        DealEED = swapDealSetting.EndDate,
+                        DealEED = swapDealSetting.EEDToStore,
                         GroupVolumeInMinutes = inbound.Volume,
                         DaysTostart = daysToStart,
                         RemainingDaysToEnd = daysToEnd,
@@ -83,7 +83,7 @@ namespace TOne.WhS.Deal.Business
                         CarrierAccountId = swapDealSetting.CarrierAccountId,
                         DealId = dealDefinition.DealId,
                         DealBED = swapDealSetting.BeginDate,
-                        DealEED = swapDealSetting.EndDate,
+                        DealEED = swapDealSetting.EEDToStore,
                         GroupVolumeInMinutes = outbound.Volume,
                         DaysTostart = daysToStart,
                         RemainingDaysToEnd = daysToEnd,
