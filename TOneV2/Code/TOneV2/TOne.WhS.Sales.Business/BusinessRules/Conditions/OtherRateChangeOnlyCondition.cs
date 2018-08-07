@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
@@ -24,9 +25,14 @@ namespace TOne.WhS.Sales.Business
                 List<string> zoneWithOtherRateChangeOnly = new List<string>();
                 foreach (var zoneData in allZoneData.DataByZoneList)
                 {
-                    if(zoneData.OtherRatesToChange.Count > 0 && zoneData.NormalRateToChange == null )
+                    var rateTypeIds = Helper.GetRateTypeIds(ratePlanContext.OwnerId,zoneData.ZoneId, DateTime.Now);
+                    foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                     {
-                        zoneWithOtherRateChangeOnly.Add(zoneData.ZoneName);
+                        if (rateTypeIds.Contains(otherRateToChange.RateTypeId.Value) && zoneData.OtherRatesToChange.Count > 0 && zoneData.NormalRateToChange == null )
+                        {
+                            zoneWithOtherRateChangeOnly.Add(zoneData.ZoneName);
+                            break;
+                        }
                     }
                 }
                 if (zoneWithOtherRateChangeOnly.Count() > 0)

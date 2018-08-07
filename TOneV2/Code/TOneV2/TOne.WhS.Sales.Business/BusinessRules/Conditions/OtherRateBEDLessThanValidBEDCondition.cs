@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
@@ -33,11 +34,14 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
             {
-                if (otherRateToChange.BED == default(DateTime))
-                    throw new Vanrise.Entities.DataIntegrityValidationException("otherRateToChange.BED");
-
-                if (otherRateToChange.BED < newOtherRateMinBED)
-                    invalidRateTypeNames.Add(rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value));
+                var rateTypeIds = Helper.GetRateTypeIds(ratePlanContext.OwnerId, zoneData.ZoneId, DateTime.Now);
+                if (rateTypeIds.Contains(otherRateToChange.RateTypeId.Value))
+                {
+                    if (otherRateToChange.BED == default(DateTime))
+                        throw new Vanrise.Entities.DataIntegrityValidationException("otherRateToChange.BED");
+                    if (otherRateToChange.BED < newOtherRateMinBED)
+                        invalidRateTypeNames.Add(rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value));
+                }
             }
 
             if (invalidRateTypeNames.Count > 0)

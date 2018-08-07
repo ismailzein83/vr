@@ -25,13 +25,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             var zoneData = context.Target as DataByZone;
 
-            if (zoneData.NormalRateToClose != null || (zoneData.OtherRatesToClose != null && zoneData.OtherRatesToClose.Count > 0))
+            if (zoneData.NormalRateToClose != null)
             {
                 context.Message = string.Format("Can not close rates of a selling product. Violated zone(s): {0}", zoneData.ZoneName);
                 return false;
             }
 
-            if ((zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue) || (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Any(x => x.EED.HasValue)))
+            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue)
             {
                 string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(zoneData.CountryId);
                 context.Message = string.Format("Can not define a new rate with EED for country '{0}'. Violated zone(s): {1}", countryName, zoneData.ZoneName);

@@ -37,7 +37,7 @@ namespace TOne.WhS.Sales.Business
                 if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value || invalidCountryNames.Contains(countryName))
                     continue;
 
-                if (BusinessRuleUtilities.IsAnyZoneRateGreaterThanMaxRate(zoneData, ratePlanContext))
+                if (BusinessRuleUtilities.IsAnyZoneRateGreaterThanMaxRate(ratePlanContext.OwnerId, ratePlanContext.OwnerType, zoneData, ratePlanContext))
                     invalidCountryNames.Add(countryName);
             }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common.Business;
@@ -41,7 +42,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     {
                         foreach (RateToChange otherRate in zoneData.OtherRatesToChange)
                         {
-                            if (otherRate.BED < DateTime.Today)
+                            var rateTypeIds = Helper.GetRateTypeIds(ratePlanContext.OwnerId, zoneData.ZoneId, DateTime.Now);
+                            if (rateTypeIds.Contains(otherRate.RateTypeId.Value) && otherRate.BED < DateTime.Today)
                             {
                                 invalidCountryNames.Add(countryName);
                                 break;

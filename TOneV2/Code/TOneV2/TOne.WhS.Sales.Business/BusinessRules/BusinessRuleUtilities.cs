@@ -48,18 +48,19 @@ namespace TOne.WhS.Sales.Business
 
             return actionMessages;
         }
-        public static bool IsAnyZoneRateGreaterThanMaxRate(DataByZone zoneData, IRatePlanContext ratePlanContext)
+        public static bool IsAnyZoneRateGreaterThanMaxRate(int ownerId, SalePriceListOwnerType ownerType, DataByZone zoneData, IRatePlanContext ratePlanContext)
         {
             if (zoneData.NormalRateToChange != null)
             {
                 if (IsRateGreaterThanMaxRate(zoneData.NormalRateToChange, ratePlanContext))
                     return true;
             }
-            if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
+            if (ownerType == SalePriceListOwnerType.Customer && zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
             {
+                var rateTypeIds = Helper.GetRateTypeIds(ownerId, zoneData.ZoneId,DateTime.Now);
                 foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                 {
-                    if (IsRateGreaterThanMaxRate(otherRateToChange, ratePlanContext))
+                    if (rateTypeIds.Contains(otherRateToChange.RateTypeId.Value) && IsRateGreaterThanMaxRate(otherRateToChange, ratePlanContext))
                         return true;
                 }
             }

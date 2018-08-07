@@ -37,13 +37,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 if ((zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value) || invalidCountryNames.Contains(countryName))
                     continue;
 
-                if (BusinessRuleUtilities.IsAnyZoneRateGreaterThanMaxRate(zoneData, ratePlanContext))
+                if (BusinessRuleUtilities.IsAnyZoneRateGreaterThanMaxRate(ratePlanContext.OwnerId, ratePlanContext.OwnerType, zoneData, ratePlanContext))
                 {
-                     rateToChangeCurrencyId = ratePlanContext.GetRateToChangeCurrencyId(zoneData.NormalRateToChange);
-                     convertedMaximumRate = ratePlanContext.GetMaximumRateConverted(rateToChangeCurrencyId);
+                    rateToChangeCurrencyId = ratePlanContext.GetRateToChangeCurrencyId(zoneData.NormalRateToChange);
+                    convertedMaximumRate = ratePlanContext.GetMaximumRateConverted(rateToChangeCurrencyId);
                     invalidCountryNames.Add(countryName);
                 }
-                   
+
             }
 
             if (invalidCountryNames.Count > 0)
