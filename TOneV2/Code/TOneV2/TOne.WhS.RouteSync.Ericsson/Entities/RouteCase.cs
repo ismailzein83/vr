@@ -12,8 +12,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
     public class RouteCaseOption
     {
         public int? Percentage { get; set; }
-        public int Priority { get; set; }
-        public string OutTrunk { get; set; }
+		public bool IsSwitch { get; set; }
+		public string OutTrunk { get; set; }
         public TrunkType Type { get; set; }
         public int BNT { get; set; }
         public short SP { get; set; }

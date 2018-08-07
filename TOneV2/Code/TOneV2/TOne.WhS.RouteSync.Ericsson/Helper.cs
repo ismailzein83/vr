@@ -37,7 +37,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			string percentage = routeCaseOption.Percentage.HasValue ? routeCaseOption.Percentage.Value.ToString() : string.Empty;
 			string trunkPercentage = routeCaseOption.TrunkPercentage.HasValue ? routeCaseOption.TrunkPercentage.Value.ToString() : string.Empty;
 
-			return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}", OptionFieldsSeparator, percentage, routeCaseOption.Priority, routeCaseOption.OutTrunk, (int)routeCaseOption.Type,
+			return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}", OptionFieldsSeparator, percentage, routeCaseOption.IsSwitch ? 1 : 0, routeCaseOption.OutTrunk, (int)routeCaseOption.Type,
 				routeCaseOption.BNT, routeCaseOption.SP, trunkPercentage, routeCaseOption.IsBackup ? 1 : 0, routeCaseOption.GroupID);
 		}
 
@@ -76,9 +76,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (!string.IsNullOrEmpty(percentage))
 				routeCaseOption.Percentage = int.Parse(percentage);
 
-			string priority = routeCaseOptionAsString[1];
-			if (!string.IsNullOrEmpty(priority))
-				routeCaseOption.Priority = int.Parse(priority);
+			string isSwitch = routeCaseOptionAsString[1];
+			if (!string.IsNullOrEmpty(isSwitch))
+				routeCaseOption.IsSwitch = int.Parse(isSwitch) > 0;
 
 			routeCaseOption.OutTrunk = routeCaseOptionAsString[2];
 
@@ -116,7 +116,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 				BNT = 1,
 				SP = 1,
 				OutTrunk = "BLK",
-				Priority = 1,
 				GroupID = 1,
 			};
 		}

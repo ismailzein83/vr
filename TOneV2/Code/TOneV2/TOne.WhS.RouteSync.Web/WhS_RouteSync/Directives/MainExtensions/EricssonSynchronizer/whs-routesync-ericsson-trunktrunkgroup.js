@@ -156,7 +156,6 @@
                         trunkTrunkGroups.push({
                             TrunkId: currentTrunkTrunkGroup.TrunkId,
                             Percentage: currentTrunkTrunkGroup.Percentage,
-                            Priority: currentTrunkTrunkGroup.Priority
                         });
                     }
                     return trunkTrunkGroups;

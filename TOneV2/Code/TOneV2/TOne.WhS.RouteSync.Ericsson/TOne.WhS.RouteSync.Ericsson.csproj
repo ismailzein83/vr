@@ -99,11 +99,13 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controller\EricssonSwitchLoggerController.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
+    <Compile Include="Data\IUncompressedRouteDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
     <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\IRouteCaseDataManager.cs" />
     <Compile Include="Data\IRouteDataManager.cs" />
+    <Compile Include="Entities\BranchRoute.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\EricssonSwitchRouteSynchronizerSettings.cs" />
     <Compile Include="Entities\EricssonCommands.cs" />

@@ -42,6 +42,38 @@
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.localSuppliers = [];
+				$scope.scopeModel.brList = [];
+
+				$scope.scopeModel.validateBranchRoutes = function () {
+					if ($scope.scopeModel.brList == undefined || $scope.scopeModel.brList.length < 1)
+						return "At least one branch route should be added."
+					return null;
+				}
+
+				$scope.scopeModel.isBRValid = function () {
+					var brIsValid = true;
+					if ($scope.scopeModel.brToAdd == undefined || $scope.scopeModel.brToAdd.length == 0) {
+						brIsValid = false;
+					}
+					else {
+						angular.forEach($scope.scopeModel.brList, function (item) {
+							if ($scope.scopeModel.brToAdd === item.Name) {
+								brIsValid = false;
+							}
+						});
+					}
+					return brIsValid;
+				};
+
+				$scope.scopeModel.addBR = function () {
+					var br = {
+						Name: $scope.scopeModel.brToAdd,
+						IncludeTrunkAsSwitch: false
+					};
+
+					$scope.scopeModel.brList.push(br);
+					$scope.scopeModel.brToAdd = undefined;
+				};
 
 				$scope.scopeModel.onEricssonSwitchCommunicationReady = function (api) {
 					switchCommunicationAPI = api;
@@ -117,11 +149,15 @@
 						if (ericssonSWSync != undefined) {
 							$scope.scopeModel.isEditMode = true;
 							$scope.scopeModel.firstRCNumber = ericssonSWSync.FirstRCNumber;
-							$scope.scopeModel.numberOfOptions = ericssonSWSync.NumberOfOptions;
+							$scope.scopeModel.numberOfMappings = ericssonSWSync.NumberOfMappings;
 							$scope.scopeModel.minCodeLength = ericssonSWSync.MinCodeLength;
 							$scope.scopeModel.maxCodeLength = ericssonSWSync.MaxCodeLength;
 							$scope.scopeModel.localCountryCode = ericssonSWSync.LocalCountryCode;
 							$scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
+							$scope.scopeModel.brList = (ericssonSWSync.BranchRoutes != undefined) ? ericssonSWSync.BranchRoutes : [];
+							$scope.scopeModel.esr = ericssonSWSync.ESR;
+							$scope.scopeModel.cc = ericssonSWSync.CC;
+							$scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
 
 							sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
 							switchLoggerList = ericssonSWSync.SwitchLoggerList;
@@ -269,7 +305,7 @@
 					var switchCommunicationData = switchCommunicationAPI.getData();
 					var data = {
 						$type: "TOne.WhS.RouteSync.Ericsson.EricssonSWSync, TOne.WhS.RouteSync.Ericsson",
-						NumberOfOptions: $scope.scopeModel.numberOfOptions,
+						NumberOfMappings: $scope.scopeModel.numberOfMappings,
 						MinCodeLength: $scope.scopeModel.minCodeLength,
 						MaxCodeLength: $scope.scopeModel.maxCodeLength,
 						LocalCountryCode: $scope.scopeModel.localCountryCode,
@@ -280,7 +316,11 @@
 						CarrierMappings: carrierAccountMappingGridAPI.getData(),
 						SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
 						SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
-						FirstRCNumber: $scope.scopeModel.firstRCNumber
+						FirstRCNumber: $scope.scopeModel.firstRCNumber,
+						BranchRoutes: $scope.scopeModel.brList,
+						ESR: $scope.scopeModel.esr,
+						CC: $scope.scopeModel.cc,
+						PercentagePrefix: $scope.scopeModel.percentagePrefix
 					};
 					return data;
 				};

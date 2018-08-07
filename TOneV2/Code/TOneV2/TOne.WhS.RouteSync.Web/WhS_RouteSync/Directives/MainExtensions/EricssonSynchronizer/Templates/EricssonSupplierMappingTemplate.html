@@ -1,86 +1,94 @@
 ﻿<vr-form name="validationContext">
-    <vr-section title="Trunks">
-        <vr-validator validate="scopeModel.isTrunksValid()">
-            <vr-row removeline>
-                <vr-columns width="fullrow" simplecol>
-                    <vr-button type="Add" data-onclick="scopeModel.onTrunkAdded" standalone></vr-button>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-datagrid on-ready="scopeModel.onTrunkGridReady"
-                                 datasource="scopeModel.trunks"
-                                 onbeforedeleterowclicked="scopeModel.onBeforeTrunkDeleted"
-                                 ondeleterow="scopeModel.onTrunkDeleted"
-                                 pagingtype="'PagingOnScroll'" hidegridmenu>
+	<vr-section title="Trunks">
+		<vr-validator validate="scopeModel.isTrunksValid()">
+			<vr-row removeline>
+				<vr-columns width="fullrow" simplecol>
+					<vr-button type="Add" data-onclick="scopeModel.onTrunkAdded" standalone></vr-button>
+				</vr-columns>
+			</vr-row>
+			<vr-row>
+				<vr-columns width="fullrow">
+					<vr-datagrid on-ready="scopeModel.onTrunkGridReady"
+								 datasource="scopeModel.trunks"
+								 onbeforedeleterowclicked="scopeModel.onBeforeTrunkDeleted"
+								 ondeleterow="scopeModel.onTrunkDeleted"
+								 pagingtype="'PagingOnScroll'" hidegridmenu>
 
-                        <vr-datagridcolumn headertext="'Trunk Name'" widthfactor="3" disablesorting>
-                            <vr-textbox value="dataItem.TrunkName" type="text"
-                                        onvaluechanged="viewScope.scopeModel.onTrunkNameValueChanged"
-                                        onblurtextbox="viewScope.scopeModel.onTrunkNameValueBlur"
-                                        isrequired="true" tonextinput>
-                            </vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Trunk Type'" widthfactor="2" disablesorting>
-                            <vr-select on-ready="dataItem.onTrunkTypeSelectorReady"
-                                       datasource="viewScope.scopeModel.trunkTypes"
-                                       selectedvalues="dataItem.selectedTrunkType"
-                                       datavaluefield="value"
-                                       datatextfield="description"
-                                       isrequired="true">
-                            </vr-select>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'National Country Code'" widthfactor="2" disablesorting>
-                            <vr-textbox value="dataItem.NationalCountryCode" type="text" tonextinput></vr-textbox>
-                        </vr-datagridcolumn>
-                        <!--<vr-datagridcolumn headertext="'Routing'" widthfactor="1" disablesorting>
-                            <vr-switch value="dataItem.IsRouting"></vr-switch>
-                        </vr-datagridcolumn>-->
-                    </vr-datagrid>
-                </vr-columns>
-            </vr-row>
-        </vr-validator>
-    </vr-section>
-    <vr-section title="Trunk Groups">
-        <vr-validator validate="scopeModel.isTrunkGroupsValid()">
-            <vr-row removeline>
-                <vr-columns width="fullrow" simplecol>
-                    <vr-button type="Add" data-onclick="scopeModel.onTrunkGroupAdded" standalone></vr-button>
-                </vr-columns>
-            </vr-row>
-            <vr-row vr-loader="scopeModel.isTrunkGroupGridLoading">
-                <vr-columns width="fullrow">
-                    <vr-datagrid on-ready="scopeModel.onTrunkGroupGridReady"
-                                 datasource="scopeModel.trunkGroups"
-                                 ondeleterow="scopeModel.onTrunkGroupDeleted"
-                                 pagingtype="'PagingOnScroll'" hidegridmenu>
+						<vr-datagridcolumn headertext="'Trunk Name'" widthfactor="3" disablesorting>
+							<vr-textbox value="dataItem.TrunkName" type="text"
+										onvaluechanged="viewScope.scopeModel.onTrunkNameValueChanged"
+										onblurtextbox="viewScope.scopeModel.onTrunkNameValueBlur"
+										isrequired="true" tonextinput>
+							</vr-textbox>
+						</vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Trunk Type'" widthfactor="2" disablesorting>
+							<vr-select on-ready="dataItem.onTrunkTypeSelectorReady"
+									   datasource="viewScope.scopeModel.trunkTypes"
+									   selectedvalues="dataItem.selectedTrunkType"
+									   datavaluefield="value"
+									   datatextfield="description"
+									   isrequired="true">
+							</vr-select>
+						</vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'National Country Code'" widthfactor="2" disablesorting>
+							<vr-textbox value="dataItem.NationalCountryCode" type="text" tonextinput></vr-textbox>
+						</vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Is Switch'" widthfactor="2" disablesorting>
+							<vr-switch value="dataItem.IsSwitch"></vr-switch>
+						</vr-datagridcolumn>
+						<!--<vr-datagridcolumn headertext="'Routing'" widthfactor="1" disablesorting>
+							<vr-switch value="dataItem.IsRouting"></vr-switch>
+						</vr-datagridcolumn>-->
+					</vr-datagrid>
+				</vr-columns>
+			</vr-row>
+		</vr-validator>
+	</vr-section>
+	<vr-section title="Trunk Groups">
+		<vr-validator validate="scopeModel.isTrunkGroupsValid()">
+			<vr-row removeline>
+				<vr-columns colnum="6" simplecol>
+					<vr-button type="Add" data-onclick="scopeModel.onTrunkGroupAdded" standalone></vr-button>
+				</vr-columns>
+				<vr-columns colnum="6">
+					<div align="right">
+						<vr-label>Trunks should be sorted from highest to lowest priority for each trunk group.</vr-label>
+					</div>
+				</vr-columns>
+			</vr-row>
+			<vr-row vr-loader="scopeModel.isTrunkGroupGridLoading">
+				<vr-columns width="fullrow">
+					<vr-datagrid on-ready="scopeModel.onTrunkGroupGridReady"
+								 datasource="scopeModel.trunkGroups"
+								 ondeleterow="scopeModel.onTrunkGroupDeleted"
+								 pagingtype="'PagingOnScroll'" hidegridmenu>
 
-                        <vr-datagridcolumn headertext="'Customers'" widthfactor="2" disablesorting>
-                            <vr-whs-be-customer-selector on-ready="dataItem.onCustomerSelectorReady"
-                                                         onselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                         ondeselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                         ondeselectallitems="viewScope.scopeModel.updateSupplierDescriptions"
-                                                         normal-col-num="12" usefullcolumn hidelabel ismultipleselection>
-                            </vr-whs-be-customer-selector>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Code Groups'" widthfactor="2" disablesorting>
-                            <vr-whs-be-codegroup-selector on-ready="dataItem.onCodeGroupSelectorReady"
-                                                          onselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                          ondeselectitem="viewScope.scopeModel.updateSupplierDescriptions"
-                                                          ondeselectallitems="viewScope.scopeModel.updateSupplierDescriptions"
-                                                          hidelabel ismultipleselection>
-                            </vr-whs-be-codegroup-selector>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Backup'" widthfactor="1" disablesorting>
-                            <vr-switch value="dataItem.IsBackup"></vr-switch>
-                        </vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Customers'" widthfactor="2" disablesorting>
+							<vr-whs-be-customer-selector on-ready="dataItem.onCustomerSelectorReady"
+														 onselectitem="viewScope.scopeModel.updateSupplierDescriptions"
+														 ondeselectitem="viewScope.scopeModel.updateSupplierDescriptions"
+														 ondeselectallitems="viewScope.scopeModel.updateSupplierDescriptions"
+														 normal-col-num="12" usefullcolumn hidelabel ismultipleselection>
+							</vr-whs-be-customer-selector>
+						</vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Code Groups'" widthfactor="2" disablesorting>
+							<vr-whs-be-codegroup-selector on-ready="dataItem.onCodeGroupSelectorReady"
+														  onselectitem="viewScope.scopeModel.updateSupplierDescriptions"
+														  ondeselectitem="viewScope.scopeModel.updateSupplierDescriptions"
+														  ondeselectallitems="viewScope.scopeModel.updateSupplierDescriptions"
+														  hidelabel ismultipleselection>
+							</vr-whs-be-codegroup-selector>
+						</vr-datagridcolumn>
+						<vr-datagridcolumn headertext="'Backup'" widthfactor="1" disablesorting>
+							<vr-switch value="dataItem.IsBackup"></vr-switch>
+						</vr-datagridcolumn>
 
-                        <vr-datagridexpandablerow>
-                            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-                        </vr-datagridexpandablerow>
-                    </vr-datagrid>
-                </vr-columns>
-            </vr-row>
-        </vr-validator>
-    </vr-section>
+						<vr-datagridexpandablerow>
+							<vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+						</vr-datagridexpandablerow>
+					</vr-datagrid>
+				</vr-columns>
+			</vr-row>
+		</vr-validator>
+	</vr-section>
 </vr-form>
