@@ -278,7 +278,7 @@ namespace Vanrise.GenericData.Business
             };
             string sortByColumnName = input.SortByColumnName;
 
-            var storageRecords = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
+            var storageRecordsResult = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
             {
                 FromRow = input.FromRow,
                 ToRow = input.ToRow,
@@ -308,7 +308,19 @@ namespace Vanrise.GenericData.Business
                     //SortColumns=,
                     //ToTime
                 },
-            }) as BigResult<DataRecordDetail>;
+            });
+
+
+            if (input.DataRetrievalResultType == DataRetrievalResultType.Excel)
+            {
+                var storageRecords1 = storageRecordsResult as ExcelResult<DataRecordDetail>;
+                return new ExcelResult<GenericBusinessEntityDetail>
+                {
+                    ExcelFileContent = storageRecords1.ExcelFileContent,
+                    ExcelFileStream = storageRecords1.ExcelFileStream
+                };
+            }
+            var storageRecords = storageRecordsResult as BigResult<DataRecordDetail>;
 
             BigResult<GenericBusinessEntityDetail> result = new BigResult<GenericBusinessEntityDetail>();
             if (storageRecords != null)
