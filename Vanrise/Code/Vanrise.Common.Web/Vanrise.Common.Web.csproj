@@ -246,6 +246,8 @@
     <Content Include="Common\Directives\DBReplication\DBReplicationSettings\vr-common-dbreplication-settings.js" />
     <Content Include="Common\Directives\ExcelFileUploader\Templates\ExcelFileUploader.html" />
     <Content Include="Common\Directives\ExcelFileUploader\vr-common-excelfileuploader.js" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionEditorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-httpconnection-editor.js" />
     <Content Include="Common\Directives\MainExtensions\RuntimeService\Templates\DataGroupingDistributorRuntimeServiceTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\RuntimeService\vr-common-runtimeservice-datagroupingdistributor.js" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditGridTemplate.html" />
