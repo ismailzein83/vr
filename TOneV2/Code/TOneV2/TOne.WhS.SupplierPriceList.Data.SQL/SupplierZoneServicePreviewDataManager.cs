@@ -40,7 +40,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         public IEnumerable<ZoneServicePreview> GetFilteredZonesServicesPreview(SPLPreviewQuery query)
         {
-            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierZonesServices_Preview_GetFiltered]", ZoneServicePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.OnlyModified);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierZonesServices_Preview_GetFiltered]", ZoneServicePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.OnlyModified,query.IsExcluded);
         }
 
 

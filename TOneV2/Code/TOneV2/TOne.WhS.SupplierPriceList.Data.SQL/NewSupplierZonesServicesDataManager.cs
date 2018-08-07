@@ -11,7 +11,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
     public class NewSupplierZonesServicesDataManager : BaseSQLDataManager, INewSupplierZonesServicesDataManager
     {
-        readonly string[] _columns = { "ID", "SupplierID", "ProcessInstanceID", "ZoneID", "ZoneServices", "BED", "EED" };
+        readonly string[] _columns = { "ID", "SupplierID", "ProcessInstanceID", "ZoneID", "ZoneServices", "BED", "EED","IsExcluded" };
         public NewSupplierZonesServicesDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -56,14 +56,15 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         public void WriteRecordToStream(NewZoneService record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
                        record.ZoneServiceId,
                        record.SupplierId,
                        _processInstanceID,
                        record.Zone.ZoneId,
                        Vanrise.Common.Serializer.Serialize(record.ZoneServices, true),
                        GetDateTimeForBCP(record.BED),
-                       GetDateTimeForBCP(record.EED));
+                       GetDateTimeForBCP(record.EED),
+                        (record.IsExcluded) ? 1 : 0);
         }
     }
 }

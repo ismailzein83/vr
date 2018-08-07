@@ -6,7 +6,7 @@
 	StartProcessingDateTime: { value: 4, description: "Start Processing DateTime" },
 	SupplierName: { value: 5, description: "Supplier Name" },
 	SupplierEmail: { value: 6, description: "Supplier Email" },
-	ErrorDetails: { value: 7, description: "Error Details" },
+	MessageDetails: { value: 7, description: "Message Details" },
 	SupplierId: { value: 8, description: "Supplier Id" },
 	ProcessInstanceId: { value: 9, description: "Process Instance Id" },
 	PricelistId: { value: 10, description: "Pricelist Id" },

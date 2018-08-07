@@ -16,7 +16,7 @@
   <x:Members>
     <x:Property Name="IsAutoImport" Type="InArgument(x:Boolean)" />
     <x:Property Name="ImportedDataToValidate" Type="InArgument(scg:IEnumerable(vbe:IRuleTarget))" />
-    <x:Property Name="ReceivedPricelistRecordId" Type="InArgument(x:Int32)" />
+    <x:Property Name="ReceivedPricelistRecordId" Type="InArgument(s:Nullable(x:Int32))" />
     <x:Property Name="BusinessRulesKey" Type="InArgument(x:String)" />
     <x:Property Name="BPBusinessRuleSetId" Type="InArgument(s:Nullable(x:Int32))" />
     <x:Property Name="ProcessNeedsConfirmation" Type="InOutArgument(x:Boolean)" />
@@ -163,8 +163,8 @@
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
           <twsba:UpdateReceivePricelistStatusAsFailed sap2010:WorkflowViewState.IdRef="UpdateReceivePricelistStatusAsFailed_1">
             <twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistRecordId>
-              <InArgument x:TypeArguments="x:Int32">
-                <mca:CSharpValue x:TypeArguments="x:Int32">ReceivedPricelistRecordId</mca:CSharpValue>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">ReceivedPricelistRecordId</mca:CSharpValue>
               </InArgument>
             </twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistRecordId>
             <twsba:UpdateReceivePricelistStatusAsFailed.ReceivedPricelistStatus>

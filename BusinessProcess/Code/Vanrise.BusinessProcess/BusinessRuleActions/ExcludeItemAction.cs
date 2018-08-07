@@ -18,7 +18,10 @@ namespace Vanrise.BusinessProcess
             if (context.Target == null)
                 throw new ArgumentNullException("Target");
 
-            //context.Target.SetExcluded(2);
+            var target = context.Target as IExclude;
+            if (target == null)
+                throw new InvalidOperationException("Trying to execute exclude action on a target that doesn't implement IExclude");
+            target.SetAsExcluded();
         }
 
         public override ActionSeverity GetSeverity()

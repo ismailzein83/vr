@@ -10,14 +10,14 @@
                     <businessprocess-bp-definition-selector onselectionchanged="onBPDefinitionSelectionchanged" isdisabled="scopeModel.isReadOnly" selectedvalues="bpDefition" on-ready="onBPDefinitionDirectiveReady" isrequired="true"></businessprocess-bp-definition-selector>
                 </vr-columns>
 
-                <vr-columns width="large" ng-if="bpDefition">
+                <vr-columns width="large" ng-show="bpDefition">
                     <span vr-disabled="scopeModel.isReadOnly">
                         <businessprocess-bp-business-rule-set-selector selectedvalues="scopeModel.selectedbusinessRuleSet" on-ready="onBPBusinessRuleSetDirectiveReady" onselectionchanged="onParentRuleSetChanged"></businessprocess-bp-business-rule-set-selector>
                     </span>
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-columns width="fullrow" ng-if="bpDefition">
+                <vr-columns width="fullrow" ng-show="bpDefition">
                     <businessprocess-bp-business-rule-set-detail on-ready="onGridReady"></businessprocess-bp-business-rule-set-detail>
                 </vr-columns>
             </vr-row>

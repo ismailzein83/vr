@@ -11,7 +11,6 @@ namespace Vanrise.BusinessProcess.Entities
         public BPBusinessRuleEffectiveAction Entity { get; set; }
         public Guid RuleDefinitionId { get; set; }
         public string ActionDescription { get; set; }
-        public bool IsInherited { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
         public List<Guid> ActionTypesIds { get; set; }

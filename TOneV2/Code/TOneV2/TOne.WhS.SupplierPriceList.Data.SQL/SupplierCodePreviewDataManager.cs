@@ -10,7 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
 	public class SupplierCodePreviewDataManager : BaseTOneDataManager, ISupplierCodePreviewDataManager
 	{
-		readonly string[] _columns = { "ProcessInstanceID", "Code", "ChangeType", "RecentZoneName", "ZoneName", "BED", "EED" };
+		readonly string[] _columns = { "ProcessInstanceID", "Code", "ChangeType", "RecentZoneName", "ZoneName", "BED", "EED","IsExcluded" };
 
 		private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
 		static SupplierCodePreviewDataManager()
@@ -41,7 +41,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
 		public IEnumerable<CodePreview> GetFilteredCodePreview(SPLPreviewQuery query)
 		{
-			return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]", CodePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.CountryId, query.OnlyModified);
+			return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]", CodePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.CountryId, query.OnlyModified,query.IsExcluded);
 		}
 
 		object Vanrise.Data.IBulkApplyDataManager<CodePreview>.InitialiazeStreamForDBApply()
@@ -52,14 +52,15 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 		public void WriteRecordToStream(CodePreview record, object dbApplyStream)
 		{
 			StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-			streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}",
+			streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
 				_processInstanceID,
 				record.Code,
 				(int)record.ChangeType,
 				record.RecentZoneName,
 				record.ZoneName,
 				GetDateTimeForBCP(record.BED),
-				GetDateTimeForBCP(record.EED));
+				GetDateTimeForBCP(record.EED),
+                (record.IsExcluded) ? 1 : 0);
 		}
 
 		public object FinishDBApplyStream(object dbApplyStream)

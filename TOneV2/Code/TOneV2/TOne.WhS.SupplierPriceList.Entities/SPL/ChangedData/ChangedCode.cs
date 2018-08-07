@@ -12,5 +12,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public long EntityId { get; set; }
 
         public DateTime EED { get; set; }
+        public bool IsExcluded { get; set; }
     }
 }

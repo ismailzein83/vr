@@ -91,7 +91,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 						if (supplierPriceListTemplate == null)
 						{
 							context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}' because there is no mapping for this supplier.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject));
-							errors.Add(new SPLImportErrorDetail() { ErrorMessage = "No pricelist mapping is defined yet for this supplier." });
+							errors.Add(new SPLImportErrorDetail() { Message = "No pricelist mapping is defined yet for this supplier." });
 							receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, receivedPricelistFile.FileId, receivedMailMessage.Header.MessageSendTime, pricelistType, ReceivedPricelistStatus.FailedDueToConfigurationError, errors, out recordId);
 							receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
 						}
@@ -122,7 +122,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 					}
 					else
 					{
-						context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}'. Following are the error messages: '{2}'.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject, string.Join(" ", errors.Select(x => x.ErrorMessage))));
+						context.WriteBusinessTrackingMsg(LogEntryType.Information, string.Format("Rejected mail from '{0}' with subject '{1}'. Following are the error messages: '{2}'.", receivedMailMessage.Header.From, receivedMailMessage.Header.Subject, string.Join(" ", errors.Select(x => x.Message))));
 						receivedPricelistDataManager.InsertReceivedPricelist(supplierAccount.CarrierAccountId, null, receivedMailMessage.Header.MessageSendTime, null, ReceivedPricelistStatus.FailedDueToReceivedMailError, errors, out recordId);
 						receivedSupplierPricelistManager.SendMailToSupplier(recordId, AutoImportEmailTypeEnum.Failed);
 						receivedSupplierPricelistManager.SendMailToInternal(recordId, AutoImportEmailTypeEnum.Failed);
@@ -138,13 +138,13 @@ namespace TOne.WhS.SupplierPriceList.Business
 			//var attachmentCode = supplierAccount.SupplierSettings.AutoImportSettings.AttachmentCode;
 
 			if (pricelistType == null)
-				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "Email subject does not contain pricelist type." });
+				errors.Add(new SPLImportErrorDetail() { Message = "Email subject does not contain pricelist type." });
 
 			if (applicableFiles == null || applicableFiles.Count == 0)
-				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "There is no applicable attachment." });
+				errors.Add(new SPLImportErrorDetail() { Message = "There is no applicable attachment." });
 
 			else if (applicableFiles.Count > 1)
-				errors.Add(new SPLImportErrorDetail() { ErrorMessage = "There are more than one applicable attachment." });
+				errors.Add(new SPLImportErrorDetail() { Message = "There are more than one applicable attachment." });
 
 			//else if (!string.IsNullOrEmpty(attachmentCode) && applicableFiles[0].Name.ToLower().Contains(attachmentCode.ToLower()))
 			//errors.Add(new SPLImportErrorDetail() { ErrorMessage = string.Format("Attachment name does not contain .", attachmentCode) });

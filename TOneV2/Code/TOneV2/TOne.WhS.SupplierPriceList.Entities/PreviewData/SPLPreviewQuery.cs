@@ -12,5 +12,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public int? CountryId { get; set; }
         public bool OnlyModified { get; set; }
         public string ZoneName { get; set; }
+        public bool IsExcluded { get; set; }
     }
 }

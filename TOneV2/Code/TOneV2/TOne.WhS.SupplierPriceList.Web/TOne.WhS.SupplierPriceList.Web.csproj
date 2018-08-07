@@ -191,7 +191,9 @@
     <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\Templates\ReceivedSupplierPricelistGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\whs-spl-receivedsupplierpricelist-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ReceivedSupplierPriceList\whs-spl-receivedpricelist-status-selector.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\Templates\SupplierPricelistPreviewDataTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\Templates\SupplierPriceListPreviewSectionTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\whs-spl-supplierpricelist-previewdata.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\whs-spl-supplierpricelistpreview-section.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPricelistPreviewSummary\Templates\SupplierPricelistPreviewSummary.html" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPricelistPreviewSummary\whs-spl-supplierpricelistpreview-summary.js" />

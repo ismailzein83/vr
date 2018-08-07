@@ -53,7 +53,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         ZoneEED = importedZone.EED,
                         ImportedRate = decimal.Round(importedNormalRate.Rate, 8),
                         ImportedRateBED = importedNormalRate.BED,
-                        ChangeTypeRate = importedZone.ImportedNormalRate.ChangeType
+                        ChangeTypeRate = importedZone.ImportedNormalRate.ChangeType,
+                        IsExcluded = importedZone.IsExcluded
                     };
 
                     if (importedNormalRate.SystemRate != null)

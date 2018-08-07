@@ -29,6 +29,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
         var drillDownManager;
         var onlyModified;
         var processInstanceId;
+        var isExcluded;
 
         this.initializeController = initializeController;
 
@@ -47,6 +48,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
                     directiveAPI.load = function (query) {
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
+                        isExcluded = query.IsExcluded;
                         return gridAPI.retrieveData(query);
                     };
 
@@ -88,7 +90,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, VRUIUtilsService, VRNotif
                     var zoneRateGridPayload = {
                         ProcessInstanceId: processInstanceId,
                         CountryId: countryDataItem.Entity.CountryId,
-                        OnlyModified: onlyModified
+                        OnlyModified: onlyModified,
+                        IsExcluded : isExcluded
                     };
 
                     return countryDataItem.zoneRateGridAPI.load(zoneRateGridPayload);

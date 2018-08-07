@@ -12,6 +12,5 @@ namespace Vanrise.BusinessProcess.Entities
 
         public BusinessRuleAction Action { get; set; }
 
-        public bool IsInherited { get; set; }
     }
 }

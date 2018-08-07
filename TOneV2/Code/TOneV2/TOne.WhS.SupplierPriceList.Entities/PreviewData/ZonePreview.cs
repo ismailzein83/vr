@@ -48,6 +48,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public List<int> ImportedServiceIds { get; set; }
         public DateTime? ImportedServicesBED { get; set; }
         public ZoneServiceChangeType ZoneServicesChangeType { get; set; }
+        public bool IsExcluded { get; set; }
 
     }
 

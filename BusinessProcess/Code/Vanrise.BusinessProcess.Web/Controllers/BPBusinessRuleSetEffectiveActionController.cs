@@ -14,10 +14,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         BPBusinessRuleSetEffectiveActionManager _manager = new BPBusinessRuleSetEffectiveActionManager();
            
         [HttpPost]
-        [Route("GetFilteredBPBusinessRuleSetsEffectiveActions")]
-        public object GetFilteredBPBusinessRuleSetsEffectiveActions(Vanrise.Entities.DataRetrievalInput<BPBusinessRuleEffectiveActionQuery> input)
+        [Route("GetBPBusinessRuleSetsEffectiveActions")]
+        public object GetBPBusinessRuleSetsEffectiveActions(BPBusinessRuleEffectiveActionQuery input)
         {
-            return _manager.GetFilteredBPBusinessRuleSetsEffectiveActions(input);
+            return _manager.GetBPBusinessRuleSetsEffectiveActions(input);
         }
 
         [HttpGet]
@@ -33,5 +33,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             return _manager.GetParentActionDescription(ruleSetId,ruleDefinitionId);
         }
+        [HttpGet]
+        [Route("GetRuleSetEffectiveActions")]
+        public List<BPBusinessRuleActionDetails> GetRuleSetEffectiveActions(int bpBusinessRuleSetId)
+        {
+            return _manager.GetRuleSetEffectiveActions(bpBusinessRuleSetId);
+        }
     }
 }
+
+
+

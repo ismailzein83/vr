@@ -17,7 +17,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public List<ZoneService> ZoneServices { get; set; }
 
         public DateTime BED { get; set; }
-
+        public bool IsExcluded { get; set; }
         public DateTime? EED { get; set; }
     }
 }

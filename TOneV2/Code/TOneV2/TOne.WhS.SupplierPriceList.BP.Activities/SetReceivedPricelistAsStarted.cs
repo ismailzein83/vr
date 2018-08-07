@@ -9,15 +9,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 	public class SetReceivedPricelistAsStarted: CodeActivity
 	{
 		[RequiredArgument]
-		public InArgument<int> ReceivedPricelistRecordId { get; set; }
+		public InArgument<int?> ReceivedPricelistRecordId { get; set; }
 
 		protected override void Execute(CodeActivityContext context)
 		{
-			int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
+			int? receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
 			long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
 			IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 
-			manager.SetReceivedPricelistAsStarted(receivedPricelistRecordId, ReceivedPricelistStatus.Processing, processInstanceId, DateTime.Now);
+			manager.SetReceivedPricelistAsStarted(receivedPricelistRecordId.Value, ReceivedPricelistStatus.Processing, processInstanceId, DateTime.Now);
 		}
 	}
 }

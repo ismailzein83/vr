@@ -479,13 +479,8 @@
                                 fax: carrierProfileEntity.Settings.Faxes[j]
                             });
                         }
-
-
-
                     }
-
                 }
-
             }
 
             var rootPromiseNode = {

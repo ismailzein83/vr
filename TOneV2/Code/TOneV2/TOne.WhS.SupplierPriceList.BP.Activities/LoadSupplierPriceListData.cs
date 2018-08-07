@@ -29,7 +29,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 		public InArgument<DateTime> PriceListDate { get; set; }
 
 		[RequiredArgument]
-		public InArgument<int> ReceivedPricelistRecordId { get; set; }
+		public InArgument<int?> ReceivedPricelistRecordId { get; set; }
 
 		[RequiredArgument]
 		public InArgument<bool> IsAutoImport { get; set; }
@@ -72,7 +72,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 			int currencyId = this.CurrencyId.Get(context);
 			int supplierPriceListTemplateId = SupplierPriceListTemplateId.Get(context);
 			DateTime pricelistDate = PriceListDate.Get(context);
-			int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
+			int? receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
 			bool isAutoImport = this.IsAutoImport.Get(context);
 
 			DateTime startReading = DateTime.Now;
@@ -95,9 +95,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 				if (isAutoImport)
 				{
 					IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
-					manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToConfigurationError,new List<SPLImportErrorDetail>() { new SPLImportErrorDetail() { ErrorMessage = ex.Message} });
+					manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId.Value, ReceivedPricelistStatus.FailedDueToConfigurationError,new List<SPLImportErrorDetail>() { new SPLImportErrorDetail() { Message = ex.Message} });
 					var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-					receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+					receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId.Value, AutoImportEmailTypeEnum.Failed);
 				}
 				throw;
 			}

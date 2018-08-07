@@ -8,7 +8,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
     var bpBusinessRuleSetDetailReadyPromiseDeferred;
 
     var bpBusinessRuleSetDirectiveApi;
-    var bpBusinessRuleSetReadyPromiseDeferred;
+    var bpBusinessRuleSetReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var isEditMode;
     var bpBusinessRuleSetId;
@@ -17,7 +17,12 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
     var existingBusinessRules;
     var parentRuleSetId;
 
+    var businessProcessSelectedPromiseDeferred;
+
     var gridAPI;
+    var gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var ruleSetHasParent;
 
     var ruleActionsSelectiveAPI;
     var ruleActionsSelectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -36,22 +41,19 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
 
         $scope.onBPBusinessRuleSetDirectiveReady = function (api) {
             bpBusinessRuleSetDirectiveApi = api;
-          
-                var setLoader = function (value) { };
+            bpBusinessRuleSetReadyPromiseDeferred.resolve();
+            //var setLoader = function (value) { };
 
-                var businessRuleSetPayload = {
-                    filter: { BPDefinitionId: $scope.bpDefition.BPDefinitionID, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
-                    selectedIds: bpBusinessRuleSetParentId
-                };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpBusinessRuleSetDirectiveApi, businessRuleSetPayload, setLoader, bpBusinessRuleSetReadyPromiseDeferred);
-            
+            //var businessRuleSetPayload = {
+            //    filter: { BPDefinitionId: $scope.bpDefition.BPDefinitionID, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
+            //    selectedIds: bpBusinessRuleSetParentId
+            //};
+            //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpBusinessRuleSetDirectiveApi, businessRuleSetPayload, setLoader, bpBusinessRuleSetReadyPromiseDeferred);
+
         };
         $scope.onGridReady = function (api) {
-            $scope.isLoading = true;
             gridAPI = api;
-            gridAPI.load(getGridPayload()).finally(function () {
-                $scope.isLoading = false;
-            });
+            gridReadyPromiseDeferred.resolve();
         };
 
         $scope.scopeModel.onBPAccountActionSelectiveReady = function (api) {
@@ -103,37 +105,68 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
             }
         };
 
-        $scope.onBPDefinitionSelectionchanged = function () {
+        //$scope.onBPDefinitionSelectionchanged = function () {
+        //    //$scope.isLoading = true;
+        //    //gridReadyPromiseDeferred.promise.then(function () {
+        //    //    gridAPI.load(getGridPayload()).finally(function () {
+        //    //        $scope.isLoading = false;
+        //    //    });
+        //    //})
 
-            if (bpBusinessRuleSetDirectiveApi != undefined && bpBusinessRuleSetDetailDirectiveApi != undefined) {
+        //    if (bpBusinessRuleSetDirectiveApi != undefined && bpBusinessRuleSetDetailDirectiveApi != undefined) {
 
-                var bpDefinitionId = bpDefinitionDirectiveApi.getSelectedIds();
-                var businessRuleSetPayload = {
-                    filter: { BPDefinitionId: bpDefinitionId, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
-                    selectedIds: bpBusinessRuleSetParentId
-                };
+        //        var bpDefinitionId = bpDefinitionDirectiveApi.getSelectedIds();
+        //        var businessRuleSetPayload = {
+        //            filter: { BPDefinitionId: bpDefinitionId, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
+        //            selectedIds: bpBusinessRuleSetParentId
+        //        };
 
-                var businessRuleSetDetailPayload = {
-                    BPDefinitionId: bpDefinitionId,
-                    existingBusinessRules: existingBusinessRules
-                };
+        //        var businessRuleSetDetailPayload = {
+        //            BPDefinitionId: bpDefinitionId,
+        //            existingBusinessRules: existingBusinessRules
+        //        };
 
-                if (bpDefinitionId != undefined) {
-                    bpBusinessRuleSetDirectiveApi.load(businessRuleSetPayload);
-                    bpBusinessRuleSetDetailDirectiveApi.load(businessRuleSetDetailPayload);
+        //        if (bpDefinitionId != undefined) {
+        //            bpBusinessRuleSetDirectiveApi.load(businessRuleSetPayload);
+        //            bpBusinessRuleSetDetailDirectiveApi.load(businessRuleSetDetailPayload);
+        //        }
+
+        //    }
+        //};
+
+        $scope.onBPDefinitionSelectionchanged = function (value) {
+            $scope.bpDefition = value;
+            var bpDefinitionId = bpDefinitionDirectiveApi.getSelectedIds();
+            if (bpDefinitionId != undefined && $scope.bpDefition != undefined)
+            {
+                if(businessProcessSelectedPromiseDeferred != undefined)
+                {
+                    businessProcessSelectedPromiseDeferred.resolve();
+                }
+                else
+                {
+                    var parentRuleSetSelectorPayload = {
+                        filter: { BPDefinitionId: bpDefinitionId, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
+                        selectedIds: bpBusinessRuleSet != undefined ? bpBusinessRuleSetParentId : undefined
+                    };
+                    var ruleSetGridPayload = getGridPayload();
+                    bpBusinessRuleSetDirectiveApi.load(parentRuleSetSelectorPayload);
+                    gridAPI.load(ruleSetGridPayload);
                 }
             }
         };
-
-        $scope.onParentRuleSetChanged = function () {
-            parentRuleSetId = bpBusinessRuleSetDirectiveApi.getSelectedIds();
-            if (gridAPI != undefined) {
-                $scope.isLoading = true;
-                gridAPI.load(getGridPayload()).finally(function () {
-                    $scope.isLoading = false;
+        $scope.onParentRuleSetChanged = function (value) {
+            if (!isEditMode && value != undefined) {
+                parentRuleSetId = bpBusinessRuleSetDirectiveApi.getSelectedIds();
+                gridReadyPromiseDeferred.promise.then(function () {
+                    $scope.isLoading = true;
+                    gridAPI.load(getGridPayload()).finally(function () {
+                        $scope.isLoading = false;
+                    });
                 });
             }
         };
+        
     }
 
     function buildObjectFromScope() {
@@ -147,7 +180,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
         for (var z = 0; z < businessRules.length; z++) {
             var currentItem = businessRules[z];
             var effectiveAction = gridAPI.getData();
-            var dataItem = { BPBusinessRuleDefinitionId: currentItem.RuleDefinitionId, Settings: { } };
+            var dataItem = { BPBusinessRuleDefinitionId: currentItem.RuleDefinitionId, Settings: {} };
             if (currentItem.Entity.Action != undefined) {
                 if (currentItem.Entity.Action.action != undefined)
                     dataItem.Settings.Action = currentItem.Entity.Action.action;
@@ -157,20 +190,28 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
         }
         return instance;
     }
+    function loadRuleSetGrid() {
+        if (isEditMode) {
+            var ruleSetLoadDeferred = UtilsService.createPromiseDeferred();
+            gridReadyPromiseDeferred.promise.then(function () {
+                var payload = getGridPayload();
+                VRUIUtilsService.callDirectiveLoad(gridAPI, payload, ruleSetLoadDeferred);
+            });
+            return ruleSetLoadDeferred.promise;
+        }
+    }
 
     function getGridPayload() {
         return obj = {
             query: {
                 BusinessProcessId: $scope.bpDefition.BPDefinitionID,
-                BusinessRuleSetDefinitionId: bpBusinessRuleSetId != undefined ? bpBusinessRuleSetId : bpBusinessRuleSetDirectiveApi.getSelectedIds()
+                BusinessRuleSetDefinitionId: bpBusinessRuleSetId != undefined ? bpBusinessRuleSetId : undefined,
+                ParentBusinessRuleSetId: parentRuleSetId
             },
             isEditMode: isEditMode,
             bpBusinessRuleSetId: bpBusinessRuleSetId,
-            parentRuleSetId: parentRuleSetId
+            parentRuleSetId: parentRuleSetId,
         };
-
-
-
     }
     function load() {
         $scope.isLoading = true;
@@ -181,7 +222,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
                     .finally(function () {
                         bpBusinessRuleSet = undefined;
                     });
-            }).catch(function () {
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
             });
@@ -202,7 +243,7 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
 
     function loadAllControls() {
         $scope.isLoading = true;
-        return UtilsService.waitMultipleAsyncOperations([setTitle, loadData, loadBPDefinitions])
+        return UtilsService.waitMultipleAsyncOperations([setTitle, loadData, loadBPSection])
            .catch(function (error) {
                VRNotificationService.notifyExceptionWithClose(error, $scope);
            })
@@ -237,7 +278,51 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
             return;
         $scope.name = bpBusinessRuleSet.Name;
     }
+    function loadBPSection ()
+    {
+        var loadBusinessProcessPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var promises = [];
+        promises.push(loadBusinessProcessPromiseDeferred.promise);
+
+        var payload = {
+            filter: {
+                $type: "Vanrise.BusinessProcess.Entities.BPDefinitionInfoFilter,Vanrise.BusinessProcess.Entities",
+                Filters: [{
+                    $type: "Vanrise.BusinessProcess.Business.BPDefinitionRuleSetFilter,Vanrise.BusinessProcess.Business"
+                }]
+            }
+        };
+        if (bpBusinessRuleSet != undefined && bpBusinessRuleSet.BPDefinitionId != undefined) {
+            payload.selectedIds = bpBusinessRuleSet != undefined ? bpBusinessRuleSet.BPDefinitionId : undefined;
+            businessProcessSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+        }
+
+        bpDefinitionReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(bpDefinitionDirectiveApi, payload, loadBusinessProcessPromiseDeferred);
+        });
+        if (bpBusinessRuleSet != undefined && bpBusinessRuleSet.BPDefinitionId != undefined) {
+            var loadParentRuleSetPromiseDeferred = UtilsService.createPromiseDeferred();
+            var loadRuleSetGridPromiseDeferref = UtilsService.createPromiseDeferred();
+
+            promises.push(loadParentRuleSetPromiseDeferred.promise);
+            promises.push(loadRuleSetGridPromiseDeferref.promise);
+            UtilsService.waitMultiplePromises([bpBusinessRuleSetReadyPromiseDeferred.promise, gridReadyPromiseDeferred.promise, businessProcessSelectedPromiseDeferred.promise]).then(function () {
+                var bpDefinitionId = bpDefinitionDirectiveApi.getSelectedIds();
+                var parentRuleSetSelectorPayload = {
+                    filter: { BPDefinitionId: bpDefinitionId, CanBeParentOfRuleSetId: bpBusinessRuleSetId },
+                    selectedIds:bpBusinessRuleSet != undefined ? bpBusinessRuleSetParentId:undefined
+                };
+                var ruleSetGridPayload = getGridPayload();
+                VRUIUtilsService.callDirectiveLoad(bpBusinessRuleSetDirectiveApi, parentRuleSetSelectorPayload, loadParentRuleSetPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(gridAPI, ruleSetGridPayload, loadRuleSetGridPromiseDeferref);
+               
+                businessProcessSelectedPromiseDeferred = undefined;
+            });
+        }
+
+        return UtilsService.waitMultiplePromises(promises);
+    }
     function loadBPDefinitions() {
         var loadBPDefinitionsPromiseDeferred = UtilsService.createPromiseDeferred();
         bpDefinitionReadyPromiseDeferred.promise.then(function () {

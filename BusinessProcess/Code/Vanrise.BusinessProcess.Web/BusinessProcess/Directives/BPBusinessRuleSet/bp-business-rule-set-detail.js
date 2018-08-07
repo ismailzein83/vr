@@ -36,6 +36,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
         this.initializeController = initializeController;
 
         function initializeController() {
+            var ruleSetActions = [];
             $scope.bpBusinessRules = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -45,12 +46,54 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.load = function (payload) {
+                        gridAPI.clearDataSource();
+                        var ruleSetLoadPromise = UtilsService.createPromiseDeferred();
                         if (payload != undefined) {
                             isEditMode = payload.isEditMode;
                             bpBusinessRuleSetId = payload.bpBusinessRuleSetId;
                             parentRuleSetId = payload.parentRuleSetId;
-                            return gridAPI.retrieveData(payload.query);
+                            if (isEditMode) {
+                            BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetRuleSetEffectiveActions(bpBusinessRuleSetId)
+                                .then(function (response) {
+                                    ruleSetActions = response;
+
+                                    BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetBPBusinessRuleSetsEffectiveActions(payload.query)
+                                .then(function (response) {
+                                    if (response != undefined) {
+                                        for (var i = 0; i < response.length; i++) {
+                                            var dataItem = response[i];
+                                            $scope.bpBusinessRules.push(dataItem);
+                                            extendDataItem(dataItem);
+                                            ruleSetLoadPromise.resolve();
+                                        }
+                                    }
+                                })
+                           .catch(function (error) {
+                               VRNotificationService.notifyException(error, $scope);
+                           });
+                                }
+                                ).catch(function (error) {
+                                    VRNotificationService.notifyException(error, $scope);
+                                });
+                            }
+                            else {
+                                BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetBPBusinessRuleSetsEffectiveActions(payload.query)
+                                .then(function (response) {
+                                    if (response != undefined) {
+                                        for (var i = 0; i < response.length; i++) {
+                                            var dataItem = response[i];
+                                            $scope.bpBusinessRules.push(dataItem);
+                                            extendDataItem(dataItem);
+                                            ruleSetLoadPromise.resolve();
+                                        }
+                                    }
+                                })
+                           .catch(function (error) {
+                               VRNotificationService.notifyException(error, $scope);
+                           });
+                            }
                         }
+                        return ruleSetLoadPromise.promise;
                     };
 
                     directiveAPI.getData = function () {
@@ -88,6 +131,12 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
             };
 
             function getRowStyle(dataItem) {
+                var index = UtilsService.getItemIndexByVal(ruleSetActions, dataItem.RuleDefinitionId, 'BPBusinessRuleDefinitionId');
+                if (index >= 0) {
+                    dataItem.IsInherited = false;
+                }
+                else
+                    dataItem.IsInherited = true;
                 var rowStyle;
                 if (!dataItem.IsInherited)
                     rowStyle = { CssClass: "bg-success" };
@@ -95,22 +144,11 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
             }
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetFilteredBPBusinessRuleSetsEffectiveActions(dataRetrievalInput)
-                    .then(function (response) {
-                        if (response != undefined) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                var dataItem = response.Data[i];
-                                extendDataItem(dataItem);
-                            }
-                        }
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
+
             };
 
             function extendDataItem(dataItem) {
+               
 
                 if (!isEditMode && parentRuleSetId != undefined)
                     dataItem.IsInherited = true;
@@ -154,7 +192,6 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
             }
         }
     }
-
     return directiveDefinitionObject;
 
 }]);

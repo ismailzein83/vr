@@ -76,7 +76,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         {
             get { return ZoneEntity.SupplierZoneId; }
         }
-
         public string Name
         {
             get { return ZoneEntity.Name; }

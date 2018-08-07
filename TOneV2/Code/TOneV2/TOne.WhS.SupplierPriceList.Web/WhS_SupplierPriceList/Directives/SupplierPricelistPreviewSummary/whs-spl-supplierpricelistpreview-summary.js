@@ -94,7 +94,6 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
         function loadSupplierPricelistPreviewSummary() {
 
             return WhS_SupPL_SupplierPriceListPreviewPIService.GetSupplierPricelistPreviewSummary(processInstanceId).then(function (previewSummary) {
-
                 $scope.scopeModel.numberOfNewRates = previewSummary.NumberOfNewRates;
                 $scope.scopeModel.numberOfIncreasedRates = previewSummary.NumberOfIncreasedRates;
                 $scope.scopeModel.numberOfDecreasedRates = previewSummary.NumberOfDecreasedRates;
@@ -108,6 +107,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                 $scope.scopeModel.numberOfMovedCodes = previewSummary.NumberOfMovedCodes;
                 $scope.scopeModel.numberOfClosedCodes = previewSummary.NumberOfClosedCodes;
                 $scope.scopeModel.numberOfZonesWithChangeServices = previewSummary.NumberOfZonesWithChangedServices;
+                $scope.scopeModel.numberOfExcludedCountries = previewSummary.NumberOfExcludedCountries;
             });
         }
     }

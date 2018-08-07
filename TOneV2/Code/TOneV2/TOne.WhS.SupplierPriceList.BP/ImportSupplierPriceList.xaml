@@ -201,8 +201,8 @@
       <If.Then>
         <twsba1:SetReceivedPricelistAsStarted sap2010:WorkflowViewState.IdRef="SetReceivedPricelistAsStarted_1">
           <twsba1:SetReceivedPricelistAsStarted.ReceivedPricelistRecordId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+            <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
             </InArgument>
           </twsba1:SetReceivedPricelistAsStarted.ReceivedPricelistRecordId>
         </twsba1:SetReceivedPricelistAsStarted>
@@ -309,8 +309,8 @@
         </InArgument>
       </twsba1:LoadSupplierPriceListData.PriceListDate>
       <twsba1:LoadSupplierPriceListData.ReceivedPricelistRecordId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
         </InArgument>
       </twsba1:LoadSupplierPriceListData.ReceivedPricelistRecordId>
       <twsba1:LoadSupplierPriceListData.SupplierPriceListTemplateId>
@@ -390,8 +390,8 @@
         </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
     </local:ExecuteImportSupplierPricelistRules>
@@ -471,8 +471,8 @@
         </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
     </local:ExecuteImportSupplierPricelistRules>
@@ -536,8 +536,8 @@
         </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
     </local:ExecuteImportSupplierPricelistRules>
@@ -699,8 +699,8 @@
         </InOutArgument>
       </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
       <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
         </InArgument>
       </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
     </local:ExecuteImportSupplierPricelistRules>
@@ -1111,8 +1111,8 @@
                               </InOutArgument>
                             </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
                             <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-                              <InArgument x:TypeArguments="x:Int32">
-                                <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
                               </InArgument>
                             </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
                           </local:ExecuteImportSupplierPricelistRules>
@@ -1359,8 +1359,8 @@
             </InOutArgument>
           </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
           <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-            <InArgument x:TypeArguments="x:Int32">
-              <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+            <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
             </InArgument>
           </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
         </local:ExecuteImportSupplierPricelistRules>
@@ -1482,8 +1482,8 @@
                   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_19">
                     <twsba1:SetReceivedPricelistAsWaitingConfirmation sap2010:WorkflowViewState.IdRef="SetReceivedPricelistAsWaitingConfirmation_1">
                       <twsba1:SetReceivedPricelistAsWaitingConfirmation.ReceivedPricelistRecordId>
-                        <InArgument x:TypeArguments="x:Int32">
-                          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
                         </InArgument>
                       </twsba1:SetReceivedPricelistAsWaitingConfirmation.ReceivedPricelistRecordId>
                     </twsba1:SetReceivedPricelistAsWaitingConfirmation>
@@ -1643,8 +1643,8 @@
                         </InArgument>
                       </twsba1:SetReceivedPricelistAsCompleted.PricelistId>
                       <twsba1:SetReceivedPricelistAsCompleted.ReceivedPricelistRecordId>
-                        <InArgument x:TypeArguments="x:Int32">
-                          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
                         </InArgument>
                       </twsba1:SetReceivedPricelistAsCompleted.ReceivedPricelistRecordId>
                     </twsba1:SetReceivedPricelistAsCompleted>
@@ -1663,8 +1663,8 @@
                   <If.Then>
                     <twsba1:SetReceivedPricelistAsRejected sap2010:WorkflowViewState.IdRef="SetReceivedPricelistAsRejected_1">
                       <twsba1:SetReceivedPricelistAsRejected.ReceivedPricelistRecordId>
-                        <InArgument x:TypeArguments="x:Int32">
-                          <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
                         </InArgument>
                       </twsba1:SetReceivedPricelistAsRejected.ReceivedPricelistRecordId>
                       <twsba1:SetReceivedPricelistAsRejected.ValidationWarningMessages>
@@ -1705,8 +1705,8 @@
             <If.Then>
               <twsba1:SetReceivedPricelistAsCompletedWithNoChanges sap2010:WorkflowViewState.IdRef="SetReceivedPricelistAsCompletedWithNoChanges_1">
                 <twsba1:SetReceivedPricelistAsCompletedWithNoChanges.ReceivedPricelistRecordId>
-                  <InArgument x:TypeArguments="x:Int32">
-                    <mca:CSharpValue x:TypeArguments="x:Int32">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                  <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                    <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
                   </InArgument>
                 </twsba1:SetReceivedPricelistAsCompletedWithNoChanges.ReceivedPricelistRecordId>
               </twsba1:SetReceivedPricelistAsCompletedWithNoChanges>

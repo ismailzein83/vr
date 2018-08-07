@@ -13,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         public BusinessEntity.Entities.SupplierZoneService ZoneServiceEntity { get; set; }
 
         public ChangedZoneService ChangedZoneService { get; set; }
-
+       
         public IChangedEntity ChangedEntity
         {
             get { return this.ChangedZoneService; }

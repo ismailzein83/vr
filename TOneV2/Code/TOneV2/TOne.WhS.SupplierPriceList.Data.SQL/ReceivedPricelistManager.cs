@@ -107,7 +107,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 				PricelistId = GetReaderValue<int?>(reader, "PricelistId"),
 				ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceId"),
 				StartProcessingDateTime = GetReaderValue<DateTime?>(reader, "StartProcessingDate"),
-				ErrorDetails = string.IsNullOrEmpty(GetReaderValue<string>(reader, "ErrorDetails")) ? null : Serializer.Deserialize<List<SPLImportErrorDetail>>(GetReaderValue<string>(reader, "ErrorDetails")),
+				MessageDetails = string.IsNullOrEmpty(GetReaderValue<string>(reader, "ErrorDetails")) ? null : Serializer.Deserialize<List<SPLImportErrorDetail>>(GetReaderValue<string>(reader, "ErrorDetails")),
                 SentToSupplier = GetReaderValue<bool>(reader, "SentToSupplier")
 			};
 		}

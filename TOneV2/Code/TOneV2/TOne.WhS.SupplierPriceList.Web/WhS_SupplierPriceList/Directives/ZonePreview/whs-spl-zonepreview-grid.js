@@ -30,6 +30,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
         var onlyModified;
         var processInstanceId;
         var countryId;
+        var isExcluded;
 
         this.initializeController = initializeController;
 
@@ -49,6 +50,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
                         countryId = query.CountryId;
+                        isExcluded = query.IsExcluded;
                         return gridAPI.retrieveData(query);
                     };
 
@@ -89,7 +91,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                         ProcessInstanceId: processInstanceId,
                         ZoneName: zoneDataItem.ZoneName,
                         OnlyModified: onlyModified,
-                        CountryId: countryId
+                        CountryId: countryId,
+                        IsExcluded : isExcluded
                     };
 
                     return zoneDataItem.codeGridAPI.load(codeGridPayload);
@@ -121,7 +124,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                     var zoneServicesGridPayload = {
                         ProcessInstanceId: processInstanceId,
                         ZoneName: zoneDataItem.ZoneName,
-                        OnlyModified: onlyModified
+                        OnlyModified: onlyModified,
+                        IsExcluded : isExcluded
                     };
 
                     return zoneDataItem.zoneServicesGridAPI.load(zoneServicesGridPayload);

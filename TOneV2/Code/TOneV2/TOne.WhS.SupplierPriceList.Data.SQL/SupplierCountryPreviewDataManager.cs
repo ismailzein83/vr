@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         public IEnumerable<CountryPreview> GetFilteredCountryPreview(SPLPreviewQuery query)
         {
-            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCountry_Preview_GetFiltered]", CountryPreviewMapper, query.ProcessInstanceId, query.OnlyModified);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCountry_Preview_GetFiltered]", CountryPreviewMapper, query.ProcessInstanceId, query.OnlyModified,query.IsExcluded);
         }
 
         private CountryPreview CountryPreviewMapper(IDataReader reader)

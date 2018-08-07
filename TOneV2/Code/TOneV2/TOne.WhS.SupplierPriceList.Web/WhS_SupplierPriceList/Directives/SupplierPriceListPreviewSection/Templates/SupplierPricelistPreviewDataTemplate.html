@@ -1,0 +1,21 @@
+﻿<vr-row ng-hide="filterSectionCollapsed">
+    <span>
+        <whs-spl-viewchangetype-selector on-ready="onViewChangeTypeSelectorReady"
+                                         onselectitem="onViewChangeTypeSelectItem"
+                                         normal-col-num="3"
+                                         hideremoveicon="true">
+        </whs-spl-viewchangetype-selector>
+    </span>
+    <span>
+        <whs-spl-groupedby-selector on-ready="onGroupedBySelectorReady"
+                                    normal-col-num="3"
+                                    hideremoveicon="true"
+                                    selectedvalues="selectedGroupedBy">
+        </whs-spl-groupedby-selector>
+    </span>
+</vr-row>
+<vr-row>
+    <span vr-loader="isLoadingPreviewDataSection">
+        <vr-directivewrapper directive="selectedGroupedBy.dwGrid" on-ready="onDirectiveWrapperReady"></vr-directivewrapper>
+    </span>
+</vr-row>

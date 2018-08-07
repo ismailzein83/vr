@@ -14,37 +14,40 @@ namespace Vanrise.BusinessProcess.Business
     {
         #region public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<BusinessRuleEffectiveActionDetail> GetFilteredBPBusinessRuleSetsEffectiveActions(Vanrise.Entities.DataRetrievalInput<BPBusinessRuleEffectiveActionQuery> input)
+        public IEnumerable<BusinessRuleEffectiveActionDetail> GetBPBusinessRuleSetsEffectiveActions(BPBusinessRuleEffectiveActionQuery input)
         {
             List<BPBusinessRuleEffectiveAction> allEffectiveActions = new List<BPBusinessRuleEffectiveAction>();
-            if (input.Query.ParentBusinessRuleSetId.HasValue)
+            if (input.ParentBusinessRuleSetId.HasValue)
             {
-                allEffectiveActions = GetParentEffectiveActions(input.Query.ParentBusinessRuleSetId.Value);
+                allEffectiveActions= GetParentRuleSetEffectiveActions(input.ParentBusinessRuleSetId.Value);
             }
-            if (input.Query.BusinessRuleSetDefinitionId.HasValue)
+            if (input.BusinessRuleSetDefinitionId.HasValue)
             {
                 var allBusinessRuleSets = GetCachedBPBusinessRuleSetsEffectiveActions();
                 if (allBusinessRuleSets != null && allBusinessRuleSets.Count() > 0)
                 {
-                    allEffectiveActions = allBusinessRuleSets.GetRecord(input.Query.BusinessRuleSetDefinitionId.Value);
+                    allEffectiveActions= allBusinessRuleSets.GetRecord(input.BusinessRuleSetDefinitionId.Value);
                 }
             }
-            else
+            else if (!input.ParentBusinessRuleSetId.HasValue && !input.BusinessRuleSetDefinitionId.HasValue)
             {
                 BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager();
-                allEffectiveActions = actionManager.GetDefaultBusinessRulesActions(input.Query.BusinessProcessId).Values.ToList();
+                allEffectiveActions= actionManager.GetDefaultBusinessRulesActions(input.BusinessProcessId).Values.ToList();
             }
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allEffectiveActions.ToBigResult(input, null, BPBusinessRuleSetEffectiveActionsDetailMapper));
+            return allEffectiveActions.MapRecords(BPBusinessRuleSetEffectiveActionsDetailMapper);
         }
-        public List<BPBusinessRuleEffectiveAction> GetParentEffectiveActions(int ruleSetId)
+        public List<BPBusinessRuleEffectiveAction> GetParentRuleSetEffectiveActions(int ruleSetId)
         {
             var allEffectiveActions = GetCachedBPBusinessRuleSetsEffectiveActions().GetRecord(ruleSetId);
-            foreach (var effectiveAction in allEffectiveActions)
-            {
-                if (effectiveAction.IsInherited == false)
-                    effectiveAction.IsInherited = true;
-            }
             return allEffectiveActions;
+        }
+        public List<BPBusinessRuleActionDetails> GetRuleSetEffectiveActions(int bpBusinessRuleSetId)
+        {
+            BPBusinessRuleSetManager businessRuleSetManager = new BPBusinessRuleSetManager();
+            var businessRuleSet = businessRuleSetManager.GetBusinessRuleSetsByID(bpBusinessRuleSetId);
+            businessRuleSet.ThrowIfNull("businessRuleSet");
+            businessRuleSet.Details.ThrowIfNull("businessRuleSet.Details");
+            return businessRuleSet.Details.ActionDetails;
         }
         public BusinessRuleAction GetParentAction (int businessRuleSetId,Guid ruleDefinitionId)
         {
@@ -144,7 +147,6 @@ namespace Vanrise.BusinessProcess.Business
             {
                 Entity = bpBusinessRuleSetEffectiveAction,
                 RuleDefinitionId = bpBusinessRuleSetEffectiveAction.RuleDefinitionId,
-                IsInherited = bpBusinessRuleSetEffectiveAction.IsInherited,
                 Description = ruleDefinitionManager.GetRuleDefinitionDescription(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
                 Title = ruleDefinitionManager.GetRuleDefinitionTitle(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
                 ActionDescription = bpBusinessRuleSetEffectiveAction.Action.GetDescription(),
@@ -176,7 +178,6 @@ namespace Vanrise.BusinessProcess.Business
                 {
                     RuleDefinitionId = action.Value.RuleDefinitionId,
                     Action = action.Value.Action,
-                    IsInherited = true
                 };
                 actionsCopy.Add(action.Key, ruleEffectiveAction);
             }
@@ -186,7 +187,6 @@ namespace Vanrise.BusinessProcess.Business
                 var effectiveAction = actionsCopy.GetRecord(action.BPBusinessRuleDefinitionId);
                 if (effectiveAction != null)
                 {
-                    effectiveAction.IsInherited = false;
                     effectiveAction.Action = action.Settings.Action;
                 }
             }

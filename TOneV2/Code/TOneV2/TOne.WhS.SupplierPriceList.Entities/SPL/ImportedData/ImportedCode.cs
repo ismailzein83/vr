@@ -9,7 +9,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
+    public class ImportedCode : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget,IExclude
     {
         public ImportedCode()
         {
@@ -36,6 +36,19 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 return _newCodes;
             }
         }
+        #region IExclude Implementation
+        public bool IsExcluded { get; set; }
+        public void SetAsExcluded()
+        {
+            IsExcluded = true;
+
+            foreach (var newCode in NewCodes)
+                newCode.IsExcluded = true;
+            
+            foreach (var changedCode in ChangedExistingCodes)
+                changedCode.ChangedCode.IsExcluded = true;
+        }
+        #endregion
 
         List<ExistingCode> _changedExistingCodes = new List<ExistingCode>();
         public List<ExistingCode> ChangedExistingCodes
@@ -73,6 +86,8 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     {
 
     }
+   
+  
 
     public enum CodeChangeType
     {

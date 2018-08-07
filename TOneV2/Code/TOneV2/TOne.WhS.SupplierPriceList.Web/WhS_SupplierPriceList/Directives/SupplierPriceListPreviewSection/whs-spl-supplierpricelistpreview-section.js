@@ -35,17 +35,14 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
         var validationMessageHistoryGridAPI;
         var validationMessageHistoryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var directiveWrapperAPI;
-        var directiveWrapperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var viewChangeTypeSelectorAPI;
-        var viewChangeTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-        var groupedBySelectorAPI;
-        var groupedByReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
         var supplierPricelistPreviewSummaryAPI;
         var supplierPricelistPreviewSummaryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var supplierPricelistPreviewExcludedDataAPI;
+        var supplierPricelistPreviewExcludedDataReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var supplierPricelistPreviewDataAPI;
+        var supplierPricelistPreviewDataReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         this.initializeController = initializeController;
 
@@ -65,37 +62,19 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                 validationMessageHistoryReadyPromiseDeferred.resolve();
             };
 
-            $scope.onViewChangeTypeSelectorReady = function (api) {
-                viewChangeTypeSelectorAPI = api;
-                viewChangeTypeReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onGroupedBySelectorReady = function (api) {
-                groupedBySelectorAPI = api;
-                groupedByReadyPromiseDeferred.resolve();
-            };
-
             $scope.onSupplierPricelistPreviewSummaryReady = function (api) {
                 supplierPricelistPreviewSummaryAPI = api;
                 supplierPricelistPreviewSummaryReadyPromiseDeferred.resolve();
             };
 
-            $scope.onDirectiveWrapperReady = function (api) {
-                directiveWrapperAPI = api;
-
-                var setLoader = function (value) {
-                    $scope.isLoadingPreviewDataSection = value;
-                };
-
-                var previewDataPayload = {
-                    ProcessInstanceId: processInstanceId,
-
-                    OnlyModified: viewChangeTypeSelectorAPI.getSelectedIds()
-                };
-
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveWrapperAPI, previewDataPayload, setLoader, directiveWrapperReadyPromiseDeferred);
+            $scope.onSupplierPricelistPreviewDataReady = function (api) {
+                supplierPricelistPreviewDataAPI = api;
+                supplierPricelistPreviewDataReadyPromiseDeferred.resolve();
             };
-
+            $scope.onSupplierPricelistPreviewExcludedDataReady = function (api) {
+                supplierPricelistPreviewExcludedDataAPI = api;
+                supplierPricelistPreviewExcludedDataReadyPromiseDeferred.resolve();
+            };
             defineAPI();
         }
 
@@ -111,7 +90,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                     fileId = payload.fileId;
                     requireWarningConfirmation = payload.requireWarningConfirmation;
                 }
-                return UtilsService.waitMultipleAsyncOperations([loadViewChangeTypeSelector, loadGroupedBySelector, loadPreviewDataSection, loadValidationMessageHistory,loadSupplierPricelistPreviewSummary])
+                return UtilsService.waitMultipleAsyncOperations([loadValidationMessageHistory, loadSupplierPricelistPreviewSummary, loadSupplierPricelistPreviewData, loadSupplierPricelistPreviewExcludedData])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           });
@@ -119,49 +98,6 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
-
-        function loadViewChangeTypeSelector() {
-            var loadViewChangeTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-            viewChangeTypeReadyPromiseDeferred.promise.then(function () {
-
-                var viewChangeTypeSelectorPayload = {
-                    selectedIds: WhS_SupPL_PreviewChangeTypeEnum.OnlyModifiedEntities.value
-                };
-
-                VRUIUtilsService.callDirectiveLoad(viewChangeTypeSelectorAPI, viewChangeTypeSelectorPayload, loadViewChangeTypeSelectorPromiseDeferred);
-            });
-            return loadViewChangeTypeSelectorPromiseDeferred.promise;
-        }
-
-        function loadGroupedBySelector() {
-            var loadGroupedBySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            groupedByReadyPromiseDeferred.promise.then(function () {
-
-                var viewChangeTypeSelectorPayload = {
-                    selectedIds: WhS_SupPL_PreviewGroupedBy.Countries.description
-                };
-
-                VRUIUtilsService.callDirectiveLoad(groupedBySelectorAPI, viewChangeTypeSelectorPayload, loadGroupedBySelectorPromiseDeferred);
-            });
-            return loadGroupedBySelectorPromiseDeferred.promise;
-        }
-
-        function loadPreviewDataSection() {
-            var loadPreviewDataPromiseDeferred = UtilsService.createPromiseDeferred();
-            directiveWrapperReadyPromiseDeferred.promise.then(function () {
-
-                directiveWrapperReadyPromiseDeferred = undefined;
-
-                var payload = {
-                    ProcessInstanceId: processInstanceId,
-                    OnlyModified: changeType
-                };
-
-                VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred);
-            });
-            return loadPreviewDataPromiseDeferred.promise;
         }
 
 
@@ -181,7 +117,33 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
             return loadSupplierPricelistPreviewSummaryPromiseDeferred.promise;
         }
+        function loadSupplierPricelistPreviewData() {
+            var loadSupplierPricelistPreviewDataPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            supplierPricelistPreviewDataReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    processInstanceId: processInstanceId,
+                };
+                VRUIUtilsService.callDirectiveLoad(supplierPricelistPreviewDataAPI, payload, loadSupplierPricelistPreviewDataPromiseDeferred);
+            });
+
+            return loadSupplierPricelistPreviewDataPromiseDeferred.promise;
+        }
+
+
+        function loadSupplierPricelistPreviewExcludedData() {
+            var loadSupplierPricelistPreviewExcludedDataPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            supplierPricelistPreviewExcludedDataReadyPromiseDeferred.promise.then(function () {
+                var payload = {
+                    processInstanceId: processInstanceId,
+                    isExcluded : true
+                };
+                VRUIUtilsService.callDirectiveLoad(supplierPricelistPreviewExcludedDataAPI, payload, loadSupplierPricelistPreviewExcludedDataPromiseDeferred);
+            });
+
+            return loadSupplierPricelistPreviewExcludedDataPromiseDeferred.promise;
+        }
         function loadValidationMessageHistory() {
             var loadValidationMessageHistoryPromiseDeferred = UtilsService.createPromiseDeferred();
 

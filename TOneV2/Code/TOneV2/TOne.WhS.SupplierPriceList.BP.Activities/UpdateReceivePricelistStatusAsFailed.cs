@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 	public class UpdateReceivePricelistStatusAsFailed : CodeActivity
 	{
 		[RequiredArgument]
-		public InArgument<int> ReceivedPricelistRecordId { get; set; }
+		public InArgument<int?> ReceivedPricelistRecordId { get; set; }
 
 		[RequiredArgument]
 		public InArgument<ReceivedPricelistStatus> ReceivedPricelistStatus { get; set; }
@@ -24,7 +24,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
 		protected override void Execute(CodeActivityContext context)
 		{
-			int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
+			int? receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
 			ReceivedPricelistStatus receivedPricelistStatus = this.ReceivedPricelistStatus.Get(context);
 			List<BPValidationMessage> validationErrorMessages = this.ValidationErrorMessages.Get(context);
 			var validationMessageDataManager = new BPValidationMessageManager();
@@ -35,14 +35,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 			{
 				foreach (var message in validationErrorMessages)
 				{
-					errorDetails.Add(new SPLImportErrorDetail() { ErrorMessage = message.Message });
+					errorDetails.Add(new SPLImportErrorDetail() { Message = message.Message });
 				}
 			}
 			IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
-			manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, receivedPricelistStatus, errorDetails);
+			manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId.Value, receivedPricelistStatus, errorDetails);
 
 			var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-			receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+			receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId.Value, AutoImportEmailTypeEnum.Failed);
 		}
 	}
 }

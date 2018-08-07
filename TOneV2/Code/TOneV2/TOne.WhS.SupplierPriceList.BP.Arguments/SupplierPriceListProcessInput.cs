@@ -21,7 +21,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments
 
 		public bool IsAutoImport { get; set; }
 
-		public int ReceivedPricelistRecordId { get; set; }
+		public int? ReceivedPricelistRecordId { get; set; }
 
 		public override string EntityId
 		{

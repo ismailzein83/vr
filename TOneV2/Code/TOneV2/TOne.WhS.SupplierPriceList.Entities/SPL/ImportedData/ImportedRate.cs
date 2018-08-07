@@ -9,7 +9,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ImportedRate : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget
+    public class ImportedRate : Vanrise.Entities.IDateEffectiveSettings, IRuleTarget,IExclude
     {
         public ImportedRate()
         {
@@ -51,6 +51,21 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
         }
 
         public RateProcessInfo ProcessInfo { get; set; }
+
+        #region IExclude Implementation
+        public bool IsExcluded { get; set; }
+        public void SetAsExcluded()
+        {
+            IsExcluded = true;
+
+
+            foreach (var newRate in NewRates)
+                newRate.IsExcluded = true;
+
+            foreach (var changedExistingRate in ChangedExistingRates)
+                changedExistingRate.ChangedRate.IsExcluded = true;
+        }
+        #endregion
 
         #region IRuleTarget Implementation
 

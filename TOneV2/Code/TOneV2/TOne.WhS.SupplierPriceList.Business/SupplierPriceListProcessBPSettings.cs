@@ -42,10 +42,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 
                 if (supplierPriceListProcessInput.IsAutoImport)
                 {
-                    receivedPricelistManager.UpdateReceivedPricelistStatus(supplierPriceListProcessInput.ReceivedPricelistRecordId, ReceivedPricelistStatus.FailedDueToProcessingError);
+                    receivedPricelistManager.UpdateReceivedPricelistStatus(supplierPriceListProcessInput.ReceivedPricelistRecordId.Value, ReceivedPricelistStatus.FailedDueToProcessingError);
 
                     var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-                    receivedSupplierPricelistManager.SendMailToInternal(supplierPriceListProcessInput.ReceivedPricelistRecordId, AutoImportEmailTypeEnum.Failed);
+                    receivedSupplierPricelistManager.SendMailToInternal(supplierPriceListProcessInput.ReceivedPricelistRecordId.Value, AutoImportEmailTypeEnum.Failed);
                 }
 			}
 			base.OnBPExecutionCompleted(context);

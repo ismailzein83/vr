@@ -15,13 +15,13 @@ namespace TOne.WhS.SupplierPriceList.Entities
 		public int? PricelistId { get; set; }
 		public long? ProcessInstanceId { get; set; }
 		public DateTime? StartProcessingDateTime { get; set; }
-		public List<SPLImportErrorDetail> ErrorDetails { get; set; }
+		public List<SPLImportErrorDetail> MessageDetails { get; set; }
         public bool SentToSupplier { get; set; }
 	}
 
     //TODO: This should be changed from Error Message to Message (also change it in Database)
 	public class SPLImportErrorDetail
 	{
-		public string ErrorMessage { get; set; }
+		public string Message { get; set; }
 	}
 }

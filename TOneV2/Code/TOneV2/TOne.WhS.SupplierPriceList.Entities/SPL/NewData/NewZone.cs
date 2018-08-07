@@ -9,7 +9,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
     public class NewZone : IZone
     {
         public long ZoneId { get; set; }
-
+        public bool IsExcluded { get; set; }
         public int CountryId { get; set; }
 
         public string Name { get; set; }

@@ -14,17 +14,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public class SetReceivedPricelistAsWaitingConfirmation : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int> ReceivedPricelistRecordId { get; set; }
+        public InArgument<int?> ReceivedPricelistRecordId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
+            int? receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
             IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
 
-            manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, ReceivedPricelistStatus.WaitingConfirmation);
+            manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId.Value, ReceivedPricelistStatus.WaitingConfirmation);
 
             var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-            receivedSupplierPricelistManager.SendMailToInternal(receivedPricelistRecordId, AutoImportEmailTypeEnum.WaitingConfirmation);
+            receivedSupplierPricelistManager.SendMailToInternal(receivedPricelistRecordId.Value, AutoImportEmailTypeEnum.WaitingConfirmation);
         }
     }
 }

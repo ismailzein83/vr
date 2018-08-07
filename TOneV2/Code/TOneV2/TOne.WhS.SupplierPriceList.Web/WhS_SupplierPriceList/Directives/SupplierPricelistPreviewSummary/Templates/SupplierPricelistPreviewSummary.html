@@ -77,55 +77,69 @@
     </vr-columns>
 
 
-    <vr-columns width="1/3row">
-        <vr-section header="Rate Changes">
-            <div style="height:110px">
-                <vr-section level="2" header="Normal Rate Changes">
+    <vr-columns width="1/3row" haschildcolumns>
+        <vr-columns width="fullrow">
+            <vr-section header="Rate Changes">
+                <div style="height:110px">
+                    <vr-section level="2" header="Normal Rate Changes">
+                        <vr-row>
+                            <vr-columns width="1/3row">
+                                <vr-label>New: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/3row">
+                                <vr-label>Increases: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/3row">
+                                <vr-label>Decreases: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                    <vr-section level="2" header="Other Rate Changes">
+                        <vr-row>
+                            <vr-columns width="1/3row">
+                                <vr-label>New: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfNewOtherRates}}</vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/3row">
+                                <vr-label>Increases: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfIncreasedOtherRates}}</vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/3row">
+                                <vr-label>Decreases: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfDecreasedOtherRates}}</vr-label>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                </div>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-section header="Service Changes">
+                <div style="height:47px">
                     <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-label>New: </vr-label>
-                            <vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
-                        </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-label>Increases: </vr-label>
-                            <vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
-                        </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-label>Decreases: </vr-label>
-                            <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
+                        <vr-columns width="fullrow">
+                            <vr-label>Zone With Changes: </vr-label>
+                            <vr-label isvalue>{{scopeModel.numberOfZonesWithChangeServices}}</vr-label>
                         </vr-columns>
                     </vr-row>
-                </vr-section>
-                <vr-section level="2" header="Other Rate Changes">
+                </div>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-section header="Excluded">
+                <div style="height:47px">
                     <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-label>New: </vr-label>
-                            <vr-label isvalue>{{scopeModel.numberOfNewOtherRates}}</vr-label>
-                        </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-label>Increases: </vr-label>
-                            <vr-label isvalue>{{scopeModel.numberOfIncreasedOtherRates}}</vr-label>
-                        </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-label>Decreases: </vr-label>
-                            <vr-label isvalue>{{scopeModel.numberOfDecreasedOtherRates}}</vr-label>
+                        <vr-columns width="fullrow">
+                            <vr-label>Countries: </vr-label>
+                            <vr-label isvalue>{{scopeModel.numberOfExcludedCountries}}</vr-label>
                         </vr-columns>
                     </vr-row>
-                </vr-section>
-            </div>
-
-        </vr-section>
-        <vr-section header="Service Changes">
-            <div style="height:47px">
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-label>Zone With Changes: </vr-label>
-                        <vr-label isvalue>{{scopeModel.numberOfZonesWithChangeServices}}</vr-label>
-                    </vr-columns>
-                </vr-row>
-            </div>
-        </vr-section>
-
+                </div>
+            </vr-section>
+        </vr-columns>
     </vr-columns>
 
 </vr-row>

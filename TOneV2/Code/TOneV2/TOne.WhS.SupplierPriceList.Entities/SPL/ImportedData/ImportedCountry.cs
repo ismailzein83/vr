@@ -7,16 +7,14 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ImportedCountry: IRuleTarget
+    public class ImportedCountry: IRuleTarget,IExclude
+
     {
         public int CountryId { get; set; }
-
         public List<ImportedZone> ImportedZones { get; set; }
         public List<ImportedCode> ImportedCodes { get; set; }
-
         public List<ImportedRate> ImportedRates { get; set; }
-
-       
+    
 
         #region IRuleTarget Implementation
 
@@ -27,6 +25,19 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         #endregion
 
+        #region IExclude Implementation
+        public bool IsExcluded { get; set; }
+        public void SetAsExcluded ()
+        {
+            IsExcluded = true;
+            foreach (var importedZone in this.ImportedZones)
+            {
+                importedZone.SetAsExcluded();
+            }
+        }
+
+     
+        #endregion
 
         public string TargetType
         {

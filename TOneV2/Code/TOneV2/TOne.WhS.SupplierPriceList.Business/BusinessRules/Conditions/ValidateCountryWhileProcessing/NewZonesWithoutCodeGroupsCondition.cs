@@ -21,44 +21,44 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            //ImportedCountry country = context.Target as ImportedCountry;
-            //IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
-            //var supplierPriceListType = importSPLContext.SupplierPricelistType;
-            //List<string> newZones = new List<string>();
+            ImportedCountry country = context.Target as ImportedCountry;
+            IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
+            var supplierPriceListType = importSPLContext.SupplierPricelistType;
+            List<string> newZones = new List<string>();
 
-            //if (supplierPriceListType != SupplierPricelistType.RateChange)
-            //{
-            //    bool codeGroupExist = false;
-            //    IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(country.CountryId);
-            //    var importedCodes = country.ImportedCodes;
-            //    if (importedCodes.Count() > 0)
-            //    {
-            //        foreach (var codeGroup in codeGroupCodes)
-            //        {
-            //            if (importedCodes.Any(x => x.Code == codeGroup.Code))
-            //            {
-            //                codeGroupExist = true;
-            //                break;
-            //            }
-            //        }
-            //        if (codeGroupExist == false)
-            //        {
-            //            foreach (var importedZone in country.ImportedZones)
-            //            {
-            //                if (importedZone.ChangeType == ZoneChangeType.New)
-            //                    newZones.Add(importedZone.ZoneName);
-            //            }
-            //        }
-            //    }
+            if (supplierPriceListType != SupplierPricelistType.RateChange)
+            {
+                bool codeGroupExist = false;
+                IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(country.CountryId);
+                var importedCodes = country.ImportedCodes;
+                if (importedCodes.Count() > 0)
+                {
+                    foreach (var codeGroup in codeGroupCodes)
+                    {
+                        if (importedCodes.Any(x => x.Code == codeGroup.Code))
+                        {
+                            codeGroupExist = true;
+                            break;
+                        }
+                    }
+                    if (codeGroupExist == false)
+                    {
+                        foreach (var importedZone in country.ImportedZones)
+                        {
+                            if (importedZone.ChangeType == ZoneChangeType.New)
+                                newZones.Add(importedZone.ZoneName);
+                        }
+                    }
+                }
 
-            //}
-            //if (newZones.Count > 0)
-            //{
-            //    CountryManager countryManager = new CountryManager();
-            //    string countryName = countryManager.GetCountryName(country.CountryId);
-            //    context.Message = string.Format("For country '{0}' zone(s) : '{1}' are added without code group", countryName, string.Join(",", newZones));
-            //    return false;
-            //}
+            }
+            if (newZones.Count > 0)
+            {
+                CountryManager countryManager = new CountryManager();
+                string countryName = countryManager.GetCountryName(country.CountryId);
+                context.Message = string.Format("For country '{0}' zone(s) : '{1}' are added without code group", countryName, string.Join(",", newZones));
+                return false;
+            }
             return true;
         }
 

@@ -80,7 +80,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 				{"Received Pricelist", receivedPricelist}
 			};
 
-			if ((int)receivedPricelist.Status > 65 && receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
+			if ((int)receivedPricelist.Status > 65 && receivedPricelist.MessageDetails != null && receivedPricelist.MessageDetails.Count > 0)
 			{
 				var excelFile = new VRExcelFile();
 				var errorSheet = CreateExcelErrorSheet(receivedPricelist);
@@ -124,7 +124,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 				{"Received Pricelist", receivedPricelist}
 			};
 
-			if ((int)receivedPricelist.Status > 65 && receivedPricelist.ErrorDetails != null && receivedPricelist.ErrorDetails.Count > 0)
+			if ((int)receivedPricelist.Status > 65 && receivedPricelist.MessageDetails != null && receivedPricelist.MessageDetails.Count > 0)
 			{
 				var excelFile = new VRExcelFile();
 				var errorSheet = CreateExcelErrorSheet(receivedPricelist);
@@ -174,9 +174,9 @@ namespace TOne.WhS.SupplierPriceList.Business
 			errorSheet.AddCell(new VRExcelCell() { Value = "Errors", RowIndex = 0, ColumnIndex = 0 });
 			errorSheet.SetColumnConfig(errorColumnConfig);
 
-			for (int i = 0; i < receivedPricelist.ErrorDetails.Count; i++)
+			for (int i = 0; i < receivedPricelist.MessageDetails.Count; i++)
 			{
-				errorSheet.AddCell(new VRExcelCell() { Value = receivedPricelist.ErrorDetails[i].ErrorMessage, RowIndex = i + 1, ColumnIndex = 0 });
+				errorSheet.AddCell(new VRExcelCell() { Value = receivedPricelist.MessageDetails[i].Message, RowIndex = i + 1, ColumnIndex = 0 });
 			}
 			return errorSheet;
 		}

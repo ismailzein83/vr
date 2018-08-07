@@ -20,6 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+        public bool IsExcluded { get; set; }
     }
 
     public class CodePreviewDetail

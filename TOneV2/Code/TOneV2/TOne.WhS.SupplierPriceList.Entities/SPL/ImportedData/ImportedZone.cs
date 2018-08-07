@@ -8,7 +8,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Entities.SPL
 {
-    public class ImportedZone : IRuleTarget
+    public class ImportedZone : IRuleTarget,IExclude
     {
         public string ZoneName { get; set; }
 
@@ -86,7 +86,32 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         #endregion
 
+        #region IExclude Implementation
+        public bool IsExcluded { get; set; }
+        public void SetAsExcluded()
+        {
+            IsExcluded = true;
 
+            foreach (var importedCode in this.ImportedCodes)
+                importedCode.SetAsExcluded();
+
+            foreach (var existingZone in ExistingZones)
+            {
+                if (existingZone.ChangedZone != null)
+                    existingZone.ChangedZone.IsExcluded = true;
+            }
+
+            foreach (var newZone in NewZones)
+                newZone.IsExcluded = true;
+
+            if (ImportedNormalRate != null)
+                ImportedNormalRate.SetAsExcluded();
+
+            if (ImportedZoneServiceGroup != null)
+                ImportedZoneServiceGroup.SetAsExcluded();
+        }
+                                    
+        #endregion
         public string TargetType
         {
             get { return "Zone"; }

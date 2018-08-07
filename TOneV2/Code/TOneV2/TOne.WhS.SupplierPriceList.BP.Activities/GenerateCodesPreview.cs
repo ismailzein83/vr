@@ -42,7 +42,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         RecentZoneName = item.ProcessInfo.RecentZoneName,
                         ZoneName = item.ZoneName,
                         BED = item.BED,
-                        EED = item.EED
+                        EED = item.EED,
+                        IsExcluded = item.IsExcluded
                     });
                 }
             }

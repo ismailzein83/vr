@@ -9,7 +9,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.MainExtensions.VRObjectTypes
 {
-	public enum ReceivedPricelistField { PricelistType = 0, PricelistStatus = 1, PricelistName = 2, ReceivedDateTime = 3, StartProcessingDateTime = 4, SupplierName = 5, SupplierEmail = 6, ErrorDetails = 7, SupplierId = 8, ProcessInstanceId = 9, PricelistId = 10, FileId = 11, ReceivedPricelistId = 12 }
+    public enum ReceivedPricelistField { PricelistType = 0, PricelistStatus = 1, PricelistName = 2, ReceivedDateTime = 3, StartProcessingDateTime = 4, SupplierName = 5, SupplierEmail = 6, MessageDetails = 7, SupplierId = 8, ProcessInstanceId = 9, PricelistId = 10, FileId = 11, ReceivedPricelistId = 12 }
 
 	public class ReceivedPricelistPropertyEvaluator : VRObjectPropertyEvaluator
 	{
@@ -63,8 +63,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.VRObjectTypes
 				case ReceivedPricelistField.SupplierEmail:
 					return new CarrierAccountManager().GetSupplierAutoImportEmail(receivedPricelist.SupplierId);
 
-				case ReceivedPricelistField.ErrorDetails:
-					return GetErrors(receivedPricelist.ErrorDetails);
+				case ReceivedPricelistField.MessageDetails:
+					return GetMessages(receivedPricelist.MessageDetails);
 
 				case ReceivedPricelistField.PricelistName:
 					{
@@ -79,10 +79,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.VRObjectTypes
 			return null;
 		}
 
-		public string GetErrors(IEnumerable<SPLImportErrorDetail> errors)
+		public string GetMessages(IEnumerable<SPLImportErrorDetail> messages)
 		{
-			if (errors != null && errors.Any())
-				return string.Join(Environment.NewLine, errors.Select(item => item.ErrorMessage));
+            if (messages != null && messages.Any())
+                return string.Join(Environment.NewLine, messages.Select(item => item.Message));
 			return null;
 		}
 	}

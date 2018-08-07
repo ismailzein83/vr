@@ -15,7 +15,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
     public class SupplierZonePreviewDataManager : BaseTOneDataManager, ISupplierZonePreviewDataManager
     {
         readonly string[] _columns = { "ProcessInstanceID", "CountryID", "ZoneName", "RecentZoneName", "ZoneChangeType", "ZoneBED", "ZoneEED", "SystemRate", "SystemRateBED", 
-                                         "SystemRateEED", "ImportedRate", "ImportedRateBED", "RateChangeType", "SystemZoneServiceIds", "SystemZoneServiceBED", "SystemZoneServiceEED", "ImportedZoneServiceIds", "ImportedZoneServiceBED", "ZoneServiceChangeType" };
+                                         "SystemRateEED", "ImportedRate", "ImportedRateBED", "RateChangeType", "SystemZoneServiceIds", "SystemZoneServiceBED", "SystemZoneServiceEED", "ImportedZoneServiceIds", "ImportedZoneServiceBED", "ZoneServiceChangeType","IsExcluded" };
 
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
         static SupplierZonePreviewDataManager()
@@ -48,7 +48,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         public IEnumerable<ZoneRatePreviewDetail> GetFilteredZonePreview(SPLPreviewQuery query)
         {
-            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetFiltered]", ZoneRatePreviewMapper, query.ProcessInstanceId, query.CountryId, query.OnlyModified);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetFiltered]", ZoneRatePreviewMapper, query.ProcessInstanceId, query.CountryId, query.OnlyModified,query.IsExcluded);
         }
 
 
@@ -60,7 +60,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         public void WriteRecordToStream(ZoneRatePreview record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}^{16}^{17}^{18}^{19}",
                 _processInstanceID,
                 record.CountryId,
                 record.ZoneName,
@@ -79,7 +79,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 GetDateTimeForBCP(record.SystemServicesEED),
                record.ImportedServiceIds != null ? Vanrise.Common.Serializer.Serialize(record.ImportedServiceIds) : null,
                 GetDateTimeForBCP(record.ImportedServicesBED),
-                (int)record.ZoneServicesChangeType);
+                (int)record.ZoneServicesChangeType,
+                (record.IsExcluded)?1:0);
 
         }
 

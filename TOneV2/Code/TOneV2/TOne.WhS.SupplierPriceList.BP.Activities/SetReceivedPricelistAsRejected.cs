@@ -15,14 +15,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     public class SetReceivedPricelistAsRejected : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int> ReceivedPricelistRecordId { get; set; }
+        public InArgument<int?> ReceivedPricelistRecordId { get; set; }
 
         [RequiredArgument]
         public InArgument<List<BPValidationMessage>> ValidationWarningMessages { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            int receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
+            int? receivedPricelistRecordId = this.ReceivedPricelistRecordId.Get(context);
             List<BPValidationMessage> validationWarningMessages = this.ValidationWarningMessages.Get(context);
 
             List<SPLImportErrorDetail> warningDetails = new List<SPLImportErrorDetail>();
@@ -30,15 +30,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 foreach (var message in validationWarningMessages)
                 {
-                    warningDetails.Add(new SPLImportErrorDetail() { ErrorMessage = message.Message });
+                    warningDetails.Add(new SPLImportErrorDetail() { Message = message.Message });
                 }
             }
 
             IReceivedPricelistManager manager = SupPLDataManagerFactory.GetDataManager<IReceivedPricelistManager>();
-            manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId, ReceivedPricelistStatus.Rejected, warningDetails);
+            manager.UpdateReceivedPricelistStatus(receivedPricelistRecordId.Value, ReceivedPricelistStatus.Rejected, warningDetails);
 
             var receivedSupplierPricelistManager = new ReceivedSupplierPricelistManager();
-            receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId, AutoImportEmailTypeEnum.Rejected);
+            receivedSupplierPricelistManager.SendMailToSupplier(receivedPricelistRecordId.Value, AutoImportEmailTypeEnum.Rejected);
         }
     }
 }

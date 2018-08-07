@@ -23,5 +23,6 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
 
         public DateTime? EED { get; set; }
         public RateChangeType Change { get; set; }
+        public bool IsExcluded { get; set; }
     }
 }

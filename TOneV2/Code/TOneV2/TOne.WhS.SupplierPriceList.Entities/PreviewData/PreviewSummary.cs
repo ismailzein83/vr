@@ -29,5 +29,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public int NumberOfMovedCodes { get; set; }
 
         public int NumberOfZonesWithChangedServices { get; set; }
+
+        public int NumberOfExcludedCountries { get; set; }
     }
 }

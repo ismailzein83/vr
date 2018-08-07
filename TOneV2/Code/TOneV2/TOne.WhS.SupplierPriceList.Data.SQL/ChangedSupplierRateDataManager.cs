@@ -53,10 +53,11 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         public void WriteRecordToStream(ChangedRate record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}",
                        record.EntityId,
                        _processInstanceID,
-                       GetDateTimeForBCP(record.EED));
+                       GetDateTimeForBCP(record.EED),
+                        (record.IsExcluded) ? 1 : 0);
         }
     }
 }
