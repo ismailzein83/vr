@@ -59,7 +59,6 @@
     <Compile Include="RouteDataManager.cs" />
     <Compile Include="RouteCaseDataManager.cs" />
     <Compile Include="RouteSucceededDataManager.cs" />
-    <Compile Include="UncompressedRouteDataManager.cs" />
     <Compile Include="WhSRouteSyncEricssonDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

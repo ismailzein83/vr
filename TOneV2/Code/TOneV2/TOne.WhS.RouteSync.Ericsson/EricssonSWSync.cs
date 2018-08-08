@@ -71,7 +71,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (context.Routes == null || context.Routes.Count == 0 || CarrierMappings == null || CarrierMappings.Count == 0)
 				return;
 
-			var convertedRoutes = new List<ConvertedRoute>();
+			var convertedRoutes = new List<EricssonConvertedRoute>();
 			var routesToConvertByRCString = new Dictionary<string, List<EricssonConvertedRoute>>();
 			var routeCases = GetCachedRouteCasesGroupedByOptions(context.SwitchId);
 			var routeCasesToAdd = new HashSet<string>();
@@ -129,26 +129,47 @@ namespace TOne.WhS.RouteSync.Ericsson
 				var routes = routesToConvertKvp.Value.Select(item => { item.RCNumber = routeCase.RCNumber; return item; });
 				convertedRoutes.AddRange(routes);
 			}
-			context.ConvertedRoutes = convertedRoutes;
+			EricssonConvertedRoutesPayload ericssonConvertedRoutesPayload;
+			if (context.ConvertedRoutesPayload != null)
+				ericssonConvertedRoutesPayload = context.ConvertedRoutesPayload.CastWithValidate<EricssonConvertedRoutesPayload>("context.ConvertedRoutesPayload");
+			else
+				ericssonConvertedRoutesPayload = new EricssonConvertedRoutesPayload();
+
+			if (ericssonConvertedRoutesPayload.ConvertedRoutes == null)
+				ericssonConvertedRoutesPayload.ConvertedRoutes = new List<EricssonConvertedRoute>();
+
+			ericssonConvertedRoutesPayload.ConvertedRoutes.AddRange(convertedRoutes);
+			context.ConvertedRoutesPayload = ericssonConvertedRoutesPayload;
+		}
+
+		public override void onAllRoutesConverted(ISwitchRouteSynchronizerOnAllRoutesConvertedContext context)
+		{
+			if (context.ConvertedRoutesPayload == null)
+				return;
+
+			EricssonConvertedRoutesPayload payload = context.ConvertedRoutesPayload.CastWithValidate<EricssonConvertedRoutesPayload>("context.ConvertedRoutesPayload");
+			if (payload.ConvertedRoutes == null || payload.ConvertedRoutes.Count == 0)
+				return;
+			context.ConvertedRoutes = CompressRoutes(payload.ConvertedRoutes);
 		}
 
 		public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
 		{
-			IUncompressedRouteDataManager uncompressedRouteDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IUncompressedRouteDataManager>();
-			uncompressedRouteDataManager.SwitchId = context.SwitchId;
-			var dbApplyStream = uncompressedRouteDataManager.InitialiazeStreamForDBApply();
+			IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
+			routeDataManager.SwitchId = context.SwitchId;
+			var dbApplyStream = routeDataManager.InitialiazeStreamForDBApply();
 
 			foreach (var convertedRoute in context.ConvertedRoutes)
-				uncompressedRouteDataManager.WriteRecordToStream(convertedRoute as EricssonConvertedRoute, dbApplyStream);
+				routeDataManager.WriteRecordToStream(convertedRoute as EricssonConvertedRoute, dbApplyStream);
 
-			return uncompressedRouteDataManager.FinishDBApplyStream(dbApplyStream);
+			return routeDataManager.FinishDBApplyStream(dbApplyStream);
 		}
 
 		public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
 		{
-			IUncompressedRouteDataManager uncompressedRouteDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IUncompressedRouteDataManager>();
-			uncompressedRouteDataManager.SwitchId = context.SwitchId;
-			uncompressedRouteDataManager.ApplyRouteForDB(context.PreparedItemsForApply);
+			IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
+			routeDataManager.SwitchId = context.SwitchId;
+			routeDataManager.ApplyRouteForDB(context.PreparedItemsForApply);
 		}
 
 		public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
@@ -180,25 +201,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 			ICustomerMappingDataManager customerMappingDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<ICustomerMappingDataManager>();
 			customerMappingDataManager.SwitchId = context.SwitchId;
 			#endregion
-
-			IUncompressedRouteDataManager uncompressedRouteDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IUncompressedRouteDataManager>();
-			uncompressedRouteDataManager.SwitchId = context.SwitchId;
-			IEnumerable<EricssonConvertedRoute> uncompressedRoutes = uncompressedRouteDataManager.GetUncompressedRoutes();
-			IEnumerable<EricssonConvertedRoute> compressedRoutes = CompressRoutes(uncompressedRoutes);
-
-			var compressedRoutesToApply = new List<EricssonConvertedRoute>();
-			foreach (var compressedRoute in compressedRoutes)
-			{
-				compressedRoutesToApply.Add(compressedRoute);
-				if (compressedRoutesToApply.Count == 1000000)
-				{
-					routeDataManager.InsertRoutesToTempTable(compressedRoutesToApply);
-					compressedRoutesToApply = new List<EricssonConvertedRoute>();
-				}
-			}
-			if (compressedRoutesToApply.Count > 0)
-				routeDataManager.InsertRoutesToTempTable(compressedRoutesToApply);
-
 
 			#region Get Commands
 			var routeCasesToBeAdded = new RouteCaseManager().GetNotSyncedRouteCases(context.SwitchId);
@@ -344,29 +346,29 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 		public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
 		{
-            if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
-                return true;
+			if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
+				return true;
 
-            HashSet<string> allBOs = new HashSet<string>();
-            HashSet<string> duplicatedBOs = new HashSet<string>();
+			HashSet<string> allBOs = new HashSet<string>();
+			HashSet<string> duplicatedBOs = new HashSet<string>();
 
-            foreach (var carrierMapping in this.CarrierMappings)
-            {
-                CustomerMapping customerMapping = carrierMapping.Value.CustomerMapping;
-                if (customerMapping == null || string.IsNullOrEmpty(customerMapping.BO))
-                    continue;
+			foreach (var carrierMapping in this.CarrierMappings)
+			{
+				CustomerMapping customerMapping = carrierMapping.Value.CustomerMapping;
+				if (customerMapping == null || string.IsNullOrEmpty(customerMapping.BO))
+					continue;
 
-                if (!allBOs.Contains(customerMapping.BO))
-                    allBOs.Add(customerMapping.BO);
-                else
-                    duplicatedBOs.Add(customerMapping.BO);
-            }
+				if (!allBOs.Contains(customerMapping.BO))
+					allBOs.Add(customerMapping.BO);
+				else
+					duplicatedBOs.Add(customerMapping.BO);
+			}
 
-            if (duplicatedBOs.Count == 0)
-                return true;
+			if (duplicatedBOs.Count == 0)
+				return true;
 
-            context.ValidationMessages = new List<string>() { string.Format("Duplicate BOs: {0}", string.Join(", ", duplicatedBOs)) };
-            return false;
+			context.ValidationMessages = new List<string>() { string.Format("Duplicate BOs: {0}", string.Join(", ", duplicatedBOs)) };
+			return false;
 
 			//Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>();
 
@@ -1811,9 +1813,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 		#endregion
 
 		#region compress
-		private IEnumerable<EricssonConvertedRoute> CompressRoutes(IEnumerable<EricssonConvertedRoute> uncompressdRoutes)
+		private List<ConvertedRoute> CompressRoutes(IEnumerable<EricssonConvertedRoute> uncompressdRoutes)
 		{
-			List<EricssonConvertedRoute> result = new List<EricssonConvertedRoute>();
+			List<ConvertedRoute> result = new List<ConvertedRoute>();
 
 			var compressedEricssonConvertedRoutesByBO = new CompressedEricssonConvertedRoutesByBO();
 
@@ -1927,7 +1929,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				}
 			}
 
-			return result.OrderBy(item => item.BO).ThenBy(itm => itm.Code);
+			return result;
 		}
 		#endregion
 

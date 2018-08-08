@@ -16,7 +16,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		const string RouteAddedTableName = "Route_Added";
 		const string RouteUpdatedTableName = "Route_Updated";
 		const string RouteDeletedTableName = "Route_Deleted";
-		const string UncompressedRouteTableName = "Route_temp_uncompressed";
 
 		readonly string[] columns = { "BO", "Code", "RCNumber" };
 
@@ -32,9 +31,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			Guid guid = Guid.NewGuid();
 			string createTempTableQuery = string.Format(query_CreateRouteTempTable, SwitchId, guid, RouteTempTableName);
 			ExecuteNonQueryText(createTempTableQuery, null);
-
-			string createUncompressedTableQuery = string.Format(query_CreateUncompressedRouteTable, SwitchId, guid, UncompressedRouteTableName);
-			ExecuteNonQueryText(createUncompressedTableQuery, null);
 
 			string createTableQuery = string.Format(query_CreateRouteTable, SwitchId, guid, RouteTableName);
 			ExecuteNonQueryText(createTableQuery, null);
@@ -68,8 +64,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		{
 			string query = string.Format(query_SwapTables, SwitchId, RouteTableName, RouteTempTableName);
 			ExecuteNonQueryText(query, null);
-			string deleteUncompressedTabeQuery = string.Format(query_DeleteRouteTable, SwitchId, UncompressedRouteTableName);
-			ExecuteNonQueryText(deleteUncompressedTabeQuery, null);
 			string deleteAddedTabeQuery = string.Format(query_DeleteRouteTable, SwitchId, RouteAddedTableName);
 			ExecuteNonQueryText(deleteAddedTabeQuery, null);
 			string deleteUpdatedTabeQuery = string.Format(query_DeleteRouteTable, SwitchId, RouteUpdatedTableName);
@@ -261,22 +255,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		}
 
 		#region Queries
-		const string query_CreateUncompressedRouteTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
-                                                    BEGIN
-                                                        DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
-                                                    END
-
-                                                    CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                                          BO varchar(255) NOT NULL,
-	                                                      Code varchar(20) NOT NULL,
-	                                                      RCNumber int NOT NULL
-                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
-                                                    (
-                                                        BO ASC,
-	                                                    Code ASC
-                                                    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-													) ON [PRIMARY]";
-
 
 		const string query_CreateRouteTempTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
