@@ -366,8 +366,8 @@ namespace TOne.WhS.Runtime.Tasks
                             //CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
                             TrunkTrunkGroups = new List<TrunkTrunkGroup>()
                             {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("c7cc9e7b-aed9-49d3-5851-348db6586b24"), Percentage = 10, Priority = 1},
-                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90, Priority = 2}
+                                new TrunkTrunkGroup() { TrunkId = new Guid("c7cc9e7b-aed9-49d3-5851-348db6586b24"), Percentage = 10},
+                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90}
                             }
                         },
                         //new TrunkGroup()
@@ -436,7 +436,7 @@ namespace TOne.WhS.Runtime.Tasks
                             CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
                             TrunkTrunkGroups = new List<TrunkTrunkGroup>()
                             {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("F31DB509-8DC2-42B4-AEBE-1F43E6C27C8B"), Percentage = 100, Priority = 1 }
+                                new TrunkTrunkGroup() { TrunkId = new Guid("F31DB509-8DC2-42B4-AEBE-1F43E6C27C8B"), Percentage = 100}
                             }
                         },
                         new TrunkGroup()
@@ -445,7 +445,7 @@ namespace TOne.WhS.Runtime.Tasks
                             CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
                             TrunkTrunkGroups = new List<TrunkTrunkGroup>()
                             {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("DEF376A4-1FAF-4627-B64D-3E3E48ACAC40"), Percentage = 100, Priority = 1 }
+                                new TrunkTrunkGroup() { TrunkId = new Guid("DEF376A4-1FAF-4627-B64D-3E3E48ACAC40"), Percentage = 100 }
                             }
                         },
                     }
