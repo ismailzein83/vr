@@ -28,8 +28,15 @@
                     </vr-tab>
                     <vr-tab header="'Comparison'" tabobject="scopeModel.recievedComparisonTab">
                         <vr-row removeline>
-                            <vr-columns width="1/4row">
-                                <vr-textbox value="scopeModel.threshold" label="Threshold" type="number" minvalue="0"></vr-textbox>
+                            <vr-columns width="1/4row" >
+                                <vr-columns width="fullrow" haschildcolumns>
+                                    <vr-columns colnum="11" haschildcolumns>
+                                        <vr-textbox value="scopeModel.threshold" label="Threshold" type="number" minvalue="0"></vr-textbox>
+                                    </vr-columns>
+                                    <vr-columns colnum="1" withemptyline left-medium-spacing>
+                                        <vr-hint value="{{scopeModel.thresholdHint}}"></vr-hint>
+                                    </vr-columns>
+                                </vr-columns>                               
                             </vr-columns>
                             <vr-columns width="1/4row">
                                 <vr-select datasource="scopeModel.comparisonResult"
