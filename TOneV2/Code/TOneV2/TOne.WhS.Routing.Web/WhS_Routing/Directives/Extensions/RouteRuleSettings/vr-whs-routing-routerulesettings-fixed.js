@@ -279,7 +279,9 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         overallBackupOptionsDirectiveReadyPromiseDeferred.promise.then(function () {
 
                             var overallBackupOptionsPayload = {
-                                filter: { SupplierFilterSettings: supplierFilterSettings },
+                                saleRate: $scope.scopeModel.Rate,
+                                supplierZoneDetails: supplierZoneDetails,
+                                supplierFilterSettings: supplierFilterSettings,
                                 routeRuleConfiguration: routeRuleConfiguration,
                                 removeLossType: $scope.scopeModel.removeLossType
                             };
@@ -393,6 +395,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     option.backupOptionGridAPI = api;
 
                     var backupOptionGridAPIPayload = {
+                        saleRate: $scope.scopeModel.Rate,
                         supplierFilterSettings: supplierFilterSettings,
                         supplierZoneDetails: supplierZoneDetails,
                         routeRuleConfiguration: routeRuleConfiguration,
