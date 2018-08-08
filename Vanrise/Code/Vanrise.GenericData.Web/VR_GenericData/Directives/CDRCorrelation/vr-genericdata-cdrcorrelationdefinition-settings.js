@@ -34,6 +34,9 @@
             var mergeDataTransformationAPI;
             var mergeDataTransformationSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var correlateSingleCDRDataTransformationAPI;
+            var correlateSingleCDRDataTransformationSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var inputDataRecordTypeSelectorAPI;
             var inputDataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var onInputRecordTypeSelectionChangedDeferred;
@@ -65,9 +68,14 @@
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onDataTransformationSelectorDirectiveReady = function (api) {
+                $scope.scopeModel.onMergeDataTransformationSelectorDirectiveReady = function (api) {
                     mergeDataTransformationAPI = api;
                     mergeDataTransformationSelectorReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onCorrelateSingleCDRDataTransformationSelectorDirectiveReady = function (api) {
+                    correlateSingleCDRDataTransformationAPI = api;
+                    correlateSingleCDRDataTransformationSelectorReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onInputDataRecordTypeSelectorReady = function (api) {
@@ -219,6 +227,7 @@
                     var promises = [];
 
                     promises.push(loadMergeDataTransformationSelector());
+                    promises.push(loadCorrelateSingleCDRDataTransformationSelector());
                     promises.push(loadInputDataRecordTypeSelector());
                     promises.push(loadOutputDataRecordTypeSelector());
 
@@ -265,6 +274,20 @@
                             VRUIUtilsService.callDirectiveLoad(mergeDataTransformationAPI, directivePayload, loadMergeDataTransformationSelectorPromiseDeferred);
                         });
                         return loadMergeDataTransformationSelectorPromiseDeferred.promise;
+                    }
+
+                    function loadCorrelateSingleCDRDataTransformationSelector() {
+                        var loadCorrelateSingleCDRDataTransformationSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        correlateSingleCDRDataTransformationSelectorReadyDeferred.promise.then(function () {
+                            var directivePayload;
+                            if (settings != undefined) {
+                                directivePayload = {
+                                    selectedIds: settings.CorrelateSingleCDRDataTransformationDefinitionId
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(correlateSingleCDRDataTransformationAPI, directivePayload, loadCorrelateSingleCDRDataTransformationSelectorPromiseDeferred);
+                        });
+                        return loadCorrelateSingleCDRDataTransformationSelectorPromiseDeferred.promise;
                     }
 
                     function loadInputDataRecordTypeSelector() {
@@ -408,7 +431,8 @@
 							    CalledNumberFieldName: (calledNumberFieldSelectorAPI != undefined) ? calledNumberFieldSelectorAPI.getSelectedIds() : null,
 							    DurationFieldName: (durationFieldSelectorAPI != undefined) ? durationFieldSelectorAPI.getSelectedIds() : null,
 							    DatetimeFieldName: (datetimeFieldSelectorAPI != undefined) ? datetimeFieldSelectorAPI.getSelectedIds() : null,
-							    MergeDataTransformationDefinitionId: (mergeDataTransformationAPI != undefined) ? mergeDataTransformationAPI.getSelectedIds() : null
+							    MergeDataTransformationDefinitionId: (mergeDataTransformationAPI != undefined) ? mergeDataTransformationAPI.getSelectedIds() : null,
+							    CorrelateSingleCDRDataTransformationDefinitionId: (correlateSingleCDRDataTransformationAPI != undefined) ? correlateSingleCDRDataTransformationAPI.getSelectedIds() : null,
 							}
                     };
                 };

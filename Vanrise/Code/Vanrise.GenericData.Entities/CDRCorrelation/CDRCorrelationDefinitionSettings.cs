@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Entities
 		{
 			get { return new Guid("919798ED-8B0D-40CD-A011-D90C3B691C88"); }
 		}
+        public Guid CorrelateSingleCDRDataTransformationDefinitionId { get; set; }
+
 		public Guid MergeDataTransformationDefinitionId { get; set; }
 
 		public Guid InputDataRecordTypeId { get; set; }

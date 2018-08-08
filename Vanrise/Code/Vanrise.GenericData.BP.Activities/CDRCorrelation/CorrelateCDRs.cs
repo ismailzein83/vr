@@ -66,6 +66,21 @@ namespace Vanrise.GenericData.BP.Activities
 
                                 foreach (var cdr in recordBatch.Records)
                                 {
+                                    var singleCDROutput = new DataTransformer().ExecuteDataTransformation(cdrCorrelationDefinition.Settings.CorrelateSingleCDRDataTransformationDefinitionId, (context) =>
+                                    {
+                                        context.SetRecordValue("InputCDR", cdr);
+                                    });
+
+                                    dynamic correlatedCDR = singleCDROutput.GetRecordValue("CorrelatedCDR");
+                                    if (correlatedCDR != null)
+                                    {
+                                        long cdrId = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
+                                        DateTime recordDateTime = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
+
+                                        AddCorrelatedCDR(cdrCorrelationDefinition, cdrCorrelationBatch, new List<long> { cdrId }, recordDateTime, new List<dynamic>() { correlatedCDR });
+                                        continue;
+                                    }
+
                                     MobileCDR matchingMobileCDR = null;
                                     MobileCDR mobileCDR = new MobileCDR(cdr, cdrCorrelationDefinition);
 
@@ -105,16 +120,7 @@ namespace Vanrise.GenericData.BP.Activities
                                         long cdrId = mobileCDR.CDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
                                         long correlatedCDRId = matchingMobileCDR.CDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
 
-                                        cdrCorrelationBatch.OutputRecordsToInsert.Add(correlatedCDRList.First());
-                                        cdrCorrelationBatch.InputIdsToDelete.AddRange(new List<long> { cdrId, correlatedCDRId });
-
-                                        DateTime from = cdrCorrelationBatch.DateTimeRange.From;
-                                        if (from == default(DateTime) || from > recordDateTime)
-                                            cdrCorrelationBatch.DateTimeRange.From = recordDateTime;
-
-                                        DateTime to = cdrCorrelationBatch.DateTimeRange.To;
-                                        if (to == default(DateTime) || to <= recordDateTime)
-                                            cdrCorrelationBatch.DateTimeRange.To = recordDateTime.AddSeconds(1);
+                                        AddCorrelatedCDR(cdrCorrelationDefinition, cdrCorrelationBatch, new List<long> { cdrId, correlatedCDRId }, recordDateTime, correlatedCDRList);
                                     }
                                     else
                                     {
@@ -138,6 +144,20 @@ namespace Vanrise.GenericData.BP.Activities
             });
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Correlate CDRs is done.");
+        }
+
+        private void AddCorrelatedCDR(CDRCorrelationDefinition cdrCorrelationDefinition, CDRCorrelationBatch cdrCorrelationBatch, List<long> idsToDelete, DateTime recordDateTime, List<dynamic> correlatedCDRList)
+        {
+            cdrCorrelationBatch.OutputRecordsToInsert.Add(correlatedCDRList.First());
+            cdrCorrelationBatch.InputIdsToDelete.AddRange(idsToDelete);
+
+            DateTime from = cdrCorrelationBatch.DateTimeRange.From;
+            if (from == default(DateTime) || from > recordDateTime)
+                cdrCorrelationBatch.DateTimeRange.From = recordDateTime;
+
+            DateTime to = cdrCorrelationBatch.DateTimeRange.To;
+            if (to == default(DateTime) || to <= recordDateTime)
+                cdrCorrelationBatch.DateTimeRange.To = recordDateTime.AddSeconds(1);
         }
 
         private static void CleaningListAndDict(List<MobileCDR> uncorrelatedCDRs, Dictionary<string, List<MobileCDR>> uncorrelatedCDRsByCDPNDict, DateTime maxDateTime, TimeSpan dateTimeMargin)

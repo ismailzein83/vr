@@ -72,8 +72,14 @@
         <vr-row>
             <vr-section header="Settings">
                 <vr-columns width="1/2row">
-                    <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onDataTransformationSelectorDirectiveReady" hideremoveicon
-                                                                          isrequired="true" customlabel="'Correlate Data Transformation'">
+                    <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onCorrelateSingleCDRDataTransformationSelectorDirectiveReady" hideremoveicon
+                                                                          isrequired="true" customlabel="'Correlate Single CDR'">
+                    </vr-genericdata-datatransformationdefinition-selector>
+                </vr-columns>
+
+                <vr-columns width="1/2row">
+                    <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onMergeDataTransformationSelectorDirectiveReady" hideremoveicon
+                                                                          isrequired="true" customlabel="'Merge CDRs'">
                     </vr-genericdata-datatransformationdefinition-selector>
                 </vr-columns>
             </vr-section>
