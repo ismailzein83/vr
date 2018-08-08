@@ -38,11 +38,14 @@ namespace Vanrise.GenericData.Business
         public GenericBESelectorRuntimeInfo GetGenericBESelectorRuntimeInfo(Guid businessEntityDefinitionId)
         {
             var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+            var idFieldType = GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
 
             return new GenericBESelectorRuntimeInfo()
             {
                 SelectorSingularTitle = genericBEDefinitionSettings.SelectorSingularTitle,
-                SelectorPluralTitle = genericBEDefinitionSettings.SelectorPluralTitle
+                SelectorPluralTitle = genericBEDefinitionSettings.SelectorPluralTitle,
+                IdFieldName = idFieldType != null ? idFieldType.Name : null,
+                TitleFieldName = GetGenericBEDefinitionTitleFieldName(businessEntityDefinitionId)
             };
             
         }

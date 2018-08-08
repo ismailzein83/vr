@@ -54,7 +54,13 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             if (attrs.selectionmode == "dynamic" || attrs.selectionmode == "multiple") {
                 multipleselection = "ismultipleselection";
             }
+            var showaddbutton = "";
 
+             if (attrs.enableadd != undefined)
+            { 
+                showaddbutton =' showaddbutton="true" '
+            }
+                    console.log(attrs.selectionmode);
             if (attrs.selectionmode == "dynamic") {
                 return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
@@ -62,7 +68,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 '</vr-section> </vr-columns> </vr-row> ';
             }
             else {
-                return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
+                return '<vr-directivewrapper directive="selector.directive" ' + showaddbutton + ' normal-col-num="{{scopeModel.calculatedColNum}}"  on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                 + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                 '</vr-section>';

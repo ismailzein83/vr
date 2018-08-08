@@ -10,5 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public string SelectorSingularTitle { get; set; }
         public string SelectorPluralTitle { get; set; }
+        public string IdFieldName { get; set; }
+        public string TitleFieldName { get; set; }
     }
 }

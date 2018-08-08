@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntitySelector.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService'];
+    GenericBusinessEntitySelector.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService','VR_GenericData_GenericBusinessEntityService'];
 
-    function GenericBusinessEntitySelector(VR_GenericData_GenericBEDefinitionAPIService,VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService) {
+    function GenericBusinessEntitySelector(VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService, VR_GenericData_GenericBusinessEntityService) {
         return {
             restrict: 'E',
             scope: {
@@ -42,9 +42,12 @@
 
         function BusinessentitySelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
+            var businessEntityDefinitionId;
 
+            var titleFieldName;
+            var idFieldName;
             var selectorAPI;
-
+            var filter;
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -53,15 +56,34 @@
                         ctrl.onReady(getDirectiveAPI());
                     }
                 };
+                $scope.addNewGenericBusinessEntity = function () {
+                    var onGenericBEAdded = function (genericBusinessEntity) {
+                        var idField = genericBusinessEntity.FieldValues[idFieldName];
+                        var selectedIds;
+                        if (idField != undefined)
+                        {
+                            if (attrs.ismultipleselection != undefined)
+                                selectedIds = [idField.Value];
+                            else
+                                selectedIds = idField.Value;
+
+                        }
+                        $scope.isLoadingSelector = true;
+
+                        GetGenericBusinessEntityInfo(selectedIds).finally(function () {
+                            $scope.isLoadingSelector = false;
+                        });
+                    };
+                    VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId);
+                };
             }
 
             function getDirectiveAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var filter;
+                    
                     var selectedIds;
-                    var businessEntityDefinitionId;
                     var promises = [];
 
                     if (payload != undefined) {
@@ -84,6 +106,8 @@
                                     } else {
                                         if (response.SelectorSingularTitle != undefined) ctrl.fieldTitle = response.SelectorSingularTitle;
                                     }
+                                   // titleFieldName = response.TitleFieldName;
+                                    idFieldName = response.IdFieldName;
                                 }
 
                             });
@@ -91,26 +115,8 @@
                         }
                     }
 
-                    var getGenericBusinessEntityInfoPromise = GetGenericBusinessEntityInfo();
+                    var getGenericBusinessEntityInfoPromise = GetGenericBusinessEntityInfo(selectedIds);
                     promises.push(getGenericBusinessEntityInfoPromise);
-
-                    function GetGenericBusinessEntityInfo() {
-
-                     return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                        selectorAPI.clearDataSource();
-
-                        if (response) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
-                            }
-                        }
-
-                        if (selectedIds) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
-                        }
-                    });
-
-                   }
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -123,6 +129,24 @@
                 };
 
                 return api;
+            }
+
+            function GetGenericBusinessEntityInfo(selectedIds) {
+                
+                return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
+                    selectorAPI.clearDataSource();
+
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            ctrl.datasource.push(response[i]);
+                        }
+                    }
+
+                    if (selectedIds) {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
+                    }
+                });
+
             }
         }
 
@@ -144,7 +168,10 @@
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var addCliked = '';
+            if (attrs.showaddbutton != undefined)
+                addCliked = 'onaddclicked="addNewGenericBusinessEntity"';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="isLoadingSelector">'
                     + '<vr-label>' + label + '</vr-label>'
                     + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
@@ -158,6 +185,7 @@
                     + ' ' + hideselectedvaluessection
                     + ' isrequired="ctrl.isrequired"'
                     + ' ' + hideremoveicon
+                 + ' ' + addCliked
                 + '</vr-select></vr-columns>';
         }
     }
