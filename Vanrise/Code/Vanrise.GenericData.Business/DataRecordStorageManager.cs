@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Public Methods Data Record
-        private List<DataRecord> GetDataRecords(DateTime fromTime,DateTime toTime ,RecordFilterGroup filterGroup , List<string> fieldNames,int? limitResult,OrderDirection direction, Guid dataRecordStorageId)
+        public List<DataRecord> GetDataRecords(DateTime fromTime,DateTime toTime ,RecordFilterGroup filterGroup , List<string> fieldNames,int? limitResult,OrderDirection direction, Guid dataRecordStorageId)
         {
             var storageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
