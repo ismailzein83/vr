@@ -31,7 +31,6 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
             var gridDrillDownTabsObj;
 
             function initializeController() {
-                $scope.showGrid = false;
                 $scope.customerRoutes = [];
 
                 $scope.onGridReady = function (api) {
@@ -57,13 +56,13 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                         }
                         onResponseReady(response);
 
-                        //showGrid
                         UtilsService.waitMultiplePromises(customerRouteLoadGridPromises).then(function () {
-                            $scope.showGrid = true;
                             loadGridPromiseDeffered.resolve();
                         }).catch(function (error) {
                             VRNotificationService.notifyExceptionWithClose(error, $scope);
                             loadGridPromiseDeffered.reject();
+                        }).finally(function () {
+                            $scope.isLoading = false;
                         });
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -88,6 +87,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    $scope.isLoading = true;
                     isDatabaseTypeCurrent = query.isDatabaseTypeCurrent;
                     return gridAPI.retrieveData(query);
                 };
