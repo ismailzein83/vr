@@ -45,7 +45,7 @@
             $scope.scopeModel.comparisonResult = [];
             $scope.scopeModel.comparisonCriterias = [];
             $scope.scopeModel.selectedComparisonCriterias = [];
-            $scope.scopeModel.thresholdHint = 'Represents the max acceptable "%"<br> of difference between the System compared to the Supplier referring to<br> the formula:<div style="text-align:center;">(SysValue-SupplierValue)<br> %=&nbsp;&nbsp;------------------------------------*100<br>(SystemValue)</div>';
+            $scope.scopeModel.thresholdHint = 'Represents the max acceptable "%"<br> of difference between the System compared to the Supplier referring to<br> the formula:<div style="text-align:center;">(SystemValue-SupplierValue)<br>%=--------------------------------------*100<br>(SystemValue)</div>';
             $scope.scopeModel.reset = function () {
                     var payload = {
                         context: getContext(),
