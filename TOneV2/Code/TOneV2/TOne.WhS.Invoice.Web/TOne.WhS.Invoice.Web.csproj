@@ -249,11 +249,11 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\CustomerJazzInvoiceItemsReport1.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\CustomerJazzInvoiceItemsReport.rdlc">
+    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\CustomerJazzInvoiceReport1.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\CustomerJazzInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\CustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\SupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\SupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\CustomerInvoiceItemsReport.rdlc">
