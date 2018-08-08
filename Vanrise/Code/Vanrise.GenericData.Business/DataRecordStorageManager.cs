@@ -23,7 +23,21 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Public Methods Data Record
-
+        private List<DataRecord> GetDataRecords(DateTime fromTime,DateTime toTime ,RecordFilterGroup filterGroup , List<string> fieldNames,int? limitResult,OrderDirection direction, Guid dataRecordStorageId)
+        {
+            var storageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
+            var context = new DataRecordDataManagerGetFilteredDataRecordsContext
+            {
+                FromTime = fromTime,
+                ToTime = toTime,
+                FilterGroup = filterGroup,
+                LimitResult = limitResult,
+                FieldNames = fieldNames,
+                Direction = direction
+            };
+            return storageDataManager.GetFilteredDataRecords(context);
+        }
         public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
@@ -1151,7 +1165,7 @@ namespace Vanrise.GenericData.Business
                 DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
                 return dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
                 {
-                    return GetDataRecords(cloneInput, dataRecordStorageId);
+                    return dataRecordStorageManager.GetDataRecords(cloneInput.Query.FromTime, cloneInput.Query.ToTime,cloneInput.Query.FilterGroup,cloneInput.Query.Columns,cloneInput.Query.LimitResult,cloneInput.Query.Direction, dataRecordStorageId);
                 });
             }
 
@@ -1177,23 +1191,7 @@ namespace Vanrise.GenericData.Business
 
             #region Private Methods
 
-            private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, Guid dataRecordStorageId)
-            {
-                var storageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorageId);
-                storageDataManager.ThrowIfNull("storageDataManager", dataRecordStorageId);
-
-                var query = input.Query;
-                var context = new DataRecordDataManagerGetFilteredDataRecordsContext
-                {
-                    FromTime = query.FromTime,
-                    ToTime = query.ToTime,
-                    FilterGroup = query.FilterGroup,
-                    LimitResult = query.LimitResult,
-                    FieldNames = query.Columns,
-                    Direction = query.Direction
-                };
-                return storageDataManager.GetFilteredDataRecords(context);
-            }
+            
 
             #endregion
         }

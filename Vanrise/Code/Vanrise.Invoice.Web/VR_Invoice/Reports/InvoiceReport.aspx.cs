@@ -66,8 +66,16 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
         }
         protected override void Render(HtmlTextWriter writer)
         {
-            base.Render(writer);
-            GC.Collect();
+            try
+            {
+                base.Render(writer);
+                GC.Collect();
+            }
+            catch (Exception error)
+            {
+                LoggerFactory.GetExceptionLogger().WriteException(error);
+                labelError.Text = error.Message;
+            }
         }
     }
 }
