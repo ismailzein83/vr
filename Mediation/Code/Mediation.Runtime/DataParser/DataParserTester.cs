@@ -15421,7 +15421,7 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(100, dateTimePackage_100);
 
-            PackageFieldParser trunkIdIncommingPackage_105 = new FixedLengthPackageFieldParser()
+            PackageFieldParser trunkIdentificationIncommingPackage_105 = new FixedLengthPackageFieldParser()
             {
                 PackageLength = 9,
                 FieldParser = new TrunkIdentificationPackageParser()
@@ -15430,9 +15430,9 @@ namespace Mediation.Runtime.DataParser
                     TrunkNumberFieldName = "IncomingTrunkNumber"
                 }
             };
-            packages.Add(105, trunkIdIncommingPackage_105);
+            packages.Add(105, trunkIdentificationIncommingPackage_105);
 
-            PackageFieldParser trunkIdOutgoingPackage_106 = new FixedLengthPackageFieldParser()
+            PackageFieldParser trunkIdentificationOutgoingPackage_106 = new FixedLengthPackageFieldParser()
             {
                 PackageLength = 9,
                 FieldParser = new TrunkIdentificationPackageParser()
@@ -15441,7 +15441,27 @@ namespace Mediation.Runtime.DataParser
                     TrunkNumberFieldName = "OutgoingTrunkNumber"
                 }
             };
-            packages.Add(106, trunkIdOutgoingPackage_106);
+            packages.Add(106, trunkIdentificationOutgoingPackage_106);
+
+            PackageFieldParser trunkIdentificationIncommingCICPackage_107 = new FixedLengthPackageFieldParser()
+            {
+                PackageLength = 10,
+                FieldParser = new TrunkIdentificationCICPackageParser()
+                {
+                    TrunkGroupNumberCICFieldName = "IncomingTrunkGroupNumberCIC"
+                }
+            };
+            packages.Add(107, trunkIdentificationIncommingCICPackage_107);
+
+            PackageFieldParser trunkIdentificationOutgoingCICPackage_108 = new FixedLengthPackageFieldParser()
+            {
+                PackageLength = 10,
+                FieldParser = new TrunkIdentificationCICPackageParser()
+                {
+                    TrunkGroupNumberCICFieldName = "OutgoingTrunkGroupNumberCIC"
+                }
+            };
+            packages.Add(108, trunkIdentificationOutgoingCICPackage_108);
 
             PackageFieldParser connectionIdentificationPackage_110 = new DirectLengthPackageFieldParser()
             {
@@ -15503,12 +15523,6 @@ namespace Mediation.Runtime.DataParser
 
             PackageFieldParser chargeUnitsForFacilityUsagePackage_104 = new FixedLengthPackageFieldParser() { PackageLength = 3, FieldParser = new SkipBlockParser() };
             packages.Add(104, chargeUnitsForFacilityUsagePackage_104);
-
-            PackageFieldParser trunkIdIncommingWithCICPackage_107 = new FixedLengthPackageFieldParser() { PackageLength = 10, FieldParser = new SkipBlockParser() };
-            packages.Add(107, trunkIdIncommingWithCICPackage_107);
-
-            PackageFieldParser trunkIdOutgoingWithCICPackage_108 = new FixedLengthPackageFieldParser() { PackageLength = 10, FieldParser = new SkipBlockParser() };
-            packages.Add(108, trunkIdOutgoingWithCICPackage_108);
 
             PackageFieldParser dateTimePackage_116 = new FixedLengthPackageFieldParser() { PackageLength = 8, FieldParser = new SkipBlockParser() };
             packages.Add(116, dateTimePackage_116);
