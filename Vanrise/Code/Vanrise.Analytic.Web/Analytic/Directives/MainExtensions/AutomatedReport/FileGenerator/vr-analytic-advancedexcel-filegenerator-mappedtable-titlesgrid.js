@@ -41,7 +41,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.tableTitles, title.Id, 'Id');
                 $scope.scopeModel.tableTitles.splice(index, 1);
             };
-
+            $scope.scopeModel.validateTitles = function () {
+                if ($scope.scopeModel.tableTitles.length == 0)
+                {
+                    return "At least one title should be added.";
+                }
+                return null;
+            };
             defineAPI();
 
         }

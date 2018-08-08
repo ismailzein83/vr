@@ -4,16 +4,18 @@
     </vr-columns>
    
     <vr-columns width="fullrow">
-        <vr-datagrid on-ready="scopeModel.onGridReady"
-                        datasource="scopeModel.tableTitles"
-                        menuactions="scopeModel.gridMenuActions"
-                        enabledraggablerow="true"
-                        ondeleterow="scopeModel.deleteTableTitle"
-                        hidegridmenu
-                        isrequired="true">
-            <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="5">
-                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
-            </vr-datagridcolumn>
-        </vr-datagrid>
+        <vr-validator validate="scopeModel.validateTitles()">
+            <vr-datagrid on-ready="scopeModel.onGridReady"
+                         datasource="scopeModel.tableTitles"
+                         menuactions="scopeModel.gridMenuActions"
+                         enabledraggablerow="true"
+                         ondeleterow="scopeModel.deleteTableTitle"
+                         hidegridmenu
+                         isrequired="true">
+                <vr-datagridcolumn headertext="'Title'" field="'Title'" widthfactor="5">
+                    <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
     </vr-columns>
 </div>
