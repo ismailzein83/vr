@@ -129,8 +129,11 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                 var loadMappedColumnsGridPromise = loadMappedColumnsGrid();
                 promises.push(loadMappedColumnsGridPromise);
 
-                var loadMappedTableTitlesGridPromise = loadMappedTableTitlesGrid();
-                promises.push(loadMappedTableTitlesGridPromise);
+                if ($scope.scopeModel.includeTitle) {
+                    var loadMappedTableTitlesGridPromise = loadMappedTableTitlesGrid();
+                    promises.push(loadMappedTableTitlesGridPromise);
+                }
+              
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -150,7 +153,7 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     ListName: listName,
                     IncludeHeaders: $scope.scopeModel.includeHeaders,
                     IncludeSummary: $scope.scopeModel.includeSummary,
-                    Titles: mappedTableTitlesGridAPI.getData(),
+                    Titles: $scope.scopeModel.includeTitle? mappedTableTitlesGridAPI.getData() : undefined,
                     ColumnDefinitions: mappedTableObject != undefined ? mappedTableObject.mappedColumns : undefined,
                     SubTableDefinitions: (mappedTableObject != undefined && mappedTableObject.mappedSubTables!=undefined) ? mappedTableObject.mappedSubTables: null,
                 };

@@ -47,8 +47,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         }
         function defineAPI() {
             var api = {};
-
             api.load = function (payload) {
+                var promises = [];
                 var titles;
                 if (payload != undefined && payload.titles != undefined) {
                     for (var i = 0; i < payload.titles.length; i++) {
@@ -57,6 +57,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                             Title: payload.titles[i] });
                     }
                 }
+                return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {

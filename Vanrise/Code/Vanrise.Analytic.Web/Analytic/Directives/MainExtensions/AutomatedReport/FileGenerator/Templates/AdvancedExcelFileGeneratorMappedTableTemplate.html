@@ -13,11 +13,11 @@
         <vr-switch value="scopeModel.includeSummary" label="Include Summary" ng-show="scopeModel.showSummarySwitch"></vr-switch>
     </vr-columns>
     <vr-columns width="1/3row">
-        <vr-switch value="scopeModel.includeTitle" label="Include Title"></vr-switch>
+        <vr-switch value="scopeModel.includeTitle" label="Include Title(s)"></vr-switch>
     </vr-columns>
 </vr-row>
 <vr-row>
-    <span vr-disabled="!scopeModel.includeTitle" ng-show="scopeModel.includeTitle">
+    <span vr-disabled="!scopeModel.includeTitle" ng-if="scopeModel.includeTitle">
         <vr-analytic-advancedexcel-filegenerator-mappedtable-titlesgrid on-ready="scopeModel.onTitlesGridDirectiveReady"></vr-analytic-advancedexcel-filegenerator-mappedtable-titlesgrid>
     </span>
 </vr-row>

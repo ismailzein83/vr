@@ -116,7 +116,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     Dictionary<Guid, VRAutomatedReportTableInfo> presentSubTablesInfo = new Dictionary<Guid, VRAutomatedReportTableInfo>();
                     foreach (var subTableDef in subTableDefinitions)
                     {
-                        presentSubTablesInfo.Add(subTableDef.SubTableId, subTablesInfo.GetRecord(subTableDef.SubTableId));
+                        if (!presentSubTablesInfo.ContainsKey(subTableDef.SubTableId))
+                        {
+                            presentSubTablesInfo.Add(subTableDef.SubTableId, subTablesInfo.GetRecord(subTableDef.SubTableId));
+                        }
                     }
                     maxHeaderRows = presentSubTablesInfo.Max(x => x.Value.FieldsOrder.Count());
                     maxSubTableDimensions = maxHeaderRows;
@@ -354,13 +357,37 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 //SetBordersForTitleCell(worksheet, subTableTitleRowIndex - 1, subTableTitleColIndex, subTableValuesCount);
             }
         }
-
-        private void BuildTableHeaders(Worksheet worksheet, int headerRowIndex, ref int subTableDataRowIndex, IOrderedEnumerable<int> sortedColumnsIndexes, Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, Dictionary<string, VRAutomatedReportFieldInfo> fieldInfos, Dictionary<Guid, VRAutomatedReportTableInfo> subTablesInfo, out int subTableValuesCount, int maxHeaderRows, int maxSubTableDimensions)
+        private void InsertRowsForHeaders(List<int> insertedRows, List<int> insertedCols, Worksheet worksheet, int headerRowIndex, int subTableDataRowIndex,int maxSubTableDimensions, int maxHeaderRows, bool includeTitle)
+        {
+            if (maxHeaderRows != 0)
+            {
+                int startingIndex = headerRowIndex - maxHeaderRows + 1 ;
+                while (startingIndex < headerRowIndex)
+                {
+                    if (!insertedRows.Contains(startingIndex + 1))
+                    {
+                        worksheet.Cells.InsertRow(startingIndex + 1);
+                        insertedRows.Add(startingIndex + 1);
+                    }
+                    startingIndex++;
+                }
+            }
+            else if(!includeTitle)
+            {
+                if (!insertedRows.Contains(headerRowIndex+2))
+                {
+                    insertedRows.Add(headerRowIndex+2);
+                    worksheet.Cells.InsertRow(headerRowIndex+2);
+                }
+            }
+        }
+        private void BuildTableHeaders(Worksheet worksheet, int headerRowIndex, ref int subTableDataRowIndex, IOrderedEnumerable<int> sortedColumnsIndexes, Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, Dictionary<string, VRAutomatedReportFieldInfo> fieldInfos, Dictionary<Guid, VRAutomatedReportTableInfo> subTablesInfo, out int subTableValuesCount, int maxHeaderRows, int maxSubTableDimensions, List<int> insertedRows, List<int> insertedCols, bool includeTitle)
         {
             int columnIndexState = sortedColumnsIndexes.First();
             List<int> subTableRows = new List<int>();
             subTableValuesCount = 0;
             int lastCol = -1;
+            InsertRowsForHeaders(insertedRows, insertedCols, worksheet, headerRowIndex, subTableDataRowIndex, maxSubTableDimensions, maxHeaderRows, includeTitle);
             foreach (var col in sortedColumnsIndexes)
             {
                 if (lastCol > -1)
@@ -420,6 +447,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     for (int iteration = 0; iteration < fieldValues.FieldValues.Count; iteration++)
                                     {
                                         var fieldValue = fieldValues.FieldValues[iteration];
+                                        if (iteration != fieldValues.FieldValues.Count - 1)
+                                        {
+                                            if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                            {
+                                                insertedCols.Add(fieldStartingIndex + 1);
+                                                worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                            }
+                                        }
                                         if (fieldValue != null)
                                         {
                                             if (fieldValues.FieldType.RenderDescriptionByDefault())
@@ -491,13 +526,18 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
         }
 
-        private void BuildTableSummaryData(Worksheet worksheet, VRAutomatedReportResolvedDataList dataList, int summaryRowIndex, IOrderedEnumerable<int> sortedColumnsIndexes, Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic)
+        private void BuildTableSummaryData(Worksheet worksheet, VRAutomatedReportResolvedDataList dataList, int summaryRowIndex, IOrderedEnumerable<int> sortedColumnsIndexes, Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, List<int> insertedRows)
         {
             var fieldInfos = dataList.FieldInfos;
             var subTablesInfo = dataList.SubTablesInfo;
             var summaryRecord = dataList.SummaryDataItem;
             int columnIndexState = sortedColumnsIndexes.First();
             int lastCol = -1;
+            if (!insertedRows.Contains(summaryRowIndex))
+            {
+                worksheet.Cells.InsertRow(summaryRowIndex);
+                insertedRows.Add(summaryRowIndex);
+            }
 
             foreach (var col in sortedColumnsIndexes)
             {
@@ -582,11 +622,21 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
         }
 
-        private void BuildTableData(Worksheet worksheet, List<int> allColumnIndices, VRAutomatedReportResolvedDataList dataList, int subTableDataRowIndex, int colDataRowIndex, IOrderedEnumerable<int> sortedColumnsIndexes, Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, int subTableValuesCount, out int summaryRowIndex)
+        private void InsertRowsForData(bool includeTitle, bool includeHeaders, ref bool initializeData, List<int> insertedRows, int rowIndex, Worksheet worksheet)
+        {
+            if (!insertedRows.Contains(rowIndex + 1))
+            {
+                worksheet.Cells.InsertRow(rowIndex + 1);
+                insertedRows.Add(rowIndex + 1);
+            }
+        }
+       
+        private void BuildTableData(Worksheet worksheet, List<int> allColumnIndices, VRAutomatedReportResolvedDataList dataList, int subTableDataRowIndex, int colDataRowIndex, IOrderedEnumerable<int> sortedColumnsIndexes, Dictionary<int, AdvancedExcelFileGeneratorTableColumnDefinition> columnDefinitionsDic, Dictionary<int, AdvancedExcelFileGeneratorSubTableDefinition> subTableDefinitionsDic, int subTableValuesCount, out int summaryRowIndex, List<int> insertedRows, bool includeTitle,bool includeHeaders, List<int> insertedCols)
         {
             var items = dataList.Items;
             var fieldInfos = dataList.FieldInfos;
             summaryRowIndex = colDataRowIndex + items.Count;
+            bool initializeData = false;
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
@@ -600,6 +650,10 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     var column = columnDefinitionsDic.GetRecord(col);
                     if (column != null)
                     {
+                        if (i != items.Count - 1)
+                        {
+                            InsertRowsForData(includeTitle, includeHeaders, ref initializeData, insertedRows, colDataRowIndex, worksheet);
+                        }
                         allColumnIndices.Add(columnIndexState);
                         var field = item.Fields.GetRecord(column.FieldName);
                         var fieldInfo = fieldInfos.GetRecord(column.FieldName);
@@ -642,12 +696,27 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 {
                                     var fieldStartingIndex = columnIndexState;
                                     var measure = subTableItem.Fields.GetRecord(measureDef.FieldName);
+                                    if (i != items.Count - 1)
+                                    {
+                                        InsertRowsForData(includeTitle, includeHeaders, ref initializeData, insertedRows, subTableFirstRowIndex, worksheet);
+                                    }
                                     if (measure != null && measure.FieldValues != null && measure.FieldValues.Count > 0)
                                     {
                                         valuesCount = measure.FieldValues.Count;
                                         for (int o = 0; o < measure.FieldValues.Count; o++)
                                         {
                                             var measureValue = measure.FieldValues[o];
+                                            if (!includeHeaders)
+                                            {
+                                                if (o != measure.FieldValues.Count - 1)
+                                                {
+                                                    if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                    {
+                                                        insertedCols.Add(fieldStartingIndex + 1);
+                                                        worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                    }
+                                                }
+                                            }
                                             allColumnIndices.Add(fieldStartingIndex);
                                             if (measureValue.Value is DateTime)
                                             {
@@ -680,6 +749,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 {
                                     var fieldStartingIndex = columnIndexState;
                                     valuesCount = subTableValuesCount;
+                                    if (!insertedRows.Contains(subTableFirstRowIndex + 1))
+                                    {
+                                        worksheet.Cells.InsertRow(subTableFirstRowIndex + 1);
+                                        insertedRows.Add(subTableFirstRowIndex + 1);
+                                    }
                                     for (int j = 0; j < subTableValuesCount; j++)
                                     {
                                         SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, null, 12, false, TextAlignmentType.Left, true);
@@ -694,6 +768,31 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     lastCol = col;
                 }
                 colDataRowIndex++;
+            }
+        }
+
+        private void InsertTitleRows(bool includeTitle, int titleRowIndex, List<string> titles, Worksheet worksheet, List<int> insertedRows, bool includeHeaders)
+        {
+            if (includeTitle)
+            {
+                int currentTitleIndex = titleRowIndex;
+                if (titles != null)
+                {
+                    int tilesCount = titles.Count;
+                    if(!includeHeaders)
+                    {
+                        tilesCount = titles.Count - 1;
+                    }
+                    for (int i = 0; i < tilesCount; i++)
+                    {
+                        if (!insertedRows.Contains(currentTitleIndex + 1))
+                        {
+                            worksheet.Cells.InsertRow(currentTitleIndex + 1);
+                            insertedRows.Add(currentTitleIndex + 1);
+                        }
+                        currentTitleIndex++;
+                    }
+                }
             }
         }
         private void BuildTableExcelTableDefinition(AdvancedExcelFileGeneratorTableDefinition tableDef, Workbook tableDefinitionsWorkbook, VRAutomatedReportResolvedDataList dataList)
@@ -715,17 +814,21 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             IOrderedEnumerable<int> sortedColumnsIndexes = columnsIndexes.OrderBy(x => x);
             int subTableValuesCount = 0;
             int summaryRowIndex;
+            List<int> insertedRows = new List<int>();
+            List<int> insertedCols = new List<int>();
+            InsertTitleRows(tableDef.IncludeTitle, titleRowIndex, tableDef.Titles, worksheet, insertedRows, tableDef.IncludeHeaders);
+            
             if (tableDef.IncludeHeaders)
             {
-                BuildTableHeaders(worksheet, headerRowIndex, ref subTableDataRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, dataList.FieldInfos, dataList.SubTablesInfo, out subTableValuesCount, maxHeaderRows, maxSubTableDimensions);
+                BuildTableHeaders(worksheet, headerRowIndex, ref subTableDataRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, dataList.FieldInfos, dataList.SubTablesInfo, out subTableValuesCount, maxHeaderRows, maxSubTableDimensions, insertedRows, insertedCols, tableDef.IncludeTitle);
             }
 
             if (dataList.Items.Count > 0)
             {
-                BuildTableData(worksheet, allColumnIndices, dataList, subTableDataRowIndex, colDataRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, subTableValuesCount, out summaryRowIndex);
+                BuildTableData(worksheet, allColumnIndices, dataList, subTableDataRowIndex, colDataRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, subTableValuesCount, out summaryRowIndex, insertedRows, tableDef.IncludeTitle, tableDef.IncludeHeaders, insertedCols);
                 if (tableDef.IncludeSummary && dataList.SummaryDataItem != null)
                 {
-                    BuildTableSummaryData(worksheet, dataList, summaryRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic);
+                    BuildTableSummaryData(worksheet, dataList, summaryRowIndex, sortedColumnsIndexes, columnDefinitionsDic, subTableDefinitionsDic, insertedRows);
                 }
             }
             else
