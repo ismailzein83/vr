@@ -68,6 +68,7 @@
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
@@ -1500,8 +1501,9 @@
                 SupplierPricelistType = Input.SupplierPricelistType,
                 PricelistDate = Input.PriceListDate,
                 CurrencyId = Input.CurrencyId,
-                FileId = Input.FileId
-            }</mca:CSharpValue>
+                FileId = Input.FileId,
+                SupplierName = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetCarrierAccountName(Input.SupplierAccountId)
+        }</mca:CSharpValue>
                         </InArgument>
                       </vbw:AssignTask.TaskData>
                       <vbw:AssignTask.TaskExecutionInformation>
@@ -1527,29 +1529,32 @@
               </If>
             </If.Then>
             <If.Else>
-              <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="Approve Price List Changes">
-                <vbw:AssignTask.AssignedTo>
-                  <InArgument x:TypeArguments="vbe:BPTaskAssignee">
-                    <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
-                  </InArgument>
-                </vbw:AssignTask.AssignedTo>
-                <vbw:AssignTask.TaskData>
-                  <InArgument x:TypeArguments="vbe:BPTaskData">
-                    <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskData()
+              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_21">
+                <vbw:AssignTask x:TypeArguments="twsbat:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="Approve Price List Changes">
+                  <vbw:AssignTask.AssignedTo>
+                    <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                      <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:AssignTask.AssignedTo>
+                  <vbw:AssignTask.TaskData>
+                    <InArgument x:TypeArguments="vbe:BPTaskData">
+                      <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskData()
             {
                 SupplierPricelistType = Input.SupplierPricelistType,
                 PricelistDate = Input.PriceListDate,
                 CurrencyId = Input.CurrencyId,
-                FileId = Input.FileId
+                FileId = Input.FileId,
+                SupplierName = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetCarrierAccountName(Input.SupplierAccountId)
             }</mca:CSharpValue>
-                  </InArgument>
-                </vbw:AssignTask.TaskData>
-                <vbw:AssignTask.TaskExecutionInformation>
-                  <OutArgument x:TypeArguments="twsbat:PreviewTaskExecutionInformation">
-                    <mca:CSharpReference x:TypeArguments="twsbat:PreviewTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
-                  </OutArgument>
-                </vbw:AssignTask.TaskExecutionInformation>
-              </vbw:AssignTask>
+                    </InArgument>
+                  </vbw:AssignTask.TaskData>
+                  <vbw:AssignTask.TaskExecutionInformation>
+                    <OutArgument x:TypeArguments="twsbat:PreviewTaskExecutionInformation">
+                      <mca:CSharpReference x:TypeArguments="twsbat:PreviewTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
+                    </OutArgument>
+                  </vbw:AssignTask.TaskExecutionInformation>
+                </vbw:AssignTask>
+              </Sequence>
             </If.Else>
           </If>
           <If sap2010:WorkflowViewState.IdRef="If_2">
@@ -1730,7 +1735,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -1914,6 +1919,14 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_21" sap:VirtualizedContainerService.HintSize="222,146">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="997,508">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">

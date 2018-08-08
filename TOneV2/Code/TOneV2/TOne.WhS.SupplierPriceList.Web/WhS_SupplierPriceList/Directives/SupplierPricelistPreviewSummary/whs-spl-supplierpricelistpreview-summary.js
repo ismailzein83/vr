@@ -46,10 +46,9 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
                 if (payload != null) {
                     processInstanceId = payload.processInstanceId;
-
                     currencyId = payload.currencyId;
                     fileId = payload.fileID;
-
+                    $scope.scopeModel.supplierName = payload.supplierName;
                     $scope.scopeModel.pricelistDate = UtilsService.getDateTimeFormat(payload.pricelistDate, DateTimeFormatEnum.Date);
 
                     if (payload.supplierPricelistType != null) {

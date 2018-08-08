@@ -99,6 +99,7 @@
                     supplierPricelistType: taskData.SupplierPricelistType,
                     pricelistDate: taskData.PricelistDate,
                     currencyId: taskData.CurrencyId,
+                    supplierName: taskData.SupplierName,
                     requireWarningConfirmation: true,
                 };
                 VRUIUtilsService.callDirectiveLoad(supplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);

@@ -39,7 +39,6 @@
         }
 
         function previewSupplierPriceList(payload) {
-
             var settings = {
             };
 
@@ -52,9 +51,9 @@
                 fileId: payload.fileId,
                 supplierPricelistType: payload.supplierPricelistType,
                 pricelistDate: payload.pricelistDate,
-                currencyId: payload.currencyId
+                currencyId: payload.currencyId,
+                supplierName : payload.supplierName
             };
-
             VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);
         }
 

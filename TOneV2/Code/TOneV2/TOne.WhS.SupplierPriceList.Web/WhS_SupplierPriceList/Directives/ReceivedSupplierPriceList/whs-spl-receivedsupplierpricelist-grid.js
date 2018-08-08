@@ -124,13 +124,14 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRUIUtils
 	                return menuActions;
 	            };
 	        }
-	        function previewPricelist(dataItem) {
+            function previewPricelist(dataItem) {
 	            var obj = {
 	                processInstanceId: dataItem.ReceivedPricelist.ProcessInstanceId,
 	                fileId: dataItem.ReceivedPricelist.FileId,
 	                supplierPricelistType: dataItem.ReceivedPricelist.PricelistType,
 	                pricelistDate: dataItem.ReceivedPricelist.ReceivedDateTime,
-	                currencyId: dataItem.CurrencyId
+                    currencyId: dataItem.CurrencyId,
+                    supplierName: dataItem.SupplierName
 	            };
 	            WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(obj);
 	        }
