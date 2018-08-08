@@ -200,18 +200,26 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         promises.push(saleServiceViewerLoadDeferred.promise);
                     }
 
-                    //Loading OptionsSection Directives
-                    var optionsSectionLoadPromise = getOptionsSectionLoadPromise();
-                    promises.push(optionsSectionLoadPromise);
+                    var loadingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    //Loading OverallBackupOptions Directive
-                    var overallBackupOptionsDirectiveLoadPromise = getOverallBackupOptionsDirectiveLoadPromise();
-                    promises.push(overallBackupOptionsDirectiveLoadPromise);
+                    getRouteRuleConfiguration().then(function () {
+                        var _promises = [];
 
+                        //Loading OptionsSection Directives
+                        var optionsSectionLoadPromise = getOptionsSectionLoadPromise();
+                        _promises.push(optionsSectionLoadPromise);
 
-                    function getOptionsSectionLoadPromise() {
-                        //GetRouteRuleConfiguration
-                        var getRouteRuleConfigurationPromise = WhS_Routing_RouteRuleAPIService.GetRouteRuleConfiguration().then(function (response) {
+                        //Loading OverallBackupOptions Directive
+                        var overallBackupOptionsDirectiveLoadPromise = getOverallBackupOptionsDirectiveLoadPromise();
+                        _promises.push(overallBackupOptionsDirectiveLoadPromise);
+
+                        UtilsService.waitMultiplePromises(_promises).then(function () {
+                            loadingDirectivePromiseDeferred.resolve();
+                        });
+                    });
+
+                    function getRouteRuleConfiguration() {
+                        return WhS_Routing_RouteRuleAPIService.GetRouteRuleConfiguration().then(function (response) {
                             routeRuleConfiguration = response;
 
                             switch (routeRuleConfiguration.FixedOptionLossType) {
@@ -226,7 +234,8 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                             $scope.scopeModel.showGrid = true;
                         });
-
+                    }
+                    function getOptionsSectionLoadPromise() {
                         //Loading CarrierAccount Selector
                         var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                         carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
@@ -240,7 +249,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                         //Loading Options Grid 
                         var loadOptionGridPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([gridPromiseDeferred.promise, getRouteRuleConfigurationPromise, carrierAccountSelectorLoadPromiseDeferred.promise]).then(function () {
+                        UtilsService.waitMultiplePromises([gridPromiseDeferred.promise, carrierAccountSelectorLoadPromiseDeferred.promise]).then(function () {
                             var _promises = [];
                             for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
                                 var selectedSupplier = $scope.scopeModel.selectedSuppliers[i];
@@ -269,7 +278,11 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                         overallBackupOptionsDirectiveReadyPromiseDeferred.promise.then(function () {
 
-                            var overallBackupOptionsPayload = { filter: { SupplierFilterSettings: supplierFilterSettings } };
+                            var overallBackupOptionsPayload = {
+                                filter: { SupplierFilterSettings: supplierFilterSettings },
+                                routeRuleConfiguration: routeRuleConfiguration,
+                                removeLossType: $scope.scopeModel.removeLossType
+                            };
                             if (overallBackupOptions != undefined) {
                                 overallBackupOptionsPayload.backups = overallBackupOptions;
                             }
@@ -279,7 +292,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         return overallBackupOptionsDirectiveLoadPromiseDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return loadingDirectivePromiseDeferred.promise;
                 };
 
                 api.getData = function () {
@@ -379,7 +392,12 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 option.onBackupOptionDirectiveReady = function (api) {
                     option.backupOptionGridAPI = api;
 
-                    var backupOptionGridAPIPayload = { supplierFilterSettings: supplierFilterSettings, supplierZoneDetails: supplierZoneDetails };
+                    var backupOptionGridAPIPayload = {
+                        supplierFilterSettings: supplierFilterSettings,
+                        supplierZoneDetails: supplierZoneDetails,
+                        routeRuleConfiguration: routeRuleConfiguration,
+                        removeLossType: $scope.scopeModel.removeLossType
+                    };
                     if (option != undefined && option.Backups != undefined) {
                         backupOptionGridAPIPayload.backups = option.Backups;
                     }
