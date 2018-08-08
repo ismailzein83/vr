@@ -348,7 +348,7 @@ namespace Vanrise.Common.Business
             return new BankDetailsSettingsInfo()
             {
                 BankDetailId = bankDetail.BankDetailId,
-                Bank = bankDetail.Bank,
+                ChannelName = bankDetail.ChannelName != null ? bankDetail.ChannelName : bankDetail.Bank,
             };
         }
 

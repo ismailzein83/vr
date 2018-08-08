@@ -9,6 +9,6 @@ namespace Vanrise.Entities
     public class BankDetailsSettingsInfo
     {
         public Guid BankDetailId { get; set; }
-        public string Bank { get; set; }
+        public string ChannelName { get; set; }
     }
 }

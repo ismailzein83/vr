@@ -73,7 +73,7 @@ function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService, VRCommo
             addCliked = 'onaddclicked="addNewBank"';
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Bank" datavaluefield="BankDetailId" '
+            + '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="ChannelName" datavaluefield="BankDetailId" '
         + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" on-ready="onSelectorReady"></vr-select>'
            + '</vr-columns>';
     }
