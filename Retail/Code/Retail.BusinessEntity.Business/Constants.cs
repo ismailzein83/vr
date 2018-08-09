@@ -13,5 +13,7 @@ namespace Retail.BusinessEntity.Business
         public const string ServiceVoiceTypeTemplateConfigType = "Retail_BE_ServiceVoiceTypeTemplate";
 
         public const string RetailBETechnicalSettings = "Retail_BE_TechnicalSettings";
+
+        public const string FaultTicketsSettingsData = "Retail_BE_FaultTickets_Settings";
     }
 }
