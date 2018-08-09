@@ -8,113 +8,119 @@ using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Ericsson.Business
 {
-    public class FTPLogger : SwitchLogger
-    {
-        public override Guid ConfigId { get { return new Guid("4B424B30-083C-4999-B883-AF4555ECC819"); } }
+	public class FTPLogger : SwitchLogger
+	{
+		public override Guid ConfigId { get { return new Guid("4B424B30-083C-4999-B883-AF4555ECC819"); } }
 
-        public FTPCommunicatorSettings FTPCommunicatorSettings { get; set; }
+		public FTPCommunicatorSettings FTPCommunicatorSettings { get; set; }
 
 
-        public override void LogRouteCases(ILogRouteCasesContext context)
-        {
-            MemoryStream ms = GenerateStream(context.CommandResults);
+		public override void LogRouteCases(ILogRouteCasesContext context)
+		{
+			MemoryStream ms = GenerateStream(context.CommandResults);
 
-            string fileName;
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
-            string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
+			string fileName;
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
 
-            switch (context.ExecutionStatus)
-            {
-                case ExecutionStatus.Succeeded: fileName = string.Format("RouteCase_Successful_{0}", executionDateTimeAsString); break;
-                case ExecutionStatus.Failed: fileName = string.Format("RouteCase_Unsuccessful_{0}", executionDateTimeAsString); break;
-                default: throw new NotSupportedException(string.Format("context.ExecutionStatus '{0}' is not supported", context.ExecutionStatus));
-            }
+			switch (context.ExecutionStatus)
+			{
+				case ExecutionStatus.Succeeded: fileName = string.Format("RouteCase_Successful_{0}", executionDateTimeAsString); break;
+				case ExecutionStatus.Failed: fileName = string.Format("RouteCase_Unsuccessful_{0}", executionDateTimeAsString); break;
+				default: throw new NotSupportedException(string.Format("context.ExecutionStatus '{0}' is not supported", context.ExecutionStatus));
+			}
 
-            string errorMessage;
-            using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
-            {
-                communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
-            }
-        }
+			string errorMessage;
+			using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
+			{
+				communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
+			}
+		}
 
-        public override void LogCarrierMappings(ILogCarrierMappingsContext context)
-        {
-            MemoryStream ms = GenerateStream(context.CommandResults);
+		public override void LogCarrierMappings(ILogCarrierMappingsContext context)
+		{
+			context.CommandResults.Insert(0, new CommandResult() { Command = string.Format("{0};", EricssonCommands.PNBZI_Command) });
+			context.CommandResults.Insert(1, new CommandResult() { Command = string.Format("{0};", EricssonCommands.PNBCI_Command) });
+			context.CommandResults.Add(new CommandResult() { Command = string.Format("{0};", EricssonCommands.PNBAI_Command) });
+			MemoryStream ms = GenerateStream(context.CommandResults);
 
-            string fileName;
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
-            string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
+			string fileName;
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
 
-            switch (context.ExecutionStatus)
-            {
-                case ExecutionStatus.Succeeded: fileName = string.Format("PreTableScript_Successful_{0}", executionDateTimeAsString); break;
-                case ExecutionStatus.Failed: fileName = string.Format("PreTableScript_Unsuccessful_{0}", executionDateTimeAsString); break;
-                default: throw new NotSupportedException(string.Format("context.ExecutionStatus '{0}' is not supported", context.ExecutionStatus));
-            }
+			switch (context.ExecutionStatus)
+			{
+				case ExecutionStatus.Succeeded: fileName = string.Format("PreTableScript_Successful_{0}", executionDateTimeAsString); break;
+				case ExecutionStatus.Failed: fileName = string.Format("PreTableScript_Unsuccessful_{0}", executionDateTimeAsString); break;
+				default: throw new NotSupportedException(string.Format("context.ExecutionStatus '{0}' is not supported", context.ExecutionStatus));
+			}
 
-            string errorMessage;
-            using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
-            {
-                communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
-            }
-        }
+			string errorMessage;
+			using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
+			{
+				communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
+			}
+		}
 
-        public override void LogRoutes(ILogRoutesContext context)
-        {
-            MemoryStream ms = GenerateStream(context.CommandResults);
+		public override void LogRoutes(ILogRoutesContext context)
+		{
+			context.CommandResults.Insert(0, new CommandResult() { Command = string.Format("{0};", EricssonCommands.ANBZI_Command) });
+			context.CommandResults.Insert(1, new CommandResult() { Command = string.Format("{0};", EricssonCommands.ANBCI_Command) });
+			context.CommandResults.Add(new CommandResult() { Command = string.Format("{0};", EricssonCommands.ANBAI_Command) });
+			MemoryStream ms = GenerateStream(context.CommandResults);
 
-            string fileName;
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
-            string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
+			string fileName;
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
 
-            switch (context.ExecutionStatus)
-            {
-                case ExecutionStatus.Succeeded: fileName = string.Format("RouteBO{0}_Successful_{1}", context.BONumber, executionDateTimeAsString); break;
-                case ExecutionStatus.Failed: fileName = string.Format("RouteBO{0}_Unsuccessful_{1}", context.BONumber, executionDateTimeAsString); break;
-                default: throw new NotSupportedException(string.Format("context.ExecutionStatus '{0}' is not supported", context.ExecutionStatus));
-            }
+			switch (context.ExecutionStatus)
+			{
+				case ExecutionStatus.Succeeded: fileName = string.Format("RouteBO{0}_Successful_{1}", context.BONumber, executionDateTimeAsString); break;
+				case ExecutionStatus.Failed: fileName = string.Format("RouteBO{0}_Unsuccessful_{1}", context.BONumber, executionDateTimeAsString); break;
+				default: throw new NotSupportedException(string.Format("context.ExecutionStatus '{0}' is not supported", context.ExecutionStatus));
+			}
 
-            string errorMessage;
-            using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
-            {
-                communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
-            }
-        }
+			string errorMessage;
+			using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
+			{
+				communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
+			}
+		}
 
-        public override void LogCommands(ILogCommandsContext context)
-        {
-            MemoryStream ms = GenerateStream(context.CommandResults);
+		public override void LogCommands(ILogCommandsContext context)
+		{
+			MemoryStream ms = GenerateStream(context.CommandResults);
 
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
-            string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
-            string fileName = string.Format("CommandExecution_{0}", executionDateTimeAsString);
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
+			string fileName = string.Format("CommandExecution_{0}", executionDateTimeAsString);
 
-            string errorMessage;
-            using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
-            {
-                communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
-            }
-        }
+			string errorMessage;
+			using (FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings))
+			{
+				communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
+			}
+		}
 
-        private MemoryStream GenerateStream(List<CommandResult> commandResults)
-        {
-            if (commandResults == null)
-                return null;
+		private MemoryStream GenerateStream(List<CommandResult> commandResults)
+		{
+			if (commandResults == null)
+				return null;
 
-            StringBuilder strBuilder = new StringBuilder();
-            foreach (CommandResult commandResult in commandResults)
-            {
-                strBuilder.AppendLine(commandResult.Command);
-                if (commandResult.Output != null && commandResult.Output.Any())
-                {
-                    foreach (string commandOutput in commandResult.Output)
-                        strBuilder.AppendLine(commandOutput);
-                }
-                strBuilder.AppendLine();
-            }
+			StringBuilder strBuilder = new StringBuilder();
+			foreach (CommandResult commandResult in commandResults)
+			{
+				strBuilder.AppendLine(commandResult.Command);
+				if (commandResult.Output != null && commandResult.Output.Any())
+				{
+					foreach (string commandOutput in commandResult.Output)
+						strBuilder.AppendLine(commandOutput);
+				}
+			}
+			strBuilder.Remove(strBuilder.Length - 2, 2);
 
-            byte[] byteArray = Encoding.UTF8.GetBytes(strBuilder.ToString());
-            return new MemoryStream(byteArray);
-        }
-    }
+			byte[] byteArray = Encoding.UTF8.GetBytes(strBuilder.ToString());
+			return new MemoryStream(byteArray);
+		}
+	}
 }

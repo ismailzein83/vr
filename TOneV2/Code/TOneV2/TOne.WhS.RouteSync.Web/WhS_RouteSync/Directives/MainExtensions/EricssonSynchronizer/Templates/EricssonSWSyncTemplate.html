@@ -19,7 +19,7 @@
 		</vr-row>
 		<vr-row>
 			<vr-columns width="1/4row">
-				<vr-textbox value="scopeModel.interconnectGeneralPrefix" label="Interconnect General Prefix" type="text" isrequired></vr-textbox>
+				<vr-textbox value="scopeModel.interconnectGeneralPrefix" label="Interconnect General Prefix" type="text"></vr-textbox>
 			</vr-columns>
 			<vr-whs-be-customer-selector on-ready="scopeModel.onOutgoingTrafficCustomerSelectorReady" customlabel="Outgoing Traffic Customers"
 										 normal-col-num="3" isrequired="true" ismultipleselection>
@@ -56,7 +56,7 @@
 						<vr-datalist maxitemsperrow="4" datasource="scopeModel.brList" autoremoveitem="true">
 							<vr-label>{{dataItem.Name}}</vr-label>
 							<span style="display: inline-block; margin: 0px 3px; font-size: 14px; position: relative; top: -3px;"> </span>
-							<vr-switch type="inline" value="dataItem.IncludeTrunkAsSwitch" hint="Include trunks defined as switch>"></vr-switch>
+							<vr-switch type="inline" value="dataItem.IncludeTrunkAsSwitch" hint="Include trunks defined as switch"></vr-switch>
 						</vr-datalist>
 					</vr-columns>
 				</vr-row>
