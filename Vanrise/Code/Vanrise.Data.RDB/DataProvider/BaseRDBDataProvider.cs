@@ -16,6 +16,12 @@ namespace Vanrise.Data.RDB
 
         public abstract string ConvertToDBParameterName(string parameterName);
 
+        public abstract string GetTableDBName(string schemaName, string tableName);
+
+        public abstract string PrepareQueryStatementToAddToBatch(string queryStatement);
+
+        public abstract string GetQueryConcatenatedStrings(params string[] strings);
+
         public abstract RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context);
 
         public abstract RDBResolvedQuery ResolveSelectQuery(IRDBDataProviderResolveSelectQueryContext context);

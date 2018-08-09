@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\Resources\DLLs\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -51,7 +54,9 @@
     <Compile Include="BulkInsert\RDBBulkInsertQueryWriteRecordContext.cs" />
     <Compile Include="Conditions\BaseRDBCondition.cs" />
     <Compile Include="DataProvider\BaseRDBDataProvider.cs" />
+    <Compile Include="DataProvider\CommonRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\MSSQLRDBDataProvider.cs" />
+    <Compile Include="DataProvider\Providers\MySQLRDBDataProvider.cs" />
     <Compile Include="ExecuteNonQuery\RDBDeleteQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />

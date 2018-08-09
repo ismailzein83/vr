@@ -21,40 +21,42 @@ namespace Vanrise.Data.RDB
             var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             string expression1String = this.Expression1.ToDBQuery(expressionContext);
             string expression2String = this.Expression2.ToDBQuery(expressionContext);
-            string expr2Prefix;
-            string expr2Suffix = null;
+            string compareOperator;
             switch (this.Operator)
             {
-                case RDBCompareConditionOperator.Eq: expr2Prefix = " = "; break;
-                case RDBCompareConditionOperator.NEq: expr2Prefix = " <> "; break;
-                case RDBCompareConditionOperator.G: expr2Prefix = " > "; break;
-                case RDBCompareConditionOperator.GEq: expr2Prefix = " >= "; break;
-                case RDBCompareConditionOperator.L: expr2Prefix = " < "; break;
-                case RDBCompareConditionOperator.LEq: expr2Prefix = " <= "; break;
-                case RDBCompareConditionOperator.StartWith: expr2Prefix = " like '%' + "; break;
+                case RDBCompareConditionOperator.Eq: compareOperator = " = "; break;
+                case RDBCompareConditionOperator.NEq: compareOperator = " <> "; break;
+                case RDBCompareConditionOperator.G: compareOperator = " > "; break;
+                case RDBCompareConditionOperator.GEq: compareOperator = " >= "; break;
+                case RDBCompareConditionOperator.L: compareOperator = " < "; break;
+                case RDBCompareConditionOperator.LEq: compareOperator = " <= "; break;
+                case RDBCompareConditionOperator.StartWith: 
+                    compareOperator = " like ";
+                    expression2String = context.DataProvider.GetQueryConcatenatedStrings(expression2String, "'%'");
+                    break;
                 case RDBCompareConditionOperator.EndWith:
-                    expr2Prefix = " like ";
-                    expr2Suffix = " + '%'";
+                    compareOperator = " like ";
+                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String);
                     break;
                 case RDBCompareConditionOperator.Contains:
-                    expr2Prefix = " like '%' + ";
-                    expr2Suffix = " + '%'";
+                    compareOperator = " like ";
+                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String, "'%'");
                     break;
-                case RDBCompareConditionOperator.NotStartWith: expr2Prefix = " Not like '%' + "; break;
+                case RDBCompareConditionOperator.NotStartWith: 
+                    compareOperator = " not like ";
+                    expression2String = context.DataProvider.GetQueryConcatenatedStrings(expression2String, "'%'");
+                    break;
                 case RDBCompareConditionOperator.NotEndWith:
-                    expr2Prefix = " Not like ";
-                    expr2Suffix = " + '%'";
+                    compareOperator = " not like ";
+                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String);
                     break;
                 case RDBCompareConditionOperator.NotContains:
-                    expr2Prefix = " Not like '%' + ";
-                    expr2Suffix = " + '%'";
+                    compareOperator = " not like ";
+                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String, "'%'");
                     break;
                 default: throw new NotSupportedException(String.Format("Operator '{0}'", this.Operator.ToString()));
             }
-            if (expr2Suffix != null)
-                return String.Concat(expression1String, expr2Prefix, expression2String, expr2Suffix);
-            else
-                return String.Concat(expression1String, expr2Prefix, expression2String);
+            return String.Concat(expression1String, compareOperator, expression2String);
         }
     }
 

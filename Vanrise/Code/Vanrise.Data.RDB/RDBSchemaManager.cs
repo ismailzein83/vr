@@ -89,10 +89,7 @@ namespace Vanrise.Data.RDB
 
         internal static string GetTableDBName(BaseRDBDataProvider provider, RDBTableDefinition tableDefinition)
         {
-            if (!String.IsNullOrEmpty(tableDefinition.DBSchemaName))
-                return String.Concat(tableDefinition.DBSchemaName, ".", tableDefinition.DBTableName);
-            else
-                return tableDefinition.DBTableName;
+            return provider.GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName);
         }
 
         internal List<string> GetTableColumns(string tableName)

@@ -65,6 +65,14 @@ namespace Vanrise.Data.RDB
     public class CommonRDBDataReader : IRDBDataReader
     {
         IDataReader _originalReader;
+        protected IDataReader OriginalReader
+        {
+            get
+            {
+                return _originalReader;
+            }
+        }
+
         public CommonRDBDataReader(IDataReader originalReader)
         {
             _originalReader = originalReader;
@@ -92,7 +100,10 @@ namespace Vanrise.Data.RDB
                     throw new NullReferenceException(String.Format("value of field '{0}'", fieldName));
                 if (value == DBNull.Value)
                     throw new Exception(string.Format("value is DBNull. Field '{0}'", fieldName));
-                return (T)value;
+                if (value is T)
+                    return (T)value;
+                else
+                    return (T)Convert.ChangeType(value, typeof(T));
             }
 
         protected virtual T GetFieldValueWithNullHandling<T>(string fieldName)
@@ -101,7 +112,10 @@ namespace Vanrise.Data.RDB
             if (value == null || value == DBNull.Value)
                 return default(T);
             else
-                return (T)value;
+                if (value is T)
+                    return (T)value;
+                else
+                    return (T)Convert.ChangeType(value, typeof(T));
         }
 
         public virtual int GetInt(string fieldName)

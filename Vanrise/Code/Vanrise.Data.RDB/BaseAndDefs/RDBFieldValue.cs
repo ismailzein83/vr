@@ -71,7 +71,10 @@ namespace Vanrise.Data.RDB
                 throw new NullReferenceException("_value");
             if (_value == DBNull.Value)
                 throw new Exception("_value is DBNull");
-            return (T)_value;
+            if (_value is T)
+                return (T)_value;
+            else
+                return (T)Convert.ChangeType(_value, typeof(T));
         }
 
         protected virtual T GetFieldValueWithNullHandling<T>()
@@ -79,7 +82,10 @@ namespace Vanrise.Data.RDB
             if (_value == null || _value == DBNull.Value)
                 return default(T);
             else
-                return (T)_value;
+                if (_value is T)
+                    return (T)_value;
+                else
+                    return (T)Convert.ChangeType(_value, typeof(T));
         }
 
         public override string StringValue

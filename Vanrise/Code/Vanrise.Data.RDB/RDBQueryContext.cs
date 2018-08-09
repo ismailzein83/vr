@@ -124,25 +124,9 @@ namespace Vanrise.Data.RDB
             return new RDBBulkInsertQueryContext(QueryBuilderContext.CreateChildContext());
         }
 
-        public RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext resolveQueryContext)
+        public int ExecuteNonQuery()
         {
-            StringBuilder queryBuilder = new StringBuilder();
-            foreach (var subQuery in Queries)
-            {
-                var subQueryContext = new RDBQueryGetResolvedQueryContext(resolveQueryContext);
-                RDBResolvedQuery resolvedSubQuery = subQuery.GetResolvedQuery(subQueryContext);
-                queryBuilder.AppendLine(resolvedSubQuery.QueryText);
-                queryBuilder.AppendLine();
-            }
-
-            var resolveParametersContext = new RDBDataProviderResolveParameterDeclarationsContext(resolveQueryContext);
-            var resolvedParameterDeclarations = this.DataProvider.ResolveParameterDeclarations(resolveParametersContext);
-            var resolvedQuery = new RDBResolvedQuery();
-            if (resolvedParameterDeclarations != null && !string.IsNullOrEmpty(resolvedParameterDeclarations.QueryText))
-                resolvedQuery.QueryText = String.Concat(resolvedParameterDeclarations.QueryText, "\n", queryBuilder.ToString());
-            else
-                resolvedQuery.QueryText = queryBuilder.ToString();
-            return resolvedQuery;
+            return this.ExecuteNonQuery(false);
         }
 
         public int ExecuteNonQuery(bool executeTransactional)
@@ -153,9 +137,22 @@ namespace Vanrise.Data.RDB
             return this.DataProvider.ExecuteNonQuery(context);
         }
 
-        public int ExecuteNonQuery()
+        public RDBFieldValue ExecuteScalar()
         {
-            return this.ExecuteNonQuery(false);
+            return ExecuteScalar(false);
+        }
+
+        public RDBFieldValue ExecuteScalar(bool executeTransactional)
+        {
+            var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
+            var resolvedQuery = GetResolvedQuery(resolveQueryContext);
+            var context = new RDBDataProviderExecuteScalarContext(resolvedQuery, executeTransactional, resolveQueryContext.Parameters);
+            return this.DataProvider.ExecuteScalar(context);
+        }
+
+        public List<Q> GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder)
+        {
+            return GetItems(objectBuilder, false);
         }
 
         public List<Q> GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder, bool executeTransactional)
@@ -172,11 +169,6 @@ namespace Vanrise.Data.RDB
         }
 
 
-        public List<Q> GetItems<Q>(Func<IRDBDataReader, Q> objectBuilder)
-        {
-            return GetItems(objectBuilder, false);
-        }
-
         public Q GetItem<Q>(Func<IRDBDataReader, Q> objectBuilder)
         {
             Q item = default(Q);
@@ -190,17 +182,9 @@ namespace Vanrise.Data.RDB
             return item;
         }
 
-        public RDBFieldValue ExecuteScalar(bool executeTransactional)
+        public void ExecuteReader(Action<IRDBDataReader> onReaderReady)
         {
-            var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
-            var resolvedQuery = GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteScalarContext(resolvedQuery, executeTransactional, resolveQueryContext.Parameters);
-            return this.DataProvider.ExecuteScalar(context);
-        }
-
-        public RDBFieldValue ExecuteScalar()
-        {
-            return ExecuteScalar(false);
+            ExecuteReader(onReaderReady, false);
         }
 
         public void ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional)
@@ -211,9 +195,26 @@ namespace Vanrise.Data.RDB
             this.DataProvider.ExecuteReader(context);
         }
 
-        public void ExecuteReader(Action<IRDBDataReader> onReaderReady)
+        public RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext resolveQueryContext)
         {
-            ExecuteReader(onReaderReady, false);
+            StringBuilder queryBuilder = new StringBuilder();
+            foreach (var subQuery in Queries)
+            {
+                var subQueryContext = new RDBQueryGetResolvedQueryContext(resolveQueryContext);
+                RDBResolvedQuery resolvedSubQuery = subQuery.GetResolvedQuery(subQueryContext);
+                queryBuilder.AppendLine(resolveQueryContext.DataProvider.PrepareQueryStatementToAddToBatch(resolvedSubQuery.QueryText));
+                queryBuilder.AppendLine();
+            }
+
+            var resolveParametersContext = new RDBDataProviderResolveParameterDeclarationsContext(resolveQueryContext);
+            var resolvedParameterDeclarations = this.DataProvider.ResolveParameterDeclarations(resolveParametersContext);
+            var resolvedQuery = new RDBResolvedQuery();
+            if (resolvedParameterDeclarations != null && !string.IsNullOrEmpty(resolvedParameterDeclarations.QueryText))
+                resolvedQuery.QueryText = String.Concat(resolveQueryContext.DataProvider.PrepareQueryStatementToAddToBatch(resolvedParameterDeclarations.QueryText),
+                    "\n", queryBuilder.ToString());
+            else
+                resolvedQuery.QueryText = queryBuilder.ToString();
+            return resolvedQuery;
         }
 
         #region Private Classes
