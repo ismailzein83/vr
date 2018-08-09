@@ -50,14 +50,14 @@ namespace Retail.MultiNet.Business
         {
             get
             {
-                return "retail-multinet-account-invoice-selector";
+                return "retail-be-account-invoice-selector";
             }
         }
         public override string PartnerSelector
         {
             get
             {
-                return "retail-multinet-account-invoice-selector";
+                return "retail-be-account-invoice-selector";
             }
         }
         public override string PartnerInvoiceSettingFilterFQTN
