@@ -591,7 +591,7 @@ as (select * from (values
 
 ('6182C49F-5B9C-415C-8E59-2D2430ED3DED','Whs_CDRRules','CDR Rules'										,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
 ('FE79D4D7-2351-4B74-B2AB-3E1AAD43908B','WhS_Routing_RoutingRule','Route Rule'							,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
-('A596599B-1BAE-4698-827E-E2F5AFD8CF4C','WhS_Routing_RoutingProcess','Build Route'						,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Process Logs", "Start Process", "View Routes"]'),
+('A596599B-1BAE-4698-827E-E2F5AFD8CF4C','WhS_Routing_RoutingProcess','Routing'						,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Process Logs", "Start Process", "View Routes"]'),
 ('986C3FC1-2FCE-4966-ABF6-900EBCB6306B','WhS_Routing_CostGenerationProcess','Cost Generation'			,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Process Logs", "Start Process", "View Costs"]'),
 
 ('B8074080-DEA8-4BA2-BD13-0620083EA740','VR_Invoice_Supplier','Supplier Invoice'                        ,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Set_Paid","Set_Unpaid","Recreate","Send Email","Delete","Set_Approved"]'),
