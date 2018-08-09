@@ -24,6 +24,6 @@ namespace Vanrise.GenericData.Entities
 
     public class GenericBusinessEntityFilterContext : IGenericBusinessEntityFilterContext
     {
-        GenericBusinessEntity GenericBusinessEntity { get; set; }
+        public GenericBusinessEntity GenericBusinessEntity { get; set; }
     }
 }
