@@ -85,13 +85,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			return _manager.TryCompileWorkflow(vrWorkflow);
 		}
 
-		[HttpPost]
-		[Route("ExportCompilationResult")]
-		public object ExportCompilationResult(VRWorkflow vrWorkflow)
-		{
-			VRWorkflowCompilationOutput result = TryCompileWorkflow(vrWorkflow);
-			return base.GetExcelResponse(result.ErrorMessages.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(), "CompilationResult.xls");
-		}
+        //[HttpPost]
+        //[Route("ExportCompilationResult")]
+        //public object ExportCompilationResult(VRWorkflow vrWorkflow)
+        //{
+        //    VRWorkflowCompilationOutput result = TryCompileWorkflow(vrWorkflow);
+
+        //    return base.GetExcelResponse(result.ErrorMessages.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(), "CompilationResult.xls");
+        //}
 
         [HttpGet]
         [Route("GetVRWorkflowsInfo")]

@@ -24,7 +24,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowActivity Activity { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             //System.Activities.Statements.ForEach<string> foreachActivity = new System.Activities.Statements.ForEach<string>
             //{
@@ -102,8 +102,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             codeBuilder.Replace("#ITERATIONVARIABLERUNTIMETYPE#", iterationVariableRuntimeType);
             codeBuilder.Replace("#ITERATIONVARIABLENAME#", this.IterationVariableName);
 
+            var newContext = childContext.CreateChildContext();
+            newContext.VRWorkflowActivityId = this.Activity.VRWorkflowActivityId;
 
-            codeBuilder.Replace("#ACTIVITYCODE#", this.Activity.Settings.GenerateWFActivityCode(childContext));
+            codeBuilder.Replace("#ACTIVITYCODE#", this.Activity.Settings.GenerateWFActivityCode(newContext));
             return codeBuilder.ToString();
         }
     }

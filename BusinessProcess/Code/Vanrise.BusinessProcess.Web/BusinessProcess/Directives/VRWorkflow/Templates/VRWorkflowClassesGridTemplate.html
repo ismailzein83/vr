@@ -1,1 +1,11 @@
-﻿
+﻿<vr-button type="Add" data-onclick="scopeModel.addVRWorkflowClass" standalone></vr-button>
+<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.datasource"
+             menuactions="scopeModel.gridMenuActions"
+             ondeleterow="scopeModel.removeVRWorkflowClass"
+             idfield="Entity.VRWorkflowClassId"
+             norowhighlightonclick="true" maxheight="300px">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.VRWorkflowClassId'" fixedwidth="250" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Namespace'" field="'Entity.Namespace'" disablesorting></vr-datagridcolumn>
+</vr-datagrid>

@@ -18,7 +18,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public List<VRWorkflowAssignActivityItem> Items { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             StringBuilder codeBuilder = new StringBuilder();
             if (this.Items != null)

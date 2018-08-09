@@ -3,158 +3,166 @@
 app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowService', 'BusinessProcess_VRWorkflowAPIService', 'VRDragdropService', 'VRNotificationService',
 	function (UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowService, BusinessProcess_VRWorkflowAPIService, VRDragdropService, VRNotificationService) {
 
-		var directiveDefinitionObject = {
-			restrict: 'E',
-			scope: {
-				onReady: '='
-			},
-			controller: function ($scope, $element, $attrs) {
-				var ctrl = this;
-				var ctor = new workflowDesigner(ctrl, $scope, $attrs);
-				ctor.initializeController();
-			},
-			controllerAs: 'ctrl',
-			bindToController: true,
-			compile: function (element, attrs) {
+	    var directiveDefinitionObject = {
+	        restrict: 'E',
+	        scope: {
+	            onReady: '='
+	        },
+	        controller: function ($scope, $element, $attrs) {
+	            var ctrl = this;
+	            var ctor = new workflowDesigner(ctrl, $scope, $attrs);
+	            ctor.initializeController();
+	        },
+	        controllerAs: 'ctrl',
+	        bindToController: true,
+	        compile: function (element, attrs) {
 
-			},
-			templateUrl: '/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowDesignerDirectiveTemplate.html'
-		};
+	        },
+	        templateUrl: '/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowDesignerDirectiveTemplate.html'
+	    };
 
-		function workflowDesigner(ctrl, $scope, $attrs) {
+	    function workflowDesigner(ctrl, $scope, $attrs) {
 
-			var workflowContainerAPI;
-			var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-			var rootActivity;
-			//var workflowArguments;
-			var getWorkflowArguments;
-			var reserveVariableName;
-			var reserveVariableNames;
-			var isVariableNameReserved;
-			var eraseVariableName;
+	        var workflowContainerAPI;
+	        var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			this.initializeController = initializeController;
-			function initializeController() {
-				$scope.scopeModel = {};
-				$scope.scopeModel.datasource = [];
-				$scope.scopeModel.activityConfigs = [];
+	        var rootActivity;
+	        var workflowArguments;
+	        var getWorkflowArguments;
+	        var addToList;
+	        var removeFromList;
+	        var reserveVariableName;
+	        var reserveVariableNames;
+	        var isVariableNameReserved;
+	        var eraseVariableName;
+	        var doesActivityhaveErrors;
 
-				$scope.scopeModel.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
-				$scope.scopeModel.dragdropsetting = {
-					groupCorrelation: $scope.scopeModel.dragdropGroupCorrelation,
-					canReceive: true,
-					canSend: true,
-					copyOnSend: true,
-					onItemReceived: function (itemAdded, dataSource, sourceList, itemAddedContext) {
-						var vRWorkflowActivity = {};
-						if (itemAdded.directiveAPI != null) {
-							vRWorkflowActivity.Settings = itemAdded.directiveAPI.getData().Settings;
-						}
-						else {
-							vRWorkflowActivity.Settings = {
-								Editor: (itemAdded.Editor) ? itemAdded.Editor : itemAdded.Settings.Editor,
-								Title: (itemAdded.Title) ? itemAdded.Title : itemAdded.Settings.Title,
-								IsNew: true
-							};
-						}
-						vRWorkflowActivity.VRWorkflowActivityId = UtilsService.guid();
+	        this.initializeController = initializeController;
+	        function initializeController() {
+	            $scope.scopeModel = {};
+	            $scope.scopeModel.datasource = [];
+	            $scope.scopeModel.activityConfigs = [];
 
-						vRWorkflowActivity.onDirectiveReady = function (api) {
-							if (vRWorkflowActivity.directiveAPI != null)
-								return;
-							vRWorkflowActivity.directiveAPI = api;
-							var setLoader = function (value) { $scope.x = value; };
-							var context = (itemAddedContext != undefined) ? itemAddedContext : {
-								getWorkflowArguments: getWorkflowArguments,
-								reserveVariableName: reserveVariableName,
-								reserveVariableNames: reserveVariableNames,
-								isVariableNameReserved: isVariableNameReserved,
-								eraseVariableName: eraseVariableName
-							};
-							var payload = {
-								Context: context,
-								VRWorkflowActivityId: vRWorkflowActivity.VRWorkflowActivityId,
-								Settings: vRWorkflowActivity.Settings
-							};
-							VRUIUtilsService.callDirectiveLoad(vRWorkflowActivity.directiveAPI, payload);
-						};
+	            $scope.scopeModel.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+	            $scope.scopeModel.dragdropsetting = {
+	                groupCorrelation: $scope.scopeModel.dragdropGroupCorrelation,
+	                canReceive: true,
+	                canSend: true,
+	                copyOnSend: true,
+	                onItemReceived: function (itemAdded, dataSource, sourceList, itemAddedContext) {
+	                    var vRWorkflowActivity = {};
+	                    if (itemAdded.directiveAPI != null) {
+	                        vRWorkflowActivity.Settings = itemAdded.directiveAPI.getData().Settings;
+	                    }
+	                    else {
+	                        vRWorkflowActivity.Settings = {
+	                            Editor: (itemAdded.Editor) ? itemAdded.Editor : itemAdded.Settings.Editor,
+	                            Title: (itemAdded.Title) ? itemAdded.Title : itemAdded.Settings.Title,
+	                            IsNew: true
+	                        };
+	                    }
+	                    vRWorkflowActivity.VRWorkflowActivityId = UtilsService.guid();
 
-						return vRWorkflowActivity;
-					},
+	                    vRWorkflowActivity.onDirectiveReady = function (api) {
+	                        if (vRWorkflowActivity.directiveAPI != null)
+	                            return;
+	                        vRWorkflowActivity.directiveAPI = api;
+	                        var setLoader = function (value) { $scope.x = value; };
+	                        var context = (itemAddedContext != undefined) ? itemAddedContext : {
+	                            getWorkflowArguments: getWorkflowArguments,
+	                            addToList: addToList,
+	                            removeFromList:removeFromList,
+	                            reserveVariableName: reserveVariableName,
+	                            reserveVariableNames: reserveVariableNames,
+	                            isVariableNameReserved: isVariableNameReserved,
+	                            eraseVariableName: eraseVariableName,
+	                            doesActivityhaveErrors: doesActivityhaveErrors,
+	                        };
+	                        var payload = {
+	                                Context: context,
+	                            VRWorkflowActivityId: vRWorkflowActivity.VRWorkflowActivityId,
+	                            Settings: vRWorkflowActivity.Settings
+	                        };
+	                        VRUIUtilsService.callDirectiveLoad(vRWorkflowActivity.directiveAPI, payload);
+	                    };
 
-					enableSorting: true
-				};
+	                    return vRWorkflowActivity;
+	                },
 
-				$scope.scopeModel.onWorkflowContainerReady = function (api) {
-					workflowContainerAPI = api;
-					workflowContainerReadyPromiseDeferred.resolve();
-				};
+	                enableSorting: true
+	            };
 
-				defineAPI();
-			}
+	            $scope.scopeModel.onWorkflowContainerReady = function (api) {
+	                workflowContainerAPI = api;
+	                workflowContainerReadyPromiseDeferred.resolve();
+	            };
 
-			function defineAPI() {
-				var api = {};
+	            defineAPI();
+	        }
 
-				api.load = function (payload) {
+	        function defineAPI() {
+	            var api = {};
 
-					if (payload != undefined) {
-						rootActivity = payload.rootActivity;
-						getWorkflowArguments = payload.getWorkflowArguments;
-						reserveVariableName = payload.reserveVariableName;
-						reserveVariableNames = payload.reserveVariableNames;
-						isVariableNameReserved = payload.isVariableNameReserved;
-						eraseVariableName = payload.eraseVariableName;
-					}
-					return loadAllControls();
+	            api.load = function (payload) {
 
-					function loadAllControls() {
-						return UtilsService.waitMultipleAsyncOperations([loadWorkflowContainer, loadWorkflowActivityExtensionConfigs])
+	                if (payload != undefined) {
+	                    rootActivity = payload.rootActivity;
+	                    getWorkflowArguments = payload.getWorkflowArguments;
+	                    addToList = payload.addToList;
+	                    removeFromList = payload.removeFromList;
+	                    reserveVariableName = payload.reserveVariableName;
+	                    reserveVariableNames = payload.reserveVariableNames;
+	                    isVariableNameReserved = payload.isVariableNameReserved;
+	                    eraseVariableName = payload.eraseVariableName;
+	                    doesActivityhaveErrors = payload.doesActivityhaveErrors;
+	                }
+	                return loadAllControls();
+
+	                function loadAllControls() {
+	                    return UtilsService.waitMultipleAsyncOperations([loadWorkflowContainer, loadWorkflowActivityExtensionConfigs])
 							.catch(function (error) {
-								VRNotificationService.notifyExceptionWithClose(error, $scope);
+							    VRNotificationService.notifyExceptionWithClose(error, $scope);
 							});
-					}
+	                }
 
-					function loadWorkflowContainer() {
-						var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
-						if (rootActivity != undefined) {
-							workflowContainerReadyPromiseDeferred.promise.then(function () {
-								var payload = {
-									getWorkflowArguments: getWorkflowArguments,
-									vRWorkflowActivity: rootActivity,
-									reserveVariableName: reserveVariableName,
-									reserveVariableNames: reserveVariableNames,
-									isVariableNameReserved: isVariableNameReserved,
-									eraseVariableName: eraseVariableName
-								};
-								VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
-							});
-						}
-						else {
-							workflowContainerLoadDeferred.resolve();
-						}
-						return workflowContainerLoadDeferred.promise;
-					}
+	                function loadWorkflowContainer() {
+	                    var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
+	                    workflowContainerReadyPromiseDeferred.promise.then(function () {
+	                        var payload = {
+	                            getWorkflowArguments: getWorkflowArguments,
+	                            addToList: addToList,
+	                            removeFromList: removeFromList,
+	                            vRWorkflowActivity: rootActivity,
+	                            reserveVariableName: reserveVariableName,
+	                            reserveVariableNames: reserveVariableNames,
+	                            isVariableNameReserved: isVariableNameReserved,
+	                            eraseVariableName: eraseVariableName,
+	                            doesActivityhaveErrors: doesActivityhaveErrors,
+	                        };
+	                        VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
+	                    });
+	                    return workflowContainerLoadDeferred.promise;
+	                }
 
-					function loadWorkflowActivityExtensionConfigs() {
-						return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowActivityExtensionConfigs().then(function (response) {
-							if (response != null) {
-								for (var i = 0; i < response.length; i++) {
-									$scope.scopeModel.activityConfigs.push(response[i]);
-								}
-							}
-						});
-					}
-				};
+	                function loadWorkflowActivityExtensionConfigs() {
+	                    return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowActivityExtensionConfigs().then(function (response) {
+	                        if (response != null) {
+	                            for (var i = 0; i < response.length; i++) {
+	                                $scope.scopeModel.activityConfigs.push(response[i]);
+	                            }
+	                        }
+	                    });
+	                }
+	            };
 
-				api.getData = function () {
-					if (workflowContainerAPI != null)
-						return workflowContainerAPI.getData();
-				};
+	            api.getData = function () {
+	                if (workflowContainerAPI != null)
+	                    return workflowContainerAPI.getData();
+	            };
 
-				if (ctrl.onReady != null)
-					ctrl.onReady(api);
-			}
-		}
-		return directiveDefinitionObject;
+	            if (ctrl.onReady != null)
+	                ctrl.onReady(api);
+	        }
+	    }
+	    return directiveDefinitionObject;
 	}]);

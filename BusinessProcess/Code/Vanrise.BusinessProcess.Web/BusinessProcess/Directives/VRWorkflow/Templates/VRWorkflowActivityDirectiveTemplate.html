@@ -1,3 +1,7 @@
-﻿<vr-section-v2 header="scopeModel.header" dragable collapsible on-remove="scopeModel.onRemove" menuactions=" scopeModel.actions">
-	<vr-directivewrapper remove="scopeModel.onRemove" directive="scopeModel.editor" on-ready="scopeModel.onDirectiveWraperReady" dragdropsetting="scopeModel.dragdropsetting"></vr-directivewrapper>
+﻿<vr-section-v2 header="scopeModel.header" warning="scopeModel.hasError ?'One or more children have validation errors':'' " dragable collapsible on-remove="scopeModel.onRemove" menuactions=" scopeModel.actions">
+    <vr-validator validate="scopeModel.hasErrorsValidator()">
+        <vr-columns width="fullrow">
+            <vr-directivewrapper remove="scopeModel.onRemove" directive="scopeModel.editor" on-ready="scopeModel.onDirectiveWraperReady" dragdropsetting="scopeModel.dragdropsetting"></vr-directivewrapper>
+        </vr-columns>
+    </vr-validator>
 </vr-section-v2>

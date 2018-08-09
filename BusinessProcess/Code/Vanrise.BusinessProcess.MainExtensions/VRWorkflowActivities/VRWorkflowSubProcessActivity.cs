@@ -23,7 +23,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public Dictionary<string, string> OutArguments { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             StringBuilder nmSpaceCodeBuilder = new StringBuilder(@"                 
 

@@ -44,7 +44,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public bool ContinueWorkflowIfCallFailed { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             var httpClient = new System.Net.Http.HttpClient();
             context.AddUsingStatement("using System.Net.Http;");

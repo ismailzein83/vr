@@ -22,7 +22,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowActivity FalseActivity { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             //System.Activities.Statements.If wfIfActivity = new System.Activities.Statements.If((activityContext) => false)
             //{ 
@@ -83,7 +83,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 this.FalseActivity.Settings.ThrowIfNull("this.FalseActivity.Settings");
                 codeBuilder.Append(@",
             Else = #FALSEACTIVITYCODE#");
-                codeBuilder.Replace("#FALSEACTIVITYCODE#", this.FalseActivity.Settings.GenerateWFActivityCode(context));
+                var falseContext = context.CreateChildContext();
+                falseContext.VRWorkflowActivityId = this.FalseActivity.VRWorkflowActivityId;
+                codeBuilder.Replace("#FALSEACTIVITYCODE#", this.FalseActivity.Settings.GenerateWFActivityCode(falseContext));
             }
 
             codeBuilder.Append(@"
@@ -91,7 +93,9 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             codeBuilder.Replace("#NAMESPACE#", nmSpaceName);
             codeBuilder.Replace("#CLASSNAME#", className);
-            codeBuilder.Replace("#TRUEACTIVITYCODE#", this.TrueActivity.Settings.GenerateWFActivityCode(context));
+            var trueContext = context.CreateChildContext();
+            trueContext.VRWorkflowActivityId = this.TrueActivity.VRWorkflowActivityId;
+            codeBuilder.Replace("#TRUEACTIVITYCODE#", this.TrueActivity.Settings.GenerateWFActivityCode(trueContext));
             return codeBuilder.ToString();
         }
     }

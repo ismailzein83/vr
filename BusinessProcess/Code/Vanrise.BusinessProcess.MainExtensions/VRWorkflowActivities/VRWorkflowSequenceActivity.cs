@@ -17,7 +17,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public VRWorkflowVariableCollection Variables { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             StringBuilder codeBuilder = new StringBuilder();
 
@@ -51,12 +51,15 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     bool isFirstActivity = true;
                     foreach (var vrActivity in this.Activities)
                     {
+                        var newContext = childContext.CreateChildContext();
+                        newContext.VRWorkflowActivityId = vrActivity.VRWorkflowActivityId;
+
                         if (!isFirstActivity)
                             codeBuilder.Append(",");
                         else
                             isFirstActivity = false;
                         vrActivity.Settings.ThrowIfNull("vrActivity.Settings", vrActivity.VRWorkflowActivityId);
-                        string childActivityCode = vrActivity.Settings.GenerateWFActivityCode(childContext);
+                        string childActivityCode = vrActivity.Settings.GenerateWFActivityCode(newContext);
                         codeBuilder.Append(childActivityCode);
                         codeBuilder.AppendLine();
                     }
@@ -74,7 +77,10 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 {
                     var firstActivity = this.Activities[0];
                     firstActivity.Settings.ThrowIfNull("firstActivity.Settings");
-                    codeBuilder.Append(firstActivity.Settings.GenerateWFActivityCode(context));
+                    var newContext = context.CreateChildContext();
+                    newContext.VRWorkflowActivityId = firstActivity.VRWorkflowActivityId;
+
+                    codeBuilder.Append(firstActivity.Settings.GenerateWFActivityCode(newContext));
                 }
             }
             return codeBuilder.ToString();

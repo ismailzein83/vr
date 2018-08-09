@@ -64,7 +64,7 @@
 
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Arguments/Templates/VRWorkflowArgumentEditor.html', parameters, settings);
 		}
-
+		
 		function addVRWorkflowVariable(onVRWorkflowVariableAdded, isVariableNameReserved) {
 
 			var modalSettings = {};
@@ -90,6 +90,34 @@
 			};
 
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Variables/Templates/VRWorkflowVariableEditor.html', parameters, settings);
+		}
+
+		function addVRWorkflowClass(onVRWorkflowClassAdded, vrWorkflowClassNamespaces) {
+
+		    var modalSettings = {};
+		    modalSettings.onScopeReady = function (modalScope) {
+		        modalScope.onVRWorkflowClassAdded = onVRWorkflowClassAdded;
+		    };
+
+		    var modalParameters = {
+		        vrWorkflowClassNamespaces: vrWorkflowClassNamespaces
+		    };
+
+		    VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowClassesEditor.html', modalParameters, modalSettings);
+		}
+		function editVRWorkflowClass(onVRWorkflowClassUpdated, vrWorkflowClassEntity, vrWorkflowClassNamespaces) {
+
+		    var settings = {};
+		    settings.onScopeReady = function (modalScope) {
+		        modalScope.onVRWorkflowClassUpdated = onVRWorkflowClassUpdated;
+		    };
+
+		    var parameters = {
+		        vrWorkflowClassEntity: vrWorkflowClassEntity,
+		        vrWorkflowClassNamespaces: vrWorkflowClassNamespaces
+		    };
+
+		    VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowClassesEditor.html', parameters, settings);
 		}
 
 		function registerObjectTrackingDrillDownToVRWorkflow() {
@@ -217,6 +245,8 @@
 			editVRWorkflowArgument: editVRWorkflowArgument,
 			addVRWorkflowVariable: addVRWorkflowVariable,
 			editVRWorkflowVariable: editVRWorkflowVariable,
+			addVRWorkflowClass: addVRWorkflowClass,
+			editVRWorkflowClass:editVRWorkflowClass,
 			registerObjectTrackingDrillDownToVRWorkflow: registerObjectTrackingDrillDownToVRWorkflow,
 			getDrillDownDefinition: getDrillDownDefinition,
 			openExpressionBuilder: openExpressionBuilder,

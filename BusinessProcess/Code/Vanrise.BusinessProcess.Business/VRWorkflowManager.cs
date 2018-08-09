@@ -193,14 +193,15 @@ namespace Vanrise.BusinessProcess.Business
         public VRWorkflowCompilationOutput TryCompileWorkflow(VRWorkflow workflow)
         {
             System.Activities.Activity activity;
-            List<string> errorMessages;
-            bool compilationResult = TryCompileWorkflow(workflow, out activity, out errorMessages);
+            Dictionary<Guid, List<string>> activitiesErrors;
+
+            bool compilationResult = TryCompileWorkflow(workflow, out activity, out activitiesErrors);
 
             if (compilationResult)
             {
                 return new VRWorkflowCompilationOutput
                 {
-                    ErrorMessages = null,
+                    ActivitiesErrors = null,
                     Result = true
                 };
             }
@@ -208,7 +209,7 @@ namespace Vanrise.BusinessProcess.Business
             {
                 return new VRWorkflowCompilationOutput
                 {
-                    ErrorMessages = errorMessages,
+                    ActivitiesErrors = activitiesErrors,
                     Result = false
                 };
             }
@@ -224,18 +225,20 @@ namespace Vanrise.BusinessProcess.Business
                   if (vrWorkflow == null)
                       throw new NullReferenceException(String.Format("vrWorkflow '{0}'", vrWorkflowId));
                   Activity workflowActivity;
-                  List<string> errorMessages;
+                  Dictionary<Guid, List<string>> activitiesErrors;
 
-                  if (TryCompileWorkflow(vrWorkflow, out workflowActivity, out errorMessages))
+                  if (TryCompileWorkflow(vrWorkflow, out workflowActivity, out activitiesErrors))
                       return workflowActivity;
                   else
                   {
                       StringBuilder errorsBuilder = new StringBuilder();
-                      if (errorMessages != null)
+                      foreach (var activityErrorsKvp in activitiesErrors)
                       {
+                          List<string> errorMessages = activityErrorsKvp.Value;
                           foreach (var errorMessage in errorMessages)
                               errorsBuilder.AppendLine(errorMessage);
                       }
+
                       throw new Exception(String.Format("Compile Error when building for VRWorkflow Id '{0}'. Errors: {1}",
                           vrWorkflowId, errorsBuilder));
                   }
@@ -247,7 +250,7 @@ namespace Vanrise.BusinessProcess.Business
             public Guid VRWorkflowId { get; set; }
         }
 
-        public bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out List<string> errorMessages)
+        public bool TryCompileWorkflow(VRWorkflow workflow, out System.Activities.Activity activity, out Dictionary<Guid, List<string>> activitiesErrors)
         {
             StringBuilder codeBuilder = new StringBuilder(@" 
                 using System;
@@ -280,6 +283,7 @@ namespace Vanrise.BusinessProcess.Business
             workflow.Settings.RootActivity.ThrowIfNull("workflow.Settings.RootActivity", workflow.VRWorkflowId);
             workflow.Settings.RootActivity.Settings.ThrowIfNull("workflow.Settings.RootActivity.Settings", workflow.VRWorkflowId);
             var generateCodeContext = new VRWorkflowActivityGenerateWFActivityCodeContext(workflow.Settings.Arguments);
+            generateCodeContext.VRWorkflowActivityId = workflow.Settings.RootActivity.VRWorkflowActivityId;
             string rootActivityCode = workflow.Settings.RootActivity.Settings.GenerateWFActivityCode(generateCodeContext);
             codeBuilder.Replace("#ROOTACTIVITY#", rootActivityCode);
 
@@ -332,17 +336,21 @@ namespace Vanrise.BusinessProcess.Business
             codeBuilder.Replace("#CLASSNAME#", className);
             var fullTypeName = String.Format("{0}.{1}", classNamespace, className);
             CSharpCompilationOutput compilationOutput;
+            List<string> errorMessages;
             if (CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
             {
                 Type activityType = compilationOutput.OutputAssembly.GetType(fullTypeName);
                 activity = Activator.CreateInstance(activityType).CastWithValidate<System.Activities.Activity>("activity", workflow.VRWorkflowId);
                 errorMessages = null;
+                activitiesErrors = null;
                 return true;
             }
             else
             {
                 activity = null;
                 errorMessages = compilationOutput.ErrorMessages;
+                var errors = compilationOutput.Errors;
+                activitiesErrors = SplitErrorsByActivities(codeBuilder, errors);
                 return false;
             }
         }
@@ -386,6 +394,34 @@ namespace Vanrise.BusinessProcess.Business
             ICompiledExpressionRoot compiledExpressionRoot = Activator.CreateInstance(results.ResultType, new object[] { dynamicActivity }) as ICompiledExpressionRoot;
             CompiledExpressionInvoker.SetCompiledExpressionRootForImplementation(dynamicActivity, compiledExpressionRoot); errorMessages = null;
             return true;
+        }
+
+        private Dictionary<Guid, List<string>> SplitErrorsByActivities(StringBuilder codeBuilder, List<CSharpCompilationError> errors)
+        {
+            if (errors == null || errors.Count == 0)
+                return null;
+
+            Dictionary<Guid, List<string>> activitiesErrors = new Dictionary<Guid, List<string>>();
+
+            string[] codeLines = codeBuilder.ToString().Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None);
+
+            foreach (var error in errors)
+            {
+                var errorLineNumber = error.LineNumber;
+                for (int i = errorLineNumber - 2; i >= 0; i--)
+                {
+                    string currentCodeLine = codeLines[i];
+                    if (currentCodeLine.StartsWith("#region"))
+                    {
+                        Guid faultyWorkflowActivityId = new Guid(currentCodeLine.Replace("#region", "").Trim());
+                        List<string> activityErrors = activitiesErrors.GetOrCreateItem(faultyWorkflowActivityId, () => { return new List<string>(); });
+                        activityErrors.Add(error.ErrorText);
+                        break;
+                    }
+                }
+            }
+
+            return activitiesErrors;
         }
 
         #endregion
@@ -449,6 +485,8 @@ namespace Vanrise.BusinessProcess.Business
 
         private class VRWorkflowActivityGenerateWFActivityCodeContext : IVRWorkflowActivityGenerateWFActivityCodeContext
         {
+            public Guid VRWorkflowActivityId { get; set; }
+
             Dictionary<string, VRWorkflowArgument> _allArguments = new Dictionary<string, VRWorkflowArgument>();
 
             List<IVRWorkflowActivityGenerateWFActivityCodeContext> _childContexts = new List<IVRWorkflowActivityGenerateWFActivityCodeContext>();
@@ -522,12 +560,24 @@ namespace Vanrise.BusinessProcess.Business
 
             public void AddFullNamespaceCode(string namespaceCode)
             {
-                this.OtherNameSpaceCodes.Add(namespaceCode);
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.AppendLine(string.Empty);
+                strBuilder.AppendLine(string.Format("#region {0}", VRWorkflowActivityId));
+                strBuilder.AppendLine(namespaceCode);
+                strBuilder.AppendLine("#endregion");
+
+                this.OtherNameSpaceCodes.Add(strBuilder.ToString());
             }
 
             public void AddUsingStatement(string usingStatement)
             {
-                this.AdditionalUsingStatements.Add(usingStatement);
+                StringBuilder strBuilder = new StringBuilder();
+                strBuilder.AppendLine(string.Empty);
+                strBuilder.AppendLine(string.Format("#region {0}", VRWorkflowActivityId));
+                strBuilder.AppendLine(usingStatement);
+                strBuilder.AppendLine("#endregion");
+
+                this.AdditionalUsingStatements.Add(strBuilder.ToString());
             }
 
 
@@ -581,7 +631,7 @@ namespace Vanrise.BusinessProcess.Business
 
     public class VRWorkflowCompilationOutput
     {
-        public List<string> ErrorMessages { get; set; }
+        public Dictionary<Guid, List<string>> ActivitiesErrors { get; set; }
         public bool Result { get; set; }
     }
 }

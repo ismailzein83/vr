@@ -11,13 +11,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-writetrackingmessage"; } }
 
-        public override string Title { get { return "Write Tracking Message"; } }
+        public override string Title { get { return "Log Message"; } }
 
         public string Message { get; set; }
 
         public VRWorkflowTrackingMessageSeverityEnum Severity { get; set; }
 
-        public override string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
+        protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
             this.Message.ThrowIfNull("this.Message");
             StringBuilder nmSpaceCodeBuilder = new StringBuilder(@"                 

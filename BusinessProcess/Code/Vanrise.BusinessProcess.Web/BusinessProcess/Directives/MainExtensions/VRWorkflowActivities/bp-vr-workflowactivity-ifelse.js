@@ -36,8 +36,6 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	            $scope.scopeModel = {};
 	            $scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
 
-	            console.log(ctrl.dragdropsetting);
-
 	            $scope.scopeModel.onTrueWorkflowContainerReady = function (api) {
 	                trueWorkflowContainerAPI = api;
 	                trueWorkflowContainerReadyPromiseDeferred.resolve();
@@ -53,10 +51,14 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 
 	                if (context != undefined) {
 	                    childContext.getWorkflowArguments = context.getWorkflowArguments;
+	                    childContext.addToList = context.addToList;
+	                    childContext.removeFromList = context.removeFromList;
 	                    childContext.reserveVariableName = context.reserveVariableName;
 	                    childContext.reserveVariableNames = context.reserveVariableNames;
 	                    childContext.eraseVariableName = context.eraseVariableName;
 	                    childContext.isVariableNameReserved = context.isVariableNameReserved;
+	                    childContext.doesActivityhaveErrors = context.doesActivityhaveErrors;
+	                    childContext.showErrorWarningIcon = context.showErrorWarningIcon;
 	                    childContext.getParentVariables = function () {
 	                        var parentVars = [];
 	                        if (context.getParentVariables != undefined)
@@ -76,9 +78,6 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	            var api = {};
 
 	            api.load = function (payload) {
-
-	                console.log(payload);
-
 	                if (payload != undefined) {
 	                    if (payload.Settings != undefined && payload.Settings != undefined) {
 	                        $scope.scopeModel.condition = payload.Settings.Condition;
@@ -160,7 +159,7 @@ app.directive('businessprocessVrWorkflowactivityIfelse', ['UtilsService', 'VRUIU
 	                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowIfElseActivity, Vanrise.BusinessProcess.MainExtensions",
 	                    Condition: $scope.scopeModel.condition,
 	                    TrueActivity: trueWorkflowContainerAPI != undefined ? trueWorkflowContainerAPI.getData() : null,
-	                    FalseActivity:falseWorkflowContainerAPI != undefined ? falseWorkflowContainerAPI.getData() : null
+	                    FalseActivity: falseWorkflowContainerAPI != undefined ? falseWorkflowContainerAPI.getData() : null
 	                };
 	            };
 
