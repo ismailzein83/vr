@@ -204,6 +204,8 @@
     <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\whs-invoice-invoicetype-carrierinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\Templates\CustomerInvoiceGeneratorTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\whs-invoice-invoicetype-customerinvoicegenerator.js" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\InvoiceSetting\Templates\CheckUnpricedCDRsTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\InvoiceSetting\whs-invoice-invoicesetting-runtime-checkunpricedcdrs.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\PartnerSettings\Templates\CarrierPartnerSettingsTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\PartnerSettings\vr-invoicetype-partnersettings-carrier.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\SupplierInvoice\Templates\SupplierInvoiceGeneratorTemplate.html" />
@@ -321,6 +323,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -14,12 +14,17 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Security.Business;
 using Vanrise.Invoice.Business;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class SupplierInvoiceGenerator : InvoiceGenerator
     {
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
+            PartnerManager partnerManager = new PartnerManager();
+
+
             List<string> listMeasures = new List<string> { "CostNetNotNULL", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
             List<string> listDimensions = new List<string> { "SupplierZone", "Supplier", "CostCurrency", "CostRate", "CostRateType" };
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
@@ -32,7 +37,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
             financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
 
-            PartnerManager partnerManager = new PartnerManager();
+            CheckUnpricedCDRsInvoiceSettingPart checkUnpricedCDRsInvoiceSettingPart = partnerManager.GetInvoicePartnerSettingPart<CheckUnpricedCDRsInvoiceSettingPart>(context.InvoiceTypeId, context.PartnerId);
+
+            if (checkUnpricedCDRsInvoiceSettingPart != null && checkUnpricedCDRsInvoiceSettingPart.IsEnabled)
+            {
+                if (CheckUnpricedCDRs(context, financialAccount))
+                {
+                    context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                    context.ErrorMessage = "There are unpriced CDRs during the selected period";
+                    return;
+                }
+
+            }
+
+
             decimal? minAmount = partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             int? timeZoneId = null;
             decimal? commission = null;
@@ -120,16 +138,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         supplierInvoiceDetails.TotalAmountAfterCommission += ((supplierInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         supplierInvoiceDetails.TotalOriginalAmountAfterCommission += ((supplierInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
-                        
-                        
+
+
                         if (evaluatedSupplierRecurringCharges != null)
-                         {
-                             foreach (var item in evaluatedSupplierRecurringCharges)
-                             {
-                                 item.AmountAfterTaxes += ((item.Amount * Convert.ToDecimal(tax.Value)) / 100);
-                                  item.VAT = tax.IsVAT ? tax.Value : 0;
-                             }
-                         }
+                        {
+                            foreach (var item in evaluatedSupplierRecurringCharges)
+                            {
+                                item.AmountAfterTaxes += ((item.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                                item.VAT = tax.IsVAT ? tax.Value : 0;
+                            }
+                        }
                     }
 
                     context.ActionAfterGenerateInvoice = (invoice) =>
@@ -139,17 +157,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         var userId = SecurityContext.Current.GetLoggedInUserId();
                         foreach (var item in evaluatedSupplierRecurringCharges)
                         {
-                            supplierBillingRecurringChargeManager.AddSupplierBillingRecurringCharge(new SupplierBillingRecurringCharge 
+                            supplierBillingRecurringChargeManager.AddSupplierBillingRecurringCharge(new SupplierBillingRecurringCharge
                             {
-                                    InvoiceId = invoice.InvoiceId,
-                                     Amount = item.AmountAfterTaxes,
-                                     RecurringChargeId = item.RecurringChargeId,
-                                     VAT = item.VAT,
-                                     From = item.From,
-                                     To = item.To,
-                                     CreatedBy = userId,
-                                     FinancialAccountId = financialAccount.FinancialAccountId,
-                                     CurrencyId =item.CurrencyId,
+                                InvoiceId = invoice.InvoiceId,
+                                Amount = item.AmountAfterTaxes,
+                                RecurringChargeId = item.RecurringChargeId,
+                                VAT = item.VAT,
+                                From = item.From,
+                                To = item.To,
+                                CreatedBy = userId,
+                                FinancialAccountId = financialAccount.FinancialAccountId,
+                                CurrencyId = item.CurrencyId,
                             });
                         }
                         return true;
@@ -205,6 +223,52 @@ namespace TOne.WhS.Invoice.Business.Extensions
             #endregion
         }
 
+        private bool CheckUnpricedCDRs(IInvoiceGenerationContext context, WHSFinancialAccount financialAccount)
+        {
+            DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
+            CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+            Guid invalidCDRTableID = new Guid("a6fa04a1-a683-4f79-8da8-b34a625af50f");
+            Guid partialPricedCDRTableID = new Guid("ed4b26d7-8e08-4113-b0b1-c365adfefb50");
+
+            List<object> values = new List<object>();
+            if (financialAccount.CarrierAccountId != null)
+            { values.Add(financialAccount.CarrierAccountId); }
+            else
+            {
+                var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, false, true);
+                values = carrierAccounts.Select(item => (object)item.CarrierAccountId).ToList();
+            }
+
+            var invalidCDRFilterGroup = new RecordFilterGroup()
+            {
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = new List<RecordFilter>()
+                {
+                    new ObjectListRecordFilter(){FieldName = "SupplierId", CompareOperator= ListRecordFilterOperator.In, Values = values }
+                }
+            };
+            List<DataRecord> invalidCDRs = _dataRecordStorageManager.GetDataRecords(context.FromDate, context.ToDate, invalidCDRFilterGroup, new List<string> { "SupplierId" }, 1, OrderDirection.Ascending, invalidCDRTableID);
+            if (invalidCDRs.Count > 0)
+            {
+                return true;
+            }
+
+            var partialCDRFilterGroup = new RecordFilterGroup()
+            {
+                LogicalOperator = RecordQueryLogicalOperator.And,
+                Filters = new List<RecordFilter>()
+                {
+                    new ObjectListRecordFilter(){FieldName = "SupplierId", CompareOperator= ListRecordFilterOperator.In, Values = values },
+                    new NonEmptyRecordFilter(){FieldName ="CostNet"}
+                }
+            };
+            List<DataRecord> partialPricedCDRs = _dataRecordStorageManager.GetDataRecords(context.FromDate, context.ToDate, partialCDRFilterGroup, new List<string> { "SupplierId" }, 1, OrderDirection.Ascending, partialPricedCDRTableID);
+            if (partialPricedCDRs.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         private void AddRecurringChargeToSupplierCurrency(List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
         {
             if (recurringChargeItems != null && recurringChargeItems.Count > 0)
@@ -676,8 +740,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public decimal AmountAfterCommissionWithTaxes { get; set; }
             public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
 
-        } 
-        public  class InvoiceBillingRecord
+        }
+        public class InvoiceBillingRecord
         {
             public InvoiceMeasures InvoiceMeasures { get; set; }
             public long SupplierZoneId { get; set; }
