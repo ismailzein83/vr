@@ -68,6 +68,10 @@
     <Reference Include="Vanrise.ExcelConversion.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
@@ -90,6 +94,7 @@
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Extensions\AssignedPartnerInvoiceSettingFilter.cs" />
     <Compile Include="Extensions\CarrierPartnerSettings.cs" />
+    <Compile Include="Extensions\CheckUnpricedCDRsInvoiceSettingPart.cs" />
     <Compile Include="Extensions\CompareInvoiceAction.cs" />
     <Compile Include="Extensions\OriginalInvoiceDataAction.cs" />
     <Compile Include="Extensions\SettlementGenerationCustomSection.cs" />
@@ -125,6 +130,9 @@
       <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
       <Name>TOne.WhS.Invoice.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
