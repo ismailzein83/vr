@@ -23,7 +23,6 @@
 
         var rpRoutePolicyAPI;
         var rpRoutePolicyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        var rpRoutePolicyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneSelectorAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -114,27 +113,14 @@
                 var policySelectorPayload = {
                     filter: {
                         RoutingDatabaseId: selectedId
-                    }
+                    },
+                    selectDefaultPolicy: true
                 };
-                if (filterSettingsData != undefined && rpRoutePolicyLoadPromiseDeferred != undefined) {
-                    policySelectorPayload.selectedIds = filterSettingsData.PolicyConfigId;
-                }
-                else {
-                    policySelectorPayload.selectDefaultPolicy = true;
-                }
 
-                $scope.isLoadingFilterData = true;
-                var loadPolicySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorPromiseDeferred);
-                loadPolicySelectorPromiseDeferred.promise.then(function () {
-                    if (rpRoutePolicyLoadPromiseDeferred != undefined)
-                        rpRoutePolicyLoadPromiseDeferred.resolve();
-                    rpRoutePolicyLoadPromiseDeferred = undefined;
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.isLoadingFilterData = false;
-                });
+                var setLoader = function (value) {
+                    $scope.isLoadingFilterData = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rpRoutePolicyAPI, policySelectorPayload, setLoader, undefined);
             };
 
             $scope.searchClicked = function () {
@@ -219,7 +205,7 @@
                                 getChildNode: function () {
                                     var loadStaticDataPromise = UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadStaticData, loadRoutingProductFilters, loadSingleRoutingProductSelector, loadMultipleRoutingProductSelector, loadSaleZoneSection, loadRouteStatusSelector, loadCustomerSelector]);
                                     return {
-                                        promises: [loadStaticDataPromise, gridReadyPromiseDeferred.promise, rpRoutePolicyLoadPromiseDeferred.promise],
+                                        promises: [loadStaticDataPromise, gridReadyPromiseDeferred.promise],
                                         getChildNode: function () {
                                             //gridAPI.setPersonalizationItem(gridSettingsData);
                                             var loadGridPromise = gridAPI.loadGrid(getFilterObject());
@@ -243,14 +229,7 @@
             var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
 
             routingDatabaseReadyPromiseDeferred.promise.then(function () {
-
-                var payload;
-                if (filterSettingsData != undefined) {
-                    payload = {
-                        selectedIds: filterSettingsData.RoutingDatabaseId
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, payload, loadRoutingDatabasePromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, undefined, loadRoutingDatabasePromiseDeferred);
             });
 
             return loadRoutingDatabasePromiseDeferred.promise;
@@ -266,25 +245,7 @@
             }
             $scope.selectedRouteFilter = UtilsService.getItemByVal($scope.routeFilters, filterSettingsData.RouteFilter, 'value');
         }
-        function loadPolicySelector() {
 
-            var loadPolicySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            rpRoutePolicyReadyPromiseDeferred.promise.then(function () {
-                var payload;
-                if (filterSettingsData != undefined) {
-                    payload = {
-                        filter: {
-                            RoutingDatabaseId: filterSettingsData.RoutingDatabaseId
-                        },
-                        selectedIds: filterSettingsData.PolicyConfigId
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, payload, loadPolicySelectorPromiseDeferred);
-            });
-
-            return loadPolicySelectorPromiseDeferred.promise;
-        }
         function loadStaticData() {
             loadRouteFilters();
             if (filterSettingsData == undefined) {
@@ -441,9 +402,7 @@
             var context = {
                 getPersonalizationItems: function () {
                     var items = [];
-                    var routingDatabaseSelectedIds = routingDatabaseSelectorAPI.getSelectedIds();
                     var selectedRouteFilter = $scope.selectedRouteFilter;
-                    var rpRoutePolicySelectedIds = rpRoutePolicyAPI.getSelectedIds();
                     var selectedRoutingProductFilter = $scope.selectedRoutingProductFilter;
                     var multipleRoutingProductSelectedIds = multipleRoutingProductSelectorAPI.getSelectedIds();
                     var singleRoutingProductSelectedIds = singleRoutingProductSelectorAPI.getSelectedIds();
@@ -451,18 +410,17 @@
                     var routeStatusSelectedIds = routeStatusSelectorAPI.getSelectedIds();
                     var customerSelectedIds = customerSelectorAPI.getSelectedIds();
 
-                    if (routingDatabaseSelectedIds != undefined || selectedRouteFilter != undefined || rpRoutePolicySelectedIds != undefined || $scope.numberOfOptions
-                        || selectedRoutingProductFilter != undefined || multipleRoutingProductSelectedIds != undefined || singleRoutingProductSelectedIds != undefined
-                        || saleZoneSelectedIds != undefined || routeStatusSelectedIds != undefined || $scope.limit || customerSelectedIds != undefined
-                        || $scope.showInSystemCurrency || $scope.includeBlockedSuppliers || $scope.maxSupplierRate || $scope.codePrefix) {
+                    if (selectedRouteFilter != undefined || $scope.numberOfOptions || selectedRoutingProductFilter != undefined
+                        || multipleRoutingProductSelectedIds != undefined || singleRoutingProductSelectedIds != undefined
+                        || saleZoneSelectedIds != undefined || routeStatusSelectedIds != undefined || $scope.limit
+                        || customerSelectedIds != undefined || $scope.showInSystemCurrency || $scope.includeBlockedSuppliers
+                        || $scope.maxSupplierRate || $scope.codePrefix) {
 
                         items.push({
                             EntityUniqueName: "WhSRPRouteFilter",
                             ExtendedSetting: {
                                 "$type": "TOne.WhS.Routing.Business.RPRouteFilterPersonalizationExtendedSetting, TOne.WhS.Routing.Business",
-                                RoutingDatabaseId: routingDatabaseSelectedIds,
                                 RouteFilter: selectedRouteFilter.value,
-                                PolicyConfigId: rpRoutePolicySelectedIds,
                                 NumberOfOptions: $scope.numberOfOptions,
                                 RoutingProductFilter: selectedRoutingProductFilter.value,
                                 RoutingProductIds: multipleRoutingProductSelectedIds,
