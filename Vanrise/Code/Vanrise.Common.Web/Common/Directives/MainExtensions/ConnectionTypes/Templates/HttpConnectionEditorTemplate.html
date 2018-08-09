@@ -1,1 +1,21 @@
-﻿
+﻿<vr-columns width="1/2row">
+    <vr-textbox value="scopeModel.baseURL" label="Base URL" localizedlabel="VRRes.BaseURL.VREnd" isrequired="true"></vr-textbox>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-section header="Headers">
+        <vr-button type="Add" data-onclick="scopeModel.addHttpHeader" standalone></vr-button>
+        <vr-validator validate="scopeModel.isNameValid()">
+            <vr-datagrid datasource="scopeModel.datasource"
+                         pagingtype="'PagingOnScroll'"
+                         on-ready="scopeModel.onHttpHeaderGridReady"
+                         ondeleterow="scopeModel.removeHttpHeader">
+                <vr-datagridcolumn headertext="'Name'">
+                    <vr-textbox value="dataItem.Name" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Value'">
+                    <vr-textbox value="dataItem.Value" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-section>
+</vr-columns>
