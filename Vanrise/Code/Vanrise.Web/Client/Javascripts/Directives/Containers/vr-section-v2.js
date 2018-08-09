@@ -7,7 +7,8 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 		scope: {
 			menuactions: "=",
 			onRemove: "=",
-			header: "="
+			header: "=",
+		    warning:"="
 		},
 		transclude: true,
 		controller: function ($scope, $element, $attrs) {
@@ -28,7 +29,8 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 				+ '<span class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon" ng-show="dragable" ></span>'
 				+ '<span style="padding-left: 4px;" class="hand-cursor collapsible-icon glyphicon " ng-show="collapsible" ng-click=" expandname =!expandname " ng-class=" expandname ?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span><label>{{header}}</label>'
 				+ '<span class="section-menu"  style="absolute: relative; right: 10px;" ng-if="sectionCtrl.menuactions.length > 0" > <vr-button type="SectionAction" menuactions="sectionCtrl.menuactions" isasynchronous="true" ></vr-button></span> '
-				+ '<span class="hand-cursor glyphicon glyphicon-remove" style="position: absolute; right: 5px; top: 12px;" ng-show="sectionCtrl.onRemove != undefined" ng-click="sectionCtrl.onRemove()" ></span></div>'
+				+ '<span class="warning-icon"  style="position: absolute;top: 7px;" ng-style="{\'right\': sectionCtrl.menuactions.length > 0 ? \'80px\' : \'20px\'}" ng-if="sectionCtrl.warning!=\'\'" > <vr-warning  value="{{sectionCtrl.warning}}"></vr-warning></span> '
+	            + '<span class="hand-cursor glyphicon glyphicon-remove" style="position: absolute; right: 5px; top: 12px;" ng-show="sectionCtrl.onRemove != undefined" ng-click="sectionCtrl.onRemove()" ></span></div>'
 				+ '<div class="panel-body" ng-show="expandname"  ng-transclude></div></div>';
 
 			return htmlTempalte;
