@@ -143,7 +143,8 @@ namespace Vanrise.Invoice.Data.RDB
 
             var where = selectQuery.Where();
             where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.ListCondition("PartnerID", RDBListConditionOperator.IN, partnerIds);
+            if (partnerIds != null && partnerIds.Count() > 0)
+                where.ListCondition("PartnerID", RDBListConditionOperator.IN, partnerIds);
 
             return queryContext.GetItems(VRInvoiceAccountMapper);
         }

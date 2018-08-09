@@ -180,43 +180,53 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
 
-            StringBuilder valueBuilder = new StringBuilder();
-            int colIndex = 0;
-            foreach (var colVal in context.ColumnValues)
+            if (context.ColumnValues != null && context.ColumnValues.Count > 0)
             {
-                if (colIndex > 0)
+                StringBuilder valueBuilder = new StringBuilder();
+
+                int colIndex = 0;
+                foreach (var colVal in context.ColumnValues)
                 {
-                    queryBuilder.Append(",");
-                    valueBuilder.Append(",");
+                    if (colIndex > 0)
+                    {
+                        queryBuilder.Append(",");
+                        valueBuilder.Append(",");
+                    }
+                    colIndex++;
+                    var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
+                    queryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
+                    valueBuilder.Append(colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext));
                 }
-                colIndex++;
-                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
-                queryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
-                valueBuilder.Append(colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext));
+                queryBuilder.Append(") VALUES (");
+                queryBuilder.Append(valueBuilder.ToString());
+                queryBuilder.Append(")");
+                queryBuilder.AppendLine();
             }
-            RDBTableDefinitionQuerySource tableAsTableDefinitionQuerySource = context.Table as RDBTableDefinitionQuerySource;
-            if (tableAsTableDefinitionQuerySource != null)
+            else if (context.SelectQuery != null)
             {
-                RDBTableDefinition tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(context.DataProvider, tableAsTableDefinitionQuerySource.TableName);
-                if (!String.IsNullOrEmpty(tableDefinition.CreatedTimeColumnName))
+                context.SelectQuery.Columns.ThrowIfNull("context.SelectQuery.Columns");
+                if (context.SelectQuery.Columns == null || context.SelectQuery.Columns.Count == 0)
+                    throw new Exception("context.SelectQuery.Columns.Count = 0");
+                int colIndex = 0;
+                foreach (var selectColumn in context.SelectQuery.Columns)
                 {
-                    queryBuilder.Append(",");
-                    valueBuilder.Append(",");
-                    queryBuilder.Append(RDBSchemaManager.Current.GetColumnDBName(this, tableAsTableDefinitionQuerySource.TableName, tableDefinition.CreatedTimeColumnName));
-                    valueBuilder.Append(new RDBNowDateTimeExpression().ToDBQuery(rdbExpressionToDBQueryContext));
+                    if (colIndex > 0)
+                    {
+                        queryBuilder.Append(",");
+                    }
+                    colIndex++;
+                    var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(selectColumn.Alias, context);
+                    queryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
                 }
-                if (!String.IsNullOrEmpty(tableDefinition.ModifiedTimeColumnName))
-                {
-                    queryBuilder.Append(",");
-                    valueBuilder.Append(",");
-                    queryBuilder.Append(RDBSchemaManager.Current.GetColumnDBName(this, tableAsTableDefinitionQuerySource.TableName, tableDefinition.ModifiedTimeColumnName));
-                    valueBuilder.Append(new RDBNowDateTimeExpression().ToDBQuery(rdbExpressionToDBQueryContext));
-                }
+                queryBuilder.Append(")");
+                queryBuilder.AppendLine();
+
+                queryBuilder.Append(context.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context)));
             }
-            queryBuilder.Append(") VALUES (");
-            queryBuilder.Append(valueBuilder.ToString());
-            queryBuilder.Append(")");
-            queryBuilder.AppendLine();
+            else
+            {
+                throw new Exception("ColumnValues and SelectQuery are both null");
+            }
             if (!String.IsNullOrEmpty(context.GeneratedIdDBParameterName))
                 queryBuilder.AppendFormat(" SET {0} = SCOPE_IDENTITY() ", context.GeneratedIdDBParameterName);
 
@@ -247,6 +257,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             }
 
             StringBuilder columnQueryBuilder = new StringBuilder(" SET ");
+
             int colIndex = 0;
 
             foreach (var colVal in context.ColumnValues)
@@ -259,27 +270,16 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
                     columnQueryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
                 }
+                else if (colVal.ExpressionToSet != null)
+                {
+                    columnQueryBuilder.Append(colVal.ExpressionToSet.ToDBQuery(rdbExpressionToDBQueryContext));
+                }
                 else
                 {
-                    if (colVal.ExpressionToSet != null)
-                        throw new NullReferenceException("colVal.ColumnName & colVal.ExpressionToSet");
-                    columnQueryBuilder.Append(colVal.ExpressionToSet.ToDBQuery(rdbExpressionToDBQueryContext));
+                    throw new NullReferenceException("colVal.ColumnName & colVal.ExpressionToSet");
                 }
                 columnQueryBuilder.Append(" = ");
                 columnQueryBuilder.Append(colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext));
-            }
-
-            RDBTableDefinitionQuerySource tableAsTableDefinitionQuerySource = context.Table as RDBTableDefinitionQuerySource;
-            if (tableAsTableDefinitionQuerySource != null)
-            {
-                RDBTableDefinition tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(context.DataProvider, tableAsTableDefinitionQuerySource.TableName);
-                if (!String.IsNullOrEmpty(tableDefinition.ModifiedTimeColumnName))
-                {
-                    columnQueryBuilder.Append(",");
-                    columnQueryBuilder.Append(RDBSchemaManager.Current.GetColumnDBName(this, tableAsTableDefinitionQuerySource.TableName, tableDefinition.ModifiedTimeColumnName));
-                    columnQueryBuilder.Append(" = ");
-                    columnQueryBuilder.Append(new RDBNowDateTimeExpression().ToDBQuery(rdbExpressionToDBQueryContext));
-                }
             }
 
             if (context.Joins != null && context.Joins.Count > 0)

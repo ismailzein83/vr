@@ -70,6 +70,20 @@ namespace Vanrise.Data.RDB
                 context.IdColumnDefinition = _schemaManager.GetColumnDefinitionWithValidate(tableDefinition, this.TableName, tableDefinition.IdColumnName);
             }
         }
+
+
+        public List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context)
+        {
+            return _schemaManager.GetTableColumns(this.TableName);
+        }
+
+
+        public void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context)
+        {
+            var tableDefinition = _schemaManager.GetTableDefinitionWithValidate(context.DataProvider, this.TableName);
+            context.CreatedTimeColumnName = tableDefinition.CreatedTimeColumnName;
+            context.ModifiedTimeColumnName = tableDefinition.ModifiedTimeColumnName;
+        }
     }
 
     public class RDBTempPhysicalTableQuerySource : IRDBTableQuerySource
@@ -115,6 +129,19 @@ namespace Vanrise.Data.RDB
         public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
         {
             throw new NotImplementedException();
+        }
+
+
+        public List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context)
+        {
+            return this._tableDefinition.Columns.Keys.ToList();
+        }
+
+
+        public void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context)
+        {
+            context.CreatedTimeColumnName = this._tableDefinition.CreatedTimeColumnName;
+            context.ModifiedTimeColumnName = this._tableDefinition.ModifiedTimeColumnName;
         }
     }
 }

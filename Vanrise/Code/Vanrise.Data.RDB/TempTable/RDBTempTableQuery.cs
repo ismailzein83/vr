@@ -72,5 +72,16 @@ namespace Vanrise.Data.RDB
         {
             throw new NotImplementedException();
         }
+
+
+        public List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context)
+        {
+            return _columns.Keys.ToList();
+        }
+
+
+        public void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context)
+        {            
+        }
     }
 }

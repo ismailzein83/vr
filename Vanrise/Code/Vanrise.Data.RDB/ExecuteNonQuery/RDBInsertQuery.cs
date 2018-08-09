@@ -139,6 +139,7 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
+            AddCreatedAndModifiedTimeIfNeeded(context);
             RDBResolvedQuery resolvedQuery;
             if (this._notExistConditionGroup != null)
             {
@@ -172,6 +173,78 @@ namespace Vanrise.Data.RDB
                 resolvedQuery.QueryText = string.Concat(resolvedQuery.QueryText, "\n", selectIdResolvedQuery.QueryText);
             }
             return resolvedQuery;
+        }
+
+        private void AddCreatedAndModifiedTimeIfNeeded(IRDBQueryGetResolvedQueryContext context)
+        {
+            var getCreatedAndModifiedTimeContext = new RDBTableQuerySourceGetCreatedAndModifiedTimeContext(context);
+            this._table.GetCreatedAndModifiedTime(getCreatedAndModifiedTimeContext);
+            bool addCreatedTime = false;
+            bool addModifiedTime = false;
+            if (!String.IsNullOrEmpty(getCreatedAndModifiedTimeContext.CreatedTimeColumnName))
+                addCreatedTime = true;
+            if (!String.IsNullOrEmpty(getCreatedAndModifiedTimeContext.ModifiedTimeColumnName))
+                addModifiedTime = true;
+            if (addCreatedTime || addModifiedTime)
+            {
+                if (_columnValues != null && _columnValues.Count > 0)
+                {
+                    foreach (var colVal in _columnValues)
+                    {
+                        if (colVal.ColumnName == getCreatedAndModifiedTimeContext.CreatedTimeColumnName)
+                        {
+                            addCreatedTime = false;
+                            if (!addModifiedTime)
+                                break;
+                            else
+                                continue;
+                        }
+                        if (colVal.ColumnName == getCreatedAndModifiedTimeContext.ModifiedTimeColumnName)
+                        {
+                            addModifiedTime = false;
+                            if (!addCreatedTime)
+                                break;
+                            else
+                                continue;
+                        }
+                    }
+                    if (addCreatedTime)
+                        this.Column(getCreatedAndModifiedTimeContext.CreatedTimeColumnName).DateNow();
+                    if (addModifiedTime)
+                        this.Column(getCreatedAndModifiedTimeContext.ModifiedTimeColumnName).DateNow();
+                }
+                else if (this._selectQuery != null)
+                {
+                    foreach (var colVal in this._selectQuery.Columns)
+                    {
+                        if (colVal.Alias == getCreatedAndModifiedTimeContext.CreatedTimeColumnName)
+                        {
+                            addCreatedTime = false;
+                            if (!addModifiedTime)
+                                break;
+                            else
+                                continue;
+                        }
+                        if (colVal.Alias == getCreatedAndModifiedTimeContext.ModifiedTimeColumnName)
+                        {
+                            addModifiedTime = false;
+                            if (!addCreatedTime)
+                                break;
+                            else
+                                continue;
+                        }
+                    }
+                    var selectColumns = this._selectQuery.SelectColumns();
+                    if (addCreatedTime)
+                        selectColumns.Expression(getCreatedAndModifiedTimeContext.CreatedTimeColumnName).DateNow();
+                    if (addModifiedTime)
+                        selectColumns.Expression(getCreatedAndModifiedTimeContext.ModifiedTimeColumnName).DateNow();
+                }
+                else
+                {
+                    throw new NullReferenceException("ColumnValues and SelectQuery are both null");
+                }
+            }
         }
 
         private RDBResolvedQuery ResolveInsertQuery(IRDBQueryGetResolvedQueryContext context)

@@ -23,6 +23,14 @@ namespace Vanrise.Data.RDB
 
         List<RDBSelectColumn> _columns;
 
+        internal List<RDBSelectColumn> Columns
+        {
+            get
+            {
+                return _columns;
+            }
+        }
+
         List<RDBJoin> _joins;
 
         RDBConditionGroup _conditionGroup;
@@ -94,7 +102,8 @@ namespace Vanrise.Data.RDB
         {
             if (_selectColumnsContext == null)
             {
-                this._columns = new List<RDBSelectColumn>();
+                if (this._columns == null)
+                    this._columns = new List<RDBSelectColumn>();
                 _selectColumnsContext = new RDBSelectColumnsContext(_queryBuilderContext, this._columns, this._table, this._tableAlias);
             }
             return _selectColumnsContext;
@@ -105,7 +114,8 @@ namespace Vanrise.Data.RDB
         {
             if (_selectAggregateContext == null)
             {
-                this._columns = new List<RDBSelectColumn>();
+                if (this._columns == null)
+                    this._columns = new List<RDBSelectColumn>();
                 _selectAggregateContext = new RDBSelectAggregateContext(this._columns, this._table, this._tableAlias);
             }
             return _selectAggregateContext;
@@ -182,6 +192,18 @@ namespace Vanrise.Data.RDB
         public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
         {
             throw new NotImplementedException();
+        }
+
+
+        public List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context)
+        {
+            return _columns.Select(col => col.Alias).ToList();
+        }
+
+
+        public void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context)
+        {
+            
         }
     }
 

@@ -214,7 +214,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             var invoices = queryContext.GetItems(InvoiceMapper);
 
-            if(query.IsSelectAll.HasValue && query.InvoiceBulkActionIdentifier.HasValue)
+            if(query.IsSelectAll.HasValue && !query.IsSelectAll.Value && query.InvoiceBulkActionIdentifier.HasValue)
             {
                 invoiceBulkActionsDraftDataManager.DeleteBulkActionDrafts(query.InvoiceBulkActionIdentifier.Value); 
             }
@@ -246,136 +246,137 @@ namespace Vanrise.Invoice.Data.RDB
         {
             BillingTransactionDataManager billingTransactionDataManager = new BillingTransactionDataManager();
             insertedInvoiceIds = null;
-            if (generateInvoicesInputToSave != null)
+            if (generateInvoicesInputToSave == null || generateInvoicesInputToSave.Count == 0)
+                return false;
+            var dataProvider = GetDataProvider();
+            insertedInvoiceIds = new List<long>();
+
+            Guid? splitInvoiceGroupId = Guid.NewGuid();
+
+            for (var i = 0; i < generateInvoicesInputToSave.Count; i++)
             {
-                var dataProvider = GetDataProvider();
-                insertedInvoiceIds = new List<long>();
+                var generateInvoiceInputToSave = generateInvoicesInputToSave[i];
 
-                Guid? splitInvoiceGroupId = Guid.NewGuid();
-
-                for (var i = 0; i < generateInvoicesInputToSave.Count; i++)
+                if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue && generateInvoiceInputToSave.SplitInvoiceGroupId.HasValue)
                 {
-                    var generateInvoiceInputToSave = generateInvoicesInputToSave[i];
-
-                    if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue && generateInvoiceInputToSave.SplitInvoiceGroupId.HasValue)
-                    {
-                        splitInvoiceGroupId = generateInvoiceInputToSave.SplitInvoiceGroupId.Value;
-                    }
-
-                    string serializedSettings = null;
-                    if (generateInvoiceInputToSave.Invoice.Settings != null)
-                    {
-                        serializedSettings = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Settings);
-                    }
-                    string serializedDetails = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Details);
-                    var queryContext = new RDBQueryContext(dataProvider);
-                    var insertQuery = queryContext.AddInsertQuery();
-                    insertQuery.IntoTable(TABLE_NAME);
-                    insertQuery.GenerateIdAndAssignToParameter("ID");
-                    insertQuery.Column("UserId").Value(generateInvoiceInputToSave.Invoice.UserId);
-                    insertQuery.Column("PartnerID").Value(generateInvoiceInputToSave.Invoice.PartnerId);
-                    if (splitInvoiceGroupId.HasValue)
-                        insertQuery.Column("SplitInvoiceGroupId").Value(splitInvoiceGroupId.Value);
-                    insertQuery.Column("InvoiceSettingID").Value(generateInvoiceInputToSave.Invoice.InvoiceSettingId);
-                    insertQuery.Column("SerialNumber").Value(generateInvoiceInputToSave.Invoice.SerialNumber);
-                    insertQuery.Column("FromDate").Value(generateInvoiceInputToSave.Invoice.FromDate);
-                    insertQuery.Column("ToDate").Value(generateInvoiceInputToSave.Invoice.ToDate);
-                    insertQuery.Column("IssueDate").Value(generateInvoiceInputToSave.Invoice.IssueDate);
-                    insertQuery.Column("DueDate").Value(generateInvoiceInputToSave.Invoice.DueDate);
-                    insertQuery.Column("Details").Value(serializedDetails);
-                    insertQuery.Column("Notes").Value(generateInvoiceInputToSave.Invoice.Note);
-                    insertQuery.Column("SourceId").Value(generateInvoiceInputToSave.Invoice.SourceId);
-                    insertQuery.Column("IsDraft").Value(true);
-                    insertQuery.Column("IsAutomatic").Value(generateInvoiceInputToSave.Invoice.IsAutomatic);
-                    insertQuery.Column("Settings").Value(serializedSettings);
-                    if (generateInvoiceInputToSave.Invoice.SentDate.HasValue)
-                        insertQuery.Column("SentDate").Value(generateInvoiceInputToSave.Invoice.SentDate.Value);
-                    if (generateInvoiceInputToSave.Invoice.NeedApproval.HasValue)
-                        insertQuery.Column("NeedApproval").Value(generateInvoiceInputToSave.Invoice.NeedApproval.Value);
-                    long insertedInvoiceId = queryContext.ExecuteScalar().LongValue;
-
-                    insertedInvoiceIds.Add(insertedInvoiceId);
-
-                    if (generateInvoiceInputToSave.ItemSetNameStorageDic != null && generateInvoiceInputToSave.ItemSetNameStorageDic.Count > 0)
-                    {
-                        var remainingInvoiceItemSets = generateInvoiceInputToSave.InvoiceItemSets.FindAllRecords(x => !generateInvoiceInputToSave.ItemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
-                        if (remainingInvoiceItemSets != null)
-                        {
-                            InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                            dataManager.SaveInvoiceItems(insertedInvoiceId, remainingInvoiceItemSets);
-                        }
-                        foreach (var item in generateInvoiceInputToSave.ItemSetNameStorageDic)
-                        {
-                            InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                            dataManager.StorageConnectionStringKey = item.Key;
-                            var invoiceItemSetsToSave = generateInvoiceInputToSave.InvoiceItemSets.FindAllRecords(x => item.Value.Contains(x.SetName));
-                            dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSetsToSave);
-                        }
-                    }
-                    else
-                    {
-                        InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                        dataManager.SaveInvoiceItems(insertedInvoiceId, generateInvoiceInputToSave.InvoiceItemSets);
-                    }
-                    generateInvoiceInputToSave.Invoice.InvoiceId = insertedInvoiceId;
-
-                    if (generateInvoiceInputToSave.ActionBeforeGenerateInvoice != null)
-                    {
-                        generateInvoiceInputToSave.ActionBeforeGenerateInvoice(generateInvoiceInputToSave.Invoice);
-                    }
-
-                    if (generateInvoiceInputToSave.ActionAfterGenerateInvoice != null)
-                    {
-                        generateInvoiceInputToSave.ActionAfterGenerateInvoice(generateInvoiceInputToSave.Invoice);
-                    }
+                    splitInvoiceGroupId = generateInvoiceInputToSave.SplitInvoiceGroupId.Value;
                 }
 
-                var queryContext2 = new RDBQueryContext(dataProvider);
-
-                foreach (var generateInvoiceInputToSave in generateInvoicesInputToSave)
+                string serializedSettings = null;
+                if (generateInvoiceInputToSave.Invoice.Settings != null)
                 {
-                    if (generateInvoiceInputToSave.InvoiceToSettleIds != null && generateInvoiceInputToSave.InvoiceToSettleIds.Count > 0)
-                    {
-                        var updateQuery = queryContext2.AddUpdateQuery();
-                        updateQuery.FromTable(TABLE_NAME);
-                        updateQuery.Column("SettlementInvoiceId").Value(generateInvoiceInputToSave.Invoice.InvoiceId);
-                        updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, generateInvoiceInputToSave.InvoiceToSettleIds);
+                    serializedSettings = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Settings);
+                }
+                string serializedDetails = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Details);
+                var queryContext = new RDBQueryContext(dataProvider);
+                var insertQuery = queryContext.AddInsertQuery();
+                insertQuery.IntoTable(TABLE_NAME);
+                insertQuery.GenerateIdAndAssignToParameter("ID");
+                insertQuery.Column("UserId").Value(generateInvoiceInputToSave.Invoice.UserId);
+                insertQuery.Column("InvoiceTypeID").Value(generateInvoiceInputToSave.Invoice.InvoiceTypeId);
+                insertQuery.Column("PartnerID").Value(generateInvoiceInputToSave.Invoice.PartnerId);
+                if (splitInvoiceGroupId.HasValue)
+                    insertQuery.Column("SplitInvoiceGroupId").Value(splitInvoiceGroupId.Value);
+                insertQuery.Column("InvoiceSettingID").Value(generateInvoiceInputToSave.Invoice.InvoiceSettingId);
+                insertQuery.Column("SerialNumber").Value(generateInvoiceInputToSave.Invoice.SerialNumber);
+                insertQuery.Column("FromDate").Value(generateInvoiceInputToSave.Invoice.FromDate);
+                insertQuery.Column("ToDate").Value(generateInvoiceInputToSave.Invoice.ToDate);
+                insertQuery.Column("IssueDate").Value(generateInvoiceInputToSave.Invoice.IssueDate);
+                insertQuery.Column("DueDate").Value(generateInvoiceInputToSave.Invoice.DueDate);
+                insertQuery.Column("Details").Value(serializedDetails);
+                insertQuery.Column("Notes").Value(generateInvoiceInputToSave.Invoice.Note);
+                insertQuery.Column("SourceId").Value(generateInvoiceInputToSave.Invoice.SourceId);
+                insertQuery.Column("IsDraft").Value(true);
+                insertQuery.Column("IsAutomatic").Value(generateInvoiceInputToSave.Invoice.IsAutomatic);
+                insertQuery.Column("Settings").Value(serializedSettings);
+                if (generateInvoiceInputToSave.Invoice.SentDate.HasValue)
+                    insertQuery.Column("SentDate").Value(generateInvoiceInputToSave.Invoice.SentDate.Value);
+                if (generateInvoiceInputToSave.Invoice.NeedApproval.HasValue)
+                    insertQuery.Column("NeedApproval").Value(generateInvoiceInputToSave.Invoice.NeedApproval.Value);
+                long insertedInvoiceId = queryContext.ExecuteScalar().LongValue;
 
-                        if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
-                        {
-                            var updateQuery2 = queryContext2.AddUpdateQuery();
-                            updateQuery2.FromTable(TABLE_NAME);
-                            updateQuery2.Column("SettlementInvoiceId").Null();
-                            updateQuery2.Where().EqualsCondition("SettlementInvoiceId").Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
-                        }
-                    }
+                insertedInvoiceIds.Add(insertedInvoiceId);
 
-                    if (generateInvoiceInputToSave.MappedTransactions != null && generateInvoiceInputToSave.MappedTransactions.Count() > 0)
+                if (generateInvoiceInputToSave.ItemSetNameStorageDic != null && generateInvoiceInputToSave.ItemSetNameStorageDic.Count > 0)
+                {
+                    var remainingInvoiceItemSets = generateInvoiceInputToSave.InvoiceItemSets.FindAllRecords(x => !generateInvoiceInputToSave.ItemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
+                    if (remainingInvoiceItemSets != null)
                     {
-                        foreach (var billingTransaction in generateInvoiceInputToSave.MappedTransactions)
-                        {
-                            billingTransactionDataManager.AddQueryInsertBillingTransaction(queryContext2, billingTransaction, generateInvoiceInputToSave.Invoice.InvoiceId, false);
-                        }
+                        InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                        dataManager.SaveInvoiceItems(insertedInvoiceId, remainingInvoiceItemSets);
                     }
+                    foreach (var item in generateInvoiceInputToSave.ItemSetNameStorageDic)
+                    {
+                        InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                        dataManager.StorageConnectionStringKey = item.Key;
+                        var invoiceItemSetsToSave = generateInvoiceInputToSave.InvoiceItemSets.FindAllRecords(x => item.Value.Contains(x.SetName));
+                        dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSetsToSave);
+                    }
+                }
+                else
+                {
+                    InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                    dataManager.SaveInvoiceItems(insertedInvoiceId, generateInvoiceInputToSave.InvoiceItemSets);
+                }
+                generateInvoiceInputToSave.Invoice.InvoiceId = insertedInvoiceId;
+
+                if (generateInvoiceInputToSave.ActionBeforeGenerateInvoice != null)
+                {
+                    generateInvoiceInputToSave.ActionBeforeGenerateInvoice(generateInvoiceInputToSave.Invoice);
+                }
+
+                if (generateInvoiceInputToSave.ActionAfterGenerateInvoice != null)
+                {
+                    generateInvoiceInputToSave.ActionAfterGenerateInvoice(generateInvoiceInputToSave.Invoice);
+                }
+            }
+
+            var queryContext2 = new RDBQueryContext(dataProvider);
+
+            foreach (var generateInvoiceInputToSave in generateInvoicesInputToSave)
+            {
+                if (generateInvoiceInputToSave.InvoiceToSettleIds != null && generateInvoiceInputToSave.InvoiceToSettleIds.Count > 0)
+                {
+                    var updateQuery = queryContext2.AddUpdateQuery();
+                    updateQuery.FromTable(TABLE_NAME);
+                    updateQuery.Column("SettlementInvoiceId").Value(generateInvoiceInputToSave.Invoice.InvoiceId);
+                    updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, generateInvoiceInputToSave.InvoiceToSettleIds);
 
                     if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
                     {
-                        var updateQuery = queryContext2.AddUpdateQuery();
-                        updateQuery.FromTable(TABLE_NAME);
-                        updateQuery.Column("IsDeleted").Value(true);
-                        updateQuery.Where().EqualsCondition("ID").Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
-
-                        billingTransactionDataManager.AddQuerySetInvoiceBillingTransactionsDeleted(queryContext2, generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                        var updateQuery2 = queryContext2.AddUpdateQuery();
+                        updateQuery2.FromTable(TABLE_NAME);
+                        updateQuery2.Column("SettlementInvoiceId").Null();
+                        updateQuery2.Where().EqualsCondition("SettlementInvoiceId").Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
                     }
-
-                    var updateInvoiceQuery = queryContext2.AddUpdateQuery();
-                    updateInvoiceQuery.FromTable(TABLE_NAME);
-                    updateInvoiceQuery.Column("IsDraft").Value(false);
-                    updateInvoiceQuery.Where().EqualsCondition("ID").Value(generateInvoiceInputToSave.Invoice.InvoiceId);
                 }
 
-                queryContext2.ExecuteNonQuery(true);
+                if (generateInvoiceInputToSave.MappedTransactions != null && generateInvoiceInputToSave.MappedTransactions.Count() > 0)
+                {
+                    foreach (var billingTransaction in generateInvoiceInputToSave.MappedTransactions)
+                    {
+                        billingTransactionDataManager.AddQueryInsertBillingTransaction(queryContext2, billingTransaction, generateInvoiceInputToSave.Invoice.InvoiceId, false);
+                    }
+                }
+
+                if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
+                {
+                    var updateQuery = queryContext2.AddUpdateQuery();
+                    updateQuery.FromTable(TABLE_NAME);
+                    updateQuery.Column("IsDeleted").Value(true);
+                    updateQuery.Where().EqualsCondition("ID").Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+
+                    billingTransactionDataManager.AddQuerySetInvoiceBillingTransactionsDeleted(queryContext2, generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                }
+
+                var updateInvoiceQuery = queryContext2.AddUpdateQuery();
+                updateInvoiceQuery.FromTable(TABLE_NAME);
+                updateInvoiceQuery.Column("IsDraft").Value(false);
+                updateInvoiceQuery.Where().EqualsCondition("ID").Value(generateInvoiceInputToSave.Invoice.InvoiceId);
             }
+
+            queryContext2.ExecuteNonQuery(true);
+
             return true;
         }
 
@@ -400,7 +401,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             var where = selectQuery.Where();
             where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("PartnerID", partnerId);
+            where.EqualsCondition("PartnerID").Value(partnerId);
             where.GreaterOrEqualCondition("ToDate").Value(fromDate);
             where.LessOrEqualCondition("FromDate").Value(toDate);
             AddConditionInvoiceNotDeleted(where);
@@ -798,10 +799,18 @@ namespace Vanrise.Invoice.Data.RDB
 
         #endregion
 
-        private void AddConditionInvoiceNotDeleted(RDBConditionContext conditionContext)
+        private void AddConditionInvoiceNotDeleted(RDBConditionContext conditionContext, string invoiceTableAlias = null)
         {
-            conditionContext.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
-            conditionContext.ConditionIfColumnNotNull("IsDraft").EqualsCondition("IsDraft").Value(false);
+            if (invoiceTableAlias == null)
+            {
+                conditionContext.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+                conditionContext.ConditionIfColumnNotNull("IsDraft").EqualsCondition("IsDraft").Value(false);
+            }
+            else
+            {
+                conditionContext.ConditionIfColumnNotNull(invoiceTableAlias, "IsDeleted").EqualsCondition(invoiceTableAlias, "IsDeleted").Value(false);
+                conditionContext.ConditionIfColumnNotNull(invoiceTableAlias, "IsDraft").EqualsCondition(invoiceTableAlias, "IsDraft").Value(false);
+            }
         }
 
         internal void AddJoinInvoiceToBulkActionDraft(RDBJoinContext joinContext, string bulkActionDraftAlias, string invoiceAlias)
@@ -809,7 +818,7 @@ namespace Vanrise.Invoice.Data.RDB
             var joinCondition = joinContext.Join(TABLE_NAME, invoiceAlias).On();
             joinCondition.EqualsCondition(invoiceAlias, "InvoiceTypeID").Column(bulkActionDraftAlias, "InvoiceTypeID");
             joinCondition.EqualsCondition(invoiceAlias, "ID").Column(bulkActionDraftAlias, "InvoiceId");
-            AddConditionInvoiceNotDeleted(joinCondition);
+            AddConditionInvoiceNotDeleted(joinCondition, invoiceAlias);
         }
     }
 }

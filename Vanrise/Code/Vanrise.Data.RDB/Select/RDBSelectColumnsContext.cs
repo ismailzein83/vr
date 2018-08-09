@@ -33,8 +33,7 @@ namespace Vanrise.Data.RDB
         public void AllTableColumns(string tableAlias)
         {
             var tableQuerySource = _queryBuilderContext.GetTableFromAlias(tableAlias);
-            RDBTableDefinitionQuerySource table = tableQuerySource.CastWithValidate<RDBTableDefinitionQuerySource>("tableQuerySource", tableAlias);
-            foreach (var colName in RDBSchemaManager.Current.GetTableColumns(table.TableName))
+            foreach (var colName in tableQuerySource.GetColumnNames(new RDBTableQuerySourceGetColumnNamesContext()))
             {
                 Column(tableAlias, colName, colName);
             }

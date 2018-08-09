@@ -17,6 +17,10 @@ namespace Vanrise.Data.RDB
         string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context);
 
         void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context);
+
+        List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context);
+
+        void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context);
     }
 
     public interface IRDBTableQuerySourceToDBQueryContext : IBaseRDBResolveQueryContext
@@ -30,6 +34,34 @@ namespace Vanrise.Data.RDB
         {
 
         }
+    }
+
+    public interface IRDBTableQuerySourceGetColumnNamesContext
+    {
+    }
+
+    public class RDBTableQuerySourceGetColumnNamesContext : IRDBTableQuerySourceGetColumnNamesContext
+    {
+    }
+
+    public interface IRDBTableQuerySourceGetCreatedAndModifiedTimeContext : IBaseRDBResolveQueryContext
+    {
+        string CreatedTimeColumnName { set; }
+
+        string ModifiedTimeColumnName { set; }
+    }
+
+    public class RDBTableQuerySourceGetCreatedAndModifiedTimeContext : BaseRDBResolveQueryContext, IRDBTableQuerySourceGetCreatedAndModifiedTimeContext
+    {
+        public RDBTableQuerySourceGetCreatedAndModifiedTimeContext(IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+
+        }
+
+        public string CreatedTimeColumnName { get; set; }
+
+        public string ModifiedTimeColumnName { get; set; }
     }
 
     public interface IRDBTableQuerySourceGetDBColumnNameContext : IBaseRDBResolveQueryContext

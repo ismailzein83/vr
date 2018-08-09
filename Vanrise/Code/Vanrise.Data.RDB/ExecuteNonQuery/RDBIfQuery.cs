@@ -37,7 +37,7 @@ namespace Vanrise.Data.RDB
             else
             {
                 _trueQueryContext.ThrowIfNull("_trueQueryContext");
-                queryBuilder.AppendLine(_trueQueryContext.GetResolvedQuery().QueryText);
+                queryBuilder.AppendLine(_trueQueryContext.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context)).QueryText);
             }
             queryBuilder.AppendLine(" END ");
             if (_falseQueryContext != null)
@@ -45,7 +45,7 @@ namespace Vanrise.Data.RDB
                 queryBuilder.AppendLine(" ELSE ");
                 queryBuilder.AppendLine(" BEGIN ");
                 var falseQueryContext = new RDBQueryGetResolvedQueryContext(context);
-                queryBuilder.AppendLine(_falseQueryContext.GetResolvedQuery().QueryText);
+                queryBuilder.AppendLine(_falseQueryContext.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context)).QueryText);
                 queryBuilder.AppendLine(" END ");
             }
             return new RDBResolvedQuery

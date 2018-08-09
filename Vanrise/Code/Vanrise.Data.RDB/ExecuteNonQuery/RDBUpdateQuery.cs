@@ -112,6 +112,7 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
+            AddModifiedTimeIfNeeded(context);
             if (this._notExistConditionGroup != null)
             {
                 var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
@@ -136,6 +137,37 @@ namespace Vanrise.Data.RDB
                 return ResolveUpdateQuery(context);
             }
         }
+
+
+        private void AddModifiedTimeIfNeeded(IRDBQueryGetResolvedQueryContext context)
+        {
+            var getCreatedAndModifiedTimeContext = new RDBTableQuerySourceGetCreatedAndModifiedTimeContext(context);
+            this._table.GetCreatedAndModifiedTime(getCreatedAndModifiedTimeContext);
+            bool addModifiedTime = false;
+            if (!String.IsNullOrEmpty(getCreatedAndModifiedTimeContext.ModifiedTimeColumnName))
+                addModifiedTime = true;
+            if (addModifiedTime)
+            {
+                if (_columnValues != null && _columnValues.Count > 0)
+                {
+                    foreach (var colVal in _columnValues)
+                    {
+                        if (colVal.ColumnName == getCreatedAndModifiedTimeContext.ModifiedTimeColumnName)
+                        {
+                            addModifiedTime = false;
+                            break;
+                        }
+                    }
+                    if (addModifiedTime)
+                        this.Column(getCreatedAndModifiedTimeContext.ModifiedTimeColumnName).DateNow();
+                }
+                else
+                {
+                    throw new NullReferenceException("_columnValues");
+                }
+            }
+        }
+
 
         private RDBResolvedQuery ResolveUpdateQuery(IRDBQueryGetResolvedQueryContext context)
         {

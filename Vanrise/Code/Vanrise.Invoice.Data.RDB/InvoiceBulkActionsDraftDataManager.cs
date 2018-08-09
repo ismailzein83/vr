@@ -58,9 +58,10 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "bulkActionDrft");
-            selectQuery.SelectColumns().AllTableColumns("inv");
 
             invoiceDataManager.AddJoinInvoiceToBulkActionDraft(selectQuery.Join(), "bulkActionDrft", "inv");
+
+            selectQuery.SelectColumns().AllTableColumns("inv");
 
             selectQuery.Where().EqualsCondition("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
 
@@ -87,7 +88,12 @@ namespace Vanrise.Invoice.Data.RDB
                 if (targetInvoicesIds != null)
                 {
                     deleteWhereCondition.ListCondition("InvoiceId", RDBListConditionOperator.IN, targetInvoicesIds);
-
+                }
+            }
+            else
+            {
+                if(targetInvoicesIds != null)
+                {
                     foreach (var invoiceId in targetInvoicesIds)
                     {
                         var insertQuery = queryContext.AddInsertQuery();
