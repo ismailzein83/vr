@@ -68,16 +68,16 @@ namespace Vanrise.GenericData.BP.Activities
                                 {
                                     var singleCDROutput = new DataTransformer().ExecuteDataTransformation(cdrCorrelationDefinition.Settings.CorrelateSingleCDRDataTransformationDefinitionId, (context) =>
                                     {
-                                        context.SetRecordValue("InputCDR", cdr);
+                                        context.SetRecordValue("InputMobileCDR", cdr);
                                     });
 
-                                    dynamic correlatedCDR = singleCDROutput.GetRecordValue("CorrelatedCDR");
+                                    dynamic correlatedCDR = singleCDROutput.GetRecordValue("OutputCorrelatedCDR");
                                     if (correlatedCDR != null)
                                     {
                                         long cdrId = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
                                         DateTime recordDateTime = cdr.GetFieldValue(cdrCorrelationDefinition.Settings.DatetimeFieldName);
 
-                                        AddCorrelatedCDR(cdrCorrelationDefinition, cdrCorrelationBatch, new List<long> { cdrId }, recordDateTime, new List<dynamic>() { correlatedCDR });
+                                        AddCorrelatedCDR(cdrCorrelationBatch, new List<dynamic>() { correlatedCDR }, new List<long> { cdrId }, recordDateTime, cdrCorrelationDefinition);
                                         continue;
                                     }
 
@@ -120,7 +120,7 @@ namespace Vanrise.GenericData.BP.Activities
                                         long cdrId = mobileCDR.CDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
                                         long correlatedCDRId = matchingMobileCDR.CDR.GetFieldValue(cdrCorrelationDefinition.Settings.IdFieldName);
 
-                                        AddCorrelatedCDR(cdrCorrelationDefinition, cdrCorrelationBatch, new List<long> { cdrId, correlatedCDRId }, recordDateTime, correlatedCDRList);
+                                        AddCorrelatedCDR(cdrCorrelationBatch, correlatedCDRList, new List<long> { cdrId, correlatedCDRId }, recordDateTime, cdrCorrelationDefinition);
                                     }
                                     else
                                     {
@@ -146,7 +146,7 @@ namespace Vanrise.GenericData.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Correlate CDRs is done.");
         }
 
-        private void AddCorrelatedCDR(CDRCorrelationDefinition cdrCorrelationDefinition, CDRCorrelationBatch cdrCorrelationBatch, List<long> idsToDelete, DateTime recordDateTime, List<dynamic> correlatedCDRList)
+        private void AddCorrelatedCDR(CDRCorrelationBatch cdrCorrelationBatch, List<dynamic> correlatedCDRList, List<long> idsToDelete, DateTime recordDateTime, CDRCorrelationDefinition cdrCorrelationDefinition)
         {
             cdrCorrelationBatch.OutputRecordsToInsert.Add(correlatedCDRList.First());
             cdrCorrelationBatch.InputIdsToDelete.AddRange(idsToDelete);

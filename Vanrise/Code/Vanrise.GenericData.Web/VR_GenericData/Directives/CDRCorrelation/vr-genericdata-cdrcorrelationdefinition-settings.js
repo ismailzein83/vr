@@ -31,6 +31,8 @@
         function CDRCorrelationDefinitionSettingsCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
+            var settings;
+
             var mergeDataTransformationAPI;
             var mergeDataTransformationSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -56,6 +58,9 @@
             var datetimeFieldSelectorAPI;
             var datetimeFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var idFieldSelectorAPI;
+            var idFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var outputDataRecordTypeSelectorAPI;
             var outputDataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var onOutputRecordTypeSelectionChangedDeferred;
@@ -63,19 +68,18 @@
             var outputDataRecordStorageSelectorAPI;
             var outputDataRecordStorageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var settings;
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onMergeDataTransformationSelectorDirectiveReady = function (api) {
-                    mergeDataTransformationAPI = api;
-                    mergeDataTransformationSelectorReadyDeferred.resolve();
-                };
-
                 $scope.scopeModel.onCorrelateSingleCDRDataTransformationSelectorDirectiveReady = function (api) {
                     correlateSingleCDRDataTransformationAPI = api;
                     correlateSingleCDRDataTransformationSelectorReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onMergeDataTransformationSelectorDirectiveReady = function (api) {
+                    mergeDataTransformationAPI = api;
+                    mergeDataTransformationSelectorReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onInputDataRecordTypeSelectorReady = function (api) {
@@ -185,6 +189,11 @@
                     datetimeFieldSelectorReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onIdFieldSelectorDirectiveReady = function (api) {
+                    idFieldSelectorAPI = api;
+                    idFieldSelectorReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.onOutputDataRecordTypeSelectorReady = function (api) {
                     outputDataRecordTypeSelectorAPI = api;
                     outputDataRecordTypeSelectorReadyDeferred.resolve();
@@ -211,6 +220,7 @@
                         }
                     }
                 };
+
                 defineAPI();
             }
 
@@ -226,27 +236,42 @@
 
                     var promises = [];
 
-                    promises.push(loadMergeDataTransformationSelector());
-                    promises.push(loadCorrelateSingleCDRDataTransformationSelector());
-                    promises.push(loadInputDataRecordTypeSelector());
-                    promises.push(loadOutputDataRecordTypeSelector());
+                    var loadCorrelateSingleCDRDataTransformationSelectorPromise = loadCorrelateSingleCDRDataTransformationSelector();
+                    promises.push(loadCorrelateSingleCDRDataTransformationSelectorPromise);
+
+                    var loadMergeDataTransformationSelectorPromise = loadMergeDataTransformationSelector();
+                    promises.push(loadMergeDataTransformationSelectorPromise);
+
+                    var loadInputDataRecordTypeSelectorPromise = loadInputDataRecordTypeSelector();
+                    promises.push(loadInputDataRecordTypeSelectorPromise);
+
+                    var loadOutputDataRecordTypeSelectorPromise = loadOutputDataRecordTypeSelector();
+                    promises.push(loadOutputDataRecordTypeSelectorPromise);
 
                     if (settings != undefined) {
                         onInputRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
                         onOutputRecordTypeSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
                         var loadInputPromises = [];
-                        var loadInputDataRecordStorageSelectorPromise = loadInputDataRecordStorageSelector();
-                        var loadCallingNumberFieldSelectorPromise = loadCallingNumberFieldSelector();
-                        var loadCalledNumberFieldSelectorPromise = loadCalledNumberFieldSelector();
-                        var loadDurationFieldSelectorPromise = loadDurationFieldSelector();
-                        var loadDatetimeFieldSelectorPromise = loadDatetimeFieldSelector();
 
+                        var loadInputDataRecordStorageSelectorPromise = loadInputDataRecordStorageSelector();
                         loadInputPromises.push(loadInputDataRecordStorageSelectorPromise);
+
+                        var loadCallingNumberFieldSelectorPromise = loadCallingNumberFieldSelector();
                         loadInputPromises.push(loadCallingNumberFieldSelectorPromise);
+
+                        var loadCalledNumberFieldSelectorPromise = loadCalledNumberFieldSelector();
                         loadInputPromises.push(loadCalledNumberFieldSelectorPromise);
+
+                        var loadDurationFieldSelectorPromise = loadDurationFieldSelector();
                         loadInputPromises.push(loadDurationFieldSelectorPromise);
+
+                        var loadDatetimeFieldSelectorPromise = loadDatetimeFieldSelector();
                         loadInputPromises.push(loadDatetimeFieldSelectorPromise);
+
+                        var loadIdFieldSelectorPromise = loadIdFieldSelector();
+                        loadInputPromises.push(loadIdFieldSelectorPromise);
+
                         UtilsService.waitMultiplePromises(loadInputPromises).then(function () {
                             onInputRecordTypeSelectionChangedDeferred = undefined;
                         });
@@ -260,20 +285,6 @@
                         });
 
                         promises.push(loadOutputDataRecordStorageSelectorPromise);
-                    }
-
-                    function loadMergeDataTransformationSelector() {
-                        var loadMergeDataTransformationSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        mergeDataTransformationSelectorReadyDeferred.promise.then(function () {
-                            var directivePayload;
-                            if (settings != undefined) {
-                                directivePayload = {
-                                    selectedIds: settings.MergeDataTransformationDefinitionId
-                                };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(mergeDataTransformationAPI, directivePayload, loadMergeDataTransformationSelectorPromiseDeferred);
-                        });
-                        return loadMergeDataTransformationSelectorPromiseDeferred.promise;
                     }
 
                     function loadCorrelateSingleCDRDataTransformationSelector() {
@@ -290,6 +301,20 @@
                         return loadCorrelateSingleCDRDataTransformationSelectorPromiseDeferred.promise;
                     }
 
+                    function loadMergeDataTransformationSelector() {
+                        var loadMergeDataTransformationSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        mergeDataTransformationSelectorReadyDeferred.promise.then(function () {
+                            var directivePayload;
+                            if (settings != undefined) {
+                                directivePayload = {
+                                    selectedIds: settings.MergeDataTransformationDefinitionId
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(mergeDataTransformationAPI, directivePayload, loadMergeDataTransformationSelectorPromiseDeferred);
+                        });
+                        return loadMergeDataTransformationSelectorPromiseDeferred.promise;
+                    }
+
                     function loadInputDataRecordTypeSelector() {
                         var loadInputDataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         inputDataRecordTypeSelectorReadyDeferred.promise.then(function () {
@@ -302,6 +327,20 @@
                             VRUIUtilsService.callDirectiveLoad(inputDataRecordTypeSelectorAPI, directivePayload, loadInputDataRecordTypeSelectorPromiseDeferred);
                         });
                         return loadInputDataRecordTypeSelectorPromiseDeferred.promise;
+                    }
+
+                    function loadOutputDataRecordTypeSelector() {
+                        var loadOutputDataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        outputDataRecordTypeSelectorReadyDeferred.promise.then(function () {
+                            var directivePayload;
+                            if (settings != undefined) {
+                                directivePayload = {
+                                    selectedIds: settings.OutputDataRecordTypeId
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(outputDataRecordTypeSelectorAPI, directivePayload, loadOutputDataRecordTypeSelectorPromiseDeferred);
+                        });
+                        return loadOutputDataRecordTypeSelectorPromiseDeferred.promise;
                     }
 
                     function loadInputDataRecordStorageSelector() {
@@ -318,6 +357,22 @@
                             });
                         });
                         return loadInputDataRecordStorageSelectorPromiseDeferred.promise;
+                    }
+
+                    function loadOutputDataRecordStorageSelector() {
+                        var loadOutputDataRecordStorageSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        onOutputRecordTypeSelectionChangedDeferred.promise.then(function () {
+                            outputDataRecordStorageSelectorReadyDeferred.promise.then(function () {
+                                var directivePayload = {
+                                    DataRecordTypeId: outputDataRecordTypeSelectorAPI.getSelectedIds()
+                                };
+                                if (settings != undefined) {
+                                    directivePayload.selectedIds = settings.OutputDataRecordStorageId;
+                                }
+                                VRUIUtilsService.callDirectiveLoad(outputDataRecordStorageSelectorAPI, directivePayload, loadOutputDataRecordStorageSelectorPromiseDeferred);
+                            });
+                        });
+                        return loadOutputDataRecordStorageSelectorPromiseDeferred.promise;
                     }
 
                     function loadCallingNumberFieldSelector() {
@@ -384,34 +439,22 @@
                         return loadDatetimeFieldSelectorPromiseDeferred.promise;
                     }
 
-                    function loadOutputDataRecordTypeSelector() {
-                        var loadOutputDataRecordTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        outputDataRecordTypeSelectorReadyDeferred.promise.then(function () {
-                            var directivePayload;
-                            if (settings != undefined) {
-                                directivePayload = {
-                                    selectedIds: settings.OutputDataRecordTypeId
-                                };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(outputDataRecordTypeSelectorAPI, directivePayload, loadOutputDataRecordTypeSelectorPromiseDeferred);
-                        });
-                        return loadOutputDataRecordTypeSelectorPromiseDeferred.promise;
-                    }
+                    function loadIdFieldSelector() {
+                        var loadIdFieldSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    function loadOutputDataRecordStorageSelector() {
-                        var loadOutputDataRecordStorageSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        onOutputRecordTypeSelectionChangedDeferred.promise.then(function () {
-                            outputDataRecordStorageSelectorReadyDeferred.promise.then(function () {
+                        onInputRecordTypeSelectionChangedDeferred.promise.then(function () {
+                            idFieldSelectorReadyDeferred.promise.then(function () {
                                 var directivePayload = {
-                                    DataRecordTypeId: outputDataRecordTypeSelectorAPI.getSelectedIds()
+                                    dataRecordTypeId: inputDataRecordTypeSelectorAPI.getSelectedIds()
                                 };
                                 if (settings != undefined) {
-                                    directivePayload.selectedIds = settings.OutputDataRecordStorageId;
+                                    directivePayload.selectedIds = settings.IdFieldName;
                                 }
-                                VRUIUtilsService.callDirectiveLoad(outputDataRecordStorageSelectorAPI, directivePayload, loadOutputDataRecordStorageSelectorPromiseDeferred);
+                                VRUIUtilsService.callDirectiveLoad(idFieldSelectorAPI, directivePayload, loadIdFieldSelectorPromiseDeferred);
                             });
                         });
-                        return loadOutputDataRecordStorageSelectorPromiseDeferred.promise;
+
+                        return loadIdFieldSelectorPromiseDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -420,20 +463,20 @@
                 api.getData = function () {
                     return {
                         Name: $scope.scopeModel.name,
-                        Settings:
-							{
-							    $type: "Vanrise.GenericData.Entities.CDRCorrelationDefinitionSettings, Vanrise.GenericData.Entities",
-							    InputDataRecordTypeId: (inputDataRecordTypeSelectorAPI != undefined) ? inputDataRecordTypeSelectorAPI.getSelectedIds() : null,
-							    OutputDataRecordTypeId: (outputDataRecordTypeSelectorAPI != undefined) ? outputDataRecordTypeSelectorAPI.getSelectedIds() : null,
-							    InputDataRecordStorageId: (inputDataRecordStorageSelectorAPI != undefined) ? inputDataRecordStorageSelectorAPI.getSelectedIds() : null,
-							    OutputDataRecordStorageId: (outputDataRecordStorageSelectorAPI != undefined) ? outputDataRecordStorageSelectorAPI.getSelectedIds() : null,
-							    CallingNumberFieldName: (callingNumberFieldSelectorAPI != undefined) ? callingNumberFieldSelectorAPI.getSelectedIds() : null,
-							    CalledNumberFieldName: (calledNumberFieldSelectorAPI != undefined) ? calledNumberFieldSelectorAPI.getSelectedIds() : null,
-							    DurationFieldName: (durationFieldSelectorAPI != undefined) ? durationFieldSelectorAPI.getSelectedIds() : null,
-							    DatetimeFieldName: (datetimeFieldSelectorAPI != undefined) ? datetimeFieldSelectorAPI.getSelectedIds() : null,
-							    MergeDataTransformationDefinitionId: (mergeDataTransformationAPI != undefined) ? mergeDataTransformationAPI.getSelectedIds() : null,
-							    CorrelateSingleCDRDataTransformationDefinitionId: (correlateSingleCDRDataTransformationAPI != undefined) ? correlateSingleCDRDataTransformationAPI.getSelectedIds() : null,
-							}
+                        Settings:{
+                            $type: "Vanrise.GenericData.Entities.CDRCorrelationDefinitionSettings, Vanrise.GenericData.Entities",
+                            CorrelateSingleCDRDataTransformationDefinitionId: (correlateSingleCDRDataTransformationAPI != undefined) ? correlateSingleCDRDataTransformationAPI.getSelectedIds() : null,
+                            MergeDataTransformationDefinitionId: (mergeDataTransformationAPI != undefined) ? mergeDataTransformationAPI.getSelectedIds() : null,
+                            InputDataRecordTypeId: (inputDataRecordTypeSelectorAPI != undefined) ? inputDataRecordTypeSelectorAPI.getSelectedIds() : null,
+                            OutputDataRecordTypeId: (outputDataRecordTypeSelectorAPI != undefined) ? outputDataRecordTypeSelectorAPI.getSelectedIds() : null,
+                            InputDataRecordStorageId: (inputDataRecordStorageSelectorAPI != undefined) ? inputDataRecordStorageSelectorAPI.getSelectedIds() : null,
+                            OutputDataRecordStorageId: (outputDataRecordStorageSelectorAPI != undefined) ? outputDataRecordStorageSelectorAPI.getSelectedIds() : null,
+                            CallingNumberFieldName: (callingNumberFieldSelectorAPI != undefined) ? callingNumberFieldSelectorAPI.getSelectedIds() : null,
+                            CalledNumberFieldName: (calledNumberFieldSelectorAPI != undefined) ? calledNumberFieldSelectorAPI.getSelectedIds() : null,
+                            DurationFieldName: (durationFieldSelectorAPI != undefined) ? durationFieldSelectorAPI.getSelectedIds() : null,
+                            DatetimeFieldName: (datetimeFieldSelectorAPI != undefined) ? datetimeFieldSelectorAPI.getSelectedIds() : null,
+                            IdFieldName: (idFieldSelectorAPI != undefined) ? idFieldSelectorAPI.getSelectedIds() : null
+                        }
                     };
                 };
 
@@ -441,8 +484,9 @@
                     ctrl.onReady(api);
             }
         }
+
         return directiveDefinitionObject;
     }
-    app.directive('vrGenericdataCdrcorrelationdefinitionSettings', CDRCorrelationDefinitionSettings);
 
+    app.directive('vrGenericdataCdrcorrelationdefinitionSettings', CDRCorrelationDefinitionSettings);
 })(app);

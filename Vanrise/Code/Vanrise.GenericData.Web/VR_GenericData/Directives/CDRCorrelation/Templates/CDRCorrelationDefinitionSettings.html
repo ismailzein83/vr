@@ -23,32 +23,37 @@
                         </vr-genericdata-datarecordstorage-selector>
                     </vr-columns>
                 </vr-row>
-                    <vr-row>
-                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCallingNumberFieldSelectorDirectiveReady"
-                                                                          label="Calling Number Field" isrequired="true" hideremoveicon>
-                            </vr-genericdata-datarecordtypefields-selector>
-                        </vr-columns>
-
-                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCalledNumberFieldSelectorDirectiveReady"
-                                                                          label="Called Number Field" isrequired="true" hideremoveicon>
-                            </vr-genericdata-datarecordtypefields-selector>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDurationFieldSelectorDirectiveReady"
-                                                                          label="Duration Field" isrequired="true" hideremoveicon>
-                            </vr-genericdata-datarecordtypefields-selector>
-                        </vr-columns>
-
-                        <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
-                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDatetimeFieldSelectorDirectiveReady"
-                                                                          label="Date Time Field" isrequired="true" hideremoveicon>
-                            </vr-genericdata-datarecordtypefields-selector>
-                        </vr-columns>
-                    </vr-row>
+                <vr-row>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCallingNumberFieldSelectorDirectiveReady"
+                                                                      label="Calling Number Field" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCalledNumberFieldSelectorDirectiveReady"
+                                                                      label="Called Number Field" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDurationFieldSelectorDirectiveReady"
+                                                                      label="Duration Field" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDatetimeFieldSelectorDirectiveReady"
+                                                                      label="Date Time Field" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/2row" ng-show="scopeModel.selectedInputDataRecordType != undefined">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onIdFieldSelectorDirectiveReady"
+                                                                      label="Id Field" isrequired="true" hideremoveicon>
+                        </vr-genericdata-datarecordtypefields-selector>
+                    </vr-columns>
+                </vr-row>
             </vr-section>
         </vr-row>
         <vr-row>
@@ -76,7 +81,6 @@
                                                                           isrequired="true" customlabel="'Correlate Single CDR'">
                     </vr-genericdata-datatransformationdefinition-selector>
                 </vr-columns>
-
                 <vr-columns width="1/2row">
                     <vr-genericdata-datatransformationdefinition-selector on-ready="scopeModel.onMergeDataTransformationSelectorDirectiveReady" hideremoveicon
                                                                           isrequired="true" customlabel="'Merge CDRs'">
