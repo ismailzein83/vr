@@ -162,9 +162,9 @@
 
             var payload;
 
-            if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.CountryId != undefined) {
+            if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.CountryIds != undefined) {
                 payload = {};
-                payload.selectedIds = swapDealOutboundEntity != undefined ? swapDealOutboundEntity.CountryId : undefined;
+                payload.selectedIds = swapDealOutboundEntity != undefined ? swapDealOutboundEntity.CountryIds : undefined;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
 
@@ -174,7 +174,7 @@
 
 
 
-            if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.CountryId != undefined) {
+            if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.CountryIds != undefined) {
                 var loadSupplierZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadSupplierZonePromiseDeferred.promise);
@@ -190,14 +190,14 @@
                     var payload = context != undefined ? context.getSupplierZoneSelectorPayload(swapDealOutboundEntity != undefined ? swapDealOutboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.supplierId = supplierId;
-                        payload.filter.CountryIds = [swapDealOutboundEntity.CountryId];
+                        payload.filter.CountryIds = swapDealOutboundEntity.CountryIds;
                         payload.selectedIds = zoneIds;
 
                     }
                     else {
                         payload = {
                             supplierId: supplierId,
-                            filter: { CountryIds: [swapDealOutboundEntity.CountryId] },
+                            filter: { CountryIds: swapDealOutboundEntity.CountryIds },
                             selectedIds: zoneIds
                         };
                     }
@@ -260,7 +260,7 @@
                 Volume: $scope.scopeModel.volume,
                 ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
                 Rate: $scope.scopeModel.rate,
-                CountryId: countryDirectiveApi.getSelectedIds(),
+                CountryIds: countryDirectiveApi.getSelectedIds(),
                 SubstituteRateType: substituteRateTypeApi.getSelectedIds(),
                 FixedRate: $scope.scopeModel.fixedRate != undefined ? $scope.scopeModel.fixedRate : undefined
             };

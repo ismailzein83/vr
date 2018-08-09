@@ -45,13 +45,15 @@
                 isReadOnly = parameters.isReadOnly;
                 isViewHistoryMode = context != undefined && context.historyId != undefined;
             }
-            if (isReadOnly == true)
-                UtilsService.setContextReadOnly($scope);
+
             isEditMode = (dealId != undefined);
+            if (isReadOnly)
+                UtilsService.setContextReadOnly($scope);
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.disabelType = isEditMode;
+            //UtilsService.setContextReadOnly($scope.scopeModel);
+            $scope.scopeModel.disabelType = (isEditMode);
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
@@ -164,7 +166,7 @@
                 var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
                 var originalExpiredDate = UtilsService.createDateFromString(originalEED);
-                if (isEditMode && originalExpiredDate < today && eed < originalExpiredDate) {
+                if ( originalExpiredDate < today && eed < originalExpiredDate) {
                     return "Deal expired, EED can only be extended";
                 }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
@@ -295,6 +297,12 @@
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
+            if (isEditMode) {
+                var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+                var bed = UtilsService.createDateFromString(dealEntity.Settings.BeginDate);
+                //if (isReadOnly == true && bed >= today && $scope.scopeModel.selectedDealStatus != WhS_Deal_DealStatusTypeEnum.Inactive.value)
+                  //  UtilsService.setContextReadOnly($scope);
+            }
         }
         function loadCarrierBoundsSection() {
             var promises = [];
@@ -322,6 +330,8 @@
                 promises.push(loadSwapDealOutboundPromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([dealInboundReadyPromiseDeferred.promise, dealOutboundReadyPromiseDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
+                    console.log("dealEntity");
+                    console.log(dealEntity.Settings.Inbounds);
                     var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                     var payload = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
@@ -332,7 +342,8 @@
                         dealId: dealId,
 
                     };
-
+                    console.log("dealEntity");
+                    console.log(dealEntity.Settings.Outbounds);
                     var payloadOutbound = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         supplierId: carrierAccountInfo.CarrierAccountId,
@@ -424,6 +435,8 @@
         function buildSwapDealObjFromScope() {
             var inboundData = dealInboundAPI.getData();
             var outboundData = dealOutboundAPI.getData();
+            console.log("outboundData");
+            console.log(outboundData);  
             var obj = {
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
@@ -446,6 +459,7 @@
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true
                 }
             };
+            console.log(obj);
             return obj;
         }
 

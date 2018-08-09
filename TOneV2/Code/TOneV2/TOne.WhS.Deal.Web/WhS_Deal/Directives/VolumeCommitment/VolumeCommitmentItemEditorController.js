@@ -167,7 +167,7 @@
                 return names.join(",");
             };
 
-            currentContext.getCountryId = function () {
+            currentContext.getCountryIds = function () {
                 return countryDirectiveApi.getSelectedIds();
             };
 
@@ -192,8 +192,8 @@
                     }]
                 };
             }
-            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryId != undefined) {
-                payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryId : undefined;
+            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
+                payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryIds : undefined;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
 
@@ -201,7 +201,7 @@
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
 
-            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryId != undefined) {
+            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
                 var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadZonePromiseDeferred.promise);
@@ -261,7 +261,7 @@
             return {
                 Name: $scope.scopeModel.name,
                 SaleZones: saleZones,
-                CountryId: countryDirectiveApi.getSelectedIds(),
+                CountryIds: countryDirectiveApi.getSelectedIds(),
                 Tiers: tiers
             };
         }

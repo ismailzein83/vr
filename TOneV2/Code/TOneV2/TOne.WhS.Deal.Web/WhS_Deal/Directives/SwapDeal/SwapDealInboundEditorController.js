@@ -74,9 +74,6 @@
                             },
                             selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
                         };
-                    console.log("get selected ids of country selector");
-                    console.log(countryDirectiveApi.getSelectedIds());
-                    //console.log(payload.excludedZoneIds);
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
                 }
@@ -154,8 +151,8 @@
                     IsEffectiveInFuture: false
                 }]
             };
-            if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryId != undefined) {
-                payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.CountryId : undefined;
+            if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryIds != undefined) {
+                payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.CountryIds : undefined;
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
 
@@ -165,7 +162,7 @@
 
 
 
-            if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryId != undefined) {
+            if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryIds != undefined) {
                 var loadSalesZonesPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadSalesZonesPromiseDeferred.promise);
@@ -178,21 +175,19 @@
                             zoneIds.push(swapDealInboundEntity.SaleZones[i].ZoneId);
                         }
                     }
-
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
-                        payload.filter.CountryIds = [swapDealInboundEntity.CountryId];
+                        payload.filter.CountryIds = swapDealInboundEntity.CountryIds;
                         payload.selectedIds = zoneIds;
 
                     }
                     else
                         payload = {
                             sellingNumberPlanId: sellingNumberPlanId,
-                            filter: { CountryIds: [swapDealInboundEntity.CountryId] },
+                            filter: { CountryIds: swapDealInboundEntity.CountryIds   },
                             selectedIds: zoneIds,
                         };
-                    // console.log(salezonePayload.excludedZoneIds);
 
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;
@@ -253,7 +248,7 @@
                 Volume: $scope.scopeModel.volume,
                 Rate: $scope.scopeModel.rate,
                 ExtraVolumeRate: $scope.scopeModel.extraVolumeRate,
-                CountryId: countryDirectiveApi.getSelectedIds(),
+                CountryIds: countryDirectiveApi.getSelectedIds(),
                 SubstituteRateType: substituteRateTypeApi.getSelectedIds(),
                 FixedRate: $scope.scopeModel.fixedRate != undefined ? $scope.scopeModel.fixedRate : undefined
             };

@@ -9,7 +9,7 @@ namespace TOne.WhS.Deal.Entities
 
         public string Name { get; set; }
 
-        public int CountryId { get; set; }
+        public List<int> CountryIds { get; set; }
 
         public List<VolSaleZone> SaleZones { get; set; }
 

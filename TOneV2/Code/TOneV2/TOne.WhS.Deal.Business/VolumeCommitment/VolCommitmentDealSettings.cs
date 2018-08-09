@@ -109,9 +109,15 @@ namespace TOne.WhS.Deal.Business
             var customerCountries = customerCountryManager.GetCustomerCountryIds(customerId, effectiveOn, isEffectiveInFuture);
             foreach (var item in Items)
             {
-                if (!customerCountries.Contains(item.CountryId))
+                if (item.CountryIds != null)
                 {
-                    invalidCountries.Add(item.CountryId);
+                    foreach (var countryId in item.CountryIds)
+                    {
+                        if (!customerCountries.Contains(countryId))
+                        {
+                            invalidCountries.Add(countryId);
+                        }
+                    }
                 }
             }
             return invalidCountries;

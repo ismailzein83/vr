@@ -204,7 +204,7 @@
             originalEED = volumeCommitmentEntity.Settings.EndDate;
             $scope.scopeModel.description = volumeCommitmentEntity.Name;
             $scope.scopeModel.beginDate = volumeCommitmentEntity.Settings.BeginDate;
-            $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EndDate;
+            $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EEDToStore;
             $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, volumeCommitmentEntity.Settings.Status, 'value');
             $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
             //$scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
@@ -320,7 +320,7 @@
                     DealType: $scope.scopeModel.selectedVolumeCommitmentType.value,
                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
-                    EndDate: $scope.scopeModel.endDate,
+                    EEDToStore: $scope.scopeModel.endDate,
                     Items: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.volumeCommitmentItems : undefined,
                     LastGroupNumber: volumeCommitmenetItemsData != undefined ? volumeCommitmenetItemsData.lastGroupNumber : undefined,
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
