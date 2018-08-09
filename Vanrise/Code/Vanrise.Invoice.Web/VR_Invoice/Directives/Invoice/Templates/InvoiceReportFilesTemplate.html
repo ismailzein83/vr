@@ -1,0 +1,23 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-button type="Add" data-onclick="scopeModel.addInvoiceReportItem" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-validator validate="scopeModel.validateInvoiceReportItems()">
+            <vr-datagrid datasource="scopeModel.invoiceReportItems"
+                         pagingtype="'PagingOnScroll'"
+                         enabledraggablerow="true"
+                         ondeleterow="scopeModel.invoiceReportItem"
+                         enableautoexport="true">
+                <vr-datagridcolumn headertext="'Invoice Type'" disablesorting>
+                    <vr-invoicetype-selector isrequired="true" on-ready="dataItem.onInvoiceTypeSelectorReady" selectedvalues="dataItem.selectedInvoiceType" hideremoveicon onselectionchanged="dataItem.onInvoiceTypeSelectionChanged"></vr-invoicetype-selector>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Invoice Report File'" disablesorting>
+                    <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="dataItem.onInvoiceReportFileSelectorReady"></vr-genericdata-genericbusinessentity-selector>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

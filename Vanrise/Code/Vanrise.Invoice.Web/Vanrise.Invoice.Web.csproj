@@ -447,6 +447,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\vr-invoicetype-maingridcolumns.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceReportFilesTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicereportfiles.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-periodgapaction-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-ordertype-selective.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-subsections.js" />
