@@ -1644,7 +1644,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!TotalCurrentCharges.Value,2)</Value>
+                              <Value>=FormatNumber(Round(Fields!TotalCurrentCharges.Value,2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2408,7 +2408,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!Amount.Value,2)</Value>
+                              <Value>=FormatNumber(Round(Fields!Amount.Value,2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2500,7 +2500,7 @@
         <Top>4.27792in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>4.11648in</Width>
+        <Width>4.11647in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
@@ -2760,7 +2760,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!Amount.Value,2)</Value>
+                              <Value>=FormatNumber(Round(Fields!Amount.Value,2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2818,7 +2818,7 @@
         <Top>4.27792in</Top>
         <Left>4.61664in</Left>
         <Height>0.6in</Height>
-        <Width>3.06646in</Width>
+        <Width>3.06647in</Width>
         <ZIndex>11</ZIndex>
         <Style>
           <Border>
