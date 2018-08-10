@@ -13,6 +13,7 @@ using System.Reflection;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 using Vanrise.Common.Business;
+using System.Collections;
 
 namespace Vanrise.GenericData.Business
 {
@@ -117,12 +118,31 @@ namespace Vanrise.GenericData.Business
                     result.Add(genericBusinessEntityDetail);
                 }
             }
+          //  return result;
             //var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
+            //Func<GenericBusinessEntityDetail, bool> filterFunc = null;
             //if (filter != null)
             //{
-
+            //        filterFunc = (genericBEDetail) =>
+            //        {
+            //            if (filter.Filters != null && filter.Filters.Count() > 0)
+            //            {
+            //                foreach (var genericBEFilter in filter.Filters)
+            //                {
+            //                    if (!genericBEFilter.IsMatch(new GenericBusinessEntityFilterContext()
+            //                    {
+            //                        GenericBusinessEntityDetail = genericBEDetail
+            //                    }))
+            //                    {
+            //                        return false;
+            //                    }
+            //                }
+            //            }
+            //            return true;
+            //        };
             //}
-            return result.MapRecords((record) =>
+            //IEnumerable<GenericBusinessEntityDetail> filteredResult = filterFunc!=null ? result.FindAllRecords(filterFunc) : result;
+           return result.MapRecords((record) =>
             {
                 return GenericBusinessEntityInfoMapper(businessEntityDefinitionId, record);
             });
