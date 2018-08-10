@@ -25,6 +25,7 @@ app.directive('whsRoutingActionBlockcustomeraccount', ['UtilsService', 'VRUIUtil
         this.initializeController = initializeController;
 
         function initializeController() {
+            defineAPI();
         }
 
         function defineAPI() {
@@ -41,7 +42,8 @@ app.directive('whsRoutingActionBlockcustomeraccount', ['UtilsService', 'VRUIUtil
 
             api.getData = function () {
                 return {
-                    $type: 'TOne.WhS.Routing.MainExtensions.BlockCustomerAccountAction,TOne.WhS.Routing.MainExtensions',
+                    $type: 'TOne.WhS.Routing.MainExtensions.VRActions.BlockCustomerAccountAction,TOne.WhS.Routing.MainExtensions',
+                    ActionName: "Block Customer"
                 };
             };
 

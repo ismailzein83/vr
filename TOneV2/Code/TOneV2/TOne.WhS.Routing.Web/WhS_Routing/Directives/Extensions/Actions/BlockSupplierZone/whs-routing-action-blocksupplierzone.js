@@ -25,6 +25,7 @@ app.directive('whsRoutingActionBlocksupplierzone', ['UtilsService', 'VRUIUtilsSe
         this.initializeController = initializeController;
 
         function initializeController() {
+            defineAPI();
         }
 
         function defineAPI() {
@@ -41,7 +42,8 @@ app.directive('whsRoutingActionBlocksupplierzone', ['UtilsService', 'VRUIUtilsSe
 
             api.getData = function () {
                 return {
-                    $type: 'TOne.WhS.Routing.MainExtensions.BlockSupplierZoneAction,TOne.WhS.Routing.MainExtensions',
+                    $type: 'TOne.WhS.Routing.MainExtensions.VRActions.BlockSupplierZoneAction,TOne.WhS.Routing.MainExtensions',
+                    ActionName: "Block Supplier Zone"
                 };
             };
 
