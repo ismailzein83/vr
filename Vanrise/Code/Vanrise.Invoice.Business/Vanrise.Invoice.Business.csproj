@@ -102,6 +102,7 @@
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoicePartnerFilter\PartnerInvoiceSettingFilter.cs" />
     <Compile Include="InvoiceAccountManager.cs" />
+    <Compile Include="InvoiceReportFileManager.cs" />
     <Compile Include="InvoiceSequenceManager.cs" />
     <Compile Include="InvoiceSettingManager.cs" />
     <Compile Include="InvoiceTypeConfigsManager.cs" />
