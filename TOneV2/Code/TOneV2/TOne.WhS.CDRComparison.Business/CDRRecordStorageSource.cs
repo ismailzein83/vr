@@ -25,13 +25,10 @@ namespace TOne.WhS.CDRComparison.Business
             return null;
            // throw new NotImplementedException();
         }
-        public Guid DataRecordStorageId { get; set; }
+        public List<Guid> DataRecordStorageIds { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public List<DataRecordFilter> Filters { get; set; }
         public RecordFilterGroup FilterGroup { get; set; }
-        public int? LimitResult { get; set; }
-        public OrderDirection Direction { get; set; }
 
     }
 }
