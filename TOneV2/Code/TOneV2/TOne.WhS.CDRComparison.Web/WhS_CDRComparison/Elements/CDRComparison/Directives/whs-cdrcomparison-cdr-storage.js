@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new boolParserEditor($scope, ctrl);
+            var ctor = new CDRComparisonCDRStorage($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -20,11 +20,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
 
         },
         templateUrl: "/Client/Modules/WhS_CDRComparison/Elements/CDRComparison/Directives/Templates/CDRComparisonCDRStorage.html"
-
-
     };
 
-    function boolParserEditor($scope, ctrl) {
+    function CDRComparisonCDRStorage($scope, ctrl) {
 
         var context;
         var dataRecordTypeEntity;
@@ -32,7 +30,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
 
         var dataRecordStorageSelectorAPI;
         var dataRecordStorageSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
 
         var recordFilterAPI;
         var recordFilterReadyPromiseDeffered = UtilsService.createPromiseDeferred();
@@ -49,9 +46,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
             $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                 recordFilterAPI = api;
                 recordFilterReadyPromiseDeffered.resolve();
-            }
+            };
 
-            
             defineAPI();
         }
 
@@ -60,27 +56,19 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
             api.load = function (payload) {
                 var promises = [];
                 if (payload != undefined) {
-                    if (payload.ValueParser != undefined)
-                    { $scope.scopeModel.fieldName = payload.ValueParser.FieldName; }
+                    if (payload.ValueParser != undefined) {
+                        $scope.scopeModel.fieldName = payload.ValueParser.FieldName;
+                    }
                     context = payload.context;
-
                 }
-            
+
                 promises.push(loadDataRecordStorage());
-                function loadDataRecordStorage()
-                {
-                   return dataRecordStorageSelectorReadyPromiseDeferred.promise.then(function () {
-                    
+                function loadDataRecordStorage() {
+                    return dataRecordStorageSelectorReadyPromiseDeferred.promise.then(function () {
                         var payload = { DataRecordTypeId: "6cf5f7ad-5123-45d2-b47f-eca613d454f7" };
-
                         VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, payload, undefined);
-
-
-
-                    })
-
+                    });
                 }
-
 
                 promises.push(getDataRecordType());
                 function getDataRecordType() {
@@ -92,14 +80,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
                             var recordFilterPayload = { context: getContext() };
                             VRUIUtilsService.callDirectiveLoad(recordFilterAPI, recordFilterPayload, recordFilterReadyPromiseDeffered);
 
-                        })
-
+                        });
                     });
                 }
 
-                return UtilsService.waitMultiplePromises(promises).then(function () {
-
-                });
+                return UtilsService.waitMultiplePromises(promises);
 
             };
 
@@ -110,10 +95,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
                     FromDate: $scope.scopeModel.fromDateTime,
                     ToDate: $scope.scopeModel.toDateTime,
                     FilterGroup: recordFilterAPI.getData()
-
-
                 };
-               
+
             };
 
             if (ctrl.onReady != null) {
@@ -121,15 +104,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
             }
         }
 
-
-
-
-
         function getContext() {
             var currentContext = context;
             if (currentContext == undefined) {
                 currentContext = {};
             }
+
             currentContext.getFields = function () {
                 var fields = [];
                 for (var i = 0 ; i < dataRecordTypeEntity.Fields.length; i++) {
@@ -138,16 +118,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_
                         FieldName: field.Name,
                         FieldTitle: field.Title,
                         Type: field.Type
-                    })
+                    });
                 }
                 return fields;
             };
+
             return currentContext;
         }
+
     }
-
-
-
 
     return directiveDefinitionObject;
 
