@@ -43,4 +43,5 @@
 	VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
 	VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
 	VR_CaseManagement		C:\TFS\Vanrise\Code\Vanrise.CaseManagement.Web\VR_CaseManagement
-	WhS_CDRComparison	C:\TFS\TOneV2\Code\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
+	WhS_CDRComparison	    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
+	CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
