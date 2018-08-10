@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 namespace Vanrise.Invoice.Business
 {
-    class GenericBusinessEntityFilter : IGenericBusinessEntityFilter
+    public class InvoiceReportFileFilter : IGenericBusinessEntityFilter
     {
         public Guid InvoiceTypeId { get; set; }
 
