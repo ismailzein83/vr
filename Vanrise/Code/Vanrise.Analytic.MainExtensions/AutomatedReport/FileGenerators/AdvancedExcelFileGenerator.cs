@@ -322,39 +322,43 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 SetFlagValues(ref previousValue, value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
             }
         }
-        //private void SetBordersForTitleCell(Worksheet worksheet, int subTableTitleRowIndex, int subTableTitleColIndex, int subTableValuesCount)
-        //{
-        //    int count = 0;
-        //    while (count < subTableValuesCount)
-        //    {
-        //        Cell cell = worksheet.Cells.GetCell(subTableTitleRowIndex, subTableTitleColIndex+count);
-        //        Style style = cell.GetStyle();
-        //        if (count == 0)
-        //        {
-        //            style.SetBorder(BorderType.LeftBorder, CellBorderType.Medium, Color.Black);
-        //            style.SetBorder(BorderType.TopBorder, CellBorderType.Medium, Color.Black);
-        //        }
-        //        else if (count == subTableValuesCount-1)
-        //        {
-        //            style.SetBorder(BorderType.LeftBorder, CellBorderType.Medium, Color.Black);
-        //            style.SetBorder(BorderType.TopBorder, CellBorderType.Medium, Color.Black);
-        //        }
-        //        else
-        //        {
-        //            style.SetBorder(BorderType.TopBorder, CellBorderType.Medium, Color.Black);
-        //        }
-        //        cell.SetStyle(style);
-        //        count++;
-        //    }
-
-        //}
+        private void SetStyleValueAndBordersForTitleCell(Worksheet worksheet, int subTableTitleRowIndex, int subTableTitleColIndex,string subTableTitle, int subTableValuesCount)
+        {
+            int count = 0;
+            while (count < subTableValuesCount)
+            {
+                worksheet.Cells[subTableTitleRowIndex, subTableTitleColIndex + count].PutValue(subTableTitle);
+                Cell cell = worksheet.Cells.GetCell(subTableTitleRowIndex, subTableTitleColIndex + count);
+                Style style = cell.GetStyle();
+                if (count == 0)
+                {
+                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                }
+                else if (count == subTableValuesCount - 1)
+                {
+                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                }
+                else
+                {
+                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                }
+                style.Font.Name = "Times New Roman";
+                style.Font.Size = 15;
+                style.Font.Color = Color.Black;
+                style.Font.IsBold = true;
+                style.HorizontalAlignment = TextAlignmentType.Center;
+                cell.SetStyle(style);
+                count++;
+            }
+        }
         private void BuildSubTableTitle(Worksheet worksheet, string subTableTitle, int subTableTitleRowIndex, int subTableTitleColIndex, int subTableValuesCount)
         {
             if (subTableTitle != null)
             {
-                SetStyleAndValue(worksheet, subTableTitleRowIndex - 1, subTableTitleColIndex, subTableTitle, 14, true, TextAlignmentType.Center, false);
+                SetStyleValueAndBordersForTitleCell(worksheet, subTableTitleRowIndex - 1, subTableTitleColIndex, subTableTitle,subTableValuesCount);
                 worksheet.Cells.Merge(subTableTitleRowIndex - 1, subTableTitleColIndex, 1, subTableValuesCount);
-                //SetBordersForTitleCell(worksheet, subTableTitleRowIndex - 1, subTableTitleColIndex, subTableValuesCount);
             }
         }
         private void InsertRowsForHeaders(List<int> insertedRows, List<int> insertedCols, Worksheet worksheet, int headerRowIndex, int subTableDataRowIndex, int maxSubTableDimensions, int maxHeaderRows, bool includeTitle)
