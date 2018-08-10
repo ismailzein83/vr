@@ -66,20 +66,34 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 {
                     foreach (var inArgument in this.InArguments)
                     {
+                        bool isInOutArgument = OutArguments.GetRecord(inArgument.Key) != null;
                         VRWorkflowArgument matchingArgument = workflowArguments.GetRecord(inArgument.Key);
                         String matchingArgumentRuntimeType = CSharpCompiler.TypeToString(matchingArgument.Type.GetRuntimeType(null));
 
-                        propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop { get { return {1}; } set;}", matchingArgumentRuntimeType, inArgument.Value));
-                        argumentsList.Add(string.Format("{0} new System.Activities.InArgument<{1}>((activityContext) => new #NAMESPACE#.#CLASSNAME#(activityContext).In{2}Prop)", inArgument.Key, matchingArgumentRuntimeType, inArgument.Value));
+                        if (!isInOutArgument)
+                            propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop {2} get {2} return {1}; {3} set{2}{3}{3}", matchingArgumentRuntimeType, inArgument.Value, "{", "}"));
+                        else
+                        {
+                            string outArgumentValue = OutArguments.GetRecord(inArgument.Key);
+                            propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop {2} get {2} return {1}; {3} set{2} {1} = value;{3}{3}", matchingArgumentRuntimeType, inArgument.Value, "{", "}"));
+                        }
+
+                        argumentsList.Add(string.Format("{0} = new System.Activities.{1}<{2}>((activityContext) => new {3}.{4}(activityContext).In{5}Prop)",
+                            inArgument.Key, !isInOutArgument ? "InArgument" : "InOutArgument", matchingArgumentRuntimeType, nmSpaceName, className, inArgument.Value));
+
                     }
 
                     foreach (var outArgument in this.OutArguments)
                     {
+                        bool isInOutArgument = InArguments.GetRecord(outArgument.Key) != null;
+                        if (isInOutArgument)
+                            continue;
+
                         VRWorkflowArgument matchingArgument = workflowArguments.GetRecord(outArgument.Key);
                         String matchingArgumentRuntimeType = CSharpCompiler.TypeToString(matchingArgument.Type.GetRuntimeType(null));
 
-                        propertiesBuilder.AppendLine(string.Format("public {0} Out{1}Prop { get; set { {1} = value;}}", matchingArgumentRuntimeType, outArgument.Value));
-                        argumentsList.Add(string.Format("{0} new System.Activities.OutArgument<{1}>((activityContext) => new #NAMESPACE#.#CLASSNAME#(activityContext).Out{2}Prop)", outArgument.Key, matchingArgumentRuntimeType, outArgument.Value));
+                        propertiesBuilder.AppendLine(string.Format("public {0} Out{1}Prop {2} get{2}return {1};{3} set {2} {1} = value;{3}{3}", matchingArgumentRuntimeType, outArgument.Value, "{", "}"));
+                        argumentsList.Add(string.Format("{0} = new System.Activities.OutArgument<{1}>((activityContext) =>new {2}.{3}(activityContext).Out{4}Prop)", outArgument.Key, matchingArgumentRuntimeType, nmSpaceName, className, outArgument.Value));
                     }
                 }
             }
@@ -103,7 +117,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             //if (argumentsList.Count > 0)
             //    codeBuilder.AppendFormat("{{0}}", string.Join<string>(",", argumentsList));
 
-            return string.Format("new {0}(){1}", activityType, argumentsList.Count > 0 ? string.Format("{{0}}", string.Join<string>(",", argumentsList)) : string.Empty);
+            return string.Format("new {0}(){1}", activityType, argumentsList.Count > 0 ? string.Format("{0}{1}{2}", "{", string.Join<string>(",", argumentsList), "}") : string.Empty);
         }
     }
 }

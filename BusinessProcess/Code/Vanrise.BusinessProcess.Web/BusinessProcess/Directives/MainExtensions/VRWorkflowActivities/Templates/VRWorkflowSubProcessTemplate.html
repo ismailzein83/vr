@@ -1,23 +1,26 @@
-﻿<!--<vr-row>
-    <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
+﻿<vr-row vr-loader="scopeModel.isLoading">
+    <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon
+                                          onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"></businessprocess-vr-workflow-selector>
     <vr-columns ng-if="scopeModel.hasInArguments" colnum="{{scopeModel.hasOutArguments?'4':'8'}}">
         <vr-section header="In Arguments">
-            <vr-datagrid datasource="scopeModel.inarguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
-                <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagrid datasource="scopeModel.inArguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
-                    <vr-textbox value="dataItem.value"></vr-textbox>
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                            value="dataItem.value" hidelabel></businessprocess-vr-workflow-activity-expressionbuilder>
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-section>
     </vr-columns>
     <vr-columns ng-if="scopeModel.hasOutArguments" colnum="{{scopeModel.hasInArguments?'4':'8'}}">
         <vr-section header="Out Arguments">
-            <vr-datagrid datasource="scopeModel.outarguments" on-ready="scopeModel.onOutArgumentsGridReady" hidegridmenu>
-                <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+            <vr-datagrid datasource="scopeModel.outArguments" on-ready="scopeModel.onOutArgumentsGridReady" hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
-                    <vr-textbox value="dataItem.value"></vr-textbox>
+                    <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                            value="dataItem.value" hidelabel></businessprocess-vr-workflow-activity-expressionbuilder>
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-section>
     </vr-columns>
-</vr-row>-->
+</vr-row>
