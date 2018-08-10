@@ -31,9 +31,16 @@ namespace Vanrise.Data.RDB.DataProvider
                 return tableName;
         }
 
-        public override string PrepareQueryStatementToAddToBatch(string queryStatement)
+        public override string GetQueryAsText(RDBResolvedQuery resolvedQuery)
         {
-            return queryStatement;
+            var queryBuilder = new StringBuilder();
+            foreach(var statement in resolvedQuery.Statements)
+            {
+                queryBuilder.Append(statement);
+                queryBuilder.AppendLine();
+                queryBuilder.AppendLine();
+            }
+            return queryBuilder.ToString();
         }
 
         public override string GetQueryConcatenatedStrings(params string[] strings)
@@ -42,6 +49,11 @@ namespace Vanrise.Data.RDB.DataProvider
                 return string.Join(" + ", strings);
             else
                 return "";
+        }
+
+        public override string GetStatementSetParameterValue(string parameterDBName, string parameterValue)
+        {
+            return string.Concat("SET ", parameterDBName, " = ", parameterValue);
         }
 
         public override RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context)
@@ -61,7 +73,10 @@ namespace Vanrise.Data.RDB.DataProvider
                     }
                 }
             }
-            return builder != null ? new RDBResolvedQuery { QueryText = builder.ToString() } : null;
+            var resolvedQuery = new RDBResolvedQuery();
+            if (builder != null)
+                resolvedQuery.Statements.Add(builder.ToString());
+            return resolvedQuery;
         }
 
         public override RDBResolvedQuery ResolveSelectQuery(IRDBDataProviderResolveSelectQueryContext context)
@@ -166,10 +181,9 @@ namespace Vanrise.Data.RDB.DataProvider
 
             if (context.NbOfRecords.HasValue && this.UseLimitForTopRecords)
                 queryBuilder.AppendFormat(" Limit {0} ", context.NbOfRecords.Value);
-            return new RDBResolvedQuery
-            {
-                QueryText = queryBuilder.ToString()
-            };
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(queryBuilder.ToString());
+            return resolvedQuery;
         }
 
         private void AddJoinsToQuery(IBaseRDBResolveQueryContext context, StringBuilder queryBuilder, List<RDBJoin> joins, RDBConditionToDBQueryContext rdbConditionToDBQueryContext)
@@ -238,20 +252,27 @@ namespace Vanrise.Data.RDB.DataProvider
                 queryBuilder.Append(")");
                 queryBuilder.AppendLine();
 
-                queryBuilder.Append(context.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context)));
+                var resolvedSelectQuery = context.SelectQuery.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context));
+                StringBuilder selectQueryBuilder = new StringBuilder();
+                foreach (var statement in resolvedSelectQuery.Statements)
+                {
+                    selectQueryBuilder.AppendLine(statement);
+                }
+
+                queryBuilder.Append(selectQueryBuilder.ToString());
             }
             else
             {
                 throw new Exception("ColumnValues and SelectQuery are both null");
             }
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(queryBuilder.ToString());
             if (!String.IsNullOrEmpty(context.GeneratedIdDBParameterName))
-                queryBuilder.AppendFormat(" SET {0} = SCOPE_IDENTITY() ", context.GeneratedIdDBParameterName);
-
-            return new RDBResolvedQuery
-            {
-                QueryText = queryBuilder.ToString()
-            };
+                resolvedQuery.Statements.Add(GetStatementSetParameterValue(context.GeneratedIdDBParameterName, GetGenerateIdFunction()));
+            return resolvedQuery;
         }
+
+        protected abstract string GetGenerateIdFunction();
 
         public override RDBResolvedQuery ResolveUpdateQuery(IRDBDataProviderResolveUpdateQueryContext context)
         {
@@ -282,14 +303,17 @@ namespace Vanrise.Data.RDB.DataProvider
                 if (colIndex > 0)
                     columnQueryBuilder.Append(", ");
                 colIndex++;
+                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
+                string columnDBName = context.Table.GetDBColumnName(getDBColumnNameContext);
+                string value = colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext);
+                string parameterDBName = null;
+                if(colVal.ParameterName != null)
+                    parameterDBName = context.GetParameterWithValidate(colVal.ParameterName).DBParameterName;
+                AddStatementSetColumnValueInUpdateQuery(columnQueryBuilder, columnDBName, parameterDBName, value);
                 if (colVal.ColumnName != null)
                 {
-                    var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
+                    
                     columnQueryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
-                }
-                else if (colVal.ExpressionToSet != null)
-                {
-                    columnQueryBuilder.Append(colVal.ExpressionToSet.ToDBQuery(rdbExpressionToDBQueryContext));
                 }
                 else
                 {
@@ -318,10 +342,26 @@ namespace Vanrise.Data.RDB.DataProvider
                     queryBuilder.Append(conditionDBQuery);
                 }
             }
-            return new RDBResolvedQuery
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(queryBuilder.ToString());
+            return resolvedQuery;
+        }
+
+        protected virtual void AddStatementSetColumnValueInUpdateQuery(StringBuilder columnQueryBuilder, string columnDBName, string parameterDBName, string value)
+        {
+            bool parameterAdded = false;
+            if(parameterDBName != null)
             {
-                QueryText = queryBuilder.ToString()
-            };
+                columnQueryBuilder.Append(parameterDBName);
+                columnQueryBuilder.Append("=");
+                columnQueryBuilder.Append(value);
+                parameterAdded = true;
+            }
+            if (parameterAdded)
+                columnQueryBuilder.AppendLine(",");
+            columnQueryBuilder.Append(columnDBName);
+            columnQueryBuilder.Append("=");
+            columnQueryBuilder.Append(value);
         }
 
         public override RDBResolvedQuery ResolveDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context)
@@ -351,10 +391,9 @@ namespace Vanrise.Data.RDB.DataProvider
                     queryBuilder.Append(conditionDBQuery);
                 }
             }
-            return new RDBResolvedQuery
-            {
-                QueryText = queryBuilder.ToString()
-            };
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(queryBuilder.ToString());
+            return resolvedQuery;
         }
 
         public override RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context)
@@ -376,11 +415,11 @@ namespace Vanrise.Data.RDB.DataProvider
                 columnsQueryBuilder.Append(" ");
                 columnsQueryBuilder.Append(GetColumnDBType(colDefEntry.Key, colDefEntry.Value));
             }
-            columnsQueryBuilder.Append(" ) ");
-            return new RDBResolvedQuery
-            {
-                QueryText = GenerateCreateTempTableQuery(tempTableName, columnsQueryBuilder.ToString())
-            };
+            columnsQueryBuilder.Append(" ) ");            
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(GenerateCreateTempTableQuery(tempTableName, columnsQueryBuilder.ToString()));
+            return resolvedQuery;
         }
 
         protected virtual string GenerateTempTableName()

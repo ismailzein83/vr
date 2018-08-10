@@ -37,21 +37,28 @@ namespace Vanrise.Data.RDB
             else
             {
                 _trueQueryContext.ThrowIfNull("_trueQueryContext");
-                queryBuilder.AppendLine(_trueQueryContext.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context)).QueryText);
+                var trueResolvedQuery = _trueQueryContext.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context), false);
+                if (trueResolvedQuery.Statements.Count == 0)
+                    throw new Exception("trueResolvedQuery.Statements.Count == 0");
+                queryBuilder.AppendLine(context.DataProvider.GetQueryAsText(trueResolvedQuery));
             }
             queryBuilder.AppendLine(" END ");
             if (_falseQueryContext != null)
             {
-                queryBuilder.AppendLine(" ELSE ");
-                queryBuilder.AppendLine(" BEGIN ");
                 var falseQueryContext = new RDBQueryGetResolvedQueryContext(context);
-                queryBuilder.AppendLine(_falseQueryContext.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context)).QueryText);
-                queryBuilder.AppendLine(" END ");
+                var falseResolvedQuery = _falseQueryContext.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context), false);
+                if(falseResolvedQuery.Statements.Count > 0)
+                {
+                    queryBuilder.AppendLine(" ELSE ");
+                    queryBuilder.AppendLine(" BEGIN ");
+                    queryBuilder.AppendLine(context.DataProvider.GetQueryAsText(falseResolvedQuery));
+                    queryBuilder.AppendLine(" END ");
+                }
+                
             }
-            return new RDBResolvedQuery
-            {
-                QueryText = queryBuilder.ToString()
-            };
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(queryBuilder.ToString());
+            return resolvedQuery;
         }
 
         RDBConditionContext _conditionContext;

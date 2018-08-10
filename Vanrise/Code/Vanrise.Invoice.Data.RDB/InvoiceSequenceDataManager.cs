@@ -61,11 +61,7 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var sumContext = updateQuery.Parameter("NextSequence").ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
-            sumContext.Expression1().Column("LastValue");
-            sumContext.Expression2().Value(1);
-
-            sumContext = updateQuery.Column("LastValue").ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
+            var sumContext = updateQuery.ColumnAndParameter("LastValue", "NextSequence").ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
             sumContext.Expression1().Column("LastValue");
             sumContext.Expression2().Value(1);
 

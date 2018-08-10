@@ -18,9 +18,11 @@ namespace Vanrise.Data.RDB
 
         public abstract string GetTableDBName(string schemaName, string tableName);
 
-        public abstract string PrepareQueryStatementToAddToBatch(string queryStatement);
+        public abstract string GetQueryAsText(RDBResolvedQuery resolvedQuery);
 
         public abstract string GetQueryConcatenatedStrings(params string[] strings);
+
+        public abstract string GetStatementSetParameterValue(string parameterDBName, string parameterValue);
 
         public abstract RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context);
 
@@ -176,7 +178,13 @@ namespace Vanrise.Data.RDB
     
     public class RDBResolvedQuery
     {
+        public RDBResolvedQuery()
+        {
+            this.Statements = new List<string>();
+        }
         public string QueryText { get; set; }
+
+        public List<string> Statements { get; private set; }
     }
 
     public interface IRDBDataProviderResolveInsertQueryContext : IBaseRDBResolveQueryContext
@@ -353,8 +361,8 @@ namespace Vanrise.Data.RDB
     }
 
     public interface IBaseRDBDataProviderExecuteQueryContext
-    {        
-        RDBResolvedQuery ResolvedQuery { get; }
+    {      
+        string Query { get; }
 
         bool ExecuteTransactional { get; }
 
@@ -363,14 +371,14 @@ namespace Vanrise.Data.RDB
 
     public abstract class BaseRDBDataProviderExecuteQueryContext : IBaseRDBDataProviderExecuteQueryContext
     {
-        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
+        public BaseRDBDataProviderExecuteQueryContext(string query, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
         {
-            this.ResolvedQuery = resolvedQuery;
+            this.Query = query;
             this.ExecuteTransactional = executeTransactional;
             this.Parameters = parameters;
         }
 
-        public RDBResolvedQuery ResolvedQuery
+        public string Query
         {
             get;
             private set;

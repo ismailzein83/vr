@@ -9,8 +9,6 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB.DataProvider.Providers
 {
-   
-
      public class MSSQLRDBDataProvider : CommonRDBDataProvider
      {
 
@@ -35,17 +33,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
          public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
          {
-             _dataManager.ExecuteReader(context.ResolvedQuery.QueryText, context.Parameters, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
+             _dataManager.ExecuteReader(context.Query, context.Parameters, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
          }
 
          public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
          {
-             return _dataManager.ExecuteNonQuery(context.ResolvedQuery.QueryText, context.Parameters);
+             return _dataManager.ExecuteNonQuery(context.Query, context.Parameters);
          }
 
          public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
          {
-             return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.ResolvedQuery.QueryText, context.Parameters));
+             return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters));
          }
          
          public override string NowDateTimeFunction
@@ -61,6 +59,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
          protected override string GenerateTempTableName()
          {
              return String.Concat("#TempTable_", Guid.NewGuid().ToString().Replace("-", ""));
+         }
+
+         protected override string GetGenerateIdFunction()
+         {
+             return "SCOPE_IDENTITY()";
          }
 
          #region Private Classes

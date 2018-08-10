@@ -64,23 +64,15 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            StringBuilder builder = new StringBuilder();
-            if (_parameterValues.Count > 0)
-                builder.Append("SELECT ");
-            bool isFirstParameter= true;
-            foreach(var prmValueEntry in _parameterValues)
+            var resolvedQuery = new RDBResolvedQuery();
+            foreach (var prmValueEntry in _parameterValues)
             {
-                if (!isFirstParameter)
-                    builder.Append(",");
-                isFirstParameter = false;
-                builder.Append(context.GetParameterWithValidate(prmValueEntry.Key).DBParameterName);
-                builder.Append(" = ");
-                builder.Append(prmValueEntry.Value.ToDBQuery(new RDBExpressionToDBQueryContext(context, _queryBuilderContext)));
+                string parameterDBName = context.GetParameterWithValidate(prmValueEntry.Key).DBParameterName;
+                string parameterValue = prmValueEntry.Value.ToDBQuery(new RDBExpressionToDBQueryContext(context, _queryBuilderContext));
+                string statement = context.DataProvider.GetStatementSetParameterValue(parameterDBName, parameterValue);
+                resolvedQuery.Statements.Add(statement);
             }
-            return new RDBResolvedQuery
-            {
-                QueryText = builder.ToString()
-            };
+            return resolvedQuery;
         }
     }
 }

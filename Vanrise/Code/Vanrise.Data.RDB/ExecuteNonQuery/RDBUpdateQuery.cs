@@ -62,21 +62,22 @@ namespace Vanrise.Data.RDB
 
         public RDBExpressionContext Column(string columnName)
         {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
+            return ColumnAndParameter(columnName, null);
         }
 
-        public void ColumnValue(string columnName, BaseRDBExpression value)
+        public RDBExpressionContext ColumnAndParameter(string columnName, string parameterName)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, parameterName, expression), null);
+        }
+
+        public void ColumnValue(string columnName, string parameterName, BaseRDBExpression value)
         {
             this._columnValues.Add(new RDBUpdateColumn
             {
                 ColumnName = columnName,
+                ParameterName = parameterName,
                 Value = value
             });
-        }
-
-        public RDBExpressionContext Parameter(string parameterName)
-        {
-            return new RDBExpressionContext(_queryBuilderContext, (exp) => this._columnValues.Add(new RDBUpdateColumn { ExpressionToSet = new RDBParameterExpression { ParameterName = parameterName }, Value = exp }), _tableAlias);
         }
 
         RDBJoinContext _joinContext;
@@ -128,7 +129,7 @@ namespace Vanrise.Data.RDB
                 IRDBQueryReady ifQuery = new RDBIfQuery(_queryBuilderContext.CreateChildContext())
                 {
                     ConditionGroup = conditionGroup,
-                    _trueQueryText = ResolveUpdateQuery(context).QueryText
+                    _trueQueryText = context.DataProvider.GetQueryAsText(ResolveUpdateQuery(context))
                 };
                 return ifQuery.GetResolvedQuery(context);
             }
@@ -180,7 +181,7 @@ namespace Vanrise.Data.RDB
     {
         public string ColumnName { get; set; }
 
-        public BaseRDBExpression ExpressionToSet { get; set; }
+        public string ParameterName { get; set; }
 
         public BaseRDBExpression Value { get; set; }
     }

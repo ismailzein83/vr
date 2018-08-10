@@ -162,7 +162,13 @@ namespace Vanrise.Data.RDB
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
         {
             RDBQueryGetResolvedQueryContext getResolvedQueryContext = new RDBQueryGetResolvedQueryContext(context);
-            return string.Concat(" (", GetResolvedQuery(getResolvedQueryContext).QueryText, ") ");
+            var resolvedSelectQuery = GetResolvedQuery(getResolvedQueryContext);
+            StringBuilder queryBuilder = new StringBuilder();
+            foreach(var statement in resolvedSelectQuery.Statements)
+            {
+                queryBuilder.AppendLine(statement);
+            }
+            return string.Concat(" (", queryBuilder.ToString(), ") ");
         }
 
         public string GetDescription()

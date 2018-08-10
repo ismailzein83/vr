@@ -34,7 +34,7 @@ namespace Vanrise.Data.RDB
             {
                 context.AddParameter(prm);
             }
-            return new RDBResolvedQuery { QueryText = String.Empty };
+            return new RDBResolvedQuery();
         }
     }
 }

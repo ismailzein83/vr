@@ -156,7 +156,7 @@ namespace Vanrise.Data.RDB
                 IRDBQueryReady ifQuery = new RDBIfQuery(_queryBuilderContext.CreateChildContext())
                 {
                     ConditionGroup = conditionGroup,
-                    _trueQueryText = ResolveInsertQuery(context).QueryText
+                    _trueQueryText = context.DataProvider.GetQueryAsText(ResolveInsertQuery(context))
                 };
                 resolvedQuery = ifQuery.GetResolvedQuery(context);
             }
@@ -170,7 +170,8 @@ namespace Vanrise.Data.RDB
                 var selectIdQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
                 selectIdQuery.SelectColumns().Expression(_selectGeneratedIdAlias).Parameter(_generatedIdParameterName);
                 RDBResolvedQuery selectIdResolvedQuery = selectIdQuery.GetResolvedQuery(context);
-                resolvedQuery.QueryText = string.Concat(resolvedQuery.QueryText, "\n", selectIdResolvedQuery.QueryText);
+                if (selectIdResolvedQuery != null && selectIdResolvedQuery.Statements.Count > 0)
+                    resolvedQuery.Statements.AddRange(selectIdResolvedQuery.Statements);
             }
             return resolvedQuery;
         }
@@ -249,7 +250,6 @@ namespace Vanrise.Data.RDB
 
         private RDBResolvedQuery ResolveInsertQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            RDBResolvedQuery resolvedQuery;
             string generatedIdDBParameterName = null;
 
             if (!string.IsNullOrEmpty(_generatedIdParameterName))
@@ -272,7 +272,7 @@ namespace Vanrise.Data.RDB
             }
 
             var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, this._columnValues, this._selectQuery, generatedIdDBParameterName, context, _queryBuilderContext);
-            resolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
+            RDBResolvedQuery resolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
             return resolvedQuery;
         }
     }

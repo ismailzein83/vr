@@ -61,6 +61,12 @@ namespace Vanrise.Data.RDB
             this.Queries = new List<BaseRDBQuery>();
         }
 
+        //internal RDBQueryContext(RDBQueryContext parentContext)
+        //    : this(parentContext.QueryBuilderContext.CreateChildContext())
+        //{
+
+        //}
+
         public RDBSelectQuery AddSelectQuery()
         {
             var query = new RDBSelectQuery(QueryBuilderContext.CreateChildContext());
@@ -132,8 +138,8 @@ namespace Vanrise.Data.RDB
         public int ExecuteNonQuery(bool executeTransactional)
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
-            var resolvedQuery = this.GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteNonQueryContext(resolvedQuery, executeTransactional, resolveQueryContext.Parameters);
+            var resolvedQueryText = this.GetResolvedQueryText(resolveQueryContext);
+            var context = new RDBDataProviderExecuteNonQueryContext(resolvedQueryText, executeTransactional, resolveQueryContext.Parameters);
             return this.DataProvider.ExecuteNonQuery(context);
         }
 
@@ -145,8 +151,8 @@ namespace Vanrise.Data.RDB
         public RDBFieldValue ExecuteScalar(bool executeTransactional)
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
-            var resolvedQuery = GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteScalarContext(resolvedQuery, executeTransactional, resolveQueryContext.Parameters);
+            var resolvedQueryText = GetResolvedQueryText(resolveQueryContext);
+            var context = new RDBDataProviderExecuteScalarContext(resolvedQueryText, executeTransactional, resolveQueryContext.Parameters);
             return this.DataProvider.ExecuteScalar(context);
         }
 
@@ -190,30 +196,48 @@ namespace Vanrise.Data.RDB
         public void ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional)
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
-            var resolvedQuery = GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteReaderContext(resolvedQuery, executeTransactional, resolveQueryContext.Parameters, onReaderReady);
+            var resolvedQueryText = GetResolvedQueryText(resolveQueryContext);
+            var context = new RDBDataProviderExecuteReaderContext(resolvedQueryText, executeTransactional, resolveQueryContext.Parameters, onReaderReady);
             this.DataProvider.ExecuteReader(context);
+        }
+
+        private string GetResolvedQueryText(IRDBQueryGetResolvedQueryContext resolveQueryContext)
+        {
+            var resolvedQuery = GetResolvedQuery(resolveQueryContext);
+            if (resolvedQuery != null)
+                return resolveQueryContext.DataProvider.GetQueryAsText(resolvedQuery);
+            else
+                return null;
         }
 
         public RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext resolveQueryContext)
         {
-            StringBuilder queryBuilder = new StringBuilder();
+            return GetResolvedQuery(resolveQueryContext, false);
+        }
+
+        internal RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext resolveQueryContext, bool isSubContext)
+        {
+            var resolvedQuery = new RDBResolvedQuery();
             foreach (var subQuery in Queries)
             {
                 var subQueryContext = new RDBQueryGetResolvedQueryContext(resolveQueryContext);
                 RDBResolvedQuery resolvedSubQuery = subQuery.GetResolvedQuery(subQueryContext);
-                queryBuilder.AppendLine(resolveQueryContext.DataProvider.PrepareQueryStatementToAddToBatch(resolvedSubQuery.QueryText));
-                queryBuilder.AppendLine();
+                if (resolvedSubQuery.Statements.Count > 0)
+                    resolvedQuery.Statements.AddRange(resolvedSubQuery.Statements);
             }
 
-            var resolveParametersContext = new RDBDataProviderResolveParameterDeclarationsContext(resolveQueryContext);
-            var resolvedParameterDeclarations = this.DataProvider.ResolveParameterDeclarations(resolveParametersContext);
-            var resolvedQuery = new RDBResolvedQuery();
-            if (resolvedParameterDeclarations != null && !string.IsNullOrEmpty(resolvedParameterDeclarations.QueryText))
-                resolvedQuery.QueryText = String.Concat(resolveQueryContext.DataProvider.PrepareQueryStatementToAddToBatch(resolvedParameterDeclarations.QueryText),
-                    "\n", queryBuilder.ToString());
-            else
-                resolvedQuery.QueryText = queryBuilder.ToString();
+            if (!isSubContext)
+            {
+                var resolveParametersContext = new RDBDataProviderResolveParameterDeclarationsContext(resolveQueryContext);
+                var resolvedParameterDeclarations = this.DataProvider.ResolveParameterDeclarations(resolveParametersContext);
+                if (resolvedParameterDeclarations != null && resolvedParameterDeclarations.Statements.Count > 0)
+                {
+                    for (int i = resolvedParameterDeclarations.Statements.Count - 1; i >= 0; i--)
+                    {
+                        resolvedQuery.Statements.Insert(0, resolvedParameterDeclarations.Statements[i]);
+                    }
+                }
+            }
             return resolvedQuery;
         }
 
@@ -221,8 +245,8 @@ namespace Vanrise.Data.RDB
 
         private class RDBDataProviderExecuteNonQueryContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteNonQueryContext
         {
-            public RDBDataProviderExecuteNonQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
-                : base(resolvedQuery, executeTransactional, parameters)
+            public RDBDataProviderExecuteNonQueryContext(string query, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
+                : base(query, executeTransactional, parameters)
             {
             }
         }
@@ -230,8 +254,8 @@ namespace Vanrise.Data.RDB
         private class RDBDataProviderExecuteReaderContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteReaderContext
         {
             Action<IRDBDataReader> _onReaderReady;
-            public RDBDataProviderExecuteReaderContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters, Action<IRDBDataReader> onReaderReady)
-                : base(resolvedQuery, executeTransactional, parameters)
+            public RDBDataProviderExecuteReaderContext(string query, bool executeTransactional, Dictionary<string, RDBParameter> parameters, Action<IRDBDataReader> onReaderReady)
+                : base(query, executeTransactional, parameters)
             {
                 _onReaderReady = onReaderReady;
             }
@@ -244,8 +268,8 @@ namespace Vanrise.Data.RDB
 
         private class RDBDataProviderExecuteScalarContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteScalarContext
         {
-            public RDBDataProviderExecuteScalarContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
-                : base(resolvedQuery, executeTransactional, parameters)
+            public RDBDataProviderExecuteScalarContext(string query, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
+                : base(query, executeTransactional, parameters)
             {
             }
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using Vanrise.Common;
 
 namespace Vanrise.Data.RDB.DataProvider.Providers
 {
@@ -13,7 +14,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         public MySQLRDBDataProvider(string connString)
              : base(connString)
          {
-             _dataManager = new MySQLDataManager(connString);
+             connString.ThrowIfNull("connString");
+             var validConnString = string.Concat(connString, "Allow User Variables=True");
+             _dataManager = new MySQLDataManager(validConnString);
          }
 
         MySQLDataManager _dataManager;
@@ -44,15 +47,53 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
          {
              get { return UNIQUE_NAME; }
          }
-
-         public override string PrepareQueryStatementToAddToBatch(string queryStatement)
+        
+         public override string GetQueryAsText(RDBResolvedQuery resolvedQuery)
          {
-             return string.Concat(queryStatement, ";");
+             var queryBuilder = new StringBuilder();
+             foreach (var statement in resolvedQuery.Statements)
+             {
+                 queryBuilder.Append(statement);
+                 queryBuilder.Append(";");
+                 queryBuilder.AppendLine();
+                 queryBuilder.AppendLine();
+             }
+             return queryBuilder.ToString();
+         }
+
+         public override string GetStatementSetParameterValue(string parameterDBName, string parameterValue)
+         {
+             return string.Concat("SET ", parameterDBName, " := ", parameterValue);
+         }
+
+         protected override void AddStatementSetColumnValueInUpdateQuery(StringBuilder columnQueryBuilder, string columnDBName, string parameterDBName, string value)
+         {
+             columnQueryBuilder.Append(columnDBName);
+             columnQueryBuilder.Append("=");
+             if(parameterDBName != null)
+             {
+                 columnQueryBuilder.AppendLine("(");
+                 columnQueryBuilder.Append(parameterDBName);
+                 columnQueryBuilder.Append(":=");
+             }
+             columnQueryBuilder.Append(value);
+             if (parameterDBName != null)
+                 columnQueryBuilder.Append(")");
          }
 
          protected override string GenerateCreateTempTableQuery(string tempTableName, string columns)
          {
              return string.Concat("CREATE TEMPORARY TABLE ", tempTableName, " ", columns);
+         }
+
+         protected override string GetGenerateIdFunction()
+         {
+             return "LAST_INSERT_ID()";
+         }
+
+         public override RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context)
+         {
+             return new RDBResolvedQuery();
          }
 
          public override string GetQueryConcatenatedStrings(params string[] strings)
@@ -65,17 +106,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
          public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
          {
-             _dataManager.ExecuteReader(context.ResolvedQuery.QueryText, context.Parameters, (originalReader) => context.OnReaderReady(new MySQLRDBDataReader(originalReader)));
+             _dataManager.ExecuteReader(context.Query, context.Parameters, (originalReader) => context.OnReaderReady(new MySQLRDBDataReader(originalReader)));
          }
 
          public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
          {
-             return _dataManager.ExecuteNonQuery(context.ResolvedQuery.QueryText, context.Parameters);
+             return _dataManager.ExecuteNonQuery(context.Query, context.Parameters);
          }
 
          public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
          {
-             return new MySQLRDBFieldValue(_dataManager.ExecuteScalar(context.ResolvedQuery.QueryText, context.Parameters));
+             return new MySQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters));
          }
          
          public override string NowDateTimeFunction
