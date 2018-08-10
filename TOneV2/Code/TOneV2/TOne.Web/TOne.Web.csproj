@@ -45,6 +45,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CDRComparison.BP">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.BP.Activities">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.BP.Arguments">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.Business">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.Data">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.Data.SQL">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.Entities">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.MainExtensions">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="CDRComparison.Web">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.Web.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\..\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -960,6 +987,14 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Web\TOne.WhS.BusinessEntity.Web.csproj">
       <Project>{6f10d0c6-72aa-483c-9a10-bc78d053fc42}</Project>
       <Name>TOne.WhS.BusinessEntity.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CDRComparison.Business\TOne.WhS.CDRComparison.Business.csproj">
+      <Project>{53afc1ec-8c29-4c56-a322-53d9838f09e7}</Project>
+      <Name>TOne.WhS.CDRComparison.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CDRComparison.Web\TOne.WhS.CDRComparison.Web.csproj">
+      <Project>{e5b151c8-0594-4570-9ebe-26631e9e91d5}</Project>
+      <Name>TOne.WhS.CDRComparison.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.BP.Arguments\TOne.WhS.CodePreparation.BP.Arguments.csproj">
       <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
