@@ -13,22 +13,21 @@ namespace Vanrise.Invoice.Business
 
         public bool IsMatch(IGenericBusinessEntityFilterContext context)
         {
-            //if (context != null) 
-            //{
-            //    if (context.GenericBusinessEntityDetail != null && context.GenericBusinessEntityDetail.FieldValues != null && context.GenericBusinessEntityDetail.FieldValues.Count > 0)
-            //    {
-            //        var genericBEValue = context.GenericBusinessEntityDetail.FieldValues.GetRecord("InvoiceTypeId");
-            //        if (genericBEValue != null)
-            //        {
-            //            if ((Guid)genericBEValue.Value != this.InvoiceTypeId)
-            //            {
-            //                return false;
-            //            }
-            //        }
-                   
-            //    }
-            //}
-            return false;
+            if (context != null) 
+            {
+                if (context.GenericBusinessEntity != null && context.GenericBusinessEntity.FieldValues != null && context.GenericBusinessEntity.FieldValues.Count > 0)
+                {
+                    var genericBEValue = context.GenericBusinessEntity.FieldValues.GetRecord("InvoiceTypeId");
+                    if (genericBEValue != null)
+                    {
+                        if ((Guid)genericBEValue != this.InvoiceTypeId)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         } 
     }
 }
