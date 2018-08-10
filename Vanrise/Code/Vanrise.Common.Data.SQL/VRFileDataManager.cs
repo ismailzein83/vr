@@ -133,7 +133,8 @@ namespace Vanrise.Common.Data.SQL
                         IsTemp, 
                         ConfigID, 
                         Settings,
-                        [CreatedTime]
+                        [CreatedTime],
+                        [FileUniqueId]
                     INTO #TEMPTABLENAME#
                     FROM [common].[File]
                     #WHERECLAUSE#
