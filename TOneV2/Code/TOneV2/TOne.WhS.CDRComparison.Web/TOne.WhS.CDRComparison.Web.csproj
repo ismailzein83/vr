@@ -103,10 +103,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="WhS_CDRComparison\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_CDRComparison\Constant\ModuleConfig.js" />
+    <Content Include="WhS_CDRComparison\Elements\CDRComparison\Directives\whs-cdrcomparison-cdr-storage.js" />
+    <Content Include="WhS_CDRComparison\Elements\CDRComparison\Directives\Templates\CDRComparisonCDRStorage.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
