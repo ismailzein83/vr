@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CDRComparison.Entities">
+      <HintPath>..\..\..\..\Xbooster\Code\Output\CDRComparison.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,8 +44,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDRRecordStorageSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
