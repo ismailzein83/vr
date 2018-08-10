@@ -24,8 +24,11 @@
     [Rfu4]                 VARCHAR (25)    NULL,
     [Rfu5]                 VARCHAR (25)    NULL,
     [FileName]             VARCHAR (255)   NULL,
+    [IgnoreTransitRule]    BIT             NULL,
     CONSTRAINT [PK_JazzHuaweiCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

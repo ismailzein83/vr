@@ -23,7 +23,10 @@
     [Rfu3]                 VARCHAR (25)    NULL,
     [Rfu4]                 VARCHAR (25)    NULL,
     [Rfu5]                 VARCHAR (25)    NULL,
-    [FileName]             VARCHAR (255)   NULL);
+    [FileName]             VARCHAR (255)   NULL,
+    [IgnoreTransitRule]    BIT             NULL);
+
+
 
 
 
