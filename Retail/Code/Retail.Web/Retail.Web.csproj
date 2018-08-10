@@ -471,6 +471,9 @@
     <Reference Include="Vanrise.Invoice.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Data.SQL.dll</HintPath>
     </Reference>

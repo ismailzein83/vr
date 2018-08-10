@@ -33,7 +33,6 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
-            CreateWFProgrammatically();
             //CallGetAnalyticRecords();
             //GenerateVRWorkflow();
             //CreateWFProgrammatically();
@@ -554,32 +553,32 @@ namespace Retail.Runtime.Tasks
             };
             Activity wfWorkflow;
             List<string> errorMessage; 
-            if (new VRWorkflowManager().TryCompileWorkflow(workflow, out wfWorkflow, out errorMessage))
-            {
-                Console.WriteLine("Compiled successfully");
-                do
-                {
-                    Console.Clear();
-                    Console.WriteLine(DateTime.Now);
-                    try
-                    {
-                        var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { { "InputArg1", "this is teh value send in INputArg1" }, { "InputArg2", 43 } });
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Workflow Error");
-                    }
-                }
-                while (Console.ReadKey().Key != ConsoleKey.Delete);
-            }
-            else
-            {
-                Console.WriteLine("Workflow not compiled");
-                foreach(var error in errorMessage)
-                {
-                    Console.WriteLine(error);
-                }
-            }
+            //if (new VRWorkflowManager().TryCompileWorkflow(workflow, out wfWorkflow, out errorMessage))
+            //{
+            //    Console.WriteLine("Compiled successfully");
+            //    do
+            //    {
+            //        Console.Clear();
+            //        Console.WriteLine(DateTime.Now);
+            //        try
+            //        {
+            //            var output = WorkflowInvoker.Invoke(wfWorkflow, new Dictionary<string, object> { { "InputArg1", "this is teh value send in INputArg1" }, { "InputArg2", 43 } });
+            //        }
+            //        catch
+            //        {
+            //            Console.WriteLine("Workflow Error");
+            //        }
+            //    }
+            //    while (Console.ReadKey().Key != ConsoleKey.Delete);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Workflow not compiled");
+            //    foreach(var error in errorMessage)
+            //    {
+            //        Console.WriteLine(error);
+            //    }
+            //}
         }
 
         private void CreateWFProgrammatically()
