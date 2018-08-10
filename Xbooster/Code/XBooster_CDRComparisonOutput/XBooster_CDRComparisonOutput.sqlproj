@@ -76,5 +76,7 @@
     <Build Include="common\Stored Procedures\sp_File_SetUsedAndUpdateSettings.sql" />
     <Build Include="common\Stored Procedures\sp_File_Insert_Temp.sql" />
     <Build Include="common\Stored Procedures\sp_File_GetByFileIds.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetInfoByUniqueId.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetByUniqueId.sql" />
   </ItemGroup>
 </Project>
