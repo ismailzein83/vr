@@ -118,6 +118,7 @@
     <Compile Include="VRBulkActionDraft\BulkActionState.cs" />
     <Compile Include="VRBulkActionDraft\VRBulkActionDraft.cs" />
     <Compile Include="VRConnection\VRHttpConnection.cs" />
+    <Compile Include="VRNamespace\VRNamespace.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientMessage.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientSubscription.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientUnsubscribe.cs" />

@@ -142,6 +142,7 @@
     <Compile Include="Controllers\VRLocalizationTextResourceController.cs" />
     <Compile Include="Controllers\VRLocalizationTextResourceTranslationController.cs" />
     <Compile Include="Controllers\VRMailController.cs" />
+    <Compile Include="Controllers\VRNamespaceController.cs" />
     <Compile Include="Controllers\VRObjectTrackingController.cs" />
     <Compile Include="Controllers\UISettingsController.cs" />
     <Compile Include="Controllers\CompanySettingsController.cs" />
@@ -418,6 +419,8 @@
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
     <Content Include="Common\Directives\VRMail\vr-common-receivedmailmessageconvertor-editor.js" />
     <Content Include="Common\Directives\VRMail\vr-common-pop3messagefilter-selector.js" />
+    <Content Include="Common\Directives\VRNamespace\Templates\VRNamespaceGridTemplate.html" />
+    <Content Include="Common\Directives\VRNamespace\vr-common-namespace-grid.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-settings.js" />
@@ -559,6 +562,7 @@
     <Content Include="Common\Services\APIServices\VRLocalizationModuleAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationTextResourceAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationTextResourceTranslationAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRNamespaceAPIService.js" />
     <Content Include="Common\Services\APIServices\VRPop3MessageFilterAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRuleDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTempPayloadAPIService.js" />
@@ -611,6 +615,7 @@
     <Content Include="Common\Services\VRLocalizationTextResourceService.js" />
     <Content Include="Common\Services\VRLocalizationTextResourceTranslationService.js" />
     <Content Include="Common\Services\VRMailService.js" />
+    <Content Include="Common\Services\VRNamespaceService.js" />
     <Content Include="Common\Services\VRTileService.js" />
     <Content Include="Common\Services\VRTimeZoneService.js" />
     <Content Include="Common\Services\TextManipulationService.js" />
@@ -758,6 +763,10 @@
     <Content Include="Common\Views\VRLocalization\TextResource\VRLocalizationTextResourceTranslationManagementController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageEvaluator.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageEvaluatorController.js" />
+    <Content Include="Common\Views\VRNamespace\VRNamespaceEditor.html" />
+    <Content Include="Common\Views\VRNamespace\VRNamespaceEditorController.js" />
+    <Content Include="Common\Views\VRNamespace\VRNamespaceManagement.html" />
+    <Content Include="Common\Views\VRNamespace\VRNamespaceManagementController.js" />
     <Content Include="Common\Views\VRTile\VRTileManagement.html" />
     <Content Include="Common\Views\VRTile\VRTileManagementController.js" />
     <Content Include="Common\Views\VRTimeZone\VRTimeZoneEditor.html" />

@@ -85,6 +85,7 @@
     <Compile Include="VRLocalizationTextResourceDataManager.cs" />
     <Compile Include="VRLocalizationTextResourceTranslationDataManager.cs" />
     <Compile Include="VRLoggableEntityDataManager.cs" />
+    <Compile Include="VRNamespaceDataManager.cs" />
     <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRReceivedMailMessageDataManager.cs" />
     <Compile Include="VRRuleDataManager.cs" />
