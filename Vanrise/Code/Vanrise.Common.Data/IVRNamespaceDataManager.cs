@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common.Data
 {
-    public interface INamespaceDataManager
+    public interface IVRNamespaceDataManager
     {
     }
 }

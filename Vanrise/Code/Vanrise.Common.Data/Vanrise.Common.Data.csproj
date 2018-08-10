@@ -47,7 +47,7 @@
     <Compile Include="IDataEncryptionKeyDataManager.cs" />
     <Compile Include="IDBReplicationDataManager.cs" />
     <Compile Include="IEnumerationDataManager.cs" />
-    <Compile Include="INamespaceDataManager.cs" />
+    <Compile Include="IVRNamespaceDataManager.cs" />
     <Compile Include="IRegionDataManager.cs" />
     <Compile Include="IGenericLKUPItemDataManager.cs" />
     <Compile Include="IOverriddenConfigurationDataManager.cs" />
