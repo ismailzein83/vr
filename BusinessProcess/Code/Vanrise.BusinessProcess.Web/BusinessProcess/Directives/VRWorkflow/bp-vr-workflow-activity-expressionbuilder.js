@@ -10,7 +10,8 @@ app.directive('businessprocessVrWorkflowActivityExpressionbuilder', ['UtilsServi
 				value: '=',
 				label: '=',
 				getworkflowarguments: '=',
-				getactivityvariables: '='
+				getactivityvariables: '=',
+                hidelabel:'@'
 			},
 			controller: function ($scope, $element, $attrs) {
 				var ctrl = this;
@@ -29,8 +30,13 @@ app.directive('businessprocessVrWorkflowActivityExpressionbuilder', ['UtilsServi
 
 			this.initializeController = initializeController;
 			function initializeController() {
-				if (ctrl.label == undefined)
-					ctrl.label = "Value";
+			    if (ctrl.label == undefined) 
+			        ctrl.label = "Value";
+
+			    if ($attrs.hidelabel != undefined) {
+			        ctrl.label = undefined;
+			    }
+
 				$scope.scopeModel = {};
 				$scope.scopeModel.openExpressionBuilder = function () {
 					var args = (ctrl.getworkflowarguments != undefined) ? ctrl.getworkflowarguments() : undefined;

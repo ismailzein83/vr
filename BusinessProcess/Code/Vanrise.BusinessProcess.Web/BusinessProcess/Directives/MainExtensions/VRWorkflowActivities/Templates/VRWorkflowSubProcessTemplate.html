@@ -1,7 +1,7 @@
 ﻿<vr-row vr-loader="scopeModel.isLoading">
     <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon
                                           onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"></businessprocess-vr-workflow-selector>
-    <vr-columns ng-if="scopeModel.hasInArguments" colnum="{{scopeModel.hasOutArguments?'4':'8'}}">
+    <vr-columns ng-if="scopeModel.hasInArguments" colnum="{{scopeModel.hasOutArguments?'4':'8'}}" haschildcolumns>
         <vr-section header="In Arguments">
             <vr-datagrid datasource="scopeModel.inArguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
                 <vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
@@ -12,7 +12,7 @@
             </vr-datagrid>
         </vr-section>
     </vr-columns>
-    <vr-columns ng-if="scopeModel.hasOutArguments" colnum="{{scopeModel.hasInArguments?'4':'8'}}">
+    <vr-columns ng-if="scopeModel.hasOutArguments" colnum="{{scopeModel.hasInArguments?'4':'8'}}" haschildcolumns>
         <vr-section header="Out Arguments">
             <vr-datagrid datasource="scopeModel.outArguments" on-ready="scopeModel.onOutArgumentsGridReady" hidegridmenu>
                 <vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>

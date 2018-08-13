@@ -1,6 +1,6 @@
-﻿<vr-columns colnum="12">
+﻿<vr-columns colnum="12" haschildcolumns>
 	<div style="display:inline-block;width: calc(100% - 35px )">
-		<vr-label>{{ctrl.label}}</vr-label>
+        <vr-label ng-if="ctrl.label!=undefined">{{ctrl.label}}</vr-label>
 		<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>
 	</div>
 	<div style="display:inline-block;width: 30px ;position: relative;top: -4px;">
