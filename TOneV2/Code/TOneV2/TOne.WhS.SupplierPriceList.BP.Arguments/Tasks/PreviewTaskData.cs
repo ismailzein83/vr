@@ -14,6 +14,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments.Tasks
         public int CurrencyId { get; set; }
         public DateTime PricelistDate { get; set; }
         public SupplierPricelistType SupplierPricelistType { get; set; }
-        public string SupplierName { get; set; }
+        public int SupplierId { get; set; }
     }
 }

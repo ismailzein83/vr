@@ -88,7 +88,7 @@ function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPr
                                     supplierPricelistType: dataItem.Entity.PricelistType,
                                     pricelistDate: dataItem.Entity.EffectiveOn,
                                     currencyId: dataItem.Entity.CurrencyId,
-                                    supplierName: dataItem.SupplierName
+                                    supplierId: dataItem.Entity.SupplierId
                                 };
                                 additionalMenuAction.clicked(payload);
                         }

@@ -30,7 +30,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
         var supplierPricelistType;
         var fileId;
         var currencyId;
-        var supplierName;
+        var supplierId;
         var changeType = true;
 
         var validationMessageHistoryGridAPI;
@@ -89,7 +89,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                     currencyId = payload.currencyId;
                     supplierPricelistType = payload.supplierPricelistType;
                     fileId = payload.fileId;
-                    supplierName = payload.supplierName;
+                    supplierId = payload.supplierId;
                     requireWarningConfirmation = payload.requireWarningConfirmation;
                 }
                 return UtilsService.waitMultipleAsyncOperations([loadValidationMessageHistory, loadSupplierPricelistPreviewSummary, loadSupplierPricelistPreviewData, loadSupplierPricelistPreviewExcludedData])
@@ -113,7 +113,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                     fileID: fileId,
                     currencyId: currencyId, 
                     supplierPricelistType: supplierPricelistType,
-                    supplierName: supplierName
+                    supplierId: supplierId
                 };
                 VRUIUtilsService.callDirectiveLoad(supplierPricelistPreviewSummaryAPI, payload, loadSupplierPricelistPreviewSummaryPromiseDeferred);
             });

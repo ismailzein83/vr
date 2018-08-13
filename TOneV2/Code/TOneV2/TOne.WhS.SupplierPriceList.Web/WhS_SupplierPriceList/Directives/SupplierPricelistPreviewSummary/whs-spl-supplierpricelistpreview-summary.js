@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsSplSupplierpricelistpreviewSummary", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_SupplierPriceListPreviewPIService","VRCommon_FileAPIService","VRCommon_CurrencyAPIService","WhS_SupPL_SupplierPriceListTypeEnum", "DateTimeFormatEnum",
-function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_SupplierPriceListPreviewPIService, VRCommon_FileAPIService, VRCommon_CurrencyAPIService, WhS_SupPL_SupplierPriceListTypeEnum, DateTimeFormatEnum) {
+app.directive("whsSplSupplierpricelistpreviewSummary", ["WhS_SupPL_PreviewChangeTypeEnum","WhS_BE_CarrierAccountAPIService", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_SupPL_SupplierPriceListPreviewPIService","VRCommon_FileAPIService","VRCommon_CurrencyAPIService","WhS_SupPL_SupplierPriceListTypeEnum", "DateTimeFormatEnum",
+    function (WhS_SupPL_PreviewChangeTypeEnum, WhS_BE_CarrierAccountAPIService, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService, WhS_SupPL_SupplierPriceListPreviewPIService, VRCommon_FileAPIService, VRCommon_CurrencyAPIService, WhS_SupPL_SupplierPriceListTypeEnum, DateTimeFormatEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -25,6 +25,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
         var processInstanceId;
         var currencyId;
         var fileId;
+        var supplierId;
 
         var validationMessageHistoryGridAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -45,10 +46,13 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
             api.load = function (payload) {
 
                 if (payload != null) {
+
+                    supplierId = payload.supplierId;
+                    
                     processInstanceId = payload.processInstanceId;
                     currencyId = payload.currencyId;
                     fileId = payload.fileID;
-                    $scope.scopeModel.supplierName = payload.supplierName;
+
                     $scope.scopeModel.pricelistDate = UtilsService.getDateTimeFormat(payload.pricelistDate, DateTimeFormatEnum.Date);
 
                     if (payload.supplierPricelistType != null) {
@@ -59,7 +63,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                    
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadSupplierPricelistPreviewSummary,loadCurrencySymbol,loadFileName])
+                return UtilsService.waitMultipleAsyncOperations([loadSupplierPricelistPreviewSummary,loadCurrencySymbol,loadFileName,loadSupplierName])
                      .catch(function (error) {
                            VRNotificationService.notifyException(error);
                 });
@@ -67,6 +71,12 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function loadSupplierName() {
+            WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(supplierId).then(function (supplierName) {
+                $scope.scopeModel.supplierName = supplierName;
+            });
         }
 
         function loadCurrencySymbol() {

@@ -131,7 +131,7 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRUIUtils
 	                supplierPricelistType: dataItem.ReceivedPricelist.PricelistType,
 	                pricelistDate: dataItem.ReceivedPricelist.ReceivedDateTime,
                     currencyId: dataItem.CurrencyId,
-                    supplierName: dataItem.SupplierName
+                    supplierId: dataItem.ReceivedPricelist.SupplierId
 	            };
 	            WhS_SupPL_SupplierPriceListService.previewSupplierPriceList(obj);
 	        }

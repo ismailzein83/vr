@@ -52,7 +52,7 @@
                 supplierPricelistType: payload.supplierPricelistType,
                 pricelistDate: payload.pricelistDate,
                 currencyId: payload.currencyId,
-                supplierName : payload.supplierName
+                supplierId : payload.supplierId
             };
             VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);
         }

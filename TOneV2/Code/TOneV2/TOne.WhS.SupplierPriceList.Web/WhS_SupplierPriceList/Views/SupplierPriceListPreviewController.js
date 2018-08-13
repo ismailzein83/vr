@@ -11,7 +11,7 @@
         var supplierPricelistType;
         var pricelistDate;
         var currencyId;
-        var supplierName;
+        var supplierId;
 
         var SupplierPriceListPreviewSectionApi;
         var SupplierPriceListPreviewSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -30,7 +30,7 @@
                 supplierPricelistType = parameters.supplierPricelistType;
                 pricelistDate = parameters.pricelistDate;
                 currencyId = parameters.currencyId;
-                supplierName = parameters.supplierName;
+                supplierId = parameters.supplierId;
             }
         }
 
@@ -70,7 +70,7 @@
                     supplierPricelistType: supplierPricelistType,
                     pricelistDate: pricelistDate,
                     currencyId: currencyId,
-                    supplierName: supplierName
+                    supplierId: supplierId
                 };
                 VRUIUtilsService.callDirectiveLoad(SupplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);
             });

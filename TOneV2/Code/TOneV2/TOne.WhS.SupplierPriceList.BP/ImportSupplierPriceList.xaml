@@ -64,11 +64,11 @@
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.Entities</AssemblyReference>
-      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SupplierPriceList.BP</AssemblyReference>
     </sco:Collection>
@@ -1502,7 +1502,7 @@
                 PricelistDate = Input.PriceListDate,
                 CurrencyId = Input.CurrencyId,
                 FileId = Input.FileId,
-                SupplierName = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetCarrierAccountName(Input.SupplierAccountId)
+                SupplierId =Input.SupplierAccountId
         }</mca:CSharpValue>
                         </InArgument>
                       </vbw:AssignTask.TaskData>
@@ -1544,7 +1544,7 @@
                 PricelistDate = Input.PriceListDate,
                 CurrencyId = Input.CurrencyId,
                 FileId = Input.FileId,
-                SupplierName = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetCarrierAccountName(Input.SupplierAccountId)
+                SupplierId =Input.SupplierAccountId
             }</mca:CSharpValue>
                     </InArgument>
                   </vbw:AssignTask.TaskData>
