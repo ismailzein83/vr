@@ -50,7 +50,7 @@ namespace TOne.WhS.Deal.Business
 
                 int dealId = dealDefinition.DealId;
                 DateTime dealBED = swapDealSetting.BeginDate;
-                DateTime? dealEED = swapDealSetting.EEDToStore;
+                DateTime? dealEED = swapDealSetting.EndDate;
                 int carrierAccountId = swapDealSetting.CarrierAccountId;
 
                 int? dealDays = null;
@@ -313,12 +313,16 @@ namespace TOne.WhS.Deal.Business
             {
                 reachedVolume = billingData.ReachedVolume;
                 toDateVolume = billingData.ToDateVolume;
-                remainingVolume = dealInfo.EstimatedVolume - billingData.ReachedVolume;
+            }
+            if (dealInfo != null)
+            {
+                remainingVolume = dealInfo.EstimatedVolume - reachedVolume;
                 remainingVolumePrecentage = remainingVolume == 0
                     ? 0
                     : remainingVolume / dealInfo.EstimatedVolume * 100;
                 remainingVolumePerDays = dealInfo.RemainingDays == 0 ? 0 : remainingVolume / dealInfo.RemainingDays;
             }
+
 
             decimal expectedDays = toDateVolume == 0 || remainingVolume == 0
                                     ? 0
