@@ -1,0 +1,18 @@
+﻿<vr-tabs>
+    <vr-tab header="'FaultTicket'">
+        <vr-genricdata-be-sn-editor on-ready="scopeModel.onFaultTicketSerialNumberEditorReady"></vr-genricdata-be-sn-editor>
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-textbox type="number" value="scopeModel.faultTicketInitialSequence" minvalue="0" label="Initial Sequence" isrequired></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-common-mailmessagetemplate-selector on-ready="scopeModel.onFaultTicketOpenMailTemplateSelectorReady" normalcolnum="4" customlabel="Open Ticket Template"></vr-common-mailmessagetemplate-selector>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-common-mailmessagetemplate-selector on-ready="scopeModel.onFaultTicketPendingMailTemplateSelectorReady" normalcolnum="4" customlabel="Pending Ticket Template"></vr-common-mailmessagetemplate-selector>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-common-mailmessagetemplate-selector on-ready="scopeModel.onFaultTicketClosedMailTemplateSelectorReady" normalcolnum="4" customlabel="Closed Ticket Template"></vr-common-mailmessagetemplate-selector>
+            </vr-columns>
+        </vr-row>
+</vr-tabs>

@@ -436,6 +436,8 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\Invoice\retail-be-account-invoice-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faulttickets-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FaultTickets\Templates\FaultTicketsSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />
@@ -728,8 +730,10 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\OverriddenConfigurationServiceType.html" />
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-didtechnicalsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-faultticket-settings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-retailinvoicesettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\DIDTechnicalSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\FaultTicketSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\RetailInvoiceSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />

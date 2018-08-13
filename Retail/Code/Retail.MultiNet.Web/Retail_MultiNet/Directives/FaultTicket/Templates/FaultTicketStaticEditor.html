@@ -1,1 +1,54 @@
-﻿
+﻿<vr-tabs>
+    <vr-tab header="'Ticket Info'">
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-row>
+                    <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" normal-col-num="12" selectedvalues="scopeModel.selectedSubscriber" customlabel="Subscriber" isrequired="true"></retail-be-account-selector>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
+                    </vr-columns>
+                    <vr-columns width="fullrow">
+                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail" vr-disabled="!scopeModel.sendEmail"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-textbox type="text" value="scopeModel.phoneNumber" label="Phone Numbers"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+
+            </vr-columns>
+
+
+            <vr-columns width="2/3row">
+                <vr-row>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.fromDate" type="dateTime" label="From Date" customvalidate="scopeModel.validateDate()" isrequired="true"></vr-datetimepicker>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.toDate" type="dateTime" label="To Date" customvalidate="scopeModel.validateDate()" isrequired="true"></vr-datetimepicker>
+                    </vr-columns>
+                </vr-row>
+                <!--<vr-row>
+                    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="6" isrequired="true"></vr-common-statusdefinition-selector>
+                </vr-row>-->
+
+            </vr-columns>
+    </vr-tab>
+
+    <vr-tab header="'Notes & Attachments'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-textarea value="scopeModel.notes" label="Notes"></vr-textarea>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-genericdata-attachmentfieldtype-management on-ready="onAttachmentGridReady"></vr-genericdata-attachmentfieldtype-management>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>
+

@@ -13,20 +13,20 @@ namespace Retail.BusinessEntity.Business
         {
             get { return new Guid("B24015FB-D7C9-4051-9FA6-9521EBC3EF9D"); }
         }
-        //public override object GetInfoByType(IGenericBEExtendedSettingsContext context)
-        //{
-        //    if (context.InfoType == null)
-        //        return null;
+        public override object GetInfoByType(IGenericBEExtendedSettingsContext context)
+        {
+            if (context.InfoType == null)
+                return null;
 
-        //    switch (context.InfoType)
-        //    {
-        //        case "SerialNumberPattern": return new ConfigManager().GetFaultTicketsSerialNumberPattern();
-        //        case "SerialNumberInitialSequence": return new ConfigManager().GetFaultTicketsSerialNumberInitialSequence();
-        //        case "OpenTicketMailTemplate": return new ConfigManager().GetFaultTicketsOpenMailTemplateId();
-        //        case "PendingTicketMailTemplate": return new ConfigManager().GetFaultTicketsPendingMailTemplateId();
-        //        case "ClosedTicketMailTemplate": return new ConfigManager().GetFaultTicketsClosedMailTemplateId();
-                
-        //    }
-        //}
+            switch (context.InfoType)
+            {
+                case "SerialNumberPattern": return new ConfigManager().GetFaultTicketsSerialNumberPattern();
+                case "SerialNumberInitialSequence": return new ConfigManager().GetFaultTicketsSerialNumberInitialSequence();
+                case "OpenTicketMailTemplate": return new ConfigManager().GetFaultTicketsOpenMailTemplateId();
+                case "PendingTicketMailTemplate": return new ConfigManager().GetFaultTicketsPendingMailTemplateId();
+                case "ClosedTicketMailTemplate": return new ConfigManager().GetFaultTicketsClosedMailTemplateId();
+                default: return null; 
+            }
+        }
     }
 }
