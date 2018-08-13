@@ -15,7 +15,7 @@
         <div style="position:relative;">
             <a href="" class="link" ng-click="clearSelectionAndCloseModal($event,true);" ng-if="!ctrl.isMultiple() && ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0" ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly">Clear Selected</a>
             <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon" ></span>
-            <div style="padding-top:15px">
+            <div ng-style="{'padding-top':ctrl.isMultiple() || (!ctrl.isMultiple() && ctrl.selectedvalues == undefined) || ctrl.isHideRemoveIcon()   ? '30px':'15px'}">
                 <div ng-if="ctrl.isContainerVisible()" class="vr-select-multiple" style="display: inline-block; width: 100% !important;">
 
                     <div ng-if="ctrl.isEnFilter()" class="filter-section">

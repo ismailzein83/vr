@@ -11,7 +11,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $scope.isMobile = MobileService.isMobile();
     if (!$scope.isMobile) {
         Waves.displayEffect();
-        
+
     }
     $rootScope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
@@ -92,17 +92,25 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         var left = 0;
         var tooltip = self.parent().find('.tooltip-error');
         $(tooltip).removeClass('tooltip-error-right');
-        $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft });
-        if (innerWidth - elleft < 100 && !VRLocalizationService.isLocalizationRTL()) {
-            elleft = elleft - (100 + $(self).width() + 10);
-            $(tooltip).addClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+        if ($scope.isMobile) {
+            var initialTop = (selfOffset.top - $(window).scrollTop());
+            $(tooltip).css({ position: 'fixed', top: initialTop + selfHeight, left: selfOffset.left - $(window).scrollLeft() + (selfWidth / 3) });
         }
-        else if (VRLocalizationService.isLocalizationRTL() && (selfOffset.left - $(window).scrollLeft()) > 100) {
-            elleft = elleft - (100 + $(self).width() + 10);
-            $(tooltip).addClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+        else {
+            $(tooltip).removeClass('tooltip-error-right');
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft });
+            if (innerWidth - elleft < 100 && !VRLocalizationService.isLocalizationRTL()) {
+                elleft = elleft - (100 + $(self).width() + 10);
+                $(tooltip).addClass('tooltip-error-right');
+                $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+            }
+            else if (VRLocalizationService.isLocalizationRTL() && (selfOffset.left - $(window).scrollLeft()) > 100) {
+                elleft = elleft - (100 + $(self).width() + 10);
+                $(tooltip).addClass('tooltip-error-right');
+                $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+            }
         }
+
         e.stopPropagation();
     };
 
@@ -211,10 +219,10 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     };
     $scope.openMobileUserActionPopup = function () {
         var modalSettings = {
-            autoclose:true
+            autoclose: true
         };
         modalSettings.onScopeReady = function (modalScope) {
-            modalScope.mainCtrl = $scope;            
+            modalScope.mainCtrl = $scope;
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/MobileUserActionPopup.html', null, modalSettings);
     };
@@ -467,7 +475,8 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
 }]);
 
-app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootScope, VRLocalizationService) {
+app.controller('loginCtrl', ["$scope", "SecurityService", "$rootScope", "VRLocalizationService", "MobileService", function loginCtrl($scope, SecurityService, $rootScope, VRLocalizationService, MobileService) {
+    $scope.isMobile = MobileService.isMobile();
     $scope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
@@ -483,7 +492,7 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootSco
             VRLocalizationService.setLocalizationRTL(isRTL);
         }
     };
-});
+}]);
 app.controller('DocumentCtrl', ['$scope', function documentCtrl($scope) {
     $scope.downloadDocument = function (file) {
         window.open(file);

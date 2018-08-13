@@ -2,10 +2,9 @@
 
     'use strict';
 
-    LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService', 'UtilsService', 'VR_Sec_UserAPIService', 'VRLocalizationService', 'VR_Sec_SecurityProviderAPIService', 'VRUIUtilsService'];
+    LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService', 'UtilsService', 'VR_Sec_UserAPIService', 'VRLocalizationService', 'VR_Sec_SecurityProviderAPIService', 'VRUIUtilsService', 'MobileService'];
 
-    function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService, VR_Sec_SecurityProviderAPIService, VRUIUtilsService) {
-
+    function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService, VR_Sec_SecurityProviderAPIService, VRUIUtilsService, MobileService) {
         var securityProviderSelectorApi;
         var securityProviderSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -15,6 +14,8 @@
         load();
 
         function defineScope() {
+            $scope.isMobile = MobileService.isMobile();
+
             $scope.showSecurityProviderSelector = false;
 
             $scope.onSecurityProviderSelectorReady = function (api) {
@@ -41,15 +42,30 @@
                 var elleft = selfOffset.left - $(window).scrollLeft() + $(self).width();
                 var left = 0;
                 var tooltip = self.parent().find('.tooltip-error');
-                if (innerWidth - elleft < 100) {
-                    elleft = elleft - (100 + $(self).width() + 10);
-                    $(tooltip).addClass('tooltip-error-right');
-                    $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+                $(tooltip).removeClass('tooltip-error-right');
+                if ($scope.isMobile) {
+                    var initialTop = (selfOffset.top - $(window).scrollTop());
+                    $(tooltip).css({
+                        position: 'fixed', top: initialTop + selfHeight, left: selfOffset.left - $(window).scrollLeft() + (selfWidth / 3)
+                    });
                 }
                 else {
                     $(tooltip).removeClass('tooltip-error-right');
-                    $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft });
+                    $(tooltip).css({
+                        position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft
+                    });
+                    if (innerWidth - elleft < 100 && !VRLocalizationService.isLocalizationRTL()) {
+                        elleft = elleft - (100 + $(self).width() + 10);
+                        $(tooltip).addClass('tooltip-error-right');
+                        $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+                    }
+                    else if (VRLocalizationService.isLocalizationRTL() && (selfOffset.left - $(window).scrollLeft()) > 100) {
+                        elleft = elleft - (100 + $(self).width() + 10);
+                        $(tooltip).addClass('tooltip-error-right');
+                        $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 });
+                    }
                 }
+
                 e.stopPropagation();
             };
 

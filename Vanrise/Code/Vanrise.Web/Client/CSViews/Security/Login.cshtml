@@ -25,7 +25,7 @@
     @Styles.Render("~/Content/Themes")
 
 </head>
-<body ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
+<body ng-class="isMobile?'vr-mobile-view':''" ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
 
     @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
             <div class="container">

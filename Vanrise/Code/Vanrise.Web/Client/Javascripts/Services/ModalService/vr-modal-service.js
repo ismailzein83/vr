@@ -92,12 +92,15 @@
                 }
 
                 if (MobileService.isMobile()) {
-                    if ($('.modal-dialog').length > 1) {
-                        $('body').addClass('full-mobile-body');
-                    }
                     if ($('.expandable-row-content').length == 0) {
                         $('body').removeClass('full-mobile-body');
                     }
+
+                    if ($('.modal-dialog').length > 1) {
+                        $('body').addClass('full-mobile-body');
+                    }
+                    
+
 
                     if ($('.expandable-row-content').length > 1) {
                         $('.expandable-row-content').addClass('full-view');

@@ -465,8 +465,9 @@
                     includeOnViewHandler: includeOnViewHandler,
                     isSelected: isSelected
                 });
-                controller.selectedValuespageSize = 20;
                 controller.isMobile = MobileService.isMobile();
+                controller.initialSelectedValuespageSize = controller.isMobile ? 50 : 30;
+                controller.selectedValuespageSize = controller.initialSelectedValuespageSize;
                 var afterShowDropdown = function (id) {
                     var dropdown = $('div[name=' + id + ']');
                     var menuPosition = getDropDownDirection(id);
@@ -541,7 +542,7 @@
                     vrSelectSharedObject.onCloseDropDown(id);
                     found = false;
                     controller.showSearchSection = false;
-                    controller.selectedValuespageSize = 20;
+                    controller.selectedValuespageSize = controller.initialSelectedValuespageSize;
                 };
                 controller.focusFilterInput = function () {
                     if (!controller.isMobile)
@@ -735,7 +736,7 @@
                     selectService.disableScroll();
                     setTimeout(function () {
                         $scope.$apply(function () {
-                            controller.selectedValuespageSize += 20;
+                            controller.selectedValuespageSize += controller.initialSelectedValuespageSize;
                             isAddingSelectedvaluesPage = false;
                             selectService.enableScroll();
                         });
@@ -1027,7 +1028,7 @@
 
                         ctrl.selectAll = function () {
                             if (!ctrl.selectedSectionVisible())
-                                ctrl.selectedValuespageSize = 20;
+                                ctrl.selectedValuespageSize = ctrl.initialSelectedValuespageSize;
                             var dataSourceArray = ctrl.getdatasource();
                             var isRemote = ctrl.isRemoteLoad();
                             var len = dataSourceArray.length;

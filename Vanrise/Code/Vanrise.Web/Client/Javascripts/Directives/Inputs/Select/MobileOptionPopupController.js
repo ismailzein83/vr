@@ -11,6 +11,7 @@
 
         }
         function defineScope() {
+            $scope.ctrl.filtername = '';
             $scope.selectSingleItemAndCloseModal = function ($event, c) {
                 $scope.ctrl.selectValue($event, c);
                 closeModal();

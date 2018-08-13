@@ -1024,105 +1024,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 						+ '</div>'
 						+ '</div>';
 	            }
-	            buildRowDetailsHtml();
 	            buildSummaryRowHtml();
 	        }
 
-	        function buildRowDetailsHtml() {
-	            ctrl.rowDetailsHtml = '';
-	            var gridvalue;
-	            for (var i = 0; i < ctrl.columnDefs.length; i++) {
-	                var currentColumn = ctrl.columnDefs[i];
-	                var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
-	                var dataItemColumnPropertyPath = "dataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
-	                var cellWidth = ctrl.isMobile ? 'mobileWidth' : 'width';
-	                ctrl.rowDetailsHtml += '<div  ng-style="{ \'width\': ' + currentColumnHtml + '.' + cellWidth + ', \'display\':\'inline-flex\',\'vertical-align\':\'top\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"" ng-class="ctrl.getCellContainerClass(dataItem, ' + currentColumnHtml + ')" class="vr-datagrid-cell-container">';
-	                if (currentColumn.type == "MultiProgress") {
-	                    var values = currentColumn.field.split("|");
-	                    ctrl.rowDetailsHtml += '<vr-progressbar gridvalue="';
-	                    for (var j = 0; j < values.length; j++) {
-	                        ctrl.rowDetailsHtml += ('{{::dataItem.' + values[j] + '}}');
-	                        if (j < values.length - 1)
-	                            ctrl.rowDetailsHtml += "|";
-
-	                    }
-	                    ctrl.rowDetailsHtml += '"></vr-progressbar></div>';
-
-	                }
-	                else if (currentColumn.type == "Progress") {
-	                    gridvalue = "{{::" + dataItemColumnPropertyPath + ".dataValue}}";
-	                    ctrl.rowDetailsHtml += '<vr-progressbar gridvalue="' + gridvalue + '" ></vr-progressbar></div>';
-	                } else {
-	                    var tooltipFilter = "";
-	                    var mobileStyle = "{width:" + currentColumnHtml + ".mobileWidth}";
-
-	                    if (currentColumn.type == "Number") {
-	                        var numberPrecision = UISettingsService.getNormalPrecision() || 2;
-	                        if (currentColumn.numberPrecision == "NoDecimal") {
-	                            numberPrecision = 0;
-	                        }
-	                        else if (currentColumn.numberPrecision == "LongPrecision") {
-	                            numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
-	                        }
-	                        tooltipFilter = " | vrtextOrNumber:" + numberPrecision;
-	                    }
-	                    else {
-	                        if (currentColumn.type == "LongDatetime") {
-	                            tooltipFilter = " | date:'yyyy-MM-dd HH:mm:ss'"
-	                        }
-	                        else if (currentColumn.type == "Datetime") {
-	                            tooltipFilter = " | date:'yyyy-MM-dd HH:mm'"
-	                        }
-	                        else if (currentColumn.type == "Date") {
-	                            tooltipFilter = " | date:'yyyy-MM-dd'"
-	                        }
-	                        else if (currentColumn.type == "Yearmonth") {
-	                            tooltipFilter = " | date:'yyyy-MM'"
-	                        }
-
-	                    }
-
-	                    var cellTemplate = currentColumn.cellTemplate;
-	                    if (ctrl.hasExpendableColumn(currentColumn))
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateExpendableContent);
-	                    else if (currentColumn.isClickableAttr != undefined)
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateClickableContent);
-	                    else
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCONTENT#", cellTemplateNormalContent);
-
-	                    if (currentColumn.isFieldDynamic) {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "ctrl.getCellValue(dataItem, colDef)");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "ctrl.getCellTooltip(dataItem, colDef)");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "ctrl.getCellClass(dataItem, colDef)");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", "ctrl.isColumnClickable(dataItem, colDef)");
-
-	                    }
-	                    else {
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLVALUE#", "::" + dataItemColumnPropertyPath + ".dataValue");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLTOOLTIP#", "::" + dataItemColumnPropertyPath + ".tooltip");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#CELLCLASS#", "::" + dataItemColumnPropertyPath + ".cellClass");
-	                        cellTemplate = UtilsService.replaceAll(cellTemplate, "#ISCLICKABLE#", dataItemColumnPropertyPath + ".isClickable");
-	                    }
-	                    cellTemplate = UtilsService.replaceAll(cellTemplate, "#TOOLTIPFILTER#", tooltipFilter);
-
-	                    cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
-	                    cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
-	                    ctrl.rowDetailsHtml += ctrl.isMobile ? '<div class="mobile-label-container" ><label class="mobile-label" >' + currentColumn.name + ': </label></div> <div ng-style=' + mobileStyle + '>'
-							+ '<div class="vr-datagrid-celltext ">'
-							+ cellTemplate
-							+ '</div>'
-							+ '</div>'
-							+ '</div>' :
-							'<div class="vr-datagrid-cell">'
-							+ '<div class="vr-datagrid-celltext ">'
-							+ cellTemplate
-							+ '</div>'
-							+ '</div>'
-							+ '</div>';
-	                }
-	            }
-	        }
-
+	       
 
 	        function buildSummaryRowHtml() {
 	            ctrl.summaryRowHtml = undefined;

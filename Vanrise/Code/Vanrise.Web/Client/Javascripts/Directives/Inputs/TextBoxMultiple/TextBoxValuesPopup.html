@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent ng-controller="TextBoxValuesPopupController" vr-loader="isLoading" ismenu>
+﻿<div vr-modalcontent ng-controller="TextBoxValuesPopupController" vr-loader="isLoading" textboxmultiple>
     <vr-modalbody>
         <div style="position:relative;">
             <span ng-click="closeModal()" class="glyphicon glyphicon-remove hand-cursor close-icon" ></span>
 
-            <div style="width : 100% ;padding-top:15px" ng-if="!ctrl.readOnly">
+            <div style="width : 100% ;padding-top:30px" ng-if="!ctrl.readOnly">
                 <div style="display:inline-block;width:calc(100% - 40px );padding: 0px 3px;">
                     <vr-textbox value="ctrl.valuetext" type="ctrl.datatype" customvalidate="ctrl.validateInpute()" onenterpress="ctrl.addNewValue"></vr-textbox>
                 </div>

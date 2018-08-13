@@ -67,7 +67,14 @@
     .vr-mobile-view #page-content-wrapper {
         padding: unset;
     }
-
+  
+    .vr-mobile-view .tooltip-error:before {
+        border-color: rgba(136, 183, 213, 0) rgba(136, 183, 213, 0) #D5AB88 rgba(136, 183, 213, 0);
+        border-width: 4px;
+        margin-left: -5px;
+        right: 50%;
+        top: -10px;
+    }
     .full-mobile-body{
         overflow: hidden !important;
         width:100%;
@@ -136,6 +143,17 @@
        margin:0px;
        width: 100%;
     }
+
+    .vr-mobile-view div[textboxmultiple] .modal-content{
+            top: 33vh;
+            position: absolute;
+            width: 100%;
+    }
+
+    .vr-mobile-view div[textboxmultiple] .modal-body{
+            height:unset !important;
+    }
+
     .vr-mobile-view .gid-cell-menu {
         position: static;
         margin-bottom: 0px;

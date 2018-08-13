@@ -144,7 +144,24 @@
                     Actions
                 </button>
             </div>
-            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row row-full-view" vr-htmlcompiler="$parent.ctrl.rowDetailsHtml" style="display: flex;"></div>
+            <div class="grid-base-row row-full-view" style="display: flex;">
+                <div ng-repeat="colDef in ctrl.columnDefs">
+                    <div ng-style="{ 'width': colDef.mobileWidth, 'display':'inline-flex','vertical-align':'top','border-left': 'none'}" ng-class=" ctrl.getCellContainerClass(dataItem, colDef,true)" class="vr-datagrid-cell-container ng-scope">
+                        <div class="mobile-label-container">
+                            <label class="mobile-label">{{colDef.name}}: </label>
+                        </div>
+                        <div ng-style="{'width':colDef.mobileWidth}">
+                            <div class="vr-datagrid-celltext ">
+                                <div style="text-align: left;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="Analysis Type">
+                                    <span ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="::dataItem.columnsValues['col_' + colDef.columnId].cellClass" c style="white-space: nowrap;">
+                                        {{ctrl.getCellValue(dataItem, colDef)}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': 'calc(100% + 15px)', 'display':'inline-block', 'padding': '5px 0px', 'margin':'0px -5px'}"></div>
         </div>
     </div>

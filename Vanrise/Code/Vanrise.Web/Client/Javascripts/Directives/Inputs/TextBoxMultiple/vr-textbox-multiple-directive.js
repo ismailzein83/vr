@@ -240,30 +240,33 @@
                                         modalScope.ctrl = ctrl;
                                     };
                                     VRModalService.showModal("/Client/Javascripts/Directives/Inputs/TextBoxMultiple/TextBoxValuesPopup.html", null, modalSettings);
-                                    return;
                                 }
 
-                                $scope.$root.$broadcast("hide-all-select");
-                                var self = $(this);
-                                var selfHeight = $(this).parent().height();
-                                var selfOffset = $(self).offset();
-                                var dropDown = self.parent().find('ul');
-                                var top = 0;
-                                var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
-                                var baseleft = selfOffset.left - $(window).scrollLeft();
+                                else {
 
-                                var heigth = self.height() + 120;
-                                if (innerHeight - basetop < heigth)
-                                    top = basetop - (heigth + (selfHeight * 2.7));
-                                else
-                                    top = selfOffset.top - $(window).scrollTop() + selfHeight;
+                                    $scope.$root.$broadcast("hide-all-select");
+                                    var self = $(this);
+                                    var selfHeight = $(this).parent().height();
+                                    var selfOffset = $(self).offset();
+                                    var dropDown = self.parent().find('ul');
+                                    var top = 0;
+                                    var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                                    var baseleft = selfOffset.left - $(window).scrollLeft();
 
-                                if (VRLocalizationService.isLocalizationRTL()) {
-                                    baseleft += (self.parent().find('.dropdown-toggle').outerWidth() - self.width());
+                                    var heigth = self.height() + 120;
+                                    if (innerHeight - basetop < heigth)
+                                        top = basetop - (heigth + (selfHeight * 2.7));
+                                    else
+                                        top = selfOffset.top - $(window).scrollTop() + selfHeight;
+
+                                    if (VRLocalizationService.isLocalizationRTL()) {
+                                        baseleft += (self.parent().find('.dropdown-toggle').outerWidth() - self.width());
+                                    }
+
+                                    $scope.$root.$broadcast("hideallselect");
+                                    $(dropDown).css({ position: 'fixed', top: top, left: baseleft, width: self.width() });
                                 }
 
-                                $scope.$root.$broadcast("hideallselect");
-                                $(dropDown).css({ position: 'fixed', top: top, left: baseleft, width: self.width() });
                             });
 
                             $('#' + ctrl.id).parents('div').scroll(function () {
@@ -325,7 +328,7 @@
                                     + '<span class="vanrise-inpute"  style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " > {{ctrl.getLabelText()}} </span>'
                                     + '<span class="caret vr-multiple-caret vanrise-inpute" ></span>'
                                 + '</button>'
-                                + '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuCu-test" style="width : 100%">'
+                                + '<ul class="dropdown-menu" ng-if="!ctrl.isMobile" role="menu" aria-labelledby="dropdownMenuCu-test" style="width : 100%">'
                                     + '<li role="presentation" ng-click="ctrl.muteAction($event);">'
                                         + '<div style="width : 100%"  ng-if="!ctrl.readOnly" > '
                                         + '<div style="display:inline-block;width:calc(100% - 30px );padding: 0px 3px;" >'
