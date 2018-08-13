@@ -12,6 +12,8 @@ namespace TOne.WhS.Invoice.Entities
         public DateTime ToDate { get; set; }
         public decimal AmountAfterCommission { get; set; }
         public decimal AmountAfterCommissionWithTaxes { get; set; }
+        public decimal TotalTrafficAmount { get; set; }
+        public decimal TotalRecurringChargeAmount { get; set; }
         public int NumberOfCalls { get; set; }
         public decimal Duration { get; set; }
         public int CurrencyId { get; set; }

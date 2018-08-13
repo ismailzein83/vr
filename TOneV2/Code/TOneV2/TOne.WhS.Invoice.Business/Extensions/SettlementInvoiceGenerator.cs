@@ -143,6 +143,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
+
+                                        settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
+                                        settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
                                     }
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
                                 }
@@ -232,6 +235,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
+
+                                        settlementInvoiceDetailByCurrency.TotalRecurringChargeAmount = invoiceItemDetails.TotalRecurringChargeAmount;
+                                        settlementInvoiceDetailByCurrency.TotalTrafficAmount = invoiceItemDetails.TotalTrafficAmount;
                                     }
                                     settlementInvoiceCurrency.Add(settlementInvoiceDetailByCurrency);
 

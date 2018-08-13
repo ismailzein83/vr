@@ -282,7 +282,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
                         customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += item.Amount;
                         customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.Amount;
-
+                        customerInvoiceBySaleCurrencyItemDetail.TotalRecurringChargeAmount += item.AmountAfterTaxes;
                     }
                     else
                     {
@@ -296,6 +296,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             Duration = 0,
                             CurrencyId = item.CurrencyId,
                             Amount = item.Amount,
+                            TotalRecurringChargeAmount = item.AmountAfterTaxes,
+                            TotalTrafficAmount = 0  
                         });
 
                     }
@@ -364,6 +366,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 customerInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes += ((customerInvoiceBySaleCurrencyItemDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
                             }
                         }
+                        customerInvoiceBySaleCurrencyItemDetails.TotalTrafficAmount = customerInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
+
+                        
                         customerInvoiceBySaleCurrencies.Add(customerInvoiceBySaleCurrencyItemDetails);
                     }
 

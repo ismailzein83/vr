@@ -30,5 +30,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalAmountWithCommission { get; set; }
         public int NumberOfCalls { get; set; }
         public decimal  TotalDuration { get; set; }
+        public decimal TotalTrafficAmount { get; set; }
+        public decimal TotalRecurringChargeAmount { get; set; }
     }
 }
