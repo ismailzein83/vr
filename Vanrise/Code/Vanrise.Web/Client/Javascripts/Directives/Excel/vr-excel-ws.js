@@ -34,10 +34,11 @@ app.directive('vrExcelWs', ["VR_ExcelConversion_ExcelAPIService", function (VR_E
             for (var i = 0; i < scope.data.Rows.length ; i++) {
                 var row = scope.data.Rows[i];
                 data[i] = row.Cells;
-                if (scope.data.NumberOfColumns > 0)
+                if (scope.data.NumberOfColumns > 0 && row.Cells.length > 0) {
                     for (var j = 0; j < row.Cells.length; j++) {
                         data[i][j] = row.Cells[j].Value;
                     }
+                }                    
                 else
                     for (var j = 0; j < 20 ; j++) {
                         data[i][j] = "";
