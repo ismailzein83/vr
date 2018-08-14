@@ -37,7 +37,7 @@ namespace Vanrise.Invoice.Entities
         public List<string> StagesToProcessNames { get; set; }
         public List<ItemSetNameStorageRule> ItemSetNamesStorageRules { get; set; }
         public List<InvoiceMenualBulkAction> InvoiceMenualBulkActions { get; set; }
-
+        public Guid? InvoiceCommentDefinitionId { get; set; }
     }
     public class InvoiceMenualBulkAction
     {

@@ -98,6 +98,7 @@
     <Compile Include="InvoiceActionSettings\EmailAction\SendEmailAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoicePaidAction.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceReader.cs" />
+    <Compile Include="InvoiceUISubSectionSettings\InvoiceCommentSubSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionController.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceItemSubSection.cs" />
