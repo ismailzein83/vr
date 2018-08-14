@@ -643,5 +643,10 @@
     <Build Include="TOneWhS_BE\Tables\CustomerBillingRecurringCharge.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierBillingRecurringCharge_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CustomerBillingRecurringCharge_Insert.sql" />
+    <Build Include="dbo\Tables\CDRSourceConfig.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfExcludedCountries.sql" />
+    <Build Include="dbo\Stored Procedures\sp_CDRSourceConfig_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_CDRSourceConfig_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\sp_CDRSourceConfig_GetAll.sql" />
   </ItemGroup>
 </Project>
