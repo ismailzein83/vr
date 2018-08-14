@@ -62,11 +62,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
             Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency;
             List<SettlementInvoiceDetailSummary> carrierSummary;
             List<SettlementInvoiceDetailSummary> systemSummary;
+
+            List<SettlementInvoiceDetailSummary> carrierRecurringChargesSummary;
+            List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary;
+
             Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice;
 
-            ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices,availableSupplierInvoices, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice);
+            ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices, availableSupplierInvoices, out carrierRecurringChargesSummary,out systemRecurringChargesSummary, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice);
 
-            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier);
+            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary,carrierRecurringChargesSummary,systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier);
          
 
             ConfigManager configManager = new ConfigManager();
@@ -80,8 +84,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
 
-        private void ProcessItemSetName(IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices, IEnumerable<InvoiceItem> customerInvoiceItems, IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices, IEnumerable<InvoiceItem> supplierInvoiceItems,List<InvoiceAvailableForSettlement> availableCustomerInvoices,List<InvoiceAvailableForSettlement> availableSupplierInvoices, out List<SattlementInvoiceItemDetails> customerInvoiceItemSet, out List<SattlementInvoiceItemDetails> supplierInvoiceItemSet, out  Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, out List<SettlementInvoiceDetailSummary> carrierSummary, out List<SettlementInvoiceDetailSummary> systemSummary, out Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice)
+        private void ProcessItemSetName(IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices, IEnumerable<InvoiceItem> customerInvoiceItems, IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices,
+            IEnumerable<InvoiceItem> supplierInvoiceItems,List<InvoiceAvailableForSettlement> availableCustomerInvoices,List<InvoiceAvailableForSettlement> availableSupplierInvoices, out    List<SettlementInvoiceDetailSummary> carrierRecurringChargesSummary,
+          out  List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary,  out List<SattlementInvoiceItemDetails> customerInvoiceItemSet, out List<SattlementInvoiceItemDetails> supplierInvoiceItemSet, out  Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, out List<SettlementInvoiceDetailSummary> carrierSummary, out List<SettlementInvoiceDetailSummary> systemSummary, out Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice)
         {
+
             customerInvoiceItemSet = null;
             supplierInvoiceItemSet = null;
             settlementInvoiceItemSummaryByCurrency = new Dictionary<int, SettlementInvoiceItemSummaryDetail>();
@@ -140,6 +147,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoiceItemSummaryDetail.DueToSystemAmountAfterCommissionWithTaxes += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoiceItemSummaryDetail.DueToSystemNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
@@ -232,6 +241,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                         settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommission += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierAmountAfterCommissionWithTaxes += invoiceItemDetails.AmountAfterCommissionWithTaxes;
                                         settlementInvoiceItemSummaryDetail.DueToCarrierNumberOfCalls += invoiceItemDetails.NumberOfCalls;
+                                        settlementInvoiceItemSummaryDetail.DueToCarrierAmountRecurringCharges += invoiceItemDetails.TotalRecurringChargeAmount;
+                                        settlementInvoiceItemSummaryDetail.DueToSystemTotalTrafficAmount += invoiceItemDetails.TotalTrafficAmount;
 
                                         settlementInvoiceDetailByCurrency.OriginalAmount = invoiceItemDetails.Amount;
                                         settlementInvoiceDetailByCurrency.OriginalAmountWithCommission = invoiceItemDetails.AmountAfterCommissionWithTaxes;
@@ -276,6 +287,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             systemSummary = null;
             carrierSummary = null;
+            carrierRecurringChargesSummary = null;
+            systemRecurringChargesSummary = null;
+
             if (settlementInvoiceItemSummaryByCurrency != null && settlementInvoiceItemSummaryByCurrency.Count > 0)
             {
                 foreach (var settlementInvoiceItemSummary in settlementInvoiceItemSummaryByCurrency)
@@ -284,7 +298,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     if (sum > 0)
                     {
                         settlementInvoiceItemSummary.Value.DueToCarrierDifference = sum;
-
                         if (carrierSummary == null)
                             carrierSummary = new List<SettlementInvoiceDetailSummary>();
 
@@ -310,6 +323,29 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
                             CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
                             //  OriginalAmountWithCommission = commission.HasValue ? amount + ((amount * commission.Value) / 100) : amount
+                        });
+                    }
+
+                    if (settlementInvoiceItemSummary.Value.DueToCarrierAmountRecurringCharges > 0)
+                    {
+                        if (carrierRecurringChargesSummary == null)
+                            carrierRecurringChargesSummary = new List<SettlementInvoiceDetailSummary>();
+                        carrierRecurringChargesSummary.Add(new SettlementInvoiceDetailSummary
+                        {
+                            Amount = settlementInvoiceItemSummary.Value.DueToCarrierAmountRecurringCharges,
+                            CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
+                            CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
+                        });
+                    }
+                    if (settlementInvoiceItemSummary.Value.DueToSystemAmountRecurringCharges > 0)
+                    {
+                        if (systemRecurringChargesSummary == null)
+                            systemRecurringChargesSummary = new List<SettlementInvoiceDetailSummary>();
+                        systemRecurringChargesSummary.Add(new SettlementInvoiceDetailSummary
+                        {
+                            Amount = settlementInvoiceItemSummary.Value.DueToSystemAmountRecurringCharges,
+                            CurrencyId = settlementInvoiceItemSummary.Value.CurrencyId,
+                            CurrencyIdDescription = settlementInvoiceItemSummary.Value.CurrencyIdDescription,
                         });
                     }
                 }
@@ -485,9 +521,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return new Vanrise.Invoice.Business.InvoiceManager().GetInvoices(invoiceIds);
         }
 
-        private GeneratedInvoice BuildGeneratedInvoice(List<SattlementInvoiceItemDetails> customerInvoiceItemSet, List<SattlementInvoiceItemDetails> supplierInvoiceItemSet, Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, List<SettlementInvoiceDetailSummary> carrierSummary, List<SettlementInvoiceDetailSummary> systemSummary, Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier)
+        private GeneratedInvoice BuildGeneratedInvoice(List<SattlementInvoiceItemDetails> customerInvoiceItemSet, List<SattlementInvoiceItemDetails> supplierInvoiceItemSet,
+            Dictionary<int, SettlementInvoiceItemSummaryDetail> settlementInvoiceItemSummaryByCurrency, List<SettlementInvoiceDetailSummary> carrierSummary, List<SettlementInvoiceDetailSummary> systemSummary,
+            List<SettlementInvoiceDetailSummary> carrierRecurringChargesSummary, List<SettlementInvoiceDetailSummary> systemRecurringChargesSummary,
+            Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice, string partnerType, bool isApplicableToCustomer, bool isApplicableToSupplier)
         {
 
+           
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
 
             var sattlementInvoiceDetails = new SattlementInvoiceDetails
@@ -615,6 +655,42 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 generatedInvoiceItemSet.SetName = "CarrierSummary";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
                 foreach (var summary in carrierSummary)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = summary,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+            }
+            if (carrierRecurringChargesSummary != null && carrierRecurringChargesSummary.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "CarrierRecurringChargesSummary";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                foreach (var summary in carrierRecurringChargesSummary)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = summary,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+            }
+            if (systemRecurringChargesSummary != null && systemRecurringChargesSummary.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "SystemRecurringChargesSummary";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                foreach (var summary in systemRecurringChargesSummary)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
