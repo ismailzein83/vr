@@ -881,6 +881,7 @@
     <None Include="Mediation_Ogero.HuaweiMGCF.PostDeployment.sql" />
     <None Include="Mediation_Ogero.HuaweiEPC.PostDeployment.sql" />
     <None Include="Retail_NetworkRental.PostDeployment.sql" />
+    <None Include="TOneCCT.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
