@@ -111,7 +111,7 @@
     <Compile Include="VRActionAudit\VRObjectTrackingManager.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityManager.cs" />
     <Compile Include="VRBulkActionDraft\VRBulkActionDraftManager.cs" />
-    <Compile Include="VRCommentBEDefinitionSettings.cs" />
+    <Compile Include="VRComment\VRCommentBEDefinitionSettings.cs" />
     <Compile Include="VRComment\VRCommentDefinitionManager.cs" />
     <Compile Include="VRComment\VRCommentManager.cs" />
     <Compile Include="VRConnections\MainImplementations\SQLConnection.cs" />
