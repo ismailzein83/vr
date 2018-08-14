@@ -80,6 +80,7 @@
     <Compile Include="BPInstance.cs" />
     <Compile Include="BPInstanceProgressView.cs" />
     <Compile Include="BPPendingInstanceInfo.cs" />
+    <Compile Include="BPTimeSubscription.cs" />
     <Compile Include="BPTrackingBeforeIdInput.cs" />
     <Compile Include="BPInstanceDetail.cs" />
     <Compile Include="BPInstanceQuery.cs" />

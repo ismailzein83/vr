@@ -184,6 +184,7 @@
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMessageFormatEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMethodEnum.js" />
+    <Content Include="BusinessProcess\Constants\VRWorkflowTimeUnitEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowTrackingMessageSeverityEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
@@ -229,6 +230,7 @@
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-callhttpservice.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-subprocess.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-delay.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-writetrackingmessage.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\CallHttpService\bp-vr-callhttpservice-headers-grid.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\CallHttpService\bp-vr-callhttpservice-urlparameters-grid.js" />
@@ -238,6 +240,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityForEachEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivitySequenceEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowCallHttpServiceTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowDelayTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowIfElseTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowSubProcessTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowWriteTrackingMessageTemplate.html" />

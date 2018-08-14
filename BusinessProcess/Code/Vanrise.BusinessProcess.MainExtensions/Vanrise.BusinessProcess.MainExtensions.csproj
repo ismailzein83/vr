@@ -71,6 +71,7 @@
     <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRWorkflowActivities\CodeGenerationHelper.cs" />
+    <Compile Include="VRWorkflowActivities\VRWorkflowDelayActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSubProcessActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowAssignActivity.cs" />
     <Compile Include="VRWorkflowActivities\DeletedActivities\VRWorkflowAssignExpressionActivity.cs" />

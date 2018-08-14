@@ -1,0 +1,9 @@
+﻿<vr-row>
+    <vr-columns colnum="3">
+        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Delay'" isrequired="true" value="scopeModel.delayTime"></businessprocess-vr-workflow-activity-expressionbuilder>
+    </vr-columns>
+
+    <vr-columns colnum="3">
+        <vr-select on-ready="scopeModel.onTimeUnitSelectorReady" datasource="scopeModel.timeUnitEnums" datavaluefield="value" datatextfield="description"
+                   label="Unit" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedTimeUnit"></vr-columns>
+</vr-row>

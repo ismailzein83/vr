@@ -85,6 +85,7 @@
     <Compile Include="BPDefinitionRuleSetFilter.cs" />
     <Compile Include="BPDefintionArgumentStateManager.cs" />
     <Compile Include="BPDefinitionScheduleTaskFilter.cs" />
+    <Compile Include="BPTimeSubscriptionManager.cs" />
     <Compile Include="BPEventManager.cs" />
     <Compile Include="BPTaskTypeManager.cs" />
     <Compile Include="BPTaskManager.cs" />

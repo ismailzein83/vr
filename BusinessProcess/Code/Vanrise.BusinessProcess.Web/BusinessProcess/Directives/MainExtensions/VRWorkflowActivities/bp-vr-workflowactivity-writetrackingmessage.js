@@ -10,7 +10,7 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 	        },
 	        controller: function ($scope, $element, $attrs) {
 	            var ctrl = this;
-	            var ctor = new workflowAssign(ctrl, $scope, $attrs);
+	            var ctor = new workflowTrackingMessage(ctrl, $scope, $attrs);
 	            ctor.initializeController();
 	        },
 	        controllerAs: 'ctrl',
@@ -21,13 +21,16 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 	        templateUrl: '/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowWriteTrackingMessageTemplate.html'
 	    };
 
-	    function workflowAssign(ctrl, $scope, $attrs) {
+	    function workflowTrackingMessage(ctrl, $scope, $attrs) {
 
 	        this.initializeController = initializeController;
 	        function initializeController() {
 	            $scope.scopeModel = {};
 	            $scope.scopeModel.severityEnums = UtilsService.getArrayEnum(VRWorkflowTrackingMessageSeverityEnum);
-	            defineAPI();
+
+	            $scope.scopeModel.onSeveritySelectorReady = function (api) {
+	                defineAPI();
+	            };
 	        }
 
 	        function defineAPI() {

@@ -52,7 +52,29 @@ namespace Vanrise.BusinessProcess
                     return;
                 AssignPendingInstancesToServices(bpServiceInstances);
                 _bpInstanceDataManager.ArchiveInstances(BPInstanceStatusAttribute.GetClosedStatuses(), DateTime.Today.AddDays(-s_archiveBeforeNbOfDays), s_nbOfInstancesToArchivePerQuery);
+
+                TryTriggerSubscribedBPs();
             });
+        }
+
+        private void TryTriggerSubscribedBPs()
+        {
+            DateTime now = DateTime.Now;
+            BPTimeSubscriptionManager timeSubscriptionManager = new BPTimeSubscriptionManager();
+            BPEventManager eventManager = new BPEventManager();
+
+            IEnumerable<BPTimeSubscription> bpTimeSubscriptions = timeSubscriptionManager.GetBPTimeSubscriptions();
+            if (bpTimeSubscriptions == null || bpTimeSubscriptions.Count() == 0)
+                return;
+
+            foreach (BPTimeSubscription bpTimeSubscription in bpTimeSubscriptions)
+            {
+                if (bpTimeSubscription.DueTime > now)
+                    continue;
+
+                eventManager.TriggerProcessEvent(new TriggerProcessEventInput() { BookmarkName = bpTimeSubscription.Bookmark, ProcessInstanceId = bpTimeSubscription.ProcessInstanceId });
+                timeSubscriptionManager.DeleteBPTimeSubscription(bpTimeSubscription.BPTimeSubscriptionId);
+            }
         }
 
         private List<Runtime.Entities.RuntimeServiceInstance> GetRunningServiceInstances()
@@ -133,7 +155,7 @@ namespace Vanrise.BusinessProcess
                                 startedBPInstances.Add(pendingInstanceInfo);
                             }
                         }
-                    }                    
+                    }
                 }
 
                 Dictionary<Guid, ServiceInstanceBPDefinitionInfo> servicesToAssign = serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount < s_maxWorkflowsPerServiceInstance).ToDictionary(itm => itm.ServiceInstance.ServiceInstanceId, itm => itm);
@@ -145,9 +167,9 @@ namespace Vanrise.BusinessProcess
                     if (servicesToAssign.Count == 0)
                         break;
 
-                      var assignedServiceInstanceInfo = servicesToAssign.GetRecord(pendingInstanceInfo.ServiceInstanceId.Value);
-                      if (assignedServiceInstanceInfo != null)
-                          TryAssignServiceToBPInstance(pendingInstanceInfo, assignedServiceInstanceInfo, servicesToAssign, pendingInstancesToUpdate);                   
+                    var assignedServiceInstanceInfo = servicesToAssign.GetRecord(pendingInstanceInfo.ServiceInstanceId.Value);
+                    if (assignedServiceInstanceInfo != null)
+                        TryAssignServiceToBPInstance(pendingInstanceInfo, assignedServiceInstanceInfo, servicesToAssign, pendingInstancesToUpdate);
                 }
 
                 //handling waiting BPInstances that are persisted
@@ -210,7 +232,7 @@ namespace Vanrise.BusinessProcess
                 //delete BPEvents for BPInstances that are not running
                 if (processInstanceIdsHavingEvents.Count > 0)
                 {
-                    foreach(var processInstanceId in processInstanceIdsHavingEvents)
+                    foreach (var processInstanceId in processInstanceIdsHavingEvents)
                     {
                         BPInstance processInstance;
                         if (!pendingInstancesDict.TryGetValue(processInstanceId, out processInstance) || processInstance.Status == BPInstanceStatus.Suspended || processInstance.Status == BPInstanceStatus.Cancelled)
@@ -252,12 +274,12 @@ namespace Vanrise.BusinessProcess
                             suspend = true;
                             reason = "Parent Process is not running anymore";
                         }
-                        notifyParent = false;                        
+                        notifyParent = false;
                     }
                 }
                 if (shouldStopInstance)
                 {
-                    if(pendingInstanceInfo.ServiceInstanceId.HasValue)
+                    if (pendingInstanceInfo.ServiceInstanceId.HasValue)
                     {
                         instanceCancellationRequests.Add(new BPInstanceCancellationRequestInfo
                         {
