@@ -82,6 +82,7 @@
     <Compile Include="VRWorkflowActivities\VRWorkflowWriteTrackingMessageActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowIfElseActivity.cs" />
     <Compile Include="VRWorkflowActivities\VRWorkflowSequenceActivity.cs" />
+    <Compile Include="VRWorkflowVariableTypes\VRWorkflowCustomClassType.cs" />
     <Compile Include="VRWorkflowVariableTypes\VRWorkflowGenericVariableType.cs" />
   </ItemGroup>
   <ItemGroup>

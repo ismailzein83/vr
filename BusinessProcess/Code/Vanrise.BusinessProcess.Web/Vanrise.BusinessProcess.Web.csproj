@@ -248,6 +248,8 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityCallHttpServiceController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityForEachController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivitySequenceController.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\bp-vr-workflow-customclasstype.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowCustomClassTypeTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-classes-grid.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-containerv2.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowClassesEditor.html" />
