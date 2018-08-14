@@ -237,6 +237,10 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeNodeState_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetFiltered.sql" />
     <Build Include="bp\Tables\BPInstance_Archived.sql" />
+    <Build Include="bp\Tables\BPTimeSubscription.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_Insert.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_GetDue.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
