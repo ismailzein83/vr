@@ -710,6 +710,7 @@
     <Content Include="images\CentralAuth-iconheader.ico" />
     <Content Include="images\CentralAuth-login.png" />
     <Content Include="images\CentralAuth-logoonheader.png" />
+    <Content Include="images\menu-icons\CDR Compare Tool.png" />
     <Content Include="images\Ogero-iconheader.ico" />
     <Content Include="images\Ogero-login.png" />
     <Content Include="images\Ogero-logoonheader.png" />
