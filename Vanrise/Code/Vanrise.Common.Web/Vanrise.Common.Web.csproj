@@ -419,7 +419,9 @@
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
     <Content Include="Common\Directives\VRMail\vr-common-receivedmailmessageconvertor-editor.js" />
     <Content Include="Common\Directives\VRMail\vr-common-pop3messagefilter-selector.js" />
+    <Content Include="Common\Directives\VRNamespace\Templates\VRCustomClassTypeTemplate.html" />
     <Content Include="Common\Directives\VRNamespace\Templates\VRNamespaceGridTemplate.html" />
+    <Content Include="Common\Directives\VRNamespace\vr-common-customclasstype.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespace-grid.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />
