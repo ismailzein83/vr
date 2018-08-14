@@ -2,18 +2,21 @@
 @ProcessInstanceID_IN INT,
 @ZoneName_IN nvarchar(255),
 @CountryID_IN INT,
-@OnlyModified_IN bit
+@OnlyModified_IN bit,
+@IsExcluded_IN bit
 AS
 BEGIN
 	DECLARE @ProcessInstanceId INT,
 	@ZoneName nvarchar(255),
 	@CountryID INT,
-	@OnlyModified bit
+	@OnlyModified bit,
+	@IsExcluded bit
 	
 	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
 	@CountryID = @CountryID_IN,
 	@ZoneName = @ZoneName_IN,
-	@OnlyModified = @OnlyModified_IN
+	@OnlyModified = @OnlyModified_IN,
+	@IsExcluded = @IsExcluded_IN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;	
@@ -21,8 +24,10 @@ BEGIN
 	from	TOneWhS_SPL.SupplierCode_Preview as C  with(nolock)
 			Join TOneWhS_SPL.SupplierZoneRate_Preview as Z  with(nolock) on Z.ProcessInstanceID= C.ProcessInstanceID and C.ZoneName = Z.ZoneName
 	Where	Z.ProcessInstanceID=@ProcessInstanceID
+	        AND Z.IsExcluded=@IsExcluded
 			AND (@ZoneName is null or C.ZoneName = @ZoneName or c.RecentZoneName= @ZoneName) 
 			AND (@OnlyModified = 0 or C.ChangeType != 0)
 			AND (@CountryID is null or Z.CountryID = @CountryID)
+			
 	SET NOCOUNT OFF
 END

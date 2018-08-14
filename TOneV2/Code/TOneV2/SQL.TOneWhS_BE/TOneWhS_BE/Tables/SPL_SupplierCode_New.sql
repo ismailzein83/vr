@@ -5,8 +5,11 @@
     [ZoneID]            BIGINT       NOT NULL,
     [CodeGroupID]       INT          NULL,
     [BED]               DATETIME     NOT NULL,
-    [EED]               DATETIME     NULL
+    [EED]               DATETIME     NULL,
+    [IsExcluded]        BIT          CONSTRAINT [DF_SPL_SupplierCode_New_IsExcluded] DEFAULT ((0)) NOT NULL
 );
+
+
 
 
 

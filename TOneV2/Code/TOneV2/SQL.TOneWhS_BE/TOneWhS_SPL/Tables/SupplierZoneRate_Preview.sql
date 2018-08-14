@@ -17,8 +17,11 @@
     [SystemZoneServiceEED]   DATETIME        NULL,
     [ImportedZoneServiceIds] VARCHAR (MAX)   NULL,
     [ImportedZoneServiceBED] DATETIME        NULL,
-    [ZoneServiceChangeType]  INT             NOT NULL
+    [ZoneServiceChangeType]  INT             NOT NULL,
+    [IsExcluded]             BIT             CONSTRAINT [DF_SupplierZoneRate_Preview_IsExcluded] DEFAULT ((0)) NULL
 );
+
+
 
 
 

@@ -1,16 +1,20 @@
 ﻿CREATE PROCEDURE  [TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetFiltered]
 	@ProcessInstanceID_IN INT,
 	@CountryID_IN INT,
-	@OnlyModified_IN bit
+	@OnlyModified_IN bit,
+	@IsExcluded_IN bit
 AS
 BEGIN
 	DECLARE @ProcessInstanceId INT,
 	@CountryID INT,
-	@OnlyModified bit
+	@OnlyModified bit,
+	@IsExcluded bit
+
 	
 	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
 	@CountryID = @CountryID_IN,
-	@OnlyModified = @OnlyModified_IN
+	@OnlyModified = @OnlyModified_IN,
+	@IsExcluded = @IsExcluded_IN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
@@ -35,9 +39,11 @@ group by sor.ZoneName
 			
 			 	
 	Where	(Z.ProcessInstanceID=@ProcessInstanceID 
+	        AND Z.IsExcluded =@IsExcluded
 			AND c.ProcessInstanceID=@ProcessInstanceID
 			AND (@CountryID is null or Z.CountryID = @CountryID) )
 			AND (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or z.ZoneServiceChangeType != 0 or (cteZoneOtherRate.ZoneName Is Not NULL  and (CountryID is null or Z.CountryID = @CountryID)))
+			
 			
 					
 

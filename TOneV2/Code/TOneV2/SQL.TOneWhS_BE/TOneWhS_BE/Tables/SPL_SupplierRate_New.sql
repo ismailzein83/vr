@@ -7,8 +7,11 @@
     [RateTypeID]        INT             NULL,
     [Change]            TINYINT         NULL,
     [BED]               DATETIME        NOT NULL,
-    [EED]               DATETIME        NULL
+    [EED]               DATETIME        NULL,
+    [IsExcluded]        BIT             CONSTRAINT [DF_SPL_SupplierRate_New_IsExcluded] DEFAULT ((0)) NULL
 );
+
+
 
 
 

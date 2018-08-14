@@ -5,8 +5,11 @@
     [RecentZoneName]    NVARCHAR (255) NULL,
     [ZoneName]          NVARCHAR (255) NOT NULL,
     [BED]               DATETIME       NOT NULL,
-    [EED]               DATETIME       NULL
+    [EED]               DATETIME       NULL,
+    [IsExcluded]        BIT            NOT NULL
 );
+
+
 
 
 

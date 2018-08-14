@@ -1,15 +1,16 @@
 ﻿CREATE PROCEDURE  [TOneWhS_SPL].[sp_SupplierCountry_Preview_GetFiltered]
 	@ProcessInstanceId_IN INT,
-	@OnlyModified_IN bit
+	@OnlyModified_IN bit,
+	@IsExcluded_IN bit
 AS
 BEGIN
 	DECLARE @ProcessInstanceId INT,
-	@OnlyModified bit
+	@OnlyModified bit,
+	@IsExcluded bit
 	
 	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
-	@OnlyModified = @OnlyModified_IN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
+	@OnlyModified = @OnlyModified_IN,@IsExcluded = @IsExcluded_IN
+	
 	SET NOCOUNT ON;
 
 With cteZoneCode AS 
@@ -23,7 +24,7 @@ With cteZoneCode AS
 	 from TOneWhS_SPL.SupplierZoneRate_Preview as Z WITH(NOLOCK) 
 	join TOneWhS_SPL.SupplierCode_Preview as C WITH(NOLOCK)  on Z.ZoneName = C.ZoneName OR Z.ZoneName = C.RecentZoneName
 
-	where (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or z.ZoneServiceChangeType != 0)  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId
+	where (@OnlyModified = 0 or C.ChangeType != 0 or z.RateChangeType != 0 or z.ZoneServiceChangeType != 0)  and  z.ProcessInstanceID=@ProcessInstanceId and c.ProcessInstanceID=@ProcessInstanceId and z.IsExcluded=@IsExcluded and c.IsExcluded=@IsExcluded
 	group by Z.ZoneName
 ),
 
@@ -47,7 +48,7 @@ group by sor.ZoneName
  from TOneWhS_SPL.SupplierZoneRate_Preview as Res WITH(NOLOCK) 
  left Join cteZoneCode  WITH(NOLOCK) on Res.ZoneName = cteZoneCode.ZoneWithCodeChanges
  left Join cteZoneOtherRate  WITH(NOLOCK) on Res.ZoneName = cteZoneOtherRate.ZoneName
- where res.ProcessInstanceID=@ProcessInstanceId and (cteZoneOtherRate.ZoneName IS NOT NULL or cteZoneCode.ZoneWithCodeChanges IS NOT NULL)
+ where res.ProcessInstanceID=@ProcessInstanceId and (cteZoneOtherRate.ZoneName IS NOT NULL or cteZoneCode.ZoneWithCodeChanges IS NOT NULL) and res.IsExcluded = @IsExcluded
  
  group by Res.CountryId	
  
