@@ -66,8 +66,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDefinition in deals)
             {
-                DateTime? dealEED = GetDealEED(dealDefinition.Settings);
-                if (dealDefinition.Settings.BeginDate >= beginDate && dealDefinition.Settings.EndDate < dealEED)
+                if (dealDefinition.Settings.BeginDate >= beginDate && dealDefinition.Settings.RealEED < endDate)
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -25,6 +27,7 @@ namespace TOne.WhS.Deal.Entities
         {
             get { return EEDToStore.HasValue ? EEDToStore.Value.AddDays(1) : EEDToStore; }
         }
+        public abstract DateTime? RealEED { get; }
         public abstract int GetCarrierAccountId();
         public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
         public abstract void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context);

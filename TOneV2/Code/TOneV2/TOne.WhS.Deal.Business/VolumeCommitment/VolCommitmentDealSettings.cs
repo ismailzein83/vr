@@ -24,6 +24,16 @@ namespace TOne.WhS.Deal.Business
 
         public int CurrencyId { get; set; }
 
+        public override DateTime? RealEED
+        {
+            get
+            {
+                if (DeActivationDate.HasValue)
+                    return DeActivationDate < EndDate ? DeActivationDate : EndDate;
+                return EndDate;
+            }
+        }
+
         public override int GetCarrierAccountId()
         {
             return CarrierAccountId;
@@ -123,10 +133,6 @@ namespace TOne.WhS.Deal.Business
             return invalidCountries;
         }
 
-        private DateTime? GetDealEED()
-        {
-            return DeActivationDate < EndDate ? DeActivationDate : EndDate;
-        }
         public override List<long> GetDealSupplierZoneIds()
         {
             if (DealType == VolCommitmentDealType.Sell)
@@ -148,9 +154,7 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
-            DateTime? realEED = GetDealEED();
-
-            if (Status == DealStatus.Draft || (realEED.HasValue && BeginDate == realEED))
+            if (Status == DealStatus.Draft || (RealEED.HasValue && BeginDate == RealEED))
                 return;
 
             switch (DealType)
@@ -162,11 +166,11 @@ namespace TOne.WhS.Deal.Business
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
                         {
                             var zoneIds = volCommitmentDealItem.SaleZones.Select(z => z.ZoneId);
-                            List<DealSupplierZoneGroupZoneItem> supplierZones = Helper.BuildSupplierZones(zoneIds, BeginDate, realEED);
+                            List<DealSupplierZoneGroupZoneItem> supplierZones = Helper.BuildSupplierZones(zoneIds, BeginDate, RealEED);
                             BaseDealSupplierZoneGroup dealSupplierZoneGroup;
 
                             if (context.EvaluateRates)
-                                dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, supplierZones, realEED) };
+                                dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, supplierZones, RealEED) };
                             else
                                 dealSupplierZoneGroup = new DealSupplierZoneGroupWithoutRate { Tiers = BuildSupplierTiersWithoutRate(volCommitmentDealItem.Tiers) };
 
@@ -175,7 +179,7 @@ namespace TOne.WhS.Deal.Business
                             dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                             dealSupplierZoneGroup.Zones = supplierZones;
                             dealSupplierZoneGroup.BED = BeginDate;
-                            dealSupplierZoneGroup.EED = realEED;
+                            dealSupplierZoneGroup.EED = RealEED;
 
                             dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
                         }
@@ -190,11 +194,11 @@ namespace TOne.WhS.Deal.Business
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
                         {
                             var zoneIds = volCommitmentDealItem.SaleZones.Select(z => z.ZoneId);
-                            List<DealSaleZoneGroupZoneItem> saleZones = Helper.BuildSaleZones(zoneIds, BeginDate, realEED);
+                            List<DealSaleZoneGroupZoneItem> saleZones = Helper.BuildSaleZones(zoneIds, BeginDate, RealEED);
                             BaseDealSaleZoneGroup dealSaleZoneGroup;
 
                             if (context.EvaluateRates)
-                                dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, saleZones, realEED) };
+                                dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, saleZones, RealEED) };
                             else
                                 dealSaleZoneGroup = new DealSaleZoneGroupWithoutRate { Tiers = BuildSaleTiersWithoutRate(volCommitmentDealItem.Tiers) };
 
@@ -203,7 +207,7 @@ namespace TOne.WhS.Deal.Business
                             dealSaleZoneGroup.CustomerId = CarrierAccountId;
                             dealSaleZoneGroup.Zones = saleZones;
                             dealSaleZoneGroup.BED = BeginDate;
-                            dealSaleZoneGroup.EED = realEED;
+                            dealSaleZoneGroup.EED = RealEED;
 
                             dealSaleZoneGroups.Add(dealSaleZoneGroup);
                         }

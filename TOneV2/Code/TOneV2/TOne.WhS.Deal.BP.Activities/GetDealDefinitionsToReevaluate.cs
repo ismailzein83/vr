@@ -1,13 +1,10 @@
 ﻿using System;
+using Vanrise.Common;
 using System.Activities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
-using Vanrise.Common;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -55,10 +52,10 @@ namespace TOne.WhS.Deal.BP.Activities
                     var dealDefinition = cachedDealKvp.Value;
                     int dealId = cachedDealKvp.Key;
 
-                    if (dealDefinition.Settings.BeginDate == dealDefinition.Settings.EndDate)
+                    if (dealDefinition.Settings.BeginDate == dealDefinition.Settings.RealEED)
                         continue;
 
-                    if (dealDefinition.Settings.EndDate.VRGreaterThan(dealEffectiveAfter))
+                    if (dealDefinition.Settings.RealEED.VRGreaterThan(dealEffectiveAfter))
                     {
                         dealDefinitionsToReevaluate.Add(dealDefinition);
                         dealIdsToReevaluate.Add(dealId);

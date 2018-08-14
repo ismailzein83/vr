@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using System.ComponentModel;
+using TOne.WhS.Deal.Entities;
 using Vanrise.Common.Business;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -56,11 +55,19 @@ namespace TOne.WhS.Deal.Business
 
         public int CurrencyId { get; set; }
 
-        private DateTime? DealEEDWithGracePeriod
-        {
-            get { return EndDate.HasValue ? EndDate.Value.AddDays(GracePeriod) : EndDate; }
-        }
         #region Public Methods
+
+        public override DateTime? RealEED
+        {
+            get
+            {
+                DateTime? DealEEDWithGracePeriod = EndDate.HasValue ? EndDate.Value.AddDays(GracePeriod) : EndDate;
+                DateTime? EED = DealEEDWithGracePeriod;
+                if (Status == DealStatus.Inactive)
+                    EED = DeActivationDate;
+                return EED < DealEEDWithGracePeriod ? EED : DealEEDWithGracePeriod;
+            }
+        }
 
         public override int GetCarrierAccountId()
         {
@@ -107,14 +114,7 @@ namespace TOne.WhS.Deal.Business
                         validateBeforeSaveContext.ValidateMessages.Add("Cannot change Carrier");
                         validationResult = false;
                     }
-
-                    //if (DealType == DealType.Commitment)
-                    //{
-                    //    validateBeforeSaveContext.ValidateMessages.Add("You Cannot update a deal of type commitment");
-                    //    validationResult = false;
-                    //}
                 }
-
             }
             var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
             var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
@@ -156,24 +156,22 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
-            DateTime? realEED = GetRealEED();
-
-            if (Status == DealStatus.Draft || (realEED.HasValue && BeginDate == realEED))
+            if (Status == DealStatus.Draft || (RealEED.HasValue && BeginDate == RealEED))
                 return;
 
             switch (context.DealZoneGroupPart)
             {
                 case DealZoneGroupPart.Both:
-                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates, realEED);
-                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates, realEED);
+                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates);
+                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates);
                     break;
 
                 case DealZoneGroupPart.Sale:
-                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates, realEED);
+                    context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId, context.EvaluateRates);
                     break;
 
                 case DealZoneGroupPart.Cost:
-                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates, realEED);
+                    context.SupplierZoneGroups = BuildSupplierZoneGroups(context.DealId, context.EvaluateRates);
                     break;
 
                 default: throw new NotSupportedException(string.Format("DealZoneGroupPart {0} not supported.", context.DealZoneGroupPart));
@@ -351,14 +349,6 @@ namespace TOne.WhS.Deal.Business
 
             }
         }
-
-        private DateTime? GetRealEED()
-        {
-            DateTime? EED = EndDate;
-            if (Status == DealStatus.Inactive)
-                EED = DeActivationDate;
-            return EED < DealEEDWithGracePeriod ? EED : DealEEDWithGracePeriod;
-        }
         private List<int> ValidateSwapDealCountries(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             List<int> invalidCountries = new List<int>();
@@ -379,7 +369,7 @@ namespace TOne.WhS.Deal.Business
             }
             return invalidCountries;
         }
-        private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates, DateTime? dealEED)
+        private List<BaseDealSaleZoneGroup> BuildSaleZoneGroups(int dealId, bool evaluateRates)
         {
             if (Inbounds == null || Inbounds.Count == 0)
                 return null;
@@ -387,7 +377,7 @@ namespace TOne.WhS.Deal.Business
             List<BaseDealSaleZoneGroup> saleZoneGroups = new List<BaseDealSaleZoneGroup>();
             foreach (SwapDealInbound swapDealInbound in Inbounds)
             {
-                List<DealSaleZoneGroupZoneItem> zones = Helper.BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId), BeginDate, dealEED);
+                List<DealSaleZoneGroupZoneItem> zones = Helper.BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId), BeginDate, RealEED);
 
                 BaseDealSaleZoneGroup dealSaleZoneGroup;
                 if (evaluateRates)
@@ -400,7 +390,7 @@ namespace TOne.WhS.Deal.Business
                 dealSaleZoneGroup.CustomerId = CarrierAccountId;
                 dealSaleZoneGroup.Zones = zones;
                 dealSaleZoneGroup.BED = BeginDate;
-                dealSaleZoneGroup.EED = dealEED;
+                dealSaleZoneGroup.EED = RealEED;
 
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
@@ -468,7 +458,7 @@ namespace TOne.WhS.Deal.Business
             }
             return dealeRateByZoneId;
         }
-        private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates, DateTime? dealEED)
+        private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates)
         {
             if (Outbounds == null || Outbounds.Count == 0)
                 return null;
@@ -476,7 +466,7 @@ namespace TOne.WhS.Deal.Business
             var dealSupplierZoneGroups = new List<BaseDealSupplierZoneGroup>();
             foreach (SwapDealOutbound swapDealOutbound in Outbounds)
             {
-                List<DealSupplierZoneGroupZoneItem> zones = Helper.BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId), BeginDate, dealEED);
+                List<DealSupplierZoneGroupZoneItem> zones = Helper.BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId), BeginDate, RealEED);
                 BaseDealSupplierZoneGroup dealSupplierZoneGroup;
                 if (evaluateRates)
                     dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(swapDealOutbound, zones) };
@@ -488,7 +478,7 @@ namespace TOne.WhS.Deal.Business
                 dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                 dealSupplierZoneGroup.Zones = zones;
                 dealSupplierZoneGroup.BED = BeginDate;
-                dealSupplierZoneGroup.EED = dealEED;
+                dealSupplierZoneGroup.EED = RealEED;
 
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }

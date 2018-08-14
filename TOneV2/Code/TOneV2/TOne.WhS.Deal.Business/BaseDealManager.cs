@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
-using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.Data;
 using Vanrise.Caching;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
+using TOne.WhS.Deal.Data;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common.Business;
+using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
-using System.Collections;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -137,7 +135,7 @@ namespace TOne.WhS.Deal.Business
             if (deals == null || !deals.Any())
                 return null;
 
-            List<DealDefinition> effectiveDeals = deals.Where(item => item.Settings.EndDate != item.Settings.BeginDate && item.Settings.EndDate.VRGreaterThan(effectiveAfter)).ToList();
+            List<DealDefinition> effectiveDeals = deals.Where(item => item.Settings.RealEED != item.Settings.BeginDate && item.Settings.RealEED.VRGreaterThan(effectiveAfter)).ToList();
             if (effectiveDeals == null || effectiveDeals.Count == 0)
                 return null;
 
