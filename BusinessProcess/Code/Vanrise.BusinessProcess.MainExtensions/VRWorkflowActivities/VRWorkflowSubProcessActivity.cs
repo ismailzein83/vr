@@ -66,15 +66,15 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 {
                     foreach (var inArgument in this.InArguments)
                     {
-                        bool isInOutArgument = OutArguments.GetRecord(inArgument.Key) != null;
+                        bool isInOutArgument = this.OutArguments != null && this.OutArguments.GetRecord(inArgument.Key) != null;
                         VRWorkflowArgument matchingArgument = workflowArguments.GetRecord(inArgument.Key);
                         String matchingArgumentRuntimeType = CSharpCompiler.TypeToString(matchingArgument.Type.GetRuntimeType(null));
 
                         if (!isInOutArgument)
                             propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop {2} get {2} return {1}; {3} set{2}{3}{3}", matchingArgumentRuntimeType, inArgument.Value, "{", "}"));
-                        else
+                        else // OutArguments is not null
                         {
-                            string outArgumentValue = OutArguments.GetRecord(inArgument.Key);
+                            string outArgumentValue = this.OutArguments.GetRecord(inArgument.Key);
                             propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop {2} get {2} return {1}; {3} set{2} {1} = value;{3}{3}", matchingArgumentRuntimeType, inArgument.Value, "{", "}"));
                         }
 
@@ -82,10 +82,13 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                             inArgument.Key, !isInOutArgument ? "InArgument" : "InOutArgument", matchingArgumentRuntimeType, nmSpaceName, className, inArgument.Value));
 
                     }
+                }
 
+                if (this.OutArguments != null && this.OutArguments.Any())
+                {
                     foreach (var outArgument in this.OutArguments)
                     {
-                        bool isInOutArgument = InArguments.GetRecord(outArgument.Key) != null;
+                        bool isInOutArgument = this.InArguments != null && this.InArguments.GetRecord(outArgument.Key) != null;
                         if (isInOutArgument)
                             continue;
 
