@@ -85,7 +85,8 @@
     <add key="VR_AccountBalance_TransactionDBConnStringKey"     value="ConfigurationDBConnString"/>
     <add key="WhS_AccountBalance_AccountBalanceDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="WhS_Invoice_InvoiceDBConnStringKey"               value="ConfigurationDBConnString"/>
-
+    <add key="CDRComparisonDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    
     <add key="TOneWhS_Routing_DBConnStringKey"                  value="RoutingDBConnStringTemplateKey"/>
     <add key="TOneWhS_CDR_DBConnStringKey"                      value="TOneCDRDBConnString"/>
     <add key="TOneWhS_Analytics_DBConnStringKey"                value="TOneAnalyticsDBConnString"/>
