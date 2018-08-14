@@ -184,7 +184,6 @@
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMessageFormatEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMethodEnum.js" />
-    <Content Include="BusinessProcess\Constants\VRWorkflowTimeUnitEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowTrackingMessageSeverityEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowArgumentDirectionEnum.js" />
     <Content Include="BusinessProcess\Directives\BPBusinessRuleAction\bp-business-rule-actions-selective.js" />
@@ -365,7 +364,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>65008</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

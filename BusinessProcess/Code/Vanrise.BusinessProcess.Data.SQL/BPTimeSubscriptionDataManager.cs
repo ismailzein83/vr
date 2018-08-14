@@ -14,9 +14,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         }
 
-        public IEnumerable<BPTimeSubscription> GetBPTimeSubscriptions()
+        public IEnumerable<BPTimeSubscription> GetDueBPTimeSubscriptions()
         {
-            return GetItemsSP("[bp].[sp_BPTimeSubscription_GetAll]", BPTimeSubscriptionMapper);
+            return GetItemsSP("[bp].[sp_BPTimeSubscription_GetDue]", BPTimeSubscriptionMapper);
         }
 
         public bool DeleteBPTimeSubscription(long bpTimeSubscriptionId)
@@ -24,9 +24,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return ExecuteNonQuerySP("bp.sp_BPTimeSubscription_Delete", bpTimeSubscriptionId) > 0;
         }
 
-        public int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, DateTime dueTime)
+        public int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay)
         {
-            return ExecuteNonQuerySP("bp.sp_BPTimeSubscription_Insert", processInstanceId, bookmarkName, dueTime);
+            return ExecuteNonQuerySP("bp.sp_BPTimeSubscription_Insert", processInstanceId, bookmarkName, delay.TotalSeconds);
         }
 
         #region Private Methods

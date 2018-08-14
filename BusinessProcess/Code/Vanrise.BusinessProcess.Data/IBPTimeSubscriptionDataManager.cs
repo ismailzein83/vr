@@ -6,10 +6,10 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPTimeSubscriptionDataManager : IDataManager
     {
-        IEnumerable<BPTimeSubscription> GetBPTimeSubscriptions();
+        IEnumerable<BPTimeSubscription> GetDueBPTimeSubscriptions();
 
         bool DeleteBPTimeSubscription(long bpTimeSubscriptionId);
 
-        int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, DateTime dueTime);
+        int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay);
     }
 }

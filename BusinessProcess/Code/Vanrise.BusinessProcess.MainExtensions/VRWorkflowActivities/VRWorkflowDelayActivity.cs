@@ -12,9 +12,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Title { get { return "Delay"; } }
 
-        public int DelayTime { get; set; }
-
-        public VRWorkflowTimeUnit TimeUnit { get; set; }
+        public string Delay { get; set; }
 
         protected override string InternalGenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
@@ -51,15 +49,16 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         public void Execute()
                         {
+
                             long processInstanceId = _activityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                            DateTime dueTime = DateTime.Now.AddSeconds(Vanrise.Common.Utilities.GetEnumAttribute<Vanrise.BusinessProcess.Entities.VRWorkflowTimeUnit, Vanrise.BusinessProcess.Entities.VRWorkflowTimeUnitAttribute>(Vanrise.BusinessProcess.Entities.VRWorkflowTimeUnit.#TimeUnit#).TimeInSeconds * #DelayTime#);
-                            new Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager().InsertBPTimeSubscription(processInstanceId, GetWFBookmark(processInstanceId), dueTime);
-                            _activityContext.CreateBookmark(GetWFBookmark(processInstanceId));
+                            string bookmarkName = GetWFBookmark(processInstanceId);
+                            new Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager().InsertBPTimeSubscription(processInstanceId, bookmarkName, #DELAY#);
+                            _activityContext.CreateBookmark(bookmarkName);
                         }
 
                         string GetWFBookmark(long processInstanceId)
                         {
-                            return string.Format(""Delay_{0}"", processInstanceId);
+                            return string.Format(""Delay_{0}_{1}"", processInstanceId, Guid.NewGuid());
                         }
                     }
                 }");
@@ -68,9 +67,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             string baseExecutionContextClassCode = CodeGenerationHelper.GenerateBaseExecutionClass(context, baseExecutionContextClassName);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSCODE#", baseExecutionContextClassCode);
             nmSpaceCodeBuilder.Replace("#BASEEXECUTIONCLASSNAME#", baseExecutionContextClassName);
-
-            nmSpaceCodeBuilder.Replace("#TimeUnit#", this.TimeUnit.ToString());
-            nmSpaceCodeBuilder.Replace("#DelayTime#", this.DelayTime.ToString());
+            
+            nmSpaceCodeBuilder.Replace("#DELAY#", this.Delay);
 
             string codeNamespace = context.GenerateUniqueNamespace("DelayActivity");
             string className = "DelayActivity";

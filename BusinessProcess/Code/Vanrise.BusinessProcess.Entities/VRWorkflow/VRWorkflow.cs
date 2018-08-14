@@ -56,22 +56,22 @@ namespace Vanrise.BusinessProcess.Entities
         public string VRWorkflowVariableTypeDescription { get; set; }
     }
 
-    public enum VRWorkflowTimeUnit
-    {
-        [VRWorkflowTimeUnit(1)]
-        Seconds = 0,
-        [VRWorkflowTimeUnit(60)]
-        Minutes = 1,
-        [VRWorkflowTimeUnit(3600)]
-        Hours = 2
-    }
+    //public enum VRWorkflowTimeUnit
+    //{
+    //    [VRWorkflowTimeUnit(1)]
+    //    Seconds = 0,
+    //    [VRWorkflowTimeUnit(60)]
+    //    Minutes = 1,
+    //    [VRWorkflowTimeUnit(3600)]
+    //    Hours = 2
+    //}
 
-    public class VRWorkflowTimeUnitAttribute : Attribute
-    {
-        public int TimeInSeconds { get; set; }
-        public VRWorkflowTimeUnitAttribute(int timeInSeconds)
-        {
-            TimeInSeconds = timeInSeconds;
-        }
-    }
+    //public class VRWorkflowTimeUnitAttribute : Attribute
+    //{
+    //    public int TimeInSeconds { get; set; }
+    //    public VRWorkflowTimeUnitAttribute(int timeInSeconds)
+    //    {
+    //        TimeInSeconds = timeInSeconds;
+    //    }
+    //}
 }

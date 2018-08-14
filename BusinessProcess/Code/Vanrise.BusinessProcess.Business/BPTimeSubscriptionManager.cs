@@ -7,10 +7,10 @@ namespace Vanrise.BusinessProcess.Business
 {
     public class BPTimeSubscriptionManager
     {
-        public IEnumerable<BPTimeSubscription> GetBPTimeSubscriptions()
+        public IEnumerable<BPTimeSubscription> GetDueBPTimeSubscriptions()
         {
             IBPTimeSubscriptionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTimeSubscriptionDataManager>();
-            return dataManager.GetBPTimeSubscriptions();
+            return dataManager.GetDueBPTimeSubscriptions();
         }
 
         public bool DeleteBPTimeSubscription(long bpTimeSubscriptionId)
@@ -19,10 +19,10 @@ namespace Vanrise.BusinessProcess.Business
             return dataManager.DeleteBPTimeSubscription(bpTimeSubscriptionId);
         }
 
-        public int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, DateTime dueDate)
+        public int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay)
         {
             IBPTimeSubscriptionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTimeSubscriptionDataManager>();
-            return dataManager.InsertBPTimeSubscription(processInstanceId, bookmarkName, dueDate);
+            return dataManager.InsertBPTimeSubscription(processInstanceId, bookmarkName, delay);
         }
     }
 }

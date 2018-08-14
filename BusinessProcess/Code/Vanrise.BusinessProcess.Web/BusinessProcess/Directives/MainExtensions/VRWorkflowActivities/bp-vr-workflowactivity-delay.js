@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUtilsService', 'VRWorkflowTimeUnitEnum',
-	function (UtilsService, VRUIUtilsService, VRWorkflowTimeUnitEnum) {
+app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
 	    var directiveDefinitionObject = {
 	        restrict: 'E',
@@ -26,39 +26,28 @@ app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUt
 	        this.initializeController = initializeController;
 	        function initializeController() {
 	            $scope.scopeModel = {};
-	            $scope.scopeModel.timeUnitEnums = UtilsService.getArrayEnum(VRWorkflowTimeUnitEnum);
 
-	            $scope.scopeModel.onTimeUnitSelectorReady = function (api) {
-	                defineAPI();
-	            };
+	            defineAPI();
 	        }
 
 	        function defineAPI() {
 	            var api = {};
 
 	            api.load = function (payload) {
-	                var selectedTimeUnit;
 	                if (payload != undefined) {
 	                    if (payload.Settings != undefined) {
-	                        $scope.scopeModel.delayTime = payload.Settings.DelayTime;
-	                        selectedTimeUnit = payload.Settings.TimeUnit;
+	                        $scope.scopeModel.delay = payload.Settings.Delay;
 	                    }
 
 	                    if (payload.Context != null)
 	                        $scope.scopeModel.context = payload.Context;
 	                }
-
-	                if (selectedTimeUnit != undefined)
-	                    $scope.scopeModel.selectedTimeUnit = UtilsService.getItemByVal($scope.scopeModel.timeUnitEnums, selectedTimeUnit, "value");
-	                else
-	                    $scope.scopeModel.selectedTimeUnit = $scope.scopeModel.timeUnitEnums[0];
 	            };
 
 	            api.getData = function () {
 	                return {
 	                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowDelayActivity, Vanrise.BusinessProcess.MainExtensions",
-	                    DelayTime: $scope.scopeModel.delayTime,
-	                    TimeUnit: $scope.scopeModel.selectedTimeUnit.value
+	                    Delay: $scope.scopeModel.delay,
 	                };
 	            };
 

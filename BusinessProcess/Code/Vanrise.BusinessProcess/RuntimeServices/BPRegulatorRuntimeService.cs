@@ -59,19 +59,15 @@ namespace Vanrise.BusinessProcess
 
         private void TryTriggerSubscribedBPs()
         {
-            DateTime now = DateTime.Now;
             BPTimeSubscriptionManager timeSubscriptionManager = new BPTimeSubscriptionManager();
             BPEventManager eventManager = new BPEventManager();
 
-            IEnumerable<BPTimeSubscription> bpTimeSubscriptions = timeSubscriptionManager.GetBPTimeSubscriptions();
+            IEnumerable<BPTimeSubscription> bpTimeSubscriptions = timeSubscriptionManager.GetDueBPTimeSubscriptions();
             if (bpTimeSubscriptions == null || bpTimeSubscriptions.Count() == 0)
                 return;
 
             foreach (BPTimeSubscription bpTimeSubscription in bpTimeSubscriptions)
             {
-                if (bpTimeSubscription.DueTime > now)
-                    continue;
-
                 eventManager.TriggerProcessEvent(new TriggerProcessEventInput() { BookmarkName = bpTimeSubscription.Bookmark, ProcessInstanceId = bpTimeSubscription.ProcessInstanceId });
                 timeSubscriptionManager.DeleteBPTimeSubscription(bpTimeSubscription.BPTimeSubscriptionId);
             }
