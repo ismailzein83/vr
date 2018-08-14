@@ -86,6 +86,7 @@
     <add key="TOneWhS_TS_DBConnStringKey"                       value="ConfigurationDBConnString"/>
     <add key="StatisticManagementDBConnStringKey"               value="ConfigurationDBConnString"/>
     <add key="TOneWhS_BE_DBConnStringKey"                       value="ConfigurationDBConnString"/>
+    <add key="CDRComparisonDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
     <add key="TOneWhS_CDR_DBConnStringKey"                      value="TOneCDRDBConnString"/>
     <add key="TOneWhS_Routing_DBConnStringKey"                  value="RoutingDBConnStringTemplateKey"/>
