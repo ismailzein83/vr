@@ -2,31 +2,27 @@
 using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Common.Business
 {
     public class SQLConnection : VRConnectionSettings
     {
-        public override Guid ConfigId { get { return new Guid("8224B27C-C128-4150-A4E4-5E2034BB3A36"); } }
-        
-        public string ConnectionString { get; set; }
+        public override Guid ConfigId { get { return s_ConfigId; } }
 
-        
+        public static Guid s_ConfigId = new Guid("8224B27C-C128-4150-A4E4-5E2034BB3A36");
+
+        public string ConnectionString { get; set; }
     }
 
     public class SQLConnectionFilter : IVRConnectionFilter
     {
-        public Guid ConfigId { get { return new Guid("8224B27C-C128-4150-A4E4-5E2034BB3A36"); } }
-
         public bool IsMatched(VRConnection vrConnection)
         {
-            if (vrConnection == null)
-                throw new NullReferenceException("connection");
+            vrConnection.ThrowIfNull("vrConnection");
+            vrConnection.Settings.ThrowIfNull("vrConnection.Settings", vrConnection.VRConnectionId);
 
-            if (vrConnection.Settings == null)
-                throw new NullReferenceException("vrConnection.Settings");
-
-            if (vrConnection.Settings.ConfigId != ConfigId)
+            if (vrConnection.Settings.ConfigId != SQLConnection.s_ConfigId)
                 return false;
 
             return true;
