@@ -1,4 +1,4 @@
-﻿<!--<vr-columns>
+﻿<vr-columns>
 	<vr-button type="Add" data-onclick="scopeModel.addRow" standalone></vr-button>
 </vr-columns>
 <br />
@@ -10,12 +10,12 @@
 					 maxheight="400px"
 					 ondeleterow="scopeModel.deleteRow">
 			<vr-datagridcolumn headertext="'Name'">
-				<vr-textbox value="dataItem.Name" isrequired="true"></vr-textbox>
+				<vr-textbox value="dataItem.Entity.Name" isrequired="true"></vr-textbox>
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn headertext="'Value'" disablesorting>
-				<vr-textbox value="dataItem.Value" isrequired="true"></vr-textbox>
+				<vr-textbox value="dataItem.Entity.Value" isrequired="true"></vr-textbox>
 			</vr-datagridcolumn>
 		</vr-datagrid>
 	</vr-validator>
-</vr-columns>-->
+</vr-columns>

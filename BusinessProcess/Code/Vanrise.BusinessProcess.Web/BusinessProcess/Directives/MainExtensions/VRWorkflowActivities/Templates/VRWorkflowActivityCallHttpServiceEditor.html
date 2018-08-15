@@ -1,4 +1,4 @@
-﻿<!--<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityCallHttpServiceController" size="medium">
+﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityCallHttpServiceController" size="medium">
 	<vr-modalbody>
 		<vr-form name="formEditActivity" vr-loader="scopeModel.isLoading">
 			<vr-tabs>
@@ -25,13 +25,13 @@
 
 					<vr-row>
 						<vr-columns width="1/2row">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Body Logic'" isrequired="true" value="scopeModel.buildBodyLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
+							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Body Logic'" value="scopeModel.buildBodyLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
 						</vr-columns>
 						<vr-columns colnum="4">
 							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Is Succeeded'" isrequired="true" value="scopeModel.isSucceeded"></businessprocess-vr-workflow-activity-expressionbuilder>
 						</vr-columns>
 						<vr-columns colnum="2">
-							<vr-switch value="scopeModel.context.continueWorkflowIfCallFailed" label="Continue If Call Failed"></vr-switch>
+							<vr-switch value="scopeModel.continueWorkflowIfCallFailed" label="Continue If Call Failed"></vr-switch>
 						</vr-columns>
 					</vr-row>
 
@@ -63,4 +63,4 @@
 			</div>
 		</vr-actionbar>
 	</div>
-</div>-->
+</div>

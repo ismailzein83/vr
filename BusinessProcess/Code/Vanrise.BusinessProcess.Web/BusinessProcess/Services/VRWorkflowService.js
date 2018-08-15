@@ -64,7 +64,7 @@
 
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Arguments/Templates/VRWorkflowArgumentEditor.html', parameters, settings);
 		}
-		
+
 		function addVRWorkflowVariable(onVRWorkflowVariableAdded, isVariableNameReserved) {
 
 			var modalSettings = {};
@@ -94,30 +94,30 @@
 
 		function addVRWorkflowClass(onVRWorkflowClassAdded, vrWorkflowClassNamespaces) {
 
-		    var modalSettings = {};
-		    modalSettings.onScopeReady = function (modalScope) {
-		        modalScope.onVRWorkflowClassAdded = onVRWorkflowClassAdded;
-		    };
+			var modalSettings = {};
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onVRWorkflowClassAdded = onVRWorkflowClassAdded;
+			};
 
-		    var modalParameters = {
-		        vrWorkflowClassNamespaces: vrWorkflowClassNamespaces
-		    };
+			var modalParameters = {
+				vrWorkflowClassNamespaces: vrWorkflowClassNamespaces
+			};
 
-		    VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowClassesEditor.html', modalParameters, modalSettings);
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowClassesEditor.html', modalParameters, modalSettings);
 		}
 		function editVRWorkflowClass(onVRWorkflowClassUpdated, vrWorkflowClassEntity, vrWorkflowClassNamespaces) {
 
-		    var settings = {};
-		    settings.onScopeReady = function (modalScope) {
-		        modalScope.onVRWorkflowClassUpdated = onVRWorkflowClassUpdated;
-		    };
+			var settings = {};
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onVRWorkflowClassUpdated = onVRWorkflowClassUpdated;
+			};
 
-		    var parameters = {
-		        vrWorkflowClassEntity: vrWorkflowClassEntity,
-		        vrWorkflowClassNamespaces: vrWorkflowClassNamespaces
-		    };
+			var parameters = {
+				vrWorkflowClassEntity: vrWorkflowClassEntity,
+				vrWorkflowClassNamespaces: vrWorkflowClassNamespaces
+			};
 
-		    VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowClassesEditor.html', parameters, settings);
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/VRWorkflow/Templates/VRWorkflowClassesEditor.html', parameters, settings);
 		}
 
 		function registerObjectTrackingDrillDownToVRWorkflow() {
@@ -182,7 +182,7 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Views/VRWorkflow/ActivityVariablesEditor.html', parameter, modalSettings);
 		}
 
-		function openForeachEditor(dragdropsetting, foreachObj, getChildContext, context, onActivityUpdated, remove) {
+		function openForeachEditor(dragdropsetting, foreachObj, getChildContext, context, onActivityUpdated, remove, isNew) {
 			var modalSettings = {};
 
 			modalSettings.onScopeReady = function (modalScope) {
@@ -193,9 +193,39 @@
 				dragdropsetting: dragdropsetting,
 				getChildContext: getChildContext,
 				context: context,
-				foreachObj: foreachObj
+				foreachObj: foreachObj,
+				isNew: isNew
 			};
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityForEachEditor.html', parameter, modalSettings);
+		}
+
+		function openCallHttpServiceEditor(obj, context, onActivityUpdated, remove, isNew) {
+			var modalSettings = {};
+
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onActivityUpdated = onActivityUpdated;
+				modalScope.remove = remove;
+			};
+			var parameter = {
+				obj: obj,
+				context: context,
+				isNew: isNew
+			};
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityCallHttpServiceEditor.html', parameter, modalSettings);
+		}
+
+		function openSubProcessEditor(obj, onActivityUpdated, remove, isNew) {
+			var modalSettings = {};
+
+			modalSettings.onScopeReady = function (modalScope) {
+				modalScope.onActivityUpdated = onActivityUpdated;
+				modalScope.remove = remove;
+			};
+			var parameter = {
+				obj: obj,
+				isNew: isNew
+			};
+			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivitySubprocessEditor.html', parameter, modalSettings);
 		}
 
 		function openSequenceEditor(dragdropsetting, context, settings, onActivityUpdated) {
@@ -210,20 +240,6 @@
 				settings: settings
 			};
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivitySequenceEditor.html', parameter, modalSettings);
-		}
-
-		function openCallHttpServiceEditor(obj, context, onActivityUpdated, remove) {
-			var modalSettings = {};
-
-			modalSettings.onScopeReady = function (modalScope) {
-				modalScope.onActivityUpdated = onActivityUpdated;
-				modalScope.remove = remove;
-			};
-			var parameter = {
-				obj: obj,
-				context: context
-			};
-			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityCallHttpServiceEditor.html', parameter, modalSettings);
 		}
 
 		function tryCompilationResult(errorMessages, workflowObj) {
@@ -246,7 +262,7 @@
 			addVRWorkflowVariable: addVRWorkflowVariable,
 			editVRWorkflowVariable: editVRWorkflowVariable,
 			addVRWorkflowClass: addVRWorkflowClass,
-			editVRWorkflowClass:editVRWorkflowClass,
+			editVRWorkflowClass: editVRWorkflowClass,
 			registerObjectTrackingDrillDownToVRWorkflow: registerObjectTrackingDrillDownToVRWorkflow,
 			getDrillDownDefinition: getDrillDownDefinition,
 			openExpressionBuilder: openExpressionBuilder,
@@ -254,7 +270,8 @@
 			tryCompilationResult: tryCompilationResult,
 			openForeachEditor: openForeachEditor,
 			openSequenceEditor: openSequenceEditor,
-			openCallHttpServiceEditor: openCallHttpServiceEditor
+			openCallHttpServiceEditor: openCallHttpServiceEditor,
+			openSubProcessEditor: openSubProcessEditor
 		});
 	}
 
