@@ -60,7 +60,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             { 
                 showaddbutton =' showaddbutton="true" '
             }
-                    console.log(attrs.selectionmode);
             if (attrs.selectionmode == "dynamic") {
                 return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
