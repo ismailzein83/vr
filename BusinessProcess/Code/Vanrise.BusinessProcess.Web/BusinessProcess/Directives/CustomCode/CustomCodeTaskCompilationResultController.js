@@ -12,7 +12,7 @@ function CustomCodeTaskCompilationResultController($scope, VRNavigationService, 
             $scope.dataSrouce = [];
             for (var i = 0; i < parameters.errorMessages.length; i++)
             {
-                $scope.dataSrouce.push({ Error: parameters.errorMessages[i] })
+				$scope.dataSrouce.push({ Error: parameters.errorMessages[i] });
             }
         }
     }
@@ -20,7 +20,7 @@ function CustomCodeTaskCompilationResultController($scope, VRNavigationService, 
     function defineScope() {
 
         $scope.close = function () {
-            $scope.modalContext.closeModal()
+			$scope.modalContext.closeModal();
         };
       
         $scope.title = 'Custom Code Task Compilation Result';

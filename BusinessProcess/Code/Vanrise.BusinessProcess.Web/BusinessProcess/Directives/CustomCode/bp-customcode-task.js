@@ -91,10 +91,10 @@ app.directive("bpCustomcodeTask", ['UtilsService', 'VRUIUtilsService', 'VRValida
             }
 
             function buildComipleObject() {
-                return {
-                    TaskCode: $scope.scopeModel.taskCode,
-                    ClassDefinitions: $scope.scopeModel.classDefinitions
-                }
+				return {
+					TaskCode: $scope.scopeModel.taskCode,
+					ClassDefinitions: $scope.scopeModel.classDefinitions
+				};
             }
 
             function getContext() {
