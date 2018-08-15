@@ -9,7 +9,9 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Invoice.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
@@ -102,6 +104,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                              bankDetails = carrierAccountManager.GetBankDetails(financialAccount.CarrierAccountId.Value);
                         }
                         return bankDetails;
+                        #endregion
+                    }
+                case "RDLCReportPath":
+                    {
+                        #region RDLCReportPath
+                        InvoiceManager invoiceManager = new InvoiceManager();
+                        context.Invoice.ThrowIfNull("context.Invoice");
+                        return invoiceManager.GetRDLCReportPath(financialAccount.CarrierProfileId, context.Invoice.InvoiceTypeId, financialAccount.CarrierAccountId);
                         #endregion
                     }
             }

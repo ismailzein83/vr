@@ -263,7 +263,40 @@ namespace TOne.WhS.Invoice.Business
             return originalInvoiceDataRuntime;
         }
 
-
+        public string GetRDLCReportPath(int? financialAccountCarrierProfileId, Guid invoiceTypeId, int? financialAccountCarrierAccountId)
+        {
+            Dictionary<Guid, InvoiceReportFile> invoiceReportFiles;
+            InvoiceReportFileManager invoiceReportFileManager = new InvoiceReportFileManager();
+            if (financialAccountCarrierProfileId.HasValue)
+            {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                invoiceReportFiles = carrierProfileManager.GetCompanySettingInvoiceReportFiles(financialAccountCarrierProfileId.Value);
+                if (invoiceReportFiles != null && invoiceReportFiles.Count > 0)
+                {
+                    var invoiceReportFile = invoiceReportFiles.GetRecord(invoiceTypeId);
+                    if (invoiceReportFile != null)
+                    {
+                        var reportName = invoiceReportFileManager.GetInvoiceReportFileName(invoiceReportFile.InvoiceReportFileId);
+                        return string.Format("WhS_Invoice/Reports/{0}.rdlc", reportName);
+                    }
+                }
+            }
+            else
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                invoiceReportFiles = carrierAccountManager.GetCompanySettingInvoiceReportFiles(financialAccountCarrierAccountId.Value);
+                if (invoiceReportFiles != null && invoiceReportFiles.Count > 0)
+                {
+                    var invoiceReportFile = invoiceReportFiles.GetRecord(invoiceTypeId);
+                    if (invoiceReportFile != null)
+                    {
+                        var reportName = invoiceReportFileManager.GetInvoiceReportFileName(invoiceReportFile.InvoiceReportFileId);
+                        return string.Format("WhS_Invoice/Reports/{0}.rdlc", reportName);
+                    }
+                }
+            }
+            return null;
+        }
         public bool DoesUserUserHaveCompareInvoiceAccess(Guid invoiceTypeId)
         {
             return new InvoiceTypeManager().DoesUserHaveViewAccess(invoiceTypeId);

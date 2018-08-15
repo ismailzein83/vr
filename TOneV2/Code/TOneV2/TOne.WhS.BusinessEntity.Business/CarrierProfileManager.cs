@@ -366,6 +366,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return configManager.GetDefaultCompanySetting();
         }
+
+        public Dictionary<Guid, InvoiceReportFile> GetCompanySettingInvoiceReportFiles(int carrierProfileId)
+        {
+            return GetCompanySetting(carrierProfileId).InvoiceReportFiles;
+        }
         public IEnumerable<VRTaxItemDetail> GetTaxItemDetails(int carrierProfileId)
         {
             List<VRTaxItemDetail> taxItemDetails = new List<VRTaxItemDetail>();

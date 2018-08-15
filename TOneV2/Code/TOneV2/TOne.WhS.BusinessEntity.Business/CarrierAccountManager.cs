@@ -1112,6 +1112,10 @@ namespace TOne.WhS.BusinessEntity.Business
 				return new CarrierProfileManager().GetCompanySetting(carrierAccount.CarrierProfileId);
 			}
 		}
+        public Dictionary<Guid, InvoiceReportFile> GetCompanySettingInvoiceReportFiles(int carrierAccountId)
+        {
+             return GetCompanySetting(carrierAccountId).InvoiceReportFiles;
+        }
 		public IEnumerable<Guid> GetBankDetails(int carrierAccountId)
 		{
             var carrierProfileId = GetCarrierProfileId(carrierAccountId);
