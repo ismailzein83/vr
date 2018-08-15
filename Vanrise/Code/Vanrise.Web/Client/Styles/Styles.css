@@ -4218,6 +4218,12 @@ vr-datalist[scrollable] .datalist-container {
 .vr-datagrid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
 	background-color: #d7ebee !important;
 }
+.vr-datagrid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
+	background-color: #d7ebee !important;
+}
+.vr-datagrid[alternative-color] .vr-datagrid-body.no-highlight > div:first-of-type:hover {
+	background-color: inherit !important;
+}
 
 .vr-datagrid[vertical-line="true"] .vr-datagrid-cell-container {
 	border-right: 1px solid rgb(208, 208, 208);

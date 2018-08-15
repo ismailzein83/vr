@@ -22,6 +22,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            onexport: '=',
 	            showexpand: '=',
 	            norowhighlightonclick: '=',
+	            norowhighlightonhover: '=',
 	            gridmenuactions: '=',
 	            margin: '=',
 	            dragdropsetting: '='

@@ -53,7 +53,7 @@
 
     <div id="gridBodyContainer" ng-style="ctrl.gridStyle" ng-show="ctrl.isMainItemsShown">
         <div id="gridBody">
-            <div class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
+            <div ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body" style="white-space: nowrap; background-color: Transparent; font-weight: bolder; border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; " ng-if="ctrl.summaryRowHtml != undefined">
                 <div ng-if="!ctrl.isMobile" style="width:100%">
                     <div ng-if="ctrl.showDraggableRowSection" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}">
                     </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div ng-sortable="ctrl.itemsSortable" ng-class="ctrl.dragdropsetting && ctrl.datasource.length==0  ?'empty-vrdatagrid-drop' : '' ">
-                <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
+                <div id="rowSection1" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.datasource">
 
                 </div>
             </div>
@@ -77,7 +77,7 @@
     </div>
     <div id="gridBodyContainer_2" ng-style="ctrl.gridStyle" ng-show="!ctrl.isMainItemsShown">
         <div id="gridBody_2">
-            <div id="rowSection2" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.updateItems">
+            <div id="rowSection2" ng-class="ctrl.norowhighlightonhover ? 'no-highlight' : ''" class="vr-datagrid-body" ng-repeat="dataItem in ctrl.updateItems">
 
             </div>
         </div>
