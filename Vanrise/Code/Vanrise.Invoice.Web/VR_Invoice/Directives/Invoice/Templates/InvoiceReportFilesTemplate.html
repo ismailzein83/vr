@@ -12,10 +12,10 @@
                          enableautoexport="true"
                          vr-loader="scopeModel.isLoadingInvoiceReportFiles">
                 <vr-datagridcolumn headertext="'Invoice Type'" disablesorting>
-                    <vr-invoicetype-selector isrequired="true" on-ready="dataItem.onInvoiceTypeSelectorReady" hidelabel onselectionchanged="dataItem.onInvoiceTypeSelectionChanged" usefullcolumn></vr-invoicetype-selector>
+                    <vr-invoicetype-selector isrequired="true" on-ready="dataItem.onInvoiceTypeSelectorReady" hidelabel hideremoveicon onselectionchanged="dataItem.onInvoiceTypeSelectionChanged" usefullcolumn></vr-invoicetype-selector>
                 </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Report'" disablesorting>
-                    <vr-genericdata-genericbusinessentity-selector isrequired="true" hidelabel on-ready="dataItem.onInvoiceReportFileSelectorReady" usefullcolumn></vr-genericdata-genericbusinessentity-selector>
+                    <vr-genericdata-genericbusinessentity-selector isrequired="true" hidelabel hideremoveicon on-ready="dataItem.onInvoiceReportFileSelectorReady" usefullcolumn></vr-genericdata-genericbusinessentity-selector>
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>

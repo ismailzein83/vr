@@ -52,24 +52,23 @@ function (UtilsService, VRNotificationService,  VRUIUtilsService, VR_Invoice_Inv
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceReportItemDefinition.invoiceTypeSelectorAPI, undefined, setLoader);
                     };
                     invoiceReportItemDefinition.onInvoiceTypeSelectionChanged = function (selectedInvoiceType) {
-                        var invoiceTypeIdSelected;
-                        if (selectedInvoiceType != undefined) {
-                            invoiceTypeIdSelected = selectedInvoiceType.InvoiceTypeId;
+                        if (selectedInvoiceType != undefined)
+                        {
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isLoadingInvoiceReportFiles = value;
+                            };
+                            var invoiceReportFileSelectorPayload = {
+                                businessEntityDefinitionId: "64f8db86-691d-4486-83fb-26a3d3fc095e",
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Invoice.Business.InvoiceReportFileFilter, Vanrise.Invoice.Business",
+                                        InvoiceTypeId: selectedInvoiceType.InvoiceTypeId
+                                    }]
+                                },
+                                selectIfSingleItem: true
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceReportItemDefinition.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, setLoader);
                         }
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isLoadingInvoiceReportFiles = value;
-                        };
-                        var invoiceReportFileSelectorPayload = {
-                            businessEntityDefinitionId: "64f8db86-691d-4486-83fb-26a3d3fc095e",
-                            filter: {
-                                Filters: [{
-                                    $type: "Vanrise.Invoice.Business.InvoiceReportFileFilter, Vanrise.Invoice.Business",
-                                    InvoiceTypeId: invoiceTypeIdSelected
-                                }]
-                            },
-                            selectIfSingleItem: true
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceReportItemDefinition.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, setLoader);
                     };
 
                     invoiceReportItemDefinition.onInvoiceReportFileSelectorReady = function (api)
