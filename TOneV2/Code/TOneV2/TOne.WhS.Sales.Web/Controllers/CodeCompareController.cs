@@ -20,7 +20,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredCodeCompare(Vanrise.Entities.DataRetrievalInput<CodeCompareQuery> input)
         {
             CodeCompareManager manager = new CodeCompareManager();
-            return GetWebResponse(input, manager.GetFilteredCodeCompare(input));
+            return GetWebResponse(input, manager.GetFilteredCodeCompare(input), "Code Comparison.xlsx");
         }
         [HttpPost]
         [Route("ExportCodeCompareTemplate")]

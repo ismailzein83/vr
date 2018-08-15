@@ -287,7 +287,11 @@ namespace TOne.WhS.Sales.Business
                             
                             row.Cells.Add(new ExportExcelCell() { Value = record.OccurrenceInSuppliers });
                             row.Cells.Add(new ExportExcelCell() { Value = record.AbsenceInSuppliers });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Action });
+                            
+                            string action = record.Action == CodeCompareAction.New 
+                                ? "N" : (record.Action == CodeCompareAction.Delete ? "D" : string.Empty);                            
+
+                            row.Cells.Add(new ExportExcelCell() { Value = action });
                             sheet.Rows.Add(row);
                         }
                     }
