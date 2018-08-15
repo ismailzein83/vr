@@ -7,7 +7,8 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 			scope: {
 				onReady: "=",
 				dragdropsetting: '=',
-				singleActivity: '='
+				singleActivity: '=',
+				acceptEmptyContainer: '='
 			},
 
 			controller: function ($scope, $element, $attrs) {
@@ -44,11 +45,18 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 		};
 
 		function DirectiveConstructor($scope, ctrl) {
+			//var inEditor;
 			this.initializeController = initializeController;
 
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.datasource = [];
+				$scope.scopeModel.isValid = function () {
+					if (($scope.scopeModel.datasource == undefined || $scope.scopeModel.datasource.length < 1) && (ctrl.acceptEmptyContainer == undefined || ctrl.acceptEmptyContainer == false)) {
+						return "You should add at least one activity.";
+					}
+					return null;
+				};
 				$scope.scopeModel.onRemove = function (vRWorkflowActivityId) {
 					for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
 						if ($scope.scopeModel.datasource[i].VRWorkflowActivityId == vRWorkflowActivityId) {
@@ -75,22 +83,33 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 							var directivePayload = {
 								Context: (ctrl.getChildContext != undefined) ? ctrl.getChildContext() : undefined,
 								VRWorkflowActivityId: dataItem.VRWorkflowActivityId,
-								Settings: dataItem.Settings
+								Settings: dataItem.Settings,
+								//inEditor: inEditor
 							};
 							VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, directivePayload, setLoader);
 						};
 					}
 
 					if (payload != undefined) {
+						//inEditor = payload.inEditor;
 						ctrl.getChildContext = payload.getChildContext;
 
 						if (payload.vRWorkflowActivity != null) {
 							extendDataItem(payload.vRWorkflowActivity);
 							$scope.scopeModel.datasource = [payload.vRWorkflowActivity];
 						}
+
+						if (payload.vRWorkflowActivities != null && payload.vRWorkflowActivities.length > 0) {
+							for (var i = 0; i < payload.vRWorkflowActivities.length; i++) {
+								{
+									var currentActivity = payload.vRWorkflowActivities[i];
+									extendDataItem(currentActivity);
+									$scope.scopeModel.datasource.push(currentActivity);
+								}
+							}
+						}
 					}
 				};
-
 				api.getData = function () {
 					var activities = [];
 					for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
