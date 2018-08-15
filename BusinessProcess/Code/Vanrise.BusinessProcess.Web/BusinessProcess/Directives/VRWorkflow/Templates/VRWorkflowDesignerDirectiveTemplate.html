@@ -1,16 +1,16 @@
 ﻿<vr-row removeline>
 	<vr-columns colnum="2">
 		<div style=" max-height: 78vh; overflow: auto;">
-            <vr-section header="Activities">
-                <vr-toolbox datasource="scopeModel.activityConfigs" verticallayout datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
-            </vr-section>
+			<vr-section header="Activities">
+				<vr-toolbox datasource="scopeModel.activityConfigs" verticallayout datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
+			</vr-section>
 		</div>
 	</vr-columns>
 	<vr-columns colnum="10">
 		<div style=" max-height: 78vh; overflow: auto;">
-            <vr-section header="Workflow">
-                <businessprocess-vr-workflow-container on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-container>
-            </vr-section>
+			<vr-section header="Workflow">
+				<businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting" single-activity="true"></businessprocess-vr-workflow-containerv2>
+			</vr-section>
 		</div>
 	</vr-columns>
 </vr-row>
