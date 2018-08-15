@@ -12,6 +12,6 @@ Post-Deployment Script Template
 --[common].[Setting]----------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Update	s
-SET		s.[Data] = REPLACE(s.[Data],'"ProductName":"TOne"','"ProductName":"Ntegra"')
+SET		s.[Data] = REPLACE(s.[Data],'"ProductName":"T.One"','"ProductName":"Ntegra"')
 from	[common].[Setting] s
 where	ID='509E467B-4562-4CA6-A32E-E50473B74D2C'
