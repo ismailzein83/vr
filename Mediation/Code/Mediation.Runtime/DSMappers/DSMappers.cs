@@ -531,8 +531,6 @@ namespace Mediation.Runtime
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "WHS_Ericsson_CDR");
                 mappedBatches.Add("CDRTransformationStage", batch);
             }
-            else
-                importedData.IsEmpty = true;
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
