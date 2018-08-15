@@ -219,6 +219,9 @@ namespace TOne.WhS.Sales.Business
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CodeCompareItemDetail> context)
             {
+                Vanrise.Entities.DataRetrievalInput<CodeCompareQuery> input = context.Input as Vanrise.Entities.DataRetrievalInput<CodeCompareQuery>;
+                IEnumerable<long> selectedSupplierIds = input.Query.supplierIds;
+
                 var sheet = new ExportExcelSheet()
                 {
                     SheetName = "Code Compare",
@@ -227,12 +230,26 @@ namespace TOne.WhS.Sales.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone Name" });
+                foreach (var supplierId in selectedSupplierIds)
+                {
+                    string supplierName = new CarrierAccountManager().GetCarrierAccountName((int)supplierId);
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = supplierName, Width = 30 });
+                }
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone Code" });
-                var maxCountOfSuppliers = 0;
+                foreach (var supplierId in selectedSupplierIds)
+                {
+                    string supplierName = new CarrierAccountManager().GetCarrierAccountName((int)supplierId);
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = supplierName, Width = 30 });
+                }
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Occurrence Code In Supplier" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Absence Code In Supplier" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Action" });
                 sheet.Rows = new List<ExportExcelRow>();
+
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
+                    int supplierCount = context.BigResult.Data.First().AbsenceInSuppliers + context.BigResult.Data.First().OccurrenceInSuppliers;
+
                     foreach (var record in context.BigResult.Data)
                     {
                         if (record != null)
@@ -240,20 +257,34 @@ namespace TOne.WhS.Sales.Business
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.Code });
                             row.Cells.Add(new ExportExcelCell() { Value = record.SaleZone });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.SaleCode });
-                            if (record.SupplierItems != null)
-                            {
-                                if (record.SupplierItems.Count() > maxCountOfSuppliers)
-                                {
-                                    maxCountOfSuppliers = record.SupplierItems.Count();
-                                }
-                                foreach (var supplier in record.SupplierItems)
-                                {
-                                    row.Cells.Add(new ExportExcelCell() { Value = supplier.SupplierZone });
-                                    row.Cells.Add(new ExportExcelCell() { Value = supplier.SupplierCode });
-                                }
-                            }
 
+                            foreach (var supplierId in selectedSupplierIds)
+                            {
+                                var matchedSupplierItem = new CodeCompareSupplierItem();
+                                if (record.SupplierItems != null)
+                                {
+                                    matchedSupplierItem = record.SupplierItems.FirstOrDefault(sup => sup.SupplierId == supplierId);
+                                }
+                                if (matchedSupplierItem != null)
+                                    row.Cells.Add(new ExportExcelCell() { Value = matchedSupplierItem.SupplierZone });
+                                else
+                                    row.Cells.Add(new ExportExcelCell() { Value = "" });
+                            }
+                            row.Cells.Add(new ExportExcelCell() { Value = record.SaleCode });
+
+                            foreach (var supplierId in selectedSupplierIds)
+                            {
+                                var matchedSupplierItem = new CodeCompareSupplierItem();
+                                if (record.SupplierItems != null)
+                                {
+                                    matchedSupplierItem = record.SupplierItems.FirstOrDefault(sup => sup.SupplierId == supplierId);
+                                }
+                                if (matchedSupplierItem != null)
+                                    row.Cells.Add(new ExportExcelCell() { Value = matchedSupplierItem.SupplierCode });
+                                else
+                                    row.Cells.Add(new ExportExcelCell() { Value = "" });
+                            }
+                            
                             row.Cells.Add(new ExportExcelCell() { Value = record.OccurrenceInSuppliers });
                             row.Cells.Add(new ExportExcelCell() { Value = record.AbsenceInSuppliers });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Action });
@@ -261,12 +292,7 @@ namespace TOne.WhS.Sales.Business
                         }
                     }
                 }
-                for (var i = 0; i < maxCountOfSuppliers; i++)
-                {
-                    var j = i + 1;
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Supplier " + j + " Zone Name", Width = 30 });
-                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Supplier " + j + " Zone Code", Width = 30 });
-                }
+
                 context.MainSheet = sheet;
             }
         }

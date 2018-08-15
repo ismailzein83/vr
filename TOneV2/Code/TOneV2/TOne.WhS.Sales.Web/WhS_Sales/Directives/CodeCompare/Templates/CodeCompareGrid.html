@@ -3,7 +3,7 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Code">
+             idfield="Code" enableautoexport="true">
     <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'" columnindex="0"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Sale Code'" field="'SaleCode'" type="'Text'" getcolor="getSaleCodeStatusColor" columnindex="1"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="supplier in suppliers" headertext="supplier.Name" type="'Text'" tag="supplier" columnindex="(2 + $index)">
