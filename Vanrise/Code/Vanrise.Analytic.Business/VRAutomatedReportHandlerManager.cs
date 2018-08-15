@@ -17,6 +17,10 @@ namespace Vanrise.Analytic.Business
         {
             return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<VRAutomatedReportHandlerSettingsConfig>(VRAutomatedReportHandlerSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<VRAutomatedReportHandlerSettingsActionTypeConfig> GetAutomatedReportHandlerActionTypesTemplateConfigs()
+        {
+            return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<VRAutomatedReportHandlerSettingsActionTypeConfig>(VRAutomatedReportHandlerSettingsActionTypeConfig.EXTENSION_TYPE);
+        }
 
         #endregion
 

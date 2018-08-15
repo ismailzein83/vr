@@ -34,9 +34,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 if (context.EvaluatorContext != null)
                 {
                     if (totalAttachments == 1)
-                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of attachments to generate is 1 attachment.");
+                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate is 1 files.");
                     else
-                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of attachments to generate is {0} attachments.", totalAttachments);
+                        context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to generate is {0} files.", totalAttachments);
                 }
                
                 AdvancedExcelFileGeneratorManager fileGeneratorManager = new AdvancedExcelFileGeneratorManager();
@@ -56,7 +56,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         {
                             attachmentsDone++;
                             attachmentsLeft = totalAttachments - attachmentsDone;
-                            context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of attachments left is {0} out of {1} attachments.", attachmentsLeft, totalAttachments);
+                            context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of files left to generate is {0} out of {1} files.", attachmentsLeft, totalAttachments);
                         }
                         generatedFileOutput.GeneratedFile.ThrowIfNull("generatedFileOutput.GeneratedFile");
 
@@ -131,6 +131,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 int totalFiles = context.GeneratedFileItems.Count;
                 int filesDone = 0;
                 int filesLeft = totalFiles;
+                if (context.HandlerContext.EvaluatorContext!=null)
+                {
+                    if (totalFiles == 1)
+                        context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to transfer to directory {0} using FTP is 1 file.", this.FTPCommunicatorSettings.Directory);
+                    else
+                        context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("The total number of files to transfer to directory {0} using FTP is {1} files.", this.FTPCommunicatorSettings.Directory, totalFiles);
+                }
                 using (FTPCommunicator ftpCommunicator = new FTPCommunicator(this.FTPCommunicatorSettings))
                 {
                     foreach (var generator in context.GeneratedFileItems)
@@ -151,7 +158,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                             {
                                 filesDone++;
                                 filesLeft = totalFiles - filesDone;
-                                context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of files left to generate and transfer is {0} out of {1} files.", filesLeft, totalFiles);
+                                context.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of files left to transfer is {0} out of {1} files.", filesLeft, totalFiles);
                             }
                         }
                     }

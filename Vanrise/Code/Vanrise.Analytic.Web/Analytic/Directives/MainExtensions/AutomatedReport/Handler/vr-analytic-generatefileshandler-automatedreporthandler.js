@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrAnalyticSendemailhandlerAutomatedreporthandler", ["UtilsService", "VRAnalytic_AutomatedReportHandlerService","VRUIUtilsService",
+app.directive("vrAnalyticGeneratefileshandlerAutomatedreporthandler", ["UtilsService", "VRAnalytic_AutomatedReportHandlerService", "VRUIUtilsService",
 function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsService) {
     var directiveDefinitionObject = {
         restrict: "E",
@@ -8,16 +8,16 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var sendEmailHandler = new SendEmailHandler($scope, ctrl, $attrs);
-            sendEmailHandler.initializeController();
+            var generateFilesHandler = new GenerateFilesHandler($scope, ctrl, $attrs);
+            generateFilesHandler.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/SendEmailHandlerAutomatedReport.html"
+        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/GenerateFilesHandlerAutomatedReport.html"
     };
-     
 
-    function SendEmailHandler($scope, ctrl, $attrs) {
+
+    function GenerateFilesHandler($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
         var context;
@@ -25,13 +25,23 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
         var fileGeneratorGridAPI;
         var fileGeneratorGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var actionTypeSelectiveAPI;
+        var actionTypeSelectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
 
             $scope.scopeModel = {};
+
             $scope.scopeModel.onFileGeneratorGridReady = function (api) {
                 fileGeneratorGridAPI = api;
                 fileGeneratorGridReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onActionTypeSelectiveReady = function (api) {
+                actionTypeSelectiveAPI = api;
+                actionTypeSelectiveReadyDeferred.resolve();
+            };
+           
             defineAPI();
         }
 
@@ -43,16 +53,12 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                 var attachmentGenerators;
                 if (payload != undefined) {
                     context = payload.context;
-                    if (payload.settings != undefined) {
-                        $scope.scopeModel.to = payload.settings.To;
-                        $scope.scopeModel.subject = payload.settings.Subject;
-                        $scope.scopeModel.body = payload.settings.Body;
-                        attachmentGenerators = payload.settings.AttachementGenerators;
-                    }
                 }
 
                 var loadFileGeneratorGridPromise = loadFileGeneratorGrid();
                 promises.push(loadFileGeneratorGridPromise);
+                var loadActionTypeSelectivePromise = loadActionTypeSelective();
+                promises.push(loadActionTypeSelectivePromise);
 
                 function loadFileGeneratorGrid() {
                     var fileGeneratorGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -61,8 +67,8 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                         var fileGeneratorGridPayload = {
                             context: getContext()
                         };
-                        if (attachmentGenerators != undefined) {
-                            fileGeneratorGridPayload.attachmentGenerators = attachmentGenerators;
+                        if (payload != undefined && payload.settings) {
+                            fileGeneratorGridPayload.attachmentGenerators = payload.settings.AttachementGenerators;
                         }
 
                         VRUIUtilsService.callDirectiveLoad(fileGeneratorGridAPI, fileGeneratorGridPayload, fileGeneratorGridLoadPromiseDeferred);
@@ -70,24 +76,34 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
 
                     return fileGeneratorGridLoadPromiseDeferred.promise;
                 }
+
+                function loadActionTypeSelective() {
+                    var loadActionTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    actionTypeSelectiveReadyDeferred.promise.then(function () {
+                        var actionTypeSelectivePayload = {
+                            context: getContext()
+                        };
+                        if (payload != undefined && payload.settings) {
+                            actionTypeSelectivePayload.actionType = payload.settings.ActionType;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(actionTypeSelectiveAPI, actionTypeSelectivePayload, loadActionTypeSelectiveLoadDeferred);
+                    });
+                    return loadActionTypeSelectiveLoadDeferred.promise;
+                }
                 return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.SendEmailHandler,Vanrise.Analytic.MainExtensions",
-                    To: $scope.scopeModel.to,
-                    Subject: $scope.scopeModel.subject,
-                    Body: $scope.scopeModel.body,
+                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.GenerateFilesHandler,Vanrise.Analytic.MainExtensions",
                     AttachementGenerators: fileGeneratorGridAPI.getData(),
+                    ActionType: actionTypeSelectiveAPI.getData()
                 };
-
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
-
 
         function getContext() {
             var currentContext = context;

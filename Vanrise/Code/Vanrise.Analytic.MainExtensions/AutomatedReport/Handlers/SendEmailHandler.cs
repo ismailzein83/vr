@@ -74,7 +74,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                         {
                             attachmentsDone++;
                             attachmentsLeft = totalAttachments - attachmentsDone;
-                            context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of attachments left is {0} out of {1} attachments.", attachmentsLeft, totalAttachments);
+                            context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of attachments to generate left is {0} out of {1} attachments.", attachmentsLeft, totalAttachments);
                         }
                         generatedFileOutput.GeneratedFile.ThrowIfNull("generatedFileOutput.GeneratedFile");
                         VRMailAttachmentExcel excelAttachment = new VRMailAttachmentExcel()

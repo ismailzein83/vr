@@ -73,6 +73,7 @@
     <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportFileGeneratorConfig.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportFileGeneratorGenerateFileContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerExecuteContext.cs" />
+    <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerSettingsActionTypeConfig.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerSettingsConfig.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportQueryGetSubTableFieldsContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportSettings.cs" />

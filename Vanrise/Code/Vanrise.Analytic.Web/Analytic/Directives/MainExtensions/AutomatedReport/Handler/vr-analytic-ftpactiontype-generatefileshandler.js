@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrAnalyticFtphandlerAutomatedreporthandler", ["UtilsService", "VRAnalytic_AutomatedReportHandlerService", "VRUIUtilsService",
+app.directive("vrAnalyticFtpactiontypeGeneratefileshandler", ["UtilsService", "VRAnalytic_AutomatedReportHandlerService", "VRUIUtilsService",
 function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsService) {
     var directiveDefinitionObject = {
         restrict: "E",
@@ -8,20 +8,17 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ftpHandler = new FTPHandler($scope, ctrl, $attrs);
-            ftpHandler.initializeController();
+            var ftpActionType = new FTPActionType($scope, ctrl, $attrs);
+            ftpActionType.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/FTPHandlerAutomatedReport.html"
+        templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/Handler/Templates/FTPActionTypeGenerateFilesHandlerTempate.html"
     };
 
 
-    function FTPHandler($scope, ctrl, $attrs) {
+    function FTPActionType($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
-
-        var fileGeneratorGridAPI;
-        var fileGeneratorGridReadyDeferred = UtilsService.createPromiseDeferred();
 
         var ftpCommunicatorSettingsAPI;
         var ftpCommunicatorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
@@ -31,12 +28,6 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
         function initializeController() {
 
             $scope.scopeModel = {};
-
-
-            $scope.scopeModel.onFileGeneratorGridReady = function (api) {
-                fileGeneratorGridAPI = api;
-                fileGeneratorGridReadyDeferred.resolve();
-            };
 
             $scope.scopeModel.onFTPCommunicatorSettingsReady = function (api) {
                 ftpCommunicatorSettingsAPI = api;
@@ -52,21 +43,17 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
             api.load = function (payload) {
                 var promises = [];
                 var ftpCommunicatorSettings;
-                var attachmentGenerators;
                 if (payload != undefined) {
                     context = payload.context;
-                    if (payload.settings != undefined) {
-                        attachmentGenerators =  payload.settings.AttachementGenerators;
-                        ftpCommunicatorSettings = payload.settings.FTPCommunicatorSettings;
-                        $scope.scopeModel.subdirectory = payload.settings.Subdirectory;
+                    if (payload.actionType != undefined) {
+                        ftpCommunicatorSettings = payload.actionType.FTPCommunicatorSettings;
+                        $scope.scopeModel.subdirectory = payload.actionType.Subdirectory;
                     }
                 }
 
                 var loadFTPCommunicatorSettingsPromise = loadFTPCommunicatorSettings();
                 promises.push(loadFTPCommunicatorSettingsPromise);
 
-                var loadFileGeneratorGridPromise = loadFileGeneratorGrid();
-                promises.push(loadFileGeneratorGridPromise);
                 function loadFTPCommunicatorSettings() {
                     var ftpCommunicatorSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -81,31 +68,12 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                     return ftpCommunicatorSettingsLoadPromiseDeferred.promise;
                 }
 
-                function loadFileGeneratorGrid() {
-                    var fileGeneratorGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    fileGeneratorGridReadyDeferred.promise.then(function () {
-                           var fileGeneratorGridPayload = {
-                                context: getContext()
-                            };
-                            if (attachmentGenerators != undefined) {
-                                fileGeneratorGridPayload.attachmentGenerators = attachmentGenerators;
-                            }
-
-                        VRUIUtilsService.callDirectiveLoad(fileGeneratorGridAPI, fileGeneratorGridPayload, fileGeneratorGridLoadPromiseDeferred);
-                    });
-
-                    return fileGeneratorGridLoadPromiseDeferred.promise;
-                }
-
-
                 return UtilsService.waitMultiplePromises(promises);
             };
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.FTPHandler,Vanrise.Analytic.MainExtensions",
-                    AttachementGenerators: fileGeneratorGridAPI.getData(),
+                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers.FTPActionType,Vanrise.Analytic.MainExtensions",
                     Subdirectory: $scope.scopeModel.subdirectory,
                     FTPCommunicatorSettings: ftpCommunicatorSettingsAPI.getData()
                 };

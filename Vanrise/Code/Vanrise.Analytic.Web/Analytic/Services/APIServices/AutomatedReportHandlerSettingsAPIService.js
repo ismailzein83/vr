@@ -11,9 +11,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAutomatedReportHandlerTemplateConfigs'));
         }
 
+        function GetAutomatedReportHandlerActionTypesTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAutomatedReportHandlerActionTypesTemplateConfigs'));
+        }
+
         return ({
             GetAutomatedReportHandlerTemplateConfigs: GetAutomatedReportHandlerTemplateConfigs,
-
+            GetAutomatedReportHandlerActionTypesTemplateConfigs: GetAutomatedReportHandlerActionTypesTemplateConfigs
         });
     }
 

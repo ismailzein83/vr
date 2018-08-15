@@ -14,13 +14,21 @@ namespace Vanrise.Analytic.Web.Controllers
     [JSONWithTypeAttribute]
     public class AutomatedReportHandlerSettingsController : BaseAPIController
     {
+        VRAutomatedReportHandlerManager vrAutomatedReportHandlerManager = new VRAutomatedReportHandlerManager();
 
         [HttpGet]
         [Route("GetAutomatedReportHandlerTemplateConfigs")]
         public IEnumerable<VRAutomatedReportHandlerSettingsConfig> GetAutomatedReportTemplateHandlerConfigs()
         {
-            VRAutomatedReportHandlerManager vrAutomatedReportHandlerManager = new VRAutomatedReportHandlerManager();
             return vrAutomatedReportHandlerManager.GetAutomatedReportHandlerTemplateConfigs();
         }
+
+        [HttpGet]
+        [Route("GetAutomatedReportHandlerActionTypesTemplateConfigs")]
+        public IEnumerable<VRAutomatedReportHandlerSettingsActionTypeConfig> GetAutomatedReportHandlerActionTypesTemplateConfigs()
+        {
+            return vrAutomatedReportHandlerManager.GetAutomatedReportHandlerActionTypesTemplateConfigs();
+        }
+
     }
 }
