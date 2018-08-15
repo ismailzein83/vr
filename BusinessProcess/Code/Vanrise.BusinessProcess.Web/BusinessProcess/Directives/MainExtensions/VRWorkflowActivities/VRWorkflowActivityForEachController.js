@@ -17,8 +17,9 @@
 		var iterationVariableName;
 		var iterationVariableType;
 		var activity;
-		var contex;
+		var context;
 		var getChildContext;
+		var isNew;
 
 		loadParameters();
 		defineScope();
@@ -29,7 +30,8 @@
 
 			if (parameters != undefined) {
 				dragdropsetting = parameters.dragdropsetting;
-				contex = parameters.contex;
+				context = parameters.context;
+				isNew = parameters.isNew;
 				getChildContext = parameters.getChildContext;
 				if (parameters.foreachObj != undefined) {
 					list = parameters.foreachObj.List;
@@ -43,7 +45,7 @@
 		function defineScope() {
 			$scope.scopeModel = {};
 			$scope.modalContext.onModalHide = function () {
-				if ($scope.remove != undefined) {
+				if ($scope.remove != undefined && isNew == true) {
 					$scope.remove();
 				}
 			};
@@ -63,7 +65,7 @@
 			};
 
 			$scope.scopeModel.close = function () {
-				if ($scope.remove != undefined) {
+				if ($scope.remove != undefined && isNew == true) {
 					$scope.remove();
 				}
 				$scope.modalContext.closeModal();
@@ -85,9 +87,7 @@
 				$scope.scopeModel.dragdropsetting = dragdropsetting;
 				$scope.scopeModel.list = list;
 				$scope.scopeModel.iterationVariableName = iterationVariableName;
-				//$scope.scopeModel.iterationVariableType = iterationVariableType;
-				//$scope.scopeModel.activity = activity;
-				$scope.scopeModel.contex = contex;
+				$scope.scopeModel.context = context;
 			}
 
 			function loadVariableTypeSelector() {
@@ -111,7 +111,8 @@
 				workflowContainerReadyPromiseDeferred.promise.then(function () {
 					var payload = {
 						vRWorkflowActivity: activity,
-						getChildContext: getChildContext
+						getChildContext: getChildContext,
+						inEditor: true
 					};
 					VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
 				});
@@ -148,8 +149,9 @@
 			if ($scope.onActivityUpdated != undefined) {
 				$scope.onActivityUpdated(updatedObject);
 			}
-			$scope.modalContext.closeModal();
+			isNew = false;
 			$scope.scopeModel.isLoading = false;
+			$scope.modalContext.closeModal();
 		}
 	}
 
