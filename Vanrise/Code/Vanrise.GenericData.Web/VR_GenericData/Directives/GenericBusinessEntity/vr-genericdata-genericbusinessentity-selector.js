@@ -16,7 +16,8 @@
                 ismultipleselection: "@",
                 isrequired: "=",
                 customlabel: "@",
-                normalColNum: '@'
+                normalColNum: '@',
+                hidelabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -84,6 +85,7 @@
                 api.load = function (payload) {
                     
                     var selectedIds;
+                    var selectIfSingleItem;
                     var promises = [];
 
                     if (payload != undefined) {
@@ -91,7 +93,7 @@
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
-
+                        selectIfSingleItem = payload.selectIfSingleItem;
                      var getGenericBERuntimeInfoPromise = getGenericBusinessEntityRuntimeInfo();
                      promises.push(getGenericBERuntimeInfoPromise);
 
@@ -115,7 +117,7 @@
                         }
                     }
 
-                    var getGenericBusinessEntityInfoPromise = GetGenericBusinessEntityInfo(selectedIds);
+                    var getGenericBusinessEntityInfoPromise = GetGenericBusinessEntityInfo(selectedIds, selectIfSingleItem);
                     promises.push(getGenericBusinessEntityInfoPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -131,7 +133,7 @@
                 return api;
             }
 
-            function GetGenericBusinessEntityInfo(selectedIds) {
+            function GetGenericBusinessEntityInfo(selectedIds, selectIfSingleItem) {
                 
                 return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityInfo(businessEntityDefinitionId, UtilsService.serializetoJson(filter)).then(function (response) {
                     selectorAPI.clearDataSource();
@@ -144,6 +146,10 @@
 
                     if (selectedIds) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'GenericBusinessEntityId', attrs, ctrl);
+                    }
+                    else if (selectedIds == undefined && selectIfSingleItem)
+                    {
+                        selectorAPI.selectIfSingleItem();
                     }
                 });
 
@@ -164,6 +170,9 @@
                 label = attrs.customlabel;
             }
 
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
@@ -171,8 +180,13 @@
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewGenericBusinessEntity"';
-            return '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="isLoadingSelector">'
-                    + '<vr-label>' + label + '</vr-label>'
+
+            var haschildcolumns = "";
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" vr-loader="isLoadingSelector" ' + haschildcolumns + '>'
+                    + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
                     + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
                     + ' selectedvalues="ctrl.selectedvalues"'
