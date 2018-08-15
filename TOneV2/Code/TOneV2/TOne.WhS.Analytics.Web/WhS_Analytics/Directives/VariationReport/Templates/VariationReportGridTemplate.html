@@ -7,7 +7,7 @@
              showexpand="scopeModel.showExpandIcon"
              enableautoexport="true"
              getrowstyle="scopeModel.getRowStyle">
-    <vr-datagridcolumn headertext="scopeModel.dimensionTitle" field="'DimensionName'" type="'Text'" widthfactor="30"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="scopeModel.dimensionTitle" columnindex="0" ng-if="scopeModel.dimensionTitle" field="'DimensionName'" type="'Text'" widthfactor="30"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Periods AVG'" field="'Average'" summaryfield="'Average'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Periods %'" field="'Percentage'" summaryfield="'Percentage'" type="'Number'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="scopeModel.firstPeriodDefinition.PeriodDescription"
