@@ -66,14 +66,14 @@ end
 begin
 set nocount on;
 set identity_insert [sec].[User] on;
-;with cte_data([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser])
+;with cte_data([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser],[SecurityProviderId])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(-999,'System Account',null,'System Account',1,'this User is used as System account for System tasks', 1),
-(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1,null, null),
-(-1,'Support','FY5vaAn+kWWvh6cgCgfysC0R+27O0Do=','support@vanrise.com',1,null, null)
+(-999,'System Account',null,'System Account',1,'this User is used as System account for System tasks', 1,'9554069B-795E-4BB1-BFF3-9AF0F47FC0FF'),
+(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1,null, null,'9554069B-795E-4BB1-BFF3-9AF0F47FC0FF'),
+(-1,'Support','FY5vaAn+kWWvh6cgCgfysC0R+27O0Do=','support@vanrise.com',1,null, null,'9554069B-795E-4BB1-BFF3-9AF0F47FC0FF')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser]))
+)c([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser],[SecurityProviderId]))
 merge	[sec].[User] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
@@ -81,8 +81,8 @@ on		1=1 and t.[ID] = s.[ID]
 --	update set
 --	[Name] = s.[Name],[Password] = s.[Password],[Email] = s.[Email]
 when not matched by target then
-	insert([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser])
-	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId],s.[Description],s.[IsSystemUser]);
+	insert([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser],[SecurityProviderId])
+	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId],s.[Description],s.[IsSystemUser],s.[SecurityProviderId]);
 set identity_insert [sec].[User] off;
 ----------------------------------------------------------------------------------------------------
 end
@@ -432,12 +432,12 @@ as (select * from (values
 merge	[genericdata].[DataRecordStorage] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[DataRecordTypeID] = s.[DataRecordTypeID],[DataStoreID] = s.[DataStoreID],[Settings] = s.[Settings],[State] = s.[State]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[DataRecordTypeID] = s.[DataRecordTypeID],[DataStoreID] = s.[DataStoreID],[Settings] = s.[Settings],[State] = s.[State]
 when not matched by target then
-	insert([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings],[State])
-	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);
+	insert([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings])
+	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings]);
 ----------------------------------------------------------------------------------------------------
 end
 

@@ -256,21 +256,21 @@ END
 --[sec].[User]--------------------------------------------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([Name],[Password],[Email],[TenantId],[LastLogin],[Description],[TempPassword],[TempPasswordValidTill],[EnabledTill],[ExtendedSettings])
+;with cte_data([Name],[Password],[Email],[TenantId],[LastLogin],[Description],[TempPassword],[TempPasswordValidTill],[EnabledTill],[ExtendedSettings],[SecurityProviderId])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('Portal Account','fb3G/q3VC/bHDktkq3dmB79yrK4=','portalsystemaccount@nodomain.com',1,null,'System Account used to connect from the Portal application',null,null,null,null)
+('Portal Account','fb3G/q3VC/bHDktkq3dmB79yrK4=','portalsystemaccount@nodomain.com',1,null,'System Account used to connect from the Portal application',null,null,null,null,'9554069B-795E-4BB1-BFF3-9AF0F47FC0FF')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Name],[Password],[Email],[TenantId],[LastLogin],[Description],[TempPassword],[TempPasswordValidTill],[EnabledTill],[ExtendedSettings]))
+)c([Name],[Password],[Email],[TenantId],[LastLogin],[Description],[TempPassword],[TempPasswordValidTill],[EnabledTill],[ExtendedSettings],[SecurityProviderId]))
 merge	[sec].[User] as t
 using	cte_data as s
 on		1=1 and t.[Email] = s.[Email]
-when matched then
-	update set
-	[Name] = s.[Name],[Password] = s.[Password],[TenantId] = s.[TenantId],[LastLogin] = s.[LastLogin],[Description] = s.[Description],[TempPassword] = s.[TempPassword],[TempPasswordValidTill] = s.[TempPasswordValidTill],[EnabledTill] = s.[EnabledTill],[ExtendedSettings] = s.[ExtendedSettings]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Password] = s.[Password],[TenantId] = s.[TenantId],[LastLogin] = s.[LastLogin],[Description] = s.[Description],[TempPassword] = s.[TempPassword],[TempPasswordValidTill] = s.[TempPasswordValidTill],[EnabledTill] = s.[EnabledTill],[ExtendedSettings] = s.[ExtendedSettings]
 when not matched by target then
-	insert([Name],[Password],[Email],[TenantId],[LastLogin],[Description],[TempPassword],[TempPasswordValidTill],[EnabledTill],[ExtendedSettings])
-	values(s.[Name],s.[Password],s.[Email],s.[TenantId],s.[LastLogin],s.[Description],s.[TempPassword],s.[TempPasswordValidTill],s.[EnabledTill],s.[ExtendedSettings]);
+	insert([Name],[Password],[Email],[TenantId],[LastLogin],[Description],[TempPassword],[TempPasswordValidTill],[EnabledTill],[ExtendedSettings],[SecurityProviderId])
+	values(s.[Name],s.[Password],s.[Email],s.[TenantId],s.[LastLogin],s.[Description],s.[TempPassword],s.[TempPasswordValidTill],s.[EnabledTill],s.[ExtendedSettings],s.[SecurityProviderId]);
 ----------------------------------------------------------------------------------------------------
 END
 
