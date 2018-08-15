@@ -4024,6 +4024,11 @@ vr-toolbox .vertical-alignment .item {
 	width: 100%;
 }
 
+vr-toolbox .left-alignment .item {
+	text-align: left;
+	padding-left: 10px;
+}
+
 .vr-toolbox .item:hover {
 	/*border-color: gray;
     font-weight:bold;
