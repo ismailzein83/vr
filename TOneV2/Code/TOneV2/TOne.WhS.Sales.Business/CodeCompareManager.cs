@@ -177,7 +177,7 @@ namespace TOne.WhS.Sales.Business
 
             using (MemoryStream ms = new MemoryStream())
             {
-                workbook.Save(ms, SaveFormat.Excel97To2003);
+                workbook.Save(ms, SaveFormat.Xlsx);
                 array = ms.ToArray();
             }
             return array;

@@ -35,7 +35,7 @@ namespace TOne.WhS.Sales.Web.Controllers
             MemoryStream memoryStream = new System.IO.MemoryStream();
             memoryStream.Write(templateWithDataBytes, 0, templateWithDataBytes.Length);
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-            return GetExcelResponse(memoryStream, "Code Comparison Result.xls");
+            return GetExcelResponse(memoryStream, "Code Comparison Result.xlsx");
         }
     }
 }
