@@ -1,7 +1,7 @@
 ﻿"use strict";
-BlockedAttemptsController.$inject = ["$scope", "UtilsService", "VRNavigationService", "WhS_BE_SaleZoneAPIService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", "PeriodEnum"];
+BlockedAttemptsController.$inject = ["$scope", "UtilsService", "VRNavigationService", "WhS_BE_SaleZoneAPIService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", "PeriodEnum", "UISettingsService"];
 
-function BlockedAttemptsController($scope, UtilsService, VRNavigationService, WhS_BE_SaleZoneAPIService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum) {
+function BlockedAttemptsController($scope, UtilsService, VRNavigationService, WhS_BE_SaleZoneAPIService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum, UISettingsService) {
 
     var mainGridAPI;
 
@@ -27,6 +27,8 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         $scope.toDate;
 
         $scope.selectedPeriod = PeriodEnum.Today;
+        var maxSearchRecordCount = UISettingsService.getMaxSearchRecordCount()
+        $scope.limit = maxSearchRecordCount;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
@@ -55,6 +57,14 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         $scope.getData = function () {
             return mainGridAPI.loadGrid(getQuery());
         };
+        $scope.checkMaxNumberResords = function () {
+            if ($scope.limit <= maxSearchRecordCount && maxSearchRecordCount != undefined) {
+                return null;
+            }
+            else {
+                return "Max number can be entered is: " + maxSearchRecordCount;
+            }
+        };
 
     }
 
@@ -64,6 +74,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate,
+            Top: $scope.limit,
             Period: $scope.selectedPeriod.value
         };
         return query;

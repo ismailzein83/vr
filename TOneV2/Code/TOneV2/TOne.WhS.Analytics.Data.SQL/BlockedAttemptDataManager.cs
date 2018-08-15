@@ -37,6 +37,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             return GetItemsText(GetSingleQuery(), BlockedAttemptMapper, (cmd) =>
                 {
                     cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
+                    cmd.Parameters.Add(new SqlParameter("@TopRecords", input.Query.Top));
+
                 });
         }
 
@@ -53,9 +55,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilterToQuery(whereBuilder);
             AddGroupingToQuery(groupByBuilder);
             queryBuilder.Append(String.Format(@"
-                    SELECT   #SELECTCOLUMNPART#
+                    SELECT TOP (@TopRecords)   #SELECTCOLUMNPART#
                     FROM [TOneWhS_CDR].[BillingCDR_Invalid]
-                        WITH(NOLOCK ,INDEX(IX_BillingCDR_Invalid_AttemptDateTime)) WHERE SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate    
+                        WITH(NOLOCK ,INDEX(IX_BillingCDR_Invalid_AttemptDateTime)) WHERE SupplierID is NULL AND DurationInSeconds=0 AND  AttemptDateTime>= @FromDate 
                         #WHEREPART#  
                         #GROUPBYPART# 
                         "));

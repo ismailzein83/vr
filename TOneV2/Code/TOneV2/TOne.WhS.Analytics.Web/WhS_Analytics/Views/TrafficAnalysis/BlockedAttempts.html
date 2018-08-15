@@ -6,11 +6,13 @@
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="selectedPeriod" from="fromDate" to="toDate"></vr-timerange>
                 <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
                 <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-customer-selector>
-                <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady" ></vr-whs-be-salezone-selector>
+                <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-selector>
+                <vr-columns width="normal">
+                    <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="0" customvalidate="checkMaxNumberResords()" isrequired="true"></vr-textbox>
+                </vr-columns>
                 <vr-columns width="normal">
                     <vr-switch value="groupbyNumber" label="Group by Number"></vr-switch>
                 </vr-columns>
-
             </vr-row>
         </div>
 
