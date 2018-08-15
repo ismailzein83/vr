@@ -20,6 +20,9 @@
         var bankReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var bankSelectedPromiseDeferred;
 
+        var invoiceReportFilesDirectiveAPI;
+        var invoiceReportFilesDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -63,6 +66,11 @@
                 bankReadyPromiseDeferred.resolve();
             };
 
+            $scope.onInvoiceReportFilesDirectiveReady = function (api) {
+                invoiceReportFilesDirectiveAPI = api;
+                invoiceReportFilesDirectiveReadyDeferred.resolve();
+            };
+
         }
 
         function load() {
@@ -76,7 +84,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts, prepareCompanyDefinitions])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts, prepareCompanyDefinitions, loadInvoiceReportFiles])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -91,6 +99,17 @@
                 if (response != null && response.length > 0)
                     $scope.scopeModel.contactTabObject.showTab = true;
             });
+        }
+
+        function loadInvoiceReportFiles() {
+            var invoiceReportFilesDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+            invoiceReportFilesDirectiveReadyDeferred.promise.then(function () {
+                var payload = {
+                    invoiceReportFiles: companySettingEntity != undefined ? companySettingEntity.InvoiceReportFiles : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(invoiceReportFilesDirectiveAPI, payload, invoiceReportFilesDirectiveLoadDeferred);
+            });
+            return invoiceReportFilesDirectiveLoadDeferred.promise;
         }
 
         function prepareCompanyDefinitions() {
@@ -256,6 +275,7 @@
                 BankDetails: bankDirectiveApi.getSelectedIds(),
                 Contacts: getContactsData(),
                 ExtendedSettings: getCompanyExtendedSettings(),
+                InvoiceReportFiles: invoiceReportFilesDirectiveAPI.getData()
             };
             return obj;
         }

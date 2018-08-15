@@ -30,7 +30,12 @@ namespace Vanrise.Entities
         public List<Guid> BankDetails { get; set; }
         public Dictionary<string, CompanyContact> Contacts { get; set; }
         public Dictionary<Guid, BaseCompanyExtendedSettings> ExtendedSettings { get; set; }
+        public Dictionary<Guid, InvoiceReportFile> InvoiceReportFiles { get; set; }
+    }
 
+    public class InvoiceReportFile
+    {
+        public Guid InvoiceReportFileId { get; set; }
     }
 
     public class CompanyContact

@@ -55,6 +55,9 @@
                 <vr-span ng-repeat="companyDefinition in scopeModel.companyDefinitions">
                     <vr-directivewrapper directive="companyDefinition.runtimeEditor" on-ready="companyDefinition.onDirectiveReady" isrequired="false"></vr-directivewrapper>
                 </vr-span>
+                <vr-tab header="'Invoice Report Files'">
+                    <vr-invoice-invoicereportfiles on-ready="onInvoiceReportFilesDirectiveReady"></vr-invoice-invoicereportfiles>
+                </vr-tab>
             </vr-tabs>
 
 

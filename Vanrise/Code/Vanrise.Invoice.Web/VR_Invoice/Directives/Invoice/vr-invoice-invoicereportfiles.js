@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService,  VRUIUtilsService) {
+app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_Invoice_InvoiceTypeAPIService",
+function (UtilsService, VRNotificationService,  VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -18,7 +18,7 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
+            compile: function (element, attrs) { 
 
             },
             templateUrl: "/Client/Modules/VR_Invoice/Directives/Invoice/Templates/InvoiceReportFilesTemplate.html"
@@ -29,6 +29,7 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
             this.initializeController = initializeController;
 
             var gridAPI;
+            var invoiceTypes = [];
 
             function initializeController() {
 
@@ -46,26 +47,34 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
                     invoiceReportItemDefinition.onInvoiceTypeSelectorReady = function (api) {
                         invoiceReportItemDefinition.invoiceTypeSelectorAPI = api;
                         var setLoader = function (value) {
-
+                            $scope.scopeModel.isLoadingInvoiceReportFiles = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceReportItemDefinition.invoiceTypeSelectorAPI, undefined, setLoader);
                     };
                     invoiceReportItemDefinition.onInvoiceTypeSelectionChanged = function (selectedInvoiceType) {
+                        var invoiceTypeIdSelected;
                         if (selectedInvoiceType != undefined) {
-
+                            invoiceTypeIdSelected = selectedInvoiceType.InvoiceTypeId;
                         }
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingInvoiceReportFiles = value;
+                        };
+                        var invoiceReportFileSelectorPayload = {
+                            businessEntityDefinitionId: "64f8db86-691d-4486-83fb-26a3d3fc095e",
+                            filter: {
+                                Filters: [{
+                                    $type: "Vanrise.Invoice.Business.InvoiceReportFileFilter, Vanrise.Invoice.Business",
+                                    InvoiceTypeId: invoiceTypeIdSelected
+                                }]
+                            },
+                            selectIfSingleItem: true
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceReportItemDefinition.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, setLoader);
                     };
 
                     invoiceReportItemDefinition.onInvoiceReportFileSelectorReady = function (api)
                     {
                         invoiceReportItemDefinition.invoiceReportFileSelectorAPI = api;
-                        var setLoader = function (value) {
-
-                        };
-                        var invoiceReportFileSelectorPayload = {
-                            businessEntityDefinitionId: "64f8db86-691d-4486-83fb-26a3d3fc095e",
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceReportItemDefinition.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, setLoader);
                     };
 
                     $scope.scopeModel.invoiceReportItems.push(invoiceReportItemDefinition);
@@ -75,9 +84,11 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
                     var index = $scope.scopeModel.invoiceReportItems.indexOf(dataItem);
                     $scope.scopeModel.invoiceReportItems.splice(index, 1);
                 };
-
+                $scope.scopeModel.disableAddInvoiceReportItemButton = function () {
+                    return ($scope.scopeModel.invoiceReportItems.length > 0 && invoiceTypes.length > 0 && $scope.scopeModel.invoiceReportItems.length == invoiceTypes.length);
+                };
                 $scope.scopeModel.validateInvoiceReportItems = function () {
-                    if ($scope.scopeModel.invoiceReportItems.length > 0) {
+                    if ($scope.scopeModel.invoiceReportItems.length > 0 && invoiceTypes.length>0) {
                         var invoiceTypeIds = [];
                         for (var i = 0; i < $scope.scopeModel.invoiceReportItems.length; i++) {
                             var invoiceReportItem = $scope.scopeModel.invoiceReportItems[i];
@@ -103,7 +114,9 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
                     }
                     return null;
                 };
-                defineAPI();
+                getInvoiceTypes().then(function () {
+                    defineAPI();
+                });
             }
             function defineAPI() {
                 var api = {};
@@ -113,16 +126,18 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
                     $scope.scopeModel.invoiceReportItems = [];
                     if (payload != undefined && payload.invoiceReportFiles != undefined) {
                         for (var invoiceTypeId in payload.invoiceReportFiles) {
-                            var currentItem = payload.invoiceReportFiles[invoiceTypeId];
-                            var gridItem = {
-                                invoiceTypeId: invoiceTypeId,
-                                invoiceReportFileEntity: currentItem,
-                                invoiceSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
-                                invoiceSelectorLoadDeferred: UtilsService.createPromiseDeferred(),
-                                invoiceReportFileSelectorReadyDeferred : UtilsService.createPromiseDeferred(),
-                                invoiceReportFileSelectorLoadDeferred : UtilsService.createPromiseDeferred()
-                            };
-                            addItemtoGrid(gridItem);
+                            if (invoiceTypeId != "$type") {
+                                var currentItem = payload.invoiceReportFiles[invoiceTypeId];
+                                var gridItem = {
+                                    invoiceTypeId: invoiceTypeId,
+                                    invoiceReportFileEntity: currentItem,
+                                    invoiceSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
+                                    invoiceSelectorLoadDeferred: UtilsService.createPromiseDeferred(),
+                                    invoiceReportFileSelectorReadyDeferred: UtilsService.createPromiseDeferred(),
+                                    invoiceReportFileSelectorLoadDeferred: UtilsService.createPromiseDeferred(),
+                                };
+                                addItemtoGrid(gridItem);
+                            }
                         }
                     }
 
@@ -139,21 +154,68 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
                             gridItem.invoiceReportFileSelectorAPI = api;
                             gridItem.invoiceReportFileSelectorReadyDeferred.resolve();
                         };
-                        UtilsService.waitMultiplePromises([gridItem.invoiceSelectorReadyDeferred.promise, gridItem.invoiceReportFileSelectorReadyDeferred.promise]).then(function () {
-
-                            var invoiceSelectorPayload = {
-                                selectedIds: gridItem.invoiceTypeId
+                        gridItem.onInvoiceTypeSelectionChanged = function (selectedInvoiceType) {
+                            var invoiceTypeIdSelected;
+                            if (selectedInvoiceType != undefined) {
+                                invoiceTypeIdSelected = selectedInvoiceType.InvoiceTypeId;
+                            }
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isLoadingInvoiceReportFiles = value;
                             };
-                            VRUIUtilsService.callDirectiveLoad(gridItem.invoiceTypeSelectorAPI, invoiceSelectorPayload, gridItem.invoiceSelectorLoadDeferred);
-
                             var invoiceReportFileSelectorPayload = {
                                 businessEntityDefinitionId: "64f8db86-691d-4486-83fb-26a3d3fc095e",
-                                selectedIds: gridItem.invoiceReportFileEntity != undefined && gridItem.invoiceReportFileEntity.InvoiceReportFileId ? gridItem.invoiceReportFileEntity.InvoiceReportFileId : undefined,
-                                filter: null
+                                filter: {
+                                    Filters: [{
+                                        $type: "Vanrise.Invoice.Business.InvoiceReportFileFilter, Vanrise.Invoice.Business",
+                                        InvoiceTypeId: invoiceTypeIdSelected
+                                    }]
+                                },
+                                selectIfSingleItem: true
                             };
-                            VRUIUtilsService.callDirectiveLoad(gridItem.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, gridItem.invoiceReportFileSelectorLoadDeferred);
-                        });
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, setLoader, gridItem.invoiceTypeSelectedPromiseDeferred);
+                        };
+                        UtilsService.waitMultiplePromises([gridItem.invoiceSelectorReadyDeferred.promise, gridItem.invoiceReportFileSelectorReadyDeferred.promise]).then(function () {
+                            function loadInvoiceTypeSelector() {
+                                if (gridItem.invoiceTypeId != undefined) {
+                                    gridItem.invoiceTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                                }
+                                gridItem.invoiceSelectorReadyDeferred.promise.then(function () {
+                                    var invoiceSelectorPayload = {
+                                        selectedIds: gridItem.invoiceTypeId
+                                    };
+                                    VRUIUtilsService.callDirectiveLoad(gridItem.invoiceTypeSelectorAPI, invoiceSelectorPayload, gridItem.invoiceSelectorLoadDeferred);
+                                });
 
+                                return gridItem.invoiceSelectorLoadDeferred.promise;
+                            }
+
+                            function loadInvoiceReportFileSelector() {
+                                var promises = [gridItem.invoiceReportFileSelectorReadyDeferred.promise];
+                                if (gridItem.invoiceTypeSelectedPromiseDeferred != undefined) {
+                                    promises.push(gridItem.invoiceTypeSelectedPromiseDeferred.promise);
+                                }
+                                UtilsService.waitMultiplePromises(promises).then(function () {
+                                    var invoiceReportFileSelectorPayload = {
+                                        businessEntityDefinitionId: "64f8db86-691d-4486-83fb-26a3d3fc095e",
+                                        selectedIds: gridItem.invoiceReportFileEntity != undefined && gridItem.invoiceReportFileEntity.InvoiceReportFileId ? gridItem.invoiceReportFileEntity.InvoiceReportFileId : undefined,
+                                        filter: {
+                                            Filters: [{
+                                                $type: "Vanrise.Invoice.Business.InvoiceReportFileFilter, Vanrise.Invoice.Business",
+                                                InvoiceTypeId: gridItem.invoiceTypeId
+                                            }]
+                                        },
+                                        selectIfSingleItem:true
+                                        };
+                                    VRUIUtilsService.callDirectiveLoad(gridItem.invoiceReportFileSelectorAPI, invoiceReportFileSelectorPayload, gridItem.invoiceReportFileSelectorLoadDeferred);
+                                });
+                                return gridItem.invoiceReportFileSelectorLoadDeferred.promise;
+                            }
+
+                            UtilsService.waitMultiplePromises([loadInvoiceTypeSelector(), loadInvoiceReportFileSelector()]).then(function () {
+                                gridItem.invoiceTypeSelectedPromiseDeferred = undefined;
+                            });
+
+                        });
                         $scope.scopeModel.invoiceReportItems.push(gridItem);
                     }
 
@@ -165,14 +227,14 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
                     var invoiceReportItems;
 
                     if ($scope.scopeModel.invoiceReportItems != undefined) {
-                        invoiceReportItems = [];
+                        invoiceReportItems = {};
                         for (var i = 0; i < $scope.scopeModel.invoiceReportItems.length; i++) {
                             var currentItem = $scope.scopeModel.invoiceReportItems[i];
                             var invoiceTypeId = currentItem.invoiceTypeSelectorAPI.getSelectedIds();
                             if(invoiceTypeId!=undefined){
                                 invoiceReportItems[invoiceTypeId] = {
-                                    $type: "Vanrise.Entities.InvoiceReportFile, Vanrise.Entities",
-                                    InvoiceReportFileId: currentItem.invoiceReportFileSelectorAPI.getSelectedIds()
+                                $type: "Vanrise.Entities.InvoiceReportFile, Vanrise.Entities",
+                                InvoiceReportFileId: currentItem.invoiceReportFileSelectorAPI.getSelectedIds()
                                 };
                             }
                         }
@@ -182,6 +244,12 @@ app.directive("vrInvoiceInvoicereportfiles", ["UtilsService", "VRNotificationSer
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function getInvoiceTypes() {
+                return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypesInfo().then(function (response) {
+                    invoiceTypes = response;
+                });
             }
         }
 

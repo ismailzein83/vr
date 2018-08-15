@@ -17,7 +17,8 @@
                 isrequired: "=",
                 isdisabled: "=",
                 customlabel: "@",
-                normalColNum: '='
+                normalColNum: '=',
+                hidelabel: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -112,7 +113,11 @@
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            var haschildcolumns = "";
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '>'
                 + '<span vr-disabled="ctrl.isdisabled">'
                     + '<vr-select on-ready="ctrl.onSelectorReady"'
                         + ' datasource="ctrl.datasource"'

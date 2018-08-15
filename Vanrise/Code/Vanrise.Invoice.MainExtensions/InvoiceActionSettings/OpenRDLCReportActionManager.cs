@@ -14,6 +14,7 @@ using Vanrise.Common;
 using System.Threading;
 using System.IO;
 using Vanrise.Common.Business;
+using Vanrise.Invoice.Business.Extensions;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -56,13 +57,25 @@ namespace Vanrise.Invoice.MainExtensions
                 if (openRDLCReportAction != null)
                 {
                     reportViewer.ProcessingMode = ProcessingMode.Local;
+                    string reportURL = openRDLCReportAction.ReportURL;
+                    string reportRuntimeURL = openRDLCReportAction.ReportRuntimeURL;
+                    var reportFilePath = invoiceType.Settings.ExtendedSettings.GetInfo(new InvoiceTypeExtendedSettingsInfoContext()
+                    {
+                        InfoType = "RDLCReportPath",
+                        Invoice = invoice
+                    });
+                    if (reportFilePath != null)
+                    {
+                        reportURL = string.Format("~/Client/Modules/{0}", reportFilePath);
+                        reportRuntimeURL = reportFilePath;
+                    }
                     if(HttpContext.Current != null)
                     {
-                        reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(openRDLCReportAction.ReportURL);
+                        reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(reportURL);
                     }else
                     {
                         string currentDir = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(OpenRDLCReportActionManager)).Location);
-                        reportViewer.LocalReport.ReportPath = Path.Combine(currentDir, openRDLCReportAction.ReportRuntimeURL);
+                        reportViewer.LocalReport.ReportPath = Path.Combine(currentDir, reportRuntimeURL);
 
                     }
                     reportViewer.LocalReport.DisplayName = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
