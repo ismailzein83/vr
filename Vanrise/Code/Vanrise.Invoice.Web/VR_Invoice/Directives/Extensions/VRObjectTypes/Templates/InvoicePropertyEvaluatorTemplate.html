@@ -10,6 +10,9 @@
 <vr-columns width="1/2row">
     <vr-switch value="scopeModel.useDescription" label="Use Description"></vr-switch>
 </vr-columns>
+<vr-columns width="1/2row">
+    <vr-switch value="scopeModel.useRoundedValue" label="Use Rounded Value"></vr-switch>
+</vr-columns>
 <vr-columns width="1/2row" ng-show="scopeModel.isCustomFieldRequired()">
     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordFieldsSelectorReady"
                                                   isrequired="scopeModel.isCustomFieldRequired()">

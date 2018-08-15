@@ -24,6 +24,7 @@ namespace Vanrise.Invoice.MainExtensions
         public InvoiceField InvoiceField { get; set; }
         public string FieldName { get; set; }
         public bool UseDescription { get; set; }
+        public bool UseRoundedValue { get; set; }
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             Vanrise.Invoice.Entities.Invoice invoice = context.Object as Vanrise.Invoice.Entities.Invoice;
@@ -102,6 +103,14 @@ namespace Vanrise.Invoice.MainExtensions
                             return dataRecordField.Type.GetDescription(fieldValue);
                         }
                         throw new NullReferenceException(string.Format("Field: '{0}' not available in dataRecordType '{1}'.", this.FieldName, invoiceType.Settings.InvoiceDetailsRecordTypeId));
+                    }
+                    if (this.UseRoundedValue)
+                    {
+                        DataRecordField dataRecordField;
+                        if (dataRecordTypeFields.TryGetValue(this.FieldName, out dataRecordField) && dataRecordField.Type.CanRoundValue)
+                        {
+                            return dataRecordField.Type.GetRoundedValue(fieldValue);
+                        }
                     }
                     return fieldValue;
                 case InvoiceField.Paid:
