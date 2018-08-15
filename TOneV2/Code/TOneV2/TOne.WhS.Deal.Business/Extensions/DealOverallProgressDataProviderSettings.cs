@@ -293,7 +293,7 @@ namespace TOne.WhS.Deal.Business
                 {"RemaingVolumePerc", remainingVolumePrecentage},
                 {"RemainingDays", 0},
                 {"RemainingPerDays", 0},
-                {"ExpectedDays", 0},
+                {"ExpectedDays", "No Traffic"},
                 {"Rate", rate},
                 {"EstimatedAmount",0},
                 {"ReachedAmount", reachedAmount},
@@ -324,9 +324,9 @@ namespace TOne.WhS.Deal.Business
             }
 
 
-            decimal expectedDays = toDateVolume == 0 || remainingVolume == 0
-                                    ? 0
-                                    : (int)(remainingVolume / toDateVolume);
+            string expectedDays = toDateVolume == 0 || remainingVolume == 0
+                                    ? "No Traffic"
+                                    : (Math.Ceiling(remainingVolume / toDateVolume)).ToString();
 
             decimal reachedAmount = reachedVolume * dealRate;
 
