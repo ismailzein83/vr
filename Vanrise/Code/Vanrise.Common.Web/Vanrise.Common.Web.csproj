@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\VRCommentController.cs" />
     <Compile Include="Controllers\DBReplicationDefinitionController.cs" />
     <Compile Include="Controllers\ExcelFileParserController.cs" />
     <Compile Include="Controllers\CompanyDefinitionsController.cs" />
@@ -372,6 +373,10 @@
     <Content Include="Common\Directives\VRApplicationVisibility\vr-common-modulevisibility-selective.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\VRModuleVisibilityEditorController.js" />
     <Content Include="Common\Directives\VRBoolean\vr-common-boolean-selector.js" />
+    <Content Include="Common\Directives\VRComment\Templates\CommentTemplate.html" />
+    <Content Include="Common\Directives\VRComment\vr-common-comment.js" />
+    <Content Include="Common\Directives\VRComment\VRCommentBE\Templates\VRCommentBETemplate.html" />
+    <Content Include="Common\Directives\VRComment\VRCommentBE\vr-commentbe-editor.js" />
     <Content Include="Common\Directives\VRComponentType\Templates\OverriddenConfigurationComponentType.html" />
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />
@@ -540,6 +545,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
+    <Content Include="Common\Services\APIServices\VRCommentAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />

@@ -10,11 +10,18 @@ namespace Vanrise.Common.Business
 {
     public class VRCommentBEDefinitionSettings : BusinessEntityDefinitionSettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("99E22964-F94E-4BCD-8383-22A613E5AE7F"); }
-        }
+        public static Guid s_configId = new Guid("98154422-B815-4843-9304-CE63930CED84");
+        public override Guid ConfigId { get { return s_configId; } }
         public VRCommentDefinitionSecurity Security { get; set; }
+        public override string SelectorFilterEditor { get; set; }
+
+        public override string DefinitionEditor { get { return "vr-commentbe-editor"; } }
+
+        public override string IdType { get { return "System.Int64"; } }
+
+        public override string ManagerFQTN { get { return "Vanrise.Common.Business.VRCommentManager, Vanrise.Common.Business"; } }
+
+        public override string SelectorUIControl { get { return ""; } }
 
     }
 

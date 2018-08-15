@@ -1,0 +1,67 @@
+﻿<style>
+    .vr-comment {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+        .vr-comment .vr-comment-header {
+            display: inline-block;
+            flex: 1;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .vr-comment .vr-comment-body {
+            display: inline-flex;
+            width: 100%;
+            padding-left: 10px;
+        }
+
+        .vr-comment .vr-comment-footer {
+            display: inline-flex;
+            flex: 1;
+            flex-direction: row-reverse;
+        }
+</style>
+<vr-row>
+    <vr-columns width="2/3row">
+        <vr-section header="Comments">
+            <vr-row>
+                <vr-columns colnum="11">
+                    <vr-textarea value="scopeModel.newComment" rows="4" label="Comment" isrequired="true"></vr-textarea>
+                </vr-columns>
+                <vr-columns colnum="1" withemptyline>
+                    <vr-button type="Comment" data-onclick="scopeModel.addcomment" vr-disabled="!scopeModel.newComment" standalone></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="12">
+                    <vr-datagrid datasource="vRComments"
+                                 on-ready="onGridReady"
+                                 dataretrievalfunction="dataRetrievalFunction"
+                                 pagingtype="'PagingOnScroll'"
+                                 idfield="VRCommentId"
+                                 hideheader="true"
+                                 hidepaginginfo
+                                 defaultsortbyfieldname="'VRCommentId'"
+                                 norowhighlightonclick="true"
+                                 norowhighlightonhover="true">
+                        <vr-datagridcolumn headertext="'ID'" field="'VRCommentId'">
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn>
+                            <div class="vr-comment">
+                                <div class="vr-comment-header"> {{dataItem.CreatedByDescription}}</div>
+                                <div class="vr-comment-body">{{dataItem.Content}}</div>
+                                <div class="vr-comment-footer">{{dataItem.CreatedTime}}</div>
+                            </div>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+

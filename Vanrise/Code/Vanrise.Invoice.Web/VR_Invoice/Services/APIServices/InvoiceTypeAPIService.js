@@ -18,6 +18,11 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+        function GetInvoiceTypeCommentDefinitionId(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceTypeCommentDefinitionId"), {
+                invoiceTypeId: invoiceTypeId
+            });
+        }
         function GetInvoiceTypeRuntime(invoiceTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceTypeRuntime"), {
                 invoiceTypeId: invoiceTypeId
@@ -107,7 +112,8 @@
             GetMenualInvoiceBulkActionsDefinitions: GetMenualInvoiceBulkActionsDefinitions,
             GetPartnerName: GetPartnerName,
             GetPartnerInvoiceSettingFilterFQTN: GetPartnerInvoiceSettingFilterFQTN,
-            GetInvoiceSettingPartsInfo: GetInvoiceSettingPartsInfo
+            GetInvoiceSettingPartsInfo: GetInvoiceSettingPartsInfo,
+            GetInvoiceTypeCommentDefinitionId: GetInvoiceTypeCommentDefinitionId
         });
     }
 

@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceTypeEditorController" vr-loader="scopeModel.isLoading" size="large">
     <vr-modalbody>
         <vr-form name="formInvoiceTypeEditor">
-            <vr-tabs >
+            <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/3row">
@@ -28,6 +28,11 @@
                         </vr-columns>
                         <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingSatgesToProcess">
                             <vr-queueing-executionflow-stage-selector customlabel="Stages To Process" on-ready="scopeModel.onStagesToProcessSelectorReady" isrequired="true" ismultipleselection></vr-queueing-executionflow-stage-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onCommentDefinitionSelectorReady" normal-col-num="6" customlabel="Comment Definition"></vr-genericdata-businessentitydefinition-selector>
                         </vr-columns>
                     </vr-row>
                     <vr-invoice-startdatecalculationmethod on-ready="scopeModel.onStartCalculationMethodDirectiveReady" normal-col-num="4"></vr-invoice-startdatecalculationmethod>
@@ -66,7 +71,7 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                
+
                 <vr-tab header="'Pre-Generate Actions'">
                     <vr-row>
                         <vr-columns width="fullrow">
@@ -74,7 +79,7 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-              
+
                 <vr-tab header="'Bulk Generation'">
                     <vr-row>
                         <vr-columns width="1/2row">
@@ -115,7 +120,7 @@
                             </vr-section>
                         </vr-columns>
                     </vr-row>
-                   
+
 
                 </vr-tab>
                 <vr-tab header="'Grid Settings'">
@@ -134,11 +139,11 @@
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <vr-section title="Grid Sub Sections" collapsible>
-                                 <vr-invoicetype-subsections on-ready="scopeModel.onSubSectionsReady"></vr-invoicetype-subsections>
+                                <vr-invoicetype-subsections on-ready="scopeModel.onSubSectionsReady"></vr-invoicetype-subsections>
                             </vr-section>
                         </vr-columns>
                 </vr-tab>
-                <vr-tab header="'Grouping Items'" >
+                <vr-tab header="'Grouping Items'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <vr-invoice-itemgroupings on-ready="scopeModel.onItemGroupingsDirectiveReady"></vr-invoice-itemgroupings>
@@ -161,28 +166,28 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow" >
+                        <vr-columns width="fullrow">
                             <vr-section title="Generate Invoice" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onGenerateRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow" >
+                        <vr-columns width="fullrow">
                             <vr-section title="View Settings" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewSettingsRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow" >
+                        <vr-columns width="fullrow">
                             <vr-section title="Add Settings" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddSettingsRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow" >
+                        <vr-columns width="fullrow">
                             <vr-section title="Edit Settings" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditSettingsRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>

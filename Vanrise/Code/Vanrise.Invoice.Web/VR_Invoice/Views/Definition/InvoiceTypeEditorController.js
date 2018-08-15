@@ -35,8 +35,9 @@
         var invoiceBulkActionsAPI;
         var invoiceBulkActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var commentDefinitionAPI;
+        var commentDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        
         var invoiceGeneratorActionAPI;
         var invoiceGeneratorActionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -125,7 +126,10 @@
                 invoiceMenualActionsReadyPromiseDeferred.resolve();
             };
 
-
+            $scope.scopeModel.onCommentDefinitionSelectorReady = function (api) {
+                commentDefinitionAPI = api;
+                commentDefinitionReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onInvoiceAttachmentsReady = function (api) {
                 invoiceAttachmentsAPI = api;
                 invoiceAttachmentsReadyPromiseDeferred.resolve();
@@ -358,7 +362,8 @@
                         AmountFieldName: amountFieldAPI.getSelectedIds(),
                         CurrencyFieldName: currencyFieldAPI.getSelectedIds(),
                         ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
-                        InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds()
+                        InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
+                        InvoiceCommentDefinitionId: commentDefinitionAPI.getSelectedIds()
                     }
                 };
                 return obj;
@@ -533,7 +538,7 @@
                     return invoiceBulkActionsDeferredLoadPromiseDeferred.promise;
                 }
 
-                
+
                 function loadInvoiceGeneratorActionGrid() {
                     var invoiceGeneratorActionDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceGeneratorActionReadyPromiseDeferred.promise.then(function () {
@@ -788,9 +793,26 @@
                     });
                     return invoiceMenualActionsSectionLoadPromiseDeferred.promise;
                 }
+                function loadCommentDefinitionSelector() {
+                    var commentDefinitionSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    commentDefinitionReadyPromiseDeferred.promise.then(function () {
+                        var commentDefinitionSelectorPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Vanrise.Common.Business.CommentBEDefinitionFilter, Vanrise.Common.Business"
+                                }]
+                            }
+                        };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
+                            commentDefinitionSelectorPayload.selectedIds = invoiceTypeEntity.Settings.InvoiceCommentDefinitionId;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(commentDefinitionAPI, commentDefinitionSelectorPayload, commentDefinitionSelectorLoadPromiseDeferred);
+                    });
+                    return commentDefinitionSelectorLoadPromiseDeferred.promise;
+                }
 
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection, loadCommentDefinitionSelector])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

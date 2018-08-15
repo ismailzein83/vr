@@ -62,6 +62,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BE360Degree\BE360DegreeManager.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="DataEncryptionKeyManager.cs" />
     <Compile Include="DBReplicationDefinitionManager.cs" />
     <Compile Include="ExcelFileUploader\ExcelFileUploaderManager.cs" />
+    <Compile Include="Filters\CommentBEDefinitionFilter.cs" />
     <Compile Include="LicenseManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyDefinitionManager.cs" />

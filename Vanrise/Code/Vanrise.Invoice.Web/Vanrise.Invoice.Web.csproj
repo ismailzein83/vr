@@ -400,6 +400,10 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-editor.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-row.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\vr-invoicetype-invoicesetting-definition-section.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\CommentSubSectionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\vr-invoicetype-invoicesubsectionsettings-comment.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\InvoiceItemSubSectionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\ItemGroupingSubSectionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\ItemSetNameStorageRuleEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\MainExtensions\Templates\DefaultItemSetNameStorageRuleTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\ItemSetNameStorageRule\MainExtensions\vr-invoicetype-itemsetnamestoragerulesettings-default.js" />
@@ -419,7 +423,6 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\vr-invoicetype-datasourcesettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\vr-invoicetype-openrdlcreport-parametersettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\Templates\InvoiceGridActionsManagement.html" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\ItemGroupingSubSectionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\vr-invoicetype-invoicesubsectionsettings-itemgrouping.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\ConstantConatenatedPartSettingsTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\VRConcatenatedPart\Templates\CurrentItemSetNameConcatenatedPartTemplate.html" />
@@ -448,6 +451,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\vr-invoicetype-maingridcolumns.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceReportFilesTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\CommentSubSectionGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-commentsubsection-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicereportfiles.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-periodgapaction-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-ordertype-selective.js" />
@@ -468,7 +473,6 @@
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-subsection-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\OpenRDLCReportActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-openrdlcreport.js" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\Templates\InvoiceItemSubSectionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\MainExtensions\vr-invoicetype-invoiceuisubsectionsettings-invoiceitem.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\Templates\CustomFieldRDLReportParameterValue.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\Templates\FieldRDLReportParameterValue.html" />
