@@ -11,7 +11,8 @@
             scope: {
                 value: '=',
                 label: '@',
-                isrequired: '='
+                isrequired: '=',
+                hidelabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -42,19 +43,16 @@
                 else if (attrs.isrequired == undefined)
                     isrequired = 'isrequired="false"';
 
+                var label = ' label="{{ctrl.label}}" ';
+                if (attrs.hidelabel != undefined)
+                    label = '';
 
-                var timeSpan =
-                       '<vr-textbox label="{{ctrl.label}}" value="ctrl.value" ' + isrequired + '  customvalidate="scopeModel.validateTimeOffset(ctrl.value)"></vr-textbox>';
-
-                return timeSpan;
+                return '<vr-textbox ' + label + ' value="ctrl.value" ' + isrequired + '  customvalidate="scopeModel.validateTimeOffset(ctrl.value)"></vr-textbox>';
             }
-
         };
-
     }
 
     app.directive('vrTimespan', vrTimespan);
-
 })(app);
 
 

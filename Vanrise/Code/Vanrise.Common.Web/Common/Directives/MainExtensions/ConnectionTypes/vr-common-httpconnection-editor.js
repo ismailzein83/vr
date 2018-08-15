@@ -20,14 +20,26 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
         function HttpConnectionCtor(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
-            var gridAPI;
+            var headerGridAPI;
+            var headerGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var settingsGridAPI;
+            var settingsGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.datasource = [];
+                $scope.scopeModel.headers = [];
+                $scope.scopeModel.settings = [];
 
                 $scope.scopeModel.onHttpHeaderGridReady = function (api) {
-                    gridAPI = api;
+                    headerGridAPI = api;
+                    headerGridAPIReadyPromiseDeferred.resolve();
+                };
+
+
+                $scope.scopeModel.onSettingGridReady = function (api) {
+                    settingsGridAPI = api;
+                    settingsGridAPIReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.addHttpHeader = function () {
@@ -36,17 +48,22 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
                         Name: "",
                         Value: ""
                     };
-                    $scope.scopeModel.datasource.push(dataItem);
+                    $scope.scopeModel.headers.push(dataItem);
                 };
 
+                $scope.scopeModel.addSettings = function () {
+                    var dataItem = {};
+                    $scope.scopeModel.settings.push(dataItem);
+
+                };
                 $scope.scopeModel.isNameValid = function () {
-                    if ($scope.scopeModel.datasource.length == 0)
+                    if ($scope.scopeModel.headers.length == 0)
                         return;
 
-                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                        var currentItem = $scope.scopeModel.datasource[i];
-                        for (var j = i + 1; j < $scope.scopeModel.datasource.length; j++) {
-                            var dataItem = $scope.scopeModel.datasource[j];
+                    for (var i = 0; i < $scope.scopeModel.headers.length; i++) {
+                        var currentItem = $scope.scopeModel.headers[i];
+                        for (var j = i + 1; j < $scope.scopeModel.headers.length; j++) {
+                            var dataItem = $scope.scopeModel.headers[j];
                             if (dataItem.Name === currentItem.Name)
                                 return 'This name already exists';
                         }
@@ -55,39 +72,62 @@ app.directive('vrCommonHttpconnectionEditor', ['UtilsService',
                 };
 
                 $scope.scopeModel.removeHttpHeader = function (dataItem) {
-                    $scope.scopeModel.datasource.splice($scope.scopeModel.datasource.indexOf(dataItem), 1);
+                    $scope.scopeModel.headers.splice($scope.scopeModel.headers.indexOf(dataItem), 1);
                 };
 
-                defineAPI();
+                $scope.scopeModel.removeSetting = function (dataItem) {
+                    $scope.scopeModel.settings.splice($scope.scopeModel.settings.indexOf(dataItem), 1);
+                };
+
+                UtilsService.waitMultiplePromises([settingsGridAPIReadyPromiseDeferred.promise, headerGridAPIReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
-                    var headers;
-
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.baseURL = payload.data.BaseURL;
-                        $scope.scopeModel.datasource = payload.data.Headers;
+                        if (payload.data.Headers != undefined)
+                            $scope.scopeModel.headers = payload.data.Headers;
+
+                        if (payload.data.WorkflowRetrySettings != undefined)
+                            $scope.scopeModel.settings = payload.data.WorkflowRetrySettings;
                     }
                 };
 
                 api.getData = function () {
-                    var headers = [];
-                    angular.forEach($scope.scopeModel.datasource, function (item) {
-                        var dataItem = {
-                            Name: item.Name,
-                            Value: item.Value
-                        };
-                        headers.push(dataItem);
-                    });
+                    var headers;
+                    if ($scope.scopeModel.headers.length > 0) {
+                        headers = [];
+                        angular.forEach($scope.scopeModel.headers, function (item) {
+                            var dataItem = {
+                                Name: item.Name,
+                                Value: item.Value
+                            };
+                            headers.push(dataItem);
+                        });
+                    }
+
+                    var settings;
+                    if ($scope.scopeModel.settings.length > 0) {
+                        settings = [];
+                        angular.forEach($scope.scopeModel.settings, function (item) {
+                            var dataItem = {
+                                MaxRetryCount: item.MaxRetryCount,
+                                RetryInterval: item.RetryInterval
+                            };
+                            settings.push(dataItem);
+                        });
+                    }
 
                     return {
                         $type: "Vanrise.Common.Business.VRHttpConnection, Vanrise.Common.Business",
                         BaseURL: $scope.scopeModel.baseURL,
-                        Headers: headers
+                        Headers: headers,
+                        WorkflowRetrySettings: settings
                     };
                 };
 

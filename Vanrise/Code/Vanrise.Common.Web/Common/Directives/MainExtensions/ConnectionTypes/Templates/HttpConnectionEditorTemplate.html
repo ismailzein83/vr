@@ -5,10 +5,10 @@
     <vr-section header="Headers">
         <vr-button type="Add" data-onclick="scopeModel.addHttpHeader" standalone></vr-button>
         <vr-validator validate="scopeModel.isNameValid()">
-            <vr-datagrid datasource="scopeModel.datasource"
-                         pagingtype="'PagingOnScroll'"
+            <vr-datagrid datasource="scopeModel.headers"
                          on-ready="scopeModel.onHttpHeaderGridReady"
-                         ondeleterow="scopeModel.removeHttpHeader">
+                         ondeleterow="scopeModel.removeHttpHeader"
+                         disablesorting="true" hidegridmenu disabledraggablecolumns>
                 <vr-datagridcolumn headertext="'Name'">
                     <vr-textbox value="dataItem.Name" isrequired></vr-textbox>
                 </vr-datagridcolumn>
@@ -17,5 +17,22 @@
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-validator>
+    </vr-section>
+</vr-columns>
+
+<vr-columns width="fullrow">
+    <vr-section header="Workflow Retry Settings">
+        <vr-button type="Add" data-onclick="scopeModel.addSettings" standalone></vr-button>
+        <vr-datagrid datasource="scopeModel.settings"
+                     on-ready="scopeModel.onSettingGridReady"
+                     ondeleterow="scopeModel.removeSetting"
+                     disablesorting="true" hidegridmenu disabledraggablecolumns>
+            <vr-datagridcolumn headertext="'Max Retry Count'">
+                <vr-textbox value="dataItem.MaxRetryCount" isrequired type="number" decimalprecision="0" minvalue="1"></vr-textbox>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Retry Interval'">
+                <vr-timespan value="dataItem.RetryInterval" isrequired hidelabel></vr-timespan>
+            </vr-datagridcolumn>
+        </vr-datagrid>
     </vr-section>
 </vr-columns>
