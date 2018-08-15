@@ -17,6 +17,7 @@ namespace TOne.WhS.Sales.Entities
         public int SubscriberId { get; set; }
         public SubscriberProcessStatus Status { get; set; }
         public long SubscriberProcessInstanceId { get; set; }
+        public List<ExcludedChange> ExcludedCountries { get; set; }
       
     }
 
@@ -24,6 +25,7 @@ namespace TOne.WhS.Sales.Entities
     {
         public SubscriberPreview Entity { get; set; }
         public string SubscriberName { get; set; }
+        public int NumberOfExcludedCountries { get; set; }
     }
 
     public class SubscriberPreviewSummary

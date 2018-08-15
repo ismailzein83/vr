@@ -14,11 +14,14 @@
 </vr-row>
 <vr-row>
     <vr-columns colnum="12">
-    <vr-datagrid datasource="scopeModel.subscriberPreviews"
-                 pagingtype="'PagingOnScroll'"
-                 on-ready="scopeModel.onGridReady">
-        <vr-datagridcolumn headertext="'Subscriber'" field="'SubscriberName'" isclickable="true" onclicked="processInstanceClicked" widthfactor="3" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Status'" field="'SubscriberStatusDescription'" widthfactor="2" type="'Text'"></vr-datagridcolumn>
-    </vr-datagrid>
-        </vr-columns>
+        <vr-datagrid datasource="scopeModel.subscriberPreviews"
+                     pagingtype="'PagingOnScroll'"
+                     on-ready="scopeModel.onGridReady">
+            <vr-datagridcolumn headertext="'Subscriber'" field="'SubscriberName'" isclickable="true" onclicked="processInstanceClicked" widthfactor="3" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Status'" field="'SubscriberStatusDescription'" widthfactor="2" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Excluded Countries'" field="'NumberOfExcludedCountries'" isclickable="true" onclicked="processInstanceClicked" widthfactor="3" type="'Text'">
+                <a href="" ng-click="viewScope.processInstanceClicked(dataItem)" ng-if="dataItem.NumberOfExcludedCountries > 0">Number of Countries : {{dataItem.NumberOfExcludedCountries}}</a>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
 </vr-row>

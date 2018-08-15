@@ -17,7 +17,7 @@ namespace TOne.WhS.Sales.Business
             var dataManager = SalesDataManagerFactory.GetDataManager<ISubscriberPreviewDataManager>();
             var subscriberPreviews = dataManager.GetSubscriberPreviews(processInstanceId);
 
-            IEnumerable<SubscriberPreviewDetail> subscriberPreviewDetails = subscriberPreviews.MapRecords(SubscriberPreviewDetail);
+            IEnumerable<SubscriberPreviewDetail> subscriberPreviewDetails = subscriberPreviews.MapRecords(SubscriberPreviewDetailMapper);
             SubscriberPreviewSummary subscriberPreviewSummary = new SubscriberPreviewSummary
             {
                 NumberOfSubscriberWithSuccessStatus = subscriberPreviews.Count(item => item.Status == SubscriberProcessStatus.Success),
@@ -32,13 +32,27 @@ namespace TOne.WhS.Sales.Business
             };
         }
 
-        private SubscriberPreviewDetail SubscriberPreviewDetail(SubscriberPreview entity)
+        private SubscriberPreviewDetail SubscriberPreviewDetailMapper(SubscriberPreview entity)
         {
             var carrierAccountManager = new CarrierAccountManager();
             var subscriberPreviewDetail = new SubscriberPreviewDetail();
             subscriberPreviewDetail.Entity = entity;
             subscriberPreviewDetail.SubscriberName = carrierAccountManager.GetCarrierAccountName(entity.SubscriberId);
+            subscriberPreviewDetail.NumberOfExcludedCountries = GetNumberOfExcludedCountries(entity.ExcludedCountries);
             return subscriberPreviewDetail;
+        }
+
+        private int GetNumberOfExcludedCountries(List<ExcludedChange> excludedCountries)
+        {
+            int numberOfExcludedCountries = 0;
+            if (excludedCountries != null)
+            {
+                foreach (var excludedCountry in excludedCountries)
+                {
+                    numberOfExcludedCountries += excludedCountry.CountryIds.Count();
+                }
+            }
+            return numberOfExcludedCountries;
         }
 
     }

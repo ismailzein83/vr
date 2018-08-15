@@ -39,7 +39,8 @@ namespace TOne.WhS.Sales.Data.SQL
 
         public bool InsertSubscriberPreview(SubscriberPreview subscriberPreview)
         {
-            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SubscriberPreview_Insert", _processInstanceId, subscriberPreview.SubscriberId, Convert.ToInt32(subscriberPreview.Status), subscriberPreview.SubscriberProcessInstanceId);
+            var details = (subscriberPreview.ExcludedCountries != null) ? Vanrise.Common.Serializer.Serialize(subscriberPreview.ExcludedCountries) : null;
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SubscriberPreview_Insert", _processInstanceId, subscriberPreview.SubscriberId, Convert.ToInt32(subscriberPreview.Status), subscriberPreview.SubscriberProcessInstanceId,details);
 
             return affectedRows > 0;
         }
@@ -51,6 +52,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 SubscriberId = GetReaderValue<int>(reader, "SubscriberID"),
                 Status = (SubscriberProcessStatus)reader["Status"],
                 SubscriberProcessInstanceId = GetReaderValue<long>(reader, "SubscriberProcessInstanceID"),
+                ExcludedCountries = ((reader["Details"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<List<ExcludedChange>>(reader["Details"] as string) : null, 
             };
         }
     }

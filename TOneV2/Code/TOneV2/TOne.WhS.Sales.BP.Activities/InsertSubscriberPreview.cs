@@ -22,13 +22,14 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<bool> TerminatedDueBusinessRulesViolation { get; set; }
-
+        public InArgument<List<ExcludedChange>> ExcludedCountries { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             long rootProcessInstanceId = ratePlanContext.RootProcessInstanceId;
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             int subscriberId = SubscriberId.Get(context);
+            List<ExcludedChange> excludedCountries = ExcludedCountries.Get(context);
             bool terminatedDueBusinessRulesViolation = TerminatedDueBusinessRulesViolation.Get(context);
             SubscriberProcessStatus status;
 
@@ -48,7 +49,8 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 SubscriberId = subscriberId,
                 Status = status,
-                SubscriberProcessInstanceId = processInstanceId
+                SubscriberProcessInstanceId = processInstanceId,
+                ExcludedCountries = excludedCountries
             };
             var subscriberPreviewDataManager = SalesDataManagerFactory.GetDataManager<ISubscriberPreviewDataManager>();
             subscriberPreviewDataManager.ProcessInstanceId = rootProcessInstanceId;
