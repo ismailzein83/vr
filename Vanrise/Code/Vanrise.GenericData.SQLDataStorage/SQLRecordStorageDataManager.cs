@@ -615,6 +615,9 @@ namespace Vanrise.GenericData.SQLDataStorage
                                             WHERE {2} >= @From AND {2} < @To", tableName, GetColumnNameFromFieldName(idFieldName), GetColumnNameFromFieldName(dateTimeFieldName)),
                 (cmd) =>
                 {
+
+                    cmd.CommandTimeout = 0;
+
                     var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
                     dtPrm.TypeName = "IDType";
                     dtPrm.Value = datatable;
