@@ -21,7 +21,7 @@ namespace BPMExtended.Main.Business
 
         #region Public Methods
 
-        public CreateCustomerRequestOutput CreateBSCSBillingAccount(BPMCustomerType customerType, Guid accountOrContactId)
+        public CreateCustomerRequestOutput ProcessCustomerCreation(BPMCustomerType customerType, Guid accountOrContactId)
         {
             NewCustomerCreationSomRequestSetting newCustomerCreationSomRequestSetting = new NewCustomerCreationSomRequestSetting
             {
