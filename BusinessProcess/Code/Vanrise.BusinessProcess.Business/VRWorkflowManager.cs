@@ -426,7 +426,18 @@ namespace Vanrise.BusinessProcess.Business
 
         #endregion
 
-        #region Private Classes
+        #region Internal/Private Classes
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreVRWorkflowsUpdated(ref _updateHandle);
+            }
+        }
 
         private class VRWorkflowLoggableEntity : VRLoggableEntityBase
         {
@@ -469,17 +480,6 @@ namespace Vanrise.BusinessProcess.Business
             {
                 VRWorkflow vrWorkflow = context.Object.CastWithValidate<VRWorkflow>("context.Object");
                 return s_vrWorkflowManager.GetVRWorkflowName(vrWorkflow);
-            }
-        }
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return dataManager.AreVRWorkflowsUpdated(ref _updateHandle);
             }
         }
 
