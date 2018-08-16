@@ -324,7 +324,7 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                     var entity = $scope.scopeModel.gridDataSource[i].Entity;
                     if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
                         excludedSaleZoneIds.push(entity.entityId);
-                    else {
+                    else if (entity.saleZoneSelectorAPI != undefined){
                         var selectedSaleZoneIds = entity.saleZoneSelectorAPI.getSelectedIds();
                         if (selectedSaleZoneIds != undefined) {
                             for (var j = 0; j < selectedSaleZoneIds.length; j++)
@@ -403,9 +403,10 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                 $scope.scopeModel.isLoading = true;
 
                 var directiveLoadPromises = [];
-                var commonDirectivePayload = getCommonSaleZoneSelectorPayload();
+
 
                 for (var i = 0; i < $scope.scopeModel.selectedCountries.length; i++) {
+                    var commonDirectivePayload = getCommonSaleZoneSelectorPayload();
                     var country = $scope.scopeModel.selectedCountries[i];
                     addCountry(country, entityTypeValue, entityTypeDescription, commonDirectivePayload, directiveLoadPromises);
                 }
