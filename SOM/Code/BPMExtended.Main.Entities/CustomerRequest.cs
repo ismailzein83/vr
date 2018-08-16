@@ -14,7 +14,7 @@ namespace BPMExtended.Main.Entities
 
         public Guid RequestTypeId { get; set; }
 
-        public CustomerObjectType CustomerObjectType { get; set; }
+        public BPMCustomerType CustomerType { get; set; }
 
         public Guid AccountOrContactId { get; set; }
 

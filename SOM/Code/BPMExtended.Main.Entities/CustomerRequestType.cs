@@ -31,7 +31,7 @@ namespace BPMExtended.Main.Entities
 
     public interface ICustomerRequestTypeCanCreateRequestOnCustomerContext
     {
-        CustomerObjectType CustomerObjectType { get; }
+        BPMCustomerType CustomerType { get; }
 
         Guid AccountOrContactId { get; set; }
     }

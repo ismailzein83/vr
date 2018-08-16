@@ -10,7 +10,7 @@ namespace SOM.Main.Entities
     {
         public string PhoneNumber { get; set; }
         public string RatePlanId { get; set; }
-        public List<TelephoneService> Services { get; set; }
+        public List<Service> Services { get; set; }
 
     }
 

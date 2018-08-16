@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace SOM.Main.Entities
 {
-    public enum RatePlanType { Normal, Gold, ADSL, ST_Employee, ISDN }
     public class RatePlan
     {
-        //Used in CRM
-        public string Id { get; set; }
+        public string RatePlanId { get; set; }
+        
         public string Name { get; set; }
 
-        //Not used
-        public string Description { get; set; }
-        public RatePlanType Type { get; set; }
+        public LineOfBusiness LOB { get; set; }
+
+        public string SubType { get; set; }
+
+        public CustomerCategory Category { get; set; }
+
+        public ServicePackage CorePackage { get; set; }
+
+        public List<ServicePackage> OptionalPackages { get; set; }
 
     }
 }

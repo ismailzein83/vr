@@ -6,5 +6,10 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public enum CustomerObjectType { Account = 0, Contact = 1 }
+    public class RatePlanInfo
+    {
+        public string RatePlanId { get; set; }
+
+        public string Name { get; set; }
+    }
 }

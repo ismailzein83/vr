@@ -16,17 +16,19 @@ namespace SOM.Main.Web.Controllers
     {
         [HttpGet]
         [Route("GetServices")]
-        public List<TelephoneService> GetServices(string ratePlanId)
+        public List<Service> GetServices(string ratePlanId)
         {
-            BillingManager manager = new BillingManager();
-            return manager.GetServices().FindAll(c => c.RatePlanId.ToLower() == ratePlanId.ToLower());
+            throw new NotImplementedException();
+            //BillingManager manager = new BillingManager();
+            //return manager.GetServices().FindAll(c => c.RatePlanId.ToLower() == ratePlanId.ToLower());
         }
         [HttpGet]
         [Route("GetRatePlans")]
         public List<RatePlan> GetRatePlans()
         {
-            BillingManager manager = new BillingManager();
-            return manager.GetRatePlans();
+            throw new NotImplementedException();
+            //BillingManager manager = new BillingManager();
+            //return manager.GetRatePlans();
         }
     }
 }

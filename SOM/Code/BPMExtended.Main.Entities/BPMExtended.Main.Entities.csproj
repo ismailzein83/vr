@@ -46,8 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContractDetail.cs" />
     <Compile Include="CreateCustomerRequestOutput.cs" />
-    <Compile Include="CustomerObjectType.cs" />
+    <Compile Include="CustomerBalance.cs" />
+    <Compile Include="CustomerCategoryDetail.cs" />
+    <Compile Include="CustomerCategoryInfo.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="CustomerRequestHeaderDetail.cs" />
     <Compile Include="CustomerRequestLogDetail.cs" />
@@ -55,15 +59,19 @@
     <Compile Include="CustomerRequestTypeInfo.cs" />
     <Compile Include="DeviceItemDetail.cs" />
     <Compile Include="InventoryItemDetail.cs" />
-    <Compile Include="LeasedLineContractInfo.cs" />
+    <Compile Include="LeasedLineContractDetail.cs" />
     <Compile Include="LineType.cs" />
     <Compile Include="PhoneNumberDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatePlanDetail.cs" />
-    <Compile Include="TelephoneServiceDetail.cs" />
-    <Compile Include="TelephonyContract.cs" />
-    <Compile Include="TelephonyContractInfo.cs" />
-    <Compile Include="TelephonyContractServiceInfo.cs" />
+    <Compile Include="RatePlanInfo.cs" />
+    <Compile Include="ServiceDetail.cs" />
+    <Compile Include="TelephonyContractDetail.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
+      <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
+      <Name>SOM.Main.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,4 +1,5 @@
-﻿using BPMExtended.Main.Entities;
+﻿using BPMExtended.Main.Common;
+using BPMExtended.Main.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,110 +10,24 @@ namespace BPMExtended.Main.Business
 {
     public class ContractManager
     {
-        public List<TelephonyContractInfo> GetTelephonyContractInfos(CustomerObjectType customerObjectType, Guid accountOrContactId, string telephonyNumber)
+        public TelephonyContractDetail GetTelephonyContract(string contractId)
         {
-            return new List<TelephonyContractInfo>
-            {
-                 new TelephonyContractInfo
-                 {
-                     TelephonyContractId = "1",
-                     PhoneNumber= "1111",
-                     Status = "Active",
-                     ContractTime = DateTime.Today
-                 },
-                 new TelephonyContractInfo
-                 {
-                     TelephonyContractId = "2",
-                      PhoneNumber= "2222",
-                      Status = "Active",
-                       ContractTime = DateTime.Today
-                 },
-                 new TelephonyContractInfo
-                 {
-                     TelephonyContractId = "3",
-                      Status = "Inactive",
-                      PhoneNumber= "5555",
-                       ContractTime = DateTime.Today
-                 }
-            };
+            return MockDataGenerator.GetTelephonyContract(contractId);
         }
 
-        public TelephonyContract GetTelephonyContract(CustomerObjectType customerObjectType, Guid accountOrContactId, string telephonyContractId)
+        public List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
         {
-            var contractInfo = GetTelephonyContractInfos(customerObjectType, accountOrContactId, null).FirstOrDefault(itm => itm.TelephonyContractId == telephonyContractId);
-            if (contractInfo != null)
-                return new TelephonyContract
-                {
-                    TelephonyContractId = contractInfo.TelephonyContractId,
-                    PhoneNumber = contractInfo.PhoneNumber,
-                    Status = contractInfo.Status,
-                    ContractTime = contractInfo.ContractTime
-                };
-            else
-                return null;
+            return MockDataGenerator.GetTelephonyContracts(customerId);
         }
 
-        public List<TelephonyContractServiceInfo> GetTelephonyContractServiceInfos(CustomerObjectType customerObjectType, Guid accountOrContactId, string telephonyContractId)
+        public LeasedLineContractDetail GetLeasedLineContract(string contractId)
         {
-            return new List<TelephonyContractServiceInfo>
-            {
-                new TelephonyContractServiceInfo
-                {
-                     TelephonyContractServiceInfoId = "1",
-                     ServiceName = "Service 1",
-                     Status = "Active",
-                     CreatedTime = DateTime.Today
-                },
-                new TelephonyContractServiceInfo
-                {
-                     TelephonyContractServiceInfoId = "1",
-                     ServiceName = "Service 2",
-                     Status = "Active",
-                     CreatedTime = DateTime.Today
-                },
-                new TelephonyContractServiceInfo
-                {
-                     TelephonyContractServiceInfoId = "1",
-                     ServiceName = "Service 3",
-                     Status = "Active",
-                     CreatedTime = DateTime.Today
-                },
-                new TelephonyContractServiceInfo
-                {
-                     TelephonyContractServiceInfoId = "1",
-                     ServiceName = "Service 4",
-                     Status = "Active",
-                     CreatedTime = DateTime.Today
-                }
-            };
+            return MockDataGenerator.GetLeasedLineContract(contractId);
         }
 
-        public List<LeasedLineContractInfo> GetLeasedLineContractInfos(CustomerObjectType customerObjectType, Guid accountOrContactId, string telephonyNumber)
+        public List<LeasedLineContractDetail> GetLeasedLineContracts(string customerId)
         {
-            return new List<LeasedLineContractInfo>
-            {
-                 new LeasedLineContractInfo
-                 {
-                     LeasedLineContractId = "1",
-                      PhoneNumber= "932487855",
-                      Status = "Active",
-                       ContractTime = DateTime.Today
-                 },
-                 new LeasedLineContractInfo
-                 {
-                     LeasedLineContractId = "2",
-                      Status = "Inactive",
-                      PhoneNumber= "233432545",
-                       ContractTime = DateTime.Today
-                 },
-                 new LeasedLineContractInfo
-                 {
-                     LeasedLineContractId = "3",
-                      PhoneNumber= "34654364",
-                      Status = "Active",
-                       ContractTime = DateTime.Today
-                 }
-            };
+            return MockDataGenerator.GetLeasedLineContracts(customerId);
         }
     }
 }

@@ -5,22 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Common;
 
 namespace BPMExtended.Main.Business
 {
     public class CustomerRequestTypeManager
     {
         //static ICustomerRequestTypeDataManager s_dataManager = new BPMExtended.Main.Data.SQL.CustomerRequestTypeDataManager();// BPMExtendedDataManagerFactory.GetDataManager<ICustomerRequestTypeDataManager>();
-        public List<CustomerRequestTypeInfo> GetCustomerRequestTypeInfos(CustomerObjectType customerObjectType, Guid accountOrContactId)
-        {
-            return GetCustomerRequestTypes().Values.MapRecords(itm => new CustomerRequestTypeInfo
-            {
-                CustomerRequestTypeId = itm.CustomerRequestTypeId,
-                Name = itm.Name,
-                PageURL = itm.Settings != null ? itm.Settings.PageURL : null
-            }).ToList();
-        }
+        //public List<CustomerRequestTypeInfo> GetCustomerRequestTypeInfos(BPMCustomerType customerType, Guid accountOrContactId)
+        //{
+        //    return GetCustomerRequestTypes().Values.MapRecords(itm => new CustomerRequestTypeInfo
+        //    {
+        //        CustomerRequestTypeId = itm.CustomerRequestTypeId,
+        //        Name = itm.Name,
+        //        PageURL = itm.Settings != null ? itm.Settings.PageURL : null
+        //    }).ToList();
+        //}
 
         #region Public Methods
 

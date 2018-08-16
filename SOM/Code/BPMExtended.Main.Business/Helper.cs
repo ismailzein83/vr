@@ -11,13 +11,13 @@ namespace BPMExtended.Main.Business
 {
     public class Helper
     {
-        public static CreateCustomerRequestOutput CreateSOMRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
+        public static CreateCustomerRequestOutput CreateSOMRequest(BPMCustomerType customerType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
         {
             Guid requestId = Guid.NewGuid();
             CreateSOMRequestInput somRequestInput = new CreateSOMRequestInput
             {
                 SOMRequestId = requestId,
-                EntityId = BuildSOMEntityIdFromCustomer(customerObjectType, accountOrContactId),
+                EntityId = BuildSOMEntityIdFromCustomer(customerType, accountOrContactId),
                 RequestTitle = requestTitle,
                 Settings = new SOMRequestSettings { ExtendedSettings = requestSettings }
             };
@@ -42,9 +42,9 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        private static string BuildSOMEntityIdFromCustomer(CustomerObjectType customerObjectType, Guid accountOrContactId)
+        private static string BuildSOMEntityIdFromCustomer(BPMCustomerType customerType, Guid accountOrContactId)
         {
-            return String.Concat(customerObjectType.ToString(), "_", accountOrContactId.ToString());
+            return String.Concat(customerType.ToString(), "_", accountOrContactId.ToString());
         }
     }
 }

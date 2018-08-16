@@ -21,12 +21,23 @@ namespace BPMExtended.Main.Business
 
         #region Public Methods
 
-        public List<CustomerRequestHeaderDetail> GetRecentRequestHeaders(int nbOfRecords, CustomerObjectType customerObjectType, Guid accountOrContactId, long? lessThanSequenceNb)
+        public CreateCustomerRequestOutput CreateBSCSBillingAccount(BPMCustomerType customerType, Guid accountOrContactId)
+        {
+            NewCustomerCreationSomRequestSetting newCustomerCreationSomRequestSetting = new NewCustomerCreationSomRequestSetting
+            {
+                CustomerId = accountOrContactId
+            };
+            string title = string.Format("New Customer Creation Process Input: '{0}'", newCustomerCreationSomRequestSetting.CustomerId);
+
+            return Helper.CreateSOMRequest(customerType, accountOrContactId, title, newCustomerCreationSomRequestSetting);
+        }
+
+        public List<CustomerRequestHeaderDetail> GetRecentRequestHeaders(int nbOfRecords, BPMCustomerType customerType, Guid accountOrContactId, long? lessThanSequenceNb)
         {
             List<SOMRequestHeader> somRequests = null;
             using(SOMClient client = new SOMClient())
             {
-                string entityId = BuildSOMEntityIdFromCustomer(customerObjectType, accountOrContactId);
+                string entityId = BuildSOMEntityIdFromCustomer(customerType, accountOrContactId);
                 somRequests = client.Get<List<SOMRequestHeader>>(String.Format("api/SOM_Main/SOMRequest/GetRecentSOMRequestHeaders?entityId={0}&nbOfRecords={1}&lessThanSequenceNb={2}", entityId, nbOfRecords, lessThanSequenceNb));
             }
             List<CustomerRequestHeaderDetail> customerRequests = new List<CustomerRequestHeaderDetail>();
@@ -37,7 +48,7 @@ namespace BPMExtended.Main.Business
                     var customerReq = new CustomerRequestHeaderDetail
                     {
                         CustomerRequestId = req.SOMRequestId,
-                        CustomerObjectType = customerObjectType,
+                        CustomerType = customerType,
                         AccountOrContactId = accountOrContactId,
                         SequenceNumber = req.SequenceNumber,
                         Title = req.Title,
@@ -76,11 +87,11 @@ namespace BPMExtended.Main.Business
             return logs;
         }
 
-        public CreateCustomerRequestOutput CreateLineSubscriptionRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, LineSubscriptionRequest lineSubscriptionRequest)
+        public CreateCustomerRequestOutput CreateLineSubscriptionRequest(BPMCustomerType customerType, Guid accountOrContactId, LineSubscriptionRequest lineSubscriptionRequest)
         {
             string title = string.Format("Line Subscription '{0}'", lineSubscriptionRequest.PhoneNumber);
 
-            return CreateSOMRequest(customerObjectType, accountOrContactId, title, lineSubscriptionRequest);
+            return CreateSOMRequest(customerType, accountOrContactId, title, lineSubscriptionRequest);
             //Guid requestId = Guid.NewGuid();
             //CreateLineSubscriptionInput somRequestInput = new CreateLineSubscriptionInput
             //{
@@ -108,16 +119,16 @@ namespace BPMExtended.Main.Business
             //return new CreateCustomerRequestOutput { };
         }
 
-        public CreateCustomerRequestOutput CreateMoveLineRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, MoveLineRequest moveLineRequest)
+        public CreateCustomerRequestOutput CreateMoveLineRequest(BPMCustomerType customerType, Guid accountOrContactId, MoveLineRequest moveLineRequest)
         {
             string title = string.Format("Move Line '{0}'", moveLineRequest.PhoneNumber);
-            return CreateSOMRequest(customerObjectType, accountOrContactId, title, moveLineRequest);
+            return CreateSOMRequest(customerType, accountOrContactId, title, moveLineRequest);
         }
 
-        public CreateCustomerRequestOutput CreateLineSubscriptionTerminationRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, LineSubscriptionTerminationProcessRequest lineSubscriptionTerminationRequest)
+        public CreateCustomerRequestOutput CreateLineSubscriptionTerminationRequest(BPMCustomerType customerType, Guid accountOrContactId, LineSubscriptionTerminationProcessRequest lineSubscriptionTerminationRequest)
         {
             string title = string.Format("Line Subscription Termination '{0}'", lineSubscriptionTerminationRequest.PhoneNumber);
-            return CreateSOMRequest(customerObjectType, accountOrContactId, title, lineSubscriptionTerminationRequest);
+            return CreateSOMRequest(customerType, accountOrContactId, title, lineSubscriptionTerminationRequest);
         }
 
         //public void UpdateRequestStatus(Guid requestId, CustomerRequestStatus status)
@@ -129,13 +140,13 @@ namespace BPMExtended.Main.Business
 
         #region Private Methods
 
-        private CreateCustomerRequestOutput CreateSOMRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
+        private CreateCustomerRequestOutput CreateSOMRequest(BPMCustomerType customerType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
         {
             Guid requestId = Guid.NewGuid();
             CreateSOMRequestInput somRequestInput = new CreateSOMRequestInput
              {
                  SOMRequestId = requestId,
-                 EntityId = BuildSOMEntityIdFromCustomer(customerObjectType, accountOrContactId),
+                 EntityId = BuildSOMEntityIdFromCustomer(customerType, accountOrContactId),
                  RequestTitle = requestTitle,
                  Settings = new SOMRequestSettings { ExtendedSettings = requestSettings }
              };
@@ -160,9 +171,9 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        private static string BuildSOMEntityIdFromCustomer(CustomerObjectType customerObjectType, Guid accountOrContactId)
+        private static string BuildSOMEntityIdFromCustomer(BPMCustomerType customerType, Guid accountOrContactId)
         {
-            return String.Concat(customerObjectType.ToString(), "_", accountOrContactId.ToString());
+            return String.Concat(customerType.ToString(), "_", accountOrContactId.ToString());
         }
 
         //private CustomerRequestDetail CustomerRequestDetailMapper(CustomerRequest request)

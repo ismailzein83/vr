@@ -49,9 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Billing\CustomerCategory.cs" />
+    <Compile Include="Billing\Enumerations.cs" />
     <Compile Include="Billing\LeasedLineContractInfo.cs" />
     <Compile Include="Billing\RatePlan.cs" />
-    <Compile Include="Billing\TelephoneService.cs" />
+    <Compile Include="Billing\ServicePackage.cs" />
+    <Compile Include="Billing\Service.cs" />
     <Compile Include="Billing\TelephonyContractInfo.cs" />
     <Compile Include="Billing\XDSLContractInfo.cs" />
     <Compile Include="Inventory\InventoryItem.cs" />

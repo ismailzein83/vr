@@ -7,11 +7,10 @@ using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
-using Vanrise.Common;
 
 namespace BPMExtended.Main.Business
 {
-    public class InventoryRequestManager
+    public class InventoryManager
     {
         public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
         {
@@ -139,7 +138,7 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-        public ReserveLineRequestOutput ReservePhoneNumber(CustomerObjectType customerObjectType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
+        public ReserveLineRequestOutput ReservePhoneNumber(BPMCustomerType customerType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
         {
             ReserveLineRequestOutput output = null;
 
@@ -150,11 +149,11 @@ namespace BPMExtended.Main.Business
             return output;
         }
 
-        public CreateCustomerRequestOutput InitiateTelephonyLineSubscriptionRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, TelephonyLineSubscriptionSomRequestSetting telephonyLineSubscriptionSomRequestSetting)
+        public CreateCustomerRequestOutput InitiateTelephonyLineSubscriptionRequest(BPMCustomerType customerType, Guid accountOrContactId, TelephonyLineSubscriptionSomRequestSetting telephonyLineSubscriptionSomRequestSetting)
         {
             string title = string.Format("Telephony Line Subscription '{0}'", telephonyLineSubscriptionSomRequestSetting.PhoneNumber);
 
-            return Helper.CreateSOMRequest(customerObjectType, accountOrContactId, title, telephonyLineSubscriptionSomRequestSetting);
+            return Helper.CreateSOMRequest(customerType, accountOrContactId, title, telephonyLineSubscriptionSomRequestSetting);
         }
 
         public string TestPhoneLine(string phoneNumber)
