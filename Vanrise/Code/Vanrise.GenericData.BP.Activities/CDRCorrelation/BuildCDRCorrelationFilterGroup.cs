@@ -98,7 +98,7 @@ namespace Vanrise.GenericData.BP.Activities
                 }
 
                 recordFilter.Filters.Add(new NumberRecordFilter { FieldName = idFieldName, CompareOperator = NumberRecordFilterOperator.LessOrEquals, Value = maxId });
-                recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1 } });
+                recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1, 100 } });
 
                 cdrCorrelationFilterGroups.Add(new CDRCorrelationFilterGroup() { RecordFilterGroup = recordFilter, From = from, To = to });
             }
