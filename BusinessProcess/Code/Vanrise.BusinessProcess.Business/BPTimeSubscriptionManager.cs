@@ -19,10 +19,15 @@ namespace Vanrise.BusinessProcess.Business
             return dataManager.DeleteBPTimeSubscription(bpTimeSubscriptionId);
         }
 
-        public int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay)
+        public int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay, BPTimeSubscriptionPayload payload = null)
         {
             IBPTimeSubscriptionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTimeSubscriptionDataManager>();
-            return dataManager.InsertBPTimeSubscription(processInstanceId, bookmarkName, delay);
+            return dataManager.InsertBPTimeSubscription(processInstanceId, bookmarkName, delay, payload);
+        }
+
+        public static string GetWFBookmark(long processInstanceId)
+        {
+            return string.Format("Delay_{0}_{1}", processInstanceId, Guid.NewGuid());
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Vanrise.BusinessProcess
 
             foreach (BPTimeSubscription bpTimeSubscription in bpTimeSubscriptions)
             {
-                eventManager.TriggerProcessEvent(new TriggerProcessEventInput() { BookmarkName = bpTimeSubscription.Bookmark, ProcessInstanceId = bpTimeSubscription.ProcessInstanceId });
+                eventManager.TriggerProcessEvent(new TriggerProcessEventInput() { BookmarkName = bpTimeSubscription.Bookmark, ProcessInstanceId = bpTimeSubscription.ProcessInstanceId, EventData = bpTimeSubscription.Payload });
                 timeSubscriptionManager.DeleteBPTimeSubscription(bpTimeSubscription.BPTimeSubscriptionId);
             }
         }

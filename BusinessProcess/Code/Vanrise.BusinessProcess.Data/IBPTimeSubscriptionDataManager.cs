@@ -10,6 +10,6 @@ namespace Vanrise.BusinessProcess.Data
 
         bool DeleteBPTimeSubscription(long bpTimeSubscriptionId);
 
-        int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay);
+        int InsertBPTimeSubscription(long processInstanceId, string bookmarkName, TimeSpan delay, BPTimeSubscriptionPayload payload);
     }
 }

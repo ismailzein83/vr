@@ -10,6 +10,13 @@ namespace Vanrise.BusinessProcess.Entities
 
         public string Bookmark { get; set; }
 
+        public BPTimeSubscriptionPayload Payload { get; set; }
+
         public DateTime DueTime { get; set; }
+    }
+
+    public abstract class BPTimeSubscriptionPayload 
+    {
+
     }
 }

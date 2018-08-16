@@ -52,12 +52,30 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                 namespace #NAMESPACE#
                 {
-                    public class #CLASSNAME# : CodeActivity
+                    public class #CLASSNAME# : NativeActivity
                     {
-                        protected override void Execute(CodeActivityContext context)
+                        protected override void Execute(NativeActivityContext context)
                         {
                             var executionContext = new #CLASSNAME#ExecutionContext(context);
-                            executionContext.Execute();
+                            executionContext.Execute(OnDelayCompleted, 0);
+                        }
+
+                        private void OnDelayCompleted(NativeActivityContext context, Bookmark bookmark, object value)
+                        {
+                            var httpDelayInput = value as Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRHttpDelayInput;
+                            if (httpDelayInput == null)
+                                throw new ArgumentNullException(""httpDelayInput"");
+
+                            var executionContext = new #CLASSNAME#ExecutionContext(context);
+                            executionContext.Execute(OnDelayCompleted, httpDelayInput.RetryCount);
+                        }
+
+                        protected override bool CanInduceIdle
+                        {
+                            get
+                            {
+                                return true;
+                            }
                         }
                     }
 
@@ -66,22 +84,27 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                     public class #CLASSNAME#ExecutionContext : #BASEEXECUTIONCLASSNAME#
                     {
                         static Vanrise.Common.Business.VRConnectionManager s_connectionManager = new Vanrise.Common.Business.VRConnectionManager();
+                        static Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager s_bpTimeSubscriptionManager = new Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager();
+                        NativeActivityContext _activityContext;
 
-                        public #CLASSNAME#ExecutionContext(ActivityContext activityContext) 
+                        public #CLASSNAME#ExecutionContext(NativeActivityContext activityContext) 
                             : base (activityContext)
                         {
+                            _activityContext = activityContext;
                         }
 
-                        public void Execute()
- {
+                        public void Execute(BookmarkCallback onDelayCompleted, int retryCount)
+                        {
                             Guid connectionId = new Guid(""#CONNECTIONID#"");
                             var vrConnection = s_connectionManager.GetVRConnection(connectionId);
                             vrConnection.ThrowIfNull(""vrConnection"", connectionId);
                             var vrHttpConnection = vrConnection.Settings.CastWithValidate<Vanrise.Common.Business.VRHttpConnection>(""vrConnection.Settings"", connectionId);
-
+                        
+                            List<TimeSpan> delays = GetDelays();
+                            bool throwIfError = (delays == null || delays.Count == retryCount) && #THROWIFERROR#;
                             #ASSIGNISSUCCEEDED#vrHttpConnection.TrySendRequest(#ACTIONPATH#, Vanrise.Entities.VRHttpMethod.#HTTPMETHOD#, Vanrise.Entities.VRHttpMessageFormat.#MESSAGEFORMAT#, #URLPARAMETERS#,
                             #HEADERS#, #BODY#, (response) => OnResponseReceived(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse(response)),
-                            #THROWIFERROR#, (error) => OnError(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault(error)));
+                            throwIfError, (error) => OnError(new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault(error), onDelayCompleted, retryCount));
                         }
 
                         #BUILDURLPARAMETERSMETHOD#
@@ -90,14 +113,53 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         #BUILDBODYMETHOD#
                         
+                        List<TimeSpan> GetDelays()
+                        {
+                            Guid connectionId = new Guid(""#CONNECTIONID#"");
+                            var vrConnection = s_connectionManager.GetVRConnection(connectionId);
+                            vrConnection.ThrowIfNull(""vrConnection"", connectionId);
+                            var vrHttpConnection = vrConnection.Settings.CastWithValidate<Vanrise.Common.Business.VRHttpConnection>(""vrConnection.Settings"", connectionId);
+
+                            Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpRetrySettings retrySettings = Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpRetrySettings.#RetrySettings#;
+                            List<TimeSpan> delays = new List<TimeSpan>();
+                            switch (retrySettings)
+                            {
+                                case Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpRetrySettings.NoRetry: break;
+                                case Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpRetrySettings.RetryAsPerConnection:
+
+                                    List<Vanrise.Common.Business.VRWorkflowRetrySettings> vrWorkflowRetrySettings = vrHttpConnection.WorkflowRetrySettings;
+                                    if (vrWorkflowRetrySettings == null || vrWorkflowRetrySettings.Count == 0)
+                                        break;
+
+                                    foreach (Vanrise.Common.Business.VRWorkflowRetrySettings workflowRetrySettings in vrWorkflowRetrySettings)
+                                        delays.AddRange(Enumerable.Repeat(workflowRetrySettings.RetryInterval, workflowRetrySettings.MaxRetryCount));
+
+                                    break;
+                            }
+                            return delays.Count > 0 ? delays : null;
+                        }
+
                         void OnResponseReceived(Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceResponse response)
                         {
                             #RESPONSELOGIC#
                         }
 
-                        void OnError(Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault error)
+                        void OnError(Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowCallHttpServiceFault error, BookmarkCallback onDelayCompleted, int retryCount)
                         {
                             #ERRORLOGIC#
+                            
+                            List<TimeSpan> delays = GetDelays();
+                            if(delays == null || delays.Count <= retryCount)
+                                return;
+
+                            long processInstanceId = _activityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+                            TimeSpan delay = delays[retryCount];
+                            
+                            retryCount++;
+                            string bookmarkName = Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager.GetWFBookmark(processInstanceId);
+                            var input = new Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRHttpDelayInput(){ NoMoreRanges = delays.Count == retryCount, RetryCount = retryCount };
+                            new Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager().InsertBPTimeSubscription(processInstanceId, bookmarkName, delay, input);
+                            _activityContext.CreateBookmark(bookmarkName, onDelayCompleted);
                         }
                     }
                 }");
@@ -105,6 +167,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#CONNECTIONID#", this.ConnectionId.ToString());
             nmSpaceCodeBuilder.Replace("#ACTIONPATH#", this.ActionPath);
             nmSpaceCodeBuilder.Replace("#HTTPMETHOD#", this.Method.ToString());
+            nmSpaceCodeBuilder.Replace("#RetrySettings#", this.RetrySettings.ToString());
 
             if (this.URLParameters != null && this.URLParameters.Count > 0)
             {
@@ -315,5 +378,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                 return _vrHttpFault.StatusCode;
             }
         }
+    }
+
+    public class VRHttpDelayInput : BPTimeSubscriptionPayload
+    {
+        public bool NoMoreRanges { get; set; }
+
+        public int RetryCount { get; set; }
     }
 }

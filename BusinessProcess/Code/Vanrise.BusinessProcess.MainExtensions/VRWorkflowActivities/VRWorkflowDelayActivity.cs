@@ -49,17 +49,12 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
                         public void Execute()
                         {
-
                             long processInstanceId = _activityContext.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                            string bookmarkName = GetWFBookmark(processInstanceId);
+                            string bookmarkName = Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager.GetWFBookmark(processInstanceId);
                             new Vanrise.BusinessProcess.Business.BPTimeSubscriptionManager().InsertBPTimeSubscription(processInstanceId, bookmarkName, #DELAY#);
                             _activityContext.CreateBookmark(bookmarkName);
                         }
 
-                        string GetWFBookmark(long processInstanceId)
-                        {
-                            return string.Format(""Delay_{0}_{1}"", processInstanceId, Guid.NewGuid());
-                        }
                     }
                 }");
 
