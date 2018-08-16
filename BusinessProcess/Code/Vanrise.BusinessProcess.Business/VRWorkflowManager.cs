@@ -337,7 +337,7 @@ namespace Vanrise.BusinessProcess.Business
             var fullTypeName = String.Format("{0}.{1}", classNamespace, className);
             CSharpCompilationOutput compilationOutput;
             List<string> errorMessages;
-            if (CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+            if (CSharpCompiler.TryCompileClass(className, codeBuilder.ToString(), out compilationOutput))
             {
                 Type activityType = compilationOutput.OutputAssembly.GetType(fullTypeName);
                 activity = Activator.CreateInstance(activityType).CastWithValidate<System.Activities.Activity>("activity", workflow.VRWorkflowId);
