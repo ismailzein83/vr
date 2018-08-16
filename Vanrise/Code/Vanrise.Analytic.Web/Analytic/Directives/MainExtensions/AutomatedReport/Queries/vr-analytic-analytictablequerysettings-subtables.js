@@ -61,6 +61,8 @@ function (UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTableQuerySettings
             var api = {};
 
             api.load = function (payload) {
+                $scope.scopeModel.subtables.length = 0;
+                analyticTableId = undefined;
                 if (payload != undefined) {
                     analyticTableId = payload.analyticTableId;
                     if (payload.subtables != undefined) {
