@@ -8,8 +8,8 @@
 
         var accountId;
         var accountTypeId;
-
-
+        var billingTransactionEntity;
+        var context;
         var accountStatusSelectorAPI;
         var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var accountStatusSelectedDeferred;
@@ -27,6 +27,8 @@
         var accountBalanceInvoicesGridAPI;
         var accountBalanceInvoicesGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var attachmentFieldTypeManagementAPI;
+        var attachmentFieldTypeManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -37,6 +39,12 @@
             if (parameters != undefined) {
                 accountId = parameters.accountId;
                 accountTypeId = parameters.accountTypeId;
+                billingTransactionEntity = parameters.billingTransactionEntity;
+                context = parameters.context;
+            }
+            if ((accountId == undefined || accountTypeId == undefined) && billingTransactionEntity!=undefined) {
+                accountId = billingTransactionEntity.AccountId;
+                accountTypeId = billingTransactionEntity.AccountTypeId;
             }
         }
         function defineScope() {
@@ -81,11 +89,27 @@
                 accountBalanceInvoicesGridAPI = api;
                 accountBalanceInvoicesGridReadyDeferred.resolve();
             };
-            $scope.scopeModel.save = function () {
-                return insertBillingTransaction();
+            $scope.scopeModel.onAttachmentFieldTypeManagementReady = function (api) {
+                attachmentFieldTypeManagementAPI = api;
+                attachmentFieldTypeManagementReadyDeferred.resolve();
             };
+            $scope.scopeModel.save = function () {
+                if (attachmentFieldTypeManagementAPI != undefined) {
+                    if (attachmentFieldTypeManagementAPI.getData() == undefined) {
+                        VRNotificationService.showConfirmation("No attachments were added. Are you sure you want to continue?").then(function (response) {
+                            if (response) {
+                                return insertBillingTransaction();
+                            }
+                        });
+                    }
+                    else {
+                        return insertBillingTransaction();
+                    }
+                }
+            };
+
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.validateAmount = function () {
@@ -130,7 +154,11 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('Financial Transactions');
             }
             function loadStaticData() {
-
+                if (billingTransactionEntity !=undefined) {
+                    $scope.scopeModel.amount = billingTransactionEntity.Amount;
+                    $scope.scopeModel.reference = billingTransactionEntity.Reference;
+                    $scope.scopeModel.notes = billingTransactionEntity.Notes;
+                }
             }
             function loadCurrencySelector() {
                 var promises = [];
@@ -173,7 +201,8 @@
                             Filters: [{
                                 $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
                             }]
-                        }
+                        },
+                        selectedIds: billingTransactionEntity != undefined ? billingTransactionEntity.TransactionTypeId: undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, payload, loadTransactionTypePromiseDeferred);
                 });
@@ -186,7 +215,20 @@
                   return  loadAccountBalanceInvoices(accountId);
                 }
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadBillingTransactionTypeSelector, loadAccountBalanceInvoicesByAccountParameter]).catch(function (error) {
+
+            function loadAttachmentFieldTypeManagement(){
+                var attachmentFieldTypeManagementLoadDeferred = UtilsService.createPromiseDeferred();
+                attachmentFieldTypeManagementReadyDeferred.promise.then(function () {
+                    var attachmentFieldTypeManagementPayload = {
+                        attachementFieldTypes: billingTransactionEntity != undefined && billingTransactionEntity.Settings != undefined ? billingTransactionEntity.Settings.Attachments : undefined
+                    };
+                    attachmentFieldTypeManagementAPI.loadGrid(attachmentFieldTypeManagementPayload).then(function() {
+                        attachmentFieldTypeManagementLoadDeferred.resolve();
+                    });
+                });
+                return attachmentFieldTypeManagementLoadDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadBillingTransactionTypeSelector, loadAccountBalanceInvoicesByAccountParameter, loadAttachmentFieldTypeManagement]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -235,7 +277,7 @@
                 };
                 VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, loadAccountSelectorPromiseDeferred);
             });
-            return loadAccountSelectorPromiseDeferred.promise
+            return loadAccountSelectorPromiseDeferred.promise;
         }
 
         function loadGridDirective() {
@@ -270,7 +312,11 @@
                 TransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds(),
                 Notes: $scope.scopeModel.notes,
                 TransactionTime: $scope.scopeModel.date,
-                Reference: $scope.scopeModel.reference
+                Reference: $scope.scopeModel.reference,
+                Settings: {
+                    $type:"Vanrise.AccountBalance.Entities.BillingTransactionSettings, Vanrise.AccountBalance.Entities",
+                    Attachments: attachmentFieldTypeManagementAPI.getData()
+                }
             };
             return obj;
         }

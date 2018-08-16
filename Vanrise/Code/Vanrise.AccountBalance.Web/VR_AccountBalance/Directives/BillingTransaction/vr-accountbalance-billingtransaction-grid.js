@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_BillingTransactionAPIService', 'VRNotificationService',
-    function (VR_AccountBalance_BillingTransactionAPIService, VRNotificationService) {
+app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_BillingTransactionAPIService', 'VRNotificationService','VR_AccountBalance_BillingTransactionService',
+    function (VR_AccountBalance_BillingTransactionAPIService, VRNotificationService, VR_AccountBalance_BillingTransactionService) {
         return {
             restrict: 'E',
             scope: {
@@ -22,6 +22,7 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
             this.initializeController = initializeController;
 
             var gridAPI;
+            var context;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -60,6 +61,20 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
 
 
             function defineMenuActions() {
+                $scope.scopeModel.menuActions = [{
+                    name: "View",
+                    clicked: viewBillingTransaction
+                }];
+            }
+            function viewBillingTransaction(billingTransactionObj) {
+                VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionObj.Entity, getContext());
+            }
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined) {
+                    currentContext = {};
+                }
+                return currentContext;
             }
 
         }

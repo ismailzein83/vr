@@ -87,6 +87,7 @@
     <Compile Include="Extensions\AccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="Extensions\AlertRuleEntityBalanceInfo.cs" />
     <Compile Include="Extensions\AccountBalanceNotificationTypeExtendedSettings.cs" />
+    <Compile Include="Extensions\BillingTransactionFileSettings.cs" />
     <Compile Include="Filters\IAccountFilter\AccountTypeExtendedSettingsFilter.cs" />
     <Compile Include="LiveBalanceManager.cs" />
     <Compile Include="QueueActivators\BalanceUpdatePayload.cs" />

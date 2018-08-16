@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
@@ -28,6 +29,7 @@ namespace Vanrise.AccountBalance.Entities
 
     public class BillingTransactionSettings
     {
+        public AttachmentFieldTypeEntityCollection Attachments { get; set; }
         public List<BillingTransactionUsageOverride> UsageOverrides { get; set; }
     }
 

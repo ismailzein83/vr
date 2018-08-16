@@ -27,11 +27,33 @@ namespace Vanrise.AccountBalance.Business
 
             long billingTransactionId = -1;
             string errorMessage;
-            if (TryAddBillingTransaction(billingTransaction, out billingTransactionId,out  errorMessage))
+            if (billingTransaction.Settings != null && billingTransaction.Settings.Attachments != null && billingTransaction.Settings.Attachments.Count > 0)
+            {
+                for (int i = 0; i < billingTransaction.Settings.Attachments.Count; i++)
+                {
+                    billingTransaction.Settings.Attachments[i].CreatedTime = DateTime.Now;
+                }
+            }
+            if (TryAddBillingTransaction(billingTransaction, out billingTransactionId, out  errorMessage))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 billingTransaction.AccountBillingTransactionId = billingTransactionId;
                 insertOperationOutput.InsertedObject = BillingTransactionDetailMapper(billingTransaction, BillingTransactionSource.Transaction);
+                if (billingTransaction.Settings != null && billingTransaction.Settings.Attachments != null && billingTransaction.Settings.Attachments.Count > 0)
+                {
+                    VRFileManager fileManager = new VRFileManager();
+                    foreach (var file in billingTransaction.Settings.Attachments)
+                    {
+                        var fileSettings = new VRFileSettings()
+                        {
+                            ExtendedSettings = new BillingTransactionFileSettings()
+                            {
+                                BillingTransactionId = billingTransactionId
+                            }
+                        };
+                        fileManager.SetFileUsedAndUpdateSettings(file.FileId, fileSettings);
+                    }
+                }
             }
             else
             {
