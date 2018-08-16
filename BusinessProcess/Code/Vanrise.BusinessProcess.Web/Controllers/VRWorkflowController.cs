@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
@@ -29,6 +27,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			return _manager.GetVRWorkflowEditorRuntime(vrWorkflowId);
 		}
 
+		[HttpGet]
+		[Route("GetVRWorkflowName")]
+		public string GetVRWorkflowName(Guid vrWorkflowId)
+		{
+			return _manager.GetVRWorkflowNameById(vrWorkflowId);
+		}
+
 		[HttpPost]
 		[Route("GetVRWorkflowVariablesTypeDescription")]
 		public Dictionary<Guid, string> GetVRWorkflowVariablesTypeDescription(IEnumerable<VRWorkflowVariable> variables)
@@ -42,7 +47,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 		{
 			return _manager.GetVRWorkflowArgumentTypeDescription(vrWorkflowArgumentType);
 		}
-		
+
 		[HttpPost]
 		[Route("GetVRWorkflowVariableTypeDescription")]
 		public string GetVRWorkflowVariableTypeDescription(VRWorkflowVariableType vrWorkflowVariableType)
@@ -85,21 +90,21 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			return _manager.TryCompileWorkflow(vrWorkflow);
 		}
 
-        //[HttpPost]
-        //[Route("ExportCompilationResult")]
-        //public object ExportCompilationResult(VRWorkflow vrWorkflow)
-        //{
-        //    VRWorkflowCompilationOutput result = TryCompileWorkflow(vrWorkflow);
+		//[HttpPost]
+		//[Route("ExportCompilationResult")]
+		//public object ExportCompilationResult(VRWorkflow vrWorkflow)
+		//{
+		//    VRWorkflowCompilationOutput result = TryCompileWorkflow(vrWorkflow);
 
-        //    return base.GetExcelResponse(result.ErrorMessages.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(), "CompilationResult.xls");
-        //}
+		//    return base.GetExcelResponse(result.ErrorMessages.SelectMany(s => System.Text.Encoding.ASCII.GetBytes(s)).ToArray(), "CompilationResult.xls");
+		//}
 
-        [HttpGet]
-        [Route("GetVRWorkflowsInfo")]
-        public IEnumerable<VRWorkflowInfo> GetVRWorkflowsInfo(string filter = null)
-        {
-            VRWorkflowFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRWorkflowFilter>(filter) : null;
-            return _manager.GetVRWorkflowsInfo(deserializedFilter);
-        }
+		[HttpGet]
+		[Route("GetVRWorkflowsInfo")]
+		public IEnumerable<VRWorkflowInfo> GetVRWorkflowsInfo(string filter = null)
+		{
+			VRWorkflowFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRWorkflowFilter>(filter) : null;
+			return _manager.GetVRWorkflowsInfo(deserializedFilter);
+		}
 	}
 }
