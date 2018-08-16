@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class VRWorkflowFilter
-    {
-
-    }
+	public class VRWorkflowFilter
+	{
+		public List<Guid> ExcludedIds { get; set; }
+	}
 }
