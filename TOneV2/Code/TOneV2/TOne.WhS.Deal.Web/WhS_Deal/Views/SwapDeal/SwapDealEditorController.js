@@ -25,7 +25,7 @@
 
         var dealOutboundAPI;
         var dealOutboundReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var isEditable;
         var carrierAccountInfo;
 
         var originalEED;
@@ -41,16 +41,17 @@
             if (parameters != undefined && parameters != null) {
                 dealId = parameters.dealId;
                 context = parameters.context;
-
+                isEditable = parameters.isEditable;
                 isReadOnly = parameters.isReadOnly;
                 isViewHistoryMode = context != undefined && context.historyId != undefined;
             }
 
             isEditMode = (dealId != undefined);
-            if (isReadOnly)
+            if(isReadOnly && !isEditable)
                 UtilsService.setContextReadOnly($scope);
         }
         function defineScope() {
+            
             $scope.scopeModel = {};
             //UtilsService.setContextReadOnly($scope.scopeModel);
             $scope.scopeModel.disabelType = (isEditMode);
@@ -166,7 +167,7 @@
                 var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
                 var originalExpiredDate = UtilsService.createDateFromString(originalEED);
-                if ( originalExpiredDate < today && eed < originalExpiredDate) {
+                if (originalExpiredDate.getTime() < today.getTime() && eed.getTime() < today.getTime() && originalExpiredDate.getTime() != eed.getTime()) {
                     return "Deal expired, EED can only be extended";
                 }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
@@ -210,9 +211,12 @@
             $scope.scopeModel.dataForBoundsReady = function () {
                 return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
             };
+
+            //UtilsService.setContextReadOnly($scope);
         }
         function load() {
             $scope.scopeModel.isLoading = true;
+
             if (isEditMode) {
                 getSwapDeal().then(function () {
                     loadAllControls().finally(function () {
@@ -282,7 +286,7 @@
         function loadStaticData() {
             if (dealEntity == undefined)
                 return;
-            originalEED = dealEntity.Settings.EndDate;
+            originalEED = dealEntity.Settings.EEDToStore;
             $scope.scopeModel.isCommitmentAgreement = isCommitmentAgreement();
             //console.log(isCommitmentAgreement())
             //if (isCommitmentAgreement())
@@ -297,12 +301,6 @@
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
-            if (isEditMode) {
-                var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
-                var bed = UtilsService.createDateFromString(dealEntity.Settings.BeginDate);
-                //if (isReadOnly == true && bed >= today && $scope.scopeModel.selectedDealStatus != WhS_Deal_DealStatusTypeEnum.Inactive.value)
-                  //  UtilsService.setContextReadOnly($scope);
-            }
         }
         function loadCarrierBoundsSection() {
             var promises = [];
@@ -330,8 +328,6 @@
                 promises.push(loadSwapDealOutboundPromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([dealInboundReadyPromiseDeferred.promise, dealOutboundReadyPromiseDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
-                    console.log("dealEntity");
-                    console.log(dealEntity.Settings.Inbounds);
                     var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                     var payload = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
@@ -342,8 +338,6 @@
                         dealId: dealId,
 
                     };
-                    console.log("dealEntity");
-                    console.log(dealEntity.Settings.Outbounds);
                     var payloadOutbound = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         supplierId: carrierAccountInfo.CarrierAccountId,
@@ -435,8 +429,6 @@
         function buildSwapDealObjFromScope() {
             var inboundData = dealInboundAPI.getData();
             var outboundData = dealOutboundAPI.getData();
-            console.log("outboundData");
-            console.log(outboundData);  
             var obj = {
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
@@ -459,7 +451,6 @@
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true
                 }
             };
-            console.log(obj);
             return obj;
         }
 

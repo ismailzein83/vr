@@ -64,18 +64,19 @@
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-                        payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined;
+                        payload.selectedIds = getSelectedIdsFromEntity(swapDealInboundEntity);
                     }
-                    else
+                    else {
+                       
                         payload = {
                             sellingNumberPlanId: sellingNumberPlanId,
                             filter: {
                                 CountryIds: countryDirectiveApi.getSelectedIds(),
                             },
-                            selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
+                            selectedIds:  getSelectedIdsFromEntity(swapDealInboundEntity)
                         };
+                    }
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
-
                 }
                 else if (saleZoneDirectiveAPI != undefined)
                     $scope.salezones.length = 0;
@@ -188,8 +189,8 @@
                             filter: { CountryIds: swapDealInboundEntity.CountryIds   },
                             selectedIds: zoneIds,
                         };
-
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
+                   // VRUIUtilsService.callDirectiveLoad($scope, saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;
                 });
             }
@@ -197,6 +198,18 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
+        function getSelectedIdsFromEntity (swapDealInboundEntity)
+        {
+            if (swapDealInboundEntity != undefined) {
+                var zoneIds = [];
+                for (var i = 0; i < swapDealInboundEntity.SaleZones.length; i++) {
+                    zoneIds.push(swapDealInboundEntity.SaleZones[i].ZoneId);
+                }
+                return zoneIds;
+            }
+            return undefined;
+        }
+    
         function setTitle() {
             if (isEditMode) {
                 if (swapDealInboundEntity != undefined)

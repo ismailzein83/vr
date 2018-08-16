@@ -18,10 +18,11 @@
             VRModalService.showModal(editorUrl, null, settings);
         }
 
-        function editSwapDeal(dealId, onSwapDealUpdated, isReadOnly) {
+        function editSwapDeal(dealId, onSwapDealUpdated, isReadOnly, isEditable) {
             var parameters = {
                 dealId: dealId,
-                isReadOnly: isReadOnly
+                isReadOnly: isReadOnly,
+                isEditable: isEditable
             };
 
             var settings = {};

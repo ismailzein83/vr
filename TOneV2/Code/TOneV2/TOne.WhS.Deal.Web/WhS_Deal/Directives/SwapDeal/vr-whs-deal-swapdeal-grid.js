@@ -102,6 +102,7 @@
             }
             function editDeal(dataItem) {
                 var isReadOnly = false;
+                var isEditable = false;
 
                 var dealBED = UtilsService.getDateObject(dataItem.Entity.Settings.BeginDate);
 
@@ -113,11 +114,17 @@
                             isReadOnly = false;
                     }
                 }
+
+                var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+                var bed = UtilsService.createDateFromString(dataItem.Entity.Settings.BeginDate);
+                if (bed >= today || dataItem.StatusDescription == WhS_Deal_DealStatusTypeEnum.Draft.description)
+                    isEditable = true;
+
                 var onDealUpdated = function (updatedDeal) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedDeal);
                     gridAPI.itemUpdated(updatedDeal);
                 };
-                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated, isReadOnly);
+                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated, isReadOnly, isEditable);
             }
 
             function recurDeal(dataItem) {
