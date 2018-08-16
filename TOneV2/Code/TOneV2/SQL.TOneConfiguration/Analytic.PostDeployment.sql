@@ -53,7 +53,10 @@ Post-Deployment Script Template
 ('A194AAC8-0675-4100-8A8B-1FBE4105FE09','Date','Date','VR_Analytic_AutomatedReportFileNameParts','{"Editor":"vr-analytic-automatedreportfilenamepart-date"}'),
 ('1654683D-6168-47F4-B157-661A1FE88A95','DownloadFileAction','Download File Action','VR_Analytic_ReportGenerationAction_ReportAction','{"Editor":"vr-analytic-reportgeneration-settings-reportaction-downloadaction"}'),
 ('38974659-FB26-415E-82BC-2895E1D09238','StandardReportGenerationFilter','Standard','VR_Analytic_ReportGenerationAction_FilterConfig','{"Editor":"vr-analytic-reportgeneration-filter-standard"}'),
-('4ecc5dc2-5781-437a-af6c-acaedc3c4a5d','Analytic Table Query Definition','Analytic Table Query','VR_Analytic_QueryDefinitionSettings_AutomatedReport','{"Editor":"vr-analytictablequerydefinition-automatedreport"}')
+('4ecc5dc2-5781-437a-af6c-acaedc3c4a5d','Analytic Table Query Definition','Analytic Table Query','VR_Analytic_QueryDefinitionSettings_AutomatedReport','{"Editor":"vr-analytictablequerydefinition-automatedreport"}'),
+('F139CA56-D602-4D91-9FC2-A14418D9831E','Generate Files Handler','Generate Files','VR_Analytic_HandlerSettings_AutomatedReport','{"Editor":"vr-analytic-generatefileshandler-automatedreporthandler"}'),
+('F38308EF-433A-48C6-891B-34847929FD5A','FTP Action Type','FTP','VR_Analytic_AutomatedReport_HandlerSettings_ActionType','{"Editor":"vr-analytic-ftpactiontype-generatefileshandler"}'),
+('D7D6D580-40BD-42C6-ABBB-7FA6B60A5462','Send Email Action Type','Send Email','VR_Analytic_AutomatedReport_HandlerSettings_ActionType','{"Editor":"vr-analytic-sendemailactiontype-generatefileshandler"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
 --[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
