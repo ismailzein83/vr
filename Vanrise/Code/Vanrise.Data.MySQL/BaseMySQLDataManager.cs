@@ -42,7 +42,7 @@ namespace Vanrise.Data.MySQL
                 return filePath;
             }
             else
-                return System.IO.Path.GetTempFileName();
+                return Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         }
     }
 }

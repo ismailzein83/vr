@@ -383,7 +383,7 @@ namespace Vanrise.Data.SQL
                 return filePath;
             }
             else
-                return System.IO.Path.GetTempFileName();// String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
+                return Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()); // String.Format(@"C:\CodeMatch\{0}.txt", Guid.NewGuid());
         }
 
         protected bool GetDeleteBCPFiles()
@@ -444,7 +444,7 @@ namespace Vanrise.Data.SQL
             if (s_bcpFormatFileNamesByTable.TryGetValue(tableUniqueIndentifierName, out formatFileName) && File.Exists(formatFileName))
                 return string.Format("-f {0}", formatFileName);
 
-            formatFileName = System.IO.Path.GetTempFileName();
+            formatFileName = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
             string sqlPassword;
             string baseBCPArgs = GetBaseBCPArgs(bulkInsertInfo, " format nul ", out sqlPassword);
