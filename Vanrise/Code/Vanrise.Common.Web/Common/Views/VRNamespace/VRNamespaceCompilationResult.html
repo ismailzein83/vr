@@ -1,1 +1,23 @@
-﻿
+﻿<div vr-modalcontent ng-controller="Common_VRNamespaceCompilationResultController" width="'50%'">
+    <vr-modalbody vr-loader="isLoading" maxheight="'700px'">
+        <vr-form name="formValidateEditor">
+
+            <vr-datagrid datasource="datasource" on-ready="onMainGridReady" hidegridmenu>
+                <vr-datagridcolumn headertext="'Error Messages'" isfielddynamic>
+                    <div class="responsive-container">
+                        {{dataItem.Error}}
+                    </div>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+            <vr-label ng-if="showMessage!=undefined">{{showMessage}}</vr-label>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Export" data-onclick="export"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

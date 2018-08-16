@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Data
 {
-    public interface IVRNamespaceDataManager
+    public interface IVRNamespaceDataManager : IDataManager
     {
+        List<VRNamespace> GetVRNamespaces();
+
+        bool AreVRNamespaceUpdated(ref object updateHandle);
+
+        bool Insert(VRNamespace vrNamespaceItem);
+
+        bool Update(VRNamespace vrNamespaceItem);
     }
 }

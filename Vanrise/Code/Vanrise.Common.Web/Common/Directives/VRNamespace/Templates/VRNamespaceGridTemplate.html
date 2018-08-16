@@ -1,1 +1,14 @@
-﻿
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.vrNamespaces"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="VRNamespaceId">
+
+    <vr-datagridcolumn headertext="'ID'" field="'VRNamespaceId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Settings'" field="'Settings'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

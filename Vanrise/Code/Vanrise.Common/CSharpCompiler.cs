@@ -5,14 +5,13 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Common
 {
     public static class CSharpCompiler
     {
         static string s_generatedCodePathInDevMode = ConfigurationManager.AppSettings["VRDevMode_GeneratedCodePath"];
+        static HashSet<string> expiredAssemblies = new HashSet<string>();
 
         public static bool TryCompileClass(string classDefinition, out CSharpCompilationOutput output)
         {
@@ -31,8 +30,8 @@ namespace Vanrise.Common
             CompilerParameters parameters = new CompilerParameters();
             //  parameters.OutputAssembly = assemblyName;
             parameters.GenerateExecutable = false;
-            parameters.GenerateInMemory = false;           
-            parameters.IncludeDebugInformation = true;            
+            parameters.GenerateInMemory = false;
+            parameters.IncludeDebugInformation = true;
             //parameters.ReferencedAssemblies.Add("System.dll");
             //parameters.ReferencedAssemblies.Add("System.Data.dll");
 
@@ -50,19 +49,17 @@ namespace Vanrise.Common
             {
                 FileInfo info = new FileInfo(fileName);
                 Assembly.LoadFile(info.FullName);
-                //parameters.ReferencedAssemblies.Add(info.FullName);
             }
 
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 try
                 {
-                    if (!referencedAssembliesFullNames.Contains(assembly.FullName))// parameters.ReferencedAssemblies.Contains(assembly.Location))
+                    if (!expiredAssemblies.Contains(assembly.FullName) && !referencedAssembliesFullNames.Contains(assembly.FullName))
                     {
                         parameters.ReferencedAssemblies.Add(assembly.Location);
                         referencedAssembliesFullNames.Add(assembly.FullName);
                     }
-
                 }
                 catch (NotSupportedException ex)
                 {
@@ -74,13 +71,13 @@ namespace Vanrise.Common
             {
                 parameters.TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true);
                 parameters.TempFiles.KeepFiles = true;
-                string outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(className.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-","") , ".cs"));
+                string outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(className.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-", ""), ".cs"));
                 File.WriteAllText(outputFileName, classDefinition);
                 results = provider.CompileAssemblyFromFile(parameters, outputFileName);
             }
             else
             {
-                results =  provider.CompileAssemblyFromSource(parameters, classDefinition);
+                results = provider.CompileAssemblyFromSource(parameters, classDefinition);
             }
             if (results.Errors != null && results.Errors.Count > 0)
             {
@@ -147,6 +144,11 @@ namespace Vanrise.Common
             {
                 return type.FullName;
             }
+        }
+
+        public static void SetExpiredAssembly(string assemblyName)
+        {
+            expiredAssemblies.Add(assemblyName);
         }
     }
 

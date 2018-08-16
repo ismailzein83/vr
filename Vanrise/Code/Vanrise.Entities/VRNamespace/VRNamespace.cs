@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Vanrise.Entities.VRNamespace
+namespace Vanrise.Entities
 {
-    class VRNamespace
+    public class VRNamespace
     {
+        public Guid VRNamespaceId { get; set; }
+        public string Name { get; set; }
+        public VRNamespaceSettings Settings { get; set; }
+    }
+
+    public class VRNamespaceSettings
+    {
+        public string Code { get; set; }
     }
 }

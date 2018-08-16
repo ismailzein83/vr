@@ -771,7 +771,7 @@
     <Content Include="Common\Views\VRLocalization\TextResource\VRLocalizationTextResourceTranslationManagementController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageEvaluator.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageEvaluatorController.js" />
-    <Content Include="Common\Views\VRNamespace\VRCompilationResultController.js" />
+    <Content Include="Common\Views\VRNamespace\VRNamespaceCompilationResultController.js" />
     <Content Include="Common\Views\VRNamespace\VRNamespaceCompilationResult.html" />
     <Content Include="Common\Views\VRNamespace\VRNamespaceEditor.html" />
     <Content Include="Common\Views\VRNamespace\VRNamespaceEditorController.js" />

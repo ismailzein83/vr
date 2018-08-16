@@ -1,1 +1,25 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VRCommon_VRNamespaceEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formVRNamespaceEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.namespace" label="Namespace" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textarea value="scopeModel.code" label="Code" rows="20" isrequired="true"></vr-textarea>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formVRNamespaceEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Compile" formname="formVRNamespaceEditor" data-onclick="scopeModel.tryCompileNamespace"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

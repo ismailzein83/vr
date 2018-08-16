@@ -4,6 +4,8 @@ namespace Vanrise.Entities
 {
     public class VRCustomClassType
     {
-        public string FullTypeName { get; set; }
+        public string Namespace { get; set; }
+        public string ClassName { get; set; }
+        public string AssemblyName { get; set; }
     }
 }
