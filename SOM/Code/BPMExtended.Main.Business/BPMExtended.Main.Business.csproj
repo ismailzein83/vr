@@ -54,20 +54,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Caching">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
