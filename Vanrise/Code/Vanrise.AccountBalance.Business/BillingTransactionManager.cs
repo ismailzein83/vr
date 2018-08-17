@@ -85,12 +85,9 @@ namespace Vanrise.AccountBalance.Business
         public bool DoesUserHaveViewAccess(int userId, long billingTransactionId)
         {
             var billingTransaction = GetBillingTransactionById(billingTransactionId);
-            if (billingTransaction != null)
-            {
-                AccountTypeManager accountTypeManager = new AccountTypeManager();
-                return accountTypeManager.DoesUserHaveViewAccess(userId, billingTransaction.AccountTypeId);
-            }
-            return true;
+            billingTransaction.ThrowIfNull("billingTransaction", billingTransactionId);
+            AccountTypeManager accountTypeManager = new AccountTypeManager();
+            return accountTypeManager.DoesUserHaveViewAccess(userId, billingTransaction.AccountTypeId);
         }
 
         private bool ValidateAddBillingTransaction(string accountId, Guid accountTypeId, out string errorMessage)
