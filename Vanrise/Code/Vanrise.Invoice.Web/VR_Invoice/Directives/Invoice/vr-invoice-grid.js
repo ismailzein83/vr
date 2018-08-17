@@ -58,6 +58,8 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                 $scope.scopeModel.onInvoiceSelect = function (dataItem) {
                     var invoiceId = dataItem.Entity.InvoiceId;
                     if (dataItem.isSelected) {
+                        if (invoiceBulkActionIdentifier == undefined)
+                            invoiceBulkActionIdentifier = UtilsService.guid();
                         if (isAllInvoicesSelected) {
                             var index = targetInvoices.indexOf(invoiceId);
                             if (index > -1) {
