@@ -218,7 +218,7 @@
 
 											var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
 											if (loadRoutePolicyDataPromiseDeferred != undefined)
-												loadRoutePolicyDataPromiseDeferred.promise.then(function () { gridAPI.loadGrid(getFilterObject()).then(function () { rodiLoadPromise.resolve(); }) });
+												loadRoutePolicyDataPromiseDeferred.promise.then(function () { gridAPI.loadGrid(getFilterObject()).then(function () { loadGridPromiseDeferred.resolve(); }) });
 											else gridAPI.loadGrid(getFilterObject()).then(function () { loadGridPromiseDeferred.resolve(); });
 
 											return {
