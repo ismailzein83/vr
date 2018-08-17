@@ -111,11 +111,11 @@ namespace Vanrise.GenericData.Business
                 var dataRecordFields = GetDataRecordTypeFields(dataRecordTypeId);
                 dataRecordFields.ThrowIfNull("dataRecordFields", dataRecordTypeId);
                 parsedDicValues = new Dictionary<string, object>();
-                foreach(var fieldValue in fieldValues)
+                foreach (var fieldValue in fieldValues)
                 {
                     var dataRecordField = dataRecordFields.GetRecord(fieldValue.Key);
                     dataRecordField.ThrowIfNull("dataRecordField", String.Format(" {0}: {1}", dataRecordTypeId, fieldValue.Key));
-                    parsedDicValues.Add(fieldValue.Key,dataRecordField.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue.Value)));
+                    parsedDicValues.Add(fieldValue.Key, dataRecordField.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue.Value)));
                 }
             }
             return parsedDicValues;
@@ -362,8 +362,8 @@ namespace Vanrise.GenericData.Business
                         errorsBuilder.AppendLine(errorMessage);
                     }
                 }
-                throw new Exception(String.Format("Compile Error when building Data Record Type '{0}'. Errors: {1}",
-                    dataRecordType.Name, errorsBuilder));
+
+                throw new Exception(String.Format("Compile Error when building Data Record Type '{0}'. Errors: {1}", dataRecordType.Name, errorsBuilder));
             }
             else
                 return compilationOutput.OutputAssembly.GetType(fullTypeName);
@@ -477,7 +477,7 @@ namespace Vanrise.GenericData.Business
                         }
                     }
                 }");
-            
+
             StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
             StringBuilder globalMembersDefinitionBuilder = new StringBuilder();
 
@@ -515,7 +515,7 @@ namespace Vanrise.GenericData.Business
                                                                                                                         else
                                                                                                                             dataRecord.#FIELDNAME# = s_dataRecordFieldTypeDict.GetRecord(""#FIELDNAME#"").ParseValueToFieldType(new Vanrise.GenericData.Business.DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue)); 
                                                                                                                     });");
-                                        
+
                     cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
                     cloneRecordMembersBuilder.AppendLine();
                 }
@@ -558,7 +558,7 @@ namespace Vanrise.GenericData.Business
             globalMemberDefinitionBuilder.Append(string.Format("private bool {0}; \n", isFieldFilledVariableName));
             globalMemberDefinitionBuilder.Append(string.Format("private {0} {1};", fieldRuntimeTypeAsString, _fieldVariableName));
 
-                
+
             if (dataRecordField.Formula == null)
             {
                 globalMemberDefinitionBuilder.Append(@"
