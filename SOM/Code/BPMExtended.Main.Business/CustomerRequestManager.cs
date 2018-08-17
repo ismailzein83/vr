@@ -11,6 +11,7 @@ using BPMExtended.Main.Common;
 using Terrasoft.Core.Entities;
 using Terrasoft.Core;
 using System.Web;
+using Terrasoft.Core.DB;
 
 namespace BPMExtended.Main.Business
 {
@@ -26,7 +27,7 @@ namespace BPMExtended.Main.Business
 
         public CreateCustomerRequestOutput ProcessCustomerCreation(BPMCustomerType customerType, Guid accountOrContactId)
         {
-            
+            string name = GetContactInfo(accountOrContactId);
 
             NewCustomerCreationSomRequestSetting newCustomerCreationSomRequestSetting = new NewCustomerCreationSomRequestSetting
             {
@@ -34,6 +35,7 @@ namespace BPMExtended.Main.Business
             };
             string title = string.Format("New Customer Creation Process Input: '{0}'", newCustomerCreationSomRequestSetting.CustomerId);
 
+            this.UpdateContactCustomerId(accountOrContactId, MockDataGenerator.GetRandomCustomerId());
 
             return Helper.CreateSOMRequest(customerType, accountOrContactId, title, newCustomerCreationSomRequestSetting);
         }
@@ -223,6 +225,12 @@ namespace BPMExtended.Main.Business
             object retVal = entity.GetColumnValue("Name");
 
             return retVal != null ? retVal.ToString() : null;            
+        }
+
+        private void UpdateContactCustomerId(Guid contactId, string customerId)
+        {
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "Contact").Set("StCustomerId", Func.IsNull(Column.SourceColumn("StCustomerId"), Column.Parameter(customerId)));
         }
 
         #endregion
