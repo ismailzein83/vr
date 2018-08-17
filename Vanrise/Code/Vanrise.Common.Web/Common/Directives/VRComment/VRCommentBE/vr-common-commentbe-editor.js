@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommentbeEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrCommonCommentbeEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {

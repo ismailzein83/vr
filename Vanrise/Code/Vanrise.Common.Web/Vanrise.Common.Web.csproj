@@ -376,7 +376,7 @@
     <Content Include="Common\Directives\VRComment\Templates\CommentTemplate.html" />
     <Content Include="Common\Directives\VRComment\vr-common-comment.js" />
     <Content Include="Common\Directives\VRComment\VRCommentBE\Templates\VRCommentBETemplate.html" />
-    <Content Include="Common\Directives\VRComment\VRCommentBE\vr-commentbe-editor.js" />
+    <Content Include="Common\Directives\VRComment\VRCommentBE\vr-common-commentbe-editor.js" />
     <Content Include="Common\Directives\VRComponentType\Templates\OverriddenConfigurationComponentType.html" />
     <Content Include="Common\Directives\VRComponentType\Templates\VRComponentTypeGridTemplate.html" />
     <Content Include="Common\Directives\VRComponentType\vr-common-componenttype-grid.js" />

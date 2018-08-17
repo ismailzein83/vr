@@ -15,7 +15,7 @@ namespace Vanrise.Common.Business
         public VRCommentDefinitionSecurity Security { get; set; }
         public override string SelectorFilterEditor { get; set; }
 
-        public override string DefinitionEditor { get { return "vr-commentbe-editor"; } }
+        public override string DefinitionEditor { get { return "vr-common-commentbe-editor"; } }
 
         public override string IdType { get { return "System.Int64"; } }
 

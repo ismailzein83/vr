@@ -28,7 +28,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
     function CommentSubSectionGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
         var gridAPI;
-        var commentPayload;
 
         var vrCommentGridAPI;
         var vrCommentGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -53,16 +52,32 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
 
                     var invoiceTypeId = payload.query.InvoiceTypeId;
                     var objectId = payload.query.InvoiceId;
-
+                    var promise = UtilsService.createPromiseDeferred();
+                    promises.push(promise.promise);
                     VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeCommentDefinitionId(invoiceTypeId).then(function (response) {
-                        commentPayload = { definitionId: response, objectId: objectId };
-                        var loadVRCommentPromise = loadVRComment();
-                        promises.push(loadVRCommentPromise);
-                        UtilsService.waitMultiplePromises(promises);
-
+                        var commentPayload = { definitionId: response, objectId: objectId };
+                        loadVRComment(commentPayload).then(function () {
+                            promise.resolve();
+                        }).catch(function (error) {
+                            promise.reject(error);
+                        });
+                      
+                    }).catch(function () {
+                        promise.reject(error);
                     });
 
                 }
+
+                function loadVRComment(commentPayload) {
+                    var vrCommentLoadDeferred = UtilsService.createPromiseDeferred();
+                    vrCommentGridReadyDeferred.promise.then(function () {
+
+                        VRUIUtilsService.callDirectiveLoad(vrCommentGridAPI, commentPayload, vrCommentLoadDeferred);
+                    });
+                    return vrCommentLoadDeferred.promise;
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
             };
 
 
@@ -70,15 +85,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
                 ctrl.onReady(api);
         };
 
-        function loadVRComment() {
-            var vrCommentLoadDeferred = UtilsService.createPromiseDeferred();
-            vrCommentGridReadyDeferred.promise.then(function () {
-                var dataPayload = commentPayload;
-
-                VRUIUtilsService.callDirectiveLoad(vrCommentGridAPI, dataPayload, vrCommentLoadDeferred);
-            });
-            return vrCommentLoadDeferred.promise;
-        }
+       
 
     }
 
