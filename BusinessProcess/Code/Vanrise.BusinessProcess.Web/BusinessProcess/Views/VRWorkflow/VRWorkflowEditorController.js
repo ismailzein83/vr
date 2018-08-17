@@ -21,9 +21,6 @@
 		var workflowDesignerAPI;
 		var workflowDesignerReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var classesGridAPI;
-		var classesGridReadyDeferred = UtilsService.createPromiseDeferred();
-
 		var activitiesList = [];
 		var context;
 
@@ -52,11 +49,6 @@
 			$scope.scopeModel.onWorkflowDesignerReady = function (api) {
 				workflowDesignerAPI = api;
 				workflowDesignerReadyDeferred.resolve();
-			};
-
-			$scope.scopeModel.onWorkflowClassesGridReady = function (api) {
-				classesGridAPI = api;
-				classesGridReadyDeferred.resolve();
 			};
 
 			$scope.scopeModel.tryCompileWorkflow = function () {
@@ -215,20 +207,7 @@
 				return workflowDesignerLoadDeferred.promise;
 			}
 
-			function loadClassesGrid() {
-				var classesGridLoadDeferred = UtilsService.createPromiseDeferred();
-
-				classesGridReadyDeferred.promise.then(function () {
-					var classesGridPayload = {
-						vrWorkflowClasses: (vrWorkflowEntity != undefined && vrWorkflowEntity.Settings != undefined) ? vrWorkflowEntity.Settings.Classes : undefined
-					};
-					VRUIUtilsService.callDirectiveLoad(classesGridAPI, classesGridPayload, classesGridLoadDeferred);
-				});
-
-				return classesGridLoadDeferred.promise;
-			}
-
-			return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadArgumentsGrid, loadWorkflowDesigner, loadClassesGrid]).then(function () {
+			return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadArgumentsGrid, loadWorkflowDesigner]).then(function () {
 
 			}).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -308,8 +287,7 @@
 				Title: $scope.scopeModel.title,
 				Settings: {
 					Arguments: argumentsGridAPI.getData(),
-					RootActivity: workflowDesignerAPI.getData(),
-					Classes: classesGridAPI.getData()
+					RootActivity: workflowDesignerAPI.getData()
 				}
 			};
 

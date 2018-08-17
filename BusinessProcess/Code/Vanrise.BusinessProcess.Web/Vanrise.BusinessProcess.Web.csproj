@@ -252,10 +252,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivitySubprocessController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\bp-vr-workflow-customclasstype.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowCustomClassTypeTemplate.html" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-classes-grid.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-containerv2.js" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowClassesEditor.html" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowClassesGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowContainerV2Template.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variables-grid.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-selector.js" />
@@ -287,7 +284,6 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\bp-vr-workflowactivity-sequence.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Arguments\VRWorkflowArgumentEditorController.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\VRWorkflowVariableEditorController.js" />
-    <Content Include="BusinessProcess\Directives\VRWorkflow\VRWorkflowClassesEditorController.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionArgumentStateAPIService.js" />
