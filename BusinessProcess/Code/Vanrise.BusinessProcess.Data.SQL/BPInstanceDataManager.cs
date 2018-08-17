@@ -30,7 +30,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         #endregion
 
-        #region public methods
+        #region Public Methods
 
         public BPInstance GetBPInstance(long bpInstanceId, bool getFromArchive)
         {
@@ -43,7 +43,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             StringBuilder queryBuilder = new StringBuilder();
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} FROM bp.[BPInstance{2}] bp WITH(NOLOCK)", query.Top, BPInstanceSELECTCOLUMNS, (getFromArchive ? "_Archived" : ""));
-            
+
             List<string> filters = new List<string>();
 
             if (!string.IsNullOrEmpty(query.EntityId))
@@ -63,8 +63,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             if (query.DateFrom.HasValue)
                 filters.Add(" bp.CreatedTime >= @DateFrom ");
-            
-            if(query.DateTo.HasValue)
+
+            if (query.DateTo.HasValue)
                 filters.Add(" bp.CreatedTime <= @DateTo ");
 
             if (filters.Count > 0)
@@ -76,13 +76,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             queryBuilder.AppendLine();
 
-            return GetItemsText(queryBuilder.ToString(),
-                BPInstanceMapper,
-                (cmd) =>
+            return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, (cmd) =>
                 {
                     if (!string.IsNullOrEmpty(query.EntityId))
                         cmd.Parameters.Add(new SqlParameter("@EntityId", query.EntityId));
-                    if(query.DateFrom.HasValue)
+                    if (query.DateFrom.HasValue)
                         cmd.Parameters.Add(new SqlParameter("@DateFrom", query.DateFrom.Value));
                     if (query.DateTo.HasValue)
                         cmd.Parameters.Add(new SqlParameter("@DateTo", query.DateTo.Value));
@@ -228,17 +226,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 filters.Add(String.Concat(" bp.ParentID = ", input.ParentId.ToString()));
 
             if (filters.Count > 0)
-            {
                 queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
-            }
 
             queryBuilder.Append(" ORDER BY bp.[ID] DESC");
 
             queryBuilder.AppendLine();
 
-            return GetItemsText(queryBuilder.ToString(),
-                BPInstanceMapper,
-                null);
+            return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
         }
 
         public List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId, bool getFromArchive)
@@ -337,7 +331,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceIDAndAssignmentStatus]", pendingInstance.ProcessInstanceID, pendingInstance.ServiceInstanceId.Value, (int)pendingInstance.AssignmentStatus);
             }
         }
-        
+
         public List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus)
         {
             StringBuilder queryBuilder = new StringBuilder();
@@ -425,70 +419,7 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
 
         #endregion
 
-        #region mapper
-
-        const string BPInstanceSELECTCOLUMNS = @" bp.[ID]
-	  ,[Title]
-      ,[ParentID]
-      ,[DefinitionID]
-      ,[WorkflowInstanceID]
-      ,[InputArgument]
-	  , [CompletionNotifier]
-      ,[ExecutionStatus]
-      ,[AssignmentStatus]
-      ,[LastMessage]
-	   ,EntityID
-      ,[ViewRequiredPermissionSetId]
-      ,[CreatedTime]
-      ,[StatusUpdatedTime]      
-      ,[InitiatorUserId]
-	  ,[ServiceInstanceID]
-      ,[TaskId]
-      ,[CancellationRequestUserId]
-	  ,[timestamp] ";
-
-        private BPInstance BPInstanceMapper(IDataReader reader)
-        {
-            BPInstance instance = new BPInstance
-            {
-                ProcessInstanceID = (long)reader["ID"],
-                Title = reader["Title"] as string,
-                ParentProcessID = GetReaderValue<long?>(reader, "ParentID"),
-                DefinitionID = GetReaderValue<Guid>(reader, "DefinitionID"),
-                WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
-                Status = (BPInstanceStatus)reader["ExecutionStatus"],
-                AssignmentStatus = (BPInstanceAssignmentStatus)GetReaderValue<int>(reader, "AssignmentStatus"),
-                LastMessage = reader["LastMessage"] as string,
-                CreatedTime = (DateTime)reader["CreatedTime"],
-                StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),
-                InitiatorUserId = GetReaderValue<int>(reader, "InitiatorUserId"),
-                EntityId = reader["EntityId"] as string,
-                ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId"),
-                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID"),
-                TaskId = GetReaderValue<Guid?>(reader, "TaskId"),
-                CancellationRequestByUserId = GetReaderValue<int?>(reader, "CancellationRequestUserId")
-            };
-
-            string inputArg = reader["InputArgument"] as string;
-            if (!String.IsNullOrWhiteSpace(inputArg))
-                instance.InputArgument = Serializer.Deserialize(inputArg) as BaseProcessInputArgument;
-
-            string completionNotifier = reader["CompletionNotifier"] as string;
-            if (!string.IsNullOrWhiteSpace(completionNotifier))
-                instance.CompletionNotifier = Serializer.Deserialize(completionNotifier) as ProcessCompletionNotifier;
-
-            return instance;
-        }
-
-        private BPDefinitionSummary BPDefinitionSummaryMapper(IDataReader reader)
-        {
-            return new BPDefinitionSummary()
-            {
-                RunningProcessNumber = GetReaderValue<int>(reader, "RunningProcessNumber"),
-                LastProcessCreatedTime = GetReaderValue<DateTime>(reader, "LastProcessCreatedTime"),
-                BPDefinitionID = GetReaderValue<Guid>(reader, "DefinitionID")
-            };
-        }
+        #region Private Methods
 
         private string BuildStatusesFilter(IEnumerable<BPInstanceStatus> statuses)
         {
@@ -542,6 +473,74 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
                 filters.Add(String.Concat(" bp.ParentID = ", parentId.ToString()));
             return filters;
         }
+
+        #endregion
+
+        #region Mappers
+
+        const string BPInstanceSELECTCOLUMNS = @" bp.[ID]
+	                                                ,[Title]
+                                                    ,[ParentID]
+                                                    ,[DefinitionID]
+                                                    ,[WorkflowInstanceID]
+                                                    ,[InputArgument]
+	                                                , [CompletionNotifier]
+                                                    ,[ExecutionStatus]
+                                                    ,[AssignmentStatus]
+                                                    ,[LastMessage]
+	                                                ,EntityID
+                                                    ,[ViewRequiredPermissionSetId]
+                                                    ,[CreatedTime]
+                                                    ,[StatusUpdatedTime]      
+                                                    ,[InitiatorUserId]
+	                                                ,[ServiceInstanceID]
+                                                    ,[TaskId]
+                                                    ,[CancellationRequestUserId]
+	                                                ,[timestamp] ";
+
+        private BPInstance BPInstanceMapper(IDataReader reader)
+        {
+            BPInstance instance = new BPInstance
+            {
+                ProcessInstanceID = (long)reader["ID"],
+                Title = reader["Title"] as string,
+                ParentProcessID = GetReaderValue<long?>(reader, "ParentID"),
+                DefinitionID = GetReaderValue<Guid>(reader, "DefinitionID"),
+                WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
+                Status = (BPInstanceStatus)reader["ExecutionStatus"],
+                AssignmentStatus = (BPInstanceAssignmentStatus)GetReaderValue<int>(reader, "AssignmentStatus"),
+                LastMessage = reader["LastMessage"] as string,
+                CreatedTime = (DateTime)reader["CreatedTime"],
+                StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),
+                InitiatorUserId = GetReaderValue<int>(reader, "InitiatorUserId"),
+                EntityId = reader["EntityId"] as string,
+                ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId"),
+                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID"),
+                TaskId = GetReaderValue<Guid?>(reader, "TaskId"),
+                CancellationRequestByUserId = GetReaderValue<int?>(reader, "CancellationRequestUserId")
+            };
+
+            string inputArg = reader["InputArgument"] as string;
+            if (!String.IsNullOrWhiteSpace(inputArg))
+                instance.InputArgument = Serializer.Deserialize(inputArg) as BaseProcessInputArgument;
+
+            string completionNotifier = reader["CompletionNotifier"] as string;
+            if (!string.IsNullOrWhiteSpace(completionNotifier))
+                instance.CompletionNotifier = Serializer.Deserialize(completionNotifier) as ProcessCompletionNotifier;
+
+            return instance;
+        }
+
+        private BPDefinitionSummary BPDefinitionSummaryMapper(IDataReader reader)
+        {
+            return new BPDefinitionSummary()
+            {
+                RunningProcessNumber = GetReaderValue<int>(reader, "RunningProcessNumber"),
+                LastProcessCreatedTime = GetReaderValue<DateTime>(reader, "LastProcessCreatedTime"),
+                BPDefinitionID = GetReaderValue<Guid>(reader, "DefinitionID")
+            };
+        }
+
 
         #endregion
     }

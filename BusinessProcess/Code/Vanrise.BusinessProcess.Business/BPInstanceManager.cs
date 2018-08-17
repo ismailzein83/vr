@@ -18,6 +18,29 @@ namespace Vanrise.BusinessProcess.Business
 
         #region public methods
 
+        public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
+        }
+
+        public List<BPInstance> GetAllFilteredBPInstances(BPInstanceQuery query)
+        {
+            var requiredPermissionSetManager = new RequiredPermissionSetManager();
+            
+            List<int> grantedPermissionSetIds;
+            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+            
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            List<BPInstance> bpInstances = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, false);
+            List<BPInstance> bpInstancesArchived = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, true);
+            if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+            {
+                bpInstances.AddRange(bpInstancesArchived);
+                bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(query.Top).ToList();
+            }
+            return bpInstances;
+        }
+
         public BPInstance GetBPInstance(long bpInstanceId)
         {
             var bpInstance = s_dataManager.GetBPInstance(bpInstanceId, false);
@@ -31,29 +54,10 @@ namespace Vanrise.BusinessProcess.Business
             BPInstance bpInstance = GetBPInstance(bpInstanceId);
             return GetBPInstanceName(bpInstance);
         }
+
         public string GetBPInstanceName(BPInstance bpInstance)
         {
             return bpInstance != null ? bpInstance.Title : null;
-        }
-        public Vanrise.Entities.IDataRetrievalResult<BPInstanceDetail> GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
-        {
-            return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
-        }
-
-        public List<BPInstance> GetAllFilteredBPInstances(BPInstanceQuery query)
-        {
-            var requiredPermissionSetManager = new RequiredPermissionSetManager();
-            List<int> grantedPermissionSetIds;
-            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            List<BPInstance> bpInstances = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, false);
-            List<BPInstance> bpInstancesArchived = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, true);
-            if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
-            {
-                bpInstances.AddRange(bpInstancesArchived);
-                bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(query.Top).ToList();
-            }
-            return bpInstances;
         }
 
         public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds)
@@ -126,6 +130,7 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
         }
+
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             return CreateNewProcess(createProcessInput, false);
@@ -303,7 +308,6 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
-
         public class BPInstanceLoggableEntity : VRLoggableEntityBase
         {
             string _entityDisplayName;
@@ -351,9 +355,10 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             return dataManager.GetBPDefinitionSummary(BPInstanceStatusAttribute.GetNonClosedStatuses());
         }
+
         #endregion
 
-        #region mapper
+        #region Mappers
 
         private BPInstanceDetail BPInstanceDetailMapper(BPInstance bpInstance)
         {
