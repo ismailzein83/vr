@@ -50,6 +50,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Terrasoft.Common">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Terrasoft.Core, Version=7.11.0.3122, Culture=neutral, PublicKeyToken=edaadfbc3b0bb879, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Core.dll</HintPath>

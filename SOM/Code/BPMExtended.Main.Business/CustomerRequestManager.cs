@@ -8,6 +8,9 @@ using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
 using BPMExtended.Main.Data;
 using BPMExtended.Main.Common;
+using Terrasoft.Core.Entities;
+using Terrasoft.Core;
+using System.Web;
 
 namespace BPMExtended.Main.Business
 {
@@ -23,11 +26,14 @@ namespace BPMExtended.Main.Business
 
         public CreateCustomerRequestOutput ProcessCustomerCreation(BPMCustomerType customerType, Guid accountOrContactId)
         {
+            
+
             NewCustomerCreationSomRequestSetting newCustomerCreationSomRequestSetting = new NewCustomerCreationSomRequestSetting
             {
                 CustomerId = accountOrContactId
             };
             string title = string.Format("New Customer Creation Process Input: '{0}'", newCustomerCreationSomRequestSetting.CustomerId);
+
 
             return Helper.CreateSOMRequest(customerType, accountOrContactId, title, newCustomerCreationSomRequestSetting);
         }
@@ -204,6 +210,19 @@ namespace BPMExtended.Main.Business
                 case SOMRequestStatus.Aborted: return CustomerRequestStatus.Aborted;
                 default: throw new NotSupportedException(String.Format("somRequestStatus '{0}'", somRequestStatus.ToString()));
             }
+        }
+
+        private string GetContactInfo(Guid contactId)
+        {
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
+            esqResult.AddColumn("Name");
+
+            // Execution of query to database and getting object with set identifier.
+            var entity = esqResult.GetEntity(connection, contactId);
+            object retVal = entity.GetColumnValue("Name");
+
+            return retVal != null ? retVal.ToString() : null;            
         }
 
         #endregion
