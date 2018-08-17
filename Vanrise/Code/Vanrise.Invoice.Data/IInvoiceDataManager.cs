@@ -32,11 +32,12 @@ namespace Vanrise.Invoice.Data
         IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices);
         VRPopulatedPeriod GetInvoicesPopulatedPeriod(Guid invoiceTypeId, string partnerId);
         bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId);
-        List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId,IEnumerable<string> serialNumbers);
+        List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId, IEnumerable<string> serialNumbers);
         bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate);
         bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings);
         bool SetInvoiceSentDate(long invoiceId, DateTime? sentDate);
         bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate);
+        bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy);
 
         void LoadInvoices(Guid invoiceTypeId, DateTime? from, DateTime? to, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded);
     }

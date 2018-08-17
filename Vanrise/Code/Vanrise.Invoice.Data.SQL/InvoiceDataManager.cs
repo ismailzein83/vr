@@ -231,7 +231,7 @@ namespace Vanrise.Invoice.Data.SQL
                         generateInvoiceInputToSave.ActionBeforeGenerateInvoice(generateInvoiceInputToSave.Invoice);
                     }
 
-                    if(generateInvoiceInputToSave.ActionAfterGenerateInvoice != null)
+                    if (generateInvoiceInputToSave.ActionAfterGenerateInvoice != null)
                     {
                         generateInvoiceInputToSave.ActionAfterGenerateInvoice(generateInvoiceInputToSave.Invoice);
                     }
@@ -382,6 +382,11 @@ namespace Vanrise.Invoice.Data.SQL
                 invoiceIdsAsString = string.Join<long>(",", invoiceIds);
 
             return GetItemsSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceIdsAsString);
+        }
+        public bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceApproved", invoiceId, ApprovedDate, ApprovedBy);
+            return (affectedRows > -1);
         }
 
         #endregion

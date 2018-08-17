@@ -33,8 +33,8 @@ namespace Vanrise.Invoice.Data.SQL
         public bool InsertInvoiceType(InvoiceType invoiceType)
         {
             string serializedObj = null;
-            if(invoiceType.Settings != null)
-                serializedObj =  Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
+            if (invoiceType.Settings != null)
+                serializedObj = Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
 
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Insert", invoiceType.InvoiceTypeId, invoiceType.Name, serializedObj);
             return (affectedRows > -1);
@@ -46,23 +46,18 @@ namespace Vanrise.Invoice.Data.SQL
                 serializedObj = Vanrise.Common.Serializer.Serialize(invoiceType.Settings);
 
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceType_Update", invoiceType.InvoiceTypeId, invoiceType.Name, serializedObj);
-            return (affectedRows > -1 );
-        }
-
-        public bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy)
-        {
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceApproved", invoiceId, ApprovedDate, ApprovedBy);
             return (affectedRows > -1);
         }
 
+
         #endregion
-        
+
         #region Mappers
         public InvoiceType InvoiceTypeMapper(IDataReader reader)
         {
             InvoiceType invoiceType = new InvoiceType
             {
-                InvoiceTypeId = GetReaderValue<Guid>(reader,"ID"),
+                InvoiceTypeId = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<InvoiceTypeSettings>(reader["Settings"] as string)
             };

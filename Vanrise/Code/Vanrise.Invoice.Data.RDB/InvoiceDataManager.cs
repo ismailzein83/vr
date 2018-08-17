@@ -796,7 +796,10 @@ namespace Vanrise.Invoice.Data.RDB
                         }
                     );
         }
-
+        public bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         private void AddConditionInvoiceNotDeleted(RDBConditionContext conditionContext, string invoiceTableAlias = null)

@@ -100,10 +100,7 @@ namespace Vanrise.Invoice.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
         }
 
-        public bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         #endregion
     }

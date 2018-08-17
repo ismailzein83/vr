@@ -706,7 +706,7 @@ namespace Vanrise.Invoice.Business
 
         public bool ApproveInvoice(long invoiceId, bool isApproved)
         {
-            IInvoiceTypeDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceTypeDataManager>();
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             DateTime? ApprovedDate = null;
             int? ApprovedBy = null;
             if (isApproved)
