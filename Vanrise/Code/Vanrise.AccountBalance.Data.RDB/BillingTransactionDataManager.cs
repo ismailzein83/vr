@@ -353,5 +353,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             where.EqualsCondition("CreatedByInvoiceID").Value(invoiceId);
         }
 
+        public BillingTransaction GetBillingTransactionById(long billingTransactionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
     public class BillingTransactionController : BaseAPIController
     {
         AccountTypeManager _accountTypeManager = new AccountTypeManager();
+        BillingTransactionManager _billingTransactionManager = new BillingTransactionManager();
 
         [HttpPost]
         [Route("GetFilteredBillingTransactions")]
@@ -20,8 +21,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
         {
             if (!DoesUserHaveViewAccess(input.Query.AccountTypeId))
                 return GetUnauthorizedResponse();
-            BillingTransactionManager manager = new BillingTransactionManager();
-            return GetWebResponse(input, manager.GetFilteredBillingTransactions(input));
+            return GetWebResponse(input, _billingTransactionManager.GetFilteredBillingTransactions(input));
         }
 
         [HttpGet]
@@ -43,8 +43,14 @@ namespace Vanrise.AccountBalance.Web.Controllers
         {
             if (!DoesUserHaveAddAccess(billingTransaction.AccountTypeId))
                 return GetUnauthorizedResponse();
-            BillingTransactionManager manager = new BillingTransactionManager();
-            return manager.AddBillingTransaction(billingTransaction);
+            return _billingTransactionManager.AddBillingTransaction(billingTransaction);
+        }
+
+        [HttpGet]
+        [Route("GetBillingTransactionById")]
+        public BillingTransaction GetBillingTransactionById(long billingTransactionId)
+        {
+            return _billingTransactionManager.GetBillingTransactionById(billingTransactionId);
         }
     }
 }

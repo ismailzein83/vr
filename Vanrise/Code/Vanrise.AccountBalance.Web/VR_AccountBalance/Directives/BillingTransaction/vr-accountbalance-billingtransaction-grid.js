@@ -67,7 +67,9 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
                 }];
             }
             function viewBillingTransaction(billingTransactionObj) {
-                VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionObj.Entity, getContext());
+                return VR_AccountBalance_BillingTransactionAPIService.GetBillingTransactionById(billingTransactionObj.Entity.AccountBillingTransactionId).then(function (billingTransactionEntity) {
+                    VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionEntity, getContext());
+                });
             }
             function getContext() {
                 var currentContext = context;

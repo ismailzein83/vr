@@ -16,7 +16,8 @@ namespace Vanrise.AccountBalance.Business
         public long BillingTransactionId { get; set; }
         public override bool DoesUserHaveViewAccess(IVRFileDoesUserHaveViewAccessContext context)
         {
-            return true;
+            BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
+            return billingTransactionManager.DoesUserHaveViewAccess(context.UserId, BillingTransactionId);
         }
     }
 }

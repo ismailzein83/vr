@@ -26,11 +26,16 @@
                 });
         }
 
+        function GetBillingTransactionById(billingTransactionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'GetBillingTransactionById'), { billingTransactionId: billingTransactionId });
+        }
+
         return {
             GetFilteredBillingTransactions: GetFilteredBillingTransactions,
             HasViewBillingTransactionPermission: HasViewBillingTransactionPermission,
             AddBillingTransaction: AddBillingTransaction,
-            HasAddBillingTransactionPermission: HasAddBillingTransactionPermission
+            HasAddBillingTransactionPermission: HasAddBillingTransactionPermission,
+            GetBillingTransactionById: GetBillingTransactionById
         };
     }
 

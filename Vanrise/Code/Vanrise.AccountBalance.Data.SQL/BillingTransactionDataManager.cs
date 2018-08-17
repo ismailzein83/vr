@@ -103,6 +103,10 @@ namespace Vanrise.AccountBalance.Data.SQL
                 billingTransactionIDs = string.Join<long>(",", billingTransactionIds);
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BillingTransaction_SetBalanceUpdated]", billingTransactionIDs) > 0);
         }
+        public BillingTransaction GetBillingTransactionById(long billingTransactionId)
+        {
+            return GetItemSP("[VR_AccountBalance].[sp_BillingTransaction_GetById]", BillingTransactionMapper, billingTransactionId);
+        }
         public bool SetBillingTransactionsAsSubtractedFromBalance(IEnumerable<long> billingTransactionIds)
         {
             string billingTransactionIdsAsString = (billingTransactionIds != null) ? string.Join(",", billingTransactionIds) : null;

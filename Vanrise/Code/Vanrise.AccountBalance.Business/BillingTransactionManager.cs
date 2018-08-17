@@ -76,6 +76,23 @@ namespace Vanrise.AccountBalance.Business
             return dataManager.Insert(billingTransaction, out billingTransactionId);
         }
 
+        public BillingTransaction GetBillingTransactionById(long billingTransactionId)
+        {
+            IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
+            return dataManager.GetBillingTransactionById(billingTransactionId);
+        }
+
+        public bool DoesUserHaveViewAccess(int userId, long billingTransactionId)
+        {
+            var billingTransaction = GetBillingTransactionById(billingTransactionId);
+            if (billingTransaction != null)
+            {
+                AccountTypeManager accountTypeManager = new AccountTypeManager();
+                return accountTypeManager.DoesUserHaveViewAccess(userId, billingTransaction.AccountTypeId);
+            }
+            return true;
+        }
+
         private bool ValidateAddBillingTransaction(string accountId, Guid accountTypeId, out string errorMessage)
         {
             errorMessage = null;
