@@ -45,7 +45,6 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 		};
 
 		function DirectiveConstructor($scope, ctrl) {
-			//var inEditor;
 			this.initializeController = initializeController;
 
 			function initializeController() {
@@ -83,15 +82,13 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 							var directivePayload = {
 								Context: (ctrl.getChildContext != undefined) ? ctrl.getChildContext() : undefined,
 								VRWorkflowActivityId: dataItem.VRWorkflowActivityId,
-								Settings: dataItem.Settings,
-								//inEditor: inEditor
+								Settings: dataItem.Settings
 							};
 							VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, directivePayload, setLoader);
 						};
 					}
 
 					if (payload != undefined) {
-						//inEditor = payload.inEditor;
 						ctrl.getChildContext = payload.getChildContext;
 
 						if (payload.vRWorkflowActivity != null) {
@@ -100,6 +97,7 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 						}
 
 						if (payload.vRWorkflowActivities != null && payload.vRWorkflowActivities.length > 0) {
+							$scope.scopeModel.datasource = [];
 							for (var i = 0; i < payload.vRWorkflowActivities.length; i++) {
 								{
 									var currentActivity = payload.vRWorkflowActivities[i];
