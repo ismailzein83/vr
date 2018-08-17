@@ -400,7 +400,9 @@ as (select * from (values
 ('80791C8A-5F81-4D2E-B3D7-4240CF967FA0','SMSMessageTypeSettings','SMS Message Type','VR_Common_VRComponentType'														,'{"Editor":"vr-common-smsmessagetype-settings"}'),
 ('BB07A3B5-E519-4A6C-B4C6-695069BBB64A','DBReplicationDefinitionSettings','DBReplication Definition','VR_Common_VRComponentType'									,'{"Editor":"vr-common-dbreplicationdefinition-settings"}'),
 
-('44E97625-1B35-478A-918E-60F9C58678B4','ExecuteDatabaseCommandSMSHandler','SQL SMS Handler','VRCommon_SMSSendHandlerSettings'														,'{"Editor":"vr-common-executedatabasecommand-smshandler"}')
+('44E97625-1B35-478A-918E-60F9C58678B4','ExecuteDatabaseCommandSMSHandler','SQL SMS Handler','VRCommon_SMSSendHandlerSettings'														,'{"Editor":"vr-common-executedatabasecommand-smshandler"}'),
+('A6B961D2-84F3-4772-94BC-67328FCA0C05','Comment Section','Comment Section','VR_Invoice_InvoiceType_InvoiceUISubSectionSettings','{"Editor":"vr-invoicetype-invoicesubsectionsettings-comment","RuntimeEditor":"vr-invoice-commentsubsection-grid"}'),
+('98154422-B815-4843-9304-CE63930CED84','VRCommon_Comment','VRComment','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"vr-commentbe-editor"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
