@@ -30,6 +30,7 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
 			var actionPath;
 			var buildBodyLogic;
 			var callHttpServiceMessageFormat;
+			var callHttpRetrySettings;
 			var responseLogic;
 			var errorLogic;
 			var isSucceeded;
@@ -58,12 +59,13 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
 						if (payload.Settings != undefined) {
 							isNew = payload.Settings.IsNew;
 							serviceName = payload.Settings.ServiceName;
-							$scope.scopeModel.ServiceName = serviceName;
+							$scope.scopeModel.serviceName = serviceName;
 							connectionId = payload.Settings.ConnectionId;
 							callHttpServiceMethod = payload.Settings.Method;
 							actionPath = payload.Settings.ActionPath;
 							buildBodyLogic = payload.Settings.BuildBodyLogic;
 							callHttpServiceMessageFormat = payload.Settings.MessageFormat;
+							callHttpRetrySettings = payload.Settings.RetrySettings;
 							responseLogic = payload.Settings.ResponseLogic;
 							errorLogic = payload.Settings.ErrorLogic;
 							isSucceeded = payload.Settings.IsSucceeded;
@@ -85,13 +87,14 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
 
 					function openActivityEditor() {
 						var onActivityUpdated = function (updatedObject) {
-							$scope.scopeModel.ServiceName = updatedObject.serviceName;
+							$scope.scopeModel.serviceName = updatedObject.serviceName;
 							serviceName = updatedObject.serviceName;
 							connectionId = updatedObject.connectionId;
 							callHttpServiceMethod = updatedObject.callHttpServiceMethod;
 							actionPath = updatedObject.actionPath;
 							buildBodyLogic = updatedObject.buildBodyLogic;
 							callHttpServiceMessageFormat = updatedObject.callHttpServiceMessageFormat;
+							callHttpRetrySettings = updatedObject.callHttpRetrySettings;
 							responseLogic = updatedObject.responseLogic;
 							errorLogic = updatedObject.errorLogic;
 							isSucceeded = updatedObject.isSucceeded;
@@ -123,6 +126,7 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
 					ActionPath: actionPath,
 					BuildBodyLogic: buildBodyLogic,
 					MessageFormat: callHttpServiceMessageFormat,
+					RetrySettings: callHttpRetrySettings,
 					ResponseLogic: responseLogic,
 					ErrorLogic: errorLogic,
 					IsSucceeded: isSucceeded,

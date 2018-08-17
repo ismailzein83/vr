@@ -9,12 +9,12 @@
 					 pagingtype="'PagingOnScroll'"
 					 maxheight="400px"
 					 ondeleterow="scopeModel.deleteRow">
-			<vr-datagridcolumn headertext="'Name'">
-				<vr-textbox value="dataItem.Entity.Name" isrequired="true"></vr-textbox>
+			<vr-datagridcolumn type="'Text'" headertext="'Name'">
+				<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.getParentVariables" getworkflowarguments="viewScope.scopeModel.getWorkflowArguments" value="dataItem.Entity.Name" isrequired="true" hidelabel></businessprocess-vr-workflow-activity-expressionbuilder>
 			</vr-datagridcolumn>
 
-			<vr-datagridcolumn headertext="'Value'" disablesorting>
-				<vr-textbox value="dataItem.Entity.Value" isrequired="true"></vr-textbox>
+			<vr-datagridcolumn type="'Text'" headertext="'Value'" disablesorting>
+				<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.getParentVariables" getworkflowarguments="viewScope.scopeModel.getWorkflowArguments" value="dataItem.Entity.Value" isrequired="true" hidelabel></businessprocess-vr-workflow-activity-expressionbuilder>
 			</vr-datagridcolumn>
 		</vr-datagrid>
 	</vr-validator>

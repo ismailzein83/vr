@@ -70,11 +70,16 @@ app.directive("businessprocessVrCallhttpserviceUrlparametersGrid", ["UtilsServic
 				var api = {};
 
 				api.load = function (payload) {
-					if (payload != undefined && payload.urlParameters != undefined) {
-						for (var i = 0; i < payload.urlParameters.length; i++)
-							$scope.scopeModel.urlParameters.push({
-								Entity: payload.urlParameters[i]
-							});
+					if (payload != undefined) {
+						$scope.scopeModel.getWorkflowArguments = payload.getWorkflowArguments;
+						$scope.scopeModel.getParentVariables = payload.getParentVariables;
+
+						if (payload.urlParameters != undefined) {
+							for (var i = 0; i < payload.urlParameters.length; i++)
+								$scope.scopeModel.urlParameters.push({
+									Entity: payload.urlParameters[i]
+								});
+						}
 					}
 				};
 

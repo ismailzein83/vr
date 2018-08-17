@@ -182,6 +182,7 @@
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
     <Content Include="BusinessProcess\Constants\GridMaxSize.js" />
     <Content Include="BusinessProcess\Constants\ModuleConfig.js" />
+    <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpRetrySettingsEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMessageFormatEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowCallHttpServiceMethodEnum.js" />
     <Content Include="BusinessProcess\Constants\VRWorkflowTrackingMessageSeverityEnum.js" />
@@ -238,6 +239,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityCallHttpServiceEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivityForEachEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivitySequenceEditor.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowActivitySubprocessEditor.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowCallHttpServiceTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowDelayTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\Templates\VRWorkflowIfElseTemplate.html" />
@@ -247,6 +249,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityCallHttpServiceController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivityForEachController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivitySequenceController.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivitySubprocessController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\bp-vr-workflow-customclasstype.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowCustomClassTypeTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-classes-grid.js" />

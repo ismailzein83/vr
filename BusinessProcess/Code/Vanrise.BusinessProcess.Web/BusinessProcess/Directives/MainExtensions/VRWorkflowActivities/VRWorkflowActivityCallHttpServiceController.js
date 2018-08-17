@@ -2,9 +2,9 @@
 
 	"use strict";
 
-	CallHttpServiceEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService', 'VRWorkflowCallHttpServiceMethodEnum', 'VRWorkflowCallHttpServiceMessageFormatEnum'];
+	CallHttpServiceEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService', 'BusinessProcess_VRWorkflowService', 'VRWorkflowCallHttpServiceMethodEnum', 'VRWorkflowCallHttpServiceMessageFormatEnum', 'VRWorkflowCallHttpRetrySettingsEnum'];
 
-	function CallHttpServiceEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService, VRWorkflowCallHttpServiceMethodEnum, VRWorkflowCallHttpServiceMessageFormatEnum) {
+	function CallHttpServiceEditorController($scope, VRNavigationService, VRNotificationService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService, BusinessProcess_VRWorkflowService, VRWorkflowCallHttpServiceMethodEnum, VRWorkflowCallHttpServiceMessageFormatEnum, VRWorkflowCallHttpRetrySettingsEnum) {
 
 		var serviceName;
 		var connectionId;
@@ -12,6 +12,7 @@
 		var actionPath;
 		var buildBodyLogic;
 		var callHttpServiceMessageFormat;
+		var callHttpRetrySettings;
 		var responseLogic;
 		var errorLogic;
 		var isSucceeded;
@@ -46,6 +47,7 @@
 				actionPath = parameters.obj.ActionPath;
 				buildBodyLogic = parameters.obj.BuildBodyLogic;
 				callHttpServiceMessageFormat = parameters.obj.MessageFormat;
+				callHttpRetrySettings = parameters.obj.RetrySettings;
 				responseLogic = parameters.obj.ResponseLogic;
 				errorLogic = parameters.obj.ErrorLogic;
 				isSucceeded = parameters.obj.IsSucceeded;
@@ -135,11 +137,22 @@
 					$scope.scopeModel.selectedCallHttpServiceMessageFormat = $scope.scopeModel.callHttpServiceMessageFormatEnums[0];
 			}
 
+			function loadCallHttpRetrySettingsSelector() {
+				$scope.scopeModel.callHttpRetrySettingsEnums = UtilsService.getArrayEnum(VRWorkflowCallHttpRetrySettingsEnum);
+
+				if (callHttpRetrySettings != undefined)
+					$scope.scopeModel.selectedCallHttpRetrySettings = UtilsService.getItemByVal($scope.scopeModel.callHttpRetrySettingsEnums, callHttpRetrySettings, "value");
+				else
+					$scope.scopeModel.selectedCallHttpRetrySettings = $scope.scopeModel.callHttpRetrySettingsEnums[0];
+			}
+
 			function loadHeadersGrid() {
 				var headersGridLoadDeferred = UtilsService.createPromiseDeferred();
 				headersGridReadyDeferred.promise.then(function () {
 					var headersGridPayload = {
-						headers: headers
+						headers: headers,
+						getWorkflowArguments: context.getWorkflowArguments,
+						getParentVariables: context.getParentVariables
 					};
 					VRUIUtilsService.callDirectiveLoad(headersGridAPI, headersGridPayload, headersGridLoadDeferred);
 				});
@@ -150,7 +163,9 @@
 				var urlParametersGridLoadDeferred = UtilsService.createPromiseDeferred();
 				urlParametersGridReadyDeferred.promise.then(function () {
 					var urlParametersGridPayload = {
-						urlParameters: urlParameters
+						urlParameters: urlParameters,
+						getWorkflowArguments: context.getWorkflowArguments,
+						getParentVariables: context.getParentVariables
 					};
 					VRUIUtilsService.callDirectiveLoad(urlParametersGridAPI, urlParametersGridPayload, urlParametersGridLoadDeferred);
 				});
@@ -173,7 +188,7 @@
 				return connectionSelectorLoadDeferred.promise;
 			}
 
-			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadHeadersGrid, loadURLParametersGrid, loadCallHttpServiceMethodSelector, loadCallHttpServiceMessageFormatSelector, loadConnectionSelector]).then(function () {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadHeadersGrid, loadURLParametersGrid, loadCallHttpServiceMethodSelector, loadCallHttpServiceMessageFormatSelector, loadCallHttpRetrySettingsSelector, loadConnectionSelector]).then(function () {
 			}).catch(function (error) {
 				VRNotificationService.notifyExceptionWithClose(error, $scope);
 			}).finally(function () {
@@ -189,6 +204,7 @@
 				actionPath: $scope.scopeModel.actionPath,
 				buildBodyLogic: $scope.scopeModel.buildBodyLogic,
 				callHttpServiceMessageFormat: $scope.scopeModel.selectedCallHttpServiceMessageFormat.value,
+				callHttpRetrySettings: $scope.scopeModel.selectedCallHttpRetrySettings.value,
 				responseLogic: $scope.scopeModel.responseLogic,
 				errorLogic: $scope.scopeModel.errorLogic,
 				isSucceeded: $scope.scopeModel.isSucceeded,

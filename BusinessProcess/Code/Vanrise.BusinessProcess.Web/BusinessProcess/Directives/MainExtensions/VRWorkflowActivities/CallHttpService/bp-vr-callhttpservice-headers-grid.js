@@ -70,11 +70,16 @@ app.directive("businessprocessVrCallhttpserviceHeadersGrid", ["UtilsService",
 				var api = {};
 
 				api.load = function (payload) {
-					if (payload != undefined && payload.headers != undefined) {
-						for (var i = 0; i < payload.headers.length; i++)
-							$scope.scopeModel.headers.push({
-								Entity: payload.headers[i]
-							});
+					if (payload != undefined) {
+						$scope.scopeModel.getWorkflowArguments = payload.getWorkflowArguments;
+						$scope.scopeModel.getParentVariables = payload.getParentVariables;
+
+						if (payload.headers != undefined) {
+							for (var i = 0; i < payload.headers.length; i++)
+								$scope.scopeModel.headers.push({
+									Entity: payload.headers[i]
+								});
+						}
 					}
 				};
 
