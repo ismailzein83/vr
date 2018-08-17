@@ -10,13 +10,13 @@ namespace BPMExtended.Main.Business
 {
     public class RatePlanManager
     {
-        private List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
+        public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
             var customerCategories = MockDataGenerator.GetCustomerCategories(customerType);
             return customerCategories.MapRecords(CustomerCategroryInfoMapper).ToList();
         }
         
-        private List<CustomerCategoryDetail> GetCustomerCategories(BPMCustomerType customerType)
+        public List<CustomerCategoryDetail> GetCustomerCategories(BPMCustomerType customerType)
         {
             return MockDataGenerator.GetCustomerCategories(customerType);
         }
