@@ -31,7 +31,7 @@
         var attachmentFieldTypeManagementAPI;
         var attachmentFieldTypeManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var isViewMode;
+        var isEditMode;
 
         loadParameters();
         defineScope();
@@ -45,7 +45,7 @@
                 billingTransactionId = parameters.billingTransactionId;
                 context = parameters.context;
             }
-            isViewMode = billingTransactionId != undefined;
+            isEditMode = billingTransactionId != undefined;
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -127,22 +127,18 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (isViewMode) {
+            if (isEditMode) {
                 getBillingTransactionEntity().then(function () {
-                    getAccountTypeSettings().then(function () {
-                        if (accountId == undefined) {
-                            loadAccountSection().then(function (response) {
-                                loadAllControls();
-                            });
-                        }
-                        else
-                            loadAllControls();
-                    });
+                    loadAccountSettings();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
             else {
+                loadAccountSettings();
+            }
+
+            function loadAccountSettings() {
                 getAccountTypeSettings().then(function () {
                     if (accountId == undefined) {
                         loadAccountSection().then(function (response) {
@@ -156,6 +152,7 @@
                 });
             }
         }
+
         function getAccountTypeSettings()
         {
             return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSettings(accountTypeId).then(function (response) {
