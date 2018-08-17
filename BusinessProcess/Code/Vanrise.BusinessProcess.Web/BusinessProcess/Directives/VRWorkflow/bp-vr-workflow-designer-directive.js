@@ -76,7 +76,7 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 								reserveVariableNames: reserveVariableNames,
 								isVariableNameReserved: isVariableNameReserved,
 								eraseVariableName: eraseVariableName,
-								doesActivityhaveErrors: doesActivityhaveErrors,
+								doesActivityhaveErrors: doesActivityhaveErrors
 							};
 							var payload = {
 								Context: context,
@@ -138,7 +138,7 @@ app.directive('businessprocessVrWorkflowDesignerDirective', ['UtilsService', 'VR
 						childContext.removeFromList = removeFromList;
 						childContext.doesActivityhaveErrors = doesActivityhaveErrors;
 						return childContext;
-					};
+					}
 
 					function loadWorkflowContainer() {
 						var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
