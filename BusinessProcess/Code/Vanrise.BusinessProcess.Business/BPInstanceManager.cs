@@ -13,8 +13,8 @@ namespace Vanrise.BusinessProcess.Business
 {
     public class BPInstanceManager
     {
-        static BPDefinitionManager s_definitionManager = new BPDefinitionManager();
-        static IBPInstanceDataManager s_dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+        static BPDefinitionManager s_bpDefinitionManager = new BPDefinitionManager();
+        static IBPInstanceDataManager s_bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
 
         #region public methods
 
@@ -43,9 +43,9 @@ namespace Vanrise.BusinessProcess.Business
 
         public BPInstance GetBPInstance(long bpInstanceId)
         {
-            var bpInstance = s_dataManager.GetBPInstance(bpInstanceId, false);
+            var bpInstance = s_bpInstanceDataManager.GetBPInstance(bpInstanceId, false);
             if (bpInstance == null)
-                bpInstance = s_dataManager.GetBPInstance(bpInstanceId, true);//get from archive
+                bpInstance = s_bpInstanceDataManager.GetBPInstance(bpInstanceId, true);//get from archive
             return bpInstance;
         }
 
@@ -71,8 +71,8 @@ namespace Vanrise.BusinessProcess.Business
             List<BPInstance> bpInstances;
             if (maxTimeStamp == null) //first page
             {
-                bpInstances = s_dataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
-                List<BPInstance> bpInstancesArchived = s_dataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                bpInstances = s_bpInstanceDataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                List<BPInstance> bpInstancesArchived = s_bpInstanceDataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
                 if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
                 {
                     bpInstances.AddRange(bpInstancesArchived);
@@ -81,7 +81,7 @@ namespace Vanrise.BusinessProcess.Business
             }
             else
             {
-                bpInstances = s_dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                bpInstances = s_bpInstanceDataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
             }
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
@@ -125,21 +125,15 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstances;
         }
 
-        public bool HasRunningInstances(Guid definitionId, List<string> entityIds)
+        public BPInstanceDefinitionDetail GetBPInstanceDefinitionDetail(Guid bpDefinitionId, long bpInstanceId)
         {
-            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
+            var bpdefinition = s_bpDefinitionManager.GetBPDefinition(bpDefinitionId);
+            return BPInstanceDefinitionDetailMapper(bpdefinition, bpInstanceId);
         }
 
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput)
         {
             return CreateNewProcess(createProcessInput, false);
-        }
-
-        public BPInstanceDefinitionDetail GetBPInstanceDefinitionDetail(Guid bpDefinitionId, long bpInstanceId)
-        {
-            var bpdefinition = s_definitionManager.GetBPDefinition(bpDefinitionId);
-            return BPInstanceDefinitionDetailMapper(bpdefinition, bpInstanceId);
         }
 
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput, bool isViewedFromUI)
@@ -204,7 +198,7 @@ namespace Vanrise.BusinessProcess.Business
         {
             int cancelRequestByUserId = SecurityContext.Current.GetLoggedInUserId();
             List<BPInstanceStatus> allowedStatuses = BPInstanceStatusAttribute.GetNonClosedStatuses();
-            s_dataManager.SetCancellationRequestUserId(bpInstanceId, allowedStatuses, cancelRequestByUserId);
+            s_bpInstanceDataManager.SetCancellationRequestUserId(bpInstanceId, allowedStatuses, cancelRequestByUserId);
             var bpInstance = GetBPInstance(bpInstanceId);
             bpInstance.ThrowIfNull("bpInstance", bpInstanceId);
             if (bpInstance.CancellationRequestByUserId == cancelRequestByUserId)
@@ -221,15 +215,21 @@ namespace Vanrise.BusinessProcess.Business
                 };
         }
 
+        public bool HasRunningInstances(Guid definitionId, List<string> entityIds)
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.HasRunningInstances(definitionId, entityIds, BPInstanceStatusAttribute.GetNonClosedStatuses());
+        }
+
         public bool DoesUserHaveCancelAccess(int userId, long bpInstanceId)
         {
             var bpInstance = GetBPInstance(bpInstanceId);
             bpInstance.ThrowIfNull("bpInstance", bpInstanceId);
             bpInstance.InputArgument.ThrowIfNull("bpInstance.InputArgument", bpInstanceId);
-            var bpDefinition = s_definitionManager.GetBPDefinition(bpInstance.DefinitionID);
+            var bpDefinition = s_bpDefinitionManager.GetBPDefinition(bpInstance.DefinitionID);
             bpDefinition.ThrowIfNull("bpDefinition", bpInstance.DefinitionID);
-            return s_definitionManager.DoesUserHaveViewAccess(userId, bpDefinition, bpInstance.InputArgument)
-                && s_definitionManager.DoesUserHaveStartNewInstanceAccess(userId, bpInstance.InputArgument);
+            return s_bpDefinitionManager.DoesUserHaveViewAccess(userId, bpDefinition, bpInstance.InputArgument)
+                && s_bpDefinitionManager.DoesUserHaveStartNewInstanceAccess(userId, bpInstance.InputArgument);
         }
 
         #endregion
@@ -381,7 +381,7 @@ namespace Vanrise.BusinessProcess.Business
         {
             BPInstanceDefinitionDetail detail = new BPInstanceDefinitionDetail();
             detail.Entity = bpDefinition;
-            var extendedSettings = s_definitionManager.GetBPDefinitionExtendedSettings(bpDefinition);
+            var extendedSettings = s_bpDefinitionManager.GetBPDefinitionExtendedSettings(bpDefinition);
             detail.AllowCancel = extendedSettings.CanCancelBPInstance(null) && DoesUserHaveCancelAccess(SecurityContext.Current.GetLoggedInUserId(), bpInstanceId);
             return detail;
         }
