@@ -93,8 +93,7 @@ namespace Vanrise.Common.Business
         public VRNamespaceCompilationOutput TryCompileNamespace(VRNamespace vrNamespace)
         {
             VRNamespaceCompilationOutput output;
-            Type outputType;
-            if (TryCompileNamespace(vrNamespace, null, out outputType, out output))
+            if (TryCompileNamespace(vrNamespace, out output))
                 CSharpCompiler.SetExpiredAssembly(output.OutputAssembly.FullName);
 
             return output;
@@ -106,21 +105,28 @@ namespace Vanrise.Common.Business
             if (vrNamespace == null)
                 return null;
 
-            var cacheName = new GetVRNamespaceTypeCacheName { Namespace = vrNamespaceName, ClassName = className };
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+            var outputAssembly = GetCachedAssembly(vrNamespaceName);
+            return outputAssembly.GetType(string.Format("{0}.{1}", vrNamespaceName, className));
+        }
+
+        private Assembly GetCachedAssembly(string vrNamespaceName)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(vrNamespaceName,
               () =>
               {
+                  VRNamespace vrNamespace = GetVRNamespaceByName(vrNamespaceName);
+                  vrNamespace.ThrowIfNull("vrNamespace", vrNamespaceName);
+
                   AssemblyObject existingAssembly = vrNamespaceAssemblies.GetOrCreateItem(vrNamespaceName);
                   if (!string.IsNullOrEmpty(existingAssembly.AssemblyName))
                       CSharpCompiler.SetExpiredAssembly(existingAssembly.AssemblyName);
 
-                  Type outputType;
                   VRNamespaceCompilationOutput namespaceCompilationOutput;
 
-                  if (TryCompileNamespace(vrNamespace, className, out outputType, out namespaceCompilationOutput))
+                  if (TryCompileNamespace(vrNamespace, out namespaceCompilationOutput))
                   {
                       existingAssembly.AssemblyName = namespaceCompilationOutput.OutputAssembly.FullName;
-                      return outputType;
+                      return namespaceCompilationOutput.OutputAssembly;
                   }
                   else
                   {
@@ -136,10 +142,8 @@ namespace Vanrise.Common.Business
               });
         }
 
-        private bool TryCompileNamespace(VRNamespace vrNamespace, string className, out Type outputType, out VRNamespaceCompilationOutput namespaceCompilationOutput)
+        private bool TryCompileNamespace(VRNamespace vrNamespace, out VRNamespaceCompilationOutput namespaceCompilationOutput)
         {
-            outputType = null;
-
             var classDefinition = BuildClassDefinition(vrNamespace);
 
             CSharpCompilationOutput compilationOutput;
@@ -168,19 +172,10 @@ namespace Vanrise.Common.Business
                     Result = true,
                     ErrorMessages = null
                 };
-
-                if (!string.IsNullOrEmpty(className))
-                    outputType = compilationOutput.OutputAssembly.GetType(string.Format("{0}.{1}", vrNamespace.Name, className));
             }
             return namespaceCompilationOutput.Result;
         }
 
-        private struct GetVRNamespaceTypeCacheName
-        {
-            public string Namespace { get; set; }
-
-            public string ClassName { get; set; }
-        }
         #endregion
 
         #region Private Classes
