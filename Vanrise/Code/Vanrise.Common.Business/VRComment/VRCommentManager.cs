@@ -79,7 +79,8 @@ namespace Vanrise.Common.Business
                 Content = vRComment.Content,
                 CreatedByDescription = _userManager.GetUserName(vRComment.LastModifiedBy),
                 CreatedBy = vRComment.CreatedBy,
-                CreatedTime = vRComment.CreatedTime
+                CreatedTime = vRComment.CreatedTime,
+              CreatedTimeDescription =vRComment.CreatedTime.ToString(Utilities.GetDateTimeFormat(DateTimeType.DateTime))
             };
         }
 

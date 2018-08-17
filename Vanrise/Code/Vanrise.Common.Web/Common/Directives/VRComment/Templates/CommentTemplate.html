@@ -18,50 +18,93 @@
             display: inline-flex;
             width: 100%;
             padding-left: 10px;
+            white-space: normal;
+            text-overflow: ellipsis;
+            width: 100%;
+            overflow: hidden;
         }
 
-        .vr-comment .vr-comment-footer {
-            display: inline-flex;
-            flex: 1;
-            flex-direction: row-reverse;
+    .action-link:focus {
+        outline: none !important;
+    }
+
+    .vr-comment .vr-comment-body.full-content {
+        height: auto !important;
+        max-height: unset !important;
+    }
+
+    .vr-comment .vr-comment-footer {
+        display: inline-flex;
+        font-size: 10px;
+        flex: 1;
+        flex-direction: row-reverse;
+    }
+
+    /* Put your css in here */
+    .showless {
+        position: relative;
+    }
+
+        .showless .content {
+            overflow: hidden;
+            transition: all linear 0.5s;
+            -webkit-transition: all linear 0.5s;
+        }
+
+        .showless .trigger {
+            display: inline-block;
+            position: absolute;
+            right: 10px;
+            bottom: 1px;
+            cursor: pointer !important;
+            color: #00adef;
         }
 </style>
 <vr-row>
-    <vr-columns width="2/3row">
-        <vr-section header="Comments">
-            <vr-row>
-                <vr-columns colnum="11">
-                    <vr-textarea value="scopeModel.newComment" rows="4" label="Comment" isrequired="true"></vr-textarea>
-                </vr-columns>
-                <vr-columns colnum="1" withemptyline>
-                    <vr-button type="Comment" data-onclick="scopeModel.addcomment" vr-disabled="!scopeModel.newComment" standalone></vr-button>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns colnum="12">
-                    <vr-datagrid datasource="vRComments"
-                                 on-ready="onGridReady"
-                                 dataretrievalfunction="dataRetrievalFunction"
-                                 pagingtype="'PagingOnScroll'"
-                                 idfield="VRCommentId"
-                                 hideheader="true"
-                                 hidepaginginfo
-                                 defaultsortbyfieldname="'VRCommentId'"
-                                 norowhighlightonclick="true"
-                                 norowhighlightonhover="true">
-                        <vr-datagridcolumn headertext="'ID'" field="'VRCommentId'">
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn>
-                            <div class="vr-comment">
-                                <div class="vr-comment-header"> {{dataItem.CreatedByDescription}}</div>
-                                <div class="vr-comment-body">{{dataItem.Content}}</div>
-                                <div class="vr-comment-footer">{{dataItem.CreatedTime}}</div>
+    <vr-columns width="fullrow">
+        <vr-row>
+            <vr-columns colnum="12">
+                <div style="display:inline-block;width:calc(100% - 30px)">
+                    <vr-textarea value="scopeModel.newComment" rows="2" on-ready="scopeModel.onCommentReady" isrequired="true"></vr-textarea>
+                </div>
+                <div style="display:inline-block;width:30px; position:absolute;transform:translate(0,-50%);top:50%">
+                    <a href="" ng-click="scopeModel.newComment ? scopeModel.addcomment() : '' " class="action-link">
+                        <vr-button type="Comment" data-onclick="" vr-disabled="!scopeModel.newComment" standalone></vr-button>
+                    </a>
+                </div>
+
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="12">
+                <vr-datagrid datasource="vRComments"
+                             on-ready="onGridReady"
+                             dataretrievalfunction="dataRetrievalFunction"
+                             pagingtype="'PagingOnScroll'"
+                             idfield="VRCommentId"
+                             hideheader="true"
+                             hidepaginginfo
+                             defaultsortbyfieldname="'CreatedTime'"
+                             defaultsortdirection="'DESC'"
+                             norowhighlightonclick="true"
+                             norowhighlightonhover="true">
+                    <vr-datagridcolumn headertext="'ID'" field="'VRCommentId'">
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn>
+                        <div class="vr-comment">
+                            <div class="vr-comment-body" ng-class="dataItem.fullView ? 'full-content' : ''">
+                                <div style="word-wrap: break-word;display: inline-block; width: 100%;">
+                                    <vr-expandablecontent>
+                                        <p style="width:calc(100% - 70px);white-space: pre-wrap;" ng-bind="dataItem.Content"></p>
+                                    </vr-expandablecontent>
+                                </div>
                             </div>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-columns>
-            </vr-row>
-        </vr-section>
+                            <div class="vr-comment-footer">By: {{dataItem.CreatedByDescription}} At: {{dataItem.CreatedTimeDescription}}</div>
+                        </div>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
     </vr-columns>
 </vr-row>
 

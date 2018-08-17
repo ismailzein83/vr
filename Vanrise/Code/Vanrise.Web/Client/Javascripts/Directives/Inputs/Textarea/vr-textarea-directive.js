@@ -154,6 +154,11 @@
 							angular.element(input).trigger('input');
 						};
 
+						api.focusComponent = function (text) {
+						    var input = document.getElementById(ctrl.textAreaGuid);
+						    input.focus();
+						};
+
 						if (ctrl.onReady != null)
                             ctrl.onReady(api);
 					}

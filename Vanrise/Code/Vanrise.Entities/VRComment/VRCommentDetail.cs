@@ -13,5 +13,6 @@ namespace Vanrise.Entities
         public string CreatedByDescription { get; set; }
         public string Content { get; set; }       
         public DateTime CreatedTime { get; set; }
+        public String CreatedTimeDescription { get; set; }
     }
 }

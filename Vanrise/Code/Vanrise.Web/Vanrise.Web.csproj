@@ -184,6 +184,7 @@
     <Content Include="Client\Javascripts\Directives\ActionBar\AllActionsModalPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Button\MenuActionsModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\Button\MenuActionsModalPopupController.js" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-expandablecontent.js" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-legend-directive.js" />
     <Content Include="Client\Javascripts\Directives\DataGrid\GridMenuActionModalPopup.html" />
     <Content Include="Client\Javascripts\Directives\DataGrid\SortByColumnsModalPopup.html" />

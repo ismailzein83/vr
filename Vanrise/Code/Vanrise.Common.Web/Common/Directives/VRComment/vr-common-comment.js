@@ -26,6 +26,7 @@ app.directive('vrCommonComment', ['VRCommon_VRCommentAPIService', 'UtilsService'
 
         function Comment(ctrl, $scope, attrs) {
             var gridApi;
+            var commentApi;
             var definitionId;
             var objectId ;
 
@@ -50,6 +51,9 @@ app.directive('vrCommonComment', ['VRCommon_VRCommentAPIService', 'UtilsService'
 
                 };
 
+                $scope.scopeModel.onCommentReady = function (api) {
+                    commentApi = api;
+                };
                 function getDirectiveApi() {
                     var directiveApi = {};
 
@@ -82,10 +86,11 @@ app.directive('vrCommonComment', ['VRCommon_VRCommentAPIService', 'UtilsService'
 
                     return VRCommon_VRCommentAPIService.AddVRComment(commenttoadd).then(function (response) {
                         if (response != null) {
-                            $scope.vRComments.push(response.InsertedObject);
+                            $scope.vRComments.unshift(response.InsertedObject);
                         }
                         $scope.scopeModel.newComment = undefined;
                         $scope.scopeModel.isLoading = false;
+                        commentApi.focusComponent();
                     });
 
                 };               
