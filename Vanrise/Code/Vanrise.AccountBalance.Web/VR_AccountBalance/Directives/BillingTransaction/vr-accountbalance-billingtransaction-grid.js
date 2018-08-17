@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_BillingTransactionAPIService', 'VRNotificationService','VR_AccountBalance_BillingTransactionService',
-    function (VR_AccountBalance_BillingTransactionAPIService, VRNotificationService, VR_AccountBalance_BillingTransactionService) {
+app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_BillingTransactionAPIService', 'VRNotificationService', 'VR_AccountBalance_BillingTransactionService', 'VR_AccountBalance_BillingTransactionSourceEnum',
+    function (VR_AccountBalance_BillingTransactionAPIService, VRNotificationService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionSourceEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -61,15 +61,18 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
 
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: "View",
-                    clicked: viewBillingTransaction
-                }];
+                $scope.scopeModel.menuActions = function (dataItem) {
+                    if (dataItem.BillingTransactionSource == VR_AccountBalance_BillingTransactionSourceEnum.Transaction.value) {
+                        var defaultMenuActions = [{
+                            name: "View",
+                            clicked: viewBillingTransaction
+                        }];
+                        return defaultMenuActions;
+                }
+            };
             }
             function viewBillingTransaction(billingTransactionObj) {
-                return VR_AccountBalance_BillingTransactionAPIService.GetBillingTransactionById(billingTransactionObj.Entity.AccountBillingTransactionId).then(function (billingTransactionEntity) {
-                    VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionEntity, getContext());
-                });
+                    VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionObj.Entity.AccountBillingTransactionId, getContext());
             }
             function getContext() {
                 var currentContext = context;

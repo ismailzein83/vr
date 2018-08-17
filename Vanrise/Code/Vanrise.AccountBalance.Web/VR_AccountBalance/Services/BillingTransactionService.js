@@ -21,9 +21,9 @@
         };
 
 
-        function viewBillingTransaction(billingTransactionEntity, context) {
+        function viewBillingTransaction(billingTransactionId, context) {
             var parameters = {
-                billingTransactionEntity: billingTransactionEntity,
+                billingTransactionId: billingTransactionId,
                 context: context
             };
             var settings = {};

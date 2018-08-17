@@ -8,6 +8,7 @@
 
         var accountId;
         var accountTypeId;
+        var billingTransactionId;
         var billingTransactionEntity;
         var context;
         var accountStatusSelectorAPI;
@@ -30,6 +31,8 @@
         var attachmentFieldTypeManagementAPI;
         var attachmentFieldTypeManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var isViewMode;
+
         loadParameters();
         defineScope();
         load();
@@ -39,13 +42,10 @@
             if (parameters != undefined) {
                 accountId = parameters.accountId;
                 accountTypeId = parameters.accountTypeId;
-                billingTransactionEntity = parameters.billingTransactionEntity;
+                billingTransactionId = parameters.billingTransactionId;
                 context = parameters.context;
             }
-            if ((accountId == undefined || accountTypeId == undefined) && billingTransactionEntity!=undefined) {
-                accountId = billingTransactionEntity.AccountId;
-                accountTypeId = billingTransactionEntity.AccountTypeId;
-            }
+            isViewMode = billingTransactionId != undefined;
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -69,7 +69,7 @@
                     }
                 }
             };
-            $scope.scopeModel.showAccountSelector = accountId == undefined;
+            $scope.scopeModel.showAccountSelector = accountId == undefined && billingTransactionId==undefined;
             $scope.scopeModel.date = VRDateTimeService.getNowDateTime();
 
             $scope.scopeModel.onAccountSelectorReady = function (api) {
@@ -127,25 +127,49 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-
-            getAccountTypeSettings()
-            .then(function () {
-                if (accountId == undefined) {
-                    loadAccountSection().then(function (response) {
-                        loadAllControls();
+            if (isViewMode) {
+                getBillingTransactionEntity().then(function () {
+                    getAccountTypeSettings().then(function () {
+                        if (accountId == undefined) {
+                            loadAccountSection().then(function (response) {
+                                loadAllControls();
+                            });
+                        }
+                        else
+                            loadAllControls();
                     });
-                }
-                else
-                    loadAllControls();
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
-           
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+            }
+            else {
+                getAccountTypeSettings().then(function () {
+                    if (accountId == undefined) {
+                        loadAccountSection().then(function (response) {
+                            loadAllControls();
+                        });
+                    }
+                    else
+                        loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+            }
         }
         function getAccountTypeSettings()
         {
             return VR_AccountBalance_AccountTypeAPIService.GetAccountTypeSettings(accountTypeId).then(function (response) {
                 $scope.scopeModel.useAccountInvoicesGrid = response.InvToAccBalanceRelationId != undefined;
+            });
+        }
+
+        function getBillingTransactionEntity() {
+            return VR_AccountBalance_BillingTransactionAPIService.GetBillingTransactionById(billingTransactionId).then(function (billingTransaction) {
+                billingTransactionEntity = billingTransaction;
+                if (billingTransaction!=undefined) {
+                    accountTypeId = billingTransaction.AccountTypeId;
+                    accountId = billingTransaction.AccountId;
+                }
             });
         }
         function loadAllControls() {
