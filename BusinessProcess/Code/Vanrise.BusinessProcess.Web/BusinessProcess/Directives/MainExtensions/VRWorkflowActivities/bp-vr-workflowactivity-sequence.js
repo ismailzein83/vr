@@ -25,7 +25,6 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 		function workflowSequence(ctrl, $scope, $attrs) {
 			var context;
 			var variables;
-			var parentVariables;
 			var activities;
 			var workflowContainerAPI;
 			var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -43,7 +42,7 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 				};
 
 				ctrl.getChildContext = function () {
-					var childContext = { /*ParentVariables: []*/ };
+					var childContext = {};
 
 					if (context != undefined) {
 						childContext.inEditor = context.inEditor;
@@ -149,7 +148,10 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 					Activities: activities,
 					Variables: variables
 				};
-				BusinessProcess_VRWorkflowService.openSequenceEditor(ctrl.dragdropsetting, context, settings, onActivityUpdated);
+
+				var updateContext = ctrl.getChildContext();
+				updateContext.inEditor = true;
+				BusinessProcess_VRWorkflowService.openSequenceEditor(ctrl.dragdropsetting, updateContext, settings, onActivityUpdated);
 			}
 
 			function openVariablesEditor() {

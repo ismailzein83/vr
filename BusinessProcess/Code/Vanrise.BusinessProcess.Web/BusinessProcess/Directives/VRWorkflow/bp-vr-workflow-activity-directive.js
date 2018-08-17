@@ -24,7 +24,6 @@ app.directive("businessprocessVrWorkflowActivityDirective", ['UtilsService', 'VR
 			var vRWorkflowActivityId;
 			var vRWorkflowActivitySettings;
 			var context;
-			var inEditor;
 
 			var directiveWraperAPI;
 			var directiveWraperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -43,7 +42,7 @@ app.directive("businessprocessVrWorkflowActivityDirective", ['UtilsService', 'VR
 				$scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
 
 				$scope.scopeModel.hasErrorsValidator = function () {
-					if (!inEditor && context != undefined && vRWorkflowActivityId != undefined) {
+					if (context != undefined && (context.inEditor == undefined || context.inEditor == false) && vRWorkflowActivityId != undefined) {
 						var errors = context.doesActivityhaveErrors(vRWorkflowActivityId);
 						if (errors != undefined) {
 							if (context != undefined && context.showErrorWarningIcon != undefined)
@@ -67,7 +66,7 @@ app.directive("businessprocessVrWorkflowActivityDirective", ['UtilsService', 'VR
 
 			function resetErrorsFunction() {
 				$scope.scopeModel.hasError = false;
-			};
+			}
 
 			function defineAPI() {
 
@@ -77,9 +76,6 @@ app.directive("businessprocessVrWorkflowActivityDirective", ['UtilsService', 'VR
 						$scope.scopeModel.actions.push(menuAction);
 					};
 					var loadPromiseDeferred = UtilsService.createPromiseDeferred();
-					//if (payload != undefined) {
-					//	inEditor = payload.inEditor;
-					//}
 
 					if (payload != undefined && payload.Settings != null) {
 						context = payload.Context;
@@ -103,7 +99,7 @@ app.directive("businessprocessVrWorkflowActivityDirective", ['UtilsService', 'VR
 						var childContext = {};
 						childContext.showErrorWarningIcon = showErrorWarningIcon;
 						if (context != undefined) {
-							//childContext.inEditor = inEditor;
+							childContext.inEditor = context.inEditor;
 							childContext.vrWorkflowId = context.vrWorkflowId;
 							childContext.getWorkflowArguments = context.getWorkflowArguments;
 							childContext.addToList = context.addToList;
@@ -122,7 +118,6 @@ app.directive("businessprocessVrWorkflowActivityDirective", ['UtilsService', 'VR
 						}
 						directiveWraperReadyPromiseDeferred.promise.then(function () {
 							var payload = {
-								//inEditor: inEditor,
 								Context: childContext,
 								SetMenuAction: setMenuAction,
 								Settings: vRWorkflowActivitySettings

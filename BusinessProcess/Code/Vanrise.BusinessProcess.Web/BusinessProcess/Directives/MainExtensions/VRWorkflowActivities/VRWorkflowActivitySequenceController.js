@@ -22,6 +22,8 @@
 
 			if (parameters != undefined) {
 				context = parameters.context;
+				if (context != undefined)
+					context.inEditor = true;
 				sequenceSettings = parameters.settings;
 				dragdropsetting = parameters.dragdropsetting;
 			}

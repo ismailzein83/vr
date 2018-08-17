@@ -105,14 +105,19 @@
 				return variableTypeDirectiveLoadDeferred.promise;
 			}
 
+			function getContainerGetChildContext() {
+				var containerChildContext = getChildContext();
+				containerChildContext.inEditor = true;
+				return containerChildContext;
+			}
+
 			function loadWorkflowContainer() {
 				var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
 
 				workflowContainerReadyPromiseDeferred.promise.then(function () {
 					var payload = {
 						vRWorkflowActivity: activity,
-						getChildContext: getChildContext,
-						inEditor: true
+						getChildContext: getContainerGetChildContext,
 					};
 					VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
 				});

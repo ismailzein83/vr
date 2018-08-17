@@ -132,7 +132,9 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 							promises.push(loadWorkflowContainer());
 							UtilsService.waitMultiplePromises(promises);
 						};
-						BusinessProcess_VRWorkflowService.openForeachEditor(ctrl.dragdropsetting, buildObjectFromScope(), ctrl.getChildContext, context, onActivityUpdated, ctrl.remove, isNew);
+						var updateContext = ctrl.getChildContext();
+						updateContext.inEditor = true;
+						BusinessProcess_VRWorkflowService.openForeachEditor(ctrl.dragdropsetting, buildObjectFromScope(), ctrl.getChildContext, updateContext, onActivityUpdated, ctrl.remove, isNew);
 					}
 
 					function loadWorkflowContainer() {
