@@ -26,6 +26,7 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 	        this.initializeController = initializeController;
 	        function initializeController() {
 	            $scope.scopeModel = {};
+	            $scope.scopeModel.isVRWorkflowActivityDisabled = false;
 	            $scope.scopeModel.severityEnums = UtilsService.getArrayEnum(VRWorkflowTrackingMessageSeverityEnum);
 
 	            $scope.scopeModel.onSeveritySelectorReady = function (api) {
@@ -40,6 +41,7 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 	                var selectedSeverity;
 	                if (payload != undefined) {
 	                    if (payload.Settings != undefined) {
+	                        $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
 	                        $scope.scopeModel.message = payload.Settings.Message;
 	                        selectedSeverity = payload.Settings.Severity;
 	                    }
@@ -60,6 +62,18 @@ app.directive('businessprocessVrWorkflowactivityWritetrackingmessage', ['UtilsSe
 	                    Message: $scope.scopeModel.message,
 	                    Severity: $scope.scopeModel.selectedSeverity.value
 	                };
+	            };
+
+	            api.changeActivityStatus = function (isVRWorkflowActivityDisabled) {
+	                $scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
+	            };
+
+	            api.getActivityStatus = function () {
+	                return $scope.scopeModel.isVRWorkflowActivityDisabled;
+	            };
+
+	            api.isActivityValid = function () {
+	                return $scope.scopeModel.message != undefined;
 	            };
 
 	            if (ctrl.onReady != null)

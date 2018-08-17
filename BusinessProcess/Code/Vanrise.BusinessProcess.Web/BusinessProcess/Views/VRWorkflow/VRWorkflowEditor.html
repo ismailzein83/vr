@@ -29,7 +29,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" data-onclick="scopeModel.saveVRWorkflow" formname="formEditVRWorkflow"></vr-button>
-                <vr-button type="Compile" data-onclick="scopeModel.tryCompileWorkflow"></vr-button>
+                <vr-button type="Compile" data-onclick="scopeModel.tryCompileWorkflow" customvalidate="scopeModel.isCompileValid()"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

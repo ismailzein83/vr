@@ -23,8 +23,13 @@ namespace Vanrise.BusinessProcess.Entities
 
         public abstract string Title { get; }
 
+        public bool IsDisabled { get; set; }
+
         public string GenerateWFActivityCode(IVRWorkflowActivityGenerateWFActivityCodeContext context)
         {
+            if (this.IsDisabled)
+                return string.Empty;
+
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.AppendLine(string.Empty);
             strBuilder.AppendLine(string.Format("#region {0}", context.VRWorkflowActivityId));

@@ -32,7 +32,8 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 			this.initializeController = initializeController;
 
 			function initializeController() {
-				$scope.scopeModel = {};
+			    $scope.scopeModel = {};
+			    $scope.scopeModel.isVRWorkflowActivityDisabled = false;
 				$scope.scopeModel.datasource = [];
 				$scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
 
@@ -78,8 +79,10 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 					var promises = [];
 					if (payload != undefined) {
 						context = payload.Context;
-						if (payload.Settings != undefined)
-							variables = payload.Settings.Variables;
+						if (payload.Settings != undefined) {
+						    $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+						    variables = payload.Settings.Variables;
+						}
 
 						if (context != undefined && context.reserveVariableNames != undefined && variables != undefined && variables.length > 0)
 							context.reserveVariableNames(variables);
@@ -103,6 +106,23 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 						Activities: (workflowContainerAPI != undefined) ? workflowContainerAPI.getData() : null,
 						Variables: variables
 					};
+				};
+
+				api.changeActivityStatus = function (isVRWorkflowActivityDisabled) {
+				    $scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
+				    if (workflowContainerAPI != undefined && workflowContainerAPI.changeActivityStatus != undefined)
+				        workflowContainerAPI.changeActivityStatus(isVRWorkflowActivityDisabled);
+				};
+
+				api.getActivityStatus = function () {
+				    return $scope.scopeModel.isVRWorkflowActivityDisabled;
+				};
+
+				api.isActivityValid = function () {
+				    if (workflowContainerAPI != null && workflowContainerAPI.isActivityValid != undefined)
+				        return workflowContainerAPI.isActivityValid();
+
+				    return true;
 				};
 
 				if (ctrl.onReady != null)
