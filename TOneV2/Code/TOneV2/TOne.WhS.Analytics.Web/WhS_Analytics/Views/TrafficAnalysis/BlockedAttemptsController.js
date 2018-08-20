@@ -27,7 +27,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         $scope.toDate;
 
         $scope.selectedPeriod = PeriodEnum.Today;
-        var maxSearchRecordCount = UISettingsService.getMaxSearchRecordCount()
+        var maxSearchRecordCount = UISettingsService.getMaxSearchRecordCount();
         $scope.limit = maxSearchRecordCount;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
