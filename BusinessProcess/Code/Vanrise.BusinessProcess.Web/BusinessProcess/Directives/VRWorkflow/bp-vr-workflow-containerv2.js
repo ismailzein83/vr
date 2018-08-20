@@ -142,7 +142,7 @@ app.directive('businessprocessVrWorkflowContainerv2', ['UtilsService', 'VRUIUtil
 	            };
 
 	            api.changeActivityStatus = function (isVRWorkflowActivityDisabled) {
-	                $scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled
+	                $scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
 	                for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
 	                    var item = $scope.scopeModel.datasource[i];
 	                    if (item.directiveAPI != null && item.directiveAPI.changeActivityStatus != undefined) {
