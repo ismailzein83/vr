@@ -1,4 +1,4 @@
-CREATE TABLE [Mobile_EDR].[MobileCDR] (
+﻿CREATE TABLE [Mobile_EDR].[MobileCDR] (
     [Id]                              BIGINT         IDENTITY (1, 1) NOT NULL,
     [call_reference]                  BIGINT         NULL,
     [record_type]                     INT            NULL,
@@ -66,6 +66,8 @@ CREATE TABLE [Mobile_EDR].[MobileCDR] (
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_MobileCDR_Id]
     ON [Mobile_EDR].[MobileCDR]([Id] ASC);
@@ -74,4 +76,9 @@ CREATE NONCLUSTERED INDEX [IX_MobileCDR_Id]
 GO
 CREATE CLUSTERED INDEX [IX_MobileCDR_SetupTime_Id]
     ON [Mobile_EDR].[MobileCDR]([setup_time] ASC, [Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_MobileCDR_SetupTime]
+    ON [Mobile_EDR].[MobileCDR]([setup_time] DESC);
 
