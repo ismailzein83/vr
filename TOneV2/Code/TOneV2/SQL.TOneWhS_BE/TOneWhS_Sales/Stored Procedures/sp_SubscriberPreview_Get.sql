@@ -8,7 +8,7 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_SubscriberPreview_Get]
 AS
 BEGIN
 	
-	select SubscriberID, [Status],SubscriberProcessInstanceID
+	select SubscriberID, [Status],SubscriberProcessInstanceID,Details
 	from TOneWhS_Sales.RP_Subscriber_Preview WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID
 END

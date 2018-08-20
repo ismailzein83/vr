@@ -7,7 +7,8 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_SubscriberPreview_Insert]
 	@ProcessInstanceId bigint,
 	@SubscriberId int,
 	@Status int,
-    @SubscriberProcessInstanceId bigint
+    @SubscriberProcessInstanceId bigint,
+	@Details nvarchar(max)
 AS
 BEGIN
 	insert into TOneWhS_Sales.RP_Subscriber_Preview
@@ -15,7 +16,8 @@ BEGIN
 		ProcessInstanceID,
 		SubscriberID,
 		[Status],
-		SubscriberProcessInstanceID
+		SubscriberProcessInstanceID,
+		Details
 	)
-	values (@ProcessInstanceId, @SubscriberId, @Status, @SubscriberProcessInstanceId)
+	values (@ProcessInstanceId, @SubscriberId, @Status, @SubscriberProcessInstanceId,@Details)
 END
