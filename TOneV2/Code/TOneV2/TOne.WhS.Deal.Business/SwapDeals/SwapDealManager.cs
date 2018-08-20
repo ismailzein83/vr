@@ -50,8 +50,7 @@ namespace TOne.WhS.Deal.Business
             var deals = GetCachedSwapDeals();
             foreach (var dealDefinition in deals)
             {
-                DateTime? dealEED = GetDealEED(dealDefinition.Settings);
-                if (!dealEED.HasValue || dealEED >= effectiveAfter)
+                if (dealDefinition.Settings.Status != DealStatus.Inactive && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.RealEED > effectiveAfter))
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
@@ -226,23 +225,6 @@ namespace TOne.WhS.Deal.Business
                 return deals.FirstOrDefault(d => d.DealId == dealId);
             return null;
         }
-        #endregion
-
-        #region private Methods
-
-        private DateTime? GetDealEED(DealSettings dealSetting)
-        {
-            var swapDealSetting = dealSetting as SwapDealSettings;
-            DateTime? dealEED = swapDealSetting.EndDate;
-
-            if (dealEED.HasValue)
-                return swapDealSetting.Status == DealStatus.Inactive
-                    ? swapDealSetting.DeActivationDate
-                    : dealEED.Value.AddDays(swapDealSetting.GracePeriod);
-
-            return dealEED;
-        }
-
         #endregion
         #region Private Classes
 
