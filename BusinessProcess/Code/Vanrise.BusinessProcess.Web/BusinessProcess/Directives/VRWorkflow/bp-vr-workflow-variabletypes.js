@@ -86,12 +86,15 @@ app.directive('businessprocessVrWorkflowVariabletypes', ['UtilsService', 'VRUIUt
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                               
+
                                 if (variableType != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, variableType.ConfigId, 'ExtensionConfigurationId');
                                 }
                                 else if (selectIfSingleItem == true) {
                                     selectorAPI.selectIfSingleItem();
+                                }
+                                if ($scope.scopeModel.selectedTemplateConfig == undefined) {
+                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, 'VRWorkflow_ArgumentVariableType_GenericVariableType', 'Name');
                                 }
 
                                 if (selectIfSingleItem == true && $scope.scopeModel.templateConfigs.length == 1) {

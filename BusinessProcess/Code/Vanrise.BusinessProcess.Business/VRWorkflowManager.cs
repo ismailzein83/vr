@@ -200,7 +200,7 @@ namespace Vanrise.BusinessProcess.Business
 		public IEnumerable<VRWorkflowActivityConfig> GetVRWorkflowActivityExtensionConfigs()
 		{
 			ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurations<VRWorkflowActivityConfig>(VRWorkflowActivityConfig.EXTENSION_TYPE).OrderBy(itm => itm.Name);
+            return manager.GetExtensionConfigurations<VRWorkflowActivityConfig>(VRWorkflowActivityConfig.EXTENSION_TYPE).OrderBy(itm => itm.Title);
 		}
 
 		public VRWorkflowCompilationOutput TryCompileWorkflow(VRWorkflow workflow)

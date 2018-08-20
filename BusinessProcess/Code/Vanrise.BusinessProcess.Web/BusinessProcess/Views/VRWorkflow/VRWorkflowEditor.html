@@ -20,7 +20,7 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Workflow'">
-                    <businessprocess-vr-workflow-designer-directive on-ready="scopeModel.onWorkflowDesignerReady"></businessprocess-vr-workflow-designer-directive>
+                        <businessprocess-vr-workflow-designer-directive on-ready="scopeModel.onWorkflowDesignerReady"></businessprocess-vr-workflow-designer-directive>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
@@ -29,7 +29,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" data-onclick="scopeModel.saveVRWorkflow" formname="formEditVRWorkflow"></vr-button>
-                <vr-button type="Compile" data-onclick="scopeModel.tryCompileWorkflow" customvalidate="scopeModel.isCompileValid()"></vr-button>
+                <vr-button type="Compile" data-onclick="scopeModel.tryCompileWorkflow" validationcontext="scopeModel.isCompileValidContext"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

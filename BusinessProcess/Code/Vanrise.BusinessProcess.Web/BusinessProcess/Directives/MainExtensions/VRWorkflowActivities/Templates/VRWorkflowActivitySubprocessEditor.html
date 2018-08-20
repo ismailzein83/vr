@@ -9,8 +9,8 @@
 						<vr-datagrid datasource="scopeModel.inArguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
 							<vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
 							<vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
-								<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-																						value="dataItem.value" hidelabel></businessprocess-vr-workflow-activity-expressionbuilder>
+                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                                        value="dataItem.value" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
 							</vr-datagridcolumn>
 						</vr-datagrid>
 					</vr-section>
@@ -21,7 +21,7 @@
 							<vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
 							<vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
 								<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-																						value="dataItem.value" hidelabel></businessprocess-vr-workflow-activity-expressionbuilder>
+																						value="dataItem.value" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
 							</vr-datagridcolumn>
 						</vr-datagrid>
 					</vr-section>

@@ -45,11 +45,15 @@
                 argumentsGridAPI = api;
                 argumentsGridReadyDeferred.resolve();
             };
+            $scope.scopeModel.isCompileValidContext =
+                {
+                    validate: function () {
+                        if(workflowDesignerAPI == undefined || !workflowDesignerAPI.isActivityValid())
+                            return 'Compile action is not allowed';
 
-            $scope.scopeModel.isCompileValid=function(){
-			   
-                return workflowDesignerAPI==undefined || workflowDesignerAPI.isActivityValid();
-            };
+                        return null;
+                    }
+                };
 
             $scope.scopeModel.onWorkflowDesignerReady = function (api) {
                 workflowDesignerAPI = api;
@@ -57,10 +61,7 @@
             };
 
             $scope.scopeModel.tryCompileWorkflow = function () {
-                if($scope.scopeModel.isCompileValid())
-                    return tryCompileWorkflow();
-                else
-                    alert('Not allow to compile');
+                return tryCompileWorkflow();
             };
 
             $scope.scopeModel.saveVRWorkflow = function () {

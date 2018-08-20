@@ -1,9 +1,23 @@
 ﻿<vr-row>
-	<vr-columns colnum="6">
-        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'To'" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="scopeModel.to"></businessprocess-vr-workflow-activity-expressionbuilder>
-	</vr-columns>
+    <vr-columns colnum="12">
+        <vr-button type="Add" data-onclick="scopeModel.addAssign" standalone></vr-button>
+    </vr-columns>
+</vr-row>
 
-	<vr-columns colnum="6">
-        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="'Value'" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="scopeModel.value"></businessprocess-vr-workflow-activity-expressionbuilder>
-	</vr-columns>
+<vr-row ng-repeat="item in scopeModel.items" removeline>
+    <vr-columns colnum="12" haschildcolumns>
+        <div style="display:inline-block;width: calc(100% - 21px )">
+            <vr-columns colnum="6">
+                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="To" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="item.to"
+                                                                        hidelabel="$index>0"></businessprocess-vr-workflow-activity-expressionbuilder>
+            </vr-columns>
+
+            <vr-columns colnum="6">
+                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Value" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="item.value"
+                                                                        hidelabel="$index>0">
+                </businessprocess-vr-workflow-activity-expressionbuilder>
+            </vr-columns>
+        </div>
+        <span class="hand-cursor glyphicon glyphicon-remove" style="display:inline-block;width: 16px ;position: relative;top: -15px;" ng-show="scopeModel.items.length > 1" ng-click="scopeModel.removeAssign(item)"></span>
+    </vr-columns>
 </vr-row>

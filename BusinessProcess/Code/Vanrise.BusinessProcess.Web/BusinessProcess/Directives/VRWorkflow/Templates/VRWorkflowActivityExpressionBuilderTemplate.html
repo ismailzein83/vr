@@ -1,8 +1,8 @@
 ﻿<vr-columns colnum="12" haschildcolumns>
-	<div style="display:inline-block;width: calc(100% - 35px )">
-        <vr-label ng-if="ctrl.label!=undefined">{{ctrl.label}}</vr-label>
-		<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>
-	</div>
+    <div style="display:inline-block;width: calc(100% - 35px)">
+        <vr-label ng-if="!ctrl.hidelabel">{{ctrl.label}}</vr-label>
+        <vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>
+    </div>
     <div style="display:inline-block;width: 30px ;position: relative;top: -5px;">
         <vr-button type="Edit" data-onclick="scopeModel.openExpressionBuilder" standalone></vr-button>
     </div>

@@ -25,8 +25,17 @@ app.directive('businessprocessVrWorkflowactivityAssign', ['UtilsService', 'VRUIU
 
 	        this.initializeController = initializeController;
 	        function initializeController() {
-	            $scope.scopeModel = {};
+	            $scope.scopeModel = { items: [] };
 	            $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+
+	            $scope.scopeModel.addAssign = function () {
+	                $scope.scopeModel.items.push({});
+	            };
+
+	            $scope.scopeModel.removeAssign = function (item) {
+	                $scope.scopeModel.items.splice($scope.scopeModel.items.indexOf(item), 1);
+	            };
+
 	            defineAPI();
 	        }
 
@@ -35,12 +44,19 @@ app.directive('businessprocessVrWorkflowactivityAssign', ['UtilsService', 'VRUIU
 
 	            api.load = function (payload) {
 	                if (payload != undefined) {
-	                    if (payload.Settings != undefined && payload.Settings.Items != null) {
+	                    if (payload.Settings != undefined) {
 	                        $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
 
-	                        if (payload.Settings.Items.length > 0) {
-	                            $scope.scopeModel.to = payload.Settings.Items[0].To;
-	                            $scope.scopeModel.value = payload.Settings.Items[0].Value;
+	                        if (payload.Settings.Items != null) {
+	                            if (payload.Settings.Items.length > 1) {
+	                                for (var x = 0; x < payload.Settings.Items.length; x++) {
+	                                    var currentAssign = payload.Settings.Items[x];
+	                                    $scope.scopeModel.items.push({ to: currentAssign.To, value: currentAssign.Value });
+	                                }
+	                            }
+	                        }
+	                        else {
+	                            $scope.scopeModel.items.push({});
 	                        }
 	                    }
 	                    if (payload.Context != null)
@@ -49,15 +65,17 @@ app.directive('businessprocessVrWorkflowactivityAssign', ['UtilsService', 'VRUIU
 	            };
 
 	            api.getData = function () {
-	                var items = [{
-	                    To: $scope.scopeModel.to,
-	                    Value: $scope.scopeModel.value
-	                }];
+	                var items = [];
+	                if ($scope.scopeModel.items.length > 0) {
+	                    for (var x = 0; x < $scope.scopeModel.items.length; x++) {
+	                        var currentAssign = $scope.scopeModel.items[x];
+	                        items.push({ To: currentAssign.to, Value: currentAssign.value });
+	                    }
+	                }
+
 	                return {
 	                    $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities.VRWorkflowAssignActivity, Vanrise.BusinessProcess.MainExtensions",
 	                    Items: items
-	                    //Title: "Assign",
-	                    //Editor: "businessprocess-vr-workflow-assign"
 	                };
 	            };
 
@@ -70,7 +88,16 @@ app.directive('businessprocessVrWorkflowactivityAssign', ['UtilsService', 'VRUIU
 	            };
 
 	            api.isActivityValid = function () {
-	                return $scope.scopeModel.to != undefined && $scope.scopeModel.value != undefined;
+	                if ($scope.scopeModel.items == undefined || $scope.scopeModel.items.length == 0)
+	                    return false;
+
+	                for (var x = 0; x < $scope.scopeModel.items.length; x++) {
+	                    var currentAssign = $scope.scopeModel.items[x];
+	                    if (currentAssign.to == undefined || currentAssign.value == undefined)
+	                        return false;
+	                }
+
+	                return true;
 	            };
 
 	            if (ctrl.onReady != null)
