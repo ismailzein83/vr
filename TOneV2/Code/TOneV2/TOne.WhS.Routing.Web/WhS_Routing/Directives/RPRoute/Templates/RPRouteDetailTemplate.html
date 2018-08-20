@@ -22,8 +22,8 @@
                     <span style="color:#FFA500; font-weight:bold;" ng-if="dataItem.SupplierZoneMatchHasClosedRate">*</span>
                 </a>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'" fixedwidth="300" ng-show="selectedPolicy.ShowSupplierZone == true"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Services'" fixedwidth="150" ng-show="selectedPolicy.ShowSupplierZone == true">
+            <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'" ng-show="selectedPolicy.ShowSupplierZone == true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Services'" fixedwidth="60" ng-show="selectedPolicy.ShowSupplierZone == true">
                 <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Status'" field="'SupplierStatusDescription'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
