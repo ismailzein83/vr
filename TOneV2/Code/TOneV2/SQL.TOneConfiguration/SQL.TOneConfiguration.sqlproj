@@ -794,6 +794,9 @@
     <Build Include="common\Stored Procedures\sp_File_GetInfoByUniqueId.sql" />
     <Build Include="common\Stored Procedures\sp_File_GetByUniqueId.sql" />
     <Build Include="common\Stored Procedures\sp_File_SetUsedAndUpdateSettingsByFileUniqueId.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceReportFile.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetById.sql" />
+    <Build Include="VR_Invoice\User Defined Types\InvoiceReportFileType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
