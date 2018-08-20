@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Security.Entities;
 
-namespace NP.IVSwitch.Entities.RouteTable
+namespace NP.IVSwitch.Entities
 {
     public enum RouteTableViewType
     {
