@@ -45,8 +45,22 @@
     <Reference Include="TOne.WhS.BusinessEntity.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="TOne.WhS.Routing.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Routing.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +99,13 @@
     <Compile Include="CustomerRoute\CustomerRoute.cs" />
     <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
     <Compile Include="CustomerRoute\CustomerRouteQuery.cs" />
+    <Compile Include="RouteTableRT\RouteTableRouteDetails.cs" />
+    <Compile Include="RouteTableRT\RouteTableRoute.cs" />
+    <Compile Include="RouteTableRT\RouteTableRouteQuery.cs" />
     <Compile Include="RouteTable\RouteTable.cs" />
     <Compile Include="RouteTable\RouteTableDetails.cs" />
     <Compile Include="RouteTable\RouteTableQuery.cs" />
+    <Compile Include="RouteTable\RouteTableViewSettings.cs" />
     <Compile Include="Route\RouteCarrierAccountExtension.cs" />
     <Compile Include="Route\RouteEntityInfo.cs" />
     <Compile Include="Route\RouteInfoFilter.cs" />
