@@ -797,6 +797,15 @@
     <Build Include="VR_Invoice\Tables\InvoiceReportFile.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetById.sql" />
     <Build Include="VR_Invoice\User Defined Types\InvoiceReportFileType.sql" />
+    <Build Include="common\Tables\VRNamespace.sql" />
+    <Build Include="common\Tables\VRComment.sql" />
+    <Build Include="common\Stored Procedures\sp_VRNamespace_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRNamespace_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRNamespace_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_VRComment_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRComment_GetFiltered.sql" />
+    <Build Include="common\Stored Procedures\sp_VRComment_GetById.sql" />
+    <Build Include="common\User Defined Types\VRCommentType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
