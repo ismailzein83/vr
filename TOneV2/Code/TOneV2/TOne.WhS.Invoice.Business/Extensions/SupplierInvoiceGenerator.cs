@@ -26,7 +26,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
             List<string> listMeasures = new List<string> { "CostNetNotNULL", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "SupplierZone", "Supplier", "CostCurrency", "CostRate", "CostRateType" };
+            List<string> listDimensions = new List<string> { "SupplierZone", "Supplier", "CostCurrency", "CostRate", "CostRateType", "CostDealZoneGroupNb", "CostDealTierNb", "CostDeal", "CostDealRateTierNb" };
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
             var supplierGenerationCustomSectionPayload = context.CustomSectionPayload as SupplierGenerationCustomSectionPayload;
@@ -520,6 +520,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             OriginalAmountAfterCommissionWithTaxes = item.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes,
                             OriginalSupplierAmountWithTaxes = item.InvoiceMeasures.CostNet_OrigCurrWithTaxes,
                             SupplierAmountWithTaxes = item.InvoiceMeasures.CostNetWithTaxes,
+                            CostDealZoneGroupNb = item.CostDealZoneGroupNb,
+                            CostDealTierNb = item.CostDealTierNb,
+                            CostDeal = item.CostDeal,
+                            CostDealRateTierNb = item.CostDealRateTierNb,
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -619,6 +623,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     DimensionValue supplierRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
                     DimensionValue supplierRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
 
+                    DimensionValue costDealZoneGroupNb = analyticRecord.DimensionValues.ElementAtOrDefault(5);
+                    DimensionValue costDealTierNb = analyticRecord.DimensionValues.ElementAtOrDefault(6);
+                    DimensionValue costDeal = analyticRecord.DimensionValues.ElementAtOrDefault(7);
+                    DimensionValue costDealRateTierNb = analyticRecord.DimensionValues.ElementAtOrDefault(8);
+
+
                     MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
                     MeasureValue costDuration = GetMeasureValue(analyticRecord, "CostDuration");
                     MeasureValue costNet = GetMeasureValue(analyticRecord, "CostNetNotNULL");
@@ -644,8 +654,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                                 CostNet = costNetValue,
                                 NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
                                 CostNet_OrigCurr = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0),
-                            }
-
+                            },
+                            CostDeal = costDeal != null ? Convert.ToInt32(costDeal.Value) : default(int?),
+                            CostDealRateTierNb = costDealRateTierNb != null ? Convert.ToDecimal(costDealRateTierNb.Value) : default(Decimal?),
+                            CostDealZoneGroupNb = costDealZoneGroupNb != null ? Convert.ToInt32(costDealZoneGroupNb.Value) : default(int?),
+                            CostDealTierNb = costDealTierNb != null ? Convert.ToInt32(costDealTierNb.Value) : default(int?),
                         };
 
 
@@ -755,6 +768,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public Decimal SupplierRate { get; set; }
             public int? SupplierRateTypeId { get; set; }
             public int SupplierCurrencyId { get; set; }
+            public int? CostDealZoneGroupNb { get; set; }
+            public int? CostDealTierNb { get; set; }
+            public int? CostDeal { get; set; }
+            public Decimal? CostDealRateTierNb { get; set; }
 
         }
     }

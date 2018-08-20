@@ -32,7 +32,10 @@ namespace TOne.WhS.Invoice.Entities
         public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
         public decimal OriginalSaleAmountWithTaxes { get; set; }
         public decimal SaleAmountWithTaxes { get; set; }
-        
+        public int? SaleDealZoneGroupNb { get; set; }
+        public int? SaleDealTierNb { get; set; }
+        public int? SaleDeal { get; set; }
+        public Decimal? SaleDealRateTierNb { get; set; }
         public CustomerInvoiceItemDetails() { }
         public IEnumerable<CustomerInvoiceItemDetails> GetCustomerInvoiceItemDetailsRDLCSchema()
         {

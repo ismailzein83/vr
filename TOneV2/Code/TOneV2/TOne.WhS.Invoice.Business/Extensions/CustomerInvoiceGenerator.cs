@@ -26,7 +26,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             PartnerManager partnerManager = new PartnerManager();
             List<string> listMeasures = new List<string> { "SaleNetNotNULL", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "SaleZone", "Customer", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone" };
+            List<string> listDimensions = new List<string> { "SaleZone", "Customer", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone", "SaleDealZoneGroupNb", "SaleDealTierNb", "SaleDeal", "SaleDealRateTierNb" };
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
 
@@ -519,6 +519,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             OriginalAmountAfterCommissionWithTaxes = item.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes,
                             OriginalSaleAmountWithTaxes = item.InvoiceMeasures.SaleNet_OrigCurrWithTaxes,
                             SaleAmountWithTaxes = item.InvoiceMeasures.SaleNetWithTaxes,
+                            SaleDealZoneGroupNb = item.SaleDealZoneGroupNb,
+                            SaleDealTierNb = item.SaleDealTierNb,
+                            SaleDeal = item.SaleDeal,
+                            SaleDealRateTierNb = item.SaleDealRateTierNb,
+
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -623,6 +628,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     DimensionValue country = analyticRecord.DimensionValues.ElementAtOrDefault(6);
                     DimensionValue supplierZone = analyticRecord.DimensionValues.ElementAtOrDefault(7);
 
+                    DimensionValue saleDealZoneGroupNb = analyticRecord.DimensionValues.ElementAtOrDefault(8);
+                    DimensionValue saleDealTierNb = analyticRecord.DimensionValues.ElementAtOrDefault(9);
+                    DimensionValue saleDeal = analyticRecord.DimensionValues.ElementAtOrDefault(10);
+                    DimensionValue saleDealRateTierNb = analyticRecord.DimensionValues.ElementAtOrDefault(11);
 
                     MeasureValue saleNet_OrigCurr = GetMeasureValue(analyticRecord, "SaleNet_OrigCurr");
                     MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");
@@ -653,7 +662,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             CountryId = Convert.ToInt32(country.Value),
                             SupplierId = Convert.ToInt32(supplier.Value),
                             SupplierZoneId = Convert.ToInt32(supplierZone.Value),
-
+                            SaleDeal = saleDeal != null ? Convert.ToInt32(saleDeal.Value) : default(int?),
+                            SaleDealRateTierNb = saleDealRateTierNb != null ? Convert.ToDecimal(saleDealRateTierNb.Value) : default(Decimal?),
+                            SaleDealZoneGroupNb = saleDealZoneGroupNb != null ? Convert.ToInt32(saleDealZoneGroupNb.Value) : default(int?),
+                            SaleDealTierNb = saleDealTierNb != null ? Convert.ToInt32(saleDealTierNb.Value) : default(int?),
                         };
                         if (billingPeriodFrom != null)
                         {
@@ -756,6 +768,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public class InvoiceBillingRecord
         {
+            public int? SaleDealZoneGroupNb { get; set; }
+            public int? SaleDealTierNb { get; set; }
+            public int? SaleDeal { get; set; }
+            public Decimal? SaleDealRateTierNb { get; set; }
             public InvoiceMeasures InvoiceMeasures { get; set; }
             public long SaleZoneId { get; set; }
             public int CustomerId { get; set; }
