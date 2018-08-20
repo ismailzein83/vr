@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -11,6 +8,9 @@ namespace TOne.WhS.Routing.Entities
         public long SaleZoneId { get; set; }
         public int SupplierId { get; set; }
         public string SupplierName { get; set; }
+        public string SupplierZoneName { get; set; }
+        public HashSet<int> SupplierServicesIds { get; set; }
+        public string SupplierServicesNames { get; set; }
         public Decimal SupplierRate { get; set; }
         public int? Percentage { get; set; }
         public bool SupplierZoneMatchHasClosedRate { get; set; }

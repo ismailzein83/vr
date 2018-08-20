@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -13,6 +14,10 @@ namespace TOne.WhS.Routing.Entities
         public int SupplierId { get; set; }
 
         public long SaleZoneId { get; set; }
+
+        public long? SupplierZoneId { get; set; }
+
+        public HashSet<int> SupplierServicesIds { get; set; }
 
         public Decimal SupplierRate { get; set; }
 

@@ -203,6 +203,7 @@ namespace TOne.WhS.Routing.Business
                     Editor = config.Editor,
                     ExtensionConfigurationId = config.ExtensionConfigurationId,
                     IsDefault = config.IsDefault,
+                    ShowSupplierZone = config.ShowSupplierZone,
                     Name = config.Name,
                     Title = config.Title
                 };
@@ -945,11 +946,17 @@ namespace TOne.WhS.Routing.Business
             bool isblocked = routeOption.SupplierStatus == SupplierStatus.Block;
             bool isLossy = effectiveRateValue.HasValue ? effectiveRateValue.Value < convertedSupplierRate : false;
 
+            SupplierZoneManager _supplierZoneManager = new SupplierZoneManager();
+            ZoneServiceConfigManager _zoneServiceConfigManager = new ZoneServiceConfigManager();
+
             var routeOptionDetail = new RPRouteOptionDetail()
             {
                 SaleZoneId = routeOption.SaleZoneId,
                 SupplierId = routeOption.SupplierId,
                 SupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId),
+                SupplierZoneName = routeOption.SupplierZoneId.HasValue ? _supplierZoneManager.GetSupplierZoneName(routeOption.SupplierZoneId.Value) : null,
+                SupplierServicesIds = routeOption.SupplierServicesIds,
+                SupplierServicesNames = routeOption.SupplierServicesIds != null ? _zoneServiceConfigManager.GetZoneServicesNames(routeOption.SupplierServicesIds) : null,
                 SupplierRate = routeOption.SupplierRate,
                 Percentage = routeOption.Percentage,
                 SupplierZoneMatchHasClosedRate = routeOption.SupplierZoneMatchHasClosedRate,

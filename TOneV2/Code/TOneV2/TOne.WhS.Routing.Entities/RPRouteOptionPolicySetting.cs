@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
@@ -14,5 +10,7 @@ namespace TOne.WhS.Routing.Entities
         public string BehaviorFQTN { get; set; }
 
         public bool IsDefault { get; set; }
+
+        public bool ShowSupplierZone { get; set; }
     }
 }

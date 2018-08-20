@@ -98,6 +98,8 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                 var percentage = routeOption.Percentage;
                 var acd = routeOption.ACD;
                 var asr = routeOption.ASR;
+                var supplierZoneName = routeOption.SupplierZoneName;
+                var services = routeOption.SupplierServicesNames;
 
                 var result = percentage ? percentage + '% ' + supplierName : supplierName;
                 if (asr) {
@@ -109,6 +111,13 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                 if (roundedConvertedSupplierRate) {
                     result = result + ' (' + roundedConvertedSupplierRate + ')';
                 }
+                if (supplierZoneName) {
+                    result = result + ', Zone: ' + supplierZoneName;
+                }
+                if (services) {
+                    result = result + ', Services: ' + services;
+                }
+
                 return result;
             }
 

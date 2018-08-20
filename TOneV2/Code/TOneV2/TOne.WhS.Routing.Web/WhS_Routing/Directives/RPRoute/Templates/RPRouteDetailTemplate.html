@@ -16,11 +16,15 @@
                      defaultsortbyfieldname="'OptionOrder'">
 
             <vr-datagridcolumn headertext="'Supplier'" type="'Text'">
-                <a ng-click="viewScope.openRouteOptionSupplier(dataItem)" 
+                <a ng-click="viewScope.openRouteOptionSupplier(dataItem)"
                    style="color:#616F77; font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0;">
                     <span class="clickableoption bold-label" ng-class="dataItem.EvaluatedStatusCssClass">{{dataItem.SupplierName}}</span>
                     <span style="color:#FFA500; font-weight:bold;" ng-if="dataItem.SupplierZoneMatchHasClosedRate">*</span>
                 </a>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'" type="'Text'" fixedwidth="300" ng-show="selectedPolicy.ShowSupplierZone == true"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Services'" fixedwidth="150" ng-show="selectedPolicy.ShowSupplierZone == true">
+                <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Status'" field="'SupplierStatusDescription'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Rate'" field="'ConvertedSupplierRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="100"></vr-datagridcolumn>

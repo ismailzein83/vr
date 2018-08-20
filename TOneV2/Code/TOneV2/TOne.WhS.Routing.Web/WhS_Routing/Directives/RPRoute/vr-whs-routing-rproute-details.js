@@ -182,6 +182,16 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 if (evaluatedStatus != undefined) {
                     rpRouteOption.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
                 }
+
+                rpRouteOption.onServiceViewerReady = function (api) {
+                    rpRouteOption.serviceViewerAPI = api;
+
+                    var serviceViewerPayload;
+                    if (rpRouteOption != undefined) {
+                        serviceViewerPayload = { selectedIds: rpRouteOption.SupplierServicesIds };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(rpRouteOption.serviceViewerAPI, serviceViewerPayload, rpRouteOption.saleZoneServiceLoadDeferred);
+                };
             }
         }
 

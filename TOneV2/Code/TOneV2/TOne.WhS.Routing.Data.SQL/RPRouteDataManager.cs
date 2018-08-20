@@ -481,8 +481,11 @@ namespace TOne.WhS.Routing.Data.SQL
                 {
                     string supplierZoneMatchHasClosedRate = !routeOption.SupplierZoneMatchHasClosedRate ? string.Empty : "1";
                     string isForced = !routeOption.IsForced ? string.Empty : "1";
-                    serializedRouteOptions.Add(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}", RouteOptionPropertiesSeparator, routeOption.SupplierId, routeOption.SupplierRate, routeOption.Percentage,
-                                        routeOption.OptionWeight, routeOption.SaleZoneId, routeOption.SupplierServiceWeight, supplierZoneMatchHasClosedRate, Convert.ToInt32(routeOption.SupplierStatus), isForced));
+                    string supplierZoneId = routeOption.SupplierZoneId.HasValue ? routeOption.SupplierZoneId.ToString() : string.Empty;
+                    string supplierServicesIds = routeOption.SupplierServicesIds != null ? string.Join(",", routeOption.SupplierServicesIds) : string.Empty;
+
+                    serializedRouteOptions.Add(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}", RouteOptionPropertiesSeparator, routeOption.SupplierId, routeOption.SupplierRate, routeOption.Percentage,
+                                        routeOption.OptionWeight, routeOption.SaleZoneId, routeOption.SupplierServiceWeight, supplierZoneMatchHasClosedRate, Convert.ToInt32(routeOption.SupplierStatus), isForced, supplierZoneId, supplierServicesIds));
                 }
 
                 string serializadedRouteOptionsAsString = string.Join(RouteOptionsSeparatorAsString, serializedRouteOptions);
@@ -540,6 +543,21 @@ namespace TOne.WhS.Routing.Data.SQL
                             int isForced;
                             if (int.TryParse(isFrocedAsString, out isForced))
                                 rpRouteOption.IsForced = isForced > 0;
+                        }
+
+                        string supplierZoneIdAsString = routeOptionParts[9];
+                        if (!string.IsNullOrEmpty(supplierZoneIdAsString))
+                            rpRouteOption.SupplierZoneId = long.Parse(supplierZoneIdAsString);
+
+                        string supplierServicesAsString = routeOptionParts[10];
+                        if (!string.IsNullOrEmpty(supplierServicesAsString))
+                        {
+                            var supplierServicesIds = supplierServicesAsString.Split(',');
+                            rpRouteOption.SupplierServicesIds = new HashSet<int>();
+                            foreach (var supplierServiceId in supplierServicesIds)
+                            {
+                                rpRouteOption.SupplierServicesIds.Add(int.Parse(supplierServiceId));
+                            }
                         }
 
                         routeOptionsList.Add(rpRouteOption);

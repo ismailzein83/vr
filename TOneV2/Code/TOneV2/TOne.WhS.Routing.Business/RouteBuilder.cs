@@ -533,6 +533,8 @@ namespace TOne.WhS.Routing.Business
                         {
                             SupplierId = item.SupplierId,
                             SaleZoneId = saleZoneId,
+                            SupplierZoneId = supplierZoneToRPOptionPolicyExecutionContext.SupplierZoneId,
+                            SupplierServicesIds = supplierZoneToRPOptionPolicyExecutionContext.SupplierServicesIds,
                             SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate,
                             Percentage = item.Percentage,
                             SupplierServiceWeight = item.SupplierServiceWeight,
