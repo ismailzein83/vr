@@ -177,8 +177,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 							zoneItem.IsDirty = true;
 							otherRate.CurrentRateNewEED = closedOtherRate.EED;
 						}
-					}
-					if (ownerType == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value && zoneItem.CurrentOtherRates.length != 0)
+                    }
+                    if (ownerType == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value && zoneItem.CurrentOtherRates != undefined && zoneItem.CurrentOtherRates.length != 0)
 						otherRate.IsEEDDisabled = isEEDDisabled(otherRate);
 
 
