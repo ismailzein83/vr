@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.MultiNet.Entities
 {
+    public class FaultTicketSettingsDetailsCollection : List<FaultTicketDescriptionSettingDetails>
+    {
+
+    }
     public class FaultTicketSettingsDetails
     {
         public List<FaultTicketDescriptionSettingDetails> DescriptionSettings { get; set; }
