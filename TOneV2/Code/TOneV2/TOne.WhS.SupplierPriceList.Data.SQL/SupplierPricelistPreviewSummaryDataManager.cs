@@ -40,7 +40,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
             supplierPricelistPreviewSummary.NumberOfZonesWithChangedServices = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfZonesWithChangedSe", processInstanceId));
 
-            supplierPricelistPreviewSummary.NumberOfExcludedCountries = Convert.ToInt32(ExecuteScalarSP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetNumberOfExcludedCountries]"));
+            supplierPricelistPreviewSummary.NumberOfExcludedCountries = Convert.ToInt32(ExecuteScalarSP("[TOneWhS_SPL].[sp_SupplierZoneRate_Preview_GetNumberOfExcludedCountries]", processInstanceId));
 
             return supplierPricelistPreviewSummary;
 
