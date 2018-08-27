@@ -20,7 +20,7 @@
                         if (response) {
                             VR_Sec_SecurityProviderAPIService.ChangeSecurityProviderStatus(genericBusinessEntityId, isEnabled).then(function (response) {
                                 if (response != undefined) {
-                                    if (VRNotificationService.notifyOnItemUpdated("Security provider", response, response.Message)) {
+                                    if (VRNotificationService.notifyOnItemUpdated("Authentication Method", response, response.Message)) {
                                         payload.onItemUpdated(response.UpdatedObject);
                                     }
                                 }

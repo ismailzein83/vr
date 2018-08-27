@@ -140,7 +140,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Security Provider" '
+                            + 'label="Authentication Method" '
                             + ' ' + hideremoveicon + ' '
                              + 'isrequired ="ctrl.isrequired"'
                            + ' >'

@@ -349,13 +349,17 @@ namespace Vanrise.Security.Business
             }
 
             var currentUser = GetUserbyId(userToChangeSecurityProvider.UserId);
-            var userSettings = new UserSetting
+            UserSetting userSettings = null;
+            if (currentUser.Settings != null)
             {
-                EnablePasswordExpiration = userToChangeSecurityProvider.EnablePasswordExpiration,
-                LanguageId =currentUser.Settings.LanguageId,
-                PhotoFileId = currentUser.Settings.PhotoFileId
-            };
-
+                userSettings = new UserSetting
+                {
+                    EnablePasswordExpiration = userToChangeSecurityProvider.EnablePasswordExpiration,
+                    LanguageId = currentUser.Settings.LanguageId,
+                    PhotoFileId = currentUser.Settings.PhotoFileId
+                };
+            }
+            
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
 

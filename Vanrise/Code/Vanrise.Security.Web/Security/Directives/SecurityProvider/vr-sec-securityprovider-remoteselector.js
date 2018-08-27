@@ -98,9 +98,9 @@ app.directive('vrSecSecurityproviderRemoteselector', ['UtilsService', 'VRUIUtils
 
             var multipleselection = "";
 
-            var label = "Security Provider";
+            var label = "Authentication Method";
             if (attrs.ismultipleselection != undefined) {
-                label = "Security Providers";
+                label = "Authentication Methods";
                 multipleselection = "ismultipleselection";
             }
 
