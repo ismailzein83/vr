@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 
 namespace Vanrise.Common.Business
 {
     public class VRCommentManager
     {
-        Vanrise.Security.Business.UserManager _userManager = new Vanrise.Security.Business.UserManager();
+        Vanrise.Security.Entities.IUserManager _userManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<Vanrise.Security.Entities.IUserManager>();
+        Vanrise.Security.Entities.ISecurityContext _securityManager = ContextFactory.GetContext();
 
         #region Public Methods
         public IDataRetrievalResult<VRCommentDetail> GetFilteredVRComments(DataRetrievalInput<VRCommentQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new VRCommentRequestHandler());
         }
-       
-               
+
+
         public InsertOperationOutput<VRCommentDetail> AddVRComment(VRComment vRComment)
         {
             IVRCommentDataManager vRCommentDataManager = CommonDataManagerFactory.GetDataManager<IVRCommentDataManager>();
@@ -28,15 +30,16 @@ namespace Vanrise.Common.Business
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             long commentId = -1;
-            vRComment.CreatedBy = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+            vRComment.CreatedBy = _securityManager.GetLoggedInUserId();
             bool insertActionSuccess = vRCommentDataManager.Insert(vRComment, out commentId);
             if (insertActionSuccess)
-            {  
+            {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 VRComment addedVRComment = this.GetVRCommentById(commentId);
                 insertOperationOutput.InsertedObject = VRCommentDetailMapper(addedVRComment);
             }
-           
+
             return insertOperationOutput;
         }
 
@@ -68,19 +71,20 @@ namespace Vanrise.Common.Business
 
         }
 
-    
+
         #endregion
 
         #region Mappers
         public VRCommentDetail VRCommentDetailMapper(VRComment vRComment)
-        {            
+        {
             return new VRCommentDetail
-            { VRCommentId=vRComment.VRCommentId,
+            {
+                VRCommentId = vRComment.VRCommentId,
                 Content = vRComment.Content,
                 CreatedByDescription = _userManager.GetUserName(vRComment.LastModifiedBy),
                 CreatedBy = vRComment.CreatedBy,
                 CreatedTime = vRComment.CreatedTime,
-              CreatedTimeDescription =vRComment.CreatedTime.ToString(Utilities.GetDateTimeFormat(DateTimeType.DateTime))
+                CreatedTimeDescription = vRComment.CreatedTime.ToString(Utilities.GetDateTimeFormat(DateTimeType.DateTime))
             };
         }
 
@@ -88,5 +92,5 @@ namespace Vanrise.Common.Business
         #endregion
 
     }
-   
+
 }
