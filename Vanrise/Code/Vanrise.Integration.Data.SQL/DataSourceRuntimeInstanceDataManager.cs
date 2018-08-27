@@ -56,7 +56,8 @@ namespace Vanrise.Integration.Data.SQL
             {
 
                 DataSourceRuntimeInstanceId = (Guid)reader["ID"],
-                DataSourceId = GetReaderValue<Guid>(reader,"DataSourceID")
+                DataSourceId = GetReaderValue<Guid>(reader, "DataSourceID"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };
         }
 

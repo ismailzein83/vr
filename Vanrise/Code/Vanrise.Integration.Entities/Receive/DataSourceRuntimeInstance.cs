@@ -11,5 +11,7 @@ namespace Vanrise.Integration.Entities
         public Guid DataSourceRuntimeInstanceId { get; set; }
 
         public Guid DataSourceId { get; set; }
+
+        public DateTime CreatedTime { get; set; }
     }
 }

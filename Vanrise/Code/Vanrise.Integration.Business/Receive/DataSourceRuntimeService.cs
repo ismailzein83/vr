@@ -30,7 +30,8 @@ namespace Vanrise.Integration.Business
             List<DataSourceRuntimeInstance> dataSourceRuntimeInstances = _dataManager.GetAll();
             if (dataSourceRuntimeInstances != null && dataSourceRuntimeInstances.Count > 0)
             {
-                foreach (var dsRuntimeInstance in dataSourceRuntimeInstances)
+                IOrderedEnumerable<DataSourceRuntimeInstance> orderedDataSourceRuntimeInstances = dataSourceRuntimeInstances.OrderBy(itm => itm.CreatedTime);
+                foreach (var dsRuntimeInstance in orderedDataSourceRuntimeInstances)
                 {
                     bool isInstanceLockedAndExecuted = false;
                     TransactionLocker.Instance.TryLock(String.Concat("DataSourceRuntimeInstance_", dsRuntimeInstance.DataSourceRuntimeInstanceId),
