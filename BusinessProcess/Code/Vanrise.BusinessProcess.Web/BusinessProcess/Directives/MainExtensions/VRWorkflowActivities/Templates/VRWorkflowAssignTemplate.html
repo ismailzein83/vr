@@ -4,20 +4,17 @@
     </vr-columns>
 </vr-row>
 
-<vr-row ng-repeat="item in scopeModel.items" removeline>
-    <vr-columns colnum="12" haschildcolumns>
-        <div style="display:inline-block;width: calc(100% - 21px )">
-            <vr-columns colnum="6">
-                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="To" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="item.to"
-                                                                        hidelabel="$index>0"></businessprocess-vr-workflow-activity-expressionbuilder>
-            </vr-columns>
+<vr-datagrid on-ready="scopeModel.onGridReady" datasource="scopeModel.items" hidegridmenu="true" disabledraggablecolumns>
+    <vr-datagridcolumn headertext="'To'" type="'Text'" disablesorting="true">
+        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                value="dataItem.to" hidelabel="true" isrequired="!viewScope.scopeModel.isVRWorkflowActivityDisabled"></businessprocess-vr-workflow-activity-expressionbuilder>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
+        <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                value="dataItem.value" hidelabel="true" isrequired="!viewScope.scopeModel.isVRWorkflowActivityDisabled"></businessprocess-vr-workflow-activity-expressionbuilder>
+    </vr-datagridcolumn>
 
-            <vr-columns colnum="6">
-                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Value" isrequired="!scopeModel.isVRWorkflowActivityDisabled" value="item.value"
-                                                                        hidelabel="$index>0">
-                </businessprocess-vr-workflow-activity-expressionbuilder>
-            </vr-columns>
-        </div>
-        <span class="hand-cursor glyphicon glyphicon-remove" style="display:inline-block;width: 16px ;position: relative;top: -15px;" ng-show="scopeModel.items.length > 1" ng-click="scopeModel.removeAssign(item)"></span>
-    </vr-columns>
-</vr-row>
+    <vr-datagridcolumn headertext="'Remove'" disablesorting="true" invisibleheader fixedwidth="30">
+        <span class="hand-cursor glyphicon glyphicon-remove" ng-show="viewScope.scopeModel.items.length > 1" ng-click="viewScope.scopeModel.removeAssign(dataItem)"></span>
+    </vr-datagridcolumn>
+</vr-datagrid>
