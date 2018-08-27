@@ -19,16 +19,16 @@
 					<vr-row>
 						<vr-columns colnum="2">
 							<div style=" max-height: 78vh; overflow: auto;">
-								<vr-section title="Activities">
+								<vr-section header="Activities">
 									<vr-toolbox datasource="scopeModel.activityConfigs" verticallayout leftalignment datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropsetting.groupCorrelation.getGroupName()}}"></vr-toolbox>
 								</vr-section>
 							</div>
 						</vr-columns>
 						<vr-columns colnum="10">
 							<div style=" max-height: 78vh; overflow: auto;">
-								<vr-section title="Body">
-									<businessprocess-vr-workflow-containerv2 single-activity="true" on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-containerv2>
-								</vr-section>
+                                <vr-section header="Body">
+                                    <businessprocess-vr-workflow-containerv2 single-activity="true" on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-containerv2>
+                                </vr-section>
 							</div>
 						</vr-columns>
 					</vr-row>
