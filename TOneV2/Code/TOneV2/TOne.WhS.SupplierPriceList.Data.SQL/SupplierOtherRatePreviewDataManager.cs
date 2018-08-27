@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 {
     public class SupplierOtherRatePreviewDataManager : BaseTOneDataManager, ISupplierOtherRatePreviewDataManager
     {
-        readonly string[] _columns = { "ProcessInstanceID", "ZoneName", "SystemRate", "SystemRateBED", "SystemRateEED", "ImportedRate", "ImportedRateBED", "RateTypeID", "RateChangeType" };
+        readonly string[] _columns = { "ProcessInstanceID", "ZoneName", "SystemRate", "SystemRateBED", "SystemRateEED", "ImportedRate", "ImportedRateBED", "RateTypeID", "RateChangeType","IsExcluded" };
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
        
         public long ProcessInstanceId
@@ -42,7 +42,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         public IEnumerable<OtherRatePreview> GetFilteredOtherRatesPreview(SPLPreviewQuery query)
         {
-            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierOtherRate_Preview_GetFiltered]", OtherRatePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.OnlyModified);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierOtherRate_Preview_GetFiltered]", OtherRatePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.OnlyModified,query.IsExcluded);
         }
 
 
@@ -54,7 +54,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
         public void WriteRecordToStream(OtherRatePreview record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
                 _processInstanceID,
                 record.ZoneName,
                 GetRoundedRate(record.SystemRate),
@@ -63,7 +63,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 GetRoundedRate(record.ImportedRate),
                 GetDateTimeForBCP(record.ImportedRateBED),
                 record.RateTypeId,
-                (int)record.ChangeTypeRate);
+                (int)record.ChangeTypeRate,
+                 (record.IsExcluded) ? 1 : 0);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

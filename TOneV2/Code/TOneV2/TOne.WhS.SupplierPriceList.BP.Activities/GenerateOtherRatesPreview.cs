@@ -47,7 +47,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                             ImportedRate = decimal.Round(importedOtherRate.Rate, 8),
                             ImportedRateBED = importedOtherRate.BED,
                             RateTypeId = importedOtherRate.RateTypeId.Value,
-                            ChangeTypeRate = importedOtherRate.ChangeType
+                            ChangeTypeRate = importedOtherRate.ChangeType,
+                            IsExcluded = importedOtherRate.IsExcluded
                         };
 
                         if (importedOtherRate.SystemRate != null)

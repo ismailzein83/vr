@@ -19,6 +19,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public DateTime? ImportedRateBED { get; set; }
         public int RateTypeId { get; set; }
         public RateChangeType ChangeTypeRate { get; set; }
+        public bool IsExcluded { get; set; }
 
     }
 
