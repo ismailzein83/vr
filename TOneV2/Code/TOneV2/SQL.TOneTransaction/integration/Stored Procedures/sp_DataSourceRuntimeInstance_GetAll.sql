@@ -3,5 +3,6 @@ AS
 BEGIN	
 	SELECT [ID]
       ,[DataSourceID]
+	  ,[CreatedTime]
 	FROM integration.DataSourceRuntimeInstance WITH(NOLOCK)	
 END
