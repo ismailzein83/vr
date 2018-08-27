@@ -105,7 +105,7 @@ namespace TOne.WhS.SupplierPriceList.Entities.SPL
                 newZone.IsExcluded = true;
 
             foreach (var importedOtherRate in ImportedOtherRates)
-                importedOtherRate.Value.IsExcluded = true;
+                importedOtherRate.Value.SetAsExcluded();
 
             if (ImportedNormalRate != null)
                 ImportedNormalRate.SetAsExcluded();
