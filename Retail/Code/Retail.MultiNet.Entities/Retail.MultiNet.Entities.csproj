@@ -59,6 +59,7 @@
     <Compile Include="AddressType.cs" />
     <Compile Include="FaultTickets\FaultTicketCustomObjectTypeSettings.cs" />
     <Compile Include="FaultTickets\FaultTicketSettingsDetails.cs" />
+    <Compile Include="FaultTickets\FaultTicketStatusDefinitionFilter.cs" />
     <Compile Include="InvoiceDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDLCBranchSummaryDetails.cs" />
