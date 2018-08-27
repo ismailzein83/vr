@@ -314,6 +314,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         var loadViewDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
                         viewDefinitionGridReadyPromiseDeferred.promise.then(function () {
                             var payload = {
+                                context: getContext(),
                                 genericBEGridViews: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GridDefinition != undefined && businessEntityDefinitionSettings.GridDefinition.GenericBEGridViews || undefined
                             };
 
