@@ -7,8 +7,11 @@
     [ImportedRate]      DECIMAL (20, 8) NULL,
     [ImportedRateBED]   DATETIME        NULL,
     [RateTypeID]        INT             NOT NULL,
-    [RateChangeType]    INT             NOT NULL
+    [RateChangeType]    INT             NOT NULL,
+    [IsExcluded]        BIT             NULL
 );
+
+
 
 
 
