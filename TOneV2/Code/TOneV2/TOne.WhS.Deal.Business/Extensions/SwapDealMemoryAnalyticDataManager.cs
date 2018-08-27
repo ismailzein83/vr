@@ -24,7 +24,8 @@ namespace TOne.WhS.Deal.Business
             }
             var swapDealManager = new SPDealManager();
             var filteredDeals = swapDealManager.GetAllSwapDeals().FindAllRecords(deal => (filteredDealIds == null || filteredDealIds.Contains(deal.DealId))
-                && Utilities.AreTimePeriodsOverlapped(deal.Settings.BeginDate, deal.Settings.EndDate, query.FromTime, query.ToTime));
+                && Utilities.AreTimePeriodsOverlapped(deal.Settings.BeginDate, deal.Settings.RealEED, query.FromTime, query.ToTime));
+
             bool estimationPerZone = query.DimensionFields.Contains("Zone") || query.DimensionFields.Contains("ZoneGroup")
                 || (query.Filters != null && (query.Filters.Any(filter => filter.Dimension == "Zone" || filter.Dimension == "ZoneGroup")));
             
