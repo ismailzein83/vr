@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Retail.MultiNet.Entities;
 using Vanrise.Entities;
 
-namespace Retail.BusinessEntity.Business
+namespace Retail.MultiNet.Entities
 {
-    class FaultTicketCustomObjectTypeSettings : FieldCustomObjectTypeSettings
+    public class FaultTicketCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
 
         public override Guid ConfigId { get { return new Guid("AB921E5F-3CCF-47E2-A606-DBD12E55E026"); } }
