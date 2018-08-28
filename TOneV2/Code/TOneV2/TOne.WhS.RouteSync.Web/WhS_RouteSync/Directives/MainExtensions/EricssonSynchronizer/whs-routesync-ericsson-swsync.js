@@ -38,17 +38,19 @@
 			var carrierAccountMappingGridAPI;
 			var carrierAccountMappingGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+			var branchRouteSettingsAPI;
+			var branchRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 			function initializeController() {
 				$scope.scopeModel = {};
 				$scope.scopeModel.localSuppliers = [];
 				$scope.scopeModel.brList = [];
 
-				$scope.scopeModel.validateBranchRoutes = function () {
-					if ($scope.scopeModel.brList == undefined || $scope.scopeModel.brList.length < 1)
-						return "At least one branch route should be added.";
-					return null;
-				};
+				//$scope.scopeModel.validateBranchRoutes = function () {
+				//	if ($scope.scopeModel.brList == undefined || $scope.scopeModel.brList.length < 1)
+				//		return "At least one branch route should be added.";
+				//	return null;
+				//};
 
 				$scope.scopeModel.isBRValid = function () {
 					var brIsValid = true;
@@ -78,6 +80,11 @@
 				$scope.scopeModel.onEricssonSwitchCommunicationReady = function (api) {
 					switchCommunicationAPI = api;
 					switchCommunicationReadyPromiseDeferred.resolve();
+				};
+
+				$scope.scopeModel.onBranchRouteSettingsReady = function (api) {
+					branchRouteSettingsAPI = api;
+					branchRouteSettingsReadyPromiseDeferred.resolve();
 				};
 
 				$scope.scopeModel.onOutgoingTrafficCustomerSelectorReady = function (api) {
@@ -142,6 +149,7 @@
 					var carrierMappings;
 					var sshCommunicationList;
 					var switchLoggerList;
+					var branchRouteSettings;
 
 					if (payload != undefined) {
 						ericssonSWSync = payload.switchSynchronizerSettings;
@@ -158,7 +166,7 @@
 							$scope.scopeModel.esr = ericssonSWSync.ESR;
 							$scope.scopeModel.cc = ericssonSWSync.CC;
 							$scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
-
+							branchRouteSettings = ericssonSWSync.BranchRouteSettings;
 							sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
 							switchLoggerList = ericssonSWSync.SwitchLoggerList;
 							outgoingTrafficCustomers = ericssonSWSync.OutgoingTrafficCustomers;
@@ -186,6 +194,10 @@
 					//Loading CarrierAccountMapping Grid
 					var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
 					promises.push(carrierAccountMappingGridLoadPromise);
+
+					//LoadingBranchRouteSettings
+					var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
+					promises.push(branchRouteSettingsLoadPromise);
 
 					function getSwitchCommunicationLoadPromise() {
 						var switchCommunicationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -266,6 +278,16 @@
 						return carrierAccountMappingGridLoadDeferred.promise;
 					}
 
+					function getBranchRouteSettingsLoadPromise() {
+						var branchRouteSettingsLoadPromise = UtilsService.createPromiseDeferred();
+						branchRouteSettingsReadyPromiseDeferred.promise.then(function () {
+							var branchRouteSettingsPayload = { branchRouteSettings: branchRouteSettings };
+							VRUIUtilsService.callDirectiveLoad(branchRouteSettingsAPI, branchRouteSettingsPayload, branchRouteSettingsLoadPromise);
+						});
+
+						return branchRouteSettingsLoadPromise.promise;
+					}
+
 					return UtilsService.waitMultiplePromises(promises);
 				};
 
@@ -318,6 +340,7 @@
 						SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
 						FirstRCNumber: $scope.scopeModel.firstRCNumber,
 						BranchRoutes: $scope.scopeModel.brList,
+						BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
 						ESR: $scope.scopeModel.esr,
 						CC: $scope.scopeModel.cc,
 						PercentagePrefix: $scope.scopeModel.percentagePrefix

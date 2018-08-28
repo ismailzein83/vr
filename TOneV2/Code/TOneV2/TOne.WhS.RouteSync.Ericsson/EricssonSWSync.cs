@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Collections.Generic;
-using Vanrise.Common;
-using Vanrise.Entities;
-using Vanrise.Rules;
-using Vanrise.GenericData.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.RouteSync.Ericsson.Business;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
-using TOne.WhS.RouteSync.Ericsson.Business;
 using Vanrise.Caching;
+using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
+using Vanrise.Rules;
 using Vanrise.Runtime;
 
 namespace TOne.WhS.RouteSync.Ericsson
@@ -38,7 +38,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public List<InterconnectOverrides> InterconnectOverrides { get; set; }
 		public List<EricssonSSHCommunication> SwitchCommunicationList { get; set; }
 		public List<SwitchLogger> SwitchLoggerList { get; set; }
-		public List<BranchRoute> BranchRoutes { get; set; }
+		public BranchRouteSettings BranchRouteSettings { get; set; }
 		public string PercentagePrefix { get; set; }
 		public string ESR { get; set; }
 		public string CC { get; set; }
@@ -60,7 +60,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
 			IRouteCaseDataManager routeCaseDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteCaseDataManager>();
 			routeCaseDataManager.SwitchId = context.SwitchId;
-			routeCaseDataManager.Initialize(new RouteCaseInitializeContext() { FirstRCNumber = FirstRCNumber });
+			routeCaseDataManager.Initialize(new RouteCaseInitializeContext() { FirstRCNumber = FirstRCNumber, BranchRouteSettings = BranchRouteSettings });
 
 			CustomerMappingManager customerMappingManager = new CustomerMappingManager();
 			customerMappingManager.Initialize(context.SwitchId, CarrierMappings.Values);
@@ -100,19 +100,27 @@ namespace TOne.WhS.RouteSync.Ericsson
 				EricssonConvertedRoute ericssonConvertedRoute = new EricssonConvertedRoute() { BO = customerMapping.BO, Code = route.Code };
 
 				List<RouteCaseOption> routeCaseOptions = GetRouteCaseOptions(route, routeCodeGroupId, routeCodeGroup, ruleTree);
-				var routeCaseOptionsAsString = Helper.SerializeRouteCaseOptions(routeCaseOptions);
+
+				IGenerateBranchRoutesContext generateBranchRoutesContext = new GenerateBranchRoutesContext() { RouteCaseOptions = routeCaseOptions };
+				var branchRoutes = BranchRouteSettings.GenerateBranchRoutes(generateBranchRoutesContext);
+
+				var routeCaseAsString = Helper.SerializeRouteCase(routeCaseOptions, branchRoutes);
+				//var routeCaseOptionsAsString = Helper.SerializeRouteCaseOptions(routeCaseOptions);
 
 				RouteCase routeCase;
-				if (routeCases.TryGetValue(routeCaseOptionsAsString, out routeCase))
+				//if (routeCases.TryGetValue(routeCaseOptionsAsString, out routeCase))
+				if (routeCases.TryGetValue(routeCaseAsString, out routeCase))
 				{
 					ericssonConvertedRoute.RCNumber = routeCase.RCNumber;
 					convertedRoutes.Add(ericssonConvertedRoute);
 				}
 				else
 				{
-					List<EricssonConvertedRoute> routesToConvert = routesToConvertByRCString.GetOrCreateItem(routeCaseOptionsAsString);
+					//List<EricssonConvertedRoute> routesToConvert = routesToConvertByRCString.GetOrCreateItem(routeCaseOptionsAsString);
+					List<EricssonConvertedRoute> routesToConvert = routesToConvertByRCString.GetOrCreateItem(routeCaseAsString);
 					routesToConvert.Add(ericssonConvertedRoute);
-					routeCasesToAdd.Add(routeCaseOptionsAsString);
+					//routeCasesToAdd.Add(routeCaseOptionsAsString);
+					routeCasesToAdd.Add(routeCaseAsString);
 				}
 			}
 
@@ -499,6 +507,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 					}
 				}
 			}
+			if (routeCaseOptions.Count == 0)
+				routeCaseOptions.Add(Helper.GetBlockedRouteCaseOption());
 			return routeCaseOptions;
 		}
 
@@ -687,23 +697,17 @@ namespace TOne.WhS.RouteSync.Ericsson
 			List<string> routeCaseCommands = new List<string>();
 			string command;
 			routeCaseCommands.Add(string.Format("{0}:RC={1},CCH=NO;", EricssonCommands.ANRPI_Command, routeCase.RCNumber));
-			var routeCaseOptions = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
+			var deserializedRouteCase = Helper.DeserializeRouteCase(routeCase.RouteCaseAsString);
+			//var routeCaseOptions = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
+			var routeCaseOptions = deserializedRouteCase.RouteCaseOptions;
+			var branchRoutes = deserializedRouteCase.BranchRoutes;
 			string esrCommand = ",";
 			int pValue = 0;
-			var mergedBranchRoutesDict = new Dictionary<bool, BranchRoute>();
-			var mergedBranchRoutes = new List<BranchRoute>();
-			foreach (var branchRoute in BranchRoutes)
-			{
-				var mergedBranchRoute = mergedBranchRoutesDict.GetOrCreateItem(branchRoute.IncludeTrunkAsSwitch, () => new BranchRoute() { IncludeTrunkAsSwitch = branchRoute.IncludeTrunkAsSwitch });
-				mergedBranchRoute.Name = (string.IsNullOrEmpty(mergedBranchRoute.Name)) ? branchRoute.Name : string.Format("{0}&&{1}", mergedBranchRoute.Name, branchRoute.Name);
-			}
 
-			if (routeCaseOptions != null && routeCaseOptions.Count > 0 && routeCaseOptions.Any(item => item.IsSwitch))
-				mergedBranchRoutes = mergedBranchRoutesDict.Values.ToList();
+			//IGenerateBranchRoutesContext context = new GenerateBranchRoutesContext() { RouteCaseOptions = routeCaseOptions };
+			//var branchRoutes = BranchRouteSettings.GenerateBranchRoutes(context);
 
-			else mergedBranchRoutes.Add(new BranchRoute() { IncludeTrunkAsSwitch = true, Name = string.Join("&&", mergedBranchRoutesDict.Values.Select(item => item.Name)) });
-
-			foreach (var branchRoute in mergedBranchRoutes)
+			foreach (var branchRoute in branchRoutes)
 			{
 				var brName = branchRoute.Name;
 				var brAlternativeName = (!string.IsNullOrEmpty(branchRoute.AlternativeName)) ? branchRoute.AlternativeName : branchRoute.Name;
@@ -726,7 +730,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 							pValue++;
 							int priority = 1;
 
-							//var orderedOptions = optionGroup.OrderBy(r => Convert.ToInt32(r.IsBackup));
 							foreach (RouteCaseOption option in optionGroup)
 							{
 								if (option.IsSwitch && !branchRoute.IncludeTrunkAsSwitch)
@@ -883,7 +886,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 			var routeCase = routeCases.FindRecord(item => item.RCNumber == route.RCNumber);
 			if (routeCase == null)
 				throw new NullReferenceException(string.Format("No route cases found with route case number '{0}'.", route.RCNumber));
-			var options = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
+			var deserializedRouteCase = Helper.DeserializeRouteCase(routeCase.RouteCaseAsString);
+			//var options = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
+			var options = deserializedRouteCase.RouteCaseOptions;
 
 			EricssonRouteProperties ericssonRouteProperties = GetRouteTypeAndParameters(supplierByOutTrunk, route, ref routeCodeGroup, carrierCustomerMapping, options);
 
@@ -924,7 +929,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 
 			var routeCase = routeCases.FindRecord(item => item.RCNumber == route.RCNumber);
-			var options = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
+			var deserializedRouteCase = Helper.DeserializeRouteCase(routeCase.RouteCaseAsString);
+			//var options = Helper.DeserializeRouteCaseOptions(routeCase.RouteCaseOptionsAsString);
+			var options = deserializedRouteCase.RouteCaseOptions;
 			EricssonRouteProperties ericssonRouteParamerters = GetRouteTypeAndParameters(supplierByOutTrunk, route, ref routeCodeGroup, carrierCustomerMapping, options);
 
 			routeCommands.Add(GetRouteCommandString(route, routeCodeGroup, ericssonRouteParamerters));
@@ -1715,7 +1722,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 		#endregion
 
 		#region routeCases
-		private Dictionary<string, RouteCase> InsertAndGetRouteCases(string switchId, HashSet<string> routeCaseOptionsToAdd)
+		private Dictionary<string, RouteCase> InsertAndGetRouteCases(string switchId, HashSet<string> RouteCasesToAddAsString)
 		{
 			int maxLockRetryCount = Int32.MaxValue;
 			TimeSpan lockRetryInterval = new TimeSpan(0, 0, 1);
@@ -1749,12 +1756,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 					rcNumber++;
 
 					Object dbApplyStream = dataManager.InitialiazeStreamForDBApply();
-					foreach (string routeCaseOption in routeCaseOptionsToAdd)
+					foreach (string RouteCaseToAddAsString in RouteCasesToAddAsString)
 					{
-						if (newRouteCasesByOptions == null || !newRouteCasesByOptions.ContainsKey(routeCaseOption))
+						if (newRouteCasesByOptions == null || !newRouteCasesByOptions.ContainsKey(RouteCaseToAddAsString))
 						{
-							RouteCase routeCaseToAdd = new RouteCase() { RCNumber = rcNumber, RouteCaseOptionsAsString = routeCaseOption };
-							routeCases.Add(routeCaseOption, routeCaseToAdd);
+							RouteCase routeCaseToAdd = new RouteCase() { RCNumber = rcNumber, RouteCaseAsString = RouteCaseToAddAsString };
+							routeCases.Add(RouteCaseToAddAsString, routeCaseToAdd);
 							dataManager.WriteRecordToStream(routeCaseToAdd, dbApplyStream);
 							rcNumber++;
 						}
@@ -1793,7 +1800,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				if (routeCases != null)
 				{
 					foreach (RouteCase routeCase in routeCases)
-						result.Add(routeCase.RouteCaseOptionsAsString, routeCase);
+						result.Add(routeCase.RouteCaseAsString, routeCase);
 				}
 				return result;
 			});

@@ -92,11 +92,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\BranchRouteSettingsManager.cs" />
     <Compile Include="Business\CustomerMappingManager.cs" />
     <Compile Include="Business\RouteCaseManager.cs" />
     <Compile Include="Business\FTPLogger.cs" />
     <Compile Include="Business\SwitchLoggerManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controller\EricssonBranchRouteSettingsController.cs" />
     <Compile Include="Controller\EricssonSwitchLoggerController.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
@@ -105,6 +107,8 @@
     <Compile Include="Data\IRouteCaseDataManager.cs" />
     <Compile Include="Data\IRouteDataManager.cs" />
     <Compile Include="Entities\BranchRoute.cs" />
+    <Compile Include="Entities\BranchRouteSettings.cs" />
+    <Compile Include="Entities\BranchRouteSettingsConfig.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\EricssonConvertedRoutesPayload.cs" />
     <Compile Include="Entities\EricssonSwitchRouteSynchronizerSettings.cs" />

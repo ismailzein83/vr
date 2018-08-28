@@ -15,11 +15,13 @@
 								 pagingtype="'PagingOnScroll'" hidegridmenu>
 
 						<vr-datagridcolumn headertext="'Trunk Name'" widthfactor="3" disablesorting>
-							<vr-textbox value="dataItem.TrunkName" type="text"
-										onvaluechanged="viewScope.scopeModel.onTrunkNameValueChanged"
-										onblurtextbox="viewScope.scopeModel.onTrunkNameValueBlur"
-										isrequired="true" tonextinput>
-							</vr-textbox>
+							<vr-validator validate="viewScope.scopeModel.validateTrunkName(dataItem.TrunkName)">
+								<vr-textbox value="dataItem.TrunkName" type="text"
+											onvaluechanged="viewScope.scopeModel.onTrunkNameValueChanged"
+											onblurtextbox="viewScope.scopeModel.onTrunkNameValueBlur"
+											isrequired="true" tonextinput>
+								</vr-textbox>
+							</vr-validator>
 						</vr-datagridcolumn>
 						<vr-datagridcolumn headertext="'Trunk Type'" widthfactor="2" disablesorting>
 							<vr-select on-ready="dataItem.onTrunkTypeSelectorReady"

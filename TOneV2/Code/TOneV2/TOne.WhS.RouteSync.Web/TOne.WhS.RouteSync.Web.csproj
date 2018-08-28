@@ -156,6 +156,12 @@
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiusdatamanagers.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsRORangeTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsFreeTextTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\Templates\EricssonSwitchBranchRoutesSettingsTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\whs-routesync-ericssonbranchroutesettings-rorange.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\whs-routesync-ericssonbranchroutesettings-freetext.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\whs-routesync-ericssonbranchroutesettings.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\Communication\Templates\EricssonSwitchCommunicationTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingEricssonGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCustomerMappingTemplate.html" />
@@ -214,6 +220,7 @@
     <Content Include="WhS_RouteSync\Directives\IdbDataManagers\Templates\IdbDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\IdbDataManagers\whs-routesync-idbdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\ModuleInitailization.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\EricssonBranchRouteSettingsAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\FreeRadiusAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\IdbDataManagerSettingAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />

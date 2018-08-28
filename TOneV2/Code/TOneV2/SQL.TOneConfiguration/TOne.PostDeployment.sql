@@ -257,7 +257,10 @@ as (select * from (values
 
 ('77F773F8-FB42-4A4E-97FB-BCC807BA940F','Recurring Charge Period','Recurring Charge Period','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"whs-be-recurringchargeperiod-customobjectsettings"}'),
 ('447B67A5-DBEA-4410-9C00-C8D297B8F81C','OnceAYear','Once A Year','WhS_BE_RecurringCharge','{"Editor":"whs-be-recurringchargeperiodsettings-onceayear"}'),
-('28840BD1-3C9A-4793-8A46-64992F823C43','CheckUnpricedCDRs','Check Unpriced CDRs','VR_Invoice_InvoiceSettingPartConfig','{"RuntimeEditor":"whs-invoice-invoicesetting-runtime-checkunpricedcdrs"}')
+('28840BD1-3C9A-4793-8A46-64992F823C43','CheckUnpricedCDRs','Check Unpriced CDRs','VR_Invoice_InvoiceSettingPartConfig','{"RuntimeEditor":"whs-invoice-invoicesetting-runtime-checkunpricedcdrs"}'),
+
+('BA32DF95-FFE5-4C71-94FC-B02B841791F9','WhS_RouteSync_EricssonRORangeBranchRouteSettings','RO Range','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-rorange"}'),
+('BEC60C47-A37F-4EED-B628-1E17EFD60A41','WhS_RouteSync_EricssonFreeTextBranchRouteSettings','Text','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-freetext"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

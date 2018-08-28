@@ -1,0 +1,9 @@
+﻿<vr-row>
+	<vr-columns colnum="2" ng-show="scopeModel.branchRouteSettingConfigs != undefined && scopeModel.branchRouteSettingConfigs.length>1">
+		<vr-select datasource="scopeModel.branchRouteSettingConfigs" datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Type" isrequired="true"
+				   selectedvalues="scopeModel.selectedBranchRouteSettings" hideremoveicon></vr-select>
+	</vr-columns>
+	<vr-columns colnum="10">
+		<vr-directivewrapper directive="scopeModel.selectedBranchRouteSettings.Editor" on-ready="scopeModel.onBranchRouteSettingsReady"></vr-directivewrapper>
+	</vr-columns>
+</vr-row>

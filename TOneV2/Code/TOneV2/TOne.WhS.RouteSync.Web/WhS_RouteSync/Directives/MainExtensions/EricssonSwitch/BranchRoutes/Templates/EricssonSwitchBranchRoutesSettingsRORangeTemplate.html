@@ -1,0 +1,33 @@
+﻿<vr-validator validate="scopeModel.validateBranchRoutes()">
+	<vr-columns colnum="12" haschildcolumns>
+		<vr-columns colnum="3">
+			<vr-validator validate="scopeModel.validateNewBranchRoute()">
+				<vr-columns colnum="10" withemptyline haschildcolumns>
+					<div style="display:inline-block;width:20px;position:relative;top:-5px">
+						<vr-label>RO- </vr-label>
+					</div>
+					<div style="display:inline-block;width:calc(50% - 27px)">
+						<vr-textbox value="scopeModel.brFrom" type="number" minvalue="0"></vr-textbox>
+					</div>
+					<div style="display:inline-block;width:20px;position:relative;top:-5px">
+						<vr-label>&&- </vr-label>
+					</div>
+					<div style="display:inline-block;width:calc(50% - 27px)">
+						<vr-textbox value="scopeModel.brTo" type="number" minvalue="0"></vr-textbox>
+					</div>
+				</vr-columns>
+
+				<vr-columns colnum="1" withemptyline haschildcolumns>
+					<vr-button type="Add" data-onclick="scopeModel.addBR" standalone vr-disabled="!scopeModel.isBRValid()"></vr-button>
+				</vr-columns>
+			</vr-validator>
+		</vr-columns>
+		<vr-columns colnum="9">
+			<vr-datalist maxitemsperrow="4" datasource="scopeModel.brList" autoremoveitem="true">
+				<vr-label>RO-{{dataItem.From}}</vr-label><vr-label ng-if="!viewScope.scopeModel.isEmpty(dataItem.To)">&&-{{dataItem.To}}</vr-label>
+				<span style="display: inline-block; margin: 0px 3px; font-size: 14px; position: relative; top: -3px;"> </span>
+				<vr-switch type="inline" value="dataItem.IncludeTrunkAsSwitch" hint="Include trunks defined as switch"></vr-switch>
+			</vr-datalist>
+		</vr-columns>
+	</vr-columns>
+</vr-validator>

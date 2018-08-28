@@ -24,8 +24,10 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void Initialize(IRouteCaseInitializeContext context)
 		{
-			var blockedRCOption = Helper.SerializeRouteCaseOption(Helper.GetBlockedRouteCaseOption());
-			string query = string.Format(query_CreateRouteCaseTable, SwitchId, context.FirstRCNumber, blockedRCOption);
+			var blockedRCOption = new List<RouteCaseOption>() { Helper.GetBlockedRouteCaseOption() };
+			var branchRoutes = context.BranchRouteSettings.GenerateBranchRoutes(new GenerateBranchRoutesContext() { RouteCaseOptions = blockedRCOption });
+			var serializedBlockedRCOption = Helper.SerializeRouteCase(blockedRCOption, branchRoutes);
+			string query = string.Format(query_CreateRouteCaseTable, SwitchId, context.FirstRCNumber, serializedBlockedRCOption);
 			ExecuteNonQueryText(query, null);
 		}
 
@@ -37,7 +39,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		public void WriteRecordToStream(RouteCase record, object dbApplyStream)
 		{
 			StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-			streamForBulkInsert.WriteRecord("{0}^{1}", record.RCNumber, record.RouteCaseOptionsAsString);
+			streamForBulkInsert.WriteRecord("{0}^{1}", record.RCNumber, record.RouteCaseAsString);
 		}
 
 		public void ApplyRouteCaseForDB(object preparedRouteCase)
@@ -70,7 +72,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 				while (reader.Read())
 				{
 					RouteCase routeCase = RouteCaseMapper(reader);
-					routeCases.Add(routeCase.RouteCaseOptionsAsString, routeCase);
+					routeCases.Add(routeCase.RouteCaseAsString, routeCase);
 				}
 			}, null);
 
@@ -125,7 +127,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			return new RouteCase()
 			{
 				RCNumber = (int)reader["RCNumber"],
-				RouteCaseOptionsAsString = reader["Options"] as string,
+				RouteCaseAsString = reader["Options"] as string,
 			};
 		}
 
