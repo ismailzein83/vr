@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -19,28 +17,29 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return BusinessManagerFactory.GetManager<IBPDefinitionManager>().GetDefinitionTitle(this.ProcessName);
         }
+
         public virtual void OnAfterSaveAction(IProcessInputArgumentOnAfterSaveActionContext context)
         {
-
         }
+
         public virtual void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
-
         }
 
         public virtual void PrepareArgumentForExecutionFromTask(IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext context)
         {
-
         }
     }
+
     public interface IProcessInputArgumentOnAfterSaveActionContext
     {
         Guid TaskId { get; }
     }
+
     public interface IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext
     {
-
     }
+
     public class ProcessInputArgumentOnAfterSaveActionContext : IProcessInputArgumentOnAfterSaveActionContext
     {
         public Guid TaskId { get; set; }
