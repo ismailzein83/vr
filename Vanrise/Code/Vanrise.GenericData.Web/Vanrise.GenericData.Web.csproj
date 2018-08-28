@@ -310,6 +310,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbe-effectiveperiod-editor.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\LimitResultFilterRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-limitresult.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBESubviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-genericbegridview-runtime.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\Templates\GenericBusinessEntityManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Management\vr-genericdata-genericbusinessentity-management.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityEditor.html" />
