@@ -10,7 +10,6 @@ namespace Vanrise.Common.Business
 {
     public class VRNamespaceManager
     {
-
         static Dictionary<string, AssemblyObject> vrNamespaceAssemblies = new Dictionary<string, AssemblyObject>();
 
         #region Public Methods
@@ -109,10 +108,56 @@ namespace Vanrise.Common.Business
             return outputAssembly.GetType(string.Format("{0}.{1}", vrNamespaceName, className));
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<Guid, VRNamespace> GetCachedVRNamespaces()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRNamespaces",
+               () =>
+               {
+                   IVRNamespaceDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRNamespaceDataManager>();
+                   return dataManager.GetVRNamespaces().ToDictionary(x => x.VRNamespaceId, x => x);
+               });
+        }
+
+        private Dictionary<string, VRNamespace> GetCachedVRNamespacesByName()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRNamespacesByName",
+               () =>
+               {
+                   Dictionary<Guid, VRNamespace> cachedNamespaces = GetCachedVRNamespaces();
+                   return cachedNamespaces.ToDictionary(x => x.Value.Name, x => x.Value);
+               });
+        }
+
+        private string BuildClassDefinition(VRNamespace vrNamespace)
+        {
+            StringBuilder classDefinitionBuilder = new StringBuilder(@" 
+                using System;
+                using System.Collections.Generic;
+                using System.IO;
+                using System.Data;
+                using System.Linq;
+                using Vanrise.Common;
+                using Vanrise.GenericData.Business;
+                using Vanrise.GenericData.Entities;
+
+                namespace #NAMESPACE#
+                {
+                    #CLASSCODE#
+                }");
+
+            classDefinitionBuilder.Replace("#NAMESPACE#", vrNamespace.Name);
+            classDefinitionBuilder.Replace("#CLASSCODE#", vrNamespace.Settings.Code);
+
+            return classDefinitionBuilder.ToString();
+        }
+
         private Assembly GetCachedAssembly(string vrNamespaceName)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(vrNamespaceName,
-              () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(vrNamespaceName, () =>
               {
                   VRNamespace vrNamespace = GetVRNamespaceByName(vrNamespaceName);
                   vrNamespace.ThrowIfNull("vrNamespace", vrNamespaceName);
@@ -136,8 +181,7 @@ namespace Vanrise.Common.Business
                           errorsBuilder.AppendLine(errorMessage);
                       }
 
-                      throw new Exception(String.Format("Compile Error when building for Namespace '{0}'. Errors: {1}",
-                          vrNamespaceName, errorsBuilder));
+                      throw new Exception(String.Format("Compile Error when building for Namespace '{0}'. Errors: {1}", vrNamespaceName, errorsBuilder));
                   }
               });
         }
@@ -178,7 +222,15 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-        #region Private Classes
+        #region Classes
+
+        public class VRNamespaceCompilationOutput
+        {
+            public Assembly OutputAssembly { get; set; }
+            public bool Result { get; set; }
+            public List<string> ErrorMessages { get; set; }
+        }
+
         private class AssemblyObject
         {
             public string AssemblyName { get; set; }
@@ -206,25 +258,13 @@ namespace Vanrise.Common.Business
 
             static VRNamespaceManager _vrNamespaceManager = new VRNamespaceManager();
 
-            public override string EntityUniqueName
-            {
-                get { return "VR_Common_VRNamespace"; }
-            }
+            public override string EntityUniqueName { get { return "VR_Common_VRNamespace"; } }
 
-            public override string ModuleName
-            {
-                get { return "Common"; }
-            }
+            public override string ModuleName { get { return "Common"; } }
 
-            public override string EntityDisplayName
-            {
-                get { return "VRNamespace"; }
-            }
+            public override string EntityDisplayName { get { return "VRNamespace"; } }
 
-            public override string ViewHistoryItemClientActionName
-            {
-                get { return "VR_Common_VRNamespace_ViewHistoryItem"; }
-            }
+            public override string ViewHistoryItemClientActionName { get { return "VR_Common_VRNamespace_ViewHistoryItem"; } }
 
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
             {
@@ -241,52 +281,6 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-        #region Private Methods
-
-        Dictionary<Guid, VRNamespace> GetCachedVRNamespaces()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRNamespaces",
-               () =>
-               {
-                   IVRNamespaceDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRNamespaceDataManager>();
-                   return dataManager.GetVRNamespaces().ToDictionary(x => x.VRNamespaceId, x => x);
-               });
-        }
-
-        Dictionary<string, VRNamespace> GetCachedVRNamespacesByName()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRNamespacesByName",
-               () =>
-               {
-                   Dictionary<Guid, VRNamespace> cachedNamespaces = GetCachedVRNamespaces();
-                   return cachedNamespaces.ToDictionary(x => x.Value.Name, x => x.Value);
-               });
-        }
-
-        private string BuildClassDefinition(VRNamespace vrNamespace)
-        {
-            StringBuilder classDefinitionBuilder = new StringBuilder(@" 
-                using System;
-                using System.Collections.Generic;
-                using System.IO;
-                using System.Data;
-                using System.Linq;
-                using Vanrise.Common;
-                using Vanrise.GenericData.Business;
-                using Vanrise.GenericData.Entities;
-
-                namespace #NAMESPACE#
-                {
-                    #CLASSCODE#
-                }");
-
-            classDefinitionBuilder.Replace("#NAMESPACE#", vrNamespace.Name);
-            classDefinitionBuilder.Replace("#CLASSCODE#", vrNamespace.Settings.Code);
-
-            return classDefinitionBuilder.ToString();
-        }
-        #endregion
-
         #region Mappers
 
         public VRNamespaceDetail VRNamespaceDetailMapper(VRNamespace vrNamespace)
@@ -300,12 +294,5 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
-
-        public class VRNamespaceCompilationOutput
-        {
-            public Assembly OutputAssembly { get; set; }
-            public bool Result { get; set; }
-            public List<string> ErrorMessages { get; set; }
-        }
     }
 }
