@@ -2295,18 +2295,22 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     opacity: 0.5;
 }*/
 
-.divDisabled vr-validator > div {
+.divDisabled:first-child vr-validator > div {
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.8 !important;
 }
 
-	.divDisabled vr-validator > div input[type="text"] {
-		background-color: #ddd;
-	}
+.divDisabled .divDisabled vr-validator > div {
+	opacity: 1 !important;
+}
 
-		.divDisabled vr-validator > div input[type="text"].vr-date-input {
-			width: calc(100% + 9px);
-		}
+.divDisabled vr-validator > div input[type="text"] {
+	background-color: #ddd;
+}
+
+.divDisabled vr-validator > div input[type="text"].vr-date-input {
+	width: calc(100% + 9px);
+}
 
 .read-only-frame {
 	pointer-events: none !important;
@@ -2314,7 +2318,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 
 vr-button[class*="divDisabled"] > div {
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.8;
 }
 
 vr-button[class*="divDisabled"][type="Add"][standalone] div > span {
@@ -2323,19 +2327,19 @@ vr-button[class*="divDisabled"][type="Add"][standalone] div > span {
 
 vr-switch[class*="divDisabled"] .switch {
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.8;
 	background: #8a8a8a;
 }
 
 .divDisabled .switch {
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.8;
 	background: #8a8a8a;
 }
 
 .divDisabled vr-check > .main-container {
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.8;
 }
 /**************START Pagination*********/
 
@@ -4388,9 +4392,9 @@ span.option-marketprice {
 	}
 
 
-		.vr-menu-list > li > a.disabled:hover {
-			cursor: not-allowed !important;
-		}
+.vr-menu-list > li > a.disabled:hover {
+	cursor: not-allowed !important;
+}
 
 .vr-draggable-item.sortable-ghost {
 	background-color: transparent;
@@ -4400,15 +4404,41 @@ span.option-marketprice {
 	overflow: hidden;
 }
 
-	.vr-draggable-item.sortable-ghost::before, businessprocess-vr-workflow-container .item.sortable-ghost::before, businessprocess-vr-workflow-containerv2 .item.sortable-ghost::before, businessprocess-vr-workflowactivity-sequence .item.sortable-ghost::before {
-		content: "";
-		border-color: transparent;
-		border-left-color: #FF0000;
-		border-style: solid;
-		border-width: 0.35em 0.35em 0.35em 0.45em;
-		display: inline-block;
-		height: 0px;
-		width: 0px;
-		top: -5px;
-		position: relative;
-	}
+.vr-draggable-item.sortable-ghost::before, businessprocess-vr-workflow-container .item.sortable-ghost::before, businessprocess-vr-workflow-containerv2 .item.sortable-ghost::before, businessprocess-vr-workflowactivity-sequence .item.sortable-ghost::before {
+	content: "";
+	border-color: transparent;
+	border-left-color: #FF0000;
+	border-style: solid;
+	border-width: 0.35em 0.35em 0.35em 0.45em;
+	display: inline-block;
+	height: 0px;
+	width: 0px;
+	top: -5px;
+	position: relative;
+}
+/*start vr-workflow*/
+
+.vr-workflow .panel-vr {
+    margin-top: 5px ;
+}
+
+
+.vr-workflow .fieldset-vr {
+     margin-top: unset; 
+}
+/*.vr-workflow .panel-vr:focus .panel-body  {
+    border: 2px solid #000;
+}*/
+.vr-workflow .panel-vr .panel-body {
+    padding: 5px;
+}
+
+.vr-workflow .fieldset-vr .panel-body {
+    padding: 5px ;
+}
+
+.vr-workflow .vr-toolbox{
+    border:none;
+}
+
+/*end vr-workflow*/
