@@ -78,7 +78,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 saleRates[rate.SaleRateId] = rate;
                 return rate.RateChange;
             }
-            throw new ArgumentNullException(String.Format("SaleRate: {0}", rateId));
+            else return RateChangeType.RateNotAvailable;
         }
 
         private SaleRate GetSaleRateByRateId(long rateId)

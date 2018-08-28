@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 supplierRates[rate.SupplierRateId] = rate;
                 return rate.RateChange;
             }
-            throw new ArgumentNullException(String.Format("CostRate: {0}", rateId));
+            else return RateChangeType.RateNotAvailable;
         }
 
         public Dictionary<long, SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds)
