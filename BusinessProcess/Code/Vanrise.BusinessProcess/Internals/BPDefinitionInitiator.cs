@@ -22,42 +22,39 @@ namespace Vanrise.BusinessProcess
         static bool s_AddActivityEventsTracking = ConfigurationManager.AppSettings["BusinessProcess_ActivityEventsTracking"] == "true";
         internal static int s_defaultMaxConcurrentWorkflowsPerDefinition;
 
-        static BPDefinitionInitiator()
-        {
-            if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_DefaultMaxConcurrentWorkflowsPerDefinition"], out s_defaultMaxConcurrentWorkflowsPerDefinition))
-                s_defaultMaxConcurrentWorkflowsPerDefinition = 10;
-        }
-
-        Guid _serviceInstanceId;
-        BPDefinition _definition;
-
-        static IBPInstanceDataManager s_instanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
         static IBPEventDataManager s_eventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
         static IBPTaskDataManager s_taskDataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
         static IBPInstancePersistenceDataManager s_instancePersistenceDataManager = BPDataManagerFactory.GetDataManager<IBPInstancePersistenceDataManager>();
 
-        Activity _workflowDefinition;
+        static BPDefinitionManager s_definitionManager = new BPDefinitionManager();
+        static BPInstanceManager s_bpInstanceManager = new BPInstanceManager();
+        static VRWorkflowManager s_vrWorkflowManager = new VRWorkflowManager();
 
-        Activity WorkflowDefinition
+        Guid _definitionId;
+        int _maxNbOfThreads;
+        Guid _serviceInstanceId;
+        BPDefinition _definition;
+        
+        Activity _workflowDefinition;
+        private Activity WorkflowDefinition
         {
             get
             {
                 if (_workflowDefinition != null)
                     return _workflowDefinition;
                 else
-                    return _vrWorkflowManager.GetVRWorkflowActivity(_definition.VRWorkflowId.Value);
+                    return s_vrWorkflowManager.GetVRWorkflowActivity(_definition.VRWorkflowId.Value);
             }
         }
 
         private ConcurrentDictionary<long, BPRunningInstance> _runningInstances = new ConcurrentDictionary<long, BPRunningInstance>();
 
-        BPDefinitionManager _definitionManager = new BPDefinitionManager();
-        VRWorkflowManager _vrWorkflowManager = new VRWorkflowManager();
+        static BPDefinitionInitiator()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_DefaultMaxConcurrentWorkflowsPerDefinition"], out s_defaultMaxConcurrentWorkflowsPerDefinition))
+                s_defaultMaxConcurrentWorkflowsPerDefinition = 10;
+        }
 
-        Guid _definitionId;
-        int _maxNbOfThreads;
-
-        static IEnumerable<BPInstanceStatus> s_acceptableBPStatusesToRun = BPInstanceStatusAttribute.GetNonClosedStatuses();
         public BPDefinitionInitiator(Guid serviceInstanceId, BPDefinition definition)
         {
             _serviceInstanceId = serviceInstanceId;
@@ -90,7 +87,7 @@ namespace Vanrise.BusinessProcess
         #region Workflow Execution
 
         bool _isRunning;
-
+        static IEnumerable<BPInstanceStatus> s_acceptableBPStatusesToRun = BPInstanceStatusAttribute.GetNonClosedStatuses();
         internal void RunPendingProcesses()
         {
             lock (this)
@@ -101,12 +98,12 @@ namespace Vanrise.BusinessProcess
             }
             try
             {
-                _definition = _definitionManager.GetBPDefinition(_definitionId);
+                _definition = s_definitionManager.GetBPDefinition(_definitionId);
                 int nbOfRunningInstances = GetNbOfRunningInstances();
                 if (nbOfRunningInstances >= _maxNbOfThreads)
                     return;
                 int nbOfThreads = _maxNbOfThreads - nbOfRunningInstances;
-                List<BPInstance> pendingInstances = s_instanceDataManager.GetPendingInstances(_definitionId, s_acceptableBPStatusesToRun, BPInstanceAssignmentStatus.AssignedForExecution, nbOfThreads, _serviceInstanceId);
+                List<BPInstance> pendingInstances = s_bpInstanceManager.GetPendingInstances(_definitionId, s_acceptableBPStatusesToRun, BPInstanceAssignmentStatus.AssignedForExecution, nbOfThreads, _serviceInstanceId);
                 if (pendingInstances != null)
                 {
                     foreach (var instance in pendingInstances)
@@ -153,7 +150,7 @@ namespace Vanrise.BusinessProcess
             }
             else
             {
-                BPInstance bpInstance = s_instanceDataManager.GetBPInstance(bpInstanceId, false);
+                BPInstance bpInstance = s_bpInstanceManager.GetBPInstance(bpInstanceId, false);
                 if (bpInstance != null && !BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
                 {
                     BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
@@ -178,7 +175,6 @@ namespace Vanrise.BusinessProcess
         {
             return _runningInstances.Where(itm => !itm.Value.IsIdle).Count();
         }
-
 
         #endregion
 
@@ -247,7 +243,7 @@ namespace Vanrise.BusinessProcess
                 {
                     if (bpInstance.AssignmentStatus != BPInstanceAssignmentStatus.Executing)
                     {
-                        s_instanceDataManager.UpdateInstanceAssignmentStatus(bpInstance.ProcessInstanceID, BPInstanceAssignmentStatus.Executing);
+                        s_bpInstanceManager.UpdateInstanceAssignmentStatus(bpInstance.ProcessInstanceID, BPInstanceAssignmentStatus.Executing);
                         bpInstance.AssignmentStatus = BPInstanceAssignmentStatus.Executing;
                     }
                     runningInstance.IsIdle = false;
@@ -277,7 +273,7 @@ namespace Vanrise.BusinessProcess
             };
             runningInstance.WFApplication.PersistableIdle = delegate(WorkflowApplicationIdleEventArgs e)
             {
-                if (_definitionManager.GetBPDefinitionExtendedSettings(_definition).ShouldPersist(new BPDefinitionShouldPersistContext { BPInstance = runningInstance.BPInstance }))
+                if (s_definitionManager.GetBPDefinitionExtendedSettings(_definition).ShouldPersist(new BPDefinitionShouldPersistContext { BPInstance = runningInstance.BPInstance }))
                 {
                     BPRunningInstance dummy;
                     _runningInstances.TryRemove(runningInstance.BPInstance.ProcessInstanceID, out dummy);
@@ -285,7 +281,7 @@ namespace Vanrise.BusinessProcess
                 }
                 else
                 {
-                    s_instanceDataManager.UpdateInstanceAssignmentStatus(runningInstance.BPInstance.ProcessInstanceID, BPInstanceAssignmentStatus.Free);
+                    s_bpInstanceManager.UpdateInstanceAssignmentStatus(runningInstance.BPInstance.ProcessInstanceID, BPInstanceAssignmentStatus.Free);
                     runningInstance.IsIdle = true;
                     return PersistableIdleAction.None;
                 }
@@ -423,7 +419,7 @@ namespace Vanrise.BusinessProcess
 
         internal static void UpdateProcessStatus(long processInstanceId, long? parentProcessId, BPInstanceStatus status, BPInstanceAssignmentStatus assignmentStatus, string errorMessage, bool clearServiceInstanceId, Guid? workflowInstanceId)
         {
-            s_instanceDataManager.UpdateInstanceStatus(processInstanceId, status, assignmentStatus, errorMessage, clearServiceInstanceId, workflowInstanceId);
+            s_bpInstanceManager.UpdateInstanceStatus(processInstanceId, status, assignmentStatus, errorMessage, clearServiceInstanceId, workflowInstanceId);
             LogEntryType statusChangedTrackingSeverity = BPInstanceStatusAttribute.GetAttribute(status).TrackingSeverity;
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
             {
