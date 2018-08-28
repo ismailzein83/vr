@@ -285,6 +285,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBESaveCondition\MainExtensions\Templates\SaveConditionConditionGroupTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBESaveCondition\MainExtensions\vr-genericdata-genericbe-savecondition-conditiongroup.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBESaveCondition\vr-genericdata-genericbe-savecondition-settings.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\GenericbeGenericbegridviewDefinitionViewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-genericbegridview-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\SerialNumberDateTimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\SerialNumberSequenceTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\SerialNumberGenericFieldTemplate.html" />

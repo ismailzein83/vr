@@ -22,7 +22,7 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
         };
 
         function ViewDefinitionGrid($scope, ctrl, $attrs) {
-
+            var context;
             var gridAPI;
             this.initializeController = initializeController;
             function initializeController() {
@@ -41,7 +41,7 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
                         ctrl.datasource.push(addedItem);
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded);
+                    VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded, context);
                 };
                 
                 ctrl.removeView = function (dataItem) {
@@ -74,6 +74,7 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        context = payload.context;
                         api.clearDataSource();
                         if (payload.genericBEGridViews != undefined) {
                             for (var i = 0; i < payload.genericBEGridViews.length; i++) {
@@ -112,7 +113,7 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
                     var index = ctrl.datasource.indexOf(viewObj);
                     ctrl.datasource[index] = view;
                 };
-                VR_GenericData_GenericBEDefinitionService.editGenericBEViewDefinition(onGridViewUpdated, viewObj);
+                VR_GenericData_GenericBEDefinitionService.editGenericBEViewDefinition(onGridViewUpdated, viewObj,context);
             }
 
             function checkDuplicateName() {

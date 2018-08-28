@@ -22,9 +22,9 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined && parameters != null) {
                 viewDefinition = parameters.viewDefinition;
+                context = parameters.context;
             }
             isEditMode = (viewDefinition != undefined);
         }
@@ -78,7 +78,8 @@
                     var loadViewSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
                     viewSettingsReadyPromiseDeferred.promise.then(function () {
                         var payload = {
-                            parameterEntity: viewDefinition != undefined && viewDefinition.Settings != undefined ? viewDefinition.Settings : undefined
+                            parameterEntity: viewDefinition != undefined && viewDefinition.Settings != undefined ? viewDefinition.Settings : undefined,
+                            context:context
                         };
 
                         VRUIUtilsService.callDirectiveLoad(viewSettingsDirectiveAPI, payload, loadViewSettingsPromiseDeferred);

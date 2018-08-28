@@ -65,8 +65,9 @@
         }
 
 
-        function addGenericBEViewDefinition(onGenericBEViewDefinitionAdded) {
+        function addGenericBEViewDefinition(onGenericBEViewDefinitionAdded,context) {
             var parameters = {
+                context: context
             };
 
             var settings = {};
@@ -78,9 +79,10 @@
             VRModalService.showModal(viewModalPath, parameters, settings);
         }
 
-        function editGenericBEViewDefinition(onGenericBEViewDefinitionUpdated, viewDefinition) {
+        function editGenericBEViewDefinition(onGenericBEViewDefinitionUpdated, viewDefinition, context) {
             var parameters = {
-                viewDefinition: viewDefinition
+                viewDefinition: viewDefinition,
+                context: context
             };
 
             var settings = {};

@@ -49,7 +49,10 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var payload = {
+                        context: context
+                    }
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -99,6 +102,7 @@
                             var directivePayload = { };
                             if (parameterEntity != undefined) {
                                 directivePayload.parameterEntity = parameterEntity;
+                                directivePayload.context=payload.context
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
