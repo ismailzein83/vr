@@ -5,7 +5,6 @@ using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Web.ModelMappers;
 using Vanrise.BusinessProcess.Web.Models;
-using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
@@ -61,6 +60,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             createProcessInput.InputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
             return manager.CreateNewProcess(createProcessInput,true);
         }
+
         [HttpPost]
         [Route("HasRunningInstances")]
         public bool HasRunningInstances(HasRunningInstancesInput hasRunningInstancesInput)
@@ -100,9 +100,11 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return s_instanceManager.CancelProcess(input.BPInstanceId);
         }
     }
+
     public class HasRunningInstancesInput
     {
         public Guid definitionId { get; set; }
+
         public List<string> entityIds { get; set; }
     }
 
