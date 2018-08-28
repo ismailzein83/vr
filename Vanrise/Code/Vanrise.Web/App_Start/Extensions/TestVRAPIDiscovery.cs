@@ -18,26 +18,25 @@ namespace Vanrise.Web.App_Start.Extensions
         private static Type CompileControllerType()
         {
             string customController = @"using System;
-using System.Collections.Generic;
-using System.Web.Http;
-using Vanrise.Web.Base;
+                using System.Collections.Generic;
+                using System.Web.Http;
+                using Vanrise.Web.Base;
 
-namespace Vanrise.DynamicControllers_#NamespaceName#
-{
-    [RoutePrefix(""api/DynamicModule/VRDynGen"")]
-    public class VRDynGenController : BaseAPIController
-    {
-        //[Vanrise.Entities.IsAnonymous]
-        [HttpGet]
-        [Route(""TestCall"")]
-        
-        public string TestCall(string input)
-        {
-            return String.Concat(input, "" from DynGen Controller using VRHttpControllerSelector V3:"", DateTime.Now, ""\nController generated at: #GENERATIONTIME#"", ""\n #NBOFGENERATIONTIME# times generated"");
-        }
-        
-    }
-} ";
+                namespace Vanrise.DynamicControllers_#NamespaceName#
+                {
+                    [RoutePrefix(""api/DynamicModule/VRDynGen"")]
+                    public class VRDynGenController : BaseAPIController
+                    {
+                        //[Vanrise.Entities.IsAnonymous]
+                        [HttpGet]
+                        [Route(""TestCall"")]
+                        public string TestCall(string input)
+                        {
+                            return String.Concat(input, "" from DynGen Controller using VRHttpControllerSelector V3:"", DateTime.Now, ""\nController generated at: #GENERATIONTIME#"", ""\n #NBOFGENERATIONTIME# times generated"");
+                        }
+                    }
+                }";
+
             NbOfGenerationTime++;
             string namespaceName = Guid.NewGuid().ToString().Replace("-", "");
             Common.CSharpCompilationOutput output;
