@@ -423,12 +423,14 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\vr-genericdata-genericfields-actionauditchange-runtime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\CompareToConstantFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\DateTimeRoundFieldFormulaTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\EncryptedCalculatedFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\NullToBooleanFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\ParentBusinessEntityFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\SingleMathOperationFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\SwitchCaseFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-comparetoconstant.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-datetimeround.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-encryptedcalculated.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-nulltoboolean.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-parentbusinessentity.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-singlemathoperation.js" />

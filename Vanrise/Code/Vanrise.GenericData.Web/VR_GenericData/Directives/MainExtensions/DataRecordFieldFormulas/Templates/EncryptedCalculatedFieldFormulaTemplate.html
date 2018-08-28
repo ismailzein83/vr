@@ -1,0 +1,12 @@
+﻿<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedFieldName"
+               entityname="Field Name"
+               label="Field Name" isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-switch value="scopeModel.decrypt" label="Decrypt"></vr-switch>
+</vr-columns>
