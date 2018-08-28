@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 
 namespace TOne.WhS.Deal.Business
@@ -10,6 +14,9 @@ namespace TOne.WhS.Deal.Business
     public class DealBusinessObjectDataProviderSettings : BusinessObjectDataProviderExtendedSettings
     {
         static DataRecordTypeManager s_dataRecordTypeManager = new DataRecordTypeManager();
+        CurrencyManager currencyManager = new CurrencyManager();
+        CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
 
         public override Guid ConfigId { get { return new Guid("7b5d42b4-b05c-4f54-9683-a73dd0cebd68"); } }
 
@@ -49,7 +56,7 @@ namespace TOne.WhS.Deal.Business
                     ? (dealDefinition.Settings.BeginDate - DateTime.Today).Days
                     : 0;
 
-                int daysToEnd=0, daysToGrace = 0, dealLifeSpan = 1;
+                int daysToEnd = 0, daysToGrace = 0, dealLifeSpan = 1;
                 if (swapDealSetting.EndDate.HasValue)
                 {
                     DateTime endDate = swapDealSetting.EndDate.Value;
@@ -59,11 +66,11 @@ namespace TOne.WhS.Deal.Business
                     dealLifeSpan = (endDate - swapDealSetting.BeginDate).Days;
                 }
 
-                int dealDay=0; 
+                int dealDay = 0;
 
-                if(DateTime.Now < swapDealSetting.BeginDate)
-                  dealDay = 0;
-                else if( DateTime.Now > swapDealSetting.EndDate.Value)
+                if (DateTime.Now < swapDealSetting.BeginDate)
+                    dealDay = 0;
+                else if (DateTime.Now > swapDealSetting.EndDate.Value)
                     dealDay = dealLifeSpan;
                 else
                     dealDay = (DateTime.Now - swapDealSetting.BeginDate).Days;
@@ -82,9 +89,12 @@ namespace TOne.WhS.Deal.Business
                         RemainingDaysToEnd = daysToEnd,
                         RemainingDaysToGrace = daysToGrace,
                         GroupNumber = inbound.ZoneGroupNumber,
+                        GroupName = inbound.Name,
                         GroupType = 1,
                         DealDay = dealDay,
-                        DealLifeSpan = dealLifeSpan
+                        DealLifeSpan = dealLifeSpan,
+                        CurrencyId = swapDealSetting.CurrencyId,
+                        Rate = inbound.Rate
                     };
                     saleProgressByGroupNb.Add(inbound.ZoneGroupNumber, dealInfo);
                 }
@@ -102,9 +112,12 @@ namespace TOne.WhS.Deal.Business
                         RemainingDaysToEnd = daysToEnd,
                         RemainingDaysToGrace = daysToGrace,
                         GroupNumber = outbound.ZoneGroupNumber,
+                        GroupName = outbound.Name,
                         GroupType = 2,
                         DealDay = dealDay,
-                        DealLifeSpan = dealLifeSpan
+                        DealLifeSpan = dealLifeSpan,
+                        CurrencyId = swapDealSetting.CurrencyId,
+                        Rate = outbound.Rate
                     };
                     costProgressByGroupNb.Add(outbound.ZoneGroupNumber, dealInfo);
                 }
@@ -134,7 +147,7 @@ namespace TOne.WhS.Deal.Business
             {
                 foreach (var dealInfo in kvp.Values)
                 {
-                    decimal expectedVolumeDailyInMin = (decimal) dealInfo.GroupVolumeInMinutes / dealInfo.DealLifeSpan;
+                    decimal expectedVolumeDailyInMin = (decimal)dealInfo.GroupVolumeInMinutes / dealInfo.DealLifeSpan;
                     decimal overallExpectedVolumeInMin = expectedVolumeDailyInMin * dealInfo.DealDay;
                     decimal weeklyExpectedVolumeInMin = expectedVolumeDailyInMin * 7;
 
@@ -148,13 +161,15 @@ namespace TOne.WhS.Deal.Business
                         RemainingDaysToEnd = dealInfo.RemainingDaysToEnd,
                         DaysTostart = dealInfo.DaysTostart,
                         GroupNumber = dealInfo.GroupNumber,
+                        GroupName = dealInfo.GroupName,
                         GroupType = dealInfo.GroupType,
-                        TodayProgressPerc =
-                            expectedVolumeDailyInMin > 0 ? (dealInfo.TodayProgressInMinutes / expectedVolumeDailyInMin) * 100 : 0,
-                        OverallProgressPerc =
-                            overallExpectedVolumeInMin > 0 ? (dealInfo.OverallProgressInMinutes / overallExpectedVolumeInMin) * 100 : 0,
-                        WeeklyProgressPerc =
-                            weeklyExpectedVolumeInMin > 0 ? (dealInfo.WeeklyProgressMinutes / weeklyExpectedVolumeInMin) * 100 : 0,
+                        TodayProgressPerc = expectedVolumeDailyInMin > 0 ? (dealInfo.TodayProgressInMinutes / expectedVolumeDailyInMin) * 100 : 0,
+                        OverallProgressPerc = overallExpectedVolumeInMin > 0 ? (dealInfo.OverallProgressInMinutes / overallExpectedVolumeInMin) * 100 : 0,
+                        WeeklyProgressPerc = weeklyExpectedVolumeInMin > 0 ? (dealInfo.WeeklyProgressMinutes / weeklyExpectedVolumeInMin) * 100 : 0,
+                        ReachedDuration = dealInfo.OverallProgressInMinutes,
+                        ReachedAmount = dealInfo.OverallProgressInMinutes * dealInfo.Rate,
+                        Currency = currencyManager.GetCurrencyName(dealInfo.CurrencyId),
+
 
                     };
                     dataRecords.Add(recordType);
@@ -165,13 +180,19 @@ namespace TOne.WhS.Deal.Business
 
         private DataRecordObject DataRecordObjectMapper(SwapDealProgressDataRecordType swapDealProgress)
         {
+             var carrierProfileId = carrierAccountManager.GetCarrierProfileId(swapDealProgress.CarrierAccountId);
+            var carrierName = carrierAccountManager.GetCarrierAccountName(swapDealProgress.CarrierAccountId);
+
             var swapDealProgressObject = new Dictionary<string, object>
             {
                 {"Deal", swapDealProgress.Deal},
                 {"DealBED", swapDealProgress.DealBED},
                 {"DealEED", swapDealProgress.DealEED},
-                {"CarrierAccount", swapDealProgress.CarrierAccountId},
+                {"CarrierAccount", swapDealProgress.CarrierAccountId },
+                {"ProfileId", carrierProfileId },
+                {"CarrierName", carrierName},
                 {"Group", swapDealProgress.GroupNumber},
+                {"GroupName", swapDealProgress.GroupName },
                 {"GroupType", swapDealProgress.GroupType},
                 {"TodayProgressPerc", swapDealProgress.TodayProgressPerc},
                 {"YesterdayProgressPerc", swapDealProgress.YesterdayProgressPerc},
@@ -179,7 +200,10 @@ namespace TOne.WhS.Deal.Business
                 {"OverallProgressPerc", swapDealProgress.OverallProgressPerc},
                 {"DaysToStart", swapDealProgress.DaysTostart},
                 {"RemainingDaysToEnd", swapDealProgress.RemainingDaysToEnd},
-                {"RemainingDaysToGrace", swapDealProgress.RemainingDaysToGrace}
+                {"RemainingDaysToGrace", swapDealProgress.RemainingDaysToGrace},
+                {"ReachedDuration",swapDealProgress.ReachedDuration },
+                {"ReachedAmount",swapDealProgress.ReachedAmount },
+                {"Currency",swapDealProgress.Currency},
             };
             return new DataRecordObject(new Guid("AB46069D-0FFC-4027-9CCF-BD1AF8EC91F7"), swapDealProgressObject);
         }
@@ -226,6 +250,7 @@ namespace TOne.WhS.Deal.Business
         public DateTime? DealEED { get; set; }
         public int CarrierAccountId { get; set; }
         public int GroupNumber { get; set; }
+        public string GroupName { get; set; }
         public int GroupVolumeInMinutes { get; set; }
         public decimal OverallProgressInMinutes { get; set; }
         public decimal TodayProgressInMinutes { get; set; }
@@ -237,6 +262,8 @@ namespace TOne.WhS.Deal.Business
         public int GroupType { get; set; }
         public int DealLifeSpan { get; set; }
         public int DealDay { get; set; }
+        public int CurrencyId { get; set; }
+        public decimal Rate { get; set; }
     }
 
     public class SwapDealProgressDataRecordType
@@ -245,6 +272,7 @@ namespace TOne.WhS.Deal.Business
         public DateTime DealBED { get; set; }
         public DateTime? DealEED { get; set; }
         public int CarrierAccountId { get; set; }
+        public string GroupName { get; set; }
         public int GroupNumber { get; set; }
         public int GroupType { get; set; }
         public decimal TodayProgressPerc { get; set; }
@@ -254,6 +282,12 @@ namespace TOne.WhS.Deal.Business
         public int DaysTostart { get; set; }
         public int RemainingDaysToEnd { get; set; }
         public int RemainingDaysToGrace { get; set; }
+        public decimal ReachedDuration { get; set; }
+        public decimal ReachedAmount { get; set; }
+        public int SumOfAttempts { get; set; }
+        public int SumOfSuccessfulAttempts { get; set; }
+        public string Currency { get; set; }
+
     }
 
     #endregion
