@@ -123,7 +123,12 @@ as (select * from (values
 
 ('VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates','VR_System_Administration: View'),
 ('VRCommon/SMSMessageTemplate/AddSMSMessageTemplate','VR_System_Administration: Manage'),
-('VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate','VR_System_Administration: Manage')
+('VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate','VR_System_Administration: Manage'),
+
+('VRCommon/VRNamespace/GetVRNamespace','VR_SystemConfiguration:View'),
+('VRCommon/VRNamespace/UpdateVRNamespace','VR_SystemConfiguration:Edit'),
+('VRCommon/VRNamespace/AddVRNamespace','VR_SystemConfiguration:Add'),
+('VRCommon/VRNamespace/GetFilteredVRNamespaces','VR_SystemConfiguration:View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -281,7 +286,8 @@ as (select * from (values
 ('8AC4B99E-01A0-41D1-AE54-09E679309086','Status Definitions','Status Definitions','#/view/Common/Views/StatusDefinition/StatusDefinitionManagement'							,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/StatusDefinition/GetFilteredStatusDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',23),
 ('52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD','Component Types','Component Types','#/view/Common/Views/VRComponentType/VRComponentTypeManagement'									,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRComponentType/GetFilteredVRComponentTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',24),
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26),
-('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
+('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+('32495D59-E401-4AF0-81A3-829F9C442036','Custom Namespaces','Custom Namespaces','#/view/Common/Views/VRNamespace/VRNamespaceManagement'										,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRNamespace/GetFilteredVRNamespaces',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',19)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -375,6 +381,7 @@ as (select * from (values
 
 ('8224B27C-C128-4150-A4E4-5E2034BB3A36','SQL Connection','SQL Connection','VRCommon_ConnectionConfig'																,'{"Editor":"vr-common-sqlconnection-editor"}'),
 ('5CD2AAC3-1C74-401F-8010-8B9B5FD9C011','Inter App','Inter App','VRCommon_ConnectionConfig'																			,'{"Editor":"vr-common-interapprestconnection-editor"}'),
+('071D54D2-463B-4404-8219-45FCD539FF01','Http Connection','Http Connection','VRCommon_ConnectionConfig'																,'{"Editor":"vr-common-httpconnection-editor"}'),
 
 ('4829119D-F86F-4A6C-A6C0-CDB3FC8274C1','VR Rest API','VR Rest API','VR_GenericData_DataStoreConfig'																,'{"Editor":"vr-genericdata-datastoresetting-restapi", "DataRecordSettingsEditor": "vr-genericdata-datarecordstoragesettings-restapi"}'),
 
@@ -533,7 +540,8 @@ as (select * from (values
 ('15A6CABA-4E0F-40E1-94BC-66B0E175611C','VR_Common_StatusDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_StatusDefinition_ViewHistoryItem"}'),
 ('32AF3865-AC51-48A0-A94A-89D62D66F062','VR_Common_StyleDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_StyleDefinition_ViewHistoryItem"}'),
 ('02628AEA-F6D9-4F64-8714-81ED3C3DC1E5','VR_Common_TimeZone','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_TimeZone_ViewHistoryItem"}'),
-('066CE724-CAE5-4FC6-887D-31314C277A9A','VR_Common_Region','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_Region_ViewHistoryItem"}')
+('066CE724-CAE5-4FC6-887D-31314C277A9A','VR_Common_Region','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_Region_ViewHistoryItem"}'),
+('92DCF52C-F8C0-4BAC-94A6-5D62B72B5267','VR_Common_VRNamespace','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Common_VRNamespace_ViewHistoryItem"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[UniqueName],[Settings]))
 merge	[logging].[LoggableEntity] as t
