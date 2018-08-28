@@ -1,73 +1,73 @@
-﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityCallHttpServiceController" size="medium">
-	<vr-modalbody>
-		<vr-form name="formEditActivity" vr-loader="scopeModel.isLoading">
-			<vr-tabs>
-				<vr-tab header="'Settings'">
+﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityCallHttpServiceController" size="xlarge">
+    <vr-modalbody>
+        <vr-form name="formEditActivity" vr-loader="scopeModel.isLoading">
+            <vr-tabs>
+                <vr-tab header="'Settings'">
 
-					<vr-row>
-						<vr-columns width="1/2row">
-							<vr-textbox value="scopeModel.serviceName" label="Title" isrequired="true"></vr-textbox>
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Action Path" isrequired="true" value="scopeModel.actionPath"></businessprocess-vr-workflow-activity-expressionbuilder>
-						</vr-columns>
-					</vr-row>
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.serviceName" label="Title" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Action Path" isrequired="true" value="scopeModel.actionPath"></businessprocess-vr-workflow-activity-expressionbuilder>
+                        </vr-columns>
+                    </vr-row>
 
-					<vr-row>
-						<vr-common-connection-selector normal-col-num="3" on-ready="scopeModel.onConnectionSelectorReady" hideremoveicon isrequired="true"></vr-common-connection-selector>
-						<vr-columns colnum="3">
-							<vr-select datasource="scopeModel.callHttpRetrySettingsEnums" datavaluefield="value" datatextfield="description"
-									   label="Retry Settings" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedCallHttpRetrySettings">
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Body Logic" value="scopeModel.buildBodyLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
-						</vr-columns>
-					</vr-row>
+                    <vr-row>
+                        <vr-common-connection-selector normal-col-num="3" on-ready="scopeModel.onConnectionSelectorReady" hideremoveicon isrequired="true"></vr-common-connection-selector>
+                        <vr-columns colnum="3">
+                            <vr-select datasource="scopeModel.callHttpRetrySettingsEnums" datavaluefield="value" datatextfield="description"
+                                       label="Retry Settings" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedCallHttpRetrySettings">
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Body Logic" value="scopeModel.buildBodyLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
+                        </vr-columns>
+                    </vr-row>
 
-					<vr-row>
-						<vr-columns colnum="3">
-							<vr-select datasource="scopeModel.callHttpServiceMethodEnums" datavaluefield="value" datatextfield="description"
-									   label="Method" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedCallHttpServiceMethod">
-						</vr-columns>
-						<vr-columns colnum="3">
-							<vr-select datasource="scopeModel.callHttpServiceMessageFormatEnums" datavaluefield="value" datatextfield="description"
-									   label="Message Format" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedCallHttpServiceMessageFormat">
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Response Logic" value="scopeModel.responseLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
-						</vr-columns>
-					</vr-row>
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <vr-select datasource="scopeModel.callHttpServiceMethodEnums" datavaluefield="value" datatextfield="description"
+                                       label="Method" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedCallHttpServiceMethod">
+                        </vr-columns>
+                        <vr-columns colnum="3">
+                            <vr-select datasource="scopeModel.callHttpServiceMessageFormatEnums" datavaluefield="value" datatextfield="description"
+                                       label="Message Format" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedCallHttpServiceMessageFormat">
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Response Logic" value="scopeModel.responseLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
+                        </vr-columns>
+                    </vr-row>
 
-					<vr-row>
-						<vr-columns colnum="3">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Is Succeeded" value="scopeModel.isSucceeded"></businessprocess-vr-workflow-activity-expressionbuilder>
-						</vr-columns>
-						<vr-columns colnum="3">
-							<vr-switch value="scopeModel.continueWorkflowIfCallFailed" label="Continue If Call Failed"></vr-switch>
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Error Logic" value="scopeModel.errorLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
-						</vr-columns>
-					</vr-row>
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Is Succeeded" value="scopeModel.isSucceeded"></businessprocess-vr-workflow-activity-expressionbuilder>
+                        </vr-columns>
+                        <vr-columns colnum="3">
+                            <vr-switch value="scopeModel.continueWorkflowIfCallFailed" label="Continue If Call Failed"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="Error Logic" value="scopeModel.errorLogic"></businessprocess-vr-workflow-activity-expressionbuilder>
+                        </vr-columns>
+                    </vr-row>
 
-				</vr-tab>
+                </vr-tab>
 
-				<vr-tab header="'Headers'" ng-show="true">
-					<businessprocess-vr-callhttpservice-headers-grid on-ready="scopeModel.onHeadersGridReady"></businessprocess-vr-callhttpservice-headers-grid>
-				</vr-tab>
+                <vr-tab header="'Headers'" ng-show="true">
+                    <businessprocess-vr-callhttpservice-headers-grid on-ready="scopeModel.onHeadersGridReady"></businessprocess-vr-callhttpservice-headers-grid>
+                </vr-tab>
 
-				<vr-tab header="'URL Parameters'" ng-show="true">
-					<businessprocess-vr-callhttpservice-urlparameters-grid on-ready="scopeModel.onURLParametersGridReady"></businessprocess-vr-callhttpservice-urlparameters-grid>
-				</vr-tab>
-			</vr-tabs>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditActivity"></vr-button>
-				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-			</div>
-		</vr-actionbar>
-	</div>
+                <vr-tab header="'URL Parameters'" ng-show="true">
+                    <businessprocess-vr-callhttpservice-urlparameters-grid on-ready="scopeModel.onURLParametersGridReady"></businessprocess-vr-callhttpservice-urlparameters-grid>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditActivity"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
 </div>

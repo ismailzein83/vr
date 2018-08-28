@@ -1,28 +1,28 @@
-﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivitySequenceController" size="large">
-	<vr-modalbody>
-		<vr-form name="formEditSequence" vr-loader="scopeModel.isLoading">
-			<vr-columns colnum="2">
-				<div style=" max-height: 78vh; overflow: auto;">
-                    <vr-section header="Activities">
+﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivitySequenceController" size="xlarge">
+    <vr-modalbody>
+        <vr-form name="formEditSequence" vr-loader="scopeModel.isLoading" class="vr-workflow">
+            <vr-columns colnum="2" medium-spacing>
+                <div style=" max-height: 78vh; overflow: auto;">
+                    <vr-section header="Toolbox">
                         <vr-toolbox datasource="scopeModel.activityConfigs" leftalignment verticallayout datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropsetting.groupCorrelation.getGroupName()}}"></vr-toolbox>
                     </vr-section>
-				</div>
-			</vr-columns>
-			<vr-columns colnum="10">
-				<div style=" max-height: 78vh; overflow: auto;">
+                </div>
+            </vr-columns>
+            <vr-columns colnum="10" medium-spacing>
+                <div style=" max-height: 78vh; overflow: auto;">
                     <vr-section header="Sequence">
                         <businessprocess-vr-workflowactivity-sequence on-ready="scopeModel.onSequenceDirectiveReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflowactivity-sequence>
                     </vr-section>
-				</div>
-			</vr-columns>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditSequence"></vr-button>
-				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-			</div>
-		</vr-actionbar>
-	</div>
+                </div>
+            </vr-columns>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditSequence"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
 </div>

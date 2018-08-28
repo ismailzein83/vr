@@ -1,40 +1,40 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivitySubprocessController" size="large">
-	<vr-modalbody>
-		<vr-form name="formEditSubprocess" vr-loader="scopeModel.isLoading">
-			<vr-row>
-				<businessprocess-vr-workflow-selector selectedvalues="scopeModel.selectedWorkflow" on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon
-													  onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"></businessprocess-vr-workflow-selector>
-				<vr-columns ng-if="scopeModel.hasInArguments" colnum="{{scopeModel.hasOutArguments?'4':'8'}}" haschildcolumns>
-					<vr-section header="In Arguments">
-						<vr-datagrid datasource="scopeModel.inArguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
-							<vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-							<vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
+    <vr-modalbody>
+        <vr-form name="formEditSubprocess" vr-loader="scopeModel.isLoading">
+            <vr-row>
+                <businessprocess-vr-workflow-selector selectedvalues="scopeModel.selectedWorkflow" on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon
+                                                      onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"></businessprocess-vr-workflow-selector>
+                <vr-columns ng-if="scopeModel.hasInArguments" colnum="{{scopeModel.hasOutArguments?'4':'8'}}"  medium-spacing >
+                    <vr-section header="In Arguments">
+                        <vr-datagrid datasource="scopeModel.inArguments" on-ready="scopeModel.onInArgumentsGridReady" hidegridmenu>
+                            <vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
                                 <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
                                                                                         value="dataItem.value" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
-							</vr-datagridcolumn>
-						</vr-datagrid>
-					</vr-section>
-				</vr-columns>
-				<vr-columns ng-if="scopeModel.hasOutArguments" colnum="{{scopeModel.hasInArguments?'4':'8'}}" haschildcolumns>
-					<vr-section header="Out Arguments">
-						<vr-datagrid datasource="scopeModel.outArguments" on-ready="scopeModel.onOutArgumentsGridReady" hidegridmenu>
-							<vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
-							<vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
-								<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
-																						value="dataItem.value" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
-							</vr-datagridcolumn>
-						</vr-datagrid>
-					</vr-section>
-				</vr-columns>
-			</vr-row>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
-				<vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditSubprocess"></vr-button>
-				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-			</div>
-		</vr-actionbar>
-	</div>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                </vr-columns>
+                <vr-columns ng-if="scopeModel.hasOutArguments" colnum="{{scopeModel.hasInArguments?'4':'8'}}"  medium-spacing>
+                    <vr-section header="Out Arguments">
+                        <vr-datagrid datasource="scopeModel.outArguments" on-ready="scopeModel.onOutArgumentsGridReady" hidegridmenu>
+                            <vr-datagridcolumn headertext="'Name'" field="'name'" type="'Text'" disablesorting="true"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Value'" type="'Text'" disablesorting="true">
+                                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.context.getParentVariables" getworkflowarguments="viewScope.scopeModel.context.getWorkflowArguments"
+                                                                                        value="dataItem.value" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditSubprocess"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
 </div>

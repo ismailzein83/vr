@@ -1,16 +1,16 @@
-﻿<vr-row removeline>
-	<vr-columns colnum="2">
-		<div style=" max-height: 78vh; overflow: auto;">
-			<vr-section header="Toolbox">
-				<vr-toolbox datasource="scopeModel.activityConfigs" verticallayout leftalignment datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
-			</vr-section>
-		</div>
-	</vr-columns>
-	<vr-columns colnum="10">
-		<div style=" max-height: 78vh; overflow: auto;">
-			<vr-section header="Workflow">
-				<businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting" single-activity="true"></businessprocess-vr-workflow-containerv2>
-			</vr-section>
-		</div>
-	</vr-columns>
+﻿<vr-row removeline class="vr-workflow">
+    <vr-columns colnum="2" medium-spacing>
+        <div style=" max-height: 78vh; overflow: auto;">
+            <vr-section header="Toolbox">
+                <vr-toolbox datasource="scopeModel.activityConfigs" verticallayout leftalignment datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
+            </vr-section>
+        </div>
+    </vr-columns>
+    <vr-columns colnum="10" medium-spacing>
+        <div style=" max-height: 78vh; overflow: auto;">
+            <vr-section header="Workflow">
+                <businessprocess-vr-workflow-containerv2 on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting" single-activity="true"></businessprocess-vr-workflow-containerv2>
+            </vr-section>
+        </div>
+    </vr-columns>
 </vr-row>
