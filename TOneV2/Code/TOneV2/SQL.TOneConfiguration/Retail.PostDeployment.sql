@@ -141,7 +141,6 @@ as (select * from (values
 ('B3D9B0A4-B751-4544-8A7A-6764687059ED','Retail_BE_DataRecordFieldFormula_ParentAccount','Retail Parent Account','VR_Generic_DataRecordFieldFormula','{"Editor":"retail-be-datarecordtypefields-formula-parentaccount"}'),
 ('fb3b7f00-0d58-4a11-9be8-dcd9a9212c58','ChangeStatus','Change Status','Retail_BE_AccountProvisionerPostAction','{"Editor" : "retail-be-actionbpdefinition-definitionpostaction-changestatus"}'),
 ('889c2da2-5bba-4316-a245-521e85e3fbe8','RevertStatus','Revert Status','Retail_BE_AccountProvisionerPostAction','{"Editor" : "retail-be-actionbpdefinition-definitionpostaction-revertstatus"}'),
-('9EEBA2C1-0EC9-4DE0-B9E1-755A1D8CE0AA','Data Record Source','Data Record Source','VR_Analytic_DRSearchPageSubviewDefinitionSettingsConfig','{"Editor":"vr-analytic-datarecordsource-subviewdefinitionsettings"}'),
 ('95183b89-056a-410a-b920-91ec6a134f82','Portal Account Extra Field','Portal Account Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig','{"Editor":"retail-be-accountextrafield-portalaccount"}'),
 
 ('b573969d-05a2-4c92-a856-1f846557520c','Topup','Top Up','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-topup"}'),
