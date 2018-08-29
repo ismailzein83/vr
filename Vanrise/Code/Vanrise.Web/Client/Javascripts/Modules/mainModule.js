@@ -20,10 +20,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             if ($(this).prop('id') != $(clickedPanel).prop('id'))
                 $(this).removeClass('focus-panel');
         });
-        if ($(clickedPanel).hasClass('focus-panel'))
-            $(clickedPanel).removeClass('focus-panel');
-        else
-            $(clickedPanel).addClass('focus-panel');
+        $(clickedPanel).addClass('focus-panel');
         e.stopPropagation();
     };
 

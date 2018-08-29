@@ -4424,6 +4424,7 @@ span.option-marketprice {
 
 .vr-workflow .panel-vr.focus-panel , .panel-vr.vr-clickable-panel.focus-panel {
    border: 2px solid #90afe4;
+   border-radius:4px;
 }
 
 .vr-workflow .panel-vr.focus-panel > .panel-heading , .panel-vr.vr-clickable-panel.focus-panel > .panel-heading{
