@@ -42,6 +42,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             if (nonEmptyFilter != null)
                 return null;
 
+            StringRecordFilter stringRecordFilter = context.InitialFilter as StringRecordFilter;
+            if (stringRecordFilter != null)
+            {
+                var fieldValue = stringRecordFilter.Value;
+                string key = DataEncryptionKeyManager.GetLocalTokenDataDecryptionKey();
+                if (Decrypt)
+                {
+                    fieldValue = Cryptography.Encrypt(fieldValue, key);
+                }
+                else
+                {
+                    fieldValue = Cryptography.Decrypt(fieldValue, key);
+                }
+                return new StringRecordFilter()
+                {
+                    FieldName = FieldName,
+                    Value = fieldValue,
+                    CompareOperator = StringRecordFilterOperator.Equals
+                };
+            }
+
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
     }
