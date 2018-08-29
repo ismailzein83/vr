@@ -84,12 +84,12 @@
                 };
 
                 function buildGenericBEViewPayload() {
-
                     var payload = {
+                        parentBEEntity: genericBusinessEntity,
                         genericBEGridView: genericBEGridView,
                         businessEntityDefinitionId: businessEntityDefinitionId,
-                        genericBusinessEntityId: idFieldType != undefined? genericBusinessEntity.FieldValues[idFieldType.Name].Value :undefined
-                    };
+                        genericBusinessEntityId: idFieldType != undefined ? genericBusinessEntity.FieldValues[idFieldType.Name].Value : undefined
+                    };                   
                     return payload;
                 }
 

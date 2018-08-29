@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeDirective
         {
-            get { return ""; }
+            get { return "vr-genericdata-genericbe-genericbegridview-runtime"; }
         }
         public override bool DoesUserHaveAccess(IGenericBEViewDefinitionCheckAccessContext context)
         {
