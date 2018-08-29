@@ -230,7 +230,10 @@ namespace BPMExtended.Main.Business
         private void UpdateContactCustomerId(Guid contactId, string customerId)
         {
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
-            var update = new Update(connection, "Contact").Set("StCustomerId", Func.IsNull(Column.SourceColumn("StCustomerId"), Column.Parameter(customerId)));
+            //var update = new Update(connection, "Contact").Set("StCustomerId", Func.IsNull(Column.SourceColumn("StCustomerId"), Column.Parameter(contactId)));
+            var update = new Update(connection, "Contact").Set("StCustomerId", Column.Parameter(customerId))
+                .Where("Id").IsEqual(Column.Parameter(contactId));
+            update.Execute();
         }
 
         #endregion
