@@ -13,6 +13,20 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         Waves.displayEffect();
 
     }
+
+    $rootScope.addFocusPanelClass = function (e) {
+        var clickedPanel = e.currentTarget;
+        $('.panel-vr').each(function (index) {
+            if ($(this).prop('id') != $(clickedPanel).prop('id'))
+                $(this).removeClass('focus-panel');
+        });
+        if ($(clickedPanel).hasClass('focus-panel'))
+            $(clickedPanel).removeClass('focus-panel');
+        else
+            $(clickedPanel).addClass('focus-panel');
+        e.stopPropagation();
+    };
+
     $rootScope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
     });

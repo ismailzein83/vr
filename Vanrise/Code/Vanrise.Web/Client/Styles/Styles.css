@@ -4422,13 +4422,17 @@ span.option-marketprice {
     margin-top: 5px ;
 }
 
+.vr-workflow .panel-vr.focus-panel , .panel-vr.vr-clickable-panel.focus-panel {
+   border: 2px solid #90afe4;
+}
 
+.vr-workflow .panel-vr.focus-panel > .panel-heading , .panel-vr.vr-clickable-panel.focus-panel > .panel-heading{
+    top:unset;
+}
 .vr-workflow .fieldset-vr {
      margin-top: unset; 
 }
-/*.vr-workflow .panel-vr:focus .panel-body  {
-    border: 2px solid #000;
-}*/
+
 .vr-workflow .panel-vr .panel-body {
     padding: 5px;
 }

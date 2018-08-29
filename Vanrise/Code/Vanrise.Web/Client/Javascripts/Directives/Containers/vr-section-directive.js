@@ -19,12 +19,17 @@ app.directive('vrSection', ['UtilsService','VRLocalizationService', function (Ut
             if (tAttrs.level != undefined && tAttrs.level == "2")
                 classlevel = " panel-vr-child ";
             if(tAttrs.level != undefined && tAttrs.level == "2" && tAttrs.light!=undefined)
-              classlevel = "panel-vr-child light";
-            var expandname = 'expanded_' + UtilsService.replaceAll(UtilsService.guid(), '-', '');
-            var newElement = '<div class="panel-primary panel-vr ' + classlevel + '" >'
+                classlevel = "panel-vr-child light";
+            var sectionId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+            var expandname = 'expanded_' + sectionId;
+            var focusClass = "";
+            if (tAttrs.focusonclick != undefined) {
+                focusClass = "vr-clickable-panel";
+            }
+            var newElement = '<div ng-click="$root.addFocusPanelClass($event)" id="' + sectionId + '" class="panel-primary panel-vr ' + classlevel + ' ' + focusClass + '" >'
                             + '<div class="panel-heading" ng-init="' + expandname + '=' + expanded + '" expanded="{{' + expandname + '}}"><label><span  class="hand-cursor collapsible-icon glyphicon " ng-show="' + collapsible + '" ng-click="' + expandname + '=!' + expandname + '" ng-class="' + expandname + '?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span>' + title + '</label></div>'
                             + '<div class="panel-body" ng-show="' + expandname + '">' + tElement.html() + '</div></div>';
-            tElement.html(newElement);
+            tElement.html(newElement);           
         }
 
     };

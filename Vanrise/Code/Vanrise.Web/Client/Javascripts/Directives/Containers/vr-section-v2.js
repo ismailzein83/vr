@@ -19,12 +19,17 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 			$scope.collapsible = $attrs.collapsible != undefined;
 			if ($attrs.level != undefined && $attrs.level == "2")
 				$scope.classlevel = " panel-vr-child ";
-			$scope.expandname = 'expanded_' + UtilsService.replaceAll(UtilsService.guid(), '-', '');
+			$scope.sectionId = UtilsService.replaceAll(UtilsService.guid(), '-', '');
+			$scope.expandname = 'expanded_' + $scope.sectionId;
 		},
 		controllerAs: 'sectionCtrl',
 		bindToController: true,
 		template: function (attrs) {
-			var htmlTempalte = '<div class="panel-primary panel-vr" ng-class="classlevel" >'
+		    var focusClass = "";
+		    if (attrs.focusonclick != undefined) {
+		        focusClass = "vr-clickable-panel";
+		    }
+		    var htmlTempalte = '<div class="panel-primary panel-vr ' + focusClass + '" id="{{sectionId}}" ng-click="$root.addFocusPanelClass($event)" ng-class="classlevel" >'
 				+ '<div class="panel-heading" ng-init="expandname=true" expanded="{{expandname}}">'
 				+ '<span class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon" ng-show="dragable" ></span>'
 				+ '<span style="padding-left: 4px;" class="hand-cursor collapsible-icon glyphicon " ng-show="collapsible" ng-click=" expandname =!expandname " ng-class=" expandname ?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span><label>{{header}}</label>'
