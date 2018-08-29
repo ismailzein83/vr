@@ -454,7 +454,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
             case "Comment":
                 return {
                     text: "Comment",
-                    class: "glyphicon glyphicon-comment"
+                    class: "glyphicon glyphicon-circle-arrow-right"
                 };
 
         }

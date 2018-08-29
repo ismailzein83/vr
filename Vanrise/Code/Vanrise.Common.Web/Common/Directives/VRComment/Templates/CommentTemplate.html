@@ -1,74 +1,12 @@
-﻿<style>
-    .vr-comment {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        padding: 5px;
-        border-radius: 4px;
-    }
-
-        .vr-comment .vr-comment-header {
-            display: inline-block;
-            flex: 1;
-            text-decoration: underline;
-            font-weight: bold;
-        }
-
-        .vr-comment .vr-comment-body {
-            display: inline-flex;
-            width: 100%;
-            padding-left: 10px;
-            white-space: normal;
-            text-overflow: ellipsis;
-            width: 100%;
-            overflow: hidden;
-        }
-
-    .action-link:focus {
-        outline: none !important;
-    }
-
-    .vr-comment .vr-comment-body.full-content {
-        height: auto !important;
-        max-height: unset !important;
-    }
-
-    .vr-comment .vr-comment-footer {
-        display: inline-flex;
-        font-size: 10px;
-        flex: 1;
-        flex-direction: row-reverse;
-    }
-
-    /* Put your css in here */
-    .showless {
-        position: relative;
-    }
-
-        .showless .content {
-            overflow: hidden;
-            transition: all linear 0.5s;
-            -webkit-transition: all linear 0.5s;
-        }
-
-        .showless .trigger {
-            display: inline-block;
-            position: absolute;
-            right: 10px;
-            bottom: 1px;
-            cursor: pointer !important;
-            color: #00adef;
-        }
-</style>
-<vr-row>
+﻿<vr-row>
     <vr-columns width="fullrow">
         <vr-row>
             <vr-columns colnum="12">
-                <div style="display:inline-block;width:calc(100% - 30px)">
+                <div class="comment-editor">
                     <vr-textarea value="scopeModel.newComment" rows="2" on-ready="scopeModel.onCommentReady" isrequired="true"></vr-textarea>
                 </div>
-                <div style="display:inline-block;width:30px; position:absolute;transform:translate(0,-50%);top:50%">
-                    <a href="" ng-click="scopeModel.newComment ? scopeModel.addcomment() : '' " class="action-link">
+                <div class="add-comment-container">
+                    <a href="" ng-click="scopeModel.newComment ? scopeModel.addcomment() : '' " class="vr-custombutton">
                         <vr-button type="Comment" data-onclick="" vr-disabled="!scopeModel.newComment" standalone></vr-button>
                     </a>
                 </div>
@@ -93,11 +31,12 @@
                     <vr-datagridcolumn>
                         <div class="vr-comment">
                             <div class="vr-comment-body" ng-class="dataItem.fullView ? 'full-content' : ''">
-                                <div style="word-wrap: break-word;display: inline-block; width: 100%;">
+                                <div class="expandable-content-wrapper">
                                     <vr-expandablecontent>
-                                        <p style="width:calc(100% - 70px);white-space: pre-wrap;" ng-bind="dataItem.Content"></p>
+                                        <p class="expandable-content-container" ng-bind="dataItem.Content"></p>
                                     </vr-expandablecontent>
                                 </div>
+
                             </div>
                             <div class="vr-comment-footer">By: {{dataItem.CreatedByDescription}} At: {{dataItem.CreatedTimeDescription}}</div>
                         </div>
