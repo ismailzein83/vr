@@ -1743,6 +1743,7 @@ loader .outer-loader {
 
 		.panel-vr > .panel-heading[expanded="false"] {
 			border-bottom: 1px solid #ddd;
+            margin-bottom:unset;
 		}
 
 		.panel-vr > .panel-heading label {
@@ -4430,6 +4431,7 @@ span.option-marketprice {
 .vr-workflow .panel-vr.focus-panel > .panel-heading , .panel-vr.vr-clickable-panel.focus-panel > .panel-heading{
     top:unset;
 }
+
 .vr-workflow .fieldset-vr {
      margin-top: unset; 
 }
