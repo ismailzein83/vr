@@ -14,12 +14,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
     {
         #region Properties/Ctor
 
-        private static Dictionary<string, string> _mapper = new Dictionary<string, string>();
+        private static Dictionary<string, string> s_mapper = new Dictionary<string, string>();
+
+        public Dictionary<Guid, Type> InputArgumentTypeByDefinitionId { get; set; }
 
         static BPInstanceDataManager()
         {
-            _mapper.Add("ProcessInstanceID", "ID");
-            _mapper.Add("StatusDescription", "ExecutionStatus");
+            s_mapper.Add("ProcessInstanceID", "ID");
+            s_mapper.Add("StatusDescription", "ExecutionStatus");
         }
 
         public BPInstanceDataManager()
@@ -312,11 +314,21 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus,
             int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId, Guid? taskId)
         {
+            bool serializeInputArgumentsWithoutType = false;
+            if (InputArgumentTypeByDefinitionId.ContainsKey(definitionId))
+                serializeInputArgumentsWithoutType = true;
+
+            string serializedInputArguments = null;
+            if (inputArguments != null)
+                serializedInputArguments = Serializer.Serialize(inputArguments, serializeInputArgumentsWithoutType);
+
+            string serializedCompletionNotifier = null;
+            if (completionNotifier != null)
+                serializedCompletionNotifier = Serializer.Serialize(completionNotifier);
+
             object processInstanceId;
-            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId,
-                inputArguments != null ? Serializer.Serialize(inputArguments) : null,
-                completionNotifier != null ? Serializer.Serialize(completionNotifier) : null,
-                (int)executionStatus, initiatorUserId, entityId, viewInstanceRequiredPermissionSetId, taskId) > 0)
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, serializedInputArguments, serializedCompletionNotifier, (int)executionStatus,
+                initiatorUserId, entityId, viewInstanceRequiredPermissionSetId, taskId) > 0)
                 return (long)processInstanceId;
             else
                 return 0;
@@ -522,7 +534,13 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
 
             string inputArg = reader["InputArgument"] as string;
             if (!String.IsNullOrWhiteSpace(inputArg))
-                instance.InputArgument = Serializer.Deserialize(inputArg) as BaseProcessInputArgument;
+            {
+                Type inputArgumentType;
+                if (InputArgumentTypeByDefinitionId.TryGetValue(instance.DefinitionID, out inputArgumentType))
+                    instance.InputArgument = Serializer.Deserialize(inputArg, inputArgumentType).CastWithValidate<BaseProcessInputArgument>("bpInstance.InputArgument", instance.DefinitionID);
+                else
+                    instance.InputArgument = Serializer.Deserialize(inputArg).CastWithValidate<BaseProcessInputArgument>("bpInstance.InputArgument", instance.DefinitionID);
+            }
 
             string completionNotifier = reader["CompletionNotifier"] as string;
             if (!string.IsNullOrWhiteSpace(completionNotifier))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -186,6 +187,26 @@ namespace Vanrise.BusinessProcess.Business
                });
         }
 
+        public Dictionary<Guid, Type> GetInputArgumentTypeByDefinitionId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<BPDefinitionWorkflowCacheManager>().GetOrCreateObject("GetInputArgumentTypeByDefinitionId",
+               () =>
+               {
+                   Dictionary<Guid, Type> inputArgumentTypeByDefinitionId = new Dictionary<Guid, Type>();
+
+                   IEnumerable<BPDefinition> bpDefinitions = this.GetBPDefinitions();
+                   foreach (var bpDefinition in bpDefinitions)
+                   {
+                       if (!bpDefinition.VRWorkflowId.HasValue)
+                           continue;
+
+                       inputArgumentTypeByDefinitionId.Add(bpDefinition.BPDefinitionID, Helper.GetInputArgumentType(bpDefinition));
+                   }
+
+                   return inputArgumentTypeByDefinitionId;
+               });
+        }
+
         #region Security
 
         public bool DoesUserHaveViewAccessInManagement(int userId)
@@ -327,9 +348,9 @@ namespace Vanrise.BusinessProcess.Business
 
         #endregion
 
-        #region Private Classes
+        #region Internal/Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
             object _updateHandle;
@@ -337,6 +358,18 @@ namespace Vanrise.BusinessProcess.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return dataManager.AreBPDefinitionsUpdated(ref _updateHandle);
+            }
+        }
+
+        internal class BPDefinitionWorkflowCacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            DateTime? _bpDefinitionCacheLastCheck;
+            DateTime? _vrWorkflowCacheLastCheck;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref _bpDefinitionCacheLastCheck)
+                       | Vanrise.Caching.CacheManagerFactory.GetCacheManager<VRWorkflowManager.CacheManager>().IsCacheExpired(ref _vrWorkflowCacheLastCheck);
             }
         }
 

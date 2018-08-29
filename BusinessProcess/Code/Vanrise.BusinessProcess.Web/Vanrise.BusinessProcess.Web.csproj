@@ -167,6 +167,7 @@
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
+    <Compile Include="Controllers\DynamicAPI.cs" />
     <Compile Include="Controllers\VRWorkflowController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\SchedulerTaskModel.cs" />

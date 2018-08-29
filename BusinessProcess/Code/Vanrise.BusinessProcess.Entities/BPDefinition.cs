@@ -23,6 +23,7 @@ namespace Vanrise.BusinessProcess.Entities
 
     public class BPConfiguration
     {
+        public string ProcessTitle { get; set; }
         public int? MaxConcurrentWorkflows { get; set; }
         public string Url { get; set; }
         public string ScheduleTemplateURL { get; set; }

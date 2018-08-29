@@ -25,11 +25,11 @@ namespace Vanrise.BusinessProcess
         static int s_archiveBeforeNbOfDays;
         static int s_nbOfInstancesToArchivePerQuery;
 
-        BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
-        IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-        IBPEventDataManager _bpEventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
-        RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
         UserManager _userManager = new UserManager();
+        BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
+        BPInstanceManager _bpInstanceManager = new BPInstanceManager();
+        RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
+        IBPEventDataManager _bpEventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
 
         static BPRegulatorRuntimeService()
         {
@@ -51,7 +51,7 @@ namespace Vanrise.BusinessProcess
                 if (bpServiceInstances == null || bpServiceInstances.Count == 0)
                     return;
                 AssignPendingInstancesToServices(bpServiceInstances);
-                _bpInstanceDataManager.ArchiveInstances(BPInstanceStatusAttribute.GetClosedStatuses(), DateTime.Today.AddDays(-s_archiveBeforeNbOfDays), s_nbOfInstancesToArchivePerQuery);
+                _bpInstanceManager.ArchiveInstances(BPInstanceStatusAttribute.GetClosedStatuses(), DateTime.Today.AddDays(-s_archiveBeforeNbOfDays), s_nbOfInstancesToArchivePerQuery);
 
                 TryTriggerSubscribedBPs();
             });
@@ -82,7 +82,7 @@ namespace Vanrise.BusinessProcess
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances)
         {
-            var pendingInstances = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses);
+            var pendingInstances = _bpInstanceManager.GetPendingInstancesInfo(s_pendingStatuses);
             if (pendingInstances != null && pendingInstances.Count > 0)
             {
                 Dictionary<long, BPInstance> pendingInstancesDict = pendingInstances.ToDictionary(itm => itm.ProcessInstanceID, itm => itm);
@@ -208,7 +208,7 @@ namespace Vanrise.BusinessProcess
                                 TrackingMessage = canRunBPInstanceContext.Reason,
                                 EventTime = DateTime.Now
                             });
-                            _bpInstanceDataManager.UpdateInstanceLastMessage(pendingInstanceInfo.ProcessInstanceID, canRunBPInstanceContext.Reason);
+                            _bpInstanceManager.UpdateInstanceLastMessage(pendingInstanceInfo.ProcessInstanceID, canRunBPInstanceContext.Reason);
                         }
                         if (pendingInstanceInfo.Status != BPInstanceStatus.Postponed)
                         {
@@ -219,7 +219,7 @@ namespace Vanrise.BusinessProcess
                 }
 
                 if (pendingInstancesToUpdate.Count > 0)
-                    _bpInstanceDataManager.UpdateServiceInstancesAndAssignmentStatus(pendingInstancesToUpdate);
+                    _bpInstanceManager.UpdateServiceInstancesAndAssignmentStatus(pendingInstancesToUpdate);
 
                 if (instanceCancellationRequests.Count > 0)
                     SendCancellationRequests(serviceInstancesInfo, instanceCancellationRequests);

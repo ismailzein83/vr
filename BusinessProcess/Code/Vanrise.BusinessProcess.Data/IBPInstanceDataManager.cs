@@ -7,6 +7,8 @@ namespace Vanrise.BusinessProcess.Data
 {
     public interface IBPInstanceDataManager : IDataManager
     {
+        Dictionary<Guid, Type> InputArgumentTypeByDefinitionId { get; set; }
+
         BPInstance GetBPInstance(long bpInstanceId, bool getFromArchive);
 
         List<BPInstance> GetFilteredBPInstances(BPInstanceQuery query, List<int> grantedPermissionSetIds, bool getFromArchive);
@@ -30,7 +32,6 @@ namespace Vanrise.BusinessProcess.Data
         void UpdateInstanceLastMessage(long processInstanceId, string message);
 
         long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId, Guid? taskId);
-
 
         void UpdateServiceInstancesAndAssignmentStatus(List<BPInstance> pendingInstancesToUpdate);
 
