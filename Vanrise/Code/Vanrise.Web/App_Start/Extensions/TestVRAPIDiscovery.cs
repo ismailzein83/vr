@@ -44,15 +44,17 @@ namespace Vanrise.Web.App_Start.Extensions
             return output.OutputAssembly.GetType("Vanrise.DynamicControllers_" + namespaceName + ".VRDynGenController");
         }
 
-        public override bool IsCacheExpired(ref DateTime LastCheckTime)
+        public override bool IsCacheExpired(ref DateTime? lastCheckTime)
         {
-            if ((DateTime.Now - LastCheckTime).TotalSeconds >= 20)
+            if (!lastCheckTime.HasValue || (DateTime.Now - lastCheckTime.Value).TotalSeconds >= 20)
             {
-                LastCheckTime = DateTime.Now;
+                lastCheckTime = DateTime.Now;
                 return true;
             }
             else
+            {
                 return false;
+            }
         }
 
         public override System.Collections.Generic.List<string> GetModuleNames(IVRAPIDiscoveryGetModuleNamesContext context)

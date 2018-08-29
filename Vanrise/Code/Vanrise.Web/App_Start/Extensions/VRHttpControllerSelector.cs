@@ -7,6 +7,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Dispatcher;
 using Vanrise.Entities;
 using Vanrise.Common;
+using System.Collections.Concurrent;
 
 namespace Vanrise.Web
 {
@@ -82,15 +83,17 @@ namespace Vanrise.Web
 
         private class APIDiscoveryState
         {
+            Guid _apiDiscoveryStateId;
             HttpConfiguration _configuration;
             VRAPIDiscovery _apiDiscovery;
-
             CacheManager _cacheManager;
+
             public APIDiscoveryState(HttpConfiguration configuration, VRAPIDiscovery apiDiscovery)
             {
+                _apiDiscoveryStateId = Guid.NewGuid();
                 _configuration = configuration;
                 _apiDiscovery = apiDiscovery;
-                _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+                _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>(_apiDiscoveryStateId);
                 _cacheManager._apiDiscovery = apiDiscovery;
             }
 
@@ -104,7 +107,7 @@ namespace Vanrise.Web
 
             Dictionary<string, VRHttpControllerDescriptor> GetCachedControllerDescriptors()
             {
-                return _cacheManager.GetOrCreateObject("GetCachedControllerDescriptors", () =>
+                return _cacheManager.GetOrCreateObject("GetCachedControllerDescriptors", _apiDiscoveryStateId, () =>
                 {
                     Dictionary<string, VRHttpControllerDescriptor> controllerDescriptors = new System.Collections.Generic.Dictionary<string, VRHttpControllerDescriptor>();
                     List<Type> controllerTypes = _apiDiscovery.GetControllerTypes(null);
@@ -122,20 +125,24 @@ namespace Vanrise.Web
                 });
             }
 
-            private class CacheManager : Vanrise.Caching.BaseCacheManager
+            private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
             {
-                DateTime _lastCheckTime;
-
                 internal VRAPIDiscovery _apiDiscovery;
 
-                protected override bool ShouldSetCacheExpired()
+                ConcurrentDictionary<Guid, DateTime?> _lastCheckTimeByAPIDiscoveryStateId = new ConcurrentDictionary<Guid, DateTime?>();
+
+                protected override bool ShouldSetCacheExpired(Guid parameter)
                 {
-                    return _apiDiscovery.IsCacheExpired(ref _lastCheckTime);
+                    DateTime? _lastCheckTime;
+                    _lastCheckTimeByAPIDiscoveryStateId.TryGetValue(parameter, out _lastCheckTime);
+                    bool isCacheExpired = _apiDiscovery.IsCacheExpired(ref _lastCheckTime);
+                    _lastCheckTimeByAPIDiscoveryStateId.AddOrUpdate(parameter, _lastCheckTime, (key, existingHandle) => _lastCheckTime);
+
+                    return isCacheExpired;
                 }
             }
         }
 
         #endregion
-
     }
 }

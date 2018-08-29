@@ -12,7 +12,7 @@ namespace Vanrise.Entities
 
         public abstract List<Type> GetControllerTypes(IVRAPIDiscoveryGetControllerTypesContext context);
 
-        public abstract bool IsCacheExpired(ref DateTime LastCheckTime);
+        public abstract bool IsCacheExpired(ref DateTime? lastCheckTime);
     }
 
     public interface IVRAPIDiscoveryGetModuleNamesContext

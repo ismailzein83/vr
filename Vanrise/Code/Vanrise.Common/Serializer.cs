@@ -22,8 +22,6 @@ namespace Vanrise.Common
             TypeNameHandling = TypeNameHandling.None
         };
 
-       
-        
         public static string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj, Formatting.None, s_Settings);
@@ -31,7 +29,8 @@ namespace Vanrise.Common
 
         public static string Serialize(object obj, bool withoutType)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.None, s_SettingsWithoutType);
+            JsonSerializerSettings jsonSerializerSettings = withoutType ? s_SettingsWithoutType : s_Settings;
+            return JsonConvert.SerializeObject(obj, Formatting.None, jsonSerializerSettings);
         }
 
         public static T Deserialize<T>(string serialized)
@@ -54,6 +53,5 @@ namespace Vanrise.Common
                 return null;
             return JsonConvert.DeserializeObject(serialized, type, s_Settings);
         }
-
     }
 }
