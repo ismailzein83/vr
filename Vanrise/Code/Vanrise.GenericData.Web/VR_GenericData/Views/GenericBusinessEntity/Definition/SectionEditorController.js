@@ -40,7 +40,7 @@
                     return null;
                 }
                 else if (UtilsService.contains(exitingSections, $scope.scopeModal.sectionValue.toLowerCase())) {
-                    return "Same name exist.";
+                    return "Same name exists.";
                 }
                 return null;
             };

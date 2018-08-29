@@ -49,7 +49,7 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModal.onDirectiveReady = function (api) {
@@ -104,7 +104,7 @@
                 if (isEditMode && $scope.scopeModal.name.toLowerCase() == dataRecordTypeEntity.RecordName.toLowerCase())
                     return null;
                 else if (UtilsService.getItemIndexByVal(existingRecordNames, $scope.scopeModal.name.toLowerCase(), 'RecordName') != -1)
-                    return 'Same Name Exist.';
+                    return 'Same name exists.';
                 return null;
             }
             return null;

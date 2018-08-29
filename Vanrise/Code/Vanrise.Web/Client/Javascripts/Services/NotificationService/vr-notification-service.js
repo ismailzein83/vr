@@ -194,13 +194,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case AuthenticateOperationResultEnum.UserNotExists.value:
                 showError("Login Failed. User does not exist"); break;
             case AuthenticateOperationResultEnum.Failed.value:
-                showError("Login Failed. An error occurred"); break;
+                showError("Login Failed. An error has occurred"); break;
             case AuthenticateOperationResultEnum.ActivationNeeded.value:
                 onValidationNeeded();
                 showError("Activation Needed"); break;
             case AuthenticateOperationResultEnum.PasswordExpired.value:
                 onExpiredPasswordChangeNeeded();
-                showError("Password has been expired"); break;
+                showError("Password has expired"); break;
         }
         return false;
     }

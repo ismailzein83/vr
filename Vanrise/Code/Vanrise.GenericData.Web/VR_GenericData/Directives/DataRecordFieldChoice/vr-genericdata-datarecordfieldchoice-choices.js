@@ -33,7 +33,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
             ctrl.isValid = function () {
                 if (ctrl.datasource.length > 0)
                     return null;
-                return "You Should Add At Least One Choice."
+                return "You Should Add At Least One Choice.";
             };
             ctrl.addChoice = function () {
                 var dataItem = {
@@ -92,7 +92,7 @@ function (UtilsService, $compile, VRUIUtilsService) {
                 for (var j = i + 1, sourcelength = ctrl.datasource.length; j < sourcelength; j++) {
                     var choice = ctrl.datasource[j];
                     if (item.Entity.Value == choice.Entity.Value && choice.Entity.Value == currentChoice.Entity.Value) {
-                        return "Same value exist.";
+                        return "Same value exists.";
                     }
                 }
             }

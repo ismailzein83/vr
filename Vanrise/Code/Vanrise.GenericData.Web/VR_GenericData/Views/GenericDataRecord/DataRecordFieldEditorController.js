@@ -56,7 +56,7 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModal.onDirectiveReady = function (api) {
@@ -138,7 +138,7 @@
             if (isEditMode && $scope.scopeModal.name == dataRecordFieldEntity.Name)
                 return null;
             else if (UtilsService.getItemIndexByVal(existingFields, $scope.scopeModal.name, 'Name') != -1)
-                return 'Same Name Exist.';
+                return 'Same name exists.';
             return null;
         }
 
@@ -146,7 +146,7 @@
             if (isEditMode && $scope.scopeModal.title == dataRecordFieldEntity.Title)
                 return null;
             else if (UtilsService.getItemIndexByVal(existingFields, $scope.scopeModal.title, 'Title') != -1)
-                return 'Same Title Exist.';
+                return 'Same title exists.';
             return null;
         }
 

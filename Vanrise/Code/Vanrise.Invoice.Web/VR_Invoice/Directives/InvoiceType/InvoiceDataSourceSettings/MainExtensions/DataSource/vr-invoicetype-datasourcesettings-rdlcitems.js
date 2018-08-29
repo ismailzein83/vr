@@ -46,7 +46,7 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                     }
                     if (UtilsService.contains(ctrl.listItems, ctrl.itemsetName)) {
                         ctrl.disableAddButton = true;
-                        return "Same name exist.";
+                        return "Same name exists.";
                     }
                     ctrl.disableAddButton = false;
                     return null;
