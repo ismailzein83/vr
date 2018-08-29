@@ -12,22 +12,22 @@ namespace BPMExtended.Main.Business
     {
         public TelephonyContractDetail GetTelephonyContract(string contractId)
         {
-            return MockDataGenerator.GetTelephonyContract(contractId);
+            return RatePlanMockDataGenerator.GetTelephonyContract(contractId);
         }
 
         public List<TelephonyContractDetail> GetTelephonyContracts(string customerId)
         {
-            return MockDataGenerator.GetTelephonyContracts(customerId);
+            return RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
         }
 
         public LeasedLineContractDetail GetLeasedLineContract(string contractId)
         {
-            return MockDataGenerator.GetLeasedLineContract(contractId);
+            return RatePlanMockDataGenerator.GetLeasedLineContract(contractId);
         }
 
         public List<LeasedLineContractDetail> GetLeasedLineContracts(string customerId)
         {
-            return MockDataGenerator.GetLeasedLineContracts(customerId);
+            return RatePlanMockDataGenerator.GetLeasedLineContracts(customerId);
         }
     }
 }

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContractDetail.cs" />
+    <Compile Include="CPTNumberDetail.cs" />
     <Compile Include="CreateCustomerRequestOutput.cs" />
     <Compile Include="CustomerBalance.cs" />
     <Compile Include="CustomerCategoryDetail.cs" />

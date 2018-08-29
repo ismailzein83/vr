@@ -35,7 +35,7 @@ namespace BPMExtended.Main.Business
             };
             string title = string.Format("New Customer Creation Process Input: '{0}'", newCustomerCreationSomRequestSetting.CustomerId);
 
-            this.UpdateContactCustomerId(accountOrContactId, MockDataGenerator.GetRandomCustomerId());
+            this.UpdateContactCustomerId(accountOrContactId, RatePlanMockDataGenerator.GetRandomCustomerId());
 
             return Helper.CreateSOMRequest(customerType, accountOrContactId, title, newCustomerCreationSomRequestSetting);
         }

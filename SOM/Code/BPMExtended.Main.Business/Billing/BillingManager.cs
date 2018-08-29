@@ -13,7 +13,7 @@ namespace BPMExtended.Main.Business
     {
         public CustomerBalance GetCustomerBalance(string customerId)
         {
-            return MockDataGenerator.GetCustomerBalance(customerId);
+            return RatePlanMockDataGenerator.GetCustomerBalance(customerId);
         }
 
         public decimal SubmitToPOS(string customerId, string requestId, string ratePlanId)

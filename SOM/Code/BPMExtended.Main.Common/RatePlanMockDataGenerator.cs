@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Common
 {
-    public static class MockDataGenerator
+    public static class RatePlanMockDataGenerator
     {
         #region Constants
 

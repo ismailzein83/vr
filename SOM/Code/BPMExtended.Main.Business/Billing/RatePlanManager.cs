@@ -13,32 +13,32 @@ namespace BPMExtended.Main.Business
     {
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
-            var customerCategories = MockDataGenerator.GetCustomerCategories(customerType);
+            var customerCategories = RatePlanMockDataGenerator.GetCustomerCategories(customerType);
             return customerCategories.MapRecords(CustomerCategroryInfoMapper).ToList();
         }
         
         public List<CustomerCategoryDetail> GetCustomerCategories(BPMCustomerType customerType)
         {
-            return MockDataGenerator.GetCustomerCategories(customerType);
+            return RatePlanMockDataGenerator.GetCustomerCategories(customerType);
         }
 
         public List<RatePlanInfo> GetRatePlanInfo(BPMCustomerType customerType, string customerCategoryId, OperationType operationType, string subType)
         {
             var lobAttr = Utilities.GetEnumAttribute<OperationType, SOM.Main.Entities.LineOfBusinessAttribute>(operationType);
-            var ratePlans = MockDataGenerator.GetRatePlans(lobAttr.LOB, customerCategoryId, subType);
+            var ratePlans = RatePlanMockDataGenerator.GetRatePlans(lobAttr.LOB, customerCategoryId, subType);
 
             return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
         }
 
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
         {
-            var ratePlan = MockDataGenerator.GetRatePlan(ratePlanId);
+            var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             return ratePlan.CorePackage.Services.MapRecords(ServiceMapper).ToList();
         }
 
         public List<ServiceDetail> GetOptionalServices(string ratePlanId)
         {
-            var ratePlan = MockDataGenerator.GetRatePlan(ratePlanId);
+            var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);
             var services = new List<ServiceDetail>();
 
             foreach (var pckg in ratePlan.OptionalPackages)
@@ -51,7 +51,18 @@ namespace BPMExtended.Main.Business
         
         public List<ServiceDetail> GetAllCoreServices()
         {
-            return MockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore).MapRecords(ServiceMapper).ToList();
+            return RatePlanMockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore).MapRecords(ServiceMapper).ToList();
+        }
+
+        public bool ActivateCPTService(string contractId, string cptNumber)
+        {
+            return true;
+        }
+
+        public bool DeactivateCPTService(string contractId, string cptNumber)
+        {
+            //Make sure if we need to call inventory to remove the reservation for this CPT number
+            return true;
         }
 
         #region Mappers
@@ -75,7 +86,7 @@ namespace BPMExtended.Main.Business
                 IsCore = service.IsCore,
                 SubscriptionFee = service.SubscriptionFee,
                 AccessFee = service.AccessFee,
-                PackageName = MockDataGenerator.GetServicePackage(service.PackageId).PackageName,
+                PackageName = RatePlanMockDataGenerator.GetServicePackage(service.PackageId).PackageName,
                 ServiceParams = service.ServiceParams != null ? service.ServiceParams.MapRecords(ServiceParameterMapper).ToList() : null
             };
         }
