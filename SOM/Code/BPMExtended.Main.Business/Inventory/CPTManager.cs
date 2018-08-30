@@ -10,12 +10,23 @@ namespace BPMExtended.Main.Business
 {
     public class CPTManager
     {
-        public List<CPTNumberDetail> GetFreeNumbers()
+        ContractManager _contractManager = new ContractManager();
+
+        public List<CPTNumberDetail> GetFreeNumbers(string contractId)
         {
-            return InventoryMockDataGenerator.GetCPTNumbersByStatus(CPTNumberStatus.Free);
+            TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            //TODO: pass the phone number to inventory
+            return InventoryMockDataGenerator.GetAllCPTNumbers();
         }
 
-        public bool ReserveCPTNumber(string number)
+        public bool RegisterCPTNumber(string contractId, string cptNumber)
+        {
+            TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            //TODO: get the phone number
+            return true;
+        }
+
+        public bool UnRegisterCPTNumber(string contractId, string cptNumber)
         {
             return true;
         }

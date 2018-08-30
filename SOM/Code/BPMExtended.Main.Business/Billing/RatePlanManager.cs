@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BPMExtended.Main.Entities;
 
 namespace BPMExtended.Main.Business
 {
     public class RatePlanManager
     {
+        CPTManager _cptManager = new CPTManager();
+
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
             var customerCategories = RatePlanMockDataGenerator.GetCustomerCategories(customerType);
@@ -56,12 +57,15 @@ namespace BPMExtended.Main.Business
 
         public bool ActivateCPTService(string contractId, string cptNumber)
         {
+            //TODO: call BSCS to activate CPT service
             return true;
         }
 
         public bool DeactivateCPTService(string contractId, string cptNumber)
         {
-            //Make sure if we need to call inventory to remove the reservation for this CPT number
+            this._cptManager.UnRegisterCPTNumber(contractId, cptNumber);
+
+            //TODO: call BSCS to deactivate the service
             return true;
         }
 

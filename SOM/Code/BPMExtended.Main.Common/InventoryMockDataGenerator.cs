@@ -15,44 +15,29 @@ namespace BPMExtended.Main.Common
 
         #region CPT Numbers
 
-        public static List<CPTNumberDetail> GetCPTNumbersByStatus(CPTNumberStatus status)
-        {
-            return GetAllCPTNumbers().FindAll(x => x.Status == status).ToList();
-        }
-
-        private static List<CPTNumberDetail> GetAllCPTNumbers()
+        public static List<CPTNumberDetail> GetAllCPTNumbers()
         {
             return new List<CPTNumberDetail>
             {
                 new CPTNumberDetail
                 {
-                    Id = "1",
-                    Number = "1515",
-                    Status = CPTNumberStatus.Free
+                    Number = "1515"
                 },
                 new CPTNumberDetail
                 {
-                    Id = "2",
-                    Number = "1517",
-                    Status = CPTNumberStatus.Free
+                    Number = "1517"
                 },
                 new CPTNumberDetail
                 {
-                    Id = "3",
-                    Number = "1518",
-                    Status = CPTNumberStatus.Free
+                    Number = "1518"
                 },
                 new CPTNumberDetail
                 {
-                    Id = "4",
-                    Number = "1212",
-                    Status = CPTNumberStatus.Reserved
+                    Number = "1212"
                 },
                 new CPTNumberDetail
                 {
-                    Id = "5",
-                    Number = "1240",
-                    Status = CPTNumberStatus.Reserved
+                    Number = "1240"
                 }
             };
         }
