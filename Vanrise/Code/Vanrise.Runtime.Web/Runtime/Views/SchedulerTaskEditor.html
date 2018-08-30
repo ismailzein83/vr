@@ -35,9 +35,7 @@
                             </vr-row>
                             <vr-row vr-loader="isLoadingTrigger">
                                 <vr-columns width="fullrow" ng-if="scopeModel.selectedTriggerType">
-                                    <vr-section title="{{scopeModel.selectedTriggerType.Name}} Trigger">
-                                        <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskTriggerDirectiveReady"></vr-directivewrapper>
-                                    </vr-section>
+                                    <vr-directivewrapper directive="scopeModel.selectedTriggerType.Info.Editor" on-ready="onTaskTriggerDirectiveReady"></vr-directivewrapper>
                                 </vr-columns>
                             </vr-row>
                         </vr-columns>
@@ -47,11 +45,11 @@
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-row>
-                                <vr-columns width="1/2row">                                   
+                                <vr-columns width="1/2row">
                                     <span vr-disabled="scopeModel.disableActionType">
                                         <vr-runtime-taskactiontype-selector on-ready="scopeModel.onTaskActionTypeDirectiveReady" selectedvalues="scopeModel.selectedActionType" onselectionchanged="onTaskActionSelectionChanged" isrequired>
                                         </vr-runtime-taskactiontype-selector>
-                                    </span>                                   
+                                    </span>
                                 </vr-columns>
                             </vr-row>
                             <vr-row vr-loader="isLoadingAction">

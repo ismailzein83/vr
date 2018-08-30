@@ -50,6 +50,7 @@
     <Compile Include="RuntimeNodeConfigurationManager.cs" />
     <Compile Include="RuntimeNodeManager.cs" />
     <Compile Include="RuntimeNodeStateManager.cs" />
+    <Compile Include="SchedulerTaskTriggerTypeManager.cs" />
     <Compile Include="UserSchedulerServiceViewSettings.cs" />
     <Compile Include="SchedulerServiceViewSettings.cs" />
     <Compile Include="SchedulerTaskActionTypeConfigureFilter.cs" />

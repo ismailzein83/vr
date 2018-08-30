@@ -1,4 +1,5 @@
-﻿using Vanrise.Common;
+﻿using System;
+using Vanrise.Common;
 
 namespace Vanrise.Runtime.Entities
 {
@@ -9,5 +10,7 @@ namespace Vanrise.Runtime.Entities
         public bool IsEnabled { get; set; }
 
         public string StatusDescription { get { if (this.Entity != null) return Utilities.GetEnumDescription(this.Entity.Status); return null; } }
+
+        public bool AllowRunIfEnabled { get; set; }
     }
 }

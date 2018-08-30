@@ -131,19 +131,19 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                     if (dataItem != undefined) {
                         var entity = dataItem.Entity;
 
-                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && dataItem.AllowRun == true) {
+                        if (entity.IsEnabled && (entity.AllowRunIfEnabled || (entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && dataItem.HasRunPermission))) {
                             menuActions.push({
                                 name: "Run",
                                 clicked: runSchedulerTask
                             });
                         }
-                        if (entity.IsEnabled && dataItem.AllowEdit == true) {
+                        if (entity.IsEnabled && dataItem.HasEditPermission) {
                             var menuAction1 = {
                                 name: "Disable",
                                 clicked: disableTask
                             };
                             menuActions.push(menuAction1);
-                        } else if (dataItem.AllowEdit == true) {
+                        } else if (dataItem.HasEditPermission) {
                             var menuAction2 = {
                                 name: "Enable",
                                 clicked: enableTask
@@ -159,7 +159,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
             function defineStaticMenuActions(dataItem) {
                 var staticMenuActions = [];
 
-                if (dataItem.AllowEdit == true) {
+                if (dataItem.HasEditPermission) {
                     staticMenuActions.push({
                         name: "Edit",
                         clicked: editTask
@@ -246,14 +246,15 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                                     TaskId: $scope.schedulerTasks[j].Entity.TaskId,
                                     Name: $scope.schedulerTasks[j].Entity.Name,
                                     IsEnabled: schedulerTaskState.IsEnabled,
+                                    AllowRunIfEnabled: schedulerTaskState.AllowRunIfEnabled,
                                     LastRunTime: schedulerTaskState.Entity.LastRunTime,
                                     NextRunTime: schedulerTaskState.Entity.NextRunTime,
                                     StatusDescription: schedulerTaskState.StatusDescription
                                 };
                                 var obj = {
                                     Entity: Entity,
-                                    AllowEdit: $scope.schedulerTasks[j].AllowEdit,
-                                    AllowRun: $scope.schedulerTasks[j].AllowRun
+                                    HasEditPermission: $scope.schedulerTasks[j].HasEditPermission,
+                                    HasRunPermission: $scope.schedulerTasks[j].HasRunPermission
                                 };
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(obj);
                                 $scope.schedulerTasks[j] = obj;
@@ -272,7 +273,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 var onPermissionDisabled = function (entity) {
                     var gridDataItem = {
                         Entity: entity,
-                        AllowEdit: dataItem.AllowEdit
+                        HasEditPermission: dataItem.HasEditPermission
                     };
                     gridDataItem.Entity.IsEnabled = false;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
@@ -298,7 +299,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 var onPermissionDisabled = function (entity) {
                     var gridDataItem = {
                         Entity: entity,
-                        AllowEdit: dataItem.AllowEdit
+                        HasEditPermission: dataItem.HasEditPermission
                     };
                     gridDataItem.Entity.IsEnabled = true;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
@@ -328,14 +329,15 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                             TaskId: currentSchedulerTask.Entity.TaskId,
                             Name: currentSchedulerTask.Entity.Name,
                             IsEnabled: status,
+                            AllowRunIfEnabled: currentSchedulerTask.Entity.AllowRunIfEnabled,
                             LastRunTime: currentSchedulerTask.Entity.LastRunTime,
                             NextRunTime: currentSchedulerTask.Entity.NextRunTime,
                             StatusDescription: currentSchedulerTask.StatusDescription
                         };
                         var obj = {
                             Entity: Entity,
-                            AllowEdit: currentSchedulerTask.AllowEdit,
-                            AllowRun: currentSchedulerTask.AllowRun
+                            HasEditPermission: currentSchedulerTask.HasEditPermission,
+                            HasRunPermission: currentSchedulerTask.HasRunPermission
                         };
                         gridDrillDownTabsObj.setDrillDownExtensionObject(obj);
                         $scope.schedulerTasks[j] = obj;

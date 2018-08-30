@@ -57,7 +57,7 @@ namespace Vanrise.Runtime.Web.Controllers
         [Route("GetSchedulerTaskTriggerTypes")]
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
         {
-            return _schedulerTaskManager.GetSchedulerTaskTriggerTypes();
+            return new SchedulerTaskTriggerTypeManager().GetSchedulerTaskTriggerTypes();
         }
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]

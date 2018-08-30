@@ -137,10 +137,12 @@
     <Content Include="Runtime\Directives\TaskAction\vr-runtime-taskaction-workflow.js" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerDaily.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerInterval.html" />
+    <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerManual.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerTimer.html" />
     <Content Include="Runtime\Directives\TaskTrigger\Templates\TaskTriggerWeekly.html" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-daily.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-interval.js" />
+    <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-manual.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
     <Content Include="Runtime\ModuleInitialization.js" />

@@ -77,9 +77,9 @@ namespace Vanrise.Runtime.Data.SQL
             ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_Delete", taskId);
         }
 
-        public void RunSchedulerTask(Guid taskId)
+        public void RunSchedulerTask(Guid taskId, bool allowRunIfEnabled)
         {
-            ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_RunSchedulerTask", taskId, DateTime.Now);
+            ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_RunSchedulerTask", taskId, DateTime.Now, allowRunIfEnabled ? 1 : 0);
         }
 
         #endregion

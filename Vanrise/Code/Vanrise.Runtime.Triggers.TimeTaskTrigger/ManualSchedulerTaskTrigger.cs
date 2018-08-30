@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Runtime.Entities;
-using Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments;
 
 namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 {
-    public class TimeSchedulerTaskTrigger : SchedulerTaskTrigger
+    public class ManualSchedulerTaskTrigger : SchedulerTaskTrigger
     {
         public override Dictionary<string, object> EvaluateExpressions(SchedulerTask task, SchedulerTaskState taskState)
         {
             Dictionary<string, object> evaluatedExpressions = null;
+            DateTime now = DateTime.Now;
 
             if (task.TaskSettings.TaskActionArgument != null && task.TaskSettings.TaskActionArgument.RawExpressions != null)
             {
@@ -20,8 +20,8 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
                     object placeHolder = kvp.Value;
                     if (placeHolder.ToString() == "ScheduleTime")
                     {
-                        Console.WriteLine("Original Time is {0}", taskState.NextRunTime);
-                        placeHolder = taskState.NextRunTime;
+                        Console.WriteLine("Original Time is {0}", now);
+                        placeHolder = now;
                     }
 
                     evaluatedExpressions.Add(kvp.Key, placeHolder);
@@ -33,10 +33,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 
         public override DateTime? CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
         {
-            TimeTaskTriggerArgument timeTaskTriggerArgument = (TimeTaskTriggerArgument)taskTriggerArgument;
-            TimeSchedulerTaskTrigger timerTaskTrigger = (TimeSchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(timeTaskTriggerArgument.TimerTriggerTypeFQTN));
-
-            return timerTaskTrigger.CalculateNextTimeToRun(task, taskState, timeTaskTriggerArgument);
+            return null;
         }
     }
 }

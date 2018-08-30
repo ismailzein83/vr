@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Runtime.Entities
 {
@@ -22,6 +18,8 @@ namespace Vanrise.Runtime.Entities
         public string FQTN { get; set; }
 
         public string Editor { get; set; }
+
+        public bool AllowRunIfEnabled { get; set; }
     }
 
 }

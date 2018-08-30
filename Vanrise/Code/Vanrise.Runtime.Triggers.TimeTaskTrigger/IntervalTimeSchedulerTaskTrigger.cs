@@ -6,7 +6,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 {
     public class IntervalTimeSchedulerTaskTrigger : TimeSchedulerTaskTrigger
     {
-        public override DateTime CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
+        public override DateTime? CalculateNextTimeToRun(SchedulerTask task, SchedulerTaskState taskState, BaseTaskTriggerArgument taskTriggerArgument)
         {
             DateTime nextRunTime;
             DateTime now = DateTime.Now;
@@ -19,7 +19,7 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
             {
                 IntervalTimeTaskTriggerArgument intervalTimeTaskTriggerArgument = (IntervalTimeTaskTriggerArgument)taskTriggerArgument;
                 nextRunTime = taskState.NextRunTime.Value;
-
+              
                 switch (intervalTimeTaskTriggerArgument.IntervalType)
                 {
                     case IntervalType.Hour:

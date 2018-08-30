@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
-using Vanrise.Common;
-using Vanrise.Security.Entities;
-using Vanrise.Common.Data;
+
 namespace Vanrise.Runtime.Business
 {
     public class SchedulerTaskManager
@@ -16,6 +15,7 @@ namespace Vanrise.Runtime.Business
         static SchedulerTaskActionTypeManager _schedulerTaskActionTypeManager = new SchedulerTaskActionTypeManager();
         IVRActionLogger _vrActionLogger = BusinessManagerFactory.GetManager<IVRActionLogger>();
         #endregion
+
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Runtime.Entities.SchedulerTaskDetail> GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
@@ -81,12 +81,14 @@ namespace Vanrise.Runtime.Business
             }
             return listTasksInfos;
         }
+        
         public string GetSchedulerTaskName(SchedulerTask schedulerTask)
         {
             if (schedulerTask == null)
                 return null;
             return schedulerTask.Name;
         }
+        
         public List<SchedulerTaskInfo> GetTasksInfo()
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
@@ -129,10 +131,12 @@ namespace Vanrise.Runtime.Business
                 _vrActionLogger.LogObjectViewed(SchedulerTaskLoggableEntity.Instance, task);
             return task;
         }
+        
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(Guid taskId)
         {
             return GetTask(taskId, false);
         }
+        
         public List<SchedulerTask> GetTasksbyActionType(Guid actionType)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
@@ -143,12 +147,6 @@ namespace Vanrise.Runtime.Business
             if (tasks == null)
                 return null;
             return tasks.ToList();
-        }
-
-        public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
-        {
-            ISchedulerTaskTriggerTypeDataManager datamanager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskTriggerTypeDataManager>();
-            return datamanager.GetAll();
         }
 
         public Vanrise.Entities.InsertOperationOutput<SchedulerTaskDetail> AddTask(SchedulerTask taskObject)
@@ -166,6 +164,8 @@ namespace Vanrise.Runtime.Business
             {
                 if (taskObject.TaskSettings != null && taskObject.TaskSettings.TaskActionArgument != null)
                     taskObject.TaskSettings.TaskActionArgument.OnAfterSaveAction(new BaseTaskActionArgumentOnAfterSaveActionContext { TaskId = taskObject.TaskId });
+
+                taskObject.TriggerInfo = new SchedulerTaskTriggerTypeManager().GetSchedulerTaskTriggerType(taskObject.TriggerTypeId).Info;
 
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 _vrActionLogger.TrackAndLogObjectAdded(SchedulerTaskLoggableEntity.Instance, taskObject);
@@ -191,6 +191,8 @@ namespace Vanrise.Runtime.Business
             {
                 if (taskObject.TaskSettings != null && taskObject.TaskSettings.TaskActionArgument != null)
                     taskObject.TaskSettings.TaskActionArgument.OnAfterSaveAction(new BaseTaskActionArgumentOnAfterSaveActionContext { TaskId = taskObject.TaskId });
+
+                taskObject.TriggerInfo = new SchedulerTaskTriggerTypeManager().GetSchedulerTaskTriggerType(taskObject.TriggerTypeId).Info;
 
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 _vrActionLogger.TrackAndLogObjectUpdated(SchedulerTaskLoggableEntity.Instance, taskObject);
@@ -305,6 +307,7 @@ namespace Vanrise.Runtime.Business
                 ShowDisableAll = tasks.FindRecord(x => x.IsEnabled) != null
             };
         }
+
         public bool EnableAllTasks()
         {
             var tasks = GetAllTasksExceptDS();
@@ -321,6 +324,7 @@ namespace Vanrise.Runtime.Business
             }
             return true;
         }
+
         private class SchedulerTaskLoggableEntity : VRLoggableEntityBase
         {
             public static SchedulerTaskLoggableEntity Instance = new SchedulerTaskLoggableEntity();
@@ -364,6 +368,7 @@ namespace Vanrise.Runtime.Business
                 return s_schedulerTaskManager.GetSchedulerTaskName(schedulerTask);
             }
         }
+
         #region private methods
         private Dictionary<Guid, SchedulerTask> GetCachedSchedulerTasks()
         {
@@ -394,8 +399,9 @@ namespace Vanrise.Runtime.Business
             return new SchedulerTaskDetail()
             {
                 Entity = task,
-                AllowEdit = _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(task),
-                AllowRun = _schedulerTaskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(task)
+                HasEditPermission = _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(task),
+                HasRunPermission = _schedulerTaskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(task),
+                AllowRunIfEnabled = task.TriggerInfo.AllowRunIfEnabled
             };
         }
 

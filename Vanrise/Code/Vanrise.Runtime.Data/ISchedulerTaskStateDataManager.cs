@@ -22,6 +22,6 @@ namespace Vanrise.Runtime.Data
 
         void DeleteTaskState(Guid taskId);
 
-        void RunSchedulerTask(Guid taskId);
+        void RunSchedulerTask(Guid taskId, bool allowRunIfEnabled);
     }
 }

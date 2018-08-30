@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Runtime.Business
 {
@@ -52,7 +53,10 @@ namespace Vanrise.Runtime.Business
                 foreach (SchedulerTaskState schedulerTaskState in taskStates)
                 {
                     var schedulerTask = schedulerTaskManager.GetTask(schedulerTaskState.TaskId);
-                    schedulerTaskStateDetails.Add(SchedulerTaskStateDetailMapper(schedulerTaskState, schedulerTask.IsEnabled));
+                    schedulerTask.ThrowIfNull("schedulerTask", schedulerTaskState.TaskId);
+                    schedulerTask.TriggerInfo.ThrowIfNull("schedulerTask.TriggerInfo", schedulerTaskState.TaskId);
+
+                    schedulerTaskStateDetails.Add(SchedulerTaskStateDetailMapper(schedulerTaskState, schedulerTask));
                 }
             }
 
@@ -101,23 +105,28 @@ namespace Vanrise.Runtime.Business
 
         public void RunSchedulerTask(Guid taskId)
         {
+            var schedulerTask = new SchedulerTaskManager().GetTask(taskId);
+            schedulerTask.ThrowIfNull("schedulerTask", taskId);
+            schedulerTask.TriggerInfo.ThrowIfNull("schedulerTask.TriggerInfo", taskId);
+
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
-            dataManager.RunSchedulerTask(taskId);
+            dataManager.RunSchedulerTask(taskId, schedulerTask.TriggerInfo.AllowRunIfEnabled);
         }
 
         #endregion
 
         #region private methods
 
-        private SchedulerTaskStateDetail SchedulerTaskStateDetailMapper(SchedulerTaskState task, bool isEnabled)
+        private SchedulerTaskStateDetail SchedulerTaskStateDetailMapper(SchedulerTaskState taskState, SchedulerTask task)
         {
-            if (task == null)
+            if (taskState == null)
                 return null;
 
             SchedulerTaskStateDetail schedulerTaskStateDetail = new SchedulerTaskStateDetail()
             {
-                Entity = task,
-                IsEnabled = isEnabled
+                Entity = taskState,
+                IsEnabled = task.IsEnabled,
+                AllowRunIfEnabled = task.TriggerInfo.AllowRunIfEnabled
             };
 
             return schedulerTaskStateDetail;

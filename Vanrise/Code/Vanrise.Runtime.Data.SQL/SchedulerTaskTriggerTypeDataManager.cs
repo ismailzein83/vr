@@ -23,6 +23,11 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("runtime.sp_SchedulerTaskTriggerType_GetAll", SchedulerTaskTriggerTypeMapper);
         }
 
+        public bool AreSchedulerTaskTriggerTypesUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[runtime].[SchedulerTaskTriggerType]", ref updateHandle);
+        }
+
         #region Private Methods
 
         private SchedulerTaskTriggerType SchedulerTaskTriggerTypeMapper(IDataReader reader)

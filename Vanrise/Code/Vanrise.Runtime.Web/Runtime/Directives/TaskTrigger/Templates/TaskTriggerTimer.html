@@ -1,22 +1,24 @@
-﻿<div>
-    <vr-row>
-        <vr-columns width="1/2row">
-            <vr-select label="Type" datasource="schedulerTypes" selectedvalues="selectedType"
-                       datatextfield="name" datavaluefield="value" isrequired>
-            </vr-select>
-        </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-switch value="ignoreSkippedIntervals" label="Ignore Skipped Intervals"></vr-switch>
-        </vr-columns>
-    </vr-row>
-</div>
-<div>
-    <vr-row>
-        <vr-section title="Settings" level="2" >
-            <vr-columns width="fullrow" vr-loader="isLoadingTimerSection">
-                <vr-directivewrapper directive="selectedType.editor" on-ready="onTimerTypeDirectiveReady"></vr-directivewrapper>
+﻿<vr-section title="Timer Trigger">
+    <div>
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-select label="Type" datasource="schedulerTypes" selectedvalues="selectedType"
+                           datatextfield="name" datavaluefield="value" isrequired>
+                </vr-select>
             </vr-columns>
-        </vr-section>
+            <vr-columns width="1/2row">
+                <vr-switch value="ignoreSkippedIntervals" label="Ignore Skipped Intervals"></vr-switch>
+            </vr-columns>
+        </vr-row>
+    </div>
+    <div>
+        <vr-row>
+            <vr-section title="Settings" level="2" >
+                <vr-columns width="fullrow" vr-loader="isLoadingTimerSection">
+                    <vr-directivewrapper directive="selectedType.editor" on-ready="onTimerTypeDirectiveReady"></vr-directivewrapper>
+                </vr-columns>
+            </vr-section>
 
-    </vr-row>
-</div>
+        </vr-row>
+    </div>
+</vr-section>
