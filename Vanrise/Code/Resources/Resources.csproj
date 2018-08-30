@@ -190,6 +190,7 @@
     <Content Include="DLLs\Microsoft.Practices.ServiceLocation.dll" />
     <Content Include="DLLs\Microsoft.Practices.Unity.dll" />
     <Content Include="DLLs\Microsoft.Practices.Unity.Interception.dll" />
+    <Content Include="DLLs\Microsoft.ReportViewer.WebForms.DLL" />
     <Content Include="DLLs\Microsoft.SqlServer.ConnectionInfo.dll" />
     <Content Include="DLLs\Microsoft.SqlServer.Management.Sdk.Sfc.dll" />
     <Content Include="DLLs\Microsoft.SqlServer.Smo.dll" />
