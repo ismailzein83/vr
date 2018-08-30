@@ -202,6 +202,7 @@
     <Content Include="DLLs\Newtonsoft.Json.dll" />
     <Content Include="DLLs\Npgsql.dll" />
     <Content Include="DLLs\OpenPop.dll" />
+    <Content Include="DLLs\Oracle.ManagedDataAccess.dll" />
     <Content Include="DLLs\protobuf-net.dll" />
     <Content Include="DLLs\RazorEngine.dll" />
     <Content Include="DLLs\Rebex.Net.Ftp.dll" />
