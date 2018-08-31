@@ -51,7 +51,7 @@
                             }
                         }
                     }
-                }
+                };
                 $scope.scopeModel.removeMappingItem = function (dataItem) {
                     var index = $scope.scopeModel.mappingItems.indexOf(dataItem);
                     $scope.scopeModel.mappingItems.splice(index, 1);
@@ -83,7 +83,7 @@
                     };
 
                     $scope.scopeModel.mappingItems.push(mappingItem);
-                }
+                };
                 $scope.scopeModel.validateMappingItems = function () {
                    
                     if ($scope.scopeModel.mappingItems.length > 0) {
@@ -186,7 +186,7 @@
                         })
                             .catch(function (error) {
                                 promise.resolve();
-                                onBusinessEntityDefinitionSelectionChangeDeffered=undefined
+                                onBusinessEntityDefinitionSelectionChangeDeffered = undefined;
                                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                         });
                     }

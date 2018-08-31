@@ -51,7 +51,7 @@
                     };
                     var payload = {
                         context: context
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
                 };
             }
