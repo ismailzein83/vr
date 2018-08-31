@@ -49,6 +49,10 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
                     tabsCtrl.removeTab(ctrl.tabobject);
                     ctrl.tabobject = undefined;
                 }
+                else {                   
+                    tabsCtrl.removeTabAndHeader(ctrl.tabobject);
+                    ctrl.tabobject = undefined;
+                }
             });
         },
         templateUrl: function (elem, attrs) {
