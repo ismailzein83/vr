@@ -145,7 +145,9 @@
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartBranchExtendedInfoRuntimeTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\Account\retail-multinet-account-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Templates\AccountConvertorEditor.html" />
+    <Content Include="Retail_MultiNet\Directives\FaultTicket\retail-multinet-faultticket-customobjectsettings.js" />
     <Content Include="Retail_MultiNet\Directives\FaultTicket\retail-multinet-faultticket-staticeditor.js" />
+    <Content Include="Retail_MultiNet\Directives\FaultTicket\Templates\FaultTicketCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\FaultTicket\Templates\FaultTicketStaticEditor.html" />
     <Content Include="Retail_MultiNet\Directives\Payment\retail-multinet-payment-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\Payment\Templates\PaymentConvertorEditor.html" />

@@ -6,6 +6,9 @@
                     <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" normal-col-num="12" selectedvalues="scopeModel.selectedSubscriber" customlabel="Subscriber" isrequired="true"></retail-be-account-selector>
                 </vr-row>
                 <vr-row>
+                    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="12" isrequired="true"></vr-common-statusdefinition-selector>
+                </vr-row>
+                <vr-row>
                     <vr-columns width="1/3row">
                         <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
                     </vr-columns>
@@ -31,9 +34,49 @@
                         <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.toDate" type="dateTime" label="To Date" customvalidate="scopeModel.validateDate()" isrequired="true"></vr-datetimepicker>
                     </vr-columns>
                 </vr-row>
-                <!--<vr-row>
-                    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="6" isrequired="true"></vr-common-statusdefinition-selector>
-                </vr-row>-->
+
+                <vr-row ng-if="!scopeModel.isEditMode">
+                    <span vr-disabled="scopeModel.isEditMode">
+                        <vr-genericdata-genericbusinessentity-selector on-ready="scopeModel.onReasonSelectorReady" normal-col-num="6" customlabel="Reason" selectedvalues="scopeModel.reason" ></vr-genericdata-genericbusinessentity-selector>
+                    </span>
+                    <span vr-disabled="scopeModel.isEditMode">
+                        <vr-genericdata-genericbusinessentity-selector on-ready="scopeModel.onTypeSelectorReady" normal-col-num="6" customlabel="Type" selectedvalues="scopeModel.type" ></vr-genericdata-genericbusinessentity-selector>
+                    </span>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow" haschildcolumns>
+                        <span vr-disabled="scopeModel.isEditMode">
+                                <vr-columns colnum="1">
+                                    <vr-button type="Add" data-onclick="scopeModel.addReason" standalone vr-disabled="scopeModel.disableAddReason()" ng-show="!scopeModel.isEditMode"></vr-button>
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-validator validate="scopeModel.descriptionSettingsHasItem()">
+
+                                        <vr-datagrid datasource="scopeModel.descriptionSettings"
+                                                     ondeleterow="removerow"
+                                                     on-ready="onGridReady"
+                                                     pagingtype="'PagingOnScroll'"
+                                                     menuactions="gridMenuActions"
+                                                     enableautoexport="true"
+                                                     hidegridmenu>
+                                            <vr-datagridcolumn headertext="'Ticket Reason'" field="'TicketReasonDescription'" type="'Text'"></vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Type'" field="'Type'" type="'Text'"></vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Note'" widthfactor="8" disablesorting="true">
+                                                <vr-textbox value="dataItem.Note"></vr-textbox>
+                                            </vr-datagridcolumn>
+                                    </vr-validator>
+                                </vr-columns>
+                            
+                                <vr-columns width="fullrow" withemptyline>
+
+                                    <span ng-if="scopeModel.errorMessage != undefined">
+                                        <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>
+                                    </span>
+                                </vr-columns>
+                        </span>
+                    </vr-columns>
+
+                </vr-row>
 
             </vr-columns>
     </vr-tab>

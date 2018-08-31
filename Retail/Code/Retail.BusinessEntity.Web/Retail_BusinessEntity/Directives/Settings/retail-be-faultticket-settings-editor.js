@@ -23,10 +23,10 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
             this.initializeController = initializeController;
 
             var faultTicketSetting;
-           
+
             var faultTicketSerialNumberEditorAPI;
             var faultTicketSerialNumberEditorReadyDeferred = UtilsService.createPromiseDeferred();
-                        
+
             var faultTicketOpenMailTemplateSelectorAPI;
             var faultTicketOpenMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -34,32 +34,34 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
             var faultTicketPendingMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var faultTicketClosedMailTemplateSelectorAPI;
-            var faultTicketClosedMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();        
+            var faultTicketClosedMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-
-
-            $scope.scopeModel = {};
-            $scope.scopeModel.faultTicketInitialSequence = 0;
-            $scope.scopeModel.onFaultTicketSerialNumberEditorReady = function (api) {
-                faultTicketSerialNumberEditorAPI = api;
-                faultTicketSerialNumberEditorReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onFaultTicketOpenMailTemplateSelectorReady = function (api) {
-                faultTicketOpenMailTemplateSelectorAPI = api;
-                faultTicketOpenMailTemplateSelectorReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onFaultTicketPendingMailTemplateSelectorReady = function (api) {
-                faultTicketPendingMailTemplateSelectorAPI = api;
-                faultTicketPendingMailTemplateSelectorReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onFaultTicketClosedMailTemplateSelectorReady = function (api) {
-                faultTicketClosedMailTemplateSelectorAPI = api;
-                faultTicketClosedMailTemplateSelectorReadyDeferred.resolve();
-            };
-            
+                    
 
             function initializeController() {
-                defineAPI();
+                $scope.scopeModel = {};
+                $scope.scopeModel.faultTicketInitialSequence = 0;
+                $scope.scopeModel.onFaultTicketSerialNumberEditorReady = function (api) {
+                    faultTicketSerialNumberEditorAPI = api;
+                    faultTicketSerialNumberEditorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onFaultTicketOpenMailTemplateSelectorReady = function (api) {
+                    faultTicketOpenMailTemplateSelectorAPI = api;
+                    faultTicketOpenMailTemplateSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onFaultTicketPendingMailTemplateSelectorReady = function (api) {
+                    faultTicketPendingMailTemplateSelectorAPI = api;
+                    faultTicketPendingMailTemplateSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onFaultTicketClosedMailTemplateSelectorReady = function (api) {
+                    faultTicketClosedMailTemplateSelectorAPI = api;
+                    faultTicketClosedMailTemplateSelectorReadyDeferred.resolve();
+                };
+                
+                UtilsService.waitMultiplePromises([faultTicketSerialNumberEditorReadyDeferred.promise, faultTicketOpenMailTemplateSelectorReadyDeferred.promise, faultTicketPendingMailTemplateSelectorReadyDeferred.promise, faultTicketClosedMailTemplateSelectorReadyDeferred.promise]).then(function () {
+
+                    defineAPI();
+                });
             }
             function defineAPI() {
 
@@ -78,18 +80,18 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                             $scope.scopeModel.faultTicketInitialSequence = faultTicketSetting.InitialSequence;
                     }
 
-                    var loadFaultTicketSerialNumberEditorPromise = loadFaultTicketSerialNumberEditor(faultTicketSetting);
-                    
+                    var loadFaultTicketSerialNumberEditorPromise = loadFaultTicketSerialNumberEditor(faultTicketSetting);                                   
+
                     var loadFaultTicketOpenMailTemplateSelectorPromise = loadFaultTicketOpenMailTemplateSelector();
                     var loadFaultTicketPendingMailTemplateSelectorPromise = loadFaultTicketPendingMailTemplateSelector();
                     var loadFaultTicketClosedMailTemplateSelectorPromise = loadFaultTicketClosedMailTemplateSelector();
-                    
+
 
                     promises.push(loadFaultTicketSerialNumberEditorPromise);
                     promises.push(loadFaultTicketOpenMailTemplateSelectorPromise);
                     promises.push(loadFaultTicketPendingMailTemplateSelectorPromise);
                     promises.push(loadFaultTicketClosedMailTemplateSelectorPromise);
-
+                    
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -112,7 +114,7 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
             }
 
 
-
+           
             function loadFaultTicketSerialNumberEditor(faultTicketSetting) {
                 var serialNumberEditorEditorLoadDeferred = UtilsService.createPromiseDeferred();
                 faultTicketSerialNumberEditorReadyDeferred.promise.then(function () {
@@ -166,7 +168,7 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     VRUIUtilsService.callDirectiveLoad(faultTicketClosedMailTemplateSelectorAPI, payload, faultTicketClosedMailTemplateSelectorLoadDeferred);
                 });
                 return faultTicketClosedMailTemplateSelectorLoadDeferred.promise;
-            }    
+            }
 
 
         }
