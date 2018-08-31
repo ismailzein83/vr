@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
         public override string Editor { get { return "businessprocess-vr-workflowactivity-subprocess"; } }
 
-        public override string Title { get { return "Execute Worklfow"; } }
+        public override string Title { get { return "Subprocess"; } }
 
         public Guid VRWorkflowId { get; set; }
 
