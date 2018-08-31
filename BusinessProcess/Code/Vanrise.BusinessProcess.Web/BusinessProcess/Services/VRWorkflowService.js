@@ -186,7 +186,7 @@
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivityCallHttpServiceEditor.html', parameter, modalSettings);
 		}
 
-		function openSubProcessEditor(obj, onActivityUpdated, remove, isNew, workflowId) {
+		function openSubProcessEditor(obj, onActivityUpdated, remove, isNew, workflowId, context) {
 			var modalSettings = {};
 
 			modalSettings.onScopeReady = function (modalScope) {
@@ -196,12 +196,13 @@
 			var parameter = {
 				obj: obj,
 				isNew: isNew,
-				workflowId: workflowId
+				workflowId: workflowId,
+				context: context
 			};
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivitySubprocessEditor.html', parameter, modalSettings);
 		}
 
-		function openSequenceEditor(dragdropsetting, context, settings, onActivityUpdated) {
+		function openSequenceEditor(dragdropsetting, context, settings, onActivityUpdated, vRWorkflowActivityId) {
 			var modalSettings = {};
 
 			modalSettings.onScopeReady = function (modalScope) {
@@ -210,7 +211,9 @@
 			var parameter = {
 				dragdropsetting: dragdropsetting,
 				context: context,
-				settings: settings
+				settings: settings,
+				VRWorkflowActivityId: vRWorkflowActivityId
+
 			};
 			VRModalService.showModal('/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflowActivities/Templates/VRWorkflowActivitySequenceEditor.html', parameter, modalSettings);
 		}
