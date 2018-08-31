@@ -60,43 +60,52 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
 
             if (vrWorkflow.Settings.Arguments != null && vrWorkflow.Settings.Arguments.Any())
             {
-                Dictionary<string, VRWorkflowArgument> workflowArguments = vrWorkflow.Settings.Arguments.ToDictionary(itm => itm.Name, itm => itm);
-
-                if (this.InArguments != null && this.InArguments.Any())
+                foreach (var argument in vrWorkflow.Settings.Arguments)
                 {
-                    foreach (var inArgument in this.InArguments)
+                    String argumentRuntimeType = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
+                    string inArgumentValue = this.InArguments != null ? this.InArguments.GetRecord(argument.Name) : null;
+                    string outArgumentValue = this.OutArguments != null ? this.OutArguments.GetRecord(argument.Name) : null;
+
+                    switch (argument.Direction)
                     {
-                        bool isInOutArgument = this.OutArguments != null && this.OutArguments.GetRecord(inArgument.Key) != null;
-                        VRWorkflowArgument matchingArgument = workflowArguments.GetRecord(inArgument.Key);
-                        String matchingArgumentRuntimeType = CSharpCompiler.TypeToString(matchingArgument.Type.GetRuntimeType(null));
+                        case VRWorkflowArgumentDirection.In:
+                            if (!string.IsNullOrEmpty(inArgumentValue))
+                            {
+                                propertiesBuilder.AppendLine(string.Concat("public ", argumentRuntimeType, " In", argument.Name, "Prop { get { return ", inArgumentValue, "; } set { } }"));
+                                argumentsList.Add(string.Format("{0} = new System.Activities.InArgument<{1}>((activityContext) => new {2}.{3}(activityContext).In{4}Prop)", argument.Name, argumentRuntimeType, nmSpaceName, className, argument.Name));
+                            }
+                            break;
 
-                        if (!isInOutArgument)
-                            propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop {2} get {2} return {1}; {3} set{2}{3}{3}", matchingArgumentRuntimeType, inArgument.Value, "{", "}"));
-                        else // OutArguments is not null
-                        {
-                            string outArgumentValue = this.OutArguments.GetRecord(inArgument.Key);
-                            propertiesBuilder.AppendLine(string.Format("public {0} In{1}Prop {2} get {2} return {1}; {3} set{2} {1} = value;{3}{3}", matchingArgumentRuntimeType, inArgument.Value, "{", "}"));
-                        }
+                        case VRWorkflowArgumentDirection.InOut:
+                            if (string.IsNullOrEmpty(inArgumentValue) && string.IsNullOrEmpty(outArgumentValue))
+                                break;
 
-                        argumentsList.Add(string.Format("{0} = new System.Activities.{1}<{2}>((activityContext) => new {3}.{4}(activityContext).In{5}Prop)",
-                            inArgument.Key, !isInOutArgument ? "InArgument" : "InOutArgument", matchingArgumentRuntimeType, nmSpaceName, className, inArgument.Value));
+                            if (!string.IsNullOrEmpty(inArgumentValue) && !string.IsNullOrEmpty(outArgumentValue))
+                            {
+                                propertiesBuilder.AppendLine(string.Concat("public ", argumentRuntimeType, " In", argument.Name, "Prop { get { return ", inArgumentValue, "; } set { ", outArgumentValue, " = value; } }"));
+                                argumentsList.Add(string.Format("{0} = new System.Activities.InOutArgument<{1}>((activityContext) => new {2}.{3}(activityContext).In{4}Prop)", argument.Name, argumentRuntimeType, nmSpaceName, className, argument.Name));
+                                break;
+                            }
 
-                    }
-                }
+                            if (!string.IsNullOrEmpty(inArgumentValue))
+                            {
+                                propertiesBuilder.AppendLine(string.Concat("public ", argumentRuntimeType, " In", argument.Name, "Prop { get { return ", inArgumentValue, "; } set { } }"));
+                                argumentsList.Add(string.Format("{0} = new System.Activities.InOutArgument<{1}>((activityContext) => new {2}.{3}(activityContext).In{4}Prop)", argument.Name, argumentRuntimeType, nmSpaceName, className, argument.Name));
+                                break;
+                            }
 
-                if (this.OutArguments != null && this.OutArguments.Any())
-                {
-                    foreach (var outArgument in this.OutArguments)
-                    {
-                        bool isInOutArgument = this.InArguments != null && this.InArguments.GetRecord(outArgument.Key) != null;
-                        if (isInOutArgument)
-                            continue;
+                            //outArgumnetValue not null
+                            propertiesBuilder.AppendLine(string.Concat("public ", argumentRuntimeType, " Out", argument.Name, "Prop { get { return default(",argumentRuntimeType,");} set { ", outArgumentValue, " = value; } }"));
+                            argumentsList.Add(string.Format("{0} = new System.Activities.InOutArgument<{1}>((activityContext) =>new {2}.{3}(activityContext).Out{4}Prop)", argument.Name, argumentRuntimeType, nmSpaceName, className, argument.Name));
+                            break;
 
-                        VRWorkflowArgument matchingArgument = workflowArguments.GetRecord(outArgument.Key);
-                        String matchingArgumentRuntimeType = CSharpCompiler.TypeToString(matchingArgument.Type.GetRuntimeType(null));
-
-                        propertiesBuilder.AppendLine(string.Format("public {0} Out{1}Prop {2} get{2}return {1};{3} set {2} {1} = value;{3}{3}", matchingArgumentRuntimeType, outArgument.Value, "{", "}"));
-                        argumentsList.Add(string.Format("{0} = new System.Activities.OutArgument<{1}>((activityContext) =>new {2}.{3}(activityContext).Out{4}Prop)", outArgument.Key, matchingArgumentRuntimeType, nmSpaceName, className, outArgument.Value));
+                        case VRWorkflowArgumentDirection.Out:
+                            if (!string.IsNullOrEmpty(outArgumentValue))
+                            {
+                                propertiesBuilder.AppendLine(string.Concat("public ", argumentRuntimeType, " Out", argument.Name, "Prop { get { return default(", argumentRuntimeType, ");} set { ", outArgumentValue, " = value; } }"));
+                                argumentsList.Add(string.Format("{0} = new System.Activities.OutArgument<{1}>((activityContext) =>new {2}.{3}(activityContext).Out{4}Prop)", argument.Name, argumentRuntimeType, nmSpaceName, className, argument.Name));
+                            }
+                            break;
                     }
                 }
             }
@@ -104,21 +113,8 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
             nmSpaceCodeBuilder.Replace("#PROPERTIES#", propertiesBuilder.ToString());
             context.AddFullNamespaceCode(nmSpaceCodeBuilder.ToString());
 
-            //StringBuilder codeBuilder = new StringBuilder();
-
             System.Activities.Activity activity = new Vanrise.BusinessProcess.Business.VRWorkflowManager().GetVRWorkflowActivity(VRWorkflowId);
             string activityType = CSharpCompiler.TypeToString(activity.GetType());
-
-            //codeBuilder.AppendLine(@"new Vanrise.BusinessProcess.Business.VRWorkflowManager().GetVRWorkflowActivity(new Guid(""#VRWORKFLOWID#""))");
-            //if (argumentsList.Count > 0)
-            //    codeBuilder.AppendFormat("{{0}}", string.Join<string>(",", argumentsList));
-
-            //codeBuilder.Replace("#VRWORKFLOWID#", this.VRWorkflowId.ToString());
-
-            //return codeBuilder.ToString();
-
-            //if (argumentsList.Count > 0)
-            //    codeBuilder.AppendFormat("{{0}}", string.Join<string>(",", argumentsList));
 
             return string.Format("new {0}(){1}", activityType, argumentsList.Count > 0 ? string.Format("{0}{1}{2}", "{", string.Join<string>(",", argumentsList), "}") : string.Empty);
         }
