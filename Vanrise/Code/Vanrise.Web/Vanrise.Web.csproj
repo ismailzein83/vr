@@ -176,6 +176,7 @@
     <Content Include="Client\Images\copy-icon.png" />
     <Content Include="Client\Images\currency-exchange.png" />
     <Content Include="Client\Images\loadingbar.gif" />
+    <Content Include="Client\Images\menu-icons\billing.png" />
     <Content Include="Client\Images\Ogero-01.png" />
     <Content Include="Client\Images\Ogero-02.png" />
     <Content Include="Client\Images\Zebra-01.png" />
