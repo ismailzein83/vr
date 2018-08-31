@@ -9,6 +9,7 @@
 		var context;
 		var sequenceSettings;
 		var dragdropsetting;
+		var vRWorkflowActivityId;
 
 		var sequenceDirectiveAPI;
 		var sequenceDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -25,6 +26,7 @@
 				if (context != undefined)
 					context.inEditor = true;
 				sequenceSettings = parameters.settings;
+				vRWorkflowActivityId = parameters.VRWorkflowActivityId;
 				dragdropsetting = parameters.dragdropsetting;
 			}
 		}
@@ -67,7 +69,8 @@
 				sequenceDirectiveReadyDeferred.promise.then(function () {
 					var payload = {
 						Context: context,
-						Settings: sequenceSettings
+						Settings: sequenceSettings,
+						VRWorkflowActivityId: vRWorkflowActivityId
 					};
 					VRUIUtilsService.callDirectiveLoad(sequenceDirectiveAPI, payload, sequenceDirectiveLoadDeferred);
 				});
@@ -96,7 +99,7 @@
 			$scope.scopeModel.isLoading = true;
 			var updatedObject = sequenceDirectiveAPI.getData();
 			if ($scope.onActivityUpdated != undefined) {
-				$scope.onActivityUpdated(updatedObject);
+				$scope.onActivityUpdated(updatedObject.Settings);
 			}
 			$scope.scopeModel.isLoading = false;
 			$scope.modalContext.closeModal();

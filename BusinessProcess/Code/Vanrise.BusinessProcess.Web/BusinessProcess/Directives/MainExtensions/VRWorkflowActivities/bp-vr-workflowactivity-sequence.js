@@ -28,12 +28,15 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 			var activities;
 			var workflowContainerAPI;
 			var workflowContainerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+			var activitySettings;
+			var vRWorkflowActivityId;
+			var disableActivity;
 
 			this.initializeController = initializeController;
 
 			function initializeController() {
-			    $scope.scopeModel = {};
-			    $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+				$scope.scopeModel = {};
+				$scope.scopeModel.isVRWorkflowActivityDisabled = false;
 				$scope.scopeModel.datasource = [];
 				$scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
 
@@ -78,10 +81,13 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 				api.load = function (payload) {
 					var promises = [];
 					if (payload != undefined) {
+						vRWorkflowActivityId = payload.VRWorkflowActivityId;
+						disableActivity = payload.DisableActivity;
 						context = payload.Context;
 						if (payload.Settings != undefined) {
-						    $scope.scopeModel.isVRWorkflowActivityDisabled = false;
-						    variables = payload.Settings.Variables;
+							activitySettings = payload.Settings;
+							$scope.scopeModel.isVRWorkflowActivityDisabled = false;
+							variables = payload.Settings.Variables;
 						}
 
 						if (context != undefined && context.reserveVariableNames != undefined && variables != undefined && variables.length > 0)
@@ -94,9 +100,11 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 
 						if (payload.SetMenuAction != undefined) {
 							payload.SetMenuAction(getVariableEditorAction());
-							payload.SetMenuAction(getOpenEditorAction());
+							if (!payload.DisableEdit)
+								payload.SetMenuAction(getOpenEditorAction());
 						}
 					}
+					return UtilsService.waitMultiplePromises(promises);
 				};
 
 				api.getData = function () {
@@ -109,20 +117,20 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 				};
 
 				api.changeActivityStatus = function (isVRWorkflowActivityDisabled) {
-				    $scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
-				    if (workflowContainerAPI != undefined && workflowContainerAPI.changeActivityStatus != undefined)
-				        workflowContainerAPI.changeActivityStatus(isVRWorkflowActivityDisabled);
+					$scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
+					if (workflowContainerAPI != undefined && workflowContainerAPI.changeActivityStatus != undefined)
+						workflowContainerAPI.changeActivityStatus(isVRWorkflowActivityDisabled);
 				};
 
 				api.getActivityStatus = function () {
-				    return $scope.scopeModel.isVRWorkflowActivityDisabled;
+					return $scope.scopeModel.isVRWorkflowActivityDisabled;
 				};
 
 				api.isActivityValid = function () {
-				    if (workflowContainerAPI != null && workflowContainerAPI.isActivityValid != undefined)
-				        return workflowContainerAPI.isActivityValid();
+					if (workflowContainerAPI != null && workflowContainerAPI.isActivityValid != undefined)
+						return workflowContainerAPI.isActivityValid();
 
-				    return true;
+					return true;
 				};
 
 				if (ctrl.onReady != null)
@@ -152,6 +160,16 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 						activities = sequenceSettings.Activities;
 					}
 
+					if (sequenceSettings == undefined || sequenceSettings.Variables == undefined || sequenceSettings.Variables.length < 1) {
+						variables = [];
+					}
+					else {
+						variables = sequenceSettings.Variables;
+					}
+
+					if (sequenceSettings != undefined && sequenceSettings.IsDisabled && !activitySettings.IsDisabled && disableActivity != undefined)
+						disableActivity();
+
 					var workflowContainerLoadDeferred = UtilsService.createPromiseDeferred();
 					var payload = {
 						vRWorkflowActivities: activities,
@@ -168,10 +186,16 @@ app.directive('businessprocessVrWorkflowactivitySequence', ['UtilsService', 'VRU
 					Activities: activities,
 					Variables: variables
 				};
+				if (activitySettings != undefined) {
+					settings.Title = activitySettings.Title;
+					settings.IsDisabled = activitySettings.IsDisabled;
+					settings.Editor = activitySettings.Editor;
+					settings.ConfigId = activitySettings.ConfigId;
+				}
 
 				var updateContext = ctrl.getChildContext();
 				updateContext.inEditor = true;
-				BusinessProcess_VRWorkflowService.openSequenceEditor(ctrl.dragdropsetting, updateContext, settings, onActivityUpdated);
+				BusinessProcess_VRWorkflowService.openSequenceEditor(ctrl.dragdropsetting, updateContext, settings, onActivityUpdated, vRWorkflowActivityId);
 			}
 
 			function openVariablesEditor() {
