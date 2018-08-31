@@ -20,7 +20,9 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             if ($(this).prop('id') != $(clickedPanel).prop('id'))
                 $(this).removeClass('focus-panel');
         });
-        $(clickedPanel).addClass('focus-panel');
+        $(clickedPanel).parent().addClass('focus-panel');
+        $rootScope.$broadcast("hide-all-menu");
+        $rootScope.$broadcast("hide-all-select");
         e.stopPropagation();
     };
 
@@ -30,7 +32,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $scope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
     });
-
+  
     $rootScope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);

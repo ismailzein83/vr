@@ -28,8 +28,8 @@ app.directive('vrSectionV2', ['UtilsService', 'MultiTranscludeService', function
 			if (attrs.focusonclick != undefined) {
 				focusClass = "vr-clickable-panel";
 			}
-			var htmlTempalte = '<div class="panel-primary panel-vr ' + focusClass + '" id="{{sectionId}}" ng-click="$root.addFocusPanelClass($event)" ng-class="classlevel" >'
-				+ '<div class="panel-heading" ng-init="expandname=true" expanded="{{expandname}}">'
+			var htmlTempalte = '<div class="panel-primary panel-vr ' + focusClass + '"  ng-class="classlevel" >'
+				+ '<div class="panel-heading" ng-init="expandname=true" expanded="{{expandname}}" id="{{sectionId}}" ng-click="$root.addFocusPanelClass($event)">'
 				+ '<span class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon" ng-show="dragable" ></span>'
 				+ '<span style="padding-left: 4px;" class="hand-cursor collapsible-icon glyphicon " ng-show="collapsible" ng-click=" expandname =!expandname " ng-class=" expandname ?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span><label>{{sectionCtrl.header}}</label>'
 				+ '<span class="section-menu"  style="absolute: relative; right: 10px;" ng-if="sectionCtrl.menuactions.length > 0" > <vr-button type="SectionAction" menuactions="sectionCtrl.menuactions" isasynchronous="true" ></vr-button></span> '
