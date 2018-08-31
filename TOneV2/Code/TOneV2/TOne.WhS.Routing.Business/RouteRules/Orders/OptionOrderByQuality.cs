@@ -10,7 +10,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         public static Guid s_ConfigId { get { return new Guid("c107e207-6597-4e45-b22f-d4f0bb7dd211"); } }
         public override Guid ConfigId { get { return s_ConfigId; } }
 
-        public List<Guid> QualityConfigurationIds { get; set; }
+        public Guid? QualityConfigurationId { get; set; }
 
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
@@ -59,24 +59,21 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
             if (!customerRouteQualityConfigurationData.TryGetValue(supplierZoneId, out customerRouteQualityConfigurationsData) || customerRouteQualityConfigurationsData.Count == 0)
                 return null;
 
-            decimal qualityValue = 0;
-
             foreach (var itm in customerRouteQualityConfigurationsData)
             {
-                if (this.QualityConfigurationIds == null)
+                if (!this.QualityConfigurationId.HasValue)
                 {
                     if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
-                        qualityValue += itm.QualityData;
+                        return itm.QualityData;
                 }
-
                 else
                 {
-                    if (this.QualityConfigurationIds.Contains(itm.QualityConfigurationId))
-                        qualityValue += itm.QualityData;
+                    if (itm.QualityConfigurationId == this.QualityConfigurationId.Value)
+                        return itm.QualityData;
                 }
-
             }
-            return qualityValue;
+
+            return null;
         }
 
         private decimal? GetRoutingProductQualityValue(long saleZoneId, int supplierId, QualityConfigurationManager manager, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration)
@@ -91,25 +88,21 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
             if (!rpQualityConfigurationData.TryGetValue(saleZoneSupplier, out rpQualityConfigurationsData) || rpQualityConfigurationsData.Count == 0)
                 return null;
 
-            decimal qualityValue = 0;
-
             foreach (var itm in rpQualityConfigurationsData)
             {
-                if (this.QualityConfigurationIds == null)
+                if (!this.QualityConfigurationId.HasValue)
                 {
                     if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
-                        qualityValue += itm.QualityData;
+                        return itm.QualityData;
                 }
-
                 else
                 {
-                    if (this.QualityConfigurationIds.Contains(itm.QualityConfigurationId))
-                        qualityValue += itm.QualityData;
+                    if (itm.QualityConfigurationId == this.QualityConfigurationId.Value)
+                        return itm.QualityData;
                 }
-
             }
 
-            return qualityValue;
+            return null;
         }
     }
 }

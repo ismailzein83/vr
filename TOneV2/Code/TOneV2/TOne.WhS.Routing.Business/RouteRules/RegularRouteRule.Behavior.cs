@@ -66,17 +66,10 @@ namespace TOne.WhS.Routing.Business
                     if (optionOrderSetting.ConfigId == OptionOrderByQuality.s_ConfigId)
                     {
                         OptionOrderByQuality optionOrderByQuality = optionOrderSetting.CastWithValidate<OptionOrderByQuality>("optionOrderSetting");
-                        if (optionOrderByQuality.QualityConfigurationIds == null || optionOrderByQuality.QualityConfigurationIds.Count == 0)
-                        {
+                        if (!optionOrderByQuality.QualityConfigurationId.HasValue)
                             context.IsDefault = true;
-                        }
                         else
-                        {
-                            foreach (var qualityConfigurationId in optionOrderByQuality.QualityConfigurationIds)
-                            {
-                                qualityConfigurationIds.Add(qualityConfigurationId);
-                            }
-                        }
+                            qualityConfigurationIds.Add(optionOrderByQuality.QualityConfigurationId.Value);
                     }
                 }
             }

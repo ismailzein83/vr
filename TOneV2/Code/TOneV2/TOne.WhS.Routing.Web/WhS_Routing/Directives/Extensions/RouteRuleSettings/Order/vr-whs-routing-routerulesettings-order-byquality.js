@@ -61,7 +61,7 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
 
                             var qualityConfigurationPayload = undefined;
                             if (payload != undefined) {
-                                qualityConfigurationPayload = { selectedIds: payload.QualityConfigurationIds };
+                                qualityConfigurationPayload = { selectedIds: payload.QualityConfigurationId };
                             }
 
                             VRUIUtilsService.callDirectiveLoad(qualityConfigurationSelectorAPI, qualityConfigurationPayload, loadQualityConfigurationPromiseDeferred);
@@ -76,7 +76,7 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByQuality, TOne.WhS.Routing.Business",
-                        QualityConfigurationIds: qualityConfigurationSelectorAPI.getSelectedIds()
+                        QualityConfigurationId: qualityConfigurationSelectorAPI.getSelectedIds()
                     };
                 };
 
