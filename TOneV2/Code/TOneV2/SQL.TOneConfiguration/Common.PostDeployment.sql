@@ -241,11 +241,11 @@ as (select * from (values
 ('937F4A80-74FD-43BA-BCC1-F674445170BB','Business Partner'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0),
 ('89254E36-5D91-4DB1-970F-9BFEF404679A','Lookups'					,null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,10,1),
 
-('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing Management'		,null,null,'/images/menu-icons/billing.png',70,0),
+('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing Management'		,null,null,'/Client/Images/menu-icons/billing.png',70,0),
 
 ('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'						,null,null,'/Client/Images/menu-icons/other.png',75,0),
 
-('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/images/menu-icons/busines intel.png',95,1)
+('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/Client/Images/menu-icons/busines intel.png',95,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
