@@ -311,24 +311,23 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return hasRunningProcesses;
         }
 
-        public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus,
-            int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId, Guid? taskId)
+        public long InsertInstance(BPInstanceToAdd bpInstanceToAdd)
         {
             bool serializeInputArgumentsWithoutType = false;
-            if (InputArgumentTypeByDefinitionId.ContainsKey(definitionId))
+            if (InputArgumentTypeByDefinitionId.ContainsKey(bpInstanceToAdd.DefinitionID))
                 serializeInputArgumentsWithoutType = true;
 
             string serializedInputArguments = null;
-            if (inputArguments != null)
-                serializedInputArguments = Serializer.Serialize(inputArguments, serializeInputArgumentsWithoutType);
+            if (bpInstanceToAdd.InputArgument != null)
+                serializedInputArguments = Serializer.Serialize(bpInstanceToAdd.InputArgument, serializeInputArgumentsWithoutType);
 
             string serializedCompletionNotifier = null;
-            if (completionNotifier != null)
-                serializedCompletionNotifier = Serializer.Serialize(completionNotifier);
+            if (bpInstanceToAdd.CompletionNotifier != null)
+                serializedCompletionNotifier = Serializer.Serialize(bpInstanceToAdd.CompletionNotifier);
 
             object processInstanceId;
-            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId, serializedInputArguments, serializedCompletionNotifier, (int)executionStatus,
-                initiatorUserId, entityId, viewInstanceRequiredPermissionSetId, taskId) > 0)
+            if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, bpInstanceToAdd.Title, bpInstanceToAdd.ParentProcessID, bpInstanceToAdd.DefinitionID, serializedInputArguments,
+                serializedCompletionNotifier, (int)bpInstanceToAdd.Status, bpInstanceToAdd.InitiatorUserId, bpInstanceToAdd.EntityId, bpInstanceToAdd.ViewRequiredPermissionSetId, bpInstanceToAdd.TaskId) > 0)
                 return (long)processInstanceId;
             else
                 return 0;

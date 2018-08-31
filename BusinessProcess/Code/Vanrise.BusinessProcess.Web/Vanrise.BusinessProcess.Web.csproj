@@ -204,6 +204,8 @@
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPTechnicalDefinitionGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPDefinitionGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-afterinserthandler-settings.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-beforeinserthandler-settings.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-monitor.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-history.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-history-grid.js" />

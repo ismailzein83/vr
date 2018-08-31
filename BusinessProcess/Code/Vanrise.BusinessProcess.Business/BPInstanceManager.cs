@@ -175,10 +175,24 @@ namespace Vanrise.BusinessProcess.Business
             if (processTitle != null)
                 processTitle = processTitle.Replace("#BPDefinitionTitle#", processDefinition.Title);
 
-            IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
+            BPInstanceToAdd bpInstanceToAdd = new Entities.BPInstanceToAdd()
+            {
+                Title = processTitle,
+                ParentProcessID = createProcessInput.ParentProcessID,
+                InitiatorUserId = createProcessInput.InputArguments.UserId,
+                EntityId = createProcessInput.InputArguments.EntityId,
+                DefinitionID = processDefinition.BPDefinitionID,
+                Status = BPInstanceStatus.New,
+                InputArgument = createProcessInput.InputArguments,
+                ViewRequiredPermissionSetId = viewInstanceRequiredPermissionSetId,
+                CompletionNotifier = createProcessInput.CompletionNotifier
+            };
 
-            long processInstanceId = bpInstanceDataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, createProcessInput.CompletionNotifier, processDefinition.BPDefinitionID, createProcessInput.InputArguments,
-                BPInstanceStatus.New, createProcessInput.InputArguments.UserId, createProcessInput.InputArguments.EntityId, viewInstanceRequiredPermissionSetId, createProcessInput.TaskId);
+            if (processDefinition.Configuration != null && processDefinition.Configuration.BPInstanceBeforeInsertHandler != null)
+                processDefinition.Configuration.BPInstanceBeforeInsertHandler.Execute(new BPInstanceBeforeInsertHandlerExecuteContext() { BPInstanceToAdd = bpInstanceToAdd });
+
+            IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
+            long processInstanceId = bpInstanceDataManager.InsertInstance(bpInstanceToAdd);
 
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage
@@ -193,6 +207,9 @@ namespace Vanrise.BusinessProcess.Business
             BPInstance bpInstance = GetBPInstance(processInstanceId);
             if (bpInstance != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectCustomAction(new BPInstanceLoggableEntity(createProcessInput.InputArguments.GetDefinitionTitle()), "Start Process", false, bpInstance);
+
+            if (processDefinition.Configuration != null && processDefinition.Configuration.BPInstanceAfterInsertHandler != null)
+                processDefinition.Configuration.BPInstanceAfterInsertHandler.Execute(new BPInstanceAfterInsertHandlerExecuteContext() { BPInstance = bpInstance });
 
             CreateProcessOutput output = new CreateProcessOutput
             {
@@ -288,6 +305,18 @@ namespace Vanrise.BusinessProcess.Business
             bpDefinition.ThrowIfNull("bpDefinition", bpInstance.DefinitionID);
             return s_bpDefinitionManager.DoesUserHaveViewAccess(userId, bpDefinition, bpInstance.InputArgument)
                 && s_bpDefinitionManager.DoesUserHaveStartNewInstanceAccess(userId, bpInstance.InputArgument);
+        }
+
+        public IEnumerable<BPInstanceBeforeInsertHandlerConfig> GetBPInstanceBeforeInsertHandlerConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<BPInstanceBeforeInsertHandlerConfig>(BPInstanceBeforeInsertHandlerConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<BPInstanceAfterInsertHandlerConfig> GetBPInstanceAfterInsertHandlerConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<BPInstanceAfterInsertHandlerConfig>(BPInstanceAfterInsertHandlerConfig.EXTENSION_TYPE);
         }
 
         #endregion

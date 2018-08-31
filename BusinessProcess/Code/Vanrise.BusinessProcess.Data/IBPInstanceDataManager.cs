@@ -31,7 +31,7 @@ namespace Vanrise.BusinessProcess.Data
 
         void UpdateInstanceLastMessage(long processInstanceId, string message);
 
-        long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId, Guid? taskId);
+        long InsertInstance(BPInstanceToAdd bpInstanceToAdd);
 
         void UpdateServiceInstancesAndAssignmentStatus(List<BPInstance> pendingInstancesToUpdate);
 

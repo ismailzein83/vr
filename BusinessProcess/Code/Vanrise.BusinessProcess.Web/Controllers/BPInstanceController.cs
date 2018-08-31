@@ -99,6 +99,20 @@ namespace Vanrise.BusinessProcess.Web.Controllers
                 return GetUnauthorizedResponse();
             return s_instanceManager.CancelProcess(input.BPInstanceId);
         }
+
+        [HttpGet]
+        [Route("GetBPInstanceBeforeInsertHandlerConfigs")]
+        public IEnumerable<BPInstanceBeforeInsertHandlerConfig> GetBPInstanceBeforeInsertHandlerConfigs()
+        {
+            return s_instanceManager.GetBPInstanceBeforeInsertHandlerConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetBPInstanceAfterInsertHandlerConfigs")]
+        public IEnumerable<BPInstanceAfterInsertHandlerConfig> GetBPInstanceAfterInsertHandlerConfigs()
+        {
+            return s_instanceManager.GetBPInstanceAfterInsertHandlerConfigs();
+        }
     }
 
     public class HasRunningInstancesInput

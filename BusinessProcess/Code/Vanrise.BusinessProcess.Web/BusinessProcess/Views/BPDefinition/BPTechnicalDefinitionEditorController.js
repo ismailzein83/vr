@@ -23,6 +23,12 @@
         var scheduleTaskPermissionAPI;
         var scheduleTaskPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var bpInstanceBeforeInsertHandlerSettingsAPI;
+        var bpInstanceBeforeInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var bpInstanceAfterInsertHandlerSettingsAPI;
+        var bpInstanceAfterInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -58,6 +64,16 @@
             $scope.scopeModel.onScheduleTaskRequiredPermissionReady = function (api) {
                 scheduleTaskPermissionAPI = api;
                 scheduleTaskPermissionReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onBPIntanceBeforeInsertHandlerSettingsReady = function (api) {
+                bpInstanceBeforeInsertHandlerSettingsAPI = api;
+                bpInstanceBeforeInsertHandlerSettingsReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onBPIntanceAfterInsertHandlerSettingsReady = function (api) {
+                bpInstanceAfterInsertHandlerSettingsAPI = api;
+                bpInstanceAfterInsertHandlerSettingsReadyDeferred.resolve();
             };
 
             $scope.saveBPDefinition = function () {
@@ -181,14 +197,47 @@
 
                 return scheduleTaskPermissionLoadDeferred.promise;
             }
+            function loadBeforeInsertHandlerSettings() {
+                var bpInstanceBeforeInsertHandlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRWorkflowSelector, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission, loadScheduleTaskRequiredPermission]).then(function () {
+                bpInstanceBeforeInsertHandlerSettingsReadyDeferred.promise.then(function () {
 
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
+                    var payload;
+                    if (businessProcessDefinitionEntity && businessProcessDefinitionEntity.Configuration && businessProcessDefinitionEntity.Configuration.BPInstanceBeforeInsertHandler) {
+                        payload = {
+                            bpInstanceBeforeInsertHandler: businessProcessDefinitionEntity.Configuration.BPInstanceBeforeInsertHandler
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(bpInstanceBeforeInsertHandlerSettingsAPI, payload, bpInstanceBeforeInsertHandlerSettingsLoadPromiseDeferred);
+                });
+
+                return bpInstanceBeforeInsertHandlerSettingsLoadPromiseDeferred.promise;
+            }
+            function loadAfterInsertHandlerSettings() {
+                var bpInstanceAfterInsertHandlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                bpInstanceAfterInsertHandlerSettingsReadyDeferred.promise.then(function () {
+
+                    var payload;
+                    if (businessProcessDefinitionEntity && businessProcessDefinitionEntity.Configuration && businessProcessDefinitionEntity.Configuration.BPInstanceAfterInsertHandler) {
+                        payload = {
+                            bpInstanceAfterInsertHandler: businessProcessDefinitionEntity.Configuration.BPInstanceAfterInsertHandler
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(bpInstanceAfterInsertHandlerSettingsAPI, payload, bpInstanceAfterInsertHandlerSettingsLoadPromiseDeferred);
+                });
+
+                return bpInstanceAfterInsertHandlerSettingsLoadPromiseDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRWorkflowSelector, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
+                loadScheduleTaskRequiredPermission, loadBeforeInsertHandlerSettings, loadAfterInsertHandlerSettings]).then(function () {
+
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function insert() {
@@ -235,11 +284,14 @@
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
+            obj.Configuration.BPInstanceBeforeInsertHandler = bpInstanceBeforeInsertHandlerSettingsAPI.getData();
+            obj.Configuration.BPInstanceAfterInsertHandler = bpInstanceAfterInsertHandlerSettingsAPI.getData();
             obj.Configuration.Security = {
                 View: viewPermissionAPI.getData(),
                 StartNewInstance: startNewInstancePermissionAPI.getData(),
                 ScheduleTask: scheduleTaskPermissionAPI.getData()
             };
+
             return obj;
         }
     }

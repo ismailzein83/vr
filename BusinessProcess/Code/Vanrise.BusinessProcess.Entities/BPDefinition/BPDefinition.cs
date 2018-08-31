@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Vanrise.Entities;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
@@ -38,6 +39,8 @@ namespace Vanrise.BusinessProcess.Entities
         public string CompletionViewURL { get; set; }
         public string CompletionViewLinkText { get; set; }
         public bool BusinessRuleSetSupported { get; set; }
+        public BPInstanceBeforeInsertHandler BPInstanceBeforeInsertHandler { get; set; }
+        public BPInstanceAfterInsertHandler BPInstanceAfterInsertHandler { get; set; }
     }
 
     public abstract class BPDefinitionExtendedSettings
@@ -119,6 +122,5 @@ namespace Vanrise.BusinessProcess.Entities
         public RequiredPermissionSettings View { get; set; }
         public RequiredPermissionSettings StartNewInstance { get; set; }
         public RequiredPermissionSettings ScheduleTask { get; set; }
-
     }
 }
