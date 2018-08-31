@@ -25,10 +25,11 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 		function workflowCtor(ctrl, $scope, $attrs) {
 
 			var selectedVRWorkflowId;
-			var VRWorkflowIdX;
+			var VRWorkflowId;
 			var inArguments;
 			var outArguments;
 			var isNew;
+			var context;
 
 			this.initializeController = initializeController;
 			function initializeController() {
@@ -51,8 +52,8 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 					if (payload != undefined) {
 						$scope.scopeModel.context = payload.Context;
 						if (payload.Context != undefined)
-							VRWorkflowIdX = payload.Context.vrWorkflowId;
-
+							VRWorkflowId = payload.Context.vrWorkflowId;
+						context = payload.Context;
 						if (payload.Settings != undefined) {
 							selectedVRWorkflowId = payload.Settings.VRWorkflowId;
 							isNew = payload.Settings.IsNew;
@@ -80,7 +81,7 @@ app.directive('businessprocessVrWorkflowactivitySubprocess', ['UtilsService', 'V
 							isNew = false;
 						};
 
-						BusinessProcess_VRWorkflowService.openSubProcessEditor(buildObjectFromScope(), onActivityUpdated, ctrl.remove, isNew, VRWorkflowIdX);
+						BusinessProcess_VRWorkflowService.openSubProcessEditor(buildObjectFromScope(), onActivityUpdated, ctrl.remove, isNew, VRWorkflowId, context);
 					}
 
 					return UtilsService.waitMultiplePromises(promises).then(function () {

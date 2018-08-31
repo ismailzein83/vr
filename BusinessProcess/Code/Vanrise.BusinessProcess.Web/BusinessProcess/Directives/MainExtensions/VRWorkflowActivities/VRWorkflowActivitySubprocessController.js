@@ -26,6 +26,7 @@
 		var outArguments;
 		var workflowId;
 		var isNew;
+		var context;
 		loadParameters();
 		defineScope();
 		load();
@@ -40,12 +41,14 @@
 					inArguments = parameters.obj.InArguments;
 					outArguments = parameters.obj.OutArguments;
 					workflowId = parameters.workflowId;
+					context = parameters.context;
 				}
 			}
 		}
 
 		function defineScope() {
 			$scope.scopeModel = {};
+			$scope.scopeModel.context = context;
 			$scope.scopeModel.hasInArguments = false;
 			$scope.scopeModel.hasOutArguments = false;
 			$scope.scopeModel.inArguments = [];
@@ -260,7 +263,6 @@
 		}
 
 		function tryGetArgumentValue(selectedArguments, argumentName) {
-			console.log(selectedArguments);
 			if (selectedArguments == undefined)
 				return;
 
