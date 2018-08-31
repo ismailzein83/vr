@@ -54,11 +54,15 @@ namespace Vanrise.BusinessProcess.MainExtensions.VRWorkflowActivities
                         var newContext = childContext.CreateChildContext();
                         newContext.VRWorkflowActivityId = vrActivity.VRWorkflowActivityId;
 
+                        vrActivity.Settings.ThrowIfNull("vrActivity.Settings", vrActivity.VRWorkflowActivityId);
+                        if (vrActivity.Settings.IsDisabled)
+                            continue;
+
                         if (!isFirstActivity)
                             codeBuilder.Append(",");
                         else
                             isFirstActivity = false;
-                        vrActivity.Settings.ThrowIfNull("vrActivity.Settings", vrActivity.VRWorkflowActivityId);
+
                         string childActivityCode = vrActivity.Settings.GenerateWFActivityCode(newContext);
                         codeBuilder.Append(childActivityCode);
                         codeBuilder.AppendLine();
