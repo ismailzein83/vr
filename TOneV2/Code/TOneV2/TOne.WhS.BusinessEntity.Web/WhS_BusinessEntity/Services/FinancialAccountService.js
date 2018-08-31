@@ -2,9 +2,9 @@
 
     'use stict';
 
-    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierProfileService', 'VRUIUtilsService', 'VR_AccountBalance_BillingTransactionAPIService', 'WhS_BE_FinancialAccountAPIService', 'WhS_BE_FinancialAccountDefinitionAPIService', 'WhS_BE_RecurringChargeAPIService'];
+    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierProfileService', 'UtilsService', 'VRUIUtilsService', 'VR_AccountBalance_BillingTransactionAPIService', 'WhS_BE_FinancialAccountAPIService', 'WhS_BE_FinancialAccountDefinitionAPIService', 'WhS_BE_RecurringChargeAPIService', 'WhS_BE_CarrierProfileAPIService', 'WhS_BE_CarrierAccountAPIService'];
 
-    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService, VR_AccountBalance_BillingTransactionAPIService, WhS_BE_FinancialAccountAPIService, WhS_BE_FinancialAccountDefinitionAPIService, WhS_BE_RecurringChargeAPIService) {
+    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, UtilsService, VRUIUtilsService, VR_AccountBalance_BillingTransactionAPIService, WhS_BE_FinancialAccountAPIService, WhS_BE_FinancialAccountDefinitionAPIService, WhS_BE_RecurringChargeAPIService, WhS_BE_CarrierProfileAPIService, WhS_BE_CarrierAccountAPIService) {
 
         function addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded) {
             var parameters = {
@@ -80,13 +80,13 @@
 
         function defineFinancialAccountDrillDownTabs(financialAccount, gridAPI) {
             var drillDownTabs = [];
-            
+
             if (financialAccount.IsApplicableToCustomer)
                 addCustomerRecurringChargeDrillDownTab();
-           
-            if (financialAccount.IsApplicableToSupplier) 
+
+            if (financialAccount.IsApplicableToSupplier)
                 addSupplierRecurringChargeDrillDownTab();
-            
+
             addBillingTransactionDrillDownTab();
 
             setDrillDownTabs();
@@ -130,13 +130,24 @@
                 };
                 customerDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccountObj) {
                     var financialAccountId = financialAccountObj.Entity.FinancialAccountId;
-                    var genericBusinessEntityPayload = {
-                        businessEntityDefinitionId: "fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131",
-                        fieldValues: {
-                            FinancialAccountId: financialAccountId
-                        }
-                    };
-                    return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
+                    var promise = UtilsService.createPromiseDeferred();
+                    WhS_BE_FinancialAccountAPIService.GetFinancialAccountCurrencyId(financialAccountId).then(function (currencyId) {
+                        var genericBusinessEntityPayload = {
+                            businessEntityDefinitionId: "fa6c91c0-adc9-4bb2-aedb-77a6ee1c9131",
+                            fieldValues: {
+                                FinancialAccountId: financialAccountId,
+                                CurrencyId: currencyId
+                            }
+                        };
+                        genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
+                            promise.resolve();
+                        }).catch(function (error) {
+                            promise.reject(error);
+                        });
+                    }).catch(function (error) {
+                        promise.reject(error);
+                    });
+                    return promise.promise;
                 };
 
                 drillDownTabs.push(customerDrillDownTab);
@@ -154,14 +165,24 @@
                 };
                 supplierDrillDownTab.loadDirective = function (genericBusinessEntityAPI, financialAccountObj) {
                     var financialAccountId = financialAccountObj.Entity.FinancialAccountId;
-
-                    var genericBusinessEntityPayload = {
-                        businessEntityDefinitionId: "e9c11a90-864c-45a1-b90c-d7fdd80e9cf3",
-                        fieldValues: {
-                            FinancialAccountId: financialAccountId
-                        }
-                    };
-                    return genericBusinessEntityAPI.load(genericBusinessEntityPayload);
+                    var promise = UtilsService.createPromiseDeferred();
+                    WhS_BE_FinancialAccountAPIService.GetFinancialAccountCurrencyId(financialAccountId).then(function (currencyId) {
+                        var genericBusinessEntityPayload = {
+                            businessEntityDefinitionId: "e9c11a90-864c-45a1-b90c-d7fdd80e9cf3",
+                            fieldValues: {
+                                FinancialAccountId: financialAccountId,
+                                CurrencyId: currencyId
+                            }
+                        };
+                        genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
+                            promise.resolve();
+                        }).catch(function (error) {
+                            promise.reject(error);
+                        });;
+                    }).catch(function (error) {
+                        promise.reject(error);
+                    });;
+                    return promise.promise;
                 };
 
                 drillDownTabs.push(supplierDrillDownTab);

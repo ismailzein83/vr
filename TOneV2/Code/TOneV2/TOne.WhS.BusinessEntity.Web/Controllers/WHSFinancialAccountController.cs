@@ -65,6 +65,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return _manager.GetFinancialAccount(financialAccountId);
         }
         [HttpGet]
+        [Route("GetFinancialAccountCurrencyId")]
+        public int GetFinancialAccountCurrencyId(int financialAccountId)
+        {
+            return _manager.GetFinancialAccountCurrencyId(financialAccountId);
+        }
+
+        [HttpGet]
         [Route("GetFinancialAccountRuntimeEditor")]
         public WHSFinancialAccountRuntimeEditor GetFinancialAccountRuntimeEditor(int financialAccountId)
         {

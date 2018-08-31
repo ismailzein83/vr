@@ -54,6 +54,11 @@
                 financialAccountId: financialAccountId
             });
         }
+        function GetFinancialAccountCurrencyId(financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountCurrencyId"), {
+                financialAccountId: financialAccountId
+            });
+        }
 
         function GetCustomerTimeZoneId(financialAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerTimeZoneId"), {
@@ -74,6 +79,7 @@
         }
 
         return ({
+            GetFinancialAccountCurrencyId:GetFinancialAccountCurrencyId,
             GetAccountCurrencyName: GetAccountCurrencyName,
             AddFinancialAccount: AddFinancialAccount,
             UpdateFinancialAccount: UpdateFinancialAccount,
