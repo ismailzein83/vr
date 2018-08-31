@@ -6,6 +6,8 @@ namespace Vanrise.Runtime.Triggers.TimeTaskTrigger
 {
     public class ManualSchedulerTaskTrigger : SchedulerTaskTrigger
     {
+        public override bool UpdateNextRuntimeWhenNull { get { return false; } }
+
         public override Dictionary<string, object> EvaluateExpressions(SchedulerTask task, SchedulerTaskState taskState)
         {
             Dictionary<string, object> evaluatedExpressions = null;

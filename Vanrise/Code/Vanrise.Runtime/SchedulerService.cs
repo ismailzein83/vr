@@ -40,7 +40,7 @@ namespace Vanrise.Runtime
                 (i) =>
                 {
                     Entities.SchedulerTaskState schedulerTaskState;
-                    while(qTaskStates.TryDequeue(out schedulerTaskState))
+                    while (qTaskStates.TryDequeue(out schedulerTaskState))
                     {
                         SchedulerTask schedulerTask = _scheduleTaskManager.GetTask(schedulerTaskState.TaskId);
                         if (schedulerTask == null)
@@ -77,7 +77,7 @@ namespace Vanrise.Runtime
         {
             TransactionLocker.Instance.TryLock(String.Concat("SchedulerTask_", schedulerTaskState.TaskId),
                 () =>
-                {                    
+                {
                     Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(userId);
                     SchedulerTaskTrigger taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(schedulerTask.TriggerInfo.FQTN));
                     bool updateTaskState = false;
@@ -91,7 +91,8 @@ namespace Vanrise.Runtime
                         {
                             if (!schedulerTaskState.NextRunTime.HasValue)
                             {
-                                updateTaskState = true;
+                                if (taskTrigger.UpdateNextRuntimeWhenNull)
+                                    updateTaskState = true;
                             }
                             else
                             {
