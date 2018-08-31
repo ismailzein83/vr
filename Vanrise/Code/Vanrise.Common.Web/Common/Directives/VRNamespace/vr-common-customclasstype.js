@@ -7,7 +7,7 @@ app.directive('vrCommonCustomclasstype', ['UtilsService', 'VRUIUtilsService',
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum: '='
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
