@@ -35,8 +35,8 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 
 			this.initializeController = initializeController;
 			function initializeController() {
-			    $scope.scopeModel = {};
-			    $scope.scopeModel.isVRWorkflowActivityDisabled = false;
+				$scope.scopeModel = {};
+				$scope.scopeModel.isVRWorkflowActivityDisabled = false;
 				$scope.scopeModel.dragdropsetting = ctrl.dragdropsetting;
 
 				$scope.scopeModel.onWorkflowContainerReady = function (api) {
@@ -84,6 +84,8 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 						childContext.showErrorWarningIcon = context.showErrorWarningIcon;
 						childContext.getParentVariables = function () {
 							var parentVars = [];
+							if ($scope.scopeModel.IterationVariableName != undefined && $scope.scopeModel.IterationVariableName.length > 0)
+								parentVars.push({ Name: $scope.scopeModel.IterationVariableName });
 							if (context.getParentVariables != undefined)
 								parentVars = parentVars.concat(context.getParentVariables());
 							return parentVars;
@@ -101,8 +103,8 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 
 					var promises = [];
 					if (payload != undefined) {
-					    if (payload.Settings != undefined) {
-					        $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
+						if (payload.Settings != undefined) {
+							$scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
 
 							isNew = payload.Settings.IsNew;
 							$scope.scopeModel.List = payload.Settings.List;
@@ -168,20 +170,20 @@ app.directive('businessprocessVrWorkflowactivityForeach', ['UtilsService', 'VRUI
 				};
 
 				api.changeActivityStatus = function (isVRWorkflowActivityDisabled) {
-				    $scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
-				    if (workflowContainerAPI != undefined && workflowContainerAPI.changeActivityStatus != undefined)
-				        workflowContainerAPI.changeActivityStatus(isVRWorkflowActivityDisabled);
+					$scope.scopeModel.isVRWorkflowActivityDisabled = isVRWorkflowActivityDisabled;
+					if (workflowContainerAPI != undefined && workflowContainerAPI.changeActivityStatus != undefined)
+						workflowContainerAPI.changeActivityStatus(isVRWorkflowActivityDisabled);
 				};
 
 				api.getActivityStatus = function () {
-				    return $scope.scopeModel.isVRWorkflowActivityDisabled;
+					return $scope.scopeModel.isVRWorkflowActivityDisabled;
 				};
 
 				api.isActivityValid = function () {
-				    if (workflowContainerAPI != null && workflowContainerAPI.isActivityValid != undefined)
-				        return workflowContainerAPI.isActivityValid();
+					if (workflowContainerAPI != null && workflowContainerAPI.isActivityValid != undefined)
+						return workflowContainerAPI.isActivityValid();
 
-				    return true;
+					return true;
 				};
 
 				if (ctrl.onReady != null)

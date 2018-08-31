@@ -1,47 +1,53 @@
 ﻿<div vr-modalcontent ng-controller="BusinessProcess_VR_WorkflowActivityForEachController" size="xlarge">
-    <vr-modalbody>
-        <vr-form name="formEditForEach" vr-loader="scopeModel.isLoading">
-            <vr-tabs>
-                <vr-tab header="'Definition'">
-                    <vr-row>
-                        <vr-columns width="1/3row">
-                            <vr-textbox label="Iteration Variable Name" value="scopeModel.iterationVariableName" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/3row">
-                            <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="List" isrequired="true" value="scopeModel.list"></businessprocess-vr-workflow-activity-expressionbuilder>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row haschildcolumns>
-                        <businessprocess-vr-workflow-variabletypes normal-col-num="4" label="Iteration Variable Type" on-ready="scopeModel.onIterationVariableTypeSelectorReady"></businessprocess-vr-workflow-variabletypes>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Body'">
-                    <vr-row class="vr-workflow">
-                        <vr-columns colnum="2" medium-spacing>
-                            <div style=" max-height: 78vh; overflow: auto;">
-                                <vr-section header="Toolbox">
-                                    <vr-toolbox datasource="scopeModel.activityConfigs" verticallayout leftalignment datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropsetting.groupCorrelation.getGroupName()}}"></vr-toolbox>
-                                </vr-section>
-                            </div>
-                        </vr-columns>
-                        <vr-columns colnum="10" medium-spacing>
-                            <div style=" max-height: 78vh; overflow: auto;">
-                                <vr-section header="Body">
-                                    <businessprocess-vr-workflow-containerv2 single-activity="true" on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-containerv2>
-                                </vr-section>
-                            </div>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditForEach"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+	<vr-modalbody>
+		<vr-form name="formEditForEach" vr-loader="scopeModel.isLoading">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-row>
+						<vr-columns width="1/3row">
+							<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="scopeModel.context.getParentVariables" getworkflowarguments="scopeModel.context.getWorkflowArguments" label="List" isrequired="true" value="scopeModel.list"></businessprocess-vr-workflow-activity-expressionbuilder>
+						</vr-columns>
+					</vr-row>
+					<vr-section header="Iteration Variable Name">
+						<vr-row>
+							<vr-columns width="1/4row">
+								<vr-validator validate="scopeModel.isVariableNameValid()">
+									<vr-textbox label="Iteration Variable Name" value="scopeModel.iterationVariableName" isrequired="true"></vr-textbox>
+								</vr-validator>
+							</vr-columns>
+						</vr-row>
+						<vr-row haschildcolumns>
+							<businessprocess-vr-workflow-variabletypes normal-col-num="3" label="Iteration Variable Type" on-ready="scopeModel.onIterationVariableTypeSelectorReady"></businessprocess-vr-workflow-variabletypes>
+						</vr-row>
+					</vr-section>
+				</vr-tab>
+				<vr-tab header="'Body'">
+					<vr-row class="vr-workflow">
+						<vr-columns colnum="2" medium-spacing>
+							<div style=" max-height: 78vh; overflow: auto;">
+								<vr-section header="Toolbox">
+									<vr-toolbox datasource="scopeModel.activityConfigs" verticallayout leftalignment datatextfield="Title" datavaluefield="Entity" groupname="{{scopeModel.dragdropsetting.groupCorrelation.getGroupName()}}"></vr-toolbox>
+								</vr-section>
+							</div>
+						</vr-columns>
+						<vr-columns colnum="10" medium-spacing>
+							<div style=" max-height: 78vh; overflow: auto;">
+								<vr-section header="Body">
+									<businessprocess-vr-workflow-containerv2 single-activity="true" on-ready="scopeModel.onWorkflowContainerReady" dragdropsetting="scopeModel.dragdropsetting"></businessprocess-vr-workflow-containerv2>
+								</vr-section>
+							</div>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" data-onclick="scopeModel.saveActivity" formname="formEditForEach"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

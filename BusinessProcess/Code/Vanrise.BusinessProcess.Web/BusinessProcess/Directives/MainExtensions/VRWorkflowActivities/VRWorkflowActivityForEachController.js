@@ -55,6 +55,21 @@
 				iterationVariableTypeSelectorReadyDeferred.resolve();
 			};
 
+			$scope.scopeModel.isVariableNameValid = function () {
+				if ($scope.scopeModel.iterationVariableName == undefined)
+					return null;
+
+				var variableName = $scope.scopeModel.iterationVariableName.toLowerCase();
+
+				if (iterationVariableName != undefined && variableName == iterationVariableName.toLowerCase())
+					return null;
+
+				if (context.isVariableNameReserved != undefined && context.isVariableNameReserved(variableName))
+					return 'Same variable name already exists';
+
+				return null;
+			};
+
 			$scope.scopeModel.onWorkflowContainerReady = function (api) {
 				workflowContainerAPI = api;
 				workflowContainerReadyPromiseDeferred.resolve();
@@ -105,10 +120,45 @@
 				return variableTypeDirectiveLoadDeferred.promise;
 			}
 
+			//function getContainerGetChildContext() {
+			//	var containerChildContext = getChildContext();
+			//	containerChildContext.inEditor = true;
+			//	return containerChildContext;
+			//}
 			function getContainerGetChildContext() {
 				var containerChildContext = getChildContext();
-				containerChildContext.inEditor = true;
-				return containerChildContext;
+				var newContainerChildContext = {};
+				newContainerChildContext.addToList = containerChildContext.addToList;
+				newContainerChildContext.doesActivityhaveErrors = containerChildContext.doesActivityhaveErrors;
+				newContainerChildContext.eraseVariableName = containerChildContext.eraseVariableName;
+				newContainerChildContext.getWorkflowArguments = containerChildContext.getWorkflowArguments;
+				newContainerChildContext.isVariableNameReserved = containerChildContext.isVariableNameReserved;
+				newContainerChildContext.removeFromList = containerChildContext.removeFromList;
+				newContainerChildContext.reserveVariableName = containerChildContext.reserveVariableName;
+				newContainerChildContext.reserveVariableNames = containerChildContext.reserveVariableNames;
+				newContainerChildContext.showErrorWarningIcon = containerChildContext.showErrorWarningIcon;
+				newContainerChildContext.vrWorkflowId = containerChildContext.vrWorkflowId;
+				newContainerChildContext.inEditor = true;
+				newContainerChildContext.getParentVariables = function () {
+					var parentVariables = containerChildContext.getParentVariables();
+
+					if (parentVariables != undefined && parentVariables.length > 0) {
+						if (iterationVariableName != $scope.scopeModel.iterationVariableName) {
+							if (iterationVariableName != undefined && iterationVariableName.length > 0) {
+								var variableIndex = UtilsService.getItemIndexByVal(parentVariables, iterationVariableName, "Name");
+								if (variableIndex >= 0)
+									parentVariables.splice(variableIndex, 1);
+							}
+
+							if ($scope.scopeModel.iterationVariableName != undefined && $scope.scopeModel.iterationVariableName.length > 0)
+								parentVariables.unshift({ Name: $scope.scopeModel.iterationVariableName });
+						}
+					}
+
+					else parentVariables = [{ Name: $scope.scopeModel.iterationVariableName }];
+					return parentVariables;
+				};
+				return newContainerChildContext;
 			}
 
 			function loadWorkflowContainer() {
@@ -117,7 +167,7 @@
 				workflowContainerReadyPromiseDeferred.promise.then(function () {
 					var payload = {
 						vRWorkflowActivity: activity,
-						getChildContext: getContainerGetChildContext,
+						getChildContext: getContainerGetChildContext
 					};
 					VRUIUtilsService.callDirectiveLoad(workflowContainerAPI, payload, workflowContainerLoadDeferred);
 				});
@@ -144,6 +194,17 @@
 
 		function updateActivity() {
 			$scope.scopeModel.isLoading = true;
+			var oldIterationVariableName = (iterationVariableName != undefined) ? iterationVariableName.toLowerCase() : undefined;
+			var newIterationVariableName = ($scope.scopeModel.iterationVariableName != undefined) ? $scope.scopeModel.iterationVariableName.toLowerCase() : undefined;
+
+			if (oldIterationVariableName != newIterationVariableName) {
+				if (context.reserveVariableName != undefined && newIterationVariableName != undefined)
+					context.reserveVariableName(newIterationVariableName);
+
+				if (context.eraseVariableName != undefined && oldIterationVariableName != undefined)
+					context.eraseVariableName(oldIterationVariableName);
+			}
+
 			var updatedObject = {
 				List: $scope.scopeModel.list,
 				IterationVariableName: $scope.scopeModel.iterationVariableName,
