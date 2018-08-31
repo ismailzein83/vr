@@ -50,6 +50,8 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
 				var api = {};
 
 				api.load = function (payload) {
+					var promises = [];
+
 					var editModeAction = {
 						name: "Edit",
 						clicked: openActivityEditor
@@ -106,6 +108,7 @@ app.directive('businessprocessVrWorkflowactivityCallhttpservice', ['UtilsService
 
 						BusinessProcess_VRWorkflowService.openCallHttpServiceEditor(buildObjectFromScope(), context, onActivityUpdated, ctrl.remove, isNew);
 					}
+					return UtilsService.waitMultiplePromises(promises);
 				};
 
 				api.getData = function () {
