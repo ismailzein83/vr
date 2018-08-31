@@ -33,7 +33,8 @@ app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUt
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+				api.load = function (payload) {
+					var promises = [];
                     if (payload != undefined) {
                         if (payload.Settings != undefined) {
                             $scope.scopeModel.isVRWorkflowActivityDisabled = payload.Settings.IsDisabled;
@@ -42,7 +43,8 @@ app.directive('businessprocessVrWorkflowactivityDelay', ['UtilsService', 'VRUIUt
 
                         if (payload.Context != null)
                             $scope.scopeModel.context = payload.Context;
-                    }
+					}
+					return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
