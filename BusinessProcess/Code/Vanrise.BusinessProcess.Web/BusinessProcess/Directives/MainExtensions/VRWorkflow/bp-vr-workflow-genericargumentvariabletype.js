@@ -1,84 +1,85 @@
 ﻿'use strict';
 
 app.directive('businessprocessVrWorkflowGenericargumentvariabletype', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+	function (UtilsService, VRUIUtilsService) {
 
-        var directiveDefinitionObject = {
-            restrict: 'E',
-            scope: {
-                onReady: '=',
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var ctor = new GenericVariableTypeDirectiveCtor(ctrl, $scope, $attrs);
-                ctor.initializeController();
-            },
-            controllerAs: 'ctrl',
-            bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
+		var directiveDefinitionObject = {
+			restrict: 'E',
+			scope: {
+				onReady: '=',
+				normalColNum: '@'
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var ctor = new GenericVariableTypeDirectiveCtor(ctrl, $scope, $attrs);
+				ctor.initializeController();
+			},
+			controllerAs: 'ctrl',
+			bindToController: true,
+			compile: function (element, attrs) {
+				return {
+					pre: function ($scope, iElem, iAttrs, ctrl) {
 
-                    }
-                };
-            },
-            templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflow/Templates/VRWorkflowGenericArgumentVariableTypeTemplate.html"
-        };
+					}
+				};
+			},
+			templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflow/Templates/VRWorkflowGenericArgumentVariableTypeTemplate.html"
+		};
 
-        function GenericVariableTypeDirectiveCtor(ctrl, $scope, attrs) {
-            this.initializeController = initializeController;
-            
-            var fieldTypeSelectorAPI;
-            var fieldTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		function GenericVariableTypeDirectiveCtor(ctrl, $scope, attrs) {
+			this.initializeController = initializeController;
 
-            function initializeController() {
-                $scope.scopeModel = {};
+			var fieldTypeSelectorAPI;
+			var fieldTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-                $scope.scopeModel.onFieldTypeSelectorReady = function (api) {
-                    fieldTypeSelectorAPI = api;
-                    fieldTypeSelectorReadyDeferred.resolve();
-                };
+			function initializeController() {
+				$scope.scopeModel = {};
 
-                defineAPI();
-            }
+				$scope.scopeModel.onFieldTypeSelectorReady = function (api) {
+					fieldTypeSelectorAPI = api;
+					fieldTypeSelectorReadyDeferred.resolve();
+				};
 
-            function defineAPI() {
-                var api = {};
+				defineAPI();
+			}
 
-                api.load = function (payload) {
-                    var promises = [];
+			function defineAPI() {
+				var api = {};
 
-                    var fieldTypeSelectorLoadPromise = getFieldTypeSelectorLoadPromise();
-                    promises.push(fieldTypeSelectorLoadPromise);
+				api.load = function (payload) {
+					var promises = [];
 
-                    function getFieldTypeSelectorLoadPromise() {
-                        var fieldTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+					var fieldTypeSelectorLoadPromise = getFieldTypeSelectorLoadPromise();
+					promises.push(fieldTypeSelectorLoadPromise);
 
-                        fieldTypeSelectorReadyDeferred.promise.then(function () {
-                            var fieldTypeSelectorPayload;
-                            if (payload != undefined) {
-                                fieldTypeSelectorPayload = payload.FieldType;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(fieldTypeSelectorAPI, fieldTypeSelectorPayload, fieldTypeSelectorLoadDeferred);
-                        });
+					function getFieldTypeSelectorLoadPromise() {
+						var fieldTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        return fieldTypeSelectorLoadDeferred.promise;
-                    }
+						fieldTypeSelectorReadyDeferred.promise.then(function () {
+							var fieldTypeSelectorPayload;
+							if (payload != undefined) {
+								fieldTypeSelectorPayload = payload.FieldType;
+							}
+							VRUIUtilsService.callDirectiveLoad(fieldTypeSelectorAPI, fieldTypeSelectorPayload, fieldTypeSelectorLoadDeferred);
+						});
 
-                    return UtilsService.waitMultiplePromises(promises);
-                };
+						return fieldTypeSelectorLoadDeferred.promise;
+					}
 
-                api.getData = function () {
-                    return {
-                        $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions",
-                        FieldType: fieldTypeSelectorAPI.getData()
-                    };
-                };
+					return UtilsService.waitMultiplePromises(promises);
+				};
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
-        }
+				api.getData = function () {
+					return {
+						$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowGenericVariableType, Vanrise.BusinessProcess.MainExtensions",
+						FieldType: fieldTypeSelectorAPI.getData()
+					};
+				};
 
-        return directiveDefinitionObject;
-    }]);
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
+		}
+
+		return directiveDefinitionObject;
+	}]);

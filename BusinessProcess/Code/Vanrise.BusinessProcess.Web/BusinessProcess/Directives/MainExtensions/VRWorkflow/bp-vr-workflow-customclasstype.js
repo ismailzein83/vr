@@ -1,84 +1,85 @@
 ﻿'use strict';
 
 app.directive('businessprocessVrWorkflowCustomclasstype', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+	function (UtilsService, VRUIUtilsService) {
 
-        var directiveDefinitionObject = {
-            restrict: 'E',
-            scope: {
-                onReady: '=',
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var ctor = new WorkflowCustomClassTypeDirectiveCtor(ctrl, $scope, $attrs);
-                ctor.initializeController();
-            },
-            controllerAs: 'ctrl',
-            bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
+		var directiveDefinitionObject = {
+			restrict: 'E',
+			scope: {
+				onReady: '=',
+				normalColNum: '@'
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var ctor = new WorkflowCustomClassTypeDirectiveCtor(ctrl, $scope, $attrs);
+				ctor.initializeController();
+			},
+			controllerAs: 'ctrl',
+			bindToController: true,
+			compile: function (element, attrs) {
+				return {
+					pre: function ($scope, iElem, iAttrs, ctrl) {
 
-                    }
-                };
-            },
-            templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflow/Templates/VRWorkflowCustomClassTypeTemplate.html"
-        };
+					}
+				};
+			},
+			templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/VRWorkflow/Templates/VRWorkflowCustomClassTypeTemplate.html"
+		};
 
-        function WorkflowCustomClassTypeDirectiveCtor(ctrl, $scope, attrs) {
-            this.initializeController = initializeController;
+		function WorkflowCustomClassTypeDirectiveCtor(ctrl, $scope, attrs) {
+			this.initializeController = initializeController;
 
-            var customClassTypeDirectiveAPI;
-            var customClassTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+			var customClassTypeDirectiveAPI;
+			var customClassTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            function initializeController() {
-                $scope.scopeModel = {};
+			function initializeController() {
+				$scope.scopeModel = {};
 
-                $scope.scopeModel.onCustomClassTypeDirectiveReady = function (api) {
-                    customClassTypeDirectiveAPI = api;
-                    customClassTypeDirectiveReadyDeferred.resolve();
-                };
+				$scope.scopeModel.onCustomClassTypeDirectiveReady = function (api) {
+					customClassTypeDirectiveAPI = api;
+					customClassTypeDirectiveReadyDeferred.resolve();
+				};
 
-                defineAPI();
-            }
+				defineAPI();
+			}
 
-            function defineAPI() {
-                var api = {};
+			function defineAPI() {
+				var api = {};
 
-                api.load = function (payload) {
-                    var promises = [];
+				api.load = function (payload) {
+					var promises = [];
 
-                    var customClassTypeDirectiveLoadPromise = getCustomClassTypeDirectivePromise();
-                    promises.push(customClassTypeDirectiveLoadPromise);
+					var customClassTypeDirectiveLoadPromise = getCustomClassTypeDirectivePromise();
+					promises.push(customClassTypeDirectiveLoadPromise);
 
-                    function getCustomClassTypeDirectivePromise() {
-                        var customClassTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+					function getCustomClassTypeDirectivePromise() {
+						var customClassTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        customClassTypeDirectiveReadyDeferred.promise.then(function () {
-                            var customClassTypeDirectivePayload;
-                            if (payload != undefined) {
-                                customClassTypeDirectivePayload = payload.FieldType;
-                            }
-                            VRUIUtilsService.callDirectiveLoad(customClassTypeDirectiveAPI, customClassTypeDirectivePayload, customClassTypeDirectiveLoadDeferred);
-                        });
+						customClassTypeDirectiveReadyDeferred.promise.then(function () {
+							var customClassTypeDirectivePayload;
+							if (payload != undefined) {
+								customClassTypeDirectivePayload = payload.FieldType;
+							}
+							VRUIUtilsService.callDirectiveLoad(customClassTypeDirectiveAPI, customClassTypeDirectivePayload, customClassTypeDirectiveLoadDeferred);
+						});
 
-                        return customClassTypeDirectiveLoadDeferred.promise;
-                    }
+						return customClassTypeDirectiveLoadDeferred.promise;
+					}
 
-                    return UtilsService.waitMultiplePromises(promises);
-                };
+					return UtilsService.waitMultiplePromises(promises);
+				};
 
-                api.getData = function () {
-                    return {
-                        $type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowCustomClassType, Vanrise.BusinessProcess.MainExtensions",
-                        FieldType: customClassTypeDirectiveAPI.getData()
-                    };
-                };
+				api.getData = function () {
+					return {
+						$type: "Vanrise.BusinessProcess.MainExtensions.VRWorkflowVariableTypes.VRWorkflowCustomClassType, Vanrise.BusinessProcess.MainExtensions",
+						FieldType: customClassTypeDirectiveAPI.getData()
+					};
+				};
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
-        }
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
+		}
 
-        return directiveDefinitionObject;
-    }]);
+		return directiveDefinitionObject;
+	}]);
