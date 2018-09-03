@@ -13,6 +13,8 @@ using TOne.WhS.RouteSync.Ericsson.Entities;
 using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable;
+using Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules;
 using Vanrise.BusinessProcess;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common;
@@ -33,29 +35,28 @@ namespace TOne.WhS.Runtime.Tasks
 
         public void Execute()
         {
-            #region FreeRadiusSWSync
-            //FreeRadiusSWSyncTask freeRadiusSWSyncTask = new FreeRadiusSWSyncTask();
-            //freeRadiusSWSyncTask.FreeRadiusSWSyncTask_Main();
+            #region BillingMeasureExternalSourceTask
+            //BillingMeasureExternalSourceTask.BillingMeasureExternalSourceTask_Main();
+            #endregion
+
+            #region FreeRadiusSWSyncTask
+            //FreeRadiusSWSyncTask.FreeRadiusSWSyncTask_Main();
             #endregion
 
             #region EricssonFTPSwitchLoggerTask
-            //EricssonFTPSwitchLoggerTask ericssonFTPSwitchLoggerTask = new EricssonFTPSwitchLoggerTask();
-            //ericssonFTPSwitchLoggerTask.EricssonFTPSwitchLoggerTask_Main();
+            //EricssonFTPSwitchLoggerTask.EricssonFTPSwitchLoggerTask_Main();
             #endregion
 
             #region EricssonSWSyncTask
-            //EricssonSWSyncTask ericssonSWSyncTask = new EricssonSWSyncTask();
-            //ericssonSWSyncTask.EricssonSWSyncTask_Main();
+            //EricssonSWSyncTask.EricssonSWSyncTask_Main();
             #endregion
 
-            #region NormalizationRule RemoveAction
-            //NormalizationRuleRemoveActionTask normalizationRuleRemoveActionTask = new NormalizationRuleRemoveActionTask();
-            //normalizationRuleRemoveActionTask.NormalizationRuleRemoveActionTask_Main();
+            #region NormalizationRuleRemoveActionTask
+            //NormalizationRuleRemoveActionTask.NormalizationRuleRemoveActionTask_Main();
             #endregion
 
             #region TelesIdbSWSyncTask
-            //TelesIdbSWSyncTask telesIdbSWSyncTask = new TelesIdbSWSyncTask();
-            //telesIdbSWSyncTask.TelesIdbSWSync_Main();
+            //TelesIdbSWSyncTask.TelesIdbSWSync_Main();
             #endregion
 
             #region DeserializeTask
@@ -64,8 +65,7 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             #region VRMailMessageTemplateTask
-            //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
-            //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
+            //VRMailMessageTemplateTask.VRMailMessageTemplate_Main();
             #endregion
 
             #region PrepareCodePrefixesTask
@@ -74,9 +74,8 @@ namespace TOne.WhS.Runtime.Tasks
             //DisplayList(codePrefixesResult);
             #endregion
 
-            #region Runtime
-            //ExecuteRuntime executeRuntime = new ExecuteRuntime();
-            //executeRuntime.Runtime_Main();
+            #region RuntimeTask
+            //RuntimeTask.Runtime_Main();
             #endregion
         }
 
@@ -157,7 +156,7 @@ namespace TOne.WhS.Runtime.Tasks
 
         #region Private Methods
 
-        private void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
+        private static void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
         {
             foreach (CodePrefixInfo item in codePrefixes)
                 Console.WriteLine(item.CodePrefix + "   " + item.Count);
@@ -176,9 +175,164 @@ namespace TOne.WhS.Runtime.Tasks
         #endregion
     }
 
+    public class BillingMeasureExternalSourceTask
+    {
+        public static void BillingMeasureExternalSourceTask_Main()
+        {
+            var billingMeasureExternalSource = new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
+            {
+                ExtendedSettings = new AnalyticTableMeasureExternalSource
+                {
+                    AnalyticTableId = new Guid("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                    DimensionMappingRules = new List<DimensionMappingRule>
+                    {
+                        new DimensionMappingRule 
+                        { 
+                            Name = "Same Dimension Names",
+                            Settings= new SameDimensionName 
+                            { 
+                                Type = SameDimensionNameType.SpecificDimensions, 
+                                DimensionNames = new List<string> { "CDRType", "CostFinancialAccount", "Country", "Customer", "CustomerProfile", "Supplier", "SupplierProfile", "MasterZone", "Switch"} 
+                            }
+                        },
+                        new DimensionMappingRule 
+                        { 
+                            Name = "Day",
+                            Settings= new SpecificDimensionMapping { DimensionName = "Day", MappedDimensionName = "DayAsDate" }
+                        }
+                    },
+                    MeasureMappingRules = new List<MeasureMappingRule>
+                    {
+                         new MeasureMappingRule
+                         {
+                             MeasureMappingRuleId = new Guid("8E676687-09B3-46E6-A95E-415E64E6A44A"),
+                             Name = "Priced Calls",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "PricedCalls",
+                                   MappedMeasures = new List<string> {"NumberOfCalls"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("E01558B6-7494-4A9E-BB9C-018C800E9F22"),
+                              Name = "Sale Net",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "SaleNet",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("C1787BA3-9782-46EA-BF1C-492FD25DB50B"),
+                              Name = "Cost Net",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "CostNet",
+                                   MappedMeasures = new List<string> {"CostNetNotNULL"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("E059F8DD-EB7D-4210-A20E-0D59BBD70149"),
+                              Name = "Profit",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "Profit",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("5FBFEA8D-6E41-4A07-BF3A-F3EA4F3E7B0E"),
+                              Name = "Percentage Profit",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "PercentageProfit",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("AD73E251-2E64-488A-B48D-25AAEC168F4E"),
+                              Name = "Markup Percentage",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "MarkupPercentage",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("EE84981C-0C9D-4FC3-949F-C5DB24518181"),
+                              Name = "Sale Duration",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "SaleDuration",
+                                   MappedMeasures = new List<string> {"SaleDuration"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("189B176A-715E-4A20-A618-4F6D0B4A1741"),
+                              Name = "Cost Duration",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "CostDuration",
+                                   MappedMeasures = new List<string> {"CostDuration"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("9D8A8671-BEFF-466D-94D7-F9150BF60A4E"),
+                              Name = "Cost Rate Duration Avg",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "CostRate_DurAvg",
+                                   MappedMeasures = new List<string> {"CostRate_DurAvg"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("E134622D-0664-4B5C-BF48-52BF83419B3C"),
+                              Name = "Sale Rate Duration Avg",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "SaleRate_DurAvg",
+                                   MappedMeasures = new List<string> {"SaleRate_DurAvg"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("51D55875-FA5D-40F3-9A04-8739D60AF7C9"),
+                              Name = "Netting",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "Netting",
+                                   MappedMeasures = new List<string> {"Netting"}
+                              }
+                         },
+                         new MeasureMappingRule
+                         {
+                              MeasureMappingRuleId = new Guid("F46B2C01-C4F0-49C3-BB01-617D3D15A5BD"),
+                              Name = "Global Profit",
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "GlobalProfit",
+                                   MappedMeasures = new List<string> {"GlobalProfit"}
+                              }
+                         }
+                    }
+                }
+            };
+            var serializedBillingMeasureExternalSource = Vanrise.Common.Serializer.Serialize(billingMeasureExternalSource);
+        }
+    }
+
     public class FreeRadiusSWSyncTask
     {
-        public void FreeRadiusSWSyncTask_Main()
+        public static void FreeRadiusSWSyncTask_Main()
         {
             //var convertedRouteOptions = new List<TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRouteOption>()
             //{
@@ -235,7 +389,7 @@ namespace TOne.WhS.Runtime.Tasks
 
     public class EricssonFTPSwitchLoggerTask
     {
-        public void EricssonFTPSwitchLoggerTask_Main()
+        public static void EricssonFTPSwitchLoggerTask_Main()
         {
             string baseDirectory = "/AADir"; //@"c:\AAADir"
 
@@ -309,7 +463,7 @@ namespace TOne.WhS.Runtime.Tasks
             //this.CreateDirectory(directory);
         }
 
-        public void CreateDirectory(string path)
+        public static void CreateDirectory(string path)
         {
             try
             {
@@ -328,7 +482,7 @@ namespace TOne.WhS.Runtime.Tasks
 
     public class EricssonSWSyncTask
     {
-        public void EricssonSWSyncTask_Main()
+        public static void EricssonSWSyncTask_Main()
         {
             #region supplierMapping_11
 
@@ -455,7 +609,7 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             var carrierMappings = new Dictionary<string, RouteSync.Ericsson.CarrierMapping>();
-            carrierMappings.Add("11", supplierMapping_11); 
+            carrierMappings.Add("11", supplierMapping_11);
             //carrierMappings.Add("12", supplierMapping_12); 
 
             var ruleTree = new EricssonSWSync().BuildSupplierTrunkGroupTree(carrierMappings); //GetRuleTree(ruleDefinitionId);
@@ -474,7 +628,7 @@ namespace TOne.WhS.Runtime.Tasks
 
     public class NormalizationRuleRemoveActionTask
     {
-        public void NormalizationRuleRemoveActionTask_Main()
+        public static void NormalizationRuleRemoveActionTask_Main()
         {
             NormalizeNumberTarget target = new NormalizeNumberTarget() { PhoneNumber = "abc123acc145abc" }; //"abc123abc145"
 
@@ -491,7 +645,7 @@ namespace TOne.WhS.Runtime.Tasks
 
     public class TelesIdbSWSyncTask
     {
-        public void TelesIdbSWSync_Main()
+        public static void TelesIdbSWSync_Main()
         {
             var carrierMapping1 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C001", "C002" } };
             var carrierMapping2 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C003" } };
@@ -535,7 +689,7 @@ namespace TOne.WhS.Runtime.Tasks
         {
             //CustomerRoutes
             string serializedCustomerRouteOptions = "506~~~15543~~~~~|506~~~7715~~~~~|506~~~13899~~~~~|506~~~3195~~~~~|506~~~329683~~~~~";
-            string customerRouteOptionsAsJSON = this.DeserializeCustomerRouteOptions(serializedCustomerRouteOptions);
+            string customerRouteOptionsAsJSON = DeserializeCustomerRouteOptions(serializedCustomerRouteOptions);
 
             //RoutingProductRoutes
             //string serializedRPOptionsDetailsBySupplier = "240~315094$0.01540000$1$$False$2515165#315095$0.01540000$1$$False$2515166#315096$0.01540000$1$$False$2515167#315091$0.01540000$1$$False$2515162#315092$0.01540000$1$$False$2515163#315090$0.01540000$1$$False$2515161~0~6~~1|564~322849$0.02250000$1$$False$2522986#322852$0.02250000$1$$False$2522989~0~2~~1|57~2712$0.03390000$1@2@5$$False$29107#2717$0.03390000$1@2@5$$False$29112#2718$0.03390000$1@2@5$$False$29113#2713$0.03390000$1@2@5$$False$29108#2714$0.03390000$1@2@5$$False$29109#2715$0.03390000$1@2@5$$False$29110~0~6~~20|66~9660$0.02600000$7@4$$False$115805#9664$0.03000000$7@4$$False$115803#9665$0.03000000$7@4$$False$115804~0~3~~79|559~315422$0.02250000$1$$False$2515559#315425$0.02250000$1$$False$2515562~0~2~~1|88~30370$0.02700000$7@4$$False$395295~0~1~~79|527~329529$0.01970000$4$$False$2529781#329528$0.02240000$4$$False$2529780~0~2~~15|60~7255$0.03390000$7@4$$False$86520#7261$0.03390000$7@4$$False$86526#7256$0.03390000$7@4$$False$86521#7260$0.03390000$7@4$$False$86525#7258$0.03390000$7@4$$False$86523#7257$0.03390000$7@4$$False$86522~0~6~~79|65~9536$0.38350000$7@4$$False$114463#9531$0.38350000$7@4$$False$114458#9533$0.38350000$7@4$$False$114460#9534$0.38350000$7@4$$False$114461#9535$0.38350000$7@4$$False$114462#9530$0.38350000$7@4$$False$114457~0~6~~79|70~15411$0.02700000$7@4$$False$187067#15414$0.04130000$7@4$$False$187074~0~2~~79|561~319138$0.02250000$1$$False$2519275#319141$0.02250000$1$$False$2519278~0~2~~1|69~13620$0.03390000$7@4$$False$164003#13622$0.03390000$7@4$$False$164005#13617$0.03390000$7@4$$False$164000#13623$0.03390000$7@4$$False$164006#13618$0.03390000$7@4$$False$164001#13619$0.03390000$7@4$$False$164002~0~6~~79|563~321615$0.02250000$1$$False$2521752#321612$0.02250000$1$$False$2521749~0~2~~1|145~331901$0.01680000$7@4$$False$2532162~0~1~~79|562~320378$0.02250000$1$$False$2520515#320375$0.02250000$1$$False$2520512~0~2~~1|558~316664$0.02250000$1$$False$2516801#316667$0.02250000$1$$False$2516804~0~2~~1|75~21776$0.01950000$1@2$$False$280981#21775$0.02150000$1@2$$False$280982~0~2~~4|560~317904$0.02250000$1$$False$2518041#317901$0.02250000$1$$False$2518038~0~2~~1|67~11457$0.03000000$7@4$$False$137632#11458$0.03000000$7@4$$False$137633#11459$0.03000000$7@4$$False$137634~0~3~~79";
@@ -583,7 +737,7 @@ namespace TOne.WhS.Runtime.Tasks
     {
         #region Public Method
 
-        public void VRMailMessageTemplate_Main()
+        public static void VRMailMessageTemplate_Main()
         {
             Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
 
@@ -735,9 +889,9 @@ namespace TOne.WhS.Runtime.Tasks
         #endregion
     }
 
-    public class ExecuteRuntime
+    public class RuntimeTask
     {
-        public void Runtime_Main()
+        public static void Runtime_Main()
         {
             var runtimeServices = new List<RuntimeService>();
 
