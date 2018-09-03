@@ -184,6 +184,10 @@
                 {
                     $scope.scopeModel.partnerLabel = invoiceActionEntity.Settings.PartnerLabel;
                     $scope.scopeModel.partnerAbbreviationLabel = invoiceActionEntity.Settings.PartnerAbbreviationLabel;
+                    $scope.scopeModel.diffCall = '(SystemCalls-' + $scope.scopeModel.partnerAbbreviationLabel + 'Calls)\n---------------------------*100\n\t(SystemCalls)';
+                    $scope.scopeModel.diffDuration = '(SystemDuration-' + $scope.scopeModel.partnerAbbreviationLabel + 'Duration)\n-----------------------------------*100\n\t(SystemDuration)';
+                    $scope.scopeModel.diffAmount = '(SystemAmount-' + $scope.scopeModel.partnerAbbreviationLabel + 'Amount)\n----------------------------------*100\n\t(SystemAmount)';
+
                 }
             });
         }
