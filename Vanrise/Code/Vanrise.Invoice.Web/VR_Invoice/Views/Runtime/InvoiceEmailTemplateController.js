@@ -2,7 +2,7 @@
 
     "use strict";
 
-    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService','VR_Invoice_InvoiceTypeAPIService','VRCommon_VRMailAPIService'];
+    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService', 'VR_Invoice_InvoiceTypeAPIService', 'VRCommon_VRMailAPIService'];
 
     function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService, VR_Invoice_InvoiceTypeAPIService, VRCommon_VRMailAPIService) {
         var invoiceId;
@@ -39,7 +39,7 @@
                 return VRCommon_VRMailAPIService.DownloadAttachement(attachedfileId).then(function (response) {
                     $scope.scopeModel.isLoading = false;
                     if (response != undefined)
-                    UtilsService.downloadFile(response.data, response.headers);
+                        UtilsService.downloadFile(response.data, response.headers);
                 });
             };
             $scope.scopeModel.addUploadedAttachement = function (obj) {
@@ -53,30 +53,28 @@
                 invoiceMailTemplateReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.sendEmail = function () {
-                    return sendEmail();
+                return sendEmail();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
             $scope.scopeModel.onAttachmentItemClicked = function (dataItem) {
-                if (dataItem != undefined)
-                {
+                if (dataItem != undefined) {
                     return downloadAttachment(dataItem.AttachmentId);
                 }
-               
+
             };
 
             $scope.scopeModel.onInvoiceMailTemplateSelectionChanged = function (value) {
                 $scope.scopeModel.isLoading = true;
                 if (value != undefined) {
                     getInvoiceEmail().then(function () {
-                        if (invoiceTemplateEntity != undefined && invoiceTemplateEntity.VRMailEvaluatedTemplate != undefined)
-                        {
-                            $scope.scopeModel.cc = invoiceTemplateEntity.VRMailEvaluatedTemplate.CC;
-                            $scope.scopeModel.to = invoiceTemplateEntity.VRMailEvaluatedTemplate.To;
+                        if (invoiceTemplateEntity != undefined && invoiceTemplateEntity.VRMailEvaluatedTemplate != undefined) {
+                            $scope.scopeModel.cc = invoiceTemplateEntity.VRMailEvaluatedTemplate.CC != undefined ? invoiceTemplateEntity.VRMailEvaluatedTemplate.CC.split(';') : [];
+                            $scope.scopeModel.to = invoiceTemplateEntity.VRMailEvaluatedTemplate.To != undefined ? invoiceTemplateEntity.VRMailEvaluatedTemplate.To.split(';') : [];
                             $scope.scopeModel.subject = invoiceTemplateEntity.VRMailEvaluatedTemplate.Subject;
                             $scope.scopeModel.body = invoiceTemplateEntity.VRMailEvaluatedTemplate.Body;
-                            $scope.scopeModel.from = invoiceTemplateEntity.VRMailEvaluatedTemplate.From;
+                            $scope.scopeModel.from = invoiceTemplateEntity.VRMailEvaluatedTemplate.From != "" ? invoiceTemplateEntity.VRMailEvaluatedTemplate.From : null;
 
                         }
                         $scope.scopeModel.attachments = invoiceTemplateEntity.EmailAttachments;
@@ -89,11 +87,11 @@
                     });
                 }
                 else {
-                    $scope.scopeModel.cc = undefined;
-                    $scope.scopeModel.to = undefined;
+                    $scope.scopeModel.cc = [];
+                    $scope.scopeModel.to = [];
                     $scope.scopeModel.subject = undefined;
                     $scope.scopeModel.body = undefined;
-                    $scope.scopeModel.from = undefined;
+                    $scope.scopeModel.from = null;
                     $scope.scopeModel.isLoading = false;
                 }
 
@@ -105,9 +103,9 @@
                 var emailObject = buildInvoiceTemplateObjFromScope();
                 return VR_Invoice_InvoiceEmailActionAPIService.SendEmail(emailObject)
                .then(function (response) {
-                       if ($scope.onInvoiceEmailSend != undefined)
-                           $scope.onInvoiceEmailSend(response);
-                       $scope.modalContext.closeModal();
+                   if ($scope.onInvoiceEmailSend != undefined)
+                       $scope.onInvoiceEmailSend(response);
+                   $scope.modalContext.closeModal();
                })
                .catch(function (error) {
                    VRNotificationService.notifyException(error, $scope);
@@ -127,15 +125,13 @@
                     $scope.scopeModel.isLoading = false;
                 });
             });
-           
-          
+
+
 
         }
 
-        function getInvoiceAction()
-        {
-            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceAction(invoiceTypeId, invoiceActionId).then(function(response)
-            {
+        function getInvoiceAction() {
+            return VR_Invoice_InvoiceTypeAPIService.GetInvoiceAction(invoiceTypeId, invoiceActionId).then(function (response) {
                 invoiceActionEntity = response;
             })
         }
@@ -156,11 +152,11 @@
             }
             function loadStaticData() {
                 if (invoiceTemplateEntity != undefined) {
-                    $scope.scopeModel.cc = invoiceTemplateEntity.CC;
-                    $scope.scopeModel.to = invoiceTemplateEntity.To;
+                    $scope.scopeModel.cc = invoiceTemplateEntity.CC != undefined ? invoiceTemplateEntity.CC.split(';') : [];
+                    $scope.scopeModel.from = invoiceTemplateEntity.From != "" ? invoiceTemplateEntity.From : null;
                     $scope.scopeModel.subject = invoiceTemplateEntity.Subject;
                     $scope.scopeModel.body = invoiceTemplateEntity.Body;
-                    $scope.scopeModel.from = invoiceTemplateEntity.From;
+                    $scope.scopeModel.to = invoiceTemplateEntity.To != undefined ? invoiceTemplateEntity.To.split(';') : [];
                 }
             }
 
@@ -184,14 +180,14 @@
 
         function buildInvoiceTemplateObjFromScope() {
             var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
-          
+
             var obj = {
-                InvoiceId:invoiceId,
+                InvoiceId: invoiceId,
                 InvoiceActionId: invoiceActionId,
                 EmailTemplate: {
                     From: $scope.scopeModel.from,
-                    CC: $scope.scopeModel.cc,
-                    To: $scope.scopeModel.to,
+                    CC: $scope.scopeModel.cc.join(';'),
+                    To: $scope.scopeModel.to.join(';'),
                     Subject: $scope.scopeModel.subject,
                     Body: $scope.scopeModel.body,
                 },
@@ -200,13 +196,12 @@
             return obj;
         }
 
-        function downloadAttachment(attachmentId)
-        {
+        function downloadAttachment(attachmentId) {
             $scope.scopeModel.isLoading = true;
             return VR_Invoice_InvoiceEmailActionAPIService.DownloadAttachment(invoiceId, attachmentId).then(function (response) {
                 $scope.scopeModel.isLoading = false;
                 if (response != undefined)
-                   UtilsService.downloadFile(response.data, response.headers);
+                    UtilsService.downloadFile(response.data, response.headers);
             });
         }
     }
