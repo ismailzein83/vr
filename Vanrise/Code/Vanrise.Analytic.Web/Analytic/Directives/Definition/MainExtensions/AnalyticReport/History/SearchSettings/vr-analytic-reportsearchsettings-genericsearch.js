@@ -246,7 +246,7 @@
                         var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         advancedFilterDimensionReadyDeferred.promise.then(function () {
                             var payloadAdvancedFilterDirective = {
-                                filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
+                                filter: { TableIds: tableIds },
                                 selectedIds: selectedAdvancedFilterFieldIds
                             };
                             VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
