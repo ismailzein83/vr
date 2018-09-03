@@ -57,7 +57,7 @@ as (select * from (values
 ('3C53D6DC-BBE7-49CA-A222-8211AF25DD31','Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement','1C7569FA-43C9-4853-AE4C-1152746A34FD','BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',110),
 ('BEEEEB03-8CB2-44F4-9769-A95B46D4F40D','BP Technical Definitions','BP Technical Definitions','#/view/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionManagement','FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1),
 
-('20CFA17A-1C79-4ABE-BF85-F40C42B03FAC','Workflows','Workflows','#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement','FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','BusinessProcess/VRWorkflow/GetFilteredVRWorkflows',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2)
+('20CFA17A-1C79-4ABE-BF85-F40C42B03FAC','Workflows','Workflows','#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement','FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2)
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
