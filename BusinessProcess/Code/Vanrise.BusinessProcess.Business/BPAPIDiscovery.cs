@@ -51,8 +51,8 @@ namespace Vanrise.BusinessProcess.Business
                             public class #ControllerFullName# : BaseAPIController
                             {
                                 [HttpPost]
-                                [Route(""#StartProcess#"")]
-                                public void #StartProcess#(#StartProcessInputClassName# input)
+                                [Route(""StartProcess"")]
+                                public void StartProcess(#StartProcessInputClassName# input)
                                 {
                                     if(input == null)
                                         input = new #StartProcessInputClassName#();
@@ -74,12 +74,10 @@ namespace Vanrise.BusinessProcess.Business
             string controllerName = bpDefinitionTitle;
             string controllerFullName = string.Concat(controllerName, "Controller");
             string controllerNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.BusinessProcess.Web.DynamicControllers");
-            string startProcessFunctionName = string.Concat("Start", bpDefinitionTitle, "Process");
 
             sb_CustomController.Replace("#Namespace#", controllerNamespace);
             sb_CustomController.Replace("#ControllerName#", controllerName);
             sb_CustomController.Replace("#ControllerFullName#", controllerFullName);
-            sb_CustomController.Replace("#StartProcess#", startProcessFunctionName);
             sb_CustomController.Replace("#StartProcessInputClass#", startProcessInputClass);
             sb_CustomController.Replace("#StartProcessInputClassName#", startProcessInputClassName);
 

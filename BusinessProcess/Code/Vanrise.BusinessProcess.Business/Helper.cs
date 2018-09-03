@@ -14,10 +14,9 @@ namespace Vanrise.BusinessProcess.Business
         {
             StringBuilder sb_CustomController = new StringBuilder(@"using System;
                         using System.Collections.Generic;
-                        using System.Web.Http;
-                        using Vanrise.Web.Base;
+                        using System.Linq;
+                        using Vanrise.Common;
                         using Vanrise.BusinessProcess.Entities;
-                        using Vanrise.BusinessProcess.Business;
         
                         namespace #Namespace#
                         {       
@@ -33,7 +32,16 @@ namespace Vanrise.BusinessProcess.Business
             sb_CustomController.Replace("#InputArgumentClass#", inputArgumentClassCode);
 
             Common.CSharpCompilationOutput output;
-            Common.CSharpCompiler.TryCompileClass(sb_CustomController.ToString(), out output);
+            if (!Common.CSharpCompiler.TryCompileClass(sb_CustomController.ToString(), out output))
+            {
+                StringBuilder errorsBuilder = new StringBuilder();
+                foreach (var errorMessage in output.ErrorMessages)
+                    errorsBuilder.AppendLine(errorMessage);
+
+                throw new Exception(String.Format("Compile Error when building VRWorkflowInputArgument for BPDefinition Id '{0}'. Errors: {1}",
+                    bpDefinition.BPDefinitionID, errorsBuilder));
+            }
+
             return output.OutputAssembly.GetType(string.Format("{0}.{1}", inputArgumentClassNamespace, inputArgumentClassName));
         }
 
@@ -65,30 +73,33 @@ namespace Vanrise.BusinessProcess.Business
             VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(vrWorkflowId);
             vrWorkflow.ThrowIfNull("vrWorkflow", vrWorkflowId);
             vrWorkflow.Settings.ThrowIfNull("vrWorkflow.Settings", vrWorkflowId);
-            vrWorkflow.Settings.Arguments.ThrowIfNull("vrWorkflow.Settings.Arguments", vrWorkflowId);
+            //vrWorkflow.Settings.Arguments.ThrowIfNull("vrWorkflow.Settings.Arguments", vrWorkflowId);
 
             StringBuilder sb_ArgumentsDictionaryBuilder = new StringBuilder();
             StringBuilder sb_InputArgumentClassPropertiesBuilder = new StringBuilder();
 
-            foreach (var argument in vrWorkflow.Settings.Arguments)
+            if (vrWorkflow.Settings.Arguments != null)
             {
-                switch (argument.Direction)
+                foreach (var argument in vrWorkflow.Settings.Arguments)
                 {
-                    case VRWorkflowArgumentDirection.In:
-                    case VRWorkflowArgumentDirection.InOut:
-                        string fieldRuntimeTypeAsString = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
+                    switch (argument.Direction)
+                    {
+                        case VRWorkflowArgumentDirection.In:
+                        case VRWorkflowArgumentDirection.InOut:
+                            string fieldRuntimeTypeAsString = CSharpCompiler.TypeToString(argument.Type.GetRuntimeType(null));
 
-                        sb_InputArgumentClassPropertiesBuilder.Append(GetProperty(fieldRuntimeTypeAsString, argument.Name));
-                        sb_InputArgumentClassPropertiesBuilder.AppendLine();
+                            sb_InputArgumentClassPropertiesBuilder.Append(GetProperty(fieldRuntimeTypeAsString, argument.Name));
+                            sb_InputArgumentClassPropertiesBuilder.AppendLine();
 
-                        sb_ArgumentsDictionaryBuilder.AppendFormat(@"arguments.Add(""{0}"", {0});", argument.Name);
-                        sb_ArgumentsDictionaryBuilder.AppendLine();
-                        break;
+                            sb_ArgumentsDictionaryBuilder.AppendFormat(@"arguments.Add(""{0}"", {0});", argument.Name);
+                            sb_ArgumentsDictionaryBuilder.AppendLine();
+                            break;
 
-                    case VRWorkflowArgumentDirection.Out:
-                        break;
+                        case VRWorkflowArgumentDirection.Out:
+                            break;
 
-                    default: throw new NotSupportedException(String.Format("wfArgument.Direction '{0}'", argument.Direction.ToString()));
+                        default: throw new NotSupportedException(String.Format("wfArgument.Direction '{0}'", argument.Direction.ToString()));
+                    }
                 }
             }
 
@@ -99,8 +110,8 @@ namespace Vanrise.BusinessProcess.Business
                 getTitleExecutionCode = string.Concat("\"", vrWorkflow.Title, "\"");
 
             string bpDefinitionTitle = bpDefinition.Title.Replace(" ", "");
-            string startProcessFunctionName = string.Concat("Start", bpDefinitionTitle, "Process");
-            inputArgumentClassName = string.Concat(startProcessFunctionName, "Input");
+            //string startProcessFunctionName = string.Concat("Start", bpDefinitionTitle, "Process");
+            inputArgumentClassName = string.Concat(bpDefinitionTitle, "ProcessInput");
 
             string argumentsDictionaryBuilder = sb_ArgumentsDictionaryBuilder.Length > 0 ? sb_ArgumentsDictionaryBuilder.ToString() : string.Empty;
             string inputArgumentClassPropertiesBuilder = sb_InputArgumentClassPropertiesBuilder.Length > 0 ? sb_InputArgumentClassPropertiesBuilder.ToString() : string.Empty;
