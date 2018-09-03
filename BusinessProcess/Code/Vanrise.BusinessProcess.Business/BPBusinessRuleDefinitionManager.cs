@@ -34,6 +34,14 @@ namespace Vanrise.BusinessProcess.Business
             ruleDefinition.Settings.ThrowIfNull("ruleDefinition.Settings");
             return ruleDefinition.Settings.Title;
         }
+        public bool GetRuleDefinitionCanBeDisabled(Guid ruleDefinitionId)
+        {
+            var allRulesDefinitions = GetCachedBPBusinessRulesById();
+            var ruleDefinition = allRulesDefinitions.GetRecord(ruleDefinitionId);
+            ruleDefinition.ThrowIfNull("ruleDefinition");
+            ruleDefinition.Settings.ThrowIfNull("ruleDefinition.Settings");
+            return ruleDefinition.Settings.CanBeDisabled;
+        }
         public BPBusinessRuleDefinition GetBusinessRuleDefinitionById(Guid ruleDefinitionId)
         {
             var allRulesDefinitions = GetCachedBPBusinessRulesById();

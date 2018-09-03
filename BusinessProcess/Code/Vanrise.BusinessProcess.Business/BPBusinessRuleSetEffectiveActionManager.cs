@@ -19,20 +19,20 @@ namespace Vanrise.BusinessProcess.Business
             List<BPBusinessRuleEffectiveAction> allEffectiveActions = new List<BPBusinessRuleEffectiveAction>();
             if (input.ParentBusinessRuleSetId.HasValue)
             {
-                allEffectiveActions= GetParentRuleSetEffectiveActions(input.ParentBusinessRuleSetId.Value);
+                allEffectiveActions = GetParentRuleSetEffectiveActions(input.ParentBusinessRuleSetId.Value);
             }
             if (input.BusinessRuleSetDefinitionId.HasValue)
             {
                 var allBusinessRuleSets = GetCachedBPBusinessRuleSetsEffectiveActions();
                 if (allBusinessRuleSets != null && allBusinessRuleSets.Count() > 0)
                 {
-                    allEffectiveActions= allBusinessRuleSets.GetRecord(input.BusinessRuleSetDefinitionId.Value);
+                    allEffectiveActions = allBusinessRuleSets.GetRecord(input.BusinessRuleSetDefinitionId.Value);
                 }
             }
             else if (!input.ParentBusinessRuleSetId.HasValue && !input.BusinessRuleSetDefinitionId.HasValue)
             {
                 BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager();
-                allEffectiveActions= actionManager.GetDefaultBusinessRulesActions(input.BusinessProcessId).Values.ToList();
+                allEffectiveActions = actionManager.GetDefaultBusinessRulesActions(input.BusinessProcessId).Values.ToList();
             }
             return allEffectiveActions.MapRecords(BPBusinessRuleSetEffectiveActionsDetailMapper);
         }
@@ -49,9 +49,9 @@ namespace Vanrise.BusinessProcess.Business
             businessRuleSet.Details.ThrowIfNull("businessRuleSet.Details");
             return businessRuleSet.Details.ActionDetails;
         }
-        public BusinessRuleAction GetParentAction (int businessRuleSetId,Guid ruleDefinitionId)
+        public BPBusinessRuleEffectiveAction GetParentAction(int businessRuleSetId, Guid ruleDefinitionId)
         {
-            BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager ();
+            BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager();
             BPBusinessRuleSetManager ruleSetManager = new BPBusinessRuleSetManager();
             var ruleSet = ruleSetManager.GetBusinessRuleSetsByID(businessRuleSetId);
             ruleSet.ThrowIfNull("ruleSet");
@@ -59,19 +59,28 @@ namespace Vanrise.BusinessProcess.Business
             {
                 var defaultAction = actionManager.GetBusinessRuleAction(ruleDefinitionId);
                 defaultAction.ThrowIfNull("defaultAction");
-                return defaultAction.Details.Settings.Action;
+                return new BPBusinessRuleEffectiveAction
+                {
+                    RuleDefinitionId = ruleDefinitionId,
+                    Action = defaultAction.Details.Settings.Action,
+                    Disabled = defaultAction.Details.Settings.Disabled
+                };
             }
             else
             {
                 var allEffectiveActions = GetCachedBPBusinessRuleSetsEffectiveActions().GetRecord(ruleSet.ParentId.Value);
-                return allEffectiveActions.FirstOrDefault(x => x.RuleDefinitionId == ruleDefinitionId).Action;
+                return allEffectiveActions.FirstOrDefault(x => x.RuleDefinitionId == ruleDefinitionId);
             }
         }
-        public string GetParentActionDescription (int ruleSetId,Guid ruleDefinitionId)
+        public BPBusinessRuleEffectiveActionDescription GetParentActionDescription(int ruleSetId, Guid ruleDefinitionId)
         {
             var parentAction = GetParentAction(ruleSetId, ruleDefinitionId);
             parentAction.ThrowIfNull("parentAction");
-            return parentAction.GetDescription();
+            return new BPBusinessRuleEffectiveActionDescription()
+            {
+                ActionDescription = parentAction.Action.GetDescription(),
+                Disabled = parentAction.Disabled
+            };
         }
         public BPBusinessRuleEffectiveAction GetBusinessRuleEffectiveAction(Guid businessRuleDefinitionId, int? businessRuleSetId)
         {
@@ -80,7 +89,7 @@ namespace Vanrise.BusinessProcess.Business
                 var actions = GetCachedBPBusinessRuleSetsEffectiveActions().GetRecord(businessRuleSetId.Value);
                 if (actions == null || actions.Count() == 0)
                     throw new VRBusinessException("No default actions are defined for business rules");
-                return actions.First(x => x.RuleDefinitionId == businessRuleDefinitionId);
+                return actions.FirstOrDefault(x => x.RuleDefinitionId == businessRuleDefinitionId);
             }
             else
             {
@@ -89,7 +98,7 @@ namespace Vanrise.BusinessProcess.Business
                 var ruleDefinition = definitionManager.GetBusinessRuleDefinitionById(businessRuleDefinitionId);
                 ruleDefinition.ThrowIfNull("Rule Definition");
                 var allEffectiveActions = actionManager.GetDefaultBusinessRulesActions(ruleDefinition.BPDefintionId).Values.ToList();
-                return allEffectiveActions.First(x => x.RuleDefinitionId == businessRuleDefinitionId);
+                return allEffectiveActions.FirstOrDefault(x => x.RuleDefinitionId == businessRuleDefinitionId);
             }
         }
         public IEnumerable<BPBusinessRuleActionType> GetRuleActionsExtensionConfigs(ActionTypesInfoFilter actionTypeFilter)
@@ -134,8 +143,8 @@ namespace Vanrise.BusinessProcess.Business
                 {
                     BPBusinessRuleActionManager actionManager = new BPBusinessRuleActionManager();
                     var effectiveActions = actionManager.GetDefaultBusinessRulesActions(businesssRuleSet.BPDefinitionId);
-                  var ruleSetEffectiveActions =  UpdateEffectiveActions(businesssRuleSet.BPBusinessRuleSetId);
-                  cachedBusinessRuleActionsByRuleSetId.Add(businesssRuleSet.BPBusinessRuleSetId, ruleSetEffectiveActions.Values.ToList());
+                    var ruleSetEffectiveActions = UpdateEffectiveActions(businesssRuleSet.BPBusinessRuleSetId);
+                    cachedBusinessRuleActionsByRuleSetId.Add(businesssRuleSet.BPBusinessRuleSetId, ruleSetEffectiveActions.Values.ToList());
                 }
                 return cachedBusinessRuleActionsByRuleSetId;
             });
@@ -149,6 +158,7 @@ namespace Vanrise.BusinessProcess.Business
                 RuleDefinitionId = bpBusinessRuleSetEffectiveAction.RuleDefinitionId,
                 Description = ruleDefinitionManager.GetRuleDefinitionDescription(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
                 Title = ruleDefinitionManager.GetRuleDefinitionTitle(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
+                CanBeDisabled = ruleDefinitionManager.GetRuleDefinitionCanBeDisabled(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
                 ActionDescription = bpBusinessRuleSetEffectiveAction.Action.GetDescription(),
                 ActionTypesIds = ruleDefinitionManager.GetBusinessRuleDefinitionById(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Settings.ActionTypes,
             };
@@ -177,6 +187,7 @@ namespace Vanrise.BusinessProcess.Business
                 var ruleEffectiveAction = new BPBusinessRuleEffectiveAction()
                 {
                     RuleDefinitionId = action.Value.RuleDefinitionId,
+                    Disabled = action.Value.Disabled,
                     Action = action.Value.Action,
                 };
                 actionsCopy.Add(action.Key, ruleEffectiveAction);
@@ -188,11 +199,12 @@ namespace Vanrise.BusinessProcess.Business
                 if (effectiveAction != null)
                 {
                     effectiveAction.Action = action.Settings.Action;
+                    effectiveAction.Disabled = action.Settings.Disabled;
                 }
             }
             return actionsCopy;
         }
-      
+
 
 
         #endregion

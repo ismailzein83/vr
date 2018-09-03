@@ -19,13 +19,23 @@
         <vr-datagridcolumn headertext="'Title'" field="'Title'" type="'Text'" widthfactor="'3'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'" widthfactor="'7'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Action'" field="'ActionDescription'" type="'Text'" isfielddynamic="true" fixedwidth="'120'"></vr-datagridcolumn>
+       
         <vr-datagridcolumn headertext="'Override'" fixedwidth="'80'">
-            <vr-columns width="fullrow" ng-if="!dataItem.hideOverrideSettings() && dataItem.ActionTypesIds.length > 1">
-                <vr-switch value="dataItem.IsOverriden" onvaluechanged="dataItem.onInheritedSwitchChanged"> </vr-switch>
-            </vr-columns>
+            <span vr-disabled="dataItem.Entity.Disabled">
+                <vr-columns width="fullrow" ng-if="!dataItem.hideOverrideSettings() && dataItem.ActionTypesIds.length > 1">
+                    <vr-switch value="dataItem.IsOverriden" onvaluechanged="dataItem.onInheritedSwitchChanged"> </vr-switch>
+                </vr-columns>
+            </span>
         </vr-datagridcolumn>
-        <vr-datagridcolumn  fixedwidth="'150'">
-            <span ng-if="(!dataItem.hideOverrideSettings() && dataItem.IsOverriden)">
+
+        <vr-datagridcolumn headertext="'Disable'" fixedwidth="'80'">
+                <vr-columns width="fullrow" ng-if="dataItem.CanBeDisabled==true">
+                    <vr-switch value="dataItem.Entity.Disabled" onvaluechanged="dataItem.onDisabledChanged"> </vr-switch>
+                </vr-columns>
+        </vr-datagridcolumn>
+
+        <vr-datagridcolumn fixedwidth="'150'">
+            <span ng-if="(!dataItem.hideOverrideSettings() && dataItem.IsOverriden)" vr-disabled ="dataItem.Entity.Disabled">
                 <vr-columns colnum="12" haschildcolumns>
                     <bp-business-rule-actions-selective hidelabel on-ready="dataItem.onRuleActionsSelectiveReady"></bp-business-rule-actions-selective>
                 </vr-columns>

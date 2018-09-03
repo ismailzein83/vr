@@ -176,12 +176,13 @@ function BusinessProcess_BP_BusinessRuleSetEditorController($scope, BusinessProc
         instance.Name = $scope.name;
         instance.BPDefinitionId = $scope.bpDefition.BPDefinitionID;
         instance.ParentId = $scope.scopeModel.selectedbusinessRuleSet != undefined ? $scope.scopeModel.selectedbusinessRuleSet.BPBusinessRuleSetId : null;
-        instance.Details = { ActionDetails: [] };
+        instance.Details = { ActionDetails: []};
         for (var z = 0; z < businessRules.length; z++) {
             var currentItem = businessRules[z];
             var effectiveAction = gridAPI.getData();
             var dataItem = { BPBusinessRuleDefinitionId: currentItem.RuleDefinitionId, Settings: {} };
             if (currentItem.Entity.Action != undefined) {
+                dataItem.Settings.Disabled = currentItem.Entity.Disabled;
                 if (currentItem.Entity.Action.action != undefined)
                     dataItem.Settings.Action = currentItem.Entity.Action.action;
                 else dataItem.Settings.Action = currentItem.Entity.Action;

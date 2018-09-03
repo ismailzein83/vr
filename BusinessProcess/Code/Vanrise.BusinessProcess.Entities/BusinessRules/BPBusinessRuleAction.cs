@@ -18,5 +18,6 @@ namespace Vanrise.BusinessProcess.Entities
     public class BPBusinessRuleActionSettings
     {
         public BusinessRuleAction Action { get; set; }
+        public bool Disabled { get; set; }
     }
 }

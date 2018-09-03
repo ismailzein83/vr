@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class BPBusinessRuleEffectiveAction
+    public class BPBusinessRuleEffectiveActionDescription
     {
-        public Guid RuleDefinitionId { get; set; }
-        public BusinessRuleAction Action { get; set; }
+        public string ActionDescription { get; set; }
         public bool Disabled { get; set; }
     }
 }

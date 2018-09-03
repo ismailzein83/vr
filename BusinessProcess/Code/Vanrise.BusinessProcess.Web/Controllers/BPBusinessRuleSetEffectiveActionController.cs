@@ -29,7 +29,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
         [HttpGet]
         [Route("GetParentActionDescription")]
-        public string GetParentActionDescription(int ruleSetId, Guid ruleDefinitionId)
+        public BPBusinessRuleEffectiveActionDescription GetParentActionDescription(int ruleSetId, Guid ruleDefinitionId)
         {
             return _manager.GetParentActionDescription(ruleSetId,ruleDefinitionId);
         }

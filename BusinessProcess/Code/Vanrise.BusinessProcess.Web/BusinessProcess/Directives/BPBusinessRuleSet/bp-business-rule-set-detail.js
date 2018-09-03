@@ -56,7 +56,6 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                             BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetRuleSetEffectiveActions(bpBusinessRuleSetId)
                                 .then(function (response) {
                                     ruleSetActions = response;
-
                                     BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetBPBusinessRuleSetsEffectiveActions(payload.query)
                                 .then(function (response) {
                                     if (response != undefined) {
@@ -102,9 +101,10 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                             var obj = $scope.bpBusinessRules[i];
                             if (obj.IsOverriden) {
                                 obj.Entity.Action = obj.ruleActionsSelectiveAPI.getData();
+                                obj.Entity.Disabled = obj.Entity.Disabled;
                                 businessRuleSets.push(obj);
                             }
-                            else if (!obj.IsInherited) {
+                            else if (!obj.IsInherited || obj.disabledChanged) { 
                                 obj.Entity.Action = obj.Entity.Action;
                                 businessRuleSets.push(obj);
                             }
@@ -148,12 +148,12 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
             };
 
             function extendDataItem(dataItem) {
-               
+                dataItem.disabledChanged = false;
 
                 if (!isEditMode && parentRuleSetId != undefined)
                     dataItem.IsInherited = true;
 
-                dataItem.showReset = !dataItem.IsInherited;
+                dataItem.showReset = (!dataItem.IsInherited);
                 dataItem.ruleActionsSelectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 dataItem.onRuleActionsSelectiveReady = function (api) {
@@ -171,6 +171,10 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.ruleActionsSelectiveAPI, payload, setLoader);
                 };
 
+                dataItem.onDisabledChanged = function () {
+                    dataItem.disabledChanged = !dataItem.disabledChanged;
+                };
+
                 dataItem.hideOverrideSettings = function () {
                     return isEditMode && !dataItem.IsInherited && dataItem.showReset;
                 };
@@ -178,7 +182,8 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                 dataItem.onResetClicked = function (dataItem) {
                     return BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetParentActionDescription(bpBusinessRuleSetId, dataItem.RuleDefinitionId).then(function (response) {
                         if (response != undefined) {
-                            dataItem.ActionDescription = response;
+                            dataItem.ActionDescription = response.ActionDescription;
+                            dataItem.Entity.Disabled = response.Disabled;
                             dataItem.showReset = false;
                             dataItem.IsInherited = true;
                             dataItem.CssClass = "";

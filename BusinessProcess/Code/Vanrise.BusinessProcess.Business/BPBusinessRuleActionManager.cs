@@ -16,22 +16,30 @@ namespace Vanrise.BusinessProcess.Business
         {
             return GetCachedBPBusinessRuleActionsByDefinition().GetRecord(bpBusinessRuleDefinitionId);
         }
-        public BusinessRuleAction GetEffectiveRuleAction (Guid bpBusinessRuleDefinitionId,int? businessRuleSetId)
+        public BPBusinessRuleEffectiveAction GetEffectiveRuleAction(Guid bpBusinessRuleDefinitionId, int? businessRuleSetId)
         {
             if (!businessRuleSetId.HasValue)
             {
                 var action = GetBusinessRuleAction(bpBusinessRuleDefinitionId);
                 if (action == null)
                     throw new VRBusinessException("no default actions are defined for business rules");
-                return action.Details.Settings.Action;
+                return new BPBusinessRuleEffectiveAction
+                {
+                    RuleDefinitionId = bpBusinessRuleDefinitionId,
+                    Action = action.Details.Settings.Action,
+                    Disabled = action.Details.Settings.Disabled
+                };
             }
             else
             {
                 BPBusinessRuleSetEffectiveActionManager effectiveActionManager = new BPBusinessRuleSetEffectiveActionManager();
                 var effectiveAction = effectiveActionManager.GetBusinessRuleEffectiveAction(bpBusinessRuleDefinitionId, businessRuleSetId.Value);
-                return effectiveAction.Action;
+                if (effectiveAction == null)
+                    throw new VRBusinessException("no actions are defined for business rules");
+                return effectiveAction;
             }
         }
+        
         public Dictionary<Guid, BPBusinessRuleEffectiveAction> GetDefaultBusinessRulesActions(Guid businessProcessId)
         {
             Dictionary<Guid, BPBusinessRuleEffectiveAction> defaultActions = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
@@ -40,7 +48,7 @@ namespace Vanrise.BusinessProcess.Business
             var allDefinitions = bpDefinitionManager.GetAllBusinessRuleDefinitions();
             foreach (var definition in allDefinitions)
             {
-                if(definition.BPDefintionId == businessProcessId)
+                if (definition.BPDefintionId == businessProcessId)
                 {
                     BPBusinessRuleAction action = allActions.GetRecord(definition.BPBusinessRuleDefinitionId);
                     if (action == null)
@@ -49,6 +57,7 @@ namespace Vanrise.BusinessProcess.Business
                     {
                         RuleDefinitionId = definition.BPBusinessRuleDefinitionId,
                         //check action
+                        Disabled = action.Details.Settings.Disabled,
                         Action = action.Details.Settings.Action,
                     };
                     defaultActions.Add(definition.BPBusinessRuleDefinitionId, effectiveAction);
@@ -56,7 +65,7 @@ namespace Vanrise.BusinessProcess.Business
             }
             return defaultActions;
         }
-       
+
 
         #endregion
 

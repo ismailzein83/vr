@@ -14,5 +14,6 @@ namespace Vanrise.BusinessProcess.Entities
         public string Description { get; set; }
         public string Title { get; set; }
         public List<Guid> ActionTypesIds { get; set; }
+        public bool CanBeDisabled { get; set; }
     }
 }
