@@ -30,7 +30,7 @@ as (select * from (values
 ('A0DE8C69-7427-4F95-9A4D-9ECD8658D7B2','VRWorkflowWriteTrackingMessageActivity','Log Message'	,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-writetrackingmessage"}'),
 ('9292B3BE-256F-400F-9BC6-A0423FA0B30F','VRWorkflowSequenceActivity','Sequence'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-sequence"}'),
 ('BA3A107D-20DA-4456-AC70-A2948DFE3725','VRWorkflowForEachActivity','ForEach'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-foreach"}'),
-('173258F8-2AC9-4214-BCE2-D3DB6D902423','VRWorkflowSubProcessActivity','Execute Workflow'		,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-subprocess"}'),
+('173258F8-2AC9-4214-BCE2-D3DB6D902423','VRWorkflowSubProcessActivity','Subprocess'				,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-subprocess"}'),
 ('40B7E3E9-F8E0-4C2C-9ED7-F79CC4A68473','VRWorkflowIfElseActivity','If Else'					,'BP_VR_Workflow_Activity','{"Editor":"businessprocess-vr-workflowactivity-ifelse"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
