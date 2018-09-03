@@ -16,8 +16,10 @@
                 </vr-analytic-dimension-selector>
                 <vr-columns width="2/3row">
                     <vr-validator validate="scopeModel.isValidGroupingDimensions()">
-                        <vr-datagrid datasource="scopeModel.groupingDimensions" enabledraggablerow="true"
-                                     on-ready="onGridReady" ondeleterow="scopeModel.removeGroupingDimension" hidegridmenu norowhighlightonclick="'true'">
+                        <vr-datagrid datasource="scopeModel.groupingDimensions"
+                                     ondeleterow="scopeModel.removeGroupingDimension"
+                                     enabledraggablerow="true" norowhighlightonclick="'true'" hidegridmenu>
+
                             <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
                             <vr-datagridcolumn headertext="'Title'" widthfactor="5" disablesorting="true">
                                 <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
@@ -41,20 +43,60 @@
                                                 normal-col-num="4" hideselectedvaluessection ismultipleselection>
                 </vr-analytic-dimension-selector>
                 <vr-columns width="2/3row">
-                    <vr-validator validate="scopeModel.isValidFilterDimensions()">
-                        <vr-datagrid datasource="scopeModel.filterDimensions"
-                                     on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu enabledraggablerow="true" norowhighlightonclick="'true'">
-                            <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Title'" widthfactor="5" disablesorting="true">
-                                <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
-                                <vr-switch value="dataItem.IsRequired"></vr-switch>
-                            </vr-datagridcolumn>
-                        </vr-datagrid>
-                    </vr-validator>
+                    <vr-datagrid datasource="scopeModel.filterDimensions"
+                                 ondeleterow="scopeModel.removeFilterDimension"
+                                 enabledraggablerow="true" norowhighlightonclick="'true'" hidegridmenu>
+
+                        <vr-datagridcolumn headertext="'Dimension Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="5" disablesorting="true">
+                            <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
+                            <vr-switch value="dataItem.IsRequired"></vr-switch>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
                 </vr-columns>
             </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Advanced Filters">
+            <vr-row>
+                <vr-columns colnum="4">
+                    <vr-select datasource="scopeModel.advancedFilterFieldsRelationTypeDS" onselectionchanged="scopeModel.onAdvancedFilterFieldsRelationTypeSelectionChanged"
+                               selectedvalues="scopeModel.advancedFilterFieldsRelationTypeSelectedValues" datavaluefield="value" datatextfield="description" label="Type" hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+                <span ng-show="scopeModel.showAdvancedFilterFields">
+                    <vr-analytic-dimension-selector on-ready="scopeModel.onAdvancedFilterDimensionSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterDimensions"
+                                                    onselectitem="scopeModel.onSelectAdvancedFilterDimensionItem" ondeselectitem="scopeModel.onDeselectAdvancedFilterDimensionItem"
+                                                    normal-col-num="4" hideselectedvaluessection ismultipleselection>
+                    </vr-analytic-dimension-selector>
+                </span>
+            </vr-row>
+            <!--<vr-row>
+                <span ng-show="scopeModel.showAdvancedFilterFields">
+                    <vr-analytic-dimension-selector on-ready="scopeModel.onAdvancedFilterDimensionSelectorDirectiveReady" selectedvalues="scopeModel.selectedAdvancedFilterDimensions"
+                                                    onselectitem="scopeModel.onSelectAdvancedFilterDimensionItem" ondeselectitem="scopeModel.onDeselectAdvancedFilterDimensionItem"
+                                                    normal-col-num="4" hideselectedvaluessection ismultipleselection>
+                    </vr-analytic-dimension-selector>
+                    <vr-columns width="2/3row">
+                        <vr-validator validate="scopeModel.isValidAdvancedFilterFields()">
+                            <vr-datagrid datasource="scopeModel.advancedFilterFields"
+                                         ondeleterow="scopeModel.removeAdvancedFilterField"
+                                         enabledraggablerow="true" norowhighlightonclick="'true'" hidegridmenu>
+
+                                <vr-datagridcolumn headertext="'Field Name'" field="'Name'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
+                                    <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-validator>
+                    </vr-columns>
+                </span>
+            </vr-row>-->
         </vr-section>
     </vr-columns>
 </vr-row>

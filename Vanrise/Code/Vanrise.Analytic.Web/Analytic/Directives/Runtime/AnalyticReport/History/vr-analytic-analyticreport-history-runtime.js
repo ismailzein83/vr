@@ -2,9 +2,10 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService', 'VR_Analytic_AdvancedFilterFieldsRelationType'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService, VR_Analytic_AdvancedFilterFieldsRelationType) {
+
         return {
             restrict: "E",
             scope: {
@@ -18,18 +19,17 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Analytic/Directives/Runtime/AnalyticReport/History/Templates/HistoryAnalyticReportRuntimeTemplates.html"
-
         };
 
         function HistoryAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var fieldTypes = [];
-            var filterObj;
-
             var dimensions = [];
             var measures = [];
+
             var settings;
+            var filterObj;
 
             var currencySelectorAPI;
             var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -60,14 +60,29 @@
                     currencySelectorAPI = api;
                     currencySelectorReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.addFilter = function () {
                     var onDimensionFilterAdded = function (filter, expression) {
                         filterObj = filter;
                         $scope.scopeModel.expression = expression;
                     };
+
+                    var checkAvailableFieldNames = false;
+                    var availableFieldNames;
+                    if (settings && settings.SearchSettings && settings.SearchSettings.AdvancedFilters) {
+                        var advancedFilters = settings.SearchSettings.AdvancedFilters;
+                        if (advancedFilters.FieldsRelationType == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
+                            checkAvailableFieldNames = true;
+                            availableFieldNames = UtilsService.getPropValuesFromArray(advancedFilters.AvailableFields, "FieldName");
+                        }
+                    }
+
                     var fields = [];
                     for (var i = 0; i < dimensions.length; i++) {
                         var dimension = dimensions[i];
+
+                        if (checkAvailableFieldNames && !availableFieldNames.includes(dimension.Name))
+                            continue;
 
                         fields.push({
                             FieldName: dimension.Name,
@@ -110,6 +125,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     if (payload != undefined) {
                         settings = payload.settings;
                     }
@@ -364,7 +380,7 @@
                     FilterGroup: buildFilterGroupObj(filterObj, widgetPayload.RecordFilter),
                     ToTime: $scope.scopeModel.todate,
                     Period: $scope.scopeModel.selectedPeriod.value,
-                    CurrencyId: currencySelectorAPI != undefined?currencySelectorAPI.getSelectedIds():undefined
+                    CurrencyId: currencySelectorAPI != undefined ? currencySelectorAPI.getSelectedIds() : undefined
                 };
                 return query;
             }
