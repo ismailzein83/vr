@@ -34,6 +34,15 @@
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationGenerator.html', parameters, settings);
         }
+
+        function testGenerateVRReportGeneration(currentReportGenerationInfo) {
+            var settings = {};
+            var parameters = {
+                currentReportGenerationInfo: currentReportGenerationInfo
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationGenerator.html', parameters, settings);
+        }
         
         function getEntityUniqueName() {
             return "VR_Analytic_ReportGeneration";
@@ -53,7 +62,8 @@
             getEntityUniqueName:getEntityUniqueName,
             addVRReportGeneration: addVRReportGeneration,
             editVRReportGeneration: editVRReportGeneration,
-            generateVRReportGeneration: generateVRReportGeneration
+            generateVRReportGeneration: generateVRReportGeneration,
+            testGenerateVRReportGeneration: testGenerateVRReportGeneration
         };
     }
 

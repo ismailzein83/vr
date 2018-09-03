@@ -123,6 +123,12 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerAPIService, VRUIUtilsSe
                 }
                 return false;
             };
+
+            api.reload = function (newQueries) {
+                if (directiveAPI != undefined && directiveAPI.reload != undefined && typeof (directiveAPI.reload) == 'function') {
+                    directiveAPI.reload(newQueries);
+                }
+            };
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }

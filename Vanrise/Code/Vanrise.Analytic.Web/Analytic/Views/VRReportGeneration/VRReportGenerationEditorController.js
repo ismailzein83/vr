@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Analytic_AccessLevel'];
+    vRReportGenerationEditorController.$inject = ['$scope', 'VR_Analytic_ReportGenerationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Analytic_AccessLevel', 'VR_Analytic_ReportGenerationService'];
 
-    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Analytic_AccessLevel) {
+    function vRReportGenerationEditorController($scope, VR_Analytic_ReportGenerationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Analytic_AccessLevel, VR_Analytic_ReportGenerationService) {
 
         var isEditMode;
         var reportId;
@@ -37,6 +37,8 @@
             $scope.scopeModel.accessLevels = [];
             $scope.scopeModel.accessLevels.push(UtilsService.getItemByVal(accessLevels, 'Private', 'description'));
             $scope.scopeModel.selectedAccessLevel = $scope.scopeModel.accessLevels[0];
+            $scope.scopeModel.showTestGenerateButton = false;
+            $scope.scopeModel.disableTestGenerateButton = true;
 
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {
                 settingsDirectiveAPI = api;
@@ -48,6 +50,13 @@
                     return update();
                 else
                     return insert();
+            };
+
+            $scope.scopeModel.testGenerate = function () {
+                var currentReportGenerationInfo = buildVRReportGenerationObjectFromScope();
+                if (currentReportGenerationInfo != undefined) {
+                    VR_Analytic_ReportGenerationService.testGenerateVRReportGeneration(currentReportGenerationInfo);
+                }
             };
 
             $scope.scopeModel.close = function () {
@@ -105,11 +114,11 @@
 
             function setTitle() {
                 if (isEditMode && vRReportGenerationEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vRReportGenerationEntity.Name, "VR Report Generation");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vRReportGenerationEntity.Name, "Report Generation");
                 else if (isViewHistoryMode && vRReportGenerationEntity != undefined)
                     $scope.title = "View Report Generation: " + vRReportGenerationEntity.Name;
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("VR Report Generation");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Report Generation");
             }
 
             function loadStaticData() {
@@ -125,9 +134,11 @@
                 var settingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                 settingsDirectiveReadyDeferred.promise.then(function () {
-                    var settingsDirectivePayload;
+                    var settingsDirectivePayload = {
+                        context: getContext()
+                    };
                     if (vRReportGenerationEntity != undefined) {
-                        settingsDirectivePayload = { Settings: vRReportGenerationEntity.Settings };
+                        settingsDirectivePayload.Settings = vRReportGenerationEntity.Settings;
                     }
                     VRUIUtilsService.callDirectiveLoad(settingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });
@@ -163,7 +174,7 @@
             var vRReportGenerationObject = buildVRReportGenerationObjectFromScope();
             return VR_Analytic_ReportGenerationAPIService.AddVRReportGeneration(vRReportGenerationObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("VRReportGeneration", response, "Name")) {
+                if (VRNotificationService.notifyOnItemAdded("ReportGeneration", response, "Name")) {
                     if ($scope.onVRReportGenerationAdded != undefined) {
                         $scope.onVRReportGenerationAdded(response.InsertedObject);
                     }
@@ -182,7 +193,7 @@
             $scope.scopeModel.isLoading = true;
             var vRReportGenerationObject = buildVRReportGenerationObjectFromScope();
             VR_Analytic_ReportGenerationAPIService.UpdateVRReportGeneration(vRReportGenerationObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("VRReportGeneration", response, "Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("ReportGeneration", response, "Name")) {
                     if ($scope.onVRReportGenerationUpdated != undefined) {
                         $scope.onVRReportGenerationUpdated(response.UpdatedObject);
                     }
@@ -195,6 +206,20 @@
                 $scope.scopeModel.isLoading = false;
 
             });
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            currentContext.showTestGenerateButton = function (value) {
+                $scope.scopeModel.showTestGenerateButton = value;
+            };
+
+            currentContext.disableTestGenerateButton = function (value) {
+                $scope.scopeModel.disableTestGenerateButton = value;
+            };
+            return currentContext;
         }
 
     }

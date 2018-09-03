@@ -456,7 +456,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Comment",
                     class: "glyphicon glyphicon-circle-arrow-right"
                 };
-
+            case "TestGenerate":
+                return {
+                    text: "Test Generate",
+                    class: 'glyphicon glyphicon-download'
+                };
         }
     }
 }]);

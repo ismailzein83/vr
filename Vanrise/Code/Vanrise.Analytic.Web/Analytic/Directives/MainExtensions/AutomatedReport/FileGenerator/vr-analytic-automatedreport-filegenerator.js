@@ -98,6 +98,14 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                     return UtilsService.waitMultiplePromises([loadFileNamePatternQuery(), loadFileGeneratorSelector()]);
                 };
 
+                api.reload = function (newQueries) {
+                    fileGeneratorSelectorReadyPromiseDeferred.promise.then(function () {
+                        if (fileGeneratorSelectorAPI.reload!=undefined && typeof(fileGeneratorSelectorAPI.reload)=='function') {
+                            fileGeneratorSelectorAPI.reload(newQueries);
+                        }
+                    });
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

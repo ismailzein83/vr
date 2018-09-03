@@ -28,7 +28,7 @@
             this.initializeController = initializeController;
 
             var directiveAPI;
-
+            var context;
             function initializeController() {
                 ctrl.onDirectiveReady = function (api) {
                     directiveAPI = api;
@@ -41,6 +41,10 @@
             function getDirectiveAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    context = payload.context;
+                    if (context != undefined && context.showTestGenerateButton != undefined && typeof (context.showTestGenerateButton) == 'function') {
+                        context.showTestGenerateButton(true);
+                    };
                     return directiveAPI.load(payload);
                 };
 
@@ -56,6 +60,11 @@
                     }
 
                     return returnValue;
+                };
+                api.setQueryChanges = function (newQueries) {
+                    if (directiveAPI != undefined && directiveAPI.reload != undefined && typeof (directiveAPI.reload)== 'function') {
+                        directiveAPI.reload(newQueries);
+                    }
                 };
                 return api;
             }

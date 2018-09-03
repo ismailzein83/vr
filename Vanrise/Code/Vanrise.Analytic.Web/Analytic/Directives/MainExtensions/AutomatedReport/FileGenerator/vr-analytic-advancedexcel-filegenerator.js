@@ -93,6 +93,11 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 $scope.scopeModel.removeTable = function (obj) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, obj.data.tableTabIndex, 'tableTabIndex');
                     $scope.scopeModel.tables.splice(index, 1);
+                    if (context != undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
+                        if ($scope.scopeModel.tables.length == 0) {
+                            context.disableTestGenerateButton(true);
+                        }
+                    }
                 };
                 
                 $scope.scopeModel.disableAddMappedTable = function () {
@@ -142,6 +147,11 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 var tableDefinitions;
                 if (payload != undefined) {
                     context = payload.context;
+                    if (context != undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
+                        if ($scope.scopeModel.tables.length > 0) {
+                            context.disableTestGenerateButton(false);
+                        }
+                    }
                     var fileGenerator = payload.fileGenerator;
                     if (fileGenerator != undefined) {
                         tableDefinitions = fileGenerator.TableDefinitions;
@@ -211,7 +221,93 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
                 return UtilsService.waitMultiplePromises(promises);
             };
+            api.reload = function (newQueries) {
+                if (queries != undefined && newQueries != undefined) {
+                    if (queries.length != newQueries.length) {
+                        if (queries.length < newQueries.length) {
+                            var queryAdded = newQueries[newQueries.length-1];
+                            queries.push(queryAdded);
+                            $scope.scopeModel.queries.push({
+                                description: queryAdded.QueryTitle,
+                                value: queryAdded.VRAutomatedReportQueryId
+                            });
+                        }
+                        else
+                        {
+                            var queryDeleted;
+                            for (var i = 0; i < queries.length; i++) {
+                                var oldQuery = queries[i];
+                                var oldQueryIndex = UtilsService.getItemIndexByVal(newQueries, oldQuery.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                                if (oldQueryIndex==-1) {
+                                    queryDeleted = oldQuery;
+                                }
+                            }
+                            if (queryDeleted !=undefined) {
+                                let index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, queryDeleted.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                                while(index > -1) {
+                                    $scope.scopeModel.tables.splice(index, 1);
+                                    index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, queryDeleted.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                                    tabsAPI.setTabSelected($scope.scopeModel.tables.length -1);
+                                }
+                                if (context != undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
+                                    if ($scope.scopeModel.tables.length == 0) {
+                                        context.disableTestGenerateButton(true);
+                                    }
+                                }
+                                if ($scope.scopeModel.tables.length != 0) {
+                                    tabsAPI.setLastTabSelected();
+                                }
 
+                                var matchingDeletedQueryIndex = UtilsService.getItemIndexByVal($scope.scopeModel.queries, queryDeleted.VRAutomatedReportQueryId, 'value');
+                                $scope.scopeModel.queries.splice(matchingDeletedQueryIndex, 1);
+                                var matchingDeletedQueryArrayIndex = UtilsService.getItemIndexByVal(queries, queryDeleted.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                                queries.splice(matchingDeletedQueryArrayIndex, 1);
+                                if ($scope.scopeModel.queries.length==0) {
+                                    $scope.scopeModel.querySelected = undefined;
+                                    $scope.scopeModel.listNameSelected = undefined;
+                                    $scope.scopeModel.listNames.length = 0;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        var queryUpdated;
+                        for (var i = 0; i < queries.length; i++) {
+                            var oldQuery = queries[i];
+                            var newQuery = newQueries[i];
+                            if (oldQuery.Settings != newQuery.Settings) {
+                                queryUpdated = newQuery;
+                                break;
+                            }
+                            }
+                            if (queryUpdated !=undefined) {
+                                   var matchingQuery = UtilsService.getItemByVal($scope.scopeModel.queries, queryUpdated.VRAutomatedReportQueryId, 'value');
+                                   if (matchingQuery != undefined) {
+                                       if (matchingQuery.description != queryUpdated.QueryTitle) {
+                                           var matchingUpdatedQueryIndex = $scope.scopeModel.queries.indexOf(matchingQuery);
+                                           var matchingUpdatedQueryArrayIndex = UtilsService.getItemIndexByVal(queries, matchingQuery.value, 'VRAutomatedReportQueryId');
+                                           queries[matchingUpdatedQueryArrayIndex].QueryTitle = queryUpdated.QueryTitle;
+                                           $scope.scopeModel.queries[matchingUpdatedQueryIndex].description = queryUpdated.QueryTitle;
+                                           if ($scope.scopeModel.queries.length == 1 && $scope.scopeModel.queries[0].value == queryUpdated.VRAutomatedReportQueryId) {
+                                               $scope.scopeModel.querySelected.description = queryUpdated.QueryTitle;
+                                       }
+                                   }
+                                    for (var i = 0; i < $scope.scopeModel.tables.length; i++) {
+                                        var tab = $scope.scopeModel.tables[i];
+                                        if (tab.VRAutomatedReportQueryId==queryUpdated.VRAutomatedReportQueryId) {
+                                            let index = $scope.scopeModel.tables.indexOf(tab);
+                                            $scope.scopeModel.tables[index].header = queryUpdated.QueryTitle + " - " +tab.ListName + ' (' +tab.tableTabIndex + ')';
+                                            if ($scope.scopeModel.tables[index].directiveAPI != undefined && $scope.scopeModel.tables[index].directiveAPI.reload != undefined && typeof ($scope.scopeModel.tables[index].directiveAPI.reload == 'function')) {
+                                                $scope.scopeModel.tables[index].directiveAPI.reload(queryUpdated.VRAutomatedReportQueryId);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    queries = newQueries;
+                }
+            };
             api.getData = function () {
               var obj = {
                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGenerator,Vanrise.Analytic.MainExtensions",
@@ -251,6 +347,8 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     tableIndex = lastItem.tableTabIndex + 1;
                 }
                 var mappedTableTab = {
+                    VRAutomatedReportQueryId: querySelected.VRAutomatedReportQueryId,
+                    ListName: mappedTableItem.ListName,
                     header: querySelected.QueryTitle + " - " + mappedTableItem.ListName + ' (' + tableIndex + ')',
                     tableTabIndex: tableIndex,
                     Editor: "vr-analytic-advancedexcel-filegenerator-mappedtable",
@@ -271,6 +369,11 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     VRUIUtilsService.callDirectiveLoad(mappedTableTab.directiveAPI, directivePayload, mappedTableTab.loadPromiseDeferred);
                 });
                 $scope.scopeModel.tables.push(mappedTableTab);
+                if (context != undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
+                    if ($scope.scopeModel.tables.length > 0) {
+                        context.disableTestGenerateButton(false);
+                    }
+                }
             }
         }
 

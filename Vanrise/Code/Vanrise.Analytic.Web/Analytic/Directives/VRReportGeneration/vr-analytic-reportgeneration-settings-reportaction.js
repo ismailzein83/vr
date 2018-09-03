@@ -10,7 +10,8 @@ function (UtilsService, VR_Analytic_ReportGenerationAPIService, VRUIUtilsService
             normalColNum: '@',
             label: '@',
             customvalidate: '=',
-            isrequired: '='
+            isrequired: '=',
+            hideremoveicon:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -116,6 +117,13 @@ function (UtilsService, VR_Analytic_ReportGenerationAPIService, VRUIUtilsService
                 }
                 return data;
             };
+
+            api.setQueryChanges = function (newQueries) {
+                if (directiveAPI != undefined && directiveAPI.setQueryChanges != undefined && typeof (directiveAPI.setQueryChanges) == 'function') {
+                    directiveAPI.setQueryChanges(newQueries);
+                }
+            };
+
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }

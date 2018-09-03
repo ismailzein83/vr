@@ -44,6 +44,9 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
 
                 var onQueryAdded = function (obj) {
                     $scope.scopeModel.columns.push(obj);
+                    if (context != undefined && context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
+                        context.setQueryChanges(getColumns());
+                    }
                 };
                 VRAnalytic_AutomatedReportProcessScheduledService.addQuery(onQueryAdded, getContext());
             };
@@ -52,6 +55,9 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.columns, dataItem.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
                 if (index > -1) {
                     $scope.scopeModel.columns.splice(index, 1);
+                    if (context != undefined && context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
+                        context.setQueryChanges(getColumns());
+                    }
                 }
             };
 
@@ -143,6 +149,9 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
             var onQueryUpdated = function (obj) {
                 var index = $scope.scopeModel.columns.indexOf(object);
                 $scope.scopeModel.columns[index] = obj;
+                if (context != undefined && context.setQueryChanges != undefined && typeof (context.setQueryChanges) == 'function') {
+                    context.setQueryChanges(getColumns());
+                }
             };
             VRAnalytic_AutomatedReportProcessScheduledService.editQuery(object, onQueryUpdated, getContext());
         }

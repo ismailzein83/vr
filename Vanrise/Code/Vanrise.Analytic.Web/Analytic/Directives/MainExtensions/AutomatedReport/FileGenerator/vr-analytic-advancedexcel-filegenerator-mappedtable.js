@@ -138,6 +138,32 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                 return UtilsService.waitMultiplePromises(promises);
             };
 
+            api.reload = function (vrAutomatedReportQueryId) {
+                if (context != undefined && context.getQueryInfo != undefined && typeof (context.getQueryInfo) == "function") {
+                    var queries = context.getQueryInfo();
+                    var query = UtilsService.getItemByVal(queries, vrAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                    if (query!=null) {
+                        if (query.Settings != undefined && query.Settings.WithSummary != undefined) {
+                            $scope.scopeModel.showSummarySwitch = query.Settings.WithSummary;
+                            if ($scope.scopeModel.showSummarySwitch) {
+                                $scope.scopeModel.includeSummary = true;
+                            }
+                        }
+                        else {
+                            $scope.scopeModel.showSummarySwitch = false;
+                            $scope.scopeModel.includeSummary = false;
+                        }
+                    }
+                    else {
+                        $scope.scopeModel.showSummarySwitch = false;
+                        $scope.scopeModel.includeSummary = false;
+                    }
+                }
+                if (mappedColumnsAPI != undefined && mappedColumnsAPI.reload != undefined && typeof (mappedColumnsAPI.reload) == 'function') {
+                    mappedColumnsAPI.reload(vrAutomatedReportQueryId);
+                }
+            };
+
             api.getData = function getData() {
                 var firstRowDirectiveData = firstRowDirectiveAPI.getData();
                 if (firstRowDirectiveData == undefined)
@@ -152,7 +178,7 @@ app.directive('vrAnalyticAdvancedexcelFilegeneratorMappedtable', ['UtilsService'
                     VRAutomatedReportQueryId: vrAutomatedReportQueryId,
                     ListName: listName,
                     IncludeHeaders: $scope.scopeModel.includeHeaders,
-                    IncludeSummary: $scope.scopeModel.includeSummary,
+                    IncludeSummary: $scope.scopeModel.showSummarySwitch ? $scope.scopeModel.includeSummary : false,
                     Titles: $scope.scopeModel.includeTitle? mappedTableTitlesGridAPI.getData() : undefined,
                     ColumnDefinitions: mappedTableObject != undefined ? mappedTableObject.mappedColumns : undefined,
                     SubTableDefinitions: (mappedTableObject != undefined && mappedTableObject.mappedSubTables!=undefined) ? mappedTableObject.mappedSubTables: null,

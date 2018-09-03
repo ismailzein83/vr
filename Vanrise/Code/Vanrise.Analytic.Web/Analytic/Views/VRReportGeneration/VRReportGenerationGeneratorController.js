@@ -7,6 +7,7 @@
 
         var isEditMode;
         var reportId;
+        var currentReportGenerationInfo;
         var vRReportGenerationEntity;
         var runtimeEditorAPI;
         var runtimeEditorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,6 +21,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 reportId = parameters.reportId;
+                currentReportGenerationInfo = parameters.currentReportGenerationInfo;
             }
         }
 
@@ -71,15 +73,26 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            getVRReportGeneration().then(function () {
+            if (reportId != undefined && currentReportGenerationInfo==undefined) {
+                getVRReportGeneration().then(function () {
+                    loadAllControls().finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
+                }).catch(function (error) {
+                    $scope.scopeModel.isLoading = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
+            }
+            else {
+                vRReportGenerationEntity = currentReportGenerationInfo;
+                vRReportGenerationEntity.Settings.ReportAction.ActionTypeName = "DownloadFile";
+                if (vRReportGenerationEntity.Settings != undefined && vRReportGenerationEntity.Settings.Filter != undefined && vRReportGenerationEntity.Settings.Filter.ConfigId == "38974659-fb26-415e-82bc-2895e1d09238") {
+                    $scope.scopeModel.runtimeEditor = "vr-analytic-reportgeneration-filter-standardruntime";
+                }
                 loadAllControls().finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
-            }).catch(function (error) {
-                $scope.scopeModel.isLoading = false;
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            });
-
+            }
 
         }
 

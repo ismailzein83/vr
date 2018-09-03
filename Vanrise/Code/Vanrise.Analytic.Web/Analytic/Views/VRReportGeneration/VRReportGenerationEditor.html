@@ -26,6 +26,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="TestGenerate" ng-show="scopeModel.showTestGenerateButton" formname="formVRReportGenerationEditor" vr-disabled="scopeModel.disableTestGenerateButton" data-onclick="scopeModel.testGenerate"></vr-button>
                 <vr-button type="Save" formname="formVRReportGenerationEditor" data-onclick="scopeModel.save"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>

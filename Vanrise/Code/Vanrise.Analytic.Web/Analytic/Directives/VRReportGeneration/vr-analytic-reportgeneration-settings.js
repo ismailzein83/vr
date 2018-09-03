@@ -73,22 +73,24 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                         Queries: automatedReportQueryAPI.getData(),
                         ReportAction: reportActionAPI.getData(),
                         Filter: filterAPI.getData()
+                    };
                 };
-                };
+
 
 
                 api.load = function (payload) {
                     var queries;
                     var reportAction;
                     var filter;
-                    if (payload != undefined)
+                    if (payload != undefined) {
                         context = payload.context;
 
-                    if (payload != undefined && payload.Settings != undefined) {
+                        if (payload.Settings != undefined) {
 
-                        queries = payload.Settings.Queries;
-                        reportAction = payload.Settings.ReportAction;
-                        filter = payload.Settings.Filter;
+                            queries = payload.Settings.Queries;
+                            reportAction = payload.Settings.ReportAction;
+                            filter = payload.Settings.Filter;
+                        }
                     }
                     function loadAutomatedReportQuery() {
                         var automatedReportQueryLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -148,6 +150,12 @@ app.directive("vrAnalyticReportgenerationSettings", ['UtilsService', 'VRAnalytic
                 var currentContext = context;
                 if (currentContext == undefined)
                     currentContext = {};
+                currentContext.setQueryChanges = function (newQueries) {
+                    if (reportActionAPI != undefined && reportActionAPI.setQueryChanges != undefined && typeof (reportActionAPI.setQueryChanges) =='function') {
+                        reportActionAPI.setQueryChanges(newQueries);
+                    }
+                };
+
                 currentContext.getQueryInfo = function () {
                     return getColumns();
                 };
