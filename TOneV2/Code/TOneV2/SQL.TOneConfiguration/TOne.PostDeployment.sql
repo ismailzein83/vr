@@ -217,6 +217,7 @@ as (select * from (values
 ('8837f293-1465-46e0-9792-950856ab2445','Financial Account','Financial Account','VR_Common_ObjectType'										,'{"Editor":"whs-be-financialaccountobjecttype", "PropertyEvaluatorExtensionType": "WhS_BE_FinancialAccount_PropertyEvaluator"}'),
 
 ('395B97B4-E304-4040-A53D-16A145B4C42E','WhS_BE_DataRecordFieldFormula_GatewayEvaluator','Gateway Evaluator','VR_Generic_DataRecordFieldFormula','{"Editor":"vr-whs-be-datarecordtypefields-formula-gatewayevaluator"}'),
+('33FBAC65-A393-4038-8841-EB02699B9CDE','WhS_BE_DataRecordFieldFormula_PointOfInterconnectEvaluator','Point Of Interconnect Evaluator','VR_Generic_DataRecordFieldFormula','{"Editor":"vr-whs-be-datarecordtypefields-formula-pointofinterconnectevaluator"}'),
 
 ('01090AC4-8995-485B-A5E1-7FD80271641C','WhS_Sales_MarginRateCalculation_Cost','Cost','WhS_Sales_MarginRateCalculation'					,'{"Editor" : "vr-whs-sales-marginratecalculation-cost"}'),
 ('188AFED5-4161-4BF4-9E76-89BC25640881','WhS_Sales_MarginRateCalculation_Supplier','Supplier','WhS_Sales_MarginRateCalculation'			,'{"Editor" : "vr-whs-sales-marginratecalculation-supplier"}'),
