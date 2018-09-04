@@ -37,13 +37,13 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         decimal? CostRate { get; }
 
-        int CostCurrencyId { get; }
+        int? CostCurrencyId { get; }
     }
 
     public class PassThroughEvaluateCustomerRateContext : IPassThroughEvaluateCustomerRateContext
     {
         public decimal? CostRate { get; set; }
 
-        public int CostCurrencyId { get; set; }
+        public int? CostCurrencyId { get; set; }
     }
 }
