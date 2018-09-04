@@ -78,8 +78,10 @@ namespace Vanrise.BusinessProcess.Business
             parentAction.ThrowIfNull("parentAction");
             return new BPBusinessRuleEffectiveActionDescription()
             {
+                BPBusinessRuleActionTypeId = parentAction.Action.BPBusinessRuleActionTypeId,
                 ActionDescription = parentAction.Action.GetDescription(),
                 Disabled = parentAction.Disabled
+               
             };
         }
         public BPBusinessRuleEffectiveAction GetBusinessRuleEffectiveAction(Guid businessRuleDefinitionId, int? businessRuleSetId)

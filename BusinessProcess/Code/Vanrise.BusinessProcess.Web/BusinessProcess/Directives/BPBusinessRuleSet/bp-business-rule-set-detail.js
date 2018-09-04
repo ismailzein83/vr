@@ -157,6 +157,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                 dataItem.ruleActionsSelectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 dataItem.onRuleActionsSelectiveReady = function (api) {
+                    console.log(dataItem);
                     dataItem.ruleActionsSelectiveAPI = api;
                     dataItem.ruleActionsSelectiveReadyPromiseDeferred.resolve();
                     var setLoader = function (value) { };
@@ -183,6 +184,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPBusinessRuleSet
                     return BusinessProcess_BPBusinessRuleSetEffectiveActionAPIService.GetParentActionDescription(bpBusinessRuleSetId, dataItem.RuleDefinitionId).then(function (response) {
                         if (response != undefined) {
                             dataItem.ActionDescription = response.ActionDescription;
+                            dataItem.Entity.Action.BPBusinessRuleActionTypeId = response.BPBusinessRuleActionTypeId
                             dataItem.Entity.Disabled = response.Disabled;
                             dataItem.showReset = false;
                             dataItem.IsInherited = true;

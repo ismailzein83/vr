@@ -8,6 +8,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPBusinessRuleEffectiveActionDescription
     {
+        public Guid BPBusinessRuleActionTypeId { get; set; }
         public string ActionDescription { get; set; }
         public bool Disabled { get; set; }
     }
