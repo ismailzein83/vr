@@ -191,8 +191,26 @@ namespace TOne.WhS.Routing.Business
                     var routeRule = GetRouteRule(routeRuleTarget, routingProduct.RoutingProductId);
                     if (routeRule != null)
                     {
-                        RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
-                        routes.Add(route);
+                        if (context.SupplierCodeMatches != null && context.SupplierCodeMatches.Count > 0)
+                        {
+                            RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
+                            routes.Add(route);
+                        }
+                        else
+                        {
+                            routes.Add(new RPRoute()
+                            {
+                                RoutingProductId = routingProduct.RoutingProductId,
+                                SaleZoneId = saleZone.SaleZoneId,
+                                SaleZoneName = saleZone.Name,
+                                SaleZoneServiceIds = saleZoneServiceIds,
+                                IsBlocked = routeRule.CorrespondentType == CorrespondentType.Block,
+                                ExecutedRuleId = routeRule.RuleId,
+                                EffectiveRateValue = routeRuleTarget.SaleRate,
+                                OptionsDetailsBySupplier = null,
+                                RPOptionsByPolicy = null
+                            });
+                        }
                     }
                     //Removed after discussion with Sari
                     //else

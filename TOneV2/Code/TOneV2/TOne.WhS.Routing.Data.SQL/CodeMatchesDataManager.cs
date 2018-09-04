@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
 using Vanrise.Common;
-using System.Globalization;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
@@ -138,7 +137,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return codeMatchBulkInsertInfo;
         }
 
-        public IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId, Func<bool> shouldStop)
+        public Dictionary<long, RPCodeMatches> GetRPCodeMatchesBySaleZone(long fromZoneId, long toZoneId, Func<bool> shouldStop)
         {
             Dictionary<long, RPCodeMatches> result = new Dictionary<long, RPCodeMatches>();
             ExecuteReaderText(query_GetRPCodeMatchesByZone, (reader) =>
@@ -156,7 +155,8 @@ namespace TOne.WhS.Routing.Data.SQL
                     });
 
                     SupplierCodeMatchWithRate supplierCodeMatchWithRate = SupplierCodeMatchWithRateMapper(reader);
-                    rpCodeMatches.SupplierCodeMatches.Add(supplierCodeMatchWithRate);
+                    if (supplierCodeMatchWithRate != null)
+                        rpCodeMatches.SupplierCodeMatches.Add(supplierCodeMatchWithRate);
                 }
             }, (cmd) =>
             {
@@ -169,7 +169,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(dtPrm);
             });
 
-            return result.Values;
+            return result;
         }
 
         public List<PartialCodeMatches> GetPartialCodeMatchesByRouteCodes(HashSet<string> routeCodes)
@@ -202,23 +202,27 @@ namespace TOne.WhS.Routing.Data.SQL
 
         SupplierCodeMatchWithRate SupplierCodeMatchWithRateMapper(IDataReader reader)
         {
+            long? supplierZoneId = GetReaderValue<long?>(reader, "SupplierZoneID");
+            if (!supplierZoneId.HasValue)
+                return null;
+
             string supplierServiceIds = reader["SupplierServiceIds"] as string;
             string exactSupplierServiceIds = reader["ExactSupplierServiceIds"] as string;
             return new SupplierCodeMatchWithRate()
-             {
-                 CodeMatch = new SupplierCodeMatch()
-                 {
-                     SupplierCode = reader["SupplierCode"] as string,
-                     SupplierId = (int)reader["SupplierID"],
-                     SupplierZoneId = (long)reader["SupplierZoneID"]
-                 },
-                 SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? supplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
-                 ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
-                 RateValue = (decimal)reader["EffectiveRateValue"],
-                 SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
-                 SupplierRateId = (long)reader["SupplierRateId"],
-                 SupplierServiceWeight = (int)reader["SupplierServiceWeight"]
-             };
+            {
+                CodeMatch = new SupplierCodeMatch()
+                {
+                    SupplierCode = reader["SupplierCode"] as string,
+                    SupplierId = (int)reader["SupplierID"],
+                    SupplierZoneId = supplierZoneId.Value
+                },
+                SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? supplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
+                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
+                RateValue = (decimal)reader["EffectiveRateValue"],
+                SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
+                SupplierRateId = (long)reader["SupplierRateId"],
+                SupplierServiceWeight = (int)reader["SupplierServiceWeight"]
+            };
         }
 
         DataTable BuildCodesTable(HashSet<string> routeCodes)
@@ -374,21 +378,21 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Queries
 
-        const string query_GetRPCodeMatchesByZone = @"SELECT DISTINCT cszm.[Code]
-                                                            ,cszm.[SupplierID]
-                                                            ,cszm.[SupplierZoneID]
-                                                            ,sz.SaleZoneID
-		                                                    ,null as SupplierCode
-		                                                    ,szd.SupplierServiceIds
-		                                                    ,szd.ExactSupplierServiceIds
-		                                                    ,szd.EffectiveRateValue
-		                                                    ,szd.SupplierServiceWeight
-		                                                    ,szd.SupplierRateId
-		                                                    ,szd.SupplierRateEED
-                                                    FROM    [dbo].[CodeSupplierZoneMatch] cszm with(nolock)
-                                                    JOIN    [dbo].[CodeSaleZone] sz on sz.code = cszm.code
-                                                    JOIN    [dbo].[SupplierZoneDetail] szd on szd.SupplierZoneID = cszm.SupplierZoneID  
-                                                    WHERE   sz.SaleZoneId between @FromZoneId and @ToZoneId";
+        const string query_GetRPCodeMatchesByZone = @"SELECT DISTINCT sz.[Code]
+				                                                     ,sz.[SaleZoneId]
+                                                                     ,cszm.[SupplierID]
+                                                                     ,cszm.[SupplierZoneID]
+		                                                             ,null as SupplierCode
+		                                                             ,szd.SupplierServiceIds
+		                                                             ,szd.ExactSupplierServiceIds
+		                                                             ,szd.EffectiveRateValue
+		                                                             ,szd.SupplierServiceWeight
+		                                                             ,szd.SupplierRateId
+		                                                             ,szd.SupplierRateEED
+                                                             FROM    [dbo].[CodeSaleZone] sz with(nolock)
+                                                             LEFT JOIN  [dbo].[CodeSupplierZoneMatch] cszm  on sz.code = cszm.code
+                                                             LEFT JOIN    [dbo].[SupplierZoneDetail] szd on szd.SupplierZoneID = cszm.SupplierZoneID  
+                                                             WHERE   sz.SaleZoneId between @FromZoneId and @ToZoneId";
 
         private StringBuilder query_GetCodeMatchesByCode = new StringBuilder(@"SELECT  cszm.[Code]
                                                                                        ,cszm.[SupplierID]

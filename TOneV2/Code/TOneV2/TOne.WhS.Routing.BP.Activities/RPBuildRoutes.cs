@@ -111,11 +111,11 @@ namespace TOne.WhS.Routing.BP.Activities
         public bool EntitiesEffectiveInFuture { get; set; }
         public RoutingDatabase RoutingDatabase { get; set; }
 
-        public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<RoutingProduct> routingProducts, IEnumerable<SupplierZoneToRPOptionPolicy> policies, 
+        public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<RoutingProduct> routingProducts, IEnumerable<SupplierZoneToRPOptionPolicy> policies,
             DateTime? effectiveDate, bool isFuture, RoutingDatabase routingDatabase)
         {
             this.RoutingProducts = routingProducts;
-            this.SupplierCodeMatches = codeMatch.SupplierCodeMatches.ToList();
+            this.SupplierCodeMatches = (codeMatch.SupplierCodeMatches != null) ? codeMatch.SupplierCodeMatches.ToList() : null;
             this.SupplierCodeMatchesBySupplier = codeMatch.SupplierCodeMatchesBySupplier;
             this.SupplierZoneToRPOptionPolicies = policies;
             this.EntitiesEffectiveOn = effectiveDate;

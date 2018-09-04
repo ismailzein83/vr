@@ -1,14 +1,13 @@
 ﻿using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Queueing;
-using Vanrise.Common;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -48,35 +47,17 @@ namespace TOne.WhS.Routing.BP.Activities
             Dictionary<long, HashSet<string>> saleZoneCodeGroups = zoneCodeGroupsDict != null ? zoneCodeGroupsDict.GetRecord(true) : null;
             Dictionary<long, HashSet<string>> costZoneCodeGroups = zoneCodeGroupsDict != null ? zoneCodeGroupsDict.GetRecord(false) : null;
 
-            var codeMatches = dataManager.GetRPCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId, () => ShouldStop(handle));
+            var codeMatches = dataManager.GetRPCodeMatchesBySaleZone(inputArgument.FromZoneId, inputArgument.ToZoneId, () => ShouldStop(handle));
 
-            long currentZoneId = 0;
-            Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;
-
-            foreach (var codeMatch in codeMatches.OrderBy(c => c.SaleZoneId))
+            foreach (var codeMatchKvp in codeMatches)
             {
                 if (ShouldStop(handle))
                     break;
 
+                var codeMatch = codeMatchKvp.Value;
                 HashSet<string> saleCodeGroups = saleZoneCodeGroups != null ? saleZoneCodeGroups.GetRecord(codeMatch.SaleZoneId) : null;
 
-                if (currentZoneId != codeMatch.SaleZoneId)
-                {
-                    if (currentSupplierCodeMatchesWithRate != null && currentSupplierCodeMatchesWithRate.Count > 0)
-                    {
-                        RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
-                       {
-                           SaleZoneId = currentZoneId,
-                           SupplierCodeMatches = currentSupplierCodeMatchesWithRate.Values,
-                           SupplierCodeMatchesBySupplier = GetSupplierCodeMatchesBySupplier(currentSupplierCodeMatchesWithRate.Values)
-                       };
-
-                        inputArgument.OutputQueue.Enqueue(codeMatchByZone);
-                    }
-                    currentSupplierCodeMatchesWithRate = new Dictionary<long, SupplierCodeMatchWithRate>();
-                    currentZoneId = codeMatch.SaleZoneId;
-                }
-
+                Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = new Dictionary<long, SupplierCodeMatchWithRate>();
                 if (codeMatch.SupplierCodeMatches != null)
                 {
                     foreach (var item in codeMatch.SupplierCodeMatches)
@@ -95,16 +76,13 @@ namespace TOne.WhS.Routing.BP.Activities
                             currentSupplierCodeMatchesWithRate.Add(item.CodeMatch.SupplierZoneId, item);
                     }
                 }
-            }
 
-            if (currentSupplierCodeMatchesWithRate != null && currentSupplierCodeMatchesWithRate.Count > 0)
-            {
                 RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
-                {
-                    SaleZoneId = currentZoneId,
-                    SupplierCodeMatches = currentSupplierCodeMatchesWithRate.Values,
-                    SupplierCodeMatchesBySupplier = GetSupplierCodeMatchesBySupplier(currentSupplierCodeMatchesWithRate.Values)
-                };
+               {
+                   SaleZoneId = codeMatch.SaleZoneId,
+                   SupplierCodeMatches = (currentSupplierCodeMatchesWithRate.Count > 0) ? currentSupplierCodeMatchesWithRate.Values : null,
+                   SupplierCodeMatchesBySupplier = (currentSupplierCodeMatchesWithRate.Count > 0) ? GetSupplierCodeMatchesBySupplier(currentSupplierCodeMatchesWithRate.Values) : null
+               };
 
                 inputArgument.OutputQueue.Enqueue(codeMatchByZone);
             }

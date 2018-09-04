@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
 using Vanrise.Common;
+using Vanrise.Data.SQL;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
@@ -69,14 +65,16 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 if (supplierCodeMatchWithRate.CodeMatch == null)
                     throw new NullReferenceException("supplierCodeMatchWithRate.CodeMatch");
 
-                CarrierAccount supplier = _allCarriers.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierId);
-                SupplierZone supplierZone = _allSupplierZones.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierZoneId);
-
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatchWithRate.CodeMatch.SupplierCodeSourceId, supplierZone.SourceId, supplier.SourceId);
+                if (supplierCodeMatchWithRate.CodeMatch.SupplierId != null && supplierCodeMatchWithRate.CodeMatch.SupplierZoneId != null)
+                {
+                    CarrierAccount supplier = _allCarriers.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierId);
+                    SupplierZone supplierZone = _allSupplierZones.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierZoneId);
+                    streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatchWithRate.CodeMatch.SupplierCodeSourceId, supplierZone.SourceId, supplier.SourceId);
+                }
             }
         }
 
-        public IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId, Func<bool> shouldStop) 
+        public Dictionary<long, RPCodeMatches> GetRPCodeMatchesBySaleZone(long fromZoneId, long toZoneId, Func<bool> shouldStop) 
         {
             throw new NotImplementedException();
         }

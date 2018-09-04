@@ -366,6 +366,9 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <returns></returns>
         private string SerializeOptionsDetailsBySupplier(Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier)
         {
+            if (optionsDetailsBySupplier == null)
+                return string.Empty;
+
             StringBuilder str = new StringBuilder();
 
             foreach (var routeOptionSupplier in optionsDetailsBySupplier.Values)
@@ -466,6 +469,9 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <returns></returns>
         private string SerializeOptionsByPolicy(Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy)
         {
+            if (optionsByPolicy == null)
+                return string.Empty;
+
             StringBuilder str = new StringBuilder();
             foreach (var kvp in optionsByPolicy)
             {
