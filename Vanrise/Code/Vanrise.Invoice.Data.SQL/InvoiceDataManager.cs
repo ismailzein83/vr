@@ -69,10 +69,12 @@ namespace Vanrise.Invoice.Data.SQL
         public IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
             string partnerIds = null;
+            string invoiceSettingIds = null;
             if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count() > 0)
                 partnerIds = string.Join<string>(",", input.Query.PartnerIds);
-
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent, input.Query.IsPaid);
+            if (input.Query.InvoiceSettingIds != null && input.Query.InvoiceSettingIds.Count() > 0)
+                invoiceSettingIds = string.Join<string>(",", input.Query.InvoiceSettingIds);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds,invoiceSettingIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent, input.Query.IsPaid);
         }
 
         public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, IEnumerable<string> partnerIds, DateTime fromDate, DateTime toDate)

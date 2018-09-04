@@ -21,6 +21,9 @@
         var invoiceSentSelectorAPI;
         var invoiceSentSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceSettingSelectorAPI;
+        var invoiceSettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var gridAPI;
         loadParameters();
         defineScope();
@@ -29,6 +32,7 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+            console.log(parameters);
             if (parameters != undefined && parameters != null) {
                 invoiceTypeId = parameters.invoiceTypeId;
             }
@@ -67,6 +71,10 @@
             $scope.scopeModel.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
                 partnerSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onInvoiceSettingSelectorReady = function (api) {
+                invoiceSettingSelectorAPI = api;
+                invoiceSettingSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject()).then(function () {
@@ -145,7 +153,8 @@
                     IsEffectiveInFuture: accountStatusObj != undefined ? accountStatusObj.IsEffectiveInFuture : undefined,
                     Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
                     IsSent:invoiceSentSelectorAPI.getSelectedIds(),
-                    IsPaid: invoicePaidSelectorAPI.getSelectedIds()
+                    IsPaid: invoicePaidSelectorAPI.getSelectedIds(),
+                    InvoiceSettingIds: invoiceSettingSelectorAPI.getSelectedIds()
                 }
             };
             return filter;
@@ -190,8 +199,18 @@
                 });
                 return invoicePaidSelectorPayloadLoadDeferred.promise;
             }
+            function loadInvoiceSetting() {
+                var invoiceSettingDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                invoiceSettingSelectorReadyDeferred.promise.then(function () {
+                    var filter = { InvoiceTypeId: invoiceTypeId };
+                    var invoiceSettingPayload = { filter: filter };
+                    
+                    VRUIUtilsService.callDirectiveLoad(invoiceSettingSelectorAPI, invoiceSettingPayload, invoiceSettingDirectiveLoadPromiseDeferred);
+                });
+                return invoiceSettingDirectiveLoadPromiseDeferred.promise;
+            }
 
-            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective, loadInvoicePaidSelectorDirective, loadInvoiceSentSelectorDirective]).then(function ()
+            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective, loadInvoicePaidSelectorDirective, loadInvoiceSentSelectorDirective, loadInvoiceSetting]).then(function ()
             {
                 if(gridAPI != undefined)
                 {
