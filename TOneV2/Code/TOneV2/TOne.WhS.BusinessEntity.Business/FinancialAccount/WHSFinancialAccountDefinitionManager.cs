@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -13,6 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
     public class WHSFinancialAccountDefinitionManager
     {
         Vanrise.GenericData.Business.BusinessEntityDefinitionManager s_beDefinitionManager = new Vanrise.GenericData.Business.BusinessEntityDefinitionManager();
+
         public WHSFinancialAccountDefinitionSettings GetFinancialAccountDefinitionSettings(Guid financialAccountDefinitionId)
         {
             var beDefinition = GetAllFinancialAccountDefinitions().GetRecord(financialAccountDefinitionId);
@@ -42,6 +41,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<WHSFinancialAccountDefinitionConfig>(WHSFinancialAccountDefinitionConfig.EXTENSION_TYPE);
         }
+
         public IEnumerable<WHSFinancialAccountDefinitionInfo> GetFinancialAccountDefinitionInfo(WHSFinancialAccountDefinitionInfoFilter filter)
         {
             var financialAccountDefinitions = GetAllFinancialAccountDefinitions();
@@ -63,8 +63,22 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 return true;
             };
+
             return financialAccountDefinitions.MapRecords(FinancialAccountDefinitionInfoMapper, filterExpression);
         }
+
+        public Guid? GetBalanceAccountTypeId(Guid financialAccountDefinitionId)
+        {
+            var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+            return financialAccountDefinitionSettings.BalanceAccountTypeId;
+        }
+
+        public List<FinancialAccountInvoiceType> GetFinancialAccountInvoiceTypes(Guid financialAccountDefinitionId)
+        {
+            var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+            return financialAccountDefinitionSettings.FinancialAccountInvoiceTypes;
+        }
+
         private WHSFinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(BusinessEntityDefinition businessEntityDefinition)
         {
             var settings = businessEntityDefinition.Settings.CastWithValidate<WHSFinancialAccountDefinitionSettings>("beDefinition.Settings");
@@ -75,17 +89,5 @@ namespace TOne.WhS.BusinessEntity.Business
                 BalanceAccountTypeId = settings.BalanceAccountTypeId,
             };
         }
-
-        public Guid? GetBalanceAccountTypeId(Guid financialAccountDefinitionId)
-        {
-            var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
-            return financialAccountDefinitionSettings.BalanceAccountTypeId;
-        }
-        public List<FinancialAccountInvoiceType> GetFinancialAccountInvoiceTypes(Guid financialAccountDefinitionId)
-        {
-            var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
-            return financialAccountDefinitionSettings.FinancialAccountInvoiceTypes;
-        }
-       
     }
 }
