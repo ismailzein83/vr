@@ -25,6 +25,15 @@ namespace BPMExtended.Main.Entities
         public List<ServiceParameterDetail> ServiceParams { get; set; }
     }
 
+    public class ServiceInfo
+    {
+
+        public string ServiceId { get; set; }
+
+        public string Name { get; set; }
+
+    }
+
     public class ServiceParameterDetail
     {
         public string Id { get; set; }

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using Terrasoft.Core;
+using Terrasoft.Core.DB;
 
 namespace BPMExtended.Main.Business
 {
@@ -55,9 +58,19 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore).MapRecords(ServiceMapper).ToList();
         }
 
-        public bool ActivateCPTService(string contractId, string cptNumber)
+        public bool ActivateCPTService(string requestId , string contractId, string cptNumber)
         {
+
             //TODO: call BSCS to activate CPT service
+
+
+            //
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            //var update = new Update(connection, "Contact").Set("StCustomerId", Func.IsNull(Column.SourceColumn("StCustomerId"), Column.Parameter(contactId)));
+            var update = new Update(connection, "StCpt").Set("StStepId", Column.Parameter("D9BCF65C-8311-4C85-84ED-972EB09C46BB"))
+                .Where("Id").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
             return true;
         }
 
@@ -69,6 +82,18 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+        public List<ServiceInfo> GetServicesWithPasswordResetSupport(string contractId)
+        {
+            ContractManager contractManager = new ContractManager();
+            string ratePlanId = contractManager.GetTelephonyContract(contractId).RatePlanId;
+
+            var services = GetOptionalServices(ratePlanId);
+            return services.MapRecords(ServiceInfoMapper).ToList();
+
+        }
+
+
+
         #region Mappers
 
         private RatePlanInfo RatePlanInfoMapper(SOM.Main.Entities.RatePlan ratePlan)
@@ -79,6 +104,16 @@ namespace BPMExtended.Main.Business
                 Name = ratePlan.Name
             };
         }
+
+        private ServiceInfo ServiceInfoMapper(ServiceDetail service)
+        {
+            return new ServiceInfo
+            {
+                ServiceId = service.ServiceId,
+                Name = service.Name
+            };
+        }
+
 
         private ServiceDetail ServiceMapper(SOM.Main.Entities.Service service)
         {

@@ -30,5 +30,19 @@ namespace BPMExtended.Main.Business
         {
             return true;
         }
+
+        public List<CPTNumberDetail> GetCountrFreeCptNumbers()
+        {
+            return InventoryMockDataGenerator.GetAllCPTNumbers();
+        }
+
+        public bool RegisterCountryCPTNumber(string cptNumber)
+        {
+            
+            //TODO: send request to inventory system to register cptnumber in all provinces switches
+            
+            return true;
+        }
+
     }
 }
