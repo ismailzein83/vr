@@ -267,6 +267,13 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\CustomerRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerRecurringChargeInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SettlementInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierRecurringChargeInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

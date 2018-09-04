@@ -2325,7 +2325,6 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox72</rd:DefaultName>
-            <Top>0.03069in</Top>
             <Left>0.02902in</Left>
             <Height>0.17708in</Height>
             <Width>1.26042in</Width>
@@ -2341,10 +2340,10 @@
           </Textbox>
           <Rectangle Name="Rectangle7">
             <KeepTogether>true</KeepTogether>
-            <Top>0.27722in</Top>
-            <Left>0.03705in</Left>
+            <Top>0.24652in</Top>
+            <Left>0.02902in</Left>
             <Height>0.01042in</Height>
-            <Width>3.85713in</Width>
+            <Width>3.86516in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -2690,7 +2689,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>BankDetails</DataSetName>
-            <Top>0.46125in</Top>
+            <Top>0.40971in</Top>
             <Height>1.33056in</Height>
             <Width>3.90221in</Width>
             <ZIndex>2</ZIndex>
@@ -2702,9 +2701,9 @@
           </Tablix>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>15.29084cm</Top>
-        <Left>0.33409cm</Left>
-        <Height>4.55119cm</Height>
+        <Top>15.33722cm</Top>
+        <Left>0.28824cm</Left>
+        <Height>4.42029cm</Height>
         <Width>9.91161cm</Width>
         <ZIndex>27</ZIndex>
         <Style>
