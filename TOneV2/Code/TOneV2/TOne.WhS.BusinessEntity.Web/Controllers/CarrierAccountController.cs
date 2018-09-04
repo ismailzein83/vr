@@ -10,6 +10,7 @@ using Vanrise.Web.Base;
 
 namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "CarrierAccount")]
     public class WhSBE_CarrierAccountController : BaseAPIController
     {
@@ -20,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input));
         }
+
         [HttpGet]
         [Route("GetCarrierAccountHistoryDetailbyHistoryId")]
         public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
@@ -27,6 +29,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccountHistoryDetailbyHistoryId(carrierAccountHistoryId);
         }
+
         [HttpGet]
         [Route("GetCarrierAccount")]
         public CarrierAccount GetCarrierAccount(int carrierAccountId)
@@ -116,6 +119,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetSuppliersWithZonesGroupsTemplates();
         }
+
         [HttpGet]
         [Route("GetCarrierAccountName")]
         public string GetCarrierAccountName(int carrierAccountId)
@@ -123,6 +127,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccountName(carrierAccountId);
         }
+
         [HttpGet]
         [Route("GetCarrierAccountIdsAssignedToSellingProduct")]
         public IEnumerable<int> GetCarrierAccountIdsAssignedToSellingProduct(int sellingProductId)
@@ -136,6 +141,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public PricingSettings GetCustomerPricingSettings(int customerId)
         {
             return new CarrierAccountManager().GetCustomerPricingSettings(customerId);
+        }
+
+        [HttpGet]
+        [Route("GetPassThroughCustomerRateExtensionConfigs")]
+        public IEnumerable<PassThroughCustomerRateEvaluatorExtensionConfig> GetPassThroughCustomerRateExtensionConfigs()
+        {
+            return new CarrierAccountManager().GetPassThroughCustomerRateExtensionConfigs();
         }
     }
 }

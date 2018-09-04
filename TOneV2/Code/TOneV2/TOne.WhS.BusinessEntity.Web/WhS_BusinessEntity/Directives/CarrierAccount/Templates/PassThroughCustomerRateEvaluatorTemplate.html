@@ -1,0 +1,15 @@
+﻿<vr-columns colnum="4">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.templateConfigs"
+               selectedvalues="scopeModel.selectedTemplateConfig"
+               datavaluefield="ExtensionConfigurationId"
+               datatextfield="Title"
+               label="Rate Evaluator"
+               isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined"
+                     directive="scopeModel.selectedTemplateConfig.Editor"
+                     on-ready="scopeModel.onDirectiveReady" isrequired="true"
+                     normal-col-num="{{PassThroughCustomerRateEvaluatorCtrl.normalColNum}}">
+</vr-directivewrapper>

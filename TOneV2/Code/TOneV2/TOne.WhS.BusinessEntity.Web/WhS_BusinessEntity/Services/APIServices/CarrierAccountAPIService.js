@@ -98,6 +98,10 @@
             });
         }
 
+        function GetPassThroughCustomerRateExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetPassThroughCustomerRateExtensionConfigs'));
+        }
+
         return ({
             GetCarrierAccountInfo: GetCarrierAccountInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
@@ -117,7 +121,8 @@
             HasViewCarrierAccountPermission: HasViewCarrierAccountPermission,
             GetCarrierAccountHistoryDetailbyHistoryId: GetCarrierAccountHistoryDetailbyHistoryId,
             GetCarrierAccountIdsAssignedToSellingProduct: GetCarrierAccountIdsAssignedToSellingProduct,
-            GetCustomerPricingSettings: GetCustomerPricingSettings
+            GetCustomerPricingSettings: GetCustomerPricingSettings,
+            GetPassThroughCustomerRateExtensionConfigs: GetPassThroughCustomerRateExtensionConfigs
         });
     }
 

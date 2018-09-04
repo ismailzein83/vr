@@ -950,7 +950,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierAccountCustomerSettings == null)
                 return false;
 
-            return carrierAccountCustomerSettings.IsPassThrough;
+            return carrierAccountCustomerSettings.PassThroughCustomerRateEvaluator != null;
         }
 
         /// <summary>
@@ -991,6 +991,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<CustomerGroupConfig>(CustomerGroupConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<PassThroughCustomerRateEvaluatorExtensionConfig> GetPassThroughCustomerRateExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<PassThroughCustomerRateEvaluatorExtensionConfig>(PassThroughCustomerRateEvaluatorExtensionConfig.EXTENSION_TYPE);
         }
 
         #endregion

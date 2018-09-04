@@ -75,6 +75,16 @@
                                         </vr-whs-be-routingstatus-selector>
                                     </span>
                                 </vr-row>
+                                <vr-row removeline>
+                                    <vr-columns width="fullrow" haschildcolumns>
+                                        <vr-columns colnum="2">
+                                            <vr-switch value="scopeModel.isPassThrough" label="Pass Through"></vr-switch>
+                                        </vr-columns>
+                                        <span ng-if="scopeModel.isPassThrough" vr-loader="scopeModel.isLoadingPassThroughCustomerRateEvaluatorSelector">
+                                            <vr-whs-be-passthroughcustomerrateevaluator on-ready="scopeModel.onPassThroughCustomerRateEvaluatorSelectorReady" normal-col-num="6"></vr-whs-be-passthroughcustomerrateevaluator>
+                                        </span>
+                                    </vr-columns>
+                                </vr-row>
                             </vr-section>
                         </vr-columns>
                     </vr-row>

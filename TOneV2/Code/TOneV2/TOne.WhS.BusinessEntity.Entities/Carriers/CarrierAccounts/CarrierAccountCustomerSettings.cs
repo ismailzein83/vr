@@ -16,11 +16,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public bool InvoiceTimeZone { get; set; }
 
-        public bool IsPassThrough { get; set; }
-
-        /// <summary>
-        /// null if IsPassThrough false
-        /// </summary>
         public PassThroughCustomerRateEvaluator PassThroughCustomerRateEvaluator { get; set; }
 
         public PricingSettings PricingSettings { get; set; }
@@ -30,6 +25,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public abstract class PassThroughCustomerRateEvaluator
     {
+        public abstract Guid ConfigId { get; }
         public abstract decimal? EvaluateCustomerRate(IPassThroughEvaluateCustomerRateContext context);
     }
 
