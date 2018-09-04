@@ -12,7 +12,7 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.Reprocess.Business
 {
-    public class ReprocessDefinitionManager
+    public class ReprocessDefinitionManager : IReprocessDefinitionManager
     {
         #region Public Methods
 

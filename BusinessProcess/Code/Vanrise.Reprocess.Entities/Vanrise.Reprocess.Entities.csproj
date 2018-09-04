@@ -65,6 +65,9 @@
     <Compile Include="ReprocessDefinition\ReprocessDefinitionInfo.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinitionInfoFilter.cs" />
     <Compile Include="ReprocessDefinition\ReprocessDefinitionQuery.cs" />
+    <Compile Include="ReprocessManagers\IReprocessDefinitionManager.cs" />
+    <Compile Include="ReprocessManagers\IReprocessManager.cs" />
+    <Compile Include="ReprocessManagers\ReprocessManagerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj">

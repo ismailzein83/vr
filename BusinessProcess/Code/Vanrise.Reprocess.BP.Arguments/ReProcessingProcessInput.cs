@@ -24,7 +24,9 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Reprocess from {0} to {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            IReprocessDefinitionManager reprocessDefinitionManager = ReprocessManagerFactory.GetManager<IReprocessDefinitionManager>();
+            string reprocessName = reprocessDefinitionManager.GetReprocessDefinition(ReprocessDefinitionId).Name;
+            return String.Format("{0} from {1} to {2}", reprocessName, FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
