@@ -261,7 +261,9 @@ as (select * from (values
 ('28840BD1-3C9A-4793-8A46-64992F823C43','CheckUnpricedCDRs','Check Unpriced CDRs','VR_Invoice_InvoiceSettingPartConfig','{"RuntimeEditor":"whs-invoice-invoicesetting-runtime-checkunpricedcdrs"}'),
 
 ('BA32DF95-FFE5-4C71-94FC-B02B841791F9','WhS_RouteSync_EricssonRORangeBranchRouteSettings','RO Range','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-rorange"}'),
-('BEC60C47-A37F-4EED-B628-1E17EFD60A41','WhS_RouteSync_EricssonFreeTextBranchRouteSettings','Text','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-freetext"}')
+('BEC60C47-A37F-4EED-B628-1E17EFD60A41','WhS_RouteSync_EricssonFreeTextBranchRouteSettings','Text','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-freetext"}'),
+
+('3D4B738E-BF30-4F0C-8A92-D22356980503','WhS_BE_CostWithPercentageMargin','Cost With Percentage Margin','WhS_BE_PassThroughCustomerRateEvaluator','{"Editor":"vr-whs-be-costwithpercentagemarginrateevaluator"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
