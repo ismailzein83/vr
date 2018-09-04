@@ -1,0 +1,19 @@
+﻿<vr-section title="Included Code">
+    <vr-row removeline ng-show="!ctrl.disableadding">
+        <vr-columns colnum="6">
+            <vr-textbox value="addedCode" type="number" label="Add a code" minvalue="0" decimalprecision="0" vr-disabled="ctrl.disableadding"></vr-textbox>
+        </vr-columns>
+        <vr-columns colnum="2" withemptyline>
+            <vr-button type="Add" data-onclick="addCode" standalone vr-disabled="ctrl.disableadding"></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="fullrow">
+            <vr-datalist maxitemsperrow="2" datasource="codeCriteriaArray" autoremoveitem="true" hideremoveicon="ctrl.disableadding">
+                <vr-label>{{dataItem.Code}}</vr-label>
+                <span style="display: inline-block; margin: 0px 3px; font-size: 14px; position: relative; top: -3px;">|</span>
+                <vr-switch type="inline" value="dataItem.WithSubCodes" hint="With Sub Codes"></vr-switch>
+            </vr-datalist>
+        </vr-columns>
+    </vr-row>
+</vr-section>

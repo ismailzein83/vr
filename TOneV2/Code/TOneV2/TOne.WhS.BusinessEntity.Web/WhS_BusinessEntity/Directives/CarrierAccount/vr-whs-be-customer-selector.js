@@ -13,6 +13,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
                 ondeselectallitems: "=",
                 selectedvalues: "=",
                 isrequired: '=',
+                isdisabled:'=',
                 ismultipleselection: '@',
                 normalColNum: '@',
                 hideremoveicon: "@",
@@ -63,10 +64,10 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             if (attrs.usefullcolumn != undefined)
                 usefullcolumn = "usefullcolumn";
 
-            return '<vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady" onselectionchanged="ctrl.onselectionchanged" selectedvalues="ctrl.selectedvalues" ' +
+            return '<span vr-disabled="ctrl.isdisabled"><vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady" onselectionchanged="ctrl.onselectionchanged" selectedvalues="ctrl.selectedvalues" ' +
                          ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems="ctrl.ondeselectallitems" isrequired="ctrl.isrequired"  normal-col-num="{{ctrl.normalColNum}}" getcustomers '
                          + multipleselection + ' ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + hidelabel + ' ' + customlabel + ' ' + usefullcolumn + '>' +
-                   '</vr-whs-be-carrieraccount-selector>';
+                   '</vr-whs-be-carrieraccount-selector></span>';
         }
 
         function customerSelectorCtor(ctrl, $scope) {

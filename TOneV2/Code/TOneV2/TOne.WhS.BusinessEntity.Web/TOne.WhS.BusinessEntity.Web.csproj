@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\ANumberSupplierCodeController.cs" />
+    <Compile Include="Controllers\BusinessEntityConfigurationController.cs" />
     <Compile Include="Controllers\CustomerCountryController.cs" />
     <Compile Include="Controllers\ANumberSaleCodeController.cs" />
     <Compile Include="Controllers\FaultTicketController.cs" />
@@ -290,6 +291,20 @@
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-excluded-destinations.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-code-list-resolver.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\templates\SpecificCodeResolverTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\templates\SpecificCountryCodeListResolverTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\templates\SpecificExcludedCodeTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\templates\SpecificExcludedRangeTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\templates\SpecificSaleZoneCodeListResolverTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-code-resolver.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-country-code-list-resolver.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-country-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-excluded-codes.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-excluded-ranges.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-sale-zone-code-list-resolver.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CodeList\whs-be-specific-sale-zone-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\DBReplication\Templates\DBReplicationPreInsertSwitchTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\DBReplication\vr-whs-be-dbreplicationpreinsert-switch.js" />
     <Content Include="WhS_BusinessEntity\Directives\ExclusiveSessionTypes\Templates\SaleAreaExclusiveSessionTypeEditorTemplate.html" />
@@ -599,6 +614,7 @@
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\ANumberSupplierCodeService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ANumberSupplierCodeAPIService .js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\BusinessEntityConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerCountryAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ANumberSaleCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FaultTicketAPIService.js" />

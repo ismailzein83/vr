@@ -7,33 +7,40 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-
-    public  class CodeListResolverConfig:ExtensionConfiguration
+    public class CodeListResolverConfig : ExtensionConfiguration
     {
-        public string EXTENSION_TYPE { get { return "WhS_BE_CodeListResolverConfig";} }
+        public const string EXTENSION_TYPE = "WhS_BE_CodeListResolverConfig";
         public string Editor { get; set; }
     }
 
+    public class ExcludedDestinationsConfig : ExtensionConfiguration
+    {
+        public const string EXTENSION_TYPE = "WhS_BE_ExcludedDestinationsConfig";
+        public string Editor { get; set; }
+    }
 
     public class CodeListResolver
     {
-        public CodeListResolverSettings Settings { get;set; }
-        public ExcludedDestinations ExcludedDestinations { get; set; }
+        public CodeListResolverSettings Settings { get; set; }
     }
 
     public abstract class CodeListResolverSettings
     {
-        public abstract Guid ConfigId { get;  }
+        public abstract Guid ConfigId { get; }
 
         public abstract List<string> GetCodeList(ICodeListResolverContext context);
     }
+
     public interface ICodeListResolverContext
     {
     }
+
     public abstract class ExcludedDestinations
     {
         public abstract Guid ConfigId { get; }
+        public abstract List<string> GetExcludedCodes(ICodeListExcludedContext context);
     }
-  
-   
+    public interface ICodeListExcludedContext
+    {
+    }
 }

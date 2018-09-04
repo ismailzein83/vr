@@ -12,5 +12,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeList
         public override Guid ConfigId { get { return new Guid("AA1911DF-E45F-4CF6-BCA5-ECDFDD246FEE"); } }
 
         public List<string> Codes { get; set; }
+        public override List<string> GetExcludedCodes(ICodeListExcludedContext context)
+        {
+            return this.Codes;
+
+        }
     }
 }

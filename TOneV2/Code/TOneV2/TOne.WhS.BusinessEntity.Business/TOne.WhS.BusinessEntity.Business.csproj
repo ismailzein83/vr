@@ -129,6 +129,7 @@
     <Compile Include="ANumber\ANumberSaleCodeManager.cs" />
     <Compile Include="ANumber\ANumberSupplierCodeManager.cs" />
     <Compile Include="BECacheExpirationChecker.cs" />
+    <Compile Include="BusinessEntityConfigurationManager.cs" />
     <Compile Include="CarrierAccountStatusHistory\CarrierAccountStatusHistoryManager.cs" />
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountBE360DegreeNodeType.cs" />

@@ -13,8 +13,15 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeList
         public List<CodeCriteria> Codes { get; set; }
         public override List<string> GetCodeList(ICodeListResolverContext context)
         {
-            throw new NotImplementedException();
+            List<string> saleCodes = new List<string>();
+            foreach (var item in this.Codes)
+                saleCodes.Add(item.Code);
+            return saleCodes;
+           
+
         }
+
+
     }
 
 }
