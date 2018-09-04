@@ -120,6 +120,7 @@
     <Compile Include="MappingSteps\GetCDPNsForIdentificationStep.cs" />
     <Compile Include="MappingSteps\CheckSoldCountryForCustomerStep.cs" />
     <Compile Include="MappingSteps\GetCDPNsForZoneMatchStep.cs" />
+    <Compile Include="PassThroughCustomerRateEvaluator\CostWithPercentageMarginRateEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecurringCharges\OnceAYearRecuringCharge.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\BasicSalePriceListTemplateSettings.cs" />
