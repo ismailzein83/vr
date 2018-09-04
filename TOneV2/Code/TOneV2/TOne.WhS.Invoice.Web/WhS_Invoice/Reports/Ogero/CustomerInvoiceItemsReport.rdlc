@@ -23,7 +23,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.50485in</Top>
-        <Left>4.99536in</Left>
+        <Left>5.14119in</Left>
         <Height>0.27083in</Height>
         <Width>2.4613in</Width>
         <Style>
@@ -126,9 +126,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>2.24424in</Top>
-        <Left>1.08218in</Left>
+        <Left>1.0544in</Left>
         <Height>0.20833in</Height>
-        <Width>2.159in</Width>
+        <Width>2.54707in</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -177,7 +177,7 @@
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
         <Top>3.20952in</Top>
-        <Left>1.99052in</Left>
+        <Left>2.15102in</Left>
         <Height>0.01042in</Height>
         <Width>5.78302in</Width>
         <ZIndex>5</ZIndex>
@@ -192,31 +192,31 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.55078in</Width>
+              <Width>1.8586in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.77092in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.10973in</Width>
+              <Width>0.07682in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.77092in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.04083in</Width>
+              <Width>1.05195in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.06502in</Width>
+              <Width>1.01502in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53707in</Width>
+              <Width>0.36603in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.05125in</Width>
+              <Width>1.05013in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -685,7 +685,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -909,9 +909,9 @@
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
         <Top>2.63542in</Top>
-        <Left>0.05499in</Left>
+        <Left>0.15163in</Left>
         <Height>0.46875in</Height>
-        <Width>7.71854in</Width>
+        <Width>7.78241in</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -931,19 +931,19 @@
               <Width>1.12216in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.1439in</Width>
+              <Width>0.35607in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.04083in</Width>
+              <Width>1.05159in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.06426in</Width>
+              <Width>1.01538in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.52771in</Width>
+              <Width>0.35442in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.0625in</Width>
@@ -1180,10 +1180,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>3.2616in</Top>
-        <Left>1.99052in</Left>
+        <Top>3.28938in</Top>
+        <Left>2.15102in</Left>
         <Height>0.19792in</Height>
-        <Width>5.78338in</Width>
+        <Width>5.78414in</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -1269,9 +1269,8 @@
                 <Value>=Parameters!Carrier.Value</Value>
               </Parameter>
             </Parameters>
-            <Left>0.00252in</Left>
             <Height>1.625in</Height>
-            <Width>7.71639in</Width>
+            <Width>7.78241in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1284,9 +1283,9 @@
         </PageBreak>
         <KeepTogether>true</KeepTogether>
         <Top>9.23078cm</Top>
-        <Left>0.13967cm</Left>
+        <Left>0.38514cm</Left>
         <Height>4.1924cm</Height>
-        <Width>19.60603cm</Width>
+        <Width>19.76732cm</Width>
         <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=IIf(Parameters!HasRecurringCharges.Value,true,false)</Hidden>
@@ -1337,9 +1336,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.7998in</Top>
-        <Left>1.60577in</Left>
+        <Left>1.90308in</Left>
         <Height>0.375in</Height>
-        <Width>5.30208in</Width>
+        <Width>4.61368in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border />
@@ -1353,7 +1352,7 @@
     <Height>13.96999cm</Height>
     <Style />
   </Body>
-  <Width>19.87486cm</Width>
+  <Width>20.52274cm</Width>
   <Page>
     <PageFooter>
       <Height>1.13505cm</Height>
