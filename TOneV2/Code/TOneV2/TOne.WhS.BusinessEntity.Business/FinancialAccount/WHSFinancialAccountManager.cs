@@ -141,17 +141,20 @@ namespace TOne.WhS.BusinessEntity.Business
             updateOperationOutput.Message = message;
             return updateOperationOutput;
         }
+
         internal bool TryUpdateFinancialAccount(WHSFinancialAccountToEdit financialAccountToEdit)
         {
             IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
             financialAccountToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
             return dataManager.Update(financialAccountToEdit);
         }
+
         public WHSFinancialAccount GetFinancialAccount(int financialAccountId)
         {
             var allFinancialAccounts = GetCachedFinancialAccounts();
             return allFinancialAccounts.GetRecord(financialAccountId);
         }
+
         public int GetFinancialAccountCurrencyId(int financialAccountId)
         {
             var wHSFinancialAccount = GetFinancialAccount(financialAccountId);
@@ -207,6 +210,7 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierFinancialAccountData.ThrowIfNull("carrierFinancialAccountData", financialAccountId);
             return carrierFinancialAccountData;
         }
+
         //public void GetCustInvoiceData(int customerAccountId, DateTime effectiveOn, out string invoiceSettingName, out string invoiceTypeName)
         //{
         //    invoiceTypeName = null;
@@ -347,7 +351,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         var financialAccountInvoiceTypes = s_financialAccountDefinitionManager.GetFinancialAccountInvoiceTypes(financialAccount.FinancialAccountDefinitionId);
                         if (financialAccountInvoiceTypes == null || !financialAccountInvoiceTypes.Any(x => x.InvoiceTypeId == filter.InvoiceTypeId.Value))
                             return false;
-
                     }
 
                     if (filter.BalanceAccountTypeId.HasValue)
@@ -363,7 +366,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             case WHSFinancialAccountCarrierType.Profile: if (!financialAccount.CarrierProfileId.HasValue) return false; break;
                             case WHSFinancialAccountCarrierType.Account: if (!financialAccount.CarrierAccountId.HasValue) return false; break;
-
                         }
                     }
 
@@ -384,6 +386,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (financialAccount.EED.HasValue && financialAccount.EED.Value < DateTime.Today)
                             return false;
                     }
+
                     if (filter.Filters != null)
                     {
                         var context = new WHSFinancialAccountFilterContext
@@ -392,6 +395,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             FinancialAccountId = financialAccount.FinancialAccountId,
                             InvoiceTypeId = filter.InvoiceTypeId
                         };
+
                         foreach (var item in filter.Filters)
                         {
 
@@ -399,6 +403,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                 return false;
                         }
                     }
+
                     return true;
                 };
             }
@@ -417,16 +422,19 @@ namespace TOne.WhS.BusinessEntity.Business
             var financialAccounts = GetCachedFinancialAccounts();
             return financialAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
         }
+
         public IEnumerable<WHSCarrierFinancialAccountData> GetEffectiveFinancialAccountsDataByCarrierProfileId(int carrierProfileId, DateTime effectiveDate)
         {
             var financialAccountsData = GetFinancialAccountsDataByCarrierProfileId(carrierProfileId);
             return financialAccountsData.FindAllRecords(x => x.FinancialAccount.IsEffective(effectiveDate));
         }
+
         public IEnumerable<WHSCarrierFinancialAccountData> GetFinancialAccountsDataByCarrierProfileId(int carrierProfileId)
         {
             var financialAccountsData = GetCachedCustCarrierFinancialsByCarrProfId();
             return financialAccountsData.GetRecord(carrierProfileId);
         }
+
         public List<WHSFinancialAccount> GetFinancialAccountsByDefinitionId(Guid financialAccountDefinitionId)
         {
             return GetCachedFinancialAccountsByDefinitionId().GetRecord(financialAccountDefinitionId);
@@ -574,82 +582,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
         }
-        private void ReflectStatusToInvoice(VRAccountStatus vrAccountStatus, WHSFinancialAccountDefinitionSettings financialAccountDefinitionSettings, string financialAccountIdAsString, bool isCustomer, bool isSupplier, ref DateTime? maxInvoiceDate)
-        {
-            if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != null)
-            {
-                foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
-                {
-                    if ((financialAccountInvoiceType.IsApplicableToCustomer && isCustomer) || (financialAccountInvoiceType.IsApplicableToSupplier && isSupplier))
-                    {
-                        s_invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccountInvoiceType.InvoiceTypeId, financialAccountIdAsString, vrAccountStatus, false);
-                        var lastInvoiceToDate = s_invoiceManager.GetLastInvoiceToDate(financialAccountInvoiceType.InvoiceTypeId, financialAccountIdAsString);
-                        if (lastInvoiceToDate.HasValue && (!maxInvoiceDate.HasValue || maxInvoiceDate.Value < lastInvoiceToDate.Value))
-                            maxInvoiceDate = lastInvoiceToDate.Value;
-                    }
 
-                }
-                if (maxInvoiceDate.HasValue)
-                    maxInvoiceDate = maxInvoiceDate.Value.AddDays(1).Date;
-            }
-        }
-
-        private void CloseFinancialAccount(VRAccountStatus vrAccountStatus, WHSFinancialAccount financialAccount, string financialAccountIdAsString, DateTime? eedToSet, Guid? balanceAccountTypeId)
-        {
-
-            if (balanceAccountTypeId.HasValue)
-                s_liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccountIdAsString, balanceAccountTypeId.Value, vrAccountStatus, false);
-
-            if (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Today)
-            {
-                if (!eedToSet.HasValue && balanceAccountTypeId.HasValue)
-                {
-                    var lastTransactionDate = new BillingTransactionManager().GetLastTransactionDate(balanceAccountTypeId.Value, financialAccountIdAsString);
-                    if (lastTransactionDate.HasValue)
-                        eedToSet = lastTransactionDate.Value;
-                }
-                if (!eedToSet.HasValue)
-                    eedToSet = DateTime.Today;
-                if (financialAccount.BED > eedToSet)
-                    eedToSet = financialAccount.BED;
-                var financialAccountToEdit = new WHSFinancialAccountToEdit
-                {
-                    FinancialAccountId = financialAccount.FinancialAccountId,
-                    Settings = financialAccount.Settings,
-                    BED = financialAccount.BED,
-                    EED = eedToSet
-                };
-                string errorMessage = null;
-                if (TryReflectEffectiveDateToInvoiceAndBalanceAccounts(financialAccountToEdit, out  errorMessage))
-                    TryUpdateFinancialAccount(financialAccountToEdit);
-            }
-        }
-
-        private bool TryReflectEffectiveDateToInvoiceAndBalanceAccounts(WHSFinancialAccountToEdit financialAccountToEdit, out string errorMessage)
-        {
-            errorMessage = null;
-            var existingFinancialAccount = GetFinancialAccount(financialAccountToEdit.FinancialAccountId);
-            existingFinancialAccount.ThrowIfNull("financialAccount", financialAccountToEdit.FinancialAccountId);
-
-            var financialAccountDefinitionSettings = GetDefinitionWithValidate(existingFinancialAccount);
-            string financialAccountIdAsString = financialAccountToEdit.FinancialAccountId.ToString();
-            if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != null)
-            {
-                List<Guid> invoiceTypeIds = new List<Guid>(); ;
-                foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
-                {
-                    invoiceTypeIds.Add(financialAccountInvoiceType.InvoiceTypeId);
-                }
-                if (!s_invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeIds, financialAccountIdAsString, financialAccountToEdit.BED, financialAccountToEdit.EED, out errorMessage))
-                    return false;
-            }
-            if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
-            {
-                if (!s_liveBalanceManager.TryUpdateLiveBalanceEffectiveDate(financialAccountIdAsString, financialAccountDefinitionSettings.BalanceAccountTypeId.Value, financialAccountToEdit.BED, financialAccountToEdit.EED))
-                    return false;
-            }
-            return true;
-        }
         public string GetAccountCurrencyName(int? carrierProfileId, int? carrierAccountId)
         {
             int currencyId = -1;
@@ -688,8 +621,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 return s_carrierProfileManager.GetCustomerTimeZoneId(financialAccount.CarrierProfileId.Value);
             }
         }
-
-
 
         /// <summary>
         /// Used In DataTransformation
@@ -746,6 +677,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return s_carrierAccountManager.GetCarrierAccountCurrencyId(financialAccount.CarrierAccountId.Value);
             }
         }
+
         public IEnumerable<VRTaxItemDetail> GetFinancialAccountTaxItemDetails(WHSFinancialAccount financialAccount)
         {
             financialAccount.ThrowIfNull("financialAccount");
@@ -763,6 +695,32 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return null;
         }
+
+        public string GetDescription(WHSFinancialAccount financialAccount)
+        {
+            if (financialAccount == null)
+                return null;
+
+            if (!financialAccount.CarrierAccountId.HasValue && !financialAccount.CarrierProfileId.HasValue)
+                throw new NullReferenceException(string.Format("financialAccount.CarrierAccountId & financialAccount.CarrierProfileId for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+            string name;
+            //string prefix;
+
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                name = s_carrierProfileManager.GetCarrierProfileName(financialAccount.CarrierProfileId.Value);
+                //prefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Profile);
+            }
+            else
+            {
+                name = s_carrierAccountManager.GetCarrierAccountName(financialAccount.CarrierAccountId.Value);
+                //prefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Account);
+            }
+
+            return name;
+        }
+
         #endregion
 
         #region Private Methods
@@ -1068,29 +1026,81 @@ namespace TOne.WhS.BusinessEntity.Business
             return partnerInvoiceSettingManager.LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, partnerId, invoiceSettingId);
         }
 
-        public string GetDescription(WHSFinancialAccount financialAccount)
+        private void ReflectStatusToInvoice(VRAccountStatus vrAccountStatus, WHSFinancialAccountDefinitionSettings financialAccountDefinitionSettings, string financialAccountIdAsString, bool isCustomer, bool isSupplier, ref DateTime? maxInvoiceDate)
         {
-            if (financialAccount == null)
-                return null;
-
-            if (!financialAccount.CarrierAccountId.HasValue && !financialAccount.CarrierProfileId.HasValue)
-                throw new NullReferenceException(string.Format("financialAccount.CarrierAccountId & financialAccount.CarrierProfileId for financial Account Id: {0}", financialAccount.FinancialAccountId));
-
-            string name;
-            //string prefix;
-
-            if (financialAccount.CarrierProfileId.HasValue)
+            if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != null)
             {
-                name = s_carrierProfileManager.GetCarrierProfileName(financialAccount.CarrierProfileId.Value);
-                //prefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Profile);
-            }
-            else
-            {
-                name = s_carrierAccountManager.GetCarrierAccountName(financialAccount.CarrierAccountId.Value);
-                //prefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Account);
-            }
+                foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
+                {
+                    if ((financialAccountInvoiceType.IsApplicableToCustomer && isCustomer) || (financialAccountInvoiceType.IsApplicableToSupplier && isSupplier))
+                    {
+                        s_invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccountInvoiceType.InvoiceTypeId, financialAccountIdAsString, vrAccountStatus, false);
+                        var lastInvoiceToDate = s_invoiceManager.GetLastInvoiceToDate(financialAccountInvoiceType.InvoiceTypeId, financialAccountIdAsString);
+                        if (lastInvoiceToDate.HasValue && (!maxInvoiceDate.HasValue || maxInvoiceDate.Value < lastInvoiceToDate.Value))
+                            maxInvoiceDate = lastInvoiceToDate.Value;
+                    }
 
-            return name;
+                }
+                if (maxInvoiceDate.HasValue)
+                    maxInvoiceDate = maxInvoiceDate.Value.AddDays(1).Date;
+            }
+        }
+
+        private void CloseFinancialAccount(VRAccountStatus vrAccountStatus, WHSFinancialAccount financialAccount, string financialAccountIdAsString, DateTime? eedToSet, Guid? balanceAccountTypeId)
+        {
+
+            if (balanceAccountTypeId.HasValue)
+                s_liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccountIdAsString, balanceAccountTypeId.Value, vrAccountStatus, false);
+
+            if (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Today)
+            {
+                if (!eedToSet.HasValue && balanceAccountTypeId.HasValue)
+                {
+                    var lastTransactionDate = new BillingTransactionManager().GetLastTransactionDate(balanceAccountTypeId.Value, financialAccountIdAsString);
+                    if (lastTransactionDate.HasValue)
+                        eedToSet = lastTransactionDate.Value;
+                }
+                if (!eedToSet.HasValue)
+                    eedToSet = DateTime.Today;
+                if (financialAccount.BED > eedToSet)
+                    eedToSet = financialAccount.BED;
+                var financialAccountToEdit = new WHSFinancialAccountToEdit
+                {
+                    FinancialAccountId = financialAccount.FinancialAccountId,
+                    Settings = financialAccount.Settings,
+                    BED = financialAccount.BED,
+                    EED = eedToSet
+                };
+                string errorMessage = null;
+                if (TryReflectEffectiveDateToInvoiceAndBalanceAccounts(financialAccountToEdit, out  errorMessage))
+                    TryUpdateFinancialAccount(financialAccountToEdit);
+            }
+        }
+
+        private bool TryReflectEffectiveDateToInvoiceAndBalanceAccounts(WHSFinancialAccountToEdit financialAccountToEdit, out string errorMessage)
+        {
+            errorMessage = null;
+            var existingFinancialAccount = GetFinancialAccount(financialAccountToEdit.FinancialAccountId);
+            existingFinancialAccount.ThrowIfNull("financialAccount", financialAccountToEdit.FinancialAccountId);
+
+            var financialAccountDefinitionSettings = GetDefinitionWithValidate(existingFinancialAccount);
+            string financialAccountIdAsString = financialAccountToEdit.FinancialAccountId.ToString();
+            if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != null)
+            {
+                List<Guid> invoiceTypeIds = new List<Guid>(); ;
+                foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
+                {
+                    invoiceTypeIds.Add(financialAccountInvoiceType.InvoiceTypeId);
+                }
+                if (!s_invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeIds, financialAccountIdAsString, financialAccountToEdit.BED, financialAccountToEdit.EED, out errorMessage))
+                    return false;
+            }
+            if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
+            {
+                if (!s_liveBalanceManager.TryUpdateLiveBalanceEffectiveDate(financialAccountIdAsString, financialAccountDefinitionSettings.BalanceAccountTypeId.Value, financialAccountToEdit.BED, financialAccountToEdit.EED))
+                    return false;
+            }
+            return true;
         }
 
         #endregion
@@ -1248,6 +1258,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return !s_carrierAccountManager.IsCarrierAccountDeleted(carrierAccountId) && s_carrierAccountManager.IsCarrierAccountActive(carrierAccountId);
         }
+
         private bool IsFinancialAccountDefinitionApplicableToCarrier(Guid financialAccountDefinitionId, int? carrierAccountId, int? carrierProfileId, out bool isApplicableToCustomer, out bool isApplicableToSupplier)
         {
             WHSFinancialAccountDefinitionSettings definitionSettings = GetDefinitionWithValidate(financialAccountDefinitionId);
@@ -1375,6 +1386,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return financialAccountInfo;
         }
+
         private WHSFinancialAccountEffectiveStatus GetFinancialAccountEffectiveStatus(DateTime financialAccountBED, DateTime? financialAccountEED)
         {
             DateTime today = DateTime.Today;
@@ -1395,6 +1407,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return (financialAccountBED > today) ? WHSFinancialAccountEffectiveStatus.Future : WHSFinancialAccountEffectiveStatus.Current;
             }
         }
+
         private WHSFinancialAccountDetail FinancialAccountDetailMapper(WHSFinancialAccount financialAccount)
         {
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
@@ -1409,6 +1422,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 IsApplicableToSupplier = financialAccountDefinitionSettings.ExtendedSettings != null ? financialAccountDefinitionSettings.ExtendedSettings.IsApplicableToSupplier : false
             };
         }
+
         #endregion
 
         #region IBusinessEntityManager
