@@ -1,50 +1,53 @@
 ﻿<vr-panel ng-controller="WhS_CP_CodePreparationManagementController">
-    <vr-form validationcontext="filterGroupValid" vr-loader="isLoading">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
-            <vr-row removeline>
-                <vr-validation-group validationcontext="SearchGroup">
-                    <span vr-loader="isLoadingSellingNumberPlan">
-                        <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan" showaddbutton></vr-whs-be-sellingnumberplan-selector>
-                    </span>
-                </vr-validation-group>
-            </vr-row>
-        </div>
-    </vr-form>
+	<vr-form validationcontext="filterGroupValid" vr-loader="isLoading">
+		<div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilter">
+			<vr-row removeline>
+				<vr-validation-group validationcontext="SearchGroup">
+					<span vr-loader="isLoadingSellingNumberPlan">
+						<vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady" onselectionchanged="onSellingNumberPlanSelectorChanged" selectedvalues="selectedSellingNumberPlan" showaddbutton></vr-whs-be-sellingnumberplan-selector>
+					</span>
+				</vr-validation-group>
+			</vr-row>
+		</div>
+	</vr-form>
 
-    <vr-row removeline>
-        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-            <div transclude-to="buttons">
-                <vr-button type="Apply" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="applyCodePreparationState"></vr-button>
-                <vr-button type="CancelChanges" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="cancelState"></vr-button>
-                <vr-button type="Upload" ng-show="hasState==false" validationcontext="SearchGroup" data-onclick="uploadCodePreparation"></vr-button>
-                <vr-button type="Add" text="New Zone" ng-show="showAddNewZone" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
-                <vr-button type="Add" text="New Code" ng-show="showAddNewCode" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
-                <vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0 "></vr-button>
-                <vr-button type="Rename" formname="formFilter" validationcontext="SearchGroup" data-onclick="renameZoneClicked" ng-show="showRenameZone"></vr-button>
-                <vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="endClicked" ng-show="showEnd || selectedCodes.length > 0"></vr-button>
-            </div>
-        </vr-actionbar>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="1/4row" ng-show="selectedSellingNumberPlan!=undefined" vr-loader="isLoadingCountries">
-            <vr-treeview on-ready="countriesTreeReady"
-                         datachildrenfield="effectiveZones"
-                         datavaluefield="nodeId"
-                         datatextfield="nodeName"
-                         selecteditem="currentNode"
-                         hasremotechildrenfield="hasRemoteChildren"
-                         loadremotechildren="loadEffectiveSaleZones"
-                         onvaluechanged="onNodeSelection"
-                         datavaluefieldmethod="buildTreeId"
-                         state="true">
-            </vr-treeview>
-        </vr-columns>
-        <vr-columns width="3/4row" ng-show="currentNode!=undefined">
-            <vr-whs-codepreparation-codesgrid ng-show="showGrid" on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
-
-            </vr-whs-codepreparation-codesgrid>
-        </vr-columns>
-    </vr-row>
+	<vr-row removeline>
+		<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+			<div transclude-to="buttons">
+				<vr-button type="Apply" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="applyCodePreparationState"></vr-button>
+				<vr-button type="CancelChanges" ng-show="hasState==true" validationcontext="SearchGroup" data-onclick="cancelState"></vr-button>
+				<vr-button type="Upload" ng-show="hasState==false" validationcontext="SearchGroup" data-onclick="uploadCodePreparation"></vr-button>
+				<vr-button type="Add" text="New Zone" ng-show="showAddNewZone" formname="formFilter" validationcontext="SearchGroup" data-onclick="newZoneClicked"></vr-button>
+				<vr-button type="Add" text="New Code" ng-show="showAddNewCode" formname="formFilter" validationcontext="SearchGroup" data-onclick="newCodeClicked"></vr-button>
+				<vr-button type="Move" text="Move Codes" formname="formFilter" validationcontext="SearchGroup" data-onclick="moveCodesClicked" ng-show="selectedCodes.length > 0 "></vr-button>
+				<vr-button type="Rename" formname="formFilter" validationcontext="SearchGroup" data-onclick="renameZoneClicked" ng-show="showRenameZone"></vr-button>
+				<vr-button type="End" formname="formFilter" validationcontext="SearchGroup" data-onclick="endClicked" ng-show="showEnd || selectedCodes.length > 0"></vr-button>
+			</div>
+		</vr-actionbar>
+	</vr-row>
+	<vr-row>
+		<vr-columns width="1/4row" ng-show="selectedSellingNumberPlan!=undefined" vr-loader="isLoadingCountries">
+			<vr-treeview on-ready="countriesTreeReady"
+						 datachildrenfield="effectiveZones"
+						 datavaluefield="nodeId"
+						 datatextfield="nodeName"
+						 selecteditem="currentNode"
+						 hasremotechildrenfield="hasRemoteChildren"
+						 loadremotechildren="loadEffectiveSaleZones"
+						 onvaluechanged="onNodeSelection"
+						 datavaluefieldmethod="buildTreeId"
+						 state="true">
+			</vr-treeview>
+		</vr-columns>
+		<vr-columns width="3/4row" ng-show="currentNode!=undefined">
+			<vr-row vr-loader="isLoadingCurrentNode">
+				<vr-columns width="fullrow">
+					<vr-whs-codepreparation-codesgrid ng-show="showGrid" on-ready="saleCodesGridReady" selectedcodes="selectedCodes">
+					</vr-whs-codepreparation-codesgrid>
+				</vr-columns>
+			</vr-row>
+		</vr-columns>
+	</vr-row>
 </vr-panel>
 
 
