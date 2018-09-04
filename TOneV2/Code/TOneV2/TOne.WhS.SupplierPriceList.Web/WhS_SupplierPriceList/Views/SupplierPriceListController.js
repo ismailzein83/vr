@@ -57,26 +57,27 @@ function (appControllers) {
                 carrierAccountReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModel.carrierAccountSelectItem = function (dataItem) {
+            $scope.scopeModel.carrierAccountSelectItem = function () {
                 releaseSession();
-                if (dataItem == null)
-                    return;
-                $scope.scopeModel.isLoading = true;
-                var selectedCarrierAccountId = dataItem.CarrierAccountId;
-                hasRunningProcessesForSupplier(selectedCarrierAccountId).then(function (response) {
-                    tryTakeSession(selectedCarrierAccountId).then(function (response) {
-                        if (response.IsSucceeded) {
-                            buildPricelistTemplate(selectedCarrierAccountId);
-                        }
-                        else onTryTakeFailure(response).then(function () {
-                            $scope.isLoading = false;
+                if (carrierAccountDirectiveAPI.getSelectedIds() != undefined) {
+                    $scope.scopeModel.isLoading = true;
+                    var selectedCarrierAccountId = carrierAccountDirectiveAPI.getSelectedIds();
+                    hasRunningProcessesForSupplier(selectedCarrierAccountId).then(function (response) {
+                        tryTakeSession(selectedCarrierAccountId).then(function (response) {
+                            if (response.IsSucceeded) {
+                                buildPricelistTemplate(selectedCarrierAccountId);
+                            }
+                            else onTryTakeFailure(response).then(function () {
+                                $scope.isLoading = false;
+                            });
                         });
-                    });
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
 
-                });
+                    });
+                }
+               
             };
 
             $scope.scopeModel.onReadyWoorkBook = function (api) {
