@@ -15,23 +15,59 @@ namespace TOne.WhS.BusinessEntity.Business
     public class PointOfInterconnectManager
     {
         static Guid pointOfInterconnectBEDefinitionId = new Guid("fc6e8188-d37a-4c2c-9deb-7b944ef00991");
+
         GenericBusinessEntityDefinitionManager _genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
-        public long? GetPointOfInterconnect(int switchId, string truck)
+
+        public long? GetPointOfInterconnect(int switchId, string trunk)
         {
-            var cachedPointOfInterconnects = GetCachedPointOfInterconnectBySwitchIdAndTruck();
-            var pointOfInterconnect = cachedPointOfInterconnects.GetRecord(string.Format("{0}_{1}", switchId, truck));
+            var cachedPointOfInterconnects = GetCachedPointOfInterconnectBySwitchIdAndTrunk();
+            var pointOfInterconnect = cachedPointOfInterconnects.GetRecord(string.Format("{0}_{1}", switchId, trunk));
             if (pointOfInterconnect == null)
                 return null;
             return pointOfInterconnect.PointOfInterconnectEntityId;
         }
 
-        public Dictionary<string, PointOfInterconnectEntity> GetCachedPointOfInterconnectBySwitchIdAndTruck()
+        public IEnumerable<PointOfInterconnectEntity> GetPointOfInterconnects()
         {
-            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedPointOfInterconnectBySwitchIdAndTruck", pointOfInterconnectBEDefinitionId,
+            var cachedPointOfInterconnects = GetCachedPointOfInterconnect();
+            return cachedPointOfInterconnects.Values;
+        }
+
+        public PointOfInterconnectEntity GetPointOfInterconnect(long pointOfInterconnectEntityId)
+        {
+            var cachedPointOfInterconnects = GetCachedPointOfInterconnect();
+            return cachedPointOfInterconnects.GetRecord(pointOfInterconnectEntityId);
+        }
+
+        Dictionary<string, PointOfInterconnectEntity> GetCachedPointOfInterconnectBySwitchIdAndTrunk()
+        {
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedPointOfInterconnectBySwitchIdAndTrunk", pointOfInterconnectBEDefinitionId,
                 () =>
                 {
-                    Dictionary<string, PointOfInterconnectEntity> pointOfInterconnectBySwitchIdAndTruck = new Dictionary<string, PointOfInterconnectEntity>();
+                    Dictionary<string, PointOfInterconnectEntity> pointOfInterconnectBySwitchIdAndtrunk = new Dictionary<string, PointOfInterconnectEntity>();
+
+                    Dictionary<long, PointOfInterconnectEntity> pointOfInterconnectsById = GetCachedPointOfInterconnect();
+                    foreach (var pointOfInterconnectEntityKvp in pointOfInterconnectsById)
+                    {
+                        var pointOfInterconnectEntity = pointOfInterconnectEntityKvp.Value;
+                        foreach (var trunk in pointOfInterconnectEntity.Settings.Trunks)
+                        {
+                            string key = string.Format("{0}_{1}", pointOfInterconnectEntity.SwitchId, trunk.Trunk);
+                            if (!pointOfInterconnectBySwitchIdAndtrunk.ContainsKey(key))
+                                pointOfInterconnectBySwitchIdAndtrunk.Add(key, pointOfInterconnectEntity);
+                        }
+                    }
+                    return pointOfInterconnectBySwitchIdAndtrunk;
+                });
+        }
+
+        Dictionary<long, PointOfInterconnectEntity> GetCachedPointOfInterconnect()
+        {
+            return _genericBusinessEntityManager.GetCachedOrCreate("GetCachedPointOfInterconnect", pointOfInterconnectBEDefinitionId,
+                () =>
+                {
+                    Dictionary<long, PointOfInterconnectEntity> pointOfInterconnectsById = new Dictionary<long, PointOfInterconnectEntity>();
 
                     var idFieldType = _genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(pointOfInterconnectBEDefinitionId);
                     idFieldType.ThrowIfNull("idFieldType");
@@ -60,15 +96,10 @@ namespace TOne.WhS.BusinessEntity.Business
                             pointOfInterconnectEntity.Settings = currentPointOfInterconnect.CastWithValidate<PointOfInterconnect>("trunks");
                             pointOfInterconnectEntity.Settings.Trunks.ThrowIfNull("pointOfInterconnectEntity.Settings.Trunks");
 
-                            foreach (var trunk in pointOfInterconnectEntity.Settings.Trunks)
-                            {
-                                string key = string.Format("{0}_{1}", pointOfInterconnectEntity.SwitchId, trunk.Trunk);
-                                if (!pointOfInterconnectBySwitchIdAndTruck.ContainsKey(key))
-                                    pointOfInterconnectBySwitchIdAndTruck.Add(key, pointOfInterconnectEntity);
-                            }
+                            pointOfInterconnectsById.Add(pointOfInterconnectEntity.PointOfInterconnectEntityId, pointOfInterconnectEntity);
                         }
                     }
-                    return pointOfInterconnectBySwitchIdAndTruck;
+                    return pointOfInterconnectsById;
                 });
         }
     }

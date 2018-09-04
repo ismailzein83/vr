@@ -365,7 +365,9 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypricelistsettings-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\Templates\PointofinterconnectEvaluatorFieldFormulaTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\Templates\GatewayEvaluatorFieldFormulaTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\vr-whs-be-datarecordtypefields-formula-pointofinterconnectevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\vr-whs-be-datarecordtypefields-formula-gatewayevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\Templates\GetCDPNsForIdentificationStepPreviewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForIdentification\Templates\GetCDPNsForIdentificationStepTemplate.html" />

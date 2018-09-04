@@ -101,6 +101,7 @@
     <Compile Include="CodeList\SpecificCountryCodeListResolver.cs" />
     <Compile Include="CodeList\SpecificSaleZoneCodeListResolver.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
+    <Compile Include="DataRecordFieldFormulas\PointOfInterconnectEvaluatorFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\GatewayEvaluatorFieldFormula.cs" />
     <Compile Include="DBReplication\SwitchDBReplicationPreInsert.cs" />
     <Compile Include="ExclusiveSessionTypes\SaleAreaExclusiveSessionType.cs" />
