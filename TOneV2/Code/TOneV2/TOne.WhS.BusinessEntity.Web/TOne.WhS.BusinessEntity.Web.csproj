@@ -263,6 +263,7 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccount-gridpanel.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrierprofile-ticketcontact-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrierprofile-ticketcontact-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-passthroughcustomerrateevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-pricelistextensionformat-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-routingstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccountall-selector.js" />
@@ -377,6 +378,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\Templates\GetCDPNsForZoneMatchStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\PassThroughCustomerRateEvaluators\Templates\CostWithMarginRateEvaluatorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\PassThroughCustomerRateEvaluators\vr-whs-be-costwithpercentagemarginrateevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-befield.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-constant.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-otherrates.js" />
