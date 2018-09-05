@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
@@ -875,6 +876,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
         public void ExecuteStage(Vanrise.Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             DealDetailedProgressManager dealDetailedProgressManager = new DealDetailedProgressManager();
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> saleDealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(true, null, context.To);
             Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> costDealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(false, null, context.To);
@@ -927,12 +929,15 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
                                 continue;
                             }
 
+                            int customerId = record.CustomerId;
+                            bool isCustomerPassThrough = carrierAccountManager.IsCustomerPassThrough(customerId);
+
                             decimal? recordSaleRateId = record.OrigSaleRateId;
                             decimal? recordSaleCurrencyId = record.OrigSaleCurrencyId;
                             decimal? recordCostRateId = record.OrigCostRateId;
                             decimal? recordCostCurrencyId = record.OrigCostCurrencyId;
 
-                            bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue;
+                            bool saleValid = (recordSaleRateId.HasValue || isCustomerPassThrough) && recordSaleCurrencyId.HasValue;
                             bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
 
                             if (!saleValid && !costValid)
