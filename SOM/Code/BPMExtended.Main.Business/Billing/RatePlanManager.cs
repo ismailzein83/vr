@@ -14,6 +14,7 @@ namespace BPMExtended.Main.Business
     public class RatePlanManager
     {
         CPTManager _cptManager = new CPTManager();
+        
 
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
@@ -56,6 +57,17 @@ namespace BPMExtended.Main.Business
         public List<ServiceDetail> GetAllCoreServices()
         {
             return RatePlanMockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore).MapRecords(ServiceMapper).ToList();
+        }
+
+        public List<ServiceDetail> GetOptionalServicesByContractId(string contractId)
+        {
+            ContractManager contractManager = new ContractManager();
+            string ratePlanId = contractManager.GetTelephonyContract(contractId).RatePlanId;
+            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+            if (allOptionalServices.Count > 0)
+                return allOptionalServices.Take(2).ToList();
+
+            return new List<ServiceDetail>();
         }
 
         public bool ActivateCPTService(string requestId , string contractId, string cptNumber)
