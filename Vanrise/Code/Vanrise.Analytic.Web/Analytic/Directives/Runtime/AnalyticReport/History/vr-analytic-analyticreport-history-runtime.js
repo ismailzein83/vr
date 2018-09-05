@@ -236,7 +236,11 @@
                     $scope.scopeModel.showCurrency = true;
                     var loadCurrencySelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     currencySelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, undefined, loadCurrencySelectorDirectivePromiseDeferred);
+
+                        var currencySelectorPayload = {
+                            selectSystemCurrency: true
+                        };
+                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, loadCurrencySelectorDirectivePromiseDeferred);
                     });
                     filterPromises.push(loadCurrencySelectorDirectivePromiseDeferred.promise);
                 }
