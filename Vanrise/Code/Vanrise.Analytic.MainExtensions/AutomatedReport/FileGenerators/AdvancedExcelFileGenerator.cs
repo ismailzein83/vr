@@ -121,12 +121,30 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             presentSubTablesInfo.Add(subTableDef.SubTableId, subTablesInfo.GetRecord(subTableDef.SubTableId));
                         }
                     }
-                    maxHeaderRows = presentSubTablesInfo.Max(x => x.Value.FieldsOrder.Count());
+                    maxHeaderRows = 0;
+                    VRAutomatedReportTableInfo subTableInfoWithMostDimensions = null;
+                    AdvancedExcelFileGeneratorSubTableDefinition subTableDefWithMostDimensions = null;
+                    foreach (var item in presentSubTablesInfo)
+                    {
+                        var fieldsCount = item.Value.FieldsOrder.Count();
+                        var defObj = subTableDefinitions.FindRecord(x => x.SubTableId == item.Key);
+                        defObj.ThrowIfNull("subTableDefinition", item.Key);
+                        var subTableFieldsCount = defObj.SubTableFields.Count();
+                        if (subTableFieldsCount > 1)
+                        {
+                            fieldsCount++;
+                        }
+                        if (fieldsCount > maxHeaderRows)
+                        {
+                            maxHeaderRows = fieldsCount;
+                            subTableInfoWithMostDimensions = item.Value;
+                            subTableDefWithMostDimensions = defObj;
+                        }
+                    }
+
                     maxSubTableDimensions = maxHeaderRows;
                     headerRowIndex += maxHeaderRows - 1;
                     int maximumDimensionCount = maxHeaderRows;
-                    var subTableInfoWithMostDimensions = presentSubTablesInfo.FirstOrDefault(x => x.Value.FieldsOrder.Count() == maximumDimensionCount);
-                    var subTableDefWithMostDimensions = subTableDefinitions.FindRecord(x => x.SubTableId == subTableInfoWithMostDimensions.Key);
                     bool doAllTablesHaveSameDimensionCount = presentSubTablesInfo.All(x => x.Value.FieldsOrder.Count == maximumDimensionCount);
                     if (subTableDefWithMostDimensions != null && subTableDefWithMostDimensions.SubTableTitle != null)
                     {
@@ -260,9 +278,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             endIndex = newEndIndex;
         }
 
-        private void CheckAndSetNumericalOrDateTimeValues(Worksheet worksheet, VRAutomatedReportResolvedDataFieldValue fieldValue, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int iteration, ref object previousValue, ref int startIndex, ref int endIndex)
+        private void CheckAndSetNumericalOrDateTimeValues(Worksheet worksheet, VRAutomatedReportResolvedDataFieldValue fieldValue, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int iteration, ref object previousValue, ref int startIndex, ref int endIndex, int currentSubTableField)
         {
-            if (iteration > 0)
+            if (iteration > 0 || currentSubTableField>0)
             {
                 if (previousValue == null)
                 {
@@ -288,9 +306,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             }
         }
 
-        private void CheckAndSetStringValues(Worksheet worksheet, string value, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int iteration, ref object previousValue, ref int startIndex, ref int endIndex)
+        private void CheckAndSetStringValues(Worksheet worksheet, string value, int subTableFirstRowIndex, int adjustedSubTableFirstRowIndex, List<FieldValueRange> currentRanges, List<FieldValueRange> parentRanges, int fieldStartingIndex, int iteration, ref object previousValue, ref int startIndex, ref int endIndex, int currentSubTableField)
         {
-            if (iteration > 0)
+            if (iteration > 0 || currentSubTableField>0)
             {
                 if (previousValue == null)
                 {
@@ -324,33 +342,51 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         }
         private void SetStyleValueAndBordersForTitleCell(Worksheet worksheet, int subTableTitleRowIndex, int subTableTitleColIndex,string subTableTitle, int subTableValuesCount)
         {
-            int count = 0;
-            while (count < subTableValuesCount)
+            if (subTableValuesCount > 1)
             {
-                worksheet.Cells[subTableTitleRowIndex, subTableTitleColIndex + count].PutValue(subTableTitle);
-                Cell cell = worksheet.Cells.GetCell(subTableTitleRowIndex, subTableTitleColIndex + count);
+                int count = 0;
+                while (count < subTableValuesCount)
+                {
+                    worksheet.Cells[subTableTitleRowIndex, subTableTitleColIndex + count].PutValue(subTableTitle);
+                    Cell cell = worksheet.Cells.GetCell(subTableTitleRowIndex, subTableTitleColIndex + count);
+                    Style style = cell.GetStyle();
+                    if (count == 0)
+                    {
+                        style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                        style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                    }
+                    else if (count == subTableValuesCount - 1)
+                    {
+                        style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                        style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                    }
+                    else
+                    {
+                        style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                    }
+                    style.Font.Name = "Times New Roman";
+                    style.Font.Size = 15;
+                    style.Font.Color = Color.Black;
+                    style.Font.IsBold = true;
+                    style.HorizontalAlignment = TextAlignmentType.Center;
+                    cell.SetStyle(style);
+                    count++;
+                }
+            }
+            else if(subTableValuesCount==1)
+            {
+                worksheet.Cells[subTableTitleRowIndex, subTableTitleColIndex].PutValue(subTableTitle);
+                Cell cell = worksheet.Cells.GetCell(subTableTitleRowIndex, subTableTitleColIndex);
                 Style style = cell.GetStyle();
-                if (count == 0)
-                {
-                    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
-                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
-                }
-                else if (count == subTableValuesCount - 1)
-                {
-                    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
-                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
-                }
-                else
-                {
-                    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
-                }
+                style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
                 style.Font.Name = "Times New Roman";
                 style.Font.Size = 15;
                 style.Font.Color = Color.Black;
                 style.Font.IsBold = true;
                 style.HorizontalAlignment = TextAlignmentType.Center;
                 cell.SetStyle(style);
-                count++;
             }
         }
         private void BuildSubTableTitle(Worksheet worksheet, string subTableTitle, int subTableTitleRowIndex, int subTableTitleColIndex, int subTableValuesCount)
@@ -414,6 +450,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     var subTableDef = subTableDefinitionsDic.GetRecord(col);
                     if (subTableDef != null)
                     {
+                        int subTableFieldsCount = subTableDef.SubTableFields.Count;
                         var subTableInfo = subTablesInfo.GetRecord(subTableDef.SubTableId);
                         int subTableFirstRowIndex = subTableDataRowIndex;
                         int subTableTitleRowIndex = subTableFirstRowIndex;
@@ -422,10 +459,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         int adjustedSubTableFirstRowIndex = 0;
                         if (subTableInfo != null && subTableInfo.FieldsInfo != null && subTableInfo.FieldsInfo.Count > 0 && subTableInfo.FieldsOrder != null && subTableInfo.FieldsOrder.Count > 0)
                         {
-                            subTableRows.Add(subTableInfo.FieldsOrder.Count);
-                            if (maxSubTableDimensions > subTableInfo.FieldsOrder.Count)
+                            int fieldsOrderCount = subTableInfo.FieldsOrder.Count;
+                            if (subTableFieldsCount > 1)
+                                fieldsOrderCount++;
+
+                            subTableRows.Add(fieldsOrderCount);
+                            if (maxSubTableDimensions > fieldsOrderCount)
                             {
-                                subTableFirstRowIndex += (maxSubTableDimensions - subTableInfo.FieldsOrder.Count);
+                                subTableFirstRowIndex += (maxSubTableDimensions - fieldsOrderCount);
                                 subTableTitleRowIndex = subTableFirstRowIndex;
                             }
                             adjustedSubTableFirstRowIndex = subTableFirstRowIndex;
@@ -439,13 +480,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 List<FieldValueRange> currentRanges = new List<FieldValueRange>();
                                 if (fieldValues != null && fieldValues.FieldValues != null && fieldValues.FieldValues.Count > 0 && fieldValues.FieldType != null)
                                 {
-                                    valuesCount = fieldValues.FieldValues.Count;
+                                    valuesCount = fieldValues.FieldValues.Count*subTableFieldsCount;
                                     subTableValuesCount = valuesCount;
                                     object previousValue = null;
                                     int startIndex = -1;
                                     int endIndex = -1;
                                     for (int iteration = 0; iteration < fieldValues.FieldValues.Count; iteration++)
                                     {
+                                        int currentSubTableField = 0;
                                         var fieldValue = fieldValues.FieldValues[iteration];
                                         if (iteration != fieldValues.FieldValues.Count - 1)
                                         {
@@ -459,51 +501,114 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                         {
                                             if (fieldValues.FieldType.RenderDescriptionByDefault())
                                             {
-                                                SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Description, 14, true, TextAlignmentType.Center, true);
-                                                CheckAndSetStringValues(worksheet, fieldValue.Description, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
-                                                fieldStartingIndex++;
+                                                while (currentSubTableField < subTableFieldsCount)
+                                                {
+                                                    if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                    {
+                                                        insertedCols.Add(fieldStartingIndex + 1);
+                                                        worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                    }
+                                                    SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Description, 14, true, TextAlignmentType.Center, true);
+                                                    CheckAndSetStringValues(worksheet, fieldValue.Description, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
+                                                    currentSubTableField++;
+                                                    fieldStartingIndex++;
+                                                }
                                             }
                                             else
                                             {
                                                 if (fieldValue.Value is DateTime)
                                                 {
                                                     var date = Convert.ToDateTime(fieldValue.Value);
-                                                    SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 14, true, TextAlignmentType.Center, true);
-                                                    CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
-                                                    fieldStartingIndex++;
+                                                    while (currentSubTableField < subTableFieldsCount)
+                                                    {
+                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        {
+                                                            insertedCols.Add(fieldStartingIndex + 1);
+                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        }
+                                                        SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 14, true, TextAlignmentType.Center, true);
+                                                        CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
+                                                        currentSubTableField++;
+                                                        fieldStartingIndex++;
+                                                    }
                                                 }
                                                 else if (fieldValue.Value is int || fieldValue.Value is double || fieldValue.Value is decimal || fieldValue.Value is long)
                                                 {
-                                                    SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                    CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
-                                                    fieldStartingIndex++;
+                                                    while (currentSubTableField < subTableFieldsCount)
+                                                    {
+                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        {
+                                                            insertedCols.Add(fieldStartingIndex + 1);
+                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        }
+                                                        SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
+                                                        CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
+                                                        currentSubTableField++;
+                                                        fieldStartingIndex++;
+                                                    }
                                                 }
                                                 else if (fieldValue.Value is string)
                                                 {
-                                                    SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                    CheckAndSetStringValues(worksheet, fieldValue.Value.ToString(), subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex);
-                                                    fieldStartingIndex++;
+                                                    while (currentSubTableField < subTableFieldsCount)
+                                                    {
+                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        {
+                                                            insertedCols.Add(fieldStartingIndex + 1);
+                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        }
+                                                        SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
+                                                        CheckAndSetStringValues(worksheet, fieldValue.Value.ToString(), subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
+                                                        currentSubTableField++;
+                                                        fieldStartingIndex++;
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                    if (iteration > 0)
+                                                    while (currentSubTableField < subTableFieldsCount)
                                                     {
-                                                        if (previousValue != fieldValue.Value)
+                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
                                                         {
-                                                            MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
-                                                            SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                                                            insertedCols.Add(fieldStartingIndex + 1);
+                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        }
+                                                        SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
+                                                        if (iteration > 0)
+                                                        {
+                                                            if (previousValue != fieldValue.Value)
+                                                            {
+                                                                MergeCells(worksheet, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, startIndex, endIndex, currentRanges, parentRanges);
+                                                                SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
+                                                            }
+                                                            else
+                                                            {
+                                                                endIndex = fieldStartingIndex;
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            endIndex = fieldStartingIndex;
+                                                            SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
                                                         }
+                                                        currentSubTableField++;
+                                                        fieldStartingIndex++;
                                                     }
-                                                    else
-                                                    {
-                                                        SetFlagValues(ref previousValue, fieldValue.Value, ref startIndex, fieldStartingIndex, ref endIndex, fieldStartingIndex);
-                                                    }
-                                                    fieldStartingIndex++;
+                                                }
+                                            }
+                                            if (valuesCount == 1 && subTableFieldsCount > 1)
+                                            {
+                                                worksheet.Cells.Merge(subTableFirstRowIndex, startIndex, 1, subTableFieldsCount);
+                                                currentRanges.Add(new FieldValueRange()
+                                                {
+                                                    StartIndex = startIndex,
+                                                    EndIndex = endIndex + subTableFieldsCount
+                                                });
+                                            }
+                                            if (field == subTableInfo.FieldsOrder.Last() && subTableDef.SubTableFields != null && subTableDef.SubTableFields.Count > 1)
+                                            {
+                                                var subTableFieldStartingIndex = fieldStartingIndex - subTableDef.SubTableFields.Count;
+                                                foreach (var subTableField in subTableDef.SubTableFields)
+                                                {
+                                                    SetStyleAndValue(worksheet, subTableFirstRowIndex + 1, subTableFieldStartingIndex, subTableField.FieldName, 14, true, TextAlignmentType.Center, true);
+                                                    subTableFieldStartingIndex++;
                                                 }
                                             }
                                         }
@@ -578,6 +683,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     if (subTableDef != null)
                     {
                         var subTableInfo = subTablesInfo.GetRecord(subTableDef.SubTableId);
+                        int subTableFieldsCount = subTableDef.SubTableFields.Count;
                         VRAutomatedReportResolvedDataItemSubTable summarySubTableFields = (summaryRecord != null && summaryRecord.SubTables != null) ? summaryRecord.SubTables.GetRecord(subTableDef.SubTableId) : null;
                         if (summarySubTableFields != null && summarySubTableFields.Fields != null && summarySubTableFields.Fields.Count > 0 && subTableDef.SubTableFields != null && subTableDef.SubTableFields.Count > 0)
                         {
@@ -587,33 +693,41 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 insertedRows.Add(summaryRowIndex);
                             }
                             int valuesCount = 0;
-                            foreach (var measureDef in subTableDef.SubTableFields)
+                            for(int k = 0; k < subTableDef.SubTableFields.Count;k++ )
                             {
-                                var fieldStartingIndex = columnIndexState;
+                                var measureDef = subTableDef.SubTableFields[k];
+                                var fieldStartingIndex = columnIndexState +k ;
                                 var summaryMeasure = (summarySubTableFields != null && summarySubTableFields.Fields != null) ? summarySubTableFields.Fields.GetRecord(measureDef.FieldName) : null;
                                 if (summaryMeasure != null && summaryMeasure.FieldValues != null && summaryMeasure.FieldValues.Count > 0)
                                 {
-                                    valuesCount = summaryMeasure.FieldValues.Count;
+                                    valuesCount = summaryMeasure.FieldValues.Count*subTableFieldsCount;
                                     for (int o = 0; o < summaryMeasure.FieldValues.Count; o++)
                                     {
                                         var summaryMeasureValue = (summaryMeasure != null && summaryMeasure.FieldValues != null) ? summaryMeasure.FieldValues[o] : null;
+                                        if (o > 0 && subTableFieldsCount>1)
+                                        {
+                                            fieldStartingIndex += subTableDef.SubTableFields.Count;
+                                        }
                                         if (summaryMeasureValue.Value is DateTime)
                                         {
                                             var date = Convert.ToDateTime(summaryMeasureValue.Value);
                                             SetStyleAndValue(worksheet, summaryRowIndex, fieldStartingIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 14, true, TextAlignmentType.Right, true);
-                                            fieldStartingIndex++;
+                                            if (subTableFieldsCount==1)
+                                                fieldStartingIndex++;
                                             continue;
                                         }
                                         else if (summaryMeasureValue.Value is int || summaryMeasureValue.Value is double || summaryMeasureValue.Value is decimal || summaryMeasureValue.Value is long)
                                         {
                                             SetStyleAndValue(worksheet, summaryRowIndex, fieldStartingIndex, summaryMeasureValue.Value, 14, true, TextAlignmentType.Right, true);
-                                            fieldStartingIndex++;
+                                            if (subTableFieldsCount == 1)
+                                                fieldStartingIndex++;
                                             continue;
                                         }
                                         else
                                         {
                                             SetStyleAndValue(worksheet, summaryRowIndex, fieldStartingIndex, summaryMeasureValue.Value, 14, true, TextAlignmentType.Left, true);
-                                            fieldStartingIndex++;
+                                            if (subTableFieldsCount == 1)
+                                                fieldStartingIndex++;
                                         }
                                     }
                                 }
@@ -691,14 +805,18 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         if (subTableDef != null)
                         {
                             int subTableFirstRowIndex = subTableDataRowIndex + i;
+                            int subTableFieldsCount = subTableDef.SubTableFields.Count;
                             item.SubTables.ThrowIfNull("item.SubTables");
                             var subTableItem = item.SubTables.GetRecord(subTableDef.SubTableId);
                             if (subTableItem != null && subTableItem.Fields != null && subTableItem.Fields.Count > 0 && subTableDef.SubTableFields != null && subTableDef.SubTableFields.Count > 0)
                             {
                                 int valuesCount = 0;
-                                foreach (var measureDef in subTableDef.SubTableFields)
+                                for (int k = 0; k < subTableDef.SubTableFields.Count;k++ )
                                 {
-                                    var fieldStartingIndex = columnIndexState;
+
+                                    var measureDef = subTableDef.SubTableFields[k];
+                                    var fieldStartingIndex = columnIndexState + k;
+                                 
                                     var measure = subTableItem.Fields.GetRecord(measureDef.FieldName);
                                     if (i != items.Count - 1)
                                     {
@@ -706,18 +824,26 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     }
                                     if (measure != null && measure.FieldValues != null && measure.FieldValues.Count > 0)
                                     {
-                                        valuesCount = measure.FieldValues.Count;
+                                        valuesCount = measure.FieldValues.Count*subTableFieldsCount;
                                         for (int o = 0; o < measure.FieldValues.Count; o++)
                                         {
                                             var measureValue = measure.FieldValues[o];
+                                            if (o > 0 && subTableFieldsCount>1)
+                                            {
+                                                fieldStartingIndex += subTableDef.SubTableFields.Count;
+                                            }
+
                                             if (!includeHeaders)
                                             {
-                                                if (o != measure.FieldValues.Count - 1)
+                                                if (subTableFieldsCount == 1)
                                                 {
-                                                    if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                    if (o != measure.FieldValues.Count - 1)
                                                     {
-                                                        insertedCols.Add(fieldStartingIndex + 1);
-                                                        worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        {
+                                                            insertedCols.Add(fieldStartingIndex + 1);
+                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -726,24 +852,27 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                             {
                                                 var date = Convert.ToDateTime(measureValue.Value);
                                                 SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 12, false, TextAlignmentType.Right, true);
-                                                fieldStartingIndex++;
+                                                if (subTableFieldsCount == 1)
+                                                    fieldStartingIndex++;
                                                 continue;
                                             }
                                             else if (measureValue.Value is int || measureValue.Value is double || measureValue.Value is decimal || measureValue.Value is long)
                                             {
                                                 SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, measureValue.Value, 12, false, TextAlignmentType.Right, true);
-                                                fieldStartingIndex++;
+                                                if (subTableFieldsCount == 1)
+                                                    fieldStartingIndex++;
                                                 continue;
                                             }
                                             else
                                             {
                                                 SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, measureValue.Value, 12, false, TextAlignmentType.Left, true);
-                                                fieldStartingIndex++;
+                                                if (subTableFieldsCount == 1)
+                                                    fieldStartingIndex++;
                                             }
                                         }
-                                        subTableFirstRowIndex++;
                                     }
                                 }
+                                subTableFirstRowIndex++;
                                 columnIndexState += valuesCount - 1;
                             }
                             else

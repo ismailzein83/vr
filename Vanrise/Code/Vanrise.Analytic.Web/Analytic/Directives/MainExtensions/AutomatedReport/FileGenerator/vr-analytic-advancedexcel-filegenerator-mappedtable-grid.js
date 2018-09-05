@@ -86,10 +86,17 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                                                     });
                                                 }
                                             }
-                                            if (col.selectedSubTableFields != undefined && col.editedTitle == undefined) {
-                                                var selectedSubTableFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.mappedCols[i].subTableFields, col.selectedSubTableFields.value, 'value');
-                                                if (selectedSubTableFieldIndex == -1) {
-                                                    $scope.scopeModel.mappedCols[i].selectedSubTableFields = undefined;
+                                            if (col.selectedSubTableFields != undefined && col.selectedSubTableFields.length>0 && col.editedTitle == undefined) {
+                                                for (var l = 0; l < col.selectedSubTableFields.length; l++) {
+                                                    var selectedSubtableField = col.selectedSubTableFields[l];
+                                                    if(selectedSubtableField!=undefined) {
+                                                        var selectedSubTableFieldIndex = UtilsService.getItemIndexByVal($scope.scopeModel.mappedCols[i].subTableFields, selectedSubtableField.value, 'value');
+                                                        if (selectedSubTableFieldIndex == -1) {
+                                                            if ($scope.scopeModel.mappedCols[i].selectedSubTableFields.length>0) {
+                                                                $scope.scopeModel.mappedCols[i].selectedSubTableFields.splice(l, 1);
+                                                            }
+                                                        }
+                                                    }
                                                }
                                             }
                                         }
@@ -295,11 +302,12 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
 
             function loadSubTableSelector() {
                 mappedCol.selectedSubTableFields = undefined;
+                mappedCol.selectedSubTableFields = [];
                 mappedCol.onSubTableFieldSelectorReadyDeferred.promise.then(function () {
                     if (mappedCol.selectedField != undefined && mappedCol.selectedField.source == VR_Analytic_AutomatedReportQuerySourceEnum.SubTable) {
                         mappedCol.subTableFields.length = 0;
                         if(allFields!=undefined){
-                               for (var i = 0; i < allFields.length; i++) {
+                            for (var i = 0; i < allFields.length; i++) {
                             var field = allFields[i];
                             if (field.subTableFields != undefined && field.value == mappedCol.selectedField.value) {
                                 for (var subTableFieldName in field.subTableFields) {
@@ -317,7 +325,10 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                             if (mappedColumn != undefined && mappedColumn.SubTableFields != undefined && mappedColumn.SubTableFields.length > 0 && mappedCol.subTableFields != undefined && mappedCol.subTableFields.length > 0) {
                                 for (var i = 0; i < mappedColumn.SubTableFields.length; i++) {
                                     var field = mappedColumn.SubTableFields[i];
-                                    mappedCol.selectedSubTableFields = UtilsService.getItemByVal(mappedCol.subTableFields, field.FieldName, "value");
+                                    var item = UtilsService.getItemByVal(mappedCol.subTableFields, field.FieldName, "value");
+                                    if(item!=null){
+                                        mappedCol.selectedSubTableFields.push(item);
+                                    }
                                 }
                             }
                         }
@@ -401,11 +412,14 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                     }
                     if (mappedCol.selectedSubTableFields != undefined) {
                         mappedSubTable.SubTableFields = [];
-                        mappedSubTable.SubTableFields.push({
-                            $type : "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorSubTableColumnDefinition, Vanrise.Analytic.MainExtensions",
-                            FieldName: mappedCol.selectedSubTableFields.value,
-                            FileTitle: mappedCol.selectedSubTableFields.description
-                        });
+                        for (var l = 0; l < mappedCol.selectedSubTableFields.length; l++) {
+                            var selectedSubTableField =mappedCol.selectedSubTableFields[l];
+                            mappedSubTable.SubTableFields.push({
+                                $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGeneratorSubTableColumnDefinition, Vanrise.Analytic.MainExtensions",
+                                FieldName: selectedSubTableField.value,
+                                FileTitle: selectedSubTableField.description
+                            });
+                        }
                     }
                     mappedSubTable.SubTableName = mappedCol.selectedField.description;
                     mappedSubTable.SubTableTitle = mappedCol.subTableTitle;
