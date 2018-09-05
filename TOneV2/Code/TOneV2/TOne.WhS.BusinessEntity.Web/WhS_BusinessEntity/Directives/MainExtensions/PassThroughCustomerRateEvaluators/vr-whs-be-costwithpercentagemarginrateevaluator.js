@@ -23,6 +23,7 @@ app.directive('vrWhsBeCostwithpercentagemarginrateevaluator', ['UtilsService', '
 
 	        function initializeController() {
 	            $scope.scopeModel = {};
+	            $scope.scopeModel.percentage = 0;
 
 	            defineAPI();
 	        }
