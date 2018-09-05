@@ -6,8 +6,10 @@
 
     function MobileService( UtilsService) {
 
-        function isMobile() {            
-            return isMobileView() || isMobileOS();
+        function isMobile() {
+            if (isMobileView() || isMobileOS())
+                return true;
+            return false;
         }
 
         function isMobileView() {           
