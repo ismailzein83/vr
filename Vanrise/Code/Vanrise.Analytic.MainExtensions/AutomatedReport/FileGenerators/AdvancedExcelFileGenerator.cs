@@ -489,24 +489,19 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     {
                                         int currentSubTableField = 0;
                                         var fieldValue = fieldValues.FieldValues[iteration];
-                                        if (iteration != fieldValues.FieldValues.Count - 1)
-                                        {
-                                            if (!insertedCols.Contains(fieldStartingIndex + 1))
-                                            {
-                                                insertedCols.Add(fieldStartingIndex + 1);
-                                                worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
-                                            }
-                                        }
                                         if (fieldValue != null)
                                         {
                                             if (fieldValues.FieldType.RenderDescriptionByDefault())
                                             {
                                                 while (currentSubTableField < subTableFieldsCount)
                                                 {
-                                                    if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                    if (!(iteration == fieldValues.FieldValues.Count - 1 && currentSubTableField == subTableFieldsCount - 1))
                                                     {
-                                                        insertedCols.Add(fieldStartingIndex + 1);
-                                                        worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        {
+                                                            insertedCols.Add(fieldStartingIndex + 1);
+                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                        }
                                                     }
                                                     SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Description, 14, true, TextAlignmentType.Center, true);
                                                     CheckAndSetStringValues(worksheet, fieldValue.Description, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
@@ -521,10 +516,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                     var date = Convert.ToDateTime(fieldValue.Value);
                                                     while (currentSubTableField < subTableFieldsCount)
                                                     {
-                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        if (!(iteration == fieldValues.FieldValues.Count - 1 && currentSubTableField == subTableFieldsCount - 1))
                                                         {
-                                                            insertedCols.Add(fieldStartingIndex + 1);
-                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                            {
+                                                                insertedCols.Add(fieldStartingIndex + 1);
+                                                                worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            }
                                                         }
                                                         SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, date.ToString(generalSettingsManager.GetDateTimeFormat()), 14, true, TextAlignmentType.Center, true);
                                                         CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
@@ -536,10 +534,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 {
                                                     while (currentSubTableField < subTableFieldsCount)
                                                     {
-                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        if (!(iteration == fieldValues.FieldValues.Count - 1 && currentSubTableField == subTableFieldsCount - 1))
                                                         {
-                                                            insertedCols.Add(fieldStartingIndex + 1);
-                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                            {
+                                                                insertedCols.Add(fieldStartingIndex + 1);
+                                                                worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            }
                                                         }
                                                         SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
                                                         CheckAndSetNumericalOrDateTimeValues(worksheet, fieldValue, subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
@@ -551,10 +552,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 {
                                                     while (currentSubTableField < subTableFieldsCount)
                                                     {
-                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        if (!(iteration == fieldValues.FieldValues.Count - 1 && currentSubTableField == subTableFieldsCount - 1))
                                                         {
-                                                            insertedCols.Add(fieldStartingIndex + 1);
-                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                            {
+                                                                insertedCols.Add(fieldStartingIndex + 1);
+                                                                worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            }
                                                         }
                                                         SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
                                                         CheckAndSetStringValues(worksheet, fieldValue.Value.ToString(), subTableFirstRowIndex, adjustedSubTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, ref startIndex, ref endIndex, currentSubTableField);
@@ -566,10 +570,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 {
                                                     while (currentSubTableField < subTableFieldsCount)
                                                     {
-                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                        if (!(iteration == fieldValues.FieldValues.Count - 1 && currentSubTableField == subTableFieldsCount - 1))
                                                         {
-                                                            insertedCols.Add(fieldStartingIndex + 1);
-                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            if (!insertedCols.Contains(fieldStartingIndex + 1))
+                                                            {
+                                                                insertedCols.Add(fieldStartingIndex + 1);
+                                                                worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
+                                                            }
                                                         }
                                                         SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
                                                         if (iteration > 0 || currentSubTableField>0)
@@ -811,6 +818,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             if (subTableItem != null && subTableItem.Fields != null && subTableItem.Fields.Count > 0 && subTableDef.SubTableFields != null && subTableDef.SubTableFields.Count > 0)
                             {
                                 int valuesCount = 0;
+                                bool insertColumns=true;
+
                                 for (int k = 0; k < subTableDef.SubTableFields.Count;k++ )
                                 {
 
@@ -825,6 +834,20 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     if (measure != null && measure.FieldValues != null && measure.FieldValues.Count > 0)
                                     {
                                         valuesCount = measure.FieldValues.Count*subTableFieldsCount;
+                                        if (!includeHeaders && subTableFieldsCount > 1 && insertColumns)
+                                        {
+                                            int colCount = 0;
+                                            while (colCount <valuesCount-1)
+                                            {
+                                                if (!insertedCols.Contains(columnIndexState + 1 + colCount))
+                                                {
+                                                    insertedCols.Add(columnIndexState + 1 + colCount);
+                                                    worksheet.Cells.InsertColumn(columnIndexState + 1 + colCount);
+                                                }
+                                                colCount++;
+                                            }
+                                            insertColumns = false;
+                                        }
                                         for (int o = 0; o < measure.FieldValues.Count; o++)
                                         {
                                             var measureValue = measure.FieldValues[o];
@@ -833,17 +856,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 fieldStartingIndex += subTableDef.SubTableFields.Count;
                                             }
 
-                                            if (!includeHeaders)
+                                            if (!includeHeaders && subTableFieldsCount == 1)
                                             {
-                                                if (subTableFieldsCount == 1)
+                                                if (o != measure.FieldValues.Count - 1)
                                                 {
-                                                    if (o != measure.FieldValues.Count - 1)
+                                                    if (!insertedCols.Contains(fieldStartingIndex + 1))
                                                     {
-                                                        if (!insertedCols.Contains(fieldStartingIndex + 1))
-                                                        {
-                                                            insertedCols.Add(fieldStartingIndex + 1);
-                                                            worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
-                                                        }
+                                                        insertedCols.Add(fieldStartingIndex + 1);
+                                                        worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
                                                     }
                                                 }
                                             }
