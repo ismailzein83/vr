@@ -37,6 +37,8 @@
     [PortOUT]                        VARCHAR (42)     NULL,
     [CustomerProfileId]              INT              NULL,
     [SupplierProfileId]              INT              NULL,
+    [ReleaseCode]                    VARCHAR (50)     NULL,
+    [ReleaseSource]                  VARCHAR (10)     NULL,
     [ReleaseSourceSCount]            INT              NULL,
     [SaleExtraCharges]               DECIMAL (26, 10) NULL,
     [CostExtraCharges]               DECIMAL (26, 10) NULL,
@@ -57,6 +59,8 @@
     [CostDealTierNb]                 INT              NULL,
     [CostDealRateTierNb]             INT              NULL,
     [CostDealDurInSec]               DECIMAL (20, 4)  NULL);
+
+
 
 
 

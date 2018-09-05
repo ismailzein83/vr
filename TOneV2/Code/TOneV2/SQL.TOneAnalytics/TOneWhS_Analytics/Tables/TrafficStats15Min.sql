@@ -57,8 +57,12 @@
     [CostDealTierNb]                 INT              NULL,
     [CostDealRateTierNb]             INT              NULL,
     [CostDealDurInSec]               DECIMAL (20, 4)  NULL,
+    [ReleaseCode]                    VARCHAR (50)     NULL,
+    [ReleaseSource]                  VARCHAR (10)     NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
