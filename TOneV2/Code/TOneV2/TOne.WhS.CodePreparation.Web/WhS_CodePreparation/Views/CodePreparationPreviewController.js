@@ -41,9 +41,6 @@
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
             };
-            $scope.scopeModal.continueTask = function () {
-                return executeTask(true);
-            };
             $scope.scopeModal.openCheckPriceListPreview = function () {
                 WhS_BE_SalePriceListChangeService.openCheckPriceListPreview(processInstanceId);
             };
