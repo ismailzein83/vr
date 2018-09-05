@@ -572,7 +572,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                             worksheet.Cells.InsertColumn(fieldStartingIndex + 1);
                                                         }
                                                         SetStyleAndValue(worksheet, subTableFirstRowIndex, fieldStartingIndex, fieldValue.Value, 14, true, TextAlignmentType.Center, true);
-                                                        if (iteration > 0)
+                                                        if (iteration > 0 || currentSubTableField>0)
                                                         {
                                                             if (previousValue != fieldValue.Value)
                                                             {
