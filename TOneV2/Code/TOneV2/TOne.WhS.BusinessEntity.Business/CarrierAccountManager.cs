@@ -937,7 +937,7 @@ namespace TOne.WhS.BusinessEntity.Business
         /// </summary>
         /// <param name="carrierAccountId"></param>
         /// <returns></returns>
-        public bool IsCustomerPathThrough(int carrierAccountId)
+        public bool IsCustomerPassThrough(int carrierAccountId)
         {
             CarrierAccount carrierAccount = this.GetCarrierAccount(carrierAccountId);
             if (carrierAccount == null)
@@ -958,7 +958,7 @@ namespace TOne.WhS.BusinessEntity.Business
         /// </summary>
         /// <param name="carrierAccountId"></param>
         /// <returns></returns>
-        public decimal? EvaluatePathThroughCustomerRate(int carrierAccountId, decimal? costRate, int? costCurrencyId)
+        public decimal? EvaluatePassThroughCustomerRate(int carrierAccountId, decimal? costRate, int? costCurrencyId)
         {
             CarrierAccount carrierAccount = this.GetCarrierAccount(carrierAccountId);
             carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
@@ -967,7 +967,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             PassThroughEvaluateCustomerRateContext context = new PassThroughEvaluateCustomerRateContext() { CostRate = costRate, CostCurrencyId = costCurrencyId };
             return carrierAccount.CustomerSettings.PassThroughCustomerRateEvaluator.EvaluateCustomerRate(context);
-        }
+        } 
 
         #endregion
 
