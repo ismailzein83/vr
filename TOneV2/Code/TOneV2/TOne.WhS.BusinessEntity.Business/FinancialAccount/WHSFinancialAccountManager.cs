@@ -342,8 +342,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 filterFunc = (financialAccount) =>
                 {
-                    if (filter.FinancialAccountDefinitionId.HasValue && filter.FinancialAccountDefinitionId.Value != WHSFinancialAccount.STATICBUSINESSENTITY_DEFINITION_ID &&
-                        financialAccount.FinancialAccountDefinitionId != filter.FinancialAccountDefinitionId.Value)
+                    if (!IsFinancialAccountDefinitionMatch(filter.FinancialAccountDefinitionId, financialAccount))
                         return false;
 
                     if (filter.InvoiceTypeId.HasValue)
@@ -410,6 +409,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return allFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterFunc).OrderBy(x => x.Name);
         }
+
 
         public IEnumerable<WHSFinancialAccount> GetFinancialAccountsByCarrierAccountId(int carrierAccountId)
         {
@@ -1102,6 +1102,33 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return true;
         }
+
+        private bool IsFinancialAccountDefinitionMatch(Guid? financialAccountDefinitionId, WHSFinancialAccount financialAccount)
+        {
+            if (!financialAccountDefinitionId.HasValue)
+                return true;
+
+            if (financialAccountDefinitionId.Value == WHSFinancialAccount.STATIC_SALEFINANCIALACCOUNTBE_DEFINITION_ID)
+            {
+                WHSFinancialAccountDefinitionSettings whsFinancialAccountDefinitionSettings = GetDefinitionWithValidate(financialAccount);
+                if (whsFinancialAccountDefinitionSettings.ExtendedSettings.IsApplicableToCustomer)
+                    return true;
+            }
+            else if (financialAccountDefinitionId.Value == WHSFinancialAccount.STATIC_COSTFINANCIALACCOUNTBE_DEFINITION_ID)
+            {
+                WHSFinancialAccountDefinitionSettings whsFinancialAccountDefinitionSettings = GetDefinitionWithValidate(financialAccount);
+                if (whsFinancialAccountDefinitionSettings.ExtendedSettings.IsApplicableToSupplier)
+                    return true;
+            }
+            else
+            {
+                if (financialAccountDefinitionId.Value == financialAccount.FinancialAccountDefinitionId)
+                    return true;
+            }
+
+            return false;
+        }
+
 
         #endregion
 
