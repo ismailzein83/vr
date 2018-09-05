@@ -133,7 +133,7 @@
         function getInvoiceAction() {
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceAction(invoiceTypeId, invoiceActionId).then(function (response) {
                 invoiceActionEntity = response;
-            })
+            });
         }
 
         function loadMailMsgTemplateSelector() {
