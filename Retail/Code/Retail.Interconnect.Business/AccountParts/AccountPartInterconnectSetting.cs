@@ -7,7 +7,7 @@ namespace Retail.Interconnect.Business
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return Guid.Empty; }
         }
         public bool RepresentASwitch { get; set; }
     }

@@ -23,6 +23,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -109,6 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Interconnect\Constant\InterconnectInvoiceType.js" />
+    <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Definition\retail-interconnect-account-part-definition-setting.js" />
+    <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Definition\Templates\AccountTypeSettingPartDefinitionTemplate.html" />
+    <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Runtime\retail-interconnect-account-part-runtime-setting.js" />
+    <Content Include="Retail_Interconnect\Directives\MainExtensions\AccountPart\Runtime\Templates\AccountTypeSettingPartRuntimeTemplate.html" />
     <Content Include="Retail_Interconnect\Directives\retail-interconnect-account-invoice-selector.js" />
     <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectinvoicesettings.js" />
     <Content Include="Retail_Interconnect\Directives\Templates\InterconnectInvoiceSettingsTemplate.html" />
