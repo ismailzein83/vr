@@ -528,22 +528,25 @@ namespace TOne.WhS.BusinessEntity.Business
             var allCarrierAccounts = GetCachedCarrierAccounts();
 
             Func<CarrierAccount, bool> filterExpression = (item) =>
-                (input.Query.Name == null || IsMatchByName(input.Query.Name, item))
-                &&
-                (input.Query.CarrierProfilesIds == null || input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
-                &&
-                (input.Query.CarrierAccountsIds == null || input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
-                &&
-                (input.Query.ActivationStatusIds == null || input.Query.ActivationStatusIds.Contains((int)item.CarrierAccountSettings.ActivationStatus))
-                &&
-                (input.Query.AccountsTypes == null || input.Query.AccountsTypes.Contains(item.AccountType))
-                &&
-                (input.Query.SellingNumberPlanIds == null || (item.AccountType == CarrierAccountType.Supplier || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId)))
-                 &&
-                (input.Query.SellingProductsIds == null || (item.AccountType == CarrierAccountType.Supplier || input.Query.SellingProductsIds.Contains(item.SellingProductId)))
-                  &&
-                (input.Query.Services == null || (item.AccountType == CarrierAccountType.Customer || input.Query.Services.All(x => item.SupplierSettings.DefaultServices.Select(y => y.ServiceId).Contains(x))));
-
+              {
+                  if (input.Query.Name != null && !IsMatchByName(input.Query.Name, item))
+                      return false;
+                  if (input.Query.CarrierProfilesIds != null && input.Query.CarrierProfilesIds.Count > 0 && !input.Query.CarrierProfilesIds.Contains(item.CarrierProfileId))
+                      return false;
+                  if (input.Query.CarrierAccountsIds != null && input.Query.CarrierAccountsIds.Count > 0 && !input.Query.CarrierAccountsIds.Contains(item.CarrierAccountId))
+                      return false;
+                  if (input.Query.ActivationStatusIds != null && input.Query.ActivationStatusIds.Count > 0 && !input.Query.ActivationStatusIds.Contains((int)item.CarrierAccountSettings.ActivationStatus))
+                      return false;
+                  if (input.Query.AccountsTypes != null && input.Query.AccountsTypes.Count > 0 && !input.Query.AccountsTypes.Contains(item.AccountType))
+                      return false;
+                  if (input.Query.SellingNumberPlanIds != null && input.Query.SellingNumberPlanIds.Count > 0 && !(item.AccountType != CarrierAccountType.Supplier && input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId)))
+                      return false;
+                  if (input.Query.SellingProductsIds != null && input.Query.SellingProductsIds.Count > 0 && !(item.AccountType != CarrierAccountType.Supplier && input.Query.SellingProductsIds.Contains(item.SellingProductId)))
+                      return false;
+                  if (input.Query.Services != null && input.Query.Services.Count > 0 && !(item.AccountType != CarrierAccountType.Customer && input.Query.Services.All(x => item.SupplierSettings.DefaultServices.Select(y => y.ServiceId).Contains(x))))
+                      return false;
+                  return true;
+              };
             var resultProcessingHandler = new ResultProcessingHandler<CarrierAccountDetail>()
             {
                 ExportExcelHandler = new CarrierAccountDetailExportExcelHandler()
@@ -967,7 +970,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             PassThroughEvaluateCustomerRateContext context = new PassThroughEvaluateCustomerRateContext() { CostRate = costRate, CostCurrencyId = costCurrencyId };
             return carrierAccount.CustomerSettings.PassThroughCustomerRateEvaluator.EvaluateCustomerRate(context);
-        } 
+        }
 
         #endregion
 
