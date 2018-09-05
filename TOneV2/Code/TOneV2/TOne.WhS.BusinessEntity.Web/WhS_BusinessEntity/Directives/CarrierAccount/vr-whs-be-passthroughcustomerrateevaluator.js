@@ -83,8 +83,13 @@ app.directive('vrWhsBePassthroughcustomerrateevaluator', ['UtilsService', 'VRUIU
 	                            for (var i = 0; i < response.length; i++) {
 	                                $scope.scopeModel.templateConfigs.push(response[i]);
 	                            }
+
 	                            if (passThroughCustomerRateEvaluator != undefined) {
 	                                $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, passThroughCustomerRateEvaluator.ConfigId, 'ExtensionConfigurationId');
+	                            } else {
+	                                if ($scope.scopeModel.templateConfigs.length > 0) {
+	                                    $scope.scopeModel.selectedTemplateConfig = $scope.scopeModel.templateConfigs[0];
+	                                }
 	                            }
 	                        }
 	                    });
