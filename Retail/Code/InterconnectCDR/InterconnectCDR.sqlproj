@@ -96,5 +96,8 @@
     <Build Include="ICX_Data\User Defined Types\AccumulatedDataType.sql" />
     <Build Include="ICX_Data\User Defined Types\RawDataType.sql" />
     <Build Include="Security\ICX_Data.sql" />
+    <Build Include="ICX_CDR\Tables\BillingCDR_Interconnect.sql" />
+    <Build Include="ICX_CDR\User Defined Types\InterconnectCDRType.sql" />
+    <Build Include="ICX_CDR\User Defined Types\BillingCDR_InterconnectType.sql" />
   </ItemGroup>
 </Project>
