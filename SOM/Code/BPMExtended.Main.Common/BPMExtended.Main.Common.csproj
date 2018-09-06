@@ -59,6 +59,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="InventoryMockDataGenerator.cs" />
     <Compile Include="JSONSerializer.cs" />
+    <Compile Include="MicsMockDataGenerator.cs" />
     <Compile Include="RatePlanMockDataGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SOMClient.cs" />

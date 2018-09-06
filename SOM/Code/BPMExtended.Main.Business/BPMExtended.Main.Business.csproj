@@ -70,6 +70,7 @@
     <Compile Include="Inventory\CPTManager.cs" />
     <Compile Include="Inventory\InventoryManager.cs" />
     <Compile Include="Inventory\LineTypeManager.cs" />
+    <Compile Include="Inventory\MicsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Billing\RatePlanManager.cs" />
     <Compile Include="Provisioning\ProvisioningManager.cs" />
