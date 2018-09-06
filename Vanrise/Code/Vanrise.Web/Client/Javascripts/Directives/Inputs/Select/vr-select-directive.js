@@ -130,6 +130,8 @@
                     controller.showSearchSection = !controller.showSearchSection;
                 };
 
+                controller.hideSelectAll = $attrs.hideselectall != undefined;
+
                 controller.cancelClickTrigger = function (e) {
                     controller.showSearchSection = false;
                     var onCancelHandler = $scope.$parent.$eval($attrs.oncancelhandler);
@@ -1027,6 +1029,8 @@
                         }
 
                         ctrl.selectAll = function () {
+                            if (ctrl.hideSelectAll)
+                                return;
                             if (!ctrl.selectedSectionVisible())
                                 ctrl.selectedValuespageSize = ctrl.initialSelectedValuespageSize;
                             var dataSourceArray = ctrl.getdatasource();

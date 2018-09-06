@@ -59,9 +59,9 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-if="ctrl.isMultiple()" style="padding-left:5px;position:relative; top: 3px;">
+                    <div ng-if="ctrl.isMultiple()" style="padding-left:5px;position:relative; top: 3px;height:17px">
                         <span class="hand-cursor">
-                            <a href="" class="link" ng-click="ctrl.selectAll()">Select all</a>
+                            <a href="" class="link" ng-click="ctrl.selectAll()" ng-hide="ctrl.hideSelectAll">Select all</a>
                             <a href="" class="link remove-selection" ng-click="ctrl.clearAllSelected($event);">Clear all</a>
                         </span>
                     </div>
