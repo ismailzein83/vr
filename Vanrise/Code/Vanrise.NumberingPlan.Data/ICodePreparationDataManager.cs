@@ -20,5 +20,8 @@ namespace Vanrise.NumberingPlan.Data
         #endregion
 
         bool CheckCodePreparationState(int sellingNumberPlanId);
-    }
+
+		bool CleanTemporaryTables(long processInstanceId);
+
+	}
 }

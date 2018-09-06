@@ -1,25 +1,25 @@
 ﻿<vr-datagrid datasource="changedCodes"
-             on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             menuactions="[]">
+			 on-ready="onGridReady"
+			 dataretrievalfunction="dataRetrievalFunction"
+			 pagingtype="'PagingOnScroll'"
+			 menuactions="[]">
 
-    <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
-
-    <vr-datagridcolumn headertext="'Code Change Type'">
-        <vr-icon iconurl="dataItem.codeStatusIconUrl" tooltip="dataItem.codeStatusIconTooltip" inline></vr-icon>
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Moved From'" type="'Text'">
-        <span ng-show="dataItem.showMovedFrom">
-            {{dataItem.Entity.RecentZoneName}}
-        </span>
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Moved To'" type="'Text'">
-        <span ng-show="dataItem.showMovedTo">
-            {{dataItem.Entity.ZoneName}}
-        </span>
-    </vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Zone Name'" ng-show="showZoneName" field="'Entity.ZoneName'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn widthfactor="3">
+		<vr-icon iconurl="dataItem.codeStatusIconUrl" tooltip="dataItem.codeStatusIconTooltip" inline></vr-icon>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Moved From'" type="'Text'">
+		<span ng-show="dataItem.showMovedFrom">
+			{{dataItem.Entity.RecentZoneName}}
+		</span>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Moved To'" type="'Text'">
+		<span ng-show="dataItem.showMovedTo">
+			{{dataItem.Entity.ZoneName}}
+		</span>
+	</vr-datagridcolumn>
 
 </vr-datagrid>

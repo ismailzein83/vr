@@ -18,8 +18,14 @@ namespace Vanrise.NumberingPlan.Data.SQL
 
         }
 
+		public bool CleanTemporaryTables(long processInstanceId)
+		{
+			int recordesEffected = ExecuteNonQuerySP("VR_NumberingPlan.sp_CleanTemporaryTablesNumberingPlan", processInstanceId);
+			return (recordesEffected > 0);
+		}
 
-        public Changes GetChanges(int sellingNumberPlanId, CodePreparationStatus status)
+
+		public Changes GetChanges(int sellingNumberPlanId, CodePreparationStatus status)
         {
             return GetItemSP("VR_NumberingPlan.sp_CodePreparation_GetChanges", ChangesMapper, sellingNumberPlanId, status);
 

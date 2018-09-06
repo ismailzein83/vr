@@ -22,8 +22,10 @@ namespace Vanrise.NumberingPlan.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ZoneToProcess>> ZonesToProcess { get; set; }
 
+		[RequiredArgument]
+		public OutArgument<AllZonesToProcess> AllZonesToProcess { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+		protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<CodeToAdd> codesToAdd = this.CodesToAdd.Get(context);
             IEnumerable<CodeToMove> codesToMove = this.CodesToMove.Get(context);
@@ -72,6 +74,7 @@ namespace Vanrise.NumberingPlan.BP.Activities
 
             this.ZonesToProcess.Set(context, zoneToProcessByZoneName.Values);
 
-        }
-    }
+			AllZonesToProcess.Set(context, new AllZonesToProcess() { Zones = zoneToProcessByZoneName.Values });
+		}
+	}
 }

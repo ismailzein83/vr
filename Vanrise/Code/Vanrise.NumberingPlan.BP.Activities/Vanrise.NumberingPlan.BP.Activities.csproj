@@ -68,6 +68,7 @@
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
+    <Compile Include="CleanTemporaryTables.cs" />
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="GenerateZonesPreview.cs" />
     <Compile Include="GetChangesFromView.cs" />

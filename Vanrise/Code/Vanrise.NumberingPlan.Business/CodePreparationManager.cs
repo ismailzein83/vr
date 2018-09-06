@@ -20,7 +20,13 @@ namespace Vanrise.NumberingPlan.Business
             return changes;
         }
 
-        public bool CheckCodePreparationState(int sellingNumberPlanId)
+		public void CleanTemporaryTables(long processInstanceId)
+		{
+			ICodePreparationDataManager cpDataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
+			cpDataManager.CleanTemporaryTables(processInstanceId);
+		}
+
+		public bool CheckCodePreparationState(int sellingNumberPlanId)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             return dataManager.CheckCodePreparationState(sellingNumberPlanId);
