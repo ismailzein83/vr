@@ -95,6 +95,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class DealRoutingSaleZoneGroup
     {
+        public int DealSaleZoneGroupNb { get; set; }
         public List<DealRoutingSaleZoneGroupTier> Tiers { get; set; }
     }
 
@@ -107,6 +108,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class DealRoutingSupplierZoneGroup
     {
+        public int DealSupplierZoneGroupNb { get; set; }
         public List<DealRoutingSupplierZoneGroupTier> Tiers { get; set; }
     }
 

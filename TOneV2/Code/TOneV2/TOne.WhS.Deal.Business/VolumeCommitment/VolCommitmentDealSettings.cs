@@ -232,7 +232,8 @@ namespace TOne.WhS.Deal.Business
                         {
                             supplierZoneGroups.Add(new DealRoutingSupplierZoneGroup
                             {
-                                Tiers = BuildRoutingSupplierTiers(volCommitmentDealItem)
+                                Tiers = BuildRoutingSupplierTiers(volCommitmentDealItem),
+                                DealSupplierZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber
                             });
                         }
                         context.SupplierZoneGroups = supplierZoneGroups;
@@ -247,7 +248,8 @@ namespace TOne.WhS.Deal.Business
                         {
                             saleZoneGroups.Add(new DealRoutingSaleZoneGroup
                             {
-                                Tiers = BuildRoutingSaleTiers(volCommitmentDealItem)
+                                Tiers = BuildRoutingSaleTiers(volCommitmentDealItem),
+                                DealSaleZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber
                             });
                         }
                         context.SaleZoneGroups = saleZoneGroups;
