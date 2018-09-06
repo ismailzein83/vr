@@ -99,9 +99,9 @@
     <Compile Include="CustomerRoute\CustomerRoute.cs" />
     <Compile Include="CustomerRoute\CustomerRouteDetail.cs" />
     <Compile Include="CustomerRoute\CustomerRouteQuery.cs" />
-    <Compile Include="RouteTableRT\RouteTableRouteDetails.cs" />
-    <Compile Include="RouteTableRT\RouteTableRoute.cs" />
-    <Compile Include="RouteTableRT\RouteTableRouteQuery.cs" />
+    <Compile Include="RouteTableRoute\RouteTableRouteDetails.cs" />
+    <Compile Include="RouteTableRoute\RouteTableRoute.cs" />
+    <Compile Include="RouteTableRoute\RouteTableRouteQuery.cs" />
     <Compile Include="RouteTable\RouteTable.cs" />
     <Compile Include="RouteTable\RouteTableDetails.cs" />
     <Compile Include="RouteTable\RouteTableQuery.cs" />

@@ -16,90 +16,39 @@ namespace NP.IVSwitch.Data.Postgres
         protected override string GetConnectionString()
         {
             return IvSwitchSync.MasterConnectionString;
-        }
-        public bool InsertHelperRoute(int routeId, string description)
-        {
-            string query = @"INSERT INTO ui_helper_routes(
-	                            route_id, description)
-	                            SELECT @route_id, @description WHERE NOT EXISTS 
-                                ( SELECT 1 FROM ui_helper_routes WHERE (route_id = @route_id ))";
-            int recordsEffected = ExecuteNonQueryText(query, cmd =>
-            {
-                cmd.Parameters.AddWithValue("@route_id", routeId);
-                cmd.Parameters.AddWithValue("@description", description);
-            });
-            return recordsEffected > 0;
-        }
-        public int CreateRouteTable(int routeId)
-        {
-            if (routeId == -1) return -1;
-
-            String[] cmdText = {
-                string.Format(@"CREATE TABLE rt{0} (
-                                                      destination character varying(20) NOT NULL,
-                                                      route_id integer NOT NULL,
-                                                      time_frame character varying(50) NOT NULL,
-                                                      preference smallint NOT NULL,
-                                                      huntstop smallint,
-                                                      huntstop_rc character varying(50) DEFAULT NULL::character varying,
-                                                      min_profit numeric(5,5) DEFAULT NULL::numeric,
-                                                      state_id smallint,
-                                                      wakeup_time timestamp without time zone,
-                                                      description character varying(50),
-                                                      routing_mode integer DEFAULT 1,
-                                                      total_bkts integer DEFAULT 1,
-                                                      bkt_serial integer DEFAULT 1,
-                                                      bkt_capacity integer DEFAULT 1,
-                                                      bkt_tokens integer DEFAULT 1,
-                                                      p_score integer DEFAULT 0,
-                                                      flag_1 numeric DEFAULT 1,
-                                                      flag_2 numeric DEFAULT 1,
-                                                      flag_3 integer DEFAULT 1,
-                                                      flag_4 integer DEFAULT 1,
-                                                      flag_5 numeric DEFAULT 1,
-                                                      tech_prefix character varying(20),
-                                                      CONSTRAINT rt{0}_pkey PRIMARY KEY (destination, route_id, time_frame, preference)
-                                                    )
-                                                    WITH (
-                                                      OIDS=FALSE
-                                                    );",routeId.ToString()),
-                string.Format("ALTER TABLE  rt{0}  OWNER TO {1};",routeId.ToString(),IvSwitchSync.OwnerName) 
-
-            };
-            ExecuteNonQuery(cmdText);
-            return routeId;
-        }
-
+        }   
         public bool Insert(RouteTableInput routeTableInput, out int insertedId)
         {
 
-            String cmdText = @"INSERT INTO route_tables(route_table_name,description,p_score)
-	                             SELECT  @route_table_name,@description, @p_score 
+            String cmdText = @"INSERT INTO route_tables(route_table_name,description)
+	                             SELECT  @route_table_name,@description where(NOT EXISTS(SELECT 1 FROM route_tables WHERE  route_table_name =@route_table_name))  
  	                             returning  route_table_id;";
 
-            int? id = (int)ExecuteScalarText(cmdText, (cmd) =>
+            var recId = ExecuteScalarText(cmdText, (cmd) =>
             {
                 cmd.Parameters.AddWithValue("@route_table_name", routeTableInput.RouteTable.Name);
                 cmd.Parameters.AddWithValue("@description", routeTableInput.RouteTable.Description);
-                cmd.Parameters.AddWithValue("@p_score", routeTableInput.RouteTable.PScore);
             });
 
-            bool result = id.HasValue;
-            if (result)
-                insertedId = (int)id;
-            else
-                insertedId = 0;
-            return result;
-
+            insertedId = -1;
+            if (recId == null)
+                return false;
+            insertedId = Convert.ToInt32(recId);
+            return insertedId > 0;
         }
-
+        public bool DeleteRouteTable(int routeTableId)
+        {
+            string cmdText = string.Format("DELETE FROM route_tables where route_table_id={0};", routeTableId);
+            int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>{});
+            return true;
+        }
         public bool Update(RouteTableInput routeTableInput)
         {
-            String cmdText1 = @"UPDATE route_tables
-	                             SET  route_table_name=@route_table_name,description=@description,p_score=@p_score
-                                      WHERE  route_table_id = @route_table_id  ";
+            String cmdText = @"UPDATE route_tables
+	                             SET route_table_name = @route_table_name, description = @description,p_score=@p_score 
+                                 WHERE  route_table_id = @route_table_id and  NOT EXISTS(SELECT 1 FROM  route_tables WHERE  route_table_id != @route_table_id and route_table_name = @route_table_name);";
 
-            int recordsEffected = ExecuteNonQueryText(cmdText1, cmd =>
+            int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
             {
                 cmd.Parameters.AddWithValue("@route_table_name", routeTableInput.RouteTable.Name);
                 cmd.Parameters.AddWithValue("@description", routeTableInput.RouteTable.Description);
@@ -110,7 +59,6 @@ namespace NP.IVSwitch.Data.Postgres
            );
             return recordsEffected > 0;
         }
-
         public List<RouteTable> GetRouteTables()
         {
             String cmdText = @"SELECT route_table_id,route_table_name,description,p_score FROM route_tables;";
@@ -118,14 +66,13 @@ namespace NP.IVSwitch.Data.Postgres
             {
             });
         }
-
         private RouteTable RouteTableMapper(IDataReader reader)
         {
             RouteTable routeTable = new RouteTable();
 
             var routeTableId = reader["route_table_id"];
-            var name = reader["route_table_name"] ;
-            var description = reader["description"] ;
+            var name = reader["route_table_name"];
+            var description = reader["description"];
             var pScore = reader["p_score"];
 
             if (routeTableId != DBNull.Value)
@@ -144,7 +91,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 routeTable.PScore = (int?)pScore;
             }
-         
+
             return routeTable;
         }
 

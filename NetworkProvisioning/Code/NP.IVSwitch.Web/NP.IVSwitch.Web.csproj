@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -24,6 +25,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -105,6 +107,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -128,6 +134,7 @@
     <Compile Include="Controllers\CodecProfileController.cs" />
     <Compile Include="Controllers\DomainController.cs" />
     <Compile Include="Controllers\LiveCdrController.cs" />
+    <Compile Include="Controllers\RouteTableRouteController.cs" />
     <Compile Include="Controllers\RouteTableController.cs" />
     <Compile Include="Controllers\SwitchMappingController.cs" />
     <Compile Include="Controllers\EndPointController.cs" />
@@ -152,11 +159,11 @@
       <Name>NP.IVSwitch.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="NP_IVSwitch\Constant\CallsEnum.js" />
     <Content Include="NP_IVSwitch\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EndPointEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\RouteTableViewTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
     <Content Include="NP_IVSwitch\Constant\RtpModeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\SortingEnum.js" />
@@ -177,6 +184,12 @@
     <Content Include="NP_IVSwitch\Directives\Firewall\Templates\FirewallGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\LiveCdr\np-ivswitch-livecdr-grid.js" />
     <Content Include="NP_IVSwitch\Directives\LiveCdr\Templates\LiveCdrGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-routetable-route-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-routetable-route-search.js" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-supplier-route-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\RouteTableRouteGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\RouteTableRouteSearchTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\SupplierRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\RouteTable\np-ivswitch-routetable-grid.js" />
     <Content Include="NP_IVSwitch\Directives\RouteTable\Templates\RouteTableGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\Route\np-ivswitch-route-selector.js" />
@@ -198,11 +211,13 @@
     <Content Include="NP_IVSwitch\Services\APIServices\EndPointAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\FirewallAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\LiveCdrAPIService.js" />
+    <Content Include="NP_IVSwitch\Services\APIServices\RouteTableRouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteTableAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchMappingAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\RouteAPIService.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\SwitchDashboardAPIService.js" />
     <Content Include="NP_IVSwitch\Services\CustomerRouteService.js" />
+    <Content Include="NP_IVSwitch\Services\RouteTableRouteService.js" />
     <Content Include="NP_IVSwitch\Services\RouteTableService.js" />
     <Content Include="NP_IVSwitch\Services\SwitchDashboardService.js" />
     <Content Include="NP_IVSwitch\Services\SwitchMappingService.js" />
@@ -233,6 +248,8 @@
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
     <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagement.html" />
     <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagementController.js" />
+    <Content Include="NP_IVSwitch\Views\RouteTableRT\RouteTableRouteEditor.html" />
+    <Content Include="NP_IVSwitch\Views\RouteTableRT\RouteTableRouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableEditor.html" />
     <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableEditorController.js" />
     <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableManagement.html" />
@@ -252,11 +269,13 @@
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagement.html" />
     <Content Include="NP_IVSwitch\Views\TranslationRule\TranslationRuleManagementController.js" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

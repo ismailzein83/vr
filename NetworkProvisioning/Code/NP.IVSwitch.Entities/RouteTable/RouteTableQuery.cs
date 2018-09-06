@@ -8,6 +8,9 @@ namespace NP.IVSwitch.Entities
 {
     public class RouteTableQuery
     {
+        public RouteTableViewType RouteTableViewType { get; set; }
         public string Name { get; set; }
+        public List<int> CustomerIds { get; set; }
+        public List<int> EndPoints { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NP.IVSwitch.Entities.RouteTableRT
+namespace NP.IVSwitch.Entities.RouteTableRoute
 {
    public  class RouteTableRouteDetails
     {
@@ -14,6 +14,7 @@ namespace NP.IVSwitch.Entities.RouteTableRT
     public class RouteTableRouteDetail
     {
         public string Destination { get; set; }
+        public string TechPrefix { get; set; }
         public List<RouteTableRouteOptionDetails> RouteOptionsDetails { get; set; }
 
     }
@@ -21,7 +22,7 @@ namespace NP.IVSwitch.Entities.RouteTableRT
     {
         public string SupplierName { get; set; }
         public string RouteName { get; set; }
-        public decimal Percentage { get; set; }
+        public decimal? Percentage { get; set; }
         public Int16 Preference { get; set; }
     }
 

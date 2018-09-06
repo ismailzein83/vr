@@ -29,5 +29,13 @@ namespace NP.IVSwitch.Business
             }
             return null;
         }
+
+        public static BuiltInIVSwitchSWSync GetIvSwitchSync()
+        {
+            var tempSwitch = GetSwitch();
+            if (tempSwitch != null)
+               return (BuiltInIVSwitchSWSync)tempSwitch.Settings.RouteSynchronizer;
+            return null;
+        }
     }
 }

@@ -14,3 +14,4 @@ namespace NP.IVSwitch.Entities
         public int? PScore { get; set; }
     }
 }
+

@@ -20,7 +20,8 @@ namespace NP.IVSwitch.Entities
         public int EndPointId { get; set; } // user_id
 
         public UserType EndPointType { get; set; }
-
+        public Int16 CliRouting { get; set; }
+        public int DstRouting { get; set; }
         public String Host { get; set; }
         public Int16 DomainId { get; set; }
         public String TechPrefix { get; set; }

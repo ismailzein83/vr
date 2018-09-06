@@ -104,6 +104,7 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="CodecDefManager.cs" />
     <Compile Include="CodecProfileManager.cs" />
+    <Compile Include="EndPointViewFilter.cs" />
     <Compile Include="FirewallManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IPAddressExtensions.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="RouteTableManager.cs" />
     <Compile Include="RouteManager.cs" />
     <Compile Include="CustomerRouteManager.cs" />
+    <Compile Include="RouteTableRouteManager.cs" />
     <Compile Include="SwitchDashboardManager.cs" />
     <Compile Include="SwitchMappingManager.cs" />
     <Compile Include="TranslationRuleManager.cs" />

@@ -10,14 +10,14 @@ namespace NP.IVSwitch.Entities
     public enum RouteTableViewType
     {
         ANumber = 0,
-        ABNumber = 1
+        Whitelist = 1
 
     }
     public class RouteTableViewSettings:ViewSettings
     {
         public override string GetURL(View view)
         {
-            return String.Format("##/view/NP_IVSwitch/Views/RouteTable/RouteTableManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
+            return String.Format("#/viewwithparams/NP_IVSwitch/Views/RouteTable/RouteTableManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
         public RouteTableViewType Type { get; set; }
      

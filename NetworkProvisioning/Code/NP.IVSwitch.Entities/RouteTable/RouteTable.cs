@@ -15,38 +15,29 @@ namespace NP.IVSwitch.Entities.RouteTable
     }
     public class RouteTableInput
     {
+        public RouteTableViewType RouteTableViewType { get; set; }
         public RouteTable RouteTable { get; set; }
         public List<RouteTableEndPoint> EndPoints { get; set; }
     }
+    public class RuntimeEditorEntity
+    {
+        public RouteTableInput RouteTableInput { get; set; }
+        public List<EndPointCarrierAccount> EndPointCarrierAccount { get; set; }
+    }
+    public class EndPointCarrierAccount
+    {
+        public int EndPointId { get; set; }
+        public int? CarrierAccount { get; set; }
+    }
     public class RouteTableEndPoint
     {
-        public int EndPointId { get; set; } 
-       // public Int16 CLIRouting { get; set; }
+        public int EndPointId { get; set; }
+        // public Int16 CLIRouting { get; set; }
     }
-    public class RouteTableRoute
+    public class RouteEndPoints
     {
-        public string Destination { get; set; }
-        public List<RouteTableRouteOption> RouteOptions { get; set; }
-    }
-    public class RouteTableRouteOption
-    {
-        public int RouteId { get; set; }
-        public int Percetage { get; set; }
-
-    }
-
-    public class RouteTableRouteDetails
-    {
-        public string Destination { get; set; }
-        public List<RouteTableRouteOptionDetails> RouteOptions { get; set; }
-    }
-    public class RouteTableRouteOptionDetails
-    {
-        public int RouteId { get; set; }
-        public string RouteName { get; set; }
-        public string SupplierName { get; set; }
-        public int Percetage { get; set; }
-
+        public RouteTable RouteTable { get; set; }
+        public List<EndPoint> EndPoints { get; set; }
     }
 
 }

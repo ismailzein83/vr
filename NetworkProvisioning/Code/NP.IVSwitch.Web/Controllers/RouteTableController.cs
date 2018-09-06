@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common;
 
 namespace NP.IVSwitch.Web.Controllers
 {
@@ -16,7 +17,6 @@ namespace NP.IVSwitch.Web.Controllers
     public class RouteTableController : BaseAPIController
     {
         RouteTableManager _manager = new RouteTableManager();
-
         [HttpPost]
         [Route("GetFilteredRouteTables")]
         public object GetFilteredRouteTables(Vanrise.Entities.DataRetrievalInput<RouteTableQuery> input)
@@ -39,10 +39,18 @@ namespace NP.IVSwitch.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetRouteTableById")]
-        public RouteTable GetRouteTableById(int routeTableId)
+        [Route("DeleteRouteTable")]
+        public DeleteOperationOutput<object> DeleteRouteTable(int routeTableId, RouteTableViewType routeTableViewType)
         {
-            return _manager.GetRouteTableById(routeTableId);
+            return _manager.DeleteRouteTable(routeTableId, routeTableViewType);
+        }
+
+        [HttpGet]
+        [Route("GetRouteTableById")]
+        public RuntimeEditorEntity GetRouteTableById(int routeTableId, RouteTableViewType RouteTableViewType)
+        {
+
+            return _manager.GetRouteTableById(routeTableId, RouteTableViewType);
         }
 
     }

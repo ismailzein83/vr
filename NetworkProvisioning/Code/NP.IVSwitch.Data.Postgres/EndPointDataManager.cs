@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Npgsql;
 using Vanrise.Data.Postgres;
+using NP.IVSwitch.Entities.RouteTable;
 
 namespace NP.IVSwitch.Data.Postgres
 {
@@ -24,12 +25,12 @@ namespace NP.IVSwitch.Data.Postgres
 
             String cmdText = @"
                                 SELECT access_list.user_id,access_list.account_id,access_list.description,access_list.group_id,access_list.tariff_id,
-                                access_list.log_alias,access_list.codec_profile_id,access_list.trans_rule_id,access_list.state_id,
+                                access_list.log_alias,access_list.codec_profile_id,access_list.cli_routing,access_list.dst_routing,access_list.trans_rule_id,access_list.state_id,
                                 access_list.channels_limit,access_list.route_table_id,access_list.max_call_dura,access_list.rtp_mode,access_list.domain_id,
                                 access_list.host,access_list.tech_prefix,null as sip_login, null as sip_password
                                 FROM access_list INNER JOIN users on access_list.user_id = users.user_id
                                 UNION
-                                SELECT users.user_id,users.account_id, users.description ,users.group_id,users.tariff_id,users.log_alias,users.codec_profile_id,
+                                SELECT users.user_id,users.account_id, users.description ,users.group_id,users.tariff_id,users.log_alias,users.codec_profile_id,users.cli_routing,users.dst_routing,
                                 users.trans_rule_id,users.state_id,users.channels_limit,users.route_table_id,users.max_call_dura,users.rtp_mode,
                                 users.domain_id,null as host,users.tech_prefix,users.sip_login,users.sip_password
                                 FROM users LEFT JOIN access_list on users.user_id = access_list.user_id  where access_list.user_id is null";
@@ -37,7 +38,6 @@ namespace NP.IVSwitch.Data.Postgres
             {
             });
         }
-
         public int GetTableId(int userId)
         {
             string query = string.Format("select route_table_id FROM access_list where user_id={0}", userId);
@@ -80,7 +80,40 @@ namespace NP.IVSwitch.Data.Postgres
           );
             return (recordsEffected > 0);
         }
+        public bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType, UserType userType)
+        {   
+            string fieldName = "";
+            string tableName = "";
+            string userIds = "(";
+            for (int index = 0; index < endPointIds.Count(); index++)
+                if (index < endPointIds.Count() - 1)
+                    userIds += endPointIds.ElementAt(index)+ ",";
+                else
+                    userIds += endPointIds.ElementAt(index) + ")";
+            
+            if (userType == UserType.ACL)
+                tableName = "users";
+            else
+                tableName = "access_list";
 
+            if (routeTableViewType == RouteTableViewType.ANumber)
+                fieldName = "cli_routing";
+             else
+                fieldName = "dst_routing";
+
+            string query = string.Format(@"UPDATE {0} SET {1}=@value WHERE  user_id in {2}", tableName, fieldName,userIds);
+            int recordsEffected = ExecuteNonQueryText(query, cmd =>
+            {
+               cmd.Parameters.AddWithValue("@table", tableName);
+               cmd.Parameters.AddWithValue("@field", fieldName);
+               cmd.Parameters.AddWithValue("@value", value);     
+            
+            });
+
+
+return recordsEffected > 0;
+
+        }
         private bool AclUpdate(EndPoint endPoint)
         {
             String cmdText1 = @"UPDATE users
@@ -126,7 +159,6 @@ namespace NP.IVSwitch.Data.Postgres
             int recordsEffected = ExecuteNonQueryText(cmdText, null);
             return (recordsEffected > 0);
         }
-
         public bool SipInsert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> endPointInfoList, out int insertedId, string carrierAccountName)
         {
             insertedId = -1;
@@ -165,14 +197,40 @@ namespace NP.IVSwitch.Data.Postgres
                 return AclInsert(endPoint, globalTariffTableId, joinedEndPoint, aclEndPoints, out insertedId, carrierAccountName);
             return SipInsert(endPoint, globalTariffTableId, joinedEndPoint, out insertedId, carrierAccountName);
         }
-
         public bool Update(EndPoint endPoint)
         {
             if (endPoint.EndPointType == UserType.ACL)
                 return AclUpdate(endPoint);
             return SipUpdate(endPoint);
         }
+        public bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId)
+        {
+            string fieldName = "";
+            string endPointIds = "(";
+            for (int index = 0; index < routeTableInput.EndPoints.Count; index++)
+            {
+                if (index < routeTableInput.EndPoints.Count - 1)
+                    endPointIds += routeTableInput.EndPoints[index].EndPointId + ",";
+                else
+                    endPointIds += routeTableInput.EndPoints[index].EndPointId + ")";
+            }
+            
+            if (routeTableInput.RouteTableViewType == 0)
+                fieldName="cli_routing";
+            else
+                fieldName="dst_routing";
+   
+             string query =string.Format(@"UPDATE access_list SET  {0}=@route_table_id WHERE user_id in {1} ", fieldName,endPointIds);
 
+            int recordsEffected = ExecuteNonQueryText(query, cmd =>
+            {
+                cmd.Parameters.AddWithValue("@route_table_id", routeTableId);
+
+            }
+
+           );
+            return recordsEffected>0;
+        }
         #endregion
 
         #region private functions
@@ -292,7 +350,7 @@ namespace NP.IVSwitch.Data.Postgres
             if (routeId == null) return null;
 
             var insertedRouteId = Convert.ToInt32(routeId);
-            RouteTableDataManager routeTableDataManager = new RouteTableDataManager { IvSwitchSync = IvSwitchSync };
+            RouteTableRouteDataManager routeTableDataManager = new RouteTableRouteDataManager { IvSwitchSync = IvSwitchSync };
             routeTableDataManager.CreateRouteTable(insertedRouteId);
 
             return new AccessList
@@ -368,23 +426,27 @@ namespace NP.IVSwitch.Data.Postgres
         private EndPoint EndPointMapper(IDataReader reader)
         {
             int hostOrdinal = reader.GetOrdinal("host");
-            EndPoint endPoint = new EndPoint
-            {
-                EndPointId = (int)reader["user_id"],
-                AccountId = (int)reader["account_id"],
-                Description = reader["description"] as string,
-                LogAlias = reader["log_alias"] as string,
-                CodecProfileId = (int)reader["codec_profile_id"],
-                TransRuleId = (int)reader["trans_rule_id"],
-                CurrentState = (State)GetReaderValue<Int16>(reader, "state_id"),
-                ChannelsLimit = GetReaderValue<int>(reader, "channels_limit"),
-                MaxCallDuration = (int)reader["max_call_dura"],
-                RtpMode = (RtpMode)(int)reader["rtp_mode"],
-                DomainId = (Int16)reader["domain_id"],
-                SipLogin = reader["sip_login"] as string,
-                SipPassword = reader["sip_password"] as string,
-                TechPrefix = reader["tech_prefix"] as string
-            };
+            EndPoint endPoint = new EndPoint();
+            
+                endPoint.EndPointId = (int)reader["user_id"];
+                endPoint.CliRouting = (Int16)reader["cli_routing"];
+                endPoint.DstRouting = (int)reader["dst_routing"];
+                endPoint.DstRouting = GetReaderValue<int>(reader, "dst_routing");
+
+                 endPoint.AccountId = (int)reader["account_id"];
+                 endPoint.Description = reader["description"] as string;
+                 endPoint.LogAlias = reader["log_alias"] as string;
+                 endPoint.CodecProfileId = (int)reader["codec_profile_id"];
+                 endPoint.TransRuleId = (int)reader["trans_rule_id"];
+                 endPoint.CurrentState = (State)GetReaderValue<Int16>(reader, "state_id");
+                 endPoint.ChannelsLimit = GetReaderValue<int>(reader, "channels_limit");
+                 endPoint.MaxCallDuration = (int)reader["max_call_dura"];
+                 endPoint.RtpMode = (RtpMode)(int)reader["rtp_mode"];
+                endPoint. DomainId = (Int16)reader["domain_id"];
+                 endPoint.SipLogin = reader["sip_login"] as string;
+                 endPoint.SipPassword = reader["sip_password"] as string;
+                 endPoint.TechPrefix = reader["tech_prefix"] as string;
+            ;
             NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;
             string hostObj = npgsqlreader.GetProviderSpecificValue(hostOrdinal).ToString();
             endPoint.Host = hostObj;

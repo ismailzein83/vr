@@ -15,6 +15,8 @@ using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
+using Vanrise.Caching;
+using NP.IVSwitch.Entities.RouteTable;
 
 namespace NP.IVSwitch.Business
 {
@@ -54,6 +56,36 @@ namespace NP.IVSwitch.Business
             }
         }
 
+        public bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType RouteTableViewType)
+        {
+            IEndPointDataManager endPointDataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+            Helper.SetSwitchConfig(endPointDataManager);
+            IEnumerable<EndPoint> endPoints = endPointIds.MapRecords(x => GetEndPoint(x));
+            List<int> aclEndPoints=new List<int>();
+            List<int> sipEndPoints=new List<int>();
+
+
+
+            if(endPoints!=null)
+            {
+                foreach (var endPoint in endPoints)
+                {
+                    if (endPoint.EndPointType == UserType.ACL)
+                        aclEndPoints.Add(endPoint.EndPointId);
+                    else
+                        sipEndPoints.Add(endPoint.EndPointId);
+                }
+
+            }
+
+            bool updatedAclResult = endPointDataManager.EndPointAclUpdate(aclEndPoints, value, RouteTableViewType,UserType.ACL);
+            bool updateSipResult = endPointDataManager.EndPointAclUpdate(aclEndPoints, value, RouteTableViewType, UserType.SIP);
+
+            if (updatedAclResult && updatedAclResult)
+            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            return (updatedAclResult && updatedAclResult);
+        }
+
         public string GetEndPointDescription(int endPointId)
         {
             var endPoint = GetEndPoint(endPointId);
@@ -80,7 +112,9 @@ namespace NP.IVSwitch.Business
                         if (customerEndpointIds != null)
                         {
                             foreach (int endpointId in customerEndpointIds)
-                            { endPointIds.Add(endpointId); }
+                            {
+                                endPointIds.Add(endpointId);
+                            }
                         }
 
                     }
@@ -89,7 +123,7 @@ namespace NP.IVSwitch.Business
                 {
                     assignedEndPointIds = new HashSet<int>(GetCarrierAccountIdsByEndPointId().Keys);
                     var accountManager = new AccountManager();
-                    carrierAccountSWCustomerAccountId = accountManager.GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value);
+                    carrierAccountSWCustomerAccountId = accountManager.GetCarrierAccountSWCustomerAccountId(filter.AssignableToCarrierAccountId.Value); //Account Id in postgres
                     alreadyAssignedSWCustomerAccountIds = new HashSet<int>(accountManager.GetAllAssignedSWCustomerAccountIds());
                 }
                 filterFunc = (x) =>
@@ -109,6 +143,16 @@ namespace NP.IVSwitch.Business
                         if (!endPointIds.Contains(x.EndPointId))
                         {
                             return false;
+                        }
+                    }
+                    if (filter.Filters != null)
+                    {
+
+                        var context = new EndPointFilterContext() { EndPoint = x };
+                        foreach (var itemFilter in filter.Filters)
+                        {
+                            if (!itemFilter.IsMatched(context))
+                                return false;
                         }
                     }
                     return true;
@@ -238,7 +282,11 @@ namespace NP.IVSwitch.Business
 
         public int? GetEndPointCarrierAccountId(int endPointId)
         {
-            return GetCarrierAccountIdsByEndPointId().GetRecord(endPointId);
+            Dictionary<int, int> carrierAccountIdsByEndPointId = GetCarrierAccountIdsByEndPointId();
+            int carrierAccountId;
+            if (carrierAccountIdsByEndPointId.TryGetValue(endPointId, out carrierAccountId))
+                return carrierAccountId;
+            return null;
         }
 
         public string GetEndPointAccountName(int routeId)
@@ -296,6 +344,20 @@ namespace NP.IVSwitch.Business
             {
                 GenerateRule(carrierAccountId, endPointId, carrierAccountName);
             }
+        }
+        public Dictionary<int, EndPoint> GetAllEndPoints()
+        {
+            return GetCachedEndPoint();
+        }
+        public bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId)
+        {
+            IEndPointDataManager _dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
+            Helper.SetSwitchConfig(_dataManager);
+            bool result = _dataManager.RouteTableEndPointUpdate(routeTableInput, routeTableId);
+            if (result)
+              Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            return result;
+
         }
 
 
@@ -572,7 +634,9 @@ namespace NP.IVSwitch.Business
             {
                 EndPointId = endPoint.EndPointId,
                 Description = GetEndPointDescription(endPoint),
-                AccountId = endPoint.AccountId
+                AccountId = endPoint.AccountId,
+                CliRouting = endPoint.CliRouting,
+                DstRouting = endPoint.DstRouting
             };
 
             return endPointEntityInfo;

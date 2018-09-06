@@ -42,6 +42,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="TOne.WhS.RouteSync.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.RouteSync.Entities.dll</HintPath>
     </Reference>
@@ -68,6 +72,7 @@
     <Compile Include="IRouteTableDataManager.cs" />
     <Compile Include="IRouteDataManager.cs" />
     <Compile Include="ICustomerRouteDataManager.cs" />
+    <Compile Include="IRouteTableRouteDataManager.cs" />
     <Compile Include="ITranslationRuleDataManager.cs" />
     <Compile Include="IVSwitchDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,6 +13,7 @@ namespace NP.IVSwitch.Data
         List<RouteTable> GetRouteTables();
         bool Insert(RouteTableInput routeTableInput, out int insertedId);
         bool Update(RouteTableInput routeTableInput);
+        bool DeleteRouteTable(int routeTableId);
 
     }
 }

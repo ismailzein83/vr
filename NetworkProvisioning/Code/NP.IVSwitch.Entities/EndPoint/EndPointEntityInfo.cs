@@ -10,10 +10,10 @@ namespace NP.IVSwitch.Entities
     {
 
         public int EndPointId { get; set; }
-
         public string Description { get; set; }
-
         public int AccountId { get; set; }
+        public Int16 CliRouting { get; set; }
+        public int? DstRouting { get; set; }
 
     }
 }

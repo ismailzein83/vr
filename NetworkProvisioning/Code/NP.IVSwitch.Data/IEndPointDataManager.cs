@@ -1,4 +1,5 @@
 ﻿using NP.IVSwitch.Entities;
+using NP.IVSwitch.Entities.RouteTable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace NP.IVSwitch.Data
         bool Update(EndPoint endPoint);
         bool Insert(EndPoint endPoint, int globalTariffTableId, List<EndPointInfo> userEndPointInfoList, List<EndPointInfo> aclEndPointInfoList, out int insertedId, string carrierAccountName);
         List<AccessList> GetAccessList();
+        bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType,UserType userType  );
+        bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId);
     }
 }
