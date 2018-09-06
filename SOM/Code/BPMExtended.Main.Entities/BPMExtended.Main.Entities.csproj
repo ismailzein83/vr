@@ -52,6 +52,7 @@
     <Compile Include="CustomerBalance.cs" />
     <Compile Include="CustomerCategoryDetail.cs" />
     <Compile Include="CustomerCategoryInfo.cs" />
+    <Compile Include="DSLAMPortInfo.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="CustomerRequestHeaderDetail.cs" />

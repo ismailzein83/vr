@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class TelephonyContractDetail : ContractDetail
+    public class DSLAMPortInfo
     {
-    }
-
-    public class TelephonyContractInfo : ContractInfo
-    {
+        public string Id { get; set; }
+        public string Name { get;set; }
     }
 }

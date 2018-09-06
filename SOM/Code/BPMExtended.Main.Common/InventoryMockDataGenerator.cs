@@ -43,5 +43,41 @@ namespace BPMExtended.Main.Common
         }
 
         #endregion
+
+        #region DSLAM Free Ports
+
+        public static List<DSLAMPortInfo> GetDSLAMFreePorts()
+        {
+            return new List<DSLAMPortInfo>
+            {
+                new DSLAMPortInfo
+                {
+                    Id="1001",
+                    Name = "P-1515"
+                },
+                new DSLAMPortInfo
+                {
+                    Id="1002",
+                    Name = "P-1517"
+                },
+                new DSLAMPortInfo
+                {
+                    Id="1003",
+                    Name = "P-1518"
+                },
+                new DSLAMPortInfo
+                {
+                    Id="1004",
+                    Name = "P-1212"
+                },
+                new DSLAMPortInfo
+                {
+                    Id="1005",
+                    Name = "P-1240"
+                }
+            };
+        }
+
+        #endregion
     }
 }

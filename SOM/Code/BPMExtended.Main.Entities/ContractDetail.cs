@@ -26,4 +26,15 @@ namespace BPMExtended.Main.Entities
 
         public DateTime LastModifiedTime { get; set; }
     }
+
+    public class ContractInfo
+    {
+        public string ContractId { get; set; }
+
+        public string CustomerId { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+    }
+
 }

@@ -59,10 +59,10 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore).MapRecords(ServiceMapper).ToList();
         }
 
-        public List<ServiceDetail> GetOptionalServicesByContractId(string contractId)
+        public List<ServiceDetail> GetOptionalServicesByContractId(string telephonycontractid)
         {
             ContractManager contractManager = new ContractManager();
-            string ratePlanId = contractManager.GetTelephonyContract(contractId).RatePlanId;
+            string ratePlanId = contractManager.GetTelephonyContract(telephonycontractid).RatePlanId;
             List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
             if (allOptionalServices.Count > 0)
                 return allOptionalServices.Take(2).ToList();

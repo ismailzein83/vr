@@ -20,6 +20,11 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
         }
 
+        public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
+        {
+            return RatePlanMockDataGenerator.GetTelephonyContractsInfo(customerId);
+        }
+
         public LeasedLineContractDetail GetLeasedLineContract(string contractId)
         {
             return RatePlanMockDataGenerator.GetLeasedLineContract(contractId);

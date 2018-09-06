@@ -68,6 +68,7 @@
     <Compile Include="CustomerRequestTypeManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Inventory\CPTManager.cs" />
+    <Compile Include="Inventory\DslamManager.cs" />
     <Compile Include="Inventory\InventoryManager.cs" />
     <Compile Include="Inventory\LineTypeManager.cs" />
     <Compile Include="Inventory\MicsManager.cs" />

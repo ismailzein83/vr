@@ -378,6 +378,64 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+        #region ADSL Contract
+
+        public static List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
+        {
+            return GetAllTelephonyContractsInfo().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+        }
+
+        private static List<TelephonyContractInfo> GetAllTelephonyContractsInfo()
+        {
+            return new List<TelephonyContractInfo>
+            {
+                 new TelephonyContractInfo
+                 {
+                     ContractId = CONTRACT_CUST1_TL1,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1
+                 },
+                 new TelephonyContractInfo
+                 {
+                     ContractId = CONTRACT_CUST1_TL2,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1
+                 },                 
+                 new TelephonyContractInfo
+                 {
+                     ContractId = CONTRACT_CUST1_TL3,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1
+                 },
+                 new TelephonyContractInfo
+                 {
+                     ContractId = CONTRACT_CUST3_TL1,
+                     CustomerId = CUSTOMER_ID_3,
+                     PhoneNumber= PHONE_NUMBER_1
+                 },
+                 new TelephonyContractInfo
+                 {
+                      ContractId = CONTRACT_CUST3_TL2,
+                      CustomerId = CUSTOMER_ID_3,
+                      PhoneNumber= PHONE_NUMBER_1
+                 },
+                 new TelephonyContractInfo
+                 {
+                     ContractId = CONTRACT_CUST3_TL3,
+                     CustomerId = CUSTOMER_ID_3,
+                     PhoneNumber= PHONE_NUMBER_1
+                 },
+                 new TelephonyContractInfo
+                 {
+                     ContractId = CONTRACT_CUST3_TL4,
+                     CustomerId = CUSTOMER_ID_3,
+                     PhoneNumber= PHONE_NUMBER_1
+                 }
+            };
+        }
+
+        #endregion
+
         #region Leased Line Contract
 
         public static LeasedLineContractDetail GetLeasedLineContract(string contractId)

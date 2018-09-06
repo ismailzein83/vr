@@ -51,6 +51,14 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public bool MultiplexerValidation(string phoneNumber)
+        {
+            InventoryPhoneItemDetail inventoryItem = GetInventoryDetail(phoneNumber);
+            
+            return inventoryItem.IsMultiplexed ? true : false;
+
+        }
+
         public List<DPPortItemDetail> GetFreePorts(string dpPortId)
         {
             List<DPPortItem> apiResult;
