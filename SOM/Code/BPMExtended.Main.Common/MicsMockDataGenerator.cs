@@ -15,15 +15,18 @@ namespace BPMExtended.Main.Common
             {
                 new MIC
                 {
-                    SwitchName = "Midan001.SW"
+                    SwitchName = "Midan001.SW",
+                    MicNumber = 1
                 },
                 new MIC
                 {
-                    SwitchName = "Mazzeh001.SW"
+                    SwitchName = "Mazzeh001.SW",
+                    MicNumber = 2
                 },
                 new MIC
                 {
-                    SwitchName = "Damascus001.SW"
+                    SwitchName = "Damascus001.SW",
+                    MicNumber = 3
                 }
             };
         }

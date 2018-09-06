@@ -8,6 +8,7 @@ namespace BPMExtended.Main.Entities
 {
     public class MIC
     {
+        public int MicNumber { get; set; }
         public string SwitchName { get; set; }
     }
 }
