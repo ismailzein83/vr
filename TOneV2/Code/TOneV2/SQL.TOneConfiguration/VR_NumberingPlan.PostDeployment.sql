@@ -33,6 +33,10 @@ when not matched by target then
 END
 --[bp].[BPTaskType]----------------------------------------------------------------------------------------------------------------------------------------------------------BEGINset nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('3D917365-FE65-4FAD-AAF8-19D7354E2A3D','Vanrise.NumberingPlan.BP.Arguments.PreviewTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/VR_NumberingPlan/Views/NumberingPlanPreview.html","AutoOpenTask":true}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[bp].[BPTaskType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);END
 
+
+delete from [bp].[BPBusinessRuleAction] where BusinessRuleDefinitionId IN ('D468D1B7-CED3-4CAC-A88E-3512586DD908')
+delete from [bp].[BPBusinessRuleDefinition] where ID IN ('607C3FE1-63AF-4AE8-963A-0E5523FDE4E0')
+
 --[bp].[BPBusinessRuleDefinition]-------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Begin
