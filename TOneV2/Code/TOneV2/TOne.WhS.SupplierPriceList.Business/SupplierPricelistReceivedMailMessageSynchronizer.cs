@@ -47,10 +47,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 					receivedMailMessage.ThrowIfNull("receivedMailMessage is null");
 					int recordId;
 
-					Dictionary<string, CarrierAccount> supplierAccounts = carrierAccountManager.GetCachedSupplierAccountsByAutoImportEmail();
-					var supplierAccount = supplierAccounts.GetRecord(receivedMailMessage.Header.From.ToLower());
+					//Dictionary<string, List<CarrierAccount>> supplierAccounts = carrierAccountManager.GetCachedSupplierAccountsByAutoImportEmail();
+                    var supplierAccount = carrierAccountManager.GetMatchedSupplier(receivedMailMessage.Header.From, receivedMailMessage.Header.Subject);
 
-					SupplierPricelistType? pricelistType = null;
+                    SupplierPricelistType? pricelistType = null;
 					var pricelistTypeMappings = configManager.GetPurchasePricelistTypeMappingList();
 					pricelistTypeMappings.ThrowIfNull("Pricelist Type Mappings");
 					foreach (var pricelistTypeMapping in pricelistTypeMappings)

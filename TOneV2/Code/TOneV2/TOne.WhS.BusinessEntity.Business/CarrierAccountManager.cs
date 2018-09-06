@@ -50,30 +50,39 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierAccounts;
                });
         }
-        public Dictionary<string, CarrierAccount> GetCachedSupplierAccountsByAutoImportEmail()
+        public Dictionary<string, List<CarrierAccount>> GetCachedSupplierAccountsByAutoImportEmail()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSupplierAccountsByAutoImportEmail",
                () =>
                {
                    Dictionary<int, CarrierAccount> allCarrierAccounts = this.GetCachedCarrierAccounts();
-                   Dictionary<string, CarrierAccount> supplierAccountsByAutoImportEmail = new Dictionary<string, CarrierAccount>();
+                   var supplierAccountsByAutoImportEmail = new Dictionary<string, List<CarrierAccount>>();
+
                    foreach (CarrierAccount item in allCarrierAccounts.Values)
                    {
-                       if (item.SupplierSettings == null || item.SupplierSettings.AutoImportSettings == null || !item.SupplierSettings.AutoImportSettings.IsAutoImportActive)
+                       if (item.SupplierSettings == null || item.SupplierSettings.AutoImportSettings == null)
                            continue;
 
                        string email = item.SupplierSettings.AutoImportSettings.Email;
-                       if (!string.IsNullOrEmpty(email))
+                       string code = item.SupplierSettings.AutoImportSettings.SubjectCode;
+
+                       if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(code))
                        {
                            email = email.ToLower();
-                           CarrierAccount duplicatedAccount = supplierAccountsByAutoImportEmail.GetRecord(email);
-                           if (duplicatedAccount != null)
-                               throw new VRBusinessException(string.Format("Email {0} is duplicated for accounts {1} and {2}.", email, GetCarrierAccountName(item.CarrierAccountId), GetCarrierAccountName(duplicatedAccount.CarrierAccountId)));
-                           supplierAccountsByAutoImportEmail.Add(email, item);
+                           code = code.ToLower();
+                           List<CarrierAccount> allAccountsWithCommonEmail = supplierAccountsByAutoImportEmail.GetOrCreateItem(email);
+
+                           foreach (var account in allAccountsWithCommonEmail)
+                           {
+                               if (account.SupplierSettings.AutoImportSettings.SubjectCode.ToLower() == code)
+                                   throw new VRBusinessException(string.Format("Accounts {1} and {2} have the same Email '{0}' and Code '{3}'.", email, GetCarrierAccountName(item.CarrierAccountId), GetCarrierAccountName(account.CarrierAccountId), code));
+                           }
+                           allAccountsWithCommonEmail.Add(item);
                        }
                        else
                        {
-                           throw new VRBusinessException(string.Format("Carrier account '{0}' has activate auto import but do not have auto import email.", email, GetCarrierAccountName(item.CarrierAccountId)));
+                           if (item.SupplierSettings.AutoImportSettings.IsAutoImportActive)
+                               throw new VRBusinessException(string.Format("Carrier account '{0}' has activate auto import but do not have auto import email and subject code.", email, GetCarrierAccountName(item.CarrierAccountId)));
                        }
                    }
                    return supplierAccountsByAutoImportEmail;
@@ -1233,13 +1242,13 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierAccount.SupplierSettings != null && carrierAccount.SupplierSettings.AutoImportSettings != null)
             {
                 string email = carrierAccount.SupplierSettings.AutoImportSettings.Email;
-                if (!string.IsNullOrEmpty(email))
+                string code = carrierAccount.SupplierSettings.AutoImportSettings.SubjectCode;
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(code))
                 {
-                    email = email.ToLower();
                     var supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
-                    CarrierAccount duplicatedCarrierAccount = supplierAccounts.GetRecord(email);
+                    CarrierAccount duplicatedCarrierAccount = GetSupplierToValidate(email, code);
                     if (duplicatedCarrierAccount != null)
-                        throw new VRBusinessException(string.Format("Cannot set auto import email {0} because it is already set for carrier account {1}.", email, GetCarrierAccountName(duplicatedCarrierAccount.CarrierAccountId)));
+                        throw new VRBusinessException(string.Format("Cannot set auto import email {0} and subject code {1} because they are already set for carrier account {2}.", email, code, GetCarrierAccountName(duplicatedCarrierAccount.CarrierAccountId)));
                 }
             }
 
@@ -1261,17 +1270,47 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierAccount.SupplierSettings != null && carrierAccount.SupplierSettings.AutoImportSettings != null)
             {
                 string email = carrierAccount.SupplierSettings.AutoImportSettings.Email;
-                if (!string.IsNullOrEmpty(email))
+                string code = carrierAccount.SupplierSettings.AutoImportSettings.SubjectCode;
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(code))
                 {
-                    email = email.ToLower();
                     var supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
-                    CarrierAccount duplicatedCarrierAccount = supplierAccounts.GetRecord(email);
+                    CarrierAccount duplicatedCarrierAccount = GetSupplierToValidate(email, code);
                     if (duplicatedCarrierAccount != null && duplicatedCarrierAccount.CarrierAccountId != carrierAccountEntity.CarrierAccountId)
-                        throw new VRBusinessException(string.Format("Cannot set auto import email {0} because it is already set for carrier account {1}.", email, GetCarrierAccountName(duplicatedCarrierAccount.CarrierAccountId)));
+                        throw new VRBusinessException(string.Format("Cannot set auto import email {0} and subject code {1} because they are already set for carrier account {2}.", email, code, GetCarrierAccountName(duplicatedCarrierAccount.CarrierAccountId)));
                 }
             }
 
             ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
+        }
+
+        public CarrierAccount GetSupplierToValidate(string email, string subjectCode)
+        {
+            Dictionary<string, List<CarrierAccount>> supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
+            List<CarrierAccount> suppliersHavingSpecifiedEmail = supplierAccounts.GetRecord(email.ToLower());
+            if (suppliersHavingSpecifiedEmail != null)
+            {
+                foreach (var account in suppliersHavingSpecifiedEmail)
+                {
+                    if (subjectCode.ToLower() == account.SupplierSettings.AutoImportSettings.SubjectCode.ToLower())
+                        return account;
+                }
+            }
+            return null;
+        }
+
+        public CarrierAccount GetMatchedSupplier(string from, string subject)
+        {
+            Dictionary<string, List<CarrierAccount>> supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
+            List<CarrierAccount> suppliersHavingSpecifiedEmail = supplierAccounts.GetRecord(from.ToLower());
+            if (suppliersHavingSpecifiedEmail != null)
+            {
+                foreach (var account in suppliersHavingSpecifiedEmail)
+                {
+                    if (account.SupplierSettings.AutoImportSettings.IsAutoImportActive && subject.ToLower().Contains(account.SupplierSettings.AutoImportSettings.SubjectCode.ToLower()))
+                        return account;
+                }
+            }
+            return null;
         }
 
         private void ValidateCarrierAccount(string caNameSuffix, CarrierAccountSettings caSettings)
