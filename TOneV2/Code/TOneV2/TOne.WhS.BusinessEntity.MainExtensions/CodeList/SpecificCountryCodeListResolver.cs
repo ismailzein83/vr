@@ -22,7 +22,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeList
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             IEnumerable<SaleZone>saleZones=saleZoneManager.GetEffectiveSaleZonesByCountryIds(SellingNumberPlanId, CountryIds, DateTime.Now, true);
-           List<string> excludedCodes = (ExcludedDestinations!=null)? this.ExcludedDestinations.GetExcludedCodes(null):new List<string>();
+           List<string> excludedCodes = (ExcludedDestinations!=null)? this.ExcludedDestinations.GetExcludedCodes(new CodeListExcludedContext()):new List<string>();
             foreach (var item in saleZones)
                 zonneIds.Add((long)item.SaleZoneId);
 

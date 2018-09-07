@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.CodeList
         {
             SaleCodeManager saleCodeManager = new SaleCodeManager();
             List<string> codesList=new List<string>();
-            List<string> excludedCodes = (ExcludedDestinations != null) ? this.ExcludedDestinations.GetExcludedCodes(null) : new List<string>();
+            List<string> excludedCodes = (ExcludedDestinations != null) ? this.ExcludedDestinations.GetExcludedCodes(new CodeListExcludedContext()) : new List<string>();
             foreach (var item in saleCodeManager.GetSaleCodesByZoneIDs(this.ZoneIds, DateTime.Now))
                 if(!excludedCodes.Contains(item.Code))
                 codesList.Add(item.Code);

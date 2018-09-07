@@ -34,6 +34,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public interface ICodeListResolverContext
     {
     }
+    public class CodeListResolverContext : ICodeListResolverContext
+    {
+    }
 
     public abstract class ExcludedDestinations
     {
@@ -41,6 +44,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public abstract List<string> GetExcludedCodes(ICodeListExcludedContext context);
     }
     public interface ICodeListExcludedContext
+    {
+    }
+
+    public class CodeListExcludedContext : ICodeListExcludedContext
     {
     }
 }
