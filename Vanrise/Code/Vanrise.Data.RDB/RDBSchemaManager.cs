@@ -107,7 +107,8 @@ namespace Vanrise.Data.RDB
 
         internal static string GetColumnDBName(BaseRDBDataProvider provider, string columnName, RDBTableColumnDefinition columnDefinition)
         {
-            return columnDefinition.DBColumnName != null ? columnDefinition.DBColumnName : columnName;
+            string columnDBName = columnDefinition.DBColumnName != null ? columnDefinition.DBColumnName : columnName;
+            return provider.GetColumnDBName(columnDBName);
         }
 
         internal RDBTableColumnDefinition GetColumnDefinitionWithValidate(BaseRDBDataProvider provider, string tableName, string columnName)

@@ -72,6 +72,8 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
+            if (this.Values == null || this.Values.Count() == 0)
+                return null;
             var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             return String.Concat(this.Expression.ToDBQuery(expressionContext), this.Operator == RDBListConditionOperator.IN ? " IN (" : " NOT IN (", String.Join(",", this.Values.Select(itm => itm.ToDBQuery(expressionContext))), ")");
         }
@@ -135,8 +137,14 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var selectQueryAsDB = this.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context));
-            return string.Concat(" EXISTS ", selectQueryAsDB);
+            var resolvedSelectQuery = this.SelectQuery.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context));
+            StringBuilder queryBuilder = new StringBuilder(" EXISTS (");
+            foreach (var statement in resolvedSelectQuery.Statements)
+            {
+                queryBuilder.Append(statement.TextStatement);
+            }
+            queryBuilder.Append(")");
+            return queryBuilder.ToString();
         }
     }
 
@@ -146,8 +154,14 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var selectQueryAsDB = this.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context));
-            return string.Concat(" NOT EXISTS (", selectQueryAsDB, ")");
+            var resolvedSelectQuery = this.SelectQuery.GetResolvedQuery(new RDBQueryGetResolvedQueryContext(context));
+            StringBuilder queryBuilder = new StringBuilder(" NOT EXISTS (");
+            foreach (var statement in resolvedSelectQuery.Statements)
+            {
+                queryBuilder.Append(statement.TextStatement);
+            }
+            queryBuilder.Append(")");
+            return queryBuilder.ToString();
         }
     }
 }

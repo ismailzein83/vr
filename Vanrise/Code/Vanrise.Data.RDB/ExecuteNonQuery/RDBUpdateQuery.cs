@@ -28,6 +28,8 @@ namespace Vanrise.Data.RDB
 
         List<RDBJoin> _joins;
 
+        List<RDBUpdateSelectColumn> _selectColumns;
+
         public RDBUpdateQuery FromTable(string tableName)
         {
             return FromTable(new RDBTableDefinitionQuerySource(tableName));
@@ -62,22 +64,28 @@ namespace Vanrise.Data.RDB
 
         public RDBExpressionContext Column(string columnName)
         {
-            return ColumnAndParameter(columnName, null);
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
         }
 
-        public RDBExpressionContext ColumnAndParameter(string columnName, string parameterName)
-        {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, parameterName, expression), null);
-        }
-
-        public void ColumnValue(string columnName, string parameterName, BaseRDBExpression value)
+        public void ColumnValue(string columnName, BaseRDBExpression value)
         {
             this._columnValues.Add(new RDBUpdateColumn
             {
                 ColumnName = columnName,
-                ParameterName = parameterName,
                 Value = value
             });
+        }
+
+        public void AddSelectColumn(string columnName)
+        {
+            AddSelectColumn(columnName, columnName);
+        }
+
+        public void AddSelectColumn(string columnName, string alias)
+        {
+            if (_selectColumns == null)
+                _selectColumns = new List<RDBUpdateSelectColumn>();
+            _selectColumns.Add(new RDBUpdateSelectColumn { ColumnName = columnName, Alias = alias });
         }
 
         RDBJoinContext _joinContext;
@@ -116,29 +124,14 @@ namespace Vanrise.Data.RDB
             AddModifiedTimeIfNeeded(context);
             if (this._notExistConditionGroup != null)
             {
-                var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
-                selectQuery.From(this._table, _notExistConditionTableAlias, 1);
-                selectQuery.SelectColumns().Column(new RDBNullExpression(), "nullColumn");
-                selectQuery.ConditionGroup = this._notExistConditionGroup;
-                var rdbNotExistsCondition = new RDBNotExistsCondition()
-                {
-                    SelectQuery = selectQuery
-                };
-                var conditionGroup = new RDBConditionGroup(RDBConditionGroupOperator.AND);
-                conditionGroup.Conditions.Add(rdbNotExistsCondition);
-                IRDBQueryReady ifQuery = new RDBIfQuery(_queryBuilderContext.CreateChildContext())
-                {
-                    ConditionGroup = conditionGroup,
-                    _trueQueryText = context.DataProvider.GetQueryAsText(ResolveUpdateQuery(context))
-                };
-                return ifQuery.GetResolvedQuery(context);
+                var notExistsSelectQuery = this.Where().NotExistsCondition();
+                notExistsSelectQuery.From(this._table, _notExistConditionTableAlias, 1);
+                notExistsSelectQuery.SelectColumns().Expression("nullColumn").Null();
+                notExistsSelectQuery.Where().Condition(this._notExistConditionGroup);
             }
-            else
-            {
-                return ResolveUpdateQuery(context);
-            }
+            var resolveUpdateQueryContext = new RDBDataProviderResolveUpdateQueryContext(this._table, this._tableAlias, this._columnValues, this._conditionGroup, this._joins, this._selectColumns, context, _queryBuilderContext);
+            return context.DataProvider.ResolveUpdateQuery(resolveUpdateQueryContext);
         }
-
 
         private void AddModifiedTimeIfNeeded(IRDBQueryGetResolvedQueryContext context)
         {
@@ -168,22 +161,20 @@ namespace Vanrise.Data.RDB
                 }
             }
         }
-
-
-        private RDBResolvedQuery ResolveUpdateQuery(IRDBQueryGetResolvedQueryContext context)
-        {
-            var resolveUpdateQueryContext = new RDBDataProviderResolveUpdateQueryContext(this._table, this._tableAlias, this._columnValues, this._conditionGroup, this._joins, context, _queryBuilderContext);
-            return context.DataProvider.ResolveUpdateQuery(resolveUpdateQueryContext);
-        }
     }
 
     public class RDBUpdateColumn
     {
         public string ColumnName { get; set; }
 
-        public string ParameterName { get; set; }
-
         public BaseRDBExpression Value { get; set; }
+    }
+
+    public class RDBUpdateSelectColumn
+    {
+        public string ColumnName { get; set; }
+
+        public string Alias { get; set; }
     }
 
     public class RDBUpdateExpressionContext : RDBTwoExpressionsContext

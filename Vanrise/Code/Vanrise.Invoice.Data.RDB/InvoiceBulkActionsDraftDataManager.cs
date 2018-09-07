@@ -12,21 +12,27 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceBulkActionDraft";
 
+        const string COL_ID = "ID";
+        const string COL_InvoiceBulkActionIdentifier = "InvoiceBulkActionIdentifier";
+        internal const string COL_InvoiceTypeId = "InvoiceTypeId";
+        internal const string COL_InvoiceId = "InvoiceId";
+        const string COL_CreatedTime = "CreatedTime";
+
         static InvoiceBulkActionsDraftDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("InvoiceBulkActionIdentifier", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("InvoiceTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("InvoiceId", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_InvoiceBulkActionIdentifier, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_InvoiceTypeId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_InvoiceId, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "InvoiceBulkActionDraft",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -63,7 +69,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             selectQuery.SelectColumns().AllTableColumns("inv");
 
-            selectQuery.Where().EqualsCondition("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
+            selectQuery.Where().EqualsCondition(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
 
             queryContext.ExecuteReader((reader) =>
                 {
@@ -82,12 +88,12 @@ namespace Vanrise.Invoice.Data.RDB
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
             var deleteWhereCondition = deleteQuery.Where();
-            deleteWhereCondition.EqualsCondition("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
+            deleteWhereCondition.EqualsCondition(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
             if(isAllInvoicesSelected)
             {
                 if (targetInvoicesIds != null)
                 {
-                    deleteWhereCondition.ListCondition("InvoiceId", RDBListConditionOperator.IN, targetInvoicesIds);
+                    deleteWhereCondition.ListCondition(COL_InvoiceId, RDBListConditionOperator.IN, targetInvoicesIds);
                 }
             }
             else
@@ -98,9 +104,9 @@ namespace Vanrise.Invoice.Data.RDB
                     {
                         var insertQuery = queryContext.AddInsertQuery();
                         insertQuery.IntoTable(TABLE_NAME);
-                        insertQuery.Column("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
-                        insertQuery.Column("InvoiceTypeID").Value(invoiceTypeId);
-                        insertQuery.Column("InvoiceId").Value(invoiceId);
+                        insertQuery.Column(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
+                        insertQuery.Column(COL_InvoiceTypeId).Value(invoiceTypeId);
+                        insertQuery.Column(COL_InvoiceId).Value(invoiceId);
                     }
                 }
             }
@@ -112,8 +118,10 @@ namespace Vanrise.Invoice.Data.RDB
 
             var selectAggregates = selectQuery.SelectAggregates();
             selectAggregates.Count("TotalCount");
-            selectAggregates.Aggregate(RDBNonCountAggregateType.MIN, "inv", "FromDate", "MinimumFrom");
-            selectAggregates.Aggregate(RDBNonCountAggregateType.MAX, "inv", "ToDate", "MaximumTo");
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MIN, "inv", InvoiceDataManager.COL_FromDate, "MinimumFrom");
+            selectAggregates.Aggregate(RDBNonCountAggregateType.MAX, "inv", InvoiceDataManager.COL_ToDate, "MaximumTo");
+
+            selectQuery.Where().EqualsCondition(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
 
             return queryContext.GetItem(InvoiceBulkActionsDraftSummary);
         }
@@ -123,7 +131,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("InvoiceBulkActionIdentifier").Value(invoiceBulkActionIdentifier);
+            deleteQuery.Where().EqualsCondition(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
 
             queryContext.ExecuteNonQuery();
         }
@@ -135,7 +143,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("InvoiceBulkActionIdentifier").Value(bulkActionDraftIdentifier);
+            deleteQuery.Where().EqualsCondition(COL_InvoiceBulkActionIdentifier).Value(bulkActionDraftIdentifier);
 
             queryContext.ExecuteNonQuery();
         }

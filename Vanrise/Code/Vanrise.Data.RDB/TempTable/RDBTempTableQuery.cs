@@ -9,7 +9,7 @@ namespace Vanrise.Data.RDB
 {
     public class RDBTempTableQuery : BaseRDBQuery, IRDBTableQuerySource
     {
-        Dictionary<string, RDBTableColumnDefinition> _columns = new Dictionary<string,RDBTableColumnDefinition>();
+        Dictionary<string, RDBTempTableColumnDefinition> _columns = new Dictionary<string, RDBTempTableColumnDefinition>();
         string _tempTableName;
 
         RDBQueryBuilderContext _queryBuilderContext;
@@ -19,16 +19,17 @@ namespace Vanrise.Data.RDB
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public void AddColumn(string columnName, RDBTableColumnDefinition columnDefinition)
+        public void AddColumn(string columnName, RDBTableColumnDefinition columnDefinition, bool isPrimaryKey)
         {
-            this._columns.Add(columnName, columnDefinition);
+            this._columns.Add(columnName, new RDBTempTableColumnDefinition { ColumnDefinition = columnDefinition, IsPrimaryKey = isPrimaryKey });
         }
 
         public void AddColumnsFromTable(string tableName)
         {
-            foreach(var columnEntry in RDBSchemaManager.Current.GetTableDefinitionWithValidate(_queryBuilderContext.DataProvider, tableName).Columns)
+            var tableDefinition =RDBSchemaManager.Current.GetTableDefinitionWithValidate(_queryBuilderContext.DataProvider, tableName);
+            foreach(var columnEntry in tableDefinition.Columns)
             {
-                this._columns.Add(columnEntry.Key, columnEntry.Value);
+                this._columns.Add(columnEntry.Key, new RDBTempTableColumnDefinition { ColumnDefinition = columnEntry.Value, IsPrimaryKey = tableDefinition.IdColumnName == columnEntry.Key });
             }
         }
 
@@ -38,6 +39,7 @@ namespace Vanrise.Data.RDB
             var resolveQueryContext = new RDBDataProviderResolveTempTableCreationQueryContext(_columns, context);
             var resolvedQuery = context.DataProvider.ResolveTempTableCreationQuery(resolveQueryContext);
             _tempTableName = resolveQueryContext.TempTableName;
+            context.AddTempTableName(_tempTableName);
             return resolvedQuery;
         }
 
@@ -61,10 +63,10 @@ namespace Vanrise.Data.RDB
 
         public string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context)
         {
-            RDBTableColumnDefinition columnDef;
+            RDBTempTableColumnDefinition columnDef;
             if (!_columns.TryGetValue(context.ColumnName, out columnDef))
                 throw new Exception(String.Format("Column '{0}' not found", context.ColumnName));
-            return RDBSchemaManager.GetColumnDBName(context.DataProvider, context.ColumnName, columnDef);
+            return RDBSchemaManager.GetColumnDBName(context.DataProvider, context.ColumnName, columnDef.ColumnDefinition);
         }
 
 
@@ -83,5 +85,21 @@ namespace Vanrise.Data.RDB
         public void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context)
         {            
         }
+
+
+        public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
+        {
+            RDBTempTableColumnDefinition columnDef;
+            if (!_columns.TryGetValue(context.ColumnName, out columnDef))
+                throw new Exception(String.Format("Column '{0}' not found", context.ColumnName));
+            context.ColumnDefinition = columnDef.ColumnDefinition;
+        }
+    }
+
+    public class RDBTempTableColumnDefinition
+    {
+        public RDBTableColumnDefinition ColumnDefinition { get; set; }
+
+        public bool IsPrimaryKey { get; set; }
     }
 }

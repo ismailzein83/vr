@@ -48,16 +48,6 @@ namespace Vanrise.Data.RDB
             });
         }
 
-        public void ColumnToParameter(BaseRDBExpression expression, string parameterName)
-        {
-            string dbParameterName = _queryBuilderContext.DataProvider.ConvertToDBParameterName(parameterName);
-            _columns.Add(new RDBSelectColumn
-            {
-                Expression = expression,
-                SetDBParameterName = dbParameterName
-            });
-        }
-
         public void Column(string tableAlias, string columnName, string alias)
         {
             Column(new RDBColumnExpression
@@ -68,24 +58,9 @@ namespace Vanrise.Data.RDB
                     alias);
         }
 
-        public void ColumnToParameter(string tableAlias, string columnName, string parameterName)
-        {
-            ColumnToParameter(new RDBColumnExpression
-           {
-               TableAlias = tableAlias,
-               ColumnName = columnName
-           },
-                    parameterName);
-        }
-
         public void Column(string columnName, string alias)
         {
             Column(this._tableAlias, columnName, alias);
-        }
-
-        public void ColumnToParameter(string columnName, string parameterName)
-        {
-            ColumnToParameter(this._tableAlias, columnName, parameterName);
         }
 
         public void Column(string columnName)

@@ -70,7 +70,7 @@ namespace Vanrise.Data.RDB
 
         public RDBJoinSelectContext JoinSelect(string inlineQueryAlias)
         {
-            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
+            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
             var join = AddJoin(selectQuery, inlineQueryAlias);
             return new RDBJoinSelectContext(_queryBuilderContext, join, _tableAlias, selectQuery);
         }

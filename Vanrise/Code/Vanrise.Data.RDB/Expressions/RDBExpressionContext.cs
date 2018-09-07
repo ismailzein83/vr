@@ -71,12 +71,7 @@ namespace Vanrise.Data.RDB
 
         public void Column(string tableAlias, string columnName)
         {
-            Column(tableAlias, columnName, false);
-        }
-
-        public void Column(string tableAlias, string columnName, bool dontAppendTableAlias)
-        {
-            Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName, DontAppendTableAlias = dontAppendTableAlias });
+            Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName});
         }
 
         public void DateNow()
@@ -97,6 +92,11 @@ namespace Vanrise.Data.RDB
         public void Null()
         {
             Expression(new RDBNullExpression());
+        }
+
+        public void EmptyString()
+        {
+            Expression(new RDBEmptyStringExpression());
         }
 
         public void ObjectValue(Object value)
@@ -124,10 +124,10 @@ namespace Vanrise.Data.RDB
             throw new NotSupportedException(string.Format("value type '{0}'", value.GetType()));
         }
 
-        public void Parameter(string parameterName)
-        {
-            Expression(new RDBParameterExpression { ParameterName = parameterName });
-        }
+        //public void Parameter(string parameterName)
+        //{
+        //    Expression(new RDBParameterExpression { ParameterName = parameterName });
+        //}
 
         bool _isExpressionSet;
         public void Expression(BaseRDBExpression expression)

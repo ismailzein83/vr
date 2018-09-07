@@ -37,49 +37,21 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 return tableName;
         }
 
-         public override string ConvertToDBParameterName(string parameterName)
+        public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
          {
              return string.Concat("@", parameterName);
          }
 
-         public const string UNIQUE_NAME = "MySQL";
+         public const string UNIQUE_NAME = "MYSQL";
          public override string UniqueName
          {
              get { return UNIQUE_NAME; }
          }
         
-         public override string GetQueryAsText(RDBResolvedQuery resolvedQuery)
-         {
-             var queryBuilder = new StringBuilder();
-             foreach (var statement in resolvedQuery.Statements)
-             {
-                 queryBuilder.Append(statement);
-                 queryBuilder.Append(";");
-                 queryBuilder.AppendLine();
-                 queryBuilder.AppendLine();
-             }
-             return queryBuilder.ToString();
-         }
-
-         public override string GetStatementSetParameterValue(string parameterDBName, string parameterValue)
-         {
-             return string.Concat("SET ", parameterDBName, " := ", parameterValue);
-         }
-
-         protected override void AddStatementSetColumnValueInUpdateQuery(StringBuilder columnQueryBuilder, string columnDBName, string parameterDBName, string value)
-         {
-             columnQueryBuilder.Append(columnDBName);
-             columnQueryBuilder.Append("=");
-             if(parameterDBName != null)
-             {
-                 columnQueryBuilder.AppendLine("(");
-                 columnQueryBuilder.Append(parameterDBName);
-                 columnQueryBuilder.Append(":=");
-             }
-             columnQueryBuilder.Append(value);
-             if (parameterDBName != null)
-                 columnQueryBuilder.Append(")");
-         }
+         //public override RDBResolvedQueryStatement GetStatementSetParameterValue(string parameterDBName, string parameterValue)
+         //{
+         //    return new RDBResolvedQueryStatement { TextStatement = string.Concat("SET ", parameterDBName, " := ", parameterValue) };
+         //}
 
          protected override string GenerateCreateTempTableQuery(string tempTableName, string columns)
          {
@@ -91,10 +63,154 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              return "LAST_INSERT_ID()";
          }
 
-         public override RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context)
+         //public override RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context)
+         //{
+         //    return new RDBResolvedQuery();
+         //}
+
+         public override RDBResolvedQuery ResolveUpdateQuery(IRDBDataProviderResolveUpdateQueryContext context)
          {
-             return new RDBResolvedQuery();
+             context.Table.ThrowIfNull("context.Table");
+             context.ColumnValues.ThrowIfNull("context.ColumnValues");
+
+             var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
+             var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
+
+             StringBuilder queryBuilder = new StringBuilder(" UPDATE ");
+             if (context.Joins != null && context.Joins.Count > 0)
+             {                 
+                 AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
+                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
+             }
+             else
+             {
+                 AddTableToDBQueryBuilder(queryBuilder, context.Table, null, context);
+             }
+
+             StringBuilder columnQueryBuilder = new StringBuilder(" SET ");
+
+             Dictionary<string, RDBUpdateSelectColumn> selectColumnsByColumnName = null;
+             StringBuilder selectColumnsQueryBuilder = null;
+
+             if (context.SelectColumns != null && context.SelectColumns.Count > 0)
+             {
+                 selectColumnsByColumnName = new Dictionary<string, RDBUpdateSelectColumn>();
+                 foreach (var selectColumn in context.SelectColumns)
+                 {
+                     selectColumnsByColumnName.Add(selectColumn.ColumnName, selectColumn);
+                 }
+             }
+
+
+             int colIndex = 0;
+
+             foreach (var colVal in context.ColumnValues)
+             {
+                 if (colIndex > 0)
+                     columnQueryBuilder.Append(", ");
+                 colIndex++;
+                 var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
+                 string columnDBName = context.Table.GetDBColumnName(getDBColumnNameContext);
+                 if (!string.IsNullOrEmpty(context.TableAlias))
+                     columnDBName = string.Concat(context.TableAlias, ".", columnDBName);
+                 string value = colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext);
+
+                 string selectColumnDBParameterName = null;
+                 RDBUpdateSelectColumn selectColumn;
+                 if (selectColumnsByColumnName != null && selectColumnsByColumnName.TryGetValue(colVal.ColumnName, out selectColumn))
+                 {
+                     DefineParameterFromColumn(context, colVal.ColumnName, out selectColumnDBParameterName);
+
+                     if (selectColumnsQueryBuilder == null)
+                         selectColumnsQueryBuilder = new StringBuilder();
+                     else
+                         selectColumnsQueryBuilder.Append(", ");
+                     selectColumnsQueryBuilder.Append(selectColumnDBParameterName);
+                     selectColumnsQueryBuilder.Append(" ");
+                     selectColumnsQueryBuilder.Append(selectColumn.Alias);
+
+                     selectColumnsByColumnName.Remove(colVal.ColumnName);
+                 }
+
+                 AddStatementSetColumnValueInUpdateQuery(columnQueryBuilder, columnDBName, selectColumnDBParameterName, value);                 
+             }
+
+             //add columns that are not added through the ColumnValues iterations
+             if (selectColumnsByColumnName != null && selectColumnsByColumnName.Count > 0)
+             {
+                 foreach (var selectColumnEntry in selectColumnsByColumnName)
+                 {
+                     columnQueryBuilder.Append(", ");
+
+                     var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(selectColumnEntry.Key, context);
+                     string columnDBName = context.Table.GetDBColumnName(getDBColumnNameContext);
+
+                     string selectColumnDBParameterName;
+                     DefineParameterFromColumn(context, selectColumnEntry.Key, out selectColumnDBParameterName);
+                     if (selectColumnsQueryBuilder == null)
+                         selectColumnsQueryBuilder = new StringBuilder();
+                     else
+                         selectColumnsQueryBuilder.Append(", ");
+                     selectColumnsQueryBuilder.Append(selectColumnDBParameterName);
+                     selectColumnsQueryBuilder.Append(" ");
+                     selectColumnsQueryBuilder.Append(selectColumnEntry.Value.Alias);
+
+                     AddStatementSetColumnValueInUpdateQuery(columnQueryBuilder, columnDBName, selectColumnDBParameterName, columnDBName);
+                 }
+             }
+
+             queryBuilder.Append(columnQueryBuilder.ToString());
+
+             if (context.Condition != null)
+             {
+                 string conditionDBQuery = context.Condition.ToDBQuery(rdbConditionToDBQueryContext);
+                 if (!string.IsNullOrEmpty(conditionDBQuery))
+                 {
+                     queryBuilder.Append(" WHERE ");
+                     queryBuilder.Append(conditionDBQuery);
+                 }
+             }
+             var resolvedQuery = new RDBResolvedQuery();
+             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+             if (selectColumnsQueryBuilder != null)
+                 resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat(" SELECT ", selectColumnsQueryBuilder.ToString()) });
+             return resolvedQuery;
          }
+
+         private void DefineParameterFromColumn(IRDBDataProviderResolveUpdateQueryContext context, string columnName, out string dbParameterName)
+         {
+             var parameterName = string.Concat("Col_", Guid.NewGuid().ToString().Replace("-", ""));
+             dbParameterName = this.ConvertToDBParameterName(parameterName, RDBParameterDirection.Declared);
+             var getColumnDefinitionContext = new RDBTableQuerySourceGetColumnDefinitionContext(columnName, context);
+             context.Table.GetColumnDefinition(getColumnDefinitionContext);
+             getColumnDefinitionContext.ColumnDefinition.ThrowIfNull("getColumnDefinitionContext.ColumnDefinition", columnName);
+             var selectColumnDefinition = getColumnDefinitionContext.ColumnDefinition;
+             context.AddParameter(new RDBParameter
+             {
+                 Name = parameterName,
+                 DBParameterName = dbParameterName,
+                 Direction = RDBParameterDirection.Declared,
+                 Type = selectColumnDefinition.DataType,
+                 Size = selectColumnDefinition.Size,
+                 Precision = selectColumnDefinition.Precision
+             });
+         }
+
+         private void AddStatementSetColumnValueInUpdateQuery(StringBuilder columnQueryBuilder, string columnDBName, string parameterDBName, string value)
+         {
+             columnQueryBuilder.Append(columnDBName);
+             columnQueryBuilder.Append("=");
+             if (parameterDBName != null)
+             {
+                 columnQueryBuilder.AppendLine("(");
+                 columnQueryBuilder.Append(parameterDBName);
+                 columnQueryBuilder.Append(":=");
+             }
+             columnQueryBuilder.Append(value);
+             if (parameterDBName != null)
+                 columnQueryBuilder.Append(")");
+         }
+
 
          public override string GetQueryConcatenatedStrings(params string[] strings)
          {
@@ -106,17 +222,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
          public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
          {
-             _dataManager.ExecuteReader(context.Query, context.Parameters, (originalReader) => context.OnReaderReady(new MySQLRDBDataReader(originalReader)));
+             _dataManager.ExecuteReader(context.Query, context.Parameters, context.ExecuteTransactional, (originalReader) => context.OnReaderReady(new MySQLRDBDataReader(originalReader)));
          }
 
          public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
          {
-             return _dataManager.ExecuteNonQuery(context.Query, context.Parameters);
+             return _dataManager.ExecuteNonQuery(context.Query, context.Parameters, context.ExecuteTransactional);
          }
 
          public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
          {
-             return new MySQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters));
+             return new MySQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
          }
          
          public override string NowDateTimeFunction
@@ -164,24 +280,24 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                  _connString = connString;
              }
 
-             public void ExecuteReader(string sqlQuery, Dictionary<string, RDBParameter> parameters, Action<IDataReader> onReaderReady)
+             public void ExecuteReader(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, Action<IDataReader> onReaderReady)
              {
-                 CreateCommandWithParams(sqlQuery, parameters,
+                 CreateCommandWithParams(query, parameters, executeTransactional,
                      (cmd) =>
                      {
                          using (var reader = cmd.ExecuteReader())
                          {
                              onReaderReady(reader);
-                             cmd.Cancel();
-                             reader.Close();
+                             //cmd.Cancel();
+                             //reader.Close();
                          }
                      });
              }
 
-             public int ExecuteNonQuery(string sqlQuery, Dictionary<string, RDBParameter> parameters)
+             public int ExecuteNonQuery(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional)
              {
                  int rslt = 0;
-                 CreateCommandWithParams(sqlQuery, parameters,
+                 CreateCommandWithParams(query, parameters, executeTransactional,
                      (cmd) =>
                      {
                          rslt = cmd.ExecuteNonQuery();
@@ -189,10 +305,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                  return rslt;
              }
 
-             public Object ExecuteScalar(string sqlQuery, Dictionary<string, RDBParameter> parameters)
+             public Object ExecuteScalar(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional)
              {
                  Object rslt = 0;
-                 CreateCommandWithParams(sqlQuery, parameters,
+                 CreateCommandWithParams(query, parameters, executeTransactional,
                      (cmd) =>
                      {
                          rslt = cmd.ExecuteScalar();
@@ -200,20 +316,55 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                  return rslt;
              }
 
-             void CreateCommandWithParams(string sqlQuery, Dictionary<string, RDBParameter> parameters, Action<MySqlCommand> onCommandReady)
+             void CreateCommandWithParams(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, Action<MySqlCommand> onCommandReady)
              {
                  using (var connection = new MySqlConnection(_connString))
                  {
                      connection.Open();
-                     using (var cmd = new MySqlCommand(sqlQuery, connection))
+                     using (var cmd = new MySqlCommand(GetQueryAsText(query), connection))
                      {
                          if (parameters != null)
                              AddParameters(cmd, parameters);
-                         onCommandReady(cmd);
+                         if (executeTransactional)
+                         {
+                             using (var transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted))
+                             {
+                                 cmd.Transaction = transaction;
+                                 try
+                                 {
+                                     onCommandReady(cmd);
+                                     transaction.Commit();
+                                 }
+                                 catch
+                                 {
+                                     transaction.Rollback();
+                                     throw;
+                                 }
+                             }
+                         }
+                         else
+                         {
+                             onCommandReady(cmd);
+                         }
                      }
                      connection.Close();
                  }
              }
+
+
+             public string GetQueryAsText(RDBResolvedQuery resolvedQuery)
+             {
+                 var queryBuilder = new StringBuilder();
+                 foreach (var statement in resolvedQuery.Statements)
+                 {
+                     queryBuilder.Append(statement.TextStatement);
+                     queryBuilder.Append(";");
+                     queryBuilder.AppendLine();
+                     queryBuilder.AppendLine();
+                 }
+                 return queryBuilder.ToString();
+             }
+
 
              private static void AddParameters(MySqlCommand cmd, Dictionary<string, RDBParameter> parameters)
              {

@@ -10,6 +10,8 @@ namespace Vanrise.Data.RDB
     {
         public abstract string StringValue { get; }
 
+        public abstract string StringValueWithEmptyHandling { get; }
+
         public abstract int IntValue { get; }
 
         public abstract int IntWithNullHandlingValue { get; }
@@ -65,6 +67,26 @@ namespace Vanrise.Data.RDB
             _value = value;
         }
 
+        static CommonRDBFieldValue()
+        {
+            s_nullableInlineTypes.Add(typeof(int?), typeof(int));
+            s_nullableInlineTypes.Add(typeof(long?), typeof(long));
+            s_nullableInlineTypes.Add(typeof(short?), typeof(short));
+            s_nullableInlineTypes.Add(typeof(decimal?), typeof(decimal));
+            s_nullableInlineTypes.Add(typeof(float?), typeof(float));
+            s_nullableInlineTypes.Add(typeof(double?), typeof(double));
+        }
+
+        static Dictionary<Type, Type> s_nullableInlineTypes = new Dictionary<Type, Type>();
+        internal static Type GetInlineType(Type  nullableType)
+        {
+            Type inlineType;
+            if (s_nullableInlineTypes.TryGetValue(nullableType, out inlineType))
+                return inlineType;
+            else
+                return nullableType;
+        }
+
         protected virtual T GetFieldValue<T>()
         {
             if (_value == null)
@@ -74,7 +96,7 @@ namespace Vanrise.Data.RDB
             if (_value is T)
                 return (T)_value;
             else
-                return (T)Convert.ChangeType(_value, typeof(T));
+                return (T)Convert.ChangeType(_value, GetInlineType(typeof(T)));
         }
 
         protected virtual T GetFieldValueWithNullHandling<T>()
@@ -85,12 +107,17 @@ namespace Vanrise.Data.RDB
                 if (_value is T)
                     return (T)_value;
                 else
-                    return (T)Convert.ChangeType(_value, typeof(T));
+                    return (T)Convert.ChangeType(_value, GetInlineType(typeof(T)));
         }
 
         public override string StringValue
         {
             get { return _value as string; }
+        }
+
+        public override string StringValueWithEmptyHandling
+        {
+            get { return this.StringValue; }
         }
 
         public override int IntValue

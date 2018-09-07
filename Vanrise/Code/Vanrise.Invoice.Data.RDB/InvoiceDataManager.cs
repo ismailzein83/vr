@@ -16,42 +16,69 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_Invoice";
 
+        const string COL_ID = "ID";
+        const string COL_UserId = "UserId";
+        internal const string COL_InvoiceTypeID = "InvoiceTypeID";
+        internal const string COL_PartnerID = "PartnerID";
+        const string COL_SettlementInvoiceId = "SettlementInvoiceId";
+        const string COL_SplitInvoiceGroupId = "SplitInvoiceGroupId";
+        const string COL_InvoiceSettingID = "InvoiceSettingID";
+        const string COL_SerialNumber = "SerialNumber";
+        internal const string COL_FromDate = "FromDate";
+        internal const string COL_ToDate = "ToDate";
+        const string COL_IssueDate = "IssueDate";
+        const string COL_DueDate = "DueDate";
+        const string COL_Details = "Details";
+        const string COL_PaidDate = "PaidDate";
+        const string COL_LockDate = "LockDate";
+        const string COL_SentDate = "SentDate";
+        const string COL_IsDeleted = "IsDeleted";
+        const string COL_Notes = "Notes";
+        const string COL_Settings = "Settings";
+        const string COL_SourceId = "SourceId";
+        const string COL_IsDraft = "IsDraft";
+        const string COL_IsAutomatic = "IsAutomatic";
+        const string COL_NeedApproval = "NeedApproval";
+        const string COL_ApprovedTime = "ApprovedTime";
+        const string COL_ApprovedBy = "ApprovedBy";
+        const string COL_CreatedTime = "CreatedTime";
+
         static InvoiceDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("UserId", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add("InvoiceTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("PartnerID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            columns.Add("SettlementInvoiceId", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("SplitInvoiceGroupId", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("InvoiceSettingID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("SerialNumber", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-            columns.Add("FromDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("ToDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("IssueDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("DueDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("Details", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("PaidDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("LockDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("SentDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("IsDeleted", new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add("Notes", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("Settings", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("SourceId", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 50 });
-            columns.Add("IsDraft", new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add("IsAutomatic", new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add("NeedApproval", new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add("ApprovedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("ApprovedBy", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_UserId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_InvoiceTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_SettlementInvoiceId, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_SplitInvoiceGroupId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_InvoiceSettingID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_SerialNumber, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_FromDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ToDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_IssueDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_DueDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_PaidDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LockDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SentDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_Notes, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_SourceId, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 50 });
+            columns.Add(COL_IsDraft, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_IsAutomatic, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_NeedApproval, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_ApprovedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ApprovedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "Invoice",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -66,8 +93,8 @@ namespace Vanrise.Invoice.Data.RDB
         {
             switch (fieldName)
             {
-                case "Partner": return "PartnerID";
-                case "User": return "UserId";
+                case "Partner": return COL_PartnerID;
+                case "User": return COL_UserId;
                 default: return fieldName;
             }
         }
@@ -76,30 +103,30 @@ namespace Vanrise.Invoice.Data.RDB
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
-                Details = Vanrise.Common.Serializer.Deserialize(reader.GetString("Details")),
-                FromDate = reader.GetDateTimeWithNullHandling("FromDate"),
-                InvoiceId = reader.GetLong("ID"),
-                InvoiceTypeId = reader.GetGuid("InvoiceTypeID"),
-                IssueDate = reader.GetDateTimeWithNullHandling("IssueDate"),
-                PartnerId = reader.GetString("PartnerID"),
-                SerialNumber = reader.GetString("SerialNumber"),
-                ToDate = reader.GetDateTimeWithNullHandling("ToDate"),
-                PaidDate = reader.GetNullableDateTime("PaidDate"),
-                DueDate = reader.GetDateTimeWithNullHandling("DueDate"),
-                UserId = reader.GetIntWithNullHandling("UserId"),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                LockDate = reader.GetNullableDateTime("LockDate"),
-                Note = reader.GetString("Notes"),
-                SourceId = reader.GetString("SourceId"),
-                IsAutomatic = reader.GetBooleanWithNullHandling("IsAutomatic"),
-                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader.GetString("Settings")),
-                InvoiceSettingId = reader.GetGuidWithNullHandling("InvoiceSettingID"),
-                SentDate = reader.GetNullableDateTime("SentDate"),
-                SettlementInvoiceId = reader.GetNullableLong("SettlementInvoiceId"),
-                SplitInvoiceGroupId = reader.GetNullableGuid("SplitInvoiceGroupId"),
-                ApprovedBy = reader.GetNullableInt("ApprovedBy"),
-                ApprovedTime = reader.GetNullableDateTime("ApprovedTime"),
-                NeedApproval = reader.GetNullableBoolean("NeedApproval"),
+                Details = Vanrise.Common.Serializer.Deserialize(reader.GetString(COL_Details)),
+                FromDate = reader.GetDateTimeWithNullHandling(COL_FromDate),
+                InvoiceId = reader.GetLong(COL_ID),
+                InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeID),
+                IssueDate = reader.GetDateTimeWithNullHandling(COL_IssueDate),
+                PartnerId = reader.GetString(COL_PartnerID),
+                SerialNumber = reader.GetString(COL_SerialNumber),
+                ToDate = reader.GetDateTimeWithNullHandling(COL_ToDate),
+                PaidDate = reader.GetNullableDateTime(COL_PaidDate),
+                DueDate = reader.GetDateTimeWithNullHandling(COL_DueDate),
+                UserId = reader.GetIntWithNullHandling(COL_UserId),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                LockDate = reader.GetNullableDateTime(COL_LockDate),
+                Note = reader.GetString(COL_Notes),
+                SourceId = reader.GetString(COL_SourceId),
+                IsAutomatic = reader.GetBooleanWithNullHandling(COL_IsAutomatic),
+                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader.GetString(COL_Settings)),
+                InvoiceSettingId = reader.GetGuidWithNullHandling(COL_InvoiceSettingID),
+                SentDate = reader.GetNullableDateTime(COL_SentDate),
+                SettlementInvoiceId = reader.GetNullableLong(COL_SettlementInvoiceId),
+                SplitInvoiceGroupId = reader.GetNullableGuid(COL_SplitInvoiceGroupId),
+                ApprovedBy = reader.GetNullableInt(COL_ApprovedBy),
+                ApprovedTime = reader.GetNullableDateTime(COL_ApprovedTime),
+                NeedApproval = reader.GetNullableBoolean(COL_NeedApproval),
             };
             return invoice;
         }
@@ -108,19 +135,19 @@ namespace Vanrise.Invoice.Data.RDB
         {
             return new InvoiceByPartnerInfo
             {
-                InvoiceTypeId = reader.GetGuidWithNullHandling("InvoiceTypeID"),
-                IssueDate = reader.GetDateTimeWithNullHandling("IssueDate"),
-                PartnerId = reader.GetString("PartnerID"),
-                ToDate = reader.GetDateTimeWithNullHandling("ToDate"),
-                DueDate = reader.GetDateTimeWithNullHandling("DueDate"),
+                InvoiceTypeId = reader.GetGuidWithNullHandling(COL_InvoiceTypeID),
+                IssueDate = reader.GetDateTimeWithNullHandling(COL_IssueDate),
+                PartnerId = reader.GetString(COL_PartnerID),
+                ToDate = reader.GetDateTimeWithNullHandling(COL_ToDate),
+                DueDate = reader.GetDateTimeWithNullHandling(COL_DueDate),
             };
         }
         public VRPopulatedPeriod VRPopulatedPeriodMapper(IRDBDataReader reader)
         {
             return new VRPopulatedPeriod
             {
-                FromDate = reader.GetNullableDateTime("FromDate"),
-                ToDate = reader.GetNullableDateTime("ToDate"),
+                FromDate = reader.GetNullableDateTime(COL_FromDate),
+                ToDate = reader.GetNullableDateTime(COL_ToDate),
             };
         }
 
@@ -136,11 +163,11 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
             if (partnerIds != null && partnerIds.Count() > 0)
-                where.ListCondition("PartnerID", RDBListConditionOperator.IN, partnerIds);
-            where.GreaterThanCondition("FromDate").Value(fromDate);
-            where.LessThanCondition("ToDate").Value(toDate);
+                where.ListCondition(COL_PartnerID, RDBListConditionOperator.IN, partnerIds);
+            where.GreaterThanCondition(COL_FromDate).Value(fromDate);
+            where.LessThanCondition(COL_ToDate).Value(toDate);
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.GetItems(InvoiceMapper);
@@ -165,30 +192,30 @@ namespace Vanrise.Invoice.Data.RDB
             invoiceAccountDataManager.AddJoinInvoiceToInvoiceAccount(selectInvoicesQuery.Join(), "inv", "invAcc", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
 
             var where = selectInvoicesQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(query.InvoiceTypeId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(query.InvoiceTypeId);
             if (query.PartnerIds != null && query.PartnerIds.Count > 0)
-                where.ListCondition("PartnerID", RDBListConditionOperator.IN, query.PartnerIds);
+                where.ListCondition(COL_PartnerID, RDBListConditionOperator.IN, query.PartnerIds);
             if (query.PartnerPrefix != null)
-                where.StartsWithCondition("PartnerID", query.PartnerPrefix);
-            where.GreaterOrEqualCondition("FromDate").Value(query.FromTime);
+                where.StartsWithCondition(COL_PartnerID, query.PartnerPrefix);
+            where.GreaterOrEqualCondition(COL_FromDate).Value(query.FromTime);
             if (query.ToTime.HasValue)
-                where.LessOrEqualCondition("ToDate").Value(query.ToTime.Value);
+                where.LessOrEqualCondition(COL_ToDate).Value(query.ToTime.Value);
             if (query.IssueDate.HasValue)
-                where.EqualsCondition("IssueDate").Value(query.IssueDate.Value);
+                where.EqualsCondition(COL_IssueDate).Value(query.IssueDate.Value);
             AddConditionInvoiceNotDeleted(where);
             if(query.IsPaid.HasValue)
             {
                 if (query.IsPaid.Value)
-                    where.NotNullCondition("PaidDate");
+                    where.NotNullCondition(COL_PaidDate);
                 else
-                    where.NullCondition("PaidDate");
+                    where.NullCondition(COL_PaidDate);
             }
             if(query.IssueDate.HasValue)
             {
                 if (query.IsSent.Value)
-                    where.NotNullCondition("SentDate");
+                    where.NotNullCondition(COL_SentDate);
                 else
-                    where.NullCondition("SentDate");
+                    where.NullCondition(COL_SentDate);
             }
 
             InvoiceBulkActionsDraftDataManager invoiceBulkActionsDraftDataManager = new InvoiceBulkActionsDraftDataManager();
@@ -201,8 +228,8 @@ namespace Vanrise.Invoice.Data.RDB
                     var selectDraftsToInsertQuery = insertDraftsQuery.FromSelect();
                     selectDraftsToInsertQuery.From(tempTableQuery, "tmp");
                     var selectColumns = selectDraftsToInsertQuery.SelectColumns();
-                    selectColumns.Column("InvoiceTypeID");
-                    selectColumns.Column("ID", "InvoiceId");
+                    selectColumns.Column(COL_InvoiceTypeID, InvoiceBulkActionsDraftDataManager.COL_InvoiceTypeId);
+                    selectColumns.Column(COL_ID, InvoiceBulkActionsDraftDataManager.COL_InvoiceId);
                     selectColumns.Expression("InvoiceBulkActionIdentifier").Value(query.InvoiceBulkActionIdentifier.Value);
                 }
             }
@@ -230,14 +257,14 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectAggregates().Count("cnt");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(InvoiceTypeId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(InvoiceTypeId);
             AddConditionInvoiceNotDeleted(where);
             if (partnerId != null)
-                where.EqualsCondition("PartnerID").Value(partnerId);
+                where.EqualsCondition(COL_PartnerID).Value(partnerId);
             if (fromDate.HasValue)
-                where.GreaterOrEqualCondition("IssueDate").Value(fromDate.Value);
+                where.GreaterOrEqualCondition(COL_IssueDate).Value(fromDate.Value);
             if (toDate.HasValue)
-                where.LessOrEqualCondition("IssueDate").Value(toDate.Value);
+                where.LessOrEqualCondition(COL_IssueDate).Value(toDate.Value);
 
             return queryContext.ExecuteScalar().IntValue;
         }
@@ -271,28 +298,29 @@ namespace Vanrise.Invoice.Data.RDB
                 var queryContext = new RDBQueryContext(dataProvider);
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.GenerateIdAndAssignToParameter("ID");
-                insertQuery.Column("UserId").Value(generateInvoiceInputToSave.Invoice.UserId);
-                insertQuery.Column("InvoiceTypeID").Value(generateInvoiceInputToSave.Invoice.InvoiceTypeId);
-                insertQuery.Column("PartnerID").Value(generateInvoiceInputToSave.Invoice.PartnerId);
+                insertQuery.AddSelectGeneratedId();
+                insertQuery.Column(COL_UserId).Value(generateInvoiceInputToSave.Invoice.UserId);
+                insertQuery.Column(COL_InvoiceTypeID).Value(generateInvoiceInputToSave.Invoice.InvoiceTypeId);
+                insertQuery.Column(COL_PartnerID).Value(generateInvoiceInputToSave.Invoice.PartnerId);
                 if (splitInvoiceGroupId.HasValue)
-                    insertQuery.Column("SplitInvoiceGroupId").Value(splitInvoiceGroupId.Value);
-                insertQuery.Column("InvoiceSettingID").Value(generateInvoiceInputToSave.Invoice.InvoiceSettingId);
-                insertQuery.Column("SerialNumber").Value(generateInvoiceInputToSave.Invoice.SerialNumber);
-                insertQuery.Column("FromDate").Value(generateInvoiceInputToSave.Invoice.FromDate);
-                insertQuery.Column("ToDate").Value(generateInvoiceInputToSave.Invoice.ToDate);
-                insertQuery.Column("IssueDate").Value(generateInvoiceInputToSave.Invoice.IssueDate);
-                insertQuery.Column("DueDate").Value(generateInvoiceInputToSave.Invoice.DueDate);
-                insertQuery.Column("Details").Value(serializedDetails);
-                insertQuery.Column("Notes").Value(generateInvoiceInputToSave.Invoice.Note);
-                insertQuery.Column("SourceId").Value(generateInvoiceInputToSave.Invoice.SourceId);
-                insertQuery.Column("IsDraft").Value(true);
-                insertQuery.Column("IsAutomatic").Value(generateInvoiceInputToSave.Invoice.IsAutomatic);
-                insertQuery.Column("Settings").Value(serializedSettings);
+                    insertQuery.Column(COL_SplitInvoiceGroupId).Value(splitInvoiceGroupId.Value);
+                insertQuery.Column(COL_InvoiceSettingID).Value(generateInvoiceInputToSave.Invoice.InvoiceSettingId);
+                insertQuery.Column(COL_SerialNumber).Value(generateInvoiceInputToSave.Invoice.SerialNumber);
+                insertQuery.Column(COL_FromDate).Value(generateInvoiceInputToSave.Invoice.FromDate);
+                insertQuery.Column(COL_ToDate).Value(generateInvoiceInputToSave.Invoice.ToDate);
+                insertQuery.Column(COL_IssueDate).Value(generateInvoiceInputToSave.Invoice.IssueDate);
+                insertQuery.Column(COL_DueDate).Value(generateInvoiceInputToSave.Invoice.DueDate);
+                insertQuery.Column(COL_Details).Value(serializedDetails);
+                insertQuery.Column(COL_Notes).Value(generateInvoiceInputToSave.Invoice.Note);
+                insertQuery.Column(COL_SourceId).Value(generateInvoiceInputToSave.Invoice.SourceId);
+                insertQuery.Column(COL_IsDraft).Value(true);
+                insertQuery.Column(COL_IsDeleted).Value(false);
+                insertQuery.Column(COL_IsAutomatic).Value(generateInvoiceInputToSave.Invoice.IsAutomatic);
+                insertQuery.Column(COL_Settings).Value(serializedSettings);
                 if (generateInvoiceInputToSave.Invoice.SentDate.HasValue)
-                    insertQuery.Column("SentDate").Value(generateInvoiceInputToSave.Invoice.SentDate.Value);
+                    insertQuery.Column(COL_SentDate).Value(generateInvoiceInputToSave.Invoice.SentDate.Value);
                 if (generateInvoiceInputToSave.Invoice.NeedApproval.HasValue)
-                    insertQuery.Column("NeedApproval").Value(generateInvoiceInputToSave.Invoice.NeedApproval.Value);
+                    insertQuery.Column(COL_NeedApproval).Value(generateInvoiceInputToSave.Invoice.NeedApproval.Value);
                 long insertedInvoiceId = queryContext.ExecuteScalar().LongValue;
 
                 insertedInvoiceIds.Add(insertedInvoiceId);
@@ -339,15 +367,15 @@ namespace Vanrise.Invoice.Data.RDB
                 {
                     var updateQuery = queryContext2.AddUpdateQuery();
                     updateQuery.FromTable(TABLE_NAME);
-                    updateQuery.Column("SettlementInvoiceId").Value(generateInvoiceInputToSave.Invoice.InvoiceId);
-                    updateQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, generateInvoiceInputToSave.InvoiceToSettleIds);
+                    updateQuery.Column(COL_SettlementInvoiceId).Value(generateInvoiceInputToSave.Invoice.InvoiceId);
+                    updateQuery.Where().ListCondition(COL_ID, RDBListConditionOperator.IN, generateInvoiceInputToSave.InvoiceToSettleIds);
 
                     if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
                     {
                         var updateQuery2 = queryContext2.AddUpdateQuery();
                         updateQuery2.FromTable(TABLE_NAME);
-                        updateQuery2.Column("SettlementInvoiceId").Null();
-                        updateQuery2.Where().EqualsCondition("SettlementInvoiceId").Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                        updateQuery2.Column(COL_SettlementInvoiceId).Null();
+                        updateQuery2.Where().EqualsCondition(COL_SettlementInvoiceId).Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
                     }
                 }
 
@@ -363,16 +391,16 @@ namespace Vanrise.Invoice.Data.RDB
                 {
                     var updateQuery = queryContext2.AddUpdateQuery();
                     updateQuery.FromTable(TABLE_NAME);
-                    updateQuery.Column("IsDeleted").Value(true);
-                    updateQuery.Where().EqualsCondition("ID").Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                    updateQuery.Column(COL_IsDeleted).Value(true);
+                    updateQuery.Where().EqualsCondition(COL_ID).Value(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
 
                     billingTransactionDataManager.AddQuerySetInvoiceBillingTransactionsDeleted(queryContext2, generateInvoiceInputToSave.InvoiceIdToDelete.Value);
                 }
 
                 var updateInvoiceQuery = queryContext2.AddUpdateQuery();
                 updateInvoiceQuery.FromTable(TABLE_NAME);
-                updateInvoiceQuery.Column("IsDraft").Value(false);
-                updateInvoiceQuery.Where().EqualsCondition("ID").Value(generateInvoiceInputToSave.Invoice.InvoiceId);
+                updateInvoiceQuery.Column(COL_IsDraft).Value(false);
+                updateInvoiceQuery.Where().EqualsCondition(COL_ID).Value(generateInvoiceInputToSave.Invoice.InvoiceId);
             }
 
             queryContext2.ExecuteNonQuery(true);
@@ -387,7 +415,7 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.From(TABLE_NAME, "inv");
             selectQuery.SelectColumns().AllTableColumns("inv");
 
-            selectQuery.Where().ListCondition("ID", RDBListConditionOperator.IN, invoiceIds);
+            selectQuery.Where().ListCondition(COL_ID, RDBListConditionOperator.IN, invoiceIds);
 
             return queryContext.GetItems(InvoiceMapper);
         }
@@ -397,16 +425,16 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());            
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "inv", 1);
-            selectQuery.SelectColumns().Column("ID");
+            selectQuery.SelectColumns().Column(COL_ID);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("PartnerID").Value(partnerId);
-            where.GreaterOrEqualCondition("ToDate").Value(fromDate);
-            where.LessOrEqualCondition("FromDate").Value(toDate);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_PartnerID).Value(partnerId);
+            where.GreaterOrEqualCondition(COL_ToDate).Value(fromDate);
+            where.LessOrEqualCondition(COL_FromDate).Value(toDate);
             AddConditionInvoiceNotDeleted(where);
             if (invoiceId.HasValue)
-                where.NotEqualsCondition("ID").Value(invoiceId.Value);
+                where.NotEqualsCondition(COL_ID).Value(invoiceId.Value);
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -417,10 +445,10 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
             if (paidDate.HasValue)
-                updateQuery.Column("PaidDate").Value(paidDate.Value);
+                updateQuery.Column(COL_PaidDate).Value(paidDate.Value);
             else
-                updateQuery.Column("PaidDate").Null();
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceId);
+                updateQuery.Column(COL_PaidDate).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceId);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -430,10 +458,10 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
             if (lockedDate.HasValue)
-                updateQuery.Column("LockDate").Value(lockedDate.Value);
+                updateQuery.Column(COL_LockDate).Value(lockedDate.Value);
             else
-                updateQuery.Column("LockDate").Null();
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceId);
+                updateQuery.Column(COL_LockDate).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceId);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -442,8 +470,8 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column("Notes").Value(invoiceNote);
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceId);
+            updateQuery.Column(COL_Notes).Value(invoiceNote);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceId);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -455,11 +483,11 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
             AddConditionInvoiceNotDeleted(where);
-            where.GreaterThanCondition("ID").Value(lastImportedId);
+            where.GreaterThanCondition(COL_ID).Value(lastImportedId);
 
-            selectQuery.Sort().ByColumn("ID", RDBSortDirection.ASC);
+            selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
 
             queryContext.ExecuteReader((reader) =>
             {
@@ -475,8 +503,8 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn("InvoiceTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableQuery.AddColumn("PartnerID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableQuery.AddColumn(COL_InvoiceTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
+            tempTableQuery.AddColumn(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
 
             if(partnerInvoiceTypes != null)
             {
@@ -484,8 +512,8 @@ namespace Vanrise.Invoice.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.Column("InvoiceTypeID").Value(partner.InvoiceTypeId);
-                    insertQuery.Column("PartnerID").Value(partner.PartnerId);
+                    insertQuery.Column(COL_InvoiceTypeID).Value(partner.InvoiceTypeId);
+                    insertQuery.Column(COL_PartnerID).Value(partner.PartnerId);
                 }
             }
 
@@ -494,12 +522,12 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var joinTempCondition = selectQuery.Join().Join(tempTableQuery, "partners").On();
-            joinTempCondition.EqualsCondition("inv", "InvoiceTypeID", "partners", "InvoiceTypeID");
-            joinTempCondition.EqualsCondition("inv", "PartnerID", "partners", "PartnerID");
+            joinTempCondition.EqualsCondition("inv", COL_InvoiceTypeID, "partners", COL_InvoiceTypeID);
+            joinTempCondition.EqualsCondition("inv", COL_PartnerID, "partners", COL_PartnerID);
 
             var where = selectQuery.Where();
-            where.NullCondition().Column("PaidDate");
-            where.LessOrEqualCondition("DueDate").DateNow();
+            where.NullCondition().Column(COL_PaidDate);
+            where.LessOrEqualCondition(COL_DueDate).DateNow();
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.GetItems(InvoiceMapper);
@@ -510,8 +538,8 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn("InvoiceTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableQuery.AddColumn("PartnerID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            tempTableQuery.AddColumn(COL_InvoiceTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
+            tempTableQuery.AddColumn(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
 
             if (partnerInvoiceTypes != null)
             {
@@ -519,21 +547,21 @@ namespace Vanrise.Invoice.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.Column("InvoiceTypeID").Value(partner.InvoiceTypeId);
-                    insertQuery.Column("PartnerID").Value(partner.PartnerId);
+                    insertQuery.Column(COL_InvoiceTypeID).Value(partner.InvoiceTypeId);
+                    insertQuery.Column(COL_PartnerID).Value(partner.PartnerId);
                 }
             }
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "inv");
-            selectQuery.SelectColumns().Columns("InvoiceTypeID", "PartnerID", "IssueDate", "ToDate", "DueDate");
+            selectQuery.SelectColumns().Columns(COL_InvoiceTypeID, COL_PartnerID, COL_IssueDate, COL_ToDate, COL_DueDate);
 
             var joinTempCondition = selectQuery.Join().Join(tempTableQuery, "partners").On();
-            joinTempCondition.EqualsCondition("inv", "InvoiceTypeID", "partners", "InvoiceTypeID");
-            joinTempCondition.EqualsCondition("inv", "PartnerID", "partners", "PartnerID");
+            joinTempCondition.EqualsCondition("inv", COL_InvoiceTypeID, "partners", COL_InvoiceTypeID);
+            joinTempCondition.EqualsCondition("inv", COL_PartnerID, "partners", COL_PartnerID);
 
             var where = selectQuery.Where();
-            where.LessOrEqualCondition("DueDate").DateNow();
+            where.LessOrEqualCondition(COL_DueDate).DateNow();
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.GetItems(InvoiceByPartnerInfoMapper);
@@ -544,31 +572,31 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
 
-            updateQuery.Column("InvoiceTypeID").Value(invoice.InvoiceTypeId);
-            updateQuery.Column("PartnerID").Value(invoice.InvoiceTypeId);
-            updateQuery.Column("SerialNumber").Value(invoice.SerialNumber);
-            updateQuery.Column("FromDate").Value(invoice.FromDate);
-            updateQuery.Column("ToDate").Value(invoice.ToDate);
-            updateQuery.Column("IssueDate").Value(invoice.IssueDate);
-            updateQuery.Column("DueDate").Value(invoice.DueDate);
-            updateQuery.Column("Details").Value(Vanrise.Common.Serializer.Serialize(invoice.Details));
+            updateQuery.Column(COL_InvoiceTypeID).Value(invoice.InvoiceTypeId);
+            updateQuery.Column(COL_PartnerID).Value(invoice.InvoiceTypeId);
+            updateQuery.Column(COL_SerialNumber).Value(invoice.SerialNumber);
+            updateQuery.Column(COL_FromDate).Value(invoice.FromDate);
+            updateQuery.Column(COL_ToDate).Value(invoice.ToDate);
+            updateQuery.Column(COL_IssueDate).Value(invoice.IssueDate);
+            updateQuery.Column(COL_DueDate).Value(invoice.DueDate);
+            updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(invoice.Details));
             if (invoice.PaidDate.HasValue)
-                updateQuery.Column("PaidDate").Value(invoice.PaidDate.Value);
+                updateQuery.Column(COL_PaidDate).Value(invoice.PaidDate.Value);
             else
-                updateQuery.Column("PaidDate").Null();
+                updateQuery.Column(COL_PaidDate).Null();
             if (invoice.LockDate.HasValue)
-                updateQuery.Column("LockDate").Value(invoice.LockDate.Value);
+                updateQuery.Column(COL_LockDate).Value(invoice.LockDate.Value);
             else
-                updateQuery.Column("LockDate").Null();
-            updateQuery.Column("Notes").Value(invoice.Note);
-            updateQuery.Column("SourceId").Value(invoice.SourceId);
-            updateQuery.Column("InvoiceSettingID").Value(invoice.InvoiceSettingId);
+                updateQuery.Column(COL_LockDate).Null();
+            updateQuery.Column(COL_Notes).Value(invoice.Note);
+            updateQuery.Column(COL_SourceId).Value(invoice.SourceId);
+            updateQuery.Column(COL_InvoiceSettingID).Value(invoice.InvoiceSettingId);
             if (invoice.SentDate.HasValue)
-                updateQuery.Column("SentDate").Value(invoice.SentDate.Value);
+                updateQuery.Column(COL_SentDate).Value(invoice.SentDate.Value);
             else
-                updateQuery.Column("SentDate").Null();
+                updateQuery.Column(COL_SentDate).Null();
 
-            updateQuery.Where().EqualsCondition("ID").Value(invoice.InvoiceId);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoice.InvoiceId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -581,8 +609,8 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("SourceId").Value(sourceId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_SourceId).Value(sourceId);
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.GetItem(InvoiceMapper);
@@ -596,11 +624,11 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("PartnerID").Value(partnerId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_PartnerID).Value(partnerId);
             AddConditionInvoiceNotDeleted(where);
 
-            selectQuery.Sort().ByColumn("ID", RDBSortDirection.DESC);
+            selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
 
             return queryContext.GetItem(InvoiceMapper);
         }
@@ -611,11 +639,11 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column("PaidDate").Value(paidDate);
+            updateQuery.Column(COL_PaidDate).Value(paidDate);
 
             var where = updateQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("SourceId").Value(sourceId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_SourceId).Value(sourceId);
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.ExecuteNonQuery() > 0;
@@ -629,13 +657,13 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("PartnerID").Value(partnerId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_PartnerID).Value(partnerId);
             AddConditionInvoiceNotDeleted(where);
             if (beforeDate.HasValue)
-                where.LessThanCondition("CreatedTime").Value(beforeDate.Value);
+                where.LessThanCondition(COL_CreatedTime).Value(beforeDate.Value);
 
-            selectQuery.Sort().ByColumn("ID", RDBSortDirection.DESC);
+            selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
 
             return queryContext.GetItems(InvoiceMapper);
         }
@@ -647,12 +675,12 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.From(TABLE_NAME, "inv");
 
             var aggregates = selectQuery.SelectAggregates();
-            aggregates.Aggregate(RDBNonCountAggregateType.MIN, "FromDate");
-            aggregates.Aggregate(RDBNonCountAggregateType.MAX, "ToDate");
+            aggregates.Aggregate(RDBNonCountAggregateType.MIN, COL_FromDate);
+            aggregates.Aggregate(RDBNonCountAggregateType.MAX, COL_ToDate);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("PartnerID").Value(partnerId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_PartnerID).Value(partnerId);
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.GetItem(VRPopulatedPeriodMapper);
@@ -663,11 +691,11 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "inv", 1);
-            selectQuery.SelectColumns().Column("ID");
+            selectQuery.SelectColumns().Column(COL_ID);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("PartnerID").Value(partnerId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_PartnerID).Value(partnerId);
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -680,9 +708,9 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
             AddConditionInvoiceNotDeleted(where);
-            where.ListCondition("SerialNumber", RDBListConditionOperator.IN, serialNumbers);
+            where.ListCondition(COL_SerialNumber, RDBListConditionOperator.IN, serialNumbers);
 
             return queryContext.GetItems(InvoiceMapper);
         }
@@ -693,11 +721,11 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column("PaidDate").Value(paidDate);
+            updateQuery.Column(COL_PaidDate).Value(paidDate);
 
             var where = updateQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("ID").Value(invoiceId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_ID).Value(invoiceId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -713,10 +741,10 @@ namespace Vanrise.Invoice.Data.RDB
             {
                 serializedSettings = Vanrise.Common.Serializer.Serialize(invoiceSettings);
             }
-            updateQuery.Column("Settings").Value(serializedSettings);
+            updateQuery.Column(COL_Settings).Value(serializedSettings);
 
             var where = updateQuery.Where();
-            where.EqualsCondition("ID").Value(invoiceId);
+            where.EqualsCondition(COL_ID).Value(invoiceId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -727,10 +755,10 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
             if (sentDate.HasValue)
-                updateQuery.Column("SentDate").Value(sentDate.Value);
+                updateQuery.Column(COL_SentDate).Value(sentDate.Value);
             else
-                updateQuery.Column("SentDate").Null();
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceId);
+                updateQuery.Column(COL_SentDate).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceId);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -746,8 +774,8 @@ namespace Vanrise.Invoice.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column("IsDeleted").Value(true);
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceId);
+            updateQuery.Column(COL_IsDeleted).Value(true);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceId);
 
             if (billingPeriodInfo.NextPeriodStart.Date == nextPeriodStart.Date)
             {
@@ -773,16 +801,16 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("inv");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
             if (from.HasValue)
-                where.GreaterOrEqualCondition("CreatedTime").Value(from.Value);
+                where.GreaterOrEqualCondition(COL_CreatedTime).Value(from.Value);
             if (to.HasValue)
-                where.LessOrEqualCondition("CreatedTime").Value(to.Value);
+                where.LessOrEqualCondition(COL_CreatedTime).Value(to.Value);
             if (filterGroup != null)
                 new RecordFilterRDBBuilder((fieldName, expressionContext) => expressionContext.Column("inv", GetColumnNameFromFieldName(fieldName))).RecordFilterGroupCondition(where, filterGroup);
 
             if (orderDirection.HasValue)
-                selectQuery.Sort().ByColumn("ID", orderDirection.Value == OrderDirection.Ascending ? RDBSortDirection.ASC : RDBSortDirection.DESC);
+                selectQuery.Sort().ByColumn(COL_ID, orderDirection.Value == OrderDirection.Ascending ? RDBSortDirection.ASC : RDBSortDirection.DESC);
 
             queryContext.ExecuteReader(
                         (reader) =>
@@ -806,22 +834,22 @@ namespace Vanrise.Invoice.Data.RDB
         {
             if (invoiceTableAlias == null)
             {
-                conditionContext.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
-                conditionContext.ConditionIfColumnNotNull("IsDraft").EqualsCondition("IsDraft").Value(false);
+                conditionContext.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+                conditionContext.ConditionIfColumnNotNull(COL_IsDraft).EqualsCondition(COL_IsDraft).Value(false);
             }
             else
             {
-                conditionContext.ConditionIfColumnNotNull(invoiceTableAlias, "IsDeleted").EqualsCondition(invoiceTableAlias, "IsDeleted").Value(false);
-                conditionContext.ConditionIfColumnNotNull(invoiceTableAlias, "IsDraft").EqualsCondition(invoiceTableAlias, "IsDraft").Value(false);
+                conditionContext.ConditionIfColumnNotNull(invoiceTableAlias, COL_IsDeleted).EqualsCondition(invoiceTableAlias, COL_IsDeleted).Value(false);
+                conditionContext.ConditionIfColumnNotNull(invoiceTableAlias, COL_IsDraft).EqualsCondition(invoiceTableAlias, COL_IsDraft).Value(false);
             }
         }
 
         internal void AddJoinInvoiceToBulkActionDraft(RDBJoinContext joinContext, string bulkActionDraftAlias, string invoiceAlias)
         {
             var joinCondition = joinContext.Join(TABLE_NAME, invoiceAlias).On();
-            joinCondition.EqualsCondition(invoiceAlias, "InvoiceTypeID").Column(bulkActionDraftAlias, "InvoiceTypeID");
-            joinCondition.EqualsCondition(invoiceAlias, "ID").Column(bulkActionDraftAlias, "InvoiceId");
-            AddConditionInvoiceNotDeleted(joinCondition, invoiceAlias);
+            joinCondition.EqualsCondition(invoiceAlias, COL_InvoiceTypeID).Column(bulkActionDraftAlias, InvoiceBulkActionsDraftDataManager.COL_InvoiceTypeId);
+            joinCondition.EqualsCondition(invoiceAlias, COL_ID).Column(bulkActionDraftAlias, InvoiceBulkActionsDraftDataManager.COL_InvoiceId);
+            //AddConditionInvoiceNotDeleted(joinCondition, invoiceAlias);
         }
     }
 }

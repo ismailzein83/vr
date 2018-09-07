@@ -11,12 +11,12 @@ namespace Vanrise.Data.RDB
     {
         public static BaseRDBDataProvider CreateProvider(string moduleName, string appSettingWithConnectionStringName, string defaultConnectionStringName)
         {
-            return new DataProvider.Providers.MySQLRDBDataProvider(GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName));
+            return new DataProvider.Providers.MSSQLRDBDataProvider(GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName));
         }
 
         public static BaseRDBDataProvider CreateProvider(string moduleName, string connectionStringName)
         {
-            return new DataProvider.Providers.MySQLRDBDataProvider(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
+            return new DataProvider.Providers.MSSQLRDBDataProvider(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
         }
 
         private static string GetConnectionString(string appSettingWithConnectionStringName, string defaultConnectionStringName)

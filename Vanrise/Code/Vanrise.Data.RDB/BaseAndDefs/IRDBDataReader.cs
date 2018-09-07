@@ -15,6 +15,8 @@ namespace Vanrise.Data.RDB
 
         string GetString(string fieldName);
 
+        string GetStringWithEmptyHandling(string fieldName);
+
         int GetInt(string fieldName);
 
         int GetIntWithNullHandling(string fieldName);
@@ -93,6 +95,11 @@ namespace Vanrise.Data.RDB
             return _originalReader[fieldName] as string;
         }
 
+        public virtual string GetStringWithEmptyHandling(string fieldName)
+        {
+            return GetString(fieldName);
+        }
+
         protected virtual T GetFieldValue<T>(string fieldName)
             {
                 var value = _originalReader[fieldName];
@@ -103,7 +110,7 @@ namespace Vanrise.Data.RDB
                 if (value is T)
                     return (T)value;
                 else
-                    return (T)Convert.ChangeType(value, typeof(T));
+                    return (T)Convert.ChangeType(value, CommonRDBFieldValue.GetInlineType(typeof(T)));
             }
 
         protected virtual T GetFieldValueWithNullHandling<T>(string fieldName)
@@ -115,7 +122,7 @@ namespace Vanrise.Data.RDB
                 if (value is T)
                     return (T)value;
                 else
-                    return (T)Convert.ChangeType(value, typeof(T));
+                    return (T)Convert.ChangeType(value, CommonRDBFieldValue.GetInlineType(typeof(T)));
         }
 
         public virtual int GetInt(string fieldName)

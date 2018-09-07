@@ -12,24 +12,33 @@ namespace Vanrise.AccountBalance.Data.RDB
     {
         static string TABLE_NAME = "VR_AccountBalance_AccountUsageOverride";
 
+        const string COL_ID = "ID";
+        internal const string COL_AccountTypeID = "AccountTypeID";
+        internal const string COL_AccountID = "AccountID";
+        internal const string COL_TransactionTypeID = "TransactionTypeID";
+        internal const string COL_PeriodStart = "PeriodStart";
+        internal const string COL_PeriodEnd = "PeriodEnd";
+        const string COL_OverriddenByTransactionID = "OverriddenByTransactionID";
+        const string COL_CreatedTime = "CreatedTime";
+
         static AccountUsageOverrideDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            columns.Add("TransactionTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("PeriodStart", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("PeriodEnd", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("OverriddenByTransactionID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_PeriodStart, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_PeriodEnd, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_OverriddenByTransactionID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_AccountBalance",
                 DBTableName = "AccountUsageOverride",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -48,12 +57,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             {
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column("AccountTypeID").Value(accountUsageOverride.AccountTypeId);
-                insertQuery.Column("AccountID").Value(accountUsageOverride.AccountId);
-                insertQuery.Column("TransactionTypeID").Value(accountUsageOverride.TransactionTypeId);
-                insertQuery.Column("PeriodStart").Value(accountUsageOverride.PeriodStart);
-                insertQuery.Column("PeriodEnd").Value(accountUsageOverride.PeriodEnd);
-                insertQuery.Column("OverriddenByTransactionID").Value(accountUsageOverride.OverriddenByTransactionId);
+                insertQuery.Column(COL_AccountTypeID).Value(accountUsageOverride.AccountTypeId);
+                insertQuery.Column(COL_AccountID).Value(accountUsageOverride.AccountId);
+                insertQuery.Column(COL_TransactionTypeID).Value(accountUsageOverride.TransactionTypeId);
+                insertQuery.Column(COL_PeriodStart).Value(accountUsageOverride.PeriodStart);
+                insertQuery.Column(COL_PeriodEnd).Value(accountUsageOverride.PeriodEnd);
+                insertQuery.Column(COL_OverriddenByTransactionID).Value(accountUsageOverride.OverriddenByTransactionId);
             }
         }
 
@@ -61,7 +70,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, billingTransactionIds);
+            deleteQuery.Where().ListCondition(COL_OverriddenByTransactionID, RDBListConditionOperator.IN, billingTransactionIds);
         }
 
         internal bool IsAccountOverriddenInPeriod(Guid accountTypeId, Guid transactionTypeId, string accountId, DateTime periodStart, DateTime periodEnd)
@@ -69,14 +78,14 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(AccountUsageOverrideDataManager.TABLE_NAME, "au_override", 1);
-            selectQuery.SelectColumns().Column("ID");
+            selectQuery.SelectColumns().Column(COL_ID);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.EqualsCondition("AccountID").Value(accountId);
-            where.EqualsCondition("TransactionTypeID").Value(transactionTypeId);
-            where.LessOrEqualCondition("PeriodStart").Value(periodStart);
-            where.GreaterOrEqualCondition("PeriodEnd").Value(periodEnd);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.EqualsCondition(COL_AccountID).Value(accountId);
+            where.EqualsCondition(COL_TransactionTypeID).Value(transactionTypeId);
+            where.LessOrEqualCondition(COL_PeriodStart).Value(periodStart);
+            where.GreaterOrEqualCondition(COL_PeriodEnd).Value(periodEnd);
 
             return  queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -85,8 +94,8 @@ namespace Vanrise.AccountBalance.Data.RDB
         {            
             var joinSelectQuery = joinSelectContext.SelectQuery();
             joinSelectQuery.From(TABLE_NAME, "usageOverride");
-            joinSelectQuery.SelectColumns().Columns("AccountTypeID", "AccountID", "TransactionTypeID", "PeriodStart", "PeriodEnd");
-            joinSelectQuery.Where().ListCondition("OverriddenByTransactionID", RDBListConditionOperator.IN, deletedTransactionIds);
+            joinSelectQuery.SelectColumns().Columns(COL_AccountTypeID, COL_AccountID, COL_TransactionTypeID, COL_PeriodStart, COL_PeriodEnd);
+            joinSelectQuery.Where().ListCondition(COL_OverriddenByTransactionID, RDBListConditionOperator.IN, deletedTransactionIds);
         }
     }
 }

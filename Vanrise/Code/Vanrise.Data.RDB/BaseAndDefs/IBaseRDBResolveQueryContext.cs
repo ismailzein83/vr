@@ -12,11 +12,15 @@ namespace Vanrise.Data.RDB
 
         Dictionary<string, RDBParameter> Parameters { get; }
 
+        List<string> TempTableNames { get; }
+
+        void AddTempTableName(string tempTableName);
+
         RDBParameter GetParameterWithValidate(string parameterName);
 
         int PrmIndex { get; set; }
 
-        string GenerateUniqueDBParameterName();
+        string GenerateUniqueDBParameterName(RDBParameterDirection parameterDirection);
 
 
         void AddParameter(RDBParameter parameter);
@@ -31,6 +35,7 @@ namespace Vanrise.Data.RDB
         {
             _dataProvider = dataProvider;
             this.Parameters = new Dictionary<string, RDBParameter>();
+            this.TempTableNames = new List<string>();
         }
 
         public BaseRDBResolveQueryContext(IBaseRDBResolveQueryContext parentContext)
@@ -38,6 +43,7 @@ namespace Vanrise.Data.RDB
             _parentContext = parentContext;
             this._dataProvider = parentContext.DataProvider;
             this.Parameters = parentContext.Parameters;
+            this.TempTableNames = parentContext.TempTableNames;
         }
 
         public BaseRDBDataProvider DataProvider
@@ -59,9 +65,9 @@ namespace Vanrise.Data.RDB
 
         int _prmIndex;
 
-        public string GenerateUniqueDBParameterName()
+        public string GenerateUniqueDBParameterName(RDBParameterDirection parameterDirection)
         {
-            return this.DataProvider.ConvertToDBParameterName(String.Concat("Prm_", this.PrmIndex++));
+            return this.DataProvider.ConvertToDBParameterName(String.Concat("Prm_", this.PrmIndex++), parameterDirection);
         }
 
         public Dictionary<string, RDBParameter> Parameters
@@ -86,6 +92,18 @@ namespace Vanrise.Data.RDB
             if (!this.Parameters.TryGetValue(parameterName, out parameter))
                 throw new Exception(String.Format("Parameter '{0}' not found", parameterName));
             return parameter;
+        }
+
+
+        public List<string> TempTableNames
+        {
+            get;
+            private set;
+        }
+
+        public void AddTempTableName(string tempTableName)
+        {
+            this.TempTableNames.Add(tempTableName);
         }
     }
 

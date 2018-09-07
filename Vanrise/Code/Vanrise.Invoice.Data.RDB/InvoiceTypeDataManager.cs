@@ -12,20 +12,25 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceType";
 
+        const string COL_ID = "ID";
+        const string COL_Name = "Name";
+        const string COL_Settings = "Settings";
+        const string COL_CreatedTime = "CreatedTime";
+
         static InvoiceTypeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("Name", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-            columns.Add("Settings", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "InvoiceType",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -40,9 +45,9 @@ namespace Vanrise.Invoice.Data.RDB
         {
             InvoiceType invoiceType = new InvoiceType
             {
-                InvoiceTypeId = reader.GetGuid("ID"),
-                Name = reader.GetString("Name"),
-                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceTypeSettings>(reader.GetString("Settings"))
+                InvoiceTypeId = reader.GetGuid(COL_ID),
+                Name = reader.GetString(COL_Name),
+                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceTypeSettings>(reader.GetString(COL_Settings))
             };
             return invoiceType;
         }
@@ -57,7 +62,7 @@ namespace Vanrise.Invoice.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "invType", null, true);
             selectQuery.SelectColumns().AllTableColumns("invType");
-            selectQuery.Sort().ByColumn("Name", RDBSortDirection.ASC);
+            selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 
             return queryContext.GetItems(InvoiceTypeMapper);
         }
@@ -72,12 +77,12 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
-            insertQuery.IfNotExists("invType").EqualsCondition("Name").Value(invoiceType.Name);
+            insertQuery.IfNotExists("invType").EqualsCondition(COL_Name).Value(invoiceType.Name);
 
-            insertQuery.Column("ID").Value(invoiceType.InvoiceTypeId);
-            insertQuery.Column("Name").Value(invoiceType.Name);
+            insertQuery.Column(COL_ID).Value(invoiceType.InvoiceTypeId);
+            insertQuery.Column(COL_Name).Value(invoiceType.Name);
             if (invoiceType.Settings != null)
-                insertQuery.Column("Settings").Value(Vanrise.Common.Serializer.Serialize(invoiceType.Settings));
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(invoiceType.Settings));
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -89,13 +94,13 @@ namespace Vanrise.Invoice.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
 
             var notExistsCondition = updateQuery.IfNotExists("invType");
-            notExistsCondition.NotEqualsCondition("ID").Value(invoiceType.InvoiceTypeId);
-            notExistsCondition.EqualsCondition("Name").Value(invoiceType.Name);
+            notExistsCondition.NotEqualsCondition(COL_ID).Value(invoiceType.InvoiceTypeId);
+            notExistsCondition.EqualsCondition(COL_Name).Value(invoiceType.Name);
 
-            updateQuery.Column("Name").Value(invoiceType.Name);
-            updateQuery.Column("Settings").Value(Vanrise.Common.Serializer.Serialize(invoiceType.Settings));
+            updateQuery.Column(COL_Name).Value(invoiceType.Name);
+            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(invoiceType.Settings));
 
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceType.InvoiceTypeId);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceType.InvoiceTypeId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }

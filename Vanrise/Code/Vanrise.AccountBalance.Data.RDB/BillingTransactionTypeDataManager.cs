@@ -11,21 +11,28 @@ namespace Vanrise.AccountBalance.Data.RDB
     public class BillingTransactionTypeDataManager : IBillingTransactionTypeDataManager
     {
         static string TABLE_NAME = "VR_AccountBalance_BillingTransactionType";
+
+        const string COL_ID = "ID";
+        const string COL_Name = "Name";
+        const string COL_IsCredit = "IsCredit";
+        const string COL_Settings = "Settings";
+        const string COL_CreatedTime = "CreatedTime";
+
         static BillingTransactionTypeDataManager()
         {
             var columns = new Dictionary<string,RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition{ DataType = RDBDataType.UniqueIdentifier});
-            columns.Add("Name", new RDBTableColumnDefinition{ DataType = RDBDataType.NVarchar, Size= 255});
-            columns.Add("IsCredit", new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add("Settings", new RDBTableColumnDefinition {  DataType = RDBDataType.NVarchar });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition{ DataType = RDBDataType.UniqueIdentifier});
+            columns.Add(COL_Name, new RDBTableColumnDefinition{ DataType = RDBDataType.NVarchar, Size= 255});
+            columns.Add(COL_IsCredit, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition {  DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_AccountBalance",
                 DBTableName = "BillingTransactionType",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
             
         }
@@ -41,10 +48,10 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             return new BillingTransactionType
             {
-                BillingTransactionTypeId = reader.GetGuid("ID"),
-                Name = reader.GetString("Name"),
-                IsCredit = reader.GetBooleanWithNullHandling("IsCredit"),
-                Settings = Common.Serializer.Deserialize<BillingTransactionTypeSettings>(reader.GetString("Settings"))
+                BillingTransactionTypeId = reader.GetGuid(COL_ID),
+                Name = reader.GetString(COL_Name),
+                IsCredit = reader.GetBooleanWithNullHandling(COL_IsCredit),
+                Settings = Common.Serializer.Deserialize<BillingTransactionTypeSettings>(reader.GetString(COL_Settings))
             };
         }
 

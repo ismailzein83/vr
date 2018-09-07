@@ -84,6 +84,12 @@ namespace Vanrise.Data.RDB
             context.CreatedTimeColumnName = tableDefinition.CreatedTimeColumnName;
             context.ModifiedTimeColumnName = tableDefinition.ModifiedTimeColumnName;
         }
+
+
+        public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
+        {
+            context.ColumnDefinition = _schemaManager.GetColumnDefinitionWithValidate(context.DataProvider, this.TableName, context.ColumnName);
+        }
     }
 
     public class RDBTempPhysicalTableQuerySource : IRDBTableQuerySource
@@ -142,6 +148,16 @@ namespace Vanrise.Data.RDB
         {
             context.CreatedTimeColumnName = this._tableDefinition.CreatedTimeColumnName;
             context.ModifiedTimeColumnName = this._tableDefinition.ModifiedTimeColumnName;
+        }
+
+
+        public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
+        {
+            string columnName = context.ColumnName;
+            RDBTableColumnDefinition columnDefinition;
+            if (!this._tableDefinition.Columns.TryGetValue(columnName, out columnDefinition))
+                throw new Exception(String.Format(" Column '{0}' not found in table '{1}'", columnName, this._tableName));
+            context.ColumnDefinition = columnDefinition;
         }
     }
 }

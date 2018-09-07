@@ -15,12 +15,12 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
          public MSSQLRDBDataProvider(string connString)
              : base(connString)
          {
-             _dataManager = new SQLDataManager(connString);
+             _dataManager = new SQLDataManager(connString, this);
          }
 
          SQLDataManager _dataManager;
 
-         public override string ConvertToDBParameterName(string parameterName)
+         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
          {
              return string.Concat("@", parameterName);
          }
@@ -33,17 +33,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
          public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
          {
-             _dataManager.ExecuteReader(context.Query, context.Parameters, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
+             _dataManager.ExecuteReader(context.Query, context.Parameters, context.ExecuteTransactional, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
          }
 
          public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
          {
-             return _dataManager.ExecuteNonQuery(context.Query, context.Parameters);
+             return _dataManager.ExecuteNonQuery(context.Query, context.Parameters, context.ExecuteTransactional);
          }
 
          public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
          {
-             return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters));
+             return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
          }
          
          public override string NowDateTimeFunction
@@ -71,60 +71,203 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
          private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager
          {
              string _connString;
-             public SQLDataManager()
-             {
-             }
-             public SQLDataManager(string connString)
+            MSSQLRDBDataProvider _dataProvider;
+
+             public SQLDataManager(string connString, MSSQLRDBDataProvider dataProvider)
              {
                  _connString = connString;
+                 _dataProvider = dataProvider;
              }
 
-             protected override string GetConnectionString()
+             public void ExecuteReader(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, Action<IDataReader> onReaderReady)
              {
-                 return _connString;
-             }
-
-             public void ExecuteReader(string sqlQuery, Dictionary<string, RDBParameter> parameters, Action<IDataReader> onReaderReady)
-             {
-                 base.ExecuteReaderText(sqlQuery, onReaderReady, (cmd) =>
-                 {
-                     if (parameters != null)
+                 CreateCommandWithParams(query, parameters, executeTransactional,
+                     (cmd) =>
                      {
-                         AddParameters(cmd, parameters);
-                     }
-                 });
+                         using (var reader = cmd.ExecuteReader())
+                         {
+                             onReaderReady(reader);
+                             cmd.Cancel();
+                             reader.Close();
+                         }
+                     });
              }
 
-             public int ExecuteNonQuery(string sqlQuery, Dictionary<string, RDBParameter> parameters)
+             public int ExecuteNonQuery(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional)
              {
-                 return base.ExecuteNonQueryText(sqlQuery, (cmd) =>
-                 {
-                     if (parameters != null)
+                 int rslt = 0;
+                 CreateCommandWithParams(query, parameters, executeTransactional,
+                     (cmd) =>
                      {
-                         AddParameters(cmd, parameters);
-                     }
-                 });
+                         rslt = cmd.ExecuteNonQuery();
+                     });
+                 return rslt;
              }
 
-             public Object ExecuteScalar(string sqlQuery, Dictionary<string, RDBParameter> parameters)
+             public Object ExecuteScalar(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional)
              {
-                 return base.ExecuteScalarText(sqlQuery, (cmd) =>
-                 {
-                     if (parameters != null)
+                 Object rslt = 0;
+                 CreateCommandWithParams(query, parameters, executeTransactional,
+                     (cmd) =>
                      {
-                         AddParameters(cmd, parameters);
-                     }
-                 });
+                         rslt = cmd.ExecuteScalar();
+                     });
+                 return rslt;
              }
 
-             private static void AddParameters(System.Data.Common.DbCommand cmd, Dictionary<string, RDBParameter> parameters)
+             void CreateCommandWithParams(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, Action<SqlCommand> onCommandReady)
+             {
+                 using (var connection = new SqlConnection(_connString))
+                 {
+                     connection.Open();
+
+                     using (var cmd = new SqlCommand(GetQueryAsText(query, parameters), connection))
+                     {
+                         if (parameters != null)
+                             AddParameters(cmd, parameters);
+                         if (executeTransactional)
+                         {
+                             using (var transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted))
+                             {
+                                 cmd.Transaction = transaction;
+                                 try
+                                 {
+                                     onCommandReady(cmd);
+                                     transaction.Commit();
+                                 }
+                                 catch
+                                 {
+                                     transaction.Rollback();
+                                     throw;
+                                 }
+                             }
+                         }
+                         else
+                         {
+                             onCommandReady(cmd);
+                         }
+                     }
+
+                     connection.Close();
+                 }
+             }
+
+
+             public string GetQueryAsText(RDBResolvedQuery resolvedQuery, Dictionary<string, RDBParameter> parameters)
+             {
+                 var queryBuilder = new StringBuilder();
+
+                 if (parameters != null)
+                 {
+                     foreach (var prm in parameters.Values)
+                     {
+                         if (prm.Direction == RDBParameterDirection.Declared)
+                         {
+                             if (queryBuilder.Length == 0)
+                                 queryBuilder.Append("DECLARE ");
+                             else
+                                 queryBuilder.Append(", ");
+                             queryBuilder.Append(string.Concat(prm.DBParameterName, " ", _dataProvider.GetColumnDBType(prm.DBParameterName, prm.Type, prm.Size, prm.Precision)));
+                             queryBuilder.AppendLine();
+                         }
+                     }
+                 }
+
+                 foreach (var statement in resolvedQuery.Statements)
+                 {
+                     queryBuilder.Append(statement.TextStatement);
+                     queryBuilder.Append(";");
+                     queryBuilder.AppendLine();
+                     queryBuilder.AppendLine();
+                 }
+                 return queryBuilder.ToString();
+             }
+
+
+             private static void AddParameters(SqlCommand cmd, Dictionary<string, RDBParameter> parameters)
              {
                  foreach (var prm in parameters)
                  {
                      if (prm.Value.Direction == RDBParameterDirection.In)
-                         cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter(prm.Value.DBParameterName, prm.Value.Value != null ? prm.Value.Value : DBNull.Value));
+                         cmd.Parameters.Add(new SqlParameter(prm.Value.DBParameterName, prm.Value.Value != null ? prm.Value.Value : DBNull.Value));
                  }
              }
+
+             //protected override string GetConnectionString()
+             //{
+             //    return _connString;
+             //}
+
+             //public void ExecuteReader(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, Action<IDataReader> onReaderReady)
+             //{
+             //    base.ExecuteReaderText(GetQueryAsText(query, parameters), onReaderReady, (cmd) =>
+             //    {
+             //        if (parameters != null)
+             //        {
+             //            AddParameters(cmd, parameters);
+             //        }
+             //    });
+             //}
+
+             //public int ExecuteNonQuery(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters)
+             //{
+             //    return base.ExecuteNonQueryText(GetQueryAsText(query, parameters), (cmd) =>
+             //    {
+             //        if (parameters != null)
+             //        {
+             //            AddParameters(cmd, parameters);
+             //        }
+             //    });
+             //}
+
+             //public Object ExecuteScalar(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters)
+             //{
+             //    return base.ExecuteScalarText(GetQueryAsText(query, parameters), (cmd) =>
+             //    {
+             //        if (parameters != null)
+             //        {
+             //            AddParameters(cmd, parameters);
+             //        }
+             //    });
+             //}
+
+             //private string GetQueryAsText(RDBResolvedQuery resolvedQuery, Dictionary<string, RDBParameter> parameters)
+             //{
+             //    var queryBuilder = new StringBuilder();
+
+             //    if (parameters != null)
+             //    {
+             //        foreach (var prm in parameters.Values)
+             //        {
+             //            if (prm.Direction == RDBParameterDirection.Declared)
+             //            {
+             //                if (queryBuilder.Length == 0)
+             //                    queryBuilder.Append("DECLARE ");
+             //                else
+             //                    queryBuilder.Append(", ");
+             //                queryBuilder.Append(string.Concat(prm.DBParameterName, " ", _dataProvider.GetColumnDBType(prm.DBParameterName, prm.Type, prm.Size, prm.Precision)));
+             //                queryBuilder.AppendLine();
+             //            }
+             //        }
+             //    }
+
+             //    foreach (var statement in resolvedQuery.Statements)
+             //    {
+             //        queryBuilder.Append(statement.TextStatement);
+             //        queryBuilder.AppendLine();
+             //        queryBuilder.AppendLine();
+             //    }
+             //    return queryBuilder.ToString();
+             //}
+
+             //private static void AddParameters(System.Data.Common.DbCommand cmd, Dictionary<string, RDBParameter> parameters)
+             //{
+             //    foreach (var prm in parameters)
+             //    {
+             //        if (prm.Value.Direction == RDBParameterDirection.In)
+             //            cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter(prm.Value.DBParameterName, prm.Value.Value != null ? prm.Value.Value : DBNull.Value));
+             //    }
+             //}
 
              //private DbType GetSQLDBType(RDBDataType dataType, out int? size, out byte? precision)
              //{

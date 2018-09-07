@@ -253,14 +253,14 @@ namespace Vanrise.Data.RDB
         
         public RDBSelectQuery ExistsCondition()
         {
-            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
+            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
             this.Condition(new RDBExistsCondition { SelectQuery = selectQuery});
             return selectQuery;
         }
 
         public RDBSelectQuery NotExistsCondition()
         {
-            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
+            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
             this.Condition(new RDBNotExistsCondition { SelectQuery = selectQuery });
             return selectQuery;
         }

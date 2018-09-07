@@ -9,10 +9,12 @@ namespace Vanrise.Data.RDB
     public class RDBSelectQuery : BaseRDBQuery, IRDBTableQuerySource
     {
         RDBQueryBuilderContext _queryBuilderContext;
+        bool _isMainStatement;
 
-        internal RDBSelectQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBSelectQuery(RDBQueryBuilderContext queryBuilderContext, bool isMainStatement)
         {
             _queryBuilderContext = queryBuilderContext;
+            _isMainStatement = isMainStatement;
         }
 
         IRDBTableQuerySource _table;
@@ -75,7 +77,7 @@ namespace Vanrise.Data.RDB
 
         public RDBSelectQuery FromSelect(string inlineQueryAlias, long? nbOfRecords)
         {
-            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
+            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
             From(selectQuery, inlineQueryAlias, nbOfRecords);
             return selectQuery;
         }
@@ -166,7 +168,7 @@ namespace Vanrise.Data.RDB
             StringBuilder queryBuilder = new StringBuilder();
             foreach(var statement in resolvedSelectQuery.Statements)
             {
-                queryBuilder.AppendLine(statement);
+                queryBuilder.AppendLine(statement.TextStatement);
             }
             return string.Concat(" (", queryBuilder.ToString(), ") ");
         }
@@ -189,7 +191,7 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            var resolveSelectQueryContext = new RDBDataProviderResolveSelectQueryContext(this._table, this._tableAlias, this._nbOfRecords, this._columns, this._joins,
+            var resolveSelectQueryContext = new RDBDataProviderResolveSelectQueryContext(this._isMainStatement, this._table, this._tableAlias, this._nbOfRecords, this._columns, this._joins,
              this._conditionGroup, this._groupBy, this._sortColumns, context, _queryBuilderContext);
             return context.DataProvider.ResolveSelectQuery(resolveSelectQueryContext);
         }
@@ -211,6 +213,12 @@ namespace Vanrise.Data.RDB
         {
             
         }
+
+
+        public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class RDBSelectColumn
@@ -218,8 +226,6 @@ namespace Vanrise.Data.RDB
         public BaseRDBExpression Expression { get; set; }
 
         public string Alias { get; set; }
-
-        public string SetDBParameterName { get; set; }
     }
 
     public enum RDBSortDirection { ASC = 0, DESC = 1 }

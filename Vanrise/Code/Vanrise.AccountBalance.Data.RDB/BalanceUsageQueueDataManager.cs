@@ -12,21 +12,27 @@ namespace Vanrise.AccountBalance.Data.RDB
     {
         static string TABLE_NAME = "VR_AccountBalance_BalanceUsageQueue";
 
+        const string COL_ID = "ID";
+        const string COL_AccountTypeID = "AccountTypeID";
+        const string COL_QueueType = "QueueType";
+        const string COL_UsageDetails = "UsageDetails";
+        const string COL_CreatedTime = "CreatedTime";
+
         static BalanceUsageQueueDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("QueueType", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add("UsageDetails", new RDBTableColumnDefinition { DataType = RDBDataType.VarBinary });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_QueueType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_UsageDetails, new RDBTableColumnDefinition { DataType = RDBDataType.VarBinary });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_AccountBalance",
                 DBTableName = "BalanceUsageQueue",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -36,9 +42,9 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             return new BalanceUsageQueue<T>
             {
-                BalanceUsageQueueId = reader.GetLong("ID"),
-                AccountTypeId = reader.GetGuid("AccountTypeID"),
-                UsageDetails = Vanrise.Common.ProtoBufSerializer.Deserialize<T>(Common.Compressor.Decompress(reader.GetBytes("UsageDetails")))
+                BalanceUsageQueueId = reader.GetLong(COL_ID),
+                AccountTypeId = reader.GetGuid(COL_AccountTypeID),
+                UsageDetails = Vanrise.Common.ProtoBufSerializer.Deserialize<T>(Common.Compressor.Decompress(reader.GetBytes(COL_UsageDetails)))
             };
         }
 
@@ -59,8 +65,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("usageQueue");
 
             var whereCondition = selectQuery.Where();
-            whereCondition.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            whereCondition.EqualsCondition("QueueType").Value((int)balanceUsageQueueType);
+            whereCondition.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            whereCondition.EqualsCondition(COL_QueueType).Value((int)balanceUsageQueueType);
 
             queryContext.ExecuteReader(reader =>
             {
@@ -83,9 +89,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
-            insertQuery.Column("AccountTypeID").Value(accountTypeId);
-            insertQuery.Column("QueueType").Value((int)balanceUsageQueueType);
-            insertQuery.Column("UsageDetails").Value(binaryArray);
+            insertQuery.Column(COL_AccountTypeID).Value(accountTypeId);
+            insertQuery.Column(COL_QueueType).Value((int)balanceUsageQueueType);
+            insertQuery.Column(COL_UsageDetails).Value(binaryArray);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -94,9 +100,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "usageQueue", 1);
-            selectQuery.SelectColumns().Column("ID");
+            selectQuery.SelectColumns().Column(COL_ID);
 
-            selectQuery.Where().EqualsCondition("AccountTypeID").Value(accountTypeId);
+            selectQuery.Where().EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -107,7 +113,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("ID").Value(balanceUsageQueueId);
+            deleteQuery.Where().EqualsCondition(COL_ID).Value(balanceUsageQueueId);
         }
     }
 }

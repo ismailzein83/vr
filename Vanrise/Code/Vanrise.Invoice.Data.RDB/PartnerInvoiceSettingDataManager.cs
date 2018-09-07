@@ -12,21 +12,27 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_PartnerInvoiceSetting";
 
+        const string COL_ID = "ID";
+        const string COL_PartnerID = "PartnerID";
+        const string COL_InvoiceSettingID = "InvoiceSettingID";
+        const string COL_Details = "Details";
+        const string COL_CreatedTime = "CreatedTime";
+
         static PartnerInvoiceSettingDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("PartnerID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            columns.Add("InvoiceSettingID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("Details", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_InvoiceSettingID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "PartnerInvoiceSetting",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -41,10 +47,10 @@ namespace Vanrise.Invoice.Data.RDB
         {
             PartnerInvoiceSetting partnerInvoiceSetting = new PartnerInvoiceSetting
             {
-                PartnerInvoiceSettingId = reader.GetGuid("ID"),
-                PartnerId = reader.GetString("PartnerID"),
-                InvoiceSettingID = reader.GetGuid("InvoiceSettingID"),
-                Details = Vanrise.Common.Serializer.Deserialize<PartnerInvoiceSettingDetails>(reader.GetString("Details"))
+                PartnerInvoiceSettingId = reader.GetGuid(COL_ID),
+                PartnerId = reader.GetString(COL_PartnerID),
+                InvoiceSettingID = reader.GetGuid(COL_InvoiceSettingID),
+                Details = Vanrise.Common.Serializer.Deserialize<PartnerInvoiceSettingDetails>(reader.GetString(COL_Details))
             };
             return partnerInvoiceSetting;
         }
@@ -75,14 +81,14 @@ namespace Vanrise.Invoice.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
 
             var notExistsCondition = insertQuery.IfNotExists("partnerSett");
-            notExistsCondition.EqualsCondition("InvoiceSettingID").Value(invoiceSettingId);
-            notExistsCondition.EqualsCondition("PartnerID").Value(partnerId);
+            notExistsCondition.EqualsCondition(COL_InvoiceSettingID).Value(invoiceSettingId);
+            notExistsCondition.EqualsCondition(COL_PartnerID).Value(partnerId);
 
-            insertQuery.Column("ID").Value(invoicePartnerSettingId);
-            insertQuery.Column("invoiceSettingId").Value(invoiceSettingId);
-            insertQuery.Column("PartnerID").Value(partnerId);
+            insertQuery.Column(COL_ID).Value(invoicePartnerSettingId);
+            insertQuery.Column(COL_InvoiceSettingID).Value(invoiceSettingId);
+            insertQuery.Column(COL_PartnerID).Value(partnerId);
             if (partnerInvoiceSettingDetails != null)
-                insertQuery.Column("Details").Value(Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails));
+                insertQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails));
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -93,8 +99,8 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column("Details").Value(Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails));
-            updateQuery.Where().EqualsCondition("ID").Value(partnerInvoiceSettingId);
+            updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails));
+            updateQuery.Where().EqualsCondition(COL_ID).Value(partnerInvoiceSettingId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -104,7 +110,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("ID").Value(partnerInvoiceSettingId);
+            deleteQuery.Where().EqualsCondition(COL_ID).Value(partnerInvoiceSettingId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -115,9 +121,9 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column("PartnerID").Value(partnerId);
-            updateQuery.Column("InvoiceSettingID").Value(invoiceSettingId);
-            updateQuery.Where().EqualsCondition("ID").Value(partnerInvoiceSettingId);
+            updateQuery.Column(COL_PartnerID).Value(partnerId);
+            updateQuery.Column(COL_InvoiceSettingID).Value(invoiceSettingId);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(partnerInvoiceSettingId);
 
             if(queryContext.ExecuteNonQuery() <=0)
             {
@@ -125,9 +131,9 @@ namespace Vanrise.Invoice.Data.RDB
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
 
-                insertQuery.Column("ID").Value(partnerInvoiceSettingId);
-                insertQuery.Column("invoiceSettingId").Value(invoiceSettingId);
-                insertQuery.Column("PartnerID").Value(partnerId);
+                insertQuery.Column(COL_ID).Value(partnerInvoiceSettingId);
+                insertQuery.Column(COL_InvoiceSettingID).Value(invoiceSettingId);
+                insertQuery.Column(COL_PartnerID).Value(partnerId);
 
                 queryContext.ExecuteNonQuery();
             }

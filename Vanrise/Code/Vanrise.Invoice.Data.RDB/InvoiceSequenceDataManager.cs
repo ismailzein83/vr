@@ -11,21 +11,28 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceSequence";
 
+        const string COL_SequenceGroup = "SequenceGroup";
+        const string COL_InvoiceTypeID = "InvoiceTypeID";
+        const string COL_SequenceKey = "SequenceKey";
+        const string COL_InitialValue = "InitialValue";
+        const string COL_LastValue = "LastValue";
+        const string COL_CreatedTime = "CreatedTime";
+
         static InvoiceSequenceDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("SequenceGroup", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
-            columns.Add("InvoiceTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("SequenceKey", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-            columns.Add("InitialValue", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("LastValue", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SequenceGroup, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
+            columns.Add(COL_InvoiceTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_SequenceKey, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_InitialValue, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_LastValue, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "InvoiceSequence",
                 Columns = columns,
-                CreatedTimeColumnName = "CreatedTime"
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -56,22 +63,23 @@ namespace Vanrise.Invoice.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            queryContext.DeclareParameters().AddParameter("NextSequence", RDBDataType.BigInt);
-
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var sumContext = updateQuery.ColumnAndParameter("LastValue", "NextSequence").ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
-            sumContext.Expression1().Column("LastValue");
+            var sumContext = updateQuery.Column(COL_LastValue).ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
+            sumContext.Expression1().Column(COL_LastValue);
             sumContext.Expression2().Value(1);
 
             var where = updateQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("SequenceKey").Value(sequenceKey);
-            where.EqualsCondition("SequenceGroup").Value(sequenceGroup);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
 
+            if (sequenceKey == string.Empty)
+                where.EqualsCondition(COL_SequenceKey).EmptyString();
+            else
+                where.EqualsCondition(COL_SequenceKey).Value(sequenceKey);
+            where.EqualsCondition(COL_SequenceGroup).Value(sequenceGroup);
 
-            queryContext.AddSelectQuery().SelectColumns().Expression("NextSequence").Parameter("NextSequence");
+            updateQuery.AddSelectColumn(COL_LastValue);
 
             long? nextSequenceNullable = queryContext.ExecuteScalar().NullableLongValue;
             if (nextSequenceNullable.HasValue)
@@ -93,11 +101,11 @@ namespace Vanrise.Invoice.Data.RDB
 
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "seq", 1, true);
-            selectQuery.SelectColumns().Column("InvoiceTypeID");
+            selectQuery.SelectColumns().Column(COL_InvoiceTypeID);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceTypeID").Value(invoiceTypeId);
-            where.EqualsCondition("SequenceGroup").Value(sequenceGroup);
+            where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
+            where.EqualsCondition(COL_SequenceGroup).Value(sequenceGroup);
             long effectiveInitialValue;
             if (queryContext.ExecuteScalar().NullableGuidValue.HasValue)
                 effectiveInitialValue = 1;
@@ -110,11 +118,16 @@ namespace Vanrise.Invoice.Data.RDB
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
 
-                insertQuery.Column("SequenceGroup").Value(sequenceGroup);
-                insertQuery.Column("InvoiceTypeID").Value(invoiceTypeId);
-                insertQuery.Column("SequenceKey").Value(sequenceKey);
-                insertQuery.Column("InitialValue").Value(effectiveInitialValue);
-                insertQuery.Column("LastValue").Value(effectiveInitialValue);
+                insertQuery.Column(COL_SequenceGroup).Value(sequenceGroup);
+                insertQuery.Column(COL_InvoiceTypeID).Value(invoiceTypeId);
+
+                if (sequenceKey == string.Empty)
+                    insertQuery.Column(COL_SequenceKey).EmptyString();
+                else
+                    insertQuery.Column(COL_SequenceKey).Value(sequenceKey);
+
+                insertQuery.Column(COL_InitialValue).Value(effectiveInitialValue);
+                insertQuery.Column(COL_LastValue).Value(effectiveInitialValue);
 
                 queryContext.ExecuteNonQuery();
                 nextSequence = effectiveInitialValue;

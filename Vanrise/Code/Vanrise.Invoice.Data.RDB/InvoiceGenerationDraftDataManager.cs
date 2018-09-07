@@ -12,25 +12,35 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceGenerationDraft";
 
+        const string COL_ID = "ID";
+        const string COL_InvoiceGenerationIdentifier = "InvoiceGenerationIdentifier";
+        const string COL_InvoiceTypeId = "InvoiceTypeId";
+        const string COL_PartnerID = "PartnerID";
+        const string COL_PartnerName = "PartnerName";
+        const string COL_FromDate = "FromDate";
+        const string COL_ToDate = "ToDate";
+        const string COL_CustomPayload = "CustomPayload";
+        const string COL_CreatedTime = "CreatedTime";
+
          static InvoiceGenerationDraftDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("InvoiceGenerationIdentifier", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("InvoiceTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("PartnerID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            columns.Add("PartnerName", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
-            columns.Add("FromDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("ToDate", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("CustomPayload", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_InvoiceGenerationIdentifier, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_InvoiceTypeId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_PartnerName, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_FromDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ToDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CustomPayload, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "InvoiceGenerationDraft",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -43,16 +53,16 @@ namespace Vanrise.Invoice.Data.RDB
 
         private InvoiceGenerationDraft InvoiceGenerationDraftMapper(IRDBDataReader reader)
         {
-            string customPayload = reader.GetString("CustomPayload");
+            string customPayload = reader.GetString(COL_CustomPayload);
             InvoiceGenerationDraft invoiceGenerationDraft = new InvoiceGenerationDraft()
             {
-                InvoiceGenerationDraftId = reader.GetLong("ID"),
-                InvoiceGenerationIdentifier = reader.GetGuid("invoiceGenerationIdentifier"),
-                InvoiceTypeId = reader.GetGuid("InvoiceTypeID"),
-                PartnerId = reader.GetString("PartnerID"),
-                PartnerName = reader.GetString("PartnerName"),
-                From = reader.GetDateTime("FromDate"),
-                To = reader.GetDateTime("ToDate"),
+                InvoiceGenerationDraftId = reader.GetLong(COL_ID),
+                InvoiceGenerationIdentifier = reader.GetGuid(COL_InvoiceGenerationIdentifier),
+                InvoiceTypeId = reader.GetGuid(COL_InvoiceTypeId),
+                PartnerId = reader.GetString(COL_PartnerID),
+                PartnerName = reader.GetString(COL_PartnerName),
+                From = reader.GetDateTime(COL_FromDate),
+                To = reader.GetDateTime(COL_ToDate),
                 CustomPayload = !string.IsNullOrEmpty(customPayload) ? Vanrise.Common.Serializer.Deserialize(customPayload) : null
             };
             return invoiceGenerationDraft;
@@ -80,7 +90,7 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.From(TABLE_NAME, "genDraft", null, true);
             selectQuery.SelectColumns().AllTableColumns("genDraft");
 
-            selectQuery.Where().EqualsCondition("InvoiceGenerationIdentifier").Value(invoiceGenerationIdentifier);
+            selectQuery.Where().EqualsCondition(COL_InvoiceGenerationIdentifier).Value(invoiceGenerationIdentifier);
 
             return queryContext.GetItems(InvoiceGenerationDraftMapper);
         }
@@ -90,16 +100,16 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
-            insertQuery.GenerateIdAndAssignToParameter("Id");
+            insertQuery.AddSelectGeneratedId();
 
-            insertQuery.Column("InvoiceGenerationIdentifier").Value(invoiceGenerationDraft.InvoiceGenerationIdentifier);
-            insertQuery.Column("InvoiceTypeID").Value(invoiceGenerationDraft.InvoiceTypeId);
-            insertQuery.Column("PartnerID").Value(invoiceGenerationDraft.PartnerId);
-            insertQuery.Column("PartnerName").Value(invoiceGenerationDraft.PartnerName);
-            insertQuery.Column("FromDate").Value(invoiceGenerationDraft.From);
-            insertQuery.Column("ToDate").Value(invoiceGenerationDraft.To);
+            insertQuery.Column(COL_InvoiceGenerationIdentifier).Value(invoiceGenerationDraft.InvoiceGenerationIdentifier);
+            insertQuery.Column(COL_InvoiceTypeId).Value(invoiceGenerationDraft.InvoiceTypeId);
+            insertQuery.Column(COL_PartnerID).Value(invoiceGenerationDraft.PartnerId);
+            insertQuery.Column(COL_PartnerName).Value(invoiceGenerationDraft.PartnerName);
+            insertQuery.Column(COL_FromDate).Value(invoiceGenerationDraft.From);
+            insertQuery.Column(COL_ToDate).Value(invoiceGenerationDraft.To);
             if (invoiceGenerationDraft.CustomPayload != null)
-                insertQuery.Column("CustomPayload").Value(Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload));
+                insertQuery.Column(COL_CustomPayload).Value(Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload));
 
             insertedId = queryContext.ExecuteScalar().LongValue;
             return true;
@@ -111,11 +121,11 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column("FromDate").Value(invoiceGenerationDraft.From);
-            updateQuery.Column("ToDate").Value(invoiceGenerationDraft.To);
-            updateQuery.Column("CustomPayload").Value(Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload));
+            updateQuery.Column(COL_FromDate).Value(invoiceGenerationDraft.From);
+            updateQuery.Column(COL_ToDate).Value(invoiceGenerationDraft.To);
+            updateQuery.Column(COL_CustomPayload).Value(Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload));
 
-            updateQuery.Where().EqualsCondition("ID").Value(invoiceGenerationDraft.InvoiceGenerationDraftId);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceGenerationDraft.InvoiceGenerationDraftId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -125,7 +135,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("ID").Value(invoiceGenerationDraftId);
+            deleteQuery.Where().EqualsCondition(COL_ID).Value(invoiceGenerationDraftId);
 
             queryContext.ExecuteNonQuery();
         }
@@ -137,7 +147,7 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.From(TABLE_NAME, "genDraft", null, true);
             selectQuery.SelectColumns().AllTableColumns("genDraft");
 
-            selectQuery.Where().EqualsCondition("ID").Value(invoiceGenerationDraftId);
+            selectQuery.Where().EqualsCondition(COL_ID).Value(invoiceGenerationDraftId);
 
             return queryContext.GetItem(InvoiceGenerationDraftMapper);
         }
@@ -147,7 +157,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition("InvoiceGenerationIdentifier").Value(invoiceGenerationIdentifier);
+            deleteQuery.Where().EqualsCondition(COL_InvoiceGenerationIdentifier).Value(invoiceGenerationIdentifier);
 
             queryContext.ExecuteNonQuery();
         }
@@ -160,10 +170,10 @@ namespace Vanrise.Invoice.Data.RDB
 
             var aggregates = selectQuery.SelectAggregates();
             aggregates.Count("TotalCount");
-            aggregates.Aggregate(RDBNonCountAggregateType.MIN, "FromDate", "MinimumFrom");
-            aggregates.Aggregate(RDBNonCountAggregateType.MAX, "ToDate", "MaximumTo");
+            aggregates.Aggregate(RDBNonCountAggregateType.MIN, COL_FromDate, "MinimumFrom");
+            aggregates.Aggregate(RDBNonCountAggregateType.MAX, COL_ToDate, "MaximumTo");
 
-            selectQuery.Where().EqualsCondition("InvoiceGenerationIdentifier").Value(invoiceGenerationIdentifier);
+            selectQuery.Where().EqualsCondition(COL_InvoiceGenerationIdentifier).Value(invoiceGenerationIdentifier);
 
             return queryContext.GetItem(InvoiceGenerationDraftSummaryMapper);
         }

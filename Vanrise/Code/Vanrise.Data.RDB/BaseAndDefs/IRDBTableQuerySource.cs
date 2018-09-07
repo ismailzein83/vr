@@ -18,6 +18,8 @@ namespace Vanrise.Data.RDB
 
         void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context);
 
+        void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context);
+
         List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context);
 
         void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context);
@@ -84,6 +86,36 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    public interface IRDBTableQuerySourceGetColumnDefinitionContext
+    {
+        BaseRDBDataProvider DataProvider { get; }
+
+        string ColumnName { get; }
+
+        RDBTableColumnDefinition ColumnDefinition { set; }
+    }
+
+    public class RDBTableQuerySourceGetColumnDefinitionContext : BaseRDBResolveQueryContext, IRDBTableQuerySourceGetColumnDefinitionContext
+    {
+        public RDBTableQuerySourceGetColumnDefinitionContext(string columnName, IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.ColumnName = columnName;
+        }
+
+        public string ColumnName
+        {
+            get;
+            private set;
+        }
+
+        public RDBTableColumnDefinition ColumnDefinition
+        {
+            get;
+            set;
+        }
+    }
+
     public interface IRDBTableQuerySourceGetIdColumnInfoContext
     {
         BaseRDBDataProvider DataProvider { get; }
@@ -117,5 +149,4 @@ namespace Vanrise.Data.RDB
             set;
         }
     }
-
 }

@@ -13,16 +13,14 @@ namespace Vanrise.Data.RDB
 
         public string ColumnName { get; set; }
 
-        public bool DontAppendTableAlias { get; set; }
-
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
             IRDBTableQuerySource table = this.TableAlias != null ? context.QueryBuilderContext.GetTableFromAlias(this.TableAlias) : context.QueryBuilderContext.GetMainQueryTable();
             table.ThrowIfNull("table");
             var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context);
             string dbColumnName = table.GetDBColumnName(getColumnDBNameContext);
-            if (this.TableAlias != null && !DontAppendTableAlias)
-                return String.Concat(this.TableAlias, ".", dbColumnName);
+            if (this.TableAlias != null)
+                return String.Concat(context.DataProvider.GetDBAlias(this.TableAlias), ".", dbColumnName);
             else
                 return dbColumnName;
         }
@@ -34,7 +32,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName();
+            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
             context.AddParameter(new RDBParameter
             {
                 Name = parameterName,
@@ -93,7 +91,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName();
+            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
             context.AddParameter(new RDBParameter
             {
                 Name = parameterName,
@@ -112,7 +110,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName();
+            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
             context.AddParameter(new RDBParameter
             {
                 Name = parameterName,
@@ -131,7 +129,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName();
+            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
             context.AddParameter(new RDBParameter
                 {
                     Name = parameterName,
@@ -150,7 +148,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName();
+            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
             context.AddParameter(new RDBParameter
             {
                 Name = parameterName,
@@ -262,6 +260,15 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    internal class RDBEmptyStringExpression : BaseRDBExpression
+    {
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return string.Concat("'", context.DataProvider.EmptyStringValue, "'");
+        }
+    }
+
+
     internal class RDBCountExpression : BaseRDBExpression
     {
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
@@ -310,13 +317,13 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    internal class RDBParameterExpression : BaseRDBExpression
-    {
-        public string ParameterName { get; set; }
+    //internal class RDBParameterExpression : BaseRDBExpression
+    //{
+    //    public string ParameterName { get; set; }
 
-        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
-        {
-            return context.GetParameterWithValidate(this.ParameterName).DBParameterName;
-        }
-    }
+    //    public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+    //    {
+    //        return context.GetParameterWithValidate(this.ParameterName).DBParameterName;
+    //    }
+    //}
 }

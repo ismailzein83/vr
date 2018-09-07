@@ -13,22 +13,29 @@ namespace Vanrise.Invoice.Data.RDB
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceItem";
 
+        const string COL_ID = "ID";
+        const string COL_InvoiceID = "InvoiceID";
+        const string COL_ItemSetName = "ItemSetName";
+        const string COL_Name = "Name";
+        const string COL_Details = "Details";
+        const string COL_CreatedTime = "CreatedTime";
+
         static InvoiceItemDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("InvoiceID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("ItemSetName", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-            columns.Add("Name", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 900 });
-            columns.Add("Details", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_InvoiceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_ItemSetName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 900 });
+            columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "InvoiceItem",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -75,11 +82,11 @@ namespace Vanrise.Invoice.Data.RDB
         {
             Entities.InvoiceItem invoiceItem = new Entities.InvoiceItem
             {
-                Details = Vanrise.Common.Serializer.Deserialize(reader.GetString("Details")),
-                InvoiceId = reader.GetLong("InvoiceID"),
-                ItemSetName = reader.GetString("ItemSetName"),
-                Name = reader.GetString("Name"),
-                InvoiceItemId = reader.GetLong("ID"),
+                Details = Vanrise.Common.Serializer.Deserialize(reader.GetString(COL_Details)),
+                InvoiceId = reader.GetLong(COL_InvoiceID),
+                ItemSetName = reader.GetString(COL_ItemSetName),
+                Name = reader.GetString(COL_Name),
+                InvoiceItemId = reader.GetLong(COL_ID),
             };
             return invoiceItem;
         }
@@ -96,8 +103,8 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("invItm");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("InvoiceID").Value(invoiceId);
-            where.CompareCondition("ItemSetName", MapCompareOperator(compareOperator)).Value(itemSetName);
+            where.EqualsCondition(COL_InvoiceID).Value(invoiceId);
+            where.CompareCondition(COL_ItemSetName, MapCompareOperator(compareOperator)).Value(itemSetName);
 
             return queryContext.GetItems(InvoiceItemMapper);
         }
@@ -107,7 +114,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn("ItemSetName", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            tempTableQuery.AddColumn(COL_ItemSetName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 }, true);
 
             if(itemSetNames != null)
             {
@@ -115,7 +122,7 @@ namespace Vanrise.Invoice.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.Column("ItemSetName").Value(itemSetName);
+                    insertQuery.Column(COL_ItemSetName).Value(itemSetName);
                 }
             }
 
@@ -124,9 +131,9 @@ namespace Vanrise.Invoice.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("invItm");
 
             var joinCondition = selectQuery.Join().Join(tempTableQuery, "setNames").On();
-            joinCondition.CompareCondition("ItemSetName", MapCompareOperator(compareOperator)).Column("setNames", "ItemSetName");
+            joinCondition.CompareCondition(COL_ItemSetName, MapCompareOperator(compareOperator)).Column("setNames", COL_ItemSetName);
 
-            selectQuery.Where().ListCondition("InvoiceID", RDBListConditionOperator.IN, invoiceIds);
+            selectQuery.Where().ListCondition(COL_InvoiceID, RDBListConditionOperator.IN, invoiceIds);
 
             return queryContext.GetItems(InvoiceItemMapper);
         }
@@ -147,11 +154,11 @@ namespace Vanrise.Invoice.Data.RDB
                         {
                             var insertQuery = queryContext.AddInsertQuery();
                             insertQuery.IntoTable(TABLE_NAME);
-                            insertQuery.Column("InvoiceID").Value(invoiceId);
-                            insertQuery.Column("ItemSetName").Value(itemSet.SetName);
-                            insertQuery.Column("Name").Value(item.Name);
+                            insertQuery.Column(COL_InvoiceID).Value(invoiceId);
+                            insertQuery.Column(COL_ItemSetName).Value(itemSet.SetName);
+                            insertQuery.Column(COL_Name).Value(item.Name);
                             string serializedDetails = Vanrise.Common.Serializer.Serialize(item.Details);
-                            insertQuery.Column("Details").Value(serializedDetails);
+                            insertQuery.Column(COL_Details).Value(serializedDetails);
                         }
                     }
                 }

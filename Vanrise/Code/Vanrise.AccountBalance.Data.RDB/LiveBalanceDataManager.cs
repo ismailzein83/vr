@@ -15,31 +15,47 @@ namespace Vanrise.AccountBalance.Data.RDB
     {
         static string TABLE_NAME = "VR_AccountBalance_LiveBalance";
 
+        const string COL_ID = "ID";
+        const string COL_AccountTypeID = "AccountTypeID";
+        const string COL_AccountID = "AccountID";
+        const string COL_CurrencyID = "CurrencyID";
+        const string COL_InitialBalance = "InitialBalance";
+        const string COL_CurrentBalance = "CurrentBalance";
+        const string COL_NextAlertThreshold = "NextAlertThreshold";
+        const string COL_LastExecutedActionThreshold = "LastExecutedActionThreshold";
+        const string COL_AlertRuleID = "AlertRuleID";
+        const string COL_ActiveAlertsInfo = "ActiveAlertsInfo";
+        const string COL_BED = "BED";
+        const string COL_EED = "EED";
+        const string COL_Status = "Status";
+        const string COL_IsDeleted = "IsDeleted";
+        const string COL_CreatedTime = "CreatedTime";
+
         static LiveBalanceDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            columns.Add("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            columns.Add("CurrencyID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add("InitialBalance", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            columns.Add("CurrentBalance", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            columns.Add("NextAlertThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            columns.Add("LastExecutedActionThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            columns.Add("AlertRuleID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add("ActiveAlertsInfo", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add("BED", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("EED", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add("Status", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add("IsDeleted", new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add("CreatedTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_InitialBalance, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            columns.Add(COL_CurrentBalance, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            columns.Add(COL_NextAlertThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            columns.Add(COL_LastExecutedActionThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            columns.Add(COL_AlertRuleID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ActiveAlertsInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_Status, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_AccountBalance",
                 DBTableName = "LiveBalance",
                 Columns = columns,
-                IdColumnName = "ID",
-                CreatedTimeColumnName = "CreatedTime"
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
             });
         }
 
@@ -54,18 +70,18 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             return new LiveBalance
             {
-                CurrentBalance = reader.GetDecimal("CurrentBalance"),
-                AccountId = reader.GetString("AccountID"),
-                AccountTypeId = reader.GetGuid("AccountTypeID"),
-                CurrencyId = reader.GetInt("CurrencyID"),
-                AlertRuleID = reader.GetIntWithNullHandling("AlertRuleID"),
-                InitialBalance = reader.GetDecimal("InitialBalance"),
-                NextThreshold = reader.GetNullableDecimal("NextAlertThreshold"),
-                LastExecutedThreshold = reader.GetNullableDecimal("LastExecutedActionThreshold"),
-                LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader.GetString("ActiveAlertsInfo"), typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo,
-                BED = reader.GetNullableDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                Status = (VRAccountStatus) reader.GetIntWithNullHandling("Status"),
+                CurrentBalance = reader.GetDecimal(COL_CurrentBalance),
+                AccountId = reader.GetString(COL_AccountID),
+                AccountTypeId = reader.GetGuid(COL_AccountTypeID),
+                CurrencyId = reader.GetInt(COL_CurrencyID),
+                AlertRuleID = reader.GetIntWithNullHandling(COL_AlertRuleID),
+                InitialBalance = reader.GetDecimal(COL_InitialBalance),
+                NextThreshold = reader.GetNullableDecimal(COL_NextAlertThreshold),
+                LastExecutedThreshold = reader.GetNullableDecimal(COL_LastExecutedActionThreshold),
+                LiveBalanceActiveAlertsInfo = Serializer.Deserialize(reader.GetString(COL_ActiveAlertsInfo), typeof(VRBalanceActiveAlertInfo)) as VRBalanceActiveAlertInfo,
+                BED = reader.GetNullableDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                Status = (VRAccountStatus) reader.GetIntWithNullHandling(COL_Status),
             };
         }
 
@@ -73,16 +89,16 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             return new Vanrise.AccountBalance.Entities.AccountBalance
             {
-                AccountBalanceId = reader.GetLong("ID"),
-                AccountId = reader.GetString("AccountID"),
-                AccountTypeId = reader.GetGuid("AccountTypeID"),
-                CurrentBalance = reader.GetDecimal("CurrentBalance"),
-                CurrencyId = reader.GetInt("CurrencyID"),
-                InitialBalance = reader.GetDecimal("InitialBalance"),
-                AlertRuleID = reader.GetIntWithNullHandling("AlertRuleID"),
-                BED = reader.GetNullableDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                Status = (VRAccountStatus)reader.GetIntWithNullHandling("Status")
+                AccountBalanceId = reader.GetLong(COL_ID),
+                AccountId = reader.GetString(COL_AccountID),
+                AccountTypeId = reader.GetGuid(COL_AccountTypeID),
+                CurrentBalance = reader.GetDecimal(COL_CurrentBalance),
+                CurrencyId = reader.GetInt(COL_CurrencyID),
+                InitialBalance = reader.GetDecimal(COL_InitialBalance),
+                AlertRuleID = reader.GetIntWithNullHandling(COL_AlertRuleID),
+                BED = reader.GetNullableDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                Status = (VRAccountStatus)reader.GetIntWithNullHandling(COL_Status)
 
             };
         }
@@ -91,12 +107,12 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             return new LiveBalanceAccountInfo
             {
-                LiveBalanceId = reader.GetLong("ID"),
-                AccountId = reader.GetString("AccountID"),
-                CurrencyId = reader.GetInt("CurrencyID"),
-                BED = reader.GetNullableDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                Status = (VRAccountStatus)reader.GetIntWithNullHandling("Status")
+                LiveBalanceId = reader.GetLong(COL_ID),
+                AccountId = reader.GetString(COL_AccountID),
+                CurrencyId = reader.GetInt(COL_CurrencyID),
+                BED = reader.GetNullableDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                Status = (VRAccountStatus)reader.GetIntWithNullHandling(COL_Status)
             };
         }
 
@@ -112,9 +128,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("lb");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.EqualsCondition("AccountID").Value(accountId);
-            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.EqualsCondition(COL_AccountID).Value(accountId);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
             
             return queryContext.GetItem(LiveBalanceMapper);
         }
@@ -127,8 +143,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("lb");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
 
             queryContext.ExecuteReader(
                 reader =>
@@ -148,15 +164,15 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("lb");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(query.AccountTypeId);
+            where.EqualsCondition(COL_AccountTypeID).Value(query.AccountTypeId);
             if (query.AccountsIds != null && query.AccountsIds.Count() > 0)
-                where.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds);
+                where.ListCondition(COL_AccountID, RDBListConditionOperator.IN, query.AccountsIds);
             if (query.Sign != null)
-                where.CompareCondition("CurrentBalance", ConvertBalanceCompareSign(query.Sign)).Value(query.Balance);
+                where.CompareCondition(COL_CurrentBalance, ConvertBalanceCompareSign(query.Sign)).Value(query.Balance);
             AddLiveBalanceActiveAndEffectiveCondition(where, "lb", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
 
             var sortContext = selectQuery.Sort();
-            sortContext.ByColumn("CurrentBalance", query.OrderBy == "ASC" ? RDBSortDirection.ASC : RDBSortDirection.DESC);
+            sortContext.ByColumn(COL_CurrentBalance, query.OrderBy == "ASC" ? RDBSortDirection.ASC : RDBSortDirection.DESC);
 
             return queryContext.GetItems(AccountBalanceMapper);
         }
@@ -211,11 +227,11 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "lb");
-            selectQuery.SelectColumns().Columns("ID", "AccountID", "CurrencyID", "BED", "EED", "Status");
+            selectQuery.SelectColumns().Columns(COL_ID, COL_AccountID, COL_CurrencyID, COL_BED, COL_EED, COL_Status);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
 
             return queryContext.GetItems(LiveBalanceAccountInfoMapper);
         }
@@ -233,20 +249,20 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "lv");
-            selectQuery.SelectColumns().Columns("ID", "CurrencyID");
+            selectQuery.SelectColumns().Columns(COL_ID, COL_CurrencyID);
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.EqualsCondition("AccountID").Value(accountId);
-            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.EqualsCondition(COL_AccountID).Value(accountId);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
 
             queryContext.ExecuteReader((reader) =>
             {
                 if (reader.Read())
                 {
                     liveBalanceFound = true;
-                    liveBalanceInfo.LiveBalanceId = reader.GetLong("ID");
-                    liveBalanceInfo.CurrencyId = reader.GetInt("CurrencyID");
+                    liveBalanceInfo.LiveBalanceId = reader.GetLong(COL_ID);
+                    liveBalanceInfo.CurrencyId = reader.GetInt(COL_CurrencyID);
                 }
             });
 
@@ -255,18 +271,18 @@ namespace Vanrise.AccountBalance.Data.RDB
                 queryContext = new RDBQueryContext(GetDataProvider());
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.GenerateIdAndAssignToParameter("ID");
-                insertQuery.Column("AccountTypeID").Value(accountTypeId);
-                insertQuery.Column("AccountID").Value(accountId);
-                insertQuery.Column("InitialBalance").Value(initialBalance);
-                insertQuery.Column("CurrentBalance").Value(currentBalance);
-                insertQuery.Column("CurrencyID").Value(currencyId);
+                insertQuery.AddSelectGeneratedId();
+                insertQuery.Column(COL_AccountTypeID).Value(accountTypeId);
+                insertQuery.Column(COL_AccountID).Value(accountId);
+                insertQuery.Column(COL_InitialBalance).Value(initialBalance);
+                insertQuery.Column(COL_CurrentBalance).Value(currentBalance);
+                insertQuery.Column(COL_CurrencyID).Value(currencyId);
                 if (bed.HasValue)
-                    insertQuery.Column("BED").Value(bed.Value);
+                    insertQuery.Column(COL_BED).Value(bed.Value);
                 if(eed.HasValue)
-                    insertQuery.Column("EED").Value(eed.Value);
-                insertQuery.Column("Status").Value((int)status);
-                insertQuery.Column("IsDeleted").Value(isDeleted);
+                    insertQuery.Column(COL_EED).Value(eed.Value);
+                insertQuery.Column(COL_Status).Value((int)status);
+                insertQuery.Column(COL_IsDeleted).Value(isDeleted);
                 liveBalanceInfo.LiveBalanceId = queryContext.ExecuteScalar().LongValue;
                 liveBalanceInfo.CurrencyId = currencyId;
             }
@@ -294,10 +310,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            tempTableQuery.AddColumn("NextAlertThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            tempTableQuery.AddColumn("AlertRuleID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            tempTableQuery.AddColumn(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
+            tempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
+            tempTableQuery.AddColumn(COL_NextAlertThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
+            tempTableQuery.AddColumn(COL_AlertRuleID, new RDBTableColumnDefinition { DataType = RDBDataType.Int }, false);
 
             if (updateEntities != null)
             {
@@ -305,12 +321,12 @@ namespace Vanrise.AccountBalance.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.Column("AccountTypeID").Value(updateEntity.AccountTypeId);
-                    insertQuery.Column("AccountID").Value(updateEntity.AccountId);
+                    insertQuery.Column(COL_AccountTypeID).Value(updateEntity.AccountTypeId);
+                    insertQuery.Column(COL_AccountID).Value(updateEntity.AccountId);
                     if (updateEntity.NextAlertThreshold.HasValue)
-                        insertQuery.Column("NextAlertThreshold").Value(updateEntity.NextAlertThreshold.Value);
+                        insertQuery.Column(COL_NextAlertThreshold).Value(updateEntity.NextAlertThreshold.Value);
                     if (updateEntity.AlertRuleId.HasValue)
-                        insertQuery.Column("AlertRuleID").Value(updateEntity.AlertRuleId.Value);
+                        insertQuery.Column(COL_AlertRuleID).Value(updateEntity.AlertRuleId.Value);
                 }
             }
 
@@ -319,11 +335,11 @@ namespace Vanrise.AccountBalance.Data.RDB
             
             var joinContext = updateQuery.Join("lb");
             var joinCondition = joinContext.Join(tempTableQuery, "updateEntities").On();
-            joinCondition.EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID");
-            joinCondition.EqualsCondition("lb", "AccountID", "updateEntities", "AccountID");
+            joinCondition.EqualsCondition("lb", COL_AccountTypeID, "updateEntities", COL_AccountTypeID);
+            joinCondition.EqualsCondition("lb", COL_AccountID, "updateEntities", COL_AccountID);
 
-            updateQuery.Column("NextAlertThreshold").Column("updateEntities", "NextAlertThreshold");
-            updateQuery.Column("AlertRuleID").Column("updateEntities", "AlertRuleID");
+            updateQuery.Column(COL_NextAlertThreshold).Column("updateEntities", COL_NextAlertThreshold);
+            updateQuery.Column(COL_AlertRuleID).Column("updateEntities", COL_AlertRuleID);
 
             queryContext.ExecuteNonQuery();
         }
@@ -333,10 +349,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn("AccountTypeID", new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            tempTableQuery.AddColumn("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
-            tempTableQuery.AddColumn("LastExecutedActionThreshold", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            tempTableQuery.AddColumn("ActiveAlertsInfo", new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            tempTableQuery.AddColumn(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
+            tempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
+            tempTableQuery.AddColumn(COL_LastExecutedActionThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
+            tempTableQuery.AddColumn(COL_ActiveAlertsInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar }, false);
 
             if (updateEntities != null)
             {
@@ -344,12 +360,12 @@ namespace Vanrise.AccountBalance.Data.RDB
                 {
                     var insertQuery = queryContext.AddInsertQuery();
                     insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.Column("AccountTypeID").Value(updateEntity.AccountTypeId);
-                    insertQuery.Column("AccountID").Value(updateEntity.AccountId);
+                    insertQuery.Column(COL_AccountTypeID).Value(updateEntity.AccountTypeId);
+                    insertQuery.Column(COL_AccountID).Value(updateEntity.AccountId);
                     if (updateEntity.LastExecutedActionThreshold.HasValue)
-                        insertQuery.Column("LastExecutedActionThreshold").Value(updateEntity.LastExecutedActionThreshold.Value);
+                        insertQuery.Column(COL_LastExecutedActionThreshold).Value(updateEntity.LastExecutedActionThreshold.Value);
                     if (updateEntity.ActiveAlertsInfo != null)
-                        insertQuery.Column("ActiveAlertsInfo").Value(Serializer.Serialize(updateEntity.ActiveAlertsInfo, true));
+                        insertQuery.Column(COL_ActiveAlertsInfo).Value(Serializer.Serialize(updateEntity.ActiveAlertsInfo, true));
                 }
             }
 
@@ -358,11 +374,11 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             var joinContext = updateQuery.Join("lb");
             var joinCondition = joinContext.Join(tempTableQuery, "updateEntities").On();
-            joinCondition.EqualsCondition("lb", "AccountTypeID", "updateEntities", "AccountTypeID");
-            joinCondition.EqualsCondition("lb", "AccountID", "updateEntities", "AccountID");
+            joinCondition.EqualsCondition("lb", COL_AccountTypeID, "updateEntities", COL_AccountTypeID);
+            joinCondition.EqualsCondition("lb", COL_AccountID, "updateEntities", COL_AccountID);
 
-            updateQuery.Column("LastExecutedActionThreshold").Column("updateEntities", "LastExecutedActionThreshold");
-            updateQuery.Column("ActiveAlertsInfo").Column("updateEntities", "ActiveAlertsInfo");
+            updateQuery.Column(COL_LastExecutedActionThreshold).Column("updateEntities", COL_LastExecutedActionThreshold);
+            updateQuery.Column(COL_ActiveAlertsInfo).Column("updateEntities", COL_ActiveAlertsInfo);
 
             queryContext.ExecuteNonQuery();
         }
@@ -375,9 +391,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("lb");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
             AddLiveBalanceToAlertCondition(where, "lb");
-            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
 
             queryContext.ExecuteReader(reader =>
                     {
@@ -396,9 +412,9 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.SelectColumns().AllTableColumns("lb");
 
             var where = selectQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
             AddLiveBalanceToClearAlertCondition(where, "lb");
-            where.ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted").Value(false);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
 
             queryContext.ExecuteReader(reader =>
             {
@@ -414,7 +430,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, "lb", 1);
-            selectQuery.SelectColumns().Column("ID");
+            selectQuery.SelectColumns().Column(COL_ID);
 
             var whereOrCondition = selectQuery.Where();
             AddLiveBalanceToAlertCondition(whereOrCondition, "lb");
@@ -434,12 +450,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column("Status").Value((int)status);
-           updateQuery.Column("IsDeleted").Value(isDeleted);
+            updateQuery.Column(COL_Status).Value((int)status);
+           updateQuery.Column(COL_IsDeleted).Value(isDeleted);
 
             var where = updateQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.EqualsCondition("AccountID").Value(accountId);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.EqualsCondition(COL_AccountID).Value(accountId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
@@ -451,54 +467,54 @@ namespace Vanrise.AccountBalance.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
 
             if (bed.HasValue)
-                updateQuery.Column("BED").Value(bed.Value);
+                updateQuery.Column(COL_BED).Value(bed.Value);
             if (eed.HasValue)
-                updateQuery.Column("EED").Value(eed.Value);
+                updateQuery.Column(COL_EED).Value(eed.Value);
 
             var where = updateQuery.Where();
-            where.EqualsCondition("AccountTypeID").Value(accountTypeId);
-            where.EqualsCondition("AccountID").Value(accountId);
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.EqualsCondition(COL_AccountID).Value(accountId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
 
         #endregion
 
-        public void JoinLiveBalance(RDBJoinContext joinContext, string liveBalanceAlias, string originalTableAlias)
+        public void JoinLiveBalance(RDBJoinContext joinContext, string liveBalanceAlias, string originalTableAlias, string originalTableCol_AccountTypeId, string originalTableCol_AccountId)
         {
-            var joinStatement = joinContext.Join(LiveBalanceDataManager.TABLE_NAME, liveBalanceAlias);
+            var joinStatement = joinContext.Join(TABLE_NAME, liveBalanceAlias);
             joinStatement.JoinType(RDBJoinType.Left);
             var joinCondition = joinStatement.On();
-            joinCondition.EqualsCondition(liveBalanceAlias, "AccountTypeID", originalTableAlias, "AccountTypeID");
-            joinCondition.EqualsCondition(liveBalanceAlias, "AccountID", originalTableAlias, "AccountID");                    
+            joinCondition.EqualsCondition(liveBalanceAlias, COL_AccountTypeID, originalTableAlias, originalTableCol_AccountTypeId);
+            joinCondition.EqualsCondition(liveBalanceAlias, COL_AccountID, originalTableAlias, originalTableCol_AccountId);                    
         }
 
         public void AddLiveBalanceActiveAndEffectiveCondition(RDBConditionContext conditionContext, string liveBalanceAlias, VRAccountStatus? accountStatus, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
             var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(liveBalanceAlias, "AccountID");
+            orCondition.NullCondition(liveBalanceAlias, COL_AccountID);
             var andCondition = orCondition.ChildConditionGroup();
 
-            andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "IsDeleted").EqualsCondition(liveBalanceAlias, "IsDeleted").Value(false);
+            andCondition.ConditionIfColumnNotNull(liveBalanceAlias, COL_IsDeleted).EqualsCondition(liveBalanceAlias, COL_IsDeleted).Value(false);
             if (accountStatus.HasValue)
-                andCondition.EqualsCondition(liveBalanceAlias, "Status").Value((int)accountStatus.Value);
+                andCondition.EqualsCondition(liveBalanceAlias, COL_Status).Value((int)accountStatus.Value);
 
             if (effectiveDate.HasValue)
             {
-                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "BED").LessOrEqualCondition(liveBalanceAlias, "BED").Value(effectiveDate.Value);
-                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").GreaterThanCondition(liveBalanceAlias, "EED").Value(effectiveDate.Value);
+                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, COL_BED).LessOrEqualCondition(liveBalanceAlias, COL_BED).Value(effectiveDate.Value);
+                andCondition.ConditionIfColumnNotNull(liveBalanceAlias, COL_EED).GreaterThanCondition(liveBalanceAlias, COL_EED).Value(effectiveDate.Value);
             }
 
             if(isEffectiveInFuture.HasValue)
             {
                 if(isEffectiveInFuture.Value)
                 {
-                    andCondition.ConditionIfColumnNotNull(liveBalanceAlias, "EED").GreaterOrEqualCondition(liveBalanceAlias, "EED").DateNow();
+                    andCondition.ConditionIfColumnNotNull(liveBalanceAlias, COL_EED).GreaterOrEqualCondition(liveBalanceAlias, COL_EED).DateNow();
                 }
                 else
                 {
-                    andCondition.NotNullCondition(liveBalanceAlias, "EED");
-                    andCondition.LessOrEqualCondition(liveBalanceAlias, "EED").DateNow();
+                    andCondition.NotNullCondition(liveBalanceAlias, COL_EED);
+                    andCondition.LessOrEqualCondition(liveBalanceAlias, COL_EED).DateNow();
                 }
             }
         }
@@ -506,36 +522,36 @@ namespace Vanrise.AccountBalance.Data.RDB
         private void AddQueryUpdateLiveBalances(RDBQueryContext queryContext, IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate)
         {
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn("ID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-            tempTableQuery.AddColumn("UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
+            tempTableQuery.AddColumn(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt }, true);
+            tempTableQuery.AddColumn("UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
 
             foreach (var lvToUpdate in liveBalancesToUpdate)
             {
                 var insertQuery = queryContext.AddInsertQuery();
                 insertQuery.IntoTable(tempTableQuery);
-                insertQuery.Column("ID").Value(lvToUpdate.LiveBalanceId);
+                insertQuery.Column(COL_ID).Value(lvToUpdate.LiveBalanceId);
                 insertQuery.Column("UpdateValue").Value(lvToUpdate.Value);
             }
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
             var joinContext = updateQuery.Join("lv");
-            joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "lvToUpdate", "ID", "lv", "ID");
+            joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "lvToUpdate", COL_ID, "lv", COL_ID);
 
-            var currentBalanceExpressionContext = updateQuery.Column("CurrentBalance").ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
-            currentBalanceExpressionContext.Expression1().Column("lv", "CurrentBalance", true);
+            var currentBalanceExpressionContext = updateQuery.Column(COL_CurrentBalance).ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
+            currentBalanceExpressionContext.Expression1().Column("lv", COL_CurrentBalance);
             currentBalanceExpressionContext.Expression2().Column("lvToUpdate", "UpdateValue");
         }
 
         private void AddLiveBalanceToAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
             var andCondition = conditionContext.ChildConditionGroup();
-            andCondition.LessOrEqualCondition("CurrentBalance").Column(liveBalanceAlias, "NextAlertThreshold");
-            andCondition.ConditionIfColumnNotNull("LastExecutedActionThreshold").LessThanCondition("NextAlertThreshold").Column(liveBalanceAlias, "LastExecutedActionThreshold");
+            andCondition.LessOrEqualCondition(COL_CurrentBalance).Column(liveBalanceAlias, COL_NextAlertThreshold);
+            andCondition.ConditionIfColumnNotNull(COL_LastExecutedActionThreshold).LessThanCondition(COL_NextAlertThreshold).Column(liveBalanceAlias, COL_LastExecutedActionThreshold);
         }
         private void AddLiveBalanceToClearAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
-            conditionContext.GreaterThanCondition("CurrentBalance").Column(liveBalanceAlias, "LastExecutedActionThreshold");
+            conditionContext.GreaterThanCondition(COL_CurrentBalance).Column(liveBalanceAlias, COL_LastExecutedActionThreshold);
         }
 
     }

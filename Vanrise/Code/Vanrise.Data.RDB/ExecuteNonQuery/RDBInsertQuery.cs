@@ -24,11 +24,7 @@ namespace Vanrise.Data.RDB
 
         RDBConditionGroup _notExistConditionGroup;
 
-        string _generatedIdParameterName;
-        bool _declareGeneratedIdParameter;
-
         bool _addSelectGeneratedId;
-        string _selectGeneratedIdAlias;
 
         RDBSelectQuery _selectQuery;
 
@@ -63,13 +59,9 @@ namespace Vanrise.Data.RDB
             return _notExistsConditionContext;
         }
 
-        public void GenerateIdAndAssignToParameter(string parameterName, bool isParameterAlreadyDeclared = false, bool addSelectQuery = true, bool selectQueryWithAlias = false)
+        public void AddSelectGeneratedId()
         {
-            _generatedIdParameterName = parameterName;
-            _declareGeneratedIdParameter = !isParameterAlreadyDeclared;
-            _addSelectGeneratedId = addSelectQuery;
-            if (selectQueryWithAlias)
-                _selectGeneratedIdAlias = _generatedIdParameterName;
+            _addSelectGeneratedId = true;
         }
 
         public RDBExpressionContext Column(string columnName)
@@ -133,46 +125,35 @@ namespace Vanrise.Data.RDB
 
         public RDBSelectQuery FromSelect()
         {
-            _selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
+            _selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
             return _selectQuery;
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             AddCreatedAndModifiedTimeIfNeeded(context);
-            RDBResolvedQuery resolvedQuery;
-            if (this._notExistConditionGroup != null)
+
+            if (_notExistConditionGroup != null)
             {
-                var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
-                selectQuery.From(this._table, _notExistConditionTableAlias, 1);
-                selectQuery.SelectColumns().Column(new RDBNullExpression(), "nullColumn");
-                selectQuery.ConditionGroup = this._notExistConditionGroup;
-                var rdbNotExistsCondition = new RDBNotExistsCondition()
-                {
-                    SelectQuery = selectQuery
-                };
-                var conditionGroup = new RDBConditionGroup(RDBConditionGroupOperator.AND);
-                conditionGroup.Conditions.Add(rdbNotExistsCondition);
-                IRDBQueryReady ifQuery = new RDBIfQuery(_queryBuilderContext.CreateChildContext())
-                {
-                    ConditionGroup = conditionGroup,
-                    _trueQueryText = context.DataProvider.GetQueryAsText(ResolveInsertQuery(context))
-                };
-                resolvedQuery = ifQuery.GetResolvedQuery(context);
-            }
-            else
-            {
-                resolvedQuery = ResolveInsertQuery(context);               
+                var notExistsSelectQuery = this.FromSelect().Where().NotExistsCondition();
+                notExistsSelectQuery.From(this._table, _notExistConditionTableAlias, 1);
+                notExistsSelectQuery.SelectColumns().Expression("nullColumn").Null();
+                notExistsSelectQuery.Where().Condition(this._notExistConditionGroup);
             }
 
-            if (!string.IsNullOrEmpty(_generatedIdParameterName) && _addSelectGeneratedId)
+            if(this._selectQuery != null && this._columnValues != null)
             {
-                var selectIdQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext());
-                selectIdQuery.SelectColumns().Expression(_selectGeneratedIdAlias).Parameter(_generatedIdParameterName);
-                RDBResolvedQuery selectIdResolvedQuery = selectIdQuery.GetResolvedQuery(context);
-                if (selectIdResolvedQuery != null && selectIdResolvedQuery.Statements.Count > 0)
-                    resolvedQuery.Statements.AddRange(selectIdResolvedQuery.Statements);
+                var selectColumns = this._selectQuery.SelectColumns();
+                foreach (var colVal in this._columnValues)
+                {
+                    selectColumns.Expression(colVal.ColumnName).Expression(colVal.Value);
+                }
+                this._columnValues = null;
             }
+
+            var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, this._columnValues, this._selectQuery, _addSelectGeneratedId, context, _queryBuilderContext);
+            RDBResolvedQuery resolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
+
             return resolvedQuery;
         }
 
@@ -246,34 +227,6 @@ namespace Vanrise.Data.RDB
                     throw new NullReferenceException("ColumnValues and SelectQuery are both null");
                 }
             }
-        }
-
-        private RDBResolvedQuery ResolveInsertQuery(IRDBQueryGetResolvedQueryContext context)
-        {
-            string generatedIdDBParameterName = null;
-
-            if (!string.IsNullOrEmpty(_generatedIdParameterName))
-            {
-                generatedIdDBParameterName = context.DataProvider.ConvertToDBParameterName(_generatedIdParameterName);
-                if (_declareGeneratedIdParameter)
-                {
-                    var getIdColumnInfoContext = new RDBTableQuerySourceGetIdColumnInfoContext(context.DataProvider);
-                    this._table.GetIdColumnInfo(getIdColumnInfoContext);
-                    getIdColumnInfoContext.IdColumnName.ThrowIfNull("getIdColumnInfoContext.IdColumnName", this._table.GetUniqueName());
-                    getIdColumnInfoContext.IdColumnDefinition.ThrowIfNull("getIdColumnInfoContext.IdColumnDefinition", this._table.GetUniqueName());
-                    context.AddParameter(new RDBParameter
-                    {
-                        Name = _generatedIdParameterName,
-                        DBParameterName = generatedIdDBParameterName,
-                        Type = getIdColumnInfoContext.IdColumnDefinition.DataType,
-                        Direction = RDBParameterDirection.Declared
-                    });
-                }
-            }
-
-            var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, this._columnValues, this._selectQuery, generatedIdDBParameterName, context, _queryBuilderContext);
-            RDBResolvedQuery resolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
-            return resolvedQuery;
         }
     }
 
