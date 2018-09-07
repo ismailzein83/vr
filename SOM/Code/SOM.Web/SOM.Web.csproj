@@ -439,8 +439,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appSettings.config" />
-    <Content Include="ConnectionStrings.config" />
     <None Include="Web.config.exclude" />
   </ItemGroup>
   <PropertyGroup>
