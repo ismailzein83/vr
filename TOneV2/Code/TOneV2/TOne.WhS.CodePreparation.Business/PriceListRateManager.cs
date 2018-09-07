@@ -55,7 +55,7 @@ namespace TOne.WhS.CodePreparation.Business
 
 		private void ManageRate(ZoneToProcess zoneToProcess, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate)
 		{
-			IEnumerable<ExistingRate> effectiveExistingRates = existingRates.FindAllRecords(itm => itm.EED == itm.ParentZone.EED && itm.BED != itm.EED);
+			IEnumerable<ExistingRate> effectiveExistingRates = existingRates.FindAllRecords(itm => itm.EED == itm.ParentZone.EED && itm.BED != itm.OriginalEED);
 			ExistingRatesByZoneName effectiveExistingRatesByZoneName = StructureEffectiveExistingRatesByZoneName(effectiveExistingRates);
 
 			SettingManager settingManager = new SettingManager();
