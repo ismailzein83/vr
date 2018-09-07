@@ -370,8 +370,10 @@ namespace Vanrise.Analytic.Business
 
         internal static DateTime GenerateQueryToTime(DateTime fromTime)
         {
-            DateTime toTime = DateTime.Today.AddDays(1);
-            return Utilities.Max(toTime, fromTime);
+            if (fromTime < DateTime.Now)
+                return DateTime.Today.AddDays(1);
+            else
+                return fromTime.AddDays(1);
         }
 
         private Dictionary<string, MeasureStyleRule> BuildMeasureStyleRulesDictionary(List<MeasureStyleRule> measureStyleRules)
