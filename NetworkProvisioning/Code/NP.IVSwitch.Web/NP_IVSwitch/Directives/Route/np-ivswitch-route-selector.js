@@ -51,8 +51,12 @@ function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationS
         if (attrs.customlabel != undefined)
             label = attrs.customlabel;
 
-        return '<vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate" datatextfield="Description" datavaluefield="RouteId" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '"  datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
+        var hidelabel = "";
+        if (attrs.hidelabel != undefined)
+            hidelabel = "hidelabel";
+
+        return '<span vr-disabled="ctrl.isdisabled"><vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate" datatextfield="Description" datavaluefield="RouteId" isrequired="ctrl.isrequired"'
+                + ' label="' + label + '" ' + hidelabel + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues "onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select></span>'
     }
 
     function RouteCtor(ctrl, $scope, attrs) {
@@ -103,6 +107,11 @@ function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationS
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('RouteId', attrs, ctrl);
             };
+            api.clearDataSource=function()
+            {
+                selectorApi.clearDataSource();
+
+            }
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

@@ -1,0 +1,33 @@
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_RouteTableRouteEditorController" vr-loader="scopeModel.isLoading" width="small">
+    <vr-modalbody>
+        <vr-form name="formRouteTableEditor">
+            <vr-tabs>
+                <vr-tab header="'Criteria'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row" ng-show="!scopeModel.addMode">
+                            <vr-label>{{scopeModel.routeTableRouteName}}</vr-label>
+                        </vr-columns>
+                        <vr-columns colnum="12" ng-show="scopeModel.addMode" haschildcolumns>
+                            <whs-be-code-list-resolver on-ready="onCodeListDirectiveReady"></whs-be-code-list-resolver>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Options'">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <np-ivswitch-supplier-route-grid on-ready="onSupplierRouteGridDirectiveReady"></np-ivswitch-supplier-route-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formRouteTableEditor" data-onclick="scopeModel.saveRouteTableRT"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

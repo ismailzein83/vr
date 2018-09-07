@@ -5,6 +5,22 @@
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorDirectiveReady"
+                                                 ismultipleselection
+                                                 selectedvalues="scopeModel.selectedCustomer"
+                                                 onselectionchanged="scopeModel.onCustomerSelectionChanged">
+
+                    </vr-whs-be-customer-selector>
+                </vr-columns>
+                <vr-columns width="normal" vr-loader="scopeModel.isModifiedBySelectorLoading">
+                    <np-ivswitch-endpoint-selector on-ready="scopeModel.onEndPointSelectorDirectiveReady"
+                                                   label="End Points"
+                                                   ismultipleselection
+                                                   selectedvalues="scopeModel.endPoint">
+
+                    </np-ivswitch-endpoint-selector>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>

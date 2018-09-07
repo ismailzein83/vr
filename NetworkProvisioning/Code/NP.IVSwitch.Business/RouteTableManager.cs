@@ -105,8 +105,9 @@ namespace NP.IVSwitch.Business
                         endPointsToUnlink.Add(oldItem);
                 }
             }
-
+            if (endPointsToUnlink!=null &&endPointsToUnlink.Count > 0)
                 endPointManager.EndPointAclUpdate(endPointsToUnlink.MapRecords(x=>x.EndPointId), 0, routeTableItem.RouteTableViewType);
+            if (endPointsToLink != null && endPointsToLink.Count > 0)
                 endPointManager.EndPointAclUpdate(endPointsToLink.MapRecords(x => x.EndPointId), routeTableItem.RouteTable.RouteTableId, routeTableItem.RouteTableViewType);
             IRouteTableDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
             Helper.SetSwitchConfig(routeTableDataManager);

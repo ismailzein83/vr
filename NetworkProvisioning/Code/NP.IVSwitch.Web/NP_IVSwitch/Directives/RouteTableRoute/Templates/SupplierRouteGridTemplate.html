@@ -1,0 +1,31 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-switch value="scopeModel.isBlockedAccount" label="Blocked Account"></vr-switch>
+    </vr-columns>
+</vr-row>
+<vr-section title="OPTIONS" ng-if="!scopeModel.isBlockedAccount">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-button type="Add" data-onclick="ctrl.addColumn" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-validator validate="scopeModel.validatePercentage()">
+
+        <vr-datagrid on-ready="ctrl.onGridReady"
+                     datasource="ctrl.columns"
+                     enabledraggablerow="true"
+                     ondeleterow="ctrl.removeColumn"
+                     maxheight="400px"
+                     hidegridmenu>
+            <vr-datagridcolumn headertext="'Supplier'">
+                <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" onselectionchanged="dataItem.onSupplierSelectionChanged"></vr-whs-be-supplier-selector>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Routes'">
+                <np-ivswitch-route-selector hidelabel on-ready="dataItem.onRouteDirectiveReady"></np-ivswitch-route-selector>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Percantage'">
+                <vr-textbox value="dataItem.percentage" isrequired="dataItem.isPercentageRequired()" type="number" minvalue="1" maxvalue="100"></vr-textbox>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-section>

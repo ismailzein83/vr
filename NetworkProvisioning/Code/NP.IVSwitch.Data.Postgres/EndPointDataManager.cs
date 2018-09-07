@@ -84,13 +84,9 @@ namespace NP.IVSwitch.Data.Postgres
         {   
             string fieldName = "";
             string tableName = "";
-            string userIds = "(";
-            for (int index = 0; index < endPointIds.Count(); index++)
-                if (index < endPointIds.Count() - 1)
-                    userIds += endPointIds.ElementAt(index)+ ",";
-                else
-                    userIds += endPointIds.ElementAt(index) + ")";
-            
+            string userIds = "";
+         userIds="("+string.Join(",", endPointIds)+")";
+
             if (userType == UserType.ACL)
                 tableName = "users";
             else
@@ -426,26 +422,26 @@ return recordsEffected > 0;
         private EndPoint EndPointMapper(IDataReader reader)
         {
             int hostOrdinal = reader.GetOrdinal("host");
-            EndPoint endPoint = new EndPoint();
+            EndPoint endPoint = new EndPoint{
             
-                endPoint.EndPointId = (int)reader["user_id"];
-                endPoint.CliRouting = (Int16)reader["cli_routing"];
-                endPoint.DstRouting = (int)reader["dst_routing"];
-                endPoint.DstRouting = GetReaderValue<int>(reader, "dst_routing");
-
-                 endPoint.AccountId = (int)reader["account_id"];
-                 endPoint.Description = reader["description"] as string;
-                 endPoint.LogAlias = reader["log_alias"] as string;
-                 endPoint.CodecProfileId = (int)reader["codec_profile_id"];
-                 endPoint.TransRuleId = (int)reader["trans_rule_id"];
-                 endPoint.CurrentState = (State)GetReaderValue<Int16>(reader, "state_id");
-                 endPoint.ChannelsLimit = GetReaderValue<int>(reader, "channels_limit");
-                 endPoint.MaxCallDuration = (int)reader["max_call_dura"];
-                 endPoint.RtpMode = (RtpMode)(int)reader["rtp_mode"];
-                endPoint. DomainId = (Int16)reader["domain_id"];
-                 endPoint.SipLogin = reader["sip_login"] as string;
-                 endPoint.SipPassword = reader["sip_password"] as string;
-                 endPoint.TechPrefix = reader["tech_prefix"] as string;
+                 EndPointId = (int)reader["user_id"],
+                 CliRouting = (Int16)reader["cli_routing"],
+                 DstRouting = (int)reader["dst_routing"],
+                 //DstRouting = GetReaderValue<int>(reader, "dst_routing"),
+                 AccountId = (int)reader["account_id"],
+                 Description = reader["description"] as string,
+                 LogAlias = reader["log_alias"] as string,
+                 CodecProfileId = (int)reader["codec_profile_id"],
+                 TransRuleId = (int)reader["trans_rule_id"],
+                 CurrentState = (State)GetReaderValue<Int16>(reader, "state_id"),
+                 ChannelsLimit = GetReaderValue<int>(reader, "channels_limit"),
+                 MaxCallDuration = (int)reader["max_call_dura"],
+                 RtpMode = (RtpMode)(int)reader["rtp_mode"],
+                 DomainId = (Int16)reader["domain_id"],
+                 SipLogin = reader["sip_login"] as string,
+                 SipPassword = reader["sip_password"] as string,
+                 TechPrefix = reader["tech_prefix"] as string,
+        };
             ;
             NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;
             string hostObj = npgsqlreader.GetProviderSpecificValue(hostOrdinal).ToString();

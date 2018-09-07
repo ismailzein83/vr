@@ -1,0 +1,29 @@
+﻿<vr-row removeline>
+    <vr-columns width="normal" ng-if="scopeModel.isANumber">
+        <vr-textbox value="scopeModel.aNumber" label="ANumber"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="normal" ng-if="scopeModel.isANumber">
+        <vr-textbox value="scopeModel.whiteListe" label="BNumber"> ></vr-textbox>
+    </vr-columns>
+    <vr-columns width="normal" ng-if="!scopeModel.isANumber">
+        <vr-textbox value="scopeModel.aNumber" label="BNumber"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="normal">
+        <vr-textbox value="scopeModel.limit" label="Limit" type="number" isrequired="true" minvalue="1" maxvalue="999999999"></vr-textbox>
+    </vr-columns>
+
+
+    <vr-columns width="normal" withemptyline>
+        <div>
+            <vr-button type="Search" standalone data-onclick="scopeModel.search" vr-disabled="scopeModel.canSearch()"></vr-button>
+            <vr-button type="Add" standalone data-onclick="scopeModel.addRouteTableRT"></vr-button>
+        </div>
+
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <np-ivswitch-routetable-route-grid on-ready="scopeModel.onGridReady"></np-ivswitch-routetable-route-grid>
+    </vr-columns>
+</vr-row>
+
