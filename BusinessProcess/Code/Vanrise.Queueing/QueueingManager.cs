@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Queueing.Data;
-using Vanrise.Queueing.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Queueing.Data;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Queueing
 {
     public class QueueingManager
     {
+        #region Fiedds/Ctor
 
-        #region ctor
         private readonly IQueueDataManager _dataManager;
         private readonly IQueueItemDataManager _itemDataManager;
 
@@ -22,22 +20,21 @@ namespace Vanrise.Queueing
             _dataManager = QDataManagerFactory.GetDataManager<IQueueDataManager>();
             _itemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         }
+
         #endregion
 
         #region Public Methods
 
-        
-       
         public List<QueueItemType> GetQueueItemTypes()
         {
             return _dataManager.GetQueueItemTypes();
         }
-       
         
         public List<QueueItemHeader> GetHeaders(IEnumerable<int> queueIds, IEnumerable<QueueItemStatus> statuses, DateTime dateFrom, DateTime dateTo)
         {
             return _itemDataManager.GetHeaders(queueIds, statuses, dateFrom, dateTo);
         }
+
         public Dictionary<long, ItemExecutionFlowInfo> GetItemsExecutionFlowStatus(List<long> itemIds)
         {
             List<ItemExecutionFlowInfo> originalList = _itemDataManager.GetItemExecutionFlowInfo(itemIds);
@@ -58,6 +55,7 @@ namespace Vanrise.Queueing
 
             return itemsExectionStatusDic;
         }
+
         public ItemExecutionFlowStatus GetExecutionFlowStatus(List<ItemExecutionFlowInfo> list)
         {
             ItemExecutionFlowStatus result = ItemExecutionFlowStatus.New;
@@ -103,6 +101,7 @@ namespace Vanrise.Queueing
 
             return result;
         }
+
         public Vanrise.Entities.IDataRetrievalResult<QueueItemHeaderDetails> GetQueueItemsHeader(Vanrise.Entities.DataRetrievalInput<List<long>> input)
         {
             var data = _itemDataManager.GetQueueItemsHeader(input);
@@ -117,7 +116,6 @@ namespace Vanrise.Queueing
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, returnedResult, handler);
         }
-       
               
         #endregion
     }
