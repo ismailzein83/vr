@@ -35,6 +35,8 @@ namespace BPMExtended.Main.Business
             return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
         }
 
+
+
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
         {
             var ratePlan = RatePlanMockDataGenerator.GetRatePlan(ratePlanId);

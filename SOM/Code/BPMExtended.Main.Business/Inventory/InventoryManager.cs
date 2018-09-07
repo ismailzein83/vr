@@ -51,6 +51,14 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public bool ReserveDSLAMPort( string portId , string username )
+        {
+            //TODO: reserve port 
+            return true;
+
+
+        }
+
         public bool MultiplexerValidation(string phoneNumber)
         {
             InventoryPhoneItemDetail inventoryItem = GetInventoryDetail(phoneNumber);

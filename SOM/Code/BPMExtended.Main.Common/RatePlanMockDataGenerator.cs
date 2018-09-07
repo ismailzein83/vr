@@ -590,6 +590,9 @@ namespace BPMExtended.Main.Common
 
         public static List<SOM.Main.Entities.RatePlan> GetRatePlans(SOM.Main.Entities.LineOfBusiness lob, string customerCategoryId, string subType)
         {
+            if (subType == null)
+                return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()).ToList();
+            else
             return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()
                 && x.SubType.ToLower() == subType.ToLower()).ToList();
         }

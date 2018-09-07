@@ -24,6 +24,9 @@ namespace BPMExtended.Main.Entities
         TelephonyChangePhoneNumber = 3,
 
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
-        LeasedLineSubscription = 4
+        LeasedLineSubscription = 4,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        ADSL = 5
     }
 }
