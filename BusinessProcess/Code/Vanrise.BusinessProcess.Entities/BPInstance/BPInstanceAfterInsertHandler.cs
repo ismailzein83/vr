@@ -30,7 +30,7 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public override Guid ConfigId { get { return new Guid("9DC2DA9E-9ACE-42B1-86FF-D7A7BEA20BDD"); } }
 
-        public override void Execute(IBPInstanceBeforeInsertHandlerExecuteContext context)
+        public override void Execute(IBPInstanceAfterInsertHandlerExecuteContext context)
         {
             throw new NotImplementedException();
         }
