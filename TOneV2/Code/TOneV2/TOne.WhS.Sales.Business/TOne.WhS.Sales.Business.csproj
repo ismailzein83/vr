@@ -125,6 +125,7 @@
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateChangeOnlyCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\OtherRateDateRangeNotIncludedInSalePricingRuleRangeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SPDefaultRPDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
