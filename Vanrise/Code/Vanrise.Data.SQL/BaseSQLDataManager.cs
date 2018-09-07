@@ -20,11 +20,17 @@ namespace Vanrise.Data.SQL
         static string _bcpCommandName;
         static string s_bcpDirectory;
 
+        static int s_dbCommandDefaultTimeOutIntervalInSec;
+
         #region ctor
 
         static BaseSQLDataManager()
         {
             _bcpCommandName = ConfigurationManager.AppSettings["BCPCommandName"];
+            TimeSpan dbCommandDefaultTimeOutInterval;
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["DBCommandDefaultTimeOutInterval"], out dbCommandDefaultTimeOutInterval))
+                dbCommandDefaultTimeOutInterval = TimeSpan.FromMinutes(30);
+            s_dbCommandDefaultTimeOutIntervalInSec = (int)dbCommandDefaultTimeOutInterval.TotalSeconds;
             AddBCPIfNotAdded();
         }
 
@@ -605,14 +611,14 @@ namespace Vanrise.Data.SQL
         private DbCommand CreateCommand(SqlDatabase db, string sql, int? commandTimeoutInSeconds = null)
         {
             var cmd = db.GetSqlStringCommand(sql);
-            cmd.CommandTimeout = commandTimeoutInSeconds.HasValue ? commandTimeoutInSeconds.Value : 600;
+            cmd.CommandTimeout = commandTimeoutInSeconds.HasValue ? commandTimeoutInSeconds.Value : s_dbCommandDefaultTimeOutIntervalInSec;
             return cmd;
         }
 
         private DbCommand CreateCommandFromSP(SqlDatabase db, string spName)
         {
             var cmd = db.GetStoredProcCommand(spName);
-            cmd.CommandTimeout = 600;
+            cmd.CommandTimeout = s_dbCommandDefaultTimeOutIntervalInSec;
             return cmd;
         }
 

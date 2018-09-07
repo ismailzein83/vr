@@ -12,11 +12,14 @@ namespace Vanrise.Common
     public static class ServiceClientFactory
     {
         static TimeSpan _pingServiceTimeOutInterval;
+        static TimeSpan s_callServiceTimeOutInterval;
 
         static ServiceClientFactory()
         {
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["ServiceClientFactory_PingServiceTimeOutInterval"], out _pingServiceTimeOutInterval))
                 _pingServiceTimeOutInterval = TimeSpan.FromMilliseconds(500);
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["ServiceClientFactory_CallServiceTimeOutInterval"], out s_callServiceTimeOutInterval))
+                s_callServiceTimeOutInterval = TimeSpan.FromMinutes(30);
         }
 
         public static bool TryCreateTCPServiceClient<T>(string serviceURL, Action<T> onClientReady) where T : class
@@ -83,10 +86,10 @@ namespace Vanrise.Common
                 MaxReceivedMessageSize = int.MaxValue
             };
 
-            binding.OpenTimeout = TimeSpan.FromMinutes(5);
-            binding.CloseTimeout = TimeSpan.FromMinutes(5);
-            binding.SendTimeout = TimeSpan.FromMinutes(5);
-            binding.ReceiveTimeout = TimeSpan.FromMinutes(5);
+            binding.OpenTimeout = s_callServiceTimeOutInterval;// TimeSpan.FromMinutes(5);
+            binding.CloseTimeout = s_callServiceTimeOutInterval;// TimeSpan.FromMinutes(5);
+            binding.SendTimeout = s_callServiceTimeOutInterval;// TimeSpan.FromMinutes(5);
+            binding.ReceiveTimeout = s_callServiceTimeOutInterval;// TimeSpan.FromMinutes(5);
             
             ChannelFactory<T> channelFactory = new ChannelFactory<T>(binding, new EndpointAddress(serviceURL));
             IChannel channel = channelFactory.CreateChannel() as IChannel;
