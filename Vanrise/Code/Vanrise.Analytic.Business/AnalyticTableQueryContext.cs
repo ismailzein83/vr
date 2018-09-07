@@ -26,7 +26,7 @@ namespace Vanrise.Analytic.Business
             if (query == null)
                 throw new ArgumentNullException("query");
             _query = query;
-            _queryToTime = _query.ToTime.HasValue ? _query.ToTime.Value : AnalyticManager.GenerateQueryToTime();
+            _queryToTime = _query.ToTime.HasValue ? _query.ToTime.Value : AnalyticManager.GenerateQueryToTime(query.FromTime);
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
             var analyticTableId = query.TableId;

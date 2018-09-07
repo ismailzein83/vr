@@ -59,6 +59,12 @@ namespace Vanrise.Analytic.Business
             }
         }
 
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query)
+        {
+            AnalyticRecord summaryRecord;
+            return GetAllFilteredRecords(query, out summaryRecord);
+        }
+
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord)
         {
             return GetAllFilteredRecords(query, false, out summaryRecord);
@@ -359,12 +365,13 @@ namespace Vanrise.Analytic.Business
         private void SetQueryToTimeIfNull(AnalyticQuery query)
         {
             if (!query.ToTime.HasValue)
-                query.ToTime = GenerateQueryToTime();
+                query.ToTime = GenerateQueryToTime(query.FromTime);
         }
 
-        internal static DateTime GenerateQueryToTime()
+        internal static DateTime GenerateQueryToTime(DateTime fromTime)
         {
-            return DateTime.Today.AddDays(1);
+            DateTime toTime = DateTime.Today.AddDays(1);
+            return Utilities.Max(toTime, fromTime);
         }
 
         private Dictionary<string, MeasureStyleRule> BuildMeasureStyleRulesDictionary(List<MeasureStyleRule> measureStyleRules)
