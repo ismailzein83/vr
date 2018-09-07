@@ -75,9 +75,9 @@
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString"/>
   </appSettings>
   <system.web>
-    <compilation debug="true" targetFramework="4.5" />
+    <compilation debug="true" targetFramework="4.7.2" />
     <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
-    <httpRuntime targetFramework="4.5" executionTimeout="240" maxRequestLength="100000" enableVersionHeader="false" />
+    <httpRuntime targetFramework="4.7.2" executionTimeout="240" maxRequestLength="100000" enableVersionHeader="false" />
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false" />
