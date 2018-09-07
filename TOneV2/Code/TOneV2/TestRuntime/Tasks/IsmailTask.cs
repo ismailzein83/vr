@@ -16,6 +16,7 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            TestPostgresQueries();
             CallGetAnalyticRecords();
             var runtimeNodeConfigSettings = new Vanrise.Runtime.Entities.RuntimeNodeConfigurationSettings
             {
@@ -659,6 +660,48 @@ namespace TestRuntime
             //        RateEffectiveOn = DateTime.Now
             //    }
             //});
+        }
+
+        private void TestPostgresQueries()
+        {
+            using (Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection("User ID=postgres;Password=postgres;Host=192.168.110.185;Port=5432;Database=Retail_Dev_Configuration;"))
+            {
+                conn.Open();
+                string cmdText = @"UPDate public.""TestTable1""
+SET 	""SeqValue"" =""SeqValue"" + 1
+	where ""ID""  =1
+    RETURNING *;
+
+DECLARE myid public.TestTable1.SeqValue%TYPE;
+
+UPDate public.""TestTable1""
+SET 	""SeqValue"" =""SeqValue"" + 1
+	where ""ID""  =1
+    RETURNING ""SeqValue"" as ""seqValue"" INTO myid;
+
+SELECT myid;
+
+select ""SeqValue"" FROM public.""TestTable1"";";
+                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(cmdText, conn);
+                var prm = new Npgsql.NpgsqlParameter();
+                prm.ParameterName = "SeqValue";
+                prm.Value = DBNull.Value;
+                //cmd.Parameters.Add(prm);
+
+                var reader = cmd.ExecuteReader();
+
+                while(reader.Read())
+                {
+                    var seqValue = reader["SeqValue"];
+                }
+
+                reader.NextResult();
+                while (reader.Read())
+                {
+                    var seqValue = reader["seqValue"];
+                }
+                conn.Close();
+            }
         }
 
 

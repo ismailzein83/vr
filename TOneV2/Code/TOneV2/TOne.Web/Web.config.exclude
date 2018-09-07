@@ -104,7 +104,7 @@
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false" />
     </httpHandlers>
-    <compilation debug="false" targetFramework="4.5">
+    <compilation debug="false" targetFramework="4.7.2">
       <assemblies>
         <add assembly="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845DCD8080CC91" />
         <add assembly="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845DCD8080CC91" />
@@ -114,7 +114,7 @@
         <add extension=".rdlc" type="Microsoft.Reporting.RdlBuildProvider, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
       </buildProviders>
     </compilation>
-    <httpRuntime targetFramework="4.5" maxRequestLength="1048576" enableVersionHeader="false" />
+    <httpRuntime targetFramework="4.7.2" maxRequestLength="1048576" enableVersionHeader="false" />
     <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
   </system.web>
   <system.webServer>
