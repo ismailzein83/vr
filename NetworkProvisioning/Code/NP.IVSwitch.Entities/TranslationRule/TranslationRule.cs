@@ -17,6 +17,7 @@ namespace NP.IVSwitch.Entities
         public PrefixSign? DNISPatternSign { get; set; }
         public String DNISPattern { get; set; }
         public CLIType CLIType { get; set; }
+        public String CLIPattern { get; set; }//TO BE DELETED
         public FixedCLISettings FixedCLISettings { get; set; }
         public PoolBasedCLISettings PoolBasedCLISettings { get; set; }
         public DateTime CreationDate { get; set; }
