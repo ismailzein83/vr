@@ -162,7 +162,10 @@
   <ItemGroup>
     <Content Include="NP_IVSwitch\Constant\CallsEnum.js" />
     <Content Include="NP_IVSwitch\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\CLITypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EndPointEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\EngineTypeEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\PrefixSignEnum.js" />
     <Content Include="NP_IVSwitch\Constant\RouteTableViewTypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\ModuleConfig.js" />
     <Content Include="NP_IVSwitch\Constant\RtpModeEnum.js" />
