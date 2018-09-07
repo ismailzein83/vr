@@ -15,12 +15,32 @@ namespace BPMExtended.Main.Business
             //TODO: get mics list
             return MicsMockDataGenerator.GetAllMics();
         }
-        public MIC GetNextMic(string SwitchName)
+        public MIC GetNextMic(string switchName, string phoneNumber)
         {
             //TODO: get next mic
-            MIC currentmic = MicsMockDataGenerator.GetAllMics().Where(x => x.SwitchName == SwitchName).FirstOrDefault();
-            MIC nextmic = MicsMockDataGenerator.GetAllMics()[currentmic.MicNumber];
-            return nextmic== null ? new MIC() : nextmic ;
+            List<MIC> allmics = GetMics(phoneNumber);
+            MIC currentmic = allmics.Where(x => x.SwitchName == switchName).FirstOrDefault();
+            MIC nextmic = null;
+            try
+            {
+                nextmic = allmics[currentmic.MicNumber];
+            }
+            catch {
+            }
+            return  nextmic ;
+        }
+        public MIC GetFirstMic(string phoneNumber)
+        {
+            //TODO: get next mic
+            MIC currentmic = null; 
+            try
+            {
+                currentmic = GetMics(phoneNumber).First();
+            }
+            catch
+            {
+            }
+            return currentmic;
         }
     }
 }
