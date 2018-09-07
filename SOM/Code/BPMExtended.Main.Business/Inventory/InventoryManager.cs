@@ -50,7 +50,19 @@ namespace BPMExtended.Main.Business
 
             };
         }
-
+        public DeportedNumberReservation GetDeportedNumberReservation(string phoneNumber)
+        {
+            return new DeportedNumberReservation
+            {
+                LinePathID= Guid.NewGuid().ToString(),
+                MDF = "MDF001",
+                MDFPort= "005",
+                Cabinet = "Cabinet002",
+                CabinetPort = "004",
+                DP = "DP003",
+                DPPort = "005"
+            };
+        }
         public bool ReserveDSLAMPort( string portId , string username )
         {
             //TODO: reserve port 
