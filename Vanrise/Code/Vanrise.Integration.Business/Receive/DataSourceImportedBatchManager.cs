@@ -40,8 +40,8 @@ namespace Vanrise.Integration.Business
                 queueItemIds.UnionWith(qIds.Select(itm => long.Parse(itm)));
             }
 
-            QueueingManager qManager = new QueueingManager();
-            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = qManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
+            QueueingManager queueingManager = new QueueingManager();
+            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = queueingManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
 
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
@@ -51,9 +51,9 @@ namespace Vanrise.Integration.Business
                     continue;
                 }
 
-                string[] qIds = batch.QueueItemIds.Split(',');
-                List<ItemExecutionFlowInfo> list = qIds.Select(itm => dicItemExecutionStatus.GetRecord(long.Parse(itm))).ToList();
-                batch.ExecutionStatus = list.Count > 1 ? qManager.GetExecutionFlowStatus(list) : list.First().Status;
+                string[] batchQueueItemIds = batch.QueueItemIds.Split(',');
+                List<ItemExecutionFlowInfo> list = batchQueueItemIds.Select(itm => dicItemExecutionStatus.GetRecord(long.Parse(itm))).ToList();
+                batch.ExecutionStatus = list.Count > 1 ? queueingManager.GetExecutionFlowStatus(list) : list.First().Status;
             }
 
             ResultProcessingHandler<DataSourceImportedBatch> handler = new ResultProcessingHandler<DataSourceImportedBatch>()
