@@ -147,7 +147,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -195,13 +195,13 @@
               <Width>1.55078in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77092in</Width>
+              <Width>0.88247in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.10973in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77092in</Width>
+              <Width>0.83078in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.04083in</Width>
@@ -213,7 +213,7 @@
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53707in</Width>
+              <Width>0.36603in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05125in</Width>
@@ -608,7 +608,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -677,7 +677,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -911,7 +911,7 @@
         <Top>2.63542in</Top>
         <Left>0.05499in</Left>
         <Height>0.46875in</Height>
-        <Width>7.71854in</Width>
+        <Width>7.71891in</Width>
         <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>

@@ -183,7 +183,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -215,7 +215,7 @@
         <Top>3.58452in</Top>
         <Left>2.07592in</Left>
         <Height>0.02083in</Height>
-        <Width>5.85305in</Width>
+        <Width>5.99763in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -231,13 +231,13 @@
               <Width>1.8586in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72593in</Width>
+              <Width>0.82593in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.07682in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.74515in</Width>
+              <Width>0.82515in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05195in</Width>
@@ -249,7 +249,7 @@
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.36603in</Width>
+              <Width>0.33061in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05013in</Width>
@@ -636,7 +636,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -700,7 +700,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -922,7 +922,7 @@
         <Top>3.01042in</Top>
         <Left>0.21732in</Left>
         <Height>0.46875in</Height>
-        <Width>7.71165in</Width>
+        <Width>7.85623in</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -942,7 +942,7 @@
               <Width>1.12216in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.375in</Width>
+              <Width>0.60574in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05195in</Width>
@@ -954,10 +954,10 @@
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.33669in</Width>
+              <Width>0.60335in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.07947in</Width>
+              <Width>0.77739in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1190,10 +1190,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>3.63313in</Top>
-        <Left>2.12666in</Left>
+        <Top>3.64702in</Top>
+        <Left>2.07592in</Left>
         <Height>0.19792in</Height>
-        <Width>5.80231in</Width>
+        <Width>5.99763in</Width>
         <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -1292,6 +1292,7 @@
                 <Value>=Parameters!Carrier.Value</Value>
               </Parameter>
             </Parameters>
+            <Left>0.00001in</Left>
             <Height>3in</Height>
             <Width>7.69908in</Width>
             <Style>
@@ -1305,7 +1306,7 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>4.01958in</Top>
+        <Top>5.44233in</Top>
         <Left>0.22988in</Left>
         <Height>3in</Height>
         <Width>7.69909in</Width>
@@ -1320,10 +1321,10 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>18.04142cm</Height>
+    <Height>21.44353cm</Height>
     <Style />
   </Body>
-  <Width>20.5404cm</Width>
+  <Width>20.58619cm</Width>
   <Page>
     <PageFooter>
       <Height>1.13505cm</Height>

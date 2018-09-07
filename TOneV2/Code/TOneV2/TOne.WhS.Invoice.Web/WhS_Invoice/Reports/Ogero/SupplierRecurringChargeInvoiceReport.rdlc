@@ -44,13 +44,13 @@
               <Width>5.43329cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.67142cm</Width>
+              <Width>6.35351cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3.97964cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.20375cm</Width>
+              <Width>3.52166cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -254,7 +254,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!From.Value).ToString("dd/MM/yyyy") + " - " + CDate(Fields!To.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!From.Value).ToString("dd MMMM yyyy") + " - " + CDate(Fields!To.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
@@ -922,7 +922,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -993,7 +993,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>

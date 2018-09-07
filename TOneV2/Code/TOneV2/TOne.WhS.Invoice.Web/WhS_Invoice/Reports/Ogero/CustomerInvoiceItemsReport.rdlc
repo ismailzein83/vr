@@ -147,7 +147,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -195,13 +195,13 @@
               <Width>1.8586in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77092in</Width>
+              <Width>0.7792in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.07682in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77092in</Width>
+              <Width>0.7792in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05195in</Width>
@@ -213,10 +213,10 @@
               <Width>0.82202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.36603in</Width>
+              <Width>0.2202in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.05013in</Width>
+              <Width>1.1794in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -608,7 +608,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -677,7 +677,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -931,7 +931,7 @@
               <Width>1.12216in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35607in</Width>
+              <Width>0.37227in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05159in</Width>
@@ -940,7 +940,7 @@
               <Width>1.01538in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.82202in</Width>
+              <Width>0.80434in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.35442in</Width>
@@ -1183,7 +1183,7 @@
         <Top>3.28938in</Top>
         <Left>2.15102in</Left>
         <Height>0.19792in</Height>
-        <Width>5.78414in</Width>
+        <Width>5.78266in</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -1352,7 +1352,7 @@
     <Height>13.96999cm</Height>
     <Style />
   </Body>
-  <Width>20.52274cm</Width>
+  <Width>20.21795cm</Width>
   <Page>
     <PageFooter>
       <Height>1.13505cm</Height>

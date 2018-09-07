@@ -734,7 +734,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -768,7 +768,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd/MM/yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -1045,16 +1045,13 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.86142in</Width>
+                  <Width>1.11207in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.11142in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.9858in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.16142in</Width>
+                  <Width>1.11782in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.26142in</Width>
@@ -1072,7 +1069,7 @@
                   <Width>1.76099in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.68325in</Width>
+                  <Width>0.4956in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1120,44 +1117,6 @@
                     </TablixCell>
                     <TablixCell />
                     <TablixCell />
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox64">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#4e479c</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox47</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>White</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <BackgroundColor>White</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox42">
@@ -1398,7 +1357,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1468,7 +1427,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1482,42 +1441,6 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>ToDate</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BackgroundColor>Gainsboro</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox85">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox48</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1762,7 +1685,6 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1779,7 +1701,7 @@
             <Top>3.95771in</Top>
             <Left>0.1425in</Left>
             <Height>0.5in</Height>
-            <Width>7.70998in</Width>
+            <Width>7.74358in</Width>
             <ZIndex>20</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
@@ -2279,7 +2201,7 @@
                   <Width>1.51634in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.16142in</Width>
+                  <Width>0.38267in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.26142in</Width>
@@ -2294,10 +2216,10 @@
                   <Width>0.16142in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.761in</Width>
+                  <Width>1.76099in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.68326in</Width>
+                  <Width>0.4956in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -2653,7 +2575,7 @@
             <Top>4.95771in</Top>
             <Left>0.1425in</Left>
             <Height>0.25in</Height>
-            <Width>7.71in</Width>
+            <Width>7.74358in</Width>
             <ZIndex>22</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
@@ -2982,10 +2904,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.47294cm</Width>
+                  <Width>4.88292cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.73543cm</Width>
+                  <Width>1.25882cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3085,9 +3007,9 @@
             </TablixRowHierarchy>
             <DataSetName>RecurringChargeItem</DataSetName>
             <Top>13.761cm</Top>
-            <Left>13.73693cm</Left>
+            <Left>13.8889cm</Left>
             <Height>0.6cm</Height>
-            <Width>6.20837cm</Width>
+            <Width>6.14175cm</Width>
             <ZIndex>26</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>

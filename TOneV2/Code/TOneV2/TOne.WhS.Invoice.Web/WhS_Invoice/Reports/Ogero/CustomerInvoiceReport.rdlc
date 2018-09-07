@@ -430,7 +430,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -464,7 +464,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -1424,7 +1424,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1494,7 +1494,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2704,7 +2704,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>15.29084cm</Top>
         <Left>0.33409cm</Left>
-        <Height>4.55119cm</Height>
+        <Height>4.5512cm</Height>
         <Width>9.91161cm</Width>
         <ZIndex>27</ZIndex>
         <Style>

@@ -734,7 +734,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -768,7 +768,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd/MM/yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -1045,7 +1045,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.86142in</Width>
+                  <Width>1.02284in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.11142in</Width>
@@ -1072,7 +1072,7 @@
                   <Width>1.76099in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.68325in</Width>
+                  <Width>0.61313in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1398,7 +1398,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1468,7 +1468,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1779,7 +1779,7 @@
             <Top>3.95771in</Top>
             <Left>0.1425in</Left>
             <Height>0.5in</Height>
-            <Width>7.70998in</Width>
+            <Width>7.80128in</Width>
             <ZIndex>20</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
@@ -2276,7 +2276,7 @@
                   <Width>0.4423in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.51634in</Width>
+                  <Width>1.67775in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.16142in</Width>
@@ -2297,7 +2297,7 @@
                   <Width>1.761in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.68326in</Width>
+                  <Width>0.61313in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -2653,7 +2653,7 @@
             <Top>4.95771in</Top>
             <Left>0.1425in</Left>
             <Height>0.25in</Height>
-            <Width>7.71in</Width>
+            <Width>7.80128in</Width>
             <ZIndex>22</ZIndex>
             <Visibility>
               <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
@@ -2982,10 +2982,10 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>4.47294cm</Width>
+                  <Width>4.88292cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.73543cm</Width>
+                  <Width>1.56326cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3087,7 +3087,7 @@
             <Top>13.761cm</Top>
             <Left>13.73693cm</Left>
             <Height>0.6cm</Height>
-            <Width>6.20837cm</Width>
+            <Width>6.44618cm</Width>
             <ZIndex>26</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
@@ -3099,13 +3099,13 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>11.27999in</Height>
+        <Height>28.65117cm</Height>
         <Style />
       </Body>
-      <Width>7.94611in</Width>
+      <Width>20.18311cm</Width>
       <Page>
         <PageFooter>
-          <Height>0.45833in</Height>
+          <Height>1.16416cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -3161,10 +3161,15 @@
             </Border>
           </Style>
         </PageFooter>
-        <PageHeight>11.69in</PageHeight>
-        <PageWidth>8.27in</PageWidth>
+        <PageHeight>29.7cm</PageHeight>
+        <PageWidth>21cm</PageWidth>
         <InteractiveHeight>11in</InteractiveHeight>
         <InteractiveWidth>8.27in</InteractiveWidth>
+        <LeftMargin>0cm</LeftMargin>
+        <RightMargin>0cm</RightMargin>
+        <TopMargin>0cm</TopMargin>
+        <BottomMargin>0cm</BottomMargin>
+        <ColumnSpacing>1.27cm</ColumnSpacing>
         <Style />
       </Page>
     </ReportSection>
@@ -3450,6 +3455,6 @@ TpdTvdMOUMT3Cx1peZyS6iIpgCLeaHYHS8Xpy9R4UhhgGZ8kOVNmnJLkRP67whOgnvNJXmzFjpaL03SS
     </EmbeddedImage>
   </EmbeddedImages>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>cbe75953-ed41-4894-ad02-6cdafe2f9ede</rd:ReportID>
 </Report>

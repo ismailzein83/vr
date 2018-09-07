@@ -183,7 +183,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -231,13 +231,13 @@
               <Width>1.71735in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72593in</Width>
+              <Width>0.85593in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.10973in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.74515in</Width>
+              <Width>0.88516in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.09748in</Width>
@@ -249,7 +249,7 @@
               <Width>0.84778in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53785in</Width>
+              <Width>0.26785in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05649in</Width>
@@ -636,7 +636,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -700,7 +700,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd MMMM yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -922,7 +922,7 @@
         <Top>3.01042in</Top>
         <Left>0.05697in</Left>
         <Height>0.46875in</Height>
-        <Width>7.71608in</Width>
+        <Width>7.71609in</Width>
         <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -939,10 +939,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.90277in</Width>
+              <Width>0.85593in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72921in</Width>
+              <Width>0.99489in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.09748in</Width>
@@ -954,7 +954,7 @@
               <Width>0.84778in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53786in</Width>
+              <Width>0.26785in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05647in</Width>
@@ -1224,9 +1224,9 @@
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
         <Top>3.64583in</Top>
-        <Left>1.72315in</Left>
+        <Left>1.77432in</Left>
         <Height>0.25in</Height>
-        <Width>6.04989in</Width>
+        <Width>5.99872in</Width>
         <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
@@ -1356,7 +1356,7 @@
     <Height>7.10292in</Height>
     <Style />
   </Body>
-  <Width>7.81125in</Width>
+  <Width>7.82421in</Width>
   <Page>
     <PageFooter>
       <Height>0.44687in</Height>
