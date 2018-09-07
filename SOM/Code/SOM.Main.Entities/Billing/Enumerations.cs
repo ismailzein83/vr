@@ -12,7 +12,9 @@ namespace SOM.Main.Entities
     {
         Telephony = 0,
 
-        LeasedLine = 1
+        LeasedLine = 1,
+
+        ADSL = 2
     }
 
     public class LineOfBusinessAttribute : Attribute

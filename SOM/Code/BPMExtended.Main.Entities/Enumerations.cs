@@ -26,7 +26,7 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
         LeasedLineSubscription = 4,
 
-        [LineOfBusiness(LineOfBusiness.Telephony)]
-        ADSL = 5
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLSubscription = 5
     }
 }

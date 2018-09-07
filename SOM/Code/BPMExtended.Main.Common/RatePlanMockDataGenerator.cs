@@ -147,6 +147,26 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+        #region ADSL Rate Plans
+
+        #region Residential
+
+        #region Normal
+
+        const string RP_ADSL_RES_NORMAL = "9A862D6E-6A40-409C-8677-618B44FD5BA3";
+
+        #endregion
+
+        #region Student
+
+        const string RP_ADSL_RES_STUDENT = "8D2E19A3-C48F-4ED0-958C-7EE74EAAB1B0";
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region Service Packages
@@ -160,6 +180,12 @@ namespace BPMExtended.Main.Common
         const string PCKG_OPT_TL_2 = "C0695121-2C4B-4E9E-B88D-DB759C0454FD";
 
         const string PCKG_OPT_LL_1 = "5208AB6F-7956-47EE-A1A7-19A407EE8FDD";
+
+        const string PCKG_CORE_ADSL_1 = "D8968BAD-340E-4F4E-800D-A6948FA009DE";
+
+        const string PCKG_OPT_ADSL_1 = "47EED491-7787-4962-9373-6AE91883487E";
+
+        const string PCKG_OPT_ADSL_2 = "BCEF4F11-F3A5-4F75-9D58-A5F36237B4FC";
 
         #endregion
 
@@ -186,6 +212,16 @@ namespace BPMExtended.Main.Common
         const string SRV_OPT_LL_1 = "450BBD16-E948-4333-B027-130FEB3A7672";
 
         const string SRV_OPT_LL_2 = "B9E6A499-8086-4647-8ED9-FFB88FCE2420";
+
+        const string SRV_CORE_ADSL_1 = "F91FA9AB-6CBE-47FB-845C-F1852B21C19C";
+
+        const string SRV_CORE_ADSL_2 = "B6D2326E-4C6B-4BA9-A787-0919EEC12335";
+
+        const string SRV_OPT_ADSL_1 = "873F612D-CB86-44D4-A2B0-25501F687067";
+
+        const string SRV_OPT_ADSL_2 = "6EBB601B-2A76-4067-8EF7-27561813E511";
+
+        const string SRV_OPT_ADSL_3 = "87CA1D3C-72FF-44B5-84AD-792DA0C6B3DF";
 
         #endregion
 
@@ -587,7 +623,6 @@ namespace BPMExtended.Main.Common
 
         #region Rate Plan
 
-
         public static List<SOM.Main.Entities.RatePlan> GetRatePlans(SOM.Main.Entities.LineOfBusiness lob, string customerCategoryId, string subType)
         {
             if (subType == null)
@@ -664,6 +699,33 @@ namespace BPMExtended.Main.Common
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
                     CorePackage = GetServicePackage(PCKG_CORE_LL),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_ADSL_RES_NORMAL,
+                    Name = "Normal Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
+                    CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1 })
+                },
+                 new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_ADSL_RES_NORMAL,
+                    Name = "Normal Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
+                    CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1 })
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_ADSL_RES_STUDENT,
+                    Name = "Student Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.ADSL,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
+                    CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1, PCKG_OPT_ADSL_2 })
                 }
             };
         }
@@ -715,6 +777,24 @@ namespace BPMExtended.Main.Common
                     PackageId = PCKG_OPT_LL_1,
                     PackageName = "Star Package",
                     Services = GetServices(PCKG_OPT_LL_1)
+                },
+                new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_CORE_ADSL_1,
+                    PackageName = "ADSL Core Package",
+                    Services = GetServices(PCKG_CORE_ADSL_1)
+                },
+                new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_OPT_ADSL_1,
+                    PackageName = "Premium",
+                    Services = GetServices(PCKG_OPT_ADSL_1)
+                },
+                new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_OPT_ADSL_1,
+                    PackageName = "Gold",
+                    Services = GetServices(PCKG_OPT_ADSL_2)
                 }
             };
         }
@@ -847,7 +927,74 @@ namespace BPMExtended.Main.Common
                     Description = "Put a call on hold",
                     AccessFee = 150,
                     PackageId = PCKG_OPT_LL_1
-                }
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_CORE_ADSL_1,
+                    Name = "ADSL Subscription",
+                    Description = "ADSL Subscription",
+                    AccessFee = 1000,
+                    PackageId = PCKG_CORE_ADSL_1
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_CORE_ADSL_2,
+                    Name = "War Taxes",
+                    Description = "War Taxes",
+                    AccessFee = 150,
+                    PackageId = PCKG_CORE_ADSL_1
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_ADSL_1,
+                    Name = "Internet Speed",
+                    Description = "Internet Speed",
+                    AccessFee = 150,
+                    SubscriptionFee = 300,
+                    PackageId = PCKG_OPT_ADSL_1,
+                    ServiceParams = new List<SOM.Main.Entities.ServiceParameter>
+                    {
+                        new SOM.Main.Entities.ServiceParameter
+                        {
+                            Id = "1",
+                            Name = "2 MB/s"
+                        },
+                        new SOM.Main.Entities.ServiceParameter
+                        {
+                            Id = "2",
+                            Name = "50 MB/s"
+                        }
+                    }
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_ADSL_1,
+                    Name = "Quota",
+                    Description = "Quota",
+                    AccessFee = 150,
+                    PackageId = PCKG_OPT_ADSL_1,
+                    ServiceParams = new List<SOM.Main.Entities.ServiceParameter>
+                    {
+                        new SOM.Main.Entities.ServiceParameter
+                        {
+                            Id = "1",
+                            Name = "20 GB"
+                        },
+                        new SOM.Main.Entities.ServiceParameter
+                        {
+                            Id = "2",
+                            Name = "No Limit"
+                        }
+                    }
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_ADSL_1,
+                    Name = "Paternal Control",
+                    Description = "Paternal Control",
+                    AccessFee = 200,
+                    PackageId = PCKG_OPT_ADSL_2
+                },
             };
         }
 

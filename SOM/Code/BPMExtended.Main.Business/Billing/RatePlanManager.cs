@@ -14,7 +14,6 @@ namespace BPMExtended.Main.Business
     public class RatePlanManager
     {
         CPTManager _cptManager = new CPTManager();
-        
 
         public List<CustomerCategoryInfo> GetCustomerCategoryInfo(BPMCustomerType customerType)
         {
@@ -34,8 +33,6 @@ namespace BPMExtended.Main.Business
 
             return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
         }
-
-
 
         public List<ServiceDetail> GetCoreServices(string ratePlanId)
         {
@@ -105,8 +102,6 @@ namespace BPMExtended.Main.Business
             return services.MapRecords(ServiceInfoMapper).ToList();
 
         }
-
-
 
         #region Mappers
 
