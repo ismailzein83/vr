@@ -56,12 +56,13 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                    + '  <vr-whs-be-carrieraccount-selector  normal-col-num="{{ctrl.normalColNum}}"   getsuppliers on-ready="ctrl.onSupplierReady"'
                    + ' onselectionchanged="ctrl.onSupplierSelectionchanged"></vr-whs-be-carrieraccount-selector>'
                    + ' </span>'
+
+                   + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + ' <span vr-disabled="ctrl.isSupplierZoneDisabled">'
-                   + ' <vr-columns colnum="{{ctrl.normalColNum}}" >'
                    + ' <vr-select ' + multipleselection + ' on-ready="ctrl.SelectorReady"  datatextfield="Name" datavaluefield="SupplierZoneId"  limitcharactercount="ctrl.limitcharactercount"'
                    + ' isrequired="ctrl.isrequired" datasource="ctrl.searchSupplierZones" selectedvalues="ctrl.selectedvalues"' + label + 'onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" entityName="Supplier Zone"></vr-select>'
-                   + ' </vr-columns>'
-                   + ' </span>';
+                   + ' </span>'
+                   + ' </vr-columns>';
         }
 
         function supplierZoneCtor(ctrl, $scope, $attrs) {
@@ -94,7 +95,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
                 ctrl.onSupplierSelectionchanged = function () {
                     if (selectorApi != undefined)
-                    selectorApi.clearDataSource();
+                        selectorApi.clearDataSource();
                     if (supplierDirectiveApi.getSelectedIds() != undefined)
                         supplierId = supplierDirectiveApi.getSelectedIds();
                 };
@@ -177,7 +178,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                                             if (field.FieldType.BusinessEntityDefinitionId.toUpperCase() == "8C286BCD-5766-487A-8B32-5D167EC342C0") {
 
                                                 ctrl.isSupplierZoneDisabled = true;
-                                                
+
                                                 if (selectedValue == undefined) {
                                                     selectorApi.clearDataSource();
                                                     return;
