@@ -14,7 +14,7 @@ namespace NP.IVSwitch.Entities
         public int TranslationRuleId { get; set; }
         public String Name { get; set; }
         public EngineType EngineType { get; set; }
-        public PrefixSign? PrefixSign { get; set; }
+        public PrefixSign? DNISPatternSign { get; set; }
         public String DNISPattern { get; set; }
         public CLIType CLIType { get; set; }
         public FixedCLISettings FixedCLISettings { get; set; }
@@ -24,6 +24,7 @@ namespace NP.IVSwitch.Entities
 
     public class FixedCLISettings
     {
+        public PrefixSign? CLIPatternSign { get; set; }
         public String CLIPattern { get; set; }
     }
     public class PoolBasedCLISettings
