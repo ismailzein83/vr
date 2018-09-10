@@ -68,6 +68,7 @@
     <Compile Include="BillingPeriod\StartDateCalculationMethod\BillingPeriodAccumulation.cs" />
     <Compile Include="BillingPeriod\WeeklyBillingPeriod.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="FilterCondition\ReportFileExistCondition.cs" />
     <Compile Include="FilterCondition\ConditionGroupFilterCondition.cs" />
     <Compile Include="FilterCondition\FilterGroupCondition.cs" />
     <Compile Include="FilterCondition\AccountActivationCondition.cs" />
