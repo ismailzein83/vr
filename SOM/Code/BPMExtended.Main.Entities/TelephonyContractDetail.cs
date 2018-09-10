@@ -10,6 +10,11 @@ namespace BPMExtended.Main.Entities
     {
     }
 
+    public class ADSLContractDetail : ContractDetail
+    {
+
+    }
+
     public class TelephonyContractInfo : ContractInfo
     {
     }

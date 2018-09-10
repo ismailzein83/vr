@@ -96,6 +96,12 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+        public bool isUserNameUnique(string userName)
+        {
+            //TODO: call BSCS to validate the username
+            return true;
+        }
+
         
     }
 

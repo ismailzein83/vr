@@ -45,6 +45,16 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+        #region ADSL
+
+        const string CONTRACT_CUST1_ADSL1 = "DDC2177F-D398-4C2C-816F-72AD9750BE5B";
+
+        const string CONTRACT_CUST1_ADSL2 = "C372E36B-ED71-4B63-8C77-C42F2CBEBB68";
+
+        const string CONTRACT_CUST1_ADSL3 = "BF6FA071-BF08-4BF1-9689-06973D5BB5B5";
+
+        #endregion
+
         #endregion
 
         #region Contracts For CUSTOMER_ID_2
@@ -54,6 +64,12 @@ namespace BPMExtended.Main.Common
         const string CONTRACT_CUST2_LL1 = "B14D5937-3660-4C41-A05E-5CD50F1398DA";
 
         const string CONTRACT_CUST2_LL2 = "1C50C5CB-AF8A-4CE9-ACB4-81A972A78AF0";
+
+        #endregion
+
+        #region ADSL
+
+        const string CONTRACT_CUST2_ADSL1 = "8B105141-9800-4922-9627-72B64DD21950";
 
         #endregion
 
@@ -86,6 +102,12 @@ namespace BPMExtended.Main.Common
         const string CONTRACT_CUST3_TL11 = "4ECE879B-2525-45A0-8C1A-8EE0B02A557E";
 
         const string CONTRACT_CUST3_TL12 = "B3ED25BE-93E6-4700-953F-9F4539B434F6";
+
+        #endregion
+
+        #region ADSL
+
+        const string CONTRACT_CUST3_ADSL1 = "53D73D55-494F-4A78-A3D9-B632D95E1ECF";
 
         #endregion
 
@@ -412,10 +434,6 @@ namespace BPMExtended.Main.Common
             };
         }
 
-        #endregion
-
-        #region ADSL Contract
-
         public static List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
         {
             return GetAllTelephonyContractsInfo().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
@@ -467,6 +485,83 @@ namespace BPMExtended.Main.Common
                      CustomerId = CUSTOMER_ID_3,
                      PhoneNumber= PHONE_NUMBER_1
                  }
+            };
+        }
+
+        #endregion
+
+        #region ADSL Contract
+
+        public static ADSLContractDetail GetADSLContract(string contractId)
+        {
+            return GetAllADSLContracts().Find(x => x.ContractId.ToLower() == contractId.ToLower());
+        }
+
+        public static List<ADSLContractDetail> GetADSLContracts(string customerId)
+        {
+            return GetAllADSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+        }
+
+        private static List<ADSLContractDetail> GetAllADSLContracts()
+        {
+            return new List<ADSLContractDetail>
+            {
+                 new ADSLContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_ADSL1,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_ADSL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     Status = ContractDetailStatus.Active,
+                     CreatedTime = DateTime.Today.AddDays(-5),
+                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                 },
+                 new ADSLContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_ADSL2,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_ADSL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     Status = ContractDetailStatus.Inactive,
+                     CreatedTime = DateTime.Today.AddDays(-4),
+                     LastModifiedTime = DateTime.Today
+                 },                 
+                 new ADSLContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_ADSL3,
+                     CustomerId = CUSTOMER_ID_1,
+                     Status = ContractDetailStatus.Active,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_ADSL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     CreatedTime = DateTime.Today,
+                     LastModifiedTime = DateTime.Today
+                 },
+                 new ADSLContractDetail
+                 {
+                     ContractId = CONTRACT_CUST3_ADSL1,
+                     CustomerId = CUSTOMER_ID_3,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_ADSL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     Status = ContractDetailStatus.Active,
+                     CreatedTime = DateTime.Today.AddDays(-5),
+                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                 },
+                 new ADSLContractDetail
+                 {
+                      ContractId = CONTRACT_CUST2_ADSL1,
+                      CustomerId = CUSTOMER_ID_3,
+                      PhoneNumber= PHONE_NUMBER_1,
+                      RatePlanId = RP_ADSL_RES_STUDENT,
+                      RatePlanName = "Student Plan",
+                      Status = ContractDetailStatus.Inactive,
+                      CreatedTime = DateTime.Today.AddDays(-4),
+                      LastModifiedTime = DateTime.Today
+                 }
+
             };
         }
 

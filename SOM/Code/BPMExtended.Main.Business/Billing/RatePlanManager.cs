@@ -69,6 +69,17 @@ namespace BPMExtended.Main.Business
             return new List<ServiceDetail>();
         }
 
+        public List<ServiceDetail> GetADSLOptionalServicesByContractId(string telephonycontractid)
+        {
+            ContractManager contractManager = new ContractManager();
+            string ratePlanId = contractManager.GetADSLContract(telephonycontractid).RatePlanId;
+            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+            if (allOptionalServices.Count > 0)
+                return allOptionalServices.Take(2).ToList();
+
+            return new List<ServiceDetail>();
+        }
+
         public bool ActivateCPTService(string requestId , string contractId, string cptNumber)
         {
 
@@ -134,8 +145,8 @@ namespace BPMExtended.Main.Business
                 IsCore = service.IsCore,
                 SubscriptionFee = service.SubscriptionFee,
                 AccessFee = service.AccessFee,
-                PackageName = RatePlanMockDataGenerator.GetServicePackage(service.PackageId).PackageName,
-                ServiceParams = service.ServiceParams != null ? service.ServiceParams.MapRecords(ServiceParameterMapper).ToList() : null
+                PackageName = RatePlanMockDataGenerator.GetServicePackage(service.PackageId)!=null?RatePlanMockDataGenerator.GetServicePackage(service.PackageId).PackageName : null,
+                ServiceParams = service.ServiceParams != null ?service.ServiceParams.MapRecords(ServiceParameterMapper).ToList():null
             };
         }
 
