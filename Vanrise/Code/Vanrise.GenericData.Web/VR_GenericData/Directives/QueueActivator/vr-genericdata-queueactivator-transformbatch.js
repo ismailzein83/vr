@@ -64,10 +64,10 @@
 
 
 
-                $scope.onSelectedDataTransformationChanged = function () {
+                $scope.onSelectedDataTransformationChanged = function (value) {
 
-                    if ($scope.selectedDataTransformation != undefined) {
-                        dataTransformationDefinitionId = $scope.selectedDataTransformation.DataTransformationDefinitionId;
+                    if (value != undefined) {
+                        dataTransformationDefinitionId = value.DataTransformationDefinitionId;
                         if (dataTransformationRecordSelectorPromise != undefined) {
                             dataTransformationRecordSelectorPromise.resolve();
 
