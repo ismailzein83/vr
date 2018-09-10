@@ -455,7 +455,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 saleRateDetail.RateTypeName = null;
                 int displayedCurrencyId = (isSystemCurrency) ? _configManager.GetSystemCurrencyId() : saleRateHistoryRecord.CurrencyId;
                 saleRateDetail.DisplayedCurrency = _currencyManager.GetCurrencySymbol(displayedCurrencyId);
-                saleRateDetail.DisplayedRate = (isSystemCurrency) ? saleRateHistoryRecord.ConvertedRate : saleRateHistoryRecord.Rate;
+                saleRateDetail.DisplayedRate =saleRateHistoryRecord.ConvertedRate;
                 saleRateDetail.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
 
                 if (ownerType == SalePriceListOwnerType.Customer && !saleRateDetail.IsRateInherited)
