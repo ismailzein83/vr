@@ -21,16 +21,11 @@ namespace TOne.WhS.Sales.Business
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            return true;
             var ratePlanContext = context.GetExtension<IRatePlanContext>();
 
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            //TODO: Throw a new data integrity validation exception
-
-            // if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
-            //{
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var allZoneData = context.Target as AllDataByZone;
 
@@ -40,19 +35,26 @@ namespace TOne.WhS.Sales.Business
                 if (zoneData.OtherRatesToChange.Count() > 0)
                 {
                     RateTypeRule matchRule = GetMatchRule(ratePlanContext.OwnerId, zoneData.ZoneId, DateTime.Now);
-                    if (zoneData.OtherRatesToChange.First().BED <= matchRule.BeginEffectiveTime && zoneData.OtherRatesToChange.First().EED >= matchRule.EndEffectiveTime)
-                    {
-                        zoneWithInvalidBEDOrEED.Add(zoneData.ZoneName);
-                    }
+                    var ruleBED = matchRule.BeginEffectiveTime.Date;
+
+                    DateTime? ruleEED = null;
+                    if (matchRule.EndEffectiveTime.HasValue)
+                        ruleEED = matchRule.EndEffectiveTime.Value.Date;
+
+                    foreach (var otherRate in zoneData.OtherRatesToChange)
+                        if ((otherRate.EED == null && ruleEED != null) || otherRate.BED < ruleBED || otherRate.EED >= ruleEED)
+                        {
+                            zoneWithInvalidBEDOrEED.Add(zoneData.ZoneName);
+                            break;
+                        }
                 }
             }
 
             if (zoneWithInvalidBEDOrEED.Count() > 0)
             {
-                context.Message = string.Format("Zone(s) '{0}' are having other rates with a date which is not included in their Sale Pricing Rule date", string.Join(",", zoneWithInvalidBEDOrEED));
+                context.Message = string.Format("Some zone(s) are having other rates with a date which is not included in their Sale Pricing Rule date range. Violated zone(s): '{0}'", string.Join(",", zoneWithInvalidBEDOrEED));
                 return false;
             }
-            // }
             return true;
         }
         public override string GetMessage(IRuleTarget target)
