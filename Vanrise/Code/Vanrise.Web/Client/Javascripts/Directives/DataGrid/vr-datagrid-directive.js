@@ -225,9 +225,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 			+ '#CELLCONTENT#'
 			+ '</div>';
 
-	    var summaryCellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" >'
+	    var summaryCellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#COLUMNVALUES#.dataValue #SUMMARYTOOLTIPFILTER#}}" >'
 			+ ''
-			+ '<span class="span-summary" style="font-size:13px"> {{#COLUMNVALUES#.dataValue #CELLFILTER#}}</span>'
+			+ '<span class="span-summary" style="font-size:13px" ng-style="::$parent.ctrl.cellLayoutStyle"> {{#COLUMNVALUES#.dataValue #CELLFILTER#}}</span>'
 			+ ''
 			+ '</div>';
 
@@ -1043,6 +1043,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                    var cellClass = ctrl.isMobile ? 'vr-datagrid-cell-container' : '';
 
+	                    var tooltipFilter = getSummaryColumnTooltipFilter(currentColumn);
 	                    var innerSummaryRow = ctrl.isMobile ? '<div class="mobile-label-container" ><label class="mobile-label" >' + currentColumn.name + ': </label></div>'
 							+ '<div ng-style=' + mobileStyle + '>'
 							+ '<div class="vr-datagrid-cell">'
@@ -1055,7 +1056,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 							+ UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
 							+ '</div>'
 							+ '</div>';
-
+	                    innerSummaryRow = UtilsService.replaceAll(innerSummaryRow, "#SUMMARYTOOLTIPFILTER#", tooltipFilter);
 
 	                    ctrl.summaryRowHtml +=
 							'<div ng-if="!' + currentColumnHtml + '.isHidden" class="' + cellClass + '" ng-style="{ \'width\': ' + currentColumnHtml + '.' + cellWidth + ', \'display\':\'inline-flex\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}">'
@@ -1065,6 +1066,32 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            }
 	        }
 
+
+	        function getSummaryColumnTooltipFilter(currentColumn) {
+	            var tooltipFilter = "";
+	            if (currentColumn.type == "Number") {
+	                var numberPrecision = UISettingsService.getNormalPrecision() || 2;
+	                if (currentColumn.numberPrecision == "NoDecimal") {
+	                    numberPrecision = 0;
+	                }
+	                else if (currentColumn.numberPrecision == "LongPrecision") {
+	                    numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
+	                }
+	                tooltipFilter = " | vrtextOrNumber:" + numberPrecision;
+	            }
+	            else {
+	                if (currentColumn.type == "LongDatetime")
+	                { tooltipFilter = " | date:'yyyy-MM-dd HH:mm:ss'" }
+	                else if (currentColumn.type == "Datetime")
+	                { tooltipFilter = " | date:'yyyy-MM-dd HH:mm'" }
+	                else if (currentColumn.type == "Date")
+	                { tooltipFilter = " | date:'yyyy-MM-dd'" }
+	                else if (currentColumn.type == "Yearmonth")
+	                { tooltipFilter = " | date:'yyyy-MM'" }
+	            }
+
+	            return tooltipFilter;
+	        }
 	        function setMainItemsViewVisible() {
 	            ctrl.selectedView = 0;
 	            ctrl.isMainItemsShown = true;
