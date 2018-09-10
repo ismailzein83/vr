@@ -89,9 +89,6 @@ app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUti
                         };
                         $scope.scopeModel.descriptionSettings.push(faultTicketDescriptionSettingDetails);
                         $scope.scopeModel.errorMessage = undefined;
-
-
-                        ;
                     }
                 };
                 $scope.removerow = function (dataItem) {
