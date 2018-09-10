@@ -11,7 +11,8 @@ namespace Vanrise.Invoice.BP.Arguments
     {
         public override string GetTitle()
         {
-            return "Invoice Generation Process";
+            var invoiceTypeManager = BusinessManagerFactory.GetManager<IInvoiceTypeManager>();
+            return string.Format("Invoice Generation Process - {0}", invoiceTypeManager.GetInvoiceTypeName(InvoiceTypeId));
         }
 
         public Guid InvoiceTypeId { get; set; }

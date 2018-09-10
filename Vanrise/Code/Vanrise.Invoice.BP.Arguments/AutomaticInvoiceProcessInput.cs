@@ -22,7 +22,8 @@ namespace Vanrise.Invoice.BP.Arguments
         public InvoiceGapAction InvoiceGapAction { get; set; }
         public override string GetTitle()
         {
-            return "Automatic Invoice Process";
+            var invoiceTypeManager = BusinessManagerFactory.GetManager<IInvoiceTypeManager>();
+            return string.Format("Automatic Invoice Process - {0}", invoiceTypeManager.GetInvoiceTypeName(InvoiceTypeId));
         }
     }
 }

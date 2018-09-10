@@ -17,7 +17,8 @@ namespace Vanrise.Invoice.BP.Arguments
         public HandlingErrorOption HandlingErrorOption { get; set; }
         public override string GetTitle()
         {
-            return "Invoice Bulk Action Process";
+            var invoiceTypeManager = BusinessManagerFactory.GetManager<IInvoiceTypeManager>();
+            return string.Format("Invoice Bulk Action Process - {0}", invoiceTypeManager.GetInvoiceTypeName(InvoiceTypeId));
         }
     }
 }
