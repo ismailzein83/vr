@@ -501,7 +501,7 @@
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\Templates\OperationDirectionServicesTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\OperatorDeclaredInfo\retail-be-traffictype-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-traffictype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\retail-be-packagedefinition-recurcharge-evaluator-onetime.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\retail-be-packagedefinition-recurcharge-evaluator-periodic.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\Templates\OneTimeEvaluatorTemplate.html" />
@@ -565,11 +565,11 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountActions\retail-be-accountaction-email.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-retailaccount-propertyevaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\RetailAccountPropertyEvaluatorTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\OperatorDeclaredInfo\retail-be-trafficdirection-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\OperatorDeclaredInfo\retail-be-operatordeclaredinfo-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\OperatorDeclaredInfo\retail-be-operatordeclaredinfoitem-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\OperatorDeclaredInfo\Templates\OperatorDeclaredInfoGridTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\OperatorDeclaredInfo\Templates\OperatorDeclaredInfoItemGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-trafficdirection-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfo-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-operatordeclaredinfoitem-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\Templates\OperatorDeclaredInfoGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\Templates\OperatorDeclaredInfoItemGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-accounttype-part-definition.js" />
