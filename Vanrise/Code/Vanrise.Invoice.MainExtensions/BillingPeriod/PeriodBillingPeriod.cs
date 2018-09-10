@@ -32,7 +32,7 @@ namespace Vanrise.Invoice.MainExtensions
                 {
                     perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                     perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    while (nextBillingInterval.ToDate <= context.IssueDate && nextBillingInterval.ToDate < DateTime.Today)
+                    while (nextBillingInterval.ToDate < context.IssueDate && nextBillingInterval.ToDate < DateTime.Today)
                     {
                         perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
                         perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
