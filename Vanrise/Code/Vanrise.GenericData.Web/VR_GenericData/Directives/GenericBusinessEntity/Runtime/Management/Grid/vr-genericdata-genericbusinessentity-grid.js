@@ -92,7 +92,7 @@
                     
                     if (payload != undefined) {
                         if (businessEntityDefinitionId != undefined && businessEntityDefinitionId != payload.businessEntityDefinitionId)
-                            $scope.scopeModel.columns.length = 0;
+                        { $scope.scopeModel.columns.length = 0; gridAPI.clearUpdatedItems(); }
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         gridQuery = payload.query;
                         if (gridQuery != undefined)

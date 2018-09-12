@@ -21,6 +21,7 @@ app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_Accoun
             this.initializeController = initializeController;
 
             var gridAPI;
+            var accountTypeId;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -60,6 +61,9 @@ app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_Accoun
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    if (query.AccountTypeId != undefined && accountTypeId != query.AccountTypeId)
+                        gridAPI.clearUpdatedItems();
+                    accountTypeId = query.AccountTypeId;
                     return gridAPI.retrieveData(query);
                 };
                 if (ctrl.onReady != null)

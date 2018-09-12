@@ -23,6 +23,7 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
 
             var gridAPI;
             var context;
+            var accountTypeId;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -49,6 +50,11 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
                 var api = {};
 
                 api.loadGrid = function (payload) {
+                    if (payload.query != undefined && payload.query.AccountTypeId != undefined) {
+                        if (accountTypeId != payload.query.AccountTypeId)
+                            gridAPI.clearUpdatedItems();
+                        accountTypeId = payload.query.AccountTypeId;
+                    }
                     ctrl.showAccount = payload.showAccount != undefined ? payload.showAccount : true;
                     return gridAPI.retrieveData(payload.query);
                 };
@@ -68,11 +74,11 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
                             clicked: viewBillingTransaction
                         }];
                         return defaultMenuActions;
-                }
-            };
+                    }
+                };
             }
             function viewBillingTransaction(billingTransactionObj) {
-                    VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionObj.Entity.AccountBillingTransactionId, getContext());
+                VR_AccountBalance_BillingTransactionService.viewBillingTransaction(billingTransactionObj.Entity.AccountBillingTransactionId, getContext());
             }
             function getContext() {
                 var currentContext = context;

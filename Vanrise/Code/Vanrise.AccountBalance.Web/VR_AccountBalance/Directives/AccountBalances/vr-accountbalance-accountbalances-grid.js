@@ -60,6 +60,8 @@ app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBal
 
                     if (accountTypeId != payload.accountTypeId)
                     {
+                        if (accountTypeId != undefined)
+                            gridAPI.clearUpdatedItems();
                         var promiseDeferred = UtilsService.createPromiseDeferred();
                         accountTypeId = payload.accountTypeId;
                         gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(buildDrillDownTabs(), gridAPI, $scope.scopeModel.menuActions);

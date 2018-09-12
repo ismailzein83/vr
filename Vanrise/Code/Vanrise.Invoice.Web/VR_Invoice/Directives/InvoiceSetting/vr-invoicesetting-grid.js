@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService",
+app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService",
     function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService) {
 
         var directiveDefinitionObject = {
@@ -32,6 +32,7 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
             var gridDrillDownTabsObj;
             var showAccountSelector;
             var partnerIds;
+            var invoiceTypeId;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -53,7 +54,7 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                             invoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId,
                             invoiceTypeId: invoiceSettingItem.Entity.InvoiceTypeId,
                             showAccountSelector: showAccountSelector,
-                        partnerIds: partnerIds
+                            partnerIds: partnerIds
                         };
                         return invoiceSettingItem.partnerInvoiceSettingGridAPI.load(query);
                     };
@@ -62,7 +63,7 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                     drillDownDefinitionHistory.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
                     drillDownDefinitionHistory.directive = "vr-common-objecttracking-grid";
                     drillDownDefinitionHistory.loadDirective = function (directiveAPI, invoiceSettingItem) {
-                        invoiceSettingItem.objectTrackingGridAPI = directiveAPI; 
+                        invoiceSettingItem.objectTrackingGridAPI = directiveAPI;
                         var query = {
                             ObjectId: invoiceSettingItem.Entity.InvoiceSettingId,
                             EntityUniqueName: VR_Invoice_InvoiceSettingService.getEntityUniqueName(invoiceSettingItem.Entity.InvoiceTypeId)
@@ -81,12 +82,17 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (payload) {
                             if (payload != undefined) {
+                                if (payload.query != undefined && payload.query.InvoiceTypeId != undefined) {
+                                    if (invoiceTypeId != payload.query.InvoiceTypeId)
+                                        gridAPI.clearUpdatedItems();
+                                    invoiceTypeId = payload.query.InvoiceTypeId;
+                                }
                                 showAccountSelector = payload.showAccountSelector;
                                 partnerIds = payload.partnerIds;
                                 gridQuery = payload.query;
                                 return gridAPI.retrieveData(payload.query);
                             }
-                         
+
                         };
                         directiveAPI.onInvoiceSettingAdded = function (invoiceSetting) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);
@@ -131,7 +137,7 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                     clicked: setInvoiceSettingDefault,
                     haspermission: hasUpdateInvoiceSettingPermission
                 }];
-               
+
                 $scope.gridMenuActions = function (dataItem) {
                     if (dataItem.menuActionObj.menuActions != undefined)
                         dataItem.menuActionObj.menuActions.length = 0;
@@ -141,13 +147,11 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                     } else {
                         menuActions = UtilsService.cloneObject(mainMenuAction);
                     }
-                    for (var i = 0; i < $scope.menuActions.length; i++)
-                    {
+                    for (var i = 0; i < $scope.menuActions.length; i++) {
                         var menuAction = $scope.menuActions[i];
                         menuActions.push(menuAction);
                     }
-                    if (dataItem.CanDeleteInvoiceSetting)
-                    {
+                    if (dataItem.CanDeleteInvoiceSetting) {
                         menuActions.push({
                             name: "Delete",
                             clicked: deleteInvoiceSetting,
@@ -170,7 +174,7 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
             function setInvoiceSettingDefault(dataItem) {
                 VRNotificationService.showConfirmation().then(function (response) {
                     if (response) {
-                        return VR_Invoice_InvoiceSettingAPIService.SetInvoiceSettingDefault(dataItem.Entity.InvoiceSettingId,dataItem.Entity.InvoiceTypeId).then(function (response) {
+                        return VR_Invoice_InvoiceSettingAPIService.SetInvoiceSettingDefault(dataItem.Entity.InvoiceSettingId, dataItem.Entity.InvoiceTypeId).then(function (response) {
                             return gridAPI.retrieveData(gridQuery);
                         });
                     }
@@ -185,7 +189,7 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                                 gridAPI.itemDeleted(dataItem);
                             }
                             promiseDeffered.resolve();
-                        }).catch(function(error){
+                        }).catch(function (error) {
                             promiseDeffered.reject(error);
                         });
                     } else {
