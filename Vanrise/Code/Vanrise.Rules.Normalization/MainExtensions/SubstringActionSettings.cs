@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Normalization.MainExtensions
 {
+    public enum SubstringStartDirection { FromLeft = 0, FromRight = 1 }
     public class SubstringActionSettings : NormalizeNumberActionSettings
     {
         public override Guid ConfigId { get { return new Guid("b285d8dd-b628-4df0-b28c-114ebb9bed5a"); } }
+
+        public SubstringStartDirection StartDirection { get; set; }
+
         public int StartIndex { get; set; }
 
         public int? Length { get; set; }
