@@ -91,14 +91,18 @@ namespace TOne.WhS.RouteSync.IVSwitch
 
         public Dictionary<string, SupplierDefinition> GetConfiguredSuppliers()
         {
-            Dictionary<string, SupplierDefinition> suppliers = new Dictionary<string, SupplierDefinition>();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var allSuppliers = carrierAccountManager.GetAllSuppliers();
+            var supplierDefinitionById = new Dictionary<string, SupplierDefinition>();
+            var carrierAccountManager = new CarrierAccountManager();
+            List<RouteTable> nonSuspendedSuppliers = MasterDataManager.GetRouteTables(new List<int> { (int)State.Active, (int)State.Dormant });
+            List<BusinessEntity.Entities.CarrierAccount> allSuppliers = carrierAccountManager.GetAllSuppliers();
+
             foreach (var supplier in allSuppliers)
             {
-                RouteCarrierAccountExtension ivVendor =
-                    carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplier);
-                if (ivVendor == null) continue;
+                RouteCarrierAccountExtension ivVendor = carrierAccountManager.GetExtendedSettings<RouteCarrierAccountExtension>(supplier);
+
+                if (ivVendor == null)
+                    continue;
+
                 SupplierDefinition definition = new SupplierDefinition
                 {
                     SupplierId = supplier.CarrierAccountId.ToString(),
@@ -106,18 +110,18 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 };
                 foreach (var elt in ivVendor.RouteInfo)
                 {
-                    GateWay gateway = new GateWay
+                    if (nonSuspendedSuppliers.Any(item => item.RouteId == elt.RouteId))
                     {
-                        RouteId = elt.RouteId,
-                        Percentage = elt.Percentage
-                    };
-                    definition.Gateways.Add(gateway);
+                        definition.Gateways.Add(new GateWay
+                        {
+                            RouteId = elt.RouteId,
+                            Percentage = elt.Percentage
+                        });
+                    }
                 }
-                suppliers[definition.SupplierId] = definition;
+                supplierDefinitionById.Add(definition.SupplierId, definition);
             }
-            return suppliers;
-
+            return supplierDefinitionById;
         }
-
     }
 }

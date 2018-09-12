@@ -40,9 +40,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 ";
         }
 
-        private string GetSupplierQuery()
+        private string GetSupplierQuery(List<int> stateIds)
         {
-            return @"select distinct route_id,account_id,group_id from routes where route_id is not null ";
+            string stateCondition = string.Empty;
+            if (stateIds != null && stateIds.Any())
+            {
+                string stateIdSring = string.Join(",", stateIds);
+                stateCondition = string.Format("and state_id in ({0})", stateIdSring);
+            }
+            return string.Format(@"select distinct route_id,account_id,group_id from routes where route_id is not null {0}", stateCondition);
         }
 
         public DateTime GetSwitchDate()
@@ -60,9 +66,9 @@ namespace TOne.WhS.RouteSync.IVSwitch
             string query = GetCustomerQueryManual();
             return GetItemsText(query, AccessListMapperManual, null);
         }
-        public List<RouteTable> GetRouteTables()
+        public List<RouteTable> GetRouteTables(List<int> stateIds)
         {
-            string query = GetSupplierQuery();
+            string query = GetSupplierQuery(stateIds);
             return GetItemsText(query, RouteMapper, null);
         }
 

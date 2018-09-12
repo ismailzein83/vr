@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NP.IVSwitch.Entities;
 
 namespace TOne.WhS.RouteSync.IVSwitch
 {
@@ -35,12 +36,12 @@ namespace TOne.WhS.RouteSync.IVSwitch
         private Dictionary<string, RouteTable> GetSuppliers()
         {
             Dictionary<string, RouteTable> supplierDictionary = new Dictionary<string, RouteTable>();
-            List<RouteTable> supplierList = MasterDataManager.GetRouteTables();
+            List<RouteTable> supplierList = MasterDataManager.GetRouteTables(new List<int> { (int)State.Active, (int)State.Dormant });
             foreach (var supplier in supplierList)
             {
                 string key = string.Format("{0}_{1}", supplier.AccountId, supplier.GroupId);
                 if (!supplierDictionary.ContainsKey(key))
-                    supplierDictionary[key] = supplier;
+                    supplierDictionary.Add(key,supplier);
             }
             return supplierDictionary;
         }
@@ -88,7 +89,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                         }
 
                         RouteTable supplierDefinition;
-                        if (!dataBaseVendors.TryGetValue(supplierMappingValue, out supplierDefinition)) 
+                        if (!dataBaseVendors.TryGetValue(supplierMappingValue, out supplierDefinition))
                             continue;
 
                         GateWay gateway = new GateWay
@@ -145,10 +146,10 @@ namespace TOne.WhS.RouteSync.IVSwitch
             if (endPointById.Any())
             {
                 return new CustomerDefinition
-                    {
-                        CustomerId = customerId,
-                        EndPoints = endPointById.Values.ToList()
-                    };
+                {
+                    CustomerId = customerId,
+                    EndPoints = endPointById.Values.ToList()
+                };
             }
             return null;
         }
