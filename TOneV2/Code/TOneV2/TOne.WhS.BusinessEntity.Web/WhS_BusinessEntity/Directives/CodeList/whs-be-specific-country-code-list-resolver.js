@@ -54,7 +54,7 @@ app.directive('whsBeSpecificCountryCodeListResolver', ['UtilsService', 'VRUIUtil
                 $scope.onExcludedDestinationDirectiveReady = function (api) {
                     excludedDestinationDirectiveAPI = api;
                     excludedDestinationDefferedReady.resolve();
-                }
+                };
                 defineAPI();
             }
 

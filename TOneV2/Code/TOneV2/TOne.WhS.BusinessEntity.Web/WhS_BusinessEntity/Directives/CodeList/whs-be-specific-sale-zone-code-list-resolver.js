@@ -46,7 +46,7 @@ app.directive('whsBeSpecificSaleZoneCodeListResolver', ['WhS_BE_SaleZoneAPIServi
                 $scope.onExcludedDestinationDirectiveReady = function (api) {
                     excludedDestinationDirectiveAPI = api;
                     excludedDestinationDefferedReady.resolve();
-                }
+                };
                 defineAPI();
             }
 
