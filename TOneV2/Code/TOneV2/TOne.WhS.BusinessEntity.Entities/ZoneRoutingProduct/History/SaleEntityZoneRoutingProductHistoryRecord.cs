@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleEntityZoneRoutingProductHistoryRecord : Vanrise.Entities.IDateEffectiveSettingsEditable
-    {
+    public class SaleEntityZoneRoutingProductHistoryRecord : Vanrise.Entities.IDateEffectiveSettingsEditable, Vanrise.Entities.IDateEffectiveSettings
+	{
         public int RoutingProductId { get; set; }
 
         public long? SaleZoneId { get; set; }
