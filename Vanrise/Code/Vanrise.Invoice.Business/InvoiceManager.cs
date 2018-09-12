@@ -83,7 +83,7 @@ namespace Vanrise.Invoice.Business
                 var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoiceTypeId, new List<string> { partnerId });
                 invoiceAccounts.ThrowIfNull("invoiceAccounts");
                 var invoiceAccount = invoiceAccounts.FirstOrDefault();
-                return invoices.MapRecords(x=> InvoiceDetailMapper(x, invoiceType, invoiceAccount, true));
+                return invoices.MapRecords(x => InvoiceDetailMapper(x, invoiceType, invoiceAccount, true));
             }
         }
         public Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId)
@@ -126,7 +126,7 @@ namespace Vanrise.Invoice.Business
                 GenerateInvoiceResult generateInvoiceResult;
                 bool needApproval;
                 Func<Entities.Invoice, bool> actionAfterGenerateInvoice;
-                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, reGenerateInvoiceInput.PartnerId, reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, reGenerateInvoiceInput.CustomSectionPayload, reGenerateInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions, out invoiceToSettleIds, out errorMessage, out generateInvoiceResult, out needApproval,out actionAfterGenerateInvoice);
+                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, reGenerateInvoiceInput.PartnerId, reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, reGenerateInvoiceInput.CustomSectionPayload, reGenerateInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions, out invoiceToSettleIds, out errorMessage, out generateInvoiceResult, out needApproval, out actionAfterGenerateInvoice);
 
                 switch (generateInvoiceResult)
                 {
@@ -227,7 +227,7 @@ namespace Vanrise.Invoice.Business
             return (billingPeriodInfo.NextPeriodStart < fromDate) ? billingPeriodInfo.NextPeriodStart : default(DateTime?);
         }
 
-        private List<GenerateInvoiceOutput> GetErrorListOutput(List<GenerateInvoiceInputItem> items,  string errorMessage ,int? index)
+        private List<GenerateInvoiceOutput> GetErrorListOutput(List<GenerateInvoiceInputItem> items, string errorMessage, int? index)
         {
             var generateInvoiceOutputs = new List<GenerateInvoiceOutput>();
 
@@ -247,14 +247,15 @@ namespace Vanrise.Invoice.Business
                         LogEntryType = LogEntryType.Warning,
                         Message = "Stopped due to an error occurred in the generation of related invoice"
                     };
-                }else
+                }
+                else
                 {
                     generateInvoiceOutput.Message = new InvoiceGenerationMessageOutput
                     {
                         LogEntryType = LogEntryType.Warning,
                         Message = errorMessage
                     };
-                   
+
                 }
                 generateInvoiceOutputs.Add(generateInvoiceOutput);
             }
@@ -781,7 +782,7 @@ namespace Vanrise.Invoice.Business
                 Paid = invoice.PaidDate.HasValue,
                 Lock = invoice.LockDate.HasValue,
                 UserName = userManager.GetUserName(invoice.UserId),
-                ApprovedByName = invoice.ApprovedBy.HasValue? userManager.GetUserName(invoice.ApprovedBy.Value):null,
+                ApprovedByName = invoice.ApprovedBy.HasValue ? userManager.GetUserName(invoice.ApprovedBy.Value) : null,
                 HasNote = invoice.Note != null,
                 IsSent = invoice.SentDate.HasValue
             };
@@ -849,15 +850,16 @@ namespace Vanrise.Invoice.Business
                     invoiceDetail.SectionsTitle.Add(section.SectionTitle);
                 }
             }
-            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType, InvoiceAccount = invoiceAccount };
+
             foreach (var action in invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions)
             {
+                var invoiceAction = actionTypes.GetRecord(action.InvoiceGridActionId);
+                invoiceAction.ThrowIfNull("Invoice Action ", action.InvoiceGridActionId);
+                invoiceAction.Settings.ThrowIfNull("Invoice Action Settings");
+                InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType, InvoiceAccount = invoiceAccount, InvoiceAction = invoiceAction };
+
                 if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
                 {
-                    var invoiceAction = actionTypes.GetRecord(action.InvoiceGridActionId);
-                    invoiceAction.ThrowIfNull("Invoice Action ", action.InvoiceGridActionId);
-                    invoiceAction.Settings.ThrowIfNull("Invoice Action Settings");
-
                     var actionCheckAccessContext = new InvoiceActionSettingsCheckAccessContext
                     {
                         UserId = ContextFactory.GetContext().GetLoggedInUserId(),
@@ -1151,7 +1153,7 @@ namespace Vanrise.Invoice.Business
 
             InvoiceGenerator generator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             generator.GenerateInvoice(context);
-            if(context.GenerateInvoiceResult != GenerateInvoiceResult.Succeeded)
+            if (context.GenerateInvoiceResult != GenerateInvoiceResult.Succeeded)
             {
                 errorMessage = context.ErrorMessage;
                 generateInvoiceResult = context.GenerateInvoiceResult;
@@ -1159,7 +1161,7 @@ namespace Vanrise.Invoice.Business
             }
             actionAfterGenerateInvoice = context.ActionAfterGenerateInvoice;
             billingTransactions = context.BillingTransactions;
-           
+
             invoiceToSettleIds = context.InvoiceToSettleIds;
             needApproval = context.NeedApproval;
 
@@ -1180,7 +1182,8 @@ namespace Vanrise.Invoice.Business
             foreach (var preparedGenerateInvoiceInput in preparedGenerateInvoiceInputs)
             {
                 IEnumerable<string> itemSetNames = preparedGenerateInvoiceInput.InvoiceItemSets.MapRecords(x => x.SetName);
-                GenerateInvoiceInputToSave generateInvoiceInputToSave = new GenerateInvoiceInputToSave {
+                GenerateInvoiceInputToSave generateInvoiceInputToSave = new GenerateInvoiceInputToSave
+                {
                     InvoiceIdToDelete = preparedGenerateInvoiceInput.InvoiceIdToDelete,
                     Invoice = preparedGenerateInvoiceInput.Invoice,
                     InvoiceToSettleIds = preparedGenerateInvoiceInput.InvoiceToSettleIds,
@@ -1314,7 +1317,7 @@ namespace Vanrise.Invoice.Business
                 HandlingErrorOption = input.HandlingErrorOption
             };
 
-            
+
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = invoiceBulkActionProcessInput

@@ -45,7 +45,8 @@ namespace Vanrise.Invoice.MainExtensions
                 InvoiceGridActionFilterConditionContext context = new InvoiceGridActionFilterConditionContext
                 {
                     Invoice = invoice,
-                    InvoiceType = invoiceType
+                    InvoiceType = invoiceType,
+                    InvoiceAction = invoiceAction
                 };
 
                 if (invoiceAction != null && (gridAction == null || (gridAction.FilterCondition == null || gridAction.FilterCondition.IsFilterMatch(context))))

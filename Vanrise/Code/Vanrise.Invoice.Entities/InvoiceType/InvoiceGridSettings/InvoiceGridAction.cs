@@ -27,7 +27,8 @@ namespace Vanrise.Invoice.Entities
     {
         Invoice Invoice { get; set; }
         InvoiceType InvoiceType { get; set; }
-        VRInvoiceAccount InvoiceAccount { get;}
+        VRInvoiceAccount InvoiceAccount { get; }
+        InvoiceAction InvoiceAction { get; set; }
 
     }
     public class InvoiceGridActionFilterConditionContext : IInvoiceGridActionFilterConditionContext
@@ -35,5 +36,6 @@ namespace Vanrise.Invoice.Entities
         public Invoice Invoice { get; set; }
         public InvoiceType InvoiceType { get; set; }
         public VRInvoiceAccount InvoiceAccount { get; set; }
+        public InvoiceAction InvoiceAction { get; set; }
     }
 }

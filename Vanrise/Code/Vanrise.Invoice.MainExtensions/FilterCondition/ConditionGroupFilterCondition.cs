@@ -33,7 +33,8 @@ namespace Vanrise.Invoice.MainExtensions
                     {
                         Invoice =context.Invoice,
                         InvoiceAccount=context.InvoiceAccount,
-                        InvoiceType = context.InvoiceType
+                        InvoiceType = context.InvoiceType,
+                        InvoiceAction= context.InvoiceAction
                     };
                     result = filterConditionItem.FilterCondition.IsFilterMatch(invoiceGridActionFilterConditionContext);
                     switch (this.LogicalOperator)
