@@ -39,8 +39,7 @@ namespace Vanrise.BusinessProcess.Entities
         public string CompletionViewURL { get; set; }
         public string CompletionViewLinkText { get; set; }
         public bool BusinessRuleSetSupported { get; set; }
-        public BPInstanceBeforeInsertHandler BPInstanceBeforeInsertHandler { get; set; }
-        public BPInstanceAfterInsertHandler BPInstanceAfterInsertHandler { get; set; }
+        public BPInstanceInsertHandler BPInstanceInsertHandler { get; set; }
     }
 
     public abstract class BPDefinitionExtendedSettings

@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public class BPInstanceAfterInsertHandlerConfig : ExtensionConfiguration
+    public class BPInstanceInsertHandlerConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "BusinessProcess_BPInstanceAfterInsertHandler";
+        public const string EXTENSION_TYPE = "BusinessProcess_BPInstanceInsertHandler";
         public string Editor { get; set; }
     }
 }

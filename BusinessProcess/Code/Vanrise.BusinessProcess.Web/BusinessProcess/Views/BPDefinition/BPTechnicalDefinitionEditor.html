@@ -41,18 +41,11 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Handlers'">
+                <vr-tab header="'Handler'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-section header="Before Process Instance Insert Handler" collapsible>
-                                <bp-instance-beforeinserthandler-settings on-ready="scopeModel.onBPIntanceBeforeInsertHandlerSettingsReady" normal-col-num="6"></bp-instance-beforeinserthandler-settings>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section header="After Process Instance Insert Handler" collapsible>
-                                <bp-instance-afterinserthandler-settings on-ready="scopeModel.onBPIntanceAfterInsertHandlerSettingsReady" normal-col-num="6"></bp-instance-afterinserthandler-settings>
+                            <vr-section header="Process Instance Insert Handler" collapsible>
+                                <bp-instance-inserthandler-settings on-ready="scopeModel.onBPIntanceInsertHandlerSettingsReady" normal-col-num="6"></bp-instance-inserthandler-settings>
                             </vr-section>
                         </vr-columns>
                     </vr-row>

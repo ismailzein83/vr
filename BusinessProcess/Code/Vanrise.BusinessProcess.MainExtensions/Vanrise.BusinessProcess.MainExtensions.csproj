@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPInstanceProgressViews\SimilarProcessesProgressView.cs" />
+    <Compile Include="BPInstance\TestingBPInstanceBeforeInsertHandler.cs" />
     <Compile Include="BPTaskAssigne\InitiatorBPTaskAssignee.cs" />
     <Compile Include="BPTaskAssigne\FixedUsersBPTaskAssignee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

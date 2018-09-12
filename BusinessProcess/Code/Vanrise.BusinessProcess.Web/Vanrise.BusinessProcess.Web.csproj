@@ -167,6 +167,7 @@
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
+    <Compile Include="Controllers\TestDynamicAPI.cs" />
     <Compile Include="Controllers\VRWorkflowController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\SchedulerTaskModel.cs" />
@@ -204,13 +205,14 @@
     <Content Include="BusinessProcess\Directives\BPDefinition\bp-definition-selector.js" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPTechnicalDefinitionGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPDefinition\Templates\BPDefinitionGridTemplate.html" />
-    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-afterinserthandler-settings.js" />
-    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-beforeinserthandler-settings.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-inserthandler-settings.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-monitor.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-tracking-history.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-history-grid.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-status-selector.js" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-monitor-grid.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\MainExtensions\bp-instance-testinginserthandler.js" />
+    <Content Include="BusinessProcess\Directives\BPInstance\MainExtensions\Templates\BPInstanceTestingInsertHandlerTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceSearch.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceTrackingHistoryGridTemplate.html" />

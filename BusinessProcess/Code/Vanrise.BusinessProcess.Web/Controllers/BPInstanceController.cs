@@ -101,17 +101,10 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetBPInstanceBeforeInsertHandlerConfigs")]
-        public IEnumerable<BPInstanceBeforeInsertHandlerConfig> GetBPInstanceBeforeInsertHandlerConfigs()
+        [Route("GetBPInstanceInsertHandlerConfigs")]
+        public IEnumerable<BPInstanceInsertHandlerConfig> GetBPInstanceInsertHandlerConfigs()
         {
-            return s_instanceManager.GetBPInstanceBeforeInsertHandlerConfigs();
-        }
-
-        [HttpGet]
-        [Route("GetBPInstanceAfterInsertHandlerConfigs")]
-        public IEnumerable<BPInstanceAfterInsertHandlerConfig> GetBPInstanceAfterInsertHandlerConfigs()
-        {
-            return s_instanceManager.GetBPInstanceAfterInsertHandlerConfigs();
+            return s_instanceManager.GetBPInstanceInsertHandlerConfigs();
         }
     }
 

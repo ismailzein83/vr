@@ -53,12 +53,8 @@
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "CancelProcess"), cancelProcessInput);
         }
 
-        function GetBPInstanceBeforeInsertHandlerConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPInstanceBeforeInsertHandlerConfigs"));
-        }
-
-        function GetBPInstanceAfterInsertHandlerConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPInstanceAfterInsertHandlerConfigs"));
+        function GetBPInstanceInsertHandlerConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetBPInstanceInsertHandlerConfigs"));
         }
 
         return ({
@@ -72,8 +68,7 @@
             GetBPDefinitionSummary: GetBPDefinitionSummary,
             CancelProcess: CancelProcess,
             GetBPInstanceDefinitionDetail: GetBPInstanceDefinitionDetail,
-            GetBPInstanceBeforeInsertHandlerConfigs: GetBPInstanceBeforeInsertHandlerConfigs,
-            GetBPInstanceAfterInsertHandlerConfigs: GetBPInstanceAfterInsertHandlerConfigs
+            GetBPInstanceInsertHandlerConfigs: GetBPInstanceInsertHandlerConfigs
         });
     }
 

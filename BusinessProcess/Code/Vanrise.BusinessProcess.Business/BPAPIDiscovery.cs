@@ -52,34 +52,68 @@ namespace Vanrise.BusinessProcess.Business
                             {
                                 [HttpPost]
                                 [Route(""StartProcess"")]
-                                public void StartProcess(#StartProcessInputClassName# input)
+                                public #StartProcessOutputClassName# StartProcess(#StartProcessInputClassName# input)
                                 {
-                                    if(input == null)
-                                        input = new #StartProcessInputClassName#();
+                                    #InputArgumentClassName# inputArguments;
+                                    if(input != null && input.InputArguments != null)
+                                        inputArguments = input.InputArguments;
+                                    else
+                                        inputArguments = new #InputArgumentClassName#();
 
-                                    input.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-                                    CreateProcessOutput createProcessOutput = new BPInstanceManager().CreateNewProcess(new CreateProcessInput() { InputArguments = input }, true);
+                                    inputArguments.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+                                    var startProcessOutput = new #StartProcessOutputClassName#();
+                                    CreateProcessInput createProcessInput = new CreateProcessInput() { InputArguments = inputArguments, StartProcessOutput = startProcessOutput };
+                                    CreateProcessOutput createProcessOutput = new BPInstanceManager().CreateNewProcess(createProcessInput, true);
+
+                                    startProcessOutput.ProcessId = createProcessOutput.ProcessInstanceId;
+                                    return startProcessOutput;
                                 }
                             }
-        
-                            #StartProcessInputClass#
+
+                            public class #StartProcessOutputClassName#
+                            {
+                                public long ProcessId { get; set; }
+
+                                #BPInstanceInsertHandlerCode#
+                            }
+
+                            public class #StartProcessInputClassName#
+                            {
+                                public #InputArgumentClassName# InputArguments { get; set; }
+                            }
+
+                            #InputArgumentClass#
                         }");
 
-            BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
 
-            string startProcessInputClassName;
-            string startProcessInputClass = Helper.GetInputArgumentClassCode(bpDefinition, out startProcessInputClassName);
+            string inputArgumentClassName;
+            string inputArgumentClass = Helper.GetInputArgumentClassCode(bpDefinition, out inputArgumentClassName);
 
             string bpDefinitionTitle = bpDefinition.Title.Replace(" ", "");
             string controllerName = bpDefinitionTitle;
             string controllerFullName = string.Concat(controllerName, "Controller");
             string controllerNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.BusinessProcess.Web.DynamicControllers");
+            string startProcessInputClassName = string.Concat("Start", bpDefinitionTitle, "Input");
+            string startProcessOutputClassName = string.Concat("Start", bpDefinitionTitle, "Output");
+
+            string bpInstanceInsertHandlerCode = null;
+            if (bpDefinition.Configuration != null && bpDefinition.Configuration.BPInstanceInsertHandler != null)
+            {
+                var bpInstanceHandlerBeforeAPICompileContext = new BPInstanceHandlerBeforeAPICompileContext();
+                bpDefinition.Configuration.BPInstanceInsertHandler.BeforeAPICompile(bpInstanceHandlerBeforeAPICompileContext);
+                bpInstanceInsertHandlerCode = bpInstanceHandlerBeforeAPICompileContext.OutputArgumentCode;
+            }
+            bpInstanceInsertHandlerCode = !string.IsNullOrEmpty(bpInstanceInsertHandlerCode) ? bpInstanceInsertHandlerCode : string.Empty;
 
             sb_CustomController.Replace("#Namespace#", controllerNamespace);
             sb_CustomController.Replace("#ControllerName#", controllerName);
             sb_CustomController.Replace("#ControllerFullName#", controllerFullName);
-            sb_CustomController.Replace("#StartProcessInputClass#", startProcessInputClass);
+            sb_CustomController.Replace("#InputArgumentClass#", inputArgumentClass);
+            sb_CustomController.Replace("#InputArgumentClassName#", inputArgumentClassName);
             sb_CustomController.Replace("#StartProcessInputClassName#", startProcessInputClassName);
+            sb_CustomController.Replace("#StartProcessOutputClassName#", startProcessOutputClassName);
+            sb_CustomController.Replace("#BPInstanceInsertHandlerCode#", bpInstanceInsertHandlerCode);
 
             Common.CSharpCompilationOutput output;
             Common.CSharpCompiler.TryCompileClass(sb_CustomController.ToString(), out output);

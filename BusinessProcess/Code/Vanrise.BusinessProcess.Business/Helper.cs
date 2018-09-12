@@ -64,7 +64,7 @@ namespace Vanrise.BusinessProcess.Business
                                 public override Dictionary<string, object> ConvertArgumentsToDictionary()
                                 {
                                     Dictionary<string, object> arguments = new Dictionary<string, object>();
-                                    #ArgumentsDictionaryBuilderCode#
+                                    #InputArgumentDictionaryBuilderCode#
                                     return arguments;
                                 }
                             }");
@@ -73,10 +73,9 @@ namespace Vanrise.BusinessProcess.Business
             VRWorkflow vrWorkflow = new VRWorkflowManager().GetVRWorkflow(vrWorkflowId);
             vrWorkflow.ThrowIfNull("vrWorkflow", vrWorkflowId);
             vrWorkflow.Settings.ThrowIfNull("vrWorkflow.Settings", vrWorkflowId);
-            //vrWorkflow.Settings.Arguments.ThrowIfNull("vrWorkflow.Settings.Arguments", vrWorkflowId);
 
-            StringBuilder sb_ArgumentsDictionaryBuilder = new StringBuilder();
             StringBuilder sb_InputArgumentClassPropertiesBuilder = new StringBuilder();
+            StringBuilder sb_InputArgumentDictionaryBuilder = new StringBuilder();
 
             if (vrWorkflow.Settings.Arguments != null)
             {
@@ -91,8 +90,8 @@ namespace Vanrise.BusinessProcess.Business
                             sb_InputArgumentClassPropertiesBuilder.Append(GetProperty(fieldRuntimeTypeAsString, argument.Name));
                             sb_InputArgumentClassPropertiesBuilder.AppendLine();
 
-                            sb_ArgumentsDictionaryBuilder.AppendFormat(@"arguments.Add(""{0}"", {0});", argument.Name);
-                            sb_ArgumentsDictionaryBuilder.AppendLine();
+                            sb_InputArgumentDictionaryBuilder.AppendFormat(@"arguments.Add(""{0}"", {0});", argument.Name);
+                            sb_InputArgumentDictionaryBuilder.AppendLine();
                             break;
 
                         case VRWorkflowArgumentDirection.Out:
@@ -110,16 +109,15 @@ namespace Vanrise.BusinessProcess.Business
                 getTitleExecutionCode = string.Concat("\"", vrWorkflow.Title, "\"");
 
             string bpDefinitionTitle = bpDefinition.Title.Replace(" ", "");
-            //string startProcessFunctionName = string.Concat("Start", bpDefinitionTitle, "Process");
-            inputArgumentClassName = string.Concat(bpDefinitionTitle, "ProcessInput");
+            inputArgumentClassName = string.Concat(bpDefinitionTitle, "InputArgument");
 
-            string argumentsDictionaryBuilder = sb_ArgumentsDictionaryBuilder.Length > 0 ? sb_ArgumentsDictionaryBuilder.ToString() : string.Empty;
             string inputArgumentClassPropertiesBuilder = sb_InputArgumentClassPropertiesBuilder.Length > 0 ? sb_InputArgumentClassPropertiesBuilder.ToString() : string.Empty;
+            string inputArgumentDictionaryBuilder = sb_InputArgumentDictionaryBuilder.Length > 0 ? sb_InputArgumentDictionaryBuilder.ToString() : string.Empty;
 
             sb_InputArgumentClassCode.Replace("#BPDefinitionId#", bpDefinition.BPDefinitionID.ToString());
             sb_InputArgumentClassCode.Replace("#InputArgumentClassName#", inputArgumentClassName);
             sb_InputArgumentClassCode.Replace("#InputArgumentClassProperties#", inputArgumentClassPropertiesBuilder);
-            sb_InputArgumentClassCode.Replace("#ArgumentsDictionaryBuilderCode#", argumentsDictionaryBuilder);
+            sb_InputArgumentClassCode.Replace("#InputArgumentDictionaryBuilderCode#", inputArgumentDictionaryBuilder);
             sb_InputArgumentClassCode.Replace("#GetTitleExecutionCode#", getTitleExecutionCode);
 
             return sb_InputArgumentClassCode.ToString();

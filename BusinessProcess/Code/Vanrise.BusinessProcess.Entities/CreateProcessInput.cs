@@ -14,6 +14,8 @@ namespace Vanrise.BusinessProcess.Entities
         public BaseProcessInputArgument InputArguments { get; set; }
 
         public ProcessCompletionNotifier CompletionNotifier { get; set; }
+
+        public dynamic StartProcessOutput { get; set; }
     }
 
     public abstract class ProcessCompletionNotifier

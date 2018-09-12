@@ -38,6 +38,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -59,10 +60,8 @@
   <ItemGroup>
     <Compile Include="ActionTypeFilter.cs" />
     <Compile Include="ActionTypesInfoFilter.cs" />
-    <Compile Include="BPInstance\BPInstanceAfterInsertHandler.cs" />
-    <Compile Include="BPInstance\BPInstanceAfterInsertHandlerConfig.cs" />
-    <Compile Include="BPInstance\BPInstanceBeforeInsertHandler.cs" />
-    <Compile Include="BPInstance\BPInstanceBeforeInsertHandlerConfig.cs" />
+    <Compile Include="BPInstance\BPInstanceInsertHandler.cs" />
+    <Compile Include="BPInstance\BPInstanceInsertHandlerConfig.cs" />
     <Compile Include="BPInputArgument\BaseProcessInputArgument.cs" />
     <Compile Include="BPDefinition\BPDefinitionArgumentState.cs" />
     <Compile Include="BPDefinition\BPDefinition.cs" />

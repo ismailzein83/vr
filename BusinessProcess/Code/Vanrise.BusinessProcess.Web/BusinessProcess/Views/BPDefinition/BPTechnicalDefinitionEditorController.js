@@ -23,11 +23,8 @@
         var scheduleTaskPermissionAPI;
         var scheduleTaskPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var bpInstanceBeforeInsertHandlerSettingsAPI;
-        var bpInstanceBeforeInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
-
-        var bpInstanceAfterInsertHandlerSettingsAPI;
-        var bpInstanceAfterInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+        var bpInstanceInsertHandlerSettingsAPI;
+        var bpInstanceInsertHandlerSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -66,14 +63,9 @@
                 scheduleTaskPermissionReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onBPIntanceBeforeInsertHandlerSettingsReady = function (api) {
-                bpInstanceBeforeInsertHandlerSettingsAPI = api;
-                bpInstanceBeforeInsertHandlerSettingsReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onBPIntanceAfterInsertHandlerSettingsReady = function (api) {
-                bpInstanceAfterInsertHandlerSettingsAPI = api;
-                bpInstanceAfterInsertHandlerSettingsReadyDeferred.resolve();
+            $scope.scopeModel.onBPIntanceInsertHandlerSettingsReady = function (api) {
+                bpInstanceInsertHandlerSettingsAPI = api;
+                bpInstanceInsertHandlerSettingsReadyDeferred.resolve();
             };
 
             $scope.saveBPDefinition = function () {
@@ -197,41 +189,25 @@
 
                 return scheduleTaskPermissionLoadDeferred.promise;
             }
-            function loadBeforeInsertHandlerSettings() {
-                var bpInstanceBeforeInsertHandlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            function loadBPInstanceInsertHandlerSettings() {
+                var bpInstanceInsertHandlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                bpInstanceBeforeInsertHandlerSettingsReadyDeferred.promise.then(function () {
-
-                    var payload;
-                    if (businessProcessDefinitionEntity && businessProcessDefinitionEntity.Configuration && businessProcessDefinitionEntity.Configuration.BPInstanceBeforeInsertHandler) {
-                        payload = {
-                            bpInstanceBeforeInsertHandler: businessProcessDefinitionEntity.Configuration.BPInstanceBeforeInsertHandler
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(bpInstanceBeforeInsertHandlerSettingsAPI, payload, bpInstanceBeforeInsertHandlerSettingsLoadPromiseDeferred);
-                });
-
-                return bpInstanceBeforeInsertHandlerSettingsLoadPromiseDeferred.promise;
-            }
-            function loadAfterInsertHandlerSettings() {
-                var bpInstanceAfterInsertHandlerSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                bpInstanceAfterInsertHandlerSettingsReadyDeferred.promise.then(function () {
+                bpInstanceInsertHandlerSettingsReadyDeferred.promise.then(function () {
 
                     var payload;
-                    if (businessProcessDefinitionEntity && businessProcessDefinitionEntity.Configuration && businessProcessDefinitionEntity.Configuration.BPInstanceAfterInsertHandler) {
+                    if (businessProcessDefinitionEntity && businessProcessDefinitionEntity.Configuration && businessProcessDefinitionEntity.Configuration.BPInstanceInsertHandler) {
                         payload = {
-                            bpInstanceAfterInsertHandler: businessProcessDefinitionEntity.Configuration.BPInstanceAfterInsertHandler
+                            bpInstanceInsertHandler: businessProcessDefinitionEntity.Configuration.BPInstanceInsertHandler
                         };
                     }
-                    VRUIUtilsService.callDirectiveLoad(bpInstanceAfterInsertHandlerSettingsAPI, payload, bpInstanceAfterInsertHandlerSettingsLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(bpInstanceInsertHandlerSettingsAPI, payload, bpInstanceInsertHandlerSettingsLoadPromiseDeferred);
                 });
 
-                return bpInstanceAfterInsertHandlerSettingsLoadPromiseDeferred.promise;
+                return bpInstanceInsertHandlerSettingsLoadPromiseDeferred.promise;
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRWorkflowSelector, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
-                loadScheduleTaskRequiredPermission, loadBeforeInsertHandlerSettings, loadAfterInsertHandlerSettings]).then(function () {
+                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings]).then(function () {
 
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -284,8 +260,7 @@
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
-            obj.Configuration.BPInstanceBeforeInsertHandler = bpInstanceBeforeInsertHandlerSettingsAPI.getData();
-            obj.Configuration.BPInstanceAfterInsertHandler = bpInstanceAfterInsertHandlerSettingsAPI.getData();
+            obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
             obj.Configuration.Security = {
                 View: viewPermissionAPI.getData(),
                 StartNewInstance: startNewInstancePermissionAPI.getData(),

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    afterInsertHandlerSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceAPIService'];
+    bpInstanceInsertHandlerSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceAPIService'];
 
-    function afterInsertHandlerSettingsDirective(UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceAPIService) {
+    function bpInstanceInsertHandlerSettingsDirective(UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -16,10 +16,10 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new AfterInsertHandlerSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new BPInstanceInsertHandlerSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "afterInsertHandlerSettingsCtrl",
+            controllerAs: "bpInstanceInsertHandlerSettingsCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
@@ -38,27 +38,27 @@
 
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{afterInsertHandlerSettingsCtrl.normalColNum}}">'
+                    + '<vr-columns colnum="{{bpInstanceInsertHandlerSettingsCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' label="' + label + '"'
-                            + ' isrequired="afterInsertHandlerSettingsCtrl.isrequired"'
+                            + ' isrequired="bpInstanceInsertHandlerSettingsCtrl.isrequired"'
                             + ' ' + hideremoveicon + ' >'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{afterInsertHandlerSettingsCtrl.normalColNum}}" isrequired="afterInsertHandlerSettingsCtrl.isrequired" '
-                        + ' customvalidate="afterInsertHandlerSettingsCtrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{bpInstanceInsertHandlerSettingsCtrl.normalColNum}}" isrequired="bpInstanceInsertHandlerSettingsCtrl.isrequired" '
+                        + ' customvalidate="bpInstanceInsertHandlerSettingsCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
 
             return template;
         }
 
-        function AfterInsertHandlerSettingsCtor($scope, ctrl, $attrs) {
+        function BPInstanceInsertHandlerSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -94,13 +94,13 @@
 
                     var promises = [];
 
-                    var bpInstanceAfterInsertHandler;
+                    var bpInstanceInsertHandler;
 
                     if (payload != undefined) {
-                        bpInstanceAfterInsertHandler = payload.bpInstanceAfterInsertHandler;
+                        bpInstanceInsertHandler = payload.bpInstanceInsertHandler;
                     }
 
-                    if (bpInstanceAfterInsertHandler != undefined) {
+                    if (bpInstanceInsertHandler != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -109,14 +109,14 @@
                     promises.push(getSettingsConfigsPromise);
 
                     function getSettingsConfigs() {
-                        return BusinessProcess_BPInstanceAPIService.GetBPInstanceAfterInsertHandlerConfigs().then(function (response) {
+                        return BusinessProcess_BPInstanceAPIService.GetBPInstanceInsertHandlerConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (bpInstanceAfterInsertHandler != undefined) {
+                                if (bpInstanceInsertHandler != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, bpInstanceAfterInsertHandler.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, bpInstanceInsertHandler.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -130,8 +130,8 @@
                             directiveReadyDeferred = undefined;
 
                             var directivePayload;
-                            if (bpInstanceAfterInsertHandler != undefined) {
-                                directivePayload = { bpInstanceAfterInsertHandler: bpInstanceAfterInsertHandler };
+                            if (bpInstanceInsertHandler != undefined) {
+                                directivePayload = { bpInstanceInsertHandler: bpInstanceInsertHandler };
                             }
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
@@ -160,5 +160,5 @@
         }
     }
 
-    app.directive('bpInstanceAfterinserthandlerSettings', afterInsertHandlerSettingsDirective);
+    app.directive('bpInstanceInserthandlerSettings', bpInstanceInsertHandlerSettingsDirective);
 })(app);
