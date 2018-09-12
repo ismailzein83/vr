@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
+app.directive("vrRulesNormalizationnumbersettingsSubstring", ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -34,29 +34,67 @@ app.directive("vrRulesNormalizationnumbersettingsSubstring", [function () {
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
 
+        var substringStartDirectionSelectorAPI;
+        var substringStartDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         ctrl.startIndex = undefined;
         ctrl.length = undefined;
 
         function initializeController() {
+
+            ctrl.onSubstringStartDirectionSelectorReady = function (api) {
+                substringStartDirectionSelectorAPI = api;
+                substringStartDirectionSelectorReadyDeferred.resolve();
+            };
+
             defineAPI();
         }
 
         function defineAPI() {
             var api = {};
 
+            api.load = function (payload) {
+                var promises = [];
+
+                var startDirection;
+
+                if (payload != undefined) {
+                    ctrl.startIndex = payload.StartIndex;
+                    ctrl.length = payload.Length;
+                    startDirection = payload.StartDirection;
+                }
+
+                var substringStartDirectionSelectorLoadPromise = loadSubstringStartDirectionSelector();
+                promises.push(substringStartDirectionSelectorLoadPromise);
+
+                function loadSubstringStartDirectionSelector() {
+                    var substringStartDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    substringStartDirectionSelectorReadyDeferred.promise.then(function () {
+
+                        var substringStartDirectionSelectorPayload = { selectFirstItem: true };
+                        if (startDirection != undefined) {
+                            substringStartDirectionSelectorPayload.selectedIds = startDirection;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(substringStartDirectionSelectorAPI, substringStartDirectionSelectorPayload, substringStartDirectionSelectorLoadDeferred);
+                    });
+
+                    return substringStartDirectionSelectorLoadDeferred.promise;
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
+
+            };
+
             api.getData = function () {
                 return {
                     $type: "Vanrise.Rules.Normalization.MainExtensions.SubstringActionSettings, Vanrise.Rules.Normalization",
+                    StartDirection: substringStartDirectionSelectorAPI.getSelectedIds(),
                     StartIndex: ctrl.startIndex,
                     Length: ctrl.length
                 };
             };
-            api.load = function (payload) {
-                if (payload != undefined) {
-                    ctrl.startIndex = payload.StartIndex;
-                    ctrl.length = payload.Length;
-                }
-            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

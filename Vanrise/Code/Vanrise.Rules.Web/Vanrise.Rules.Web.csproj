@@ -151,6 +151,7 @@
     <Content Include="VR_Rules\Constants\ModuleConfig.js" />
     <Content Include="VR_Rules\Constants\FirstPeriodRateTypeEnum.js" />
     <Content Include="VR_Rules\Constants\RemoveDirectionEnum.js" />
+    <Content Include="VR_Rules\Constants\SubstringStartDirectionEnum.js" />
     <Content Include="VR_Rules\Constants\TextOccurrenceEnum.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\Templates\PricingRulePercentageTaxTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\vr-rules-pricingrulesettings-tax-percentage.js" />
@@ -176,6 +177,7 @@
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-replacestring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-substring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizenumbersettings.js" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-substringstartdirection-selector.js" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleTaxSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleExtraChargeSettings.html" />
     <Content Include="VR_Rules\Directives\PricingRule\Templates\PricingRuleRateTypeSettings.html" />
