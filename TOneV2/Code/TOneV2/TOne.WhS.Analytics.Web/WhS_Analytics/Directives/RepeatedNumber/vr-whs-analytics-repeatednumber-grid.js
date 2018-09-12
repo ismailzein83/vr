@@ -143,10 +143,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
 
             fieldFilters.push({
                 FieldName: "CustomerId",
-                FilterValues: dataItem.Entity.CustomerId != null ? [dataItem.Entity.CustomerId] : []
+                FilterValues: dataItem.Entity.CustomerId != null ? [dataItem.Entity.CustomerId] : null
             }, {
                 FieldName: "SupplierId",
-                FilterValues: dataItem.Entity.SupplierId != null ? [dataItem.Entity.SupplierId] : []
+                FilterValues: dataItem.Entity.SupplierId != null ? [dataItem.Entity.SupplierId] : null
             });
             var salezoneId = dataItem.Entity.SaleZoneId == 0 ? undefined : dataItem.Entity.SaleZoneId;
             fieldFilters.push({
