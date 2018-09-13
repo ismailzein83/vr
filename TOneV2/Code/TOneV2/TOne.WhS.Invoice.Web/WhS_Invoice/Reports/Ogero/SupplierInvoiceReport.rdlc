@@ -734,7 +734,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -768,7 +768,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -1398,7 +1398,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMMM yyyy")</Value>
+                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1468,7 +1468,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMMM yyyy")</Value>
+                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1540,7 +1540,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=FormatNumber(System.Math.Round(Fields!TotalNumberOfCalls.Value, Parameters!NormalPrecisionValue.Value))</Value>
+                                  <Value>=FormatNumber(System.Math.Round(Fields!TotalNumberOfCalls.Value, 0))</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -2418,7 +2418,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalNumberOfCalls.Value, 0)</Value>
+                                  <Value>=FormatNumber(Parameters!TotalNumberOfCalls.Value, 0)</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -2490,7 +2490,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -2562,7 +2562,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -3001,7 +3001,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                                  <Value>=FormatNumber(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value)</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>

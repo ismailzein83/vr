@@ -254,7 +254,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!From.Value).ToString("dd MMMM yyyy") + " - " + CDate(Fields!To.Value).ToString("dd MMMM yyyy")</Value>
+                              <Value>=CDate(Fields!From.Value).ToString("dd MMM yyyy") + " - " + CDate(Fields!To.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
@@ -922,7 +922,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
+                              <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -993,7 +993,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
+                              <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>

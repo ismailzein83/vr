@@ -397,7 +397,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -431,7 +431,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -463,7 +463,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -497,7 +497,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -531,7 +531,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -565,7 +565,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -583,7 +583,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!SaleRate.Value, 4)</Value>
+                              <Value>=Round(Fields!SupplierRate.Value,4)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -599,13 +599,14 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -617,7 +618,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=Round(Fields!OriginalAmountAfterCommission.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -633,7 +634,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
-                        <BackgroundColor>= IIF(RowNumber("CustomerInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
+                        <BackgroundColor>= IIF(RowNumber("SupplierInvoiceItemDetails") Mod 2 = 0, "WhiteSmoke", "Transparent")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -670,7 +671,7 @@
         </TablixRowHierarchy>
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
-        <DataSetName>CustomerInvoiceItemDetails</DataSetName>
+        <DataSetName>SupplierInvoiceItemDetails</DataSetName>
         <Top>1.342in</Top>
         <Height>0.46875in</Height>
         <Width>8.02482in</Width>
@@ -690,7 +691,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                <Value>=FormatNumber(Parameters!TotalDuration.Value,Parameters!NormalPrecisionValue.Value)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>
@@ -858,7 +859,7 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
-        <DataSetName>CustomerInvoiceItemDetails</DataSetName>
+        <DataSetName>SupplierInvoiceItemDetails</DataSetName>
         <Top>1.02256in</Top>
         <Height>0.25in</Height>
         <Width>8.02482in</Width>
@@ -960,7 +961,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="CustomerInvoiceItemDetails">
+    <DataSet Name="SupplierInvoiceItemDetails">
       <Query>
         <DataSourceName>TOneWhSInvoiceEntities1</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -982,48 +983,48 @@
           <DataField>SaleZoneIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyId">
-          <DataField>OriginalSaleCurrencyId</DataField>
+        <Field Name="OriginalSupplierCurrencyId">
+          <DataField>OriginalSupplierCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyIdDescription">
-          <DataField>OriginalSaleCurrencyIdDescription</DataField>
+        <Field Name="OriginalSupplierCurrencyIdDescription">
+          <DataField>OriginalSupplierCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyId">
+        <Field Name="SupplierCurrencyId">
           <DataField>SaleCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyIdDescription">
+        <Field Name="SupplierCurrencyIdDescription">
           <DataField>SaleCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleRateTypeId">
-          <DataField>SaleRateTypeId</DataField>
+        <Field Name="SupplierRateTypeId">
+          <DataField>SupplierRateTypeId</DataField>
           <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="SaleRateTypeIdDescription">
-          <DataField>SaleRateTypeIdDescription</DataField>
+        <Field Name="SupplierRateTypeIdDescription">
+          <DataField>SupplierRateTypeIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
+        <Field Name="SupplierRate">
+          <DataField>SupplierRate</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="SaleRateDescription">
-          <DataField>SaleRateDescription</DataField>
+        <Field Name="SupplierRateDescription">
+          <DataField>SupplierRateDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="NumberOfCalls">
           <DataField>NumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
+        <Field Name="CostAmount">
+          <DataField>CostAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleAmount">
-          <DataField>OriginalSaleAmount</DataField>
+        <Field Name="OriginalCostAmount">
+          <DataField>OriginalCostAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="Duration">
@@ -1038,8 +1039,8 @@
           <DataField>ToDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="SaleRateAfterCommission">
-          <DataField>SaleRateAfterCommission</DataField>
+        <Field Name="SupplierRateAfterCommission">
+          <DataField>SupplierRateAfterCommission</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="AmountAfterCommission">
@@ -1058,20 +1059,20 @@
           <DataField>OriginalAmountAfterCommissionWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleAmountWithTaxes">
-          <DataField>OriginalSaleAmountWithTaxes</DataField>
+        <Field Name="OriginalSupplierAmountWithTaxes">
+          <DataField>OriginalSupplierAmountWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="SaleAmountWithTaxes">
+        <Field Name="SupplierAmountWithTaxes">
           <DataField>SaleAmountWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>RDLCCustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetRDLCCustomerInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCSupplierInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCSupplierInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCSupplierInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

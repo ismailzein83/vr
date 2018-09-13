@@ -183,7 +183,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
+                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMM yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -636,7 +636,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!FromDate.Value).ToString("dd MMMM yyyy")</Value>
+                              <Value>=CDate(Fields!FromDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -700,7 +700,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!ToDate.Value).ToString("dd MMMM yyyy")</Value>
+                              <Value>=CDate(Fields!ToDate.Value).ToString("dd MMM yyyy")</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>

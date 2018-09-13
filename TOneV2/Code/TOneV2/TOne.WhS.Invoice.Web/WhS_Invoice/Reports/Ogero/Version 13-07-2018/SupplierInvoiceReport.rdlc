@@ -734,7 +734,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMMM yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -768,7 +768,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMMM yyyy")</Value>
+                    <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
                     <Style>
                       <FontStyle>Italic</FontStyle>
                       <FontFamily>Verdana</FontFamily>
@@ -1357,7 +1357,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMMM yyyy")</Value>
+                                  <Value>=CDate(Parameters!FromDate.Value).ToString("dd MMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1427,7 +1427,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMMM yyyy")</Value>
+                                  <Value>=CDate(Parameters!ToDate.Value).ToString("dd MMM yyyy")</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -3009,7 +3009,7 @@
             <Top>13.761cm</Top>
             <Left>13.8889cm</Left>
             <Height>0.6cm</Height>
-            <Width>6.14175cm</Width>
+            <Width>6.14174cm</Width>
             <ZIndex>26</ZIndex>
             <Visibility>
               <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
