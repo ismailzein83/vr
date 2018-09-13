@@ -70,8 +70,8 @@ app.directive("whsSplReceivedsupplierpricelistGrid", ["UtilsService", "VRUIUtils
 						});
 	            };
 	            $scope.viewDetails = function (pricelistObj) {
-	                if (pricelistObj.ReceivedPricelist.ErrorDetails != null && pricelistObj.ReceivedPricelist.ErrorDetails.length > 0)
-	                    WhS_SupPL_SupplierPriceListTemplateService.showReceivedPricelistErrorDetails(pricelistObj.ReceivedPricelist.ErrorDetails);
+					if (pricelistObj.ReceivedPricelist.MessageDetails != null && pricelistObj.ReceivedPricelist.MessageDetails.length > 0)
+	                    WhS_SupPL_SupplierPriceListTemplateService.showReceivedPricelistErrorDetails(pricelistObj.ReceivedPricelist.MessageDetails);
 	                else viewTracker(pricelistObj);
 	            };
 
