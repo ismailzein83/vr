@@ -570,7 +570,11 @@ namespace Vanrise.GenericData.SQLDataStorage
                     minDateFromReader = GetReaderValue<DateTime?>(reader, "MinDate");
                     maxIdFromReader = GetReaderValue<long?>(reader, "MaxId");
                 }
-            }, null);
+            }, (cmd) =>
+                {
+
+                    cmd.CommandTimeout = 0;
+                });
 
             maxId = maxIdFromReader;
             return minDateFromReader;
@@ -594,7 +598,11 @@ namespace Vanrise.GenericData.SQLDataStorage
                     maxDateFromReader = GetReaderValue<DateTime?>(reader, "MaxDate");
                     minDateFromReader = GetReaderValue<DateTime?>(reader, "MinDate");
                 }
-            }, null);
+            }, (cmd) =>
+            {
+
+                cmd.CommandTimeout = 0;
+            });
 
             minDate = minDateFromReader;
             maxDate = maxDateFromReader;
