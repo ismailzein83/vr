@@ -52,11 +52,12 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             #region NormalizationRuleRemoveActionTask
-            //NormalizationRuleRemoveActionTask.NormalizationRuleRemoveActionTask_Main();
+            //NormalizationRuleTask.RemoveActionTask_Main();
+            //NormalizationRuleTask.SubstringActionTask_Main();
             #endregion
 
             #region TelesIdbSWSyncTask
-            //TelesIdbSWSyncTask.TelesIdbSWSync_Main();
+            //TelesIdbSWSyncTask.TelesIdbSWSyncTask_Main();
             #endregion
 
             #region DeserializeTask
@@ -65,17 +66,17 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             #region VRMailMessageTemplateTask
-            //VRMailMessageTemplateTask.VRMailMessageTemplate_Main();
+            //VRMailMessageTemplateTask.VRMailMessageTemplateTask_Main();
             #endregion
 
             #region PrepareCodePrefixesTask
             //PrepareCodePrefixesTask prepareCodePrefixesTask = new PrepareCodePrefixesTask();
-            //IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixes_Main();
+            //IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixesTask_Main();
             //DisplayList(codePrefixesResult);
             #endregion
 
             #region RuntimeTask
-            //RuntimeTask.Runtime_Main();
+            //RuntimeTask.RuntimeTask_Main();
             #endregion
         }
 
@@ -626,9 +627,9 @@ namespace TOne.WhS.Runtime.Tasks
         }
     }
 
-    public class NormalizationRuleRemoveActionTask
+    public class NormalizationRuleTask
     {
-        public static void NormalizationRuleRemoveActionTask_Main()
+        public static void RemoveActionTask_Main()
         {
             NormalizeNumberTarget target = new NormalizeNumberTarget() { PhoneNumber = "abc123acc145abc" }; //"abc123abc145"
 
@@ -641,11 +642,24 @@ namespace TOne.WhS.Runtime.Tasks
 
             string normalizedPhoneNB = target.PhoneNumber;
         }
+
+        public static void SubstringActionTask_Main()
+        {
+            NormalizeNumberTarget target = new NormalizeNumberTarget() { PhoneNumber = "abcdefghjk" }; //"abc123abc145"
+
+            var substringActionSettings = new Vanrise.Rules.Normalization.MainExtensions.SubstringActionSettings();
+            substringActionSettings.StartDirection = Vanrise.Rules.Normalization.MainExtensions.SubstringStartDirection.FromRight;
+            substringActionSettings.StartIndex = 3;
+            substringActionSettings.Length = 3;
+            substringActionSettings.Execute(null, target);
+
+            string normalizedPhoneNB = target.PhoneNumber;
+        }
     }
 
     public class TelesIdbSWSyncTask
     {
-        public static void TelesIdbSWSync_Main()
+        public static void TelesIdbSWSyncTask_Main()
         {
             var carrierMapping1 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C001", "C002" } };
             var carrierMapping2 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C003" } };
@@ -737,7 +751,7 @@ namespace TOne.WhS.Runtime.Tasks
     {
         #region Public Method
 
-        public static void VRMailMessageTemplate_Main()
+        public static void VRMailMessageTemplateTask_Main()
         {
             Console.WriteLine("Ali Atoui: VRMailMessageTemplate");
 
@@ -779,7 +793,7 @@ namespace TOne.WhS.Runtime.Tasks
     {
         #region Public Method
 
-        public IEnumerable<CodePrefixInfo> PrepareCodePrefixes_Main()
+        public IEnumerable<CodePrefixInfo> PrepareCodePrefixesTask_Main()
         {
             Console.WriteLine("Ali Atoui: PrepareCodePrefixes");
 
@@ -891,7 +905,7 @@ namespace TOne.WhS.Runtime.Tasks
 
     public class RuntimeTask
     {
-        public static void Runtime_Main()
+        public static void RuntimeTask_Main()
         {
             var runtimeServices = new List<RuntimeService>();
 
