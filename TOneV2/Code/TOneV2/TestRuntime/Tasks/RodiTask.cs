@@ -47,8 +47,8 @@ namespace TOne.WhS.Runtime.Tasks
 			SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
 			runtimeServices.Add(summaryQueueActivationService);
 
-			DataSourceRuntimeService dsRuntimeService = new DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-			runtimeServices.Add(dsRuntimeService);
+			//DataSourceRuntimeService dsRuntimeService = new DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+			//runtimeServices.Add(dsRuntimeService);
 
 			BigDataRuntimeService bigDataService = new BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
 			runtimeServices.Add(bigDataService);
@@ -117,6 +117,20 @@ namespace TOne.WhS.Runtime.Tasks
 			//                         }*/
 			//			}
 			//		}
+			//	}
+			//}
+
+			//VRHttpConnection x = new VRHttpConnection();
+			//x.BaseURL = "Test";
+			//x.Headers = new List<VRHttpHeader>();
+			//string ser = Vanrise.Common.Serializer.Serialize(x);
+			//string path = string.Format(@"D:\Mediation\{0}.txt", "rodi");
+			//using (var fileStream = new FileStream(path, FileMode.Create))
+			//{
+			//	using (var tw = new StreamWriter(fileStream))
+			//	{
+			//		tw.Write(ser);
+			//		tw.Close();
 			//	}
 			//}
 
