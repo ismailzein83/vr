@@ -70,6 +70,7 @@ as (select * from (values
 ('A08230D0-317E-4B30-A5EA-5ED72E2604D8','Weekly','Weekly','VR_Invoice_BillingPeriodConfig'																		,'{"Editor":"vr-invoice-billingperiod-weekly"}'),
 ('3D0DD9A7-3422-4311-B16F-08B03F175FAE','Period','Period','VR_Invoice_BillingPeriodConfig'																		,'{"Editor":"vr-invoice-billingperiod-period"}'),
 ('E0EDEB7A-FE1D-4207-A1E6-0AE2A42ED452','SemiMonthly','Semi Monthly','VR_Invoice_BillingPeriodConfig'															,'{"Editor":"vr-invoice-billingperiod-semimonthly"}'),
+('93330DE5-EEC8-461C-988B-E4E0C22BC541','Quarter','Quarter','VR_Invoice_BillingPeriodConfig','{"Editor":"vr-invoice-billingperiod-quarter"}'),
 
 ('5F9DDA2C-860D-42E6-BDF2-904B1B8FF287','Billing Period Accumulation','Billing Period Accumulation','VR_Invoice_StartDateCalculationMethodConfig'				,'{"Editor":"vr-invoice-startdatecalculationmethod-periodaccumulation"}'),
 
