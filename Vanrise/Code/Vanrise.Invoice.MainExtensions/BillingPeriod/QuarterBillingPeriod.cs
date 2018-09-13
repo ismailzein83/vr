@@ -17,18 +17,31 @@ namespace Vanrise.Invoice.MainExtensions
         public override List<BillingInterval> GetPeriod(IBillingPeriodContext context)
         {
             List<BillingInterval> billingIntervalList = new List<BillingInterval>();
-           
-            var fromDate = new DateTime(context.IssueDate.Year, context.IssueDate.Month, 1);
-            var toDate = new DateTime(context.IssueDate.Year, context.IssueDate.Month, 1);
 
+            var fromDate = QuarterStart(context.IssueDate);
+            var toDate = fromDate.AddMonths(3).AddDays(-1);
+            while (fromDate.Date >= context.IssueDate.Date)
+            {
+                fromDate = QuarterStart(fromDate.AddDays(-1));
+                toDate = fromDate.AddMonths(3).AddDays(-1);
+            }
             var perviousBillingInterval = new BillingInterval
             {
-                FromDate = fromDate.AddMonths(-3),
-                ToDate = toDate.AddDays(-1)
+                FromDate = fromDate,
+                ToDate = toDate
             };
             billingIntervalList.Add(perviousBillingInterval);
            
             return billingIntervalList;
+        }
+
+
+        public DateTime QuarterStart(DateTime issueDate)
+        {
+            int startingMonth = (issueDate.Month - 1) / 3;
+            startingMonth *= 3;
+            startingMonth++;
+            return new DateTime(issueDate.Year, startingMonth, 1);
         }
         public override string GetDescription()
         {
