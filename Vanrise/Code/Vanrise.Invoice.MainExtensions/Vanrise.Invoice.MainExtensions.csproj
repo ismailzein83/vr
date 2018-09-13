@@ -64,6 +64,7 @@
     <Compile Include="BillingPeriod\BiWeeklyBillingPeriod.cs" />
     <Compile Include="BillingPeriod\MonthlyBillingPeriod.cs" />
     <Compile Include="BillingPeriod\PeriodBillingPeriod.cs" />
+    <Compile Include="BillingPeriod\QuarterBillingPeriod.cs" />
     <Compile Include="BillingPeriod\SemiMonthlyBillingPeriod.cs" />
     <Compile Include="BillingPeriod\StartDateCalculationMethod\BillingPeriodAccumulation.cs" />
     <Compile Include="BillingPeriod\WeeklyBillingPeriod.cs" />
