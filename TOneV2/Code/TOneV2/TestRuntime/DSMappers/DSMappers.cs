@@ -211,7 +211,7 @@ namespace TestRuntime
 
                         string skip_13_30 = header.Substring(13, 18);
                         if (!string.IsNullOrEmpty(skip_13_30))
-                            extraFields.Add("Skip_13_30", skip_13_30.Trim());
+                            extraFields.Add("Skip_H_13_30", skip_13_30.Trim());
 
                         int year = 2000 + Convert.ToInt32(header.Substring(31, 2));
                         int month = Convert.ToInt32(header.Substring(33, 2));
@@ -222,21 +222,21 @@ namespace TestRuntime
 
                         string skip_41_42 = header.Substring(41, 2);
                         if (!string.IsNullOrEmpty(skip_41_42))
-                            extraFields.Add("Skip_41_42", skip_41_42.Trim());
+                            extraFields.Add("Skip_H_41_42", skip_41_42.Trim());
 
                         int a1 = Convert.ToInt32(header.Substring(43, 2));
                         int a2 = Convert.ToInt32(header.Substring(45, 4));
 
                         string skip_49_51 = header.Substring(49, 3);
                         if (!string.IsNullOrEmpty(skip_49_51))
-                            extraFields.Add("Skip_49_51", skip_49_51.Trim());
+                            extraFields.Add("Skip_H_49_51", skip_49_51.Trim());
 
                         int a3 = Convert.ToInt32(header.Substring(52, 1));
                         bool a4 = Convert.ToBoolean(Convert.ToInt32(header.Substring(53, 1)));
 
                         string skip_55_85 = header.Substring(55, 31);
                         if (!string.IsNullOrEmpty(skip_55_85))
-                            extraFields.Add("Skip_55_85", skip_55_85.Trim());
+                            extraFields.Add("Skip_H_55_85", skip_55_85.Trim());
 
                         for (int i = 1; i < a1; i++)
                         {
@@ -254,7 +254,7 @@ namespace TestRuntime
 
                             string skip_0_6 = currentRecord.Substring(0, 7);
                             if (!string.IsNullOrEmpty(skip_0_6))
-                                ddrExtraFields.Add("Skip_0_6", skip_0_6.Trim());
+                                ddrExtraFields.Add("Skip_R_0_6", skip_0_6.Trim());
 
                             string trdCode = currentRecord.Substring(7, 7);
                             if (!string.IsNullOrEmpty(trdCode))
@@ -266,7 +266,7 @@ namespace TestRuntime
 
                             string skip_44_53 = currentRecord.Substring(44, 10);
                             if (!string.IsNullOrEmpty(skip_44_53))
-                                ddrExtraFields.Add("Skip_44_53", skip_44_53.Trim());
+                                ddrExtraFields.Add("Skip_R_44_53", skip_44_53.Trim());
 
                             ddr.B1 = Convert.ToInt64(currentRecord.Substring(54, 10));
                             ddr.T3 = Convert.ToInt32(currentRecord.Substring(64, 6));
@@ -275,7 +275,7 @@ namespace TestRuntime
 
                             string skip_82_85 = currentRecord.Substring(82, 4);
                             if (!string.IsNullOrEmpty(skip_82_85))
-                                ddrExtraFields.Add("Skip_82_85", skip_82_85.Trim());
+                                ddrExtraFields.Add("Skip_R_82_85", skip_82_85.Trim());
 
                             if (ddrExtraFields.Count > 0)
                                 ddr.ExtraFields = ddrExtraFields;
