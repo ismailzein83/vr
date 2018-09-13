@@ -212,12 +212,14 @@
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\vr-invoice-automaticinvoiceprocess-manual.js" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\Templates\AutomaticInvoiceProcessScheduledTemplate.html" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\vr-invoice-automaticinvoiceprocess-scheduled.js" />
+    <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\QuarterBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\SemiMonthlyBillingPeriodTemplate .html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\BiWeeklyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\BiMonthlyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\MonthlyBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\PeriodBillingPeriodTemplate.html" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\WeeklyBillingPeriodTemplate.html" />
+    <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-quarter.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-semimonthly.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-period.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\vr-invoice-billingperiod-weekly.js" />
