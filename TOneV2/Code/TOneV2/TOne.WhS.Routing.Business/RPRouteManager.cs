@@ -423,6 +423,7 @@ namespace TOne.WhS.Routing.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Option 1", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate 1", Width = 25 });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
@@ -430,8 +431,10 @@ namespace TOne.WhS.Routing.Business
                     int maxNumberOfOptions = context.BigResult.Data.Max(itm => itm.RouteOptionsDetails != null ? itm.RouteOptionsDetails.Count() : 0);
 
                     for (var optionNb = 2; optionNb <= maxNumberOfOptions; optionNb++)
+                    {
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = string.Format("Option {0}", optionNb), Width = 50 });
-
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = string.Format("Rate {0}", optionNb), Width = 25 });
+                    }
                     foreach (var record in context.BigResult.Data)
                     {
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
@@ -454,21 +457,28 @@ namespace TOne.WhS.Routing.Business
                                 if (customerRouteOptionDetail.Percentage != null)
                                     optionPercentage = customerRouteOptionDetail.Percentage + "% ";
 
-                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName, " (", Math.Round(customerRouteOptionDetail.ConvertedSupplierRate, _longPrecisionValue), ")");
+                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName);
                                 row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
+                                row.Cells.Add(new ExportExcelCell { Value = Math.Round(customerRouteOptionDetail.ConvertedSupplierRate, _longPrecisionValue) });
                             }
 
                             int remainingOptions = maxNumberOfOptions - record.RouteOptionsDetails.Count();
                             if (remainingOptions > 0)
                             {
                                 for (int i = 1; i <= remainingOptions; i++)
+                                {
                                     row.Cells.Add(new ExportExcelCell { Value = "" });
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                                }
                             }
                         }
                         else
                         {
                             for (var optionNb = 1; optionNb <= maxNumberOfOptions; optionNb++)
+                            {
                                 row.Cells.Add(new ExportExcelCell { Value = "" });
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                            }
                         }
 
                         sheet.Rows.Add(row);
