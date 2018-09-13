@@ -10,7 +10,8 @@
 					 maxheight="400px"
 					 ondeleterow="scopeModel.deleteRow">
 			<vr-datagridcolumn type="'Text'" headertext="'Name'">
-                <businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.getParentVariables" getworkflowarguments="viewScope.scopeModel.getWorkflowArguments" value="dataItem.Entity.Name" isrequired="true" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>
+                <vr-textbox value="dataItem.Entity.Name" label="Title" isrequired="true"></vr-textbox>
+                <!--<businessprocess-vr-workflow-activity-expressionbuilder getactivityvariables="viewScope.scopeModel.getParentVariables" getworkflowarguments="viewScope.scopeModel.getWorkflowArguments" value="dataItem.Entity.Name" isrequired="true" hidelabel="true"></businessprocess-vr-workflow-activity-expressionbuilder>-->
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn type="'Text'" headertext="'Value'" disablesorting>
