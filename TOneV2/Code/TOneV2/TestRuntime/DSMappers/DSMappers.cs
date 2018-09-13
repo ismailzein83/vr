@@ -63,7 +63,7 @@ namespace TestRuntime
 
             }
 
-            
+
 
             if (cdrs.Count > 0)
             {
@@ -169,6 +169,144 @@ namespace TestRuntime
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             LogVerbose("Finished");
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapDDR_File_Ericsson_Ogero_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var ddrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type ddrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Destination Data Record");
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+            string currentLine = sr.ReadLine();
+            currentLine = currentLine.Replace("\0", "");
+
+            List<int> validRecordTypes = new List<int>() { 1 };
+
+            int blockSize = 86 + 86 * 15;//86 header size, 86 record size, 15 number of records per block
+
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+                while (true)
+                {
+                    if (currentLine.Length < blockSize)
+                        break;
+
+                    string header = currentLine.Substring(0, 86);
+
+                    int? recordType = null;
+                    string recordTypeAsString = header.Substring(0, 1);
+                    if (!string.IsNullOrEmpty(recordTypeAsString))
+                        recordType = Convert.ToInt32(recordTypeAsString);
+
+                    if (recordType.HasValue && validRecordTypes.Contains(recordType.Value))
+                    {
+                        Dictionary<string, string> extraFields = new Dictionary<string, string>();
+
+                        string exchangeIdentity = header.Substring(1, 12);
+                        if (!string.IsNullOrEmpty(exchangeIdentity))
+                            exchangeIdentity = exchangeIdentity.Trim();
+
+                        string skip_13_30 = header.Substring(13, 18);
+                        if (!string.IsNullOrEmpty(skip_13_30))
+                            extraFields.Add("Skip_13_30", skip_13_30.Trim());
+
+                        int year = 2000 + Convert.ToInt32(header.Substring(31, 2));
+                        int month = Convert.ToInt32(header.Substring(33, 2));
+                        int day = Convert.ToInt32(header.Substring(35, 2));
+                        int hour = Convert.ToInt32(header.Substring(37, 2));
+                        int minute = Convert.ToInt32(header.Substring(39, 2));
+                        DateTime recordingDate = new DateTime(year, month, day, hour, minute, 0);
+
+                        string skip_41_42 = header.Substring(41, 2);
+                        if (!string.IsNullOrEmpty(skip_41_42))
+                            extraFields.Add("Skip_41_42", skip_41_42.Trim());
+
+                        int a1 = Convert.ToInt32(header.Substring(43, 2));
+                        int a2 = Convert.ToInt32(header.Substring(45, 4));
+
+                        string skip_49_51 = header.Substring(49, 3);
+                        if (!string.IsNullOrEmpty(skip_49_51))
+                            extraFields.Add("Skip_49_51", skip_49_51.Trim());
+
+                        int a3 = Convert.ToInt32(header.Substring(52, 1));
+                        bool a4 = Convert.ToBoolean(Convert.ToInt32(header.Substring(53, 1)));
+
+                        string skip_55_85 = header.Substring(55, 31);
+                        if (!string.IsNullOrEmpty(skip_55_85))
+                            extraFields.Add("Skip_55_85", skip_55_85.Trim());
+
+                        for (int i = 1; i < a1; i++)
+                        {
+                            dynamic ddr = Activator.CreateInstance(ddrRuntimeType) as dynamic;
+                            ddr.RecordType = recordType.Value;
+                            ddr.ExchangeIdentity = exchangeIdentity;
+                            ddr.RecordingDate = recordingDate;
+                            ddr.A1 = a1;
+                            ddr.A2 = a2;
+                            ddr.A3 = a3;
+                            ddr.A4 = a4;
+
+                            string currentRecord = currentLine.Substring(86 * i, 86);
+                            Dictionary<string, string> ddrExtraFields = new Dictionary<string, string>(extraFields);
+
+                            string skip_0_6 = currentRecord.Substring(0, 7);
+                            if (!string.IsNullOrEmpty(skip_0_6))
+                                ddrExtraFields.Add("Skip_0_6", skip_0_6.Trim());
+
+                            string trdCode = currentRecord.Substring(7, 7);
+                            if (!string.IsNullOrEmpty(trdCode))
+                                ddr.TRDCode = trdCode.Trim();
+
+                            ddr.N1 = Convert.ToInt64(currentRecord.Substring(14, 10));
+                            ddr.N2 = Convert.ToInt64(currentRecord.Substring(24, 10));
+                            ddr.N3 = Convert.ToInt64(currentRecord.Substring(34, 10));
+
+                            string skip_44_53 = currentRecord.Substring(44, 10);
+                            if (!string.IsNullOrEmpty(skip_44_53))
+                                ddrExtraFields.Add("Skip_44_53", skip_44_53.Trim());
+
+                            ddr.B1 = Convert.ToInt64(currentRecord.Substring(54, 10));
+                            ddr.T3 = Convert.ToInt32(currentRecord.Substring(64, 6));
+                            ddr.T1 = Convert.ToInt32(currentRecord.Substring(70, 6));
+                            ddr.T2 = Convert.ToInt32(currentRecord.Substring(76, 6));
+
+                            string skip_82_85 = currentRecord.Substring(82, 4);
+                            if (!string.IsNullOrEmpty(skip_82_85))
+                                ddrExtraFields.Add("Skip_82_85", skip_82_85.Trim());
+
+                            if (ddrExtraFields.Count > 0)
+                                ddr.ExtraFields = ddrExtraFields;
+
+                            ddrs.Add(ddr);
+                        }
+                    }
+                    currentLine = currentLine.Remove(0, blockSize);
+
+                    if (currentLine.Length > 0)
+                        currentLine = currentLine.TrimStart();
+                }
+            }
+
+            if (ddrs.Count > 0)
+            {
+                long startingId;
+                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Destination Data Record");
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, ddrs.Count, out startingId);
+
+                foreach (var item in ddrs)
+                {
+                    item.Id = startingId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(ddrs, "#RECORDSCOUNT# of DDRs", "Destination Data Record");
+                mappedBatches.Add("Distribute DDRs", batch);
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             return result;
         }
 
