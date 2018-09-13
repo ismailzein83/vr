@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRCorrelationBPDefinitionSettings.cs" />
+    <Compile Include="CompositeRecordCondition\DataRecordTypeCompositeRecord.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldFormulas\CompareToConstantFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\DateTimeRoundFieldFormula.cs" />
