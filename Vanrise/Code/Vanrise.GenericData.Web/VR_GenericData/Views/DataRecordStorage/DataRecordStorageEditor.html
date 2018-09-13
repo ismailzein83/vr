@@ -15,11 +15,9 @@
                                                                     hideremoveicon>
                             </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-select label="Time Field" datasource="scopeModel.dataRecordTypeFields" selectedvalues="scopeModel.selectedDataRecordTypeField"
-                                       datavaluefield="Entity.Name" datatextfield="Entity.Name" isrequired="true" hideremoveicon>
-                            </vr-select>
-                        </vr-columns>
+                            <vr-columns width="1/3row" vr-loader="scopeModel.isTimeFieldSelectorLoading">
+                                <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.timeFieldSelectorReady" label="Time Field" selectedvalues="scopeModel.timeField" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+                            </vr-columns>                          
                         <vr-columns width="1/3row">
                             <vr-genericdata-datastore-selector on-ready="scopeModel.onDataStoreSelectorReady"
                                                                selectedvalues="scopeModel.selectedDataStore"
