@@ -6,6 +6,7 @@
 CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetFiltered]
 	@InvoiceTypeId uniqueidentifier,
 	@PartnerIds nvarchar(MAX),
+	@InvoiceSettingIds nvarchar(MAX),
 	@PartnerPrefix nvarchar(50),
 	@FromDate datetime,
 	@ToDate datetime,
@@ -22,6 +23,9 @@ BEGIN
 DECLARE @PartnerIdsTable TABLE (PartnerId nvarchar(50))
 INSERT INTO @PartnerIdsTable (PartnerId)
 select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@PartnerIds)
+DECLARE @InvoiceSettingIdsTable TABLE (InvoiceSettingId nvarchar(50))
+INSERT INTO @InvoiceSettingIdsTable (InvoiceSettingId)
+select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@InvoiceSettingIds)
 	
 	SELECT	vrIn.ID,
 			vrIn.InvoiceTypeID,
@@ -57,6 +61,7 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 	   (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrInAcc.EED IS NULL or vrInAcc.EED >=  GETDATE()))  OR  (@IsEffectiveInFuture = 0 and  vrInAcc.EED <=  GETDATE()))
 	where	(vrIn.InvoiceTypeId = @InvoiceTypeId) AND  
 			(@PartnerIds is Null or vrIn.PartnerID IN (SELECT PartnerId FROM @PartnerIdsTable)) AND 
+			(@InvoiceSettingIds is Null or vrIn.InvoiceSettingId IN (SELECT InvoiceSettingId FROM @InvoiceSettingIdsTable)) AND 
 			(@PartnerPrefix is null Or vrIn.PartnerId like  (@PartnerPrefix +'%')) AND 
 			vrIn.FromDate >= @FromDate AND 
 			(@ToDate is null OR vrIn.ToDate <= @ToDate)   AND 
