@@ -18,29 +18,13 @@ namespace Vanrise.BusinessProcess.Business
 
             return result.FindAll(itm => itm.BPDefintionId == bpDefinitionId && itm.Name == key);
         }
-        public string GetRuleDefinitionDescription(Guid ruleDefinitionId)
+        public BPBusinessRuleSettings GetRuleDefinitionSettings(Guid ruleDefinitionId)
         {
             var allRulesDefinitions = GetCachedBPBusinessRulesById();
             var ruleDefinition = allRulesDefinitions.GetRecord(ruleDefinitionId);
             ruleDefinition.ThrowIfNull("ruleDefinition");
             ruleDefinition.Settings.ThrowIfNull("ruleDefinition.Settings");
-            return ruleDefinition.Settings.Description;
-        }
-        public string GetRuleDefinitionTitle(Guid ruleDefinitionId)
-        {
-            var allRulesDefinitions = GetCachedBPBusinessRulesById();
-            var ruleDefinition = allRulesDefinitions.GetRecord(ruleDefinitionId);
-            ruleDefinition.ThrowIfNull("ruleDefinition");
-            ruleDefinition.Settings.ThrowIfNull("ruleDefinition.Settings");
-            return ruleDefinition.Settings.Title;
-        }
-        public bool GetRuleDefinitionCanBeDisabled(Guid ruleDefinitionId)
-        {
-            var allRulesDefinitions = GetCachedBPBusinessRulesById();
-            var ruleDefinition = allRulesDefinitions.GetRecord(ruleDefinitionId);
-            ruleDefinition.ThrowIfNull("ruleDefinition");
-            ruleDefinition.Settings.ThrowIfNull("ruleDefinition.Settings");
-            return ruleDefinition.Settings.CanBeDisabled;
+            return ruleDefinition.Settings;
         }
         public BPBusinessRuleDefinition GetBusinessRuleDefinitionById(Guid ruleDefinitionId)
         {

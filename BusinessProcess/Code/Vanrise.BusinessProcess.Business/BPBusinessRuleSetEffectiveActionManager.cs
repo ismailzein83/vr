@@ -158,9 +158,9 @@ namespace Vanrise.BusinessProcess.Business
             {
                 Entity = bpBusinessRuleSetEffectiveAction,
                 RuleDefinitionId = bpBusinessRuleSetEffectiveAction.RuleDefinitionId,
-                Description = ruleDefinitionManager.GetRuleDefinitionDescription(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
-                Title = ruleDefinitionManager.GetRuleDefinitionTitle(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
-                CanBeDisabled = ruleDefinitionManager.GetRuleDefinitionCanBeDisabled(bpBusinessRuleSetEffectiveAction.RuleDefinitionId),
+                Description = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Description,
+                Title = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Title,
+                CanBeDisabled = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).CanBeDisabled,
                 ActionDescription = bpBusinessRuleSetEffectiveAction.Action.GetDescription(),
                 ActionTypesIds = ruleDefinitionManager.GetBusinessRuleDefinitionById(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Settings.ActionTypes,
             };
