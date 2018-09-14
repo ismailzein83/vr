@@ -257,7 +257,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 		}
 		function isEEDDisabled(otherRate) {
 			var isEEDLoadedFromDrafts = false;
-			if (zoneItem.ClosedRates.length > 0) {
+			if (zoneItem.ClosedRates != undefined && zoneItem.ClosedRates.length > 0) {
 				for (var i = 0; i < zoneItem.ClosedRates.length; i++) {
 					var closedRate = zoneItem.ClosedRates[i];
 					if (closedRate.RateTypeId == otherRate.RateTypeId)
