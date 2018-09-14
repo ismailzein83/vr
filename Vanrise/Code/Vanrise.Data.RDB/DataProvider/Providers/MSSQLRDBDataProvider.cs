@@ -66,6 +66,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              return "SCOPE_IDENTITY()";
          }
 
+         public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
+         {
+             return new MSSQLRDBStreamForBulkInsert(this.ConnectionString, context.DBTableName, context.Columns.Select(col => col.DBColumnName).ToList(), context.FieldSeparator);
+         }
+
          #region Private Classes
 
          private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager
@@ -307,6 +312,157 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                  : base(value)
              {
 
+             }
+         }
+
+         private class MSSQLRDBStreamForBulkInsert : BaseRDBStreamForBulkInsert
+         {
+             BulkInsertDataManager _dataManager;
+             Vanrise.Data.SQL.StreamForBulkInsert _streamForBulkInsert;
+             string _tableName;
+             List<string> _columnNames;
+             char _fieldSeparator;
+
+             public MSSQLRDBStreamForBulkInsert(string connectionString, string tableName, List<string> columnNames, char fieldSeparatar)
+             {
+                 _dataManager = new BulkInsertDataManager(connectionString);
+                 _streamForBulkInsert = _dataManager.InitializeSQLStreamForBulkInsert();
+                 _tableName = tableName;
+                 _columnNames = columnNames;
+                 _fieldSeparator = fieldSeparatar;
+             }
+
+             public override BaseRDBStreamRecordForBulkInsert CreateRecord()
+             {
+                 return new MSSQLRDBStreamRecordForBulkInsert(_streamForBulkInsert, _fieldSeparator);
+             }
+
+             public override void CloseStream()
+             {
+                 _streamForBulkInsert.Close();
+             }
+
+             public override void Apply()
+             {
+                 _dataManager.ApplyStreamToDB(_streamForBulkInsert, _tableName, _columnNames, _fieldSeparator);
+             }
+
+             private class BulkInsertDataManager : Vanrise.Data.SQL.BaseSQLDataManager
+             {
+                 string _connectionString;
+
+                 public BulkInsertDataManager(string connectionString)
+                 {
+                     _connectionString = connectionString;
+                 }
+
+                 protected override string GetConnectionString()
+                 {
+                     return _connectionString;
+                 }
+
+                 public Vanrise.Data.SQL.StreamForBulkInsert InitializeSQLStreamForBulkInsert()
+                 {
+                     return base.InitializeStreamForBulkInsert();
+                 }
+
+                 public void ApplyStreamToDB(Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert, string tableName, List<string> columnNames, char fieldSeparatar)
+                 {
+                     base.InsertBulkToTable(new Vanrise.Data.SQL.StreamBulkInsertInfo
+                     {
+                         Stream = streamForBulkInsert,
+                         TableName = tableName,
+                         ColumnNames = columnNames,
+                         FieldSeparator = fieldSeparatar
+                     });
+                 }
+             }
+         }
+
+         private class MSSQLRDBStreamRecordForBulkInsert : BaseRDBStreamRecordForBulkInsert
+         {
+             Vanrise.Data.SQL.StreamForBulkInsert _streamForBulkInsert;
+             char _fieldSeparator;
+             StringBuilder _valuesBuilder = new StringBuilder();
+
+             public MSSQLRDBStreamRecordForBulkInsert(Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert, char fieldSeparator)
+             {
+                 _streamForBulkInsert = streamForBulkInsert;
+                 _fieldSeparator = fieldSeparator;
+             }
+
+             public override void Value(string value)
+             {
+                 AppendValue(value);
+             }
+
+             public override void Value(int value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             public override void Value(long value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             public override void Value(decimal value)
+             {
+                 AppendValue(BaseDataManager.GetDecimalForBCP(value));
+             }
+
+             public override void Value(float value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             public override void Value(DateTime? value)
+             {
+                 AppendValue(BaseDataManager.GetDateTimeForBCP(value));
+             }
+
+             public override void Value(DateTime value)
+             {
+                 AppendValue(BaseDataManager.GetDateTimeForBCP(value));
+             }
+
+             public override void ValueDateOnly(DateTime? value)
+             {
+                 AppendValue(BaseDataManager.GetDateForBCP(value));
+             }
+
+             public override void ValueDateOnly(DateTime value)
+             {
+                 AppendValue(BaseDataManager.GetDateForBCP(value));
+             }
+
+             public override void Value(Vanrise.Entities.Time value)
+             {
+                 AppendValue(BaseDataManager.GetTimeForBCP(value));
+             }
+
+             public override void Value(bool value)
+             {
+                 AppendValue(value ? "1" : "0");
+             }
+
+             public override void Value(Guid value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             bool _anyValueAdded;
+             public void AppendValue(object value)
+             {
+                 if (_anyValueAdded)
+                     _valuesBuilder.Append(_fieldSeparator);
+                 _valuesBuilder.Append(value);
+                 _anyValueAdded = true;                 
+             }
+
+             public override void WriteRecord()
+             {
+                 _streamForBulkInsert.WriteRecord(_valuesBuilder.ToString());
              }
          }
 

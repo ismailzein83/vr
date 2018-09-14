@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBBulkInsertQueryContext : IRDBBulkInsertQueryContext, IRDBBulkInsertTableDefined, IRDBBulkInsertRecordWritten, IRDBBulkInsertBulkStreamClosed, IRDBBulkInsertBulkApplied
+    public class RDBBulkInsertQueryContext
     {
         RDBQueryBuilderContext _queryBuilderContext;
 
@@ -17,75 +17,40 @@ namespace Vanrise.Data.RDB
 
         BaseRDBStreamForBulkInsert _streamForBulkInsertContext;
 
-        public IRDBBulkInsertTableDefined IntoTable(string tableName, char fieldSeparator, string[] columnNames)
+        public void IntoTable(string tableName, char fieldSeparator, params string[] columnNames)
         {
-            var initializeStreamForBulkInsertContext = new RDBDataProviderInitializeStreamForBulkInsertContext(tableName, fieldSeparator, columnNames);
+            IntoTable(RDBSchemaManager.Current, tableName, fieldSeparator, columnNames);
+        }
+
+        public void IntoTable(RDBSchemaManager schemaManager, string tableName, char fieldSeparator, params string[] columnNames)
+        {
+            var initializeStreamForBulkInsertContext = new RDBDataProviderInitializeStreamForBulkInsertContext(_queryBuilderContext.DataProvider, schemaManager, tableName, fieldSeparator, columnNames);
             _streamForBulkInsertContext = _queryBuilderContext.DataProvider.InitializeStreamForBulkInsert(initializeStreamForBulkInsertContext);
-            return this;
         }
 
-        public RDBBulkInsertQueryWriteRecordContext<IRDBBulkInsertRecordWritten> WriteRecord()
+        BaseRDBStreamRecordForBulkInsert _currentRecord;
+
+        public RDBBulkInsertQueryWriteRecordContext WriteRecord()
         {
-            return new RDBBulkInsertQueryWriteRecordContext<IRDBBulkInsertRecordWritten>(this, _streamForBulkInsertContext);
+            if (_currentRecord != null)
+                _currentRecord.WriteRecord();
+
+            _currentRecord = _streamForBulkInsertContext.CreateRecord();
+            return new RDBBulkInsertQueryWriteRecordContext(_currentRecord);
         }
 
-        public IRDBBulkInsertBulkStreamClosed CloseStream()
+        public void CloseStream()
         {
+            if (_currentRecord != null)
+                _currentRecord.WriteRecord();
             _streamForBulkInsertContext.CloseStream();
-            return this;
         }
 
-        public IRDBBulkInsertBulkApplied Apply()
+        public void Apply()
         {
             _streamForBulkInsertContext.Apply();
-            return this;
         }
     }
 
-    public interface IRDBBulkInsertQueryContext : IRDBBulkInsertCanDefineTable
-    {
-
-    }
-
-    public interface IRDBBulkInsertTableDefined : IRDBBulkInsertCanInsertRecord, IRDBBulkInsertBulkCanCloseStream
-    {
-
-    }
-
-    public interface IRDBBulkInsertRecordWritten : IRDBBulkInsertCanInsertRecord, IRDBBulkInsertBulkCanCloseStream
-    {
-
-    }
-
-    public interface IRDBBulkInsertBulkStreamClosed : IRDBBulkInsertBulkCanApply
-    {
-
-    }
-
-    public interface IRDBBulkInsertBulkApplied
-    {
-
-    }
-
-    public interface IRDBBulkInsertCanDefineTable
-    {
-        IRDBBulkInsertTableDefined IntoTable(string tableName, char fieldSeparator, string[] columnNames);
-    }
-
-    public interface IRDBBulkInsertCanInsertRecord
-    {       
-
-        RDBBulkInsertQueryWriteRecordContext<IRDBBulkInsertRecordWritten> WriteRecord();
-
-    }
     
-    public interface IRDBBulkInsertBulkCanCloseStream
-    {
-        IRDBBulkInsertBulkStreamClosed CloseStream();
-    }
-
-    public interface IRDBBulkInsertBulkCanApply
-    {
-        IRDBBulkInsertBulkApplied Apply();
-    }
 }

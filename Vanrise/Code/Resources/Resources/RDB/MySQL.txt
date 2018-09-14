@@ -1,0 +1,2 @@
+﻿on MySQL server, open "my.ini" file in Path: "C:\ProgramData\MySQL\MySQL Server 8.0"
+add local-infile=1 under [mysqld] section

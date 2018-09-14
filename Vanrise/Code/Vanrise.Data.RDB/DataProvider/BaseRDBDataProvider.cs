@@ -483,23 +483,44 @@ namespace Vanrise.Data.RDB
 
     public interface IRDBDataProviderInitializeStreamForBulkInsertContext
     {
-        string TableName { get; }
+        string DBTableName { get; }
      
         char FieldSeparator { get; }
 
-        string[] ColumnNames { get; }
+        List<RDBTableColumnDefinition> Columns { get; }
     }
 
     public class RDBDataProviderInitializeStreamForBulkInsertContext : IRDBDataProviderInitializeStreamForBulkInsertContext
     {
-        public RDBDataProviderInitializeStreamForBulkInsertContext(string tableName, char fieldSeparator, string[] columnNames)
+        BaseRDBDataProvider _dataProvider;
+        RDBSchemaManager _schemaManager;
+
+        public RDBDataProviderInitializeStreamForBulkInsertContext(BaseRDBDataProvider dataProvider, RDBSchemaManager schemaManager, string tableName, char fieldSeparator, string[] columnNames)
         {
-            this.TableName = tableName;
+            _dataProvider = dataProvider;
+            this._schemaManager = schemaManager;
             this.FieldSeparator = fieldSeparator;
-            this.ColumnNames = columnNames;
+            this.DBTableName = _schemaManager.GetTableDBName(_dataProvider, tableName);
+            columnNames.ThrowIfNull("columnNames");
+            this.Columns = new List<RDBTableColumnDefinition>();
+            foreach(var columnName in columnNames)
+            {
+                var columnDefinition = _schemaManager.GetColumnDefinitionWithValidate(_dataProvider, tableName, columnName);
+                this.Columns.Add(columnDefinition);
+            }
         }
 
-        public string TableName { get; private set; }
+        public string DBTableName
+        {
+            get;
+            private set;
+        }
+
+        public List<RDBTableColumnDefinition> Columns
+        {
+            get;
+            private set;
+        }
 
         public char FieldSeparator { get; private set; }
 

@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using Vanrise.Common;
+using System.Configuration;
+using System.IO;
 
 namespace Vanrise.Data.RDB.DataProvider.Providers
 {
@@ -269,6 +271,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                  return "longblob";
          }
 
+         public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
+         {
+             return new MySQLRDBStreamForBulkInsert(this.ConnectionString, context.DBTableName, context.Columns.Select(col => col.DBColumnName).ToList(), context.FieldSeparator);
+         }
+
          #region Private Classes
 
          private class MySQLDataManager
@@ -520,6 +527,194 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                      else
                          return default(bool);
                  }
+             }
+         }
+
+         private class MySQLRDBStreamForBulkInsert : BaseRDBStreamForBulkInsert
+         {
+             BulkInsertDataManager _dataManager;
+             Vanrise.Data.SQL.StreamForBulkInsert _streamForBulkInsert;
+             string _tableName;
+             List<string> _columnNames;
+             char _fieldSeparator;
+
+             public MySQLRDBStreamForBulkInsert(string connectionString, string tableName, List<string> columnNames, char fieldSeparatar)
+             {
+                 _dataManager = new BulkInsertDataManager(connectionString);
+                 _streamForBulkInsert = _dataManager.InitializeSQLStreamForBulkInsert();
+                 _tableName = tableName;
+                 _columnNames = columnNames;
+                 _fieldSeparator = fieldSeparatar;
+             }
+
+             public override BaseRDBStreamRecordForBulkInsert CreateRecord()
+             {
+                 return new MySQLRDBStreamRecordForBulkInsert(_streamForBulkInsert, _fieldSeparator);
+             }
+
+             public override void CloseStream()
+             {
+                 _streamForBulkInsert.Close();
+             }
+
+             public override void Apply()
+             {
+                 _dataManager.ApplyStreamToDB(_streamForBulkInsert, _tableName, _columnNames, _fieldSeparator);
+             }
+
+             private class BulkInsertDataManager : Vanrise.Data.SQL.BaseSQLDataManager
+             {
+                 string _connectionString;
+
+                 public BulkInsertDataManager(string connectionString)
+                 {
+                     _connectionString = connectionString;
+                 }
+
+                 protected override string GetConnectionString()
+                 {
+                     return _connectionString;
+                 }
+
+                 public Vanrise.Data.SQL.StreamForBulkInsert InitializeSQLStreamForBulkInsert()
+                 {
+                     return base.InitializeStreamForBulkInsert();
+                 }
+
+                 public void ApplyStreamToDB(Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert, string tableName, List<string> columnNames, char fieldSeparator)
+                 {
+                     using (var conn = new MySqlConnection(_connectionString))
+                     {
+                         //conn.Open();
+                         //string cmdText = string.Concat("LOAD DATA LOCAL INFILE '", streamForBulkInsert.FilePath.Replace(@"\", @"\\"), "' INTO TABLE ", tableName, " FIELDS TERMINATED BY '", fieldSeparator, "' LINES TERMINATED BY '\n' (", string.Join(",", columnNames), ")");
+                         //using (var cmd = new MySqlCommand(cmdText, conn))
+                         //{
+                         //    cmd.ExecuteNonQuery();
+                         //}
+                         //conn.Close();
+                         var bl = new MySqlBulkLoader(conn);
+                         bl.TableName = tableName;
+                         bl.FieldTerminator = fieldSeparator.ToString();
+                         bl.LineTerminator = "\r\n";
+                         bl.FileName = streamForBulkInsert.FilePath;
+                         foreach (var columnName in columnNames)
+                         {
+                             bl.Columns.Add(columnName);
+                         }
+                         var insertedRecords = bl.Load();
+                         if (insertedRecords < streamForBulkInsert.RecordCount)
+                             throw new Exception(string.Format("only {0} records inserted out of {1}", insertedRecords, streamForBulkInsert.RecordCount));
+                     }
+                     if (ShouldDeleteBCPFiles())
+                         File.Delete(streamForBulkInsert.FilePath);
+                 }
+
+                 static bool? s_shouldDeleteBCPFiles;
+                 static object s_lockObj = new object();
+                 bool ShouldDeleteBCPFiles()
+                 {
+                     if(!s_shouldDeleteBCPFiles.HasValue)
+                     {
+                         lock(s_lockObj)
+                         {
+                             string donotDeleteFiles = ConfigurationManager.AppSettings["BCPDonotDeleteFiles"];
+                             if (!String.IsNullOrEmpty(donotDeleteFiles))
+                             {
+                                 s_shouldDeleteBCPFiles = !bool.Parse(donotDeleteFiles);
+                             }
+                             else
+                                 s_shouldDeleteBCPFiles = true;
+                         }
+                     }
+                     return s_shouldDeleteBCPFiles.Value;
+                 }
+             }
+         }
+
+         private class MySQLRDBStreamRecordForBulkInsert : BaseRDBStreamRecordForBulkInsert
+         {
+             Vanrise.Data.SQL.StreamForBulkInsert _streamForBulkInsert;
+             char _fieldSeparator;
+             StringBuilder _valuesBuilder = new StringBuilder();
+
+             public MySQLRDBStreamRecordForBulkInsert(Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert, char fieldSeparator)
+             {
+                 _streamForBulkInsert = streamForBulkInsert;
+                 _fieldSeparator = fieldSeparator;
+             }
+
+             public override void Value(string value)
+             {
+                 AppendValue(value);
+             }
+
+             public override void Value(int value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             public override void Value(long value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             public override void Value(decimal value)
+             {
+                 AppendValue(BaseDataManager.GetDecimalForBCP(value));
+             }
+
+             public override void Value(float value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             public override void Value(DateTime? value)
+             {
+                 AppendValue(BaseDataManager.GetDateTimeForBCP(value));
+             }
+
+             public override void Value(DateTime value)
+             {
+                 AppendValue(BaseDataManager.GetDateTimeForBCP(value));
+             }
+
+             public override void ValueDateOnly(DateTime? value)
+             {
+                 AppendValue(BaseDataManager.GetDateForBCP(value));
+             }
+
+             public override void ValueDateOnly(DateTime value)
+             {
+                 AppendValue(BaseDataManager.GetDateForBCP(value));
+             }
+
+             public override void Value(Vanrise.Entities.Time value)
+             {
+                 AppendValue(BaseDataManager.GetTimeForBCP(value));
+             }
+
+             public override void Value(bool value)
+             {
+                 AppendValue(value ? "1" : "0");
+             }
+
+             public override void Value(Guid value)
+             {
+                 AppendValue(value.ToString());
+             }
+
+             bool _anyValueAdded;
+             public void AppendValue(object value)
+             {
+                 if (_anyValueAdded)
+                     _valuesBuilder.Append(_fieldSeparator);
+                 _valuesBuilder.Append(value);
+                 _anyValueAdded = true;
+             }
+
+             public override void WriteRecord()
+             {
+                 _streamForBulkInsert.WriteRecord(_valuesBuilder.ToString());
              }
          }
 

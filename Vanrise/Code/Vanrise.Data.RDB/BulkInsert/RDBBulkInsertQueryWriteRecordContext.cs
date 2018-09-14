@@ -6,97 +6,53 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBBulkInsertQueryWriteRecordContext<T> : IRDBBulkInsertQueryWriteRecordContextValueDefined<T>
+    public class RDBBulkInsertQueryWriteRecordContext
     {
-        T _parent; 
-        BaseRDBStreamRecordForBulkInsert _record;
-        public RDBBulkInsertQueryWriteRecordContext(T parent, BaseRDBStreamForBulkInsert streamForBulkInsertContext)
+        BaseRDBStreamRecordForBulkInsert _currentRecord;
+
+        public RDBBulkInsertQueryWriteRecordContext(BaseRDBStreamRecordForBulkInsert currentRecord)
         {
-            _parent = parent;
-            _record = streamForBulkInsertContext.CreateRecord();
+            _currentRecord = currentRecord;
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(string value)
+        public void Value(string value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(int value)
+        public void Value(int value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(long value)
+        public void Value(long value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(decimal value)
+        public void Value(decimal value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(float value)
+        public void Value(float value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(DateTime value)
+        public void Value(DateTime value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(bool value)
+        public void Value(bool value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
 
-        public IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(Guid value)
+        public void Value(Guid value)
         {
-            _record.Value(value);
-            return this;
+            _currentRecord.Value(value);
         }
-
-        public T EndWriteRecord()
-        {
-            _record.EndRecord();
-            return _parent;
-        }
-    }
-
-    public interface IRDBBulkInsertQueryWriteRecordContextValueDefined<T> : IRDBBulkInsertQueryWriteRecordContextCanDefineValue<T>, IRDBBulkInsertQueryWriteRecordContextCanEndWriteRecord<T>
-    {
-
-    }
-
-    public interface IRDBBulkInsertQueryWriteRecordContextCanDefineValue<T>
-    {
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(string value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(int value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(long value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(decimal value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(float value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(DateTime value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(bool value);
-
-        IRDBBulkInsertQueryWriteRecordContextValueDefined<T> Value(Guid value);
-    }
-
-    public interface IRDBBulkInsertQueryWriteRecordContextCanEndWriteRecord<T>
-    {
-        T EndWriteRecord();
     }
 }

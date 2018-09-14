@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Resources\RDB\MySQL.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BatchScripts\BIV2\Client-list-of-excluded-files.txt" />

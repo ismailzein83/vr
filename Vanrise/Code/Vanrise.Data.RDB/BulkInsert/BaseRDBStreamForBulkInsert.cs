@@ -27,12 +27,20 @@ namespace Vanrise.Data.RDB
 
         public abstract void Value(float value);
 
+        public abstract void Value(DateTime? value);
+
         public abstract void Value(DateTime value);
+
+        public abstract void ValueDateOnly(DateTime? value);
+
+        public abstract void ValueDateOnly(DateTime value);
+
+        public abstract void Value(Vanrise.Entities.Time value);
 
         public abstract void Value(bool value);
 
         public abstract void Value(Guid value);
 
-        public abstract void EndRecord();
+        public abstract void WriteRecord();
     }
 }

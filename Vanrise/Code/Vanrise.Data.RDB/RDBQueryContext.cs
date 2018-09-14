@@ -118,7 +118,7 @@ namespace Vanrise.Data.RDB
         //    return query;
         //}
 
-        public IRDBBulkInsertQueryContext StartBulkInsert()
+        public RDBBulkInsertQueryContext StartBulkInsert()
         {
             return new RDBBulkInsertQueryContext(QueryBuilderContext.CreateChildContext());
         }

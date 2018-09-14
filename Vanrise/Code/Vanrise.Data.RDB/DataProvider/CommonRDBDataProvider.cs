@@ -10,6 +10,14 @@ namespace Vanrise.Data.RDB.DataProvider
     public abstract class CommonRDBDataProvider : BaseRDBDataProvider
     {
         string _connString;
+        protected string ConnectionString
+        {
+            get
+            {
+                return _connString;
+            }
+        }
+
         public CommonRDBDataProvider(string connString)
         {
             _connString = connString;

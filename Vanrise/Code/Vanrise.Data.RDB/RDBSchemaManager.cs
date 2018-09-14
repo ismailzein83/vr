@@ -39,6 +39,12 @@ namespace Vanrise.Data.RDB
             {
                 if (_defaultTableDefinitionsByName.ContainsKey(tableName))
                     throw new Exception(String.Format("Table '{0}' already registered in default table definitions", tableName));
+                tableDefinition.Columns.ThrowIfNull("tableDefinition.Columns", tableName);
+                foreach(var columnEntry in tableDefinition.Columns)
+                {
+                    if (columnEntry.Value.DBColumnName == null)
+                        columnEntry.Value.DBColumnName = columnEntry.Key;
+                }
                 _defaultTableDefinitionsByName.Add(tableName, tableDefinition);
             }
         }
@@ -62,13 +68,14 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        public void OverrideColumnDBType(string providerUniqueName, string tableName, string columnName, RDBDataType dataType, int? size)
+        public void OverrideColumnDBType(string providerUniqueName, string tableName, string columnName, RDBDataType dataType, int? size, int? precision)
         {
             lock (this)
             {
                 RDBTableColumnDefinition columnDefinition = GetOrAddColumnDefinitionByProvider(providerUniqueName, tableName, columnName);
                 columnDefinition.DataType = dataType;
                 columnDefinition.Size = size;
+                columnDefinition.Precision = precision;
             }
         }
 

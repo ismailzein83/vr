@@ -25,7 +25,7 @@ namespace Vanrise.Data.SQL
             _filePath = filePath;
             _streamWriter = new System.IO.StreamWriter(filePath);
         }
-        internal string FilePath
+        public string FilePath
         {
             get
             {
