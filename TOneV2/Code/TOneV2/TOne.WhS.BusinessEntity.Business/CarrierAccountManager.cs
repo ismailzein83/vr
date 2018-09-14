@@ -75,14 +75,14 @@ namespace TOne.WhS.BusinessEntity.Business
                            foreach (var account in allAccountsWithCommonEmail)
                            {
                                if (account.SupplierSettings.AutoImportSettings.SubjectCode.ToLower() == code)
-                                   throw new VRBusinessException(string.Format("Accounts {1} and {2} have the same Email '{0}' and Code '{3}'.", email, GetCarrierAccountName(item.CarrierAccountId), GetCarrierAccountName(account.CarrierAccountId), code));
+                                   throw new VRBusinessException(string.Format("Accounts of IDs '{0}' and '{1}' have the same Email '{2}' and Code '{3}'.",  item.CarrierAccountId,account.CarrierAccountId, email, code));
                            }
                            allAccountsWithCommonEmail.Add(item);
                        }
                        else
                        {
                            if (item.SupplierSettings.AutoImportSettings.IsAutoImportActive)
-                               throw new VRBusinessException(string.Format("Carrier account '{0}' has activate auto import but do not have auto import email and subject code.", email, GetCarrierAccountName(item.CarrierAccountId)));
+                               throw new VRBusinessException(string.Format("Carrier account of ID '{0}' has activate auto import but do not have auto import email and subject code.", item.CarrierAccountId));
                        }
                    }
                    return supplierAccountsByAutoImportEmail;
@@ -1246,9 +1246,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(code))
                 {
                     var supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
-                    CarrierAccount duplicatedCarrierAccount = GetSupplierToValidate(email, code);
+                    CarrierAccount duplicatedCarrierAccount = GetSupplierByAutomaticEmailAndSubjectCode(email, code);
                     if (duplicatedCarrierAccount != null)
-                        throw new VRBusinessException(string.Format("Cannot set auto import email {0} and subject code {1} because they are already set for carrier account {2}.", email, code, GetCarrierAccountName(duplicatedCarrierAccount.CarrierAccountId)));
+                        throw new VRBusinessException(string.Format("Cannot set auto import email {0} and subject code {1} because they are already set for carrier account of ID: '{2}'.", email, code, duplicatedCarrierAccount.CarrierAccountId));
                 }
             }
 
@@ -1274,7 +1274,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(code))
                 {
                     var supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
-                    CarrierAccount duplicatedCarrierAccount = GetSupplierToValidate(email, code);
+                    CarrierAccount duplicatedCarrierAccount = GetSupplierByAutomaticEmailAndSubjectCode(email, code);
                     if (duplicatedCarrierAccount != null && duplicatedCarrierAccount.CarrierAccountId != carrierAccountEntity.CarrierAccountId)
                         throw new VRBusinessException(string.Format("Cannot set auto import email {0} and subject code {1} because they are already set for carrier account {2}.", email, code, GetCarrierAccountName(duplicatedCarrierAccount.CarrierAccountId)));
                 }
@@ -1283,7 +1283,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateCarrierAccount(carrierAccount.NameSuffix, carrierAccount.CarrierAccountSettings);
         }
 
-        public CarrierAccount GetSupplierToValidate(string email, string subjectCode)
+        public CarrierAccount GetSupplierByAutomaticEmailAndSubjectCode(string email, string subjectCode)
         {
             Dictionary<string, List<CarrierAccount>> supplierAccounts = GetCachedSupplierAccountsByAutoImportEmail();
             List<CarrierAccount> suppliersHavingSpecifiedEmail = supplierAccounts.GetRecord(email.ToLower());
