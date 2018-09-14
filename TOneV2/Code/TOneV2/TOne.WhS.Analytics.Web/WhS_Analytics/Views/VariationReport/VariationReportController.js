@@ -178,7 +178,7 @@
 
             var chartConfig =
             {
-                type: 'column',
+                type: 'line',
                 yAxisTitle: getReportResultTypeDescription()
             };
 
@@ -209,7 +209,7 @@
                 ({
                     title: record.DimensionName,
                     valuePath: 'seriesData[' + i + ']',
-                    type: 'column'
+                        type: 'line'
                 });
 
                 seriesList[0].seriesData[i] = record.Average;
