@@ -2,9 +2,9 @@
 
     "use strict";
 
-    PermissionGridDirective.$inject = ["VR_Sec_PermissionAPIService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", "VR_Sec_PermissionFlagEnum", "VRNotificationService"];
+    PermissionGridDirective.$inject = ["VR_Sec_PermissionAPIService", "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", "VR_Sec_PermissionFlagEnum", "VRNotificationService", "UtilsService"];
 
-    function PermissionGridDirective(VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VR_Sec_PermissionFlagEnum, VRNotificationService) {
+    function PermissionGridDirective(VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VR_Sec_PermissionFlagEnum, VRNotificationService, UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -148,7 +148,7 @@
                     dataItem.Entity.EntityType,
                     dataItem.Entity.EntityId,
                     businessEntityNode ? businessEntityNode.Name : null,
-                    dataItem.Entity.PermissionFlags,
+                    UtilsService.cloneObject(dataItem.Entity.PermissionFlags, true),
                     businessEntityNode.PermissionOptions,
                     onPermissionsUpdated
                 );

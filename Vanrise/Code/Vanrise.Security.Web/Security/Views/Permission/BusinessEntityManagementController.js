@@ -32,11 +32,19 @@
             };
 
             $scope.toggleInheritance = function () {
-                return VR_Sec_BusinessEntityNodeAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
-                       $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
-                       $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
-                       gridAPI.loadGrid(getGridQuery());
-                   });
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return VR_Sec_BusinessEntityNodeAPIService.ToggleBreakInheritance($scope.currentNode.EntType, $scope.currentNode.EntityId).then(function (response) {
+                            if (VRNotificationService.notifyOnItemUpdated("Toggle Break Inheritance", response)) {
+                                $scope.currentNode.BreakInheritance = !$scope.currentNode.BreakInheritance;
+                                $scope.showBreakInheritance = !$scope.currentNode.BreakInheritance;
+                                gridAPI.loadGrid(getGridQuery());
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                });
             };
 
             $scope.addPermission = function () {
@@ -46,9 +54,7 @@
                 VR_Sec_PermissionService.addPermission($scope.currentNode.EntType, $scope.currentNode.EntityId, $scope.currentNode.PermissionOptions, $scope.permissions, onPermissionAdded);
             };
 
-            $scope.hasBreakInheritancePermission = function () {
-                return VR_Sec_BusinessEntityNodeAPIService.HasBreakInheritancePermission();
-            };
+
 
             $scope.hasAddPermissionPermission = function () {
                 return VR_Sec_PermissionAPIService.HasUpdatePermissionsPermission();
@@ -61,7 +67,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadTree]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadTree, hasBreakInheritancePermission]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -82,6 +88,13 @@
                 BusinessEntityNode: $scope.currentNode
             };
         }
+
+        function hasBreakInheritancePermission() {
+            return VR_Sec_BusinessEntityNodeAPIService.HasBreakInheritancePermission().then(function (response) {
+                $scope.showBreakInheritane = response;
+            });
+        };
+
     }
 
     appControllers.controller('VR_Sec_BusinessEntityManagementController', BusinessEntityManagementController);

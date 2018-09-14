@@ -65,8 +65,8 @@ namespace Vanrise.Security.Web.Controllers
         [Route("UpdatePermissions")]
         public object UpdatePermissions(Permission[] permissionObject)
         {
-            if (!_manager.HasUpdatePermissions(permissionObject))
-                return GetUnauthorizedResponse();
+            //if (!_manager.HasUpdatePermissions(permissionObject))
+            //    return GetUnauthorizedResponse();
             return _manager.UpdatePermissions(permissionObject);
         } 
 

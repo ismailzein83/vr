@@ -280,27 +280,38 @@ namespace Vanrise.Security.Business
         {
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
 
-            updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
-
-            foreach (Permission item in permissions)
+            if (HasUpdatePermissions(permissions))
             {
-                if (item.PermissionFlags.Count == 0)
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = null;
+                IPermissionDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IPermissionDataManager>();
+
+                foreach (Permission item in permissions)
                 {
-                    if (!dataManager.DeletePermission(item))
+                    if (item.PermissionFlags.Count == 0)
+                    {
+                        if (!dataManager.DeletePermission(item))
+                        {
+                            updateOperationOutput.Result = UpdateOperationResult.Failed;
+                        }
+                    }
+                    else if (!dataManager.UpdatePermission(item))
                     {
                         updateOperationOutput.Result = UpdateOperationResult.Failed;
                     }
                 }
-                else if (!dataManager.UpdatePermission(item))
-                {
-                    updateOperationOutput.Result = UpdateOperationResult.Failed;
-                }
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
+            else
+            {
+                updateOperationOutput.Message = "you don't have permission to perform this action";
+                updateOperationOutput.ShowExactMessage = true;
+            }
+           
 
-            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return updateOperationOutput;
         }
 

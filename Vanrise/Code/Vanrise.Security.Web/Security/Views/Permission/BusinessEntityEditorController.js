@@ -15,6 +15,7 @@
         var permissionOptions;
         var permissions;
         var notificationResponseText;
+        var currentPermissionFlags;
 
         // Directive vars
         var userSelectorAPI;
@@ -29,7 +30,6 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters) {
                 holderType = parameters.holderType;
                 holderId = parameters.holderId;
@@ -37,6 +37,7 @@
                 entityId = parameters.entityId;
                 entityName = parameters.entityName;
                 permissionFlags = parameters.permissionFlags;
+                currentPermissionFlags = UtilsService.cloneObject(permissionFlags, true);
                 permissionOptions = parameters.permissionOptions;
                 permissions = parameters.permissions;
                 notificationResponseText = parameters.notificationResponseText;
@@ -253,31 +254,62 @@
         }
 
         function updatePermissions() {
+            var saveDeferred = UtilsService.createPromiseDeferred();
+
             $scope.isLoading = true;
+            
+            if (isPermissionFlagsChanged()) {
+                var permissiontoUpdate = {
+                    HolderType: holderType,
+                    HolderId: holderId,
+                    EntityType: entityType,
+                    EntityId: entityId,
+                    PermissionFlags: permissionFlags
+                };
+                var permissions = [];
+                permissions.push(permissiontoUpdate);
+                VR_Sec_PermissionAPIService.UpdatePermissions(permissions).then(function (response) {
+                    saveDeferred.resolve();
+                    if (VRNotificationService.notifyOnItemUpdated(notificationResponseText, response)) {
+                        if ($scope.onPermissionsUpdated)
+                            $scope.onPermissionsUpdated();                       
+                        $scope.modalContext.closeModal();
+                    }                   
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                    saveDeferred.reject();
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
+            }
 
-            var permissiontoUpdate = {
-                HolderType: holderType,
-                HolderId: holderId,
-                EntityType: entityType,
-                EntityId: entityId,
-                PermissionFlags: permissionFlags
-            };
-
-            var permissions = [];
-            permissions.push(permissiontoUpdate);
-
-            return VR_Sec_PermissionAPIService.UpdatePermissions(permissions).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated(notificationResponseText, response)) {
-                    if ($scope.onPermissionsUpdated)
-                        $scope.onPermissionsUpdated();
-
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
+            else {
+                resolveDeferredAndNotifyInfo();
+            }
+           
+            function resolveDeferredAndNotifyInfo() {
+                saveDeferred.resolve();
                 $scope.isLoading = false;
-            });
+                VRNotificationService.showInformation('No changes were made');
+            }
+
+            return saveDeferred.promise;
+        }
+
+        function isPermissionFlagsChanged() {
+
+            if (permissionFlags.length != currentPermissionFlags.length)
+                return true;
+            else {
+                for (var i = 0 ; i < currentPermissionFlags.length; i++) {
+                    var currentPermission = currentPermissionFlags[i];
+                    var updatedItem = UtilsService.getItemByVal(permissionFlags, currentPermission.Name, "Name");
+                    if (updatedItem != null && updatedItem.Value != currentPermission.Value)
+                        return true;
+                }
+                return false;
+            }
+
         }
     }
 

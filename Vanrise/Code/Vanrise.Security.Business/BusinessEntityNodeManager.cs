@@ -17,7 +17,7 @@ namespace Vanrise.Security.Business
         BusinessEntityManager _beManager = new BusinessEntityManager();
 
         BusinessEntityModuleManager _beModuleManager = new BusinessEntityModuleManager();
-        
+
         #endregion
 
         #region Public Methods
@@ -34,7 +34,7 @@ namespace Vanrise.Security.Business
             {
                 if (item.ParentId == Guid.Empty || item.ParentId == null)
                 {
-                    retVal.Add(GetModuleNode(item, modules, entities, null,true));
+                    retVal.Add(GetModuleNode(item, modules, entities, null, true));
                 }
             }
 
@@ -44,7 +44,7 @@ namespace Vanrise.Security.Business
         {
             //TODO: pass the holder id to load the saved permissions
             IEnumerable<BusinessEntityModule> modules = _beModuleManager.GetBusinessEntityModules();
-           
+
             List<BusinessEntityNode> retVal = new List<BusinessEntityNode>();
 
             foreach (BusinessEntityModule item in modules)
@@ -62,7 +62,13 @@ namespace Vanrise.Security.Business
             UpdateOperationOutput<object> updateOperationOutput = new UpdateOperationOutput<object>();
             updateOperationOutput.UpdatedObject = null;
             updateOperationOutput.Result = UpdateOperationResult.Failed;
-
+            bool havePermission = DosesUserHaveToggleBreakInheritancePermission(entityType, entityId);
+            if (!havePermission)
+            {
+                updateOperationOutput.Message = "you don't have permission to perform this action";
+                updateOperationOutput.ShowExactMessage = true;
+                return updateOperationOutput;
+            }
             if (entityType == EntityType.MODULE)
             {
                 IBusinessEntityModuleDataManager manager = SecurityDataManagerFactory.GetDataManager<IBusinessEntityModuleDataManager>();
@@ -87,6 +93,59 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
+        bool DosesUserHaveToggleBreakInheritancePermission(EntityType entityType, string entityId)
+        {
+            string nodePath = GetBusinessEntityNodePath(entityType, entityId);
+            BusinessEntityNode beNode = GetBusinessEntityNode(entityType, entityId);
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            PermissionManager manager = new PermissionManager();
+            EffectivePermissionsWrapper effectivePermissionsWrapper = manager.GetEffectivePermissions(userId);
+            Dictionary<string, Flag> effectivePermissionFlags;
+            List<string> requiredPermissionsToCheck = entityType == EntityType.MODULE ? new List<string>(new string[] { "View", "Add", "Edit", "Delete" }) : beNode.PermissionOptions;
+
+            if (effectivePermissionsWrapper.EffectivePermissions.TryGetValue(nodePath, out effectivePermissionFlags))
+            {
+                if (entityType == EntityType.MODULE)
+                {
+                    Flag fullControlFlag;
+                    if (effectivePermissionFlags.TryGetValue("Full Control", out fullControlFlag))
+                    {
+                        if (fullControlFlag != Flag.ALLOW)
+                            return false;
+                        else
+                        {
+                            return CheckAllExistingPermissionFlags(effectivePermissionFlags, requiredPermissionsToCheck);
+                        }
+                    }
+                    else return false;
+                }
+                else
+                {
+                    return CheckAllExistingPermissionFlags(effectivePermissionFlags, requiredPermissionsToCheck); ;
+                }
+
+            }
+
+            else return false;
+        }
+
+
+        bool CheckAllExistingPermissionFlags(Dictionary<string, Flag> effectivePermissionFlags, List<string> requiredPermissionsToCheck)
+        {
+            foreach (string requiredFlag in requiredPermissionsToCheck)
+            {
+                Flag effectivePermissionFlag;
+                if (effectivePermissionFlags.TryGetValue(requiredFlag, out effectivePermissionFlag))
+                {
+                    if (effectivePermissionFlag != Flag.ALLOW)
+                    {
+                        return false;
+                    }
+                }
+                else return false;
+            }
+            return true;
+        }
         public BusinessEntityNode GetBusinessEntityNode(EntityType entityType, string entityId)
         {
             return GetBusinessEntityNodeRecursively(GetEntityNodes(), entityType, entityId);
@@ -185,12 +244,12 @@ namespace Vanrise.Security.Business
 
             IEnumerable<BusinessEntityModule> subModules = modules.FindAllRecords(x => x.ParentId == module.ModuleId);
 
-            IEnumerable<BusinessEntity> childEntities = null ;
+            IEnumerable<BusinessEntity> childEntities = null;
 
             if (entities != null)
                 childEntities = entities.FindAllRecords(x => x.ModuleId == module.ModuleId);
-           
-            if (childEntities !=null && childEntities.Count() > 0 && withchildEntities)
+
+            if (childEntities != null && childEntities.Count() > 0 && withchildEntities)
             {
                 node.Children = new List<BusinessEntityNode>();
                 foreach (BusinessEntity entityItem in childEntities)
@@ -228,7 +287,7 @@ namespace Vanrise.Security.Business
         {
             foreach (var beNode in beNodes)
             {
-                if (beNode.EntType == targetType && targetId.Equals(beNode.EntityId.ToString(),StringComparison.InvariantCultureIgnoreCase))
+                if (beNode.EntType == targetType && targetId.Equals(beNode.EntityId.ToString(), StringComparison.InvariantCultureIgnoreCase))
                     return beNode;
                 else if (beNode.Children != null)
                 {

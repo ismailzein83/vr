@@ -5,15 +5,15 @@
                 <div transclude-to="buttons">
                     <vr-button type="BreakInheritance"
                                formname="formBusinessEntity"
-                               ng-show="currentNode != undefined && showBreakInheritance"
-                               haspermission="hasBreakInheritancePermission"
+                               ng-if="currentNode != undefined && showBreakInheritance"
+                               ng-show="showBreakInheritane"
                                data-onclick="toggleInheritance"
                                isasynchronous=" true">
                     </vr-button>
                     <vr-button type="AllowInheritance"
                                formname="formBusinessEntity"
-                               ng-show="currentNode != undefined &&!showBreakInheritance"
-                               haspermission="hasBreakInheritancePermission"
+                               ng-if="currentNode != undefined &&!showBreakInheritance"
+                               ng-show="showBreakInheritane"
                                data-onclick="toggleInheritance"
                                isasynchronous=" true">
                     </vr-button>
