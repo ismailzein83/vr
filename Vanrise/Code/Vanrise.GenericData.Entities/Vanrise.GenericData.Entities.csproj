@@ -101,6 +101,8 @@
     <Compile Include="CDRCorrelation\CDRCorrelationBatch.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelation\CDRCorrelationProcessState.cs" />
+    <Compile Include="CompositeRecordCondition\CompositeRecordCondition.cs" />
+    <Compile Include="CompositeRecordCondition\CompositeRecordConditionDefinition.cs" />
     <Compile Include="DataStorage\DataRecordStorage\BusinessObjectDataRecordStorageConfig.cs" />
     <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />
