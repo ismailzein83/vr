@@ -154,13 +154,14 @@ namespace Vanrise.BusinessProcess.Business
         private BusinessRuleEffectiveActionDetail BPBusinessRuleSetEffectiveActionsDetailMapper(BPBusinessRuleEffectiveAction bpBusinessRuleSetEffectiveAction)
         {
             BPBusinessRuleDefinitionManager ruleDefinitionManager = new BPBusinessRuleDefinitionManager();
+            var definitionSettings = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId);
             return new BusinessRuleEffectiveActionDetail()
             {
                 Entity = bpBusinessRuleSetEffectiveAction,
                 RuleDefinitionId = bpBusinessRuleSetEffectiveAction.RuleDefinitionId,
-                Description = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Description,
-                Title = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Title,
-                CanBeDisabled = ruleDefinitionManager.GetRuleDefinitionSettings(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).CanBeDisabled,
+                Description = definitionSettings.Description,
+                Title = definitionSettings.Title,
+                CanBeDisabled = definitionSettings.CanBeDisabled,
                 ActionDescription = bpBusinessRuleSetEffectiveAction.Action.GetDescription(),
                 ActionTypesIds = ruleDefinitionManager.GetBusinessRuleDefinitionById(bpBusinessRuleSetEffectiveAction.RuleDefinitionId).Settings.ActionTypes,
             };
