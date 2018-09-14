@@ -100,9 +100,31 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = tableDefinitionsWorkbook.SaveToStream();
+
+            var memoryStreamArray =  memoryStream.ToArray();
+            //if (this.CompressFile)
+            //{
+
+            //    //ZipUtility zipUtility = new ZipUtility();
+            //    //var zippedFileContent = zipUtility.Zip(new ZipFileInfo()
+            //    //{
+            //    //    Content = memoryStream,
+            //    //    FileName = string.Format("{0}.{1}",fileName,generatedFile.FileExtension) 
+            //    //});
+            //    //return new VRAutomatedReportGeneratedOutput()
+            //    //{
+            //    //    FileName = string.Format("{0}.{1}",fileName,generatedFile.FileExtension) fileName + ".zip",
+            //    //    GeneratedFile = new VRAutomatedReportGeneratedFile
+            //    //    {
+            //    //        FileContent = zippedFileContent
+            //    //    }
+            //    //};
+            //}
+
             return new VRAutomatedReportGeneratedFile()
             {
-                FileContent = memoryStream.ToArray()
+                FileContent = memoryStreamArray,
+                FileExtension = "xls"
             };
 
         }

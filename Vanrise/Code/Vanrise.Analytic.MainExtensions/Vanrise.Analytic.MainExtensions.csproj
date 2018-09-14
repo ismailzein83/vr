@@ -65,6 +65,7 @@
     <Compile Include="AutomatedReport\FileGenerators\AdvancedExcelFileGeneratorController.cs" />
     <Compile Include="AutomatedReport\FileGenerators\AdvancedExcelFileGeneratorManager.cs" />
     <Compile Include="AutomatedReport\FileGenerators\BasicExcelFileGenerator.cs" />
+    <Compile Include="AutomatedReport\FileGenerators\FlatFileGenerator.cs" />
     <Compile Include="AutomatedReport\Handlers\FTPHandler.cs" />
     <Compile Include="AutomatedReport\Handlers\GenerateFilesHandler.cs" />
     <Compile Include="AutomatedReport\Handlers\SendEmailHandler.cs" />

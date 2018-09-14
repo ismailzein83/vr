@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Entities
     {
         public Guid VRAutomatedReportFileGeneratorId { get; set; }
         public string Name { get; set; }
+        public bool CompressFile { get; set; }
         public VRAutomatedReportFileGeneratorSettings Settings { get; set; }
     }
 }

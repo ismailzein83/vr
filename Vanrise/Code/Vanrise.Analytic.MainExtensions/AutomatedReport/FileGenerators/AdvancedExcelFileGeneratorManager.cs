@@ -61,11 +61,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 var zippedFileContent = zipUtility.Zip(new ZipFileInfo()
                 {
                     Content = generatedFile.FileContent,
-                    FileName = fileName + ".xls"
+                    FileName = string.Format("{0}.{1}",fileName, generatedFile.FileExtension) 
                 });
                 return new VRAutomatedReportGeneratedOutput()
                 {
-                    FileName = fileName + ".zip",
+                    FileName =  string.Format("{0}.zip", fileName),
                     GeneratedFile = new VRAutomatedReportGeneratedFile
                     {
                         FileContent = zippedFileContent
@@ -75,7 +75,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
             return new VRAutomatedReportGeneratedOutput()
             {
-                FileName = fileName + ".xls",
+                FileName = string.Format("{0}.{1}",fileName,generatedFile.FileExtension),
                 GeneratedFile = generatedFile
             };
   
