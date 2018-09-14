@@ -362,6 +362,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-accountactivation.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-islockedinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-issentinvoice.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-reportfileexist.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\Templates\AggregateItemGroupingTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\Templates\DimensionItemGroupingTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\Templates\InvoiceItemGroupingsTemplate.html" />
