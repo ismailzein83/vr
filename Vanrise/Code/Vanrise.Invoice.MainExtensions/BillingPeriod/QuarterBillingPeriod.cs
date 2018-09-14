@@ -20,7 +20,7 @@ namespace Vanrise.Invoice.MainExtensions
 
             var fromDate = QuarterStart(context.IssueDate);
             var toDate = fromDate.AddMonths(3).AddDays(-1);
-            while (fromDate.Date >= context.IssueDate.Date)
+            while (toDate.Date >= context.IssueDate.Date)
             {
                 fromDate = QuarterStart(fromDate.AddDays(-1));
                 toDate = fromDate.AddMonths(3).AddDays(-1);
