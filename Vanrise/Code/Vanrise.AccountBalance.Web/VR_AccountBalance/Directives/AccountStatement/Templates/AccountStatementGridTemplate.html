@@ -1,9 +1,9 @@
 ﻿<vr-row>
     <vr-list maxitemsperrow="4">
        
-        <vr-listitem><vr-label>Current Balance:</vr-label><vr-label isvalue prespace>{{ctrl.currentBalance}}</vr-label><vr-label isvalue prespace ng-show="ctrl.currentBalance != undefined">({{ctrl.balanceFlagDescription}})</vr-label></vr-listitem>
-        <vr-listitem><vr-label>Total Debit:</vr-label><vr-label isvalue prespace>{{ctrl.totalDebit}}</vr-label></vr-listitem>
-        <vr-listitem><vr-label>Total Credit:</vr-label><vr-label isvalue prespace>{{ctrl.totalCredit}}</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Current Balance:</vr-label><vr-label isvalue prespace>{{ctrl.currentBalance | number}}</vr-label><vr-label isvalue prespace ng-show="ctrl.currentBalance != undefined">({{ctrl.balanceFlagDescription}})</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Total Debit:</vr-label><vr-label isvalue prespace>{{ctrl.totalDebit | number}}</vr-label></vr-listitem>
+        <vr-listitem><vr-label>Total Credit:</vr-label><vr-label isvalue prespace>{{ctrl.totalCredit | number}}</vr-label></vr-listitem>
         <vr-listitem><vr-label>Currency:</vr-label><vr-label isvalue prespace>{{ctrl.currency}}</vr-label></vr-listitem>
     </vr-list>
 </vr-row>
