@@ -298,6 +298,8 @@ namespace Vanrise.GenericData.Business
         public RequiredPermissionSettings AddRequiredPermission { get; set; }
        
         public RequiredPermissionSettings EditRequiredPermission { get; set; }
+
+        public RequiredPermissionSettings DeleteRequiredPermission { get; set; }
     }
 
 }
