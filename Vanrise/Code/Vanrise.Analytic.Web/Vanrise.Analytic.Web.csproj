@@ -165,7 +165,7 @@
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportquerydefinition-settings.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-querydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportprocessquery-selector.js" />
-    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\Templates\FlatFileTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\Templates\FlatFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\vr-analytic-flatfile-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableTemplate.html" />
