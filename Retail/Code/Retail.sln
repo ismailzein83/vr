@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -189,10 +189,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Business",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.BP", "TestCallAnalysis.BP\TestCallAnalysis.BP.csproj", "{4EC50608-9E41-458B-8854-00952AA1E892}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Activities", "TestCallAnalysis.Activities\TestCallAnalysis.Activities.csproj", "{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Arguments", "TestCallAnalysis.Arguments\TestCallAnalysis.Arguments.csproj", "{285E7DC7-8EC0-4324-96FD-2F477263BA98}"
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RevenueAssurance", "RevenueAssurance\RevenueAssurance.sqlproj", "{1B679A09-D86A-4705-B4F9-434BD920B6E6}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RevenueAssuranceEDR", "RevenueAssuranceEDR\RevenueAssuranceEDR.sqlproj", "{2EF5FB77-F394-4846-B89D-DC9283380D51}"
@@ -218,6 +214,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Data.Data.SQL", "Retail.Data.Data.SQL\Retail.Data.Data.SQL.csproj", "{A20EC58E-C706-4B05-BFD6-FF531D41A94B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Ringo.ProxyAPI", "Retail.Ringo.ProxyAPI\Retail.Ringo.ProxyAPI.csproj", "{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.BP.Activities", "TestCallAnalysis.BP.Activities\TestCallAnalysis.BP.Activities.csproj", "{9569C863-FAA1-49AF-95A9-4C295FC9F206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.BP.Arguments", "TestCallAnalysis.BP.Arguments\TestCallAnalysis.BP.Arguments.csproj", "{CFFA10A5-A267-460F-9F33-30E41284A02C}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -529,62 +529,62 @@ Global
 		SccProjectTopLevelParentUniqueName76 = Retail.sln
 		SccProjectName76 = TestCallAnalysis.BP
 		SccLocalPath76 = TestCallAnalysis.BP
-		SccProjectUniqueName77 = TestCallAnalysis.Activities\\TestCallAnalysis.Activities.csproj
+		SccProjectUniqueName77 = RevenueAssurance\\RevenueAssurance.sqlproj
 		SccProjectTopLevelParentUniqueName77 = Retail.sln
-		SccProjectName77 = TestCallAnalysis.Activities
-		SccLocalPath77 = TestCallAnalysis.Activities
-		SccProjectUniqueName78 = TestCallAnalysis.Arguments\\TestCallAnalysis.Arguments.csproj
+		SccProjectName77 = RevenueAssurance
+		SccLocalPath77 = RevenueAssurance
+		SccProjectUniqueName78 = RevenueAssuranceEDR\\RevenueAssuranceEDR.sqlproj
 		SccProjectTopLevelParentUniqueName78 = Retail.sln
-		SccProjectName78 = TestCallAnalysis.Arguments
-		SccLocalPath78 = TestCallAnalysis.Arguments
-		SccProjectUniqueName79 = RevenueAssurance\\RevenueAssurance.sqlproj
+		SccProjectName78 = RevenueAssuranceEDR
+		SccLocalPath78 = RevenueAssuranceEDR
+		SccProjectUniqueName79 = InterconnectAnalytics\\InterconnectAnalytics.sqlproj
 		SccProjectTopLevelParentUniqueName79 = Retail.sln
-		SccProjectName79 = RevenueAssurance
-		SccLocalPath79 = RevenueAssurance
-		SccProjectUniqueName80 = RevenueAssuranceEDR\\RevenueAssuranceEDR.sqlproj
+		SccProjectName79 = InterconnectAnalytics
+		SccLocalPath79 = InterconnectAnalytics
+		SccProjectUniqueName80 = InterconnectCDR\\InterconnectCDR.sqlproj
 		SccProjectTopLevelParentUniqueName80 = Retail.sln
-		SccProjectName80 = RevenueAssuranceEDR
-		SccLocalPath80 = RevenueAssuranceEDR
-		SccProjectUniqueName81 = InterconnectAnalytics\\InterconnectAnalytics.sqlproj
+		SccProjectName80 = InterconnectCDR
+		SccLocalPath80 = InterconnectCDR
+		SccProjectUniqueName81 = Interconnect\\Interconnect.sqlproj
 		SccProjectTopLevelParentUniqueName81 = Retail.sln
-		SccProjectName81 = InterconnectAnalytics
-		SccLocalPath81 = InterconnectAnalytics
-		SccProjectUniqueName82 = InterconnectCDR\\InterconnectCDR.sqlproj
+		SccProjectName81 = Interconnect
+		SccLocalPath81 = Interconnect
+		SccProjectUniqueName82 = Retail.Interconnect.Business\\Retail.Interconnect.Business.csproj
 		SccProjectTopLevelParentUniqueName82 = Retail.sln
-		SccProjectName82 = InterconnectCDR
-		SccLocalPath82 = InterconnectCDR
-		SccProjectUniqueName83 = Interconnect\\Interconnect.sqlproj
+		SccProjectName82 = Retail.Interconnect.Business
+		SccLocalPath82 = Retail.Interconnect.Business
+		SccProjectUniqueName83 = Retail.Interconnect.Entities\\Retail.Interconnect.Entities.csproj
 		SccProjectTopLevelParentUniqueName83 = Retail.sln
-		SccProjectName83 = Interconnect
-		SccLocalPath83 = Interconnect
-		SccProjectUniqueName84 = Retail.Interconnect.Business\\Retail.Interconnect.Business.csproj
+		SccProjectName83 = Retail.Interconnect.Entities
+		SccLocalPath83 = Retail.Interconnect.Entities
+		SccProjectUniqueName84 = Retail.Interconnect.Web\\Retail.Interconnect.Web.csproj
 		SccProjectTopLevelParentUniqueName84 = Retail.sln
-		SccProjectName84 = Retail.Interconnect.Business
-		SccLocalPath84 = Retail.Interconnect.Business
-		SccProjectUniqueName85 = Retail.Interconnect.Entities\\Retail.Interconnect.Entities.csproj
+		SccProjectName84 = Retail.Interconnect.Web
+		SccLocalPath84 = Retail.Interconnect.Web
+		SccProjectUniqueName85 = Retail.Data.Business\\Retail.Data.Business.csproj
 		SccProjectTopLevelParentUniqueName85 = Retail.sln
-		SccProjectName85 = Retail.Interconnect.Entities
-		SccLocalPath85 = Retail.Interconnect.Entities
-		SccProjectUniqueName86 = Retail.Interconnect.Web\\Retail.Interconnect.Web.csproj
+		SccProjectName85 = Retail.Data.Business
+		SccLocalPath85 = Retail.Data.Business
+		SccProjectUniqueName86 = Retail.Data.Data\\Retail.Data.Data.csproj
 		SccProjectTopLevelParentUniqueName86 = Retail.sln
-		SccProjectName86 = Retail.Interconnect.Web
-		SccLocalPath86 = Retail.Interconnect.Web
-		SccProjectUniqueName87 = Retail.Data.Business\\Retail.Data.Business.csproj
+		SccProjectName86 = Retail.Data.Data
+		SccLocalPath86 = Retail.Data.Data
+		SccProjectUniqueName87 = Retail.Data.Data.SQL\\Retail.Data.Data.SQL.csproj
 		SccProjectTopLevelParentUniqueName87 = Retail.sln
-		SccProjectName87 = Retail.Data.Business
-		SccLocalPath87 = Retail.Data.Business
-		SccProjectUniqueName88 = Retail.Data.Data\\Retail.Data.Data.csproj
+		SccProjectName87 = Retail.Data.Data.SQL
+		SccLocalPath87 = Retail.Data.Data.SQL
+		SccProjectUniqueName88 = Retail.Ringo.ProxyAPI\\Retail.Ringo.ProxyAPI.csproj
 		SccProjectTopLevelParentUniqueName88 = Retail.sln
-		SccProjectName88 = Retail.Data.Data
-		SccLocalPath88 = Retail.Data.Data
-		SccProjectUniqueName89 = Retail.Data.Data.SQL\\Retail.Data.Data.SQL.csproj
+		SccProjectName88 = Retail.Ringo.ProxyAPI
+		SccLocalPath88 = Retail.Ringo.ProxyAPI
+		SccProjectUniqueName89 = TestCallAnalysis.BP.Activities\\TestCallAnalysis.BP.Activities.csproj
 		SccProjectTopLevelParentUniqueName89 = Retail.sln
-		SccProjectName89 = Retail.Data.Data.SQL
-		SccLocalPath89 = Retail.Data.Data.SQL
-		SccProjectUniqueName90 = Retail.Ringo.ProxyAPI\\Retail.Ringo.ProxyAPI.csproj
+		SccProjectName89 = TestCallAnalysis.BP.Activities
+		SccLocalPath89 = TestCallAnalysis.BP.Activities
+		SccProjectUniqueName90 = TestCallAnalysis.BP.Arguments\\TestCallAnalysis.BP.Arguments.csproj
 		SccProjectTopLevelParentUniqueName90 = Retail.sln
-		SccProjectName90 = Retail.Ringo.ProxyAPI
-		SccLocalPath90 = Retail.Ringo.ProxyAPI
+		SccProjectName90 = TestCallAnalysis.BP.Arguments
+		SccLocalPath90 = TestCallAnalysis.BP.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -905,14 +905,6 @@ Global
 		{4EC50608-9E41-458B-8854-00952AA1E892}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EC50608-9E41-458B-8854-00952AA1E892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EC50608-9E41-458B-8854-00952AA1E892}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -971,6 +963,14 @@ Global
 		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9569C863-FAA1-49AF-95A9-4C295FC9F206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9569C863-FAA1-49AF-95A9-4C295FC9F206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9569C863-FAA1-49AF-95A9-4C295FC9F206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9569C863-FAA1-49AF-95A9-4C295FC9F206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFA10A5-A267-460F-9F33-30E41284A02C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFA10A5-A267-460F-9F33-30E41284A02C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFA10A5-A267-460F-9F33-30E41284A02C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFA10A5-A267-460F-9F33-30E41284A02C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1064,8 +1064,6 @@ Global
 		{7247A3C2-23B2-42F9-ACED-2E2884953BE3} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 		{F6FD0703-9ED3-46A8-9204-91647185A3E5} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 		{4EC50608-9E41-458B-8854-00952AA1E892} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
-		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
-		{285E7DC7-8EC0-4324-96FD-2F477263BA98} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 		{1B679A09-D86A-4705-B4F9-434BD920B6E6} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{2EF5FB77-F394-4846-B89D-DC9283380D51} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{C5702D9A-3E26-4C4B-8041-DD1B679F805F} = {DBCF7D23-8951-4886-9024-282788E5D24F}
@@ -1079,5 +1077,7 @@ Global
 		{9074FFB6-22BF-40FA-8049-46339623CD65} = {D2979848-35B3-464F-A335-62EE41236287}
 		{A20EC58E-C706-4B05-BFD6-FF531D41A94B} = {D2979848-35B3-464F-A335-62EE41236287}
 		{FBBF1C80-97F3-47AC-82FC-8BA7C74FB034} = {77D5FEA4-6D6C-4163-A368-ADB63247EE2D}
+		{9569C863-FAA1-49AF-95A9-4C295FC9F206} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{CFFA10A5-A267-460F-9F33-30E41284A02C} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 	EndGlobalSection
 EndGlobal
