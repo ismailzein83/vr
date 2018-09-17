@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
-using Vanrise.Integration.Entities.Receive;
 using Vanrise.Integration.Business;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
 {
@@ -17,15 +14,16 @@ namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
 
         public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
         {
-        //    DateTime loadRecordsFromTime = DateTime.Now.AddHours(-1);
+            //DateTime loadRecordsFromTime = DateTime.Now.AddHours(-1);
 
-        //    var manager = new DataSourceImportedBatchManager();
+            //var manager = new DataSourceImportedBatchManager();
 
-        //    var dataRecords = manager.GetDataSourceBusinessObject(loadRecordsFromTime);
+            //var dataRecords = manager.GetDataSourceBusinessObject(loadRecordsFromTime);
 
-        //    foreach (var dataRecord in dataRecords){
-        //        context.OnRecordLoaded(DataRecordObjectMapper(dataRecord), DateTime.Now);
-        //    }
+            //foreach (var dataRecord in dataRecords)
+            //{
+            //    context.OnRecordLoaded(DataRecordObjectMapper(dataRecord), DateTime.Now);
+            //}
         }
 
         //private DataRecordObject DataRecordObjectMapper(DataSourceProgressDataRecordType dataSourceProgress)
@@ -45,7 +43,5 @@ namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
 
         //    return new DataRecordObject(new Guid(""), dataSourceProgressObject);
         //}
-
     }
-
 }
