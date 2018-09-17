@@ -46,7 +46,6 @@ namespace SOM.Main.Business
 
             return result;
         }
-
         public List<DPPortItem> GetFreePorts(string dpId)
         {
             List<DPPortItem> result = new List<DPPortItem>();
@@ -71,14 +70,12 @@ namespace SOM.Main.Business
 
             return result;
         }
-
         public List<PhoneNumberItem> GetAvailableNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
             List<PhoneNumberItem> phoneNumbers = new List<PhoneNumberItem>();
             GenerateInvtoryMockData.GetMockPhoneNumbers().TryGetValue(string.Format("{0}_{1}", cabinetPort, dpPort), out phoneNumbers);
             return phoneNumbers == null ? null : phoneNumbers.Where(p => p.IsGold == isGold && p.IsISDN == isISDN && (string.IsNullOrEmpty(startsWith) || p.Number.StartsWith(startsWith))).ToList();
         }
-
         public List<PhoneNumberItem> GetAvailableNumbers(string switchId, string category, string type, int top)
         {
             AktavaraConnector connector = new AktavaraConnector
@@ -93,7 +90,6 @@ namespace SOM.Main.Business
                 Number = c.PHONE_NUMBER
             }).ToList();
         }
-
         public List<DeviceItem> GetDevices(string switchId, string type, int top)
         {
             AktavaraConnector connector = new AktavaraConnector
@@ -108,7 +104,6 @@ namespace SOM.Main.Business
                 DeviceId = c.DEVICE_ID
             }).ToList();
         }
-
         public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
         {
             return new ReserveLineRequestOutput
@@ -116,12 +111,10 @@ namespace SOM.Main.Business
                 Message = string.Format("Phone Number {0} is Reserved", input.PhoneNumber)
             };
         }
-
         //public TelephonyLineSubscriptionOutput InitiateTelephonyLineSubscriptionRequest(TelephonyLineSubscriptionInput input)
         //{
 
         //}
-
         public string GetTelephonyStatusDetails(string phoneNumber)
         {
             StringBuilder result = new StringBuilder();
@@ -143,7 +136,6 @@ namespace SOM.Main.Business
             }
             return result.ToString();
         }
-
         public string TestPhoneLine(string phoneNumber)
         {
             StringBuilder result = new StringBuilder();
@@ -164,6 +156,49 @@ namespace SOM.Main.Business
                 result.AppendLine("FREE SECONDARY DP PORTS = " + detail.NUM_FREE_SECONDARY_PORTS);
             }
             return result.ToString();
+        }
+        public List<MDFItemDetail> GetMDFLinkedToPrimary(string pPort)
+        {
+            List<MDFItemDetail> result = new List<MDFItemDetail>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<MDFItem> data = connector.Get<List<MDFItem>>("/MDFlinkedtoprimary/Get?pport=" + pPort);
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new MDFItemDetail
+                    {
+                        Id = item.MDF_ID.ToString(),
+                        Name = item.MDF,
+                        Port = item.MDF_PORT.ToString(),
+                        PortId = item.MDF_PORT_ID,
+                        MdfVertical = item.MDF_VERTICAL.ToString(),
+                        VerticalId = item.MDF_VERTICAL_ID
+                    });
+                }
+            }
+            return result;
+        }
+        public ReserveLineRequestOutput ReserveNumber(string pathType, string pathName, string objectList, string connectors)
+        {
+            ReserveLineRequestOutput result = new ReserveLineRequestOutput();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            ReserveLineRequestOutput data = connector.Get<ReserveLineRequestOutput>("/reservation/Get?PathType=" + pathType + "&PathName=" + pathName + "&Objectlist=" + objectList + "&connectors=" + connectors);
+
+            if (data != null)
+            {
+                result.Message = string.Format("Phone Number is Reserved");
+            }
+            return result;
         }
     }
 

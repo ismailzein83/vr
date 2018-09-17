@@ -153,4 +153,13 @@ namespace SOM.Main.Business
         public string NUM_FREE_SECONDARY_PORTS { get; set; }
 
     }
+    public class MDFItem
+    {
+        public string MDF_ID { get; set; }
+        public string MDF { get; set; }
+        public string MDF_VERTICAL_ID { get; set; }
+        public string MDF_VERTICAL { get; set; }
+        public string MDF_PORT_ID { get; set; }
+        public string MDF_PORT { get; set; }
+    }
 }

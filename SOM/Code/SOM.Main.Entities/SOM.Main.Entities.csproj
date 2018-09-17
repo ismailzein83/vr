@@ -57,6 +57,7 @@
     <Compile Include="Billing\Service.cs" />
     <Compile Include="Billing\TelephonyContractInfo.cs" />
     <Compile Include="Billing\XDSLContractInfo.cs" />
+    <Compile Include="Inventory\CPTItem.cs" />
     <Compile Include="Inventory\InventoryItem.cs" />
     <Compile Include="Inventory\InventoryPhoneItem.cs" />
     <Compile Include="Inventory\ReserveLineRequest.cs" />

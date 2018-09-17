@@ -100,4 +100,14 @@ namespace SOM.Main.Entities
 
         public bool IsMultiplexed { get; set; }
     }
+    public class MDFItemDetail
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string VerticalId { get; set; }
+        public string MdfVertical { get; set; }
+        public string PortId { get; set; }
+        public string Port { get; set; }
+
+    }
 }

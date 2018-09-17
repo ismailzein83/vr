@@ -19,16 +19,28 @@ namespace BPMExtended.Main.Business
             return InventoryMockDataGenerator.GetAllCPTNumbers();
         }
 
-        public bool RegisterCPTNumber(string contractId, string cptNumber)
+        public bool RegisterCPTNumber(string contractId, string cptId)
         {
+            string result = null;
             TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
-            //TODO: get the phone number
-            return true;
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveCPT?phoneNumber={0}&cPTId={1}", contract.PhoneNumber, cptId));
+            }
+
+            return result == null || result == "" ? false : true;
         }
 
-        public bool UnRegisterCPTNumber(string contractId, string cptNumber)
+        public bool UnRegisterCPTNumber(string contractId)
         {
-            return true;
+            string result = null;
+            TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/DeleteCPTReservation?phoneNumber={0}", contract.PhoneNumber));
+            }
+            
+            return result==null || result== ""  ? false:true;
         }
 
         public List<CPTNumberDetail> GetCountrFreeCptNumbers()
