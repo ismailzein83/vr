@@ -328,7 +328,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ZoneName = GetReaderValue<string>(reader, "ZoneName"),
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 RateTypeId = GetReaderValue<int?>(reader, "RateTypeId"),
-                RecentRate = GetReaderValue<decimal>(reader, "RecentRate"),
+                RecentRate = GetReaderValue<decimal?>(reader, "RecentRate"),
                 ChangeType = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
