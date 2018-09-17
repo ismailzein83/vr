@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessObjectDataStore\DataSourceBusinessObjectDataProviderSettings.cs" />
     <Compile Include="FailedBatchInfoObjectType.cs" />
     <Compile Include="FailedBatchInfoPropertyEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +56,14 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Integration.Business\Vanrise.Integration.Business.csproj">
+      <Project>{1f22483a-d3db-48ee-aea8-8988bdb3b9a1}</Project>
+      <Name>Vanrise.Integration.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
