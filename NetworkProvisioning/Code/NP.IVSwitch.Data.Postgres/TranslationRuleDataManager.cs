@@ -141,13 +141,16 @@ namespace NP.IVSwitch.Data.Postgres
 
         public bool Update(TranslationRule translationRule)
         {
+            var cliPatternString = translationRule.FixedCLISettings!=null ? ",cli_pattern= @psgcli" : "";
+            if (translationRule.FixedCLISettings == null && translationRule.PoolBasedCLISettings == null)
+                cliPatternString = ",cli_pattern= DEFAULT";
             String cmdText = String.Format(@"UPDATE trans_rules
-	                             SET trans_rule_name = @psgname,
-                                 dnis_pattern=@psgdnis,
-                                 engine_id = @engineid,
-                                 cli_pattern = @psgcli
-                                 WHERE  trans_rule_id = @psgid ;");
-          
+	                             SET trans_rule_name = @psgname
+                                 {0},
+                                 engine_id = @engineid
+                                 {1}
+                                 WHERE  trans_rule_id = @psgid ;",
+            !String.IsNullOrEmpty(translationRule.DNISPattern) ? ",dnis_pattern= @psgdnis" : ",dnis_pattern=DEFAULT", cliPatternString);
             int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
              {
                  cmd.Parameters.AddWithValue("@psgid", translationRule.TranslationRuleId);
@@ -167,8 +170,6 @@ namespace NP.IVSwitch.Data.Postgres
                  }
                  if (!String.IsNullOrEmpty(translationRule.DNISPattern))
                      cmd.Parameters.AddWithValue("@psgdnis", dnisPattern);
-                 else
-                     cmd.Parameters.AddWithValue("@psgdnis", " ");
                  if (translationRule.FixedCLISettings != null)
                  {
                      string fixedCLIPattern = translationRule.FixedCLISettings.CLIPattern;
@@ -178,10 +179,6 @@ namespace NP.IVSwitch.Data.Postgres
                          fixedCLIPattern = String.Concat(sign, fixedCLIPattern);
                      }
                      cmd.Parameters.AddWithValue("@psgcli", fixedCLIPattern);
-                 }
-                 else
-                 {
-                     cmd.Parameters.AddWithValue("@psgcli", " ");
                  }
              }
            );
@@ -454,17 +451,20 @@ namespace NP.IVSwitch.Data.Postgres
                     for (int i = 0; i < itemsToUpdate.Count; i++)
                     {
                         String updateItemCMDText = String.Format(@"UPDATE x_cli_pools_items
-	                            SET prefix = @prefix,
-                                destination = @destination,
+	                            SET prefix = @prefix
+                                {0},
                                 rand_min = @randmin, 
                                 rand_max = @randmax,
                                 dn = @dn
-                                WHERE  pool_id = @poolid; ");
+                                WHERE  pool_id = @poolid; ",
+                                !String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.Destination) ? ",destination=@destination" : ",destination=DEFAULT");
 
                         int updateOperationRecordsAffected = ExecuteNonQueryText(updateItemCMDText, cmd =>
                         {
                             cmd.Parameters.AddWithValue("@prefix", translationRule.PoolBasedCLISettings.Prefix);
-                            cmd.Parameters.AddWithValue("@destination", !String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.Destination) ? translationRule.PoolBasedCLISettings.Destination : " ");
+                            if(!String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.Destination)){
+                                cmd.Parameters.AddWithValue("@destination", translationRule.PoolBasedCLISettings.Destination);
+                            }
                             cmd.Parameters.AddWithValue("@randmin", translationRule.PoolBasedCLISettings.RandMin!=0 ? translationRule.PoolBasedCLISettings.RandMin : -1);
                             cmd.Parameters.AddWithValue("@randmax", translationRule.PoolBasedCLISettings.RandMax);
                             cmd.Parameters.AddWithValue("@dn", translationRule.PoolBasedCLISettings.DisplayName);
