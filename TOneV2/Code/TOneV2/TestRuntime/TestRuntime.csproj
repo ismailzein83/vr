@@ -158,6 +158,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NP.IVSwitch.Business">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="NP.IVSwitch.Data">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="NP.IVSwitch.Data.Postgres">
+      <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Data.Postgres.dll</HintPath>
+    </Reference>
     <Reference Include="NP.IVSwitch.Entities">
       <HintPath>..\..\..\..\NetworkProvisioning\Code\Output\NP.IVSwitch.Entities.dll</HintPath>
     </Reference>
@@ -722,6 +731,10 @@
     </Reference>
     <Reference Include="Vanrise.Rules.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Rules.Normalization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
