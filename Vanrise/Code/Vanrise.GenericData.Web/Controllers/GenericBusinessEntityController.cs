@@ -33,12 +33,18 @@ namespace Vanrise.GenericData.Web.Controllers
         }
         [HttpGet]
         [Route("GetGenericBusinessEntityDetail")]
-        public GenericBusinessEntityDetail GetGenericBusinessEntity(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
+        public GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
         {
            genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
            return _manager.GetGenericBusinessEntityDetail(genericBusinessEntityId, businessEntityDefinitionId);
         }
-
+        [HttpGet]
+        [Route("GetGenericBusinessEntity")]
+        public GenericBusinessEntity GetGenericBusinessEntity(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
+        {
+            genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
+            return _manager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+        }
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]
         public bool DoesUserHaveAddAccess(Guid businessEntityDefinitionId)
@@ -65,12 +71,29 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.UpdateGenericBusinessEntity(genericBusinessEntity);
         }
 
+        [HttpPost]
+        [Route("DeleteGenericBusinessEntity")]
+        public object DeleteGenericBusinessEntity(DeleteGenericBusinessEntityInput input)
+        {
+            if (!DoesUserHaveDeleteAccess(input.BusinessEntityDefinitionId))
+                return GetUnauthorizedResponse();
+
+            return _manager.DeleteGenericBusinessEntity(input);
+        }
+
         [HttpGet]
         [Route("DoesUserHaveEditAccess")]
         public bool DoesUserHaveEditAccess(Guid businessEntityDefinitionId)
         {
             GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
             return manager.DoesUserHaveEditAccess(businessEntityDefinitionId);
+        }
+
+        [HttpGet]
+        [Route("DoesUserHaveDeleteAccess")]
+        public bool DoesUserHaveDeleteAccess(Guid businessEntityDefinitionId)
+        {
+            return _manager.DoesUserHaveDeleteAccess(businessEntityDefinitionId);
         }
 
 

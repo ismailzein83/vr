@@ -22,6 +22,8 @@ namespace Vanrise.GenericData.Entities
 
         bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId, RecordFilterGroup filterGroup);
 
+        bool Delete(Dictionary<string, Object> fieldValues);
+
         void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate);
 
         void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);

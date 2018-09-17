@@ -239,6 +239,33 @@ namespace Vanrise.GenericData.Business
             return results;
         }
 
+        public DeleteOperationOutput<object> DeleteGenericBusinessEntity(DeleteGenericBusinessEntityInput input)
+        {
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(input.BusinessEntityDefinitionId);
+            foreach (var genericBusinessEntityId in input.GenericBusinessEntityIds)
+            {
+                var deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<object>()
+                {
+                    Result = Vanrise.Entities.DeleteOperationResult.Failed
+                };
+                var oldGenericBE = GetGenericBusinessEntity(genericBusinessEntityId, input.BusinessEntityDefinitionId);
+                bool deleteActionSucc = _dataRecordStorageManager.DeleteDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityId, oldGenericBE.FieldValues);
+                if (deleteActionSucc)
+                {
+                    var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, input.BusinessEntityDefinitionId);
+                    UpdateStatusHistoryIfAvailable(input.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
+                    VRActionLogger.Current.TrackAndLogObjectDeleted(new GenericBusinessEntityLoggableEntity(input.BusinessEntityDefinitionId), oldGenericBE);
+                    deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
+                }
+                return deleteOperationOutput;
+            }
+            return new DeleteOperationOutput<object>()
+            {
+                Result = DeleteOperationResult.Failed,
+                Message = "No IDs were selected."
+            };
+           
+        }
         public IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
 
@@ -444,6 +471,12 @@ namespace Vanrise.GenericData.Business
             }
 
             return updateOperationOutput;
+        }
+        public bool DoesUserHaveDeleteAccess(Guid genericBeDefinitionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DoesUserHaveAccess(userId, genericBeDefinitionId, (sec) => sec.DeleteRequiredPermission);
+
         }
 
         public void LogObjectCustomAction(Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, string actionName, bool isObjectUpdated, string actionDescription)

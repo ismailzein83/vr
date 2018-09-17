@@ -257,8 +257,10 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-viewdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiondefinition-filter.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiondefinition-filterextension.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\DeleteGenericBEDefinitionActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\UnlockVoucherGenericBEDefinitionActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\ActivateVoucherGenericBEDefinitionActionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-deletegenericaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-unlockvouchergenericaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-genericbe-activatevouchergenericaction-definition.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBeCondition\MainExtensions\Templates\FilterGroupConditionTemplate.html" />

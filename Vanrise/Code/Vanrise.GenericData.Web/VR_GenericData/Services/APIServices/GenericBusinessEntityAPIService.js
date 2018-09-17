@@ -16,6 +16,7 @@
             UpdateGenericBusinessEntity: UpdateGenericBusinessEntity,
             DoesUserHaveEditAccess: DoesUserHaveEditAccess,
             GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
+            DeleteGenericBusinessEntity: DeleteGenericBusinessEntity
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -56,6 +57,10 @@
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
         }
+        function DeleteGenericBusinessEntity(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DeleteGenericBusinessEntity'), input);
+        }
+
         function UpdateGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateGenericBusinessEntity'), genericBusinessEntity);
         }

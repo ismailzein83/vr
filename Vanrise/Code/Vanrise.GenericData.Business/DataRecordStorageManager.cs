@@ -257,6 +257,29 @@ namespace Vanrise.GenericData.Business
             return updateActionSucc;
         }
 
+        public bool DeleteDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager");
+
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            if (fieldValues != null)
+            {
+                var dataRecordType = _recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+                var idFieldType = dataRecordType.Fields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
+                if (!fieldValues.ContainsKey(idFieldType.Name))
+                    fieldValues.Add(idFieldType.Name, recordFieldId);
+            }
+            bool deleteOperationSucc = storageDataManager.Delete(fieldValues);
+
+            if (deleteOperationSucc && dataRecordStorage.Settings.EnableUseCaching)
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);
+
+            return deleteOperationSucc;
+        }
+
         public void UpdateDataRecords(Guid dataRecordStorageId, IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate, TempStorageInformation tempStorageInformation = null)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId, tempStorageInformation);

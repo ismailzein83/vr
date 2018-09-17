@@ -53,7 +53,7 @@
                         };
                         var promise = actionType.ExecuteAction(payload);
 
-
+                              
                         if (promise != undefined && promise.then != undefined) {
 						gridAPI.showLoader();
 						 var promiseDeffered = UtilsService.createPromiseDeferred();
@@ -95,8 +95,7 @@
         }
 
         function registerEditAccount() {
-
-            var actionType = {
+            var editActionType = {
                 ActionTypeName: "EditGenericBEAction",
                 ExecuteAction: function (payload) {
                     if (payload == undefined)
@@ -113,7 +112,29 @@
                     VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize, fieldValues);
                 }
             };
-            registerActionType(actionType);
+            registerActionType(editActionType);
+
+            var deleteActionType = {
+                ActionTypeName: "DeleteGenericBEAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                    var genericBusinessEntityId = payload.genericBusinessEntityId;
+                    var businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                    var genericBusinessEntityIds = [genericBusinessEntityId];
+                    var input = {
+                        GenericBusinessEntityIds: genericBusinessEntityIds,
+                        BusinessEntityDefinitionId: businessEntityDefinitionId
+                    };
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            return VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(input).then(function (response) {
+                            });
+                        }
+                    });
+                }
+            };
+            registerActionType(deleteActionType);
         }
 
         return ({

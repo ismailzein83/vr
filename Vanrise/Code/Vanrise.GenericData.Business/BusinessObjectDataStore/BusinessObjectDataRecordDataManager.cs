@@ -69,6 +69,10 @@ namespace Vanrise.GenericData.Business
             _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
             return dataRecords;
         }
+        public bool Delete(Dictionary<string, Object> fieldValues)
+        {
+            throw new NotImplementedException();
+        }
 
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
