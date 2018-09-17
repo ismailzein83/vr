@@ -609,7 +609,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				if (customerCountriesSellDatesByCountryId.TryGetValue(countryChange.CountryId, out countrySellDate))
 				{
 					List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(countryChange.CountryId);
-					salePlZoneNotifications.AddRange(GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, salePlZoneNotifications.Select(z => z.ZoneName), countryChange.CountryId, countrySellDate, customerZoneRateHistoryLocator));
+					salePlZoneNotifications.AddRange(GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, salePlZoneNotifications.Select(z => z.ZoneName.ToLower()), countryChange.CountryId, countrySellDate, customerZoneRateHistoryLocator));
 				}
 			}
 			return salePlZoneNotifications;
@@ -635,7 +635,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 				foreach (var zoneChange in country.ZoneChanges)
 				{
-					ExistingSaleZone existingSaleZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(zoneChange.ZoneName));
+					ExistingSaleZone existingSaleZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(zoneChange.ZoneName, StringComparison.OrdinalIgnoreCase));
 
 					long zoneId = existingSaleZone != null
 						 ? existingSaleZone.ZoneId
@@ -731,7 +731,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				//Add missing codes from existing data
 				foreach (var salePlzone in countrySaleNotifications)
 				{
-					ExistingSaleZone existingSaleZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(salePlzone.ZoneName));
+					ExistingSaleZone existingSaleZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(salePlzone.ZoneName, StringComparison.OrdinalIgnoreCase));
 					if (existingSaleZone != null)
 					{
 						foreach (ExistingSaleCode existingCode in existingSaleZone.Codes)
@@ -896,7 +896,7 @@ namespace TOne.WhS.BusinessEntity.Business
 				if (existingZoneEntity == null)
 					throw new DataIntegrityValidationException(string.Format("Zone {0} not found", existingZone.ZoneName));
 				DateTime? existingZoneEED = existingZoneEntity.EED;
-				if (changedZoneNames.Contains(existingZone.ZoneName) || (existingZoneEED.HasValue && countrySellDate >= existingZoneEED.Value))
+				if (changedZoneNames.Contains(existingZone.ZoneName.ToLower()) || (existingZoneEED.HasValue && countrySellDate >= existingZoneEED.Value))
 					continue;
 
 				SalePLZoneNotification zoneNotification = new SalePLZoneNotification()
