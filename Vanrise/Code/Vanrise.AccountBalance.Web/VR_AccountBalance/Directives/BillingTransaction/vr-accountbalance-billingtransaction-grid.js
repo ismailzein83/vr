@@ -50,11 +50,9 @@ app.directive('vrAccountbalanceBillingtransactionGrid', ['VR_AccountBalance_Bill
                 var api = {};
 
                 api.loadGrid = function (payload) {
-                    if (payload.query != undefined && payload.query.AccountTypeId != undefined) {
-                        if (accountTypeId != payload.query.AccountTypeId)
+                    if (accountTypeId != undefined && accountTypeId != payload.query.AccountTypeId )                       
                             gridAPI.clearUpdatedItems();
-                        accountTypeId = payload.query.AccountTypeId;
-                    }
+                        accountTypeId = payload.query.AccountTypeId;                    
                     ctrl.showAccount = payload.showAccount != undefined ? payload.showAccount : true;
                     return gridAPI.retrieveData(payload.query);
                 };

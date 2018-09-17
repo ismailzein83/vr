@@ -82,11 +82,9 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (payload) {
                             if (payload != undefined) {
-                                if (payload.query != undefined && payload.query.InvoiceTypeId != undefined) {
-                                    if (invoiceTypeId != payload.query.InvoiceTypeId)
-                                        gridAPI.clearUpdatedItems();
-                                    invoiceTypeId = payload.query.InvoiceTypeId;
-                                }
+                                if (invoiceTypeId != undefined && invoiceTypeId != payload.query.InvoiceTypeId)
+                                    gridAPI.clearUpdatedItems();
+                                invoiceTypeId = payload.query.InvoiceTypeId;
                                 showAccountSelector = payload.showAccountSelector;
                                 partnerIds = payload.partnerIds;
                                 gridQuery = payload.query;

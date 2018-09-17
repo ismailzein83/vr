@@ -61,7 +61,7 @@ app.directive('vrAccountbalanceAccountstatementGrid', ['VR_AccountBalance_Accoun
                 var api = {};
 
                 api.loadGrid = function (query) {
-                    if (query.AccountTypeId != undefined && accountTypeId != query.AccountTypeId)
+                    if (accountTypeId != undefined && accountTypeId != query.AccountTypeId)
                         gridAPI.clearUpdatedItems();
                     accountTypeId = query.AccountTypeId;
                     return gridAPI.retrieveData(query);
