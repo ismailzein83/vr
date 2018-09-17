@@ -28,6 +28,9 @@
         function UpdateTranslationRule(TranslationRuleItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'UpdateTranslationRule'), TranslationRuleItem);
         }
+        function DeleteTranslationRule(translationRuleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'DeleteTranslationRule'), { translationRuleId: translationRuleId });
+        }
           
         function GetTranslationRulesInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, "GetTranslationRulesInfo"), {
@@ -49,6 +52,14 @@
             });
         }
 
+        function GetFilteredCLIPatterns(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'GetFilteredCLIPatterns'), input);
+        }
+
+        function HasDeleteTranslationRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(NP_IVSwitch_ModuleConfig.moduleName, controllerName, ['DeleteTranslationRule']));
+        }
+
         return ({
             GetFilteredTranslationRules: GetFilteredTranslationRules,
             GetTranslationRule: GetTranslationRule,
@@ -57,7 +68,10 @@
             GetTranslationRulesInfo: GetTranslationRulesInfo,
             HasAddTranslationRulePermission: HasAddTranslationRulePermission,
             HasEditTranslationRulePermission: HasEditTranslationRulePermission,
-            GetTranslationRuleHistoryDetailbyHistoryId: GetTranslationRuleHistoryDetailbyHistoryId
+            GetTranslationRuleHistoryDetailbyHistoryId: GetTranslationRuleHistoryDetailbyHistoryId,
+            DeleteTranslationRule: DeleteTranslationRule,
+            GetFilteredCLIPatterns: GetFilteredCLIPatterns,
+            HasDeleteTranslationRulePermission: HasDeleteTranslationRulePermission
         });
     }
 

@@ -162,6 +162,7 @@
   <ItemGroup>
     <Content Include="NP_IVSwitch\Constant\CallsEnum.js" />
     <Content Include="NP_IVSwitch\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="NP_IVSwitch\Constant\CLISourceEnum.js" />
     <Content Include="NP_IVSwitch\Constant\CLITypeEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EndPointEnum.js" />
     <Content Include="NP_IVSwitch\Constant\EngineTypeEnum.js" />
@@ -205,8 +206,14 @@
     <Content Include="NP_IVSwitch\Directives\CodecProfile\Templates\CodecProfileGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\SwitchMapping\np-ivswitch-switchmapping-grid.js" />
     <Content Include="NP_IVSwitch\Directives\SwitchMapping\Templates\SwitchMappingGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrulecli-grid.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-grid.js" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-poolbasedcligroup-customobjectsettings.js" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-poolbasedcligroup-staticeditor.js" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\np-ivswitch-translationrule-selector.js" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\CLIGridTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\PoolBasedCLIGroupCustomObjectSettingsTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\PoolBasedCLIGroupStaticEditorTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\TranslationRule\Templates\TranslationRuleGridTemplate.html" />
     <Content Include="NP_IVSwitch\ModuleInitialization.js" />
     <Content Include="NP_IVSwitch\Services\APIServices\CustomerRouteAPIService.js" />

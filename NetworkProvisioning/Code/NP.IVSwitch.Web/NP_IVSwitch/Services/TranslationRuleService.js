@@ -3,15 +3,15 @@
 
     "use strict";
 
-    TranslationRuleService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService', 'UtilsService'];
+    TranslationRuleService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService', 'UtilsService', 'NP_IVSwitch_CLITypeEnum', 'VRUIUtilsService'];
 
-    function TranslationRuleService(NPModalService, VRCommon_ObjectTrackingService, UtilsService) {
+    function TranslationRuleService(NPModalService, VRCommon_ObjectTrackingService, UtilsService, NP_IVSwitch_CLITypeEnum, VRUIUtilsService) {
         var drillDownDefinitions = [];
         function addTranslationRule(onTranslationRuleAdded) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onTranslationRuleAdded = onTranslationRuleAdded
+                modalScope.onTranslationRuleAdded = onTranslationRuleAdded;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/TranslationRule/TranslationRuleEditor.html', null, settings);
         };
@@ -73,9 +73,8 @@
 
                 translationRuleItem.objectTrackingGridAPI = directiveAPI;
                 var query = {
-                    ObjectId: translationRuleItem.Entity.TranslationRuleId,
+                    ObjectId: translationRuleItem.TranslationRuleId,
                     EntityUniqueName: getEntityUniqueName(),
-
                 };
                 return translationRuleItem.objectTrackingGridAPI.load(query);
             };
@@ -91,13 +90,45 @@
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+        function defineTranslationRuleViewTabs(translationRule, gridAPI) {
+            if (translationRule== undefined)
+                return;
+            var drillDownTabs = UtilsService.cloneObject(drillDownDefinitions);
+            if (translationRule.CLIType == NP_IVSwitch_CLITypeEnum.PoolBasedCLI.value) {
+                addPoolDrillDownTab();
+            }
+            setDrillDownTabs();
+
+            function addPoolDrillDownTab() {
+
+                var drillDownTab = {
+                    title: "CLI Patterns",
+                    directive: "np-ivswitch-translationrulecli-grid",
+                    loadDirective: function (directiveAPI, translationRuleItem) {
+                        translationRuleItem.cliPatternsGridAPI = directiveAPI;
+                        var query = {
+                            TranslationRuleId: translationRuleItem.TranslationRuleId,
+                            EntityUniqueName: getEntityUniqueName(),
+                        };
+                        return translationRuleItem.cliPatternsGridAPI.load(query);
+                    }
+                };
+                drillDownTabs.unshift(drillDownTab);
+            }
+            function setDrillDownTabs() {
+                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
+                drillDownManager.setDrillDownExtensionObject(translationRule);
+            }
+
+        }
 
         return {
             addTranslationRule: addTranslationRule,
             editTranslationRule: editTranslationRule,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToTranslationRule: registerObjectTrackingDrillDownToTranslationRule,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            defineTranslationRuleViewTabs: defineTranslationRuleViewTabs
         };
     }
 

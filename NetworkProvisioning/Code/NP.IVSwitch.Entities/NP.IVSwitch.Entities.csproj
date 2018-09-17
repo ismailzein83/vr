@@ -118,6 +118,8 @@
     <Compile Include="SwitchMapping\SwitchMapping.cs" />
     <Compile Include="SwitchMapping\SwitchMappingDetail.cs" />
     <Compile Include="SwitchMapping\SwitchMappingQuery.cs" />
+    <Compile Include="TranslationRule\CLIPatternDetail.cs" />
+    <Compile Include="TranslationRule\CLIPatternQuery.cs" />
     <Compile Include="TranslationRule\PoolBasedCLIDetails.cs" />
     <Compile Include="TranslationRule\TranslationRuleFilter.cs" />
     <Compile Include="TranslationRule\TranslationRuleInfo.cs" />

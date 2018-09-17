@@ -1,0 +1,19 @@
+﻿<span vr-loader="scopeModel.isLoading">
+    <vr-row removeline>
+        <vr-columns width="fullrow">
+            <vr-datagrid on-ready="scopeModel.onGridReady"
+                         datasource="scopeModel.datasource"
+                         dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         idfield="ID">
+                <vr-datagridcolumn headertext="'ID'" field="'ID'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'CLI'" field="'CLIPattern'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Prefix'" field="'Prefix'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Display Name'" field="'DisplayName'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Destination'" field="'Destination'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rand Min'" field="'RandMin'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Rand Max'" field="'RandMax'"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</span>  

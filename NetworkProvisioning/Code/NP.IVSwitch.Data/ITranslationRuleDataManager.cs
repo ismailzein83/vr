@@ -12,6 +12,6 @@ namespace NP.IVSwitch.Data
         List<TranslationRule> GetTranslationRules();
         bool Update(TranslationRule TranslationRule);
         bool Insert(TranslationRule TranslationRule, out int insertedId);
-        
+        bool Delete(int translationRuleId);
     }
 }

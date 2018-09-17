@@ -16,6 +16,22 @@ namespace NP.IVSwitch.Business
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
+            var valueObject = context.FieldValue as List<PoolBasedCLIDetails>;
+            if (valueObject == null)
+                valueObject = Utilities.ConvertJsonToList<PoolBasedCLIDetails>(context.FieldValue);
+
+            if (valueObject != null)
+            {
+                StringBuilder description = new StringBuilder();
+
+                foreach (var value in valueObject)
+                {
+                    if (description.Length > 0)
+                        description.Append(",");
+                    description.Append(value.CLIPattern);
+                }
+                return description.ToString();
+            }
             return null;
         }
 

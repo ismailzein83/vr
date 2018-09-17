@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Caching;
 namespace NP.IVSwitch.Business
 {
     public class TranslationRuleManager
@@ -57,6 +58,34 @@ namespace NP.IVSwitch.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTranslationRules.ToBigResult(input, filterExpression, TranslationRuleDetailMapper));
         }
 
+        public IDataRetrievalResult<CLIPatternDetail> GetFilteredCLIPatterns(DataRetrievalInput<CLIPatternQuery> input)
+        {
+            var allTranslationRules = this.GetCachedTranslationRule();
+            var translationRule = allTranslationRules.GetRecord(input.Query.TranslationRuleId);
+            translationRule.ThrowIfNull("translationRule", input.Query.TranslationRuleId);
+            Func<CLIPatternDetail, bool> filterExpression = (x) =>
+            {
+                return true;
+            };
+            List<CLIPatternDetail> cliPatternDetails = new List<CLIPatternDetail>();
+            if (translationRule.PoolBasedCLISettings != null && translationRule.PoolBasedCLISettings.CLIPatterns!=null && translationRule.PoolBasedCLISettings.CLIPatterns.Count>0)
+            {
+                foreach(var cliPatternItem in translationRule.PoolBasedCLISettings.CLIPatterns){
+                    cliPatternDetails.Add(new CLIPatternDetail()
+                    {
+                        CLIPattern = cliPatternItem,
+                        Destination = translationRule.PoolBasedCLISettings.Destination,
+                        DisplayName = translationRule.PoolBasedCLISettings.DisplayName,
+                        Prefix = translationRule.PoolBasedCLISettings.Prefix,
+                        RandMax = translationRule.PoolBasedCLISettings.RandMax,
+                        RandMin = translationRule.PoolBasedCLISettings.RandMin
+                    });
+                }
+            }
+            VRActionLogger.Current.LogGetFilteredAction(TranslationRuleLoggableEntity.Instance, input);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cliPatternDetails.ToBigResult<CLIPatternDetail>(input, filterExpression));
+        }
+
         public InsertOperationOutput<TranslationRuleDetail> AddTranslationRule(TranslationRule translationRuleItem)
         {
             var insertOperationOutput = new InsertOperationOutput<TranslationRuleDetail>
@@ -104,6 +133,22 @@ namespace NP.IVSwitch.Business
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
+        }
+
+        public DeleteOperationOutput<TranslationRuleDetail> DeleteTranslationRule(int translationRuleId)
+        {
+            var deleteOperationOutput = new DeleteOperationOutput<TranslationRuleDetail>
+            {
+                Result = DeleteOperationResult.Failed,
+            };
+            ITranslationRuleDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<ITranslationRuleDataManager>();
+            Helper.SetSwitchConfig(dataManager);
+            if (dataManager.Delete(translationRuleId))
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+            }
+            return deleteOperationOutput;
         }
 
         #endregion
@@ -189,9 +234,49 @@ namespace NP.IVSwitch.Business
         {
             TranslationRuleDetail TranslationRuleDetail = new TranslationRuleDetail()
             {
-                Entity = TranslationRule
+                TranslationRuleId = TranslationRule.TranslationRuleId,
+                Name = TranslationRule.Name,
+                DNISPattern = GetDNISPAttern(TranslationRule),
+                CLIPattern = GetCLIPattern(TranslationRule),
+                CLIType = TranslationRule.CLIType,
+                EngineType = Utilities.GetEnumDescription<EngineType>(TranslationRule.EngineType),
+                CreationDate = TranslationRule.CreationDate
             };
             return TranslationRuleDetail;
+        }
+
+        private string GetCLIPattern(TranslationRule translationRule)
+        {
+            string cliPattern="";
+            if (translationRule.FixedCLISettings != null)
+            {
+                cliPattern = translationRule.FixedCLISettings.CLIPattern;
+                if (translationRule.FixedCLISettings.CLIPatternSign.HasValue)
+                {
+                    var sign = translationRule.FixedCLISettings.CLIPatternSign.Value == PrefixSign.Plus ? "+" : "-";
+                    cliPattern = string.Concat(sign, cliPattern);
+                }
+            }
+            if (translationRule.PoolBasedCLISettings != null)
+            {
+                if (translationRule.PoolBasedCLISettings.CLIPatterns != null && translationRule.PoolBasedCLISettings.CLIPatterns.Count > 0)
+                {
+                    cliPattern = String.Join(",", translationRule.PoolBasedCLISettings.CLIPatterns);
+                }
+            }
+            return cliPattern;
+        }
+
+        private string GetDNISPAttern(TranslationRule translationRule)
+        {
+            string dnisPattern = "";
+            dnisPattern = translationRule.DNISPattern;
+            if (translationRule.DNISPatternSign.HasValue && !String.IsNullOrEmpty(dnisPattern))
+            {
+                var sign = translationRule.DNISPatternSign.Value == PrefixSign.Plus ? "+" : "-";
+                dnisPattern = string.Concat(sign, dnisPattern);
+            }
+            return dnisPattern;
         }
 
         public TranslationRuleInfo TranslationRuleInfoMapper(TranslationRule translationRule)

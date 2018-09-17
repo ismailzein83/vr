@@ -53,10 +53,25 @@ namespace NP.IVSwitch.Web.Controllers
         }
 
         [HttpGet]
+        [Route("DeleteTranslationRule")]
+        public Vanrise.Entities.DeleteOperationOutput<TranslationRuleDetail> DeleteTranslationRule(int translationRuleId)
+        {
+            return _manager.DeleteTranslationRule(translationRuleId);
+        }
+
+        [HttpGet]
         [Route("GetTranslationRuleHistoryDetailbyHistoryId")]
         public TranslationRule GetTranslationRuleHistoryDetailbyHistoryId(int translationRuleHistoryId)
         {
             return _manager.GetTranslationRuleHistoryDetailbyHistoryId(translationRuleHistoryId);
+        }
+
+
+        [HttpPost]
+        [Route("GetFilteredCLIPatterns")]
+        public object GetFilteredCLIPatterns(Vanrise.Entities.DataRetrievalInput<CLIPatternQuery> input)
+        {
+            return GetWebResponse(input, _manager.GetFilteredCLIPatterns(input));
         }
     
     }

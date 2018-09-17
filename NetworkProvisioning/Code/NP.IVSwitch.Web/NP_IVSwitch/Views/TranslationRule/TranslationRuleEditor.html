@@ -1,19 +1,122 @@
-﻿<div vr-modalcontent ng-controller="NP_IVSwitch_TranslationRuleEditorController" vr-modalcontent size="medium" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="NP_IVSwitch_TranslationRuleEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formTranslationRuleEditor">
-            <vr-tabs>
-                <vr-tab header="'Name'">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-textbox label="Description" value="scopeModel.name" isrequired type="text"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/3row">
+                    <vr-select label="Engine"
+                                datasource="scopeModel.engineTypes"
+                                selectedvalues="scopeModel.selectedEngineType"
+                                datatextfield="description"
+                                datavaluefield="value"
+                                isrequired>
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/3row" haschildcolumns>
+                    <vr-columns width="1/4row" ng-if="scopeModel.selectedEngineType.value==0">
+                        <vr-select label="Sign"
+                                    on-ready="scopeModel.onDNISPrefixSignReady"
+                                    datasource="scopeModel.prefixSigns"
+                                    selectedvalues="scopeModel.selectedPrefixSign"
+                                    datatextfield="description"
+                                    datavaluefield="value"
+                                    hideremoveicon>
+                        </vr-select>
+                    </vr-columns>
+                    <vr-columns width="3/4row">
+                        <vr-textbox label="DNIS Pattern" value="scopeModel.dnisPattern" isrequired="scopeModel.selectedCLIType==undefined"></vr-textbox>
+                    </vr-columns>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-select label="CLI Pattern"
+                                datasource="scopeModel.CLITypes"
+                                selectedvalues="scopeModel.selectedCLIType"
+                                datatextfield="description"
+                                datavaluefield="value"
+                                isrequired="scopeModel.dnisPattern==undefined">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns width="1/3row" haschildcolumns ng-if="scopeModel.selectedCLIType.value==0">
+                    <vr-columns width="1/4row" ng-if="scopeModel.selectedEngineType.value==0">
+                        <vr-select label="Sign"
+                                    on-ready="scopeModel.onCLIPatternPrefixSignReady"
+                                    datasource="scopeModel.prefixSigns"
+                                    selectedvalues="scopeModel.fixedCLISettingsSelectedPrefixSign"
+                                    datatextfield="description"
+                                    datavaluefield="value"
+                                    hideremoveicon>
+                        </vr-select>
+                    </vr-columns>
+                    <vr-columns width="3/4row">
+                        <vr-textbox label="CLI" value="scopeModel.CLIPattern" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-columns>
+            </vr-row>
+            <vr-section header="CLI Translation Rule" ng-if="scopeModel.selectedCLIType.value==1">
+                <vr-row>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        <vr-textbox label="CLI Prefix" value="scopeModel.poolBasedCLISettingsPrefix" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="DNIS Pattern" value="scopeModel.dnisPattern" isrequired="scopeModel.cliPattern == undefined"></vr-textbox>
+                        <vr-textbox label="Destination" value="scopeModel.poolBasedCLISettingsDestination"></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-textbox label="Rand Min" value="scopeModel.poolBasedCLISettingsRandMin" type="number" customvalidate="scopeModel.validateRandMin()" decimalprecision="0" minvalue="0"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="CLI Pattern" value="scopeModel.cliPattern" isrequired="scopeModel.dnisPattern == undefined"></vr-textbox>
+                        <vr-textbox label="Rand Max" value="scopeModel.poolBasedCLISettingsRandMax" type="number" customvalidate="scopeModel.validateRandMax()" decimalprecision="0" minvalue="0"></vr-textbox>
                     </vr-columns>
-                </vr-tab>
-            </vr-tabs>
+                    <vr-columns width="1/3row">
+                        <vr-textbox label="Display Name" value="scopeModel.poolBasedCLISettingsDisplayName" isrequired></vr-textbox>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-select label="CLI"
+                                    on-ready="scopeModel.onCLISourceReady"
+                                    datasource="scopeModel.CLISources"
+                                    selectedvalues="scopeModel.selectedCLISource"
+                                    datatextfield="description"
+                                    datavaluefield="value"
+                                    onselectionchanged="scopeModel.onCLISourceSelectionChange">
+                        </vr-select>
+                    </vr-columns>
+                </vr-row>
+                <vr-row>
+                    <div ng-if="scopeModel.selectedCLISource.value==0">
+                        <vr-genericdata-genericbusinessentity-selector customlabel="CLI Groups"
+                                                                        on-ready="scopeModel.onPoolBasedCLIGroupSelectorReady"
+                                                                        selectedvalues="scopeModel.selectedPoolBasedCLIGroup"
+                                                                        normal-col-num="4"
+                                                                        onselectionchanged="scopeModel.onPoolBasedCLIGroupSelectionChanged"
+                                                                        hideremoveicon>
+                        </vr-genericdata-genericbusinessentity-selector>
+                    </div>
+                    <div ng-if="scopeModel.selectedCLISource.value==1">
+                        <vr-columns width="1/3row">
+                            <vr-textbox value="scopeModel.currentCLIPattern" label="CLI"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" withemptyline>
+                            <vr-button type="Add" data-onclick="scopeModel.addCLIPattern" vr-disabled="scopeModel.disableCLIPatternAddButton()" standalone></vr-button>
+                        </vr-columns>
+                    </div>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow">
+                        <vr-validator validate="scopeModel.validateCLIPatterns()">
+                            <vr-datalist maxitemsperrow="4" datasource="scopeModel.CLIPatterns" onremoveitem="scopeModel.onRemoveCLIPattern">
+                                <vr-label>{{dataItem}}</vr-label>
+                            </vr-datalist>
+                        </vr-validator>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
         </vr-form>
     </vr-modalbody>
     <div>

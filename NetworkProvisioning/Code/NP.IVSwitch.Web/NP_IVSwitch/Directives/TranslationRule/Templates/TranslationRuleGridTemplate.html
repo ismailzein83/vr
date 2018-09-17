@@ -4,11 +4,12 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.menuActions"
-             idfield="Entity.TranslationRuleId">
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'DNIS Pattern'" field="'Entity.DNISPattern'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'CLI Pattern'" field="'Entity.CLIPattern'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Creation Date'" field="'Entity.CreationDate'"  type="'Datetime'"></vr-datagridcolumn>
+             idfield="TranslationRuleId">
+    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'DNIS Pattern'" field="'DNISPattern'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'CLI Pattern'" field="'CLIPattern'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Engine'" field="'EngineType'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Creation Date'" field="'CreationDate'"  type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
