@@ -27,7 +27,19 @@ namespace Vanrise.Analytic.Business
                 throw new NullReferenceException(String.Format("groupingValue. dimName '{0}'", dimensionName));
             return groupingValue.Value;
         }
-        
+        public dynamic GetDimensionDescription(string dimensionName)
+        {
+            var dimensionValue = GetDimensionValue(dimensionName);
+            if (dimensionValue != null)
+            {
+                var dimensionConfig = _analyticTableQueryContext.GetDimensionConfig(dimensionName);
+                if (dimensionConfig != null && dimensionConfig.Config != null && dimensionConfig.Config.FieldType != null)
+                {
+                    return dimensionConfig.Config.FieldType.GetDescription(dimensionValue);
+                }
+            }
+            return null;
+        }
         public DateTime GetQueryFromTime()
         {
             return _analyticTableQueryContext.FromTime;

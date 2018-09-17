@@ -14,9 +14,8 @@ namespace Vanrise.Analytic.Entities
     public interface IGetDimensionValueContext
     {
         dynamic GetDimensionValue(string dimensionName);
-
+        dynamic GetDimensionDescription(string dimensionName);
         DateTime GetQueryFromTime();
-
         DateTime GetQueryToTime();
     }
 }
