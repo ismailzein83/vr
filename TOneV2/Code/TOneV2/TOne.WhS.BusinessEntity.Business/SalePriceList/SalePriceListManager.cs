@@ -541,7 +541,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			if (!zoneNotifictionByCurrencyId.TryGetValue(changesCurrency, out saleNotifications))
 			{
-				overiddenPriceListType = SalePriceListType.Country;
 				zoneNotifictionByCurrencyId.Add(changesCurrency, salePlZoneNotifications);
 			}
 			else
