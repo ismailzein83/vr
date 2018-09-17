@@ -7,7 +7,7 @@
                    selectedvalues="scopeModel.selectedActionSeverities"
                    ismultipleselection
                    hideselectedvaluessection
-                   menuactions="[]" enableautoexport="true">
+                  >
         </vr-select>
     </vr-columns>
     <vr-columns width="normal" withemptyline>
@@ -20,13 +20,14 @@
                      datasource="scopeModel.bpValidationMessages"
                      dataretrievalfunction="scopeModel.dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
-                     idfield="Entity.ValidationMessageId">
+                     idfield="Entity.ValidationMessageId"
+                     menuactions="[]" enableautoexport="true">
             <vr-datagridcolumn headertext="'ID'" field="'Entity.ValidationMessageId'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" expendablecolumn></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" fixedwidth="'56'" getcolor="scopeModel.getSeverityColor"></vr-datagridcolumn>
             <vr-datagridcolumn fixedwidth="'5'"></vr-datagridcolumn>
             <!--<vr-datagridcolumn headertext="'Target Key'" field="'Entity.TargetKey'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Target Type'" field="'Entity.TargetType'" type="'Text'"></vr-datagridcolumn>-->
+        <vr-datagridcolumn headertext="'Target Type'" field="'Entity.TargetType'" type="'Text'"></vr-datagridcolumn>-->
         </vr-datagrid>
     </vr-columns>
 </vr-row>
