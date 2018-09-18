@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
         {
-            return new GenericBusinessEntityManager().DoesUserHaveEditAccess(context.UserId, context.BusinessEntityDefinitionId);
+            return new GenericBusinessEntityManager().DoesUserHaveDeleteAccess(context.BusinessEntityDefinitionId);
         }
     }
 }

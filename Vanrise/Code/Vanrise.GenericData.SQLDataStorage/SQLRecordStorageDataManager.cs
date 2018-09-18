@@ -445,12 +445,16 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         }
 
-        public bool Delete(Dictionary<string, Object> fieldValues)
+        public bool Delete(List<object> recordFieldsIds)
         {
-            DeleteGenericBusinessEntityQueryParameter deleteQueryParameter = new DeleteGenericBusinessEntityQueryParameter();
-            return ExecuteNonQueryText(BuildDeleteQuery(fieldValues, deleteQueryParameter), (cmd) =>
+            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
+            return ExecuteNonQueryText(BuildDeleteQuery(recordFieldsIds, parameterValues), (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter(String.Format("{0}", deleteQueryParameter.Name), deleteQueryParameter.Value != null ? deleteQueryParameter.Value : DBNull.Value));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
+                }
+
             }) > 0;
         }
 
@@ -1163,28 +1167,27 @@ namespace Vanrise.GenericData.SQLDataStorage
             return queryBuilder.ToString();
         }
 
-        private string BuildDeleteQuery(Dictionary<string, Object> fieldValues, DeleteGenericBusinessEntityQueryParameter deleteQueryParameter)
+        private string BuildDeleteQuery(List<object> recordFieldIds, Dictionary<string, Object> parameterValues)
         {
-            if (fieldValues == null || fieldValues.Count == 0)
-                throw new Exception("fieldValues should not be null or empty.");
+            if (recordFieldIds == null || recordFieldIds.Count == 0)
+                throw new Exception("recordFieldIds should not be null or empty.");
             StringBuilder queryBuilder = new StringBuilder();
 
             int parameterIndex = 0;
             string tableName = GetTableNameWithSchema();
             StringBuilder whereQuery = new StringBuilder();
-            
+            StringBuilder parameters = new StringBuilder();
             var idColumn = GetIdColumn();
-            var idFieldValue = fieldValues.GetRecord(idColumn.Name);
             var sqlDataRecordStorageColumn = GetColumnFromFieldName(idColumn.Name);
-            var parameter = GenerateParameterName(ref parameterIndex);
-                
-            if (sqlDataRecordStorageColumn.IsUnique)
+            foreach (var recordFieldId in recordFieldIds)
             {
-                whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
-                deleteQueryParameter.Name = parameter;
-                deleteQueryParameter.Value = idFieldValue;
+                var parameter = GenerateParameterName(ref parameterIndex);
+                parameterValues.Add(parameter, recordFieldId);
+                if (parameters.Length > 0)
+                    parameters.Append(",");
+                parameters.Append(parameter);
             }
-           
+            whereQuery.AppendFormat(@" {0} IN ({1})  ", sqlDataRecordStorageColumn.ColumnName, parameters.ToString());
             queryBuilder.Append(@"BEGIN  DELETE #TABLENAME# WHERE #WHEREQUERY#  END");
             queryBuilder.Replace("#WHEREQUERY#", whereQuery.ToString());
             queryBuilder.Replace("#TABLENAME#", tableName);

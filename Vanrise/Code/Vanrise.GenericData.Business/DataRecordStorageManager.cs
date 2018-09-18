@@ -257,7 +257,7 @@ namespace Vanrise.GenericData.Business
             return updateActionSucc;
         }
 
-        public bool DeleteDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues)
+        public bool DeleteDataRecord(Guid dataRecordStorageId, List<object> recordFieldIds)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
             storageDataManager.ThrowIfNull("storageDataManager");
@@ -265,14 +265,7 @@ namespace Vanrise.GenericData.Business
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
 
-            if (fieldValues != null)
-            {
-                var dataRecordType = _recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
-                var idFieldType = dataRecordType.Fields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
-                if (!fieldValues.ContainsKey(idFieldType.Name))
-                    fieldValues.Add(idFieldType.Name, recordFieldId);
-            }
-            bool deleteOperationSucc = storageDataManager.Delete(fieldValues);
+            bool deleteOperationSucc = storageDataManager.Delete(recordFieldIds);
 
             if (deleteOperationSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);

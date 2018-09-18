@@ -69,7 +69,7 @@ namespace Vanrise.GenericData.Business
             _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
             return dataRecords;
         }
-        public bool Delete(Dictionary<string, Object> fieldValues)
+        public bool Delete(List<object> recordFieldIds)
         {
             throw new NotImplementedException();
         }

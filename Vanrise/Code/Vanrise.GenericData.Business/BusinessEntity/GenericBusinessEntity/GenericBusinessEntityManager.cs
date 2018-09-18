@@ -241,29 +241,30 @@ namespace Vanrise.GenericData.Business
 
         public DeleteOperationOutput<object> DeleteGenericBusinessEntity(DeleteGenericBusinessEntityInput input)
         {
-            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(input.BusinessEntityDefinitionId);
-            foreach (var genericBusinessEntityId in input.GenericBusinessEntityIds)
+            var deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<object>()
             {
-                var deleteOperationOutput = new Vanrise.Entities.DeleteOperationOutput<object>()
+                Result = Vanrise.Entities.DeleteOperationResult.Failed
+            };
+            if (input.GenericBusinessEntityIds != null && input.GenericBusinessEntityIds.Count > 0)
+            {
+                List<GenericBusinessEntity> oldGenericBEs = new List<GenericBusinessEntity>();
+                foreach (var genericBusinessEntityId in input.GenericBusinessEntityIds)
                 {
-                    Result = Vanrise.Entities.DeleteOperationResult.Failed
-                };
-                var oldGenericBE = GetGenericBusinessEntity(genericBusinessEntityId, input.BusinessEntityDefinitionId);
-                bool deleteActionSucc = _dataRecordStorageManager.DeleteDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityId, oldGenericBE.FieldValues);
+                    var oldGenericBE = GetGenericBusinessEntity(genericBusinessEntityId, input.BusinessEntityDefinitionId);
+                    oldGenericBEs.Add(oldGenericBE);
+                }
+                var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(input.BusinessEntityDefinitionId);
+                bool deleteActionSucc = _dataRecordStorageManager.DeleteDataRecord(genericBEDefinitionSetting.DataRecordStorageId, input.GenericBusinessEntityIds);
                 if (deleteActionSucc)
                 {
-                    var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, input.BusinessEntityDefinitionId);
-                    UpdateStatusHistoryIfAvailable(input.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
-                    VRActionLogger.Current.TrackAndLogObjectDeleted(new GenericBusinessEntityLoggableEntity(input.BusinessEntityDefinitionId), oldGenericBE);
+                    foreach (var oldGenericBE in oldGenericBEs)
+                    {
+                        VRActionLogger.Current.TrackAndLogObjectDeleted(new GenericBusinessEntityLoggableEntity(input.BusinessEntityDefinitionId), oldGenericBE);
+                    }
                     deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
                 }
-                return deleteOperationOutput;
             }
-            return new DeleteOperationOutput<object>()
-            {
-                Result = DeleteOperationResult.Failed,
-                Message = "No IDs were selected."
-            };
+            return deleteOperationOutput;
            
         }
         public IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(DataRetrievalInput<GenericBusinessEntityQuery> input)
