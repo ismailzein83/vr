@@ -129,7 +129,6 @@
     <Compile Include="DataStorage\TempStorageInformation.cs" />
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
     <Compile Include="GenericBusinessEntity\DeleteGenericBusinessEntityInput.cs" />
-    <Compile Include="GenericBusinessEntity\DeleteGenericBusinessEntityQueryParameter.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityFilter.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
