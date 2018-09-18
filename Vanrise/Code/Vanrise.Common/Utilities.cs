@@ -435,17 +435,6 @@ namespace Vanrise.Common
 			return clonedHashSet;
 		}
 
-		public static decimal? SumOfNullables(decimal? firstNumber, decimal? secondNumber)
-		{
-			if (!firstNumber.HasValue)
-				return secondNumber;
-
-			if (!secondNumber.HasValue)
-				return firstNumber;
-
-			return firstNumber + secondNumber;
-		}
-
 		public static int? SumOfNullables(int? firstNumber, int? secondNumber)
 		{
 			if (!firstNumber.HasValue)
@@ -454,8 +443,30 @@ namespace Vanrise.Common
 			if (!secondNumber.HasValue)
 				return firstNumber;
 
-			return firstNumber + secondNumber;
+			return firstNumber.Value + secondNumber.Value;
 		}
+
+        public static long? SumOfNullables(long? firstNumber, long? secondNumber)
+        {
+            if (!firstNumber.HasValue)
+                return secondNumber;
+
+            if (!secondNumber.HasValue)
+                return firstNumber;
+
+            return firstNumber.Value + secondNumber.Value;
+        }
+
+        public static decimal? SumOfNullables(decimal? firstNumber, decimal? secondNumber)
+        {
+            if (!firstNumber.HasValue)
+                return secondNumber;
+
+            if (!secondNumber.HasValue)
+                return firstNumber;
+
+            return firstNumber.Value + secondNumber.Value;
+        }
 
 		public static IEnumerable<R> MergeUnionWithQForce<T, Q, R>(List<T> Tlist, List<Q> Qlist, Action<T, R> mapTtoR, Action<Q, R> mapQtoR)
 			where T : class, IDateEffectiveSettingsEditable
