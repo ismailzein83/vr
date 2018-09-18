@@ -12,7 +12,7 @@ namespace Vanrise.Analytic.BP.Arguments
     {
         public override string GetTitle()
         {
-            return string.Format("Automated Report: {0}", this.Name);
+            return "Automated Report";
         }
         public string Name { get; set; }
 
