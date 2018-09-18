@@ -93,6 +93,9 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                             if (evaluatedRate != undefined) {
                                 selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, evaluatedRate.ConfigId, 'ExtensionConfigurationId');
                             }
+                            else {
+                                selectiveCtrl.selectedTemplateConfig = selectiveCtrl.templateConfigs[1];
+                            }
                         });
                 }
 

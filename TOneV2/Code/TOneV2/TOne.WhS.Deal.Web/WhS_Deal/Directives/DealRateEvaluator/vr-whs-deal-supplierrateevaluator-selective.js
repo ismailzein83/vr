@@ -1,122 +1,126 @@
 ﻿"use strict";
 
 app.directive("vrWhsDealSupplierrateevaluatorSelective", ["WhS_Deal_VolCommitmentDealAPIService", "UtilsService", "VRUIUtilsService",
-function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) {
+    function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) {
 
-    return {
-        restrict: "E",
-        scope: {
-            onReady: "=",
-            onselectionchanged: '=',
-            isrequired: '=',
-            normalColNum: '@'
-        },
-        controller: function ($scope, $element, $attrs) {
-            var selectiveCtrl = this;
-            var supplierRateEvaluator = new SupplierRateEvaluator(selectiveCtrl, $scope);
-            supplierRateEvaluator.initializeController();
-        },
-        controllerAs: "selectiveCtrl",
-        bindToController: true,
-        templateUrl: "/Client/Modules/WhS_Deal/Directives/DealRateEvaluator/Templates/DealSupplierRateEvaluatorTemplate.html"
-    };
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "=",
+                onselectionchanged: '=',
+                isrequired: '=',
+                normalColNum: '@'
+            },
+            controller: function ($scope, $element, $attrs) {
+                var selectiveCtrl = this;
+                var supplierRateEvaluator = new SupplierRateEvaluator(selectiveCtrl, $scope);
+                supplierRateEvaluator.initializeController();
+            },
+            controllerAs: "selectiveCtrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/WhS_Deal/Directives/DealRateEvaluator/Templates/DealSupplierRateEvaluatorTemplate.html"
+        };
 
-    function SupplierRateEvaluator(selectiveCtrl, $scope) {
-        this.initializeController = initializeController;
-        var directiveReadyDeferred;
-        var directiveAPI;
-        var evaluatedRate;
-        var context;
+        function SupplierRateEvaluator(selectiveCtrl, $scope) {
+            this.initializeController = initializeController;
+            var directiveReadyDeferred;
+            var directiveAPI;
+            var evaluatedRate;
+            var context;
 
-        function initializeController() {
-            selectiveCtrl.templateConfigs = [];
+            function initializeController() {
+                selectiveCtrl.templateConfigs = [];
 
-            selectiveCtrl.onSupplierRateEvaluatorSelectorReady = function (api) {
-                defineAPI();
-            };
-            selectiveCtrl.onDirectiveWrapperReady = function (api) {
-                directiveAPI = api;
-                var setLoader = function (value) {
-                    $scope.isLoadingDirective = value;
+                selectiveCtrl.onSupplierRateEvaluatorSelectorReady = function (api) {
+                    defineAPI();
                 };
-                var directivePayload = {
-                    context: getContext()
+                selectiveCtrl.onDirectiveWrapperReady = function (api) {
+                    directiveAPI = api;
+                    var setLoader = function (value) {
+                        $scope.isLoadingDirective = value;
+                    };
+                    var directivePayload = {
+                        context: getContext()
+                    };
+
+                    if (evaluatedRate != undefined)
+                        directivePayload.evaluatedRate = evaluatedRate;
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
+            }
+            function defineAPI() {
 
-                if (evaluatedRate != undefined)
-                    directivePayload.evaluatedRate = evaluatedRate;
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
-            };
-        }
-        function defineAPI() {
+                var api = {};
+                api.load = function (payload) {
+                    var promises = [];
+                    var getsupplierRateEvaluatorConfigurationPromise = getSupplierRateEvaluatorConfiguration();
+                    promises.push(getsupplierRateEvaluatorConfigurationPromise);
 
-            var api = {};
-            api.load = function (payload) {
-                var promises = [];
-                var getsupplierRateEvaluatorConfigurationPromise = getSupplierRateEvaluatorConfiguration();
-                promises.push(getsupplierRateEvaluatorConfigurationPromise);
-
-                if (payload != undefined) {
-                    context = payload.context;
-                    evaluatedRate = payload.evaluatedRate;
-                }
-                if (evaluatedRate != undefined) {
-                    directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(loadDirective());
-                }
-
-                function loadDirective() {
-                    var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                    directiveReadyDeferred.promise.then(function () {
-                        var payloadEntity = {
-                            evaluatedRate: evaluatedRate,
-                            context: getContext()
-                        };
-                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadEntity, loadDirectivePromiseDeferred);
-                    });
-                    return loadDirectivePromiseDeferred.promise;
-                }
-
-                function getSupplierRateEvaluatorConfiguration() {
-                    return WhS_Deal_VolCommitmentDealAPIService.GetSupplierRateEvaluatorConfigurationTemplateConfigs().then(
-                        function (supplierRateEvaluators) {
-                            if (supplierRateEvaluators != null) {
-                                for (var i = 0; i < supplierRateEvaluators.length; i++) {
-                                    selectiveCtrl.templateConfigs.push(supplierRateEvaluators[i]);
-                                }
-                            }
-                            if (evaluatedRate != undefined) {
-                                selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, evaluatedRate.ConfigId, 'ExtensionConfigurationId');
-                            }
-                        });
-                }
-
-                return UtilsService.waitMultiplePromises(promises);
-            };
-            api.getData = function () {
-                var data = null;
-                if (selectiveCtrl.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-                    data = directiveAPI.getData();
-                    if (data != undefined) {
-                        data.ConfigId = selectiveCtrl.selectedTemplateConfig.ExtensionConfigurationId;
+                    if (payload != undefined) {
+                        context = payload.context;
+                        evaluatedRate = payload.evaluatedRate;
                     }
-                }
-                return data;
-            };
-            api.getDescription = function () {
-                if (directiveAPI != undefined) {
-                    return directiveAPI.getDescription();
-                }
-            };
-            if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
-                selectiveCtrl.onReady(api);
-        }
-        function getContext() {
-            var currentContext = context;
-            if (currentContext == undefined)
-                currentContext = {};
-            return currentContext;
-        }
+                    if (evaluatedRate != undefined) {
+                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadDirective());
+                    }
 
-    }
-}]);
+                    function loadDirective() {
+                        var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        directiveReadyDeferred.promise.then(function () {
+                            var payloadEntity = {
+                                evaluatedRate: evaluatedRate,
+                                context: getContext()
+                            };
+                            VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadEntity, loadDirectivePromiseDeferred);
+                        });
+                        return loadDirectivePromiseDeferred.promise;
+                    }
+
+                    function getSupplierRateEvaluatorConfiguration() {
+                        return WhS_Deal_VolCommitmentDealAPIService.GetSupplierRateEvaluatorConfigurationTemplateConfigs().then(
+                            function (supplierRateEvaluators) {
+                                if (supplierRateEvaluators != null) {
+                                    for (var i = 0; i < supplierRateEvaluators.length; i++) {
+                                        selectiveCtrl.templateConfigs.push(supplierRateEvaluators[i]);
+                                    }
+                                }
+                                if (evaluatedRate != undefined) {
+                                    selectiveCtrl.selectedTemplateConfig = UtilsService.getItemByVal(selectiveCtrl.templateConfigs, evaluatedRate.ConfigId, 'ExtensionConfigurationId');
+                                }
+                                else {
+                                    selectiveCtrl.selectedTemplateConfig = selectiveCtrl.templateConfigs[1];
+                                }
+                            });
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+                api.getData = function () {
+                    var data = null;
+                    if (selectiveCtrl.selectedTemplateConfig != undefined && directiveAPI != undefined) {
+                        data = directiveAPI.getData();
+                        if (data != undefined) {
+                            data.ConfigId = selectiveCtrl.selectedTemplateConfig.ExtensionConfigurationId;
+                        }
+                    }
+                    return data;
+                };
+                api.getDescription = function () {
+                    if (directiveAPI != undefined) {
+                        return directiveAPI.getDescription();
+                    }
+                };
+                if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
+                    selectiveCtrl.onReady(api);
+            }
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
+
+        }
+    }]);
