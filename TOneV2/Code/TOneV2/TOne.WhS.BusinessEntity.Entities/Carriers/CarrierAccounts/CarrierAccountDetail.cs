@@ -19,5 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string ServicesNames { get; set; }
         public string InvoiceTypeDescription { get; set; }
         public string InvoiceSettingName { get; set; }
+        public string CompanySettingName { get; set; }
     }
 }

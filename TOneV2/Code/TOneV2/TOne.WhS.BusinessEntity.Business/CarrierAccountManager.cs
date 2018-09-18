@@ -1682,6 +1682,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 carrierAccountDetail.InvoiceSettingName = financialAccountManager.GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
             }
+            var companySettings = GetCompanySetting(carrierAccount.CarrierAccountId);
+            if (companySettings != null)
+                carrierAccountDetail.CompanySettingName = companySettings.CompanyName;
             return carrierAccountDetail;
         }
 
