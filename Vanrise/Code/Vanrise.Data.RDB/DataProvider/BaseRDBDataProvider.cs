@@ -50,6 +50,13 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context);
 
+        public abstract RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context);
+
+        public virtual RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context);
 
         public abstract RDBResolvedQuery ResolveTempTableDropQuery(IRDBDataProviderResolveTempTableDropQueryContext context);
@@ -116,7 +123,7 @@ namespace Vanrise.Data.RDB
 
         List<RDBSelectSortColumn> SortColumns { get; }
     }
-    
+
     public class RDBDataProviderResolveSelectQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSelectQueryContext
     {
         //public RDBDataProviderResolveSelectQueryContext(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords, List<RDBSelectColumn> columns, List<RDBJoin> joins,
@@ -202,7 +209,7 @@ namespace Vanrise.Data.RDB
         public List<RDBSelectSortColumn> SortColumns { get; private set; }
 
     }
-    
+
     public class RDBResolvedQuery
     {
         public RDBResolvedQuery()
@@ -254,13 +261,13 @@ namespace Vanrise.Data.RDB
         public List<RDBInsertColumn> ColumnValues { get; private set; }
 
         public RDBSelectQuery SelectQuery { get; private set; }
-        
+
         public bool AddSelectGeneratedId { get; private set; }
     }
     public interface IRDBDataProviderResolveUpdateQueryContext : IBaseRDBResolveQueryContext
     {
         RDBQueryBuilderContext QueryBuilderContext { get; }
-        
+
         IRDBTableQuerySource Table { get; }
 
         string TableAlias { get; }
@@ -358,6 +365,102 @@ namespace Vanrise.Data.RDB
         public BaseRDBCondition Condition { get; private set; }
 
         public List<RDBJoin> Joins { get; private set; }
+    }
+
+    public interface IRDBDataProviderResolveTableCreationQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+
+        Dictionary<string, RDBCreateTableColumnDefinition> Columns { get; }
+
+        bool PrimaryKeyIndexNonClustered { get; }
+    }
+
+    public class RDBDataProviderResolveTableCreationQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveTableCreationQueryContext
+    {
+        public RDBDataProviderResolveTableCreationQueryContext(string schemaName, string tableName, Dictionary<string, RDBCreateTableColumnDefinition> columns, bool primaryKeyIndexNonClustered,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+            this.Columns = columns;
+            this.PrimaryKeyIndexNonClustered = primaryKeyIndexNonClustered;
+        }
+
+        public string SchemaName
+        {
+            get;
+            private set;
+        }
+
+        public string TableName
+        {
+            get;
+            private set;
+        }
+
+        public Dictionary<string, RDBCreateTableColumnDefinition> Columns
+        {
+            get;
+            private set;
+        }
+
+        public bool PrimaryKeyIndexNonClustered
+        {
+            get;
+            private set;
+        }
+    }
+
+    public interface IRDBDataProviderResolveIndexCreationQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+
+        RDBCreateIndexType IndexType { get; }
+
+        List<string> ColumnNames { get; }
+    }
+
+    public class RDBDataProviderResolveIndexCreationQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveIndexCreationQueryContext
+    {
+        public RDBDataProviderResolveIndexCreationQueryContext(string schemaName, string tableName, RDBCreateIndexType indexType, List<string> columnNames, 
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+            this.ColumnNames = columnNames;
+            this.IndexType = indexType;
+        }
+
+        public string SchemaName
+        {
+            get;
+            private set;
+        }
+
+        public string TableName
+        {
+            get;
+            private set;
+        }
+
+        public RDBCreateIndexType IndexType
+        {
+            get;
+            private set;
+        }
+
+        public List<string> ColumnNames
+        {
+            get;
+            private set;
+        }
     }
 
     public interface IRDBDataProviderResolveTempTableCreationQueryContext : IBaseRDBResolveQueryContext
@@ -478,13 +581,13 @@ namespace Vanrise.Data.RDB
 
     public interface IRDBDataProviderExecuteNonQueryContext : IBaseRDBDataProviderExecuteQueryContext
     {
-        
+
     }
 
     public interface IRDBDataProviderInitializeStreamForBulkInsertContext
     {
         string DBTableName { get; }
-     
+
         char FieldSeparator { get; }
 
         List<RDBTableColumnDefinition> Columns { get; }
@@ -503,7 +606,7 @@ namespace Vanrise.Data.RDB
             this.DBTableName = _schemaManager.GetTableDBName(_dataProvider, tableName);
             columnNames.ThrowIfNull("columnNames");
             this.Columns = new List<RDBTableColumnDefinition>();
-            foreach(var columnName in columnNames)
+            foreach (var columnName in columnNames)
             {
                 var columnDefinition = _schemaManager.GetColumnDefinitionWithValidate(_dataProvider, tableName, columnName);
                 this.Columns.Add(columnDefinition);
@@ -526,5 +629,4 @@ namespace Vanrise.Data.RDB
 
         public string[] ColumnNames { get; private set; }
     }
-
 }

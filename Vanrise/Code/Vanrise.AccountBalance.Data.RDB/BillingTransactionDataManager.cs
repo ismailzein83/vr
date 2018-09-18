@@ -201,8 +201,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var btAccountTimesTempTableQuery = queryContext.CreateTempTable();
-            btAccountTimesTempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
-            btAccountTimesTempTableQuery.AddColumn(COL_TransactionTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime }, true);
+            btAccountTimesTempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
+            btAccountTimesTempTableQuery.AddColumn(COL_TransactionTime, RDBDataType.DateTime, true);
             
             foreach (var item in billingTransactionsByTime)
             {

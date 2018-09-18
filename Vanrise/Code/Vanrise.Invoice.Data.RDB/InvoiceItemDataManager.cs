@@ -114,7 +114,7 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_ItemSetName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 }, true);
+            tempTableQuery.AddColumn(COL_ItemSetName, RDBDataType.NVarchar, 255, null, true);
 
             if(itemSetNames != null)
             {

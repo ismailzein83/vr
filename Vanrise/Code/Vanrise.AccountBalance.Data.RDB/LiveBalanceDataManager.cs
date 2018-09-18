@@ -310,10 +310,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
-            tempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
-            tempTableQuery.AddColumn(COL_NextAlertThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
-            tempTableQuery.AddColumn(COL_AlertRuleID, new RDBTableColumnDefinition { DataType = RDBDataType.Int }, false);
+            tempTableQuery.AddColumn(COL_AccountTypeID, RDBDataType.UniqueIdentifier, true);
+            tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
+            tempTableQuery.AddColumn(COL_NextAlertThreshold, RDBDataType.Decimal, 20, 6);
+            tempTableQuery.AddColumn(COL_AlertRuleID, RDBDataType.Int);
 
             if (updateEntities != null)
             {
@@ -349,10 +349,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
-            tempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
-            tempTableQuery.AddColumn(COL_LastExecutedActionThreshold, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
-            tempTableQuery.AddColumn(COL_ActiveAlertsInfo, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar }, false);
+            tempTableQuery.AddColumn(COL_AccountTypeID, RDBDataType.UniqueIdentifier, true);
+            tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
+            tempTableQuery.AddColumn(COL_LastExecutedActionThreshold, RDBDataType.Decimal, 20, 6);
+            tempTableQuery.AddColumn(COL_ActiveAlertsInfo, RDBDataType.NVarchar);
 
             if (updateEntities != null)
             {
@@ -522,8 +522,8 @@ namespace Vanrise.AccountBalance.Data.RDB
         private void AddQueryUpdateLiveBalances(RDBQueryContext queryContext, IEnumerable<LiveBalanceToUpdate> liveBalancesToUpdate)
         {
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt }, true);
-            tempTableQuery.AddColumn("UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
+            tempTableQuery.AddColumn(COL_ID, RDBDataType.BigInt, true);
+            tempTableQuery.AddColumn("UpdateValue", RDBDataType.Decimal, 20, 6);
 
             foreach (var lvToUpdate in liveBalancesToUpdate)
             {

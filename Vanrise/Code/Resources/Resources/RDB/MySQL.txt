@@ -1,2 +1,7 @@
 ﻿on MySQL server, open "my.ini" file in Path: "C:\ProgramData\MySQL\MySQL Server 8.0"
 add local-infile=1 under [mysqld] section
+
+--In MySQL Workbench
+SHOW GLOBAL VARIABLES LIKE '%infile%';
+SET GLOBAL local_infile = ON;
+SHOW VARIABLES LIKE '%secure_file_priv%'

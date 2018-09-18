@@ -503,8 +503,8 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_InvoiceTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
-            tempTableQuery.AddColumn(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
+            tempTableQuery.AddColumn(COL_InvoiceTypeID, RDBDataType.UniqueIdentifier, true);
+            tempTableQuery.AddColumn(COL_PartnerID, RDBDataType.Varchar, 50, null, true);
 
             if(partnerInvoiceTypes != null)
             {
@@ -538,8 +538,8 @@ namespace Vanrise.Invoice.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_InvoiceTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
-            tempTableQuery.AddColumn(COL_PartnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
+            tempTableQuery.AddColumn(COL_InvoiceTypeID, RDBDataType.UniqueIdentifier, true);
+            tempTableQuery.AddColumn(COL_PartnerID, RDBDataType.Varchar, 50, null, true);
 
             if (partnerInvoiceTypes != null)
             {

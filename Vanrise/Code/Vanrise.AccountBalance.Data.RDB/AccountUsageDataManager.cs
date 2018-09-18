@@ -244,12 +244,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
-            tempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
-            tempTableQuery.AddColumn(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier }, true);
-            tempTableQuery.AddColumn(COL_PeriodStart, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime }, true);
-            tempTableQuery.AddColumn(COL_PeriodEnd, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime }, true); 
-            tempTableQuery.AddColumn("TransactionID", new RDBTableColumnDefinition { DataType = RDBDataType.BigInt }, false);
+            tempTableQuery.AddColumn(COL_AccountTypeID, RDBDataType.UniqueIdentifier , true);
+            tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
+            tempTableQuery.AddColumn(COL_TransactionTypeID, RDBDataType.UniqueIdentifier, true);
+            tempTableQuery.AddColumn(COL_PeriodStart, RDBDataType.DateTime, true);
+            tempTableQuery.AddColumn(COL_PeriodEnd, RDBDataType.DateTime, true); 
+            tempTableQuery.AddColumn("TransactionID", RDBDataType.BigInt);
             
             foreach (var queryItem in transactionAccountUsageQueries)
             {
@@ -339,8 +339,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 }, true);
-            tempTableQuery.AddColumn(COL_PeriodEnd, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime }, true);
+            tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
+            tempTableQuery.AddColumn(COL_PeriodEnd, RDBDataType.DateTime, true);
 
             foreach (var usageByTime in accountUsagesByTime)
             {
@@ -391,8 +391,8 @@ namespace Vanrise.AccountBalance.Data.RDB
         public void AddQueryUpdateAccountUsageFromBalanceUsageQueue(RDBQueryContext queryContext, IEnumerable<AccountUsageToUpdate> accountsUsageToUpdate, Guid? correctionProcessId)
         {
             var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt }, true);
-            tempTableQuery.AddColumn("UpdateValue", new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 }, false);
+            tempTableQuery.AddColumn(COL_ID, RDBDataType.BigInt, true);
+            tempTableQuery.AddColumn("UpdateValue", RDBDataType.Decimal, 20, 6);
 
             foreach (var auToUpdate in accountsUsageToUpdate)
             {

@@ -317,6 +317,26 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return new PostgresRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
         }
 
+        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn)
+        {
+            columnsQueryBuilder.Append(columnDBName);
+            columnsQueryBuilder.Append(" ");
+            if (isIdentityColumn)
+            {
+                switch(columnDefinition.DataType)
+                {
+                    case RDBDataType.Int: columnsQueryBuilder.Append(" serial "); break;
+                    case RDBDataType.BigInt: columnsQueryBuilder.Append(" bigserial "); break;
+                    default: throw new NotSupportedException(string.Format("columnDefinition.DataType '{0}'", columnDefinition.DataType.ToString()));
+                }
+            }
+            else
+            {
+                columnsQueryBuilder.Append(GetColumnDBType(columnName, columnDefinition));
+            }
+            columnsQueryBuilder.Append(notNullable ? " NOT NULL " : " NULL ");
+        }
+
         public override string NowDateTimeFunction
         {
             get { return " current_timestamp "; }

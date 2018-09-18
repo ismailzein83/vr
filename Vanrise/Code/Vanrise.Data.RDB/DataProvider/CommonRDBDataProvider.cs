@@ -445,6 +445,48 @@ namespace Vanrise.Data.RDB.DataProvider
             return resolvedQuery;
         }
 
+        public override RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context)
+        {
+            string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
+            var columnsQueryBuilder = new StringBuilder();
+            columnsQueryBuilder.Append(" ( ");
+
+            int colIndex = 0;
+            List<string> primaryKeyDBColumnNames = null;
+            foreach (var colDefEntry in context.Columns)
+            {
+                if (colIndex > 0)
+                    columnsQueryBuilder.Append(",");
+                colIndex++;
+                columnsQueryBuilder.AppendLine();
+                string columnDBName = RDBSchemaManager.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value.ColumnDefinition);
+
+                AppendTableColumnDefinition(columnsQueryBuilder, colDefEntry.Key, columnDBName, colDefEntry.Value.ColumnDefinition, colDefEntry.Value.NotNullable, colDefEntry.Value.IsIdentity);
+               
+                if (colDefEntry.Value.IsPrimaryKey)
+                {
+                    if (primaryKeyDBColumnNames == null)
+                        primaryKeyDBColumnNames = new List<string>();
+                    primaryKeyDBColumnNames.Add(columnDBName);
+                }
+            }
+            if (primaryKeyDBColumnNames != null)
+            {
+                columnsQueryBuilder.Append(", Primary Key (");
+                columnsQueryBuilder.Append(string.Join(",", primaryKeyDBColumnNames));
+                columnsQueryBuilder.Append(")");
+            }
+
+            columnsQueryBuilder.Append(" ) ");
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat("CREATE TABLE ", tableDBName, " ", columnsQueryBuilder.ToString()) });
+            return resolvedQuery;
+        }
+
+        public abstract void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, 
+            RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn);
+        
         public override RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context)
         {
             string tempTableName = GenerateTempTableName();
@@ -462,9 +504,9 @@ namespace Vanrise.Data.RDB.DataProvider
                 colIndex++;
                 columnsQueryBuilder.AppendLine();
                 string columnDBName = RDBSchemaManager.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value.ColumnDefinition);
-                columnsQueryBuilder.Append(columnDBName);
-                columnsQueryBuilder.Append(" ");
-                columnsQueryBuilder.Append(GetColumnDBType(colDefEntry.Key, colDefEntry.Value.ColumnDefinition));
+
+                AppendTableColumnDefinition(columnsQueryBuilder, colDefEntry.Key, columnDBName, colDefEntry.Value.ColumnDefinition, false, false);
+
                 if(colDefEntry.Value.IsPrimaryKey)
                 {
                     if (primaryKeyDBColumnNames == null)
@@ -503,7 +545,7 @@ namespace Vanrise.Data.RDB.DataProvider
             return string.Concat("CREATE TABLE ", tempTableName, " ", columns);
         }
 
-        private string GetColumnDBType(string columnName, RDBTableColumnDefinition columnDef)
+        protected string GetColumnDBType(string columnName, RDBTableColumnDefinition columnDef)
         {
             return GetColumnDBType(columnName, columnDef.DataType, columnDef.Size, columnDef.Precision);
         }

@@ -66,9 +66,56 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              return "SCOPE_IDENTITY()";
          }
 
+         public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn)
+         {
+             columnsQueryBuilder.Append(columnDBName);
+             columnsQueryBuilder.Append(" ");
+             columnsQueryBuilder.Append(GetColumnDBType(columnName, columnDefinition));
+             if (isIdentityColumn)
+                 columnsQueryBuilder.Append(" IDENTITY(1,1) ");
+             columnsQueryBuilder.Append(notNullable ? " NOT NULL " : " NULL ");
+         }
+
          public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
          {
              return new MSSQLRDBStreamForBulkInsert(this.ConnectionString, context.DBTableName, context.Columns.Select(col => col.DBColumnName).ToList(), context.FieldSeparator);
+         }
+
+         public override RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
+         {
+             string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
+             string indexName = string.Concat("IX_", tableDBName, "_", string.Join("", context.ColumnNames));
+             var queryBuilder = new StringBuilder();
+             if(context.IndexType == RDBCreateIndexType.UniqueClustered || context.IndexType == RDBCreateIndexType.UniqueNonClustered)
+             {
+                 queryBuilder.Append(" ALTER TABLE ");
+                 queryBuilder.Append(tableDBName);
+                 queryBuilder.Append(" ADD CONSTRAINT ");
+                 queryBuilder.Append(indexName);
+                 queryBuilder.Append(" UNIQUE ");
+                 if (context.IndexType == RDBCreateIndexType.UniqueClustered)
+                     queryBuilder.Append(" CLUSTERED ");
+                 else
+                     queryBuilder.Append(" NONCLUSTERED ");
+             }
+             else
+             {
+                 queryBuilder.Append(" CREATE ");
+                 if(context.IndexType == RDBCreateIndexType.Clustered)
+                     queryBuilder.Append(" CLUSTERED ");
+                 else
+                     queryBuilder.Append(" NONCLUSTERED ");
+                 queryBuilder.Append(" INDEX ");
+                 queryBuilder.Append(indexName);
+                 queryBuilder.Append(" ON ");
+                 queryBuilder.Append(tableDBName);
+             }
+             queryBuilder.Append(" (");
+             queryBuilder.Append(string.Join(", ", context.ColumnNames.Select(colName => string.Concat(colName, " ASC"))));
+             queryBuilder.Append(")");
+             var resolvedQuery = new RDBResolvedQuery();
+             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+             return resolvedQuery;
          }
 
          #region Private Classes

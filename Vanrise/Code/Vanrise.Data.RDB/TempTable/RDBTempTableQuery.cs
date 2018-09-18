@@ -19,9 +19,34 @@ namespace Vanrise.Data.RDB
             _queryBuilderContext = queryBuilderContext;
         }
 
-        public void AddColumn(string columnName, RDBTableColumnDefinition columnDefinition, bool isPrimaryKey)
+        public void AddColumn(string columnName, RDBDataType type)
         {
-            this._columns.Add(columnName, new RDBTempTableColumnDefinition { ColumnDefinition = columnDefinition, IsPrimaryKey = isPrimaryKey });
+            AddColumn(columnName, type, false);
+        }
+
+        public void AddColumn(string columnName, RDBDataType type, bool isPrimaryKey)
+        {
+            AddColumn(columnName, type, null, null, isPrimaryKey);
+        }
+
+        public void AddColumn(string columnName, RDBDataType type, int? size, int? precision)
+        {
+            AddColumn(columnName, type, size, precision, false);
+        }
+
+        public void AddColumn(string columnName, RDBDataType type, int? size, int? precision, bool isPrimaryKey)
+        {
+            this._columns.Add(columnName, new RDBTempTableColumnDefinition
+            {
+                ColumnDefinition = new RDBTableColumnDefinition
+                    {
+                        DBColumnName = columnName,
+                        DataType = type,
+                        Size = size,
+                        Precision = precision
+                    },
+                IsPrimaryKey = isPrimaryKey
+            });
         }
 
         public void AddColumnsFromTable(string tableName)

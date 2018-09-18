@@ -530,6 +530,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return resolvedQuery;
         }
 
+        public override RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public override RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context)
         {
             string tempTableName = GenerateTempTableName();

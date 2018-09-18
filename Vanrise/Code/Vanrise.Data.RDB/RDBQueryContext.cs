@@ -111,6 +111,20 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public RDBCreateTableQuery AddCreateTableQuery()
+        {
+            var query = new RDBCreateTableQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBCreateIndexQuery AddCreateIndexQuery()
+        {
+            var query = new RDBCreateIndexQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
         //public RDBSetParameterValuesQuery SetParameterValues()
         //{
         //    var query = new RDBSetParameterValuesQuery(this.QueryBuilderContext.CreateChildContext());
