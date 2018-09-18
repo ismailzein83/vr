@@ -1,8 +1,8 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    zoneRoutingProductApiService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig"];
-    function zoneRoutingProductApiService(baseApiService, utilsService, whSBeModuleConfig) {
+    zoneRoutingProductApiService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig", "SecurityService"];
+    function zoneRoutingProductApiService(baseApiService, utilsService, whSBeModuleConfig, SecurityService) {
 
         var controllerName = "ZoneRoutingProduct";
 
@@ -15,10 +15,14 @@
         function UpdateZoneRoutingProduct(routingProductObject) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "UpdateZoneRoutingProduct"), routingProductObject);
         }
+        function hasUpdateZoneRoutingProductPermission() {
+            return SecurityService.HasPermissionToActions(utilsService.getSystemActionNames(whSBeModuleConfig.moduleName, controllerName, ['UpdateZoneRoutingProduct']));
+        }
         return ({
             GetFilteredZoneRoutingProducts: GetFilteredZoneRoutingProducts,
             GetPrimarySaleEntity: GetPrimarySaleEntity,
-            UpdateZoneRoutingProduct: UpdateZoneRoutingProduct
+            UpdateZoneRoutingProduct: UpdateZoneRoutingProduct,
+            hasUpdateZoneRoutingProductPermission: hasUpdateZoneRoutingProductPermission
         });
     }
     appControllers.service("WhS_BE_ZoneRoutingProductAPIService", zoneRoutingProductApiService);

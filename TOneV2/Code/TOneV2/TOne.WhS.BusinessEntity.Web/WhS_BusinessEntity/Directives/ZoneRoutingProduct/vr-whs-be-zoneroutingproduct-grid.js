@@ -93,14 +93,17 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
 
                     var routingPRoductEdit = {
                         name: "Edit",
-                        clicked: editRoutingProduct
+                        clicked: editRoutingProduct,
+                        haspermission: hasUpdateZoneRoutingProductPermission
                     };
                     menuActions.push(routingPRoductEdit);
                 }
                 return menuActions;
             };
         }
-
+        function hasUpdateZoneRoutingProductPermission() {
+            return whSBeZoneRoutingProductApiService.hasUpdateZoneRoutingProductPermission();
+        }
         function editRoutingProduct(routingProductObj) {
             var onZoneRoutingProductUpdated = function (updatedObj) {
                 gridApi.itemUpdated(updatedObj);
