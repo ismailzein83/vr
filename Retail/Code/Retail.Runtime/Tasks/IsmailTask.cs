@@ -33,6 +33,7 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
+            //TestBulkInsertRDB();
             //CallGetAnalyticRecords();
             //GenerateVRWorkflow();
             //CreateWFProgrammatically();
@@ -44,7 +45,7 @@ namespace Retail.Runtime.Tasks
             //GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
-            //TestRDBSelectQuery();
+            TestRDBSelectQuery();
             //var analyticTableMeasureExternalSource =
             //    new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             //    {
@@ -186,6 +187,90 @@ namespace Retail.Runtime.Tasks
             Console.WriteLine("DONE");
             Console.ReadKey();
         }
+
+        #region Bulk Insert
+
+        static void TestBulkInsertRDB()
+        {
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add("ID", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add("Name", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
+            columns.Add("TypeId", new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition("TestBulk", new RDBTableDefinition
+            {
+                DBTableName = "TestBulk",
+                Columns = columns,
+                IdColumnName = "ID",
+            }); 
+            TestBulkInsertDataManager dataManager = new TestBulkInsertDataManager();
+            var streamForDBApply = dataManager.InitialiazeStreamForDBApply();
+            //dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = 12, Name = "Item 1", TypeId = 1 }, streamForDBApply);
+            //dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = 13, Name = "Item 2", TypeId = 1 }, streamForDBApply);
+            //dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = 3, Name = "Item 3", TypeId = 2 }, streamForDBApply);
+            //dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = 4, Name = "Item 4", TypeId = 3 }, streamForDBApply);
+            //dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = 16, Name = "Item 5", TypeId = 3 }, streamForDBApply);
+            //dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = 17, Name = "Item 6", TypeId = 4 }, streamForDBApply);
+
+            int nbOfRecords = 500;
+            for (int i1 = 0; i1 < nbOfRecords; i1++)
+            {
+                dataManager.WriteRecordToStream(new TestBulkInsertObj { ID = i1, Name = "Item " + i1, TypeId = 1 }, streamForDBApply);
+            }
+
+            var readyStream = dataManager.FinishDBApplyStream(streamForDBApply);
+            DateTime start = DateTime.Now;
+            dataManager.Apply(readyStream);
+            Console.WriteLine("Inserting {0} records took {1}", nbOfRecords, (DateTime.Now - start));
+
+            Console.ReadKey();
+        }
+
+        private class TestBulkInsertObj
+        {
+            public int ID { get; set; }
+
+            public string Name { get; set; }
+
+            public int TypeId { get; set; }
+        }
+
+        private class TestBulkInsertDataManager : Vanrise.Data.IBulkApplyDataManager<TestBulkInsertObj>
+        {
+            public object InitialiazeStreamForDBApply()
+            {
+                Vanrise.Data.RDB.BaseRDBDataProvider dataProvider = null;
+                //dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
+                dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MySQLRDBDataProvider("Server=192.168.110.185;Database=test_db;Uid=root;Pwd=password;persistsecurityinfo=True;");
+                var queryContext = new RDBQueryContext(dataProvider);
+                var streamForBulkInsert = queryContext.StartBulkInsert();
+                //streamForBulkInsert.IntoTable("TestBulk", '|', "ID", "Name", "TypeId");
+                streamForBulkInsert.IntoTable("TestBulk", '|', "Name", "TypeId");
+                return streamForBulkInsert;
+            }
+
+            public void WriteRecordToStream(TestBulkInsertObj record, object dbApplyStream)
+            {
+                RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
+                var recordContext = bulkInsertContext.WriteRecord();
+                //recordContext.Value(record.ID);
+                recordContext.Value(record.Name);
+                recordContext.Value(record.TypeId);
+            }
+
+            public object FinishDBApplyStream(object dbApplyStream)
+            {
+                RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
+                bulkInsertContext.CloseStream();
+                return bulkInsertContext;
+            }
+
+            public void Apply(object dbApplyStream)
+            {
+                dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream").Apply();
+            }
+        }
+
+        #endregion
 
         private void CallGetAnalyticRecords()
         {
@@ -954,6 +1039,25 @@ namespace Retail.Runtime.Tasks
 
         void TestRDBSelectQuery()
         {
+            //var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
+            var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MySQLRDBDataProvider("Server=192.168.110.185;Database=tonev2_dev_configuration;Uid=root;Pwd=password;persistsecurityinfo=True;");
+            var queryContext = new RDBQueryContext(dataProvider);
+            var createTableQuery = queryContext.AddCreateTableQuery();
+            createTableQuery.DBTableName("RDBTable1");
+            createTableQuery.AddColumn("ID", "ID", RDBDataType.BigInt, null, null, true, true, true);
+            createTableQuery.AddColumn("Name", "Name", RDBDataType.NVarchar, 50, null, false, false, false);
+            createTableQuery.AddColumn("CreatedTime", RDBDataType.DateTime);
+            var createIndexQuery = queryContext.AddCreateIndexQuery();
+            createIndexQuery.DBTableName("RDBTable1");
+            createIndexQuery.IndexType(RDBCreateIndexType.NonClustered);
+            createIndexQuery.AddColumn("Name");
+
+            var createIndexQuery2 = queryContext.AddCreateIndexQuery();
+            createIndexQuery2.DBTableName("RDBTable1");
+            createIndexQuery2.IndexType(RDBCreateIndexType.UniqueNonClustered);
+            createIndexQuery2.AddColumn("ID");
+            createIndexQuery2.AddColumn("Name");
+            queryContext.ExecuteNonQuery();
         //    RDBSchemaManager.Current.RegisterDefaultTableDefinition("User", _userTable);
         //    var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
 
