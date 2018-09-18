@@ -22,6 +22,7 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
         public int RouteId { get; set; }
         public int RoutingMode { get; set; }
         public Int16 Preference { get; set; }
+        public Int16? Huntstop { get; set; }
         public int TotalBKTs { get; set; }
         public int BKTSerial { get; set; }
         public int BKTCapacity { get; set; }
@@ -35,20 +36,27 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
         public int RouteTableId { get; set; }
         public bool IsBlockedAccount { get; set; }
         public CodeListResolver CodeListResolver { get; set; }
-        public List<RouteTableRouteOptionsToAdd> RouteOptionstoAdd { get; set; }
+        public string TechPrefix { get; set; }
+        public List<RouteTableRouteOptionsToAdd> RouteOptionsToAdd { get; set; }
 
     }
     public class RouteTableRouteOptionsToAdd
     {
         public int RouteId { get; set; }
-        public Int16 Preference { get; set; }
+        public List<BackupOption> BackupOptions { get; set; }
         public decimal? Percentage { get; set; }
+    }
+    public class BackupOption
+    {
+        public int BackupOptionRouteId { get; set; }
+        public int? BackupOptionSupplierId { get; set; }
     }
     public class RouteTableRoutesToEdit
     {
         public bool IsBlockedAccount { get; set; }
         public int RouteTableId { get; set; }
         public string Destination{get;set;}
+        public string TechPrefix { get; set; }
         public List<RouteTableRouteOptionToEdit> RouteOptionsToEdit { get; set; }
 
 
@@ -56,11 +64,30 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
     public class RouteTableRouteOptionToEdit
     {
         public int RouteId { get; set; }
+        public List<BackupOption> BackupOptions { get; set; }
         public Int16 Preference { get; set; }
         public decimal? Percentage { get; set; }
+        public string TechPrefix { get; set; }
+
+    }
+
+    public class RouteTableRoutesRuntimeEditor
+    {
+        public bool IsBlockedAccount { get; set; }
+        public int RouteTableId { get; set; }
+        public string Destination { get; set; }
+        public string TechPrefix { get; set; }
+        public List<RouteTableRouteOptionRuntimeEditor> RouteOptionsToEdit { get; set; }
+    }
+
+    public class RouteTableRouteOptionRuntimeEditor
+    {
+        public int RouteId { get; set; }
         public int? SupplierId { get; set; }
-
-
+        public List<BackupOption> BackupOptions { get; set; }
+        public Int16 Preference { get; set; }
+        public decimal? Percentage { get; set; }
+        public string TechPrefix { get; set; }
 
     }
 

@@ -35,6 +35,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("UpdateRouteTableRoute")]
         public UpdateOperationOutput<RouteTableRouteDetails> UpdateRouteTableRoute(RouteTableRoutesToEdit routeTableItem)
         {
+            //return null;
             return _manager.UpdateRouteTableRoute(routeTableItem);
         }
         [HttpGet]
@@ -45,7 +46,7 @@ namespace NP.IVSwitch.Web.Controllers
         }
         [HttpGet]
         [Route("GetRouteTableRoutesOptions")]
-        public RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination)
+        public RouteTableRoutesRuntimeEditor GetRouteTableRoutesOptions(int routeTableId, string destination)
         {
 
             return _manager.GetRouteTableRoutesOptions(routeTableId, destination);

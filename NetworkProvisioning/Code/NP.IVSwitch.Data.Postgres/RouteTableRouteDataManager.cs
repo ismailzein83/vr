@@ -125,9 +125,12 @@ namespace NP.IVSwitch.Data.Postgres
                 {
 
                     if (destination.Equals(""))
+                    {
                         destination = GetReaderValue<string>(reader, "destination");
+                        techPrefix = GetReaderValue<string>(reader, "tech_prefix");
+                    }
 
-                       techPrefix = techPrefix = GetReaderValue<string>(reader, "tech_prefix");
+
                     if (destination != "" && GetReaderValue<string>(reader, "destination") != destination)
                     {
                         routeTableRoute.TechPrefix = techPrefix;
@@ -135,6 +138,7 @@ namespace NP.IVSwitch.Data.Postgres
                         routeTablesRoutes.Add(routeTableRoute);
                         routeTableRoute = new RouteTableRoute();
                         destination = GetReaderValue<string>(reader, "destination");
+                        techPrefix = GetReaderValue<string>(reader, "tech_prefix");
                         routeTableRoute.RouteOptions = new List<RouteTableRouteOption>();
                     }
 
@@ -149,7 +153,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 BKTCapacity = GetReaderValue<int>(reader, "bkt_capacity"),
                                 BKTTokens = GetReaderValue<int>(reader, "bkt_tokens"),
                                 Percentage = GetReaderValue<decimal>(reader, "flag_1")
-
+                                
 
                           });}
 
@@ -188,8 +192,8 @@ namespace NP.IVSwitch.Data.Postgres
                         int rowCount;
                         if (IsBlockedAccount == false)
                         {
-                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens)
-                         VALUES(@destination,@route_id,@time_frame,@preference,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens) ;", table);
+                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,tech_prefix)
+                         VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens,@techPrefix) ;", table);
                             rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                                {
                                    cmd.Parameters.AddWithValue("@destination", item.Destination);
@@ -202,6 +206,8 @@ namespace NP.IVSwitch.Data.Postgres
                                    cmd.Parameters.AddWithValue("@BKTSerial", routeOption.BKTSerial);
                                    cmd.Parameters.AddWithValue("@BKTCapacity", routeOption.BKTCapacity);
                                    cmd.Parameters.AddWithValue("@BKTTokens", routeOption.BKTTokens);
+                                   cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? (Object)DBNull.Value : item.TechPrefix);
+                                   cmd.Parameters.AddWithValue("@huntstop",(routeOption.Huntstop==null)?(Object)DBNull.Value: routeOption.Huntstop);
 
 
                                });
@@ -210,8 +216,8 @@ namespace NP.IVSwitch.Data.Postgres
                         }
                         else
                         {
-                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,description)
-                            VALUES(@destination,@route_id,@time_frame,@preference,@description);", table);
+                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,description,tech_prefix)
+                            VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@description,@techPrefix);", table);
 
                             rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                             {
@@ -220,6 +226,9 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@time_frame", "*****");
                                 cmd.Parameters.AddWithValue("@preference", -1);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
+                                   cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? (Object)DBNull.Value : item.TechPrefix);
+                                cmd.Parameters.AddWithValue("@huntstop", (routeOption.Huntstop == null) ? (Object)DBNull.Value : routeOption.Huntstop);
+
 
                             });
 
@@ -236,17 +245,88 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination)
         {
-            RouteTableRoutesToEdit routeTableRoutesEditor = new RouteTableRoutesToEdit();
+           
             string table = string.Format("rt{0}", routeTableId);
-            String cmdText = string.Format(@"SELECT route_id,preference,flag_1 from {0}  where destination=@destination order by preference;", table);
-            List<RouteTableRouteOptionToEdit> routePreferences = GetItemsText(cmdText, RoutePreferenceMapper, (cmd) =>
+            String cmdText = string.Format(@"SELECT route_id,preference,huntstop,flag_1,tech_prefix from {0}  where destination=@destination;", table);
+            RouteTableRoutesToEdit routeTableRoutesEditor = new RouteTableRoutesToEdit
             {
+             
+             RouteOptionsToEdit= new List<RouteTableRouteOptionToEdit>()
+            };
+            List<RouteTableRouteOptionToEdit> routeTableRouteOptionsToEdit = new List<RouteTableRouteOptionToEdit>();
+            RouteTableRouteOptionToEdit routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit { 
+            BackupOptions=new List<BackupOption>(),
+            
+            };
+            List<BackupOption> backupOptions=new List<BackupOption>();
+            bool firstRecordTechPrefixRead = false;
+            bool firstRecordBackupRead = false;
 
-                cmd.Parameters.AddWithValue("@destination", destination);
+            
+            ExecuteReaderText(cmdText, (reader) =>
+            {
+               while(reader.Read())
+                {
+                  Int16? huntstop = GetReaderValue<Int16?>(reader, "huntstop");
+                  int routeId=GetReaderValue<int>(reader, "route_id");
+                  if (!firstRecordTechPrefixRead)
+                  {
+                      firstRecordTechPrefixRead = true;
+                  routeTableRoutesEditor.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
+                  }
 
-            });
+                   if(huntstop==null)
+                   {
+                       routeTableRouteOptionToEdit=new RouteTableRouteOptionToEdit();
+                       routeTableRouteOptionToEdit.RouteId=routeId;
+                       routeTableRouteOptionToEdit.Preference=GetReaderValue<Int16>(reader, "preference");
+                       routeTableRouteOptionToEdit.Percentage=GetReaderValue<decimal>(reader, "flag_1");
+                       routeTableRouteOptionToEdit.TechPrefix=GetReaderValue<string>(reader, "tech_prefix");
+                       routeTableRouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+
+
+                   }
+                   else
+                       if (huntstop == 0 && !firstRecordBackupRead)
+                       {
+                           routeTableRouteOptionToEdit = new RouteTableRouteOptionToEdit
+                           {
+
+                               BackupOptions = new List<BackupOption>()
+                           };
+                           routeTableRouteOptionToEdit.RouteId = routeId;
+                           firstRecordBackupRead = true;
+
+                           routeTableRouteOptionToEdit.Preference = GetReaderValue<Int16>(reader, "preference");
+                           routeTableRouteOptionToEdit.Percentage = GetReaderValue<decimal>(reader, "flag_1");
+                           routeTableRouteOptionToEdit.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
+                       }
+                       else
+                       if (huntstop!=null && firstRecordBackupRead)
+                       {
+                           backupOptions.Add(new BackupOption { 
+                           BackupOptionRouteId=routeId
+                           });
+                       }
+                       if (huntstop==1)
+                       {
+                           routeTableRouteOptionToEdit.BackupOptions = backupOptions;
+                           routeTableRouteOptionsToEdit.Add(routeTableRouteOptionToEdit);
+                           backupOptions = new List<BackupOption>();
+                           firstRecordBackupRead = false;
+                       }
+
+
+               }
+
+            }, (cmd) =>
+          {
+
+              cmd.Parameters.AddWithValue("@destination", destination);
+
+          });
             routeTableRoutesEditor.Destination = destination;
-            routeTableRoutesEditor.RouteOptionsToEdit = routePreferences;
+            routeTableRoutesEditor.RouteOptionsToEdit = routeTableRouteOptionsToEdit;
             return routeTableRoutesEditor;
         }
         public bool Update(RouteTableRoute routeTableRoute, int routeTableId, bool IsBlockedAccount)
@@ -274,8 +354,8 @@ namespace NP.IVSwitch.Data.Postgres
                     int rowCount;
                     if (IsBlockedAccount == false)
                     {
-                        cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens)
-                         VALUES(@destination,@route_id,@time_frame,@preference,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens) ;", table);
+                        cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,tech_prefix)
+                         VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens,@techPrefix) ;", table);
                         rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                         {
                             cmd.Parameters.AddWithValue("@destination", routeTableRoute.Destination);
@@ -288,14 +368,17 @@ namespace NP.IVSwitch.Data.Postgres
                             cmd.Parameters.AddWithValue("@BKTSerial", option.BKTSerial);
                             cmd.Parameters.AddWithValue("@BKTCapacity", option.BKTCapacity);
                             cmd.Parameters.AddWithValue("@BKTTokens", option.BKTTokens);
+                            cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? (Object)DBNull.Value : routeTableRoute.TechPrefix);
+                            cmd.Parameters.AddWithValue("@huntstop", (option.Huntstop == null) ? (Object)DBNull.Value : option.Huntstop);
+
 
 
                         });
                     }
                     else
                     {
-                        cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,description)
-                            VALUES(@destination,@route_id,@time_frame,@preference,@description);", table);
+                        cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,description,tech_prefix)
+                            VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@description,@techPrefix);", table);
 
                         rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                         {
@@ -304,6 +387,9 @@ namespace NP.IVSwitch.Data.Postgres
                             cmd.Parameters.AddWithValue("@time_frame", "*****");
                             cmd.Parameters.AddWithValue("@preference", -1);
                             cmd.Parameters.AddWithValue("@description", "BLK");
+                            cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? (Object)DBNull.Value : routeTableRoute.TechPrefix);
+                            cmd.Parameters.AddWithValue("@huntstop", (option.Huntstop == null) ? (Object)DBNull.Value : option.Huntstop);
+
 
                         });
 
@@ -350,6 +436,7 @@ namespace NP.IVSwitch.Data.Postgres
             var routeId = reader["route_id"];
             var preference = reader["preference"];
             var percentage = reader["flag_1"];
+            var techPrefix = reader["tech_prefix"];
 
             if (routeId != DBNull.Value)
             {
@@ -363,14 +450,13 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 routePreference.Percentage = (decimal)percentage;
             }
-
+            if (techPrefix != DBNull.Value)
+            {
+                routePreference.TechPrefix = (string)techPrefix;
+            }
 
             return routePreference;
         }
-
-
-
-
 
         #endregion
 

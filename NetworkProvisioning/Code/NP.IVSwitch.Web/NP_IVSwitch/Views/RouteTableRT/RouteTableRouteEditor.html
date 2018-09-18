@@ -5,12 +5,15 @@
                 <vr-tab header="'Criteria'">
                     <vr-row removeline>
                         <vr-columns width="1/2row" ng-show="!scopeModel.addMode">
-                            <vr-label>{{scopeModel.routeTableRouteName}}</vr-label>
+                            <vr-textbox readonly value="scopeModel.routeTableRouteName" label="ANumber"></vr-textbox>
                         </vr-columns>
-                        <vr-columns colnum="12" ng-show="scopeModel.addMode" haschildcolumns>
-                            <whs-be-code-list-resolver on-ready="onCodeListDirectiveReady"></whs-be-code-list-resolver>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.bNumber" label="BNumber" ng-show="scopeModel.isANumber"></vr-textbox>
                         </vr-columns>
                     </vr-row>
+                    <div ng-show="scopeModel.addMode">
+                        <whs-be-code-list-resolver on-ready="onCodeListDirectiveReady" isrequired="scopeModel.addMode"></whs-be-code-list-resolver>
+                    </div>
                 </vr-tab>
                 <vr-tab header="'Options'">
                     <vr-row removeline>

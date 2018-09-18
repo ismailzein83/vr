@@ -6,26 +6,33 @@
 <vr-section title="OPTIONS" ng-if="!scopeModel.isBlockedAccount">
     <vr-row>
         <vr-columns width="1/3row">
-            <vr-button type="Add" data-onclick="ctrl.addColumn" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.addColumn" standalone></vr-button>
         </vr-columns>
     </vr-row>
-    <vr-validator validate="scopeModel.validatePercentage()">
-
-        <vr-datagrid on-ready="ctrl.onGridReady"
-                     datasource="ctrl.columns"
+    <vr-validator validate="scopeModel.isGridValid()">
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.columns"
                      enabledraggablerow="true"
-                     ondeleterow="ctrl.removeColumn"
+                     ondeleterow="scopeModel.removeColumn"
                      maxheight="400px"
-                     hidegridmenu>
+                     showexpand="scopeModel.showExpand"
+                     disablesorting="true"
+                     rowdeleteicontitle="Reset to LCR position"
+                     hidegridmenu disabledraggablecolumns>
             <vr-datagridcolumn headertext="'Supplier'">
-                <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" onselectionchanged="dataItem.onSupplierSelectionChanged"></vr-whs-be-supplier-selector>
+                <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" ismultipleselection onselectionchanged="dataItem.onSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Routes'">
-                <np-ivswitch-route-selector hidelabel on-ready="dataItem.onRouteDirectiveReady"></np-ivswitch-route-selector>
+                <vr-datagridcolumn headertext="'Routes'">
+                    <span vr-loader="dataItem.isRouteSelectorLoading">
+                        <np-ivswitch-route-selector hidelabel on-ready="dataItem.onRouteDirectiveReady" isrequired="true"></np-ivswitch-route-selector>
+                    </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percantage'">
-                <vr-textbox value="dataItem.percentage" isrequired="dataItem.isPercentageRequired()" type="number" minvalue="1" maxvalue="100"></vr-textbox>
+                <vr-textbox value="dataItem.percentage" isrequired="{{viewScope.scopeModel.showBackupTabs}}" type="number" minvalue="1" maxvalue="100" onvaluechanged="viewScope.scopeModel.onPercentageValueChangedItems" customvalidate="viewScope.scopeModel.onPercentageValueChanged()"></vr-textbox>
             </vr-datagridcolumn>
+            <vr-datagridexpandablerow>
+                <np-ivswitch-supplier-backuproute-grid on-ready="dataItem.onBackupRouteGridDirectiveReady"></np-ivswitch-supplier-backuproute-grid>
+            </vr-datagridexpandablerow>
         </vr-datagrid>
     </vr-validator>
 </vr-section>

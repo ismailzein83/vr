@@ -190,9 +190,11 @@
     <Content Include="NP_IVSwitch\Directives\LiveCdr\Templates\LiveCdrGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-routetable-route-grid.js" />
     <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-routetable-route-search.js" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-supplier-backuproute-grid.js" />
     <Content Include="NP_IVSwitch\Directives\RouteTableRoute\np-ivswitch-supplier-route-grid.js" />
     <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\RouteTableRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\RouteTableRouteSearchTemplate.html" />
+    <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\SupplierBackupRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\RouteTableRoute\Templates\SupplierRouteGridTemplate.html" />
     <Content Include="NP_IVSwitch\Directives\RouteTable\np-ivswitch-routetable-grid.js" />
     <Content Include="NP_IVSwitch\Directives\RouteTable\Templates\RouteTableGridTemplate.html" />

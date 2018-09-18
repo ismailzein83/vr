@@ -1,10 +1,12 @@
 ﻿(function (appControllers) {
     "use strict";
-    routeTableRouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteTableRouteAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum', 'WhS_Routing_RouteRuleAPIService'];
+    routeTableRouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteTableRouteAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum', 'WhS_Routing_RouteRuleAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum'];
 
-    function routeTableRouteEditorController($scope, NP_IVSwitch_RouteTableRouteAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService) {
+    function routeTableRouteEditorController($scope, NP_IVSwitch_RouteTableRouteAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService, NP_IVSwitch_RouteTableViewTypeEnum) {
         var routeTableId;
+        var routeTableRouteName;
         var isEditMode;
+        var routeTableRouteOptions;
         $scope.scopeModel = {};
 
         var codeListDirectiveAPI;
@@ -12,7 +14,6 @@
 
         var supplierRouteGridAPI;
         var supplierRouteGridDefferedReady = UtilsService.createPromiseDeferred();
-
         var isBlockedAccount;
 
         loadParameters();
@@ -24,9 +25,11 @@
             if (parameters != undefined && parameters != null) {
                 routeTableId = parameters.RouteTableId;
                 $scope.scopeModel.routeTableRouteName = parameters.Destination;
+                routeTableRouteName = parameters.Destination;
+                $scope.scopeModel.isANumber = (NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value == parameters.RouteTableViewType) ? true : false;
             }
             isEditMode = $scope.scopeModel.routeTableRouteName != undefined ? true : false;
-        };
+        }
 
         function defineScope() {
 
@@ -53,15 +56,16 @@
                 $scope.modalContext.closeModal();
             };
 
-        };
+        }
 
         function load() {
-            $scope.scopeModel.isLoading = true;
             if (isEditMode) {
+                $scope.scopeModel.isLoading = true;
+
                 $scope.scopeModel.addMode = false;
                 getRouteTableOptions().then(function () {
-                loadAllControls().finally(function () {
-                routeTableEntity = undefined;
+                    loadAllControls().finally(function () {
+                        routeTableEntity = undefined;
                     });
                 }).catch(function (error) {
                     $scope.scopeModel.isLoading = false;
@@ -72,46 +76,53 @@
                 $scope.scopeModel.addMode = true;
                 loadAllControls();
             }
-        };
+        }
 
         function getRouteTableOptions() {
-            return NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
-                var directivePayload = response;
-                VRUIUtilsService.callDirectiveLoad(supplierRouteGridAPI, directivePayload, undefined)
-
+          return  NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
+                routeTableRouteOptions = response;
+                $scope.scopeModel.bNumber = routeTableRouteOptions.TechPrefix;
             });
-        };
+        }
 
         function loadAllControls() {
+            var promises = [];
             function codeListDirective() {
-                return codeListDirectiveDefferedReady.promise.then(function () {
-                    var directivePayload;
-                    VRUIUtilsService.callDirectiveLoad(codeListDirectiveAPI, directivePayload, undefined)
-                })
-            };
-            function supplierRouteGrid() {
-                return supplierRouteGridDefferedReady.promise.then(function () {
+                    return codeListDirectiveDefferedReady.promise.then(function () {
+                        var directivePayload;
+                        VRUIUtilsService.callDirectiveLoad(codeListDirectiveAPI, directivePayload, undefined);
+                    });
+            }
 
-
-                    var directivePayload;
-                    VRUIUtilsService.callDirectiveLoad(supplierRouteGridAPI, directivePayload, undefined);
-
-                })
-            };
             function setTitle() {
                 if (isEditMode)
                     $scope.title = UtilsService.buildTitleForUpdateEditor($scope.scopeModel.routeTableRouteName, " Route Table Route");
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("New Route Table Route");
-            };
-        return UtilsService.waitMultipleAsyncOperations([codeListDirective, setTitle, supplierRouteGrid]).then(function () {
+            }
+
+            function loadSupplierRouteGrid()
+            {
+                if (isEditMode)
+                {
+                    var supplierRouteGridAPILoadDeferred = UtilsService.createPromiseDeferred();
+                    supplierRouteGridDefferedReady.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(supplierRouteGridAPI, routeTableRouteOptions, supplierRouteGridAPILoadDeferred);
+                    });
+                    return supplierRouteGridAPILoadDeferred.promise;
+                }
+               
+            }
+
+
+            return UtilsService.waitMultipleAsyncOperations([codeListDirective, setTitle, loadSupplierRouteGrid]).then(function () {
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
-               .finally(function () {
-                   $scope.scopeModel.isLoading = false;
-            });
-        };
+                   .finally(function () {
+                       $scope.scopeModel.isLoading = false;
+                   });
+        }
 
         function insertRouteTableRT() {
 
@@ -132,7 +143,7 @@
                 $scope.scopeModel.isLoading = false;
             });
 
-        };
+        }
 
         function updateRouteTableRT() {
             $scope.scopeModel.isLoading = true;
@@ -151,58 +162,67 @@
                 $scope.scopeModel.isLoading = false;
 
             });
-        };
+        }
 
         function buildParentObjectFromScopeForEdit() {
-            isBlockedAccount = supplierRouteGridAPI.getData().IsBlockedAccount;
-            var supplierRouteGridData = supplierRouteGridAPI.getData().GridData;
-            var preference = supplierRouteGridData.length;
-            var routePreferences = [];
-            for (var i = 0; i < supplierRouteGridData.length; i++) {
-                var tab = {
-                    RouteId: supplierRouteGridData[i].routeDirectiveAPI.getSelectedIds(),
-                    Preference: preference,
-                    Percentage: supplierRouteGridData[i].percentage
+            var routeOptions = supplierRouteGridAPI.getData();
+            isBlockedAccount = routeOptions.IsBlockedAccount;
+            var supplierRouteGridData = routeOptions.RouteOptions;
+            var routeOptionsToEdit = [];
+            if (supplierRouteGridData != undefined) {
+                for (var i = 0; i < supplierRouteGridData.length; i++) {
+                    var routeOption = {
+                        RouteId: supplierRouteGridData[i].RouteId,
+                        Percentage: supplierRouteGridData[i].Percentage
+                    };
+                    if (supplierRouteGridData[i].BackupRouteIds != undefined)
+                        routeOption.BackupOptions = supplierRouteGridData[i].BackupRouteIds;
+
+                    routeOptionsToEdit.push(routeOption);
+
+
+
                 }
-                routePreferences.push(tab);
-                preference--;
-            };
-            var scopeObject = {
+            }
+            var objectScopeForEdit = {
                 RouteTableId: routeTableId,
-                Destination: $scope.scopeModel.routeTableRouteName,
-                RouteOptionsToEdit: routePreferences,
-                IsBlockedAccount: isBlockedAccount
+                Destination: routeTableRouteName,
+                RouteOptionsToEdit: routeOptionsToEdit,
+                IsBlockedAccount: isBlockedAccount,
+                TechPrefix: $scope.scopeModel.bNumber
             };
-            return scopeObject;
-        };
+            return objectScopeForEdit;
+        }
 
         function buildParentObjectFromScopeForAdd() {
-            var supplierRouteGridData = supplierRouteGridAPI.getData().GridData;
-            isBlockedAccount = supplierRouteGridAPI.getData().IsBlockedAccount;
-            var preference = supplierRouteGridData.length;
-            var routePreferences = [];
-            for (var i = 0; i < supplierRouteGridData.length; i++) {
+            var routeOptions = supplierRouteGridAPI.getData();
+            isBlockedAccount = routeOptions.IsBlockedAccount;
+            var supplierRouteGridData = routeOptions.RouteOptions;
+            var routeOptionsToAdd = [];
+            if (supplierRouteGridData != undefined)
+                for (var i = 0; i < supplierRouteGridData.length; i++) {
 
-                var routePreference = {
-                    RouteId: supplierRouteGridData[i].routeDirectiveAPI.getSelectedIds(),
-                    Preference: preference,
-                    Percentage: supplierRouteGridData[i].percentage
-                };
-                routePreferences.push(routePreference);
-                preference--;
 
-            };
-            var objectScope = {
+                    var routeOption = {
+                        RouteId: supplierRouteGridData[i].RouteId,
+                        Percentage:supplierRouteGridData[i].Percentage
+                    };
+                    if (supplierRouteGridData[i].BackupRouteIds !=undefined)
+                        routeOption.BackupOptions = supplierRouteGridData[i].BackupRouteIds;
+                    routeOptionsToAdd.push(routeOption);
+                }
+            var objectScopeForAdd = {
                 CodeListResolver: {
                     Settings: codeListDirectiveAPI.getData()
                 },
                 IsBlockedAccount: isBlockedAccount,
-                RouteOptionstoAdd: routePreferences,
-                RouteTableId: routeTableId
+                RouteOptionsToAdd: routeOptionsToAdd,
+                RouteTableId: routeTableId,
+                TechPrefix: $scope.scopeModel.bNumber
             };
-            return objectScope;
-        };
+            return objectScopeForAdd;
+        }
 
-    };
+    }
     appControllers.controller('NP_IVSwitch_RouteTableRouteEditorController', routeTableRouteEditorController);
 })(appControllers);

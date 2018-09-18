@@ -43,11 +43,11 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                     if (payload != undefined) {
                         gridAPI.clearAll();
                         gridAPI.retrieveData(payload);
-                    };
+                    }
                     if (payload != undefined && payload.RouteTableViewType != undefined && payload.RouteTableId != undefined) {
                         routeTableViewType = payload.RouteTableViewType;
                         routeTableId = payload.RouteTableId;
-                    };
+                    }
 
                     if (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value)
                         $scope.scopeModel.isANumber = true;
@@ -63,9 +63,9 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(api);
-                };
+                }
 
-            };
+            }
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return NP_IVSwitch_RouteTableRouteAPIService.GetFilteredRouteTableRoutes(dataRetrievalInput).then(function (response) {
@@ -76,7 +76,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                         else
                             var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, Options: item.RouteOptionsDetails };
                         $scope.scopeModel.routeTablesRT.push(dataItem);
-                    };
+                    }
 
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -84,7 +84,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
             };
 
             defineMenuActions();
-        };
+        }
 
         function getFilter() {
             var filter = {
@@ -95,7 +95,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                 Limit: $scope.scopeModel.limit
             };
             return filter;
-        };
+        }
 
         function defineMenuActions() {
             $scope.scopeModel.gridMenuActions = [{
@@ -107,12 +107,13 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                 name: 'Delete',
                 clicked: deleteRouteTableRoute,
             });
-        };
+        }
 
         function editRouteTableRoute(routeTableEntity) {
             var routeTable = {
                 RouteTableId: routeTableId,
-                Destination: routeTableEntity.Destination
+                Destination: routeTableEntity.Destination,
+                RouteTableViewType: routeTableViewType
             };
             var onRouteTableUpdated = function (routeTable) {
                 $scope.scopeModel.routeTablesRT = [];
@@ -120,7 +121,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                 gridAPI.retrieveData(getFilter());
             };
             NP_IVSwitch_RouteTableRouteService.editRouteTableRoutes(routeTable, onRouteTableUpdated);
-        };
+        }
 
         function deleteRouteTableRoute(routeTable) {
 
@@ -129,12 +130,12 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                     NP_IVSwitch_RouteTableRouteAPIService.DeleteRouteTableRoute(routeTableId, routeTable.Destination).then(function () {
                         gridAPI.itemDeleted({ RouteOptionsDetailId: routeTable.RouteOptionsDetailId, Destination: routeTable.Destination, TechPrefix: routeTable.TechPrefix, Options: routeTable.Options });
 
-                    })
-                };
+                    });
+                }
             });
 
 
-        };
-    };
+        }
+    }
 
 }]);

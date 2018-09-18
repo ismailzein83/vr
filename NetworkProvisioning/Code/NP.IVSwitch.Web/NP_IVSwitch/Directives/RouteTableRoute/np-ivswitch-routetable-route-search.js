@@ -46,7 +46,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     if (gridAPI != undefined)
                         gridAPI.onRouteTableRouteAdded(obj);
                 };
-                NP_IVSwitch_RouteTableRouteService.addRouteTableRoutes(onRouteTableRTAdded, routeTableId);
+                var payloadForAdd = { RouteTableId: routeTableId, RouteTableViewType: routeTableViewType };
+                NP_IVSwitch_RouteTableRouteService.addRouteTableRoutes(onRouteTableRTAdded, payloadForAdd);
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -72,7 +73,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     routeTableViewType = payload.RouteTableViewType;
                     $scope.scopeModel.isANumber = (NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value == routeTableViewType) ? true : false;
 
-                };
+                }
 
                 var promises = [];
                 gridAPIDirectiveReadyDeffered.promise.then(function () {
@@ -86,7 +87,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                 ctrl.onReady(api);
-        };
+        }
 
         function getFilter() {
             var filter = {
@@ -97,7 +98,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 Limit: $scope.scopeModel.limit
             };
             return filter;
-        };
+        }
 
 
     }
