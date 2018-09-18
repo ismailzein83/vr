@@ -726,12 +726,17 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 					if (parentDimensions.length == 0) {
 						for (var i = 0; i < groupingDimensions.length; i++) {
 							var groupingDimension = groupingDimensions[i];
-							if (groupingDimension == undefined || groupingDimension.DimensionName == undefined || UtilsService.getItemByVal(dimensionValues, groupingDimension.DimensionName, "Dimension") != undefined)
-								continue;
+							if (groupingDimension == undefined || groupingDimension.DimensionName == undefined)// || UtilsService.getItemByVal(dimensionValues, groupingDimension.DimensionName, "Dimension") != undefined)
+							    continue;
+
+							var groupingDimensionValue = dataItem.DimensionValues[i].Value;
+							var existingDimensionFilter = UtilsService.getItemByVal(dimensionValues, groupingDimension.DimensionName, "Dimension");
+							if (existingDimensionFilter != null && existingDimensionFilter.FilterValues.length == 1 && existingDimensionFilter.FilterValues[0] == groupingDimensionValue)
+							    continue;
 
 							dimensionValues.push({
 								Dimension: groupingDimension.DimensionName,
-								FilterValues: [dataItem.DimensionValues[i].Value]
+								FilterValues: [groupingDimensionValue]
 							});
 						}
 					}
