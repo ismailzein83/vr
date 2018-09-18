@@ -38,8 +38,17 @@ app.directive('whsBeSpecificCodeResolver', ['UtilsService','VRUIUtilsService',
                     }
 
                     if (codeIsValid)
+                    {
                         $scope.codeCriteriaArray.push(codeCriteria);
+                        $scope.addedCode = undefined;
+                    }
                 };
+                $scope.isValid = function () {
+                    if ($scope.codeCriteriaArray.length==0)
+                        return "at least choose one code";
+                    return null;
+                };
+
 
             },
             controllerAs: "ctrl",

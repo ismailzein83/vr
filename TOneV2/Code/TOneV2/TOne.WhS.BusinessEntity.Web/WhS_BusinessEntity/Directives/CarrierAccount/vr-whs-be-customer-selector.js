@@ -48,6 +48,10 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
+            var hideselectall = "";
+            if (attrs.hideselectall != undefined)
+                hideselectall = "hideselectall";
+
             var hideselectedvaluessection = "";
             if (attrs.hideselectedvaluessection != undefined)
                 hideselectedvaluessection = "hideselectedvaluessection";
@@ -66,7 +70,7 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
 
             return '<span vr-disabled="ctrl.isdisabled"><vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady" onselectionchanged="ctrl.onselectionchanged" selectedvalues="ctrl.selectedvalues" ' +
                          ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems="ctrl.ondeselectallitems" isrequired="ctrl.isrequired"  normal-col-num="{{ctrl.normalColNum}}" getcustomers '
-                         + multipleselection + ' ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + hidelabel + ' ' + customlabel + ' ' + usefullcolumn + '>' +
+                         + multipleselection + ' ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + ' ' + hideselectall + ' ' + hidelabel + ' ' + customlabel + ' ' + usefullcolumn + '>' +
                    '</vr-whs-be-carrieraccount-selector></span>';
         }
 
