@@ -2301,6 +2301,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: none;
     opacity: 0.8 !important;
 }
+.divDisabled:first-child vr-validator > div .vr-dropdown-select {
+    opacity: 0.8 !important;
+}
 
 .divDisabled .divDisabled vr-validator > div {
     opacity: 1 !important;
