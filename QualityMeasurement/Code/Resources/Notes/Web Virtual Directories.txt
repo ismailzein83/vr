@@ -3,9 +3,12 @@
 Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under Client > Modules folder:
+BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
+BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 QM_CLITester			C:\TFS\QualityMeasurement\Code\QM.CLITester.Web\QM_CLITester
 QM_BusinessEntity		C:\TFS\QualityMeasurement\Code\QM.BusinessEntity.Web\QM_BusinessEntity
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
+Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData

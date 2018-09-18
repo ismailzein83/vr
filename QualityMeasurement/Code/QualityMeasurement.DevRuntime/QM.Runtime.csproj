@@ -144,9 +144,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.QueueActivators">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.SQLDataStorage">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
