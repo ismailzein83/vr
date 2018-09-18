@@ -176,7 +176,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                 if (exceptionMessage != undefined) {
                     showErrorMessage(exceptionMessage);
                 } else {
-                    showErrorMessage('Error Occured while posting data!');
+                    showErrorMessage('An error occured while posting data!');
                 }
                 setTimeout(function () {
                     notify.closeAll();

@@ -40,7 +40,8 @@
 
                     api.getData = function () {
                         var returnValue = {
-                            $type: 'Vanrise.Analytic.MainExtensions.StandardReportGenerationFilter,Vanrise.Analytic.MainExtensions'
+                            $type: 'Vanrise.Analytic.MainExtensions.StandardReportGenerationFilter,Vanrise.Analytic.MainExtensions',
+                            RuntimeEditor:"vr-analytic-reportgeneration-filter-standardruntime"
                         };
                         return returnValue;
                     };

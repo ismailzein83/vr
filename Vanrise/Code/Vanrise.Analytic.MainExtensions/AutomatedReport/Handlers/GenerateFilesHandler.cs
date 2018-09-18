@@ -184,12 +184,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                 List<VRMailAttachement> attachements = new List<VRMailAttachement>();
                 foreach (var generator in context.GeneratedFileItems)
                 {
-                    VRMailAttachmentExcel excelAttachment = new VRMailAttachmentExcel()
+                    VRMailAttachmentGeneral attachment = new VRMailAttachmentGeneral()
                     {
                         Name = generator.FileName,
                         Content = generator.FileContent
                     };
-                    attachements.Add(excelAttachment);
+                    attachements.Add(attachment);
                 }
                 new VRMailManager().SendMail(this.To, null, null, this.Subject, this.Body, attachements);
                 if (context.HandlerContext.EvaluatorContext != null)

@@ -55,7 +55,7 @@
             $scope.scopeModel.testGenerate = function () {
                 var currentReportGenerationInfo = buildVRReportGenerationObjectFromScope();
                 if (currentReportGenerationInfo != undefined) {
-                    VR_Analytic_ReportGenerationService.testGenerateVRReportGeneration(currentReportGenerationInfo);
+                    VR_Analytic_ReportGenerationService.testGenerateVRReportGeneration(currentReportGenerationInfo, getContext());
                 }
             };
 
@@ -218,6 +218,12 @@
 
             currentContext.disableTestGenerateButton = function (value) {
                 $scope.scopeModel.disableTestGenerateButton = value;
+            };
+            currentContext.getFilterData = function () {
+                var settingsData = settingsDirectiveAPI.getData();
+                if (settingsData != undefined) {
+                    return settingsData.Filter;
+                }
             };
             return currentContext;
         }

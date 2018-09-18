@@ -155,7 +155,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     var fileGenerator = payload.fileGenerator;
                     if (fileGenerator != undefined) {
                         tableDefinitions = fileGenerator.TableDefinitions;
-                        $scope.scopeModel.compressFile = fileGenerator.CompressFile;
                         promises.push(excelWorkbookReadyDeferred.promise);
                     }
 
@@ -312,7 +311,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
               var obj = {
                    $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.AdvancedExcelFileGenerator,Vanrise.Analytic.MainExtensions",
                    FileUniqueId: $scope.scopeModel.file != undefined ? $scope.scopeModel.file.fileUniqueId : undefined,
-                   CompressFile: $scope.scopeModel.compressFile,
                    TableDefinitions: getTables()
               };
               return obj;

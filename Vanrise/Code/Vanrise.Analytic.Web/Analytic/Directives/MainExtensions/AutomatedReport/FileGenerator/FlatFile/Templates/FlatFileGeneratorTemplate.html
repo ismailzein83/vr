@@ -1,1 +1,77 @@
-﻿
+﻿<vr-columns width="1/2row" haschildcolumns>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox label="File Extension" type="text" value="scopeModel.fileExtension" isrequired customvalidate="scopeModel.validateFileExtension()"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox label="Delimiter" value="scopeModel.delimiter" isrequired></vr-textbox>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-select on-ready="scopeModel.onQueryNameSelectorReady"
+                        datasource="scopeModel.queries"
+                        datatextfield="description"
+                        datavaluefield="value"
+                        selectedvalues="scopeModel.querySelected"
+                        onselectionchanged="scopeModel.onQuerySelectionChanged"
+                        entityname="Query"
+                        label="Query"
+                        isrequired="scopeModel.fields.length==0">
+            </vr-select>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <span vr-loader="scopeModel.isLoadingListNames">
+                <vr-select on-ready="scopeModel.onListNameSelectorReady"
+                            datasource="scopeModel.listNames"
+                            datatextfield="description"
+                            datavaluefield="value"
+                            selectedvalues="scopeModel.listNameSelected"
+                            entityname="List"
+                            label="List"
+                            isrequired="scopeModel.fields.length==0">
+                </vr-select>
+            </span>
+        </vr-columns>
+    </vr-row>
+</vr-columns>
+<vr-columns width="1/2row" haschildcolumns>
+    <vr-section title="Fields">
+        <div vr-loader="scopeModel.isLoading">
+            <vr-row>
+                <vr-columns colnum="11">
+                    <vr-switch value="scopeModel.withoutHeaders" label="Without Headers"></vr-switch>
+                </vr-columns>
+                <vr-columns colnum="1" withemptyline>
+                    <vr-button type="Add" data-onclick="scopeModel.addField" standalone="true" vr-disabled="scopeModel.querySelected==undefined || scopeModel.listNameSelected==undefined"></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="12">
+                    <vr-validator validate="scopeModel.validateGrid()">
+                        <vr-datagrid on-ready="scopeModel.onGridReady"
+                                        datasource="scopeModel.fields"
+                                        ondeleterow="scopeModel.removeField"
+                                        hidegridmenu="true"
+                                        norowhighlightonclick="true">
+                            <vr-datagridcolumn headertext="'Field'" widthfactor="70" disablesorting="true">
+                                <vr-select on-ready="dataItem.onFieldSelectorReady"
+                                            datasource="dataItem.fields"
+                                            datatextfield="description"
+                                            datavaluefield="value"
+                                            selectedvalues="dataItem.selectedField"
+                                            onselectionchanged="dataItem.onFieldSelectionChanged"
+                                            entityname="Field"
+                                            isrequired>
+                                </vr-select>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Field Header'" widthfactor="70" disablesorting="true">
+                                <vr-textbox value="dataItem.editedTitle" isrequired></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+        </div>
+    </vr-section>
+</vr-columns>

@@ -35,10 +35,11 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationGenerator.html', parameters, settings);
         }
 
-        function testGenerateVRReportGeneration(currentReportGenerationInfo) {
+        function testGenerateVRReportGeneration(currentReportGenerationInfo, context) {
             var settings = {};
             var parameters = {
-                currentReportGenerationInfo: currentReportGenerationInfo
+                currentReportGenerationInfo: currentReportGenerationInfo,
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/VRReportGeneration/VRReportGenerationGenerator.html', parameters, settings);

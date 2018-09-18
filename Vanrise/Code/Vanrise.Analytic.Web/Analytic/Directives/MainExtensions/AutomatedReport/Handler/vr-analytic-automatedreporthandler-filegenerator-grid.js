@@ -89,6 +89,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                                     VRAutomatedReportFileGeneratorId: generator.VRAutomatedReportFileGeneratorId,
                                     Name: generator.Name,
                                     Settings: generator.Settings,
+                                    CompressFile:generator.CompressFile
                                 };
                                 $scope.scopeModel.columns.push(gridItem);
                             }
@@ -109,6 +110,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                             VRAutomatedReportFileGeneratorId: column.VRAutomatedReportFileGeneratorId,
                             Name: column.Name,
                             Settings: column.Settings,
+                            CompressFile: column.CompressFile
                         });
                     }
                     return columns;

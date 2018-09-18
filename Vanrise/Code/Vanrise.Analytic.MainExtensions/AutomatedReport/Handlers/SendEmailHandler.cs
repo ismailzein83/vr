@@ -77,12 +77,12 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
                             context.EvaluatorContext.WriteInformationBusinessTrackingMsg("The number of attachments to generate left is {0} out of {1} attachments.", attachmentsLeft, totalAttachments);
                         }
                         generatedFileOutput.GeneratedFile.ThrowIfNull("generatedFileOutput.GeneratedFile");
-                        VRMailAttachmentExcel excelAttachment = new VRMailAttachmentExcel()
+                        VRMailAttachmentGeneral attachment = new VRMailAttachmentGeneral()
                         {
                             Name = generatedFileOutput.FileName,
                             Content = generatedFileOutput.GeneratedFile.FileContent
                         };
-                        attachements.Add(excelAttachment);
+                        attachements.Add(attachment);
                     }
                 }
                 new VRMailManager().SendMail(this.To, null, null, this.Subject, this.Body, attachements);

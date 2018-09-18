@@ -55,6 +55,7 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                 api.getData = function () {
                     return {
                         Name: fileNamePatternAPI.getData(),
+                        CompressFile: $scope.scopeModel.compressFile,
                         Settings: fileGeneratorSelectorAPI.getData()
                     };
                 };
@@ -68,9 +69,13 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                     }
 
                     if (fileGeneratorEntity != undefined) {
-
                         settings = fileGeneratorEntity.Settings;
                         name = fileGeneratorEntity.Name;
+                    }
+                    function loadStaticData() {
+                        if (fileGeneratorEntity == undefined)
+                            return;
+                         $scope.scopeModel.compressFile = fileGeneratorEntity.CompressFile;
                     }
                     function loadFileNamePatternQuery() {
                         var fileNamePatternLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -95,7 +100,7 @@ app.directive("vrAnalyticAutomatedreportFilegenerator", ['UtilsService', 'VRAnal
                         });
                         return fileGeneratorSelectorLoadPromiseDeferred.promise;
                     }
-                    return UtilsService.waitMultiplePromises([loadFileNamePatternQuery(), loadFileGeneratorSelector()]);
+                    return UtilsService.waitMultipleAsyncOperations([loadStaticData,loadFileNamePatternQuery, loadFileGeneratorSelector]);
                 };
 
                 api.reload = function (newQueries) {

@@ -1,4 +1,7 @@
 ﻿<vr-row>
     <vr-analytic-automatedreport-filenamepattern on-ready="scopeModel.onFileNamePatternReady" isrequired="true" normal-col-num="3" label="File Name"></vr-analytic-automatedreport-filenamepattern>
+    <vr-columns colnum="3">
+        <vr-switch value="scopeModel.compressFile" label="Compress File"></vr-switch>
+    </vr-columns>
 </vr-row>
 <vr-analytic-automatedreporthandler-filegenerator on-ready="scopeModel.onFileGeneratorSelectorReady" normal-col-num="2"></vr-analytic-automatedreporthandler-filegenerator>

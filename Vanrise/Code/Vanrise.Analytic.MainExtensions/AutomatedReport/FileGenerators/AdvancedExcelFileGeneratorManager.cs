@@ -53,8 +53,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             generatedFile.ThrowIfNull("generatedFile");
             if (generateFileContext.HandlerContext.EvaluatorContext != null)
                 generateFileContext.HandlerContext.EvaluatorContext.WriteInformationBusinessTrackingMsg("Finished generating the file '{0}'.", fileName);
-            var advancedExcelFileGenerator = fileGenerator.Settings.CastWithValidate<AdvancedExcelFileGenerator>("fileGenerator.Settings");
-            if (advancedExcelFileGenerator.CompressFile)
+            if (fileGenerator.CompressFile)
             {
 
                 ZipUtility zipUtility = new ZipUtility();

@@ -7,6 +7,7 @@
 
         var isEditMode;
         var reportId;
+        var context;
         var currentReportGenerationInfo;
         var vRReportGenerationEntity;
         var runtimeEditorAPI;
@@ -22,6 +23,7 @@
             if (parameters != undefined && parameters != null) {
                 reportId = parameters.reportId;
                 currentReportGenerationInfo = parameters.currentReportGenerationInfo;
+                context = parameters.context;
             }
         }
 
@@ -86,8 +88,11 @@
             else {
                 vRReportGenerationEntity = currentReportGenerationInfo;
                 vRReportGenerationEntity.Settings.ReportAction.ActionTypeName = "DownloadFile";
-                if (vRReportGenerationEntity.Settings != undefined && vRReportGenerationEntity.Settings.Filter != undefined && vRReportGenerationEntity.Settings.Filter.ConfigId == "38974659-fb26-415e-82bc-2895e1d09238") {
-                    $scope.scopeModel.runtimeEditor = "vr-analytic-reportgeneration-filter-standardruntime";
+                if (context != undefined && context.getFilterData != undefined && typeof (context.getFilterData) == 'function') {
+                    var filter = context.getFilterData();
+                    if (filter != undefined) {
+                        $scope.scopeModel.runtimeEditor = filter.RuntimeEditor;
+                    }
                 }
                 loadAllControls().finally(function () {
                     $scope.scopeModel.isLoading = false;

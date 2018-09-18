@@ -92,6 +92,7 @@
 
                 if (attachementGeneratorEntity == undefined)
                     return;
+                $scope.scopeModel.compressFile = attachementGeneratorEntity.CompressFile;
             }
 
             function loadFileNamePattern() {
@@ -128,11 +129,11 @@
 
         function buildObjFromScope() {
             var obj = {
-                //$type: "Vanrise.Analytic.Entities.VRAutomatedReportFileGenerator, Vanrise.Analytic.Entities",
                 VRAutomatedReportFileGeneratorId: attachementGeneratorEntity != undefined ? attachementGeneratorEntity.VRAutomatedReportFileGeneratorId: UtilsService.guid() ,
                 Name: fileNamePatternAPI.getData(),
+                CompressFile: $scope.scopeModel.compressFile,
                 Settings: fileGeneratorAPI.getData(),
-            };
+              };
             return obj;
         }
 
