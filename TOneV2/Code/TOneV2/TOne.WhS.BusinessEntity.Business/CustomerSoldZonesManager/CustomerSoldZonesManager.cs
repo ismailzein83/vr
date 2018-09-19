@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Caching;
-using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Pricing;
+using Vanrise.Rules.Pricing;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -125,13 +121,21 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (input.Query.RoutingProductsIds != null && input.Query.RoutingProductsIds.Count > 0 && !input.Query.RoutingProductsIds.Contains(customerRate.RoutingProductId))
                             continue;
 
+                        var context = new ExtraChargeRuleContext
+                        {
+                            TargetTime = DateTime.Now,
+                            Rate = customerRate.EffectiveRateValue,
+                            SourceCurrencyId = input.Query.CurrencyId
+                        };
 
+                        GetMatchRule(context, customerRate.CustomerId, customerSoldZone.ZoneId, DateTime.Now);
                         customerZonesData.Add(new CustomerZoneData
                         {
                             CustomerId = customerRate.CustomerId,
-                            Rate = _currencyExchangeRateManager.ConvertValueToCurrency(customerRate.EffectiveRateValue, sysCurrencyId, input.Query.CurrencyId, DateTime.Now),
+                            Rate = context.Rate,
                             RoutingProductId = customerRate.RoutingProductId,
-                            Services = customerRate.SaleZoneServiceIds
+                            Services = customerRate.SaleZoneServiceIds,
+                            HasExtraCharge = context.ExtraChargeRate != 0 ? true : false
                         });
                     }
 
@@ -141,6 +145,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
 
                 return customersSoldZone;
+            }
+            private void GetMatchRule(IPricingRuleExtraChargeContext context, int customerId, long zoneId, DateTime effectiveDate)
+            {
+                var ruleDefinitionId = new Guid("90A47A0A-3EF9-4941-BC21-CA0BE44FC5A4");
+                var target = new Vanrise.GenericData.Entities.GenericRuleTarget
+                {
+                    TargetFieldValues = new Dictionary<string, object>
+                {
+                    {"CustomerId", customerId},
+                    {"SaleZoneId", zoneId}
+                }
+                };
+                target.EffectiveOn = effectiveDate;
+                new ExtraChargeRuleManager().ApplyExtraChargeRule(context, ruleDefinitionId, target);
             }
 
 
@@ -156,7 +174,6 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
 
-
             private CustomerZoneDataDetail CustomerZoneDataDetailMapper(CustomerZoneData customerZoneData)
             {
                 return new CustomerZoneDataDetail()
@@ -164,7 +181,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     CustomerName = _carrierAccountManager.GetCarrierAccountName(customerZoneData.CustomerId),
                     Rate = customerZoneData.Rate,
                     RoutingProductId = customerZoneData.RoutingProductId,
-                    Services = customerZoneData.Services
+                    Services = customerZoneData.Services,
+                    HasExtraCharge = customerZoneData.HasExtraCharge
                 };
             }
 

@@ -23,6 +23,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int RoutingProductId { get; set; }
 
         public HashSet<int> Services { get; set; }
+        public bool HasExtraCharge { get; set; }
     }
 
     public class CustomersSoldZoneDetail
@@ -32,7 +33,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public IEnumerable<CustomerZoneDataDetail> CustomerZones { get; set; }
         public int SaleCount { get; set; }
         public DateTime EffectiveOn { get; set; }
-
     }
 
     public class CustomerZoneDataDetail
@@ -44,5 +44,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int RoutingProductId { get; set; }
 
         public HashSet<int> Services { get; set; }
+        public bool HasExtraCharge { get; set; }
     }
 }
