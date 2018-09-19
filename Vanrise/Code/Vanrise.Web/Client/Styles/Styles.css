@@ -2297,11 +2297,11 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     opacity: 0.5;
 }*/
 
-.divDisabled:first-child vr-validator > div {
+.divDisabled vr-validator > div {
     pointer-events: none;
     opacity: 0.8 !important;
 }
-.divDisabled:first-child vr-validator > div .vr-dropdown-select {
+.divDisabled vr-validator > div .vr-dropdown-select {
     opacity: 0.8 !important;
 }
 
