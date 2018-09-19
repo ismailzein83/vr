@@ -158,14 +158,12 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('9B4C0061-8610-42B0-B522-BCCFD8314B75','Switch Mapping','Switch Mapping','#/view/NP_IVSwitch/Views/SwitchMapping/SwitchMappingManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','NP_IVSwitch/SwitchMapping/GetFilteredSwitchMappings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',55),
-
-('9F98A163-C563-4836-B53D-212DFF6D6AF5','Translation Rules','Translation Rules','#/view/NP_IVSwitch/Views/TranslationRule/TranslationRuleManagement'	,'89254E36-5D91-4DB1-970F-9BFEF404679A','NP_IVSwitch/TranslationRule/GetFilteredTranslationRules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',105),
-('979EA3A2-EF3C-4227-802E-4C501280BEDA','Codec Profiles','Codec Profiles','#/view/NP_IVSwitch/Views/CodecProfile/CodecProfileManagement'				,'89254E36-5D91-4DB1-970F-9BFEF404679A','NP_IVSwitch/CodecProfile/GetFilteredCodecProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',110),
-
+('9B4C0061-8610-42B0-B522-BCCFD8314B75','Switch Mapping','Switch Mapping','#/view/NP_IVSwitch/Views/SwitchMapping/SwitchMappingManagement'										,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','NP_IVSwitch/SwitchMapping/GetFilteredSwitchMappings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',55),
+('9F98A163-C563-4836-B53D-212DFF6D6AF5','Translation Rules','Translation Rules','#/view/NP_IVSwitch/Views/TranslationRule/TranslationRuleManagement'							,'89254E36-5D91-4DB1-970F-9BFEF404679A','NP_IVSwitch/TranslationRule/GetFilteredTranslationRules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',105),
+('979EA3A2-EF3C-4227-802E-4C501280BEDA','Codec Profiles','Codec Profiles','#/view/NP_IVSwitch/Views/CodecProfile/CodecProfileManagement'										,'89254E36-5D91-4DB1-970F-9BFEF404679A','NP_IVSwitch/CodecProfile/GetFilteredCodecProfiles',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',110),
 ('AA625479-74DE-4092-931F-D640E4BC2921','Switch Configuration','Switch Configuration','#/viewwithparams/WhS_BusinessEntity/Views/Switch/SingleSwitchManagement/{"switchId":"1"}','D7146EBA-A2B1-484C-A498-0DDE876A7580','WhS_BE/Switch/GetFilteredSwitches & WhS_BE/Switch/UpdateSwitch',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4),
-('C028E089-4353-4408-BE19-5BB751FFDD73','Firewalls','Firewalls','#/view/NP_IVSwitch/Views/Firewall/FirewallManagement'								,'50624672-CD25-44FD-8580-0E3AC8E34C71','NP_IVSwitch/Firewall/GetFilteredFirewalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',115),
-('8098e7bb-55ed-4c3b-be5e-72ad74cb62c4','Switch Dashboard','Switch Dashboard','#/view/NP_IVSwitch/Views/SwitchDashboard/SwitchDashboard','3246ccb2-88d4-473e-a229-dc1c7de22f8c',null,null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1)
+('C028E089-4353-4408-BE19-5BB751FFDD73','Firewalls','Firewalls','#/view/NP_IVSwitch/Views/Firewall/FirewallManagement'															,'50624672-CD25-44FD-8580-0E3AC8E34C71','NP_IVSwitch/Firewall/GetFilteredFirewalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',115),
+('8098e7bb-55ed-4c3b-be5e-72ad74cb62c4','Switch Dashboard','Switch Dashboard','#/view/NP_IVSwitch/Views/SwitchDashboard/SwitchDashboard'										,'3246ccb2-88d4-473e-a229-dc1c7de22f8c',null,null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -173,7 +171,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);

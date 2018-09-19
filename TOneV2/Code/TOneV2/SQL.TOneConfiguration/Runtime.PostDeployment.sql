@@ -78,7 +78,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
@@ -144,7 +144,25 @@ when not matched by target then
 --------------------------------------------------------------------------------------------------------------
 end
 
---[runtime].[SchedulerTaskTriggerType]--------------------------------------------------------------BEGINset nocount on;;with cte_data([ID],[Name],[TriggerTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','Manual','{"URL": "/Client/Modules/Runtime/Views/TriggerTemplates/TaskTriggerManual.html","Editor": "vr-runtime-tasktrigger-manual","FQTN": "Vanrise.Runtime.Triggers.TimeTaskTrigger.ManualSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": true}'),('295B4FAC-DBF9-456F-855E-60D0B176F86B','Timer','{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": false}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[TriggerTypeInfo]))merge	[runtime].[SchedulerTaskTriggerType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[TriggerTypeInfo] = s.[TriggerTypeInfo]when not matched by target then	insert([ID],[Name],[TriggerTypeInfo])	values(s.[ID],s.[Name],s.[TriggerTypeInfo]);
+--[runtime].[SchedulerTaskTriggerType]--------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([ID],[Name],[TriggerTypeInfo])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('7FDB2D2B-E1B2-47D5-ACD5-234E391CA759','Manual','{"URL": "/Client/Modules/Runtime/Views/TriggerTemplates/TaskTriggerManual.html","Editor": "vr-runtime-tasktrigger-manual","FQTN": "Vanrise.Runtime.Triggers.TimeTaskTrigger.ManualSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": true}'),
+('295B4FAC-DBF9-456F-855E-60D0B176F86B','Timer','{"URL":"/Client/Modules/Runtime/Views/TriggerTemplates/TimerTriggerTemplate.html","Editor":"vr-runtime-tasktrigger-timer","FQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.TimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","AllowRunIfEnabled": false}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[TriggerTypeInfo]))
+merge	[runtime].[SchedulerTaskTriggerType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[TriggerTypeInfo] = s.[TriggerTypeInfo]
+when not matched by target then
+	insert([ID],[Name],[TriggerTypeInfo])
+	values(s.[ID],s.[Name],s.[TriggerTypeInfo]);
 ----------------------------------------------------------------------------------------------------
 END
 

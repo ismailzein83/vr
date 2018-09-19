@@ -97,9 +97,8 @@ as (select * from (values
 ('95F31CAF-F3F0-4617-B253-031A8FD69866','Volume Commitment','Volume Commitment','#/view/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentManagement'	,'670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_Deal/VolCommitmentDeal/GetFilteredVolCommitmentDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5,null),
 ('BAA1EDFB-4DA7-4BEE-ABA0-9E375EA3E3BF','Swap Deal','Swap Deal','#/view/WhS_Deal/Views/SwapDeal/SwapDealManagement'									,'670FD0F9-6DCE-4567-8E12-DC3E5830B549','WhS_Deal/SwapDeal/GetFilteredSwapDeals',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10,null),
 ('E3DABC8E-2180-48B9-A1C8-45D199C011AF','Notifications','Deal Notifications',null																	,'670FD0F9-6DCE-4567-8E12-DC3E5830B549',null,null,null,'{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib","$values":[{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities","VRNotificationTypeId":"7a0b2488-02e8-48dc-8ae4-1f5461eb731e"},{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities","VRNotificationTypeId":"3bd6e4cb-d407-43ed-9b85-30d0a88cb525"}]}}','A196C40A-30B5-4297-B7B0-4344C41CE5A2',15,null),
-
-('B8F19D06-3FB3-44E8-80BD-3C73F915871B','Progress Report','Progress Report',null,'242ADC4E-4B76-4FD8-89D1-700A9DF70CD4',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"092a3cd1-470f-4ab7-9b5d-7e50444d7218"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',3,null),
-('F9341A86-37FC-4804-A1EF-1E63363D91FE','Overall Progress','Overall Progress',null,'242ADC4E-4B76-4FD8-89D1-700A9DF70CD4',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"82aa89f6-4d19-4168-a499-cdd2875f1702","AnalyticReportId":"4e1fc1aa-b783-4529-be9f-38918dafe555"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null)
+('B8F19D06-3FB3-44E8-80BD-3C73F915871B','Progress Report','Progress Report',null																	,'242ADC4E-4B76-4FD8-89D1-700A9DF70CD4',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"092a3cd1-470f-4ab7-9b5d-7e50444d7218"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',3,null),
+('F9341A86-37FC-4804-A1EF-1E63363D91FE','Overall Progress','Overall Progress',null																	,'242ADC4E-4B76-4FD8-89D1-700A9DF70CD4',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"82aa89f6-4d19-4168-a499-cdd2875f1702","AnalyticReportId":"4e1fc1aa-b783-4529-be9f-38918dafe555"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -107,7 +106,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
 when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);

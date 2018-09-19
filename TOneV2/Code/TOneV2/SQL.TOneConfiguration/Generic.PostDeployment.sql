@@ -152,7 +152,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('1E9577A9-EF49-475B-B32C-585A26063B04','Data Record Types','Data Record Types','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement'																	,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordType/GetFilteredDataRecordTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
+('1E9577A9-EF49-475B-B32C-585A26063B04','Data Record Types','Data Record Types','#/view/VR_GenericData/Views/GenericDataRecord/DataRecordTypeManagement'																,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataRecordType/GetFilteredDataRecordTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
 ('A3219A0D-87BA-4CA9-A9A1-BB1FB2BD732F','Generic Rule Definitions','Generic Rule Definitions','#/view/VR_GenericData/Views/GenericRuleDefinition/GenericRuleDefinitionManagement'										,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/GenericRuleDefinition/GetFilteredGenericRuleDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3),
 ('F9137B44-C362-4823-B2A3-6EF9E5C40430','Data Transformation Definitions','Data Transformation Definitions','#/view/VR_GenericData/Views/DataTransformationDefinition/DataTransformationDefinitionManagement'			,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataTransformationDefinition/GetFilteredDataTransformationDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4),
 ('651DD50E-9CBB-49F5-8CA4-F3FDDBCB9C24','Data Stores','Data Stores','#/view/VR_GenericData/Views/DataStore/DataStoreManagement'																							,'4D5BE8B1-4E8D-414A-8A23-BB3DD17E35C7','VR_GenericData/DataStore/GetFilteredDataStores',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
@@ -169,7 +169,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);

@@ -91,9 +91,8 @@ as (select * from (values
 ('7ce99d52-af55-4111-b59b-e6de6995b84f','Test call','Test call','#/view/QM_CLITester/Views/TestPage/Test'													,'21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/TestCall/GetFilteredTestCalls & QM_CLITester/TestCall/GetUpdated & QM_CLITester/TestCall/GetBeforeId',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',11),
 ('d845620f-f6c1-49c6-a521-0629ea8d2c66','History','Calls History','#/view/QM_CLITester/Views/HistoryTestCall/HistoryTestCallManagement'						,'21e542bb-6bfb-4dbb-b359-ea50e3b42c57','QM_CLITester/TestCall/GetFilteredTestCalls',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',12),
 ('c65ed28a-36d0-4047-bec5-030d35b02308','Schedule Test Calls','Schedule Test Calls','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}','21e542bb-6bfb-4dbb-b359-ea50e3b42c57',null,null,null,'{"$type":"Vanrise.Runtime.Business.UserSchedulerServiceViewSettings, Vanrise.Runtime.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',12),
-
-('7e71942c-9569-43e0-a3e0-5f24b45de666','Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement'					,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03','QM_BE/Zone/GetFilteredZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
-('0abbf4d1-1050-42ce-bf29-9af1d5ca4d4e','Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement'	,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03','QM_BE/Supplier/GetFilteredSuppliers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',21)
+('7e71942c-9569-43e0-a3e0-5f24b45de666','Zone','Zone','#/view/QM_BusinessEntity/Views/Zone/ZoneManagement'													,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03','QM_BE/Zone/GetFilteredZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
+('0abbf4d1-1050-42ce-bf29-9af1d5ca4d4e','Supplier','Supplier','#/view/QM_BusinessEntity/Views/Supplier/SupplierManagement'									,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03','QM_BE/Supplier/GetFilteredSuppliers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',21)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -101,7 +100,7 @@ using	cte_data as s
 on		1=1 and t.[Id] = s.[Id]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
 when not matched by target then
 	insert([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 	values(s.[Id],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);

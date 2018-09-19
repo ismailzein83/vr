@@ -56,9 +56,9 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('DCA194CE-C8AE-4F54-878B-05CED4EC386B','ISP Data','ISP Data',null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"08809a53-1cc8-47e2-901a-0333ae60ceb8"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null,null),
-('91C8AFC1-04EF-4F5B-9269-2523F9A87106','ISPs','ISPs',null,'AD9EEB65-70A3-4F57-B261-79F40D541E23',null,null,null,'{"$type":"Retail.BusinessEntity.Entities.AccountBEDefinitionViewSettings, Retail.BusinessEntity.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountBEDefinitionViewSetting, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountBEDefinitionViewSetting, Retail.BusinessEntity.Entities","BusinessEntityId":"cdc53681-162c-42d6-b327-757570b876d8"}]},"AccountDefinitionSelectorLabel":"ISP"}','70CF19AC-B860-4010-A544-B6D41F94F505',2,null),
-('6689B438-41CC-4B79-BFF3-8A732ECFFB57','ISP Identification','ISP Identification',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["827ff22c-0417-4aed-99cd-26a34595ab0a"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2,null)
+('DCA194CE-C8AE-4F54-878B-05CED4EC386B','ISP Data','ISP Data',null						,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"08809a53-1cc8-47e2-901a-0333ae60ceb8"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null,null),
+('91C8AFC1-04EF-4F5B-9269-2523F9A87106','ISPs','ISPs',null								,'AD9EEB65-70A3-4F57-B261-79F40D541E23',null,null,null,'{"$type":"Retail.BusinessEntity.Entities.AccountBEDefinitionViewSettings, Retail.BusinessEntity.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Retail.BusinessEntity.Entities.AccountBEDefinitionViewSetting, Retail.BusinessEntity.Entities]], mscorlib","$values":[{"$type":"Retail.BusinessEntity.Entities.AccountBEDefinitionViewSetting, Retail.BusinessEntity.Entities","BusinessEntityId":"cdc53681-162c-42d6-b327-757570b876d8"}]},"AccountDefinitionSelectorLabel":"ISP"}','70CF19AC-B860-4010-A544-B6D41F94F505',2,null),
+('6689B438-41CC-4B79-BFF3-8A732ECFFB57','ISP Identification','ISP Identification',null	,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["827ff22c-0417-4aed-99cd-26a34595ab0a"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -66,7 +66,7 @@ using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
 when not matched by target then
 	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
