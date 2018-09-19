@@ -77,6 +77,7 @@
     <Folder Include="integration\Tables\" />
     <Folder Include="integration\Stored Procedures\" />
     <Folder Include="integration\User Defined Types\" />
+    <Folder Include="integration\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\BPTracking.sql" />
@@ -117,6 +118,8 @@
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_GetChangeInfoById.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTrackings_GetBPInstanceTrackingMessages.sql" />
     <Build Include="logging\Stored Procedures\sp_LogEntry_Insert.sql" />
+    <Build Include="integration\Functions\ParseStringList.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceSummary_Get.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
