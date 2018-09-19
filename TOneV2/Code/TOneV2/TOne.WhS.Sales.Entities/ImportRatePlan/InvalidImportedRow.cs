@@ -15,5 +15,6 @@ namespace TOne.WhS.Sales.Entities
         public long? ZoneId { get; set; }
 
         public string ErrorMessage { get; set; }
+        public ImportedRowStatus Status { get; set; }
     }
 }

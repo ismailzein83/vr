@@ -18,6 +18,7 @@ namespace TOne.WhS.Sales.Entities
 	public enum ImportedRowStatus
 	{
 		Valid = 0,
-		Invalid = 1
+		Invalid = 1,
+        OnlyNormalRateValid = 2
 	}
 }

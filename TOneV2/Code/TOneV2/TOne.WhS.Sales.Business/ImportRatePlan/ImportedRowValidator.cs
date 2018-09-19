@@ -17,19 +17,18 @@ namespace TOne.WhS.Sales.Business
 		private IEnumerable<IImportedRowValidator> _validators;
 		private IEnumerable<int> _allRateTypeIds;
 
-		public ImportedRowValidator()
-		{
-			_validators = new List<IImportedRowValidator>()
+        public ImportedRowValidator()
+        {
+            _validators = new List<IImportedRowValidator>()
 				  {
-				new CountryValidator(),
+			    	new CountryValidator(),
 						new ZoneValidator(),
 						new RateValidator(),
 						new EffectiveDateValidator(),
-						new OtherRateValidator()
 				  };
-			var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
-			_allRateTypeIds = rateTypeManager.GetAllRateTypes().Select(item => item.RateTypeId);
-		}
+            var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+            _allRateTypeIds = rateTypeManager.GetAllRateTypes().Select(item => item.RateTypeId);
+        }
 
 		#endregion
 
@@ -90,35 +89,45 @@ namespace TOne.WhS.Sales.Business
 		{
 			bool isValid = true;
 			var errorMessages = new List<string>();
+            var isValidContext = new IsValidContext()
+            {
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                AllRateTypeIds = _allRateTypeIds,
+                ImportedRow = context.ImportedRow,
+                ZoneDraft = context.ZoneDraft,
+                ExistingZone = context.ExistingZone,
+                CountryBEDsByCountry = context.CountryBEDsByCountry,
+                ClosedCountryIds = context.ClosedCountryIds,
+                DateTimeFormat = context.DateTimeFormat,
+                AdditionalCountryBEDsByCountryId = context.AdditionalCountryBEDsByCountryId
+            };
+            foreach (IImportedRowValidator validator in _validators)
+            {
+                if (!validator.IsValid(isValidContext))
+                {
+                    if (isValidContext.ErrorMessage != null)
+                        errorMessages.Add(isValidContext.ErrorMessage);
+                    isValid = false;
+                }
+            }
 
-			foreach (IImportedRowValidator validator in _validators)
-			{
-				var isValidContext = new IsValidContext()
-				{
-					OwnerType = context.OwnerType,
-					OwnerId = context.OwnerId,
-					AllRateTypeIds = _allRateTypeIds,
-					ImportedRow = context.ImportedRow,
-					ZoneDraft = context.ZoneDraft,
-					ExistingZone = context.ExistingZone,
-					CountryBEDsByCountry = context.CountryBEDsByCountry,
-					ClosedCountryIds = context.ClosedCountryIds,
-					DateTimeFormat = context.DateTimeFormat,
-					AdditionalCountryBEDsByCountryId = context.AdditionalCountryBEDsByCountryId
-				};
-
-				if (!validator.IsValid(isValidContext))
-				{
-					if (isValidContext.ErrorMessage != null)
-						errorMessages.Add(isValidContext.ErrorMessage);
-					isValid = false;
-				}
-			}
+            bool isOtherRateValid = IsOtherRateValid(isValidContext);
+            if (!isOtherRateValid)
+                errorMessages.Add(isValidContext.ErrorMessage);
 
 			if (isValid)
 			{
-				context.Status = ImportedRowStatus.Valid;
-				context.ErrorMessage = null;
+                if (isOtherRateValid)
+                {
+                    context.Status = ImportedRowStatus.Valid;
+                    context.ErrorMessage = null;
+                }
+                else
+                {
+                    context.Status = ImportedRowStatus.OnlyNormalRateValid;
+                    context.ErrorMessage = string.Join(" ; ", errorMessages);
+                }
 				return true;
 			}
 			else
@@ -129,6 +138,52 @@ namespace TOne.WhS.Sales.Business
 				return false;
 			}
 		}
+        public bool IsOtherRateValid(IIsValidContext context)
+        {
+            context.ErrorMessage = null;
+            IEnumerable<int> applicableRateTypeIds;
+            bool isValid = true;
+            List<string> errorMessages = new List<string>();
+            List<int> validRateTypeIds = new List<int>();
+            string errorMessage;
+
+            if (context.ExistingZone == null)
+                return true;
+
+            if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
+                applicableRateTypeIds = context.AllRateTypeIds;
+            else applicableRateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(context.OwnerId, context.ExistingZone.SaleZoneId, DateTime.Now);
+
+            foreach (var otherRate in context.ImportedRow.OtherRates)
+            {
+                if (string.IsNullOrEmpty(otherRate.Value))
+                    continue;
+
+                if (!applicableRateTypeIds.Contains(otherRate.TypeId))
+                {
+                    //isValid = false;
+                    errorMessages.Add(string.Format("{0} Rules (Under Rules-Sale-RateType) is not configured for this customer's zone.", otherRate.TypeName));
+                }
+                else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage))
+                {
+                    isValid = false;
+                    errorMessages.Add(string.Join(" ", otherRate.TypeName, errorMessage));
+                }
+                else
+                {
+                    validRateTypeIds.Add(otherRate.TypeId);
+                }
+            }
+
+            if (!isValid)
+            {
+                context.ErrorMessage = string.Join("; ", errorMessages);
+                return false;
+            }
+
+            context.ImportedRow.OtherRates = context.ImportedRow.OtherRates.FindAllRecords(item => validRateTypeIds.Contains(item.TypeId)).ToList();
+            return true;
+        }
 
 		#region Private Members
 
@@ -295,55 +350,56 @@ namespace TOne.WhS.Sales.Business
 		}
 	}
 
-	public class OtherRateValidator : IImportedRowValidator
-	{
-		public bool IsValid(IIsValidContext context)
-		{
-			context.ErrorMessage = null;
-			IEnumerable<int> applicableRateTypeIds;
-			bool isValid = true;
-			List<string> errorMessages = new List<string>();
-			List<int> validRateTypeIds = new List<int>();
-			string errorMessage;
+    //public class OtherRateValidator : IImportedRowValidator
+    //{
+    //    public bool IsValid(IIsValidContext context)
+    //    {
+    //        context.ErrorMessage = null;
+    //        IEnumerable<int> applicableRateTypeIds;
+    //        bool isValid = true;
+    //        List<string> errorMessages = new List<string>();
+    //        List<int> validRateTypeIds = new List<int>();
+    //        string errorMessage;
 
-			if (context.ExistingZone == null)
-				return true;
+    //        if (context.ExistingZone == null)
+    //            return true;
 
-			if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
-				applicableRateTypeIds = context.AllRateTypeIds;
-			else applicableRateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(context.OwnerId, context.ExistingZone.SaleZoneId, DateTime.Now);
+    //        if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
+    //            applicableRateTypeIds = context.AllRateTypeIds;
+    //        else applicableRateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(context.OwnerId, context.ExistingZone.SaleZoneId, DateTime.Now);
 
-			foreach (var otherRate in context.ImportedRow.OtherRates)
-			{
-				if (string.IsNullOrEmpty(otherRate.Value))
-					continue;
+    //        foreach (var otherRate in context.ImportedRow.OtherRates)
+    //        {
+    //            if (string.IsNullOrEmpty(otherRate.Value))
+    //                continue;
 
-				if (!applicableRateTypeIds.Contains(otherRate.TypeId))
-				{
-					isValid = false;
-					errorMessages.Add(string.Format("{0} Rules (Under Rules-Sale-RateType) is not configured for this customer's zone.", otherRate.TypeName));
-				}
-				else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage))
-				{
-					isValid = false;
-					errorMessages.Add(string.Join(" ", otherRate.TypeName, errorMessage));
-				}
-				else
-				{
-					validRateTypeIds.Add(otherRate.TypeId);
-				}
-			}
+    //            if (!applicableRateTypeIds.Contains(otherRate.TypeId))
+    //            {
+    //                //isValid = false;
+    //                errorMessages.Add(string.Format("{0} Rules (Under Rules-Sale-RateType) is not configured for this customer's zone.", otherRate.TypeName));
+    //            }
+    //            else if (!BulkActionUtilities.ValidateRateValue(otherRate.Value, out errorMessage))
+    //            {
+    //                isValid = false;
+    //                errorMessages.Add(string.Join(" ", otherRate.TypeName, errorMessage));
+    //            }
+    //            else
+    //            {
+    //                validRateTypeIds.Add(otherRate.TypeId);
+    //            }
+    //        }
 
-			if (!isValid)
-			{
-				context.ErrorMessage = string.Join("; ", errorMessages);
-				return false;
-			}
+    //        if (!isValid)
+    //        {
+    //            context.ErrorMessage = string.Join("; ", errorMessages);
+    //            return false;
+    //        }
 
-			context.ImportedRow.OtherRates = context.ImportedRow.OtherRates.FindAllRecords(item => validRateTypeIds.Contains(item.TypeId)).ToList();
-			return true;
+    //        context.ImportedRow.OtherRates = context.ImportedRow.OtherRates.FindAllRecords(item => validRateTypeIds.Contains(item.TypeId)).ToList();
+    //        return true;
 
-		}
-	}
+    //    }
+    //}
+  
 	#endregion
 }

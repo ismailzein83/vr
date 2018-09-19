@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultImport', ['UtilsService', 'VRUIUtilsService', 'LabelColorsEnum', function (UtilsService, VRUIUtilsService, LabelColorsEnum) {
+app.directive('vrWhsSalesBulkactionValidationresultImport', ['UtilsService', 'VRUIUtilsService', 'LabelColorsEnum','WhS_Sales_ImportedRowStatus', function (UtilsService, VRUIUtilsService, LabelColorsEnum,WhS_Sales_ImportedRowStatus) {
 	return {
 		restrict: "E",
 		scope: {
@@ -69,12 +69,16 @@ app.directive('vrWhsSalesBulkactionValidationresultImport', ['UtilsService', 'VR
 			if (sourceArray == undefined)
 				return;
 			if (gridArray.length < sourceArray.length) {
-				for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
+			    for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
+			        extendDataItem(sourceArray[i]);
 					gridArray.push({
 						Entity: sourceArray[i]
 					});
 				}
 			}
+		}
+		function extendDataItem(dataItem) {
+		    dataItem.normalRateValid = (dataItem.Status == WhS_Sales_ImportedRowStatus.OnlyNormalRateValid.value);
 		}
 	}
 }]);

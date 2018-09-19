@@ -15,6 +15,8 @@ namespace TOne.WhS.Sales.Entities
 		public string EffectiveDate { get; set; }
 
         public List<ImportedOtherRate> OtherRates { get; set; }
+
+        public ImportedRowStatus Status { get; set; }
     }
     public class ImportedOtherRate
     {

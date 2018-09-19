@@ -68,7 +68,7 @@ namespace TOne.WhS.Sales.MainExtensions
 					{
 						validationResult.InvalidImportedRows.Add(invalidImportedRow);
 
-						if (invalidImportedRow.ZoneId.HasValue)
+						if (invalidImportedRow.ZoneId.HasValue && invalidImportedRow.Status != ImportedRowStatus.OnlyNormalRateValid)
 						{
 							validationResult.ExcludedZoneIds.Add(invalidImportedRow.ZoneId.Value);
 						}

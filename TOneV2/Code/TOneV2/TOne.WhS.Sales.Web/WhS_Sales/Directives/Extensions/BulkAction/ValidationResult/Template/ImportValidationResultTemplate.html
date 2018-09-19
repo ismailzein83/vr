@@ -16,5 +16,8 @@
 		<vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create some spacing between the columns -->
 		<vr-datagridcolumn headertext="'Effective Date'" field="'Entity.ImportedRow.EffectiveDate'" type="'Date'" widthfactor="20" disablesorting></vr-datagridcolumn>
 		<vr-datagridcolumn headertext="'Error Message'" field="'Entity.ErrorMessage'" type="'Text'" widthfactor="60" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Normal Rate Valid'" fixedwidth="110" headerdescription="'Zones having valid normal rate will be included in the process (other rates will be excluded)'">
+            <vr-icon centered icontype="dataItem.Entity.normalRateValid"></vr-icon></div>
+        </vr-datagridcolumn>
 	</vr-datagrid>
 </vr-columns>
