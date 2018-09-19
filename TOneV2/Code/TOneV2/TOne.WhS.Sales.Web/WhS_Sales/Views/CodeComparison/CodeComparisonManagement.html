@@ -5,12 +5,21 @@
                 <span vr-loader="isLoadingSellingNumberPlan">
                     <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady"></vr-whs-be-sellingnumberplan-selector>
                 </span>
-                <vr-whs-be-supplier-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" normal-col-num="2" isrequired="true" ismultipleselection selectedvalues="selectedSuppliers"></vr-whs-be-supplier-selector>
+                <vr-whs-be-supplier-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" normal-col-num="2" isrequired="true" ismultipleselection selectedvalues="selectedSuppliers" onselectitem="onSelectItem" ondeselectitem="onDeselectItem" ondeselectallitems="onDeselectAll" hideselectall></vr-whs-be-supplier-selector>
                 <vr-columns width="normal">
                     <vr-textbox value="threshold" label="Threshold" isrequired="true" customvalidate="validateThreshold()"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="codeStartWith" label="Code Start With"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-select label="Supplier Zone Names"
+                               on-ready="scopeModel.onSelectorReady"
+                               datasource="scopeModel.SupplierZoneNames"
+                               datavaluefield="CarrierAccountId"
+                               datatextfield="Name"
+                               selectedvalues="scopeModel.selectedSupplierZoneName">
+                    </vr-select>
                 </vr-columns>
             </vr-row>
         </div>

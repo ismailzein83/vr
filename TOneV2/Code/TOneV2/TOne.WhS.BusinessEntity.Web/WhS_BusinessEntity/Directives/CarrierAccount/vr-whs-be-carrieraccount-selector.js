@@ -80,6 +80,10 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             if (attrs.hidelabel != undefined)
                 hidelabel = "hidelabel";
 
+            var hideselectall = "";
+            if (attrs.hideselectall != undefined)
+                hideselectall = "hideselectall";
+
             var customlabel = '';
             if (attrs.customlabel != undefined)
                 customlabel = 'customlabel="{{ctrl.customlabel}}"';
@@ -117,7 +121,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                         '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" ' +
                             ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" ' +
                             ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" ' +
-                            ' datadisabledfield="IsDisabled" ' + ' label="' + label + '" ' + customlabel + ' ' + hidelabel + ' ' + hideselectall + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
+                            ' datadisabledfield="IsDisabled" ' + ' label="' + label + '" ' + customlabel + ' ' + hidelabel + ' ' + hideselectall + ' ' + hideselectall + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
                             ' ' + ismultipleselection + ' ' + viewCliked + '>' +
                         '</vr-select>' +
                    '</vr-columns>';

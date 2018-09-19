@@ -14,7 +14,8 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
                 ismultipleselection: '@',
                 normalColNum: '@',
                 hideremoveicon: "@",
-                customlabel: '@'
+                customlabel: '@',
+                ondeselectallitems: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -41,6 +42,10 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
 
+            var hideselectall = "";
+            if (attrs.hideselectall != undefined)
+                hideselectall = "hideselectall"; 
+
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
@@ -62,8 +67,8 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
                 usefullcolumn = "usefullcolumn";
 
             return '<vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady" onselectionchanged="ctrl.onselectionchanged"  selectedvalues="ctrl.selectedvalues" ' +
-                         ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" getsuppliers ' + multipleselection +
-                         ' ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + hidelabel + ' ' + customlabel + ' ' + usefullcolumn + '>' +
+                         ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems = "ctrl.ondeselectallitems" isrequired="ctrl.isrequired" normal-col-num="{{ctrl.normalColNum}}" getsuppliers ' + multipleselection +
+                         ' ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + hidelabel + ' ' + hideselectall + ' ' + customlabel + ' ' + usefullcolumn + '>' +
                    '</vr-whs-be-carrieraccount-selector>';
         }
 

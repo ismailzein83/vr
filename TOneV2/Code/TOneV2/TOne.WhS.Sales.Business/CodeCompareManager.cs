@@ -121,6 +121,7 @@ namespace TOne.WhS.Sales.Business
                     codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
                     codeCompareItem.Action = CodeCompareAction.Delete;
                 }
+
                 codeCompareItems.Add(codeCompareItem);
 
             }
@@ -149,13 +150,19 @@ namespace TOne.WhS.Sales.Business
                 var codeCompareItem = codeCompareItems.ElementAt(i);
                 if (codeCompareItem.Action != null)
                 {
-                    if (codeCompareItem.SaleCode == null)
+                    if (codeCompareItem.Action == CodeCompareAction.New && query.ZoneNameSupplierId != null)
                     {
-                        worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SupplierItems[0].SupplierZone);
+                        CodeCompareSupplierItem supplierItem = codeCompareItem.SupplierItems.FindRecord(x => x.SupplierId == query.ZoneNameSupplierId);
+                        if (supplierItem != null)
+                            worksheet.Cells[cellCounter, 0].PutValue(supplierItem.SupplierZone);
+                        else worksheet.Cells[cellCounter, 0].PutValue(null);
                     }
                     else
                     {
-                        worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SaleZone);
+                        if (codeCompareItem.SaleZone != null)
+                            worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SaleZone);
+                        else
+                            worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SupplierItems[0].SupplierZone);
                     }
                     worksheet.Cells[cellCounter, 1].PutValue(codeCompareItem.Code);
                     if (codeCompareItem.Action == CodeCompareAction.New)
@@ -284,12 +291,12 @@ namespace TOne.WhS.Sales.Business
                                 else
                                     row.Cells.Add(new ExportExcelCell() { Value = "" });
                             }
-                            
+
                             row.Cells.Add(new ExportExcelCell() { Value = record.OccurrenceInSuppliers });
                             row.Cells.Add(new ExportExcelCell() { Value = record.AbsenceInSuppliers });
-                            
-                            string action = record.Action == CodeCompareAction.New 
-                                ? "N" : (record.Action == CodeCompareAction.Delete ? "D" : string.Empty);                            
+
+                            string action = record.Action == CodeCompareAction.New
+                                ? "N" : (record.Action == CodeCompareAction.Delete ? "D" : string.Empty);
 
                             row.Cells.Add(new ExportExcelCell() { Value = action });
                             sheet.Rows.Add(row);

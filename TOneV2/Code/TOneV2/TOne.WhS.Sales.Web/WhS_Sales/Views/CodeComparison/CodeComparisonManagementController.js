@@ -10,6 +10,8 @@
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var selectorAPI;
+        var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
         defineScope();
@@ -36,6 +38,10 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
+            $scope.scopeModel.onSelectorReady = function (api) {
+                selectorAPI = api;
+                selectorReadyPromiseDeferred.resolve();
+            };
             $scope.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
@@ -55,6 +61,18 @@
                     if ($scope.threshold > carrierAccountDirectiveAPI.getSelectedIds().length)
                         return "Maximum value : " + carrierAccountDirectiveAPI.getSelectedIds().length;
                 }
+            };
+
+            $scope.scopeModel.SupplierZoneNames = [];
+            $scope.onSelectItem = function (selectedValue) {
+                $scope.scopeModel.SupplierZoneNames.push(selectedValue);
+            };
+            $scope.onDeselectItem = function (selectedValue) {
+                var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.SupplierZoneNames, selectedValue.CarrierAccountId, 'CarrierAccountId');
+                $scope.scopeModel.SupplierZoneNames.splice(datasourceIndex, 1);
+            };
+            $scope.onDeselectAll = function () {
+                $scope.scopeModel.SupplierZoneNames = [];
             };
         }
 
@@ -84,7 +102,7 @@
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
             carrierAccountReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred)
+                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
             });
 
             return loadCarrierAccountPromiseDeferred.promise;
@@ -96,7 +114,8 @@
                 threshold: $scope.threshold,
                 sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 supplierIds: carrierAccountDirectiveAPI.getSelectedIds(),
-                codeStartWith: ($scope.codeStartWith != null) ? $scope.codeStartWith : null
+                codeStartWith: ($scope.codeStartWith != null) ? $scope.codeStartWith : null,
+                ZoneNameSupplierId: $scope.scopeModel.selectedSupplierZoneName != undefined ? $scope.scopeModel.selectedSupplierZoneName.CarrierAccountId : null
             };
         }
 
