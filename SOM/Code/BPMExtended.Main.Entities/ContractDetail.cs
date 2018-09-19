@@ -20,6 +20,8 @@ namespace BPMExtended.Main.Entities
 
         public string RatePlanName { get; set; }
 
+        public string Address { get; set; }
+
         public ContractDetailStatus Status { get; set; }
 
         public DateTime CreatedTime { get; set; }
@@ -35,6 +37,9 @@ namespace BPMExtended.Main.Entities
 
         public string PhoneNumber { get; set; }
 
+        public string Address { get; set; }
+
     }
+
 
 }

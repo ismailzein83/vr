@@ -34,6 +34,27 @@ namespace BPMExtended.Main.Common
             return list.Select(mappingExpression).ToList();
         }
 
+        public static IEnumerable<Q> MapRecords<T, Q>(this IEnumerable<T> list, Func<T, Q> mappingExpression, Func<T, bool> filterExpression)
+        {
+            if (list == null)
+                return null;
+
+            IEnumerable<T> filteredResults = list.ApplyFiltering(filterExpression);
+
+            if (filteredResults == null)
+                return null;
+
+            return filteredResults.Select(mappingExpression).ToList();
+        }
+
+        private static IEnumerable<T> ApplyFiltering<T>(this IEnumerable<T> list, Func<T, bool> filterExpression)
+        {
+            if (filterExpression == null)
+                return list;
+
+            return list.Where(filterExpression).ToList();
+        }
+
         #endregion
     }
 }

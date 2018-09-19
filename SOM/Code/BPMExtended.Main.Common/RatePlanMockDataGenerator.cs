@@ -33,6 +33,14 @@ namespace BPMExtended.Main.Common
 
         const string CONTRACT_CUST1_TL3 = "853F19B6-280A-4F1A-ADB6-325908B1EE20";
 
+        const string CONTRACT_CUST1_TL4 = "41AD81A0-9FD1-4092-9473-355F8245A1B2}";
+
+        const string CONTRACT_CUST1_TL5 = "7A94C45E-1E76-49A8-AE5B-FC906F70B8AD";
+
+        const string CONTRACT_CUST1_TL6 = "F48899F0-A1EE-4FC1-9789-C5624AC7F47E";
+
+        const string CONTRACT_CUST1_TL7 = "531A3E2F-A149-457F-8213-5D28CFDD052A";
+
         #endregion
 
         #region Leased Line
@@ -269,9 +277,10 @@ namespace BPMExtended.Main.Common
                  {
                      ContractId = CONTRACT_CUST1_TL1,
                      CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= PHONE_NUMBER_1,
+                     PhoneNumber= "2222",
                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     Address = "Haret hreik",
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3)
@@ -283,6 +292,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     Address = "Beirut",
                      Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
                      LastModifiedTime = DateTime.Today
@@ -294,6 +304,43 @@ namespace BPMExtended.Main.Common
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_TL_ISDN_RES_NORMAL,
+                     Address = "Beirut",
+                     RatePlanName = "Normal Plan (ISDN)",
+                     CreatedTime = DateTime.Today,
+                     LastModifiedTime = DateTime.Today
+                 },
+                  new TelephonyContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_TL4,
+                     CustomerId = CUSTOMER_ID_1,
+                     Status = ContractDetailStatus.Active,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_TL_ISDN_RES_NORMAL,
+                     Address = "Hamra",
+                     RatePlanName = "Normal Plan (ISDN)",
+                     CreatedTime = DateTime.Today,
+                     LastModifiedTime = DateTime.Today
+                 },
+                  new TelephonyContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_TL5,
+                     CustomerId = CUSTOMER_ID_1,
+                     Status = ContractDetailStatus.Active,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                     Address = "Tyr",
+                     RatePlanName = "Normal Plan (ISDN)",
+                     CreatedTime = DateTime.Today,
+                     LastModifiedTime = DateTime.Today
+                 },
+                  new TelephonyContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_TL6,
+                     CustomerId = CUSTOMER_ID_1,
+                     Status = ContractDetailStatus.Active,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                     Address = "Beirut",
                      RatePlanName = "Normal Plan (ISDN)",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
@@ -305,6 +352,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_LL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     Address = "Tyr",
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3)
@@ -316,6 +364,7 @@ namespace BPMExtended.Main.Common
                       PhoneNumber= PHONE_NUMBER_1,
                       RatePlanId = RP_TL_PSTN_RES_NORMAL,
                       RatePlanName = "Normal Plan",
+                      Address = "saida",
                       Status = ContractDetailStatus.Inactive,
                       CreatedTime = DateTime.Today.AddDays(-4),
                       LastModifiedTime = DateTime.Today
@@ -328,6 +377,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_TL_PSTN_RES_ENG,
                      RatePlanName = "Engineers Plan",
+                     Address = "Beirut",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -339,6 +389,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_TL_PSTN_RES_MAR,
                      RatePlanName = "Family of Martyr Plan",
+                     Address = "Beirut",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -350,6 +401,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_TL_ISDN_RES_MAR,
                      RatePlanName = "Family of Martyr Plan (ISDN)",
+                     Address = "test",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -361,6 +413,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_LL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     Address = "Beirut",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -372,6 +425,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_LL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     Address = "tyr",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -382,6 +436,7 @@ namespace BPMExtended.Main.Common
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_LL_RES_NORMAL,
+                     Address = "nabatieh",
                      RatePlanName = "Normal Plan",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
@@ -394,6 +449,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_LL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     Address = "nabatieh",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -405,6 +461,7 @@ namespace BPMExtended.Main.Common
                      RatePlanName = "Normal Plan",
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
+                     Address = "nabatieh",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -416,6 +473,7 @@ namespace BPMExtended.Main.Common
                      RatePlanName = "Normal Plan",
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
+                     Address = "beirut",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  },
@@ -427,6 +485,7 @@ namespace BPMExtended.Main.Common
                      RatePlanName = "Normal Plan",
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
+                     Address = "hamra",
                      CreatedTime = DateTime.Today,
                      LastModifiedTime = DateTime.Today
                  }
@@ -489,6 +548,87 @@ namespace BPMExtended.Main.Common
         }
 
         #endregion
+
+
+        #region Pabx
+
+        public static List<PabxContractDetail> GetPabxContracts(string customerId)
+        {
+            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+        }
+
+        public static List<PabxContractDetail> GetFilteredPabxContracts(string customerId, string contractId)
+        {
+            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId != contractId);
+        }
+
+        public static List<PabxContractDetail> checkIsContactNotPilot(string customerId, string contractId)
+        {
+            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId.ToLower() == contractId.ToLower() && x.IsPilot == false);
+        }
+
+        private static List<PabxContractDetail> GetAllPabxContracts()
+        {
+
+            return new List<PabxContractDetail>
+            {
+                 new PabxContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_TL1,
+                     CustomerId = CUSTOMER_ID_1,
+                     Address = "Haret hreik",
+                     IsPilot = true,
+                     PhoneNumber = "2222",
+                     PabxOption = PabxPhoneNumberOption.MakeCall                    
+
+                 },
+                  new PabxContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_TL2,
+                     CustomerId = CUSTOMER_ID_1,
+                     Address = "Beirut",
+                     IsPilot = false,
+                     PhoneNumber = PHONE_NUMBER_1,
+                     PabxOption = PabxPhoneNumberOption.Both                    
+
+                 },
+               
+                  new PabxContractDetail
+                 {
+                     ContractId = CONTRACT_CUST3_TL1,
+                     CustomerId = CUSTOMER_ID_3,
+                     Address = "Tyr",
+                     IsPilot = false,
+                     PhoneNumber = PHONE_NUMBER_1,
+                     PabxOption = PabxPhoneNumberOption.ReceiveCall   
+                 },
+                  new PabxContractDetail
+                 {
+                     ContractId = CONTRACT_CUST3_TL2,
+                     CustomerId = CUSTOMER_ID_3,
+                     Address = "Saida",
+                     IsPilot = false,
+                     PhoneNumber = PHONE_NUMBER_1,
+                     PabxOption = PabxPhoneNumberOption.ReceiveCall   
+                 },
+                  new PabxContractDetail
+                 {
+                     ContractId = CONTRACT_CUST3_TL3,
+                     CustomerId = CUSTOMER_ID_3,
+                     Address = "Beirut",
+                     IsPilot = false,
+                     PhoneNumber = PHONE_NUMBER_1,
+                     PabxOption = PabxPhoneNumberOption.ReceiveCall   
+                 }
+
+
+            };
+
+        }
+
+        #endregion
+
+
 
         #region ADSL Contract
 
