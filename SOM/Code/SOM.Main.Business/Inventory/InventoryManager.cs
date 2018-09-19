@@ -46,6 +46,66 @@ namespace SOM.Main.Business
 
             return result;
         }
+        public TechnicalReservationPhoneItem GetTechnicalReservation(string phoneNumber)
+        {
+            TechnicalReservationPhoneItem result = null;
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<FreeReservationDetail> data = connector.Get<List<FreeReservationDetail>>("/FreeReservation/GET?number=" + phoneNumber + "&Override=1");
+
+            if (data != null && data.Count > 0)
+            {
+                FreeReservationDetail detail = data[0];
+                result = new TechnicalReservationPhoneItem
+                {
+                    Cabinet = detail.CABINET_NAME,
+                    Transmitter = detail.WLL_TRANSMITTER_NAME,
+                    TransmitterPort = detail.WLL_TRANSMITTER_PORT_NAME,
+                    DP = detail.DP_NAME,
+                    Switch = detail.SWITCH_NAME,
+                    MDFPort = detail.MDF_PORT,
+                    VerticalMDF = detail.MDF_VERT,
+                    DPPortId = detail.DP_PORT_ID,
+                    DPId = detail.DP_ID,
+                    SwitchId = detail.SWITCH_ID,
+                    TransmitterId = detail.WLL_TRANSMITTER_ID,
+                    TransmitterPortId = detail.WLL_TRANSMITTER_PORT_ID,
+                    TransmitterModuleId = detail.WLL_TRANSMITTER_MODULE_ID,
+                    TransmitterModule = detail.WLL_TRANSMITTER_MODULE_NAME,
+                    Threshold = detail.THRESHOLD,
+                    SecondaryPortId = detail.SECONDARY_PORT_ID,
+                    SecondaryPort = detail.SECONDARY_PORT,
+                    ReceiverPortId = detail.WLL_RECEIVER_ID,
+                    ReceiverId = detail.WLL_RECEIVER_ID,
+                    Receiver = detail.WLL_RECEIVER_NAME,
+                    ReceiverPort = detail.WLL_RECEIVER_PORT_NAME,
+                    CabinetId = detail.CABINET_ID,
+                    CanReserve = detail.CAN_RESERVE,
+                    CurrentUtilization = detail.CURRENT_UTILIZATION,
+                    DIDExist = detail.EXIST_DID,
+                    DPMUXPort = detail.DP_MUX_PORT_NAME,
+                    DPMUXPortId = detail.DP_MUX_PORT_ID,
+                    DPPort = detail.DP_PORT,
+                    ISDNExist = detail.EXIST_ISDN,
+                    MDF = detail.MDF_NAME,
+                    MDFId = detail.MDF_ID,
+                    MDFPortId = detail.MDF_PORT_ID,
+                    PrimaryMUXPort = detail.PRIMARY_MUX_PORT_NAME,
+                    PrimaryMUXPortId = detail.PRIMARY_MUX_PORT_ID,
+                    PrimaryPort = detail.PRIMARY_PORT,
+                    PrimaryPortId = detail.PRIMARY_PORT_ID,
+                    PSTNExist = detail.EXIST_PSTN,
+                    VerticalMDFId = detail.MDF_VERT_ID
+
+                };
+
+            }
+
+            return result;
+        }
         public List<DPPortItem> GetFreePorts(string dpId)
         {
             List<DPPortItem> result = new List<DPPortItem>();
@@ -197,6 +257,56 @@ namespace SOM.Main.Business
             if (data != null)
             {
                 result.Message = string.Format("Phone Number is Reserved");
+            }
+            return result;
+        }
+        public string DeleteCPTReservation(string phoneNumber)
+        {
+            string result = "";
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            string data = connector.Get<string>("/DeleteCPTReservation/POST?PhoneNumber=" + phoneNumber);
+
+            if (data != null)
+            {
+                result = data;
+
+            }
+            return result.ToString();
+        }
+        public ReserveCPTRequestOutput ReserveCPT(ReserveCPTRequestInput input)
+        {
+
+            ReserveCPTRequestOutput result = new ReserveCPTRequestOutput();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            ReserveCPTRequestOutput data = connector.Get<ReserveCPTRequestOutput>("/ReserveCPT/POST?PhoneNumber=" + input.PhoneNumber + "&CPTID=" + input.CPTID);
+
+            if (data != null)
+            {
+                result = data;
+
+            }
+            return result;
+        }
+        public CPTItem SearchCPT(string phoneNumber)
+        {
+            CPTItem result = new CPTItem();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            CPTItem data = connector.Get<CPTItem>("/SearchCPT/Get?Phonenumber=" + phoneNumber);
+
+            if (data != null)
+            {
+                result = data;
             }
             return result;
         }

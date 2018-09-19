@@ -20,6 +20,13 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.GetInventoryPhoneItem(phoneNumber);
         }
+        [HttpGet]
+        [Route("GetTechnicalReservation")]
+        public TechnicalReservationPhoneItem GetTechnicalReservation(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetTechnicalReservation(phoneNumber);
+        }
 
         [HttpGet]
         [Route("GetFreePorts")]
@@ -83,6 +90,25 @@ namespace SOM.Main.Web.Controllers
         {
             InventoryManager manager = new InventoryManager();
             return manager.TestPhoneLine(phoneNumber);
+        }
+        [HttpGet]
+        [Route("ReserveCPT")]
+        public ReserveCPTRequestOutput ReserveCPT(string phoneNumber, string cptId)
+        {
+            InventoryManager manager = new InventoryManager();
+            ReserveCPTRequestInput input = new ReserveCPTRequestInput()
+            {
+                PhoneNumber = phoneNumber,
+                CPTID = cptId
+            };
+            return manager.ReserveCPT(input);
+        }
+        [HttpGet]
+        [Route("DeleteCPTReservation")]
+        public string DeleteCPTReservation(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.DeleteCPTReservation(phoneNumber);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using SOM.Main.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,31 @@ namespace BPMExtended.Main.Business
             return InventoryMockDataGenerator.GetAllCPTNumbers();
         }
 
-        public bool RegisterCPTNumber(string contractId, string cptId)
+        public ReserveCPTRequestOutput RegisterCPTNumber(string contractId, string cptId)
         {
+            //TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
+            //ReserveCPTRequestInput input = new ReserveCPTRequestInput()
+            //{
+            //    PhoneNumber = contract.PhoneNumber,
+            //    CPTID = cptId
+            //};
+            //ReserveCPTRequestOutput output = null;
+
+            //using (var client = new SOMClient())
+            //{
+            //    output = client.Post<ReserveCPTRequestInput, ReserveCPTRequestOutput>("api/SOM_Main/Inventory/ReserveCPT", input);
+            //}
+            //return output;
+
             string result = null;
             TelephonyContractDetail contract = this._contractManager.GetTelephonyContract(contractId);
             using (SOMClient client = new SOMClient())
             {
-                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveCPT?phoneNumber={0}&cPTId={1}", contract.PhoneNumber, cptId));
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveCPT?PhoneNumber={0}&CPTID={1}", contract.PhoneNumber, cptId));
             }
-
-            return result == null || result == "" ? false : true;
+            ReserveCPTRequestOutput output = null;
+            output.Message = result.ToString();
+            return output;
         }
 
         public bool UnRegisterCPTNumber(string contractId)

@@ -12,4 +12,16 @@ namespace SOM.Main.Entities
         public string PHONE_NUMBER { get; set; }
         public string NAME { get; set; }
     }
+    public class ReserveCPTRequestInput
+    {
+        public string PhoneNumber { get; set; }
+
+        public string CPTID { get; set; }
+
+    }
+
+    public class ReserveCPTRequestOutput
+    {
+        public string Message { get; set; }
+    }
 }

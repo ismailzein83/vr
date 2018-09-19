@@ -50,20 +50,77 @@ namespace BPMExtended.Main.Business
 
             };
         }
+        public TechnicalReservationDetail GetTechnicalReservation(string phoneNumber)
+        {
+            TechnicalReservationPhoneItem item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalReservationPhoneItem>(String.Format("api/SOM_Main/Inventory/GetTechnicalReservation?phoneNumber={0}", phoneNumber));
+            }
+            return new TechnicalReservationDetail
+            {
+                Switch = item.Switch,
+                SwitchId = item.SwitchId,
+
+                MDFPort = item.MDFPort,
+                MDF = item.MDF,
+                MDFPortId = item.MDFPortId,
+                MDFId = item.MDFId,
+                VerticalMDFId = item.VerticalMDFId,
+                VerticalMDF = item.VerticalMDF,
+
+                Cabinet = item.Cabinet,
+                CabinetId = item.CabinetId,
+                PrimaryPort = item.PrimaryPort,
+                PrimaryPortId = item.PrimaryPortId,
+                SecondaryPort = item.SecondaryPort,
+                SecondaryPortId = item.SecondaryPortId,
+                PrimaryMUXPort = item.PrimaryMUXPort,
+                PrimaryMUXPortId = item.PrimaryMUXPortId,
+
+                DP = item.DP,
+                DPPortId = item.DPPortId,
+                DPPort = item.DPPort,
+                DPId = item.DPId,
+                DPMUXPort = item.DPMUXPort,
+                DPMUXPortId = item.DPMUXPortId,
+
+                
+                TransmitterId = item.TransmitterId,
+                TransmitterModule = item.TransmitterModule,
+                TransmitterModuleId = item.TransmitterModuleId,
+                TransmitterPortId = item.TransmitterPortId,
+                Transmitter = item.Transmitter,
+                TransmitterPort = item.TransmitterPort,
+
+                ReceiverId = item.ReceiverId,
+                ReceiverPortId = item.ReceiverPortId,
+                Receiver = item.Receiver,
+                ReceiverPort = item.ReceiverPort,
+
+                CanReserve = item.CanReserve,
+                CurrentUtilization = item.CurrentUtilization,
+                DIDExist = item.DIDExist,
+                ISDNExist = item.ISDNExist,
+                PSTNExist = item.PSTNExist,
+                Threshold = item.Threshold
+                
+            };
+        }
         public DeportedNumberReservation GetDeportedNumberReservation(string phoneNumber)
         {
             return new DeportedNumberReservation
             {
-                LinePathID= Guid.NewGuid().ToString(),
+                LinePathID = Guid.NewGuid().ToString(),
                 MDF = "MDF001",
-                MDFPort= "005",
+                MDFPort = "005",
                 Cabinet = "Cabinet002",
                 CabinetPort = "004",
                 DP = "DP003",
                 DPPort = "005"
             };
         }
-        public bool ReserveDSLAMPort( string portId , string username )
+        public bool ReserveDSLAMPort(string portId, string username)
         {
             //TODO: reserve port 
             return true;
@@ -74,7 +131,7 @@ namespace BPMExtended.Main.Business
         public bool MultiplexerValidation(string phoneNumber)
         {
             InventoryPhoneItemDetail inventoryItem = GetInventoryDetail(phoneNumber);
-            
+
             return inventoryItem.IsMultiplexed ? true : false;
 
         }

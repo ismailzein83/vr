@@ -162,4 +162,45 @@ namespace SOM.Main.Business
         public string MDF_PORT_ID { get; set; }
         public string MDF_PORT { get; set; }
     }
+    public class FreeReservationDetail
+    {
+        public string SWITCH_NAME { get; set; }
+        public string SWITCH_ID { get; set; }
+        public string MDF_NAME { get; set; }
+        public string MDF_ID { get; set; }
+        public string MDF_VERT { get; set; }
+        public string MDF_VERT_ID { get; set; }
+        public string MDF_PORT { get; set; }
+        public string MDF_PORT_ID { get; set; }
+        public string CABINET_NAME { get; set; }
+        public string CABINET_ID { get; set; }
+        public string PRIMARY_PORT { get; set; }
+        public string SECONDARY_PORT { get; set; }
+        public string PRIMARY_PORT_ID { get; set; }
+        public string SECONDARY_PORT_ID { get; set; }
+        public string PRIMARY_MUX_PORT_ID { get; set; }
+        public string PRIMARY_MUX_PORT_NAME { get; set; }
+        public string DP_NAME { get; set; }
+        public string DP_PORT { get; set; }
+        public string DP_PORT_ID { get; set; }
+        public string DP_ID { get; set; }
+        public string DP_MUX_PORT_ID { get; set; }
+        public string DP_MUX_PORT_NAME { get; set; }
+        public string WLL_TRANSMITTER_ID { get; set; }
+        public string WLL_TRANSMITTER_NAME { get; set; }
+        public string WLL_TRANSMITTER_MODULE_ID { get; set; }
+        public string WLL_TRANSMITTER_MODULE_NAME { get; set; }
+        public string WLL_TRANSMITTER_PORT_ID { get; set; }
+        public string WLL_TRANSMITTER_PORT_NAME { get; set; }
+        public string WLL_RECEIVER_NAME { get; set; }
+        public string WLL_RECEIVER_ID { get; set; }
+        public string WLL_RECEIVER_PORT_ID { get; set; }
+        public string WLL_RECEIVER_PORT_NAME { get; set; }
+        public string EXIST_PSTN { get; set; }
+        public string EXIST_ISDN { get; set; }
+        public string EXIST_DID { get; set; }
+        public string CAN_RESERVE { get; set; }
+        public string CURRENT_UTILIZATION { get; set; }
+        public string THRESHOLD { get; set; }
+    }
 }
