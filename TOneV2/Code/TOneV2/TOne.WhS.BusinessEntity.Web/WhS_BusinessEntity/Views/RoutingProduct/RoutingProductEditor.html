@@ -8,8 +8,8 @@
                             <vr-textbox value="scopeModel.routingProductName" label="Name" isrequired></vr-textbox>
                         </vr-columns>
 
-                        <span vr-disabled="isEditMode">
-                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModel.onSellingNumberPlanSelectionChanged"
+                        <span>
+                            <vr-whs-be-sellingnumberplan-selector  vr-disabled="isEditMode" on-ready="scopeModel.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModel.onSellingNumberPlanSelectionChanged"
                                                                   selectedvalues="scopeModel.selectedSellingNumberPlan" normal-col-num="6" isrequired="true">
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
