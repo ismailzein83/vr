@@ -27,6 +27,38 @@ namespace Vanrise.Integration.Business
                 return null;
         }
 
+        public IEnumerable<DataSource> GetEnabledDataSources()
+        {
+            var dataSources = GetAllDataSources();
+
+            if (dataSources == null)
+                return null;
+
+            var enabledDataSources = new List<DataSource>();
+            foreach (var dataSource in dataSources)
+            {
+                if (dataSource.IsEnabled)
+                    enabledDataSources.Add(dataSource);
+            }
+
+            return enabledDataSources.Count > 0 ? enabledDataSources : null;
+        }
+
+        public List<Guid> GetEnabledDataSourcesIds()
+        {
+            var enabledDataSources = GetEnabledDataSources();
+            if (enabledDataSources == null)
+                return null;
+
+            var enabledDataSourcesIds = new List<Guid>();
+            foreach (var enabledDataSource in enabledDataSources)
+            {
+                enabledDataSourcesIds.Add(enabledDataSource.DataSourceId);
+            }
+
+            return enabledDataSourcesIds.Count > 0 ? enabledDataSourcesIds : null;
+        }
+
         public Vanrise.Integration.Entities.DataSourceDetail GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
@@ -120,7 +152,7 @@ namespace Vanrise.Integration.Business
                 if (dataSourceInsertActionSucc)
                 {
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId); 
+                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId);
                     VRActionLogger.Current.TrackAndLogObjectAdded(DataSourceLoggableEntity.Instance, dataSourceDetail);
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
@@ -162,7 +194,7 @@ namespace Vanrise.Integration.Business
 
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteDataSource(Guid dataSourceId, Guid taskId)
         {
-           var dataSource = GetDataSource(dataSourceId);
+            var dataSource = GetDataSource(dataSourceId);
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
 
@@ -176,7 +208,7 @@ namespace Vanrise.Integration.Business
                 VRActionLogger.Current.TrackAndLogObjectDeleted(DataSourceLoggableEntity.Instance, dataSourceDetail);
                 if ((schedulerTaskManager.DeleteTask(taskId)).Result == DeleteOperationResult.Succeeded)
                 {
-                   
+
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 }
             }
@@ -244,7 +276,7 @@ namespace Vanrise.Integration.Business
 
             var dataSource = GetDataSource(dataSourceId);
             var taskUpdated = schedulerManager.DisableTask(dataSource.TaskId);
-            
+
             if (taskUpdated.Result == UpdateOperationResult.Succeeded)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();

@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Data.SQL
 {
-    public class DataSourceImportedBatchDataManager : BaseSQLDataManager, IDataSourceImportedBatchDataManager 
+    public class DataSourceImportedBatchDataManager : BaseSQLDataManager, IDataSourceImportedBatchDataManager
     {
         public DataSourceImportedBatchDataManager()
             : base(GetConnectionStringName("BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString"))
@@ -21,7 +17,7 @@ namespace Vanrise.Integration.Data.SQL
 
         public long InsertEntry(Guid dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, Entities.MappingResult result, string mapperMessage, string queueItemsIds, string logEntryTime)
         {
-            return (long)ExecuteScalarSP("integration.sp_DataSourceImportedBatch_Insert",  dataSourceId, batchDescription, batchSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime);
+            return (long)ExecuteScalarSP("integration.sp_DataSourceImportedBatch_Insert", dataSourceId, batchDescription, batchSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime);
         }
 
         public Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
@@ -50,6 +46,15 @@ namespace Vanrise.Integration.Data.SQL
             };
 
             return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper, mapper);
+        }
+
+        public List<DataSourceSummary> GetDataSourcesSummary(DateTime fromTime, List<Guid> dataSourcesIds)
+        {
+            string serializedDataSourceIds = null;
+            if (dataSourcesIds != null && dataSourcesIds.Count > 0)
+                serializedDataSourceIds = string.Join<Guid>(",", dataSourcesIds);
+
+            return GetItemsSP("integration.sp_DataSourceSummary_Get", DataSourceSummaryMapper, serializedDataSourceIds, fromTime);
         }
 
         Vanrise.Integration.Entities.DataSourceImportedBatch DataSourceImportedBatchMapper(IDataReader reader)
@@ -84,6 +89,23 @@ namespace Vanrise.Integration.Data.SQL
 
             dt.EndLoadData();
             return dt;
+        }
+
+        private DataSourceSummary DataSourceSummaryMapper(IDataReader reader)
+        {
+            return new DataSourceSummary()
+            {
+                DataSourceId = GetReaderValue<Guid>(reader, "DataSourceId"),
+                LastImportedBatchTime = (DateTime)reader["LastImportedBatchTime"],
+                NbImportedBatch = (int)reader["NbImportedBatch"],
+                TotalRecordCount = (int)reader["TotalRecordCount"],
+                MaxRecordCount = (int)reader["MaxRecordCount"],
+                MinRecordCount = (int)reader["MinRecordCount"],
+                MaxBatchSize = GetReaderValue<decimal?>(reader, "MaxBatchSize"),
+                MinBatchSize = GetReaderValue<decimal?>(reader, "MinBatchSize"),
+                NbInvalidBatch = (int)reader["NbInvalidBatch"],
+                NbEmptyBatch = (int)reader["NbEmptyBatch"]
+            };
         }
     }
 }

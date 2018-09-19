@@ -37,7 +37,7 @@
             var alertRuleTypeSelectorAPI;
             var alertRuleTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            
+
             var viewPermissionAPI;
             var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -77,10 +77,12 @@
                 api.load = function (payload) {
                     var promises = [];
                     var settings;
-                    if (payload != undefined && payload.componentType != undefined)
-                    {
+                    if (payload != undefined && payload.componentType != undefined) {
                         $scope.scopeModel.name = payload.componentType.Name;
                         settings = payload.componentType.Settings;
+                        if (settings != undefined) {
+                            $scope.scopeModel.areDatesHardCoded = settings.AreDatesHardCoded;
+                        }
                     }
 
                     promises.push(loadDataRecordStorageSelector());
@@ -172,6 +174,7 @@
                             $type: "Vanrise.GenericData.Entities.DataRecordRuleEvaluatorDefinitionSettings, Vanrise.GenericData.Entities",
                             DataRecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
                             AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
+                            AreDatesHardCoded: $scope.scopeModel.areDatesHardCoded,
                             Security: {
                                 ViewPermission: viewPermissionAPI.getData(),
                                 StartInstancePermission: startInstancePermissionAPI.getData(),

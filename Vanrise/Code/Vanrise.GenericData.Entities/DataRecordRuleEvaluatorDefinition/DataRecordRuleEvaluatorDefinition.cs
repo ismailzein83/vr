@@ -19,6 +19,7 @@ namespace Vanrise.GenericData.Entities
 
         public List<Guid> DataRecordStorageIds { get; set; }
         public Guid AlertRuleTypeId { get; set; }
+        public bool AreDatesHardCoded { get; set; }
         public DataRecordRuleEvaluatorDefinitionSecurity Security { get; set; }
 
     }

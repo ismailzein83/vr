@@ -126,6 +126,8 @@
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-db.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-ftp.js" />
     <Content Include="Integration\Directives\Adapter\vr-integration-adapter-file.js" />
+    <Content Include="Integration\Directives\DataSource\Templates\DataSourceBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="Integration\Directives\DataSource\vr-integration-datasource-businessobject-dataprovidersettings.js" />
     <Content Include="Integration\Directives\MainExtensions\RuntimeService\Templates\DataSourceRuntimeServiceTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\RuntimeService\vr-integration-runtimeservice-datasource.js" />
     <Content Include="Integration\Directives\DataSource\Templates\DataSourceGridTemplate.html" />

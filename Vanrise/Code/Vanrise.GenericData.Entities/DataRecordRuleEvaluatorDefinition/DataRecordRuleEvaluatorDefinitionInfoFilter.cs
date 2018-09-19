@@ -10,6 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public Guid DataRecordRuleEvaluatorDefinitionId { get; set; }
         public string Name { get; set; }
+        public bool AreDatesHardCoded { get; set; }
     }
     public class DataRecordRuleEvaluatorDefinitionInfoFilter
     {

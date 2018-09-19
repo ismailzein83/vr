@@ -131,7 +131,8 @@ namespace Vanrise.GenericData.Notification
             return new DataRecordRuleEvaluatorDefinitionInfo
             {
                 DataRecordRuleEvaluatorDefinitionId = DataRecordRuleEvaluatorDefinition.VRComponentTypeId,
-                Name = DataRecordRuleEvaluatorDefinition.Name
+                Name = DataRecordRuleEvaluatorDefinition.Name,
+                AreDatesHardCoded = DataRecordRuleEvaluatorDefinition.Settings.AreDatesHardCoded
             };
         }
 

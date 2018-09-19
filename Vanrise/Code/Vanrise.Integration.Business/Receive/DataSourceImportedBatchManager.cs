@@ -64,6 +64,11 @@ namespace Vanrise.Integration.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
         }
 
+        public List<DataSourceSummary> GetDataSourcesSummary(DateTime fromTime, List<Guid> dataSourcesIds)
+        {
+            IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+            return dataManager.GetDataSourcesSummary(fromTime, dataSourcesIds);
+        }
 
         #region Private Classes
         private class DataSourceImportedBatchExcelExportHandler : ExcelExportHandler<DataSourceImportedBatch>

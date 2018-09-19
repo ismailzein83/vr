@@ -85,7 +85,7 @@ namespace Vanrise.GenericData.Business
                 FromTime = from,
                 ToTime = to,
                 FilterGroup = filterGroup,
-                Fields = recordType.Fields.Where(fld => fld.Formula != null).Select(fld => fld.Name).ToList()
+                Fields = recordType.Fields.Where(fld => fld.Formula == null).Select(fld => fld.Name).ToList()
             };
 
             bool doesSupportFilterOnAllFields = _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.DoesSupportFilterOnAllFields;

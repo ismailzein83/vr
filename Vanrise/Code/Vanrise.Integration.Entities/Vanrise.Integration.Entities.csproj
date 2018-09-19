@@ -63,6 +63,7 @@
     <Compile Include="Receive\DataSourceInfo.cs" />
     <Compile Include="Receive\DataSourceLog.cs" />
     <Compile Include="Receive\DataSourceLogQuery.cs" />
+    <Compile Include="Receive\DataSourceProgressDataRecordType.cs" />
     <Compile Include="Receive\DataSourceQuery.cs" />
     <Compile Include="Receive\DataSourceRuntimeInstance.cs" />
     <Compile Include="Receive\IAdapterImportDataContext.cs" />
