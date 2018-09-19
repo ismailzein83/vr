@@ -65,7 +65,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('90936BC4-3D55-4C2D-9D1B-3D0A9087B9D4','Traffic Quality Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"TrafficQualityConnString","IsRemoteDataStore":false}')
+('90936BC4-3D55-4C2D-9D1B-3D0A9087B9D4','Traffic Quality Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"TOneAnalyticsDBConnString","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
