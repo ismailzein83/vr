@@ -24,9 +24,6 @@ TOneV1Transition.PostDeployment.sql
 WhS_AccountBalance.PostDeployment.sql
 DataAnalysis.TOne.PostDeployment.sql
 
-TOneV2.Ogero
-TOne_Ogero.PostDeployment.sql
-
 TOneV2.Jazz
 TOne_Jazz.PostDeployment.sql
 
