@@ -13,9 +13,17 @@
         var endPointSelectorDirectiveAPI;
         var endPointSelectorDirectiveDefferedReady = UtilsService.createPromiseDeferred();
 
+        var routeTableViewTypesSelectorAPI;
+        var routeTableViewTypesSelectorDefferedReady = UtilsService.createPromiseDeferred();
+
         var selectedCustomerDeffered = UtilsService.createPromiseDeferred();
+        var deffered = UtilsService.createPromiseDeferred();
+
+        var loadPageViewTypeDefferedReady = UtilsService.createPromiseDeferred();
+
 
         var selectedEndPoints = [];
+        var viewId;
         var routeTableViewType;
 
         loadParameters();
@@ -24,20 +32,31 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            var viewId = parameters.viewId;
-            VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {
-                if (response.Settings.Type == 0)
-                    routeTableViewType = NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value;
-                else
-                    routeTableViewType = NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value;
-
-
-            });
+            if (parameters != undefined)
+              viewId = parameters.viewId;
         };
-
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.routeTableViewType = [];
+
+            $scope.scopeModel.onRouteTableViewTypesReady = function(api)
+            {
+            routeTableViewTypesSelectorAPI = api;
+            routeTableViewTypesSelectorDefferedReady.resolve();
+            };
+
+            $scope.scopeModel.onRouteTableViewSelectionChanged = function (option) {
+                if (option != undefined) {
+                    routeTableViewType = option.value;
+                    $scope.scopeModel.isLoading = true;
+                    loadAllControls().catch(function (error) {
+                        $scope.scopeModel.isLoading = false;
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
+
+                }
+            };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
@@ -97,34 +116,36 @@
              };
         };
 
-
+       
         function load() {
             $scope.scopeModel.isLoading = true;
-
-            function gridDirective() {
-                return GridDirectiveDefferedReady.promise.then(function () {
-                    gridApi.load({ Filter: getFilter(), RouteTableViewType: routeTableViewType });
+            loadPageViewType().then(function () {
+                loadAllControls().catch(function (error) {
+                    $scope.scopeModel.isLoading = false;
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
-            };
-
-            function cusomerDirective() {
-                return CustomerSelectorDirectiveDefferedReady.promise.then(function () {
-
-                    var directivePayload;
-                    VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, undefined, undefined)
-                });
-            };
-
-            return UtilsService.waitMultipleAsyncOperations([gridDirective, cusomerDirective]).then(function () {
-
-                selectedCustomerDeffered = undefined;
-
             }).catch(function (error) {
+                $scope.scopeModel.isLoading = false;
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () { $scope.scopeModel.isLoading = false; });
+            });
+        }
 
-        };
-
+        function loadPageViewType() {
+            return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {
+                routeTableViewTypesSelectorDefferedReady.promise.then(function () {
+                    var routTableViewTypes = UtilsService.getArrayEnum(NP_IVSwitch_RouteTableViewTypeEnum);
+                    if (routTableViewTypes != undefined)
+                    {
+                        for (var i = 0; i < routTableViewTypes.length; i++) {
+                            var item = routTableViewTypes[i];
+                            if (response.Settings.Types.includes(item.value))
+                                $scope.scopeModel.routeTableViewType.push(item);
+                        }
+                        routeTableViewTypesSelectorAPI.selectFirstItem();
+                    }
+                });
+            });
+        }
 
         function getEndPoints() {
             var endPointsArray = [];
@@ -135,8 +156,7 @@
                     endPointsArray.push(itemTab);
                 }
             return endPointsArray;
-        };
-
+        }
 
         function getCustomerIds() {
             var customerIdsArray = [];
@@ -148,8 +168,7 @@
                 }
 
             return customerIdsArray;
-        };
-
+        }
 
         function getFilter() {
 
@@ -161,8 +180,32 @@
                     EndPoints: getEndPoints()
                        }
                   };
-        };
+        }
 
+        function loadAllControls()
+        {
+
+            function gridDirective() {
+                return GridDirectiveDefferedReady.promise.then(function () {
+                    gridApi.load({ Filter: getFilter(), RouteTableViewType: routeTableViewType });
+                });
+            }
+
+            function customerDirective() {
+                return CustomerSelectorDirectiveDefferedReady.promise.then(function () {
+                    var directivePayload;
+                    VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, undefined, undefined)
+                });
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([gridDirective, customerDirective]).then(function () {
+                selectedCustomerDeffered = undefined;
+            }).catch(function (error) {
+                $scope.scopeModel.isLoading = false;
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () { $scope.scopeModel.isLoading = false; });
+
+        }
 
     };
 

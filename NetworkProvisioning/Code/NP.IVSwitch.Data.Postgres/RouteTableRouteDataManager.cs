@@ -224,7 +224,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@destination", item.Destination);
                                 cmd.Parameters.AddWithValue("@route_id", routeOption.RouteId);
                                 cmd.Parameters.AddWithValue("@time_frame", "*****");
-                                cmd.Parameters.AddWithValue("@preference", -1);
+                                cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
                                    cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? (Object)DBNull.Value : item.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop", (routeOption.Huntstop == null) ? (Object)DBNull.Value : routeOption.Huntstop);

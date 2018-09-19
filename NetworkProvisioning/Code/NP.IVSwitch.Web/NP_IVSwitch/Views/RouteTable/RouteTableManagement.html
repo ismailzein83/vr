@@ -1,7 +1,20 @@
-﻿<vr-panel ng-controller="NP_IVSwitch_RouteTableManagementController" vr-loader="scopeModel.isLoading">
-    <vr-form name="formFilter">
+﻿<vr-panel ng-controller="NP_IVSwitch_RouteTableManagementController" >
+    <vr-form name="formFilter" vr-loader="scopeModel.isLoading">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
+                <vr-columns width="normal" ng-show="scopeModel.routeTableViewType.length > 1">
+                    <vr-select on-ready="scopeModel.onRouteTableViewTypesReady"
+                               datasource="scopeModel.routeTableViewType"
+                               selectedvalues="scopeModel.selectedValue"
+                               datatextfield="description"
+                               onselectionchanged="scopeModel.onRouteTableViewSelectionChanged"
+                               datavaluefield="value"
+                               label="Route Table View Type"
+                               hideremoveicon
+                               isrequired="true">
+                    </vr-select>
+                </vr-columns>
+
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
                 </vr-columns>

@@ -10,8 +10,8 @@ namespace NP.IVSwitch.Entities
     public enum RouteTableViewType
     {
         ANumber = 0,
-        Whitelist = 1
-
+        Whitelist = 1,
+        BNumber=2
     }
     public class RouteTableViewSettings:ViewSettings
     {
@@ -19,7 +19,7 @@ namespace NP.IVSwitch.Entities
         {
             return String.Format("#/viewwithparams/NP_IVSwitch/Views/RouteTable/RouteTableManagement/{{\"viewId\":\"{0}\"}}", view.ViewId);
         }
-        public RouteTableViewType Type { get; set; }
+        public List<RouteTableViewType> Types { get; set; }
      
     }
 }

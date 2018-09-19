@@ -165,7 +165,9 @@
 
         function buildParentObjectFromScope() {
             var scopeObject = {
-                RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
+                //RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
+                RouteTableViewType: routeTableViewType ,
+
                 RouteTable: {
                     RouteTableId: (routeTableId != undefined) ? routeTableId : undefined,
                     Name: $scope.scopeModel.name,

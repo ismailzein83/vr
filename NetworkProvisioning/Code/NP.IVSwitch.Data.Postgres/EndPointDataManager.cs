@@ -81,11 +81,11 @@ namespace NP.IVSwitch.Data.Postgres
             return (recordsEffected > 0);
         }
         public bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType, UserType userType)
-        {   
+        {
             string fieldName = "";
             string tableName = "";
             string userIds = "";
-         userIds="("+string.Join(",", endPointIds)+")";
+            userIds = "(" + string.Join(",", endPointIds) + ")";
 
             if (userType == UserType.ACL)
                 tableName = "users";
@@ -94,20 +94,20 @@ namespace NP.IVSwitch.Data.Postgres
 
             if (routeTableViewType == RouteTableViewType.ANumber)
                 fieldName = "cli_routing";
-             else
+            else
                 fieldName = "dst_routing";
 
-            string query = string.Format(@"UPDATE {0} SET {1}=@value WHERE  user_id in {2}", tableName, fieldName,userIds);
+            string query = string.Format(@"UPDATE {0} SET {1}=@value WHERE  user_id in {2}", tableName, fieldName, userIds);
             int recordsEffected = ExecuteNonQueryText(query, cmd =>
             {
-               cmd.Parameters.AddWithValue("@table", tableName);
-               cmd.Parameters.AddWithValue("@field", fieldName);
-               cmd.Parameters.AddWithValue("@value", value);     
-            
+                cmd.Parameters.AddWithValue("@table", tableName);
+                cmd.Parameters.AddWithValue("@field", fieldName);
+                cmd.Parameters.AddWithValue("@value", value);
+
             });
 
 
-return recordsEffected > 0;
+            return recordsEffected > 0;
 
         }
         private bool AclUpdate(EndPoint endPoint)
@@ -201,7 +201,7 @@ return recordsEffected > 0;
         }
         public bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId)
         {
-            string fieldName = "";
+            string query="";
             string endPointIds = "(";
             for (int index = 0; index < routeTableInput.EndPoints.Count; index++)
             {
@@ -210,13 +210,18 @@ return recordsEffected > 0;
                 else
                     endPointIds += routeTableInput.EndPoints[index].EndPointId + ")";
             }
-            
-            if (routeTableInput.RouteTableViewType == 0)
-                fieldName="cli_routing";
-            else
-                fieldName="dst_routing";
-   
-             string query =string.Format(@"UPDATE access_list SET  {0}=@route_table_id WHERE user_id in {1} ", fieldName,endPointIds);
+            switch (routeTableInput.RouteTableViewType)
+            {
+                case RouteTableViewType.ANumber:
+                    query = string.Format(@"UPDATE access_list SET  cli_routing=@route_table_id WHERE user_id in {0} ", endPointIds);
+                    break;
+                case RouteTableViewType.Whitelist:
+                    query = string.Format(@"UPDATE access_list SET  dst_routing=@route_table_id WHERE user_id in {0} ", endPointIds);
+                    break;
+                case RouteTableViewType.BNumber:
+                    query = string.Format(@"UPDATE access_list SET  cli_routing=0, dst_routing=0,route_table_id=@route_table_id WHERE user_id in {0} ", endPointIds);
+                    break;
+            }
 
             int recordsEffected = ExecuteNonQueryText(query, cmd =>
             {
@@ -225,7 +230,7 @@ return recordsEffected > 0;
             }
 
            );
-            return recordsEffected>0;
+            return recordsEffected > 0;
         }
         #endregion
 
@@ -422,26 +427,27 @@ return recordsEffected > 0;
         private EndPoint EndPointMapper(IDataReader reader)
         {
             int hostOrdinal = reader.GetOrdinal("host");
-            EndPoint endPoint = new EndPoint{
-            
-                 EndPointId = (int)reader["user_id"],
-                 CliRouting = (Int16)reader["cli_routing"],
-                 DstRouting = (int)reader["dst_routing"],
-                 //DstRouting = GetReaderValue<int>(reader, "dst_routing"),
-                 AccountId = (int)reader["account_id"],
-                 Description = reader["description"] as string,
-                 LogAlias = reader["log_alias"] as string,
-                 CodecProfileId = (int)reader["codec_profile_id"],
-                 TransRuleId = (int)reader["trans_rule_id"],
-                 CurrentState = (State)GetReaderValue<Int16>(reader, "state_id"),
-                 ChannelsLimit = GetReaderValue<int>(reader, "channels_limit"),
-                 MaxCallDuration = (int)reader["max_call_dura"],
-                 RtpMode = (RtpMode)(int)reader["rtp_mode"],
-                 DomainId = (Int16)reader["domain_id"],
-                 SipLogin = reader["sip_login"] as string,
-                 SipPassword = reader["sip_password"] as string,
-                 TechPrefix = reader["tech_prefix"] as string,
-        };
+            EndPoint endPoint = new EndPoint
+            {
+
+                EndPointId = (int)reader["user_id"],
+                CliRouting = (Int16)reader["cli_routing"],
+                DstRouting = (int)reader["dst_routing"],
+                //DstRouting = GetReaderValue<int>(reader, "dst_routing"),
+                AccountId = (int)reader["account_id"],
+                Description = reader["description"] as string,
+                LogAlias = reader["log_alias"] as string,
+                CodecProfileId = (int)reader["codec_profile_id"],
+                TransRuleId = (int)reader["trans_rule_id"],
+                CurrentState = (State)GetReaderValue<Int16>(reader, "state_id"),
+                ChannelsLimit = GetReaderValue<int>(reader, "channels_limit"),
+                MaxCallDuration = (int)reader["max_call_dura"],
+                RtpMode = (RtpMode)(int)reader["rtp_mode"],
+                DomainId = (Int16)reader["domain_id"],
+                SipLogin = reader["sip_login"] as string,
+                SipPassword = reader["sip_password"] as string,
+                TechPrefix = reader["tech_prefix"] as string,
+            };
             ;
             NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;
             string hostObj = npgsqlreader.GetProviderSpecificValue(hostOrdinal).ToString();

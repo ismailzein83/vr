@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 };
                 if (ctrl.onReady != undefined)
                     ctrl.onReady(api);
-              };
+              }
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return NP_IVSwitch_RouteTableAPIService.GetFilteredRouteTables(dataRetrievalInput)
@@ -78,7 +78,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                     });
                 };
             defineMenuActions();
-        };
+        }
 
         function defineMenuActions() {
             $scope.scopeModel.gridMenuActions = [{
@@ -90,7 +90,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 name: 'Delete',
                 clicked: deleteRoute,
             });
-        };
+        }
         
         function editRouteTable(routeTableEntity) {
             var routeTable = {
@@ -103,7 +103,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
             };
             NP_IVSwitch_RouteTableService.editRouteTable(routeTable, onRouteTableUpdated);
-        };
+        }
 
         function deleteRoute(routeTable) {
             VRNotificationService.showConfirmation().then(function (response) {
@@ -119,7 +119,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 };
             });
 
-        };
+        }
 
     };
     return directiveDefinitionObject;
