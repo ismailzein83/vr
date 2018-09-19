@@ -310,6 +310,20 @@ namespace SOM.Main.Business
             }
             return result;
         }
+
+        public bool IsManualSwitch(string phoneNumber)
+        {
+            
+            //AktavaraConnector connector = new AktavaraConnector
+            //{
+            //    BaseURL = "http://192.168.110.195:8901"
+            //};
+            //CPTItem data = connector.Get<CPTItem>("/SearchCPT/Get?Phonenumber=" + phoneNumber);
+
+            Random gen = new Random();
+            int prob = gen.Next(100);
+            return prob <= 50;
+        }
     }
 
 }

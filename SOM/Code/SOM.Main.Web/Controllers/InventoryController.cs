@@ -110,5 +110,12 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.DeleteCPTReservation(phoneNumber);
         }
+        [HttpGet]
+        [Route("IsManualSwitch")]
+        public bool IsManualSwitch(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.IsManualSwitch(phoneNumber);
+        }
     }
 }

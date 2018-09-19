@@ -264,5 +264,30 @@ namespace BPMExtended.Main.Business
 
             return result;
         }
+
+        public bool IsNumbersOnSameSwitch(string contractId, string pilotContractId)
+        {
+            ContractManager contractManager = new ContractManager();
+            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
+            TelephonyContractDetail pilotContract = contractManager.GetTelephonyContract(pilotContractId);
+
+            InventoryPhoneItemDetail phoneitem = GetInventoryDetail(contract.PhoneNumber);
+            InventoryPhoneItemDetail pilotPhoneItem = GetInventoryDetail(pilotContract.PhoneNumber);
+
+            return phoneitem.SwitchId == pilotPhoneItem.SwitchId ? true : false;
+        }
+        public bool IsManualSwitch(string contractId)
+        {
+
+            ContractManager contractManager = new ContractManager();
+            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
+            
+            bool item = false;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<bool>(String.Format("api/SOM_Main/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+            }
+            return  item;
+        }
     }
 }
