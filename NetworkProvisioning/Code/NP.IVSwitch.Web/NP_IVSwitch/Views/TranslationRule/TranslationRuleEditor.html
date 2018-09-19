@@ -67,10 +67,10 @@
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="Rand Min" value="scopeModel.poolBasedCLISettingsRandMin" type="number" customvalidate="scopeModel.validateRandMin()" decimalprecision="0" minvalue="0"></vr-textbox>
+                        <vr-textbox label="Rand Min" value="scopeModel.poolBasedCLISettingsRandMin" type="number" customvalidate="scopeModel.validateRandMin()" decimalprecision="0" minvalue="0" maxValue="2147483647"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="Rand Max" value="scopeModel.poolBasedCLISettingsRandMax" type="number" customvalidate="scopeModel.validateRandMax()" decimalprecision="0" minvalue="0"></vr-textbox>
+                        <vr-textbox label="Rand Max" value="scopeModel.poolBasedCLISettingsRandMax" type="number" customvalidate="scopeModel.validateRandMax()" decimalprecision="0" minvalue="0" maxvalue="2147483647"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
                         <vr-textbox label="Display Name" value="scopeModel.poolBasedCLISettingsDisplayName" isrequired></vr-textbox>
@@ -108,12 +108,14 @@
                     </div>
                 </vr-row>
                 <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-validator validate="scopeModel.validateCLIPatterns()">
-                            <vr-datalist maxitemsperrow="4" datasource="scopeModel.CLIPatterns" onremoveitem="scopeModel.onRemoveCLIPattern">
-                                <vr-label>{{dataItem}}</vr-label>
-                            </vr-datalist>
-                        </vr-validator>
+                    <vr-columns width="fullrow" >
+                        <span vr-loader="scopeModel.isLoadingCLIPatterns">
+                            <vr-validator validate="scopeModel.validateCLIPatterns()">
+                                <vr-datalist maxitemsperrow="4" datasource="scopeModel.CLIPatterns" onremoveitem="scopeModel.onRemoveCLIPattern">
+                                    <vr-label>{{dataItem}}</vr-label>
+                                </vr-datalist>
+                            </vr-validator>
+                        </span>
                     </vr-columns>
                 </vr-row>
             </vr-section>

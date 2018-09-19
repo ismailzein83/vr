@@ -78,6 +78,7 @@
 
             $scope.scopeModel.onPoolBasedCLIGroupSelectionChanged = function (selectedCLIGroup) {
                 if (selectedCLIGroup != undefined) {
+                    $scope.scopeModel.isLoadingCLIPatterns = true;
                     var poolBasedCLIGroupDetailPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(selectedCLIGroup.GenericBusinessEntityId, "94820cf8-c9a3-40a9-b90e-ba25a2a96d73");
                     poolBasedCLIGroupDetailPromise.then(function (response) {
                         if (response != undefined && response.FieldValues != undefined && response.FieldValues.CLIPatterns != undefined && response.FieldValues.CLIPatterns.Value != undefined && response.FieldValues.CLIPatterns.Value.length > 0) {
@@ -88,6 +89,8 @@
                                 }
                             }
                         }
+                    }).finally(function() {
+                        $scope.scopeModel.isLoadingCLIPatterns = false;
                     });
                 }
             };
