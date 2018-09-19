@@ -69,34 +69,7 @@ namespace BPMExtended.Main.Business
         //    return filteredTelephonyContracts;
         //}
 
-        public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId, string pilotContractId)
-        {
-            List<TelephonyContractDetail> contracts = RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
-            List<PabxContractDetail> pabxContracts = RatePlanMockDataGenerator.GetPabxContracts(customerId);
-
-            Func<TelephonyContractDetail, bool> filterExpression = (item) =>
-                {
-                    if (pabxContracts.Find(x => x.ContractId == item.ContractId) != null)
-                        return false;
-
-                    //TODO: AYman to implement if not on same switch
-
-                    return true;
-                };
-
-            return contracts.MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
-        }
-
-        private TelephonyContractInfo TelephonyContractDetailToInfo(TelephonyContractDetail detail)
-        {
-            return new TelephonyContractInfo
-            {
-                ContractId = detail.ContractId,
-                CustomerId = detail.CustomerId,
-                Address = detail.Address,
-                PhoneNumber = detail.PhoneNumber
-            };
-        }
+       
 
 
     }
