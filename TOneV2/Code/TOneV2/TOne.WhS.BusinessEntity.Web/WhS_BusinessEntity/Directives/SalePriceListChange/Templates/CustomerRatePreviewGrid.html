@@ -1,19 +1,22 @@
 ﻿<vr-datagrid datasource="scopeModel.ratePreviews"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             on-ready="scopeModel.onGridReady"
-             menuactions="scopeModel.menuActions">
-    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" fixedwidth="'220'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'" ng-show="scopeModel.showCustomerName" fixedwidth="'220'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Current Rate'" field="'RecentRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'90'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'New Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'90'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Type'" fixedwidth="'90'" field="'ChangeType'">
-        <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" fixedwidth="'65'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
-    <vr-datagridexpandablerow >
-        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-    </vr-datagridexpandablerow>
+			 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+			 pagingtype="'PagingOnScroll'"
+			 on-ready="scopeModel.onGridReady"
+			 menuactions="scopeModel.menuActions">
+	<vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'" fixedwidth="'220'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'" ng-show="scopeModel.showCustomerName" fixedwidth="'220'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Current Rate'" field="'RecentRateConverted'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'90'"></vr-datagridcolumn>
+	<vr-datagridcolumn fixedwidth="'25'">
+		<vr-icon icontype="dataItem.RecentCurrencyIconType" tooltip="dataItem.RecentCurrencyIconTooltip"></vr-icon>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'New Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'90'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Change Type'" fixedwidth="'90'" field="'ChangeType'">
+		<vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" fixedwidth="'65'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+	<vr-datagridexpandablerow>
+		<vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+	</vr-datagridexpandablerow>
 </vr-datagrid>
