@@ -24,6 +24,7 @@ namespace BPMExtended.Main.Business
         {
             List<TelephonyContractDetail> contracts = RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
             List<PabxContractDetail> pabxContracts = RatePlanMockDataGenerator.GetPabxContracts(customerId);
+            InventoryManager manager = new InventoryManager();
 
             Func<TelephonyContractDetail, bool> filterExpression = (item) =>
             {
@@ -31,6 +32,7 @@ namespace BPMExtended.Main.Business
                     return false;
 
                 //TODO: AYman to implement if not on same switch
+                if (!manager.IsNumbersOnSameSwitch(item.ContractId, pilotContractId)) return false;
 
                 return true;
             };
@@ -51,7 +53,25 @@ namespace BPMExtended.Main.Business
 
         public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
         {
+
             return RatePlanMockDataGenerator.GetTelephonyContractsInfo(customerId);
+        }
+
+        public List<TelephonyContractInfo> GetNewPabxTelephonyContractsInfo(string customerId, string pilotContractId)
+        {
+            InventoryManager manager = new InventoryManager();
+
+            Func<TelephonyContractDetail, bool> filterExpression = (item) =>
+            {
+
+                if (!manager.IsNumbersOnSameSwitch(item.ContractId, pilotContractId)) return false;
+
+                return true;
+            };
+
+            return RatePlanMockDataGenerator.GetTelephonyContracts(customerId).MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
+
+
         }
 
         public LeasedLineContractDetail GetLeasedLineContract(string contractId)

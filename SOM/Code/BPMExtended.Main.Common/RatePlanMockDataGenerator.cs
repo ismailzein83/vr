@@ -126,6 +126,7 @@ namespace BPMExtended.Main.Common
         #region Phone Numbers
 
         const string PHONE_NUMBER_1 = "1111";
+        const string PHONE_NUMBER_2 = "2222";
 
         #endregion
 
@@ -277,7 +278,7 @@ namespace BPMExtended.Main.Common
                  {
                      ContractId = CONTRACT_CUST1_TL1,
                      CustomerId = CUSTOMER_ID_1,
-                     PhoneNumber= "2222",
+                     PhoneNumber= PHONE_NUMBER_2,
                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      Address = "Haret hreik",
@@ -562,9 +563,9 @@ namespace BPMExtended.Main.Common
             return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId != contractId);
         }
 
-        public static List<PabxContractDetail> checkIsContactNotPilot(string customerId, string contractId)
+        public static List<PabxContractDetail> checkIfContactPilot(string customerId, string contractId)
         {
-            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId.ToLower() == contractId.ToLower() && x.IsPilot == false);
+            return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower() && x.ContractId.ToLower() == contractId.ToLower() && x.IsPilot == true);
         }
 
         private static List<PabxContractDetail> GetAllPabxContracts()
@@ -578,7 +579,7 @@ namespace BPMExtended.Main.Common
                      CustomerId = CUSTOMER_ID_1,
                      Address = "Haret hreik",
                      IsPilot = true,
-                     PhoneNumber = "2222",
+                     PhoneNumber =PHONE_NUMBER_2,
                      PabxOption = PabxPhoneNumberOption.MakeCall                    
 
                  },
