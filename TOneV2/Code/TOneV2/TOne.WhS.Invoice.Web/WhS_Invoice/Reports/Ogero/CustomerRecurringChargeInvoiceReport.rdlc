@@ -516,7 +516,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!InvoiceNb.Value</Value>
+                              <Value>=Parameters!SerialNumber.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -1012,7 +1012,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2221,7 +2221,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="InvoiceNb">
+    <ReportParameter Name="SerialNumber">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
@@ -2239,7 +2239,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="BillingTime">
+    <ReportParameter Name="TimeZone">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
