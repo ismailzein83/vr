@@ -1,56 +1,56 @@
 ﻿<div vr-modalcontent ng-controller="VRCommon_VRMailMessageEvaluatorController" vr-loader="scopeModel.isLoading" size="medium">
-    <vr-modalbody>
-        <vr-form name="emailEvaluatorForm">
-            <vr-tabs>
-                <vr-tab header="'Definition'">
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox type="text" label="From" localizedlabel="VRRes.From.VREnd" value="scopeModel.from"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox type="text" label="To" localizedlabel="VRRes.To.VREnd" value="scopeModel.to" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox type="text" label="Cc" localizedlabel="VRRes.Cc.VREnd" value="scopeModel.cc"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-textbox type="text" label="Subject" localizedlabel="VRRes.Subject.VREnd" value="scopeModel.subject" isrequired="true"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-datalist maxitemsperrow="3" datasource="scopeModel.Attachements">
-                        <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.FileId)">{{dataItem.FileName}}</a>
-                    </vr-datalist>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-editor label="Body" value="scopeModel.body" isrequired="true"></vr-editor>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="1/3row">
-                            <vr-fileupload extension="all" value="scopeModel.uploadedAttachement" label="Upload Attachement"
-                                           on-ready="scopeModel.onUploadedAttachementFileReady" onvaluechanged="scopeModel.addUploadedAttachement">
-                            </vr-fileupload>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-datalist maxitemsperrow="3" datasource="scopeModel.uploadedAttachements" autoremoveitem="true">
-                        <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
-                    </vr-datalist>
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="SendEmail" formname="emailEvaluatorForm" data-onclick="scopeModel.confirmEmail"></vr-button>
-                <vr-button type="Cancel" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+	<vr-modalbody>
+		<vr-form name="emailEvaluatorForm">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-row removeline>
+						<vr-columns width="fullrow">
+							<vr-textbox type="text" label="From" localizedlabel="VRRes.From.VREnd" value="scopeModel.from"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<vr-row removeline>
+						<vr-columns width="fullrow">
+							<vr-textbox-multiple datatype="email" label="To" value="scopeModel.to" isrequired="true"></vr-textbox-multiple>
+						</vr-columns>
+					</vr-row>
+					<vr-row removeline>
+						<vr-columns width="fullrow">
+							<vr-textbox type="text" label="Cc" localizedlabel="VRRes.Cc.VREnd" value="scopeModel.cc"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<vr-row removeline>
+						<vr-columns width="fullrow">
+							<vr-textbox type="text" label="Subject" localizedlabel="VRRes.Subject.VREnd" value="scopeModel.subject" isrequired="true"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<vr-datalist maxitemsperrow="3" datasource="scopeModel.Attachements">
+						<a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.FileId)">{{dataItem.FileName}}</a>
+					</vr-datalist>
+					<vr-row removeline>
+						<vr-columns width="fullrow">
+							<vr-editor label="Body" value="scopeModel.body" isrequired="true"></vr-editor>
+						</vr-columns>
+					</vr-row>
+					<vr-row removeline>
+						<vr-columns width="1/3row">
+							<vr-fileupload extension="all" value="scopeModel.uploadedAttachement" label="Upload Attachement"
+										   on-ready="scopeModel.onUploadedAttachementFileReady" onvaluechanged="scopeModel.addUploadedAttachement">
+							</vr-fileupload>
+						</vr-columns>
+					</vr-row>
+					<vr-datalist maxitemsperrow="3" datasource="scopeModel.uploadedAttachements" autoremoveitem="true">
+						<a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
+					</vr-datalist>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="SendEmail" formname="emailEvaluatorForm" data-onclick="scopeModel.confirmEmail"></vr-button>
+				<vr-button type="Cancel" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>
