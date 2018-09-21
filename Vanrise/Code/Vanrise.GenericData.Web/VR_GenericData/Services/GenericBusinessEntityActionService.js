@@ -3,9 +3,9 @@
 
     'use strict';
 
-    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService'];
+    GenericBEActionService.$inject = ['VRModalService', 'UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService', 'DeleteOperationResultEnum'];
 
-    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService,  VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService) {
+    function GenericBEActionService(VRModalService, UtilsService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, DeleteOperationResultEnum) {
 
         var actionTypes = [];
 
@@ -49,6 +49,9 @@
                                 VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, updatedItem, gridAPI, genericBEGridViews, idFieldType);
                                 defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
                                 gridAPI.itemUpdated(updatedItem);
+                            },
+                            onItemDeleted: function () {
+                                gridAPI.itemDeleted(selectedGenericBusinessEntity);
                             }
                         };
                         var promise = actionType.ExecuteAction(payload);
@@ -126,12 +129,33 @@
                         GenericBusinessEntityIds: genericBusinessEntityIds,
                         BusinessEntityDefinitionId: businessEntityDefinitionId
                     };
+                    var onItemDeleted = payload.onItemDeleted;
+                    var deletePromiseDeferred = UtilsService.createPromiseDeferred();
                     VRNotificationService.showConfirmation().then(function (response) {
                         if (response) {
-                            return VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(input).then(function (response) {
+                            VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(input).then(function (result) {
+                                if (result != undefined) {
+                                    if (result.Result == DeleteOperationResultEnum.Succeeded.value) {
+                                        VRNotificationService.showSuccess("Item has been successfully deleted.");
+                                        onItemDeleted();
+                                        deletePromiseDeferred.resolve();
+                                    }
+                                    else {
+                                        VRNotificationService.showError(result.Message);
+                                        deletePromiseDeferred.reject();
+                                    }
+                                }
+                                else {
+                                    VRNotificationService.showError("An error has occured.");
+                                    deletePromiseDeferred.reject();
+                                }
                             });
                         }
+                        else {
+                            deletePromiseDeferred.resolve();
+                        }
                     });
+                    return deletePromiseDeferred.promise;
                 }
             };
             registerActionType(deleteActionType);
