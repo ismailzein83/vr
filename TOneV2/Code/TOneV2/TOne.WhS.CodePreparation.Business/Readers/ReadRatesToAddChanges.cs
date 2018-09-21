@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
@@ -77,16 +78,30 @@ namespace TOne.WhS.CodePreparation.Business
 	{
 		private SaleZoneRoutingProductsByOwner _allSaleZonesRoutingProductsByOwner;
 		private DefaultRoutingProductsByOwner _defaultRoutingProductsByOwner;
+		ISaleEntityRoutingProductDataManager _saleEntityRoutingProductDataManager;
 
-		public ReadZonesRoutingProductsToAddChanges(IEnumerable<ZoneRoutingProductToAdd> allZonesRoutingProducts)
+		public ReadZonesRoutingProductsToAddChanges(IEnumerable<ZoneRoutingProductToAdd> allZonesRoutingProducts, IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
 		{
+			_saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
 			_allSaleZonesRoutingProductsByOwner = GetAllSaleZonesRoutingProductsByOwner(allZonesRoutingProducts);
+			_defaultRoutingProductsByOwner = GetAllDefaultRoutingProductsByOwner(customerIds, effectiveOn, isEffectiveInFuture);
 		}
 
-		public ReadZonesRoutingProductsToAddChanges(IEnumerable<ZoneRoutingProductToAdd> allZonesRoutingProducts, DefaultRoutingProductsByOwner defaultRoutingProductsByOwner)
+		public DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
 		{
-			_allSaleZonesRoutingProductsByOwner = GetAllSaleZonesRoutingProductsByOwner(allZonesRoutingProducts);
-			_defaultRoutingProductsByOwner = defaultRoutingProductsByOwner;
+			DefaultRoutingProductsByOwner result = new DefaultRoutingProductsByOwner();
+			result.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
+			result.DefaultRoutingProductsByProduct = new Dictionary<int, DefaultRoutingProduct>();
+			List<DefaultRoutingProduct> defaultRoutingProducts = _saleEntityRoutingProductDataManager.GetDefaultRoutingProducts(customerIds, effectiveOn, isEffectiveInFuture).ToList();
+
+			foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
+			{
+				Dictionary<int, DefaultRoutingProduct> defaultRoutingProductsByOwner = defaultRoutingProduct.OwnerType == SalePriceListOwnerType.Customer ? result.DefaultRoutingProductsByCustomer : result.DefaultRoutingProductsByProduct;
+
+				if (!defaultRoutingProductsByOwner.ContainsKey(defaultRoutingProduct.OwnerId))
+					defaultRoutingProductsByOwner.Add(defaultRoutingProduct.OwnerId, defaultRoutingProduct);
+			}
+			return result;
 		}
 
 		private SaleZoneRoutingProductsByOwner GetAllSaleZonesRoutingProductsByOwner(IEnumerable<ZoneRoutingProductToAdd> allZonesRoutingProducts)

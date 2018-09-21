@@ -62,7 +62,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 				SaleEntityZoneRoutingProductLocator zonesRoutingProductToAddLocator = null;
 				if (allZonesRoutingProductsToAdd.Any())
 				{
-					zonesRoutingProductToAddLocator = new SaleEntityZoneRoutingProductLocator(new ReadZonesRoutingProductsToAddChanges(allZonesRoutingProductsToAdd, currentRoutingProductReader.GetAllDefaultRoutingProductsByOwner(customersForThisSellingNumberPlan.Select(item => item.CarrierAccountId), processEffectiveDate, false)));
+					zonesRoutingProductToAddLocator = new SaleEntityZoneRoutingProductLocator(new ReadZonesRoutingProductsToAddChanges(allZonesRoutingProductsToAdd, customersForThisSellingNumberPlan.Select(item => item.CarrierAccountId), processEffectiveDate, false));
 				}
 
 				IEnumerable<RoutingCustomerInfoDetails> customersInfoDetails = GetCustomersInfoDetails(customersForThisSellingNumberPlan, processEffectiveDate);

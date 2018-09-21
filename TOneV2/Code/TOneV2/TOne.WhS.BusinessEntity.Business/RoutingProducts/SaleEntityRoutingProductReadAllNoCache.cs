@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			_allDefaultRoutingProductByOwner = GetAllDefaultRoutingProductsByOwner(customerIds, effectiveOn, isEffectiveInFuture);
 		}
 		
-		public DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
+		private DefaultRoutingProductsByOwner GetAllDefaultRoutingProductsByOwner(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
 		{
 			DefaultRoutingProductsByOwner result = new DefaultRoutingProductsByOwner();
 			result.DefaultRoutingProductsByCustomer = new Dictionary<int, DefaultRoutingProduct>();
