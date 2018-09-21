@@ -54,7 +54,7 @@ namespace NP.IVSwitch.Data.Postgres
                 if (cliPattern.Contains("*"))
                 {
                     translationRule.CLIType = CLIType.PoolBasedCLI;
-                    var poolId = int.Parse(cliPattern.Replace("*", "").Replace("-", ""));
+                    var poolId = int.Parse(cliPattern.Replace("*", ""));
                     translationRule.PoolBasedCLISettings = GetPoolBasedCLISettings(poolId);
                 }
                 else
@@ -226,7 +226,7 @@ namespace NP.IVSwitch.Data.Postgres
             });
             if (cliPattern!=null && cliPattern.Contains("*"))
             {
-                var poolId = int.Parse(cliPattern.Replace("*", "").Replace("-", ""));
+                var poolId = int.Parse(cliPattern.Replace("*", ""));
                 String deleteCLIPoolsCMDText = @"Delete from x_cli_pools where pool_id=@poolid;";
                 int cliPoolsRecordsAffected = ExecuteNonQueryText(deleteCLIPoolsCMDText, cmd =>
                 {
@@ -363,7 +363,7 @@ namespace NP.IVSwitch.Data.Postgres
                 {
                     cmd.Parameters.AddWithValue("@psgid", translationRuleId);
                     cmd.Parameters.AddWithValue("@psgname", translationRule.Name);
-                    cmd.Parameters.AddWithValue("@psgcli", string.Format("*-{0}", newPoolId));
+                    cmd.Parameters.AddWithValue("@psgcli", string.Format("*{0}", newPoolId));
                 }
                );
                 List<int> poolItemIds = new List<int>();

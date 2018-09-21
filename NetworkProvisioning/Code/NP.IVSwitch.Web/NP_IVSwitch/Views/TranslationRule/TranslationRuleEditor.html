@@ -33,11 +33,12 @@
             <vr-row>
                 <vr-columns width="1/3row">
                     <vr-select label="CLI Pattern"
-                                datasource="scopeModel.CLITypes"
-                                selectedvalues="scopeModel.selectedCLIType"
-                                datatextfield="description"
-                                datavaluefield="value"
-                                isrequired="scopeModel.dnisPattern==undefined">
+                               datasource="scopeModel.CLITypes"
+                               selectedvalues="scopeModel.selectedCLIType"
+                               datatextfield="description"
+                               datavaluefield="value"
+                               onselectionchanged="scopeModel.onCLITypeSelectionChange"
+                               isrequired="scopeModel.dnisPattern==undefined">
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="1/3row" haschildcolumns ng-if="scopeModel.selectedCLIType.value==0">
@@ -94,14 +95,15 @@
                                                                         on-ready="scopeModel.onPoolBasedCLIGroupSelectorReady"
                                                                         selectedvalues="scopeModel.selectedPoolBasedCLIGroup"
                                                                         normal-col-num="4"
-                                                                        onselectionchanged="scopeModel.onPoolBasedCLIGroupSelectionChanged"
                                                                         hideremoveicon>
                         </vr-genericdata-genericbusinessentity-selector>
                     </div>
                     <div ng-if="scopeModel.selectedCLISource.value==1">
                         <vr-columns width="1/3row">
-                            <vr-textbox value="scopeModel.currentCLIPattern" label="CLI"></vr-textbox>
+                            <vr-textbox value="scopeModel.currentCLIPattern" label="CLI" customvalidate="scopeModel.validateCurrentCLIPattern()"></vr-textbox>
                         </vr-columns>
+                    </div>
+                    <div ng-if="scopeModel.selectedCLISource!=undefined">
                         <vr-columns width="1/3row" withemptyline>
                             <vr-button type="Add" data-onclick="scopeModel.addCLIPattern" vr-disabled="scopeModel.disableCLIPatternAddButton()" standalone></vr-button>
                         </vr-columns>

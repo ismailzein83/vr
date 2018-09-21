@@ -58,28 +58,23 @@
 
             $scope.scopeModel.onDNISPrefixSignReady = function (api) {
                 DNISPrefixSignAPI = api;
-                DNISPrefixSignAPI.selectFirstItem();
+                if (!isEditMode)
+                    DNISPrefixSignAPI.selectFirstItem();
             };
 
             $scope.scopeModel.onCLIPatternPrefixSignReady = function (api) {
                 CLIPatternPrefixSignAPI = api;
-                CLIPatternPrefixSignAPI.selectFirstItem();
+                if(!isEditMode)
+                    CLIPatternPrefixSignAPI.selectFirstItem();
             };
             $scope.scopeModel.addCLIPattern = function () {
                 if ($scope.scopeModel.currentCLIPattern != undefined) {
                     $scope.scopeModel.CLIPatterns.push($scope.scopeModel.currentCLIPattern);
                     $scope.scopeModel.currentCLIPattern = undefined;
                 }
-            };
-            $scope.scopeModel.onCLISourceReady = function (api) {
-                CLISourceAPI = api;
-                CLISourceAPI.selectFirstItem();
-            };
-
-            $scope.scopeModel.onPoolBasedCLIGroupSelectionChanged = function (selectedCLIGroup) {
-                if (selectedCLIGroup != undefined) {
+                else if ($scope.scopeModel.selectedPoolBasedCLIGroup!=undefined) {
                     $scope.scopeModel.isLoadingCLIPatterns = true;
-                    var poolBasedCLIGroupDetailPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail(selectedCLIGroup.GenericBusinessEntityId, "94820cf8-c9a3-40a9-b90e-ba25a2a96d73");
+                    var poolBasedCLIGroupDetailPromise = VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityDetail($scope.scopeModel.selectedPoolBasedCLIGroup.GenericBusinessEntityId, "94820cf8-c9a3-40a9-b90e-ba25a2a96d73");
                     poolBasedCLIGroupDetailPromise.then(function (response) {
                         if (response != undefined && response.FieldValues != undefined && response.FieldValues.CLIPatterns != undefined && response.FieldValues.CLIPatterns.Value != undefined && response.FieldValues.CLIPatterns.Value.length > 0) {
                             for (var i = 0; i < response.FieldValues.CLIPatterns.Value.length; i++) {
@@ -89,11 +84,33 @@
                                 }
                             }
                         }
-                    }).finally(function() {
+                    }).finally(function () {
                         $scope.scopeModel.isLoadingCLIPatterns = false;
                     });
                 }
+             
             };
+            $scope.scopeModel.onCLISourceReady = function (api) {
+                CLISourceAPI = api;
+                CLISourceAPI.selectFirstItem();
+            };
+
+            $scope.scopeModel.onCLITypeSelectionChange = function (selectedCLIType) {
+                if (selectedCLIType != undefined) {
+                    if (selectedCLIType == NP_IVSwitch_CLITypeEnum.FixedCLI) {
+                        $scope.scopeModel.poolBasedCLISettingsPrefix = undefined;
+                        $scope.scopeModel.poolBasedCLISettingsDestination = undefined;
+                        $scope.scopeModel.poolBasedCLISettingsRandMin = undefined;
+                        $scope.scopeModel.poolBasedCLISettingsRandMax = undefined;
+                        $scope.scopeModel.poolBasedCLISettingsDisplayName = undefined;
+                        $scope.scopeModel.CLIPatterns.length = 0;
+                    }
+                    else {
+                        $scope.scopeModel.CLIPattern = undefined;
+                    }
+                }
+            };
+
             $scope.scopeModel.onRemoveCLIPattern = function (dataItem) {
                 var index = $scope.scopeModel.CLIPatterns.indexOf(dataItem);
                 if (index >-1)
@@ -106,32 +123,38 @@
             };
 
             $scope.scopeModel.onCLISourceSelectionChange = function (cliSourceSelected) {
-                if (cliSourceSelected != undefined && cliSourceSelected.value == 0) {
-                    loadPoolBasedCLIGroupSelector();
+                if (cliSourceSelected != undefined) {
+                    if (cliSourceSelected == NP_IVSwitch_CLISourceEnum.CLIGroup) {
+                        loadPoolBasedCLIGroupSelector();
+                        $scope.scopeModel.currentCLIPattern = undefined;
+                    }
+                    else if (cliSourceSelected == NP_IVSwitch_CLISourceEnum.Specific) {
+                        $scope.scopeModel.selectedPoolBasedCLIGroup = undefined;
+                    }
                 }
             };
 
             $scope.scopeModel.validateCLIPatterns = function () {
-                if (UtilsService.contains($scope.scopeModel.CLIPatterns, $scope.scopeModel.currentCLIPattern))
-                    return "The CLI Pattern already exists.";
                 if ($scope.scopeModel.CLIPatterns.length == 0)
                     return "At least one CLI Pattern must be added.";
             };
 
+            $scope.scopeModel.validateCurrentCLIPattern = function () {
+                if (UtilsService.contains($scope.scopeModel.CLIPatterns, $scope.scopeModel.currentCLIPattern))
+                    return "The CLI Pattern already exists.";
+            };
             $scope.scopeModel.disableCLIPatternAddButton = function () {
                 return ($scope.scopeModel.currentCLIPattern == undefined && $scope.scopeModel.selectedPoolBasedCLIGroup ==undefined) || UtilsService.contains($scope.scopeModel.CLIPatterns, $scope.scopeModel.currentCLIPattern);
             };
 
             $scope.scopeModel.validateRandMin = function () {
                 if ($scope.scopeModel.poolBasedCLISettingsRandMin > $scope.scopeModel.poolBasedCLISettingsRandMax)
-                    return 'Rand Min must be less than RandMax.';
+                    return 'Rand Min must be less than Rand Max.';
               
             };
             $scope.scopeModel.validateRandMax = function () {
                 if ($scope.scopeModel.poolBasedCLISettingsRandMin > $scope.scopeModel.poolBasedCLISettingsRandMax)
-                    return 'Rand Max must be more than RandMin.';
-                if ($scope.scopeModel.poolBasedCLiSettingsRandMax == 0)
-                    return "Rand Max must be greater than 0";
+                    return 'Rand Max must be more than Rand Min.';
             };
 
             $scope.scopeModel.save = function () {
