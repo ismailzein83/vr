@@ -149,7 +149,7 @@ namespace NP.IVSwitch.Data.Postgres
                                  {0},
                                  engine_id = @engineid
                                  {1}
-                                 WHERE  trans_rule_id = @psgid ;",
+                                 WHERE  trans_rule_id = @psgid and NOT EXISTS(SELECT 1 FROM  trans_rules WHERE trans_rule_id != @psgid and  LOWER(trans_rule_name) =  LOWER(@psgname));",
             !String.IsNullOrEmpty(translationRule.DNISPattern) ? ",dnis_pattern= @psgdnis" : ",dnis_pattern=DEFAULT", cliPatternString);
             int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
              {
@@ -182,39 +182,43 @@ namespace NP.IVSwitch.Data.Postgres
                  }
              }
            );
-            if (translationRule.PoolBasedCLISettings != null)
+            if (recordsEffected > 0)
             {
-                var poolId = GetPoolBasedCLISettingsIDByDescription(translationRule.Name);
-                var existingPoolBasedCLISettings = GetPoolBasedCLISettings(poolId);
-                if (existingPoolBasedCLISettings == null)
+                if (translationRule.PoolBasedCLISettings != null)
                 {
-                    return InsertPoolBasedCLISettings(translationRule, translationRule.TranslationRuleId);
+                    var poolId = GetPoolBasedCLISettingsIDByDescription(translationRule.Name);
+                    var existingPoolBasedCLISettings = GetPoolBasedCLISettings(poolId);
+                    if (existingPoolBasedCLISettings == null)
+                    {
+                        return InsertPoolBasedCLISettings(translationRule, translationRule.TranslationRuleId);
+                    }
+                    else
+                    {
+                        return UpdatePoolBasedCLISettings(translationRule, poolId, existingPoolBasedCLISettings);
+                    }
                 }
                 else
                 {
-                    return UpdatePoolBasedCLISettings(translationRule, poolId, existingPoolBasedCLISettings);
-                }
-            }
-            else
-            {
-                var poolId = GetPoolBasedCLISettingsIDByDescription(translationRule.Name);
-                if (poolId > 0)
-                {
-                    var deleteCMDText = String.Format(@"DELETE FROM X_CLI_POOLS WHERE pool_id=@poolid;");
-                    int deletePoolItemCMDRecordsAffected = ExecuteNonQueryText(deleteCMDText, cmd =>
+                    var poolId = GetPoolBasedCLISettingsIDByDescription(translationRule.Name);
+                    if (poolId > 0)
                     {
-                        cmd.Parameters.AddWithValue("@poolid", poolId);
-                    });
+                        var deleteCMDText = String.Format(@"DELETE FROM X_CLI_POOLS WHERE pool_id=@poolid;");
+                        int deletePoolItemCMDRecordsAffected = ExecuteNonQueryText(deleteCMDText, cmd =>
+                        {
+                            cmd.Parameters.AddWithValue("@poolid", poolId);
+                        });
 
-                    var deleteCMDItemsText = String.Format(@"DELETE FROM X_CLI_POOLS_ITEMS WHERE pool_id=@poolid;");
-                    int deletePoolItemsCMDRecordsAffected = ExecuteNonQueryText(deleteCMDItemsText, cmd =>
-                    {
-                        cmd.Parameters.AddWithValue("@poolid", poolId);
-                    });
-                    return deletePoolItemCMDRecordsAffected > 0 && deletePoolItemsCMDRecordsAffected > 0;
+                        var deleteCMDItemsText = String.Format(@"DELETE FROM X_CLI_POOLS_ITEMS WHERE pool_id=@poolid;");
+                        int deletePoolItemsCMDRecordsAffected = ExecuteNonQueryText(deleteCMDItemsText, cmd =>
+                        {
+                            cmd.Parameters.AddWithValue("@poolid", poolId);
+                        });
+                        return deletePoolItemCMDRecordsAffected > 0 && deletePoolItemsCMDRecordsAffected > 0;
+                    }
                 }
-                return recordsEffected > 0;
             }
+            return recordsEffected > 0;
+
         }
 
         public bool Delete(int translationRuleId)
@@ -285,7 +289,8 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(TranslationRule translationRule, out int insertedId)
         {
             String transRulesTableCMD = string.Format(@"INSERT INTO trans_rules(trans_rule_name {0},engine_id {1})
-	                             SELECT @psgname {2}, @engineid {3}
+	                             SELECT @psgname {2}, @engineid {3} 
+                                 WHERE (NOT EXISTS(SELECT 1 FROM trans_rules WHERE   LOWER(trans_rule_name) =  LOWER(@psgname) ))
 	                             returning  trans_rule_id;",
                 !String.IsNullOrEmpty(translationRule.DNISPattern)? ",dnis_pattern" : "",
                 translationRule.FixedCLISettings != null ? ",cli_pattern" : "",
