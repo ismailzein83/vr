@@ -102,7 +102,7 @@ app.directive('vrWhsBeCustomerratepreviewGrid', ['WhS_BE_SalePriceListChangeAPIS
 				dataItem.RateChangeTypeIconUrl = rateChangeType.iconUrl;
 				dataItem.RateChangeTypeIconTooltip = rateChangeType.description;
 			}
-			if (dataItem.CurrencyId != dataItem.RecentCurrencyId) {
+			if (dataItem.RecentCurrencyId != undefined && dataItem.CurrencyId != dataItem.RecentCurrencyId) {
 				dataItem.RecentCurrencyIconType = 'exchange';
 				dataItem.RecentCurrencyIconTooltip = 'The real currency for current rate is ' + dataItem.RecentCurrencySymbol;
 			}
