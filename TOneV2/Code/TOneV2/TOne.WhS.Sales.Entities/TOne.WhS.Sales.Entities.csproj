@@ -98,6 +98,7 @@
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
     <Compile Include="RatePlanning\CarrierAccount\AffectedCarrierAccountFilter.cs" />
     <Compile Include="RatePlanning\ExcludedChange.cs" />
+    <Compile Include="RatePlanning\ExcludedItem.cs" />
     <Compile Include="SellingZonesWithDefaultRatesTaskData.cs" />
     <Compile Include="RPOtherRatesPreviewQuery.cs" />
     <Compile Include="SupplierTargetMatch\ITargetMatchCalculationMethodContext.cs" />
