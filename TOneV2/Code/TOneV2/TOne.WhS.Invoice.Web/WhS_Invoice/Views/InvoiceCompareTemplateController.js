@@ -47,24 +47,28 @@
             $scope.scopeModel.selectedComparisonCriterias = [];
             $scope.scopeModel.thresholdHint = 'Represents the max acceptable "%"<br> of difference between the System compared to the Supplier referring to<br> the formula:<div style="text-align:center;">(SystemValue-SupplierValue)<br>%=--------------------------------------*100<br>(SystemValue)</div>';
             $scope.scopeModel.reset = function () {
-                    var payload = {
-                        context: getContext(),
-                        fieldMappings: [
-                            { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
-                            { FieldName: "FromDate", FieldTitle: "From", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
-                            { FieldName: "ToDate", FieldTitle: "Till", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
-                            { FieldName: "Duration", FieldTitle: "Duration", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
-                            { FieldName: "NumberOfCalls", FieldTitle: "Calls", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value },
-                            { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
-                            { FieldName: "Amount", FieldTitle: "Amount", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
-                        ],
-                        listName: "MainList",
-                        showDateFormat: false,
-                    };
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mainListAPI, payload, setLoader);
+                VRNotificationService.showConfirmation('Configurations will be lost, are you sure you want to continue?').then(function (response) {
+                    if (response) {
+                        var payload = {
+                            context: getContext(),
+                            fieldMappings: [
+                                { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                                { FieldName: "FromDate", FieldTitle: "From", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                                { FieldName: "ToDate", FieldTitle: "Till", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                                { FieldName: "Duration", FieldTitle: "Duration", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
+                                { FieldName: "NumberOfCalls", FieldTitle: "Calls", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value },
+                                { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
+                                { FieldName: "Amount", FieldTitle: "Amount", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
+                            ],
+                            listName: "MainList",
+                            showDateFormat: false,
+                        };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isLoadingDirective = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mainListAPI, payload, setLoader);
+                    }
+                })
             };
             $scope.scopeModel.selectedComparisonResults = [];
 
@@ -73,7 +77,7 @@
                 mainListMappingReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
-               return saveInvoiceCompareTemplate();
+                return saveInvoiceCompareTemplate();
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
@@ -84,7 +88,7 @@
             };
             $scope.scopeModel.compare = function () {
                 $scope.scopeModel.comparisonResults.length = 0;
-                  return   startCompare();
+                return startCompare();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
@@ -92,15 +96,13 @@
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Invoice_InvoiceAPIService.CompareInvoices(dataRetrievalInput).then(function (response) {
 
-                    if (response != undefined && response.Result != undefined)
-                    {
+                    if (response != undefined && response.Result != undefined) {
                         VRNotificationService.notifyOnItemAdded("Compare Invoice", response);
-                    }else
-                    {
+                    } else {
                         $scope.scopeModel.recievedComparisonTab.isSelected = true;
                         onResponseReady(response);
                     }
-                    
+
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
@@ -138,24 +140,23 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-           
+
             UtilsService.waitMultipleAsyncOperations([getInvoice, getInvoiceAction]).then(function () {
                 $scope.scopeModel.showGrid = true;
-                WhS_Invoice_InvoiceCompareTemplateAPIService.GetInvoiceCompareTemplate(invoiceTypeId, partnerId,invoiceCarrierType).then(function (response) {
+                WhS_Invoice_InvoiceCompareTemplateAPIService.GetInvoiceCompareTemplate(invoiceTypeId, partnerId, invoiceCarrierType).then(function (response) {
                     invoiceCompareTemplateEntity = response;
-                   
+
                     loadAllControls();
                 });
-              
-            });
-        } 
 
-        function getInvoice()
-        {
-            return WhS_Invoice_InvoiceAPIService.GetInvoiceDetails(invoiceId,invoiceCarrierType).then(function (response) {
+            });
+        }
+
+        function getInvoice() {
+            return WhS_Invoice_InvoiceAPIService.GetInvoiceDetails(invoiceId, invoiceCarrierType).then(function (response) {
                 invoiceEntity = response;
-                if (invoiceEntity != undefined) {                    
-                        partnerId = invoiceEntity.PartnerId;
+                if (invoiceEntity != undefined) {
+                    partnerId = invoiceEntity.PartnerId;
                     var normalPrecision = UISettingsService.getNormalPrecision();
                     $scope.scopeModel.issuedBy = invoiceEntity.IssuedBy;
                     $scope.scopeModel.to = invoiceEntity.To;
@@ -177,11 +178,10 @@
             });
         }
         function getInvoiceAction() {
-           
+
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceAction(invoiceTypeId, invoiceActionId).then(function (response) {
                 invoiceActionEntity = response;
-                if (invoiceActionEntity != undefined && invoiceActionEntity.Settings != undefined)
-                {
+                if (invoiceActionEntity != undefined && invoiceActionEntity.Settings != undefined) {
                     $scope.scopeModel.partnerLabel = invoiceActionEntity.Settings.PartnerLabel;
                     $scope.scopeModel.partnerAbbreviationLabel = invoiceActionEntity.Settings.PartnerAbbreviationLabel;
                     $scope.scopeModel.diffCall = '(SystemCalls-' + $scope.scopeModel.partnerAbbreviationLabel + 'Calls)\n---------------------------*100\n\t(SystemCalls)';
@@ -194,9 +194,9 @@
 
 
         function loadAllControls() {
-         
+
             function setTitle() {
-              
+
                 $scope.title = 'Compare Invoice';
             }
 
@@ -227,19 +227,19 @@
             var obj = {
                 Threshold: $scope.scopeModel.threshold,
                 ListMapping: mainListAPI.getData(),
-                DateTimeFormat :$scope.scopeModel.dateTimeFormat,
-                InvoiceTypeId :invoiceTypeId,
-                InvoiceActionId :invoiceActionId,
-                InvoiceId :invoiceId,
+                DateTimeFormat: $scope.scopeModel.dateTimeFormat,
+                InvoiceTypeId: invoiceTypeId,
+                InvoiceActionId: invoiceActionId,
+                InvoiceId: invoiceId,
                 InputFileId: $scope.scopeModel.inPutFile.fileId,
                 ComparisonResults: UtilsService.getPropValuesFromArray($scope.scopeModel.selectedComparisonResults, "value"),
                 ComparisonCriterias: UtilsService.getPropValuesFromArray($scope.scopeModel.selectedComparisonCriterias, "value"),
-                DecimalDigits:$scope.scopeModel.decimalDigits
+                DecimalDigits: $scope.scopeModel.decimalDigits
             };
             return obj;
         }
 
-        function loadMainListListMapping()   {
+        function loadMainListListMapping() {
             var loadMainListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
             mainListMappingReadyPromiseDeferred.promise.then(function () {
                 var payload = {
@@ -288,8 +288,7 @@
         }
 
 
-        function startCompare()
-        {
+        function startCompare() {
             $scope.scopeModel.showGrid = false;
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
             setTimeout(function () {
