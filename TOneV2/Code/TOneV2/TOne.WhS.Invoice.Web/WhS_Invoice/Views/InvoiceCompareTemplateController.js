@@ -68,7 +68,7 @@
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mainListAPI, payload, setLoader);
                     }
-                })
+                });
             };
             $scope.scopeModel.selectedComparisonResults = [];
 
