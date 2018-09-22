@@ -180,10 +180,10 @@
             };
 
             $scope.scopeModal.onTicketContactGridReady = function (api) {
-                ticketContactsGridAPI = api;                
+                ticketContactsGridAPI = api;
                 ticketContactsGridReadyPromiseDeferred.resolve();
             };
-        }        
+        }
 
         function load() {
             $scope.isLoading = true;
@@ -202,7 +202,7 @@
             if (isEditMode) {
                 initialPromises.push(getCarrierProfile());
             }
-            else if (isViewHistoryMode) {               
+            else if (isViewHistoryMode) {
                 initialPromises.push(getCarrierProfileHistory());
             }
 
@@ -457,6 +457,7 @@
                         $scope.scopeModal.address = carrierProfileEntity.Settings.Address;
                         $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                         $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
+                        $scope.scopeModal.invoiceSubject = carrierProfileEntity.Settings.InvoiceSubject;
                         if (carrierProfileEntity.Settings.CompanyLogo != null)
                             $scope.scopeModal.companyLogo = {
                                 fileId: carrierProfileEntity.Settings.CompanyLogo
@@ -485,9 +486,9 @@
 
             var rootPromiseNode = {
                 promises: initialPromises,
-                getChildNode: function () {                    
+                getChildNode: function () {
                     return {
-                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector,loadBankDetailsSelector, loadTicketContacts])]
+                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadBankDetailsSelector, loadTicketContacts])]
                     };
                 }
             };
@@ -552,7 +553,8 @@
                     Documents: documentsGridAPI.getData(),
                     DefaultCusotmerTimeZoneId: defaultCustomerTimeZoneDirectiveAPI.getSelectedIds(),
                     DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
-                    TicketContacts:ticketContactsGridAPI.getData()
+                    TicketContacts: ticketContactsGridAPI.getData(),
+                    InvoiceSubject: $scope.scopeModal.invoiceSubject
                 }
             };
 

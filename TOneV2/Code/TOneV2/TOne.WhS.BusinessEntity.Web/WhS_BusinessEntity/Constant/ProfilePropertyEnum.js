@@ -4,5 +4,6 @@
     PricingEmail: { value: 2, description: "Pricing Email" },
     AccountManagerEmail: { value: 3, description: "Account Manager Email" },
     AlertingSMSPhoneNumbers: { value: 4, description: "SMS Phone Numbers" },
-    ProfileCompanyName: { value: 5, description: "Profile Company" }
+    ProfileCompanyName: { value: 5, description: "Profile Company" },
+    InvoiceSubject: { value: 6, description: "Invoice Subject" }
 });

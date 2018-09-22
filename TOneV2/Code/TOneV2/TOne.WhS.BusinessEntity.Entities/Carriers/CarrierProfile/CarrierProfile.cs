@@ -62,6 +62,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public VRTaxSetting TaxSetting { get; set; }
         public List<VRDocumentSetting> Documents { get; set; }
+        public string InvoiceSubject { get; set; }
     }
 
     public class CarrierProfile: BaseCarrierProfile
