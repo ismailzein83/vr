@@ -75,7 +75,7 @@ namespace Vanrise.Invoice.Web.Controllers
             if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.Query.InvoiceTypeId))
                 return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
-            return GetWebResponse(input, manager.GetFilteredInvoices(input));
+            return GetWebResponse(input, manager.GetFilteredInvoices(input),string.Format("{0} Invoice.", new InvoiceTypeManager().GetInvoiceTypeName(input.Query.InvoiceTypeId)));
         }
         [HttpPost]
         [Route("GetFilteredClientInvoices")]
