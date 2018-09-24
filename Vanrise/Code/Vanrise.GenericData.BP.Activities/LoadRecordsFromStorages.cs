@@ -15,9 +15,9 @@ namespace Vanrise.GenericData.BP.Activities
     {
         public List<Guid> RecordStorageIds { get; set; }
 
-        public DateTime FromTime { get; set; }
+        public DateTime? FromTime { get; set; }
 
-        public DateTime ToTime { get; set; }
+        public DateTime? ToTime { get; set; }
 
         public BaseQueue<RecordBatch> OutputQueue { get; set; }
 
@@ -41,10 +41,10 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<List<Guid>> RecordStorageIds { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> FromTime { get; set; }
+        public InArgument<DateTime?> FromTime { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> ToTime { get; set; }
+        public InArgument<DateTime?> ToTime { get; set; }
 
         public InArgument<RecordFilterGroup> RecordFilterGroup { get; set; }
 

@@ -10,9 +10,8 @@ namespace Vanrise.GenericData.Notification.Arguments
     public class DataRecordRuleEvaluatorProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public Guid DataRecordRuleEvaluatorDefinitionId { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
-        public VRTimePeriod TimePeriod {get; set;}
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
 
         public override string GetTitle()
         {
@@ -23,16 +22,15 @@ namespace Vanrise.GenericData.Notification.Arguments
         {
             if (evaluatedExpressions.ContainsKey("ScheduleTime") && evaluatedExpressions.ContainsKey("VRTimePeriod"))
             {
-                DateTime defaultDate = new DateTime(0001,1,1);
-                    var effectiveDate = (DateTime)evaluatedExpressions["ScheduleTime"];
-                    this.TimePeriod = (VRTimePeriod)evaluatedExpressions["VRTimePeriod"];
+                var effectiveDate = (DateTime)evaluatedExpressions["ScheduleTime"];
+                VRTimePeriod timePeriod = (VRTimePeriod)evaluatedExpressions["VRTimePeriod"];
 
-                    VRTimePeriodContext context = new VRTimePeriodContext();
-                    context.EffectiveDate = effectiveDate;
-                    this.TimePeriod.GetTimePeriod(context);
+                VRTimePeriodContext context = new VRTimePeriodContext();
+                context.EffectiveDate = effectiveDate;
+                timePeriod.GetTimePeriod(context);
 
-                    this.FromDate = context.FromTime;
-                    this.ToDate = context.ToTime;
+                this.FromDate = context.FromTime;
+                this.ToDate = context.ToTime;
             }
         }
     }

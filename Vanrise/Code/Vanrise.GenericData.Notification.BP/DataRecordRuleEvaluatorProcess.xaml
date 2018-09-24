@@ -89,15 +89,15 @@
         </Variable>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="ActivityStatus" />
       </Parallel.Variables>
-      <vgba:LoadRecordsFromStorages sap2010:WorkflowViewState.IdRef="LoadRecordsFromStorages_1">
+      <vgba:LoadRecordsFromStorages IsOrderAscending="{x:Null}" OrderColumnName="{x:Null}" RecordFilterGroup="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadRecordsFromStorages_1">
         <vgba:LoadRecordsFromStorages.EventCount>
           <OutArgument x:TypeArguments="x:Int64">
             <mca:CSharpReference x:TypeArguments="x:Int64">EventCount</mca:CSharpReference>
           </OutArgument>
         </vgba:LoadRecordsFromStorages.EventCount>
         <vgba:LoadRecordsFromStorages.FromTime>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.FromDate</mca:CSharpValue>
           </InArgument>
         </vgba:LoadRecordsFromStorages.FromTime>
         <vgba:LoadRecordsFromStorages.OutputQueue>
@@ -116,8 +116,8 @@
           </OutArgument>
         </vgba:LoadRecordsFromStorages.Status>
         <vgba:LoadRecordsFromStorages.ToTime>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.ToDate</mca:CSharpValue>
           </InArgument>
         </vgba:LoadRecordsFromStorages.ToTime>
       </vgba:LoadRecordsFromStorages>
@@ -127,11 +127,6 @@
             <mca:CSharpValue x:TypeArguments="s:Guid">AlertRuleTypeId</mca:CSharpValue>
           </InArgument>
         </vgn:EvaluateDataRecordRule.AlertRuleTypeId>
-        <vgn:EvaluateDataRecordRule.FromTime>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
-          </InArgument>
-        </vgn:EvaluateDataRecordRule.FromTime>
         <vgn:EvaluateDataRecordRule.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">RecordBatchQueue</mca:CSharpReference>
@@ -142,14 +137,9 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ActivityStatus</mca:CSharpValue>
           </InArgument>
         </vgn:EvaluateDataRecordRule.PreviousActivityStatus>
-        <vgn:EvaluateDataRecordRule.ToTime>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
-          </InArgument>
-        </vgn:EvaluateDataRecordRule.ToTime>
       </vgn:EvaluateDataRecordRule>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuTm90aWZpY2F0aW9uLkJQXERhdGFSZWNvcmRSdWxlRXZhbHVhdG9yUHJvY2Vzcy54YW1sFDwDmQEOAgEBQQVRMQIBWVIFlwEQAgECRAtEXgIBYkkLSXACAV5OC05tAgFaVw1XoQECAQNcB3smAgEufAeWASQCAQpfDV9cAgFSbg1uZwIBS3MNc28CAURpDWl4AgE9ZA1kWwIBNngNeFkCAS+OAQ2OAWcCASeJAQ2JAXgCASB/DX9YAgEZhAENhAFbAgESkwENkwFZAgEL</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuTm90aWZpY2F0aW9uLkJQXERhdGFSZWNvcmRSdWxlRXZhbHVhdG9yUHJvY2Vzcy54YW1sFDwDmQEOAgEBQQVRMQIBWVIFlwEQAgECRAtEXgIBYkkLSXACAV5OC05tAgFaVw1XoQECAQNcB3smAgEufAeWASQCAQpfDV9cAgFSbg1uZwIBS3MNc28CAURpDWl4AgE9ZA1kZwIBNngNeGUCAS+OAQ2OAWcCASeJAQ2JAXgCASB/DX9YAgEZhAENhAFbAgESkwENkwFZAgEL</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

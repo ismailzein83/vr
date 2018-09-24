@@ -27,23 +27,36 @@ app.directive("vrGenericdataDatarecordruleevaluatorSchedualed", ['UtilsService',
     function DataRecordRuleEvaluatorScheduledDirective($scope, ctrl) {
         this.initializeController = initializeController;
 
-        var datarecordruleevaluatordefinitionSelectorAPI;
-        var datarecordruleevaluatordefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataRecordRuleEvaluatorDefinitionSelectorAPI;
+        var dataRecordRuleEvaluatorDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var dataRecordRuleEvaluatorDefinitionSelectorSelectDeferred;
 
         var timePeriodSelectorAPI;
-        var timePeriodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var timePeriodSelectorReadyDeferred;
 
         function initializeController() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.datarecordruleevaluatordefinitionSelectorReady = function (api) {
-                datarecordruleevaluatordefinitionSelectorAPI = api;
-                datarecordruleevaluatordefinitionSelectorReadyDeferred.resolve();
+            $scope.scopeModel.dataRecordRuleEvaluatorDefinitionSelectorReady = function (api) {
+                dataRecordRuleEvaluatorDefinitionSelectorAPI = api;
+                dataRecordRuleEvaluatorDefinitionSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onTimePeriodSelectorReady = function (api) {
                 timePeriodSelectorAPI = api;
-                timePeriodSelectorReadyDeferred.resolve();
+
+                var setLoader = function (value) {
+                    $scope.scopeModel.isTimePeriodLoading = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timePeriodSelectorAPI, undefined, setLoader, timePeriodSelectorReadyDeferred);
+            };
+
+            $scope.scopeModel.onDataRecordRuleEvaluatorSelectionChanged = function (value) {
+                if (value != undefined) {
+                    if (dataRecordRuleEvaluatorDefinitionSelectorSelectDeferred != undefined) {
+                        dataRecordRuleEvaluatorDefinitionSelectorSelectDeferred.resolve();
+                    }
+                }
             };
 
             defineAPI();
@@ -56,11 +69,17 @@ app.directive("vrGenericdataDatarecordruleevaluatorSchedualed", ['UtilsService',
             api.load = function (payload) {
                 var promises = [];
 
+                if (payload != undefined && payload.rawExpressions != undefined && payload.rawExpressions.VRTimePeriod != undefined) {
+                    timePeriodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                    dataRecordRuleEvaluatorDefinitionSelectorSelectDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(loadTimePeriodSelector());
+                }
+
                 promises.push(loadDataRecordRuleEvaluatorDefinitionSelector());
 
                 function loadDataRecordRuleEvaluatorDefinitionSelector() {
-                    var datarecordruleevaluatordefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    datarecordruleevaluatordefinitionSelectorReadyDeferred.promise.then(function () {
+                    var dataRecordRuleEvaluatorDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    dataRecordRuleEvaluatorDefinitionSelectorReadyDeferred.promise.then(function () {
                         var dataRecordRuleEvaluatorPayload = {
                             filter: {
                                 Filters: [{
@@ -70,39 +89,40 @@ app.directive("vrGenericdataDatarecordruleevaluatorSchedualed", ['UtilsService',
                         };
                         if (payload != undefined && payload.data != undefined)
                             dataRecordRuleEvaluatorPayload.selectedIds = payload.data.DataRecordRuleEvaluatorDefinitionId;
-                        VRUIUtilsService.callDirectiveLoad(datarecordruleevaluatordefinitionSelectorAPI, dataRecordRuleEvaluatorPayload, datarecordruleevaluatordefinitionSelectorLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(dataRecordRuleEvaluatorDefinitionSelectorAPI, dataRecordRuleEvaluatorPayload, dataRecordRuleEvaluatorDefinitionSelectorLoadDeferred);
                     });
 
-                    return datarecordruleevaluatordefinitionSelectorLoadDeferred.promise;
+                    return dataRecordRuleEvaluatorDefinitionSelectorLoadDeferred.promise;
                 }
-
-                promises.push(loadTimePeriodSelector());
 
                 function loadTimePeriodSelector() {
                     var timePeriodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    timePeriodSelectorReadyDeferred.promise.then(function () {
-                        var timePeriodPayload;
-                        if (payload != undefined && payload.rawExpressions != undefined && payload.rawExpressions.VRTimePeriod != undefined)
-                            timePeriodPayload = {
-                                timePeriod : payload.rawExpressions.VRTimePeriod
-                            };
+                    UtilsService.waitMultiplePromises([timePeriodSelectorReadyDeferred.promise, dataRecordRuleEvaluatorDefinitionSelectorSelectDeferred.promise]).then(function () {
+                        timePeriodSelectorReadyDeferred = undefined;
+                        var timePeriodPayload = { timePeriod: payload.rawExpressions.VRTimePeriod };
                         VRUIUtilsService.callDirectiveLoad(timePeriodSelectorAPI, timePeriodPayload, timePeriodSelectorLoadDeferred);
                     });
 
                     return timePeriodSelectorLoadDeferred.promise;
                 }
-
-                return UtilsService.waitMultiplePromises(promises);
+                return UtilsService.waitMultiplePromises(promises).then(function () {
+                    dataRecordRuleEvaluatorDefinitionSelectorSelectDeferred = undefined;
+                });
             };
 
             api.getExpressionsData = function () {
-                return { "ScheduleTime": "ScheduleTime", "VRTimePeriod": timePeriodSelectorAPI.getData() };
+                var obj = { "ScheduleTime": "ScheduleTime" };
+
+                if (timePeriodSelectorAPI != undefined && !$scope.scopeModel.selectedEvaluator.AreDatesHardCoded)
+                    obj.VRTimePeriod = timePeriodSelectorAPI.getData();
+
+                return obj;
             };
 
             api.getData = function () {
                 return {
                     $type: "Vanrise.GenericData.Notification.Arguments.DataRecordRuleEvaluatorProcessInput, Vanrise.GenericData.Notification.Arguments",
-                    DataRecordRuleEvaluatorDefinitionId: datarecordruleevaluatordefinitionSelectorAPI.getSelectedIds()
+                    DataRecordRuleEvaluatorDefinitionId: dataRecordRuleEvaluatorDefinitionSelectorAPI.getSelectedIds()
                 };
             };
 

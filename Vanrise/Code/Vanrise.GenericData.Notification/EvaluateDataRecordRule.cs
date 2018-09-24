@@ -15,10 +15,6 @@ namespace Vanrise.GenericData.Notification
     {
         public Guid AlertRuleTypeId { get; set; }
 
-        public DateTime FromTime { get; set; }
-
-        public DateTime ToTime { get; set; }
-
         public BaseQueue<RecordBatch> InputQueue { get; set; }
     }
 
@@ -29,18 +25,11 @@ namespace Vanrise.GenericData.Notification
         public InArgument<Guid> AlertRuleTypeId { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime> FromTime { get; set; }
-
-        [RequiredArgument]
-        public InArgument<DateTime> ToTime { get; set; }
-
-        [RequiredArgument]
         public InOutArgument<BaseQueue<RecordBatch>> InputQueue { get; set; }
 
 
         protected override void DoWork(EvaluateDataRecordRuleInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-          
             var counter = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -61,7 +50,7 @@ namespace Vanrise.GenericData.Notification
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
-          //  handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0}  Processed", counter);
+            //  handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0}  Processed", counter);
         }
 
         protected override EvaluateDataRecordRuleInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -69,9 +58,7 @@ namespace Vanrise.GenericData.Notification
             return new EvaluateDataRecordRuleInput()
             {
                 AlertRuleTypeId = this.AlertRuleTypeId.Get(context),
-                FromTime = this.FromTime.Get(context),
-                InputQueue = this.InputQueue.Get(context),
-                ToTime = this.ToTime.Get(context),
+                InputQueue = this.InputQueue.Get(context)
             };
         }
     }

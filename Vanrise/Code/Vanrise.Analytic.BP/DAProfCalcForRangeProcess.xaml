@@ -111,8 +111,8 @@
           </OutArgument>
         </vgba:LoadRecordsFromStorages.EventCount>
         <vgba:LoadRecordsFromStorages.FromTime>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.FromTime</mca:CSharpValue>
           </InArgument>
         </vgba:LoadRecordsFromStorages.FromTime>
         <vgba:LoadRecordsFromStorages.OutputQueue>
@@ -131,8 +131,8 @@
           </OutArgument>
         </vgba:LoadRecordsFromStorages.Status>
         <vgba:LoadRecordsFromStorages.ToTime>
-          <InArgument x:TypeArguments="s:DateTime">
-            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.ToTime</mca:CSharpValue>
           </InArgument>
         </vgba:LoadRecordsFromStorages.ToTime>
       </vgba:LoadRecordsFromStorages>

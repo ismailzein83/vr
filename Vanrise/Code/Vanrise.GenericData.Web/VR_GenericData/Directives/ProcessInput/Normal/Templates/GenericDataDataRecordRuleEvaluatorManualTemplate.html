@@ -1,9 +1,11 @@
 ﻿<vr-row>
-    <vr-genericdata-datarecordruleevaluatordefinition-selector on-ready="scopeModel.dataRecordRuleEvaluatorDefinitionSelectorReady" normal-col-num="4" isrequired="true"></vr-genericdata-datarecordruleevaluatordefinition-selector>
-    <vr-columns colnum="4">
+    <vr-genericdata-datarecordruleevaluatordefinition-selector on-ready="scopeModel.dataRecordRuleEvaluatorDefinitionSelectorReady" 
+                                                               selectedvalues="scopeModel.selectedEvaluator" hideremoveicon
+                                                               normal-col-num="4" isrequired="true"></vr-genericdata-datarecordruleevaluatordefinition-selector>
+    <vr-columns colnum="4" ng-if="scopeModel.selectedEvaluator!=undefined && !scopeModel.selectedEvaluator.AreDatesHardCoded">
         <vr-datetimepicker label="From Date" value="scopeModel.fromDate" typeof="dateTime" isrequired></vr-datetimepicker>
     </vr-columns>
-    <vr-columns colnum="4">
+    <vr-columns colnum="4" ng-if="scopeModel.selectedEvaluator!=undefined && !scopeModel.selectedEvaluator.AreDatesHardCoded">
         <vr-datetimepicker label="To Date" value="scopeModel.toDate" typeof="dateTime" isrequired></vr-datetimepicker>
     </vr-columns>
 </vr-row>
