@@ -49,7 +49,7 @@ namespace Vanrise.Reprocess.Business
                     }
 
                     GenericReprocessFilterFieldDefinition filterField = fields.GetRecord(fieldName);
-                    RecordFilter recordFilter = filterField.FieldType.ConvertToRecordFilter(fieldMappingName, fieldValues);
+                    RecordFilter recordFilter = filterField.FieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = fieldMappingName, FilterValues = fieldValues, StrictEqual = true });
                     recordFilterGroup.Filters.Add(recordFilter);
                 }
             }
