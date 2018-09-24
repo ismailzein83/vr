@@ -107,6 +107,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\CodeBEDLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\NormalRateBEDLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountryWhileProcessing\OtherRateBEDLessThanRetroactiveDateCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\OtherRateZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\RateIsZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\OtherRateNegativeOrZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\RateGreaterThanZero.cs" />

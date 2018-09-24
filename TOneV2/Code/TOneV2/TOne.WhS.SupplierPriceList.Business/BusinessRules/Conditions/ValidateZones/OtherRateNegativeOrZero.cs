@@ -30,7 +30,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     foreach (KeyValuePair<int, List<ImportedRate>> importedOtherRate in importedZone.ImportedOtherRates)
                     {
 
-                        if (importedOtherRate.Value.Any(item => item.Rate <= 0))
+                        if (importedOtherRate.Value.Any(item => item.Rate < 0))
                         {
                             string rateTypeName = rateTypeManager.GetRateTypeName(importedOtherRate.Key);
                             invalidOtherRate.Add(rateTypeName);
@@ -43,7 +43,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             if (messages.Any())
             {
-                context.Message = string.Format("Other rate can not be negative or zero. Violated other rates: {0}.", string.Join(", ", messages));
+                context.Message = string.Format("Other rate can not be negative. Violated other rates: {0}.", string.Join(", ", messages));
                 return false;
             }
             return true;
