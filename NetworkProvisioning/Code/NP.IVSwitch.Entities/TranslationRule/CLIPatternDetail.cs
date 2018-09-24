@@ -11,8 +11,8 @@ namespace NP.IVSwitch.Entities
         public string CLIPattern { get; set; }
         public string Prefix { get; set; }
         public string Destination { get; set; }
-        public int RandMin { get; set; }
-        public int RandMax { get; set; }
+        public int? RandMin { get; set; }
+        public int? RandMax { get; set; }
         public string DisplayName { get; set; }
     }
 }

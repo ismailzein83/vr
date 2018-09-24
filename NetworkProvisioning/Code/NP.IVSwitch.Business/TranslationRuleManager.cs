@@ -77,8 +77,8 @@ namespace NP.IVSwitch.Business
                         Destination = translationRule.PoolBasedCLISettings.Destination,
                         DisplayName = translationRule.PoolBasedCLISettings.DisplayName,
                         Prefix = translationRule.PoolBasedCLISettings.Prefix,
-                        RandMax = translationRule.PoolBasedCLISettings.RandMax,
-                        RandMin = translationRule.PoolBasedCLISettings.RandMin
+                        RandMax = translationRule.PoolBasedCLISettings.RandMax.Value == 0 ? (int?)null : translationRule.PoolBasedCLISettings.RandMax.Value,
+                        RandMin = translationRule.PoolBasedCLISettings.RandMin.Value == -1 ? (int?)null : translationRule.PoolBasedCLISettings.RandMin.Value
                     });
                 }
             }

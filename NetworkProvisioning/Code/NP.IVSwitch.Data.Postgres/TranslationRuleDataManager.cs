@@ -459,10 +459,11 @@ namespace NP.IVSwitch.Data.Postgres
 	                            SET prefix = @prefix
                                 {0},
                                 rand_min = @randmin, 
-                                rand_max = @randmax,
-                                dn = @dn
+                                rand_max = @randmax
+                                {1}
                                 WHERE  pool_id = @poolid; ",
-                                !String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.Destination) ? ",destination=@destination" : ",destination=DEFAULT");
+                                !String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.Destination) ? ",destination=@destination" : ",destination=DEFAULT",
+                                !String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.DisplayName) ? ",dn = @dn" : ",dn=DEFAULT");
 
                         int updateOperationRecordsAffected = ExecuteNonQueryText(updateItemCMDText, cmd =>
                         {
@@ -470,9 +471,10 @@ namespace NP.IVSwitch.Data.Postgres
                             if(!String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.Destination)){
                                 cmd.Parameters.AddWithValue("@destination", translationRule.PoolBasedCLISettings.Destination);
                             }
-                            cmd.Parameters.AddWithValue("@randmin", translationRule.PoolBasedCLISettings.RandMin!=0 ? translationRule.PoolBasedCLISettings.RandMin : -1);
-                            cmd.Parameters.AddWithValue("@randmax", translationRule.PoolBasedCLISettings.RandMax);
-                            cmd.Parameters.AddWithValue("@dn", translationRule.PoolBasedCLISettings.DisplayName);
+                            cmd.Parameters.AddWithValue("@randmin", translationRule.PoolBasedCLISettings.RandMin.HasValue ? translationRule.PoolBasedCLISettings.RandMin.Value : -1);
+                            cmd.Parameters.AddWithValue("@randmax", translationRule.PoolBasedCLISettings.RandMax.HasValue ? translationRule.PoolBasedCLISettings.RandMax.Value : 0);
+                            if (!String.IsNullOrEmpty(translationRule.PoolBasedCLISettings.DisplayName))
+                                cmd.Parameters.AddWithValue("@dn", translationRule.PoolBasedCLISettings.DisplayName);
                             cmd.Parameters.AddWithValue("@poolid", poolId);
                             cmd.Parameters.AddWithValue("@cli", itemsToUpdate[i]);
                         }
@@ -497,13 +499,15 @@ namespace NP.IVSwitch.Data.Postgres
             return true;
         }
 
-        public object InsertPoolItem(int poolId, int preference, string prefix, string cliPattern, string destination, int randMin, int randMax, string displayName)
+        public object InsertPoolItem(int poolId, int preference, string prefix, string cliPattern, string destination, int? randMin, int? randMax, string displayName)
         {
-            String CLIPoolsItemsTableCMDText = string.Format(@"INSERT INTO x_cli_pools_items(pool_id, preference, prefix, cli {0}, mode, rand_min, rand_max, dn)
-	                                    SELECT @poolid, @preference, @prefix, @cli {1}, @mode , @randmin, @randmax, @dn
+            String CLIPoolsItemsTableCMDText = string.Format(@"INSERT INTO x_cli_pools_items(pool_id, preference, prefix, cli {0}, mode, rand_min, rand_max {1})
+	                                    SELECT @poolid, @preference, @prefix, @cli {2}, @mode , @randmin, @randmax {3}
 	                                    returning  pool_id;",
                                        !String.IsNullOrEmpty(destination) ? ",destination" : "",
-                                           !String.IsNullOrEmpty(destination) ? ",@destination" : "");
+                                       !String.IsNullOrEmpty(displayName) ? ", dn" : "",
+                                       !String.IsNullOrEmpty(destination) ? ",@destination" : "",
+                                       !String.IsNullOrEmpty(displayName) ? ", @dn" : "");
                     return ExecuteScalarText(CLIPoolsItemsTableCMDText, cmd =>
                     {
                         cmd.Parameters.AddWithValue("@poolid", poolId);
@@ -513,12 +517,10 @@ namespace NP.IVSwitch.Data.Postgres
                         if (!String.IsNullOrEmpty(destination))
                             cmd.Parameters.AddWithValue("@destination", destination);
                         cmd.Parameters.AddWithValue("@mode", 3);
-                        if (randMin == 0)
-                            randMin = -1;
-                        cmd.Parameters.AddWithValue("@randmin", randMin);
-                        cmd.Parameters.AddWithValue("@randmax", randMax);
-                        cmd.Parameters.AddWithValue("@dn", displayName);
-
+                        cmd.Parameters.AddWithValue("@randmin", randMin.HasValue ? randMin.Value : -1);
+                        cmd.Parameters.AddWithValue("@randmax", randMax.HasValue ? randMax.Value : 0);
+                        if (!String.IsNullOrEmpty(displayName))
+                            cmd.Parameters.AddWithValue("@dn", displayName);
                     });
         }
     }
