@@ -38,6 +38,9 @@ namespace TOne.WhS.Deal.Business
 
             IEnumerable<DealDefinition> deals = swapDealManager.GetSwapDealsEffectiveAfterDate(context.FromTime.Value);
 
+            if (deals == null)
+                return;
+
             foreach (var dealDefinition in deals)
             {
                 SwapDealSettings swapDealSetting = dealDefinition.Settings as SwapDealSettings;
@@ -180,7 +183,7 @@ namespace TOne.WhS.Deal.Business
 
         private DataRecordObject DataRecordObjectMapper(SwapDealProgressDataRecordType swapDealProgress)
         {
-             var carrierProfileId = carrierAccountManager.GetCarrierProfileId(swapDealProgress.CarrierAccountId);
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(swapDealProgress.CarrierAccountId);
             var carrierName = carrierAccountManager.GetCarrierAccountName(swapDealProgress.CarrierAccountId);
 
             var swapDealProgressObject = new Dictionary<string, object>

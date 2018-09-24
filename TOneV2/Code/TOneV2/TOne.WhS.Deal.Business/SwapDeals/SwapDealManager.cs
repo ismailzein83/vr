@@ -48,6 +48,10 @@ namespace TOne.WhS.Deal.Business
         {
             List<DealDefinition> dealDefinitions = new List<DealDefinition>();
             var deals = GetCachedSwapDeals();
+
+            if (deals == null)
+                return null;
+
             foreach (var dealDefinition in deals)
             {
                 if (dealDefinition.Settings.Status != DealStatus.Inactive && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.RealEED > effectiveAfter))
@@ -65,7 +69,7 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDefinition in deals)
             {
-                if (dealDefinition.Settings.Status != DealStatus.Draft && dealDefinition.Settings.BeginDate >= beginDate && dealDefinition.Settings.RealEED.Value < endDate)
+                if (dealDefinition.Settings.Status != DealStatus.Draft && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.BeginDate < endDate && dealDefinition.Settings.RealEED.Value > beginDate))
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
