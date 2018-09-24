@@ -304,8 +304,20 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                             }
                         }
                     }
-                    queries = newQueries;
                 }
+                else if (queries == null && newQueries != undefined) {
+                    queries = [];
+                    var queryAdded = newQueries[newQueries.length - 1];
+                    queries.push(queryAdded);
+                    $scope.scopeModel.queries.push({
+                        description: queryAdded.QueryTitle,
+                        value: queryAdded.VRAutomatedReportQueryId
+                    });
+                    queryNameSelectorReadyDeferred.promise.then(function() {
+                        queryNameSelectorAPI.selectIfSingleItem();
+                    });
+                }
+                queries = newQueries;
             };
             api.getData = function () {
               var obj = {

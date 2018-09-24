@@ -64,7 +64,7 @@ app.directive("vrAnalyticVrautomatedreportquery", ['UtilsService', 'VRAnalytic_A
 
             $scope.scopeModel.validateColumns = function () {
                 if ($scope.scopeModel.columns.length == 0) {
-                    return 'At least one column must be added.';
+                    return 'At least one query must be added.';
                 }
                 var columnNames = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
