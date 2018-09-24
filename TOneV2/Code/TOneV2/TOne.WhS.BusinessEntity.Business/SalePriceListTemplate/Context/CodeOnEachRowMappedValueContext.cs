@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -24,5 +22,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public CodeChange CodeChangeType { get; set; }
         public string Increment { get; set; }
         public Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
+        public long? ZoneId { get; set; }
     }
 }

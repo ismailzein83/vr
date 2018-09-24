@@ -55,6 +55,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             var mappedValueContext = new CodeOnEachRowMappedValueContext
             {
                 Zone = zone.ZoneName,
+                ZoneId = zone.ZoneId,
                 CustomerId = customerId,
                 OtherRateByRateTypeId = zone.OtherRateByRateTypeId
             };

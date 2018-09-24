@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface ICodeOnEachRowMappedValueContext
@@ -23,5 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         CodeChange CodeChangeType { get; set; }
         string Increment { get; set; }
         Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
+        long? ZoneId { get; set; }
     }
 }

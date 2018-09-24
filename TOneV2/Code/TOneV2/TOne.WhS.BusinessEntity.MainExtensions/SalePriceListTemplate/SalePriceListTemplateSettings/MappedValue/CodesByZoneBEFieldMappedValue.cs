@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
@@ -20,7 +18,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         Services = 6,
         RateChangeType = 7,
         Currency = 8,
-        Increment = 9
+        Increment = 9,
+        CodeGroup = 10,
+        Country = 11,
+        ZoneNameWithoutCountryName = 12
     }
 
     public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
@@ -33,6 +34,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override void Execute(ICodesByZoneMappedValueContext context)
         {
+            var saleZoneManager = new SaleZoneManager();
             switch (BEField)
             {
                 case CodesByZoneBEFieldType.Zone:
@@ -79,8 +81,20 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 case CodesByZoneBEFieldType.Increment:
                     context.Value = context.ZoneNotification.Increment;
                     break;
+                case CodesByZoneBEFieldType.CodeGroup:
+                    context.Value = new SalePriceListManager().GetCodeGroupFromCodes(context.ZoneNotification.Codes).Code;
+                    break;
+                case CodesByZoneBEFieldType.Country:
+                    if (context.ZoneNotification.ZoneId.HasValue)
+                        context.Value = saleZoneManager.GetCountryNameByZoneId(context.ZoneNotification.ZoneId.Value);
+                    break;
+                case CodesByZoneBEFieldType.ZoneNameWithoutCountryName:
+                    if (context.ZoneNotification.ZoneId.HasValue)
+                        context.Value = saleZoneManager.GetZoneNameWithoutCountryName(context.ZoneNotification.ZoneId, context.ZoneNotification.ZoneName);
+                    break;
             }
         }
+
 
         private string GetRateChange(RateChangeType rateChangeType, int customerId)
         {

@@ -3,7 +3,6 @@ using System.Linq;
 using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using System.Collections.Generic;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -22,7 +21,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         CodeChangeType = 10,
         Increment = 11,
         CodeRateChangeType = 12,
-        EffectiveDate = 13
+        EffectiveDate = 13,
+        CodeGroup = 14,
+        Country = 15,
+        ZoneNameWithoutCountryName = 16,
+        AreaCode =17
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -35,6 +38,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override void Execute(ICodeOnEachRowMappedValueContext context)
         {
+            var saleZoneManager = new SaleZoneManager();
             switch (BEField)
             {
                 case CodeOnEachRowBEFieldType.Zone:
@@ -85,6 +89,20 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case CodeOnEachRowBEFieldType.EffectiveDate:
                     context.Value = GetEffectiveDate(context.CodeBED, context.RateBED);
+                    break;
+                case CodeOnEachRowBEFieldType.CodeGroup:
+                    context.Value = new CodeGroupManager().GetMatchCodeGroup(context.Code).Code;
+                    break;
+                case CodeOnEachRowBEFieldType.Country:
+                    if(context.ZoneId.HasValue)
+                        context.Value = saleZoneManager.GetCountryNameByZoneId(context.ZoneId.Value);
+                    break;
+                case CodeOnEachRowBEFieldType.ZoneNameWithoutCountryName:
+                    if (context.ZoneId.HasValue)
+                        context.Value = saleZoneManager.GetZoneNameWithoutCountryName(context.ZoneId, context.Zone);
+                    break;
+                case CodeOnEachRowBEFieldType.AreaCode:
+                    context.Value = saleZoneManager.GetAreaCodeFromCode(context.Code);
                     break;
             }
         }

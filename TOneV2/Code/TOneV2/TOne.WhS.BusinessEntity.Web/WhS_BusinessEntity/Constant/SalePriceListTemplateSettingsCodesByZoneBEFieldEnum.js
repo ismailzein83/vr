@@ -8,5 +8,8 @@
     Services: { value: 6, description: "Services" },
     RateChangeType: { value: 7, description: "Rate Change Type" },
     Currency: { value: 8, description: "Currency" },
-    Increment: { value: 9, description: "Increment" }
+    Increment: { value: 9, description: "Increment" },
+    CodeGroup: { value: 10, description: "Code Group" },
+    Country: { value: 11, description: "Country" },
+    ZoneNameWithoutCountryName: { value: 12, description: "Zone Name Without Country Name" }
 });

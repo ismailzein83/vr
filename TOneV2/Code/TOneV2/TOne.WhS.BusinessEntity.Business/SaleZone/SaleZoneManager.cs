@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Caching;
-using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -146,7 +142,31 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             return saleZone.CountryId;
         }
+        public string GetCountryNameByZoneId(long zoneId)
+        {
+            var countryManager = new CountryManager();
+            int? countryId = GetSaleZoneCountryId(zoneId);
+            if (!countryId.HasValue)
+                throw new DataIntegrityValidationException("CountryId is null");
+            return countryManager.GetCountryName(countryId.Value);
+        }
+        public string GetZoneNameWithoutCountryName(long? zoneId, string zone)
+        {
+            if (!zoneId.HasValue)
+                throw new DataIntegrityValidationException("ZoneId is null");
 
+            string countryName = GetCountryNameByZoneId(zoneId.Value);
+            var index = zone.IndexOf(countryName, StringComparison.CurrentCultureIgnoreCase);
+            if (index > -1)
+                zone = zone.Remove(index, countryName.Length).TrimStart(new char[] { '-', '_', ' ' });
+            return zone;
+        }
+        public string GetAreaCodeFromCode(string code)
+        {
+            var codeGroup = new CodeGroupManager().GetMatchCodeGroup(code).Code;
+            code = code.Remove(0, codeGroup.Length);
+            return code;
+        }
         public IOrderedEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();

@@ -12,5 +12,9 @@
     CodeChangeType: { value: 10, description: "Code Change Type" },
     Increment: { value: 11, description: "Increment" },
     CodeRateChangeType: { value: 12, description: "Code and Rate Change Type(reflecting Last modification)" },
-    EffectiveDate: { value: 13, description: "Rate&CodeBED (reflecting Last modification)" }
+    EffectiveDate: { value: 13, description: "Rate&CodeBED (reflecting Last modification)" },
+    CodeGroup: { value: 14, description: "Code Group" },
+    Country: { value: 15, description: "Country" },
+    ZoneNameWithoutCountryName: { value: 16, description: "Zone Name Without Country Name" },
+    AreaCode: { value: 17, description: "Area Code" },
 });

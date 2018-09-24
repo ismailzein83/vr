@@ -100,6 +100,46 @@ namespace TOne.WhS.BusinessEntity.Business
 			if (newPriceLists.Any()) BulkInsertPriceList(newPriceLists);
 		}
 
+        public CodeGroup GetCodeGroupFromCodes(List<SalePLCodeNotification> saleCodes)
+        {
+            var saleCodesByCodeGroup = new Dictionary<CodeGroup, List<SalePLCodeNotification>>();
+            foreach (var saleCode in saleCodes)
+            {
+                CodeGroup codeGroup = new CodeGroupManager().GetMatchCodeGroup(saleCode.Code);
+                if (saleCode.Code == codeGroup.Code) 
+                    return codeGroup;
+                List<SalePLCodeNotification> codes = saleCodesByCodeGroup.GetOrCreateItem(codeGroup);
+                codes.Add(saleCode);
+            }
+
+            if (saleCodesByCodeGroup.Count == 1)
+            {
+                return saleCodesByCodeGroup.First().Key;
+            }
+           return GetCodeGroupWithMaxCodes(saleCodesByCodeGroup);
+        }
+
+        public CodeGroup GetCodeGroupWithMaxCodes(Dictionary<CodeGroup, List<SalePLCodeNotification>> saleCodesByCodeGroup)
+        {
+            var codeGroupWithMaxCodes = new CodeGroup();
+            var maxCountOfCodes = 0;
+            
+            foreach (var item in saleCodesByCodeGroup)
+            {
+                if (item.Value.Count > maxCountOfCodes)
+                {
+                    maxCountOfCodes = item.Value.Count;
+                    codeGroupWithMaxCodes=item.Key;
+                }
+                if(item.Value.Count== maxCountOfCodes)
+                {
+                    if (item.Key.Code.Length > codeGroupWithMaxCodes.Code.Length)
+                        codeGroupWithMaxCodes = item.Key;
+                }
+            }
+            return codeGroupWithMaxCodes;
+        }
+
 		public List<StructuredCustomerPricelistChange> StructureCustomerPricelistChange(List<CustomerPriceListChange> customerPriceListChanges)
 		{
 			return
