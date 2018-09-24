@@ -51,7 +51,7 @@ namespace Vanrise.GenericData.Entities
 
         public abstract GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context);
 
-        public abstract RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues);
+        public abstract RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context);
 
         public virtual bool TryGenerateUniqueIdentifier(out Guid? uniqueIdentifier)
         {
@@ -136,6 +136,18 @@ namespace Vanrise.GenericData.Entities
         }
     }
 
+    public interface IDataRecordFieldTypeConvertToRecordFilterContext
+    {
+        string FieldName { get; }
+        List<Object> FilterValues { get; }
+        bool StrictEqual { get; }
+    }
+    public class DataRecordFieldTypeConvertToRecordFilterContext : IDataRecordFieldTypeConvertToRecordFilterContext
+    {
+        public string FieldName { get; set; }
+        public List<object> FilterValues { get; set; }
+        public bool StrictEqual { get; set; }
+    }
     public interface IDataRecordFieldTypeParseValueToFieldTypeContext
     {
         Object Value { get; }

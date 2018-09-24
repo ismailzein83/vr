@@ -116,7 +116,7 @@ namespace Vanrise.GenericData.Business
 
                     var record = recordType.Fields.FindRecord(x => x.Name == filter.FieldName);
                     List<object> notNullFilterValues = filter.FilterValues.Where(itm => itm != null).ToList();
-                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
+                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = record.Name, FilterValues = notNullFilterValues }) : null;
                     EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != filter.FilterValues.Count ? new EmptyRecordFilter { FieldName = record.Name } : null;
 
                     if (notNullValuesRecordFilter != null && emptyRecordFilter != null)

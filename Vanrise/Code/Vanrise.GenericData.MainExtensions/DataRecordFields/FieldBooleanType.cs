@@ -90,12 +90,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return booleanRecordFilter.IsTrue == (bool)fieldValue;
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            if (filterValues == null || filterValues.Count == 0)
+            if (context.FilterValues == null || context.FilterValues.Count == 0)
                 return null;
 
-            var values = filterValues.Select(value => Convert.ToBoolean(value)).ToList();
+            var values = context.FilterValues.Select(value => Convert.ToBoolean(value)).ToList();
             List<RecordFilter> recordFilters = new List<RecordFilter>();
 
             foreach (var value in values)
@@ -103,7 +103,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 recordFilters.Add(new BooleanRecordFilter
                 {
                     IsTrue = value,
-                    FieldName = fieldName
+                    FieldName = context.FieldName
                 });
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();

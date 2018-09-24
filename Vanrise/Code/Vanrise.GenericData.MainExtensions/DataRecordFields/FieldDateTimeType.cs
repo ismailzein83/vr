@@ -342,9 +342,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal", Field = context != null ? context.ValueFieldPath : null };
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            if (filterValues == null || filterValues.Count == 0)
+            if (context.FilterValues == null || context.FilterValues.Count == 0)
                 return null;
 
             List<RecordFilter> recordFilters = null;
@@ -352,33 +352,33 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             switch (this.DataType)
             {
                 case FieldDateTimeDataType.DateTime:
-                    var dateTimeValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
-                    recordFilters = GetDateTimeRecordFilters(fieldName, dateTimeValues, DateTimeRecordFilterComparisonPart.DateTime);
+                    var dateTimeValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(context.FieldName, dateTimeValues, DateTimeRecordFilterComparisonPart.DateTime);
                     break;
 
                 case FieldDateTimeDataType.Date:
-                    var dateValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
-                    recordFilters = GetDateTimeRecordFilters(fieldName, dateValues, DateTimeRecordFilterComparisonPart.DateOnly);
+                    var dateValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(context.FieldName, dateValues, DateTimeRecordFilterComparisonPart.DateOnly);
                     break;
 
                 case FieldDateTimeDataType.Time:
-                    var timeValues = filterValues.Select(value => new Time(value.ToString())).ToList();
-                    recordFilters = GetDateTimeRecordFilters(fieldName, timeValues, DateTimeRecordFilterComparisonPart.TimeOnly);
+                    var timeValues = context.FilterValues.Select(value => new Time(value.ToString())).ToList();
+                    recordFilters = GetDateTimeRecordFilters(context.FieldName, timeValues, DateTimeRecordFilterComparisonPart.TimeOnly);
                     break;
 
                 case FieldDateTimeDataType.YearMonth:
-                    var yearMonthDateTimeValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
-                    recordFilters = GetDateTimeRecordFilters(fieldName, yearMonthDateTimeValues, DateTimeRecordFilterComparisonPart.YearMonth);
+                    var yearMonthDateTimeValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(context.FieldName, yearMonthDateTimeValues, DateTimeRecordFilterComparisonPart.YearMonth);
                     break;
 
                 case FieldDateTimeDataType.YearWeek:
-                    var yearWeekDateTimeValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
-                    recordFilters = GetDateTimeRecordFilters(fieldName, yearWeekDateTimeValues, DateTimeRecordFilterComparisonPart.YearWeek);
+                    var yearWeekDateTimeValues = context.FilterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(context.FieldName, yearWeekDateTimeValues, DateTimeRecordFilterComparisonPart.YearWeek);
                     break;
 
                 case FieldDateTimeDataType.Hour:
-                    var hourValues = filterValues.Select(value => new Time(value.ToString())).ToList();
-                    recordFilters = GetDateTimeRecordFilters(fieldName, hourValues, DateTimeRecordFilterComparisonPart.Hour);
+                    var hourValues = context.FilterValues.Select(value => new Time(value.ToString())).ToList();
+                    recordFilters = GetDateTimeRecordFilters(context.FieldName, hourValues, DateTimeRecordFilterComparisonPart.Hour);
                     break;
 
                 default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));

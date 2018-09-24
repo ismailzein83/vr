@@ -153,16 +153,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            if (filterValues == null || filterValues.Count == 0)
+            if (context.FilterValues == null || context.FilterValues.Count == 0)
                 return null;
 
             return new NumberListRecordFilter
             {
                 CompareOperator = ListRecordFilterOperator.In,
-                Values = filterValues.Select(value => Convert.ToDecimal(value)).ToList(),
-                FieldName = fieldName
+                Values = context.FilterValues.Select(value => Convert.ToDecimal(value)).ToList(),
+                FieldName = context.FieldName
             };
         }
         public override void GetValueByDescription(IGetValueByDescriptionContext context)

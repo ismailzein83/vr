@@ -45,7 +45,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 BusinessEntityManager beManager = new BusinessEntityManager();
                 IEnumerable<dynamic> childValues = beManager.GetChildEntitiesIds(currentBEFieldType.BusinessEntityDefinitionId, childBEFieldType.BusinessEntityDefinitionId, objectListFilter.Values.Cast<dynamic>());
 
-                var childFilter = childBEFieldType.ConvertToRecordFilter(this.ChildFieldName, childValues.Cast<Object>().ToList());
+                var childFilter = childBEFieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = this.ChildFieldName, FilterValues = childValues.Cast<Object>().ToList() });
                 if (childFilter is ObjectListRecordFilter)
                     ((ObjectListRecordFilter)childFilter).CompareOperator = objectListFilter.CompareOperator;
                 return childFilter;

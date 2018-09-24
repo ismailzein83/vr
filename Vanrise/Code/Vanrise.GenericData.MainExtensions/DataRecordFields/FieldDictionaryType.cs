@@ -81,9 +81,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            var values = filterValues.Select(x => x.ToString()).ToList();
+            if (context.FilterValues == null || context.FilterValues.Count == 0)
+                return null;
+            var values = context.FilterValues.Select(x => x.ToString()).ToList();
             List<RecordFilter> recordFilters = new List<RecordFilter>();
 
             foreach (var value in values)
@@ -92,7 +94,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 {
                     CompareOperator = StringRecordFilterOperator.Contains,
                     Value = value,
-                    FieldName = fieldName
+                    FieldName = context.FieldName
                 });
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();

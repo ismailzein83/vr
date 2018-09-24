@@ -189,7 +189,7 @@ namespace Vanrise.Analytic.Business
                             throw new ArgumentNullException(string.Format("Record field mapping for dimension {0} not found.", dimension.Name));
 
                         List<object> notNullFilterValues = dimensionFilter.FilterValues.Where(itm => itm != null).ToList();
-                        RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
+                        RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = record.Name, FilterValues = notNullFilterValues }) : null;
                         EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != dimensionFilter.FilterValues.Count ? new EmptyRecordFilter { FieldName = record.Name } : null;
 
                         if (notNullValuesRecordFilter != null && emptyRecordFilter != null)

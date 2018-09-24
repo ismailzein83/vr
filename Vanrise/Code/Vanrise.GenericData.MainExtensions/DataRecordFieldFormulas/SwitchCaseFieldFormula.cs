@@ -189,7 +189,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
         private RecordFilter ConvertToRecordFilter(string fieldName, DataRecordFieldType dataRecordFieldType, ObjectListRecordFilter objectListRecordFilter)
         {
-            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(fieldName, objectListRecordFilter.Values);
+            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = fieldName, FilterValues = objectListRecordFilter.Values ,StrictEqual = true});
             if (recordFilter is ObjectListRecordFilter)
                 ((ObjectListRecordFilter)recordFilter).CompareOperator = objectListRecordFilter.CompareOperator;
             return recordFilter;
@@ -197,7 +197,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
         private RecordFilter ConvertToRecordFilter(string fieldName, DataRecordFieldType dataRecordFieldType, StringRecordFilter stringRecordFilter)
         {
-            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(fieldName, new List<object>() { stringRecordFilter.Value });
+            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = fieldName, FilterValues = new List<object>() { stringRecordFilter.Value } ,StrictEqual =true});
             if (recordFilter is StringRecordFilter)
                 ((StringRecordFilter)recordFilter).CompareOperator = stringRecordFilter.CompareOperator;
             return recordFilter;

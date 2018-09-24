@@ -182,14 +182,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return objectListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? isValueInFilter : !isValueInFilter;
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            if (filterValues == null || filterValues.Count == 0)
+            if (context.FilterValues == null || context.FilterValues.Count == 0)
                 return null;
 
             List<Object> nonNullValues = new List<object>();
-            if (filterValues != null)
-                nonNullValues.AddRange(filterValues.Where(itm => itm != null));
+            if (context.FilterValues != null)
+                nonNullValues.AddRange(context.FilterValues.Where(itm => itm != null));
 
             if (nonNullValues.Count > 0)
             {
@@ -197,12 +197,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 {
                     CompareOperator = ListRecordFilterOperator.In,
                     Values = nonNullValues,
-                    FieldName = fieldName
+                    FieldName = context.FieldName
                 };
             }
             else
             {
-                return new EmptyRecordFilter { FieldName = fieldName };
+                return new EmptyRecordFilter { FieldName = context.FieldName };
             }
         }
 

@@ -141,7 +141,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
             throw new NotImplementedException();
         }

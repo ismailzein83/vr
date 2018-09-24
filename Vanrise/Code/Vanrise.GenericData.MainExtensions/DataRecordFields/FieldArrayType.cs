@@ -59,10 +59,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             throw new NotImplementedException();
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
@@ -72,6 +69,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string GetRuntimeTypeDescription()
         {
             return "Array";
+        }
+
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

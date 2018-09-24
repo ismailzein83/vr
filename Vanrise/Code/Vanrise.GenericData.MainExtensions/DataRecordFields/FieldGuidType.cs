@@ -147,12 +147,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             //return stringRecordFilter.Value.ToUpper() == fieldValue.ToString().ToUpper();
         }
 
-        public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
+        public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            if (filterValues == null || filterValues.Count == 0)
+            if (context.FilterValues == null || context.FilterValues.Count == 0)
                 return null;
 
-            var values = filterValues.Select(value => value.ToString()).ToList();
+            var values = context.FilterValues.Select(value => value.ToString()).ToList();
             List<RecordFilter> recordFilters = new List<RecordFilter>();
             foreach (var value in values)
             {
@@ -160,7 +160,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 {
                     CompareOperator = StringRecordFilterOperator.Equals,
                     Value = value,
-                    FieldName = fieldName
+                    FieldName = context.FieldName
                 });
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
