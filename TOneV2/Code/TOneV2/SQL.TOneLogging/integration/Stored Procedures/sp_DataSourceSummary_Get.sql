@@ -20,7 +20,7 @@ BEGIN
 				SUM(CASE WHEN [MappingResult] = 2 THEN 1 ELSE 0 END) as NbInvalidBatch,
 				SUM(CASE WHEN [MappingResult] = 3 THEN 1 ELSE 0 END) as NbEmptyBatch
 					
-	FROM [TOneWFTracking].[integration].[DataSourceImportedBatch] DSImportedBatch
+	FROM [integration].[DataSourceImportedBatch] DSImportedBatch
 
 	WHERE [LogEntryTime] >= @FromTime
 	 AND (DSImportedBatch.[DataSourceId] IN (select EnabledDataSourceID from @EnabledDataSourcesTable))
