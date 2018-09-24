@@ -49,9 +49,7 @@ namespace Vanrise.Invoice.BP.Activities
 
           //  int endDateOffsetFromToday = this.EndDateOffsetFromToday.Get(context.ActivityContext);
           //  DateTime maximumToDate = DateTime.Today.AddDays(-endDateOffsetFromToday);
-
             Guid invoiceGenerationIdentifier = Guid.NewGuid();
-
             InvoiceGenerationDraftQuery query = new InvoiceGenerationDraftQuery()
             {
                 InvoiceTypeId = this.InvoiceTypeId.Get(context.ActivityContext),
@@ -65,9 +63,9 @@ namespace Vanrise.Invoice.BP.Activities
                 MaximumToDate = issueDate,
                 IssueDate = issueDate,
                 IsAutomatic = true,
-                InvoiceGenerationIdentifier = invoiceGenerationIdentifier
+                InvoiceGenerationIdentifier = invoiceGenerationIdentifier,
             };
-            InvoiceGenerationDraftOutput invoiceGenerationDraftOutput = new InvoiceGenerationDraftManager().GenerateFilteredInvoiceGenerationDrafts(query);
+            InvoiceGenerationDraftOutput invoiceGenerationDraftOutput = new InvoiceGenerationDraftManager().GenerateFilteredInvoiceGenerationDrafts(query, new InvoiceGenerationDraftContext(context.ActivityContext));
 
             if (invoiceGenerationDraftOutput.Result == InvoiceGenerationDraftResult.Succeeded && invoiceGenerationDraftOutput.InvalidPartnerMessages != null)
             {
@@ -80,6 +78,19 @@ namespace Vanrise.Invoice.BP.Activities
             this.IssueDate.Set(context.ActivityContext, issueDate);
             this.InvoiceGenerationIdentifier.Set(context.ActivityContext, invoiceGenerationIdentifier);
             this.InvoiceGenerationDraftOutput.Set(context.ActivityContext, invoiceGenerationDraftOutput);
+        }
+
+        public class InvoiceGenerationDraftContext : IInvoiceGenerationDraftContext
+        {
+            CodeActivityContext ActivityContext { get; set; }
+            public InvoiceGenerationDraftContext(CodeActivityContext activityContext)
+            {
+                ActivityContext = activityContext;
+            }
+            public void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args)
+            {
+                ActivityContext.WriteBusinessTrackingMsg(severity, messageFormat, args);
+            }
         }
     }
 }

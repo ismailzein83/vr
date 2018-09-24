@@ -156,7 +156,7 @@ namespace Vanrise.Invoice.Web.Controllers
             if (!_invoiceTypeManager.DoesUserHaveViewAccess(query.InvoiceTypeId))
                 return GetUnauthorizedResponse();
             InvoiceGenerationDraftManager manager = new InvoiceGenerationDraftManager();
-            return manager.GenerateFilteredInvoiceGenerationDrafts(query);
+            return manager.GenerateFilteredInvoiceGenerationDrafts(query, null);
         }
 
         [HttpPost]

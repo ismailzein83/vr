@@ -10,9 +10,14 @@ using Vanrise.Invoice.Business.Context;
 
 namespace Vanrise.Invoice.Business
 {
+    public interface IInvoiceGenerationDraftContext
+    {
+       void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args);
+    }
+   
     public class InvoiceGenerationDraftManager
     {
-        public InvoiceGenerationDraftOutput GenerateFilteredInvoiceGenerationDrafts(InvoiceGenerationDraftQuery query)
+        public InvoiceGenerationDraftOutput GenerateFilteredInvoiceGenerationDrafts(InvoiceGenerationDraftQuery query, IInvoiceGenerationDraftContext context)
         {
             List<string> invalidPartnerMessages = new List<string>();
 
@@ -48,22 +53,36 @@ namespace Vanrise.Invoice.Business
 
             foreach (string partnerId in partnerIds)
             {
+
+                PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
+                var partnerName = invoiceTypePartnerManager.GetFullPartnerName(partnerNameManagerContext);
+
                 if (!IsStatusFilterMatching(query.InvoiceTypeId, partnerId, query.EffectiveDate, query.IsEffectiveInFuture, query.Status, now))
+                {
+                    if (context != null)
+                        context.WriteBusinessTrackingMsg(LogEntryType.Warning, "'{0}' skipped. Reason: Status filter not matched.", partnerName);
                     continue;
+                }
 
                 if (query.IsAutomatic)
                 {
                     var partnerSetting = partnerManager.GetInvoicePartnerSetting(query.InvoiceTypeId, partnerId);
                     if (partnerSetting == null || partnerSetting.InvoiceSetting == null)
+                    {
+                        if (context != null)
+                            context.WriteBusinessTrackingMsg(LogEntryType.Warning, "'{0}' skipped. Reason: Not linked to partner settings.", partnerName);
                         continue;
+                    }
 
                     AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(new InvoicePartnerSettingPartContext() { InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId, InvoiceTypeId = query.InvoiceTypeId, PartnerId = partnerId });
                     if (!automaticInvoiceSettingPart.IsEnabled)
+                    {
+                        if (context != null)
+                            context.WriteBusinessTrackingMsg(LogEntryType.Warning, "'{0}' skipped. Reason: Automatic invoice not enabled.", partnerName);
                         continue;
+                    }
                 }
 
-                PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
-                var partnerName = invoiceTypePartnerManager.GetFullPartnerName(partnerNameManagerContext);
 
                 DateTime? fromDate = null;
                 DateTime? toDate = null;
