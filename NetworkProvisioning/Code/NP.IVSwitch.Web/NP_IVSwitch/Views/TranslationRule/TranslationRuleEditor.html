@@ -11,6 +11,7 @@
                                 selectedvalues="scopeModel.selectedEngineType"
                                 datatextfield="description"
                                 datavaluefield="value"
+                                onselectionchanged="scopeModel.onEngineTypeSelectionChanged"
                                 isrequired>
                     </vr-select>
                 </vr-columns>
@@ -22,7 +23,8 @@
                                     selectedvalues="scopeModel.selectedPrefixSign"
                                     datatextfield="description"
                                     datavaluefield="value"
-                                    hideremoveicon>
+                                    hideremoveicon
+                                    isrequired>
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="3/4row">
@@ -49,7 +51,8 @@
                                     selectedvalues="scopeModel.fixedCLISettingsSelectedPrefixSign"
                                     datatextfield="description"
                                     datavaluefield="value"
-                                    hideremoveicon>
+                                    hideremoveicon
+                                    isrequired>
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="3/4row">
@@ -68,10 +71,10 @@
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="Rand Min" value="scopeModel.poolBasedCLISettingsRandMin" type="number" customvalidate="scopeModel.validateRandMin()" decimalprecision="0" minvalue="0" maxValue="2147483647"></vr-textbox>
+                        <vr-textbox label="Rand Min" value="scopeModel.poolBasedCLISettingsRandMin" type="number" customvalidate="scopeModel.validateRandMin()" decimalprecision="0" minvalue="0" maxvalue="2147483647"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="Rand Max" value="scopeModel.poolBasedCLISettingsRandMax" type="number" customvalidate="scopeModel.validateRandMax()" decimalprecision="0" minvalue="0" maxvalue="2147483647"></vr-textbox>
+                        <vr-textbox label="Rand Max" isrequired="scopeModel.poolBasedCLISettingsRandMin" value="scopeModel.poolBasedCLISettingsRandMax" type="number" customvalidate="scopeModel.validateRandMin()" decimalprecision="0" minvalue="0" maxvalue="2147483647"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
                         <vr-textbox label="Display Name" value="scopeModel.poolBasedCLISettingsDisplayName" isrequired></vr-textbox>
@@ -79,7 +82,7 @@
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/3row">
-                        <vr-select label="CLI"
+                        <vr-select label="CLI Type"
                                     on-ready="scopeModel.onCLISourceReady"
                                     datasource="scopeModel.CLISources"
                                     selectedvalues="scopeModel.selectedCLISource"
@@ -88,8 +91,6 @@
                                     onselectionchanged="scopeModel.onCLISourceSelectionChange">
                         </vr-select>
                     </vr-columns>
-                </vr-row>
-                <vr-row>
                     <div ng-if="scopeModel.selectedCLISource.value==0">
                         <vr-genericdata-genericbusinessentity-selector customlabel="CLI Groups"
                                                                         on-ready="scopeModel.onPoolBasedCLIGroupSelectorReady"
@@ -110,7 +111,17 @@
                     </div>
                 </vr-row>
                 <vr-row>
-                    <vr-columns width="fullrow" >
+                    <div ng-if="scopeModel.CLIPatterns.length>0">
+                        <vr-columns colnum="12">
+                            <a href="" ng-click="scopeModel.clearAllCLIPatterns()" class="pull-right">
+                                Clear all
+                                <span class="glyphicon glyphicon-trash hand-cursor"></span>
+                            </a>
+                        </vr-columns>
+                    </div>
+                </vr-row>
+                <vr-row>
+                    <vr-columns width="fullrow">
                         <span vr-loader="scopeModel.isLoadingCLIPatterns">
                             <vr-validator validate="scopeModel.validateCLIPatterns()">
                                 <vr-datalist maxitemsperrow="4" datasource="scopeModel.CLIPatterns" onremoveitem="scopeModel.onRemoveCLIPattern">

@@ -10,15 +10,23 @@
 
         var translationRuleId;
         var translationRuleEntity;
+        var translationRuleEntityPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var context;
         var isViewHistoryMode;
 
 
         var DNISPrefixSignAPI;
+        var DNISPrefixSignReadyDeferred = UtilsService.createPromiseDeferred();
+
         var CLIPatternPrefixSignAPI;
+        var CLIPatternPrefixSignReadyDeferred = UtilsService.createPromiseDeferred();
 
         var poolBasedCLIGroupAPI;
         var poolBasedCLIGroupReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var engineTypeSelectedPromiseDeferred;
+        var CLITypeSelectedPromiseDeferred;
 
         var CLISourceAPI;
 
@@ -58,14 +66,29 @@
 
             $scope.scopeModel.onDNISPrefixSignReady = function (api) {
                 DNISPrefixSignAPI = api;
-                if (!isEditMode)
-                    DNISPrefixSignAPI.selectFirstItem();
+                DNISPrefixSignReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onEngineTypeSelectionChanged = function (engineTypeSelected) {
+                if (engineTypeSelected != undefined) {
+                    if (engineTypeSelectedPromiseDeferred != undefined) {
+                        engineTypeSelectedPromiseDeferred.resolve();
+                        engineTypeSelectedPromiseDeferred = undefined;
+                    }
+                    else {
+                        DNISPrefixSignReadyDeferred.promise.then(function() {
+                            DNISPrefixSignAPI.selectFirstItem();
+                        });
+                        CLIPatternPrefixSignReadyDeferred.promise.then(function() {
+                            CLIPatternPrefixSignAPI.selectFirstItem();
+                        });
+                    }
+                }
             };
 
             $scope.scopeModel.onCLIPatternPrefixSignReady = function (api) {
                 CLIPatternPrefixSignAPI = api;
-                if(!isEditMode)
-                    CLIPatternPrefixSignAPI.selectFirstItem();
+                CLIPatternPrefixSignReadyDeferred.resolve();
             };
             $scope.scopeModel.addCLIPattern = function () {
                 if ($scope.scopeModel.currentCLIPattern != undefined) {
@@ -97,17 +120,37 @@
 
             $scope.scopeModel.onCLITypeSelectionChange = function (selectedCLIType) {
                 if (selectedCLIType != undefined) {
-                    if (selectedCLIType == NP_IVSwitch_CLITypeEnum.FixedCLI) {
-                        $scope.scopeModel.poolBasedCLISettingsPrefix = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsDestination = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsRandMin = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsRandMax = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsDisplayName = undefined;
-                        $scope.scopeModel.CLIPatterns.length = 0;
+                    if (CLITypeSelectedPromiseDeferred !=undefined) {
+                        CLITypeSelectedPromiseDeferred.resolve();
+                        CLITypeSelectedPromiseDeferred = undefined;
                     }
                     else {
-                        $scope.scopeModel.CLIPattern = undefined;
+                        if (selectedCLIType == NP_IVSwitch_CLITypeEnum.FixedCLI) {
+                            CLIPatternPrefixSignReadyDeferred.promise.then(function () {
+                                CLIPatternPrefixSignAPI.selectFirstItem();
+                            });
+                            $scope.scopeModel.poolBasedCLISettingsPrefix = undefined;
+                            $scope.scopeModel.poolBasedCLISettingsDestination = undefined;
+                            $scope.scopeModel.poolBasedCLISettingsRandMin = undefined;
+                            $scope.scopeModel.poolBasedCLISettingsRandMax = undefined;
+                            $scope.scopeModel.poolBasedCLISettingsDisplayName = undefined;
+                            $scope.scopeModel.CLIPatterns.length = 0;
+                         }
+                         else {
+                            $scope.scopeModel.fixedCLISettingsSelectedPrefixSign = undefined;
+                            $scope.scopeModel.CLIPattern = undefined;
+                        }
                     }
+                }
+                else {
+                    translationRuleEntityPromiseDeferred.promise.then(function () {
+                        if (translationRuleEntity != undefined && translationRuleEntity.CLIType == undefined) {
+                            if (CLITypeSelectedPromiseDeferred != undefined) {
+                                CLITypeSelectedPromiseDeferred.resolve();
+                                CLITypeSelectedPromiseDeferred = undefined;
+                            }
+                        }
+                    });
                 }
             };
 
@@ -120,6 +163,10 @@
             $scope.scopeModel.onPoolBasedCLIGroupSelectorReady = function (api) {
                 poolBasedCLIGroupAPI = api;
                 poolBasedCLIGroupReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.clearAllCLIPatterns = function() {
+                $scope.scopeModel.CLIPatterns.length=0;
             };
 
             $scope.scopeModel.onCLISourceSelectionChange = function (cliSourceSelected) {
@@ -137,24 +184,24 @@
             $scope.scopeModel.validateCLIPatterns = function () {
                 if ($scope.scopeModel.CLIPatterns.length == 0)
                     return "At least one CLI Pattern must be added.";
+                return null;
             };
 
             $scope.scopeModel.validateCurrentCLIPattern = function () {
                 if (UtilsService.contains($scope.scopeModel.CLIPatterns, $scope.scopeModel.currentCLIPattern))
                     return "The CLI Pattern already exists.";
+                return null;
             };
             $scope.scopeModel.disableCLIPatternAddButton = function () {
                 return ($scope.scopeModel.currentCLIPattern == undefined && $scope.scopeModel.selectedPoolBasedCLIGroup ==undefined) || UtilsService.contains($scope.scopeModel.CLIPatterns, $scope.scopeModel.currentCLIPattern);
             };
 
             $scope.scopeModel.validateRandMin = function () {
-                if ($scope.scopeModel.poolBasedCLISettingsRandMin > $scope.scopeModel.poolBasedCLISettingsRandMax)
+                if (!$scope.scopeModel.poolBasedCLISettingsRandMin && !$scope.scopeModel.poolBasedCLISettingsRandMax)
+                    return null;
+                if ($scope.scopeModel.poolBasedCLISettingsRandMin && $scope.scopeModel.poolBasedCLISettingsRandMax && parseInt($scope.scopeModel.poolBasedCLISettingsRandMin) > parseInt($scope.scopeModel.poolBasedCLISettingsRandMax) )
                     return 'Rand Min must be less than Rand Max.';
-              
-            };
-            $scope.scopeModel.validateRandMax = function () {
-                if ($scope.scopeModel.poolBasedCLISettingsRandMin > $scope.scopeModel.poolBasedCLISettingsRandMax)
-                    return 'Rand Max must be more than Rand Min.';
+                return null;
             };
 
             $scope.scopeModel.save = function () {
@@ -176,6 +223,8 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
+                engineTypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                CLITypeSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 getTranslationRule().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
@@ -188,7 +237,7 @@
                     loadAllControls();
                 }).catch(function (error) {
                     vrNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
+                    $scope.scopeModel.isLoading = false;
                 });
 
             }
@@ -201,12 +250,13 @@
         function getTranslationRuleHistory() {
             return NP_IVSwitch_TranslationRuleAPIService.GetTranslationRuleHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 translationRuleEntity = response;
-
+                translationRuleEntityPromiseDeferred.resolve();
             });
         }
         function getTranslationRule() {
             return NP_IVSwitch_TranslationRuleAPIService.GetTranslationRule(translationRuleId).then(function (response) {
                 translationRuleEntity = response;
+                translationRuleEntityPromiseDeferred.resolve();
             });
         }
 
@@ -237,7 +287,9 @@
                 $scope.scopeModel.selectedEngineType=UtilsService.getItemByVal($scope.scopeModel.engineTypes,translationRuleEntity.EngineType,'value');
                 $scope.scopeModel.selectedPrefixSign=UtilsService.getItemByVal($scope.scopeModel.prefixSigns, translationRuleEntity.DNISPatternSign, 'value');
                 $scope.scopeModel.dnisPattern = translationRuleEntity.DNISPattern;
-                $scope.scopeModel.selectedCLIType = UtilsService.getItemByVal($scope.scopeModel.CLITypes,translationRuleEntity.CLIType,'value');
+                if (translationRuleEntity.CLIType!=undefined) {
+                    $scope.scopeModel.selectedCLIType = UtilsService.getItemByVal($scope.scopeModel.CLITypes, translationRuleEntity.CLIType, 'value');
+                }
                 if (translationRuleEntity.FixedCLISettings != undefined) {
                     $scope.scopeModel.fixedCLISettingsSelectedPrefixSign = UtilsService.getItemByVal($scope.scopeModel.prefixSigns, translationRuleEntity.FixedCLISettings.CLIPatternSign,'value');
                     $scope.scopeModel.CLIPattern = translationRuleEntity.FixedCLISettings.CLIPattern;
