@@ -87,6 +87,10 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                         $scope.scopeModel.isLoadingListNames = false;
                     });
                 }
+                else {
+                    $scope.scopeModel.fields.length = 0;
+                    $scope.scopeModel.listNames.length = 0;
+                }
             };
 
             $scope.scopeModel.validateGrid = function () {
@@ -97,14 +101,31 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 gridAPI = api;
             };
 
+            $scope.scopeModel.addAllFields = function () {
+                if (context != undefined && context.getQueryFields != undefined && typeof (context.getQueryFields) == "function") {
+                    var fieldsPromise = getAllFields($scope.scopeModel.querySelected.value);
+                    fieldsPromise.then(function (fields) {
+                        if (fields != undefined) {
+                            for (var i = 0; i < fields.length; i++) {
+                                var flatFileField = getFlatFileField(fields[i]);
+                                $scope.scopeModel.fields.push(flatFileField);
+                            }
+                            disableTestGenerate();
+                        }
+                    });
+                }
+            };
+
             $scope.scopeModel.addField = function () {
                 var flatFileField = getFlatFileField();
                 $scope.scopeModel.fields.push(flatFileField);
+                disableTestGenerate();
             };
             $scope.scopeModel.removeField = function (dataItem)
             {
                 var index = $scope.scopeModel.fields.indexOf(dataItem);
                 $scope.scopeModel.fields.splice(index, 1);
+                disableTestGenerate();
             };
                 UtilsService.waitMultiplePromises(promises).then(function () {
                 defineAPI();
@@ -135,6 +156,9 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                 queryNameSelectorAPI.selectIfSingleItem();
                                 queryArrayPromise.resolve();
                             }
+                            else {
+                                queryArrayPromise.resolve();
+                            }
                         });
                     }
                     if (payload.fileGenerator != undefined) {
@@ -159,6 +183,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                             }
                                         });
                                     }
+                                    disableTestGenerate();
                                 });
                             }
                         });
@@ -168,6 +193,96 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     $scope.scopeModel.isLoading = false;
                 });
             };
+            api.reload = function (newQueries) {
+                if (queries != undefined && newQueries != undefined) {
+                    if (queries.length != newQueries.length) {
+                        if (queries.length < newQueries.length) {
+                            var queryAdded = newQueries[newQueries.length - 1];
+                            queries.push(queryAdded);
+                            $scope.scopeModel.queries.push({
+                                description: queryAdded.QueryTitle,
+                                value: queryAdded.VRAutomatedReportQueryId
+                            });
+                        }
+                        else {
+                            var queryDeleted;
+                            for (var i = 0; i < queries.length; i++) {
+                                var oldQuery = queries[i];
+                                var oldQueryIndex = UtilsService.getItemIndexByVal(newQueries, oldQuery.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                                if (oldQueryIndex == -1) {
+                                    queryDeleted = oldQuery;
+                                }
+                            }
+                            if (queryDeleted != undefined) {
+                                var matchingDeletedQueryIndex = UtilsService.getItemIndexByVal($scope.scopeModel.queries, queryDeleted.VRAutomatedReportQueryId, 'value');
+                                $scope.scopeModel.queries.splice(matchingDeletedQueryIndex, 1);
+                                var matchingDeletedQueryArrayIndex = UtilsService.getItemIndexByVal(queries, queryDeleted.VRAutomatedReportQueryId, 'VRAutomatedReportQueryId');
+                                queries.splice(matchingDeletedQueryArrayIndex, 1);
+                                if ($scope.scopeModel.queries.length == 0 || ($scope.scopeModel.querySelected != undefined && $scope.scopeModel.querySelected.value == queryDeleted.VRAutomatedReportQueryId)) {
+                                    $scope.scopeModel.querySelected = undefined;
+                                    $scope.scopeModel.listNameSelected = undefined;
+                                    $scope.scopeModel.listNames.length = 0;
+                                }
+                                disableTestGenerate();
+                                }
+                            }
+                            }
+                    else {
+                        var queryUpdated;
+                        for (var i = 0; i < queries.length; i++) {
+                            var oldQuery = queries[i];
+                            var newQuery = newQueries[i];
+                            if (oldQuery.Settings != newQuery.Settings) {
+                                queryUpdated = newQuery;
+                                break;
+                            }
+                        }
+                        if (queryUpdated != undefined) {
+                            var matchingQuery = UtilsService.getItemByVal($scope.scopeModel.queries, queryUpdated.VRAutomatedReportQueryId, 'value');
+                            if (matchingQuery != undefined) {
+                                if (matchingQuery.description != queryUpdated.QueryTitle) {
+                                    var matchingUpdatedQueryIndex = $scope.scopeModel.queries.indexOf(matchingQuery);
+                                    var matchingUpdatedQueryArrayIndex = UtilsService.getItemIndexByVal(queries, matchingQuery.value, 'VRAutomatedReportQueryId');
+                                    queries[matchingUpdatedQueryArrayIndex].QueryTitle = queryUpdated.QueryTitle;
+                                    $scope.scopeModel.queries[matchingUpdatedQueryIndex].description = queryUpdated.QueryTitle;
+                                    if ($scope.scopeModel.queries.length == 1 && $scope.scopeModel.queries[0].value == queryUpdated.VRAutomatedReportQueryId) {
+                                        $scope.scopeModel.querySelected.description = queryUpdated.QueryTitle;
+                                    }
+                                }
+                                var newFieldsPromise = getAllFields(matchingQuery.value);
+                                newFieldsPromise.then(function (newFields) {
+                                for (var i = 0; i < $scope.scopeModel.fields.length; i++) {
+                                var field = $scope.scopeModel.fields[i];
+                                    $scope.scopeModel.fields[i].fields = newFields;
+                                    allFields = newFields;
+                                    if (field.selectedField != undefined) {
+                                        var selectedFieldIndex = UtilsService.getItemIndexByVal(newFields, field.selectedField.value, 'value');
+                                        if (selectedFieldIndex == -1) {
+                                            $scope.scopeModel.fields[i].selectedField = undefined;
+                                            $scope.scopeModel.fields[i].editedTitle = undefined;
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                else if (queries == null && newQueries != undefined) {
+                    queries = [];
+                    var queryAdded = newQueries[newQueries.length - 1];
+                    queries.push(queryAdded);
+                    $scope.scopeModel.queries.push({
+                        description: queryAdded.QueryTitle,
+                        value: queryAdded.VRAutomatedReportQueryId
+                    });
+                    queryNameSelectorReadyDeferred.promise.then(function() {
+                        queryNameSelectorAPI.selectIfSingleItem();
+                    });
+                }
+                queries = newQueries;
+            };
+
             api.getData = function () {
                 function getFields() {
                     var flatFileFields = [];
@@ -200,7 +315,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 ctrl.onReady(api);
         }
 
-        function getFlatFileField() {
+        function getFlatFileField(selectedField) {
             var flatFileField = {};
 
             flatFileField.onFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -220,6 +335,9 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                             flatFileField.fieldSelectorLoadPromiseDeferred.resolve();
                         }
                         flatFileField.fieldSelectorAPI.selectIfSingleItem();
+                        if (selectedField != undefined) {
+                            flatFileField.selectedField = selectedField;
+                        }
                     });
                 });
             };
@@ -261,6 +379,17 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
             if (currentContext == undefined)
                 currentContext = {};
             return currentContext;
+        }
+        
+        function disableTestGenerate() {
+            if (context !=undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
+                if ($scope.scopeModel.fields.length == 0) {
+                    context.disableTestGenerateButton(true);
+                }
+                else {
+                    context.disableTestGenerateButton(false);
+                }
+            }
         }
     }
 
