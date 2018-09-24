@@ -133,20 +133,25 @@
                     var deletePromiseDeferred = UtilsService.createPromiseDeferred();
                     VRNotificationService.showConfirmation().then(function (response) {
                         if (response) {
-                            VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(input).then(function (result) {
-                                if (result != undefined) {
-                                    if (result.Result == DeleteOperationResultEnum.Succeeded.value) {
-                                        VRNotificationService.showSuccess("Item has been successfully deleted.");
-                                        onItemDeleted();
-                                        deletePromiseDeferred.resolve();
-                                    }
-                                    else {
-                                        VRNotificationService.showError(result.Message);
-                                        deletePromiseDeferred.reject();
-                                    }
+                            VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId).then(function (genericBERuntimeEditor) {
+                                if (genericBERuntimeEditor!=undefined) {
+                                    VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(input).then(function (result) {
+                                        if (result != undefined) {
+                                            var deleted = VRNotificationService.notifyOnItemDeleted(genericBERuntimeEditor.TitleFieldName, result);
+                                            if (deleted && onItemDeleted != undefined && typeof (onItemDeleted) == 'function') {
+                                                deletePromiseDeferred.resolve();
+                                                onItemDeleted();
+                                            }
+                                            else {
+                                                deletePromiseDeferred.reject();
+                                            }
+                                        }
+                                        else {
+                                            deletePromiseDeferred.reject();
+                                        }
+                                    });
                                 }
                                 else {
-                                    VRNotificationService.showError("An error has occured.");
                                     deletePromiseDeferred.reject();
                                 }
                             });
