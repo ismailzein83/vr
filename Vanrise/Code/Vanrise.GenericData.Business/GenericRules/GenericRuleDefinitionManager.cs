@@ -21,7 +21,6 @@ namespace Vanrise.GenericData.Business
     public class GenericRuleDefinitionManager : IGenericRuleDefinitionManager
     {
         #region Public Methods
-
         public IGenericRuleManager GetManager(Guid ruleDefinitionId)
         {
             GenericRuleDefinition ruleDefinition = GetGenericRuleDefinition(ruleDefinitionId);
@@ -33,6 +32,7 @@ namespace Vanrise.GenericData.Business
             var instance = Activator.CreateInstance(managerType);
             return instance.CastWithValidate<IGenericRuleManager>("instance");
         }
+
         public Vanrise.Entities.IDataRetrievalResult<GenericRuleDefinition> GetFilteredGenericRuleDefinitions(Vanrise.Entities.DataRetrievalInput<GenericRuleDefinitionQuery> input)
         {
             var cachedGenericRuleDefinitions = GetCachedGenericRuleDefinitions();
@@ -47,7 +47,7 @@ namespace Vanrise.GenericData.Business
 
             return cachedGenericRuleDefinitions.GetRecord(genericRuleDefinitionId);
         }
-       
+
         public IEnumerable<GenericRuleDefinition> GetGenericRulesDefinitons()
         {
             return this.GetCachedGenericRuleDefinitions().Values;
@@ -59,7 +59,7 @@ namespace Vanrise.GenericData.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-             genericRuleDefinition.GenericRuleDefinitionId = Guid.NewGuid();
+            genericRuleDefinition.GenericRuleDefinitionId = Guid.NewGuid();
 
             IGenericRuleDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericRuleDefinitionDataManager>();
             bool added = dataManager.AddGenericRuleDefinition(genericRuleDefinition);
@@ -112,21 +112,23 @@ namespace Vanrise.GenericData.Business
 
             if (filter != null)
             {
-                filterExpression = (item) =>   (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId)  || (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters));
+                filterExpression = (item) => (item.SettingsDefinition != null && item.SettingsDefinition.ConfigId == filter.RuleTypeId) || (filter.Filters != null && CheckIfFilterIsMatch(item, filter.Filters));
             }
 
             return cachedGenericRuleDefinitions.MapRecords(GenericRuleDefinitionInfoMapper, filterExpression);
         }
-        public bool CheckIfFilterIsMatch(GenericRuleDefinition ruleDefinition,List<IGenericRuleDefinitionFilter> filters)
-        {                    
-            GenericRuleDefinitionFilterContext context = new GenericRuleDefinitionFilterContext{ RuleDefinition = ruleDefinition};
-            foreach(var filter in filters)
+
+        public bool CheckIfFilterIsMatch(GenericRuleDefinition ruleDefinition, List<IGenericRuleDefinitionFilter> filters)
+        {
+            GenericRuleDefinitionFilterContext context = new GenericRuleDefinitionFilterContext { RuleDefinition = ruleDefinition };
+            foreach (var filter in filters)
             {
                 if (!filter.IsMatched(context))
                     return false;
             }
             return true;
         }
+
         public IEnumerable<GenericRuleDefinition> GetGenericRuleDefinitionsByType(string ruleTypeName)
         {
             GenericRuleTypeConfigManager configManager = new GenericRuleTypeConfigManager();
@@ -161,6 +163,7 @@ namespace Vanrise.GenericData.Business
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return DoesUserHaveViewAccess(userId, genericRuleDefinition);
         }
+
         public bool DoesUserHaveViewAccess(int userId, List<Guid> RuleDefinitionIds)
         {
             foreach (var guid in RuleDefinitionIds)
@@ -187,6 +190,7 @@ namespace Vanrise.GenericData.Business
                 return DoesUserHaveAccess(genericRuleDefinition.Security.AddRequiredPermission);
             return true;
         }
+
         public bool DoesUserHaveEditAccess(Guid genericRuleDefinitionId)
         {
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
@@ -206,14 +210,15 @@ namespace Vanrise.GenericData.Business
             Worksheet GenericRuleWorksheet = GenericRuleTemplate.Worksheets.Add("Template");
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
             genericRuleDefinition.ThrowIfNull("genericRuleDefinition", genericRuleDefinitionId);
-            genericRuleDefinition.CriteriaDefinition.ThrowIfNull("genericRuleDefinition.CriteriaDefinition", genericRuleDefinitionId);
-            var criteriaFields = genericRuleDefinition.CriteriaDefinition.Fields;
+
+            var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("genericRuleDefinition.CriteriaDefinition", genericRuleDefinition.GenericRuleDefinitionId);
+            var criteriaFields = genericRuleDefinitionCriteria.Fields;
             criteriaFields.ThrowIfNull("genericRuleDefinition.CriteriaDefinition.Fields", genericRuleDefinitionId);
 
             List<string> headers = new List<string>();
             headers.Add("Description");
 
-            foreach(var criteria in criteriaFields)
+            foreach (var criteria in criteriaFields)
             {
                 if (criteriaFieldsToHide != null)
                 {
@@ -225,7 +230,7 @@ namespace Vanrise.GenericData.Business
             genericRuleDefinition.SettingsDefinition.ThrowIfNull("genericRuleDefinition.SettingsDefinition", genericRuleDefinitionId);
             var settingFields = genericRuleDefinition.SettingsDefinition.GetFieldNames();
             settingFields.ThrowIfNull("genericRuleDefinition.SettingsDefinition", genericRuleDefinitionId);
-            
+
             foreach (var settingField in settingFields)
                 headers.Add(settingField);
 
@@ -269,7 +274,7 @@ namespace Vanrise.GenericData.Business
 
             List<GenericRuleRowToAdd> addedGenericRows = new List<GenericRuleRowToAdd>();
             List<GenericRuleInvalidRow> invalidGenericRows = new List<GenericRuleInvalidRow>();
-            
+
             CreateGenericRuleFromExcel(parsedExcel, uploadInput.GenericRuleDefinitionId, invalidGenericRows, addedGenericRows, uploadInput.EffectiveDate, uploadInput.CriteriaFieldsValues);
 
             List<GenericRule> addedGenericRules = null;
@@ -292,10 +297,15 @@ namespace Vanrise.GenericData.Business
             return bytes;
         }
 
+        public IEnumerable<CriteriaDefinitionConfig> GetCriteriaDefinitionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<CriteriaDefinitionConfig>(CriteriaDefinitionConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Methods
-
         Dictionary<Guid, GenericRuleDefinition> GetCachedGenericRuleDefinitions()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetGenericRuleDefinitions",
@@ -317,6 +327,7 @@ namespace Vanrise.GenericData.Business
             return true;
 
         }
+
         private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
         {
             SecurityManager secManager = new SecurityManager();
@@ -325,6 +336,7 @@ namespace Vanrise.GenericData.Business
             return true;
 
         }
+
         private bool ParseExcel(long fileId, out string errorMessage, out List<ParsedGenericRuleRow> parsedExcel)
         {
             VRFileManager fileManager = new VRFileManager();
@@ -337,7 +349,7 @@ namespace Vanrise.GenericData.Business
 
             var nbOfRows = worksheet.Cells.Rows.Count;
             var nbOfCols = worksheet.Cells.Columns.Count;
-            
+
             if (nbOfRows == 1)
             {
                 errorMessage = "Empty Template";
@@ -356,7 +368,7 @@ namespace Vanrise.GenericData.Business
                     var header = worksheet.Cells[0, colIndex];
                     if (header.Value == null)
                         continue;
-                    
+
                     var cell = worksheet.Cells[rowIndex, colIndex];
 
                     if (cell != null)
@@ -386,11 +398,11 @@ namespace Vanrise.GenericData.Business
             genericRuleDefinition.SettingsDefinition.ThrowIfNull("genericRuleDefinition.SettingsDefinition", genericRuleDefinitionId);
             if (genericRuleDefinition.SettingsDefinition.SupportUpload == false)
                 throw new NotSupportedException("The generic rule does not support bulk uploading");
-            genericRuleDefinition.CriteriaDefinition.ThrowIfNull("genericRulesDefinition.CriteriaDefinition", genericRuleDefinitionId);
-            genericRuleDefinition.CriteriaDefinition.Fields.ThrowIfNull("genericRuleDefinition.CriteriaDefinition.Fields", genericRuleDefinitionId);
+            var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("genericRuleDefinition.CriteriaDefinition", genericRuleDefinition.GenericRuleDefinitionId);
+            genericRuleDefinitionCriteria.Fields.ThrowIfNull("genericRuleDefinition.CriteriaDefinition.Fields", genericRuleDefinitionId);
 
 
-            if (parsedExcel != null && parsedExcel.Count!=0)
+            if (parsedExcel != null && parsedExcel.Count != 0)
             {
                 foreach (var parsedRow in parsedExcel)
                 {
@@ -405,8 +417,8 @@ namespace Vanrise.GenericData.Business
                     Dictionary<string, object> criteriaByFieldName = new Dictionary<string, object>();
                     Dictionary<string, object> addedFields = new Dictionary<string, object>();
                     Dictionary<string, object> settingFields = new Dictionary<string, object>();
-               
-                    var criteriaFields = genericRuleDefinition.CriteriaDefinition.Fields;
+
+                    var criteriaFields = genericRuleDefinitionCriteria.Fields;
                     List<AdditionalField> additionalFields = new List<AdditionalField>();
 
                     foreach (var criteria in criteriaFields)
@@ -418,11 +430,11 @@ namespace Vanrise.GenericData.Business
                             {
                                 AdditionalFields = new List<AdditionalField>(),
                             };
-                            
+
                             dataRecordContext.FieldDescription = cell;
                             dataRecordContext.FieldType = criteria.FieldType;
                             criteria.FieldType.GetValueByDescription(dataRecordContext);
-                            
+
                             if (dataRecordContext.ErrorMessage != null)
                             {
                                 invalidGenericRows.Add(new GenericRuleInvalidRow
@@ -436,7 +448,7 @@ namespace Vanrise.GenericData.Business
                             else
                             {
                                 criteriaByFieldName.Add(criteria.FieldName, dataRecordContext.FieldValue);
-                               
+
                                 additionalFields.Add(new AdditionalField
                                 {
                                     FieldType = criteria.FieldType,
@@ -457,7 +469,7 @@ namespace Vanrise.GenericData.Business
                             settingFields.Add(col.Key, col.Value);
                         }
                     }
-                    if (settingFields != null && settingFields.Count!=0)
+                    if (settingFields != null && settingFields.Count != 0)
                     {
                         var settingsContext = new CreateGenericRuleFromExcelContext
                         {
@@ -518,6 +530,7 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
+
         public void ReflectGenericRulesToDBAndExcel(List<GenericRuleRowToAdd> addedGenericRows, List<GenericRuleInvalidRow> invalidGenericRows, Guid genericRuleDefinitionId, DateTime effectiveDate, long uploadFileId, out List<GenericRule> addedGenericRules, out long outputFileId)
         {
             var genericRuleManager = GetManager(genericRuleDefinitionId);
@@ -583,7 +596,7 @@ namespace Vanrise.GenericData.Business
                                                 break;
                                             }
                                         }
-                                        if(isMatch)
+                                        if (isMatch)
                                         {
                                             foreach (var existingRuleValue in existingRuleValues)
                                             {
@@ -635,7 +648,7 @@ namespace Vanrise.GenericData.Business
                         ErrorMessage = string.Format("An error occured while adding rule to database: ", insertOperationOutput.Result.ToString())
                     });
                 }
-  
+
             }
             foreach (var genericRowFailed in invalidGenericRows)
             {
@@ -644,7 +657,7 @@ namespace Vanrise.GenericData.Business
                 UploadOutputWorksheet.Cells[genericRowFailed.RowIndex, colnum].SetStyle(cellStyle);
                 UploadOutputWorksheet.Cells[genericRowFailed.RowIndex, colnum + 1].SetStyle(cellStyle);
             }
-            
+
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = UploadOutputWorkbook.SaveToStream();
 
@@ -657,7 +670,7 @@ namespace Vanrise.GenericData.Business
 
             };
             VRFileManager fileManager = new VRFileManager();
-            outputFileId =  fileManager.AddFile(returnedFile);
+            outputFileId = fileManager.AddFile(returnedFile);
         }
         #endregion
 

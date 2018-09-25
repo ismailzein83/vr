@@ -496,6 +496,13 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-ratetype.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-ratevalue.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tariff.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Grid\Templates\CompositeConditionGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Grid\Templates\RuleTreeCriteriaGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Grid\vr-genericdata-genericrule-grid-compositecondition.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Search\Templates\SearchCompositeConditionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Search\Templates\SearchRuleTreeCriteriaTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Search\vr-genericdata-genericrulesearch-compositecondition.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Search\vr-genericdata-genericrulesearch-ruletreecriteria.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\Templates\CloneDataRecordStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\Templates\CloneDataRecordStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\CloneDataRecord\vr-genericdata-datatransformation-clonedatarecordstep-preview.js" />
@@ -528,8 +535,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\vr-genericdata-fieldtype-number-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-filtereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\MappingRule\vr-genericdata-genericrulesettings-mapping-filtereditor.js" />
-    <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleGridTemplate.html" />
-    <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-grid.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Grid\vr-genericdata-genericrule-grid-ruletreecriteria.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\SqlTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-sql.js" />
     <Content Include="VR_GenericData\Directives\DataStore\Templates\DataStoreGrid.html" />
@@ -853,6 +859,8 @@
   <ItemGroup>
     <Folder Include="VR_GenericData\Directives\BusinessEntity\Templates\" />
     <Folder Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\Templates\" />
+    <Folder Include="VR_GenericData\Directives\MainExtensions\GenericRuleDefinition\" />
+    <Folder Include="VR_GenericData\Directives\MainExtensions\GenericRule\ActionBar\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

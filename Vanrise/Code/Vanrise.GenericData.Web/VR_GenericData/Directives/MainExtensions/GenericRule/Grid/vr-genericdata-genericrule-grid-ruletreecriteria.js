@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleGridDirective.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRule', 'VRUIUtilsService', 'UtilsService', 'VRNotificationService'];
+    RuleTreeCriteriaGrid.$inject = ['VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_GenericRule', 'VRUIUtilsService', 'UtilsService', 'VRNotificationService'];
 
-    function GenericRuleGridDirective(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRule, VRUIUtilsService, UtilsService, VRNotificationService) {
+    function RuleTreeCriteriaGrid(VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_GenericRule, VRUIUtilsService, UtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -20,7 +20,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/VR_GenericData/Directives/GenericRule/Templates/GenericRuleGridTemplate.html'
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/MainExtensions/GenericRule/Grid/Templates/RuleTreeCriteriaGridTemplate.html'
         };
 
         function GenericRuleGrid($scope, ctrl, $attrs) {
@@ -164,7 +164,7 @@
             }
         }
     }
-
-    app.directive('vrGenericdataGenericruleGrid', GenericRuleGridDirective);
+    
+    app.directive('vrGenericdataGenericruleGridRuletreecriteria', RuleTreeCriteriaGrid);
 
 })(app);

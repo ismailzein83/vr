@@ -60,8 +60,8 @@ namespace Vanrise.GenericData.Business
             List<T> result = new List<T>();
 
             List<T> overridenRules = new List<T>();
-
-            criterias = criterias.OrderBy(itm => ruleDefinition.CriteriaDefinition.Fields.First(item => item.FieldName == itm.Key).Priority).ToDictionary(itm => itm.Key, itm => itm.Value);
+            var genericRuleDefinitionCriteria = ruleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("ruleDefinition.CriteriaDefinition", ruleDefinition.GenericRuleDefinitionId);
+            criterias = criterias.OrderBy(itm => genericRuleDefinitionCriteria.Fields.First(item => item.FieldName == itm.Key).Priority).ToDictionary(itm => itm.Key, itm => itm.Value);
             string lastCriteriaName = criterias.Last().Key;
 
             foreach (T rule in rules)
@@ -73,9 +73,9 @@ namespace Vanrise.GenericData.Business
                     if (rule == targetRule || overridenRules.Contains(targetRule))
                         continue;
 
-                    for (var index = 0; index < ruleDefinition.CriteriaDefinition.Fields.Count; index++)
+                    for (var index = 0; index < genericRuleDefinitionCriteria.Fields.Count; index++)
                     {
-                        var genericRuleDefinitionCriteriaField = ruleDefinition.CriteriaDefinition.Fields[index];
+                        var genericRuleDefinitionCriteriaField = genericRuleDefinitionCriteria.Fields[index];
                         var criteriaFieldName = genericRuleDefinitionCriteriaField.FieldName;
 
                         var ruleFieldValues = rule.Criteria != null ? rule.Criteria.FieldsValues : null;
@@ -101,16 +101,16 @@ namespace Vanrise.GenericData.Business
 
                         if (ruleFieldValue == null && targetRuleFieldValue != null)
                         {
-                            string tempLastCriteriaName = ruleDefinition.CriteriaDefinition.Fields.Last().FieldName;
+                            string tempLastCriteriaName = genericRuleDefinitionCriteria.Fields.Last().FieldName;
                             if (criteriaFieldName == tempLastCriteriaName)
                             {
                                 isRuleOverriden = true;
                                 break;
                             }
                             bool isOverriden = true;
-                            for (var tempIndex = index + 1; tempIndex < ruleDefinition.CriteriaDefinition.Fields.Count; tempIndex++)
+                            for (var tempIndex = index + 1; tempIndex < genericRuleDefinitionCriteria.Fields.Count; tempIndex++)
                             {
-                                var tempGenericRuleDefinitionCriteriaField = ruleDefinition.CriteriaDefinition.Fields[tempIndex];
+                                var tempGenericRuleDefinitionCriteriaField = genericRuleDefinitionCriteria.Fields[tempIndex];
                                 var tempCriteriaFieldName = tempGenericRuleDefinitionCriteriaField.FieldName;
                                 if (criterias.ContainsKey(tempCriteriaFieldName))
                                     continue;
@@ -389,7 +389,8 @@ namespace Vanrise.GenericData.Business
                 if (filter.Value == null)
                     continue;
 
-                DataRecordFieldType criteriaFieldType = ruleDefinition.CriteriaDefinition.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == filter.Key);
+                var genericRuleDefinitionCriteria = ruleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("ruleDefinition.CriteriaDefinition", ruleDefinition.GenericRuleDefinitionId);
+                DataRecordFieldType criteriaFieldType = genericRuleDefinitionCriteria.Fields.MapRecord(itm => itm.FieldType, itm => itm.FieldName == filter.Key);
                 if (criteriaFieldType == null)
                     throw new NullReferenceException("criteriaFieldType");
 
@@ -423,8 +424,10 @@ namespace Vanrise.GenericData.Business
             {
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
                 GenericRuleDefinition ruleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
+                var genericRuleDefinitionCriteria = ruleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("ruleDefinition.CriteriaDefinition", ruleDefinition.GenericRuleDefinitionId);
+
                 IEnumerable<GenericRule> rules = this.GetGenericRulesByDefinitionId(ruleDefinitionId);
-                return BuildRuleTree(ruleDefinition.CriteriaDefinition, rules);
+                return BuildRuleTree(genericRuleDefinitionCriteria, rules);
             });
 
         }
@@ -474,9 +477,10 @@ namespace Vanrise.GenericData.Business
             return GetCachedOrCreate(cacheName, () =>
             {
                 var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
-                if (ruleDefinition.CriteriaDefinition != null && ruleDefinition.CriteriaDefinition.Fields != null)
+                var genericRuleDefinitionCriteria = ruleDefinition.CriteriaDefinition as GenericRuleDefinitionCriteria;
+                if (genericRuleDefinitionCriteria != null && genericRuleDefinitionCriteria.Fields != null)
                 {
-                    return BuildCriteriaEvaluationInfos(ruleDefinition.CriteriaDefinition, ruleDefinition.Objects);
+                    return BuildCriteriaEvaluationInfos(genericRuleDefinitionCriteria, ruleDefinition.Objects);
                 }
                 else
                 {
@@ -492,11 +496,12 @@ namespace Vanrise.GenericData.Business
         public override GenericRuleDetail MapToDetails(T rule)
         {
             GenericRuleDefinition ruleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(rule.DefinitionId);
+            var genericRuleDefinitionCriteria = ruleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("ruleDefinition.CriteriaDefinition", ruleDefinition.GenericRuleDefinitionId);
 
             List<string> descriptions = new List<string>();
             if (rule.Criteria != null && rule.Criteria.FieldsValues != null)
             {
-                foreach (var criteriaField in ruleDefinition.CriteriaDefinition.Fields)
+                foreach (var criteriaField in genericRuleDefinitionCriteria.Fields)
                 {
                     GenericRuleCriteriaFieldValues fieldValues = null;
                     rule.Criteria.FieldsValues.TryGetValue(criteriaField.FieldName, out fieldValues);
@@ -529,6 +534,7 @@ namespace Vanrise.GenericData.Business
             {
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
                 var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(_query.RuleDefinitionId);
+                var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition as GenericRuleDefinitionCriteria;
 
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
@@ -537,9 +543,9 @@ namespace Vanrise.GenericData.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
 
-                if (genericRuleDefinition.CriteriaDefinition != null)
+                if (genericRuleDefinitionCriteria != null)
                 {
-                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                    foreach (var field in genericRuleDefinitionCriteria.Fields)
                     {
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
                     }
@@ -562,9 +568,9 @@ namespace Vanrise.GenericData.Business
 
                             if (record.FieldValueDescriptions == null || record.FieldValueDescriptions.Count == 0)
                             {
-                                if (genericRuleDefinition.CriteriaDefinition != null)
+                                if (genericRuleDefinitionCriteria != null)
                                 {
-                                    foreach (var field in genericRuleDefinition.CriteriaDefinition.Fields)
+                                    foreach (var field in genericRuleDefinitionCriteria.Fields)
                                     {
                                         row.Cells.Add(new ExportExcelCell { Value = null });
                                     }

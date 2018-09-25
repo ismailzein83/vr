@@ -51,5 +51,11 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetGenericRuleDefinitionsInfo(deserializedFilter);
         }
 
+        [HttpGet]
+        [Route("GetCriteriaDefinitionConfigs")]
+        public IEnumerable<CriteriaDefinitionConfig> GetCriteriaDefinitionConfigs()
+        {
+            return _manager.GetCriteriaDefinitionConfigs();
+        }
     }
 }

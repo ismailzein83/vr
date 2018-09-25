@@ -1,0 +1,6 @@
+﻿<span ng-repeat="filter in scopeModel.filters" ng-show="ruleTreeCriteriaCtrl.advancedselected || (filter.showInBasicSearch && ruleTreeCriteriaCtrl.basicselected)">
+    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+</span>
+<span ng-show="ruleTreeCriteriaCtrl.advancedselected">
+    <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+</span>

@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #region Public Methods
-        
+
         public IEnumerable<GenericRuleDefinition> GetGenericRuleDefinitions()
         {
             return GetItemsSP("genericdata.sp_GenericRuleDefinition_GetAll", GenericRuleDefinitionMapper);
@@ -86,12 +86,12 @@ when not matched by target then
             GenericRuleDefinition details = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>(reader["Details"] as string);
             return new GenericRuleDefinition()
             {
-                GenericRuleDefinitionId =  GetReaderValue<Guid>(reader,"ID"),
+                GenericRuleDefinitionId = GetReaderValue<Guid>(reader, "ID"),
                 Name = (string)reader["Name"],
                 Title = details.Title,
+                Objects = details.Objects,
                 CriteriaDefinition = details.CriteriaDefinition,
                 SettingsDefinition = details.SettingsDefinition,
-                Objects = details.Objects,
                 Security = details.Security
             };
         }

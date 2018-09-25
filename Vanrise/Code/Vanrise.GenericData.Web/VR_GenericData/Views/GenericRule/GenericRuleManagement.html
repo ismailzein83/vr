@@ -16,24 +16,21 @@
                                                                    onselectionchanged="onGenericRuleDefinitionSelectorSelectionChange" customlabel="Rule Type"
                                                                    isrequired="true" normal-col-num="2" hideremoveicon showtitle>
                     </vr-genericdata-genericruledefinition-selector>
-                </vr-columns>              
+                </vr-columns>
                 <vr-columns width="normal" ng-show="scopeModel.ruleDefinition">
                     <vr-datetimepicker label="Effective Date" value="scopeModel.effectiveDate" type="longDateTime"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="scopeModel.ruleDefinition">
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
-                <span ng-repeat="filter in scopeModel.filters" ng-show="advancedSelected || (filter.showInBasicSearch && basicSelected)">
-                    <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2"></vr-directivewrapper>
-                </span>
-                <span ng-show="advancedSelected">
-                    <vr-directivewrapper  directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
+                <span ng-if="scopeModel.selectedRuleDefinitionType!=undefined">
+                    <vr-directivewrapper directive="scopeModel.selectedRuleDefinitionType.SearchEditor" on-ready="onSearchDirectiveReady" advancedselected="advancedSelected" basicselected="basicSelected"></vr-directivewrapper>
                 </span>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons" ng-show="scopeModel.ruleDefinition" >
+                <div transclude-to="buttons" ng-show="scopeModel.ruleDefinition">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
                     <vr-button type="Add" data-onclick="addGenericRule" ng-show="scopeModel.haveAddPermission"></vr-button>
                     <vr-button type="Upload" data-onclick="uploadGenericRules" ng-show="scopeModel.ruleSupportsUpload"></vr-button>
@@ -42,7 +39,7 @@
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-genericdata-genericrule-grid ng-if="scopeModel.gridloadded" on-ready="onGridReady" ng-show="scopeModel.ruleDefinition"></vr-genericdata-genericrule-grid>
+                <vr-directivewrapper directive="scopeModel.selectedRuleDefinitionType.GridEditor" on-ready="onGridReady" ng-if="scopeModel.selectedRuleDefinitionType!=undefined && scopeModel.gridloadded"></vr-directivewrapper>
             </vr-columns>
         </vr-row>
 
