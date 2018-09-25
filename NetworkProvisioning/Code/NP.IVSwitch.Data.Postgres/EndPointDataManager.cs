@@ -24,13 +24,13 @@ namespace NP.IVSwitch.Data.Postgres
         {
 
             String cmdText = @"
-                                SELECT access_list.user_id,access_list.account_id,access_list.description,access_list.group_id,access_list.tariff_id,
+                                SELECT access_list.user_id,access_list.account_id,access_list.description,access_list.group_id,access_list.tariff_id,access_list.route_table_id,
                                 access_list.log_alias,access_list.codec_profile_id,access_list.cli_routing,access_list.dst_routing,access_list.trans_rule_id,access_list.state_id,
                                 access_list.channels_limit,access_list.route_table_id,access_list.max_call_dura,access_list.rtp_mode,access_list.domain_id,
                                 access_list.host,access_list.tech_prefix,null as sip_login, null as sip_password
                                 FROM access_list INNER JOIN users on access_list.user_id = users.user_id
                                 UNION
-                                SELECT users.user_id,users.account_id, users.description ,users.group_id,users.tariff_id,users.log_alias,users.codec_profile_id,users.cli_routing,users.dst_routing,
+                                SELECT users.user_id,users.account_id, users.description ,users.group_id,users.tariff_id,users.route_table_id,users.log_alias,users.codec_profile_id,users.cli_routing,users.dst_routing,
                                 users.trans_rule_id,users.state_id,users.channels_limit,users.route_table_id,users.max_call_dura,users.rtp_mode,
                                 users.domain_id,null as host,users.tech_prefix,users.sip_login,users.sip_password
                                 FROM users LEFT JOIN access_list on users.user_id = access_list.user_id  where access_list.user_id is null";
@@ -82,26 +82,43 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType, UserType userType)
         {
-            string fieldName = "";
+            string query = "";
+            //string fieldName = "";
             string tableName = "";
             string userIds = "";
             userIds = "(" + string.Join(",", endPointIds) + ")";
 
-            if (userType == UserType.ACL)
+            if (userType == UserType.SIP)
                 tableName = "users";
             else
                 tableName = "access_list";
 
-            if (routeTableViewType == RouteTableViewType.ANumber)
-                fieldName = "cli_routing";
-            else
-                fieldName = "dst_routing";
 
-            string query = string.Format(@"UPDATE {0} SET {1}=@value WHERE  user_id in {2}", tableName, fieldName, userIds);
+
+
+
+
+
+            switch (routeTableViewType)
+            {
+                case RouteTableViewType.ANumber:
+                    query = string.Format(@"UPDATE {0} SET  cli_routing=@value WHERE user_id in {1} ", tableName,userIds);
+                    break;
+                case RouteTableViewType.Whitelist:
+                    query = string.Format(@"UPDATE {0} SET  dst_routing=@value WHERE user_id in {1} ", tableName, userIds);
+                    break;
+                case RouteTableViewType.BNumber:
+                    query = string.Format(@"UPDATE {0} SET  cli_routing=0, dst_routing=0,route_table_id=@value WHERE user_id in {1} ",tableName, userIds);
+                    break;
+            }
+
+
+
+            //string query = string.Format(@"UPDATE {0} SET {1}=@value WHERE  user_id in {2}", tableName, fieldName, userIds);
             int recordsEffected = ExecuteNonQueryText(query, cmd =>
             {
                 cmd.Parameters.AddWithValue("@table", tableName);
-                cmd.Parameters.AddWithValue("@field", fieldName);
+                //cmd.Parameters.AddWithValue("@field", fieldName);
                 cmd.Parameters.AddWithValue("@value", value);
 
             });
@@ -433,7 +450,7 @@ namespace NP.IVSwitch.Data.Postgres
                 EndPointId = (int)reader["user_id"],
                 CliRouting = (Int16)reader["cli_routing"],
                 DstRouting = (int)reader["dst_routing"],
-                //DstRouting = GetReaderValue<int>(reader, "dst_routing"),
+                RouteTableId = GetReaderValue<int?>(reader, "route_table_id"),
                 AccountId = (int)reader["account_id"],
                 Description = reader["description"] as string,
                 LogAlias = reader["log_alias"] as string,
