@@ -126,7 +126,10 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             List<string> filteredCriteriaHeaders = new List<string>();
             List<GenericRuleDefinitionCriteriaField> filteredCriteria = new List<GenericRuleDefinitionCriteriaField>();
             List<string> excludedCriteria = new List<string> { "Account", "ServiceType", "ChargingPolicy", "Package" };
-            foreach (var criteriaField in genericRuleDefinition.CriteriaDefinition.Fields)
+
+            var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("genericRuleDefinition.CriteriaDefinition", genericRuleDefinition.GenericRuleDefinitionId);
+
+            foreach (var criteriaField in genericRuleDefinitionCriteria.Fields)
             {
                 if (!excludedCriteria.Contains(criteriaField.FieldName))
                 {
@@ -157,7 +160,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
                     if (genericRule.Criteria != null && genericRule.Criteria.FieldsValues != null && genericRule.Criteria.FieldsValues.Count > 0)
                     {
-                        foreach (GenericRuleDefinitionCriteriaField field in genericRuleDefinition.CriteriaDefinition.Fields)
+                        foreach (GenericRuleDefinitionCriteriaField field in genericRuleDefinitionCriteria.Fields)
                         {
                             if (excludedCriteria.Contains(field.FieldName))
                             {

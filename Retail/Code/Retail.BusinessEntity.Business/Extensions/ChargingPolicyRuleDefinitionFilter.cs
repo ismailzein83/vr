@@ -14,14 +14,17 @@ namespace Retail.BusinessEntity.Business
         public bool IsMatched(IGenericRuleDefinitionFilterContext context)
         {
             ValidateInput(context);
-            if (context.RuleDefinition.CriteriaDefinition == null || context.RuleDefinition.CriteriaDefinition.Fields == null)
+            GenericRuleDefinitionCriteria genericRuleDefinitionCriteria = context.RuleDefinition.CriteriaDefinition as GenericRuleDefinitionCriteria;
+
+            if (genericRuleDefinitionCriteria == null || genericRuleDefinitionCriteria.Fields == null)
                 return false;
+
             BusinessEntityDefinitionManager beDefinitionManager = new BusinessEntityDefinitionManager();
             var serviceTypeBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(ServiceType.BUSINESSENTITY_DEFINITION_NAME);
             var chargingPolicyBEDefinitionId = beDefinitionManager.GetBusinessEntityDefinitionId(ChargingPolicy.BUSINESSENTITY_DEFINITION_NAME);
 
             List<Guid> neededCriteriaBEIds = new List<Guid> { serviceTypeBEDefinitionId, chargingPolicyBEDefinitionId };
-            foreach (var criteriaField in context.RuleDefinition.CriteriaDefinition.Fields)
+            foreach (var criteriaField in genericRuleDefinitionCriteria.Fields)
             {
                 var businessEntityFieldType = criteriaField.FieldType as Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBusinessEntityType;
                 if (businessEntityFieldType != null)
@@ -34,6 +37,7 @@ namespace Retail.BusinessEntity.Business
                     }
                 }
             }
+
             return false;
         }
 

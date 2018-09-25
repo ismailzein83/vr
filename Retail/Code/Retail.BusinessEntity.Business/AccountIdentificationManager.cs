@@ -103,24 +103,21 @@ namespace Retail.BusinessEntity.Business
             GenericRuleManager<MappingRule> genericRuleManager = new GenericRuleManager<MappingRule>();
             GenericRuleDetail genericRuleDetail = genericRuleManager.MapToDetails(mappingRule);
             string criteria = "";
-            List<string> criteriaFieldsValues= new List<string>();
+            List<string> criteriaFieldsValues = new List<string>();
 
             GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition genericRuleDefiniton = genericRuleDefinitionManager.GetGenericRuleDefinition(mappingRule.DefinitionId);
+            GenericRuleDefinition genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(mappingRule.DefinitionId);
 
-            GenericRuleDefinitionCriteria criteriaFields = genericRuleDefiniton.CriteriaDefinition;
-
+            var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("genericRuleDefinition.CriteriaDefinition", genericRuleDefinition.GenericRuleDefinitionId);
 
             for (int i = 0; i < genericRuleDetail.FieldValueDescriptions.Count(); i++)
             {
                 string fieldValueDescription = genericRuleDetail.FieldValueDescriptions[i];
                 if (!string.IsNullOrEmpty(fieldValueDescription))
-                {
-                    criteriaFieldsValues.Add(string.Concat(criteriaFields.Fields[i].FieldName, ":", fieldValueDescription));
-                }
+                    criteriaFieldsValues.Add(string.Concat(genericRuleDefinitionCriteria.Fields[i].FieldName, ":", fieldValueDescription));
             }
 
-           criteria =string.Join<string>(" ,", criteriaFieldsValues);
+            criteria = string.Join<string>(" ,", criteriaFieldsValues);
 
             return new AccountIdentificationDetail()
             {
