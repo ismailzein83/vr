@@ -62,7 +62,7 @@ app.directive('vrQueueingExecutioncontrolPauseSwitcher', ['VR_Queueing_Execution
             };
             function initializeController() {
                 VR_Queueing_ExecutionControlDataAPIService.IsExecutionPaused().then(function (response) {
-                    $scope.isPaused = response;
+                    ctrl.isPaused = response;
                 });
             }
 
