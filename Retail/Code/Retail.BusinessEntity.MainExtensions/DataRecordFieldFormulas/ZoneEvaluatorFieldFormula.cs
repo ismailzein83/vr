@@ -110,7 +110,7 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 
         private RecordFilter ConvertToRecordFilter(string fieldName, FieldBusinessEntityType fieldBusinessEntityType, ObjectListRecordFilter objectListRecordFilter)
         {
-            var zoneFilter = fieldBusinessEntityType.ConvertToRecordFilter(fieldName, objectListRecordFilter.Values);
+            var zoneFilter = fieldBusinessEntityType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = fieldName, FilterValues = objectListRecordFilter.Values, StrictEqual = true });
             if (zoneFilter is ObjectListRecordFilter)
                 ((ObjectListRecordFilter)zoneFilter).CompareOperator = objectListRecordFilter.CompareOperator;
             return zoneFilter;

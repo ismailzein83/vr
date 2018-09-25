@@ -65,7 +65,7 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 
                 List<object> filterValues = parentAndChildsAccountIds.Count > 0 ? parentAndChildsAccountIds.Cast<Object>().ToList() : null;
 
-                var childFilter = accountFieldType.ConvertToRecordFilter(AccountFieldName, filterValues);
+                var childFilter = accountFieldType.ConvertToRecordFilter(new DataRecordFieldTypeConvertToRecordFilterContext { FieldName = this.AccountFieldName, FilterValues = filterValues, StrictEqual = true });
                 if (childFilter is ObjectListRecordFilter)
                     ((ObjectListRecordFilter)childFilter).CompareOperator = objectListFilter.CompareOperator;
                 return childFilter;
