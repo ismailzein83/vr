@@ -110,7 +110,9 @@ as (select * from (values
 ('99E22964-F94E-4BCD-8383-22A613E5AE7F','LookUp Business Entity','LookUp BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"vr-genericdata-lookupbusinessentity-editor"}'),
 ('442BCFAD-1407-4158-82E7-E1B7A0AB458B','VR_GenericData_LKUPBEExtendedSettings_VRActionAuditLKUP','Action Audit LookUp','VR_GenericData_LKUPBEExtendedSettings','{"Editor":"vr-genericdata-lookupbeextendedsettings-actionaudit"}'),
 ('919798ED-8B0D-40CD-A011-D90C3B691C88','CDRCorrelationDefinitionSettings','CDR Correlation','VR_Common_VRComponentType','{"Editor":"vr-genericdata-cdrcorrelationdefinition-settings"}'),
-('6BC1FB84-F28D-476A-81FA-A11FC4E5CC06','Delete_Generic','Delete Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-deletegenericaction-definition"}')
+('6BC1FB84-F28D-476A-81FA-A11FC4E5CC06','Delete_Generic','Delete Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-deletegenericaction-definition"}'),
+
+('6B1A593A-E5E5-4CA4-834A-9A20A1FD16BA','VR_GenericData_GenericRuleDefinitionCriteria','Rule Tree Criteria','VR_GenericData_CriteriaDefinition','{"GridEditor":"vr-genericdata-genericrule-grid-ruletreecriteria","SearchEditor":"vr-genericdata-genericrulesearch-ruletreecriteria","DefinitionEditor":"vr-genericdata-genericruledefinition-ruletreecriteria"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
