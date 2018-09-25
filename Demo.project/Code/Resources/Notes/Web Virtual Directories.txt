@@ -9,6 +9,7 @@ Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
  - Add the following virtual directories under Client > Modules folder:
 Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
 Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 Demo_Module				C:\TFS\Demo.project\Code\Demo.Module.Web\Demo_Module
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
