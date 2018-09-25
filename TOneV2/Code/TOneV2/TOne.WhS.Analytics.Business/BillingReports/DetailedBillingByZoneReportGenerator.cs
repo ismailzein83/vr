@@ -17,6 +17,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             AnalyticManager analyticManager = new AnalyticManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
             double service = 0;
@@ -30,7 +32,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 if (parameters.GroupBySupplier)
                 {
-                   
+
                     if (parameters.GroupByProfile)
                         listDimensions.Add("SupplierProfile");
                     else
@@ -84,20 +86,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 listMeasures.Add("SaleWeekEndNet");
             }
 
-            Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
+            var analyticQuery = new AnalyticQuery()
             {
-                Query = new AnalyticQuery()
-                {
-                    DimensionFields = listDimensions,
-                    MeasureFields = listMeasures,
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = listDimensions,
+                MeasureFields = listMeasures,
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
@@ -107,7 +106,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -117,14 +116,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(dimensionFilter);
+                analyticQuery.Filters.Add(dimensionFilter);
             }
 
             List<DetailedBillingByZone> listDetailedBillingByZone = new List<DetailedBillingByZone>();
 
-            var result = analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
+            var result = analyticManager.GetAllFilteredRecords(analyticQuery);
             if (result != null)
-                foreach (var analyticRecord in result.Data)
+                foreach (var analyticRecord in result)
                 {
                     DetailedBillingByZone detailedBillingByZone = new DetailedBillingByZone();
 
@@ -133,32 +132,33 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         detailedBillingByZone.Zone = zoneValue.Name;
 
                     bool isDeleted = false;
-
                     if (parameters.IsCost)
                     {
                         if (parameters.GroupBySupplier)
                         {
                             var supplierValue = analyticRecord.DimensionValues[1];
-
                             if (supplierValue != null)
                             {
-                                isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
-                                if (supplierValue != null)
-                                    detailedBillingByZone.SupplierID = supplierValue.Name;
+                                detailedBillingByZone.SupplierID = supplierValue.Name;
+                                if (parameters.GroupByProfile)
+                                    isDeleted = carrierProfileManager.IsCarrierProfileDeleted((int)supplierValue.Value);
+                                else
+                                    isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
                             }
-                          
                         }
                     }
+
                     else
                     {
                         var customerValue = analyticRecord.DimensionValues[1];
                         if (customerValue != null)
                         {
-                            isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
-                            if (customerValue != null)
-                                detailedBillingByZone.CustomerID = customerValue.Name;
+                            detailedBillingByZone.CustomerID = customerValue.Name;
+                            if (parameters.GroupByProfile)
+                                isDeleted = carrierProfileManager.IsCarrierProfileDeleted((int)customerValue.Value);
+                            else
+                                isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
                         }
-                       
                     }
                     if (!isDeleted)
                     {
