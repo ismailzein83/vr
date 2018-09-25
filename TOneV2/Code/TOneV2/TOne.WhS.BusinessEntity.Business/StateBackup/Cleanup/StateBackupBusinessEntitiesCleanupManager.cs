@@ -8,6 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -22,7 +23,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (GenericRuleDefinition ruleDef in ruleDefinitions)
             {
-                foreach (GenericRuleDefinitionCriteriaField field in ruleDef.CriteriaDefinition.Fields)
+                var genericRuleDefinitionCriteria = ruleDef.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("ruleDef.CriteriaDefinition", ruleDef.GenericRuleDefinitionId);
+
+                foreach (GenericRuleDefinitionCriteriaField field in genericRuleDefinitionCriteria.Fields)
                 {
                     if (field.FieldType is FieldBusinessEntityType)
                     {
@@ -49,7 +52,9 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             IGenericRuleManager manager = GetManager(genericRuleDefinition.GenericRuleDefinitionId);
             IEnumerable<GenericRule> genericRules = manager.GetGenericRulesByDefinitionId(genericRuleDefinition.GenericRuleDefinitionId);
-            foreach (GenericRuleDefinitionCriteriaField criteriaDefinitionField in genericRuleDefinition.CriteriaDefinition.Fields)
+            var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition.CastWithValidate<GenericRuleDefinitionCriteria>("genericRuleDefinition.CriteriaDefinition");
+
+            foreach (GenericRuleDefinitionCriteriaField criteriaDefinitionField in genericRuleDefinitionCriteria.Fields)
             {
                 foreach (GenericRule rule in genericRules)
                 {
