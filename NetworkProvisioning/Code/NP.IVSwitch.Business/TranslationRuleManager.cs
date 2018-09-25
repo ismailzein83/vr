@@ -259,10 +259,7 @@ namespace NP.IVSwitch.Business
             }
             if (translationRule.PoolBasedCLISettings != null)
             {
-                if (translationRule.PoolBasedCLISettings.CLIPatterns != null && translationRule.PoolBasedCLISettings.CLIPatterns.Count > 0)
-                {
-                    cliPattern = String.Join(",", translationRule.PoolBasedCLISettings.CLIPatterns);
-                }
+                cliPattern = String.Concat("*", translationRule.PoolBasedCLISettings.PoolId);
             }
             return cliPattern;
         }

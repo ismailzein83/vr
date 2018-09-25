@@ -283,6 +283,7 @@ namespace NP.IVSwitch.Data.Postgres
                 {
                     cmd.Parameters.AddWithValue("@poolid", poolId);
                 });
+                poolBasedCLISettings.PoolId = poolId;
             }
             return poolBasedCLISettings;
         }

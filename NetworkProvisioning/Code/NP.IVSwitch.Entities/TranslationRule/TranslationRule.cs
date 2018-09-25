@@ -29,6 +29,7 @@ namespace NP.IVSwitch.Entities
     }
     public class PoolBasedCLISettings
     {
+        public int PoolId { get; set; }
         public List<string> CLIPatterns { get; set; }
         public string Prefix { get; set; }
         public string Destination { get; set; }
