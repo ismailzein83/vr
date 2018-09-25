@@ -88,6 +88,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessingCodes\CloseCodeNotExistAndEffectiveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\CodeGroupCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateUICodesZones\ZoneWithoutChangesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\CodeLenghtCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\MultipleCountryCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingStatusCondition.cs" />
