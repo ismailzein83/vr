@@ -634,7 +634,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!SupplierRate.Value,3),3)</Value>
+                              <Value>=FormatNumber(Round(Fields!SupplierRate.Value,4),4)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>

@@ -1514,7 +1514,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1716,6 +1715,9 @@
         <Height>4.1275cm</Height>
         <Width>20.27235cm</Width>
         <ZIndex>28</ZIndex>
+        <Visibility>
+          <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>

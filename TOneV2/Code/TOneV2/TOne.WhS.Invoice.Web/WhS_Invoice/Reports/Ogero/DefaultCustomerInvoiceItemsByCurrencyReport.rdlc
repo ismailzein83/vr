@@ -634,7 +634,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!SaleRate.Value, 3),3)</Value>
+                              <Value>=FormatNumber(Round(Fields!SaleRate.Value, 4),4)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -657,6 +657,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
