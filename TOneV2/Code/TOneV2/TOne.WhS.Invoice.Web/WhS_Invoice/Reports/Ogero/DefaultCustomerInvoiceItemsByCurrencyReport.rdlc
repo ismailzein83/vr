@@ -12,6 +12,7 @@
                 <Value>Net Total</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
+                  <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -690,7 +691,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -702,7 +702,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Round(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -778,7 +778,7 @@
               <TextRun>
                 <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                 <Style>
-                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -811,9 +811,9 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!TotalCalls.Value</Value>
+                <Value>=FormatNumber(Parameters!TotalCalls.Value)</Value>
                 <Style>
-                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -848,7 +848,7 @@
               <TextRun>
                 <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                 <Style>
-                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -860,7 +860,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.95484in</Top>
-        <Left>6.99194in</Left>
+        <Left>6.99195in</Left>
         <Height>0.20833in</Height>
         <Width>1.03287in</Width>
         <ZIndex>5</ZIndex>

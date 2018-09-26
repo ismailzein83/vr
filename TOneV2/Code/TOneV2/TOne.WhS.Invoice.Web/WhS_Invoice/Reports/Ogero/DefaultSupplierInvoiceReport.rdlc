@@ -406,7 +406,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd MMM yyyy")</Value>
+                <Value>=CDate(Parameters!IssueDate.Value).ToString("dd MMM yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -440,7 +440,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd MMM yyyy")</Value>
+                <Value>=CDate(Parameters!DueDate.Value).ToString("dd MMM yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -499,13 +499,16 @@
                           <Value>=Parameters!Carrier.Value</Value>
                         </Parameter>
                         <Parameter Name="DueDate">
-                          <Value>=Parameters!InvoiceDueDate.Value</Value>
+                          <Value>=Parameters!DueDate.Value</Value>
                         </Parameter>
                         <Parameter Name="DisplayCommission">
                           <Value>=Parameters!DisplayCommission.Value</Value>
                         </Parameter>
                         <Parameter Name="TotalAmountAfterCommission">
                           <Value>=Fields!OriginalAmountAfterCommissionWithTaxes.Value</Value>
+                        </Parameter>
+                        <Parameter Name="NormalPrecisionValue">
+                          <Value>=Parameters!NormalPrecisionValue.Value</Value>
                         </Parameter>
                       </Parameters>
                       <Style>
@@ -1354,9 +1357,6 @@
         <Height>0.5in</Height>
         <Width>7.92553in</Width>
         <ZIndex>22</ZIndex>
-        <Visibility>
-          <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1509,11 +1509,11 @@
               <Parameter Name="SerialNumber">
                 <Value>=Parameters!SerialNumber.Value</Value>
               </Parameter>
-              <Parameter Name="InvoiceDate">
-                <Value>=Parameters!InvoiceDate.Value</Value>
+              <Parameter Name="IssueDate">
+                <Value>=Parameters!IssueDate.Value</Value>
               </Parameter>
-              <Parameter Name="InvoiceDueDate">
-                <Value>=Parameters!InvoiceDueDate.Value</Value>
+              <Parameter Name="DueDate">
+                <Value>=Parameters!DueDate.Value</Value>
               </Parameter>
               <Parameter Name="TimeZone">
                 <Value>=Parameters!TimeZone.Value</Value>
@@ -2156,13 +2156,13 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="InvoiceDate">
+    <ReportParameter Name="IssueDate">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="InvoiceDueDate">
+    <ReportParameter Name="DueDate">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
