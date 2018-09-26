@@ -332,23 +332,28 @@
             });
         }
         function update() {
-            $scope.scopeModel.isLoading = true;
+            var endPoint = buildEndPointObjFromScope();
+            if (endPointEntity!=undefined && endPointEntity.CliRouting != 0 && endPoint!=undefined && endPoint.Entity!=undefined && endPoint.Entity.RouteTableBasedRule) {
+                VRNotificationService.showWarning("This endpoint has related A-Number routing.");
+            }
+            else {
+                $scope.scopeModel.isLoading = true;
+                return NP_IVSwitch_EndPointAPIService.UpdateEndPoint(endPoint).then(function (response) {
 
-            return NP_IVSwitch_EndPointAPIService.UpdateEndPoint(buildEndPointObjFromScope()).then(function (response) {
+                    if(VRNotificationService.notifyOnItemUpdated('EndPoint', response, 'Name')) {
 
-                if (VRNotificationService.notifyOnItemUpdated('EndPoint', response, 'Name')) {
-
-                    if ($scope.onEndPointUpdated != undefined) {
-                        $scope.onEndPointUpdated(response.UpdatedObject);
+                        if ($scope.onEndPointUpdated != undefined) {
+                            $scope.onEndPointUpdated(response.UpdatedObject);
                     }
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
+                        $scope.modalContext.closeModal();
+                  }
+             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
+              }).finally(function () {
                 $scope.scopeModel.isLoading = false;
                 endPointEntity = undefined;
-            });
+                });
+            }
         }
 
         function buildEndPointObjFromScope() {
