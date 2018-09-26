@@ -53,10 +53,6 @@ namespace Vanrise.Notification.Data.SQL
 
         public List<VRNotification> GetNotClearedNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, List<string> eventKeys, DateTime? notificationCreatedAfter)
         {
-            string eventKeysAsString = null;
-            if (eventKeys != null && eventKeys.Count > 0)
-                eventKeysAsString = string.Join<string>(",", eventKeys);
-
             string parentType1 = null;
             string parentType2 = null;
             if (parentTypes != null)
@@ -64,7 +60,52 @@ namespace Vanrise.Notification.Data.SQL
                 parentType1 = parentTypes.ParentType1;
                 parentType2 = parentTypes.ParentType2;
             }
-            return GetItemsSP("[VRNotification].sp_VRNotification_GetNotCleared", VRNotificationMapper, notificationTypeId, parentType1, parentType2, eventKeysAsString, notificationCreatedAfter);
+
+            DataTable eventKeysTable = BuildEventKeysTable(eventKeys);
+
+            return GetItemsSPCmd("[VRNotification].sp_VRNotification_GetNotCleared", VRNotificationMapper,
+                   (cmd) =>
+                   {
+                       var notificationTypeIdPrm = new System.Data.SqlClient.SqlParameter("@NotificationTypeID", notificationTypeId);
+                       cmd.Parameters.Add(notificationTypeIdPrm);
+
+                       var parentType1Prm = new System.Data.SqlClient.SqlParameter("@ParentType1", parentType1);
+                       cmd.Parameters.Add(parentType1Prm);
+
+                       var parentType2Prm = new System.Data.SqlClient.SqlParameter("@ParentType2", parentType2);
+                       cmd.Parameters.Add(parentType2Prm);
+
+                       var dtPrm = new System.Data.SqlClient.SqlParameter("@EventKeysTable", SqlDbType.Structured);
+                       dtPrm.Value = eventKeysTable;
+                       cmd.Parameters.Add(dtPrm);
+
+                       var notificationCreatedAfterPrm = new System.Data.SqlClient.SqlParameter("@NotificationCreatedAfter", notificationCreatedAfter);
+                       cmd.Parameters.Add(notificationCreatedAfterPrm);
+                   });
+        }
+
+        private DataTable BuildEventKeysTable(List<string> eventKeys)
+        {
+            DataTable eventKeysTable = GetEventKeysTable();
+            if (eventKeys != null)
+            {
+                foreach (var eventKey in eventKeys)
+                {
+                    DataRow dr = eventKeysTable.NewRow();
+                    dr["EventKey"] = eventKey;
+                    eventKeysTable.Rows.Add(dr);
+                }
+            }
+
+            eventKeysTable.EndLoadData();
+            return eventKeysTable;
+        }
+
+        DataTable GetEventKeysTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("EventKey", typeof(String));
+            return dt;
         }
 
         public void GetFirstPageVRNotifications(IVRNotificationFirstPageContext context)
