@@ -24,7 +24,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.95484in</Top>
-        <Left>2.32593in</Left>
+        <Left>2.30461in</Left>
         <Height>0.20833in</Height>
         <Width>0.89699in</Width>
         <Style>
@@ -40,9 +40,9 @@
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
         <Top>1.86457in</Top>
-        <Left>2.20717in</Left>
+        <Left>2.30586in</Left>
         <Height>0.02083in</Height>
-        <Width>5.81765in</Width>
+        <Width>5.69764in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -58,13 +58,13 @@
               <Width>1.5in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.82593in</Width>
+              <Width>0.76593in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.10973in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.82593in</Width>
+              <Width>0.76593in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.30374in</Width>
@@ -566,7 +566,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value))</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -634,7 +634,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!SaleRate.Value, 4)</Value>
+                              <Value>=FormatNumber(Round(Fields!SaleRate.Value, 3),3)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -657,6 +657,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -702,7 +703,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value))</Value>
+                              <Value>=FormatNumber(Round(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -758,8 +759,9 @@
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
         <Top>1.342in</Top>
+        <Left>0.09869in</Left>
         <Height>0.46875in</Height>
-        <Width>8.02481in</Width>
+        <Width>7.90481in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -776,7 +778,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                <Value>=FormatNumber(Round(Parameters!TotalDuration.Value,Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)</Value>
                 <Style>
                   <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -790,7 +792,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.95484in</Top>
-        <Left>3.57763in</Left>
+        <Left>3.55631in</Left>
         <Height>0.20833in</Height>
         <Width>0.9877in</Width>
         <ZIndex>3</ZIndex>
@@ -811,7 +813,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalCalls.Value)</Value>
+                <Value>=FormatNumber(Parameters!TotalCalls.Value,0)</Value>
                 <Style>
                   <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -825,7 +827,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.95484in</Top>
-        <Left>4.77554in</Left>
+        <Left>4.75422in</Left>
         <Height>0.20833in</Height>
         <Width>0.88398in</Width>
         <ZIndex>4</ZIndex>
@@ -846,7 +848,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                <Value>=FormatNumber(Round(Parameters!TotalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value)</Value>
                 <Style>
                   <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
@@ -860,7 +862,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>1.95484in</Top>
-        <Left>6.99195in</Left>
+        <Left>6.97063in</Left>
         <Height>0.20833in</Height>
         <Width>1.03287in</Width>
         <ZIndex>5</ZIndex>
@@ -878,7 +880,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>8.02482in</Width>
+              <Width>7.90481in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -946,8 +948,9 @@
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
         <Top>1.02256in</Top>
+        <Left>0.09869in</Left>
         <Height>0.25in</Height>
-        <Width>8.02482in</Width>
+        <Width>7.90481in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -986,7 +989,7 @@
           </Paragraphs>
           <rd:DefaultName>Textbox24</rd:DefaultName>
           <Top>0.15538in</Top>
-          <Left>6.8894in</Left>
+          <Left>6.86808in</Left>
           <Height>0.20625in</Height>
           <Width>1.13542in</Width>
           <Style>
@@ -1001,8 +1004,9 @@
         </Textbox>
         <Line Name="Line1">
           <Top>0.08594in</Top>
+          <Left>0.09869in</Left>
           <Height>0in</Height>
-          <Width>8.02482in</Width>
+          <Width>7.90481in</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
@@ -1169,15 +1173,13 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalDuration">
-      <DataType>String</DataType>
+      <DataType>Float</DataType>
       <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalCalls">
-      <DataType>String</DataType>
+      <DataType>Integer</DataType>
       <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalAmount">
@@ -1204,9 +1206,8 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalAmountAfterCommission">
-      <DataType>String</DataType>
+      <DataType>Float</DataType>
       <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Image">

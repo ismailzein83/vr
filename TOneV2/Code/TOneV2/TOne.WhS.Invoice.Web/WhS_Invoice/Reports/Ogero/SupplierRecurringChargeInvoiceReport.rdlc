@@ -289,7 +289,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(System.Math.Round(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value))</Value>
+                              <Value>=FormatNumber(System.Math.Round(Fields!AmountAfterTaxes.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
