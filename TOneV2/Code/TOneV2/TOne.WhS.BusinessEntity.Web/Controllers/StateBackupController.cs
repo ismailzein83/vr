@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredStateBackups(Vanrise.Entities.DataRetrievalInput<StateBackupQuery> input)
         {
             StateBackupManager manager = new StateBackupManager();
-            return GetWebResponse(input, manager.GetFilteredStateBackups(input));
+            return GetWebResponse(input, manager.GetFilteredStateBackups(input), "Checkpoints");
         }
 
 

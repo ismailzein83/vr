@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
          public object GetFilteredCarrierProfiles(Vanrise.Entities.DataRetrievalInput<CarrierProfileQuery> input)
         {
             CarrierProfileManager manager = new CarrierProfileManager();
-            return GetWebResponse(input, manager.GetFilteredCarrierProfiles(input));
+            return GetWebResponse(input, manager.GetFilteredCarrierProfiles(input), "Carrier Profiles");
         }
 
         [HttpGet]

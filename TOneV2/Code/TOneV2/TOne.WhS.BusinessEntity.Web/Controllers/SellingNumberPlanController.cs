@@ -46,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSellingNumberPlans(Vanrise.Entities.DataRetrievalInput<SellingNumberPlanQuery> input)
         {
             SellingNumberPlanManager manager = new SellingNumberPlanManager();
-            return GetWebResponse(input, manager.GetFilteredSellingNumberPlans(input));
+            return GetWebResponse(input, manager.GetFilteredSellingNumberPlans(input), "Selling Number Plans");
         }
 
         [HttpPost]

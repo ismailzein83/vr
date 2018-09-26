@@ -252,7 +252,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredSoldCountries(Vanrise.Entities.DataRetrievalInput<SoldCountryQuery> input)
         {
             var manager = new SoldCountryManager();
-            return base.GetWebResponse(input, manager.GetFilteredSoldCountries(input));
+            return base.GetWebResponse(input, manager.GetFilteredSoldCountries(input), "Sold Countries");
         }
 
         [HttpPost]

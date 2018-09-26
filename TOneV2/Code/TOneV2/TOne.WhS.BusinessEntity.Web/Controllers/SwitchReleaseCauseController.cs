@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredSwitchReleaseCauses")]
         public object GetFilteredSwitchReleaseCauses(Vanrise.Entities.DataRetrievalInput<SwitchReleaseCauseQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredSwitchReleaseCauses(input));
+            return GetWebResponse(input, _manager.GetFilteredSwitchReleaseCauses(input), "Switch Release Causes");
         }
         [HttpPost]
         [Route("AddSwitchReleaseCause")]

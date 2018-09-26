@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.Web.Controllers
         public object GetFilteredRPRoutesByCode(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
         {
             RPRouteManager manager = new RPRouteManager();
-            return GetWebResponse(input, manager.GetFilteredRPRoutesByCode(input));
+            return GetWebResponse(input, manager.GetFilteredRPRoutesByCode(input), "RP Routes By Code");
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace TOne.WhS.Routing.Web.Controllers
         public object GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
         {
             RPRouteManager manager = new RPRouteManager();
-            return GetWebResponse(input, manager.GetFilteredRPRouteOptions(input));
+            return GetWebResponse(input, manager.GetFilteredRPRouteOptions(input), "RP Route Options");
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
         public object GetBlockedAttemptsData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
         {
             BlockedAttemptsManager blockedAttemptsManager = new BlockedAttemptsManager();
-            return GetWebResponse(input, blockedAttemptsManager.GetBlockedAttemptData(input));
+            return GetWebResponse(input, blockedAttemptsManager.GetBlockedAttemptData(input), "Blocked Attempts");
 
         }
     }

@@ -33,7 +33,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredRatePreviews(Vanrise.Entities.DataRetrievalInput<RatePreviewQuery> input)
         {
             var manager = new RatePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredRatePreviews(input));
+            return GetWebResponse(input, manager.GetFilteredRatePreviews(input), "Rate Previews");
         }
 
         [HttpGet]
@@ -49,7 +49,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredSaleZoneRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
         {
             var manager = new SaleZoneRoutingProductPreviewManager();
-            return GetWebResponse(input, manager.GetFilteredSaleZoneRoutingProductPreviews(input));
+            return GetWebResponse(input, manager.GetFilteredSaleZoneRoutingProductPreviews(input), "Sale Zone Routing Product Previews");
         }
 
         [HttpPost]
@@ -65,7 +65,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredSaleZoneServicePreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
         {
             var manager = new SaleZoneServicePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredSaleZoneServicePreviews(input));
+            return GetWebResponse(input, manager.GetFilteredSaleZoneServicePreviews(input), "Sale Zone Service Previews");
         }
 
         [HttpPost]
@@ -81,7 +81,7 @@ namespace TOne.WhS.Sales.Web.Controllers
 		public object GetFilteredChangedCustomerCountryPreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
 		{
 			var manager = new ChangedCustomerCountryPreviewManager();
-			return GetWebResponse(input, manager.GetFilteredChangedCustomerCountryPreviews(input));
+            return GetWebResponse(input, manager.GetFilteredChangedCustomerCountryPreviews(input), "Changed Customer Country Previews");
 		}
 
 		[HttpPost]
@@ -89,7 +89,7 @@ namespace TOne.WhS.Sales.Web.Controllers
 		public object GetFilteredNewCustomerCountryPreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)
 		{
 			var manager = new NewCustomerCountryPreviewManager();
-			return GetWebResponse(input, manager.GetFilteredNewCustomerCountryPreviews(input));
+            return GetWebResponse(input, manager.GetFilteredNewCustomerCountryPreviews(input), "New Customer Country Previews");
 		}
     }
 }

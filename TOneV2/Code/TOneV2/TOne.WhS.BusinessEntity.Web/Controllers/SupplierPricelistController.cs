@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSupplierPricelist(Vanrise.Entities.DataRetrievalInput<SupplierPricelistQuery> input)
         {
             SupplierPriceListManager manager = new SupplierPriceListManager();
-            return GetWebResponse(input, manager.GetFilteredSupplierPriceLists(input));//manager.GetFilteredSupplierPriceLists(input);
+            return GetWebResponse(input, manager.GetFilteredSupplierPriceLists(input), "Supplier Pricelist");//manager.GetFilteredSupplierPriceLists(input);
         }
     }
 }

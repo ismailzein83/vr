@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredCodeGroups(Vanrise.Entities.DataRetrievalInput<CodeGroupQuery> input)
         {
             CodeGroupManager manager = new CodeGroupManager();
-            return GetWebResponse(input, manager.GetFilteredCodeGroups(input));
+            return GetWebResponse(input, manager.GetFilteredCodeGroups(input), "Code Groups");
         }
 
         [HttpGet]

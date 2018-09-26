@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
        public object GetFilteredSupplierCodes(Vanrise.Entities.DataRetrievalInput<SupplierCodeQuery> input)
        {
            SupplierCodeManager manager = new SupplierCodeManager();
-           return GetWebResponse(input, manager.GetFilteredSupplierCodes(input));
+           return GetWebResponse(input, manager.GetFilteredSupplierCodes(input), "Supplier Codes");
        }
     }
   

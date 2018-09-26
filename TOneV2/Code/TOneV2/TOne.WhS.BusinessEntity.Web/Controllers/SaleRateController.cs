@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSaleRates(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
         {
             SaleRateManager manager = new SaleRateManager();
-            return GetWebResponse(input, manager.GetFilteredSaleRates(input));
+            return GetWebResponse(input, manager.GetFilteredSaleRates(input), "Sale Rates");
         }
         [HttpGet]
         [Route("GetPrimarySaleEntity")]

@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryWithDefaultRateQuery> input)
         {
             CountryWithDefaultRateManager manager = new CountryWithDefaultRateManager();
-            return GetWebResponse(input, manager.GetFilteredCountries(input));
+            return GetWebResponse(input, manager.GetFilteredCountries(input), "Country With Default Rate");
         }
     }
 }

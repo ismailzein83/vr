@@ -18,7 +18,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetFilteredSwapDeals")]
         public object GetFilteredDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredSwapDeals(input));
+            return GetWebResponse(input, _manager.GetFilteredSwapDeals(input), "Swap Deals");
         }
 
         [HttpGet]

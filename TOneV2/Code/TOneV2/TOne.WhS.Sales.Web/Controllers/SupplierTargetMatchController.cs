@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredSupplierTargetMatches(Vanrise.Entities.DataRetrievalInput<SupplierTargetMatchQuery> input)
         {
             SupplierTargetMatchManager manager = new SupplierTargetMatchManager();
-            return GetWebResponse(input, manager.GetFilteredSupplierTargetMatches(input));
+            return GetWebResponse(input, manager.GetFilteredSupplierTargetMatches(input), "Supplier Target Matches");
         }
 
         [HttpGet]

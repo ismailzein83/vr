@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredFinancialAccounts")]
         public object GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<WHSFinancialAccountQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input));
+            return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input), "Financial Accounts");
         }
 
         [HttpPost]

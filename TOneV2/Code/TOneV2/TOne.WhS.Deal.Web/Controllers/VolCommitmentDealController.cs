@@ -17,7 +17,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetFilteredVolCommitmentDeals")]
         public object GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVolCommitmentDeals(input));
+            return GetWebResponse(input, _manager.GetFilteredVolCommitmentDeals(input), "VolCommitment Deals");
         }
         [HttpGet]
         [Route("GetVolumeCommitmentHistoryDetailbyHistoryId")]

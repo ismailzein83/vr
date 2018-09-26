@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSupplierRates(Vanrise.Entities.DataRetrievalInput<BaseSupplierRateQueryHandler> input)
         {
             SupplierRateManager manager = new SupplierRateManager();
-            return GetWebResponse(input, manager.GetFilteredSupplierRates(input));
+            return GetWebResponse(input, manager.GetFilteredSupplierRates(input), "Supplier Rates");
         }
     }
 

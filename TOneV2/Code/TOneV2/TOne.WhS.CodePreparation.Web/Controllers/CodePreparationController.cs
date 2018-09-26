@@ -106,7 +106,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
 		public object GetCodeItems(Vanrise.Entities.DataRetrievalInput<GetCodeItemInput> input)
 		{
 			CodePreparationManager manager = new CodePreparationManager();
-			return GetWebResponse(input, manager.GetCodeItems(input));
+            return GetWebResponse(input, manager.GetCodeItems(input), "Code Items");
 		}
 
 		[HttpGet]

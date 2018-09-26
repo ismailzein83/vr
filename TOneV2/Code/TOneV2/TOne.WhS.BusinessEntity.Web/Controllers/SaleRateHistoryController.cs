@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredSaleRateHistoryRecords")]
         public object GetFilteredSaleRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
         {
-            return GetWebResponse(input, new SaleRateHistoryManager().GetFilteredSaleRateHistoryRecords(input));
+            return GetWebResponse(input, new SaleRateHistoryManager().GetFilteredSaleRateHistoryRecords(input), "Sale Rate History");
         }
     }
 }

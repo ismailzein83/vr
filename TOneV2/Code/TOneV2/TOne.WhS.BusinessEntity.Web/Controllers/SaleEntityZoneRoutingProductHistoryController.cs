@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredSaleEntityZoneRoutingProductHistoryRecords")]
         public object GetFilteredSaleEntityZoneRoutingProductHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleEntityZoneRoutingProductHistoryQuery> input)
         {
-            return GetWebResponse(input, new SaleEntityZoneRoutingProductHistoryManager().GetFilteredSaleEntityZoneRoutingProductHistoryRecords(input));
+            return GetWebResponse(input, new SaleEntityZoneRoutingProductHistoryManager().GetFilteredSaleEntityZoneRoutingProductHistoryRecords(input), "Zone Routing Product");
         }
     }
 }

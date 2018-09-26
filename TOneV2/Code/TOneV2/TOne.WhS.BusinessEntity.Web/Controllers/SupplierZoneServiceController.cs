@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSupplierZoneServices(Vanrise.Entities.DataRetrievalInput<SupplierZoneServiceQuery> input)
         {
             SupplierZoneServiceManager manager = new SupplierZoneServiceManager();
-            return GetWebResponse(input, manager.GetFilteredSupplierZoneServices(input));
+            return GetWebResponse(input, manager.GetFilteredSupplierZoneServices(input), "Supplier Zone Services");
         }
 
         [HttpPost]

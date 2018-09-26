@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredCarrierAccounts(Vanrise.Entities.DataRetrievalInput<CarrierAccountQuery> input)
         {
             CarrierAccountManager manager = new CarrierAccountManager();
-            return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input));
+            return GetWebResponse(input, manager.GetFilteredCarrierAccounts(input), "Carrier Accounts");
         }
 
         [HttpGet]

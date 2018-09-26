@@ -22,21 +22,21 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSalePriceListRateChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredPricelistRateChanges(input));
+            return GetWebResponse(input, manager.GetFilteredPricelistRateChanges(input), "Sale PriceList Rate Changes");
         }
         [HttpPost]
         [Route("GetFilteredTemporarySalePriceLists")]
         public object GetFilteredTemporarySalePriceLists(Vanrise.Entities.DataRetrievalInput<TemporarySalePriceListQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredTemporarySalePriceLists(input));
+            return GetWebResponse(input, manager.GetFilteredTemporarySalePriceLists(input), "Temporary Sale Price Lists");
         }
         [HttpPost]
         [Route("GetFilteredCustomerRatePreviews")]
         public object GetFilteredCustomerRatePreviews(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredCustomerRatePreviews(input));
+            return GetWebResponse(input, manager.GetFilteredCustomerRatePreviews(input), "Customer Rate Previews");
         }
 
          [HttpPost]
@@ -44,7 +44,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RoutingProductPreviewQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredRoutingProductPreviews(input));
+            return GetWebResponse(input, manager.GetFilteredRoutingProductPreviews(input), "Routing Product Previews");
         }
         
         [HttpPost]
@@ -52,14 +52,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSalePriceListCodeChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredPricelistCodeChanges(input));
+            return GetWebResponse(input, manager.GetFilteredPricelistCodeChanges(input), "Sale PriceList Code Changes");
         }
         [HttpPost]
         [Route("GetSalePricelistCodes")]
         public object GetSalePricelistCodes(Vanrise.Entities.DataRetrievalInput<SalePriceListCodeQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredSalePricelistCodes(input));
+            return GetWebResponse(input, manager.GetFilteredSalePricelistCodes(input), "Sale Pricelist Codes");
         }
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSalePriceListRPChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return GetWebResponse(input, manager.GetFilteredSalePriceListRPChanges(input));
+            return GetWebResponse(input, manager.GetFilteredSalePriceListRPChanges(input), "Sale PriceList RP Changes");
         }
         [HttpGet]
         [Route("GetOwnerOptions")]

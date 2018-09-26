@@ -19,7 +19,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetFilteredSwapDealBuyRouteRules")]
         public object GetFilteredSwapDealBuyRouteRules(Vanrise.Entities.DataRetrievalInput<SwapDealBuyRouteRuleQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredSwapDealBuyRouteRules(input));
+            return GetWebResponse(input, _manager.GetFilteredSwapDealBuyRouteRules(input), "Swap Deal Buy Route Rules");
         }
 
         [HttpGet]

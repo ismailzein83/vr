@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredZoneServiceConfigs(Vanrise.Entities.DataRetrievalInput<ZoneServiceConfigQuery> input)
         {
             ZoneServiceConfigManager manager = new ZoneServiceConfigManager();
-            return GetWebResponse(input, manager.GetFilteredZoneServiceConfigs(input));
+            return GetWebResponse(input, manager.GetFilteredZoneServiceConfigs(input), "Zone Service Configurations");
         }
 
         [HttpGet]

@@ -16,7 +16,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
         public object GetRawCDRData(Vanrise.Entities.DataRetrievalInput<RawCDRInput> input)
         {
             RawCDRManager manager = new RawCDRManager();
-            return GetWebResponse(input, manager.GetRawCDRData(input));
+            return GetWebResponse(input, manager.GetRawCDRData(input), "Raw CDRs");
         }
         
     }

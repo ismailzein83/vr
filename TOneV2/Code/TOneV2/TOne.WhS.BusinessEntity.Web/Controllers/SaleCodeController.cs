@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSaleCodes(Vanrise.Entities.DataRetrievalInput<BaseSaleCodeQueryHandler> input)
         {
             SaleCodeManager manager = new SaleCodeManager();
-            return GetWebResponse(input, manager.GetFilteredSaleCodes(input));
+            return GetWebResponse(input, manager.GetFilteredSaleCodes(input), "Sale Codes");
         }
 
         [HttpPost]

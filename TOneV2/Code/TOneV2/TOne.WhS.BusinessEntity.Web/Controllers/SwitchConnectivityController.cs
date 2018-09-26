@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredSwitchConnectivities")]
         public object GetFilteredSwitchConnectivities(Vanrise.Entities.DataRetrievalInput<SwitchConnectivityQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredSwitchConnectivities(input));
+            return GetWebResponse(input, _manager.GetFilteredSwitchConnectivities(input), "Switch Connectivities");
         }
 
 

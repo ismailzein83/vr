@@ -16,7 +16,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
         public Object GetAllFilteredRepeatedNumbers(Vanrise.Entities.DataRetrievalInput<RepeatedNumberQuery> input)
         {
             RepeatedNumberManager manager = new RepeatedNumberManager();
-            return GetWebResponse(input, manager.GetAllFilteredRepeatedNumbers(input));
+            return GetWebResponse(input, manager.GetAllFilteredRepeatedNumbers(input), "Repeated Numbers");
         }
     }
 }

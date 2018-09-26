@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredCustomerSoldZones")]
         public object GetFilteredCustomerSoldZones(Vanrise.Entities.DataRetrievalInput<CustomerSoldZonesQuery> input)
         {
-            return GetWebResponse(input, new CustomerSoldZonesManager().GetFilteredCustomerSoldZones(input));
+            return GetWebResponse(input, new CustomerSoldZonesManager().GetFilteredCustomerSoldZones(input), "Customer Sold Zones");
         }
     }
 }

@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 		[Route("GetFilteredSwitches")]
 		public object GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
 		{
-			return GetWebResponse(input, _manager.GetFilteredSwitches(input));
+            return GetWebResponse(input, _manager.GetFilteredSwitches(input), "Switches");
 		}
 
 		[HttpGet]

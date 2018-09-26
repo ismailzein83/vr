@@ -16,7 +16,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         public object GetFilteredCountryPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             CountryPreviewManager manager = new CountryPreviewManager();
-            return GetWebResponse(input, manager.GetFilteredCountryPreview(input));
+            return GetWebResponse(input, manager.GetFilteredCountryPreview(input), "Country Preview");
         }
 
         [HttpPost]
@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         public object GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ZonePreviewManager manager = new ZonePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredZonePreview(input));
+            return GetWebResponse(input, manager.GetFilteredZonePreview(input), "Zone Preview");
         }
 
         [HttpPost]
@@ -32,7 +32,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         public object GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             CodePreviewManager manager = new CodePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredCodePreview(input));
+            return GetWebResponse(input, manager.GetFilteredCodePreview(input), "Code Preview");
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         public object GetFilteredRatesPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             RatePreviewManager manager = new RatePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredRatesPreview(input));
+            return GetWebResponse(input, manager.GetFilteredRatesPreview(input), "Rates Preview");
         }
 
         [HttpPost]
@@ -48,7 +48,7 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
         public object GetFilteredZonesRoutingProductsPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ZoneRoutingProductPreviewManager manager = new ZoneRoutingProductPreviewManager();
-            return GetWebResponse(input, manager.GetFilteredZonesRoutingProductsPreview(input));
+            return GetWebResponse(input, manager.GetFilteredZonesRoutingProductsPreview(input), "Zones Routing Products Preview");
         }
     }
 }

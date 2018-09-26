@@ -24,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredRoutingProducts")]
         public object GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredRoutingProducts(input));
+            return GetWebResponse(input, _manager.GetFilteredRoutingProducts(input), "Routing Products");
         }
 
         [HttpGet]

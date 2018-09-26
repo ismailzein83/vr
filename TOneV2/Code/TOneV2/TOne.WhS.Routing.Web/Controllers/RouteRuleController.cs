@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.Web.Controllers
         public object GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
         {
             RouteRuleManager manager = new RouteRuleManager();
-            return GetWebResponse(input, manager.GetFilteredRouteRules(input));
+            return GetWebResponse(input, manager.GetFilteredRouteRules(input), "Route Rules");
         }
 
         [HttpGet]

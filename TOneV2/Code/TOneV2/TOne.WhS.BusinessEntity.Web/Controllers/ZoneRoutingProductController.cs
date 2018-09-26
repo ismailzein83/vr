@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredZoneRoutingProducts(Vanrise.Entities.DataRetrievalInput<ZoneRoutingProductQuery> input)
         {
             ZoneRoutingProductManager manager = new ZoneRoutingProductManager();
-            return GetWebResponse(input, manager.GetFilteredZoneRoutingProducts(input));
+            return GetWebResponse(input, manager.GetFilteredZoneRoutingProducts(input), "Zone Routing Products");
         }
         [HttpGet]
         [Route("GetPrimarySaleEntity")]

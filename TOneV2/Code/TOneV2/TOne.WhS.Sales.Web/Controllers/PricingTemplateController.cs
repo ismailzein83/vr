@@ -17,7 +17,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("GetFilteredPricingTemplates")]
         public object GetFilteredPricingTemplates(DataRetrievalInput<PricingTemplateQuery> input)
         {
-            return GetWebResponse(input, manager.GetFilteredPricingTemplates(input));
+            return GetWebResponse(input, manager.GetFilteredPricingTemplates(input), "Pricing Templates");
         }
 
         [HttpGet]

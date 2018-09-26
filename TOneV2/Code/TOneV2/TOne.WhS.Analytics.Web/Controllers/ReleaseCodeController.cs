@@ -16,7 +16,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
         public Object GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
         {
             ReleaseCodeManager manager = new ReleaseCodeManager();
-            return GetWebResponse(input, manager.GetAllFilteredReleaseCodes(input));
+            return GetWebResponse(input, manager.GetAllFilteredReleaseCodes(input), "Release Codes");
 
         }
     }

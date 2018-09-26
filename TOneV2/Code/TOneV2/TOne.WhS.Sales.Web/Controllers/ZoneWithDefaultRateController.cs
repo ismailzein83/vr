@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredZones(Vanrise.Entities.DataRetrievalInput<ZoneWithDefaultRateQuery> input)
         {
             ZoneWithDefaultRateManager manager = new ZoneWithDefaultRateManager();
-            return GetWebResponse(input, manager.GetFilteredZones(input));
+            return GetWebResponse(input, manager.GetFilteredZones(input), "Zones With Default Rate");
         }
     }
 }

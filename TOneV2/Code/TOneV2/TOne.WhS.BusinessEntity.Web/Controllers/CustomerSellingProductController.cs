@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredCustomerSellingProducts(Vanrise.Entities.DataRetrievalInput<CustomerSellingProductQuery> input)
         {
             CustomerSellingProductManager manager = new CustomerSellingProductManager();
-            return GetWebResponse(input, manager.GetFilteredCustomerSellingProducts(input));
+            return GetWebResponse(input, manager.GetFilteredCustomerSellingProducts(input), "Customer Selling Products");
         }
 
         [HttpGet]

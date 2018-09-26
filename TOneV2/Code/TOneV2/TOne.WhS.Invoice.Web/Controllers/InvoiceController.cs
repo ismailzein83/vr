@@ -26,7 +26,7 @@ namespace TOne.WhS.Invoice.Web.Controllers
                 InvoiceManager manager = new InvoiceManager();
                 if (!manager.DoesUserUserHaveCompareInvoiceAccess(input.Query.InvoiceTypeId))
                     return GetUnauthorizedResponse();
-                return GetWebResponse(input, manager.CompareInvoices(input));
+                return GetWebResponse(input, manager.CompareInvoices(input), "Compare Invoices");
             }
             catch (Exception ex)
             {

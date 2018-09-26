@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredRatePreviews(Vanrise.Entities.DataRetrievalInput<BaseOtherRatesPreviewQueryHandler> input)
         {
             OtherRatesPreviewManager manager = new OtherRatesPreviewManager();
-            return GetWebResponse(input, manager.GetFilteredRatesPreview(input));
+            return GetWebResponse(input, manager.GetFilteredRatesPreview(input), "Other Rates");
         }
 
     }

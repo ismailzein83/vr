@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("GetFilteredANumberSupplierCodes")]
         public object GetFilteredANumberSupplierCodes(Vanrise.Entities.DataRetrievalInput<ANumberSupplierCodeQuery> input)
         {
-            return GetWebResponse(input, new ANumberSupplierCodeManager().GetFilteredANumberSupplierCodes(input));
+            return GetWebResponse(input, new ANumberSupplierCodeManager().GetFilteredANumberSupplierCodes(input), "ANumber Supplier Codes");
         }
         [HttpGet]
         [Route("GetUploadedSupplierCodes")]

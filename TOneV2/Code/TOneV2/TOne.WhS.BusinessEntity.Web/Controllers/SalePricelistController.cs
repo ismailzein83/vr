@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSalePriceLists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
             SalePriceListManager manager = new SalePriceListManager();
-            return GetWebResponse(input, manager.GetFilteredPricelists(input));
+            return GetWebResponse(input, manager.GetFilteredPricelists(input), "Sale PriceLists");
         }
 
         [HttpPost]

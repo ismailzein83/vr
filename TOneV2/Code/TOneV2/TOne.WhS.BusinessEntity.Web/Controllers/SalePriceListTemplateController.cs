@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSalePriceListTemplates(Vanrise.Entities.DataRetrievalInput<SalePriceListTemplateQuery> input)
         {
             var manager = new SalePriceListTemplateManager();
-            return GetWebResponse(input, manager.GetFilteredSalePriceListTemplates(input));
+            return GetWebResponse(input, manager.GetFilteredSalePriceListTemplates(input), "Sale PriceList Templates");
         }
 
         [HttpGet]

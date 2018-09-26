@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSaleEntityZoneServices(Vanrise.Entities.DataRetrievalInput<SaleEntityZoneServiceQuery> input)
         {
             SaleEntityServiceManager manager = new SaleEntityServiceManager();
-            return GetWebResponse(input, manager.GetFilteredSaleEntityZoneServices(input));
+            return GetWebResponse(input, manager.GetFilteredSaleEntityZoneServices(input), "Zone Services");
         }
     }
 

@@ -22,7 +22,7 @@ namespace TOne.WhS.Sales.Web.Controllers
         public object GetFilteredSellingRules(Vanrise.Entities.DataRetrievalInput<SellingRuleQuery> input)
         {
             SellingRuleManager manager = new SellingRuleManager();
-            return GetWebResponse(input, manager.GetFilteredSellingRules(input));
+            return GetWebResponse(input, manager.GetFilteredSellingRules(input), "Selling Rules");
         }
 
         [HttpGet]

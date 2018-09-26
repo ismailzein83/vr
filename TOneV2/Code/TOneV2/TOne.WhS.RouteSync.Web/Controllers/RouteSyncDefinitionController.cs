@@ -19,7 +19,7 @@ namespace TOne.WhS.RouteSync.Web.Controllers
         [Route("GetFilteredRouteSyncDefinitions")]
         public object GetFilteredRouteSyncDefinitions(Vanrise.Entities.DataRetrievalInput<RouteSyncDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredRouteSyncDefinitions(input));
+            return GetWebResponse(input, _manager.GetFilteredRouteSyncDefinitions(input), "RouteSync Definitions");
         }
 
         [HttpGet]

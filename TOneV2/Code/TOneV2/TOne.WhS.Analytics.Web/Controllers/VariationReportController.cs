@@ -22,7 +22,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
         {
             if (!_manager.DoesUserHaveVariationReportViewAccess(input.Query.ReportType))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredVariationReportRecords(input));
+            return GetWebResponse(input, _manager.GetFilteredVariationReportRecords(input), "Variation Report");
         }
     }
 }

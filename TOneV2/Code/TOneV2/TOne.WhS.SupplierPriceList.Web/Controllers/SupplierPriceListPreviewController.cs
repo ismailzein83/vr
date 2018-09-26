@@ -25,7 +25,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
        public object GetFilteredCountryPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
        {
            SupplierCountryPreviewManager manager = new SupplierCountryPreviewManager();
-           return GetWebResponse(input, manager.GetFilteredCountryPreview(input));
+           return GetWebResponse(input, manager.GetFilteredCountryPreview(input), "Supplier Country Preview");
        }
 
        [HttpPost]
@@ -33,7 +33,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
        public object GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
        {
            SupplierZonePreviewManager manager = new SupplierZonePreviewManager();
-           return GetWebResponse(input, manager.GetFilteredZonePreview(input));
+           return GetWebResponse(input, manager.GetFilteredZonePreview(input),"Supplier Zone Preview");
        }
 
        [HttpPost]
@@ -41,7 +41,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
        public object GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
        {
            SupplierCodePreviewManager manager = new SupplierCodePreviewManager();
-           return GetWebResponse(input, manager.GetFilteredCodePreview(input));
+           return GetWebResponse(input, manager.GetFilteredCodePreview(input),"Supplier Code Preview");
        }
 
        [HttpPost]
@@ -49,7 +49,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
        public object GetFilteredOtherRatePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
        {
            SupplierOtherRatesPreviewManager manager = new SupplierOtherRatesPreviewManager();
-           return GetWebResponse(input, manager.GetFilteredOtherRatesPreview(input));
+           return GetWebResponse(input, manager.GetFilteredOtherRatesPreview(input),"Supplier Code Preview");
        }
 
        [HttpPost]
@@ -57,7 +57,7 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
        public object GetFilteredZoneServicesPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
        {
            SupplierZonesServicesPreviewManager manager = new SupplierZonesServicesPreviewManager();
-          return GetWebResponse(input, manager.GetFilteredZoneServicesPreview(input));
+           return GetWebResponse(input, manager.GetFilteredZoneServicesPreview(input), "Supplier Zone Services Preview");
        }
 
        [HttpGet]

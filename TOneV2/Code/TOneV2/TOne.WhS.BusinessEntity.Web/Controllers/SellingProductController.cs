@@ -19,7 +19,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public object GetFilteredSellingProducts(Vanrise.Entities.DataRetrievalInput<SellingProductQuery> input)
         {
             SellingProductManager manager = new SellingProductManager();
-            return GetWebResponse(input, manager.GetFilteredSellingProducts(input));
+            return GetWebResponse(input, manager.GetFilteredSellingProducts(input), "Selling Products");
         }
 
         [HttpGet]

@@ -16,7 +16,7 @@ namespace TOne.WhS.Analytics.Web.Controllers
         public object GetCDRLogData(Vanrise.Entities.DataRetrievalInput<CDRLogInput> input)
         {
              CDRManager __cdrManager = new CDRManager();
-             return GetWebResponse(input, __cdrManager.GetCDRLogData(input));
+             return GetWebResponse(input, __cdrManager.GetCDRLogData(input), "CDR Logs");
           
         }
     }
