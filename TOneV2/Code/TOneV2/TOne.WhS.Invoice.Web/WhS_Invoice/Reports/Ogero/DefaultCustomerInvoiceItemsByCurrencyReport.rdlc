@@ -566,7 +566,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value))</Value>
+                              <Value>=FormatNumber(Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value),Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
