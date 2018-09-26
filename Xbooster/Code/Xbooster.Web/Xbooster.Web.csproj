@@ -189,6 +189,10 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.BP.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.BP.Arguments.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
@@ -221,6 +225,10 @@
     </Reference>
     <Reference Include="Vanrise.ExcelConversion.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Arguments.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
