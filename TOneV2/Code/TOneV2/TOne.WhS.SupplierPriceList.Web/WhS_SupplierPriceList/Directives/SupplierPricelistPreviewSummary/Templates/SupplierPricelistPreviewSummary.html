@@ -1,7 +1,7 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
         <vr-section header="General Info">
-            <div style="height:223px">
+            <div style="height:205px">
                 <vr-row>
                     <vr-columns width="fullrow">
                         <div style="height:50px">
@@ -10,27 +10,39 @@
                         </div>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <div style="height:40px">
+                        <div style="height:30px">
                             <vr-label>Supplier Name: </vr-label>
                             <vr-label isvalue breakline>{{scopeModel.supplierName}}</vr-label>
                         </div>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <div style="height:40px">
+                        <div style="height:30px">
                             <vr-label>Pricelist Type: </vr-label>
                             <vr-label isvalue>{{scopeModel.supplierPricelistType}}</vr-label>
                         </div>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <div style="height:40px">
+                        <div style="height:30px">
                             <vr-label>Pricelist Date: </vr-label>
                             <vr-label isvalue>{{scopeModel.pricelistDate}}</vr-label>
                         </div>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <div style="height:37px">
+                        <div style="height:30px">
                             <vr-label>Currency: </vr-label>
                             <vr-label isvalue>{{scopeModel.currencySymbol}}</vr-label>
+                        </div>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <div style="height:30px">
+                            <vr-label>Zones&Rates Imported: </vr-label>
+                            <vr-label isvalue>{{scopeModel.NumberOfImportedCodes}}</vr-label>
+                        </div>
+                    </vr-columns>
+                    <vr-columns width="1/2row">
+                        <div style="height:30px">
+                            <vr-label>Codes Imported: </vr-label>
+                            <vr-label isvalue>{{scopeModel.NumberOfImportedZoneRates}}</vr-label>
                         </div>
                     </vr-columns>
                 </vr-row>

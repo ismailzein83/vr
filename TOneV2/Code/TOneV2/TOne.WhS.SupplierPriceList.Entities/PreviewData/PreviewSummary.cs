@@ -8,6 +8,8 @@ namespace TOne.WhS.SupplierPriceList.Entities
 {
     public class PreviewSummary
     {
+        public int NumberOfImportedCodes { get; set; }
+        public int NumberOfImportedZoneRates { get; set; }
         public int NumberOfNewRates { get; set; }
         public int NumberOfIncreasedRates { get; set; }
         public int NumberOfDecreasedRates { get; set; }

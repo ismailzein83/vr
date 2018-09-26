@@ -15,7 +15,5 @@ namespace TOne.WhS.SupplierPriceList.BP.Arguments.Tasks
         public DateTime PricelistDate { get; set; }
         public SupplierPricelistType SupplierPricelistType { get; set; }
         public int SupplierId { get; set; }
-        public int ImportedZoneCount { get; set; }
-        public int ImportedCodeCount { get; set; }
     }
 }
