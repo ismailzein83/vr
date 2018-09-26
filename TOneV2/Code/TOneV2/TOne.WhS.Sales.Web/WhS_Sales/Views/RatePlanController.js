@@ -62,13 +62,14 @@
 			$scope.showCarrierAccountSelector = false;
 			//  $scope.showBulkActionButton = false;
 			/* ***** */
+			$scope.ownerDetailsLoaded = false;
 
 			$scope.onOwnerTypeSelectorReady = function (api) {
 				ownerTypeSelectorAPI = api;
 				ownerTypeSelectorReadyDeferred.resolve();
 			};
 			$scope.onOwnerTypeChanged = function (selectedOwnerType) {
-
+				$scope.ownerDetailsLoaded = false;
 				releaseSession();
 				clearOwnerInfo();
 				resetRatePlan();
@@ -102,6 +103,7 @@
 				sellingProductSelectorReadyDeferred.resolve();
 			};
 			$scope.onSellingProductChanged = function (selectedSellingProduct) {
+				$scope.ownerDetailsLoaded = false;
 				releaseSession();
 				resetRatePlan();
 				showActionButtons(false);
@@ -133,6 +135,7 @@
 						var targetId = WhS_BE_ExclusiveSessionTargetIdPrefixEnum.SellingProduct.value + selectedSellingProduct.SellingProductId;
 						tryTakeSession(targetId).then(function (response) {
 							if (response.IsSucceeded) {
+								$scope.ownerDetailsLoaded = true;
 								getSellingProductCurrencyId(selectedSellingProduct.SellingProductId).then(function () { getSellingProductCurrencyIdDeferred.resolve(); }).catch(function (error) { getSellingProductCurrencyIdDeferred.reject(error); });
 								loadOwnerInfo().then(function () { loadOwnerInfoDeferred.resolve(); }).catch(function (error) { loadOwnerInfoDeferred.reject(error); });
 								getOwnerPricingSettings().then(function () { loadOwnerPricingSettingsDeferred.resolve(); }).catch(function (error) { loadOwnerPricingSettingsDeferred.reject(error); });
@@ -161,6 +164,7 @@
 				carrierAccountSelectorReadyDeferred.resolve();
 			};
 			$scope.onCarrierAccountChanged = function (selectedCustomer) {
+				$scope.ownerDetailsLoaded = false;
 				releaseSession();
 				resetRatePlan();
 				showActionButtons(false);
@@ -190,6 +194,7 @@
 						var targetId = WhS_BE_ExclusiveSessionTargetIdPrefixEnum.Customer.value + selectedCustomerId;
 						tryTakeSession(targetId).then(function (response) {
 							if (response.IsSucceeded) {
+								$scope.ownerDetailsLoaded = true;
 								doRunningProcessesExistDeferred.resolve();
 								onCustomerChanged(selectedCustomerId).then(function () { onCustomerChangedDeferred.resolve(); }).catch(function (error) { onCustomerChangedDeferred.reject(error); });
 							}
@@ -1490,7 +1495,7 @@
 			return entityIdPromiseDeferred.promise;
 		}
 		function hasRunningProcessesForCustomerOrSellingProduct(entityIds, ownerId, ownerType) {
-
+			console.log("hasRunningProcessesForCustomerOrSellingProduct function");
 			var editorMessage;
 
 			if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {

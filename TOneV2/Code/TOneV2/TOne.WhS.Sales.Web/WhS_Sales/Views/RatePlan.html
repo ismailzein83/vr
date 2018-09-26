@@ -1,132 +1,132 @@
 ﻿<vr-panel ng-controller="WhS_Sales_RatePlanController">
-    <vr-form validationcontext="FilterGroup">
+	<vr-form validationcontext="FilterGroup">
 
-        <div vr-loader="isLoadingFilterSection" ng-hide="filterSectionCollapsed">
-            <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-choices-filter selectedindex="selectedChoiceindex">
-                        <vr-choice-filter isselected="isSettingsSelected">Settings</vr-choice-filter>
-                        <!--<vr-choice-filter isselected="isZoneFilterSelected">Zone Filter</vr-choice-filter>-->
-                        <vr-choice-filter isselected="isInfoSelected">Info</vr-choice-filter>
-                    </vr-choices-filter>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-validation-group validationcontext="LoadGroup">
-                    <vr-validation-group validationcontext="OwnerGroup">
-                        <span ng-show="isSettingsSelected">
-                            <vr-whs-sales-ownertype-selector on-ready="onOwnerTypeSelectorReady"
-                                                             onselectionchanged="onOwnerTypeChanged"
-                                                             normal-col-num="2"
-                                                             isrequired="true"
-                                                             hideremoveicon="true">
-                            </vr-whs-sales-ownertype-selector>
-                        </span>
+		<div vr-loader="isLoadingFilterSection" ng-hide="filterSectionCollapsed">
+			<vr-row removeline>
+				<vr-columns width="fullrow">
+					<vr-choices-filter selectedindex="selectedChoiceindex">
+						<vr-choice-filter isselected="isSettingsSelected">Settings</vr-choice-filter>
+						<!--<vr-choice-filter isselected="isZoneFilterSelected">Zone Filter</vr-choice-filter>-->
+						<vr-choice-filter isselected="isInfoSelected">Info</vr-choice-filter>
+					</vr-choices-filter>
+				</vr-columns>
+			</vr-row>
+			<vr-row>
+				<vr-validation-group validationcontext="LoadGroup">
+					<vr-validation-group validationcontext="OwnerGroup">
+						<span ng-show="isSettingsSelected">
+							<vr-whs-sales-ownertype-selector on-ready="onOwnerTypeSelectorReady"
+															 onselectionchanged="onOwnerTypeChanged"
+															 normal-col-num="2"
+															 isrequired="true"
+															 hideremoveicon="true">
+							</vr-whs-sales-ownertype-selector>
+						</span>
 
-                        <span ng-show="isSettingsSelected && showSellingProductSelector">
-                            <vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
-                                                               selectedvalues="selectedSellingProduct"
-                                                               onselectionchanged="onSellingProductChanged"
-                                                               isrequired="showSellingProductSelector"
-                                                               normal-col-num="2"
-                                                               hideremoveicon>
-                            </vr-whs-be-sellingproduct-selector>
-                        </span>
+						<span ng-show="isSettingsSelected && showSellingProductSelector">
+							<vr-whs-be-sellingproduct-selector on-ready="onSellingProductSelectorReady"
+															   selectedvalues="selectedSellingProduct"
+															   onselectionchanged="onSellingProductChanged"
+															   isrequired="showSellingProductSelector"
+															   normal-col-num="2"
+															   hideremoveicon>
+							</vr-whs-be-sellingproduct-selector>
+						</span>
 
-                        <span ng-show="isSettingsSelected && showCarrierAccountSelector">
-                            <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
-                                                               getcustomers
-                                                               selectedvalues="selectedCustomer"
-                                                               onselectionchanged="onCarrierAccountChanged"
-                                                               isrequired="showCarrierAccountSelector"
-                                                               normal-col-num="2"
-                                                               hideremoveicon>
-                            </vr-whs-be-carrieraccount-selector>
-                        </span>
-                    </vr-validation-group>
+						<span ng-show="isSettingsSelected && showCarrierAccountSelector">
+							<vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+															   getcustomers
+															   selectedvalues="selectedCustomer"
+															   onselectionchanged="onCarrierAccountChanged"
+															   isrequired="showCarrierAccountSelector"
+															   normal-col-num="2"
+															   hideremoveicon>
+							</vr-whs-be-carrieraccount-selector>
+						</span>
+					</vr-validation-group>
 
-                    <span ng-show="isSettingsSelected">
-                        <vr-common-currency-selector on-ready="onCurrencySelectorReady"
-                                                     selectedvalues="currencySymbol"
-                                                     normal-col-num="2"
-                                                     onselectitem="onCurrencyChanged"
-                                                     vr-disabled="!showCarrierAccountSelector"
-                                                     isrequired="false">
-                        </vr-common-currency-selector>
-                    </span>
-                    <vr-columns colnum="2" ng-show="isSettingsSelected">
-                        <vr-whs-routing-routingdatabase-selector on-ready="onDatabaseSelectorReady"
-                                                                 getroutingproductroutes
-                                                                 onselectionchanged="onRoutingDatabaseChanged"
-                                                                 isrequired
-                                                                 hideremoveicon>
-                        </vr-whs-routing-routingdatabase-selector>
-                    </vr-columns>
+					<span ng-show="isSettingsSelected">
+						<vr-common-currency-selector on-ready="onCurrencySelectorReady"
+													 selectedvalues="currencySymbol"
+													 normal-col-num="2"
+													 onselectitem="onCurrencyChanged"
+													 vr-disabled="!showCarrierAccountSelector"
+													 isrequired="false">
+						</vr-common-currency-selector>
+					</span>
+					<vr-columns colnum="2" ng-show="isSettingsSelected">
+						<vr-whs-routing-routingdatabase-selector on-ready="onDatabaseSelectorReady"
+																 getroutingproductroutes
+																 onselectionchanged="onRoutingDatabaseChanged"
+																 isrequired
+																 hideremoveicon>
+						</vr-whs-routing-routingdatabase-selector>
+					</vr-columns>
 
-                    <vr-columns colnum="2" ng-show="isSettingsSelected">
-                        <vr-whs-routing-rproutepolicy-selector on-ready="onPolicySelectorReady" isrequired></vr-whs-routing-rproutepolicy-selector>
-                    </vr-columns>
+					<vr-columns colnum="2" ng-show="isSettingsSelected">
+						<vr-whs-routing-rproutepolicy-selector on-ready="onPolicySelectorReady" isrequired></vr-whs-routing-rproutepolicy-selector>
+					</vr-columns>
 
-                    <vr-columns colnum="2" ng-show="isSettingsSelected">
-                        <vr-textbox type="number" label="Number of Options" value="numberOfOptions" minvalue="1" isrequired></vr-textbox>
-                    </vr-columns>
+					<vr-columns colnum="2" ng-show="isSettingsSelected">
+						<vr-textbox type="number" label="Number of Options" value="numberOfOptions" minvalue="1" isrequired></vr-textbox>
+					</vr-columns>
 
-                    <span ng-show="isZoneFilterSelected">
-                        <vr-common-country-selector on-ready="onCountrySelectorReady" normal-col-num="2" ismultipleselection="true"></vr-common-country-selector>
-                    </span>
+					<span ng-show="isZoneFilterSelected">
+						<vr-common-country-selector on-ready="onCountrySelectorReady" normal-col-num="2" ismultipleselection="true"></vr-common-country-selector>
+					</span>
 
-                    <span ng-show="isZoneFilterSelected">
-                        <vr-common-filter-text on-ready="onTextFilterReady" label="Zone Name" normal-col-num="2"></vr-common-filter-text>
-                    </span>
+					<span ng-show="isZoneFilterSelected">
+						<vr-common-filter-text on-ready="onTextFilterReady" label="Zone Name" normal-col-num="2"></vr-common-filter-text>
+					</span>
 
-                    <span ng-show="isInfoSelected">
-                        <vr-columns colnum="4" ng-show="assignedToSellingProductName != undefined">
-                            <vr-label>Selling Product:</vr-label>
-                            <vr-label isvalue>{{assignedToSellingProductName}} ({{assignedToSellingProductCurrencySymbol}})</vr-label>
-                        </vr-columns>
-                    </span>
-                    <span ng-show="isInfoSelected">
-                        <vr-columns colnum="4" ng-show="currentDefaultRoutingProductName != undefined">
-                            <vr-label>Current Default Routing Product:</vr-label>
-                            <vr-label isvalue>{{currentDefaultRoutingProductName}}</vr-label>
-                        </vr-columns>
-                    </span>
+					<span ng-show="isInfoSelected">
+						<vr-columns colnum="4" ng-show="assignedToSellingProductName != undefined">
+							<vr-label>Selling Product:</vr-label>
+							<vr-label isvalue>{{assignedToSellingProductName}} ({{assignedToSellingProductCurrencySymbol}})</vr-label>
+						</vr-columns>
+					</span>
+					<span ng-show="isInfoSelected">
+						<vr-columns colnum="4" ng-show="currentDefaultRoutingProductName != undefined">
+							<vr-label>Current Default Routing Product:</vr-label>
+							<vr-label isvalue>{{currentDefaultRoutingProductName}}</vr-label>
+						</vr-columns>
+					</span>
 
-                    <span ng-show="isInfoSelected">
-                        <vr-columns colnum="4" ng-show="newDefaultRoutingProductName != undefined">
-                            <vr-label>New Default Routing Product:</vr-label>
-                            <vr-label isvalue>{{newDefaultRoutingProductName}}</vr-label>
-                        </vr-columns>
-                    </span>
+					<span ng-show="isInfoSelected">
+						<vr-columns colnum="4" ng-show="newDefaultRoutingProductName != undefined">
+							<vr-label>New Default Routing Product:</vr-label>
+							<vr-label isvalue>{{newDefaultRoutingProductName}}</vr-label>
+						</vr-columns>
+					</span>
 
-                    <span ng-show="isInfoSelected">
-                        <vr-columns colnum="4" ng-show="resetToDefaultRoutingProductName != undefined">
-                            <vr-label>Reset to Default Routing Product:</vr-label>
-                            <vr-label isvalue>{{resetToDefaultRoutingProductName}}</vr-label>
-                        </vr-columns>
-                    </span>
-                </vr-validation-group>
-            </vr-row>
-        </div>
+					<span ng-show="isInfoSelected">
+						<vr-columns colnum="4" ng-show="resetToDefaultRoutingProductName != undefined">
+							<vr-label>Reset to Default Routing Product:</vr-label>
+							<vr-label isvalue>{{resetToDefaultRoutingProductName}}</vr-label>
+						</vr-columns>
+					</span>
+				</vr-validation-group>
+			</vr-row>
+		</div>
 
-        <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
-                    <vr-button type="Load" validationcontext="LoadGroup" data-onclick="load" ></vr-button>
-                    <vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton" showbutton="showSettingsButton"></vr-button>
-                    <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" ng-show="showBulkActionButton" showbutton="false"></vr-button>
-                    <vr-button type="ManageCountries" validationcontext="OwnerGroup" ng-show="showCarrierAccountSelector" data-onclick="manageCountries" showbutton="showCarrierAccountSelector"></vr-button>
-                    <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="sellingProductApplyButtonMenuActions" ng-show="showSaveButton&&showSaveButtonForSellingProduct" showbutton="showSaveButton&&showSaveButtonForSellingProduct"></vr-button>
-                    <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="customerApplyButtonMenuActions" ng-show="showSaveButton&&showSaveButtonForCustomer" showbutton="showSaveButton&&showSaveButtonForCustomer"></vr-button>
-                    <vr-button type="CancelChanges" ng-show="showCancelButton" data-onclick="deleteDraft" showbutton="showCancelButton"></vr-button>
-                </div>
-            </vr-actionbar>
-        </vr-row>
+		<vr-row removeline>
+			<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+				<div transclude-to="buttons">
+					<vr-button type="Load" vr-disabled="!ownerDetailsLoaded" validationcontext="LoadGroup" data-onclick="load"></vr-button>
+					<vr-button type="Settings" ng-show="showSettingsButton" data-onclick="editSettings" showbutton="showSettingsButton"></vr-button>
+					<vr-button type="BulkActions" ng-show="showBulkActionButton" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" showbutton="false"></vr-button>
+					<vr-button type="ManageCountries" vr-disabled="!ownerDetailsLoaded" ng-show="showCarrierAccountSelector" validationcontext="OwnerGroup" data-onclick="manageCountries" showbutton="showCarrierAccountSelector"></vr-button>
+					<vr-button type="Apply" ng-show="showSaveButton&&showSaveButtonForSellingProduct" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="sellingProductApplyButtonMenuActions" showbutton="showSaveButton&&showSaveButtonForSellingProduct"></vr-button>
+					<vr-button type="Apply" ng-show="showSaveButton&&showSaveButtonForCustomer" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="customerApplyButtonMenuActions" showbutton="showSaveButton&&showSaveButtonForCustomer"></vr-button>
+					<vr-button type="CancelChanges" ng-show="showCancelButton" data-onclick="deleteDraft" showbutton="showCancelButton"></vr-button>
+				</div>
+			</vr-actionbar>
+		</vr-row>
 
-        <div vr-loader="isLoading">
-            <div ng-show="showGrid">
-                <vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
-            </div>
-        </div>
-    </vr-form>
+		<div vr-loader="isLoading">
+			<div ng-show="showGrid">
+				<vr-whs-sales-rateplan-grid on-ready="onGridReady"></vr-whs-sales-rateplan-grid>
+			</div>
+		</div>
+	</vr-form>
 </vr-panel>
