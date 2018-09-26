@@ -340,7 +340,7 @@ namespace TOne.WhS.Invoice.Business
           //  dimensions.Add(invoiceActionSettings.ToDateDimensionId);
             dimensions.Add(invoiceActionSettings.CurrencyDimensionId);
 
-           // dimensions.Add(invoiceActionSettings.RateDimensionId);
+            dimensions.Add(invoiceActionSettings.RateDimensionId);
 
             List<Guid> measures = new List<Guid>();
             measures.Add(invoiceActionSettings.AmountMeasureId);
@@ -390,8 +390,8 @@ namespace TOne.WhS.Invoice.Business
                     ComparisonKey comparisonKey = new ComparisonKey
                     {
                         Destination = invoiceComparisonResult.Destination,
-                        From = invoiceComparisonResult.From.Date,
-                        To = invoiceComparisonResult.To.Date,
+                        From = invoiceComparisonResult.From,
+                        To = invoiceComparisonResult.To,
                     };
                    
                     InvoiceItemToCompare invoiceItemToCompare;
