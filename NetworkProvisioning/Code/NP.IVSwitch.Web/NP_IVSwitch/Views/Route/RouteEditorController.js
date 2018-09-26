@@ -84,12 +84,18 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.codecprofileid = SelectedItem.CodecProfileId;
                 }
+                else {
+                    $scope.scopeModel.codecprofileid = undefined;
+                }
             };
 
             $scope.scopeModel.onSelectionTranslationRuleChanged = function (SelectedItem) {
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
+                }
+                else {
+                    $scope.scopeModel.translationruleid = undefined;
                 }
             };
 
@@ -273,11 +279,11 @@
                     Host: $scope.scopeModel.host,
                     Port: $scope.scopeModel.port,
                     ConnectionTimeOut: $scope.scopeModel.connectiontimeout,
-                    CurrentState: $scope.scopeModel.currentstate.value,
+                    CurrentState: $scope.scopeModel.currentstate!=undefined ? $scope.scopeModel.currentstate.value : undefined,
                     CodecProfileId: $scope.scopeModel.codecprofileid,
                     TransRuleId: $scope.scopeModel.translationruleid,
                     WakeUpTime: $scope.scopeModel.wakeuptime,
-                    TransportModeId: $scope.scopeModel.transportmodeid.value,
+                    TransportModeId: $scope.scopeModel.transportmodeid!=undefined ? $scope.scopeModel.transportmodeid.value : undefined,
                     Percentage: $scope.scopeModel.percentage
                 },
 
