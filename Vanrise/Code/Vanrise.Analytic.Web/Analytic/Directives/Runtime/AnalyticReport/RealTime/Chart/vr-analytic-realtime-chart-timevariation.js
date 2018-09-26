@@ -145,7 +145,7 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     Filters: payLoad.DimensionFilters,
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
-                    //ToTime: toTime,
+                    ToTime: toTime,
                     LastHours: lastHours,
                     TableId: payLoad.TableId,
                     TimeGroupingUnit: payLoad.TimeGroupingUnit,
