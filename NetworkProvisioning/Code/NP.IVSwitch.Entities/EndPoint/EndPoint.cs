@@ -28,7 +28,7 @@ namespace NP.IVSwitch.Entities
         public String TechPrefix { get; set; }
         public int AccountId { get; set; }
         public String Description { get; set; }
-        public int TransRuleId { get; set; }
+        public int? TransRuleId { get; set; }
         public State CurrentState { get; set; }
         public int ChannelsLimit { get; set; }
         public int ChannelsActive { get; set; }
@@ -44,5 +44,6 @@ namespace NP.IVSwitch.Entities
         public String SipPassword { get; set; }  //SIP 
 
         //   svc_handler_id smallint, ??
+        public bool RouteTableBasedRule { get; set; }
     }
 }

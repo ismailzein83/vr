@@ -59,7 +59,8 @@ namespace NP.IVSwitch.Data.Postgres
                cmd.Parameters.AddWithValue("@description", endPoint.Description);
                cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
-               cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
+               int transRuleId = endPoint.RouteTableBasedRule ? -2 : 0;
+               cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId.HasValue ? endPoint.TransRuleId.Value : transRuleId);
                cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
                cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
@@ -134,11 +135,12 @@ namespace NP.IVSwitch.Data.Postgres
                                      max_call_dura=@max_call_dura,rtp_mode=@rtp_mode,domain_id=@domain_id, tech_prefix= @tech_prefix
                                    WHERE  user_id = @user_id  ";
 
+            int transRuleId = endPoint.RouteTableBasedRule ? -2 : 0;
             int recordsEffected1 = ExecuteNonQueryText(cmdText1, cmd =>
             {
                 cmd.Parameters.AddWithValue("@user_id", endPoint.EndPointId);
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
-                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
+                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId.HasValue ? endPoint.TransRuleId.Value : transRuleId);
                 cmd.Parameters.AddWithValue("@state_id", 1);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
@@ -160,7 +162,7 @@ namespace NP.IVSwitch.Data.Postgres
                 , endPoint.Description
                 , endPoint.LogAlias
                 , endPoint.CodecProfileId
-                , endPoint.TransRuleId
+                , endPoint.TransRuleId.HasValue ? endPoint.TransRuleId.Value : transRuleId
                 , (int)endPoint.CurrentState
                 , endPoint.ChannelsLimit
                 , endPoint.MaxCallDuration
@@ -269,7 +271,8 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@group_id", groupId);
                 cmd.Parameters.AddWithValue("@log_alias", endPoint.LogAlias);
                 cmd.Parameters.AddWithValue("@codec_profile_id", endPoint.CodecProfileId);
-                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
+                int transRuleId = endPoint.RouteTableBasedRule ? -2 : 0;
+                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId.HasValue ? endPoint.TransRuleId.Value : transRuleId);
                 cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
@@ -305,7 +308,8 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@account_id", endPoint.AccountId);
                 cmd.Parameters.AddWithValue("@group_id", groupId);
-                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId);
+                int transRuleId = endPoint.RouteTableBasedRule ? -2 : 0;
+                cmd.Parameters.AddWithValue("@trans_rule_id", endPoint.TransRuleId.HasValue ? endPoint.TransRuleId.Value : transRuleId);
                 cmd.Parameters.AddWithValue("@state_id", (int)endPoint.CurrentState);
                 cmd.Parameters.AddWithValue("@channels_limit", endPoint.ChannelsLimit);
                 cmd.Parameters.AddWithValue("@max_call_dura", endPoint.MaxCallDuration);
@@ -320,6 +324,7 @@ namespace NP.IVSwitch.Data.Postgres
         }
         private bool InsertAcl(int endPointId, EndPoint endPoint, int groupId, AccessList accessList)
         {
+            int transRuleId = endPoint.RouteTableBasedRule ? -2 : 0;
             string queries =
                 string.Format(@"
                                 INSERT INTO access_list(
@@ -329,7 +334,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 , codec_profile_id, group_id, max_call_dura, rtp_mode)
 	                            VALUES ('{0}', {1}, '{2}', {3}, {4}, '{5}',{6}, {7}, {8}, '{9}', {10}, {11}, {12}, {13}, {14}, {15});"
                     , endPoint.Host, (int)endPoint.DomainId, endPoint.TechPrefix ?? ".", endPointId, endPoint.AccountId,
-                    endPoint.Description, endPoint.TransRuleId
+                    endPoint.Description, endPoint.TransRuleId.HasValue ? endPoint.TransRuleId.Value : transRuleId
                     , (int)endPoint.CurrentState, endPoint.ChannelsLimit, endPoint.LogAlias, accessList.TariffId,
                     accessList.RouteTableId, endPoint.CodecProfileId, groupId, endPoint.MaxCallDuration
                     , (int)endPoint.RtpMode);
@@ -464,6 +469,7 @@ namespace NP.IVSwitch.Data.Postgres
                 SipLogin = reader["sip_login"] as string,
                 SipPassword = reader["sip_password"] as string,
                 TechPrefix = reader["tech_prefix"] as string,
+                RouteTableBasedRule = (int)reader["trans_rule_id"]==-2
             };
             ;
             NpgsqlDataReader npgsqlreader = (NpgsqlDataReader)reader;

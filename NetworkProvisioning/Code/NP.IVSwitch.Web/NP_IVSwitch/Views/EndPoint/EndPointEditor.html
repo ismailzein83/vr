@@ -14,11 +14,16 @@
                     <vr-columns width="1/2row">
                         <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired maxlength="20"></vr-textbox>
                     </vr-columns>
-
                     <np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
                                                        normal-col-num="6"></np-ivswitch-codecprofile-selector>
-                    <np-ivswitch-translationrule-selector on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
-                                                          normal-col-num="6"></np-ivswitch-translationrule-selector>
+                    <vr-columns width="1/2row">
+                        <vr-switch label="Route Table Based Rule" value="scopeModel.routeTableBasedRule"></vr-switch>
+                    </vr-columns>
+                    <div vr-loader="scopeModel.isLoadingRules">
+                        <np-ivswitch-translationrule-selector ng-if="!scopeModel.routeTableBasedRule"
+                                                              on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
+                                                              normal-col-num="6"></np-ivswitch-translationrule-selector>
+                    </div>
                 </vr-tab>
                 <vr-tab header="'Control'">
                     <vr-columns width="1/2row">

@@ -72,7 +72,10 @@
 
             $scope.scopeModel.onSelectorTranslationRuleReady = function (api) {
                 selectorTranslationRuleAPI = api;
-                selectorTranslationRuleReadyDeferred.resolve();
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingRules = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, selectorTranslationRuleAPI, undefined, setLoader, selectorTranslationRuleReadyDeferred);
             };
 
             $scope.scopeModel.onSelectorEndPointReady = function (api) {
@@ -103,6 +106,9 @@
 
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.translationruleid = SelectedItem.TranslationRuleId;
+                }
+            else {
+                    $scope.scopeModel.translationruleid = undefined;
                 }
             };
 
@@ -231,7 +237,7 @@
                 $scope.scopeModel.siplogin = endPointEntity.SipLogin;
                 $scope.scopeModel.sippassword = endPointEntity.SipPassword;
                 $scope.scopeModel.endpointtype = endPointEntity.EndPointType;
-
+                $scope.scopeModel.routeTableBasedRule = endPointEntity.RouteTableBasedRule;
                 if (endPointEntity.CurrentState != undefined)
                     $scope.scopeModel.currentstate = $scope.scopeModel.states[endPointEntity.CurrentState - 1];
                 if (endPointEntity.RtpMode != undefined) {
@@ -252,7 +258,7 @@
                 selectorCodecProfileReadyDeferred.promise.then(function () {
                     var selectorCodecProfilePayload = {};
 
-                    if (endPointEntity != undefined && endPointEntity.CodecProfileId != undefined)
+                    if (endPointEntity != undefined && endPointEntity.CodecProfileId != undefined && endPointEntity.CodecProfileId!=0)
                         selectorCodecProfilePayload.selectedIds = endPointEntity.CodecProfileId;
 
                     VRUIUtilsService.callDirectiveLoad(selectorCodecProfileAPI, selectorCodecProfilePayload, selectorCodecProfileLoadDeferred);
@@ -263,10 +269,10 @@
 
             function loadSelectorTranslationRule() {
                 var selectorTranslationRuleLoadDeferred = UtilsService.createPromiseDeferred();
-
                 selectorTranslationRuleReadyDeferred.promise.then(function () {
+                    selectorTranslationRuleReadyDeferred = undefined;
                     var selectorTranslationRulePayload = {};
-                    if (endPointEntity != undefined && endPointEntity.TransRuleId != undefined)
+                    if (endPointEntity != undefined && endPointEntity.TransRuleId != undefined && endPointEntity.TransRuleId!=-2 && endPointEntity.TransRuleId!=0)
                         selectorTranslationRulePayload.selectedIds = endPointEntity.TransRuleId;
 
                     VRUIUtilsService.callDirectiveLoad(selectorTranslationRuleAPI, selectorTranslationRulePayload, selectorTranslationRuleLoadDeferred);
@@ -350,7 +356,7 @@
                  Description: $scope.scopeModel.description,
                  LogAlias: $scope.scopeModel.logalias,
                  CodecProfileId: $scope.scopeModel.codecprofileid,
-                 TransRuleId: $scope.scopeModel.translationruleid,
+                 TransRuleId: !$scope.scopeModel.routeTableBasedRule ? $scope.scopeModel.translationruleid : null,
                  CurrentState: $scope.scopeModel.currentstate.value,
                  ChannelsLimit: $scope.scopeModel.channelslimit,
                  MaxCallDuration: $scope.scopeModel.maxcallduration,
@@ -360,7 +366,9 @@
                  TechPrefix: $scope.scopeModel.techprefix,
                  SipLogin: $scope.scopeModel.siplogin,
                  SipPassword: $scope.scopeModel.sippassword,
-                 EndPointType: $scope.scopeModel.endpointtype
+                 EndPointType: $scope.scopeModel.endpointtype,
+                 RouteTableBasedRule:$scope.scopeModel.routeTableBasedRule
+
              },
 
                 CarrierAccountId: carrierAccountId
