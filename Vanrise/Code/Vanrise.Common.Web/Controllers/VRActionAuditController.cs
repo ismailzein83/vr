@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredActionAudits")]
         public object GetFilteredActionAudits(Vanrise.Entities.DataRetrievalInput<VRActionAuditQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredActionAudits(input));
+            return GetWebResponse(input, _manager.GetFilteredActionAudits(input), "Action Audits");
         }
     }
 }

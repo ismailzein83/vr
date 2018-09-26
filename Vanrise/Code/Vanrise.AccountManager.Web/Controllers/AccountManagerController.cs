@@ -22,7 +22,7 @@ namespace Vanrise.AccountManager.Web.Controllers
         {
             if (!_manager.DoesUserHaveViewAccess(input.Query.AccountManagerDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredAccountManagers(input));
+            return GetWebResponse(input, _manager.GetFilteredAccountManagers(input), "Account Managers");
         }
         [HttpPost]
         [Route("AddAccountManager")]

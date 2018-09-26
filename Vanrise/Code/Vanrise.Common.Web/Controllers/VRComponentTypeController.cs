@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRComponentTypes")]
         public object GetFilteredVRComponentTypes(Vanrise.Entities.DataRetrievalInput<VRComponentTypeQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRComponentTypes(input));
+            return GetWebResponse(input, _manager.GetFilteredVRComponentTypes(input), "Component Types");
         }
 
         [HttpGet]

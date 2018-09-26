@@ -59,6 +59,7 @@
             directiveReadyDeferred.promise.then(function () {
                 var payLoad = {
                     settings: viewEntity.Settings,
+                    ReportName: viewEntity.Name,
                     itemActionSettings: itemActionSettings,
                     preDefinedFilter:preDefinedFilter,
                     autoSearch: autoSearch,

@@ -20,7 +20,7 @@ namespace Vanrise.Analytic.Web.Controllers
         public object GetFilteredVRReportGenerations(Vanrise.Entities.DataRetrievalInput<VRReportGenerationQuery> input)
         {   if (!_manager.DoesUserHaveViewAccess())
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredVRReportGenerations(input));
+        return GetWebResponse(input, _manager.GetFilteredVRReportGenerations(input), "Report Generations");
         }
 
         [HttpGet]

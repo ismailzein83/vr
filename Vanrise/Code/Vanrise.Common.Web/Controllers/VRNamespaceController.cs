@@ -17,7 +17,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRNamespaces")]
         public object GetFilteredVRNamespaces(Vanrise.Entities.DataRetrievalInput<VRNamespaceQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRNamespaces(input));
+            return GetWebResponse(input, _manager.GetFilteredVRNamespaces(input), "Namespaces");
         }
 
         [HttpGet]

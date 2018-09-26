@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         public object GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<LogEntryQuery> input)
         {
             LogManager manager = new LogManager();
-            return GetWebResponse(input, manager.GetFilteredLogs(input));
+            return GetWebResponse(input, manager.GetFilteredLogs(input), "Log Entries");
         }
 
     }

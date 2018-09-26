@@ -22,7 +22,7 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             if (!_manager.DoesUserHaveAccess(input))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredDataRecords(input));
+            return GetWebResponse(input, _manager.GetFilteredDataRecords(input), input.Query.ReportName);
         }
     }
 }

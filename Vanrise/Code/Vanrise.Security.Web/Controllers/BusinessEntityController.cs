@@ -19,7 +19,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredBusinessEntities")]
         public object GetFilteredBusinessEntities(Vanrise.Entities.DataRetrievalInput<BusinessEntityQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredBusinessEntities(input));
+            return GetWebResponse(input, _manager.GetFilteredBusinessEntities(input), "Business Entities");
         }
         [HttpPost]
         [Route("GetBusinessEntitiesByIds")]

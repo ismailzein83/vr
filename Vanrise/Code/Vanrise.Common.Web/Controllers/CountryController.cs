@@ -23,7 +23,7 @@ namespace Vanrise.Common.Web.Controllers
 		public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryQuery> input)
 		{
 			CountryManager manager = new CountryManager();
-			return GetWebResponse(input, manager.GetFilteredCountries(input));
+            return GetWebResponse(input, manager.GetFilteredCountries(input), "Countries");
 		}
         [HttpGet]
         [Route("GetCountryHistoryDetailbyHistoryId")]

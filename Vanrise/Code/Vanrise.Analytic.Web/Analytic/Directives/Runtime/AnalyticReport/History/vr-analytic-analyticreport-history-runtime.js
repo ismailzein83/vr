@@ -29,6 +29,7 @@
             var measures = [];
 
             var settings;
+            var reportName;
             var filterObj;
 
             var currencySelectorAPI;
@@ -127,6 +128,7 @@
                 api.load = function (payload) {
 
                     if (payload != undefined) {
+                        reportName = payload.ReportName ? payload.ReportName : "Analytic Report";
                         settings = payload.settings;
                     }
 
@@ -377,6 +379,7 @@
                 }
                 var query = {
                     Settings: widgetPayload,
+                    ReportName:reportName,
                     DimensionFilters: dimensionFilters,
                     SelectedGroupingDimensions: groupingDimensions,
                     TableId: widgetPayload.AnalyticTableId,

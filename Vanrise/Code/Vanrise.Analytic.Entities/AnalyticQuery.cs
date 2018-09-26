@@ -10,6 +10,7 @@ namespace Vanrise.Analytic.Entities
     public enum AnalyticQueryOrderType { ByAllDimensions = 1, ByAllMeasures = 2, AdvancedMeasureOrder = 3 }
     public class AnalyticQuery
     {
+        public string ReportName { get; set; }
         public Guid TableId { get; set; }
         public DateTime FromTime { get; set; }
         public DateTime? ToTime { get; set; }

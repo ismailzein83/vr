@@ -27,7 +27,7 @@ namespace Vanrise.GenericData.Web.Controllers
                 return GetUnauthorizedResponse();
 
             var manager = _manager.GetManager(input.Query.RuleDefinitionId);
-            return GetWebResponse(input, manager.GetFilteredRules(input));
+            return GetWebResponse(input, manager.GetFilteredRules(input), input.Query.ReportName);
         }
 
         [HttpGet]
@@ -43,7 +43,7 @@ namespace Vanrise.GenericData.Web.Controllers
         public object AddGenericRule(GenericRule rule)
         {
             if (!DoesUserHaveAddAccess(rule.DefinitionId))
-             return   GetUnauthorizedResponse();
+                return GetUnauthorizedResponse();
 
             var manager = _manager.GetManager(rule.DefinitionId);
             return manager.AddGenericRule(rule);
@@ -65,7 +65,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
             var manager = _manager.GetManager(rule.DefinitionId);
             return manager.UpdateGenericRule(rule);
-           
+
         }
 
         [HttpGet]
@@ -74,7 +74,7 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.DoesUserHaveEditAccess(ruleDefinitionId);
         }
-        
+
         [HttpGet]
         [Route("DoesRuleSupportUpload")]
         public bool DoesRuleSupportUpload(Guid ruleDefinitionId)

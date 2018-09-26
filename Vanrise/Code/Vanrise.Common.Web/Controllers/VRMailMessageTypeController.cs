@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredMailMessageTypes")]
         public object GetFilteredMailMessageTypes(Vanrise.Entities.DataRetrievalInput<VRMailMessageTypeQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredMailMessageTypes(input));
+            return GetWebResponse(input, _manager.GetFilteredMailMessageTypes(input), "Mail Message Types");
         }
 
         [HttpGet]

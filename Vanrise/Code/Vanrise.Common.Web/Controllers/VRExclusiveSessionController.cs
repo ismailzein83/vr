@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRExclusiveSessions")]
         public object GetFilteredVRExclusiveSessions(Vanrise.Entities.DataRetrievalInput<VRExclusiveSessionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRExclusiveSessions(input));
+            return GetWebResponse(input, _manager.GetFilteredVRExclusiveSessions(input), "Locked Sessions");
         }
 
         [HttpGet]

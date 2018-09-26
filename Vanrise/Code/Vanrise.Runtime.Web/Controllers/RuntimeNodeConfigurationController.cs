@@ -21,8 +21,8 @@ namespace Vanrise.Runtime.Web.Controllers
         [HttpPost]
         [Route("GetFilteredRuntimeNodesConfigurations")]
         public object GetFilteredRuntimeNodesConfigurations(Vanrise.Entities.DataRetrievalInput<RuntimeNodeConfigurationQuery> input)
-        { 
-            return GetWebResponse(input, manager.GetFilteredRuntimeNodesConfigurations(input));
+        {
+            return GetWebResponse(input, manager.GetFilteredRuntimeNodesConfigurations(input), "Nodes Configurations");
         }
 
         [HttpGet]

@@ -26,7 +26,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredUsers")]
         public object GetFilteredUsers(Vanrise.Entities.DataRetrievalInput<UserQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredUsers(input));
+            return GetWebResponse(input, _manager.GetFilteredUsers(input), "Users");
         }
 
         [HttpGet]

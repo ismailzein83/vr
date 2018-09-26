@@ -23,7 +23,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredEntityPermissions")]
         public object GetFilteredEntityPermissions(Vanrise.Entities.DataRetrievalInput<PermissionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredEntityPermissions(input));
+            return GetWebResponse(input, _manager.GetFilteredEntityPermissions(input), "Permissions");
         }
 
         [HttpGet]

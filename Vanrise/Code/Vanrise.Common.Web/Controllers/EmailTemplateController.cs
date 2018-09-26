@@ -17,7 +17,7 @@ namespace Vanrise.Common.Web.Controllers
         public object GetFilteredEmailTemplates(Vanrise.Entities.DataRetrievalInput<EmailTemplateQuery> input)
         {
             EmailTemplateManager manager = new EmailTemplateManager();
-            return GetWebResponse(input, manager.GetFilteredEmailTemplates(input));
+            return GetWebResponse(input, manager.GetFilteredEmailTemplates(input), "Email Templates");
         }
 
         [HttpPost]

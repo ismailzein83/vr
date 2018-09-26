@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRLocalizationTextResourcesTranslation")]
         public object GetFilteredVRLocalizationTextResourcesTranslation(Vanrise.Entities.DataRetrievalInput<VRLocalizationTextResourceTranslationQuery> input)
         {
-            return GetWebResponse(input, _textResourceTranslationManager.GetFilteredVRLocalizationTextResourcesTranslation(input));
+            return GetWebResponse(input, _textResourceTranslationManager.GetFilteredVRLocalizationTextResourcesTranslation(input), "Localization Text Resources Translation");
         }
 
         [HttpPost]

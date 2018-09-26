@@ -19,7 +19,7 @@ namespace Vanrise.Integration.Web.Controllers
         public object GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
             DataSourceImportedBatchManager manager = new DataSourceImportedBatchManager();
-            return GetWebResponse(input, manager.GetFilteredDataSourceImportedBatches(input));
+            return GetWebResponse(input, manager.GetFilteredDataSourceImportedBatches(input), "Data Source Imported Batches");
         }
 
     }

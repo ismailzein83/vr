@@ -21,7 +21,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
         {
             if (!_accountTypeManager.DoesUserHaveViewAccess(input.Query.AccountTypeId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _accountStatementManager.GetFilteredAccountStatments(input));
+            return GetWebResponse(input, _accountStatementManager.GetFilteredAccountStatments(input), "Account Statements");
         }
     }
 }

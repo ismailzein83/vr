@@ -63,7 +63,8 @@
                 var defFilter = {
                     RuleDefinitionId: genericRuleDefinitionAPI.getSelectedIds(),
                     EffectiveDate: $scope.scopeModel.effectiveDate,
-                    Description: $scope.scopeModel.description
+                    Description: $scope.scopeModel.description,
+                    ReportName: ruleDefinition.Name
                 };
                 gridAPI.loadGrid(defFilter);
             };
@@ -175,7 +176,6 @@
                     return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionAPI.getSelectedIds()).then(function (response) {
                         ruleDefinition = response;
                         $scope.scopeModel.selectedRuleDefinitionType = UtilsService.getItemByVal(criteriaDefinitions, ruleDefinition.CriteriaDefinition.ConfigId, "ExtensionConfigurationId");
-                        console.log($scope.scopeModel.selectedRuleDefinitionType);
                     });
                 }
 

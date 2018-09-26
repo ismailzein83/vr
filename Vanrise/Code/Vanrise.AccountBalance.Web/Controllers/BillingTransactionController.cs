@@ -21,7 +21,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
         {
             if (!DoesUserHaveViewAccess(input.Query.AccountTypeId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _billingTransactionManager.GetFilteredBillingTransactions(input));
+            return GetWebResponse(input, _billingTransactionManager.GetFilteredBillingTransactions(input), "Billing Transactions");
         }
 
         [HttpGet]

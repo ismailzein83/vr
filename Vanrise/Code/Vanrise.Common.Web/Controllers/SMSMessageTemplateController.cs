@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredSMSMessageTemplates")]
         public object GetFilteredSMSMessageTemplates(Vanrise.Entities.DataRetrievalInput<SMSMessageTemplateQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredSMSMessageTemplates(input));
+            return GetWebResponse(input, _manager.GetFilteredSMSMessageTemplates(input), "SMS Message Templates");
         }
 
         [HttpGet]

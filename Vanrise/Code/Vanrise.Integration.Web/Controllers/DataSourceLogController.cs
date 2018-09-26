@@ -17,8 +17,8 @@ namespace Vanrise.Integration.Web.Controllers
         [Route("GetFilteredDataSourceLogs")]
         public object GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
         {
-            DataSourceLogManager manager = new DataSourceLogManager();            
-            return GetWebResponse(input, manager.GetFilteredDataSourceLogs(input));
+            DataSourceLogManager manager = new DataSourceLogManager();
+            return GetWebResponse(input, manager.GetFilteredDataSourceLogs(input), "Data Source Logs");
         }
     }
 }

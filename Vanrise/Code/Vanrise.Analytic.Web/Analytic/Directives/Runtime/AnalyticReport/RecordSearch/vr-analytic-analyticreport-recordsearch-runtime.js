@@ -2,7 +2,7 @@
 
     'use strict';
 
-    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService', 'PeriodEnum', 'VR_Analytic_AnalyticAPIService', 'VR_GenericData_RecordFilterAPIService', 'VR_GenericData_DataRecordStorageAPIService', 'UISettingsService','VR_Analytic_AnalyticReportAPIService'];
+    RecordSearchAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_OrderDirectionEnum', 'VRValidationService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_DataRecordTypeService', 'PeriodEnum', 'VR_Analytic_AnalyticAPIService', 'VR_GenericData_RecordFilterAPIService', 'VR_GenericData_DataRecordStorageAPIService', 'UISettingsService', 'VR_Analytic_AnalyticReportAPIService'];
 
     function RecordSearchAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_OrderDirectionEnum, VRValidationService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_DataRecordTypeService, PeriodEnum, VR_Analytic_AnalyticAPIService, VR_GenericData_RecordFilterAPIService, VR_GenericData_DataRecordStorageAPIService, UISettingsService, VR_Analytic_AnalyticReportAPIService) {
         return {
@@ -33,6 +33,7 @@
             var toDate;
             var period;
             var sourceName;
+            var reportName;
 
             var fields = [];
             var fieldTypes = [];
@@ -117,6 +118,7 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         settings = payload.settings;
+                        reportName = payload.ReportName ? payload.ReportName : "Analytic Data Record Storage";
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
                         analyticReportId = payload.analyticReportId;
@@ -296,7 +298,7 @@
 
             }
 
-            
+
 
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
@@ -307,20 +309,20 @@
 
 
 
-             function loadTimeRangeDirective() {
+            function loadTimeRangeDirective() {
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
-                    period : period != undefined ? period: PeriodEnum.Today.value,
-                fromDate: fromDate,
-                toDate: toDate
-                };
+                        period: period != undefined ? period : PeriodEnum.Today.value,
+                        fromDate: fromDate,
+                        toDate: toDate
+                    };
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);
 
                 });
                 return loadTimeDimentionPromiseDeferred.promise;
-                }
+            }
 
             function loadFields() {
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo($scope.selectedDRSearchPageStorageSource.DataRecordTypeId).then(function (response) {
@@ -360,6 +362,7 @@
 
                 return {
                     DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,
+                    ReportName: reportName,
                     DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId,
                     GridColumns: $scope.selectedDRSearchPageStorageSource.GridColumns,
                     ItemDetails: $scope.selectedDRSearchPageStorageSource.ItemDetails,

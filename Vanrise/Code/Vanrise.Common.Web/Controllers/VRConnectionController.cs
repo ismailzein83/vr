@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRConnections")]
         public object GetFilteredVRConnections(Vanrise.Entities.DataRetrievalInput<VRConnectionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRConnections(input));
+            return GetWebResponse(input, _manager.GetFilteredVRConnections(input), "Connections");
         }
 
         [HttpGet]

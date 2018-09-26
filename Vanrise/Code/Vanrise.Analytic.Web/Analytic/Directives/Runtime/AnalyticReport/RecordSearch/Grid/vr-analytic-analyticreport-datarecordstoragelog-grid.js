@@ -118,6 +118,7 @@
                     loadStyleDefinitions().then(function () {
                         getDataRecordAttributes(query).then(function () {
                             searchQuery = {
+                                ReportName: query.ReportName,
                                 DataRecordStorageIds: query.DataRecordStorageIds,
                                 FromTime: query.FromTime,
                                 ToTime: query.ToTime,

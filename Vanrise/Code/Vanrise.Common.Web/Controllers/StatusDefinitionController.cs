@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredStatusDefinitions")]
         public object GetFilteredStatusDefinitions(Vanrise.Entities.DataRetrievalInput<StatusDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredStatusDefinitions(input));
+            return GetWebResponse(input, _manager.GetFilteredStatusDefinitions(input), "Status Definitions");
         }
 
         [HttpPost]

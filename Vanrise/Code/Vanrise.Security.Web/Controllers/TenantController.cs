@@ -24,7 +24,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredTenants")]
         public object GetFilteredTenants(Vanrise.Entities.DataRetrievalInput<TenantQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredTenants(input));
+            return GetWebResponse(input, _manager.GetFilteredTenants(input), "Tenants");
         }
 
         [HttpGet]

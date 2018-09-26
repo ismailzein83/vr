@@ -178,7 +178,7 @@ namespace Vanrise.Common.Web
         {
             //no need for security because it is returning the files of the logged in User
             VRFileManager manager = new VRFileManager(input.Query.ModuleName);
-            return GetWebResponse(input, manager.GetFilteredRecentFiles(input));
+            return GetWebResponse(input, manager.GetFilteredRecentFiles(input), "Recent Files");
         }
 
         private static byte[] ReadToEnd(System.IO.Stream stream)

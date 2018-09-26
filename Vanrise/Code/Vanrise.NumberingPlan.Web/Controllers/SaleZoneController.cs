@@ -20,7 +20,7 @@ namespace Vanrise.NumberingPlan.Web.Controllers
         public object GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return GetWebResponse(input, manager.GetFilteredSaleZones(input));
+            return GetWebResponse(input, manager.GetFilteredSaleZones(input), "Sale Zones");
         }
 
 

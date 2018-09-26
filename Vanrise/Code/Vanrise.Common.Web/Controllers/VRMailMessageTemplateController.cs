@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredMailMessageTemplates")]
         public object GetFilteredMailMessageTemplates(Vanrise.Entities.DataRetrievalInput<VRMailMessageTemplateQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredMailMessageTemplates(input));
+            return GetWebResponse(input, _manager.GetFilteredMailMessageTemplates(input), "Mail Message Templates");
         }
 
         [HttpGet]

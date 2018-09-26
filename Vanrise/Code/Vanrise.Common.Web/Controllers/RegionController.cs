@@ -18,7 +18,7 @@ namespace Vanrise.Common.Web.Controllers
         public object GetFilteredRegions(Vanrise.Entities.DataRetrievalInput<RegionQuery> input)
         {
             RegionManager manager = new RegionManager();
-            return GetWebResponse(input, manager.GetFilteredRegions(input));
+            return GetWebResponse(input, manager.GetFilteredRegions(input), "Regions");
         }
 
         [HttpGet]

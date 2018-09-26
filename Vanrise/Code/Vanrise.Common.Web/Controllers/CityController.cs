@@ -18,7 +18,7 @@ namespace Vanrise.Common.Web.Controllers
         public object GetFilteredCities(Vanrise.Entities.DataRetrievalInput<CityQuery> input)
         {
             CityManager manager = new CityManager();
-            return GetWebResponse(input, manager.GetFilteredCities(input));
+            return GetWebResponse(input, manager.GetFilteredCities(input), "Cities");
         }
 
         [HttpGet]

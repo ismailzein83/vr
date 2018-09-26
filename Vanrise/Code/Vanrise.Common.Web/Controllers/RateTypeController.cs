@@ -18,7 +18,7 @@ namespace Vanrise.Web.Controllers
         public object GetFilteredRateTypes(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.RateTypeQuery> input)
         {
             RateTypeManager manager = new RateTypeManager();
-            return GetWebResponse(input, manager.GetFilteredRateTypes(input));
+            return GetWebResponse(input, manager.GetFilteredRateTypes(input), "Rate Types");
         }
 
         [HttpGet]

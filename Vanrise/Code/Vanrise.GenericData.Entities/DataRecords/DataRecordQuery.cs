@@ -6,6 +6,7 @@ namespace Vanrise.GenericData.Entities
     public enum OrderDirection { Ascending = 0, Descending = 1 }
     public class DataRecordQuery
     {
+        public string ReportName { get; set; }
         public List<Guid> DataRecordStorageIds { get; set; }
 
         public DateTime FromTime { get; set; }

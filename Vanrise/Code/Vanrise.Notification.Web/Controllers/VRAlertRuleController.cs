@@ -21,7 +21,7 @@ namespace Vanrise.Notification.Web.Controllers
         {
             if (!_typeManager.DoesUserHaveViewAccess())
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredVRAlertRules(input));
+            return GetWebResponse(input, _manager.GetFilteredVRAlertRules(input), "Alert Rules");
         }
 
         [HttpGet]

@@ -17,7 +17,7 @@ namespace Vanrise.Common.Web.Controllers
        public object GetFilteredExchangeRateCurrencies(Vanrise.Entities.DataRetrievalInput<CurrencyExchangeRateQuery> input)
        {
            CurrencyExchangeRateManager manager = new CurrencyExchangeRateManager();
-           return GetWebResponse(input, manager.GetFilteredCurrenciesExchangeRates(input));
+           return GetWebResponse(input, manager.GetFilteredCurrenciesExchangeRates(input), "Exchange Rate Currencies");
        }
 
        [HttpGet]

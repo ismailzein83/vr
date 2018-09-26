@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRLocalizationModules")]
         public object GetFilteredVRLocalizationModules(Vanrise.Entities.DataRetrievalInput<VRLocalizationModuleQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRLocalizationModules(input));
+            return GetWebResponse(input, _manager.GetFilteredVRLocalizationModules(input), "Localization Modules");
         }
 
         [HttpGet]

@@ -20,7 +20,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredVRLocalizationLanguages")]
         public object GetFilteredVRLocalizationLanguages(Vanrise.Entities.DataRetrievalInput<VRLocalizationLanguageQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredVRLocalizationLanguages(input));
+            return GetWebResponse(input, _manager.GetFilteredVRLocalizationLanguages(input), "Localization Languages");
         }
 
         [HttpGet]

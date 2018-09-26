@@ -58,7 +58,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredDynamicViews")]
         public object GetFilteredDynamicViews(Vanrise.Entities.DataRetrievalInput<string> filter)
         {
-            return GetWebResponse(filter, _manager.GetFilteredDynamicViews(filter));
+            return GetWebResponse(filter, _manager.GetFilteredDynamicViews(filter), "Dynamic Views");
         }
 
         [HttpPost]
@@ -72,7 +72,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredViews")]
         public object GetFilteredViews(Vanrise.Entities.DataRetrievalInput<ViewQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredViews(input));
+            return GetWebResponse(input, _manager.GetFilteredViews(input), "Views");
         }
     }
 

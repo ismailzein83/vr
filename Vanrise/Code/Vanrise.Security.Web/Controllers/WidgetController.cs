@@ -44,7 +44,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredWidgets")]
         public object GetFilteredWidgets(Vanrise.Entities.DataRetrievalInput<WidgetFilter> filter)
         {
-            return GetWebResponse(filter, _manager.GetFilteredWidgets(filter));
+            return GetWebResponse(filter, _manager.GetFilteredWidgets(filter), "Widgets");
         }
 
         [HttpGet]

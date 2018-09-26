@@ -16,7 +16,7 @@ namespace Vanrise.NumberingPlan.Web.Controllers
         public object GetFilteredCountryPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             CountryPreviewManager manager = new CountryPreviewManager();
-            return GetWebResponse(input, manager.GetFilteredCountryPreview(input));
+            return GetWebResponse(input, manager.GetFilteredCountryPreview(input), "Country Preview");
         }
 
         [HttpPost]
@@ -24,7 +24,7 @@ namespace Vanrise.NumberingPlan.Web.Controllers
         public object GetFilteredZonePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             ZonePreviewManager manager = new ZonePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredZonePreview(input));
+            return GetWebResponse(input, manager.GetFilteredZonePreview(input), "Zone Preview");
         }
 
         [HttpPost]
@@ -32,7 +32,7 @@ namespace Vanrise.NumberingPlan.Web.Controllers
         public object GetFilteredCodePreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
         {
             CodePreviewManager manager = new CodePreviewManager();
-            return GetWebResponse(input, manager.GetFilteredCodePreview(input));
+            return GetWebResponse(input, manager.GetFilteredCodePreview(input), "Code Preview");
         }
 
     }

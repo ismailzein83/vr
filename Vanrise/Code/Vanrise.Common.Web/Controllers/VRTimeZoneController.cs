@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         public object GetFilteredVRTimeZones(Vanrise.Entities.DataRetrievalInput<VRTimeZoneQuery> input)
         {
             VRTimeZoneManager manager = new VRTimeZoneManager();
-            return GetWebResponse(input, manager.GetFilteredVRTimeZones(input));
+            return GetWebResponse(input, manager.GetFilteredVRTimeZones(input), "Time Zones");
         }
 
         [HttpGet]

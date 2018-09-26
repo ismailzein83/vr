@@ -19,7 +19,7 @@ namespace Vanrise.Common.Web.Controllers
         [Route("GetFilteredStyleDefinitions")]
         public object GetFilteredStyleDefinitions(Vanrise.Entities.DataRetrievalInput<StyleDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredStyleDefinitions(input));
+            return GetWebResponse(input, _manager.GetFilteredStyleDefinitions(input), "Style Definitions");
         }
 
         [HttpGet]

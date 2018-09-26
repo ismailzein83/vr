@@ -23,7 +23,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredGroups")]
         public object GetFilteredGroups(Vanrise.Entities.DataRetrievalInput<GroupQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredGroups(input));
+            return GetWebResponse(input, _manager.GetFilteredGroups(input), "Groups");
         }
 
         [HttpGet]

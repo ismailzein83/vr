@@ -23,7 +23,7 @@ namespace Vanrise.Security.Web.Controllers
         [Route("GetFilteredOrgCharts")]
         public object GetFilteredOrgCharts(Vanrise.Entities.DataRetrievalInput<OrgChartQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredOrgCharts(input));
+            return GetWebResponse(input, _manager.GetFilteredOrgCharts(input), "Org Charts");
         }
 
         [HttpGet]
