@@ -677,7 +677,7 @@ namespace Mediation.Runtime
                             if (!connectDateTime.HasValue || connectDateTime.Value == DateTime.MinValue)
                             {
                                 int duration = record.GetFieldValue("DurationInSeconds");
-                                if(duration == 0)
+                                if (duration == 0)
                                 {
                                     DateTime? disconnectDateTime = record.GetFieldValue("DisconnectDateTime");
                                     record.SetFieldValue("ConnectDateTime", disconnectDateTime);
@@ -972,11 +972,15 @@ namespace Mediation.Runtime
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Ogero_Radius_CDR");
 
-            int batchSize = 0;
-
-            string fileName = ImportedData.Name;
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Ogero_Radius_CDR");
+
+            int batchSize = 0;
             int lineNumber = 0;
+            string fileName = ImportedData.Name;
+
+            int? intValue = default(int?);
+            long? longValue = default(long?);
+
             System.IO.StreamReader sr = ImportedData.StreamReader;
             while (!sr.EndOfStream)
             {
@@ -985,32 +989,22 @@ namespace Mediation.Runtime
                 if (string.IsNullOrEmpty(cdrLine))
                     continue;
 
-
-
-
                 //cdrLine = cdrLine.Replace("\"", "");
                 batchSize++;
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
-
                 string[] fields = System.Text.RegularExpressions.Regex.Split(cdrLine, @",(?=(?:[^""]*""[^""]*"")*[^""]*$)");
-
                 for (int i = 0; i < fields.Length; i++)
-                {
                     fields[i] = fields[i].Replace("\"", "");
-                }
 
                 cdr.ComputerName = fields[0];
                 cdr.ServiceName = fields[1];
 
-                int? intValue = default(int?);
                 //date
                 cdr.RecordDate = DateTime.ParseExact(fields[2], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                 cdr.RecordTime = string.IsNullOrEmpty(fields[3]) ? null : new Time(fields[3]);
 
                 //number
-
                 cdr.PacketType = string.IsNullOrEmpty(fields[4]) ? intValue : int.Parse(fields[4]);
-
                 cdr.UserName = fields[5];
                 cdr.FullyQualifiedUserName = fields[6];
                 cdr.CalledStationID = fields[7];
@@ -1026,11 +1020,10 @@ namespace Mediation.Runtime
 
                 //date
                 cdr.EventTimestamp = string.IsNullOrEmpty(fields[17]) ? null : new Time(fields[17]);
-
                 cdr.PortLimit = fields[18];
+
                 //number
                 cdr.NASPortType = string.IsNullOrEmpty(fields[19]) ? intValue : int.Parse(fields[19]);
-
                 cdr.ConnectInfo = fields[20];
 
                 //number
@@ -1038,12 +1031,10 @@ namespace Mediation.Runtime
                 cdr.ServiceType = string.IsNullOrEmpty(fields[22]) ? intValue : int.Parse(fields[22]);
                 cdr.AuthenticationType = string.IsNullOrEmpty(fields[23]) ? intValue : int.Parse(fields[23]);
 
-
                 cdr.NPPolicyName = fields[24];
 
                 //number
                 cdr.ReasonCode = string.IsNullOrEmpty(fields[25]) ? intValue : int.Parse(fields[25]);
-
 
                 cdr.Class = fields[26];
 
@@ -1051,7 +1042,6 @@ namespace Mediation.Runtime
                 cdr.SessionTimeout = string.IsNullOrEmpty(fields[27]) ? intValue : int.Parse(fields[27]);
                 cdr.IdleTimeout = string.IsNullOrEmpty(fields[28]) ? intValue : int.Parse(fields[28]);
                 cdr.TerminationAction = string.IsNullOrEmpty(fields[29]) ? intValue : int.Parse(fields[29]);
-
                 cdr.EAPFriendlyName = fields[30];
 
                 //number
@@ -1059,16 +1049,14 @@ namespace Mediation.Runtime
                 cdr.AcctDelayTime = string.IsNullOrEmpty(fields[32]) ? intValue : int.Parse(fields[32]);
                 cdr.AcctInputOctets = string.IsNullOrEmpty(fields[33]) ? default(long?) : long.Parse(fields[33]);
                 cdr.AcctOutputOctets = string.IsNullOrEmpty(fields[34]) ? default(long?) : long.Parse(fields[34]);
-
                 cdr.AcctSessionId = fields[35];
 
                 //number
                 cdr.AcctAuthentic = string.IsNullOrEmpty(fields[36]) ? intValue : int.Parse(fields[36]);
                 cdr.AcctSessionTime = string.IsNullOrEmpty(fields[37]) ? intValue : int.Parse(fields[37]);
-                cdr.AcctInputPackets = string.IsNullOrEmpty(fields[38]) ? intValue : int.Parse(fields[38]);
-                cdr.AcctOutputPackets = string.IsNullOrEmpty(fields[39]) ? intValue : int.Parse(fields[39]);
+                cdr.AcctInputPackets = string.IsNullOrEmpty(fields[38]) ? longValue : long.Parse(fields[38]);
+                cdr.AcctOutputPackets = string.IsNullOrEmpty(fields[39]) ? longValue : long.Parse(fields[39]);
                 cdr.AcctTerminateCause = string.IsNullOrEmpty(fields[40]) ? intValue : int.Parse(fields[40]);
-
                 cdr.AcctMultiSsnID = fields[41];
 
                 //number
@@ -1093,23 +1081,18 @@ namespace Mediation.Runtime
                 //mumber
                 cdr.MSRASVendor = string.IsNullOrEmpty(fields[55]) ? intValue : int.Parse(fields[55]);
 
-
                 cdr.MSCHAPError = fields[56];
                 cdr.MSCHAPDomain = fields[57];
+
                 //number
                 cdr.MSMPPEEncryptionTypes = string.IsNullOrEmpty(fields[58]) ? intValue : int.Parse(fields[58]);
                 cdr.MSMPPEEncryptionPolicy = string.IsNullOrEmpty(fields[59].Trim()) ? intValue : int.Parse(fields[59]);
-
                 cdr.FileName = fileName;
-
                 cdrs.Add(cdr);
-
             }
-
 
             long startingId;
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, batchSize, out startingId);
-
             foreach (var item in cdrs)
                 item.Id = startingId++;
 
@@ -1119,15 +1102,8 @@ namespace Mediation.Runtime
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             LogVerbose("Finished");
+
             return result;
-
-
-            //Vanrise.Integration.Entities.MappedBatchItemsToEnqueue mappedBatchesNew = new Vanrise.Integration.Entities.MappedBatchItemsToEnqueue();
-
-            //Vanrise.Integration.Entities.MappingOutput result = Mediation.Runtime.DSMappers.MapCDR_File_Radius(new Guid("125f9d3f-52ea-431d-bf0d-74c2380aa261"), data, mappedBatchesNew);
-
-            //LogVerbose("Finished");
-            //return result;
         }
 
         #endregion
