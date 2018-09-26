@@ -84,7 +84,9 @@ namespace TOne.WhS.BusinessEntity.Business
 				{
 					Entity = zoneRoutingProduct,
 					RoutingProductName = routingProductName,
-					ZoneName = zoneName
+					ZoneName = zoneName,
+					ZoneBED = zoneRoutingProductToEdit.ZoneBED,
+					ZoneEED = zoneRoutingProductToEdit.ZoneEED
 				};
 			}
 			return updateOperationOutput;
