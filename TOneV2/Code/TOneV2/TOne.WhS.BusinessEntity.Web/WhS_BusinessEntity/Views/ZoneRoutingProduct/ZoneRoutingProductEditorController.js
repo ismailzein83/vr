@@ -94,7 +94,7 @@
         }
 
         function setTitle() {
-            $scope.title = UtilsService.buildTitleForUpdateEditor(zoneName, "Routing product For Zone ");
+            $scope.title = UtilsService.buildTitleForChangeEditor(zoneName, "Routing product For Zone ");
         }
 
         function updateZoneRoutingProduct() {

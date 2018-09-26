@@ -92,7 +92,7 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
                 if ((typeof zoneEED == 'undefined' || zoneEED == null) && (typeof countryEED == 'undefined' || countryEED == null)) {
 
                     var routingPRoductEdit = {
-                        name: "Edit",
+                        name: "Change",
                         clicked: editRoutingProduct,
                         haspermission: hasUpdateZoneRoutingProductPermission
                     };

@@ -656,6 +656,15 @@
             return title;
         }
 
+        function buildTitleForChangeEditor(entityTitle, entityType, scope) {
+            var title = (isContextReadOnly(scope)) ? "View " : "Change ";
+            if (entityType != undefined)
+                title += entityType + ": " + entityTitle;
+            else
+                title += entityTitle;
+            return title;
+        }
+
         function escapeRegExp(string) {
             return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
         }
@@ -1022,7 +1031,8 @@
             getDateObject: getDateObject,
             getHtmlStringWidth: getHtmlStringWidth,
             getUnitCeildWidthNextStepValue: getUnitCeildWidthNextStepValue,
-            validateFileName: validateFileName
+            validateFileName: validateFileName,
+            buildTitleForChangeEditor: buildTitleForChangeEditor
         });
     }
 
