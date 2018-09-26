@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticMeasureInfo.cs" />
+    <Compile Include="RouteRuleApplyOptionsPercentageContext.cs" />
     <Compile Include="BusinessManagers\IRoutingDatabaseManager.cs" />
     <Compile Include="BusinessManagers\ISwitchSyncDataManager.cs" />
     <Compile Include="BusinessManagers\RoutingManagerFactory.cs" />
