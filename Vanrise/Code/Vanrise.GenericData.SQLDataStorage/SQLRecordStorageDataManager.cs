@@ -205,6 +205,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
             {
+                cmd.CommandTimeout = 0;
                 cmd.Parameters.Add(new SqlParameter("@FromTime", from));
                 cmd.Parameters.Add(new SqlParameter("@ToTime", to));
                 foreach (var prm in parameterValues)
