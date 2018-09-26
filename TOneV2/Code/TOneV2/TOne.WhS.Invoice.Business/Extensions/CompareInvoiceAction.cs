@@ -20,8 +20,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public Guid ItemGroupingId { get; set; }
         public Guid ZoneDimensionId { get; set; }
-        public Guid FromDateDimensionId { get; set; }
-        public Guid ToDateDimensionId { get; set; }
+        //public Guid FromDateDimensionId { get; set; }
+        //public Guid ToDateDimensionId { get; set; }
         public Guid CurrencyDimensionId { get; set; }
         public Guid RateDimensionId { get; set; }
         public Guid RateTypeDimensionId { get; set; }
@@ -31,7 +31,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public Guid NumberOfCallsMeasureId { get; set; }
         public Guid AmountMeasureId { get; set; }
         public Guid DurationMeasureId { get; set; }
-
+        public Guid FromDateMeasureId { get; set; }
+        public Guid ToDateMeasureId { get; set; }
         public string PartnerLabel { get; set; }
         public string PartnerAbbreviationLabel { get; set; }
     }

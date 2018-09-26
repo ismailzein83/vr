@@ -89,8 +89,8 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                                 $scope.scopeModel.measuresItemGroupings = context.getGroupingMeasures(invoiceActionEntity.ItemGroupingId);
                                 
                                 $scope.scopeModel.selectedZoneDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.ZoneDimensionId, "DimensionItemFieldId");
-                                $scope.scopeModel.selectedFromDateDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.FromDateDimensionId, "DimensionItemFieldId");
-                                $scope.scopeModel.selectedToDateDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.ToDateDimensionId, "DimensionItemFieldId");
+                                $scope.scopeModel.selectedFromDateMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.FromDateMeasureId, "MeasureItemFieldId");
+                                $scope.scopeModel.selectedToDateMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.ToDateMeasureId, "MeasureItemFieldId");
 
                                 $scope.scopeModel.selectedRateTypeDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.RateTypeDimensionId, "DimensionItemFieldId");
                                 $scope.scopeModel.selectedCurrencyDimension = UtilsService.getItemByVal($scope.scopeModel.dimensionsItemGroupings, invoiceActionEntity.CurrencyDimensionId, "DimensionItemFieldId");
@@ -115,9 +115,6 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                         PartnerLabel: $scope.scopeModel.partnerLabel,
                         PartnerAbbreviationLabel: $scope.scopeModel.partnerAbbreviationLabel,
                         ZoneDimensionId: $scope.scopeModel.selectedZoneDimension.DimensionItemFieldId,
-                        FromDateDimensionId: $scope.scopeModel.selectedFromDateDimension.DimensionItemFieldId,
-                        ToDateDimensionId: $scope.scopeModel.selectedToDateDimension.DimensionItemFieldId,
-
                         RateTypeDimensionId: $scope.scopeModel.selectedRateTypeDimension.DimensionItemFieldId,
                         CurrencyDimensionId: $scope.scopeModel.selectedCurrencyDimension.DimensionItemFieldId,
                         RateDimensionId: $scope.scopeModel.selectedRateDimension.DimensionItemFieldId,
@@ -126,7 +123,9 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                         DurationMeasureId: $scope.scopeModel.selectedDurationMeasure.MeasureItemFieldId,
                         RateMeasureId: $scope.scopeModel.selectedRateMeasure.MeasureItemFieldId,
                         ItemGroupingId: $scope.scopeModel.selectedItemGrouping.ItemGroupingId,
-                        InvoiceCarrierType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined
+                        InvoiceCarrierType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined,
+                        FromDateMeasureId: $scope.scopeModel.selectedFromDateMeasure.MeasureItemFieldId,
+                        ToDateMeasureId: $scope.scopeModel.selectedToDateMeasure.MeasureItemFieldId,
                     };
                 };
 

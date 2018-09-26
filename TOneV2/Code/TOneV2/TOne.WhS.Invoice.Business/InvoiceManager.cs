@@ -336,8 +336,8 @@ namespace TOne.WhS.Invoice.Business
 
             List<Guid> dimensions = new List<Guid>();
             dimensions.Add(invoiceActionSettings.ZoneDimensionId);
-            dimensions.Add(invoiceActionSettings.FromDateDimensionId);
-            dimensions.Add(invoiceActionSettings.ToDateDimensionId);
+          //  dimensions.Add(invoiceActionSettings.FromDateDimensionId);
+          //  dimensions.Add(invoiceActionSettings.ToDateDimensionId);
             dimensions.Add(invoiceActionSettings.CurrencyDimensionId);
 
            // dimensions.Add(invoiceActionSettings.RateDimensionId);
@@ -347,6 +347,10 @@ namespace TOne.WhS.Invoice.Business
             measures.Add(invoiceActionSettings.DurationMeasureId);
             measures.Add(invoiceActionSettings.NumberOfCallsMeasureId);
             measures.Add(invoiceActionSettings.RateMeasureId);
+
+            measures.Add(invoiceActionSettings.FromDateMeasureId);
+            measures.Add(invoiceActionSettings.ToDateMeasureId);
+
 
             GroupingInvoiceItemQuery query = new GroupingInvoiceItemQuery
             {
@@ -530,7 +534,8 @@ namespace TOne.WhS.Invoice.Business
                 AggregateItemField durationMeasure = null;
                 AggregateItemField callsMeasure = null;
                 AggregateItemField rateMeasure = null;
-
+                AggregateItemField fromDateMeasure = null;
+                AggregateItemField toDateMeasure = null;
                 foreach (var measure in itemGrouping.AggregateItemFields)
                 {
                     if (measure.AggregateItemFieldId == compareInvoiceAction.AmountMeasureId)
@@ -549,20 +554,26 @@ namespace TOne.WhS.Invoice.Business
                     {
                         rateMeasure = measure;
                     }
+                    else if (measure.AggregateItemFieldId == compareInvoiceAction.FromDateMeasureId)
+                    {
+                        fromDateMeasure = measure;
+                    }
+                    else if (measure.AggregateItemFieldId == compareInvoiceAction.ToDateMeasureId)
+                    {
+                        toDateMeasure = measure;
+                    }
                 }
 
 
                 foreach (var item in groupedItems)
                 {
                     var zoneDimension = item.DimensionValues[0];
-                    var fromDateDimension = item.DimensionValues[1];
-                    var toDateDimension = item.DimensionValues[2];
-                    var currecnyDimension = item.DimensionValues[3];
+                    //var fromDateDimension = item.DimensionValues[1];
+                    //var toDateDimension = item.DimensionValues[2];
+                    var currecnyDimension = item.DimensionValues[1];
                     InvoiceItemToCompare invoiceItemToCompare = new InvoiceItemToCompare
                     {
                         Destination = zoneDimension != null ? zoneDimension.Name : null,
-                        From = fromDateDimension != null ? Convert.ToDateTime(fromDateDimension.Value) : default(DateTime),
-                        To = toDateDimension != null ? Convert.ToDateTime(toDateDimension.Value) : default(DateTime),
                         CurrencyId = currecnyDimension != null ? Convert.ToInt32(currecnyDimension.Value) : default(int),
                     };
 
@@ -570,6 +581,11 @@ namespace TOne.WhS.Invoice.Business
                     InvoiceGroupingMeasureValue callsMeasureItem;
                     InvoiceGroupingMeasureValue durationMeasureItem;
                     InvoiceGroupingMeasureValue rateMeasureItem;
+
+
+                    InvoiceGroupingMeasureValue fromDateMeasureItem;
+                    InvoiceGroupingMeasureValue toDateMeasureItem;
+
 
                     if (amountMeasure != null && item.MeasureValues.TryGetValue(amountMeasure.FieldName, out amountMeasureItem))
                     {
@@ -589,6 +605,18 @@ namespace TOne.WhS.Invoice.Business
                     {
                         invoiceItemToCompare.Rate = rateMeasureItem.Value != null ? Convert.ToDecimal(rateMeasureItem.Value) : default(decimal);
                     }
+
+                    if (fromDateMeasure != null && item.MeasureValues.TryGetValue(fromDateMeasure.FieldName, out fromDateMeasureItem))
+                    {
+                        invoiceItemToCompare.From = fromDateMeasureItem.Value != null ? Convert.ToDateTime(fromDateMeasureItem.Value) : default(DateTime);
+                    }
+
+                    if (toDateMeasure != null && item.MeasureValues.TryGetValue(toDateMeasure.FieldName, out toDateMeasureItem))
+                    {
+                        invoiceItemToCompare.To = toDateMeasureItem.Value != null ? Convert.ToDateTime(toDateMeasureItem.Value) : default(DateTime);
+                    }
+
+
                     invoiceItemToCompare.Rate = Math.Round(invoiceItemToCompare.Rate, longPrecision,MidpointRounding.AwayFromZero);
                     if (decimalDigits.HasValue)
                     {
@@ -599,8 +627,8 @@ namespace TOne.WhS.Invoice.Business
                     var comparisonKey = new ComparisonKey
                     {
                         Destination = invoiceItemToCompare.Destination,
-                        From = invoiceItemToCompare.From.Date,
-                        To = invoiceItemToCompare.To.Date,
+                        From = invoiceItemToCompare.From,
+                        To = invoiceItemToCompare.To,
                     };
                     if (!invoiceItemsToCompare.ContainsKey(comparisonKey))
                     {
