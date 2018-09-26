@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
@@ -18,15 +14,14 @@ namespace Vanrise.Notification.Entities
 
         public VRAlertRuleSettings Settings { get; set; }
 
-        public DateTime CreatedTime { get; set; }
+        public bool IsDisabled { get; set; }
 
         public int? CreatedBy { get; set; }
+
+        public DateTime CreatedTime { get; set; }
 
         public int? LastModifiedBy { get; set; }
 
         public DateTime? LastModifiedTime { get; set; }
-
-        public bool IsDisabled { get; set; }
-       
     }
 }
