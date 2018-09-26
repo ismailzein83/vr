@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Mediation_WHS].[OgeroRadiusCDR] (
+CREATE TABLE [Mediation_WHS].[OgeroRadiusCDR] (
     [Id]                     BIGINT       NULL,
     [ComputerName]           VARCHAR (50) NULL,
     [ServiceName]            VARCHAR (50) NULL,
@@ -38,8 +38,8 @@
     [AcctSessionId]          VARCHAR (50) NULL,
     [AcctAuthentic]          INT          NULL,
     [AcctSessionTime]        VARCHAR (50) NULL,
-    [AcctInputPackets]       INT          NULL,
-    [AcctOutputPackets]      INT          NULL,
+    [AcctInputPackets]       BIGINT       NULL,
+    [AcctOutputPackets]      BIGINT       NULL,
     [AcctTerminateCause]     INT          NULL,
     [AcctMultiSsnID]         INT          NULL,
     [AcctLinkCount]          INT          NULL,
@@ -62,6 +62,10 @@
     [MSMPPEEncryptionPolicy] INT          NULL,
     [FileName]               VARCHAR (50) NULL
 );
+
+
+
+
 
 
 

@@ -38,8 +38,8 @@
     [AcctSessionId]          VARCHAR (50) NULL,
     [AcctAuthentic]          INT          NULL,
     [AcctSessionTime]        VARCHAR (50) NULL,
-    [AcctInputPackets]       INT          NULL,
-    [AcctOutputPackets]      INT          NULL,
+    [AcctInputPackets]       BIGINT       NULL,
+    [AcctOutputPackets]      BIGINT       NULL,
     [AcctTerminateCause]     INT          NULL,
     [AcctMultiSsnID]         INT          NULL,
     [AcctLinkCount]          INT          NULL,
@@ -61,6 +61,8 @@
     [MSMPPEEncryptionTypes]  INT          NULL,
     [MSMPPEEncryptionPolicy] INT          NULL,
     [FileName]               VARCHAR (50) NULL);
+
+
 
 
 
