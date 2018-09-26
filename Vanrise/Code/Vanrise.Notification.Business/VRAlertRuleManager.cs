@@ -122,8 +122,12 @@ namespace Vanrise.Notification.Business
 
         public Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail> UpdateVRAlertRule(VRAlertRule vrAlertRuleItem)
         {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail>();
+            VRAlertRule previousVRAlertRule = GetVRAlertRule(vrAlertRuleItem.VRAlertRuleId);
+            previousVRAlertRule.ThrowIfNull("previousVRAlertRule", vrAlertRuleItem.VRAlertRuleId);
+            if (vrAlertRuleItem.RuleTypeId != previousVRAlertRule.RuleTypeId)
+                throw new VRBusinessException(String.Format("You are not allowed to change Rule Type", vrAlertRuleItem.VRAlertRuleId));
 
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 

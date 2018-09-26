@@ -9,7 +9,8 @@
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-notification-alertruletype-selector on-ready="scopeModel.onAlertRuleTypeSelectorReady" selectedvalues="scopeModel.selectedRuleType"
-                                                                    onselectionchanged="scopeModel.onAlertRuleTypeSelectionChanged" isrequired="true">
+                                                                    onselectionchanged="scopeModel.onAlertRuleTypeSelectionChanged"
+                                                                    isrequired="true" vr-disabled="scopeModel.isAlertRuleTypeSelectorDisabled" hideremoveicon>
                             </vr-notification-alertruletype-selector>
                         </vr-columns>
                         <vr-columns width="1/2row">

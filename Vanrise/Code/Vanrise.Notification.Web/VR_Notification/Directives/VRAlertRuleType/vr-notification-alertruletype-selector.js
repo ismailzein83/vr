@@ -92,20 +92,27 @@ app.directive('vrNotificationAlertruletypeSelector', ['VR_Notification_VRAlertRu
 
         function getTemplate(attrs) {
 
-            var multipleselection = "";
             var label = "Rule Type";
+            var multipleselection = "";
 
             if (attrs.ismultipleselection != undefined) {
                 label = "Rule Types";
                 multipleselection = "ismultipleselection";
             }
-            if (attrs.customlabel != undefined)
+
+            if (attrs.customlabel != undefined){
                 label = attrs.customlabel;
+            }
+
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined) {
+                hideremoveicon = "hideremoveicon";
+            }
 
             var template =
                 '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRAlertRuleTypeId" isrequired="ctrl.isrequired" label="' + label +
                     '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                 '</vr-select>';
 
             return template;

@@ -34,12 +34,14 @@
                 context = parameters.context;
                 isViewMode = parameters.isViewMode;
             }
+
             isEditMode = (vrAlertRuleId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.isAlertRuleTypeSelected = false;
             $scope.scopeModel.isEnabled = true;
+            $scope.scopeModel.isAlertRuleTypeSelected = false;
+            $scope.scopeModel.isAlertRuleTypeSelectorDisabled = isEditMode;
             $scope.scopeModel.selectedRuleType;
             $scope.scopeModel.SettingEditor;
 
