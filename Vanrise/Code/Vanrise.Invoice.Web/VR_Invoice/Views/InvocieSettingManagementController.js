@@ -82,7 +82,7 @@
                         if($scope.scopeModel.partnerInvoiceSelector != undefined)
                         {
                             partnerSelectorReadyDeferred.promise.then(function () {
-                                partnerSelectorReadyDeferred = undefined;
+                                //partnerSelectorReadyDeferred = undefined;
                                 var setLoader = function (value) {
                                     $scope.scopeModel.isLoadingDirective = value;
                                 };
@@ -134,10 +134,11 @@
         }
         function getInvoicePartnerSelector()
         {
-            partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-            return VR_Invoice_InvoiceTypeAPIService.GetInvoicePartnerSelector(invoiceTypeSelectorAPI.getSelectedIds()).then(function(response){
+            return VR_Invoice_InvoiceTypeAPIService.GetInvoicePartnerSelector(invoiceTypeSelectorAPI.getSelectedIds()).then(function (response) {
+                if ($scope.scopeModel.partnerInvoiceSelector == undefined || $scope.scopeModel.partnerInvoiceSelector != response)
+                    partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                 $scope.scopeModel.partnerInvoiceSelector = response;
-                partnerSelectorReadyDeferred.resolve();
+                //partnerSelectorReadyDeferred.resolve();
             });
         }
 
