@@ -93,7 +93,7 @@
 
         function setTitle() {
             if (editMode && supplierServiceEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(supplierServiceEntity.ZoneName, "Services For Zone ");
+                $scope.title = UtilsService.buildTitleForChangeEditor(supplierServiceEntity.ZoneName, "Services For Zone ");
             else
                 $scope.title = UtilsService.buildTitleForAddEditor("Zone Service");
         }
