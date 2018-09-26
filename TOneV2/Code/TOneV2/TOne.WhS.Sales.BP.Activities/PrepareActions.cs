@@ -307,7 +307,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     var currentRate = locator.GetCustomerZoneRate(customerId, sellingProductId, zoneChanges.ZoneId);
                     if (currentRate == null)
                     {
-                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zone with id {0} does neither have a default rate nor an explicit rate for customer with id {1}", zoneId, customerId));
+                        throw new Vanrise.Entities.VRBusinessException(string.Format("Zone:'{0}' is having an Other Rate in a date '{1}' where Normal Rate doesn't exist ", zoneChanges.ZoneName, zoneChanges.NewOtherRateBED)); 
                     }
                     if (!zoneChanges.NewOtherRateBED.HasValue)
                         throw new Vanrise.Entities.VRBusinessException(string.Format("Other Rate(s) of zone with id '{0}' does not have BED", zoneId));
