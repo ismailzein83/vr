@@ -237,7 +237,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleEntityRoutingProduct] ([ID], [OwnerType], [OwnerID], [ZoneID], [RoutingProductID], [BED], [EED])
                                            SELECT [ID], [OwnerType], [OwnerID], [ZoneID], [RoutingProductID], [BED], [EED] FROM [{0}].[TOneWhS_BE_Bkup].[SaleEntityRoutingProduct]
-                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+                                            WITH (NOLOCK) Where StateBackupID = {1} AND zoneid in ( select id from TOneWhS_BE.SaleZone) ", backupDatabase, stateBackupId);
         }
 
         public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
