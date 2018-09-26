@@ -156,9 +156,66 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Notification">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Notification.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Notification.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Pricing">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.QueueActivators">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.SQLDataStorage">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
