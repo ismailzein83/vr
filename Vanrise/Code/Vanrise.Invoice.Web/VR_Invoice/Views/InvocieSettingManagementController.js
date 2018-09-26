@@ -137,6 +137,7 @@
             partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             return VR_Invoice_InvoiceTypeAPIService.GetInvoicePartnerSelector(invoiceTypeSelectorAPI.getSelectedIds()).then(function(response){
                 $scope.scopeModel.partnerInvoiceSelector = response;
+                partnerSelectorReadyDeferred.resolve();
             });
         }
 
