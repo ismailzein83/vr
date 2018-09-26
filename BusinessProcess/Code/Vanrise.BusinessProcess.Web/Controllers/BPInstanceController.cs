@@ -38,7 +38,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public object GetFilteredBPInstances(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
         {
             BPInstanceManager manager = new BPInstanceManager();
-            return GetWebResponse(input, manager.GetFilteredBPInstances(input));
+            return GetWebResponse(input, manager.GetFilteredBPInstances(input), "Business Process Instances");
         }
 
         [HttpGet]
