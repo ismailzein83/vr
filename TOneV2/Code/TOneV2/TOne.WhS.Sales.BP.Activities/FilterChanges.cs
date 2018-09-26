@@ -112,7 +112,21 @@ namespace TOne.WhS.Sales.BP.Activities
 
             var soldCountriesByCountryId = GetNotEndedCustomerCountriesByCountryId(customerId, effectiveDate);
             if (soldCountriesByCountryId.Count == 0)
+            {
+                List<int> allExcludedCountriesIds = new List<int>();
+                foreach (var zoneChange in zoneChanges)
+                {
+                    if (!allExcludedCountriesIds.Contains(zoneChange.CountryId))
+                        allExcludedCountriesIds.Add(zoneChange.CountryId);
+                }
+                excludedCountries.Add(new ExcludedChange
+                {
+                    SubscriberId = customerId,
+                    CountryIds = allExcludedCountriesIds,
+                    Reason = String.Format("No countries are sold yet to subscriber : '{0}'", carrierName)
+                });
                 return filteredZoneChanges;
+            }
 
             TOne.WhS.BusinessEntity.Business.ConfigManager configManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
 
@@ -224,24 +238,24 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 if (newRate.BED < countrySellDate)
                 {
-                    var notSoldCountryNames = countryManager.GetCountryNames(notSoldCountryIds);
-                    excludedCountries.Add(new ExcludedChange()
-                    {
-                        SubscriberId = customerId,
-                        CountryIds = notSoldCountryIds,
-                        Reason = String.Format("Country(ies) : '{0}' not sold to subscriber '{1}'", String.Join(" , ", notSoldCountryNames), carrierName)
-                    });
+                    //var notSoldCountryNames = countryManager.GetCountryNames(notSoldCountryIds);
+                    //excludedCountries.Add(new ExcludedChange()
+                    //{
+                    //    SubscriberId = customerId,
+                    //    CountryIds = notSoldCountryIds,
+                    //    Reason = String.Format("Country(ies) : '{0}' not sold to subscriber '{1}'", String.Join(" , ", notSoldCountryNames), carrierName)
+                    //});
                     continue;
                 }
                 if (rateAtActionDate == null)
                 {
-                    var notSoldCountryNames = countryManager.GetCountryNames(notSoldCountryIds);
-                    excludedCountries.Add(new ExcludedChange()
-                    {
-                        SubscriberId = customerId,
-                        CountryIds = notSoldCountryIds,
-                        Reason = String.Format("Country(ies) : '{0}' not sold to subscriber '{1}'", String.Join(" , ", notSoldCountryNames), carrierName)
-                    });
+                    //var notSoldCountryNames = countryManager.GetCountryNames(notSoldCountryIds);
+                    //excludedCountries.Add(new ExcludedChange()
+                    //{
+                    //    SubscriberId = customerId,
+                    //    CountryIds = notSoldCountryIds,
+                    //    Reason = String.Format("Country(ies) : '{0}' not sold to subscriber '{1}'", String.Join(" , ", notSoldCountryNames), carrierName)
+                    //});
                     continue;
                 }
 
@@ -288,13 +302,13 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 if (closedRate.EED < countrySellDate)
                 {
-                    var notSoldCountryNames = countryManager.GetCountryNames(notSoldCountryIds);
-                    excludedCountries.Add(new ExcludedChange()
-                    {
-                        SubscriberId = customerId,
-                        CountryIds = notSoldCountryIds,
-                        Reason = String.Format("Country(ies) : '{0}' not sold to subscriber '{1}'", String.Join(" , ", notSoldCountryNames), carrierName)
-                    });
+                    //var notSoldCountryNames = countryManager.GetCountryNames(notSoldCountryIds);
+                    //excludedCountries.Add(new ExcludedChange()
+                    //{
+                    //    SubscriberId = customerId,
+                    //    CountryIds = notSoldCountryIds,
+                    //    Reason = String.Format("Country(ies) : '{0}' not sold to subscriber '{1}'", String.Join(" , ", notSoldCountryNames), carrierName)
+                    //});
                     continue;
                 }
                 var currentRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, closedRate.ZoneId);
