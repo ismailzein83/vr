@@ -100,6 +100,9 @@
                 if (SelectedItem != undefined) {
                     $scope.scopeModel.codecprofileid = SelectedItem.CodecProfileId;
                 }
+            else {
+                    $scope.scopeModel.codecprofileid = undefined;
+                }
             };
 
             $scope.scopeModel.onSelectionTranslationRuleChanged = function (SelectedItem) {
@@ -357,7 +360,7 @@
                  LogAlias: $scope.scopeModel.logalias,
                  CodecProfileId: $scope.scopeModel.codecprofileid,
                  TransRuleId: !$scope.scopeModel.routeTableBasedRule ? $scope.scopeModel.translationruleid : null,
-                 CurrentState: $scope.scopeModel.currentstate.value,
+                 CurrentState: $scope.scopeModel.currentstate!=undefined ? $scope.scopeModel.currentstate.value : undefined,
                  ChannelsLimit: $scope.scopeModel.channelslimit,
                  MaxCallDuration: $scope.scopeModel.maxcallduration,
                  RtpMode: $scope.scopeModel.rtpmode,
