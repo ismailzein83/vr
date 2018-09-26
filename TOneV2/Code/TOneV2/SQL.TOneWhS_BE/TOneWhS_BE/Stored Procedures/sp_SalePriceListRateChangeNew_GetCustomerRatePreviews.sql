@@ -18,7 +18,7 @@ SELECT @ProcessInstanceId  = @ProcessInstanceId_IN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;	
 	
-	select spr.PricelistId,spr.ZoneName, spr.RecentRate, spr.Rate, spr.CountryID, spr.ZoneID, spr.RoutingProductID, spr.CurrencyID,spr.Change, spr.BED, spr.EED,sp.OwnerID
+	select spr.PricelistId,spr.ZoneName,spr.RecentCurrencyId, spr.RecentRate,spr.RecentRateConverted , spr.Rate, spr.CountryID, spr.ZoneID, spr.RoutingProductID, spr.CurrencyID,spr.Change, spr.BED, spr.EED,sp.OwnerID
 	from TOneWhS_BE.SalePricelistRateChange_New spr WITH(NOLOCK) 
 	join TOneWhS_BE.SalePriceList_New sp WITH(NOLOCK) on sp.ID = spr.PricelistId
 	where spr.ProcessInstanceID = @ProcessInstanceID

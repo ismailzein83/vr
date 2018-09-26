@@ -649,5 +649,7 @@
     <Build Include="dbo\Stored Procedures\sp_CDRSourceConfig_Insert.sql" />
     <Build Include="dbo\Stored Procedures\sp_CDRSourceConfig_GetAll.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfExcludedCountries.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfImportedZoneRates.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfImportedCodes.sql" />
   </ItemGroup>
 </Project>
