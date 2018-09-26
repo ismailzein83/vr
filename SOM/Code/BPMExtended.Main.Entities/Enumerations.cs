@@ -27,6 +27,13 @@ namespace BPMExtended.Main.Entities
         LeasedLineSubscription = 4,
 
         [LineOfBusiness(LineOfBusiness.ADSL)]
-        ADSLSubscription = 5
+        ADSLSubscription = 5,
+
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLForISPSubscription = 6,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        NewPabxOperation = 7,
+
     }
 }

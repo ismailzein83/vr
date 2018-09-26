@@ -85,6 +85,18 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public bool AddADSLISPService(string contractId)
+        {
+            //
+            return true;
+        }
+
+        public bool ActivateADSLISPService(string contractId, string customerId, string ispId, string port)
+        {
+            //TODO: Activate service
+            return true;
+        }
+
         #region mappers
 
         private TelephonyContractInfo TelephonyContractDetailToInfo(TelephonyContractDetail detail)

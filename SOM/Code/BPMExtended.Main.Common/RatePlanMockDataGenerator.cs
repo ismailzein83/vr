@@ -11,6 +11,15 @@ namespace BPMExtended.Main.Common
     {
         #region Constants
 
+        #region ISPs
+
+        const string ISP_ID_1 = "290998CB-5A66-46A5-869B-DBD35BF6588D";
+        const string ISP_ID_2 = "DACD473D-85F0-4A73-B202-141094C4328D";
+        const string ISP_ID_3 = "ADC2FE86-63E7-4170-BC07-4EBD66110E52";
+        const string ISP_ID_4 = "F3DF641B-5D95-46B6-861C-8791207C3A60";
+
+        #endregion
+
         #region Customers
 
         const string CUSTOMER_ID_1 = "2408EDDB-ABAB-4507-905C-20386B7EC106";
@@ -630,6 +639,39 @@ namespace BPMExtended.Main.Common
         #endregion
 
 
+        #region ISP
+
+
+         public static List<ISPInfo> GetAllISPInfo()
+        {
+            return new List<ISPInfo>
+            {
+                 new ISPInfo
+                 {
+                     Id = ISP_ID_1,
+                     Name = "Terranet"                
+                 },
+                 new ISPInfo
+                 {
+                     Id = ISP_ID_2,
+                     Name = "BSNL"                
+                 },
+                 new ISPInfo
+                 {
+                     Id = ISP_ID_3,
+                     Name = "Comcast"                
+                 },
+                 new ISPInfo
+                 {
+                     Id = ISP_ID_4,
+                     Name = "Megapath"                
+                 }
+
+            };
+
+         }
+
+        #endregion
 
         #region ADSL Contract
 

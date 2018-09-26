@@ -289,5 +289,12 @@ namespace BPMExtended.Main.Business
             }
             return  item;
         }
+
+        public List<ISPInfo> GetISPs()
+        {
+            return RatePlanMockDataGenerator.GetAllISPInfo();
+
+        }
+
     }
 }
