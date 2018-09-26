@@ -158,7 +158,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 }
             };
             var accountStatusFilter = accountStatusSelectorAPI.getData();
-            if(accountStatusFilter != undefined)
+            if(accountStatusFilter != undefined && $scope.scopeModel.showAccountSelector)
             {
                 filter.query.IsEffectiveInFuture = accountStatusFilter.IsEffectiveInFuture;
                 filter.query.Status = accountStatusFilter.Status;
