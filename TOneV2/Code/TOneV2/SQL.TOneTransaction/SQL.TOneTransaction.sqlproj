@@ -103,6 +103,7 @@
     <Folder Include="SOM\" />
     <Folder Include="SOM\Tables\" />
     <Folder Include="SOM\Stored Procedures\" />
+    <Folder Include="VRNotification\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -241,6 +242,7 @@
     <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_GetDue.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_Delete.sql" />
+    <Build Include="VRNotification\User Defined Types\EventKeysTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />

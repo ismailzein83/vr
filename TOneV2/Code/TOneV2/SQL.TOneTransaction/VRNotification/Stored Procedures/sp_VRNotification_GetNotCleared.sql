@@ -2,20 +2,16 @@
 	@NotificationTypeID uniqueidentifier,
 	@ParentType1 varchar(255) = null,
 	@ParentType2 varchar(255) = null,
-	@EventKeys nvarchar(max) = null,
+	@EventKeysTable [VRNotification].[EventKeysTable] READONLY,
 	@NotificationCreatedAfter datetime = null
 AS
 BEGIN
-	DECLARE @EventKeysTable TABLE (EventKey nvarchar(900))
-	INSERT INTO @EventKeysTable (EventKey)
-	SELECT Convert(nvarchar(900), ParsedString) FROM [VRNotification].[ParseStringList](@EventKeys)
-
 	SELECT	 [ID]
 			,[UserID]
 			,[TypeID]
 			,[ParentType1]
 			,[ParentType2]
-			,[EventKey]
+			,vrNotificationTable.[EventKey]
 			,[ExecuteBPInstanceID]
 			,[ClearBPInstanceID]
 			,[Status]
@@ -26,9 +22,9 @@ BEGIN
 			,[CreationTime]
 			,[EventPayload]
 			,RollbackEventPayload
-	FROM [VRNotification].[VRNotification] WITH(NOLOCK)
+	FROM [VRNotification].[VRNotification] vrNotificationTable WITH(NOLOCK)
+	JOIN @EventKeysTable eventKeyTable on vrNotificationTable.EventKey = eventKeyTable.EventKey
 	where TypeID = @NotificationTypeID
-	      and (@EventKeys is null or EventKey in (select EventKey from @EventKeysTable))
 		  and (@ParentType1 is null or ParentType1 = @ParentType1)
 		  and (@ParentType2 is null or ParentType2 = @ParentType2)
 		  and (@NotificationCreatedAfter is null or CreationTime > @NotificationCreatedAfter)
