@@ -26,6 +26,18 @@ namespace Vanrise.Analytic.Business
             return aggregateValue;
         }
 
+        public dynamic GetGroupingValue(string groupingName)
+        {
+            if (_groupingValues == null)
+                return null;
+
+            dynamic groupingValue;
+            if (!_groupingValues.TryGetValue(groupingName, out groupingValue))
+                return null;
+
+            return groupingValue;
+        }
+
         public bool IsGroupingValueIncluded(string groupingName)
         {
             if (_groupingValues == null)

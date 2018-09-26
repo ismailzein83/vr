@@ -12,5 +12,7 @@ namespace Vanrise.Analytic.Entities
         dynamic GetAggregateValue(string aggregateName);
 
         bool IsGroupingValueIncluded(string groupingName);
+
+        dynamic GetGroupingValue(string groupingName);
     }
 }
