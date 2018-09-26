@@ -163,9 +163,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     divDatePicker.data("DateTimePicker").hide();
             }
             ctrl.tabindex = "";
+            ctrl.disabled = false;
             setTimeout(function () {
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                     ctrl.tabindex = "-1";
+                    ctrl.disabled = true;
                 }
             }, 10);
 
@@ -442,7 +444,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                  '<div   >'
                   + '<vr-validator validate="ctrl.validate()" vr-input>'
                   + '<div id="divDatePicker" ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container vanrise-inpute" >'
-                            + '<input ' + readOnlyInput + ' tabindex="{{ctrl.tabindex}}" class="vr-date-input vanrise-inpute" placeholder="{{::ctrl.placelHolder}}" ng-keyup="::ctrl.updateModelOnKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                            + '<input ng-disabled="ctrl.disabled" ' + readOnlyInput + ' tabindex="{{ctrl.tabindex}}" class="vr-date-input vanrise-inpute" placeholder="{{::ctrl.placelHolder}}" ng-keyup="::ctrl.updateModelOnKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
                             + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;' + iconposition + n * 10 + 'px;" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'
