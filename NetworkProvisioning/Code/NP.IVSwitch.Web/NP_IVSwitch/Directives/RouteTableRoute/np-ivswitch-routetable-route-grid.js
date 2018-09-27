@@ -27,7 +27,6 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
             $scope.scopeModel.routeOptions = [];
             $scope.scopeModel.routeTablesRT = [];
             $scope.scopeModel.menuActions = [];
-            var datasources = [];
             $scope.scopeModel.limit = 100;
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -69,6 +68,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return NP_IVSwitch_RouteTableRouteAPIService.GetFilteredRouteTableRoutes(dataRetrievalInput).then(function (response) {
+                    if (response != undefined && response.Data != undefined && response.Data.length > 0)
                     for (var i = 0; i < response.Data.length; i++) {
                         var item = response.Data[i];
                         if ($scope.scopeModel.isANumber == true)

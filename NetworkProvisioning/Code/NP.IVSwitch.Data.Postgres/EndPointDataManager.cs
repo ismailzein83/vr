@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Npgsql;
 using Vanrise.Data.Postgres;
 using NP.IVSwitch.Entities.RouteTable;
+using System.Transactions;
 
 namespace NP.IVSwitch.Data.Postgres
 {
@@ -83,49 +84,58 @@ namespace NP.IVSwitch.Data.Postgres
         }
         public bool EndPointAclUpdate(IEnumerable<int> endPointIds, int value, RouteTableViewType routeTableViewType, UserType userType)
         {
-            string query = "";
-            //string fieldName = "";
-            string tableName = "";
-            string userIds = "";
-            userIds = "(" + string.Join(",", endPointIds) + ")";
-
-            if (userType == UserType.SIP)
-                tableName = "users";
-            else
-                tableName = "access_list";
-
-
-
-
-
-
-
-            switch (routeTableViewType)
+            var transactionOptions = new TransactionOptions
             {
-                case RouteTableViewType.ANumber:
-                    query = string.Format(@"UPDATE {0} SET  cli_routing=@value WHERE user_id in {1} ", tableName,userIds);
-                    break;
-                case RouteTableViewType.Whitelist:
-                    query = string.Format(@"UPDATE {0} SET  dst_routing=@value WHERE user_id in {1} ", tableName, userIds);
-                    break;
-                case RouteTableViewType.BNumber:
-                    query = string.Format(@"UPDATE {0} SET  cli_routing=0, dst_routing=0,route_table_id=@value WHERE user_id in {1} ",tableName, userIds);
-                    break;
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+            {
+                string sipQuery = "";
+                string aclQuery = "";
+                string userIds = "";
+                userIds = "(" + string.Join(",", endPointIds) + ")";
+
+                switch (routeTableViewType)
+                {
+                    case RouteTableViewType.ANumber:
+                        if (userType == UserType.ACL)
+                            aclQuery = string.Format("UPDATE access_list SET  cli_routing=@value WHERE user_id in {0}", userIds);
+                        sipQuery = string.Format("UPDATE users SET  cli_routing=@value WHERE user_id in {0}", userIds);
+                        break;
+                    case RouteTableViewType.Whitelist:
+                        if (userType == UserType.ACL)
+                            aclQuery = string.Format("UPDATE access_list SET  dst_routing=@value WHERE user_id in {0}", userIds);
+                        sipQuery = string.Format("UPDATE users SET  dst_routing=@value WHERE user_id in {0}", userIds);
+                        break;
+                    case RouteTableViewType.BNumber:
+                        if (userType == UserType.ACL)
+                            aclQuery = string.Format("UPDATE access_list SET  route_table_id=@nullValue WHERE user_id in {0}", userIds);
+                        sipQuery = string.Format("UPDATE users SET  route_table_id=@nullValue WHERE user_id in {0}", userIds);
+                        break;
+                }
+                ;
+
+
+                ExecuteNonQueryText(sipQuery, cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@value", value);
+                    cmd.Parameters.AddWithValue("@nullValue", (Object)DBNull.Value);
+
+
+                });
+                if (!aclQuery.Equals(""))
+                    ExecuteNonQueryText(aclQuery, cmd =>
+                   {
+                       cmd.Parameters.AddWithValue("@value", value);
+                       cmd.Parameters.AddWithValue("@nullValue", (Object)DBNull.Value);
+
+
+                   });
+                transactionScope.Complete();
+
             }
-
-
-
-            //string query = string.Format(@"UPDATE {0} SET {1}=@value WHERE  user_id in {2}", tableName, fieldName, userIds);
-            int recordsEffected = ExecuteNonQueryText(query, cmd =>
-            {
-                cmd.Parameters.AddWithValue("@table", tableName);
-                //cmd.Parameters.AddWithValue("@field", fieldName);
-                cmd.Parameters.AddWithValue("@value", value);
-
-            });
-
-
-            return recordsEffected > 0;
+            return true;
 
         }
         private bool AclUpdate(EndPoint endPoint)

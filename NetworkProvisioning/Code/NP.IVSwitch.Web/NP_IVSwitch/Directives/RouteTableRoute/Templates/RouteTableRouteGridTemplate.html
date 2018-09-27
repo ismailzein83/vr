@@ -19,11 +19,10 @@
                             {{routeOption.SupplierName}}
                         </span>
                         <span style="display: inline-block; width: 85px;">
-                            192.168.0.1
-                            <!--{{routeOption.RouteName}}-->
+                            {{routeOption.RouteName}}
                         </span>
                         <span style="display: inline-block; width: 25px;">
-                            {{routeOption.Percentage}}%
+                            <span ng-if="routeOption.Percentage">{{routeOption.Percentage}}%</span>
                         </span>
                     </span>
                 </div>
@@ -31,21 +30,3 @@
         </vr-datagrid>
     </vr-columns>
 </vr-row>
-
-
-
-
-<!--<vr-datagrid datasource="scopeModel.routeTablesRT"
-             on-ready="scopeModel.onGridReady"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             pagingtype="'PagingOnScroll'"
-             menuactions="scopeModel.gridMenuActions"
-             idfield="RouteOptionsDetailId"
-             enableautoexport>
-    <vr-datagridcolumn headertext="'A Number'" field="'Destination'" type="'text'" ng-show="scopeModel.isANumber">
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'B Number'" field="'TechPrefix'" type="'text'">
-    </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Options'" field="'Options'" type="'text'">
-    </vr-datagridcolumn>
-</vr-datagrid>-->

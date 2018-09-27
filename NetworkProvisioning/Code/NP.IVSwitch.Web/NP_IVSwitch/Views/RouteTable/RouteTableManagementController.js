@@ -5,7 +5,7 @@
 
     function routeTableManagementController($scope, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum) {
         var gridApi;
-        var GridDirectiveDefferedReady = UtilsService.createPromiseDeferred();   
+        var GridDirectiveDefferedReady = UtilsService.createPromiseDeferred();
 
         var customerSelectorDirectiveAPI;
         var CustomerSelectorDirectiveDefferedReady = UtilsService.createPromiseDeferred();
@@ -33,22 +33,26 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined)
-              viewId = parameters.viewId;
-        };
+                viewId = parameters.viewId;
+        }
 
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.routeTableViewType = [];
 
-            $scope.scopeModel.onRouteTableViewTypesReady = function(api)
-            {
-            routeTableViewTypesSelectorAPI = api;
-            routeTableViewTypesSelectorDefferedReady.resolve();
+            $scope.scopeModel.onRouteTableViewTypesReady = function (api) {
+                routeTableViewTypesSelectorAPI = api;
+                routeTableViewTypesSelectorDefferedReady.resolve();
             };
 
             $scope.scopeModel.onRouteTableViewSelectionChanged = function (option) {
                 if (option != undefined) {
                     routeTableViewType = option.value;
+                    if (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value)
+                        $scope.scopeModel.bNumber = true;
+                    else
+                        $scope.scopeModel.bNumber = false;
+
                     $scope.scopeModel.isLoading = true;
                     loadAllControls().catch(function (error) {
                         $scope.scopeModel.isLoading = false;
@@ -113,17 +117,18 @@
                     }
                 };
                 NP_IVSwitch_RouteTableService.addRouteTable({ onRouteTableAdded: onRouteTableAdded, RouteTableViewType: routeTableViewType });
-             };
-        };
+            };
+        }
 
-       
+
         function load() {
             $scope.scopeModel.isLoading = true;
             loadPageViewType().then(function () {
                 loadAllControls().catch(function (error) {
                     $scope.scopeModel.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
+                }
+                );
             }).catch(function (error) {
                 $scope.scopeModel.isLoading = false;
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -134,8 +139,7 @@
             return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {
                 routeTableViewTypesSelectorDefferedReady.promise.then(function () {
                     var routTableViewTypes = UtilsService.getArrayEnum(NP_IVSwitch_RouteTableViewTypeEnum);
-                    if (routTableViewTypes != undefined)
-                    {
+                    if (routTableViewTypes != undefined) {
                         for (var i = 0; i < routTableViewTypes.length; i++) {
                             var item = routTableViewTypes[i];
                             if (response.Settings.Types.includes(item.value))
@@ -174,27 +178,30 @@
 
             return {
                 query: {
-                    RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
+                    RouteTableViewType: routeTableViewType,
+
                     Name: $scope.scopeModel.name,
                     CustomerIds: getCustomerIds(),
                     EndPoints: getEndPoints()
-                       }
-                  };
+                }
+            };
         }
 
-        function loadAllControls()
-        {
+        function loadAllControls() {
 
             function gridDirective() {
                 return GridDirectiveDefferedReady.promise.then(function () {
+
                     gridApi.load({ Filter: getFilter(), RouteTableViewType: routeTableViewType });
+
+
                 });
             }
 
             function customerDirective() {
                 return CustomerSelectorDirectiveDefferedReady.promise.then(function () {
                     var directivePayload;
-                    VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, undefined, undefined)
+                    VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, undefined, undefined);
                 });
             }
 
@@ -207,7 +214,7 @@
 
         }
 
-    };
+    }
 
     appControllers.controller('NP_IVSwitch_RouteTableManagementController', routeTableManagementController);
 })(appControllers);

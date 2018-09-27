@@ -61,12 +61,12 @@ namespace NP.IVSwitch.Business
             IEndPointDataManager endPointDataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             Helper.SetSwitchConfig(endPointDataManager);
             IEnumerable<EndPoint> endPoints = endPointIds.MapRecords(x => GetEndPoint(x));
-            List<int> aclEndPoints=new List<int>();
-            List<int> sipEndPoints=new List<int>();
+            List<int> aclEndPoints = new List<int>();
+            List<int> sipEndPoints = new List<int>();
 
 
 
-            if(endPoints!=null)
+            if (endPoints != null)
             {
                 foreach (var endPoint in endPoints)
                 {
@@ -78,12 +78,17 @@ namespace NP.IVSwitch.Business
 
             }
 
-            bool updatedAclResult = endPointDataManager.EndPointAclUpdate(aclEndPoints, value, RouteTableViewType,UserType.ACL);
-            bool updateSipResult = endPointDataManager.EndPointAclUpdate(aclEndPoints, value, RouteTableViewType, UserType.SIP);
+            bool updatedAclResult = false;
+            if (aclEndPoints.Count > 0)
+                updatedAclResult = endPointDataManager.EndPointAclUpdate(aclEndPoints, value, RouteTableViewType, UserType.ACL);
 
-            if (updatedAclResult && updatedAclResult)
-            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            return (updatedAclResult && updatedAclResult);
+            bool updateSipResult = false;
+            if (sipEndPoints.Count > 0)
+                updateSipResult = endPointDataManager.EndPointAclUpdate(sipEndPoints, value, RouteTableViewType, UserType.SIP);
+
+            if (updatedAclResult || updateSipResult)
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            return (updatedAclResult || updateSipResult);
         }
 
         public string GetEndPointDescription(int endPointId)
@@ -349,16 +354,7 @@ namespace NP.IVSwitch.Business
         {
             return GetCachedEndPoint();
         }
-        public bool RouteTableEndPointUpdate(RouteTableInput routeTableInput, int routeTableId)
-        {
-            IEndPointDataManager _dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
-            Helper.SetSwitchConfig(_dataManager);
-            bool result = _dataManager.RouteTableEndPointUpdate(routeTableInput, routeTableId);
-            if (result)
-              Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            return result;
 
-        }
 
 
         #endregion
@@ -601,11 +597,26 @@ namespace NP.IVSwitch.Business
                     {
                         EndPointCarrierAccountExtension extendedSettingsObject =
                             carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customerItem);
-                        if (extendedSettingsObject == null || extendedSettingsObject.AclEndPointInfo == null) continue;
-                        foreach (var aclInfo in extendedSettingsObject.AclEndPointInfo)
+
+                        if (extendedSettingsObject == null)
+                            continue;
+
+                        if (extendedSettingsObject.AclEndPointInfo != null)
                         {
-                            if (!result.ContainsKey(aclInfo.EndPointId))
-                                result[aclInfo.EndPointId] = customerItem.CarrierAccountId;
+                            foreach (var aclInfo in extendedSettingsObject.AclEndPointInfo)
+                            {
+                                if (!result.ContainsKey(aclInfo.EndPointId))
+                                    result[aclInfo.EndPointId] = customerItem.CarrierAccountId;
+                            }
+                        }
+
+                        if (extendedSettingsObject.UserEndPointInfo != null)
+                        {
+                            foreach (var userInfo in extendedSettingsObject.UserEndPointInfo)
+                            {
+                                if (!result.ContainsKey(userInfo.EndPointId))
+                                    result[userInfo.EndPointId] = customerItem.CarrierAccountId;
+                            }
                         }
                     }
                     return result;

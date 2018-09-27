@@ -30,68 +30,80 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
             $scope.scopeModel.routeTables = [];
 
             $scope.scopeModel.onGridReady = function (api) {
-               gridApi = api;
-               finalDrillDownDefinitions.push(defineObjectRouteTableRouteDrillDown());
-               function defineObjectRouteTableRouteDrillDown() {
-                   var drillDownDefinition = {};
-                   drillDownDefinition.title = "Routes";
-                   drillDownDefinition.directive = "np-ivswitch-routetable-route-search";
-                   drillDownDefinition.dontLoad = true;
-                   drillDownDefinition.loadDirective = function (directiveAPI, routeTableItem) {
-                       var query = {
-                           RouteTableId: routeTableItem.RouteTableId,
-                           RouteTableViewType: routeTableViewType
-                       };
-                       return directiveAPI.load(query);
-                   }
-                   return drillDownDefinition;
-               };
-                   gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridApi, $scope.menuActions, true);
+                gridApi = api;
+                finalDrillDownDefinitions.push(defineObjectRouteTableRouteDrillDown());
+                function defineObjectRouteTableRouteDrillDown() {
+                    var drillDownDefinition = {};
+                    drillDownDefinition.title = "Routes";
+                    drillDownDefinition.directive = "np-ivswitch-routetable-route-search";
+                    drillDownDefinition.dontLoad = true;
+                    drillDownDefinition.loadDirective = function (directiveAPI, routeTableItem) {
+                        var query = {
+                            RouteTableId: routeTableItem.RouteTableId,
+                            RouteTableViewType: routeTableViewType
+                        };
+                        return directiveAPI.load(query);
+                    };
+                    return drillDownDefinition;
+                }
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridApi, $scope.menuActions, true);
                 defineAPI();
             };
 
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
+                    if (routeTableViewType != undefined && routeTableViewType != payload.RouteTableViewType)
+                        gridApi.clearUpdatedItems();
                     routeTableViewType = payload.RouteTableViewType;
                     return gridApi.retrieveData(payload.Filter.query);
                 };
+
                 api.onRouteTableAdded = function (routeTable) {
                     gridApi.itemAdded(routeTable);
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(routeTable);
+
                 };
+
                 if (ctrl.onReady != undefined)
                     ctrl.onReady(api);
-              }
+            }
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return NP_IVSwitch_RouteTableAPIService.GetFilteredRouteTables(dataRetrievalInput)
-                    .then(function (response) {
-                        if (response && response.Data) {
-                            for (var i = 0; i < response.Data.length; i++) {
-                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
-                            }
+                return NP_IVSwitch_RouteTableAPIService.GetFilteredRouteTables(dataRetrievalInput)
+                .then(function (response) {
+                    if (response && response.Data) {
+                        for (var i = 0; i < response.Data.length; i++) {
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
                         }
-                        onResponseReady(response);
-                    })
-                    .catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    });
-                };
+                    }
+                    onResponseReady(response);
+                })
+                .catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
             defineMenuActions();
         }
 
         function defineMenuActions() {
-            $scope.scopeModel.gridMenuActions = [{
-                name: "Edit",
-                clicked: editRouteTable,
+            $scope.scopeModel.gridMenuActions = function (dataItem) {
+                var menu = [];
+                if (routeTableViewType != NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value)
+                menu.push({
+                    name: 'Edit',
+                    clicked: editRouteTable,
+                });
+                menu.push({
+                    name: "Delete",
+                    clicked: deleteRoute,
 
-            }];
-            $scope.scopeModel.gridMenuActions.push({
-                name: 'Delete',
-                clicked: deleteRoute,
-            });
+                });
+                return menu;
+            };
+           
         }
-        
+
         function editRouteTable(routeTableEntity) {
             var routeTable = {
                 RouteTableId: routeTableEntity.RouteTableId,
@@ -116,11 +128,11 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
                     });
 
-                };
+                }
             });
 
         }
 
-    };
+    }
     return directiveDefinitionObject;
 }]);

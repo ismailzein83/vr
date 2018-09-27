@@ -14,8 +14,11 @@ namespace NP.IVSwitch.Business
         {
             if (RouteTableViewType == Entities.RouteTableViewType.ANumber)
                 return (context.EndPoint.CliRouting == 0 || (RouteTableId.HasValue && RouteTableId.Value == context.EndPoint.CliRouting));
-            else
+            else if (RouteTableViewType == Entities.RouteTableViewType.Whitelist)
                 return (context.EndPoint.DstRouting == 0 || (RouteTableId.HasValue && RouteTableId.Value == context.EndPoint.DstRouting));
+
+            else
+                return true;
         }
     }
 }

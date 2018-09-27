@@ -52,10 +52,11 @@ namespace NP.IVSwitch.Business
                 List<string> codes = routeTableRouteItem.CodeListResolver.Settings.GetCodeList(new CodeListResolverContext());
                 if (codes != null)
                 {
-                    Int16 codePreference = preference;
-                    Int16 codeMainPreference = preference;
+
                     foreach (var code in codes)
                     {
+                        Int16 codePreference = preference;
+                        Int16 codeMainPreference = preference;
                         var routeTableRoute = new RouteTableRoute
                         {
                             RouteOptions = new List<RouteTableRouteOption>(),
@@ -90,7 +91,8 @@ namespace NP.IVSwitch.Business
                                             BKTCapacity = evaluatedPercentage,
                                             BKTTokens = evaluatedPercentage,
                                             Percentage = optionAdd.Percentage.Value,
-                                            Huntstop = (optionAdd.BackupOptions == null) ? default(Int16?):0
+                                            Huntstop = (optionAdd.BackupOptions == null) ? (Int16)1:(Int16)0,
+                                            StateId=1
 
                                         });
                                         if (optionAdd.BackupOptions != null)
@@ -106,7 +108,9 @@ namespace NP.IVSwitch.Business
                                                     BKTCapacity = evaluatedPercentage,
                                                     BKTTokens = evaluatedPercentage,
                                                     Percentage = optionAdd.Percentage.Value,
-                                                    Huntstop = 0
+                                                    Huntstop = 0,
+                                                    StateId = 1
+
                                                 });
 
                                             routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
@@ -126,6 +130,9 @@ namespace NP.IVSwitch.Business
                                            BKTSerial = 1,
                                            BKTCapacity = 1,
                                            BKTTokens = 1,
+                                           StateId = 1,
+                                           Huntstop=1
+
                                        });
                                     }
                                 }
@@ -201,7 +208,9 @@ namespace NP.IVSwitch.Business
                                 BKTCapacity = evaluatedPercentage,
                                 BKTTokens = evaluatedPercentage,
                                 Percentage = optionEdit.Percentage.Value,
-                                Huntstop = (optionEdit.BackupOptions == null) ? default(Int16?) : 0
+                                Huntstop = (optionEdit.BackupOptions == null) ? (Int16)1 : (Int16)0,
+                                StateId = 1
+
 
                             });
                             if (optionEdit.BackupOptions != null)
@@ -217,7 +226,9 @@ namespace NP.IVSwitch.Business
                                         BKTCapacity = evaluatedPercentage,
                                         BKTTokens = evaluatedPercentage,
                                         Percentage = optionEdit.Percentage.Value,
-                                        Huntstop = 0
+                                        Huntstop = 0,
+                                        StateId = 1
+
                                     });
 
                                 routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
@@ -236,6 +247,9 @@ namespace NP.IVSwitch.Business
                                 BKTSerial = 1,
                                 BKTCapacity = 1,
                                 BKTTokens = 1,
+                                StateId = 1,
+                                Huntstop=1
+
                             });
 
                         }
@@ -445,7 +459,7 @@ namespace NP.IVSwitch.Business
             public override RouteTableRouteDetail EntityDetailMapper(RouteTableRoute routeTableRoute)
             {
                 RouteManager _manager = new RouteManager();
-                RouteTableRouteDetail routeTableRouteDetail = new RouteTableRouteDetail
+                    RouteTableRouteDetail routeTableRouteDetail = new RouteTableRouteDetail
                 {
                     Destination = routeTableRoute.Destination,
                     TechPrefix = routeTableRoute.TechPrefix
@@ -457,6 +471,7 @@ namespace NP.IVSwitch.Business
                 {
                     if (routeOption.RouteId == blockedAccount)
                         break;
+                    
 
                     if (routeTableRouteDetail.RouteOptionsDetails == null)
                         routeTableRouteDetail.RouteOptionsDetails = new List<RouteTableRouteOptionDetails>();

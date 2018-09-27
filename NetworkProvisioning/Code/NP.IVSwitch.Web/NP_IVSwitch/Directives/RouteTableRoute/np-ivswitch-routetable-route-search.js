@@ -28,7 +28,15 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var routeTableId;
         var routeTableViewType;
 
+        var routesDirectiveAPI;
+        var routesDirectiveDeferedReady = UtilsService.createPromiseDeferred();
+
+        var suppliersDirectiveAPI;
+        var suppliersDirectiveDeferedReady = UtilsService.createPromiseDeferred();
+
         var gridAPIDirectiveReadyDeffered = UtilsService.createPromiseDeferred();
+
+        var selectedSupplierDeffered;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -50,6 +58,38 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 NP_IVSwitch_RouteTableRouteService.addRouteTableRoutes(onRouteTableRTAdded, payloadForAdd);
             };
 
+            $scope.scopeModel.onSuppliersDirectiveReady = function (api) {
+                suppliersDirectiveAPI = api;
+                suppliersDirectiveDeferedReady.resolve();
+
+            };
+
+            $scope.scopeModel.onRoutesDirectiveReady = function (api) {
+                routesDirectiveAPI = api;
+                routesDirectiveDeferedReady.resolve();
+
+            };
+
+            $scope.scopeModel.onSupplierSelectionChanged = function (option) {
+                if (option != undefined && option.length > 0) {
+                    if (selectedSupplierDeffered != undefined) 
+                        selectedSupplierDeffered.resolve();
+                    else
+                    {
+                        var directivePayload = {
+                            filter: {
+                                AssignableToCarrierAccountId: null,
+                                SupplierIds: suppliersDirectiveAPI.getSelectedIds()
+                            }
+                        };
+
+                        var setLoader = function (value) { $scope.scopeModel.isModifiedBySelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routesDirectiveAPI, directivePayload, setLoader, undefined);
+                    }
+                    
+                }
+                };
+
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridAPIDirectiveReadyDeffered.resolve();
@@ -60,11 +100,20 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             $scope.scopeModel.search = function () {
                 gridAPI.loadGrid(getFilter());
             };
-
+            load();
             defineAPI();
 
         }
+        function load() {
 
+            suppliersDirectiveDeferedReady.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(suppliersDirectiveAPI, undefined, undefined);
+                selectedSupplierDeffered = undefined;
+
+            });
+
+
+        }
         function defineAPI() {
             var api = {};
             api.load = function (payload) {

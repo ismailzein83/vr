@@ -79,7 +79,7 @@
         }
 
         function getRouteTableOptions() {
-          return  NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
+            return NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
                 routeTableRouteOptions = response;
                 $scope.scopeModel.bNumber = routeTableRouteOptions.TechPrefix;
             });

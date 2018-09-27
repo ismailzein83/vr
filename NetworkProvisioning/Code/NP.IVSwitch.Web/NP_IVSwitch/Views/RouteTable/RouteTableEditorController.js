@@ -47,7 +47,7 @@
             $scope.scopeModel.onCustomerSelectionChanged = function (option) {
                 var accountIds = [];
                 for (var i = 0; i < option.length; i++)
-                    accountIds.push(option[i].CarrierAccountId)
+                    accountIds.push(option[i].CarrierAccountId);
                 $scope.scopeModel.selectedvalues = option;
                 if (option != undefined) {
                     if (selectedCustomerDeffered != undefined) {
@@ -62,7 +62,9 @@
                                 Filters: [{
                                     $type: "NP.IVSwitch.Business.EndPointViewFilter,NP.IVSwitch.Business",
                                     RouteTableId: routeTableId,
-                                    RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
+                                    //RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
+                                    RouteTableViewType: routeTableViewType,
+
                                 }]
                             }, selectedIds: selectedEndPoints.length != 0 ? selectedEndPoints : undefined
 
@@ -85,7 +87,7 @@
                 routeTableViewType = parameters.RouteTableViewType;
             }
             isEditMode = (routeTableId != undefined);
-        };
+        }
 
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -101,7 +103,7 @@
             }
             else
                 loadAllControls();
-        };
+        }
 
 
         defineScope();
@@ -111,7 +113,7 @@
 
         function getRouteTable() {
             var RouteTableViewType= (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value;
-            return NP_IVSwitch_RouteTableAPIService.GetRouteTableById(routeTableId, RouteTableViewType).then(function (response) {
+            return NP_IVSwitch_RouteTableAPIService.GetRouteTableById(routeTableId, routeTableViewType).then(function (response) {
                 for (var i = 0; i < response.RouteTableInput.EndPoints.length; i++)
                     selectedEndPoints.push(response.RouteTableInput.EndPoints[i].EndPointId);
                 if (response != undefined && response.EndPointCarrierAccount != undefined)
@@ -124,7 +126,7 @@
                 VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, { selectedIds: selectedCarrierAccounts }, undefined);
                 routeTableEntity = response;
             });
-        };
+        }
 
         function loadAllControls() {
 
@@ -133,7 +135,7 @@
                     var directivePayload;
                     VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, undefined, undefined);
                 });
-            };
+            }
 
             function setTitle() {
                 if (isEditMode && routeTableEntity != undefined) {
@@ -141,7 +143,7 @@
                 }
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("Route Table");
-            };
+            }
 
             function loadStaticData() {
                 if (routeTableEntity != undefined) {
@@ -149,7 +151,7 @@
                     $scope.scopeModel.description = routeTableEntity.RouteTableInput.RouteTable.Description;
                     $scope.scopeModel.pScore = routeTableEntity.RouteTableInput.RouteTable.PScore;
                 }
-            };
+            }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, cusomerDirective]).then(function () {
 
@@ -161,7 +163,7 @@
                .finally(function () {
                    $scope.scopeModel.isLoading = false;
                });
-        };
+        }
 
         function buildParentObjectFromScope() {
             var scopeObject = {
@@ -177,17 +179,17 @@
                 EndPoints: getEndPoints()
             };
             return scopeObject;
-           };
+           }
 
         function getEndPoints() {
                var endPointsIds = [];
                var endPoints = endPointSelectorDirectiveAPI.getSelectedIds();
                for (var index = 0; index < endPoints.length; index++) {
-                   var itemTab = { EndPointId: endPoints[index] }
+                   var itemTab = { EndPointId: endPoints[index] };
                    endPointsIds.push(itemTab);
                }
                return endPointsIds;
-           };
+           }
 
         function insertRouteTable() {
             $scope.scopeModel.isLoading = true;
@@ -207,7 +209,7 @@
                 $scope.scopeModel.isLoading = false;
             });
 
-        };
+        }
 
         function updateRouteTable() {
             $scope.scopeModel.isLoading = true;
@@ -226,8 +228,8 @@
                 $scope.scopeModel.isLoading = false;
 
             });
-        };
+        }
 
-    };
+    }
     appControllers.controller('NP_IVSwitch_RouteTableEditorController', routeTableEditorController);
 })(appControllers);

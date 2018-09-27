@@ -23,11 +23,12 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
         public int RoutingMode { get; set; }
         public Int16 Preference { get; set; }
         public Int16? Huntstop { get; set; }
+        public Int16 StateId { get; set; }
         public int TotalBKTs { get; set; }
         public int BKTSerial { get; set; }
         public int BKTCapacity { get; set; }
         public int BKTTokens { get; set; }
-        public decimal Percentage { get; set; }
+        public decimal? Percentage { get; set; }
     }
 
 

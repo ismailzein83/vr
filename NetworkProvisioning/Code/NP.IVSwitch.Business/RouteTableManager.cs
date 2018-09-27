@@ -23,12 +23,22 @@ namespace NP.IVSwitch.Business
         public IDataRetrievalResult<RouteTableDetails> GetFilteredRouteTables(DataRetrievalInput<RouteTableQuery> input)
         {
             var allRouteTables = GetCachedRouteTables();
-            Dictionary<int, RouteEndPoints> allRouteTableEndPoints;
-            if (input.Query.RouteTableViewType == RouteTableViewType.ANumber)
-                allRouteTableEndPoints = GetCachedRouteTablesEndPointsANumber();
-            else
-                allRouteTableEndPoints = GetCachedRouteTablesEndPointsWhitelist();
-            
+            Dictionary<int, RouteEndPoints> allRouteTableEndPoints=new Dictionary<int,RouteEndPoints>();
+            switch (input.Query.RouteTableViewType)
+            {
+                case RouteTableViewType.ANumber:
+                    allRouteTableEndPoints = GetCachedRouteTablesEndPointsANumber();
+                    break;
+                case RouteTableViewType.Whitelist:
+                    allRouteTableEndPoints = GetCachedRouteTablesEndPointsWhitelist();
+                    break;
+                case RouteTableViewType.BNumber:
+                    allRouteTableEndPoints = GetCachedRouteTablesEndPointsBNumber();
+                    break;
+            }
+
+
+
             Func<RouteTable, bool> filterExpression = (routeTable) =>
             {
                 if (input.Query.Name != null && !routeTable.Name.ToLower().Contains(input.Query.Name.ToLower()))
@@ -63,22 +73,34 @@ namespace NP.IVSwitch.Business
             InsertOperationOutput<RouteTableDetails> insertOperationOutput = new InsertOperationOutput<RouteTableDetails>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
+            if (routeTableItem.RouteTableViewType == RouteTableViewType.ANumber)
+                routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_ANumber";
+            if (routeTableItem.RouteTableViewType == RouteTableViewType.Whitelist)
+                routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_Whitelist";
             int routeTableId = -1;
-
-            bool insertActionSuccess = routeTableDataManager.Insert(routeTableItem, out routeTableId);
-            if (insertActionSuccess)
+            if (routeTableItem.RouteTableViewType != RouteTableViewType.BNumber)
             {
-                RouteTableRouteManager routeTableRouteManager = new RouteTableRouteManager();
-                routeTableRouteManager.CreateRouteTableRoute(routeTableId);
-                endPointManager.RouteTableEndPointUpdate(routeTableItem, routeTableId);
-                routeTableItem.RouteTable.RouteTableId = routeTableId;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = RouteTableDetailMapper(routeTableItem.RouteTable);
+                bool insertActionSuccess = routeTableDataManager.Insert(routeTableItem, out routeTableId);
+                if (insertActionSuccess)
+                {
+                    RouteTableRouteManager routeTableRouteManager = new RouteTableRouteManager();
+                    routeTableRouteManager.CreateRouteTableRoute(routeTableId);
+                    endPointManager.EndPointAclUpdate(routeTableItem.EndPoints.MapRecords(x => x.EndPointId), routeTableId, routeTableItem.RouteTableViewType);
+                    routeTableItem.RouteTable.RouteTableId = routeTableId;
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                    insertOperationOutput.InsertedObject = RouteTableDetailMapper(routeTableItem.RouteTable);
+                }
+                else
+                {
+                    insertOperationOutput.Result = InsertOperationResult.SameExists;
+                }
             }
             else
             {
-                insertOperationOutput.Result = InsertOperationResult.SameExists;
+                insertOperationOutput.Message = "you cannot add a BNumber RouteTable";
+                insertOperationOutput.ShowExactMessage = true;
+                
             }
             return insertOperationOutput;
         }
@@ -86,45 +108,55 @@ namespace NP.IVSwitch.Business
 
         public UpdateOperationOutput<RouteTableDetails> UpdateRouteTable(RouteTableInput routeTableItem)
         {
-            List<RouteTableEndPoint> endPointsToLink = new List<RouteTableEndPoint>();
-            List<RouteTableEndPoint> endPointsToUnlink = new List<RouteTableEndPoint>();
-            RuntimeEditorEntity runtimeEditorEntity = this.GetRouteTableById(routeTableItem.RouteTable.RouteTableId, routeTableItem.RouteTableViewType);
-            if (routeTableItem.EndPoints != null && runtimeEditorEntity.RouteTableInput.EndPoints != null)
-            {
-                foreach (RouteTableEndPoint newItem in routeTableItem.EndPoints)
-                {
-                    var endPoint = runtimeEditorEntity.RouteTableInput.EndPoints.FindRecord(x => x.EndPointId == newItem.EndPointId);
-                    if (endPoint == null)
-                        endPointsToLink.Add(newItem);
-                }
-
-                foreach (RouteTableEndPoint oldItem in runtimeEditorEntity.RouteTableInput.EndPoints)
-                {
-                    var endPoint = routeTableItem.EndPoints.FindRecord(x => x.EndPointId == oldItem.EndPointId);
-                    if (endPoint == null)
-                        endPointsToUnlink.Add(oldItem);
-                }
-            }
-            if (endPointsToUnlink!=null &&endPointsToUnlink.Count > 0)
-                endPointManager.EndPointAclUpdate(endPointsToUnlink.MapRecords(x=>x.EndPointId), 0, routeTableItem.RouteTableViewType);
-            if (endPointsToLink != null && endPointsToLink.Count > 0)
-                endPointManager.EndPointAclUpdate(endPointsToLink.MapRecords(x => x.EndPointId), routeTableItem.RouteTable.RouteTableId, routeTableItem.RouteTableViewType);
             IRouteTableDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
             Helper.SetSwitchConfig(routeTableDataManager);
 
             UpdateOperationOutput<RouteTableDetails> updateOperationOutput = new UpdateOperationOutput<RouteTableDetails>();
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-         
-            bool updateActionSuccess = routeTableDataManager.Update(routeTableItem);
-            if (updateActionSuccess)
+            if (routeTableItem.RouteTableViewType != RouteTableViewType.BNumber)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = RouteTableDetailMapper( routeTableItem.RouteTable);
+                List<RouteTableEndPoint> endPointsToLink = new List<RouteTableEndPoint>();
+                List<RouteTableEndPoint> endPointsToUnlink = new List<RouteTableEndPoint>();
+                RuntimeEditorEntity runtimeEditorEntity = this.GetRouteTableById(routeTableItem.RouteTable.RouteTableId, routeTableItem.RouteTableViewType);
+                if (routeTableItem.EndPoints != null && runtimeEditorEntity.RouteTableInput.EndPoints != null)
+                {
+                    foreach (RouteTableEndPoint newItem in routeTableItem.EndPoints)
+                    {
+                        var endPoint = runtimeEditorEntity.RouteTableInput.EndPoints.FindRecord(x => x.EndPointId == newItem.EndPointId);
+                        if (endPoint == null)
+                            endPointsToLink.Add(newItem);
+                    }
+
+                    foreach (RouteTableEndPoint oldItem in runtimeEditorEntity.RouteTableInput.EndPoints)
+                    {
+                        var endPoint = routeTableItem.EndPoints.FindRecord(x => x.EndPointId == oldItem.EndPointId);
+                        if (endPoint == null)
+                            endPointsToUnlink.Add(oldItem);
+                    }
+                }
+                if (endPointsToUnlink != null && endPointsToUnlink.Count > 0)
+                    endPointManager.EndPointAclUpdate(endPointsToUnlink.MapRecords(x => x.EndPointId), 0, routeTableItem.RouteTableViewType);
+                if (endPointsToLink != null && endPointsToLink.Count > 0)
+                    endPointManager.EndPointAclUpdate(endPointsToLink.MapRecords(x => x.EndPointId), routeTableItem.RouteTable.RouteTableId, routeTableItem.RouteTableViewType);
+
+
+                bool updateActionSuccess = routeTableDataManager.Update(routeTableItem);
+                if (updateActionSuccess)
+                {
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = RouteTableDetailMapper(routeTableItem.RouteTable);
+                }
+                else
+                    updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             else
-                updateOperationOutput.Result = UpdateOperationResult.SameExists;
+            {
+                updateOperationOutput.Message = "you cannot Edit a BNumber RouteTable";
+                updateOperationOutput.ShowExactMessage = true;
+
+            }
             return updateOperationOutput;
         }
         public DeleteOperationOutput<object> DeleteRouteTable(int routeTableId, RouteTableViewType routeTableViewType)
@@ -136,11 +168,11 @@ namespace NP.IVSwitch.Business
             Helper.SetSwitchConfig(routeTableDataManager);
 
             RuntimeEditorEntity runTimeEditorEntity = GetRouteTableById(routeTableId, routeTableViewType);
+            endPointManager.EndPointAclUpdate(runTimeEditorEntity.RouteTableInput.EndPoints.MapRecords(x => x.EndPointId), 0, routeTableViewType); //update the access_list items related to this route table
             routeTableRouteManager.DropRouteTableRoute(routeTableId);          //Delete the routes of the route table
             bool deleted = routeTableDataManager.DeleteRouteTable(routeTableId);  //Delete the route table
             if (deleted)
             {
-                endPointManager.EndPointAclUpdate(runTimeEditorEntity.RouteTableInput.EndPoints.MapRecords(x=>x.EndPointId), 0, routeTableViewType); //update the access_list items related to this route table
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
             }
@@ -158,19 +190,29 @@ namespace NP.IVSwitch.Business
                     RouteTableViewType = RouteTableViewType
                 }
             };
-            if (RouteTableViewType == Entities.RouteTableViewType.ANumber)
-            {
+
+            switch (RouteTableViewType)
+            { 
+                case RouteTableViewType.ANumber:
                 var cachedRouteTablesEndPointsANumber = GetCachedRouteTablesEndPointsANumber();
-                var routeTableEntity = cachedRouteTablesEndPointsANumber.GetRecord(routeTableId);
-                RuntimeEditorEntity(runtimeEditorEntity, routeTableEntity);
-            }
-            else
-            {
+                var routeTableEntityANumber = cachedRouteTablesEndPointsANumber.GetRecord(routeTableId);
+                RuntimeEditorEntity(runtimeEditorEntity, routeTableEntityANumber);
+                    break;
+                case RouteTableViewType.Whitelist:
                 var cachedRouteTablesEndPointsWhitelist = GetCachedRouteTablesEndPointsWhitelist();
-                var routeTableEntity = cachedRouteTablesEndPointsWhitelist.GetRecord(routeTableId);
-                RuntimeEditorEntity(runtimeEditorEntity, routeTableEntity);
+                var routeTableEntityWhitelist = cachedRouteTablesEndPointsWhitelist.GetRecord(routeTableId);
+                RuntimeEditorEntity(runtimeEditorEntity, routeTableEntityWhitelist);
+                    break;
+                case RouteTableViewType.BNumber:
+                var cachedRouteTablesEndPointsBNumber = GetCachedRouteTablesEndPointsBNumber();
+                var routeTableEntityBNumber = cachedRouteTablesEndPointsBNumber.GetRecord(routeTableId);
+                RuntimeEditorEntity(runtimeEditorEntity, routeTableEntityBNumber);
+                    break;
+            
+            
+            
             }
-            return runtimeEditorEntity;
+             return runtimeEditorEntity;
         }
         private void RuntimeEditorEntity(RuntimeEditorEntity runtimeEditorEntity, RouteEndPoints routeTableEntity)
         {
@@ -250,7 +292,7 @@ namespace NP.IVSwitch.Business
         private Dictionary<int, RouteEndPoints> GetCachedRouteTablesEndPointsWhitelist()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-               .GetOrCreateObject("GetCachedRouteTablesEndPointsBNumber", () =>
+               .GetOrCreateObject("GetCachedRouteTablesEndPointsWhitelist", () =>
                {
                    IRouteTableDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
                    Helper.SetSwitchConfig(dataManager);
@@ -281,6 +323,42 @@ namespace NP.IVSwitch.Business
                    return routeTablesEndPoints;
                });
         }
+
+        private Dictionary<int, RouteEndPoints> GetCachedRouteTablesEndPointsBNumber()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
+               .GetOrCreateObject("GetCachedRouteTablesEndPointsBNumber", () =>
+               {
+                   IRouteTableDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
+                   Helper.SetSwitchConfig(dataManager);
+                   Dictionary<int, RouteEndPoints> routeTablesEndPoints = new Dictionary<int, RouteEndPoints>();
+                   Dictionary<int, RouteTable> allRouteTables = this.GetCachedRouteTables();
+                   Dictionary<int, EndPoint> allEndPoints = endPointManager.GetAllEndPoints();
+                   if (allRouteTables != null)
+                       foreach (var routeTable in allRouteTables)
+                       {
+                           if (allEndPoints != null)
+                               foreach (var endPoint in allEndPoints)
+                               {
+                                   if (endPoint.Value.RouteTableId.HasValue && endPoint.Value.RouteTableId.Value == routeTable.Value.RouteTableId)
+                                   {
+                                       var routeEndPoints = routeTablesEndPoints.GetOrCreateItem(routeTable.Key, () =>
+                                       {
+                                           return new RouteEndPoints
+                                           {
+                                               EndPoints = new List<EndPoint>(),
+                                               RouteTable = routeTable.Value
+                                           };
+                                       });
+                                       routeEndPoints.EndPoints.Add(endPoint.Value);
+                                   }
+                               }
+
+                       }
+                   return routeTablesEndPoints;
+               });
+        }
+
 
         #endregion
 
