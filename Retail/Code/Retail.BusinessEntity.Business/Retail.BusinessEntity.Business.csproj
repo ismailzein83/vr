@@ -181,6 +181,10 @@
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilterContext.cs" />
     <Compile Include="OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclarationServicesManager.cs" />
+    <Compile Include="PackageUsageVolume\AccountPackageUsageVolumeManager.cs" />
+    <Compile Include="PackageUsageVolume\PackageUsageVolumeCombinationManager.cs" />
+    <Compile Include="PackageUsageVolume\PackageUsageVolumeGetPackageItemsInfoContext.cs" />
+    <Compile Include="PackageUsageVolume\PackageVolumeChargingIsApplicableToEventContext.cs" />
     <Compile Include="RecurChargeBalanceUpdateSummaryManager.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
     <Compile Include="AccountRecurringChargeEvaluatorBPDefinitionSettings.cs" />

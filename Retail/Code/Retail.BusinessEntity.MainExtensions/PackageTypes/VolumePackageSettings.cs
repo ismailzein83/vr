@@ -6,201 +6,279 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
-    public class VolumePackageSettings : PackageExtendedSettings, Retail.Voice.Entities.IPackageSettingVoiceUsageCharger
+    public class VolumePackageSettings : PackageExtendedSettings, IPackageUsageVolume
     {
-        //public override Guid ConfigId
-        //{
-        //    get { return new Guid("E8EC8C13-DC47-46F1-95FE-082F4760A0A0"); }
-        //}
+        public List<VolumePackageItem> Items { get; set; }
 
-        public List<VoiceVolumePackageItem> VoiceItems { get; set; }
+        public Decimal Price { get; set; }
 
-        public List<SMSVolumePackageItem> SMSItems { get; set; }
+        public int CurrencyId { get; set; }
 
-        public List<DataVolumePackageItem> DataItems { get; set; }
+        public PackageUsageVolumeRecurringPeriod RecurringPeriod { get; set; }
 
-        static BalanceManager s_balanceManager = new BalanceManager();
+        public bool ReducePriceForIncompletePeriods { get; set; }
 
-        public bool TryGetVoiceUsageCharger(Guid serviceTypeId, out Voice.Entities.IPackageVoiceUsageCharger voiceUsageCharging)
+        Dictionary<Guid, PackageItemsToEvaluateByRecordTypeId> _itemsByServiceId;
+        PackageItemsToEvaluateByRecordTypeId _itemsForAllServices;
+        Dictionary<Guid, PackageItemToEvaluate> _itemsByItemId;
+
+        static Vanrise.GenericData.Business.RecordFilterManager s_recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
+
+        #region Public Methods
+
+        public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
         {
-            if (this.VoiceItems != null)
+            context.IsValid = true;
+            if(this.RecurringPeriod == null)
             {
-                List<VoiceVolumePackageItem> matchServiceVoiceItems = this.VoiceItems.FindAllRecords(itm => itm.ServiceTypeId == serviceTypeId).ToList();
-                if (matchServiceVoiceItems != null && matchServiceVoiceItems.Count > 0)
+                if(!context.EED.HasValue)
                 {
-                    voiceUsageCharging = new VoiceUsageCharger(matchServiceVoiceItems);
+                    context.ErrorMessage = "Package end date must be specified.";
+                    context.IsValid = false;
+                }
+            }
+        }
+
+        public bool IsApplicableToEvent(IPackageUsageVolumeIsApplicableToEventContext context)
+        {
+            var packageItemsToEvaluate = GetPackageItemsToEvaluate(context.ServiceTypeId, context.RecordTypeId);
+            if(packageItemsToEvaluate != null)
+            {
+                List<Guid> applicableItemIds = null;
+                foreach (var packageItem in packageItemsToEvaluate)
+                {
+                    if (packageItem.Item.Condition == null
+                        || s_recordFilterManager.IsFilterGroupMatch(packageItem.Item.Condition, new Vanrise.GenericData.Business.DataRecordFilterGenericFieldMatchContext(context.EventDataRecordObject)))
+                    {
+                        if (applicableItemIds == null)
+                            applicableItemIds = new List<Guid>();
+                        applicableItemIds.Add(packageItem.Item.VolumePackageItemId);
+                    }
+                }
+                if (applicableItemIds != null)
+                {
+                    context.ApplicableItemIds = applicableItemIds;
                     return true;
                 }
-            }
-            voiceUsageCharging = null;
-            return false;
-        }
-
-        public override void OnPackageAssignmentStarted(IPackageSettingAssignementStartedContext context)
-        {
-            //Create Balances
-            if (this.VoiceItems != null)
-            {
-                foreach (var voicePackageItem in this.VoiceItems)
+                else
                 {
-                    s_balanceManager.CreateVolumeBalance(context.AccountId, GetVolumeItemBalanceKey(voicePackageItem), voicePackageItem.VolumeInMin);
+                    return false;
                 }
             }
-            if (this.SMSItems != null)
+            else
             {
-                foreach (var smsPackageItem in this.SMSItems)
-                {
-                    s_balanceManager.CreateVolumeBalance(context.AccountId, GetVolumeItemBalanceKey(smsPackageItem), smsPackageItem.SMSCount);
-                }
-            }
-            if (this.DataItems != null)
-            {
-                foreach (var dataPackageItem in this.DataItems)
-                {
-                    s_balanceManager.CreateVolumeBalance(context.AccountId, GetVolumeItemBalanceKey(dataPackageItem), dataPackageItem.VolumeInMB);
-                }
+                return false;
             }
         }
 
-        static string GetVolumeItemBalanceKey(VolumePackageItem volumePackageItem)
+        public void GetPackageItemsInfo(IPackageUsageVolumeGetPackageItemsInfoContext context)
         {
-            return volumePackageItem.ItemId.ToString();
-        }
-
-        #region Classes
-
-        private class VoiceUsageCharger : Retail.Voice.Entities.IPackageVoiceUsageCharger
-        {
-            List<VoiceVolumePackageItem> _voiceVolumeItems;
-            public VoiceUsageCharger(List<VoiceVolumePackageItem> voiceVolumeItems)
+            List<PackageUsageVolumeItem> items = new List<PackageUsageVolumeItem>();
+            foreach(var itemId in context.ItemIds)
             {
-                _voiceVolumeItems = voiceVolumeItems;
-            }
-
-
-            public void TryChargeVoiceEvent(Voice.Entities.IVoiceUsageChargerContext context)
-            {
-                List<DurationToDeduct> volumesToDeduct = new List<DurationToDeduct>();
-                Decimal remainingDurationToCharge = context.Duration;
-                foreach (var voiceVolumeItem in _voiceVolumeItems)
+                PackageItemToEvaluate matchItem;
+                if(_itemsByItemId.TryGetValue(itemId, out matchItem))
                 {
-                    if (voiceVolumeItem.EventCondition != null)
-                    {
-                        var conditionContext = new AccountBillingEventConditionContext(context.AccountBEDefinitionId, context.AccountId)
+                    items.Add(new PackageUsageVolumeItem
                         {
-                            BillingEvent = context.MappedCDR
-                        };
-                        if (!voiceVolumeItem.EventCondition.IsMatch(conditionContext))
-                            continue;
-                    }
-                    string itemKey = GetVolumeItemBalanceKey(voiceVolumeItem);
-                    var remaingBalance = s_balanceManager.GetAccountRemainingBalance(context.AccountId, itemKey);
-                    if (remaingBalance > 0)
-                    {
-                        Decimal chargeableDuration = Math.Min(remainingDurationToCharge, remaingBalance);
-                        remainingDurationToCharge -= chargeableDuration;
-                        volumesToDeduct.Add(new DurationToDeduct
-                        {
-                            VolumeItemKey = itemKey,
-                            Duration = chargeableDuration
+                            ItemId = itemId,
+                            Volume = matchItem.Item.Volume
                         });
-                        if (remainingDurationToCharge == 0)
-                            break;
-                    }
                 }
-                context.ChargeInfo = volumesToDeduct;
             }
-
-            public void DeductFromBalances(Voice.Entities.IVoiceUsageChargerDeductFromBalanceContext context)
+            context.Items = items;
+            if (this.RecurringPeriod == null)
             {
-                List<DurationToDeduct> volumesToDeduct = context.ChargeInfo as List<DurationToDeduct>;
-                if (volumesToDeduct != null)
+                context.FromTime = context.AccountPackage.BED;
+                if (!context.AccountPackage.EED.HasValue)
+                    throw new NullReferenceException(string.Format("context.AccountPackage.EED. AccountPackageId '{0}'", context.AccountPackage.AccountPackageId));
+                context.ToTime = context.AccountPackage.EED.Value;
+            }
+            else
+            {
+                var recurringPeriodContext = new PackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext(context.EventTime, context.AccountPackage.BED, context.AccountPackage.EED);
+                this.RecurringPeriod.GetEventApplicablePeriod(recurringPeriodContext);
+                context.FromTime = recurringPeriodContext.PeriodStart;
+                var applicablePeriodToTime = recurringPeriodContext.PeriodEnd;
+                if (context.AccountPackage.EED.HasValue && context.AccountPackage.EED.Value < applicablePeriodToTime)
+                    applicablePeriodToTime = context.AccountPackage.EED.Value;
+                context.ToTime = applicablePeriodToTime;
+            }
+        }
+
+        public void GetChargingItems(IPackageUsageVolumeGetChargingItemsContext context)
+        {
+            if (this.RecurringPeriod == null)
+            {
+                if (!context.AccountPackage.EED.HasValue)
+                    throw new NullReferenceException(string.Format("context.AccountPackage.EED. AccountPackageId '{0}'", context.AccountPackage.AccountPackageId));
+                if (context.FromDate <= context.AccountPackage.BED && context.ToDate > context.AccountPackage.BED)
                 {
-                    foreach (var volumeToDeduct in volumesToDeduct)
+                    context.ChargingItems = new List<PackageUsageVolumeChargingItem>
                     {
-                        s_balanceManager.DeductFromAccountBalance(context.AccountId, volumeToDeduct.VolumeItemKey, volumeToDeduct.Duration);
-                    }
+                        new PackageUsageVolumeChargingItem 
+                        {
+                             ChargingDate = context.AccountPackage.BED,
+                             Price = this.Price,
+                             CurrencyId = this.CurrencyId
+                        }
+                    };
                 }
             }
-
-            private class DurationToDeduct
+            else
             {
-                public string VolumeItemKey { get; set; }
-
-                public Decimal Duration { get; set; }
+                var recurringPeriodContext = new PackageUsageVolumeRecurringPeriodGetChargingDatesContext(context.FromDate, context.ToDate, context.AccountPackage.BED, context.AccountPackage.EED);
+                this.RecurringPeriod.GetChargingDates(recurringPeriodContext);
+                if(recurringPeriodContext.ChargingDates != null && recurringPeriodContext.ChargingDates.Count > 0)
+                {
+                    context.ChargingItems = new List<PackageUsageVolumeChargingItem>();
+                    foreach(var recurringPeriodChargingDate in recurringPeriodContext.ChargingDates)
+                    {
+                        var chargingItem = new PackageUsageVolumeChargingItem
+                        {
+                            ChargingDate = recurringPeriodChargingDate.ChargingDate,
+                            CurrencyId = this.CurrencyId
+                        };
+                        if (recurringPeriodChargingDate.PeriodFractionOfTheFullPeriod.HasValue && this.ReducePriceForIncompletePeriods)
+                            chargingItem.Price = this.Price * recurringPeriodChargingDate.PeriodFractionOfTheFullPeriod.Value;
+                        else
+                            chargingItem.Price = this.Price;
+                    }
+                }
             }
         }
 
         #endregion
 
-        public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
+        #region Private Methods
+
+        private List<PackageItemToEvaluate> GetPackageItemsToEvaluate(Guid serviceTypeId, Guid recordTypeId)
         {
-            context.IsValid = true;
+            PackageItemsToEvaluateByRecordTypeId packageItemsForServiceType;
+            if (!_itemsByServiceId.TryGetValue(serviceTypeId, out packageItemsForServiceType))
+                packageItemsForServiceType = _itemsForAllServices;
+            if (packageItemsForServiceType != null)
+            {
+                List<PackageItemToEvaluate> packageItemsForRecordType;
+                if (packageItemsForServiceType.TryGetValue(recordTypeId, out packageItemsForRecordType))
+                {
+                    return packageItemsForRecordType;
+                }
+            }
+            return null;
         }
+
+        #endregion
+
+        #region Private Classes
+
+        private class PackageItemToEvaluate
+        {
+            public VolumePackageDefinitionItem DefinitionItem { get; set; }
+
+            public VolumePackageItem Item { get; set; }
+        }
+
+        private class PackageItemsToEvaluateByRecordTypeId : Dictionary<Guid, List<PackageItemToEvaluate>>
+        {
+
+        }
+
+        private class PackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext : IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext
+        {
+            public PackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext(DateTime eventTime, DateTime packageAssignmentStartTime, DateTime? packageAssignmentEndTime)
+            {
+                this.EventTime = eventTime;
+                this.PackageAssignmentStartTime = packageAssignmentStartTime;
+                this.PackageAssignmentEndTime = packageAssignmentEndTime;
+            }
+
+            public DateTime EventTime
+            {
+                get;
+                private set;
+            }
+
+            public DateTime PackageAssignmentStartTime
+            {
+                get;
+                private set;
+            }
+
+            public DateTime? PackageAssignmentEndTime
+            {
+                get;
+                private set;
+            }
+
+            public DateTime PeriodStart
+            {
+                get;
+                set;
+            }
+
+            public DateTime PeriodEnd
+            {
+                get;
+                set;
+            }
+        }
+
+        private class PackageUsageVolumeRecurringPeriodGetChargingDatesContext : IPackageUsageVolumeRecurringPeriodGetChargingDatesContext
+        {
+            public PackageUsageVolumeRecurringPeriodGetChargingDatesContext(DateTime fromDate, DateTime toDate, 
+                DateTime packageAssignmentStartTime, DateTime? packageAssignmentEndTime)
+            {
+                this.FromDate = fromDate;
+                this.ToDate = toDate;
+                this.PackageAssignmentStartTime = packageAssignmentStartTime;
+                this.PackageAssignmentEndTime = packageAssignmentEndTime;
+            }
+
+            public DateTime FromDate
+            {
+                get;
+                private set;
+            }
+
+            public DateTime ToDate
+            {
+                get;
+                private set;
+            }
+
+            public DateTime PackageAssignmentStartTime
+            {
+                get;
+                private set;
+            }
+
+            public DateTime? PackageAssignmentEndTime
+            {
+                get;
+                private set;
+            }
+
+            public List<PackageUsageVolumeRecurringPeriodChargingDate> ChargingDates
+            {
+                get;
+                set;
+            }
+        }
+
+        #endregion
     }
 
     public class VolumePackageItem
     {
-        public Guid ItemId { get; set; }
+        public Guid VolumePackageItemId { get; set; }
 
-        public string Title { get; set; }
+        public RecordFilterGroup Condition { get; set; }
 
-        public Guid ServiceTypeId { get; set; }
-
-        public AccountBillingEventCondition EventCondition { get; set; }
-    }
-
-    public class VoiceVolumePackageItem : VolumePackageItem
-    {
-        public Decimal VolumeInMin { get; set; }
-    }
-
-    public class SMSVolumePackageItem : VolumePackageItem
-    {
-        public int SMSCount { get; set; }
-    }
-
-    public class DataVolumePackageItem : VolumePackageItem
-    {
-        public int VolumeInMB { get; set; }
-    }
-
-    public abstract class AccountBillingEventCondition
-    {
-        public abstract bool IsMatch(IAccountBillingEventConditionContext context);
-    }
-
-    public interface IAccountBillingEventConditionContext
-    {
-        Account Account { get; }
-
-        dynamic BillingEvent { get; }
-    }
-
-    public class AccountBillingEventConditionContext : IAccountBillingEventConditionContext
-    {
-        Guid _accountBEDefinitionId;
-        long _accountId;
-        public AccountBillingEventConditionContext(Guid accountBEDefinitionId, long accountId)
-        {
-            _accountBEDefinitionId = accountBEDefinitionId;
-            _accountId = accountId;
-        }
-
-        Account _account;
-        public Account Account
-        {
-            get
-            {
-                if (_account == null)
-                    _account = new AccountBEManager().GetAccount(_accountBEDefinitionId, _accountId);
-                return _account;
-            }
-        }
-
-        public dynamic BillingEvent { get; set; }
+        public Decimal Volume { get; set; }
     }
 }

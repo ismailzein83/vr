@@ -176,6 +176,8 @@
     <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageSettings.cs" />
+    <Compile Include="PackageTypes\VolumePackageDefinitionSettings.cs" />
+    <Compile Include="PackageUsageVolumeRecurringPeriods\MonthlyPackageUsageVolumeRecurringPeriod.cs" />
     <Compile Include="PortalAccountExtraFieldDefinition.cs" />
     <Compile Include="PortalAccount\PortalAccount.cs" />
     <Compile Include="AccountViews\AccountServices.cs" />

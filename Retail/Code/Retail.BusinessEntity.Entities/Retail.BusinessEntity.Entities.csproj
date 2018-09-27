@@ -59,6 +59,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
@@ -145,6 +149,10 @@
     <Compile Include="OperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="Package\Definition\PackageDefinitionFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
+    <Compile Include="Package\UsageVolume\IPackageUsageVolume.cs" />
+    <Compile Include="Package\UsageVolume\AccountPackageUsageVolumeBalance.cs" />
+    <Compile Include="Package\UsageVolume\PackageUsageVolumeCombination.cs" />
+    <Compile Include="Package\UsageVolume\PackageUsageVolumeRecurringPeriod.cs" />
     <Compile Include="ProductFamily\ProductFamily.cs" />
     <Compile Include="ProductFamily\ProductFamilyDetail.cs" />
     <Compile Include="ProductFamily\ProductFamilyEditorRuntime.cs" />
