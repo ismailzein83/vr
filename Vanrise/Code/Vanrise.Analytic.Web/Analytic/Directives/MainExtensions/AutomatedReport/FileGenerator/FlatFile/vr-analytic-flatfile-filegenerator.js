@@ -24,6 +24,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
         var queryNameSelectorAPI;
         var queryNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var queryNameSelectedDeferred;
 
         var listNameSelectorAPI;
         var listNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -67,25 +68,31 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
             $scope.scopeModel.onQuerySelectionChanged = function (query) {
                 if (query != undefined) {
-                    $scope.scopeModel.fields.length = 0;
-                    $scope.scopeModel.listNames.length = 0;
-                    $scope.scopeModel.isLoadingListNames = true;
-                    var listNameSelectorDataPromise = context.getQueryListNames(query.value);
-                    promises.push(listNameSelectorDataPromise);
-                    listNameSelectorDataPromise.then(function (listNames) {
-                        if (listNames != undefined) {
-                            for (var i = 0; i < listNames.length; i++) {
-                                var listName = listNames[i];
-                                $scope.scopeModel.listNames.push({
-                                    description: listName,
-                                    value: listName
-                                });
+                    if (queryNameSelectedDeferred !=undefined)
+                    {
+                        queryNameSelectedDeferred.resolve();
+                    }
+                    else {
+                        $scope.scopeModel.fields.length = 0;
+                        $scope.scopeModel.listNames.length = 0;
+                        $scope.scopeModel.isLoadingListNames = true;
+                        var listNameSelectorDataPromise = context.getQueryListNames(query.value);
+                        promises.push(listNameSelectorDataPromise);
+                        listNameSelectorDataPromise.then(function (listNames) {
+                            if (listNames != undefined) {
+                                for (var i = 0; i < listNames.length; i++) {
+                                    var listName = listNames[i];
+                                    $scope.scopeModel.listNames.push({
+                                        description: listName,
+                                        value: listName
+                                    });
+                                }
                             }
-                        }
-                        listNameSelectorAPI.selectIfSingleItem();
-                    }).then(function () {
-                        $scope.scopeModel.isLoadingListNames = false;
-                    });
+                            listNameSelectorAPI.selectIfSingleItem();
+                        }).then(function () {
+                            $scope.scopeModel.isLoadingListNames = false;
+                        });
+                    }
                 }
                 else {
                     $scope.scopeModel.fields.length = 0;
@@ -107,7 +114,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     fieldsPromise.then(function (fields) {
                         if (fields != undefined) {
                             for (var i = 0; i < fields.length; i++) {
-                                var flatFileField = getFlatFileField(fields[i]);
+                                var flatFileField = getFlatFileField(null, fields[i]);
                                 $scope.scopeModel.fields.push(flatFileField);
                             }
                             disableTestGenerate();
@@ -117,7 +124,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
             };
 
             $scope.scopeModel.addField = function () {
-                var flatFileField = getFlatFileField();
+                var flatFileField = getFlatFileField(null, null);
                 $scope.scopeModel.fields.push(flatFileField);
                 disableTestGenerate();
             };
@@ -127,7 +134,8 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 $scope.scopeModel.fields.splice(index, 1);
                 disableTestGenerate();
             };
-                UtilsService.waitMultiplePromises(promises).then(function () {
+
+            UtilsService.waitMultiplePromises(promises).then(function () {
                 defineAPI();
             });
         }
@@ -162,36 +170,41 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                         });
                     }
                     if (payload.fileGenerator != undefined) {
+                        queryNameSelectedDeferred = UtilsService.createPromiseDeferred();
                         $scope.scopeModel.fileExtension = payload.fileGenerator.FileExtension;
                         $scope.scopeModel.delimiter = payload.fileGenerator.Delimiter;
                         $scope.scopeModel.withoutHeaders = payload.fileGenerator.WithoutHeaders;
                         queryArrayPromise.promise.then(function () {
-                            $scope.scopeModel.listNameSelected = UtilsService.getItemByVal($scope.scopeModel.listNames, payload.fileGenerator.ListName, 'value');
                             $scope.scopeModel.querySelected = UtilsService.getItemByVal($scope.scopeModel.queries, payload.fileGenerator.VRAutomatedReportQueryId, 'value');
-                            if (payload.fileGenerator.Fields != undefined && payload.fileGenerator.Fields.length > 0) {
-                                var allFieldsPromise = getAllFields(payload.fileGenerator.VRAutomatedReportQueryId);
-                                allFieldsPromise.then(function () {
-                                    for (var i = 0; i < payload.fileGenerator.Fields.length; i++) {
-                                        var field = payload.fileGenerator.Fields[i];
-                                        var selectedField = UtilsService.getItemByVal(allFields, field.FieldName, 'FieldName');
-                                        if (selectedField != null) {
-                                            $scope.scopeModel.fields.push({
-                                                editedTitle: field.FieldTitle,
-                                                selectedField: {
-                                                    description: selectedField.FieldTitle,
-                                                    value: selectedField.FieldName,
-                                                    source: VR_Analytic_AutomatedReportQuerySourceEnum.MainTable
-                                                }
-                                            });
-                                        }
-                                    }
-                                    disableTestGenerate();
+                            var listNameSelectorDataPromise = context.getQueryListNames($scope.scopeModel.querySelected.value);
+                                promises.push(listNameSelectorDataPromise) ;
+                                listNameSelectorDataPromise.then(function (listNames) {
+                                if (listNames != undefined) {
+                                    for (var i = 0; i < listNames.length; i++) {
+                                        var listName = listNames[i];
+                                        $scope.scopeModel.listNames.push({
+                                        description: listName,
+                                        value: listName
                                 });
+                                }
+                                $scope.scopeModel.listNameSelected = UtilsService.getItemByVal($scope.scopeModel.listNames, payload.fileGenerator.ListName, 'value');
                             }
+                        }).then(function () {
+                            $scope.scopeModel.isLoadingListNames = false;
                         });
+                        });
+                        if (payload.fileGenerator.Fields != undefined && payload.fileGenerator.Fields.length > 0) {
+                            for (var i = 0; i < payload.fileGenerator.Fields.length; i++) {
+                                var flatFileField = getFlatFileField(payload.fileGenerator.Fields[i], null);
+                                promises.push(flatFileField.fieldSelectorLoadPromiseDeferred.promise);
+                                $scope.scopeModel.fields.push(flatFileField);
+                            }
+                            disableTestGenerate();
+                        }
                     }
                 }
                 return UtilsService.waitMultiplePromises(promises).then(function () {
+                    queryNameSelectedDeferred = undefined;
                     $scope.scopeModel.isLoading = false;
                 });
             };
@@ -253,15 +266,15 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                 }
                                 var newFieldsPromise = getAllFields(matchingQuery.value);
                                 newFieldsPromise.then(function (newFields) {
-                                for (var i = 0; i < $scope.scopeModel.fields.length; i++) {
-                                var field = $scope.scopeModel.fields[i];
-                                    $scope.scopeModel.fields[i].fields = newFields;
-                                    allFields = newFields;
-                                    if (field.selectedField != undefined) {
-                                        var selectedFieldIndex = UtilsService.getItemIndexByVal(newFields, field.selectedField.value, 'value');
-                                        if (selectedFieldIndex == -1) {
-                                            $scope.scopeModel.fields[i].selectedField = undefined;
-                                            $scope.scopeModel.fields[i].editedTitle = undefined;
+                                    for (var i = 0; i < $scope.scopeModel.fields.length; i++) {
+                                        var field = $scope.scopeModel.fields[i];
+                                        $scope.scopeModel.fields[i].fields = newFields;
+                                        allFields = newFields;
+                                        if (field.selectedField != undefined) {
+                                            var selectedFieldIndex = UtilsService.getItemIndexByVal(newFields, field.selectedField.value, 'value');
+                                            if (selectedFieldIndex == -1) {
+                                                $scope.scopeModel.fields[i].selectedField = undefined;
+                                                $scope.scopeModel.fields[i].editedTitle = undefined;
                                             }
                                         }
                                     }
@@ -317,7 +330,9 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 ctrl.onReady(api);
         }
 
-        function getFlatFileField(selectedField) {
+        function getFlatFileField(flatFileEntity, selectedField) {
+            allFields = undefined;
+
             var flatFileField = {};
 
             flatFileField.onFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -336,16 +351,26 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                             flatFileField.fields = fields;
                             flatFileField.fieldSelectorLoadPromiseDeferred.resolve();
                         }
-                        flatFileField.fieldSelectorAPI.selectIfSingleItem();
+                        if (flatFileEntity != undefined && flatFileEntity.FieldName!=undefined) {
+                             flatFileField.selectedField = UtilsService.getItemByVal(flatFileField.fields, flatFileEntity.FieldName, "value");
+                        }
                         if (selectedField != undefined) {
                             flatFileField.selectedField = selectedField;
                         }
+                        flatFileField.fieldSelectorAPI.selectIfSingleItem();
                     });
                 });
             };
             flatFileField.onFieldSelectionChanged = function (value) {
-                if (value != undefined) {
-                    flatFileField.editedTitle = value.description;
+                if (value !=undefined && value.source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable)
+                {
+                    if (flatFileEntity!= undefined) {
+                        flatFileField.editedTitle = flatFileEntity.FieldTitle;
+                        flatFileEntity = undefined;
+                    }
+                    else {
+                        flatFileField.editedTitle = value.description;
+                    }
                 }
             };
 
@@ -359,7 +384,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
             var fieldsArray = [];
             fieldsPromise.then(function (fields) {
                 if (fields != undefined) {
-                    allFields = fields;
                     for (var i = 0; i < fields.length; i++) {
                         var field = fields[i];
                         if (field.Source == VR_Analytic_AutomatedReportQuerySourceEnum.MainTable) {
@@ -370,6 +394,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                             });
                         }
                     }
+                    allFields = fieldsArray;
                     fieldsArrayPromise.resolve(fieldsArray);
                 }
             });

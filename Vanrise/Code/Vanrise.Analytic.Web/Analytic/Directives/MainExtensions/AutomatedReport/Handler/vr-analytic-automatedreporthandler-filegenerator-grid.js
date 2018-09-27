@@ -28,7 +28,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
             $scope.scopeModel.columns = [];
 
             $scope.scopeModel.removeColumn = function (dataItem) {
-                var index = UtilsService.getItemIndexByVal($scope.scopeModel.columns, dataItem.id, 'id');
+                var index = $scope.scopeModel.columns.indexOf(dataItem);
                 if (index > -1) {
                     $scope.scopeModel.columns.splice(index, 1);
                 }
@@ -36,7 +36,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
 
             $scope.scopeModel.addAttachementGenerator = function () {
                 var onAttachementGeneratorAdded = function (obj) {
-                    $scope.scopeModel.columns.push(obj);
+                    $scope.scopeModel.columns.push({ Entity: obj });
                 };
                 VRAnalytic_AutomatedReportHandlerService.addAttachementGenerator(onAttachementGeneratorAdded, getContext());
             };
@@ -48,8 +48,9 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                 }
                 var columnNames = [];
                 for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
-                    if ($scope.scopeModel.columns[i].QueryName != undefined) {
-                        columnNames.push($scope.scopeModel.columns[i].QueryName.toUpperCase());
+                    var column = $scope.scopeModel.columns[i];
+                    if (column != undefined && column.Entity != undefined && column.Entity.QueryName != undefined) {
+                        columnNames.push(column.Entity.QueryName.toUpperCase());
                     }
                 }
                 while (columnNames.length > 0) {
@@ -84,16 +85,9 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                     if (payload.attachmentGenerators != undefined) {
                         for (var i = 0; i < payload.attachmentGenerators.length; i++) {
                             var generator = payload.attachmentGenerators[i];
-                                var gridItem = {
-                                    id: i,
-                                    VRAutomatedReportFileGeneratorId: generator.VRAutomatedReportFileGeneratorId,
-                                    Name: generator.Name,
-                                    Settings: generator.Settings,
-                                    CompressFile:generator.CompressFile
-                                };
-                                $scope.scopeModel.columns.push(gridItem);
-                            }
-                        
+                                $scope.scopeModel.columns.push({ Entity: generator
+                            });
+                        }
                     }
                 }
 
@@ -106,12 +100,7 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
                     var columns = [];
                     for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
                         var column = $scope.scopeModel.columns[i];
-                        columns.push({
-                            VRAutomatedReportFileGeneratorId: column.VRAutomatedReportFileGeneratorId,
-                            Name: column.Name,
-                            Settings: column.Settings,
-                            CompressFile: column.CompressFile
-                        });
+                        columns.push(column.Entity);
                     }
                     return columns;
                 }
@@ -133,9 +122,9 @@ function (UtilsService, VRAnalytic_AutomatedReportHandlerService, VRUIUtilsServi
 
             var onAttachementGeneratorUpdated = function (obj) {
                 var index = $scope.scopeModel.columns.indexOf(object);
-                $scope.scopeModel.columns[index] = obj;
+                $scope.scopeModel.columns[index] = { Entity: obj };
             };
-            VRAnalytic_AutomatedReportHandlerService.editAttachementGenerator(object, onAttachementGeneratorUpdated, getContext());
+            VRAnalytic_AutomatedReportHandlerService.editAttachementGenerator(object.Entity, onAttachementGeneratorUpdated, getContext());
         }
 
         function getContext() {
