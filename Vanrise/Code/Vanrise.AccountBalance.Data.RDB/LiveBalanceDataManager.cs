@@ -74,7 +74,7 @@ namespace Vanrise.AccountBalance.Data.RDB
                 AccountId = reader.GetString(COL_AccountID),
                 AccountTypeId = reader.GetGuid(COL_AccountTypeID),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
-                AlertRuleID = reader.GetIntWithNullHandling(COL_AlertRuleID),
+                AlertRuleID = reader.GetNullableInt(COL_AlertRuleID),
                 InitialBalance = reader.GetDecimal(COL_InitialBalance),
                 NextThreshold = reader.GetNullableDecimal(COL_NextAlertThreshold),
                 LastExecutedThreshold = reader.GetNullableDecimal(COL_LastExecutedActionThreshold),
