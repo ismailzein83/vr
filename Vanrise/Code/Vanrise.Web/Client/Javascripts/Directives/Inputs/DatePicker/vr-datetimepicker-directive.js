@@ -54,7 +54,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             //var elementName = BaseDirService.prepareDirectiveHTMLForValidation(validationOptions, inputElement, inputElement, $element.find('#rootDiv'));
 
             var ctrl = this;
-            ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+            if ($attrs.stopreadonly == undefined)
+                ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
             ctrl.validate = function () {
                 return VRValidationService.validate(ctrl.value, $scope, $attrs);
@@ -97,7 +98,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 allowInputToggle: $attrs.disablefocus == undefined || MobileService.isMobile(),
                 ignoreReadonly: MobileService.isMobile(),
                 focusOnShow: !MobileService.isMobile(),
-                showClear:true
+                showClear: true
             });
             divDatePicker
                 .on('dp.show', function (e) {
@@ -174,72 +175,72 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var isUserChange = false;
             var selectedDate;
             divDatePicker
-            .on('dp.change', function (e) {
-                if (!e.date) {
-                    $scope.ctrl.value = null;
-                    return;
-                }
-                var dt = e.date;
-                //selectedDate = convertUTCDateToLocalDate(new Date(dt));
-                selectedDate = new Date(dt);
-                //selectedDate.setSeconds(0);
-                //selectedDate.setMilliseconds(0);
-                var modelValue = $scope.ctrl.value;
-                if (modelValue != undefined && !(modelValue instanceof Date))
-                    modelValue = UtilsService.createDateFromString(modelValue);
+                .on('dp.change', function (e) {
+                    if (!e.date) {
+                        $scope.ctrl.value = null;
+                        return;
+                    }
+                    var dt = e.date;
+                    //selectedDate = convertUTCDateToLocalDate(new Date(dt));
+                    selectedDate = new Date(dt);
+                    //selectedDate.setSeconds(0);
+                    //selectedDate.setMilliseconds(0);
+                    var modelValue = $scope.ctrl.value;
+                    if (modelValue != undefined && !(modelValue instanceof Date))
+                        modelValue = UtilsService.createDateFromString(modelValue);
 
-                if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
-                    isUserChange = true;
-                    var unspecifiedHour = 0;
-                    var unspecifiedMinute = 0;
-                    var unspecifiedSecond = 0;
-                    var unspecifiedMillisecond = 0;
-                    if ($attrs.applytimemax != undefined) {
+                    if (modelValue == undefined || modelValue.toString() != selectedDate.toString()) {
+                        isUserChange = true;
+                        var unspecifiedHour = 0;
+                        var unspecifiedMinute = 0;
+                        var unspecifiedSecond = 0;
+                        var unspecifiedMillisecond = 0;
+                        if ($attrs.applytimemax != undefined) {
 
-                        unspecifiedHour = 23;
-                        unspecifiedMinute = 59;
-                        unspecifiedSecond = 59;
-                        unspecifiedMillisecond = 998;
-                    }
-                    if ($attrs.type == "time" || $attrs.type == "hour") {
-                        $scope.ctrl.value = {
-                            $type: 'Vanrise.Entities.Time, Vanrise.Entities',
-                            Hour: selectedDate.getHours(),
-                            Minute: $attrs.type == "hour" ? unspecifiedMinute : selectedDate.getMinutes(),
-                            Second: $attrs.type == "hour" ? unspecifiedSecond : selectedDate.getSeconds(),
-                            Millisecond: $attrs.type == "hour" ? unspecifiedMillisecond : selectedDate.getMilliseconds()
-                        };
+                            unspecifiedHour = 23;
+                            unspecifiedMinute = 59;
+                            unspecifiedSecond = 59;
+                            unspecifiedMillisecond = 998;
+                        }
+                        if ($attrs.type == "time" || $attrs.type == "hour") {
+                            $scope.ctrl.value = {
+                                $type: 'Vanrise.Entities.Time, Vanrise.Entities',
+                                Hour: selectedDate.getHours(),
+                                Minute: $attrs.type == "hour" ? unspecifiedMinute : selectedDate.getMinutes(),
+                                Second: $attrs.type == "hour" ? unspecifiedSecond : selectedDate.getSeconds(),
+                                Millisecond: $attrs.type == "hour" ? unspecifiedMillisecond : selectedDate.getMilliseconds()
+                            };
+                        }
+
+                        else if ($attrs.type == "date") {
+                            var date = new Date(selectedDate.setHours(unspecifiedHour, unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
+                            //var date = moment.utc(selectedDate).format("L LT");
+                            $scope.ctrl.value = date;
+                        }
+                        else if ($attrs.type == "dateHour") {
+                            var date = new Date(selectedDate.setHours(selectedDate.getHours(), unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
+                            //var date = moment.utc(selectedDate).format("L LT");
+                            $scope.ctrl.value = date;
+                        }
+                        else if ($attrs.type == "yearMonth") {
+                            selectedDate.setDate(1);
+                            var date = new Date(selectedDate.setHours(unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
+                            $scope.ctrl.value = date;
+                        }
+                        else if ($attrs.type == "longDateTime") {
+                            var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), selectedDate.getSeconds(), unspecifiedMillisecond));
+                            //var date = moment.utc(selectedDate).format("L LT");
+                            $scope.ctrl.value = date;
+                        }
+                        else {
+                            var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), unspecifiedSecond, unspecifiedMillisecond));
+                            //var date = moment.utc(selectedDate).format("L LT");
+                            $scope.ctrl.value = date;
+
+                        }
                     }
 
-                    else if ($attrs.type == "date") {
-                        var date = new Date(selectedDate.setHours(unspecifiedHour, unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
-                        //var date = moment.utc(selectedDate).format("L LT");
-                        $scope.ctrl.value = date;
-                    }
-                    else if ($attrs.type == "dateHour") {
-                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
-                        //var date = moment.utc(selectedDate).format("L LT");
-                        $scope.ctrl.value = date;
-                    }
-                    else if ($attrs.type == "yearMonth") {
-                        selectedDate.setDate(1);
-                        var date = new Date(selectedDate.setHours(unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
-                        $scope.ctrl.value = date;
-                    }
-                    else if ($attrs.type == "longDateTime") {
-                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), selectedDate.getSeconds(), unspecifiedMillisecond));
-                        //var date = moment.utc(selectedDate).format("L LT");
-                        $scope.ctrl.value = date;
-                    }
-                    else {
-                        var date = new Date(selectedDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), unspecifiedSecond, unspecifiedMillisecond));
-                        //var date = moment.utc(selectedDate).format("L LT");
-                        $scope.ctrl.value = date;
-
-                    }
-                }
-
-            });
+                });
 
             function cloneDateTime(date) {
                 return new Date(date).toUTCString().replace(' Z', '');
@@ -434,21 +435,21 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             else if (attrs.type == undefined) {
                 n = 2;
                 icontemplate = ' <span  class="input-group-addon vr-small-addon vanrise-inpute" ng-click="::ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>'
-                             + ' <span  class="input-group-addon vr-small-addon vanrise-inpute" ng-click="::ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
+                    + ' <span  class="input-group-addon vr-small-addon vanrise-inpute" ng-click="::ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
             }
 
             var iconposition = VRLocalizationService.isLocalizationRTL() ? 'left:' : 'right:-';
-            var readOnlyInput = MobileService.isMobile() ? "readonly='true'" : '';
+            var readOnlyInput = MobileService.isMobile() ? "readonly='true'" : 'ng-readonly="::ctrl.readOnly"';
             var dateTemplate =
-                 '<div   >'
-                  + '<vr-validator validate="ctrl.validate()" vr-input>'
-                  + '<div id="divDatePicker" ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container vanrise-inpute" >'
-                            + '<input ng-disabled="ctrl.disabled" ' + readOnlyInput + ' tabindex="{{ctrl.tabindex}}" class="vr-date-input vanrise-inpute" placeholder="{{::ctrl.placelHolder}}" ng-keyup="::ctrl.updateModelOnKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
-                            + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;' + iconposition + n * 10 + 'px;" >' + icontemplate + '</div>'
-                      + '</div>'
-                  + '</vr-validator>'
-                      + '<span ng-if="(ctrl.hint!=undefined)"  ng-mouseenter="::ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input"  html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                '<div   >'
+                + '<vr-validator validate="ctrl.validate()" vr-input>'
+                + '<div id="divDatePicker" ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container vanrise-inpute" >'
+                + '<input ng-disabled="ctrl.disabled" ' + readOnlyInput + ' tabindex="{{ctrl.tabindex}}" class="vr-date-input vanrise-inpute" placeholder="{{::ctrl.placelHolder}}" ng-keyup="::ctrl.updateModelOnKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
+                + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;' + iconposition + n * 10 + 'px;" >' + icontemplate + '</div>'
+                + '</div>'
+                + '</vr-validator>'
+                + '<span ng-if="(ctrl.hint!=undefined)"  ng-mouseenter="::ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input"  html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
                 + '</div>';
 
             //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);
