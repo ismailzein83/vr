@@ -120,8 +120,10 @@ namespace TOne.WhS.Routing.BP.Activities
 
             string serializedFirstSaleZoneServiceIds = firstCustomerZoneDetail.SaleZoneServiceIds != null ? string.Join<int>("", firstCustomerZoneDetail.SaleZoneServiceIds.OrderBy(itm => itm)) : string.Empty;
             string serializedSecondSaleZoneServiceIds = secondCustomerZoneDetail.SaleZoneServiceIds != null ? string.Join<int>("", secondCustomerZoneDetail.SaleZoneServiceIds.OrderBy(itm => itm)) : string.Empty;
-
             if (string.Compare(serializedFirstSaleZoneServiceIds, serializedSecondSaleZoneServiceIds) != 0)
+                return false;
+
+            if (firstCustomerZoneDetail.DealId != secondCustomerZoneDetail.DealId)
                 return false;
 
             return true;

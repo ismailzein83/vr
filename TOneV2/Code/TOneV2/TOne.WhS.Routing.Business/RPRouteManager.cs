@@ -118,7 +118,14 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             RPRouteOptionSupplier rpRouteOptionSupplier = dicRouteOptionSuppliers[supplierId];
-            Dictionary<long, SupplierRate> supplierRateByIds = new SupplierRateManager().GetSupplierRates(rpRouteOptionSupplier.SupplierZones.Select(itm => itm.SupplierRateId).ToHashSet());
+            HashSet<long> distinctSupplierRateIds = new HashSet<long>();
+            foreach (var supplierZone in rpRouteOptionSupplier.SupplierZones)
+            {
+                if (supplierZone.SupplierRateId.HasValue)
+                    distinctSupplierRateIds.Add(supplierZone.SupplierRateId.Value);
+            }
+
+            Dictionary<long, SupplierRate> supplierRateByIds = new SupplierRateManager().GetSupplierRates(distinctSupplierRateIds);
 
             int? systemCurrencyId = null;
             if (toCurrencyId.HasValue)
@@ -816,21 +823,21 @@ namespace TOne.WhS.Routing.Business
             SupplierZoneDetail supplierZoneDetail = supplierZoneDetailsByZoneId.GetRecord(option.SupplierZoneId);
 
             RPRouteOptionByCodeDetail detail = new RPRouteOptionByCodeDetail()
-              {
-                  ConvertedSupplierRate = convertedSupplierRate,
-                  CurrencySymbol = currencySymbol,
-                  EvaluatedStatus = TOne.WhS.Routing.Entities.Helper.GetEvaluatedStatus(option.IsBlocked, isLossy, option.IsForced, option.ExecutedRuleId),
-                  ExecutedRuleId = option.ExecutedRuleId,
-                  Percentage = option.Percentage,
-                  SupplierCode = option.SupplierCode,
-                  SupplierId = option.SupplierId,
-                  SupplierName = carrierAccountManager.GetCarrierAccountName(option.SupplierId),
-                  SupplierRate = option.SupplierRate,
-                  SupplierZoneId = option.SupplierZoneId,
-                  SupplierZoneName = supplierZoneManager.GetSupplierZoneName(option.SupplierZoneId),
-                  OptionOrder = optionOrder,
-                  SupplierZoneMatchHasClosedRate = supplierZoneDetail.SupplierRateEED.HasValue
-              };
+            {
+                ConvertedSupplierRate = convertedSupplierRate,
+                CurrencySymbol = currencySymbol,
+                EvaluatedStatus = TOne.WhS.Routing.Entities.Helper.GetEvaluatedStatus(option.IsBlocked, isLossy, option.IsForced, option.ExecutedRuleId),
+                ExecutedRuleId = option.ExecutedRuleId,
+                Percentage = option.Percentage,
+                SupplierCode = option.SupplierCode,
+                SupplierId = option.SupplierId,
+                SupplierName = carrierAccountManager.GetCarrierAccountName(option.SupplierId),
+                SupplierRate = option.SupplierRate,
+                SupplierZoneId = option.SupplierZoneId,
+                SupplierZoneName = supplierZoneManager.GetSupplierZoneName(option.SupplierZoneId),
+                OptionOrder = optionOrder,
+                SupplierZoneMatchHasClosedRate = supplierZoneDetail.SupplierRateEED.HasValue
+            };
 
             if (option.Backups != null)
             {
@@ -986,7 +993,7 @@ namespace TOne.WhS.Routing.Business
             SupplierZoneManager manager = new SupplierZoneManager();
             SupplierZone supplierZone = manager.GetSupplierZone(rpRouteOptionSupplierZone.SupplierZoneId);
 
-            SupplierRate supplierRate = supplierRateByIds != null ? supplierRateByIds.GetRecord(rpRouteOptionSupplierZone.SupplierRateId) : null;
+            SupplierRate supplierRate = (supplierRateByIds != null && rpRouteOptionSupplierZone.SupplierRateId.HasValue) ? supplierRateByIds.GetRecord(rpRouteOptionSupplierZone.SupplierRateId.Value) : null;
 
             bool shouldGetFutureRate = supplierRate != null && supplierRate.EED.HasValue && futureSupplierZoneRateLocator != null;
 

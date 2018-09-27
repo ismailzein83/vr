@@ -68,6 +68,7 @@
     <Compile Include="DealRateEvaluator\DealSupplierRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\DealSupplierRateEvaluatorConfig.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
+    <Compile Include="DealSubstituteRate.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="DealProcess\DealZoneRate.cs" />
     <Compile Include="DealZoneInfo.cs" />

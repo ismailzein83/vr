@@ -7,7 +7,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public long SupplierZoneId { get; set; }
 
-        public long SupplierRateId { get; set; }
+        public long? SupplierRateId { get; set; }
 
         public Decimal SupplierRate { get; set; }
 

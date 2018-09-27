@@ -4,14 +4,12 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using TOne.Data.SQL;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
 using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Entities;
-using System.Threading;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
@@ -241,8 +239,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                         [SupplierServiceIds] [nvarchar](max) NULL,
                                                         [ExactSupplierServiceIds] [nvarchar](max) NULL,
                                                         [SupplierServiceWeight] int NOT NULL,
-                                                        [SupplierRateId] bigint NOT NULL,
-                                                        [SupplierRateEED] datetime NULL
+                                                        [SupplierRateId] bigint NULL,
+                                                        [SupplierRateEED] datetime NULL,
+                                                        [DealId] int NULL
                                                         ) ON [PRIMARY];
                                                         
                                                         CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 
@@ -259,7 +258,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                    [SellingProductId] [int] NULL,
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
 	                                                    [RateSource] [tinyint] NULL,
-                                                        [SaleZoneServiceIds] [nvarchar](max) NULL
+                                                        [SaleZoneServiceIds] [nvarchar](max) NULL,
+                                                        [DealId] int NULL
                                                         ) ON [PRIMARY];
                                                         CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
                                                         (

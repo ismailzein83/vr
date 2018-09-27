@@ -213,8 +213,9 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         [SupplierServiceIds] [nvarchar](max) NULL,
                                                         [ExactSupplierServiceIds] [nvarchar](max) NULL,
                                                         [SupplierServiceWeight] int NOT NULL,
-                                                        [SupplierRateId] bigint NOT NULL,
+                                                        [SupplierRateId] bigint NULL,
                                                         [SupplierRateEED] datetime NULL,
+                                                        [DealId] [int] NULL,
                                                         [VersionNumber] [int] NOT NULL
                                                         ) ON [PRIMARY];
                                                         
@@ -237,6 +238,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
 	                                                    [RateSource] [tinyint] NULL,
                                                         [SaleZoneServiceIds] [nvarchar](max) NULL,
+                                                        [DealId] [int] NULL,
                                                         [VersionNumber] [int] NOT NULL
                                                         ) ON [PRIMARY];
                                                         CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
@@ -377,7 +379,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         [SupplierServiceIds] [nvarchar](max) NULL,
                                                         [ExactSupplierServiceIds] [nvarchar](max) NULL,
                                                         [SupplierServiceWeight] int NOT NULL,
-                                                        [SupplierRateId] bigint NOT NULL,
+                                                        [SupplierRateId] bigint NULL,
                                                         [SupplierRateEED] datetime NULL,
                                                         [VersionNumber] [int] NOT NULL)";
 

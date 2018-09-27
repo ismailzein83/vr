@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -29,7 +26,7 @@ namespace TOne.WhS.Routing.Entities
 
         public int SupplierServiceWeight { get; set; }
 
-        public long SupplierRateId { get; set; }
+        public long? SupplierRateId { get; set; }
 
         public DateTime? SupplierRateEED { get; set; }
     }

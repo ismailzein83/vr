@@ -8,7 +8,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         [Description("Selling Product")]
         SellingProduct = 0,
         [Description("Customer")]
-        Customer = 1
+        Customer = 1,
+        [Description("Deal")]
+        Deal = 2,
     }
 
     public enum SalePriceListType

@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
 using Vanrise.Common;
-using TOne.WhS.Routing.Business;
+using Vanrise.Data.SQL;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
@@ -23,7 +21,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         Vanrise.Rules.RuleTree[] _ruleTreesForRouteOptions = new RouteOptionRuleManager().GetRuleTreesByPriorityForCustomerRoutes();
         Guid blockedRuleConfigId = new Guid("5a998636-0de9-4654-b430-c24805dd78d9");
 
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight", "SupplierRateId", "SupplierRateEED" };
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight", "SupplierRateId", "SupplierRateEED", "DealId" };
         readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
 
         Dictionary<int, CarrierAccount> _allCarriers;
@@ -91,9 +89,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             SupplierZoneDetailBulkInsert supplierZoneDetailBulkInsert = dbApplyStream as SupplierZoneDetailBulkInsert;
-            supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.SupplierId, record.SupplierZoneId,
-                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId, 
-                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "");
+            supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.SupplierId, record.SupplierZoneId,
+                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId,
+                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "", record.DealId);
 
             if (!IsFuture.HasValue)
                 throw new ArgumentNullException("IsFuture");
@@ -166,8 +164,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? new HashSet<int>(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 SupplierServiceWeight = GetReaderValue<int>(reader, "SupplierServiceWeight"),
-                SupplierRateId = (long)reader["SupplierRateId"],
-                SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED")
+                SupplierRateId = GetReaderValue<long?>(reader, "SupplierRateId"),
+                SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
+                DealId = GetReaderValue<int?>(reader, "DealId")
             };
         }
 
@@ -197,6 +196,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[SupplierServiceWeight]
                                                   ,zd.[SupplierRateId]
                                                   ,zd.[SupplierRateEED]
+                                                  ,zd.[DealId]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
@@ -208,6 +208,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[SupplierServiceWeight]
                                                   ,zd.[SupplierRateId]
                                                   ,zd.[SupplierRateEED]
+                                                  ,zd.[DealId]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId";
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 
@@ -19,7 +16,7 @@ namespace TOne.WhS.Routing.Entities
 
         public long SupplierZoneId { get; set; }
 
-        public long SupplierRateId { get; set; }
+        public long? SupplierRateId { get; set; }
 
         public Decimal SupplierRate { get; set; }
 
@@ -42,7 +39,7 @@ namespace TOne.WhS.Routing.Entities
         public bool BlockOption { get; set; }
 
         public bool FilterOption { get; set; }
-        
+
         public bool IsForced { get; set; }
 
         #region Interfaces

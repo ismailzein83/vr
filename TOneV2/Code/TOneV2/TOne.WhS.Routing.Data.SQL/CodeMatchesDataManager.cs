@@ -220,7 +220,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
                 RateValue = (decimal)reader["EffectiveRateValue"],
                 SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
-                SupplierRateId = (long)reader["SupplierRateId"],
+                SupplierRateId = GetReaderValue<long?>(reader, "SupplierRateId"),
                 SupplierServiceWeight = (int)reader["SupplierServiceWeight"]
             };
         }

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
-using Vanrise.Common;
-using System.ComponentModel;
-using TOne.WhS.Deal.Entities;
-using Vanrise.Common.Business;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -286,11 +286,13 @@ namespace TOne.WhS.Deal.Business
 
             if (Outbounds == null || Outbounds.Count == 0)
                 return null;
+
             foreach (SwapDealOutbound swapDealOutbound in Outbounds)
             {
                 supplierZoneGroups.Add(new DealRoutingSupplierZoneGroup
                 {
                     Tiers = BuildRoutingSupplierTiers(swapDealOutbound),
+                    CurrencyId = this.CurrencyId,
                     DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber
                 });
             }
@@ -303,11 +305,13 @@ namespace TOne.WhS.Deal.Business
 
             if (Inbounds == null || Inbounds.Count == 0)
                 return null;
+
             foreach (SwapDealInbound swapDealInbound in Inbounds)
             {
                 saleZoneGroups.Add(new DealRoutingSaleZoneGroup
                 {
                     Tiers = BuildRoutingSaleTiers(swapDealInbound),
+                    CurrencyId = this.CurrencyId,
                     DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber
                 });
             }

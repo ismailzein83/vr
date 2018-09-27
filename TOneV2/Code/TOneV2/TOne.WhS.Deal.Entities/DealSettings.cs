@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Vanrise.Entities;
-using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -75,8 +73,6 @@ namespace TOne.WhS.Deal.Entities
 
     public interface IDealGetRoutingZoneGroupsContext
     {
-        int DealId { get; }
-
         DealZoneGroupPart DealZoneGroupPart { get; }
 
         List<DealRoutingSaleZoneGroup> SaleZoneGroups { set; }
@@ -86,16 +82,15 @@ namespace TOne.WhS.Deal.Entities
 
     public class DealGetRoutingZoneGroupsContext : IDealGetRoutingZoneGroupsContext
     {
-        public int DealId { get; set; }
         public DealZoneGroupPart DealZoneGroupPart { get; set; }
         public List<DealRoutingSaleZoneGroup> SaleZoneGroups { get; set; }
         public List<DealRoutingSupplierZoneGroup> SupplierZoneGroups { get; set; }
-
     }
 
     public class DealRoutingSaleZoneGroup
     {
         public int DealSaleZoneGroupNb { get; set; }
+        public int CurrencyId { get; set; }
         public List<DealRoutingSaleZoneGroupTier> Tiers { get; set; }
     }
 
@@ -109,6 +104,7 @@ namespace TOne.WhS.Deal.Entities
     public class DealRoutingSupplierZoneGroup
     {
         public int DealSupplierZoneGroupNb { get; set; }
+        public int CurrencyId { get; set; }
         public List<DealRoutingSupplierZoneGroupTier> Tiers { get; set; }
     }
 

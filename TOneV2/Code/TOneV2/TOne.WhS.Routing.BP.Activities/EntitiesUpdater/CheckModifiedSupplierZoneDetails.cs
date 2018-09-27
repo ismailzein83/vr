@@ -107,20 +107,20 @@ namespace TOne.WhS.Routing.BP.Activities
 
             DateTime firstSupplierRateEED = firstSupplierZoneDetail.SupplierRateEED.HasValue ? firstSupplierZoneDetail.SupplierRateEED.Value : default(DateTime);
             DateTime secondSupplierRateEED = secondSupplierZoneDetail.SupplierRateEED.HasValue ? secondSupplierZoneDetail.SupplierRateEED.Value : default(DateTime);
-
             if (firstSupplierRateEED != secondSupplierRateEED)
                 return false;
 
             string serializedFirstSupplierZoneServiceIds = firstSupplierZoneDetail.SupplierServiceIds != null ? string.Join<int>("", firstSupplierZoneDetail.SupplierServiceIds.OrderBy(itm => itm)) : string.Empty;
             string serializedSecondSupplierZoneServiceIds = secondSupplierZoneDetail.SupplierServiceIds != null ? string.Join<int>("", secondSupplierZoneDetail.SupplierServiceIds.OrderBy(itm => itm)) : string.Empty;
-
             if (string.Compare(serializedFirstSupplierZoneServiceIds, serializedSecondSupplierZoneServiceIds) != 0)
                 return false;
 
             string serializedFirstExactSupplierZoneServiceIds = firstSupplierZoneDetail.ExactSupplierServiceIds != null ? string.Join<int>("", firstSupplierZoneDetail.ExactSupplierServiceIds.OrderBy(itm => itm)) : string.Empty;
             string serializedSecondExactSupplierZoneServiceIds = secondSupplierZoneDetail.ExactSupplierServiceIds != null ? string.Join<int>("", secondSupplierZoneDetail.ExactSupplierServiceIds.OrderBy(itm => itm)) : string.Empty;
-
             if (string.Compare(serializedFirstExactSupplierZoneServiceIds, serializedSecondExactSupplierZoneServiceIds) != 0)
+                return false;
+
+            if (firstSupplierZoneDetail.DealId != secondSupplierZoneDetail.DealId)
                 return false;
 
             return true;

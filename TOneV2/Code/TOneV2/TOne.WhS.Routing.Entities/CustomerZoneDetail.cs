@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
@@ -24,6 +21,8 @@ namespace TOne.WhS.Routing.Entities
         public SalePriceListOwnerType RateSource { get; set; }
 
         public HashSet<int> SaleZoneServiceIds { get; set; }
+
+        public int? DealId { get; set; }
 
         public int VersionNumber { get; set; }
     }

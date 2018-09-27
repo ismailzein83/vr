@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
-using Vanrise.Common;
-using TOne.WhS.Deal.Entities;
-using Vanrise.Common.Business;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -233,6 +233,7 @@ namespace TOne.WhS.Deal.Business
                             supplierZoneGroups.Add(new DealRoutingSupplierZoneGroup
                             {
                                 Tiers = BuildRoutingSupplierTiers(volCommitmentDealItem),
+                                CurrencyId = this.CurrencyId,
                                 DealSupplierZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber
                             });
                         }
@@ -249,6 +250,7 @@ namespace TOne.WhS.Deal.Business
                             saleZoneGroups.Add(new DealRoutingSaleZoneGroup
                             {
                                 Tiers = BuildRoutingSaleTiers(volCommitmentDealItem),
+                                CurrencyId = this.CurrencyId,
                                 DealSaleZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber
                             });
                         }
