@@ -244,6 +244,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\ViewDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\ColumnDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-aftersavehandler-settings.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-beforegetfilteredhandler-settings.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-beforeinserthandler-settings.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-extendedsettings.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-actiondefinition-settings.js" />
