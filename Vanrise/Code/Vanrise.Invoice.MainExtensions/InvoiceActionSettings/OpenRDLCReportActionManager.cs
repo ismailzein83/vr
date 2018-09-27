@@ -15,6 +15,7 @@ using System.Threading;
 using System.IO;
 using Vanrise.Common.Business;
 using Vanrise.Invoice.Business.Extensions;
+using System.Text.RegularExpressions;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -79,7 +80,10 @@ namespace Vanrise.Invoice.MainExtensions
                         reportViewer.LocalReport.ReportPath = Path.Combine(currentDir, reportRuntimeURL);
 
                     }
-                    reportViewer.LocalReport.DisplayName = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
+                    var fileName = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
+                    Regex reg = new Regex("[*'()[\",&#^@]");
+                    fileName = reg.Replace(fileName, "_");
+                    reportViewer.LocalReport.DisplayName = fileName;
                    // reportViewer.LocalReport.DisplayName = String.Format("Invoice");
 
                     SetMainReportDataSources(reportViewer.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources);
@@ -268,6 +272,9 @@ namespace Vanrise.Invoice.MainExtensions
                 throw new Exception(String.Format("Data Source '{0}' is not available in _currentItemsByDataSourceName", dataSourceName));
             return dataSourceItems;
         }
+
+
+       
     }
 
 
