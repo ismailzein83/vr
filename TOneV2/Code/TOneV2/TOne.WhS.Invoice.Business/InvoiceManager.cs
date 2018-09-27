@@ -390,8 +390,8 @@ namespace TOne.WhS.Invoice.Business
                     ComparisonKey comparisonKey = new ComparisonKey
                     {
                         Destination = invoiceComparisonResult.Destination,
-                        From = invoiceComparisonResult.From,
-                        To = invoiceComparisonResult.To,
+                        From = invoiceComparisonResult.From.Date,
+                        To = invoiceComparisonResult.To.Date,
                     };
                    
                     InvoiceItemToCompare invoiceItemToCompare;
@@ -627,8 +627,8 @@ namespace TOne.WhS.Invoice.Business
                     var comparisonKey = new ComparisonKey
                     {
                         Destination = invoiceItemToCompare.Destination,
-                        From = invoiceItemToCompare.From,
-                        To = invoiceItemToCompare.To,
+                        From = invoiceItemToCompare.From.Date,
+                        To = invoiceItemToCompare.To.Date,
                     };
                     if (!invoiceItemsToCompare.ContainsKey(comparisonKey))
                     {
