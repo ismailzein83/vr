@@ -42,19 +42,29 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-
             int customerId = this.CustomerId.Get(context);
             Changes changes = this.Changes.Get(context);
             DateTime effectiveDate = this.EffectiveDate.Get(context);
             bool followPublisherRatesBED = this.FollowPublisherRatesBED.Get(context);
             bool followPublisherRoutingProduct = this.FollowPublisherRoutingProduct.Get(context);
             int publisherId = this.PublisherId.Get(context);
-
+            List<DraftNewCountry>newCountriesToSold = new List<DraftNewCountry>();
             List<ExcludedChange> excludedCountries = new List<ExcludedChange>();
             Changes filteredChanges = new Changes();
-
+            var effectiveOrFutureCustomerCountriesByCountryId = GetEffectiveOrFutureCustomerCountriesByCountryId(customerId, effectiveDate); 
+            if (changes.CountryChanges != null && changes.CountryChanges.NewCountries != null && changes.CountryChanges.NewCountries.Count() > 0)
+            {
+                filteredChanges.CountryChanges = new CountryChanges();
+                foreach (var newCountry in changes.CountryChanges.NewCountries)
+                {
+                    if (!effectiveOrFutureCustomerCountriesByCountryId.ContainsKey(newCountry.CountryId))
+                        newCountriesToSold.Add(newCountry);
+                }
+                if (newCountriesToSold.Count() > 0)
+                    filteredChanges.CountryChanges.NewCountries = newCountriesToSold;
+            }
             if (changes.ZoneChanges != null && changes.ZoneChanges.Any())
-                filteredChanges.ZoneChanges = FilterZoneChanges(customerId, changes.CountryChanges, changes.ZoneChanges, changes.CurrencyId.Value, effectiveDate, followPublisherRatesBED, followPublisherRoutingProduct, publisherId, excludedCountries);
+                filteredChanges.ZoneChanges = FilterZoneChanges(customerId, changes.CountryChanges, changes.ZoneChanges, changes.CurrencyId.Value, effectiveDate, followPublisherRatesBED, followPublisherRoutingProduct, publisherId, excludedCountries, filteredChanges);
             filteredChanges.CurrencyId = changes.CurrencyId;
 
             this.FilteredChanges.Set(context, filteredChanges);
@@ -68,8 +78,9 @@ namespace TOne.WhS.Sales.BP.Activities
             }
         }
 
-        private List<ZoneChanges> FilterZoneChanges(int customerId, CountryChanges countryChanges, IEnumerable<ZoneChanges> zoneChanges, int currencyId, DateTime effectiveDate, bool followPublisherRatesBED, bool followPublisherRoutingProduct, int publisherId, List<ExcludedChange> excludedCountries)
+        private List<ZoneChanges> FilterZoneChanges(int customerId, CountryChanges countryChanges, IEnumerable<ZoneChanges> zoneChanges, int currencyId, DateTime effectiveDate, bool followPublisherRatesBED, bool followPublisherRoutingProduct, int publisherId, List<ExcludedChange> excludedCountries, Changes filteredChanges)
         {
+            
             var notSoldCountryIds = new List<int>();
             var countriesWithDifferentCurrencies = new List<int>();
             var carrierAccountManager = new CarrierAccountManager();
@@ -84,18 +95,20 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (countryChanges != null)
             {
-                if (countryChanges.NewCountries != null && countryChanges.NewCountries.Count() > 0)
-                {
-                    excludedNewCountryIds.AddRange(countryChanges.NewCountries.Select(item => item.CountryId));
-                    List<string> newCountryNames = countryManager.GetCountryNames(excludedNewCountryIds);
-                    newCountryNames.ThrowIfNull("countryNames");
-                    excludedCountries.Add(new ExcludedChange
-                        {
-                            SubscriberId = customerId,
-                            CountryIds = excludedNewCountryIds,
-                            Reason = String.Format("Selling Country(ies): '{0}' will not be reflected to subscriber '{1}'", String.Join(" , ", newCountryNames), carrierName)
-                        });
-                }
+                //if (countryChanges.NewCountries != null && countryChanges.NewCountries.Count() > 0)
+                //{
+                //    filteredChanges.CountryChanges.NewCountries = countryChanges.NewCountries;
+                //}
+                //    excludedNewCountryIds.AddRange(countryChanges.NewCountries.Select(item => item.CountryId));
+                //    List<string> newCountryNames = countryManager.GetCountryNames(excludedNewCountryIds);
+                //    newCountryNames.ThrowIfNull("countryNames");
+                //    excludedCountries.Add(new ExcludedChange
+                //        {
+                //            SubscriberId = customerId,
+                //            CountryIds = excludedNewCountryIds,
+                //            Reason = String.Format("Selling Country(ies): '{0}' will not be reflected to subscriber '{1}'", String.Join(" , ", newCountryNames), carrierName)
+                //        });
+                //}
                 if (countryChanges.ChangedCountries != null)
                 {
                     excludedClosedCountryIds.AddRange(countryChanges.ChangedCountries.Countries.Select(item => item.CountryId));
@@ -109,9 +122,8 @@ namespace TOne.WhS.Sales.BP.Activities
                     });
                 }
             }
-
             var soldCountriesByCountryId = GetNotEndedCustomerCountriesByCountryId(customerId, effectiveDate);
-            if (soldCountriesByCountryId.Count == 0)
+            if (soldCountriesByCountryId.Count == 0 && (countryChanges == null || countryChanges.NewCountries == null || countryChanges.NewCountries.Count() == 0))
             {
                 List<int> allExcludedCountriesIds = new List<int>();
                 foreach (var zoneChange in zoneChanges)
@@ -145,6 +157,11 @@ namespace TOne.WhS.Sales.BP.Activities
                     continue;
                 if (excludedClosedCountryIds.Contains(zoneChange.CountryId))
                     continue;
+                if (countryChanges != null && countryChanges.NewCountries != null && filteredChanges != null && filteredChanges.CountryChanges != null && filteredChanges.CountryChanges.NewCountries.Any(x => x.CountryId == zoneChange.CountryId))
+                {
+                    filteredZoneChanges.Add(zoneChange);
+                    continue;
+                }
                 CustomerCountry2 customerCountry;
 
                 if (!soldCountriesByCountryId.TryGetValue(zoneChange.CountryId, out customerCountry))
@@ -334,6 +351,21 @@ namespace TOne.WhS.Sales.BP.Activities
             }
             return customerCountriesSoldDateByCountryId;
         }
+        private Dictionary<int, CustomerCountry2> GetEffectiveOrFutureCustomerCountriesByCountryId(int customerId, DateTime effectiveDate)
+        {
+            var customerCountryManager = new CustomerCountryManager();
+            Dictionary<int, CustomerCountry2> effectiveOrFutureCustomerCountriesByCountryId = new Dictionary<int, CustomerCountry2>();
+            var customerCountries = customerCountryManager.GetEffectiveOrFutureCustomerCountries(customerId, effectiveDate);
+            if (customerCountries != null)
+            {
+                foreach (var customerCountry in customerCountries)
+                {
+                    effectiveOrFutureCustomerCountriesByCountryId.Add(customerCountry.CountryId, customerCountry);
+                }
+            }
+            return effectiveOrFutureCustomerCountriesByCountryId;
+        }
+
 
         private SaleEntityZoneRateLocator GetClosedRateLocator(int customerId, IEnumerable<ZoneChanges> zoneChanges, int sellingProductId)
         {
