@@ -4,6 +4,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
 
     return ({
         showConfirmation: showConfirmation,
+        showDeleteConfirmation: showDeleteConfirmation,
         showInformation: showInformation,
         showPromptWarning: showPromptWarning,
         showSuccess: showSuccess,
@@ -16,6 +17,10 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         notifyOnItemDeleted: notifyOnItemDeleted,
         notifyOnUserAuthenticated: notifyOnUserAuthenticated
     });
+
+    function showDeleteConfirmation(itemType, keyProperty) {
+       return showConfirmation('Are you sure you want to delete selected items?');
+    }
 
     function showConfirmation(message) {
         var settings = {

@@ -97,7 +97,7 @@
             actionTypes.push(actionType);
         }
 
-        function registerEditAccount() {
+        function registerEditBEAction() {
             var editActionType = {
                 ActionTypeName: "EditGenericBEAction",
                 ExecuteAction: function (payload) {
@@ -116,7 +116,10 @@
                 }
             };
             registerActionType(editActionType);
+        }
 
+        function registerDeleteBEAction()
+        {
             var deleteActionType = {
                 ActionTypeName: "DeleteGenericBEAction",
                 ExecuteAction: function (payload) {
@@ -131,10 +134,10 @@
                     };
                     var onItemDeleted = payload.onItemDeleted;
                     var deletePromiseDeferred = UtilsService.createPromiseDeferred();
-                    VRNotificationService.showConfirmation().then(function (response) {
+                    VRNotificationService.showDeleteConfirmation().then(function (response) {
                         if (response) {
                             VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId).then(function (genericBERuntimeEditor) {
-                                if (genericBERuntimeEditor!=undefined) {
+                                if (genericBERuntimeEditor != undefined) {
                                     VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(input).then(function (result) {
                                         if (result != undefined) {
                                             var deleted = VRNotificationService.notifyOnItemDeleted(genericBERuntimeEditor.TitleFieldName, result);
@@ -170,7 +173,8 @@
             defineGenericBEMenuActions: defineGenericBEMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
-            registerEditAccount: registerEditAccount,
+            registerEditBEAction: registerEditBEAction,
+            registerDeleteBEAction: registerDeleteBEAction,
         });
     };
 

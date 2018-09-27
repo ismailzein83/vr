@@ -9,5 +9,6 @@
     VR_GenericData_SummaryTransformationDefinitionService.registerObjectTrackingDrillDownToSummaryTransformationDefinition();
     VR_GenericData_BELookupRuleDefinitionService.registerObjectTrackingDrillDownToBELookupRuleDefinition();
     VR_GenericData_DataRecordFieldChoiceService.registerObjectTrackingDrillDownToDataRecordFieldChoice();
-    VR_GenericData_GenericBEActionService.registerEditAccount();
+    VR_GenericData_GenericBEActionService.registerEditBEAction();
+    VR_GenericData_GenericBEActionService.registerDeleteBEAction();
 }]);
