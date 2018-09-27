@@ -174,14 +174,16 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                     for (var i = 0; i < payload.fileGenerator.Fields.length; i++) {
                                         var field = payload.fileGenerator.Fields[i];
                                         var selectedField = UtilsService.getItemByVal(allFields, field.FieldName, 'FieldName');
-                                        $scope.scopeModel.fields.push({
-                                            editedTitle: field.FieldTitle,
-                                            selectedField: {
-                                                description: selectedField.FieldTitle,
-                                                value: selectedField.FieldName,
-                                                source: VR_Analytic_AutomatedReportQuerySourceEnum.MainTable
-                                            }
-                                        });
+                                        if (selectedField != null) {
+                                            $scope.scopeModel.fields.push({
+                                                editedTitle: field.FieldTitle,
+                                                selectedField: {
+                                                    description: selectedField.FieldTitle,
+                                                    value: selectedField.FieldName,
+                                                    source: VR_Analytic_AutomatedReportQuerySourceEnum.MainTable
+                                                }
+                                            });
+                                        }
                                     }
                                     disableTestGenerate();
                                 });
