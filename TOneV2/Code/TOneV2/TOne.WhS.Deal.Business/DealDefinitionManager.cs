@@ -178,107 +178,6 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        Dictionary<DealZoneGroupTierNb, DealSubstituteRate> GetSubstituteRateByDealZoneGroupTierNb(int dealId, bool isSale)
-        {
-            DealDefinition deal = GetDealDefinition(dealId);
-            deal.Settings.ThrowIfNull("deal.Settings", dealId);
-
-            DealGetRoutingZoneGroupsContext dealGetRoutingZoneGroupsContext = new DealGetRoutingZoneGroupsContext();
-            dealGetRoutingZoneGroupsContext.DealZoneGroupPart = isSale ? DealZoneGroupPart.Sale : DealZoneGroupPart.Cost;
-            deal.Settings.GetRoutingZoneGroups(dealGetRoutingZoneGroupsContext);
-
-            if (isSale)
-            {
-                List<DealRoutingSaleZoneGroup> saleZoneGroups = dealGetRoutingZoneGroupsContext.SaleZoneGroups;
-                return GetCachedSubstituteRateByDealZoneGroupTierNb(saleZoneGroups, dealId);
-            }
-            else
-            {
-                List<DealRoutingSupplierZoneGroup> supplierZoneGroups = dealGetRoutingZoneGroupsContext.SupplierZoneGroups;
-                return GetCachedSubstituteRateByDealZoneGroupTierNb(supplierZoneGroups, dealId);
-            }
-        }
-
-        /// <summary>
-        /// This function will return null for each DealZoneGroupTierNb with NoSubstituteRate or NormalSubstituteRate 
-        /// </summary>
-        Dictionary<DealZoneGroupTierNb, DealSubstituteRate> GetCachedSubstituteRateByDealZoneGroupTierNb(List<DealRoutingSaleZoneGroup> saleZoneGroups, int dealId)
-        {
-            string cacheName = string.Format("GetCachedDeal{0}SaleZoneGroups", dealId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
-            {
-                if (saleZoneGroups == null || saleZoneGroups.Count == 0)
-                    return null;
-
-                Dictionary<DealZoneGroupTierNb, DealSubstituteRate> dealRoutingSaleZoneGroups = new Dictionary<DealZoneGroupTierNb, DealSubstituteRate>();
-                foreach (var saleZoneGroup in saleZoneGroups)
-                {
-                    var dealSaleZoneGroupTiers = saleZoneGroup.Tiers;
-                    if (dealSaleZoneGroupTiers != null)
-                    {
-                        foreach (var dealSaleZoneGroupTier in dealSaleZoneGroupTiers)
-                        {
-                            if (!dealSaleZoneGroupTier.SubstituteRate.HasValue)
-                                continue;
-
-                            DealZoneGroupTierNb dealZoneGroupTierNb = new DealZoneGroupTierNb()
-                            {
-                                DealZoneGroupNb = saleZoneGroup.DealSaleZoneGroupNb,
-                                TierNb = dealSaleZoneGroupTier.TierNumber
-                            };
-                            DealSubstituteRate substituteRate = new DealSubstituteRate()
-                            {
-                                Rate = dealSaleZoneGroupTier.SubstituteRate.Value,
-                                CurrencyId = saleZoneGroup.CurrencyId
-                            };
-                            dealRoutingSaleZoneGroups.Add(dealZoneGroupTierNb, substituteRate);
-                        }
-                    }
-                }
-                return dealRoutingSaleZoneGroups;
-            });
-        }
-
-        /// <summary>
-        /// This function will return null for each DealZoneGroupTierNb with NoSubstituteRate or NormalSubstituteRate 
-        /// </summary>
-        Dictionary<DealZoneGroupTierNb, DealSubstituteRate> GetCachedSubstituteRateByDealZoneGroupTierNb(List<DealRoutingSupplierZoneGroup> supplierZoneGroups, int dealId)
-        {
-            string cacheName = string.Format("GetCachedDeal{0}SupplierZoneGroups", dealId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
-            {
-                if (supplierZoneGroups == null || supplierZoneGroups.Count == 0)
-                    return null;
-
-                Dictionary<DealZoneGroupTierNb, DealSubstituteRate> dealRoutingSupplierZoneGroups = new Dictionary<DealZoneGroupTierNb, DealSubstituteRate>();
-                foreach (var supplierZoneGroup in supplierZoneGroups)
-                {
-                    var dealSupplierZoneGroupTiers = supplierZoneGroup.Tiers;
-                    if (dealSupplierZoneGroupTiers != null)
-                    {
-                        foreach (var dealSupplierZoneGroupTier in dealSupplierZoneGroupTiers)
-                        {
-                            if (!dealSupplierZoneGroupTier.SubstituteRate.HasValue)
-                                continue;
-
-                            DealZoneGroupTierNb dealZoneGroupTierNb = new DealZoneGroupTierNb()
-                            {
-                                DealZoneGroupNb = supplierZoneGroup.DealSupplierZoneGroupNb,
-                                TierNb = dealSupplierZoneGroupTier.TierNumber
-                            };
-                            DealSubstituteRate substituteRate = new DealSubstituteRate()
-                            {
-                                Rate = dealSupplierZoneGroupTier.SubstituteRate.Value,
-                                CurrencyId = supplierZoneGroup.CurrencyId
-                            };
-                            dealRoutingSupplierZoneGroups.Add(dealZoneGroupTierNb, substituteRate);
-                        }
-                    }
-                }
-                return dealRoutingSupplierZoneGroups;
-            });
-        }
-
         public DealSupplierZoneGroupWithoutRate GetAccountSupplierZoneGroup(int? supplierId, long? supplierZoneId, DateTime effectiveDate)
         {
             if (!supplierId.HasValue || !supplierZoneId.HasValue)
@@ -320,6 +219,7 @@ namespace TOne.WhS.Deal.Business
 
             return BuildDealZoneGroupTierDetailsWithoutRate(dealZoneGroupTier);
         }
+
         public bool IsZoneExcluded(long zoneId, DateTime dealBED, DateTime? dealEED, int carrierAccountId, int? dealId, bool isSale)
         {
             Dictionary<int, DealZoneInfoByZoneId> cachedDealInfo = isSale
@@ -366,12 +266,7 @@ namespace TOne.WhS.Deal.Business
 
             return false;
         }
-        private bool IsOverlapped(DateTime firstBeginEffectiveDate, DateTime? firstEndEffectiveDate, DateTime secondBeginEffectiveDate, DateTime? secondEndEffectiveDate)
-        {
-            return (secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate) && firstEndEffectiveDate > secondBeginEffectiveDate);
-        }
 
-        // public 
         public List<long> AreZonesExcluded(OverlappedZonesContext context, bool isSale)
         {
             List<long> excludedSaleZones = new List<long>();
@@ -383,6 +278,7 @@ namespace TOne.WhS.Deal.Business
                 }
             return excludedSaleZones;
         }
+
         public List<long> GetExcludedSaleZones(int? dealId, int carrierAccountId, List<long> saleZoneIds, DateTime beginDate, DateTime? endDate)
         {
             var overlappedSaleZonesContext = new OverlappedZonesContext
@@ -395,6 +291,7 @@ namespace TOne.WhS.Deal.Business
             };
             return AreZonesExcluded(overlappedSaleZonesContext, true);
         }
+
         public List<long> GetExcludedSupplierZones(int? dealId, int carrierAccountId, List<long> supplierZoneIds, DateTime beginDate, DateTime? endDate)
         {
             var overlappedSupplierZonesContext = new OverlappedZonesContext
@@ -407,6 +304,7 @@ namespace TOne.WhS.Deal.Business
             };
             return AreZonesExcluded(overlappedSupplierZonesContext, false);
         }
+
         public DealZoneGroupTierDetailsWithoutRate GetSupplierDealZoneGroupTierDetailsWithoutRate(int dealId, int zoneGroupNb, int tierNb)
         {
             DealSupplierZoneGroupWithoutRate dealSupplierZoneGroup = GetDealSupplierZoneGroupWithoutRate(dealId, zoneGroupNb);
@@ -528,11 +426,13 @@ namespace TOne.WhS.Deal.Business
             }
             return result.Count > 0 ? result : null;
         }
+
         public DealDefinition GetDealDefinition(int dealId)
         {
             var cachedDealInfos = GetAllCachedDealDefinitions();
             return cachedDealInfos.GetRecord(dealId);
         }
+
         public string GetDealSaleZoneGroupName(int dealId, int groupNumber)
         {
             var dealDefinition = GetDealDefinition(dealId);
@@ -540,6 +440,7 @@ namespace TOne.WhS.Deal.Business
                 throw new DataIntegrityValidationException(string.Format("Cannot find the deal with Id {0}", dealId));
             return dealDefinition.Settings.GetSaleZoneGroupName(groupNumber);
         }
+
         public string GetDealCostZoneGroupName(int dealId, int groupNumber)
         {
             var dealDefinition = GetDealDefinition(dealId);
@@ -547,6 +448,7 @@ namespace TOne.WhS.Deal.Business
                 throw new DataIntegrityValidationException(string.Format("Cannot find the deal with Id {0}", dealId));
             return dealDefinition.Settings.GetSupplierZoneGroupName(groupNumber);
         }
+
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
@@ -579,6 +481,7 @@ namespace TOne.WhS.Deal.Business
             recurredDeals[recurringNumber - 1].Settings.IsRecurrable = true;
             return recurredDeals;
         }
+
         public List<string> ValidatingDeals(List<DealDefinition> recurredDeals)
         {
             var errorMessages = new List<string>();
@@ -606,11 +509,16 @@ namespace TOne.WhS.Deal.Business
             return errorMessages;
         }
 
+        public bool IsOverlapped(DealZoneInfo dealZoneInfo, DateTime beginEffectiveDate, DateTime? endEffectiveDate)
+        {
+            return (endEffectiveDate.VRGreaterThan(dealZoneInfo.BED) && dealZoneInfo.EED > beginEffectiveDate);
+        }
+
         #endregion
 
         #region Private Methods
 
-        DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier, decimal rate, int currencyId)
+        private DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier, decimal rate, int currencyId)
         {
             return new DealZoneGroupTierDetails()
             {
@@ -622,7 +530,7 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
-        DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSupplierZoneGroupTierWithoutRate dealSupplierZoneGroupTier, decimal rate, int currencyId)
+        private DealZoneGroupTierDetails BuildDealZoneGroupTierDetails(DealSupplierZoneGroupTierWithoutRate dealSupplierZoneGroupTier, decimal rate, int currencyId)
         {
             return new DealZoneGroupTierDetails()
             {
@@ -634,7 +542,7 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
-        DealZoneGroupTierDetailsWithoutRate BuildDealZoneGroupTierDetailsWithoutRate(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier)
+        private DealZoneGroupTierDetailsWithoutRate BuildDealZoneGroupTierDetailsWithoutRate(DealSaleZoneGroupTierWithoutRate dealSaleZoneGroupTier)
         {
             return new DealZoneGroupTierDetailsWithoutRate()
             {
@@ -690,6 +598,32 @@ namespace TOne.WhS.Deal.Business
             return tierNb;
         }
 
+        private bool IsOverlapped(DateTime firstBeginEffectiveDate, DateTime? firstEndEffectiveDate, DateTime secondBeginEffectiveDate, DateTime? secondEndEffectiveDate)
+        {
+            return (secondEndEffectiveDate.VRGreaterThan(firstBeginEffectiveDate) && firstEndEffectiveDate > secondBeginEffectiveDate);
+        }
+
+        private bool CheckDealStatus(DealStatus dealStatus, DateTime? deActivationDate, DateTime effectiveDate)
+        {
+            switch (dealStatus)
+            {
+                case DealStatus.Draft: return false;
+
+                case DealStatus.Active: return true;
+
+                case DealStatus.Inactive:
+                    if (!deActivationDate.HasValue)
+                        throw new NullReferenceException("deActivationDate");
+
+                    if (effectiveDate < deActivationDate.Value)
+                        return true;
+
+                    return false;
+
+                default: throw new NotSupportedException(string.Format("dealStatus '{0}' is not supported", dealStatus));
+            }
+        }
+
         private Dictionary<int, DealZoneInfoByZoneId> GetCachedCustomerDealZoneInfoByCustomerId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustomerDealZoneInfoByZoneId", () =>
@@ -729,14 +663,6 @@ namespace TOne.WhS.Deal.Business
                 }
                 return customerDealZoneInfo;
             });
-        }
-
-        private class DecsendingDateTimeComparer : IComparer<DateTime>
-        {
-            public int Compare(DateTime firstDate, DateTime secondDate)
-            {
-                return firstDate < secondDate ? 1 : -1;
-            }
         }
 
         private Dictionary<int, DealZoneInfoByZoneId> GetCachedSupplierDealZoneInfoBySupplierId()
@@ -786,11 +712,7 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        public bool IsOverlapped(DealZoneInfo dealZoneInfo, DateTime beginEffectiveDate, DateTime? endEffectiveDate)
-        {
-            return (endEffectiveDate.VRGreaterThan(dealZoneInfo.BED) && dealZoneInfo.EED > beginEffectiveDate);
-        }
-        DealZoneGroupTierDetailsWithoutRate BuildDealZoneGroupTierDetailsWithoutRate(DealSupplierZoneGroupTierWithoutRate dealSupplierZoneGroupTier)
+        private DealZoneGroupTierDetailsWithoutRate BuildDealZoneGroupTierDetailsWithoutRate(DealSupplierZoneGroupTierWithoutRate dealSupplierZoneGroupTier)
         {
             return new DealZoneGroupTierDetailsWithoutRate()
             {
@@ -800,19 +722,19 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
-        DealSaleZoneGroupWithoutRate GetDealSaleZoneGroup(int dealId, int zoneGroupNb)
+        private DealSaleZoneGroupWithoutRate GetDealSaleZoneGroup(int dealId, int zoneGroupNb)
         {
             var cachedDealSaleZoneGroups = GetCachedDealSaleZoneGroupsWithoutRate();
             return cachedDealSaleZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
         }
 
-        DealSupplierZoneGroupWithoutRate GetDealSupplierZoneGroupWithoutRate(int dealId, int zoneGroupNb)
+        private DealSupplierZoneGroupWithoutRate GetDealSupplierZoneGroupWithoutRate(int dealId, int zoneGroupNb)
         {
             var cachedDealSupplierZoneGroups = GetCachedDealSupplierZoneGroupsWithoutRate();
             return cachedDealSupplierZoneGroups.GetRecord(new DealZoneGroup() { DealId = dealId, ZoneGroupNb = zoneGroupNb });
         }
 
-        Dictionary<DealZoneGroup, DealSaleZoneGroupWithoutRate> GetCachedDealSaleZoneGroupsWithoutRate()
+        private Dictionary<DealZoneGroup, DealSaleZoneGroupWithoutRate> GetCachedDealSaleZoneGroupsWithoutRate()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSaleZoneGroups", () =>
             {
@@ -843,7 +765,7 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        Dictionary<DealZoneGroup, DealSupplierZoneGroupWithoutRate> GetCachedDealSupplierZoneGroupsWithoutRate()
+        private Dictionary<DealZoneGroup, DealSupplierZoneGroupWithoutRate> GetCachedDealSupplierZoneGroupsWithoutRate()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDealSupplierZoneGroups", () =>
             {
@@ -874,7 +796,7 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        Dictionary<AccountZoneGroup, IOrderedEnumerable<DealSaleZoneGroupWithoutRate>> GetCachedAccountSaleZoneGroups()
+        private Dictionary<AccountZoneGroup, IOrderedEnumerable<DealSaleZoneGroupWithoutRate>> GetCachedAccountSaleZoneGroups()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountSaleZoneGroups", () =>
             {
@@ -905,7 +827,7 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        Dictionary<AccountZoneGroup, IOrderedEnumerable<DealSupplierZoneGroupWithoutRate>> GetCachedAccountSupplierZoneGroups()
+        private Dictionary<AccountZoneGroup, IOrderedEnumerable<DealSupplierZoneGroupWithoutRate>> GetCachedAccountSupplierZoneGroups()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountSupplierZoneGroups", () =>
             {
@@ -935,32 +857,120 @@ namespace TOne.WhS.Deal.Business
             });
         }
 
-        private bool CheckDealStatus(DealStatus dealStatus, DateTime? deActivationDate, DateTime effectiveDate)
+        private Dictionary<DealZoneGroupTierNb, DealSubstituteRate> GetSubstituteRateByDealZoneGroupTierNb(int dealId, bool isSale)
         {
-            switch (dealStatus)
+            DealDefinition deal = GetDealDefinition(dealId);
+            deal.Settings.ThrowIfNull("deal.Settings", dealId);
+
+            DealGetRoutingZoneGroupsContext dealGetRoutingZoneGroupsContext = new DealGetRoutingZoneGroupsContext();
+            dealGetRoutingZoneGroupsContext.DealZoneGroupPart = isSale ? DealZoneGroupPart.Sale : DealZoneGroupPart.Cost;
+            deal.Settings.GetRoutingZoneGroups(dealGetRoutingZoneGroupsContext);
+
+            if (isSale)
             {
-                case DealStatus.Draft: return false;
-
-                case DealStatus.Active: return true;
-
-                case DealStatus.Inactive:
-                    if (!deActivationDate.HasValue)
-                        throw new NullReferenceException("deActivationDate");
-
-                    if (effectiveDate < deActivationDate.Value)
-                        return true;
-
-                    return false;
-
-                default: throw new NotSupportedException(string.Format("dealStatus '{0}' is not supported", dealStatus));
+                List<DealRoutingSaleZoneGroup> saleZoneGroups = dealGetRoutingZoneGroupsContext.SaleZoneGroups;
+                return GetCachedSubstituteRateByDealZoneGroupTierNb(saleZoneGroups, dealId);
             }
+            else
+            {
+                List<DealRoutingSupplierZoneGroup> supplierZoneGroups = dealGetRoutingZoneGroupsContext.SupplierZoneGroups;
+                return GetCachedSubstituteRateByDealZoneGroupTierNb(supplierZoneGroups, dealId);
+            }
+        }
+
+        /// <summary>
+        /// This function will return null for each DealZoneGroupTierNb with NoSubstituteRate or NormalSubstituteRate 
+        /// </summary>
+        private Dictionary<DealZoneGroupTierNb, DealSubstituteRate> GetCachedSubstituteRateByDealZoneGroupTierNb(List<DealRoutingSaleZoneGroup> saleZoneGroups, int dealId)
+        {
+            string cacheName = string.Format("GetCachedDeal{0}SaleZoneGroups", dealId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
+            {
+                if (saleZoneGroups == null || saleZoneGroups.Count == 0)
+                    return null;
+
+                Dictionary<DealZoneGroupTierNb, DealSubstituteRate> dealRoutingSaleZoneGroups = new Dictionary<DealZoneGroupTierNb, DealSubstituteRate>();
+                foreach (var saleZoneGroup in saleZoneGroups)
+                {
+                    var dealSaleZoneGroupTiers = saleZoneGroup.Tiers;
+                    if (dealSaleZoneGroupTiers != null)
+                    {
+                        foreach (var dealSaleZoneGroupTier in dealSaleZoneGroupTiers)
+                        {
+                            if (!dealSaleZoneGroupTier.SubstituteRate.HasValue)
+                                continue;
+
+                            DealZoneGroupTierNb dealZoneGroupTierNb = new DealZoneGroupTierNb()
+                            {
+                                DealZoneGroupNb = saleZoneGroup.DealSaleZoneGroupNb,
+                                TierNb = dealSaleZoneGroupTier.TierNumber
+                            };
+                            DealSubstituteRate substituteRate = new DealSubstituteRate()
+                            {
+                                Rate = dealSaleZoneGroupTier.SubstituteRate.Value,
+                                CurrencyId = saleZoneGroup.CurrencyId
+                            };
+                            dealRoutingSaleZoneGroups.Add(dealZoneGroupTierNb, substituteRate);
+                        }
+                    }
+                }
+                return dealRoutingSaleZoneGroups;
+            });
+        }
+
+        /// <summary>
+        /// This function will return null for each DealZoneGroupTierNb with NoSubstituteRate or NormalSubstituteRate 
+        /// </summary>
+        private Dictionary<DealZoneGroupTierNb, DealSubstituteRate> GetCachedSubstituteRateByDealZoneGroupTierNb(List<DealRoutingSupplierZoneGroup> supplierZoneGroups, int dealId)
+        {
+            string cacheName = string.Format("GetCachedDeal{0}SupplierZoneGroups", dealId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
+            {
+                if (supplierZoneGroups == null || supplierZoneGroups.Count == 0)
+                    return null;
+
+                Dictionary<DealZoneGroupTierNb, DealSubstituteRate> dealRoutingSupplierZoneGroups = new Dictionary<DealZoneGroupTierNb, DealSubstituteRate>();
+                foreach (var supplierZoneGroup in supplierZoneGroups)
+                {
+                    var dealSupplierZoneGroupTiers = supplierZoneGroup.Tiers;
+                    if (dealSupplierZoneGroupTiers != null)
+                    {
+                        foreach (var dealSupplierZoneGroupTier in dealSupplierZoneGroupTiers)
+                        {
+                            if (!dealSupplierZoneGroupTier.SubstituteRate.HasValue)
+                                continue;
+
+                            DealZoneGroupTierNb dealZoneGroupTierNb = new DealZoneGroupTierNb()
+                            {
+                                DealZoneGroupNb = supplierZoneGroup.DealSupplierZoneGroupNb,
+                                TierNb = dealSupplierZoneGroupTier.TierNumber
+                            };
+                            DealSubstituteRate substituteRate = new DealSubstituteRate()
+                            {
+                                Rate = dealSupplierZoneGroupTier.SubstituteRate.Value,
+                                CurrencyId = supplierZoneGroup.CurrencyId
+                            };
+                            dealRoutingSupplierZoneGroups.Add(dealZoneGroupTierNb, substituteRate);
+                        }
+                    }
+                }
+                return dealRoutingSupplierZoneGroups;
+            });
         }
 
         #endregion
 
         #region Private Classes
 
-        struct DealZoneGroupTierNb
+        private class DecsendingDateTimeComparer : IComparer<DateTime>
+        {
+            public int Compare(DateTime firstDate, DateTime secondDate)
+            {
+                return firstDate < secondDate ? 1 : -1;
+            }
+        }
+
+        private struct DealZoneGroupTierNb
         {
             public int DealZoneGroupNb { get; set; }
             public int TierNb { get; set; }
