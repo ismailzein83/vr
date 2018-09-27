@@ -12,7 +12,6 @@ app.directive('vrWhsSalesOwnertypeSelector', ['WhS_BE_SalePriceListOwnerTypeEnum
             onselectitem: '=',
             ondeselectitem: '=',
             isrequired: '=',
-            hideremoveicon: '@',
             normalColNum: '@'
         },
         controller: function ($scope, $element, $attrs) {
@@ -86,8 +85,12 @@ app.directive('vrWhsSalesOwnertypeSelector', ['WhS_BE_SalePriceListOwnerTypeEnum
             label = "Owner Types";
             multipleselection = "ismultipleselection";
         }
-
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>';
+        var hideremoveicon = "";
+        
+        if (attrs.hideremoveicon != undefined) {
+            hideremoveicon = "hideremoveicon";
+        }
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select '  +' ' + hideremoveicon  +' '+  multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select></vr-columns>';
     }
 
 }]);
