@@ -77,6 +77,7 @@
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEEditorDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEActionDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEActionFilterConditionConfig.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEOnBeforeGetFilteredHandlerSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBESelectorRuntimeInfo.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBESerialNumberPartSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEOnAfterSaveHandlerSettingsConfig.cs" />
