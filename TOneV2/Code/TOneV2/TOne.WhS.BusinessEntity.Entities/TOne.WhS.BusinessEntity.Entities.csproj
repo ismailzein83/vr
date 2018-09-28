@@ -77,6 +77,7 @@
     <Compile Include="ANumber\ANumberSupplierCode.cs" />
     <Compile Include="Carriers\CarrierAccounts\PassThroughCustomerRateEvaluatorExtensionConfig.cs" />
     <Compile Include="CodeList\CodeListResolver.cs" />
+    <Compile Include="InsertCarrierAccountOperationOutput.cs" />
     <Compile Include="RecurringCharges\CustomerBillingRecurringCharge.cs" />
     <Compile Include="RecurringCharges\SupplierBillingRecurringCharge.cs" />
     <Compile Include="Settings\AutoImportSPLSettings.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Switch\SwitchFilter.cs" />
     <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
     <Compile Include="TemporarySalePriceListQuery.cs" />
+    <Compile Include="UpdateCarrierAccountOperationOutput.cs" />
     <Compile Include="ZoneRoutingProduct\History\RoutingProductHistoryBySource.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityRoutingProducts.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />
