@@ -1201,7 +1201,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!IssueDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -1235,7 +1235,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDueDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!DueDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -2430,8 +2430,8 @@
               <Parameter Name="SerialNumber">
                 <Value>=Parameters!SerialNumber.Value</Value>
               </Parameter>
-              <Parameter Name="InvoiceDate">
-                <Value>=Parameters!InvoiceDate.Value</Value>
+              <Parameter Name="IssueDate">
+                <Value>=Parameters!IssueDate.Value</Value>
               </Parameter>
               <Parameter Name="Name">
                 <Value>=Parameters!Name.Value</Value>
@@ -4609,13 +4609,13 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="InvoiceDate">
+    <ReportParameter Name="IssueDate">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="InvoiceDueDate">
+    <ReportParameter Name="DueDate">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

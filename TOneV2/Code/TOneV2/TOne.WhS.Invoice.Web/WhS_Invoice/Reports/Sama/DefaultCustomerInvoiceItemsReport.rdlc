@@ -147,7 +147,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
+                <Value>=CDate(Parameters!IssueDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -2636,7 +2636,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="InvoiceDate">
+    <ReportParameter Name="IssueDate">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
