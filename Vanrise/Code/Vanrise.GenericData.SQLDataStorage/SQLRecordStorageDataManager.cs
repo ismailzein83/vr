@@ -307,20 +307,71 @@ namespace Vanrise.GenericData.SQLDataStorage
             Columns = GetColumnNamesFromFieldNames(context.FieldNames);
             int parameterIndex = 0;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+
+            List<string> filters = new List<string>();
+
+            StringBuilder parameterDeclarationBuilder = new StringBuilder();
+            StringBuilder parameterAssignementBuilder = new StringBuilder();
+            
+            string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
+            if(context.FromTime != default(DateTime))
+            {
+                parameterDeclarationBuilder.Append(" @FromTime datetime ");
+                parameterAssignementBuilder.Append(" @FromTime = @FromTime_FromOut ");
+                filters.Add(string.Format(" {0} >= @FromTime ", dateTimeColumn));
+            }
+
+            if(context.ToTime != default(DateTime))
+            {
+                if (parameterDeclarationBuilder.Length > 0)
+                    parameterDeclarationBuilder.Append(", ");
+                if (parameterAssignementBuilder.Length > 0)
+                    parameterAssignementBuilder.Append(", ");
+
+                parameterDeclarationBuilder.Append(" @ToTime datetime ");
+                parameterAssignementBuilder.Append(" @ToTime = @ToTime_FromOut ");
+                filters.Add(string.Format(" {0} <= @ToTime ", dateTimeColumn));
+            }
+           
             Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
             String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(context.FilterGroup, ref parameterIndex, parameterValues);
-            string query = BuildQuery(context.FieldNames, context.LimitResult, context.Direction, recordFilter);
+            if (!string.IsNullOrWhiteSpace(recordFilter))
+                filters.Add(recordFilter);
+
+            if (parameterValues.Count > 0)
+            {
+                foreach (var prm in parameterValues)
+                {
+                    if (parameterDeclarationBuilder.Length > 0)
+                        parameterDeclarationBuilder.Append(", ");
+                    if (parameterAssignementBuilder.Length > 0)
+                        parameterAssignementBuilder.Append(", ");
+
+                    parameterDeclarationBuilder.Append(String.Format("{0} {1}", prm.Key, GetSqlParameterSqlType(prm.Key, prm.Value)));
+                    parameterAssignementBuilder.Append(String.Format("{0} = {0}_FromOut", prm.Key));
+                }
+            }
+
+            string query = BuildQuery(context.FieldNames, context.LimitResult, context.Direction, filters);
+
+            if (parameterDeclarationBuilder.Length > 0)
+            {
+                query = string.Format(@"DECLARE {0}  
+                SELECT {1}
+                   {2} ", parameterDeclarationBuilder, parameterAssignementBuilder, query);
+            }
 
             return GetItemsText(query, DataRecordMapper, (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(context.FromTime)));
-                cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(context.ToTime)));
+                if (context.FromTime != default(DateTime))
+                    cmd.Parameters.Add(new SqlParameter("@FromTime_FromOut", context.FromTime));
+                if (context.ToTime != default(DateTime))
+                    cmd.Parameters.Add(new SqlParameter("@ToTime_FromOut", context.ToTime));
                 foreach (var prm in parameterValues)
                 {
-                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}_FromOut", prm.Key), prm.Value));
                 }
             });
-
         }
 
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
@@ -1032,18 +1083,17 @@ namespace Vanrise.GenericData.SQLDataStorage
             return result;
         }
 
-        private string BuildQuery(List<string> fieldNames, int? limitResult, OrderDirection orderDirection, string recordFilter)
+        private string BuildQuery(List<string> fieldNames, int? limitResult, OrderDirection orderDirection, List<string> filters)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
-            string tableName = GetTableNameWithSchema();
-
-            string recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
+            string tableName = GetTableNameWithSchema();            
+            string whereCondition = filters != null && filters.Count > 0 ? string.Concat(" WHERE ", string.Join(" AND ", filters)) : "";
             string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, orderDirection == OrderDirection.Ascending ? "ASC" : "DESC");
             StringBuilder str = new StringBuilder(string.Format(@"  select {0} {1} from {2} WITH (NOLOCK)
-                                                                    where (@FromTime is null or {3} >= @FromTime) 
-                                                                    and (@ToTime is null or {3} <= @ToTime) {4} {5} OPTION (RECOMPILE)",
-                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
-                                                                    tableName, dateTimeColumn, recordFilterResult, orderResult));
+                                                                    {3} {4} ",
+                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", 
+                                                                    string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
+                                                                    tableName, whereCondition, orderResult));
             //input.SortByColumnName = dateTimeColumn;
             return str.ToString();
         }
