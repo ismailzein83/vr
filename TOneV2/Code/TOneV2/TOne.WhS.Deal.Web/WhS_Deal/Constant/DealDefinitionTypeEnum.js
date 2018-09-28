@@ -1,4 +1,4 @@
 ﻿app.constant("WhS_Deal_DealDefinitionTypeEnum", {
-    SwapDeal: { value: '63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65', description: "Swap Deal" },
-    VolCommitment: { value: 'B606E88C-4AE5-4BF0-BCE5-10D456A092F5', description: "Volume Commitment" }
+    SwapDeal: { value: '63c1310d-fdea-4ac7-bde1-58fd11e4ec65', description: "Swap Deal" },
+    VolCommitment: { value: 'b606e88c-4ae5-4bf0-bce5-10d456a092f5', description: "Volume Commitment" }
 });

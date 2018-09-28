@@ -987,7 +987,8 @@ namespace TOne.WhS.Deal.Business
             return new DealDefinitionInfo()
             {
                 DealId = dealDefinition.DealId,
-                Name = dealDefinition.Name
+                Name = dealDefinition.Name,
+                ConfigId = dealDefinition.Settings.ConfigId
             };
         }
 

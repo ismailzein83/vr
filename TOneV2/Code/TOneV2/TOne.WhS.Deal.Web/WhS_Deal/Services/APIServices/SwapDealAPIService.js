@@ -31,6 +31,9 @@
         function HasEditDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['UpdateDeal']));
         }
+        function HasViewSwapDealPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['GetFilteredSwapDeals']));
+        }
         function GetSwapDealSettingData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealSettingData'));
         }
@@ -61,6 +64,7 @@
             UpdateDeal: UpdateDeal,
             HasAddDealPermission: HasAddDealPermission,
             HasEditDealPermission: HasEditDealPermission,
+            HasViewSwapDealPermission: HasViewSwapDealPermission,
             GetSwapDealSettingData: GetSwapDealSettingData,
             GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId,
             GetSwapDealSettingsDetail: GetSwapDealSettingsDetail,

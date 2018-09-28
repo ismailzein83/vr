@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService',
-    function (UtilsService, $compile, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService) {
+app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealService', 'WhS_Deal_VolumeCommitmentService','WhS_Deal_DealDefinitionTypeEnum',
+    function (UtilsService, $compile, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealService, WhS_Deal_VolumeCommitmentService, WhS_Deal_DealDefinitionTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -18,6 +18,7 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 hidelabel: '@',
                 normalColNum: '@',
                 hideremoveicon: '@',
+                hasviewpremission:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -65,15 +66,26 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 hideselectedvaluessection = "hideselectedvaluessection";
 
             var multipleselection = "";
-            if (attrs.ismultipleselection != undefined) 
+            if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + disabled + '  > <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
-                   + 'entityname="Deal" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
+            var onviewclicked = "";
+            if (attrs.includeviewhandler != undefined)
+                onviewclicked = "onviewclicked='onViewIconClicked'";
+
+            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + '  > <vr-select hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' '+ multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
+                + 'entityname="Deal" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
 
         }
         function directiveCtor(ctrl, $scope, $attrs) {
 
+            $scope.onViewIconClicked = function (item) {
+                if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
+                    WhS_Deal_SwapDealService.viewSwapDeal(item.DealId, true);
+                else if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
+                    WhS_Deal_VolumeCommitmentService.viewVolumeCommitment(item.DealId);
+            };
+            
             function initializeController() {
                 defineAPI();
             }

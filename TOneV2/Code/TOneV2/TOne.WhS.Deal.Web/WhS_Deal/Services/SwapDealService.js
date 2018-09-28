@@ -29,17 +29,23 @@
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onSwapDealUpdated = onSwapDealUpdated;
+                modalScope.viewMode = false;
             };
 
             VRModalService.showModal(editorUrl, parameters, settings);
         }
-        function viewSwapDeal(dealId) {
+        function viewSwapDeal(dealId, viewMode) {
             var parameters = {
                 dealId: dealId,
                 isReadOnly: true
             };
-
             var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                if (viewMode != undefined && viewMode == true) {
+                    UtilsService.setContextReadOnly(modalScope);
+                    modalScope.viewMode = true;
+                }
+            };
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
@@ -132,7 +138,7 @@
             };
             var modalSettings = {
             };
-            modalSettings.onScopeReady = function (modalScope) {                
+            modalSettings.onScopeReady = function (modalScope) {
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal(editorUrl, modalParameters, modalSettings);

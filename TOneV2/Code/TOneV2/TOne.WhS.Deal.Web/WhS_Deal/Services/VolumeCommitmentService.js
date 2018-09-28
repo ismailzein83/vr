@@ -17,7 +17,8 @@
             editVolumeCommitmentItemTierExRate: editVolumeCommitmentItemTierExRate,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToVolCommitmentDeal: registerObjectTrackingDrillDownToVolCommitmentDeal,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            viewVolumeCommitment: viewVolumeCommitment
         });
         function viewHistoryVolumeCommitment(context) {
             var modalParameters = {
@@ -69,6 +70,18 @@
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);
         }
+        function viewVolumeCommitment(dealId) {
+            var settings = {
+            };
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+            var parameters = {
+                dealId: dealId
+            };
+
+            VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);
+        }
 
         function addVolumeCommitmentItem(onVolumeCommitmentItemAdded, context) {
             var settings = {
@@ -92,7 +105,7 @@
             };
             var parameters = {
                 volumeCommitmentItemEntity: volumeCommitmentItemEntity,
-                context: context,
+                context: context
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);

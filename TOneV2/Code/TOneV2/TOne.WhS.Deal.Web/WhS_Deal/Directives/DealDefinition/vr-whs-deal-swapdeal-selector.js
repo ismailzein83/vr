@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService','WhS_Deal_SwapDealAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Deal_SwapDealAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -46,7 +46,8 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService',
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
 
-            return '<vr-whs-deal-dealdefinition-selector on-ready="onDealDefinitionSelectorReady" isrequired="ctrl.isrequired"' + ' ' + hideremoveicon + ' ' + multipleselection + ' ' + 'normal-col-num="{{ctrl.normalColNum}}"' +
+           
+            return '<vr-whs-deal-dealdefinition-selector  includeviewhandler hasviewpremission="hasViewSwapDealPermission"  on-ready="onDealDefinitionSelectorReady" isrequired="ctrl.isrequired"' + ' ' + hideremoveicon + ' ' + multipleselection + ' ' + 'normal-col-num="{{ctrl.normalColNum}}"' +
             'selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"></vr-whs-deal-dealdefinition-selector>';
 
         }
@@ -63,6 +64,9 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService',
                 $scope.onDealDefinitionSelectorReady = function (api) {
                     swapDealDirectiveAPI = api;
                     swapDealReadyPromiseDeferred.resolve();
+                };
+                $scope.hasViewSwapDealPermission = function () {
+                    return WhS_Deal_SwapDealAPIService.HasViewSwapDealPermission();
                 };
 
                 defineAPI();
