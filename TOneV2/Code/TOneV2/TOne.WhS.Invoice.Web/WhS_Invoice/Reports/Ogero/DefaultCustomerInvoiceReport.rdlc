@@ -539,7 +539,7 @@
         <PageBreak>
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
-        <Top>8.00223in</Top>
+        <Top>8.71493in</Top>
         <Left>0.11004in</Left>
         <Height>2.81041in</Height>
         <Width>7.98583in</Width>
@@ -1710,7 +1710,7 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>27.67577cm</Top>
+        <Top>29.48603cm</Top>
         <Left>0.26784cm</Left>
         <Height>4.1275cm</Height>
         <Width>20.27235cm</Width>
@@ -2536,8 +2536,40 @@
           <BackgroundColor>White</BackgroundColor>
         </Style>
       </Rectangle>
+      <Textbox Name="Textbox15">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!Notes.Value</Value>
+                <Style>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox15</rd:DefaultName>
+        <Top>20.51016cm</Top>
+        <Left>0.29052cm</Left>
+        <Height>1.26146cm</Height>
+        <Width>20.07659cm</Width>
+        <ZIndex>30</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>31.97966cm</Height>
+    <Height>33.61353cm</Height>
     <Style />
   </Body>
   <Width>20.65762cm</Width>
@@ -3059,6 +3091,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Attention">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Notes">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
