@@ -128,41 +128,51 @@ namespace Vanrise.GenericData.Data.SQL
 
         private string BuildRecordFilter(StringRecordFilter stringFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
-            string parameterName = GenerateParameterName(ref parameterIndex);
-            string modifiedParameterName = parameterName;
             string compareOperator = null;
-
-            switch (stringFilter.CompareOperator)
+            string compareValue = null;
+            if(stringFilter.CompareOperator == StringRecordFilterOperator.Equals || stringFilter.CompareOperator == StringRecordFilterOperator.NotEquals)
             {
-                case StringRecordFilterOperator.Equals: compareOperator = "="; break;
-                case StringRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
-                case StringRecordFilterOperator.Contains:
-                    compareOperator = "LIKE";
-                    modifiedParameterName = string.Format("'%' + {0} + '%'", parameterName);
-                    break;
-                case StringRecordFilterOperator.NotContains:
-                    compareOperator = "NOT LIKE";
-                    modifiedParameterName = string.Format("'%' + {0} + '%'", parameterName);
-                    break;
-                case StringRecordFilterOperator.StartsWith:
-                    compareOperator = "LIKE";
-                    modifiedParameterName = string.Format("{0} + '%'", parameterName);
-                    break;
-                case StringRecordFilterOperator.NotStartsWith:
-                    compareOperator = "NOT LIKE";
-                    modifiedParameterName = string.Format("{0} + '%'", parameterName);
-                    break;
-                case StringRecordFilterOperator.EndsWith:
-                    compareOperator = "LIKE";
-                    modifiedParameterName = string.Format("'%' + {0}", parameterName);
-                    break;
-                case StringRecordFilterOperator.NotEndsWith:
-                    compareOperator = "NOT LIKE";
-                    modifiedParameterName = string.Format("'%' + {0}", parameterName);
-                    break;
+                string parameterName = GenerateParameterName(ref parameterIndex);
+                compareValue = parameterName;
+                parameterValues.Add(parameterName, stringFilter.Value);
+
+                switch (stringFilter.CompareOperator)
+                {
+                    case StringRecordFilterOperator.Equals: compareOperator = "="; break;
+                    case StringRecordFilterOperator.NotEquals: compareOperator = "<>"; break;
+                }
             }
-            parameterValues.Add(parameterName, stringFilter.Value);
-            return string.Format("{0} {1} {2}", GetSQLExpression(stringFilter), compareOperator, modifiedParameterName);
+            else
+            {
+                switch (stringFilter.CompareOperator)
+                {
+                    case StringRecordFilterOperator.Contains:
+                        compareOperator = "LIKE";
+                        compareValue = string.Format("'%{0}%'", stringFilter.Value);
+                        break;
+                    case StringRecordFilterOperator.NotContains:
+                        compareOperator = "NOT LIKE";
+                        compareValue = string.Format("'%{0}%'", stringFilter.Value);
+                        break;
+                    case StringRecordFilterOperator.StartsWith:
+                        compareOperator = "LIKE";
+                        compareValue = string.Format("'{0}%'", stringFilter.Value);
+                        break;
+                    case StringRecordFilterOperator.NotStartsWith:
+                        compareOperator = "NOT LIKE";
+                        compareValue = string.Format("'{0}%'", stringFilter.Value);
+                        break;
+                    case StringRecordFilterOperator.EndsWith:
+                        compareOperator = "LIKE";
+                        compareValue = string.Format("'%{0}'", stringFilter.Value);
+                        break;
+                    case StringRecordFilterOperator.NotEndsWith:
+                        compareOperator = "NOT LIKE";
+                        compareValue = string.Format("'%{0}'", stringFilter.Value);
+                        break;
+                }
+            }
+            return string.Format("{0} {1} {2}", GetSQLExpression(stringFilter), compareOperator, compareValue);
         }
 
         private string BuildRecordFilter(NumberRecordFilter numberFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
