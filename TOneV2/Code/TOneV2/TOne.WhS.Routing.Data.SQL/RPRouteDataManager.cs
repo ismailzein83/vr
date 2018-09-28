@@ -430,7 +430,7 @@ namespace TOne.WhS.Routing.Data.SQL
                         routeOptionSupplierZone.SupplierZoneId = long.Parse(supplierZoneParts[0]);
                         routeOptionSupplierZone.SupplierRate = decimal.Parse(supplierZoneParts[1]);
                         routeOptionSupplierZone.ExecutedRuleId = !string.IsNullOrEmpty(supplierZoneParts[3]) ? int.Parse(supplierZoneParts[3]) : default(int?);
-                        routeOptionSupplierZone.SupplierRateId = long.Parse(supplierZoneParts[4]);
+                        routeOptionSupplierZone.SupplierRateId = !string.IsNullOrEmpty(supplierZoneParts[4]) ? long.Parse(supplierZoneParts[4]) : default(long?);
 
                         if (!string.IsNullOrEmpty(supplierZoneParts[2]))
                             routeOptionSupplierZone.ExactSupplierServiceIds = new HashSet<int>(supplierZoneParts[2].Split(SupplierServicesSeparator).Select(itm => int.Parse(itm)));
