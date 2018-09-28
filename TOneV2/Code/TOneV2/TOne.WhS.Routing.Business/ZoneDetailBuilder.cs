@@ -109,7 +109,9 @@ namespace TOne.WhS.Routing.Business
                     RoutingCustomerZones routingCustomerZones = kvp.Value;
                     RoutingCustomerInfoDetails customerInfo = routingCustomerZones.CustomerInfo;
 
-                    DealSubstituteRate substituteRate = dealDefinitionManager.GetSubstitueRate(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, true, dealProgresses);
+                    bool isDealZoneGroupCompleted;
+                    DealSubstituteRate substituteRate = dealDefinitionManager.GetSubstitueRate(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, true, dealProgresses, out isDealZoneGroupCompleted);
+                    int? dealId = !isDealZoneGroupCompleted ? dealZoneGroup.DealId : default(int?);
 
                     if (substituteRate != null)
                     {
@@ -125,7 +127,7 @@ namespace TOne.WhS.Routing.Business
                                 systemCurrencyId, effectiveOnValue);
 
                             BuildCustomerZoneDetail(customerInfo, customerZoneRoutingProduct, customerZone, rate, SalePriceListOwnerType.Deal, saleZoneServices, versionNumber,
-                                dealZoneGroup.DealId, onCustomerZoneDetailAvailable);
+                                dealId, onCustomerZoneDetailAvailable);
                         }
                     }
                     else
@@ -133,7 +135,7 @@ namespace TOne.WhS.Routing.Business
                         foreach (var customerZone in routingCustomerZones.SaleZones)
                         {
                             var customerZoneDetailWithoutDealInput = new CustomerZoneDetailWithoutDealInput(customerTransformationId, customerInfo, customerZone, effectiveOn, effectiveOnValue, isEffectiveInFuture,
-                                    includedRulesConfiguration, systemCurrencyId, isZoneServicesExplicitOnCustomer, dataTransformer, versionNumber, dealZoneGroup.DealId, customerZoneRateLocator,
+                                    includedRulesConfiguration, systemCurrencyId, isZoneServicesExplicitOnCustomer, dataTransformer, versionNumber, dealId, customerZoneRateLocator,
                                     customerZoneRoutingProductLocator, customerServiceLocator, rpRouteManager, currencyExchangeRateManager, onCustomerZoneDetailAvailable);
 
                             BuildCustomerZoneDetailWithoutDeal(customerZoneDetailWithoutDealInput);
@@ -294,7 +296,10 @@ namespace TOne.WhS.Routing.Business
                     RoutingSupplierZones routingSupplierZones = kvp.Value;
                     RoutingSupplierInfo supplierInfo = routingSupplierZones.SupplierInfo;
 
-                    DealSubstituteRate substituteRate = dealDefinitionManager.GetSubstitueRate(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, false, dealProgresses);
+                    bool isDealZoneGroupCompleted;
+                    DealSubstituteRate substituteRate = dealDefinitionManager.GetSubstitueRate(dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, false, dealProgresses, out isDealZoneGroupCompleted);
+                    int? dealId = !isDealZoneGroupCompleted ? dealZoneGroup.DealId : default(int?);
+
                     if (substituteRate != null)
                     {
                         foreach (var supplierZone in routingSupplierZones.SupplierZones)
@@ -306,7 +311,7 @@ namespace TOne.WhS.Routing.Business
 
                             decimal rate = currencyExchangeRateManager.ConvertValueToCurrency(substituteRate.Rate, substituteRate.CurrencyId, systemCurrencyId, effectiveOnValue);
 
-                            BuildSupplierZoneDetail(supplierInfo, supplierZone, rate, dealZoneGroup.DealId, versionNumber, null, exactSupplierZoneServices, supplierZoneServicesWithChildren, zoneServiceConfigManager, onSupplierZoneDetailAvailable);
+                            BuildSupplierZoneDetail(supplierInfo, supplierZone, rate, dealId, versionNumber, null, exactSupplierZoneServices, supplierZoneServicesWithChildren, zoneServiceConfigManager, onSupplierZoneDetailAvailable);
                         }
                     }
                     else
@@ -314,7 +319,7 @@ namespace TOne.WhS.Routing.Business
                         foreach (var supplierZone in routingSupplierZones.SupplierZones)
                         {
                             var buildNonDealSupplierZoneDetailInput = new SupplierZoneDetailWithoutDealInput(supplierTransformationId, supplierZoneRateLocator, supplierInfo, supplierZone,
-                                    effectiveOn, effectiveOnValue, dealZoneGroup.DealId, versionNumber, isEffectiveInFuture, includedRulesConfiguration, systemCurrencyId, supplierZoneServiceLocator,
+                                    effectiveOn, effectiveOnValue, dealId, versionNumber, isEffectiveInFuture, includedRulesConfiguration, systemCurrencyId, supplierZoneServiceLocator,
                                     zoneServiceConfigManager, currencyExchangeRateManager, dataTransformer, onSupplierZoneDetailAvailable);
 
                             BuildSupplierZoneDetailWithoutDeal(buildNonDealSupplierZoneDetailInput);

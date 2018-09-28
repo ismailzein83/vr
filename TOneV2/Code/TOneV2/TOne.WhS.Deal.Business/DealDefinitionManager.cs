@@ -159,12 +159,14 @@ namespace TOne.WhS.Deal.Business
             return null;
         }
 
-        public DealSubstituteRate GetSubstitueRate(int dealId, int dealZoneGroupNb, bool isSale, Dictionary<DealZoneGroup, DealProgress> dealProgresses)
+        public DealSubstituteRate GetSubstitueRate(int dealId, int dealZoneGroupNb, bool isSale, Dictionary<DealZoneGroup, DealProgress> dealProgresses, out bool isDealZoneGroupCompleted)
         {
+            isDealZoneGroupCompleted = true;
             int? tierNb = this.GetCurrentDealZoneGroupTierNb(dealId, dealZoneGroupNb, isSale, dealProgresses);
             if (!tierNb.HasValue)
                 return null;
 
+            isDealZoneGroupCompleted = false;
             Dictionary<DealZoneGroupTierNb, DealSubstituteRate> substituteRatesByDealZoneGroupTierNb = this.GetSubstituteRateByDealZoneGroupTierNb(dealId, isSale);
             if (substituteRatesByDealZoneGroupTierNb == null)
                 return null;
