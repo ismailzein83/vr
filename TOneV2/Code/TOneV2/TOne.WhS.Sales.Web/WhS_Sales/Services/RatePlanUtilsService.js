@@ -41,7 +41,7 @@
 		}
 		function onNewRateBlurred(dataItem, settings) {
 			if (isStringEmpty(dataItem.NewRate))
-			    dataItem.IsNewRateCancelling = null;
+				dataItem.IsNewRateCancelling = null;
 			formatNewRate(dataItem);
 			setNewRateDates(dataItem, settings);
 		}
@@ -75,10 +75,13 @@
 		}
 
 		function formatNewRate(dataItem) {
-		    if (dataItem.NewRate) {
-		        dataItem.NewRate = Number(dataItem.NewRate.replace(/,/g, ''));
+			if (dataItem.NewRate)
 				dataItem.NewRate = $filter('vrtextOrNumber')(dataItem.NewRate, UISettingsService.getLongPrecision());
-			}
+				//	dataItem.NewRate = Number(dataItem.NewRate);
+				//  dataItem.NewRate = $filter('vrtextOrNumber')(dataItem.NewRate, UISettingsService.getLongPrecision());
+
+				//	dataItem.NewRate = Number(dataItem.NewRate.replace(/,/g, ''));
+				//  dataItem.NewRate = $filter('vrtextOrNumber')(dataItem.NewRate, UISettingsService.getLongPrecision());
 		}
 
 		function setRateChangeTypeIcon(dataItem) {
