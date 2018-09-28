@@ -375,7 +375,7 @@ namespace TOne.WhS.Routing.Business
                 EffectiveRateValue = rateValue,
                 SupplierServiceIds = supplierZoneServicesWithChildren != null ? new HashSet<int>(supplierZoneServicesWithChildren.Select(itm => itm.ZoneServiceConfigId)) : null,
                 ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null,
-                SupplierRateId = supplierRate != null ? supplierRate.SupplierRateId : default(long),
+                SupplierRateId = supplierRate != null ? supplierRate.SupplierRateId : default(long?),
                 SupplierRateEED = supplierRate != null ? supplierRate.EED : null,
                 DealId = dealId,
                 VersionNumber = versionNumber
