@@ -360,6 +360,7 @@
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\vr-common-statusdefinitionbe-editor.js" />
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionGridTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-grid.js" />
+    <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-remoteselector.js" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-selector.js" />
     <Content Include="Common\Directives\TimeUnit\vr-common-timeunit-selector.js" />
     <Content Include="Common\Directives\TimeZone\vr-common-timeoffset-selector.js" />
