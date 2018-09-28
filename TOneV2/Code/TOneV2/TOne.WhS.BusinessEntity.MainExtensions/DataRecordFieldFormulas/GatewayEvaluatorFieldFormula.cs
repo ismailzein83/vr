@@ -76,27 +76,36 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
             if (emptyFilter != null)
             {
-                Dictionary<SwitchPortKey, SwitchConnectivity> switchConnectivitiesBySwitchPortKey = switchConnectivityManager.GetSwitchConnectivitiesBySwitchPortKey();
-                if (switchConnectivitiesBySwitchPortKey == null || switchConnectivitiesBySwitchPortKey.Count == 0)
-                    return null;
+                EmptyRecordFilter switchFilter = new EmptyRecordFilter() { FieldName = this.SwitchFieldName };
+                EmptyRecordFilter portFilter = new EmptyRecordFilter() { FieldName = this.PortFieldName };
 
-                Dictionary<int, List<string>> portsBySwitchId = new Dictionary<int, List<string>>();
-                List<string> ports;
-
-                foreach (SwitchPortKey switchPortKey in switchConnectivitiesBySwitchPortKey.Keys)
+                return new RecordFilterGroup()
                 {
-                    ports = portsBySwitchId.GetOrCreateItem(switchPortKey.SwitchId);
-                    ports.Add(switchPortKey.Port);
-                }
+                    LogicalOperator = RecordQueryLogicalOperator.Or,
+                    Filters = new List<RecordFilter>() { switchFilter, portFilter }
+                };
 
-                RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.NotIn);
-                if (recordFilter == null)
-                    return null;
+                //Dictionary<SwitchPortKey, SwitchConnectivity> switchConnectivitiesBySwitchPortKey = switchConnectivityManager.GetSwitchConnectivitiesBySwitchPortKey();
+                //if (switchConnectivitiesBySwitchPortKey == null || switchConnectivitiesBySwitchPortKey.Count == 0)
+                //    return null;
 
-                RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-                recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
-                recordFilterGroup.Filters = new List<RecordFilter>() { recordFilter, new EmptyRecordFilter() { FieldName = this.PortFieldName } };
-                return recordFilterGroup;
+                //Dictionary<int, List<string>> portsBySwitchId = new Dictionary<int, List<string>>();
+                //List<string> ports;
+
+                //foreach (SwitchPortKey switchPortKey in switchConnectivitiesBySwitchPortKey.Keys)
+                //{
+                //    ports = portsBySwitchId.GetOrCreateItem(switchPortKey.SwitchId);
+                //    ports.Add(switchPortKey.Port);
+                //}
+
+                //RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.NotIn);
+                //if (recordFilter == null)
+                //    return null;
+
+                //RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+                //recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+                //recordFilterGroup.Filters = new List<RecordFilter>() { recordFilter, new EmptyRecordFilter() { FieldName = this.PortFieldName } };
+                //return recordFilterGroup;
             }
 
             #endregion
@@ -106,25 +115,32 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
             if (nonEmptyFilter != null)
             {
-                Dictionary<SwitchPortKey, SwitchConnectivity> switchConnectivitiesBySwitchPortKey = switchConnectivityManager.GetSwitchConnectivitiesBySwitchPortKey();
-                if (switchConnectivitiesBySwitchPortKey == null || switchConnectivitiesBySwitchPortKey.Count == 0)
-                    return new AlwaysFalseRecordFilter();
+                NonEmptyRecordFilter switchFilter = new NonEmptyRecordFilter() { FieldName = this.SwitchFieldName };
+                NonEmptyRecordFilter portFilter = new NonEmptyRecordFilter() { FieldName = this.PortFieldName };
 
-                Dictionary<int, List<string>> portsBySwitchId = new Dictionary<int, List<string>>();
-                List<string> ports;
-
-                foreach (var switchConnectivity in switchConnectivitiesBySwitchPortKey.Values)
+                return new RecordFilterGroup()
                 {
-                    ports = portsBySwitchId.GetOrCreateItem(switchConnectivity.SwitchId);
-                    if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
-                        ports.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
-                }
+                    LogicalOperator = RecordQueryLogicalOperator.And,
+                    Filters = new List<RecordFilter>() { switchFilter, portFilter }
+                };
 
-                RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.In);
-                if (recordFilter == null)
-                    return new AlwaysFalseRecordFilter();
+                //Dictionary<SwitchPortKey, SwitchConnectivity> switchConnectivitiesBySwitchPortKey = switchConnectivityManager.GetSwitchConnectivitiesBySwitchPortKey();
+                //if (switchConnectivitiesBySwitchPortKey == null || switchConnectivitiesBySwitchPortKey.Count == 0)
+                //    return new AlwaysFalseRecordFilter();
 
-                return recordFilter;
+                //Dictionary<int, List<string>> portsBySwitchId = new Dictionary<int, List<string>>();
+                //List<string> ports;
+
+                //foreach (var switchConnectivity in switchConnectivitiesBySwitchPortKey.Values)
+                //{
+                //    ports = portsBySwitchId.GetOrCreateItem(switchConnectivity.SwitchId);
+                //    if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
+                //        ports.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
+                //}
+
+                //RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.In);
+                //if (recordFilter == null)
+                //    return new AlwaysFalseRecordFilter();
             }
 
             #endregion
