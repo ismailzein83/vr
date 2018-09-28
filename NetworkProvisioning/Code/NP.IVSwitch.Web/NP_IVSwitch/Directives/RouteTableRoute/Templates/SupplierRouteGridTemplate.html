@@ -20,7 +20,7 @@
                      rowdeleteicontitle="Reset to LCR position"
                      hidegridmenu disabledraggablecolumns>
             <vr-datagridcolumn headertext="'Supplier'">
-                <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" ismultipleselection onselectionchanged="dataItem.onSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
+                <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" onselectionchanged="dataItem.onSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
             </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Routes'">
                     <span vr-loader="dataItem.isRouteSelectorLoading">

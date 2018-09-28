@@ -118,7 +118,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
         }
 
         function deleteRoute(routeTable) {
-            VRNotificationService.showConfirmation().then(function (response) {
+            VRNotificationService.showDeleteConfirmation().then(function (response) {
                 if (response) {
                     var RouteTableId = routeTable.RouteTableId;
                     var RouteTableViewType = (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value;

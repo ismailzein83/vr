@@ -68,21 +68,15 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                     backupRouteDirectiveDefferedReady.resolve();
                 };
                 dataItem.Entity.onBackupOptionSupplierSelectionChanged = function (option) {
-                    var backupSupplierIds = [];
-                    if (option != undefined && option.length > 0) {
+                    if (option != undefined ) {
                         if (selectedBackupSupplierDefferedReady != undefined)
                             selectedBackupSupplierDefferedReady.resolve();
                         else {
-                            for (var i = 0; i < option.length; i++)
-                                backupSupplierIds.push(option[i].CarrierAccountId);
                             var directivePayload = {
                                 filter: {
-                                    AssignableToCarrierAccountId: null,
+                                    SupplierIds : [option.CarrierAccountId]
                                 }
                             };
-                            if (backupSupplierIds.length > 0)
-                                directivePayload.filter.SupplierIds = backupSupplierIds;
-
                             var modifiedByFieldSetLoader = function (value) { $scope.scopeModel.isModifiedBySelectorLoading = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.Entity.backupOptionRouteDirectiveAPI, directivePayload, modifiedByFieldSetLoader);
                         }
@@ -110,7 +104,8 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
         function defineAPI() {
             var api = {};
 
-            api.load = function (payload) {
+            api.load = function (payload) {              
+
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.backupOptions != null) {
@@ -169,19 +164,18 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 gridItem.supplierBackUpReadyDeffered.promise.then(function () {
                     var directivePayload;
                     if (gridItem.payload.BackupOptionSupplierId != undefined)
-                        directivePayload = { selectedIds: [gridItem.payload.BackupOptionSupplierId] };
+                        directivePayload = { selectedIds: gridItem.payload.BackupOptionSupplierId };
                     VRUIUtilsService.callDirectiveLoad(dataItem.backupOptionSupplierDirctiveAPI, directivePayload, gridItem.supplierBackUpLoadDeffered);
                 });
 
                 dataItem.onBackupOptionSupplierSelectionChanged = function (option) {
-                    if (option != undefined && option.length > 0) {
+                    if (option != undefined) {
                         if (backupOptionselectdSupplierDeffered != undefined) {
                             backupOptionselectdSupplierDeffered.resolve();
                         }
                         else {
                             var directivePayload = {
-                                AssignableToCarrierAccountId: null,
-                                SupplierIds: dataItem.backupOptionSupplierDirctiveAPI.getSelectedIds()
+                                SupplierIds: [dataItem.backupOptionSupplierDirctiveAPI.getSelectedIds()]
                             };
                             var modifiedByFieldSetLoader = function (value) { $scope.scopeModel.isModifiedBySelectorLoading = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.backupOptionRouteDirectiveAPI, directivePayload, modifiedByFieldSetLoader);
@@ -200,12 +194,11 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 UtilsService.waitMultiplePromises(promises).then(function () {
                     var directivePayload = {
                         filter: {
-                            AssignableToCarrierAccountId: null,
                         }
                     };
                     if (gridItem.payload.BackupOptionRouteId != undefined) {
                         directivePayload.selectedIds = gridItem.payload.BackupOptionRouteId;
-                        directivePayload.filter.SupplierIds = (gridItem.payload.BackupOptionSupplierId != null) ? [gridItem.payload.BackupOptionSupplierId] : undefined;
+                        directivePayload.filter.SupplierIds = (gridItem.payload.BackupOptionSupplierId != undefined) ? [gridItem.payload.BackupOptionSupplierId] : undefined;
                     }
                     VRUIUtilsService.callDirectiveLoad(dataItem.backupOptionRouteDirectiveAPI, directivePayload, gridItem.routeBackUpLoadDeffered);
                     backupOptionselectdSupplierDeffered = undefined;

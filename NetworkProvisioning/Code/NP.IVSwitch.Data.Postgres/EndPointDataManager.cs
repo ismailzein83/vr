@@ -120,7 +120,7 @@ namespace NP.IVSwitch.Data.Postgres
                 ExecuteNonQueryText(sipQuery, cmd =>
                 {
                     cmd.Parameters.AddWithValue("@value", value);
-                    cmd.Parameters.AddWithValue("@nullValue", (Object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@nullValue", 0);
 
 
                 });
@@ -128,7 +128,7 @@ namespace NP.IVSwitch.Data.Postgres
                     ExecuteNonQueryText(aclQuery, cmd =>
                    {
                        cmd.Parameters.AddWithValue("@value", value);
-                       cmd.Parameters.AddWithValue("@nullValue", (Object)DBNull.Value);
+                       cmd.Parameters.AddWithValue("@nullValue", 0);
 
 
                    });

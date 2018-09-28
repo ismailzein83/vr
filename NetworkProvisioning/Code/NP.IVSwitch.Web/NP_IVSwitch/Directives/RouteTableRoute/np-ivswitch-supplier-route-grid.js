@@ -167,20 +167,16 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 gridItem.percentage = $scope.dataItem.percentage;
 
                 gridItem.onSupplierSelectionChanged = function (option) {
-                    var supplierIds = [];
-                    if (option != undefined && option.length > 0) {
+                    if (option != undefined) {
                         if (selectdSupplierDeffered != undefined) {
                             selectdSupplierDeffered.resolve();
                         }
                         else {
                             gridItem.isRouteSelectorLoading = true;
-                            for (var i = 0; i < option.length; i++)
-                                supplierIds.push(option[i].CarrierAccountId);
                             var directivePayload = {
 
                                 filter: {
-                                    AssignableToCarrierAccountId: null,
-                                    SupplierIds: supplierIds
+                                    SupplierIds: [option.CarrierAccountId]
                                 }
                             };
                             var setLoader = function (value) { gridItem.isRouteSelectorLoading = value; };
@@ -279,12 +275,13 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 var routeOptions = [];
                 if ($scope.scopeModel.columns != null && $scope.scopeModel.columns.length > 0)
                     for (var i = 0; i < $scope.scopeModel.columns.length; i++) {
+                        var column = $scope.scopeModel.columns[i];
                         var routeOption = {
-                            RouteId: $scope.scopeModel.columns[i].routeDirectiveAPI.getSelectedIds(),
-                            Percentage: $scope.scopeModel.columns[i].percentage
+                            RouteId: column.routeDirectiveAPI.getSelectedIds(),
+                            Percentage: column.percentage
                         };
-                        if ($scope.scopeModel.columns[i].backupRouteGridDirectiveAPI != undefined) {
-                            var backupRouteOptions = $scope.scopeModel.columns[i].backupRouteGridDirectiveAPI.getData();
+                        if (column.backupRouteGridDirectiveAPI != undefined) {
+                            var backupRouteOptions = column.backupRouteGridDirectiveAPI.getData();
                             var backupRouteIds = [];
                             if (backupRouteOptions != undefined && backupRouteOptions.length > 0)
                                 for (var x = 0; x < backupRouteOptions.length; x++) {
@@ -320,19 +317,17 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                     };
 
                     dataItem.onSupplierSelectionChanged = function (option) {
-                        var supplierIds = [];
-                        if (option != undefined && option.length > 0) {
+                        if (option != undefined) {
                             if (selectedSupplierDeffered != undefined) {
                                 selectedSupplierDeffered.resolve();
                             }
                             else {
-                                for (var i = 0; i < option.length; i++)
-                                    supplierIds.push(option[i].CarrierAccountId); var directivePayload = {
-                                        filter: {
-                                            AssignableToCarrierAccountId: null,
-                                            SupplierIds: supplierIds
-                                        }
-                                    };
+                      
+                                var directivePayload = {
+                                    filter: {
+                                        SupplierIds: [option.CarrierAccountId]
+                                    }
+                                };
                                 var modifiedByFieldSetLoader = function (value) { $scope.scopeModel.isModifiedBySelectorLoading = value; };
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.routeDirectiveAPI, directivePayload, modifiedByFieldSetLoader);
                             }
@@ -345,18 +340,15 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                     gridItem.supplierReadyDeffered.promise.then(function () {
                         var directivePayload;
                         if (gridItem.payload != undefined)
-                            directivePayload = { selectedIds: gridItem.payload.SupplierId != 0 ? [gridItem.payload.SupplierId] : undefined };
+                            directivePayload = { selectedIds: gridItem.payload.SupplierId != 0 ? gridItem.payload.SupplierId : undefined };
                         VRUIUtilsService.callDirectiveLoad(dataItem.supplierDirctiveAPI, directivePayload, gridItem.supplierLoadDeffered);
                     });
 
                     UtilsService.waitMultiplePromises([gridItem.routeReadyDeffered.promise, selectedSupplierDeffered.promise]).then(function () {
                         var directivePayload = {
                             filter: {
-                                AssignableToCarrierAccountId: null
                             }
                         };
-
-
                         if (gridItem.payload != undefined) {
                             directivePayload.selectedIds = gridItem.payload.RouteId != 0 ? gridItem.payload.RouteId : undefined;
                             directivePayload.filter.SupplierIds = gridItem.payload.SupplierId != null ? [gridItem.payload.SupplierId] : undefined;
@@ -368,6 +360,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
                     if (gridItem.hasPercentage)
                     {
+                        console.log(gridItem.hasPercentage);
                         dataItem.onBackupRouteGridDirectiveReady = function (api) {
                             dataItem.backupRouteGridDirectiveAPI = api;
                             gridItem.backupRouteGridDirectiveReady.resolve();

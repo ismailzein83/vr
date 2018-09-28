@@ -63,9 +63,6 @@ namespace NP.IVSwitch.Business
             IEnumerable<EndPoint> endPoints = endPointIds.MapRecords(x => GetEndPoint(x));
             List<int> aclEndPoints = new List<int>();
             List<int> sipEndPoints = new List<int>();
-
-
-
             if (endPoints != null)
             {
                 foreach (var endPoint in endPoints)
@@ -75,7 +72,6 @@ namespace NP.IVSwitch.Business
                     else
                         sipEndPoints.Add(endPoint.EndPointId);
                 }
-
             }
 
             bool updatedAclResult = false;

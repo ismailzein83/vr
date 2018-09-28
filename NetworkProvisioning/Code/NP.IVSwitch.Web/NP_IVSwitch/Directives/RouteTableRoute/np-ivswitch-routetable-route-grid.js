@@ -125,7 +125,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
         function deleteRouteTableRoute(routeTable) {
 
-            VRNotificationService.showConfirmation().then(function (response) {
+            VRNotificationService.showDeleteConfirmation().then(function (response) {
                 if (response) {
                     NP_IVSwitch_RouteTableRouteAPIService.DeleteRouteTableRoute(routeTableId, routeTable.Destination).then(function () {
                         gridAPI.itemDeleted({ RouteOptionsDetailId: routeTable.RouteOptionsDetailId, Destination: routeTable.Destination, TechPrefix: routeTable.TechPrefix, Options: routeTable.Options });

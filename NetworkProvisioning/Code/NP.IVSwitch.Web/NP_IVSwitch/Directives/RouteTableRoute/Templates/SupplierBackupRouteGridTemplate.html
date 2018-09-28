@@ -13,11 +13,11 @@
              rowdeleteicontitle="Reset to LCR position"
              hidegridmenu disabledraggablecolumns>
     <vr-datagridcolumn headertext="'Backup Supplier'">
-        <vr-whs-be-supplier-selector hidelabel ismultipleselection on-ready="dataItem.Entity.onBackupOptionSuppliersDirectiveReady" onselectionchanged="dataItem.Entity.onBackupOptionSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
+        <vr-whs-be-supplier-selector hidelabel  on-ready="dataItem.Entity.onBackupOptionSuppliersDirectiveReady" onselectionchanged="dataItem.Entity.onBackupOptionSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Backup Routes'">
         <span vr-loader="dataItem.isRouteSelectorLoading">
-            <np-ivswitch-route-selector hidelabel on-ready="dataItem.Entity.onBackupOptionRouteDirectiveReady" isrequired="ture"></np-ivswitch-route-selector>
+            <np-ivswitch-route-selector hidelabel on-ready="dataItem.Entity.onBackupOptionRouteDirectiveReady" isrequired="true"></np-ivswitch-route-selector>
             </span>
 </vr-datagridcolumn>
 </vr-datagrid>

@@ -268,21 +268,16 @@ namespace NP.IVSwitch.Data.Postgres
                                    cmd.Parameters.AddWithValue("@route_id", routeOption.RouteId);
                                    cmd.Parameters.AddWithValue("@time_frame", "*****");
                                    cmd.Parameters.AddWithValue("@preference", routeOption.Preference);
-                                   cmd.Parameters.AddWithValue("@percentage", (routeOption.Percentage == null) ? (Object)DBNull.Value : routeOption.Percentage);
+                                   cmd.Parameters.AddWithValue("@percentage", (routeOption.Percentage == null) ? 0 : routeOption.Percentage);
                                    cmd.Parameters.AddWithValue("@routingMode", routeOption.RoutingMode);
                                    cmd.Parameters.AddWithValue("@totalBKTs", routeOption.TotalBKTs);
                                    cmd.Parameters.AddWithValue("@BKTSerial", routeOption.BKTSerial);
                                    cmd.Parameters.AddWithValue("@BKTCapacity", routeOption.BKTCapacity);
                                    cmd.Parameters.AddWithValue("@BKTTokens", routeOption.BKTTokens);
-                                   cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? (Object)DBNull.Value : item.TechPrefix);
+                                   cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "0" : item.TechPrefix);
                                    cmd.Parameters.AddWithValue("@huntstop", (routeOption.Huntstop == null) ? (Object)DBNull.Value : routeOption.Huntstop);
                                    cmd.Parameters.AddWithValue("@stateId", routeOption.StateId);
-
-
-
                                });
-
-
                         }
                         else
                         {
@@ -296,7 +291,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@time_frame", "*****");
                                 cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
-                                cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? (Object)DBNull.Value : item.TechPrefix);
+                                cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "0" : item.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop", 1);
                                 cmd.Parameters.AddWithValue("@stateId", 1);
 
@@ -347,13 +342,13 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@route_id", option.RouteId);
                                 cmd.Parameters.AddWithValue("@time_frame", "*****");
                                 cmd.Parameters.AddWithValue("@preference", option.Preference);
-                                cmd.Parameters.AddWithValue("@percentage", (option.Percentage == null) ? (Object)DBNull.Value : option.Percentage);
+                                cmd.Parameters.AddWithValue("@percentage", (option.Percentage == null) ? 0 : option.Percentage);
                                 cmd.Parameters.AddWithValue("@routingMode", option.RoutingMode);
                                 cmd.Parameters.AddWithValue("@totalBKTs", option.TotalBKTs);
                                 cmd.Parameters.AddWithValue("@BKTSerial", option.BKTSerial);
                                 cmd.Parameters.AddWithValue("@BKTCapacity", option.BKTCapacity);
                                 cmd.Parameters.AddWithValue("@BKTTokens", option.BKTTokens);
-                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? (Object)DBNull.Value : routeTableRoute.TechPrefix);
+                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "0" : routeTableRoute.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop", (option.Huntstop == null) ? (Object)DBNull.Value : option.Huntstop);
                                 cmd.Parameters.AddWithValue("@stateId", option.StateId);
 
@@ -373,7 +368,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@time_frame", "*****");
                                 cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
-                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? (Object)DBNull.Value : routeTableRoute.TechPrefix);
+                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "0" : routeTableRoute.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop",1);
                                 cmd.Parameters.AddWithValue("@stateId", 1);
 
@@ -433,7 +428,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 routePreference.Preference = (Int16)preference;
             }
-            if (percentage != DBNull.Value)
+            if (percentage != DBNull.Value && (int)percentage != 0)
             {
                 routePreference.Percentage = (decimal)percentage;
             }

@@ -98,7 +98,7 @@ namespace NP.IVSwitch.Business
             }
             else
             {
-                insertOperationOutput.Message = "you cannot add a BNumber RouteTable";
+                insertOperationOutput.Message = "Route table cannot be added for BNumber.";
                 insertOperationOutput.ShowExactMessage = true;
                 
             }
@@ -153,7 +153,7 @@ namespace NP.IVSwitch.Business
             }
             else
             {
-                updateOperationOutput.Message = "you cannot Edit a BNumber RouteTable";
+                updateOperationOutput.Message = "Route table cannot be updated for BNumber.";
                 updateOperationOutput.ShowExactMessage = true;
 
             }
