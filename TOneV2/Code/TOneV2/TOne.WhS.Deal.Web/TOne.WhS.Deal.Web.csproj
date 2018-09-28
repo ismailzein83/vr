@@ -181,8 +181,10 @@
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\SubstituteRateTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />
+    <Content Include="WhS_Deal\Directives\DealDefinition\Templates\DealWithCarrierAccountSelectorTemplate.html" />
     <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-dealdefinition-selector.js" />
     <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-swapdeal-selector.js" />
+    <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-withcarrieraccount-selector.js" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\Templates\DealSaleRateEvaluatorTemplate.html" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\Templates\DealSupplierRateEvaluatorTemplate.html" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-salerateevaluator-selective.js" />
