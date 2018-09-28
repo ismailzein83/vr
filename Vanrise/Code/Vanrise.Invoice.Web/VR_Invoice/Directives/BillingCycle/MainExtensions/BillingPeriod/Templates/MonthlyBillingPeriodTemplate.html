@@ -1,4 +1,4 @@
-﻿<vr-row>
+﻿<vr-columns width="fullrow" haschildcolumns>
     <vr-columns width="1/3row">
         <vr-select label="Days of the Month"
                    datasource="ctrl.monthlyTypes"
@@ -16,8 +16,8 @@
             <vr-button type="Add" vr-disabled="ctrl.selectedMonthlyType == undefined || validationContext.validate() != null" data-onclick="ctrl.addMonthlyPeriod" standalone></vr-button>
         </vr-columns>
     </vr-validation-group>
-</vr-row>
-<vr-row>
+</vr-columns>
+<vr-columns width="fullrow" haschildcolumns>
     <vr-columns width="fullrow">
 
         <vr-validator validate="ctrl.isValid()">
@@ -28,4 +28,4 @@
             </vr-datagrid>
         </vr-validator>
     </vr-columns>
-</vr-row>
+</vr-columns>
