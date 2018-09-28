@@ -1495,9 +1495,7 @@
 			return entityIdPromiseDeferred.promise;
 		}
 		function hasRunningProcessesForCustomerOrSellingProduct(entityIds, ownerId, ownerType) {
-			console.log("hasRunningProcessesForCustomerOrSellingProduct function");
 			var editorMessage;
-
 			if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
 				var sellingProductName = ($scope.selectedSellingProduct != undefined) ? $scope.selectedSellingProduct.Name : undefined;
 				editorMessage = "Other rate plan processes are still pending for selling product '" + sellingProductName + "' or some of its customers";
