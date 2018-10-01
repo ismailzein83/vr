@@ -93,7 +93,7 @@
 					return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
 				};
 
-				if ($attrs.setfocus != undefined)
+				if ($attrs.setfofcus != undefined)
 					setTimeout(function () {
 						$element.find('.main-input').focus();
 					}, 10);
@@ -107,7 +107,7 @@
 					}
 				};
 				$scope.ctrl.onFocusDirective = function (e) {
-					if ($attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name)
+					if (ctrl.value && $attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name)
 						ctrl.value = ctrl.value.replace(/,/g, '');
 				};
 			},
