@@ -163,7 +163,8 @@
                 SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 SellingProductsIds: sellingProductSelectorAPI.getSelectedIds(),
                 ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
-                Services: serviceDirectiveAPI.getSelectedIds()
+                Services: serviceDirectiveAPI.getSelectedIds(),
+                IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch
             };
             return data;
         }

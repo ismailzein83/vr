@@ -554,6 +554,8 @@ namespace TOne.WhS.BusinessEntity.Business
 					  return false;
 				  if (input.Query.Services != null && input.Query.Services.Count > 0 && !(item.AccountType != CarrierAccountType.Customer && input.Query.Services.All(x => item.SupplierSettings.DefaultServices.Select(y => y.ServiceId).Contains(x))))
 					  return false;
+                  if (input.Query.IsInterconnectSwitch==true && input.Query.IsInterconnectSwitch != item.CarrierAccountSettings.IsInterconnectSwitch)
+                      return false;
 				  return true;
 			  };
 			var resultProcessingHandler = new ResultProcessingHandler<CarrierAccountDetail>()

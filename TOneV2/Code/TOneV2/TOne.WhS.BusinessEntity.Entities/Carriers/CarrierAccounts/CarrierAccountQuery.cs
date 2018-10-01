@@ -18,5 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public List<int> Services { get; set; }
         public List<int> ActivationStatusIds { get; set; }
+        public bool IsInterconnectSwitch { get; set; }
     }
 }

@@ -28,6 +28,12 @@
                     </span>
                     <vr-whs-be-activationstatus-selector normal-col-num="2" hideselectedvaluessection ismultipleselection on-ready="onActivationStatusDirectiveReady">
                     </vr-whs-be-activationstatus-selector>
+
+                    <vr-column colnum="2">
+                        <vr-switch label="Interconnect Only" value="scopeModel.isInterconnectSwitch" >
+                        </vr-switch>
+                    </vr-column>
+
                     <span ng-show="showZoneService">
                         <vr-whs-be-zone-service-config-selector on-ready="onZoneServiceConfigSelectorReady"
                                                                 selectedvalues="servicesValues"
