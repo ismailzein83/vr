@@ -34,7 +34,13 @@ namespace Retail.MultiNet.Entities
         {
             var castedOriginalValue = originalValue as List<FaultTicketDescriptionSettingDetails>;
             if (castedOriginalValue != null)
+            {
                 return castedOriginalValue;
+            }
+            else if (originalValue is string && originalValue != null)
+            {
+                return Serializer.Deserialize<FaultTicketSettingsDetailsCollection>(originalValue.ToString());
+            }
             else
                 return Utilities.ConvertJsonToList<FaultTicketDescriptionSettingDetails>(originalValue);
         }
