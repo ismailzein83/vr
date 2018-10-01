@@ -155,6 +155,7 @@
     <Compile Include="Controllers\RetailAccountBEController.cs" />
     <Compile Include="Controllers\RetailAccountInfoController.cs" />
     <Compile Include="Controllers\RetailAccountUserController.cs" />
+    <Compile Include="Controllers\WhSAccountUserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

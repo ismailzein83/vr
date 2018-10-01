@@ -11,7 +11,7 @@ using Vanrise.Security.Entities;
 
 namespace PartnerPortal.CustomerAccess.Business
 {
-    public class RetailAccountUserManager
+    public class RetailAccountUserManager : BaseAccountUserManager
     {
         #region Public Methods
 
@@ -28,47 +28,6 @@ namespace PartnerPortal.CustomerAccess.Business
                 AccountBEDefinitionId = retailAccountSettings.AccountBEDefinitionId,
                 AccountId = retailAccountSettings.AccountId
             };
-        }
-
-        public List<UserDetailInfo> GetUsersStatus (UserStatusInput userStatusInput)
-        {
-            List<UserDetailInfo> userDetailInfo = new List<UserDetailInfo>();
-            userStatusInput.UserIds.ThrowIfNull("UserStatusInput");
-            foreach (var userId in userStatusInput.UserIds)
-            {
-                var userStatus = GetUserStatusByUserId(userId);
-                UserDetailInfo userDetail = new UserDetailInfo()
-                {
-                    UserId = userId,
-                    UserStatus = userStatus
-                };
-                userDetailInfo.Add(userDetail);
-            }
-            return userDetailInfo;
-        }
-        public UpdateOperationOutput<UserDetail> EnableUser(int userId)
-        {
-            UserManager userManager = new UserManager();
-            return userManager.EnableUser(userId);
-        }
-        public UserStatus GetUserStatusByUserId(int userId)
-        {
-            UserManager userManager = new UserManager();
-            UserStatus userStatus;
-            userManager.IsUserEnable(userId, out userStatus);
-            return userStatus;
-        }
-        public UpdateOperationOutput<UserDetail> DisableUser(int userId)
-        {
-            UserManager userManager = new UserManager();
-            return userManager.DisableUser(userId);
-        }
-        public UpdateOperationOutput<UserDetail> UnlockPortalAccount(int userId)
-        {
-            UserManager userManager = new UserManager();
-            var user = userManager.GetUserbyId(userId);
-            user.ThrowIfNull("user");
-            return userManager.UnlockUser(user);
         }
         public UpdateOperationOutput<UserDetail> UpdateRetailAccountUser(RetailAccountToUpdate retailAccount)
         {
@@ -148,11 +107,6 @@ namespace PartnerPortal.CustomerAccess.Business
             }
 
             return insertOperationOutput;
-        }
-
-        public UpdateOperationOutput<object> ResetPassword(int userId, string password)
-        {
-            return new UserManager().ResetPassword(userId, password);
         }
 
         public Dictionary<long, ClientAccountInfo> GetClientRetailAccountsInfo(Guid vrConnectionId)

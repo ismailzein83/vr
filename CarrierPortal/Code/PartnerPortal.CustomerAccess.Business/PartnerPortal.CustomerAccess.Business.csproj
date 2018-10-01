@@ -108,6 +108,7 @@
     <Compile Include="RetailAccountUserManager.cs" />
     <Compile Include="RetailSubAccountsInfoTileDefinitionSettings.cs" />
     <Compile Include="RetailUserSubaccountsBEDefinition.cs" />
+    <Compile Include="WhSAccountUserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Entities\PartnerPortal.CustomerAccess.Entities.csproj">
