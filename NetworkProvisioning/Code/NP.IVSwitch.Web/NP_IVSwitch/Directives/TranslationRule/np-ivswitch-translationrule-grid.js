@@ -91,7 +91,7 @@ app.directive('npIvswitchTranslationruleGrid', ['NP_IVSwitch_TranslationRuleAPIS
             }
 
             function deleteTranslationRule(translationRuleItem) {
-                VRNotificationService.showConfirmation().then(function (response) {
+                VRNotificationService.showDeleteConfirmation().then(function (response) {
                     if (response) {
                         NP_IVSwitch_TranslationRuleAPIService.DeleteTranslationRule(translationRuleItem.TranslationRuleId).then(function () {
                             gridAPI.itemDeleted(translationRuleItem);
