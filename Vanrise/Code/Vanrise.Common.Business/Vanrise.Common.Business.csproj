@@ -188,6 +188,7 @@
     <Compile Include="VRObject\VRObjectPropertyEvaluatorContext.cs" />
     <Compile Include="VRFileManager.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationManager.cs" />
+    <Compile Include="VRRemoteFileManager.cs" />
     <Compile Include="VRRule\VRRuleDefinitionManager.cs" />
     <Compile Include="VRRule\VRRuleManager.cs" />
     <Compile Include="VRSequence\VRSequenceManager.cs" />
