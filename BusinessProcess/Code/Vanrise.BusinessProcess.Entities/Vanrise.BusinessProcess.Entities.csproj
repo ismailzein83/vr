@@ -83,6 +83,10 @@
     <Compile Include="BPInstance\BPInstance.cs" />
     <Compile Include="BPInstance\BPInstanceProgressView.cs" />
     <Compile Include="BPPendingInstanceInfo.cs" />
+    <Compile Include="ProcessSynchronisation\StructuredProcessSynchronisation.cs" />
+    <Compile Include="ProcessSynchronisation\ProcessSynchronisationQuery.cs" />
+    <Compile Include="ProcessSynchronisation\ProcessSynchronisationDetail.cs" />
+    <Compile Include="ProcessSynchronisation\ProcessSynchronisation.cs" />
     <Compile Include="BPTimeSubscription.cs" />
     <Compile Include="BPTrackingBeforeIdInput.cs" />
     <Compile Include="BPInstance\BPInstanceDetail.cs" />
@@ -167,6 +171,7 @@
     <Compile Include="VRWorkflow\VRWorkflowVariableType.cs" />
     <Compile Include="VRWorkflow\VRWorkflowVariableTypeConfig.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
