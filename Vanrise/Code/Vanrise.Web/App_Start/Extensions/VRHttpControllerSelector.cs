@@ -125,20 +125,15 @@ namespace Vanrise.Web
                 });
             }
 
-            private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
+            private class CacheManager : Vanrise.Caching.BaseCacheManager
             {
                 internal VRAPIDiscovery _apiDiscovery;
 
-                ConcurrentDictionary<Guid, DateTime?> _lastCheckTimeByAPIDiscoveryStateId = new ConcurrentDictionary<Guid, DateTime?>();
+                DateTime? _lastCheckTime;
 
-                protected override bool ShouldSetCacheExpired(Guid parameter)
+                protected override bool ShouldSetCacheExpired(object parameter)
                 {
-                    DateTime? _lastCheckTime;
-                    _lastCheckTimeByAPIDiscoveryStateId.TryGetValue(parameter, out _lastCheckTime);
-                    bool isCacheExpired = _apiDiscovery.IsCacheExpired(ref _lastCheckTime);
-                    _lastCheckTimeByAPIDiscoveryStateId.AddOrUpdate(parameter, _lastCheckTime, (key, existingHandle) => _lastCheckTime);
-
-                    return isCacheExpired;
+                    return _apiDiscovery.IsCacheExpired(ref _lastCheckTime);
                 }
             }
         }
