@@ -20,28 +20,19 @@ namespace CDRComparison.Business
             dataManager.TableNameKey = input.Query.TableKey;
 
             var partialMatchCDRBigResult = new PartialMatchCDRBigResult();
-            BigResult<PartialMatchCDR> bigResult = dataManager.GetFilteredPartialMatchCDRs(input);
+            decimal systemDurationInSeconds;
+            decimal partnerDurationInSeconds;
+            decimal differenceDurationInSeconds;
+            BigResult<PartialMatchCDR> bigResult = dataManager.GetFilteredPartialMatchCDRs(input, out systemDurationInSeconds, out partnerDurationInSeconds, out differenceDurationInSeconds);
 
             partialMatchCDRBigResult.ResultKey = bigResult.ResultKey;
             partialMatchCDRBigResult.Data = bigResult.Data;
             partialMatchCDRBigResult.TotalCount = bigResult.TotalCount;
 
             partialMatchCDRBigResult.Summary = new PartialMatchCDR();
-            partialMatchCDRBigResult.Summary.SystemDurationInSec = 0;
-            partialMatchCDRBigResult.Summary.PartnerDurationInSec = 0;
-            partialMatchCDRBigResult.Summary.DurationDifferenceInSec = 0;
-
-            foreach (PartialMatchCDR cdr in bigResult.Data)
-            {
-                decimal durationDifference = cdr.PartnerDurationInSec - cdr.SystemDurationInSec;
-                cdr.DurationDifferenceInSec = Math.Abs(durationDifference);
-                if (cdr.SystemDurationInSec > 0)
-                    cdr.DurationDifferencePercentageOfPartner = (durationDifference * 100) / cdr.SystemDurationInSec;
-
-                partialMatchCDRBigResult.Summary.SystemDurationInSec += cdr.SystemDurationInSec;
-                partialMatchCDRBigResult.Summary.PartnerDurationInSec += cdr.PartnerDurationInSec;
-                partialMatchCDRBigResult.Summary.DurationDifferenceInSec += cdr.DurationDifferenceInSec;
-            }
+            partialMatchCDRBigResult.Summary.SystemDurationInSec = systemDurationInSeconds;
+            partialMatchCDRBigResult.Summary.PartnerDurationInSec = partnerDurationInSeconds;
+            partialMatchCDRBigResult.Summary.DurationDifferenceInSec = differenceDurationInSeconds;
 
             var resultProcessingHandler = new ResultProcessingHandler<PartialMatchCDR>()
             {

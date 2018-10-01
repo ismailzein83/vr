@@ -12,7 +12,7 @@ namespace CDRComparison.Data
     {
         void ApplyPartialMatchCDRsToDB(object preparedNumberProfiles);
         void CreatePartialMatchCDRTempTable();
-        Vanrise.Entities.BigResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input);
+        Vanrise.Entities.BigResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input, out decimal systemDurationInSeconds, out decimal partnerDurationInSeconds, out decimal differenceDurationInSeconds);
         void DeletePartialMatchTable();
         int GetPartialMatchCDRsCount();
         decimal GetDurationOfPartialMatchCDRs(bool isPartner);

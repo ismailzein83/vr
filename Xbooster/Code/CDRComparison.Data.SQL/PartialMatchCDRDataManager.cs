@@ -44,13 +44,27 @@ namespace CDRComparison.Data.SQL
             ExecuteNonQueryText(query.ToString(), null);
         }
 
-        public Vanrise.Entities.BigResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input)
+        public Vanrise.Entities.BigResult<PartialMatchCDR> GetFilteredPartialMatchCDRs(Vanrise.Entities.DataRetrievalInput<PartialMatchCDRQuery> input, out decimal systemDurationInSeconds, out decimal partnerDurationInSeconds, out decimal differenceDurationInSeconds)
         {
+            string tableName = null;
             Action<string> createTempTableAction = (tempTableName) =>
             {
+                tableName = tempTableName;
                 CreateTempTableIfNotExists(input, tempTableName);
             };
-            return RetrieveData(input, createTempTableAction, PartialMatchCDRMapper);
+
+            var retrievedData = RetrieveData(input, createTempTableAction, PartialMatchCDRMapper);
+
+            object systemDuration = ExecuteScalarText(String.Format("SELECT SUM(SystemDurationInSec) FROM {0}", tableName), null);
+            systemDurationInSeconds = (systemDuration != DBNull.Value) ? (decimal)systemDuration : 0;
+
+            object partnerDuration = ExecuteScalarText(String.Format("SELECT SUM(PartnerDurationInSec) FROM {0}", tableName), null);
+            partnerDurationInSeconds = (partnerDuration != DBNull.Value) ? (decimal)partnerDuration : 0;
+
+            object durationDifference = ExecuteScalarText(String.Format("SELECT SUM(ABS(SystemDurationInSec - PartnerDurationInSec)) FROM {0}", tableName), null);
+            differenceDurationInSeconds = (durationDifference != DBNull.Value) ? (decimal)durationDifference : 0;
+
+            return retrievedData;
         }
 
         public void CreatePartialMatchCDRTempTable()

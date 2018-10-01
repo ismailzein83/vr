@@ -12,7 +12,7 @@ namespace CDRComparison.Data
     {
         void ApplyMissingCDRsToDB(object preparedNumberProfiles);
         void CreateMissingCDRTempTable();
-        Vanrise.Entities.BigResult<MissingCDR> GetFilteredMissingCDRs(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input);
+        Vanrise.Entities.BigResult<MissingCDR> GetFilteredMissingCDRs(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input, out decimal durationInSeconds);
         void DeleteMissingCDRTable();
         int GetMissingCDRsCount(bool isPartnerCDRs);
         decimal GetDurationOfMissingCDRs(bool? isPartner);

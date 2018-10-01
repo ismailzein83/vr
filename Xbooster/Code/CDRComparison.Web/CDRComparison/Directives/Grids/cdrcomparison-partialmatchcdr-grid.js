@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PartialMatchCDRGridDirective.$inject = ['CDRComparison_PartialMatchCDRAPIService', 'VRNotificationService'];
+    PartialMatchCDRGridDirective.$inject = ['CDRComparison_PartialMatchCDRAPIService', 'VRNotificationService', 'DataGridRetrieveDataEventType'];
 
-    function PartialMatchCDRGridDirective(CDRComparison_PartialMatchCDRAPIService, VRNotificationService) {
+    function PartialMatchCDRGridDirective(CDRComparison_PartialMatchCDRAPIService, VRNotificationService, DataGridRetrieveDataEventType) {
         return {
             restrict: 'E',
             scope: {
@@ -34,13 +34,15 @@
                     defineAPI();
                 };
 
-                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
                     return CDRComparison_PartialMatchCDRAPIService.GetFilteredPartialMatchCDRs(dataRetrievalInput).then(function (response) {
-                        if (response != null && response.Data != null) {
-                            if (response.Data.length > 0 && response.Summary != null) {
+
+                        if (retrieveDataContext.eventType == DataGridRetrieveDataEventType.ExternalTrigger) {
+                            if (response.Summary != undefined) {
                                 gridAPI.setSummary(response.Summary);
                             }
                         }
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

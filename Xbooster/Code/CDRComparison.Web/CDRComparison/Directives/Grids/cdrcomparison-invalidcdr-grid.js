@@ -2,9 +2,9 @@
 
     'use strict';
 
-    InvalidCDRGridDirective.$inject = ['CDRComparison_InvalidCDRAPIService', 'VRNotificationService'];
+    InvalidCDRGridDirective.$inject = ['CDRComparison_InvalidCDRAPIService', 'VRNotificationService','DataGridRetrieveDataEventType'];
 
-    function InvalidCDRGridDirective(CDRComparison_InvalidCDRAPIService, VRNotificationService) {
+    function InvalidCDRGridDirective(CDRComparison_InvalidCDRAPIService, VRNotificationService, DataGridRetrieveDataEventType) {
         return {
             restrict: 'E',
             scope: {
@@ -35,13 +35,15 @@
                     defineAPI();
                 };
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
                     return CDRComparison_InvalidCDRAPIService.GetFilteredInvalidCDRs(dataRetrievalInput).then(function (response) {
-                        if (response != null && response.Data != null) {
-                            if (response.Data.length > 0 && response.Summary != null) {
+
+                        if (retrieveDataContext.eventType == DataGridRetrieveDataEventType.ExternalTrigger) {
+                            if (response.Summary != undefined) {
                                 gridAPI.setSummary(response.Summary);
                             }
                         }
+
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

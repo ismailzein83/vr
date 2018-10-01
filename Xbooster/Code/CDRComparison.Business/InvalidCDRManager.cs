@@ -81,7 +81,7 @@ namespace CDRComparison.Business
                 };
 
                 invalidCDRBigResult.Summary = new InvalidCDR();
-                invalidCDRBigResult.Summary.DurationInSec = bigResult.Data.Sum(x => x.DurationInSec);
+                invalidCDRBigResult.Summary.DurationInSec = allRecords.Sum(x => x.DurationInSec);
 
                 return invalidCDRBigResult;
             }

@@ -39,13 +39,21 @@ namespace CDRComparison.Data.SQL
             ExecuteNonQueryText(query.ToString(), null);
         }
 
-        public Vanrise.Entities.BigResult<MissingCDR> GetFilteredMissingCDRs(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input)
+        public Vanrise.Entities.BigResult<MissingCDR> GetFilteredMissingCDRs(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input, out decimal durationInSeconds)
         {
+            string tableName = null;
             Action<string> createTempTableAction = (tempTableName) =>
             {
+                tableName = tempTableName;
                 CreateTempTableIfNotExists(input, tempTableName);
             };
-            return RetrieveData(input, createTempTableAction, MissingCDRMapper);
+           var retrievedData = RetrieveData(input, createTempTableAction, MissingCDRMapper);
+
+           var queryBuilder = new StringBuilder(String.Format("SELECT SUM(DurationInSec) FROM {0} WHERE IsPartnerCDR = {1}", tableName,input.Query.IsPartnerCDRs ? "1" : "0"));
+           object duration = ExecuteScalarText(queryBuilder.ToString(), null);
+           durationInSeconds = (duration != DBNull.Value) ? (decimal)duration : 0;
+
+           return retrievedData;
         }
 
         private void CreateTempTableIfNotExists(Vanrise.Entities.DataRetrievalInput<MissingCDRQuery> input, string tempTableName)
@@ -99,7 +107,7 @@ namespace CDRComparison.Data.SQL
         public decimal GetDurationOfMissingCDRs(bool? isPartner)
         {
             var queryBuilder = new StringBuilder(String.Format("SELECT SUM(DurationInSec) FROM {0}", this.TableName));
-            
+
             if (isPartner.HasValue)
             {
                 string isPartnerCDRValue = isPartner.Value ? "1" : "0";

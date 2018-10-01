@@ -20,14 +20,15 @@ namespace CDRComparison.Business
             dataManager.TableNameKey = input.Query.TableKey;
 
             var missingCDRBigResult = new MissingCDRBigResult();
-            BigResult<MissingCDR> bigResult = dataManager.GetFilteredMissingCDRs(input);
+            decimal durationInSeconds;
+            BigResult<MissingCDR> bigResult = dataManager.GetFilteredMissingCDRs(input, out  durationInSeconds);
 
             missingCDRBigResult.ResultKey = bigResult.ResultKey;
             missingCDRBigResult.Data = bigResult.Data;
             missingCDRBigResult.TotalCount = bigResult.TotalCount;
 
             missingCDRBigResult.Summary = new MissingCDR();
-            missingCDRBigResult.Summary.DurationInSec = bigResult.Data.Sum(x => x.DurationInSec);
+            missingCDRBigResult.Summary.DurationInSec = durationInSeconds;
 
             var resultProcessingHandler = new ResultProcessingHandler<MissingCDR>()
             {
@@ -85,7 +86,7 @@ namespace CDRComparison.Business
                 context.MainSheet = sheet;
             }
         }
-        
+
         #endregion
     }
 }
