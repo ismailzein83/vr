@@ -36,7 +36,6 @@
 
                 api.load = function (payload) {
 
-                    console.log(payload);
 
                     if (payload != undefined && payload.vrRestAPIAnalyticQueryInterceptor != undefined) {
                         $scope.scopeModel.accountFieldName = payload.vrRestAPIAnalyticQueryInterceptor.AccountFieldName;
