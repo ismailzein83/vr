@@ -73,42 +73,6 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="Textbox14">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!VatID.Value</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>9pt</FontSize>
-                      <TextDecoration>None</TextDecoration>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>1.02639in</Top>
-            <Left>1.41464in</Left>
-            <Height>0.18541in</Height>
-            <Width>1.19164in</Width>
-            <ZIndex>2</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox11">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -134,7 +98,7 @@
             <Left>0.36919in</Left>
             <Height>0.24652in</Height>
             <Width>0.96211in</Width>
-            <ZIndex>3</ZIndex>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border />
               <PaddingLeft>2pt</PaddingLeft>
@@ -168,7 +132,7 @@
             <Left>0.36919in</Left>
             <Height>0.19792in</Height>
             <Width>2.23709in</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -203,44 +167,11 @@
             <Left>0.36919in</Left>
             <Height>0.16181in</Height>
             <Width>2.23709in</Width>
-            <ZIndex>5</ZIndex>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox29">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Vat ID</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>9pt</FontSize>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>1.02639in</Top>
-            <Left>0.36919in</Left>
-            <Height>0.18541in</Height>
-            <Width>0.96211in</Width>
-            <ZIndex>6</ZIndex>
-            <Style>
-              <Border />
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -906,40 +837,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox20">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>VAT ID.</Value>
-                <Style>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>3.33208in</Top>
-        <Left>0.14709in</Left>
-        <Height>0.17in</Height>
-        <Width>0.79166in</Width>
-        <ZIndex>19</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox30">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -963,41 +860,7 @@
         <Left>0.93499in</Left>
         <Height>0.17in</Height>
         <Width>4.04196in</Width>
-        <ZIndex>20</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox31">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!CustomerVatID.Value</Value>
-                <Style>
-                  <FontStyle>Italic</FontStyle>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>3.33208in</Top>
-        <Left>0.93499in</Left>
-        <Height>0.17in</Height>
-        <Width>4.04196in</Width>
-        <ZIndex>21</ZIndex>
+        <ZIndex>19</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1356,7 +1219,7 @@
         <Left>0.1425in</Left>
         <Height>0.5in</Height>
         <Width>7.92553in</Width>
-        <ZIndex>22</ZIndex>
+        <ZIndex>20</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1386,7 +1249,7 @@
         <Left>6.55917in</Left>
         <Height>0.17in</Height>
         <Width>1.19875in</Width>
-        <ZIndex>23</ZIndex>
+        <ZIndex>21</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1420,7 +1283,7 @@
         <Left>5.30998in</Left>
         <Height>0.17in</Height>
         <Width>1.19362in</Width>
-        <ZIndex>24</ZIndex>
+        <ZIndex>22</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1454,7 +1317,7 @@
         <Left>6.55917in</Left>
         <Height>0.17in</Height>
         <Width>1.19875in</Width>
-        <ZIndex>25</ZIndex>
+        <ZIndex>23</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1575,7 +1438,7 @@
         <Left>12.28768cm</Left>
         <Height>0.6cm</Height>
         <Width>8.20512cm</Width>
-        <ZIndex>26</ZIndex>
+        <ZIndex>24</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -1611,7 +1474,7 @@
         <Left>1.30051cm</Left>
         <Height>0.6cm</Height>
         <Width>5.04134cm</Width>
-        <ZIndex>27</ZIndex>
+        <ZIndex>25</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -1714,7 +1577,7 @@
         <Left>0.26784cm</Left>
         <Height>4.1275cm</Height>
         <Width>20.27235cm</Width>
-        <ZIndex>28</ZIndex>
+        <ZIndex>26</ZIndex>
         <Visibility>
           <Hidden>=IIf((CountRows("RecurringChargeItem") &gt; 0),False,True)</Hidden>
         </Visibility>
@@ -2528,7 +2391,7 @@
         <Left>0.11348in</Left>
         <Height>2.44304in</Height>
         <Width>4.19391in</Width>
-        <ZIndex>29</ZIndex>
+        <ZIndex>27</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2557,7 +2420,7 @@
         <Left>0.29052cm</Left>
         <Height>1.26146cm</Height>
         <Width>20.07659cm</Width>
-        <ZIndex>30</ZIndex>
+        <ZIndex>28</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>

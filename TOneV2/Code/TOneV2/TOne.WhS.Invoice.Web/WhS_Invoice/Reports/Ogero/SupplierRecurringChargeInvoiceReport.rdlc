@@ -1153,74 +1153,6 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="Textbox56">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!VatID.Value</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>9pt</FontSize>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>1.01511in</Top>
-            <Left>1.3484in</Left>
-            <Height>0.21875in</Height>
-            <Width>1.39843in</Width>
-            <ZIndex>1</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox57">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Vat ID</Value>
-                    <Style>
-                      <FontStyle>Italic</FontStyle>
-                      <FontFamily>Times New Roman</FontFamily>
-                      <FontSize>9pt</FontSize>
-                      <Color>White</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>1.00816in</Top>
-            <Left>0.42063in</Left>
-            <Height>0.24791in</Height>
-            <Width>0.9in</Width>
-            <ZIndex>2</ZIndex>
-            <Style>
-              <Border />
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox58">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -1245,7 +1177,7 @@
             <Left>0.42063in</Left>
             <Height>0.1875in</Height>
             <Width>0.9in</Width>
-            <ZIndex>3</ZIndex>
+            <ZIndex>1</ZIndex>
             <Style>
               <Border />
               <PaddingLeft>2pt</PaddingLeft>
@@ -1278,7 +1210,7 @@
             <Left>1.3623in</Left>
             <Height>0.1875in</Height>
             <Width>1.39843in</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1313,7 +1245,7 @@
             <Left>0.42064in</Left>
             <Height>0.15001in</Height>
             <Width>2.3401in</Width>
-            <ZIndex>5</ZIndex>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1349,7 +1281,7 @@
             <Left>0.42064in</Left>
             <Height>0.19792in</Height>
             <Width>2.3401in</Width>
-            <ZIndex>6</ZIndex>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
