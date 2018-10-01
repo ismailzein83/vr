@@ -7,7 +7,6 @@ namespace TOne.WhS.Deal.Entities
         public List<IDealDefinitionFilter> Filters { get; set; }
 
         public List<int> IncludedDealDefinitionIds { get; set; }
-        public List<int> CarrierIds { get; set; }
 
         public List<int> ExcludedDealDefinitionIds { get; set; }
     }
@@ -15,6 +14,7 @@ namespace TOne.WhS.Deal.Entities
     public interface IDealDefinitionFilter
     {
         bool IsMatched(IDealDefinitionFilterContext context);
+
     }
 
     public interface IDealDefinitionFilterContext

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealService', 'WhS_Deal_VolumeCommitmentService','WhS_Deal_DealDefinitionTypeEnum',
+app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService', 'WhS_Deal_SwapDealService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_DealDefinitionTypeEnum',
     function (UtilsService, $compile, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService, WhS_Deal_SwapDealService, WhS_Deal_VolumeCommitmentService, WhS_Deal_DealDefinitionTypeEnum) {
 
         var directiveDefinitionObject = {
@@ -18,7 +18,7 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                 hidelabel: '@',
                 normalColNum: '@',
                 hideremoveicon: '@',
-                hasviewpremission:'='
+                hasviewpremission: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -57,9 +57,6 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
-            var required = "";
-            if (attrs.isrequired != undefined)
-                required = "isrequired";
 
             var hideselectedvaluessection = "";
             if (attrs.hideselectedvaluessection != undefined)
@@ -73,21 +70,26 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             if (attrs.includeviewhandler != undefined)
                 onviewclicked = "onviewclicked='onViewIconClicked'";
 
-            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + '  > <vr-select hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' '+ multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
+            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
                 + 'entityname="Deal" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
 
         }
         function directiveCtor(ctrl, $scope, $attrs) {
-
+            var selectorAPI;
             $scope.onViewIconClicked = function (item) {
                 if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
                     WhS_Deal_SwapDealService.viewSwapDeal(item.DealId, true);
                 else if (item.ConfigId == WhS_Deal_DealDefinitionTypeEnum.SwapDeal.value)
                     WhS_Deal_VolumeCommitmentService.viewVolumeCommitment(item.DealId);
             };
-            
+
             function initializeController() {
-                defineAPI();
+
+                $scope.scopeModel = {};
+                $scope.scopeModel.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                };
             }
 
             function defineAPI() {
@@ -112,7 +114,6 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                     var serializedFilter = {};
                     if (filter != undefined)
                         serializedFilter = UtilsService.serializetoJson(filter);
-
                     return WhS_Deal_DealDefinitionAPIService.GetDealDefinitionInfo(serializedFilter).then(function (response) {
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
@@ -123,6 +124,9 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
                     });
                 };
 
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

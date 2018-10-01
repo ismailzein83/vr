@@ -30,14 +30,13 @@ app.directive('vrWhsDealWithcarrieraccountSelector', ['UtilsService', 'VRUIUtils
         };
 
         function dealCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
             var dealDefinitionSelectorAPI;
             var dealDefinitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
             var carrierAccountDirectiveAPI;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var carrierAccountSelectionChangedPromiseDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -45,24 +44,23 @@ app.directive('vrWhsDealWithcarrieraccountSelector', ['UtilsService', 'VRUIUtils
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.onCarrierAccountselectionchanged = function (selectedItem) {
+                $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
+                    var carrierId = carrierAccountDirectiveAPI.getSelectedIds();
+                    if (carrierId != undefined) {
+                        var dealDefinitionSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    if (selectedItem != undefined) {
-                        if (carrierAccountSelectionChangedPromiseDeferred != undefined) {
-                            carrierAccountSelectionChangedPromiseDeferred.resolve();
-                        }
-                        else {
-                            var dealDefinitionSelectorPayload = { filter: { CarrierIds: [], Filters: [] } };
+                        var dealDefinitionSelectorPayload = {
+                            filter: {
+                                $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealCarrierFilter, TOne.WhS.Deal.MainExtensions",
+                                CarrierId: carrierAccountDirectiveAPI.getSelectedIds()
+                            }
+                        };
 
-                            var swapDealDefinitionFilter = {
-                                $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealDefinitionFilter, TOne.WhS.Deal.MainExtensions"
-                            };
+                        VRUIUtilsService.callDirectiveLoad(dealDefinitionSelectorAPI, dealDefinitionSelectorPayload, dealDefinitionSelectorReadyPromiseDeferred);
+                    }
+                    else {
+                        dealDefinitionSelectorAPI.clearDataSource();
 
-                            dealDefinitionSelectorPayload.filter.Filters.push(swapDealDefinitionFilter);
-                            //   dealDefinitionSelectorPayload.filter.CarrierIds.push(carrierAccountDirectiveAPI.getSelectedIds());
-
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dealDefinitionSelectorAPI, dealDefinitionSelectorPayload, undefined, undefined);
-                        }
                     }
                 };
                 $scope.scopeModel.onDealDefinitionSelectorReady = function (api) {
@@ -72,11 +70,11 @@ app.directive('vrWhsDealWithcarrieraccountSelector', ['UtilsService', 'VRUIUtils
                 defineAPI();
             }
 
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
 
                     var carrierAccountLoadPromise = loadCarrierAccountSelectorPromise();
@@ -100,30 +98,19 @@ app.directive('vrWhsDealWithcarrieraccountSelector', ['UtilsService', 'VRUIUtils
                 }
                 function loadDealDefinitionSelectorPromise() {
                     var loadDealPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    var dealDefinitionSelectorPayload = { filter: { CarrierIds: [], Filters: [] } };
-
-                    var swapDealDefinitionFilter = {
-                        $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealDefinitionFilter, TOne.WhS.Deal.MainExtensions"
-                    };
-
-                    dealDefinitionSelectorPayload.filter.Filters.push(swapDealDefinitionFilter);
-                    // dealDefinitionSelectorPayload.filter.CarrierIds.push(carrierAccountDirectiveAPI.getSelectedIds());
                     VRUIUtilsService.callDirectiveLoad(dealDefinitionSelectorAPI, undefined, loadDealPromiseDeferred);
 
                     return loadDealPromiseDeferred.promise;
                 }
 
 
-                api.getData = function () {
+                api.getSelectedIds = function () {
                     return dealDefinitionSelectorAPI.getSelectedIds();
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

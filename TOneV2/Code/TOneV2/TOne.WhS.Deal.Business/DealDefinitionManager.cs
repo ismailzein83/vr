@@ -29,9 +29,6 @@ namespace TOne.WhS.Deal.Business
                 if (filter.ExcludedDealDefinitionIds != null && filter.ExcludedDealDefinitionIds.Contains(dealDefinition.DealId))
                     return false;
 
-                if (filter.CarrierIds != null && filter.CarrierIds.Contains(dealDefinition.DealId))
-                    return false;
-
                 if (filter.Filters != null)
                 {
                     DealDefinitionFilterContext context = new DealDefinitionFilterContext() { DealDefinition = dealDefinition };

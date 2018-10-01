@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService','WhS_Deal_SwapDealAPIService',
+app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService', 'WhS_Deal_SwapDealAPIService',
     function (UtilsService, VRUIUtilsService, WhS_Deal_SwapDealAPIService) {
 
         var directiveDefinitionObject = {
@@ -19,7 +19,9 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService','
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new swapDealSelectorCtor(ctrl, $scope);
+                var ctor = new swapDealSelectorCtor(ctrl, $scope, $attrs);
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -46,18 +48,17 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService','
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
 
-           
+
             return '<vr-whs-deal-dealdefinition-selector  includeviewhandler hasviewpremission="hasViewSwapDealPermission"  on-ready="onDealDefinitionSelectorReady" isrequired="ctrl.isrequired"' + ' ' + hideremoveicon + ' ' + multipleselection + ' ' + 'normal-col-num="{{ctrl.normalColNum}}"' +
-            'selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"></vr-whs-deal-dealdefinition-selector>';
+                'selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"></vr-whs-deal-dealdefinition-selector>';
 
         }
 
-        function swapDealSelectorCtor(ctrl, $scope) {
+        function swapDealSelectorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var swapDealDirectiveAPI;
             var swapDealReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var dealId;
 
             function initializeController() {
 
@@ -76,18 +77,31 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService','
                 var api = {};
 
                 api.load = function (payload) {
-                    var loadSwapDealPromiseDeferred = UtilsService.createPromiseDeferred();
 
+                    var loadSwapDealPromiseDeferred = UtilsService.createPromiseDeferred();
                     swapDealReadyPromiseDeferred.promise.then(function () {
                         var dealDefinitionSelectorPayload = { filter: { Filters: [] } };
-                        var swapDealDefinitionFilter = {
-                            $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealDefinitionFilter, TOne.WhS.Deal.MainExtensions"
-                        };
-                        if (payload.selectedIds != undefined)
-                            dealDefinitionSelectorPayload.selectedIds = payload.selectedIds;
-                        dealDefinitionSelectorPayload.filter.Filters.push(swapDealDefinitionFilter);
 
+                        if (payload != undefined && payload.filter!=undefined) {
+                            if ($attrs.ismultipleselection != undefined)
+                                ctrl.selectedvalues = [];
+                            else 
+                                ctrl.selectedvalues = undefined;
+                            dealDefinitionSelectorPayload.filter.Filters.push(payload.filter);
+                        }
+
+                        else {
+                            var swapDealDefinitionFilter = {
+                                $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealDefinitionFilter, TOne.WhS.Deal.MainExtensions"
+                            };
+
+                            dealDefinitionSelectorPayload.filter.Filters.push(swapDealDefinitionFilter);
+                        }
+                        if (payload != undefined && payload.selectedIds != undefined) {
+                            dealDefinitionSelectorPayload.selectedIds = payload.selectedIds;
+                        }
                         VRUIUtilsService.callDirectiveLoad(swapDealDirectiveAPI, dealDefinitionSelectorPayload, loadSwapDealPromiseDeferred);
+
                     });
                     return loadSwapDealPromiseDeferred.promise;
                 };
@@ -95,7 +109,9 @@ app.directive('vrWhsDealSwapdealSelector', ['UtilsService', 'VRUIUtilsService','
                 api.getSelectedIds = function () {
                     return swapDealDirectiveAPI.getSelectedIds();
                 };
-
+                api.clearDataSource = function () {
+                    swapDealDirectiveAPI.clearDataSource();
+                };
                 api.getSelectedValues = function () {
                     return swapDealDirectiveAPI.getSelectedValues();
                 };
