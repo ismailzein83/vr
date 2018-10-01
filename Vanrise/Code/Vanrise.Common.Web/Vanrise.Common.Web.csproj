@@ -136,6 +136,7 @@
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\SMSMessageTemplateController.cs" />
     <Compile Include="Controllers\SMSMessageTypeController.cs" />
+    <Compile Include="Controllers\RemoteFileController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionTypeController.cs" />
     <Compile Include="Controllers\VRLocalizationLanguageController.cs" />
