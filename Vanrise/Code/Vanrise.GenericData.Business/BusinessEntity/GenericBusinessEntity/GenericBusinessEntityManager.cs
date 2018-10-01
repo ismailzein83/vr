@@ -428,10 +428,11 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
             if (genericBEDefinitionSetting.OnBeforeGetFilteredHandler != null)
             {
-                var genericBEOnBeforeAddContext = new GenericBEOnBeforeAddHandlerContext();
-                genericBEDefinitionSetting.OnBeforeGetFilteredHandler.onBeforeAdd(genericBEOnBeforeAddContext);
-                if(genericBEOnBeforeAddContext.AccountFieldName!=null && genericBEOnBeforeAddContext.AccountFieldValue!=null)
-                    genericBusinessEntityToAdd.FieldValues.Add(genericBEOnBeforeAddContext.AccountFieldName,genericBEOnBeforeAddContext.AccountFieldValue);
+                genericBEDefinitionSetting.OnBeforeGetFilteredHandler.onBeforeAdd(new GenericBEOnBeforeAddHandlerContext()
+                {
+                    GenericBusinessEntityToAdd = genericBusinessEntityToAdd,
+                    VRConnectionId = genericBEDefinitionSetting.VRConnectionId
+                });
             }
             if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
             {
@@ -493,10 +494,11 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
             if (genericBEDefinitionSetting.OnBeforeGetFilteredHandler != null)
             {
-                var genericBEOnBeforeUpdateContext = new GenericBEOnBeforeUpdateHandlerContext();
-                genericBEDefinitionSetting.OnBeforeGetFilteredHandler.onBeforeUpdate(genericBEOnBeforeUpdateContext);
-                if (genericBEOnBeforeUpdateContext.AccountFieldName != null && genericBEOnBeforeUpdateContext.AccountFieldValue != null)
-                    genericBusinessEntityToUpdate.FieldValues.Add(genericBEOnBeforeUpdateContext.AccountFieldName, genericBEOnBeforeUpdateContext.AccountFieldValue);
+                genericBEDefinitionSetting.OnBeforeGetFilteredHandler.onBeforeUpdate(new GenericBEOnBeforeUpdateHandlerContext()
+                {
+                    GenericBusinessEntityToUpdate = genericBusinessEntityToUpdate,
+                    VRConnectionId = genericBEDefinitionSetting.VRConnectionId
+                });
             }
             if (genericBEDefinitionSetting.DataRecordStorageId.HasValue)
             {

@@ -95,14 +95,14 @@ namespace Vanrise.GenericData.Business
 
     public interface IGenericBEOnBeforeAddHandlerContext
     {
-        string AccountFieldName { get; set; }
-        object AccountFieldValue { get; set; }
+        GenericBusinessEntityToAdd GenericBusinessEntityToAdd { get; }
+        Guid? VRConnectionId { get; }
     }
 
     public interface IGenericBEOnBeforeUpdateHandlerContext
     {
-        string AccountFieldName { get; set; }
-        object AccountFieldValue { get; set; }
+        GenericBusinessEntityToUpdate GenericBusinessEntityToUpdate { get; }
+        Guid? VRConnectionId { get;}
     }
 
     public interface IGenericBEOnBeforeGetFilteredHandlerPrepareQueryContext
@@ -119,14 +119,14 @@ namespace Vanrise.GenericData.Business
 
     public class GenericBEOnBeforeAddHandlerContext : IGenericBEOnBeforeAddHandlerContext
     {
-        public string AccountFieldName { get; set; }
-        public object AccountFieldValue { get; set; }
+        public GenericBusinessEntityToAdd GenericBusinessEntityToAdd { get; set; }
+        public Guid? VRConnectionId { get; set; }
     }
 
     public class GenericBEOnBeforeUpdateHandlerContext : IGenericBEOnBeforeUpdateHandlerContext
     {
-        public string AccountFieldName { get; set; }
-        public object AccountFieldValue { get; set; }
+        public GenericBusinessEntityToUpdate GenericBusinessEntityToUpdate { get; set; }
+        public Guid? VRConnectionId { get; set; }
     }
     public abstract class GenericBEOnBeforeInsertHandler
     {
