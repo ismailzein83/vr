@@ -55,14 +55,25 @@ namespace CDRComparison.Data.SQL
 
             var retrievedData = RetrieveData(input, createTempTableAction, PartialMatchCDRMapper);
 
-            object systemDuration = ExecuteScalarText(String.Format("SELECT SUM(SystemDurationInSec) FROM {0}", tableName), null);
-            systemDurationInSeconds = (systemDuration != DBNull.Value) ? (decimal)systemDuration : 0;
+            decimal systemDuration = 0;
+            decimal partnerDuration = 0;
+            decimal differenceDuration = 0;
 
-            object partnerDuration = ExecuteScalarText(String.Format("SELECT SUM(PartnerDurationInSec) FROM {0}", tableName), null);
-            partnerDurationInSeconds = (partnerDuration != DBNull.Value) ? (decimal)partnerDuration : 0;
+            var query = String.Format("SELECT SUM(SystemDurationInSec) as SystemDuration, SUM(PartnerDurationInSec) as PartnerDuration, SUM(ABS(SystemDurationInSec - PartnerDurationInSec)) as DifferenceDuration FROM {0}", tableName);
+            ExecuteReaderText(query, (reader) =>
+             {
+                 while (reader.Read())
+                 {
+                     systemDuration = GetReaderValue<decimal>(reader, "SystemDuration");
+                     partnerDuration = GetReaderValue<decimal>(reader, "PartnerDuration");
+                     differenceDuration = GetReaderValue<decimal>(reader, "DifferenceDuration");
+                 }
+             },
+             null);
 
-            object durationDifference = ExecuteScalarText(String.Format("SELECT SUM(ABS(SystemDurationInSec - PartnerDurationInSec)) FROM {0}", tableName), null);
-            differenceDurationInSeconds = (durationDifference != DBNull.Value) ? (decimal)durationDifference : 0;
+            systemDurationInSeconds = systemDuration;
+            partnerDurationInSeconds = partnerDuration;
+            differenceDurationInSeconds = differenceDuration;
 
             return retrievedData;
         }
