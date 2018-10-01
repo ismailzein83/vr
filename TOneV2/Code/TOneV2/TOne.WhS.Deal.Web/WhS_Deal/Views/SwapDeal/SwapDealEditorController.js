@@ -502,13 +502,14 @@
                         payload.selectedIds = sellZoneIds;
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSaleZonesIdsFromItems(sellZoneIds),
-                            CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                            CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.All.value
                         };
                     }
                     else {
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSaleZonesIdsFromItems(),
-                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.CurrentAndFuture.value
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.All.value
                         };
 
 

@@ -255,7 +255,7 @@ namespace TOne.WhS.Deal.Business
                     var saleZone = new SaleZoneManager().GetSaleZone(zoneId);
                     if (saleZone == null)
                         throw new NullReferenceException("saleZone");
-                    if (dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null))
+                    if ((dealBED < saleZone.BED && (dealEED < saleZone.EED || saleZone.EED == null)) || (saleZone.EED != null && dealBED > saleZone.BED && dealEED > saleZone.EED))
                         return true;
                 }
                 else
@@ -263,7 +263,7 @@ namespace TOne.WhS.Deal.Business
                     var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
                     if (supplierZone == null)
                         throw new NullReferenceException("supplierZone");
-                    if (dealBED < supplierZone.BED && (dealEED < supplierZone.EED || supplierZone.EED == null))
+                    if (supplierZone.BED>dealBED || (supplierZone.EED.HasValue && supplierZone.EED.Value < dealEED.Value))
                         return true;
 
                 }

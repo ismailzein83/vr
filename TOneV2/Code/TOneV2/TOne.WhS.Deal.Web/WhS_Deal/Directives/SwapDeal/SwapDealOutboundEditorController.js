@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealOutboundEditorController.$inject = ['$scope', 'UtilsService', 'UISettingsService','Whs_Deal_SubstituteRateTypeEnum', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealOutboundEditorController.$inject = ['$scope', 'UtilsService', 'UISettingsService', 'Whs_Deal_SubstituteRateTypeEnum', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRCommon_EntityFilterEffectiveModeEnum'];
 
-    function SwapDealOutboundEditorController($scope, UtilsService, UISettingsService, Whs_Deal_SubstituteRateTypeEnum, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SwapDealOutboundEditorController($scope, UtilsService, UISettingsService, Whs_Deal_SubstituteRateTypeEnum, VRUIUtilsService, VRNavigationService, VRNotificationService, VRCommon_EntityFilterEffectiveModeEnum) {
         var isEditMode;
 
         var swapDealOutboundEntity;
@@ -103,6 +103,7 @@
                     if (payload != undefined) {
                         payload.supplierId = supplierId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
+                        payload.filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.All.value
                         payload.selectedIds = zoneIds;
                     }
                     else {
@@ -110,6 +111,7 @@
                             supplierId: supplierId,
                             filter: { CountryIds: countryDirectiveApi.getSelectedIds() },
                             selectedIds: zoneIds,
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.All.value
                         };
 
                     }
