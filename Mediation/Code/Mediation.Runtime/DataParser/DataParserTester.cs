@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using Vanrise.Common;
@@ -19,6 +20,15 @@ namespace Mediation.Runtime.DataParser
 {
     public class DataParserTester
     {
+        static string mediationFolderPath;
+
+        static DataParserTester()
+        {
+            mediationFolderPath = ConfigurationManager.AppSettings["MediationFolderPath"];
+            if (string.IsNullOrEmpty(mediationFolderPath))
+                mediationFolderPath = @"D:\Mediation";
+        }
+
         public void GenerateMediationSettings()
         {
             try
@@ -44,7 +54,7 @@ namespace Mediation.Runtime.DataParser
 
         void CreateMediationSettingsFile(string settings, string name)
         {
-            string path = string.Format(@"D:\Mediation\{0}.txt", name);
+            string path = string.Format(@"{0}\{1}.txt", mediationFolderPath, name);
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 using (var tw = new StreamWriter(fileStream))
@@ -141,7 +151,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A3_FieldParsers_Huawei()
                     },
                     RecordType = "WHS_CDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
                     },
                     CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
@@ -158,7 +168,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A4_FieldParsers_Huawei()
                     },
                     RecordType = "WHS_CDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
                     },
                     CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
@@ -174,7 +184,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A6_SMSMO_FieldParsers_Huawei()
                     },
                     RecordType = "SMS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
                     },
                     CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
@@ -191,7 +201,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A7_SMSMT_FieldParsers_Huawei()
                     },
                     RecordType = "SMS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
                     },
                     CompositeFieldsParsers = GetHuaweiNamibiaCompositeParsers()
@@ -257,7 +267,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "MSCIncomingRoute"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -277,7 +287,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "MSCOutgoingRoute"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -326,8 +336,8 @@ namespace Mediation.Runtime.DataParser
                                    {
                                         Settings = new TBCDNumberParser
                                         {
-                                             FieldName = "Diagnostics"                                          
-                                        }                            
+                                             FieldName = "Diagnostics"
+                                        }
                                    }
                             }
                         }
@@ -364,8 +374,8 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new HexaParser
                                      {
-                                          FieldName = "BasicService"                                          
-                                     }                            
+                                          FieldName = "BasicService"
+                                     }
                                 }
                             }
                         }
@@ -386,7 +396,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "AdditionalInfoCharge"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -513,7 +523,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LAC",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
@@ -522,7 +532,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "CellId",
                                            NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -606,7 +616,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "MSCIncomingRoute"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -626,7 +636,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "MSCOutgoingRoute"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -675,8 +685,8 @@ namespace Mediation.Runtime.DataParser
                                    {
                                         Settings = new TBCDNumberParser
                                         {
-                                             FieldName = "Diagnostics"                                          
-                                        }                            
+                                             FieldName = "Diagnostics"
+                                        }
                                    }
                             }
                         }
@@ -713,8 +723,8 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new HexaParser
                                      {
-                                          FieldName = "BasicService"                                          
-                                     }                            
+                                          FieldName = "BasicService"
+                                     }
                                 }
                             }
                         }
@@ -734,8 +744,8 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new HexaParser
                                      {
-                                          FieldName = "AdditionalInfoCharge"                                          
-                                     }                            
+                                          FieldName = "AdditionalInfoCharge"
+                                     }
                                 }
                             }
                         }
@@ -863,7 +873,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LAC",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
@@ -872,7 +882,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "CellId",
                                            NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -986,7 +996,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "SAC",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -995,7 +1005,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -1060,7 +1070,7 @@ namespace Mediation.Runtime.DataParser
                                           FieldName = "GsmSCFAddress",
                                           AIsZero = false,
                                           RemoveHexa = true
-                                     }                            
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
@@ -1069,7 +1079,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "ServiceKey",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
@@ -1078,7 +1088,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "DefaultSMSHandling",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"84", new BinaryFieldParser
@@ -1086,7 +1096,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "FreeFormatData"
-                                     }                            
+                                     }
                                 }
                             },
                             {"85", new BinaryFieldParser
@@ -1096,10 +1106,10 @@ namespace Mediation.Runtime.DataParser
                                           FieldName = "CAMELSMSCAddress",
                                           AIsZero = false,
                                           RemoveHexa = true
-                                     }                            
+                                     }
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -1145,7 +1155,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "ChargeIndicator",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
@@ -1153,7 +1163,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "ChargeParameters"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -1525,7 +1535,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "SAC",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -1534,7 +1544,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -1596,7 +1606,7 @@ namespace Mediation.Runtime.DataParser
                                           FieldName = "GsmSCFAddress",
                                           AIsZero = false,
                                           RemoveHexa = true
-                                     }                            
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
@@ -1605,7 +1615,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "ServiceKey",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
@@ -1614,7 +1624,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "DefaultSMSHandling",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"84", new BinaryFieldParser
@@ -1622,7 +1632,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "FreeFormatData"
-                                     }                            
+                                     }
                                 }
                             },
                             {"85", new BinaryFieldParser
@@ -1632,10 +1642,10 @@ namespace Mediation.Runtime.DataParser
                                           FieldName = "CAMELSMSCAddress",
                                           AIsZero = false,
                                           RemoveHexa = true
-                                     }                            
+                                     }
                                 }
                             }
-                            
+
                         }
                     }
                 }
@@ -1664,7 +1674,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "ChargeIndicator",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
@@ -1672,7 +1682,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "ChargeParameters"
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -1926,7 +1936,7 @@ namespace Mediation.Runtime.DataParser
 
         private List<CompositeFieldsParser> GetHuaweiNamibiaCompositeParsers()
         {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> {
             new FileNameCompositeParser{
              FieldName = "FileName"
             }
@@ -2021,8 +2031,8 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = Get_A0_Transit_FieldParsers()
                     },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> 
-                    { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2054,7 +2064,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A1_MSOriginating_FieldParsers()
                     },
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue>
-                    { 
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2086,7 +2096,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A2_Roaming_FieldParsers()
                     },
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue>
-                    { 
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2118,7 +2128,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A3_CallForwarding_FieldParsers()
                     },
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue>
-                    { 
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2150,7 +2160,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A4_MSTerminating_FieldParsers()
                     },
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue>
-                    { 
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2182,7 +2192,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A5_MSOriginatingSMS_FieldParsers()
                     },
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue>
-                    { 
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2213,7 +2223,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A7_MSTerminatingSMS_FieldParsers()
                     },
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue>
-                    { 
+                    {
                         new ParsedRecordFieldConstantValue
                             {
                              FieldName = "RecordType",
@@ -2243,14 +2253,14 @@ namespace Mediation.Runtime.DataParser
         }
         private List<CompositeFieldsParser> GetCompositeFieldParsers()
         {
-            return new List<CompositeFieldsParser> 
-                   { 
+            return new List<CompositeFieldsParser>
+                   {
                        new FileNameCompositeParser { FieldName = "FileName" },
                        new GuidCompositeParser { FieldName="UniqueIdentifier" },
                        new DateTimeCompositeParser{ DateFieldName = "Date",TimeFieldName = "StartTime",FieldName = "ConnectDateTime" },
                        new DateTimeCompositeParser{ DateFieldName = "Date",TimeFieldName = "StopTime",FieldName = "DisconnectDateTime" },
                        new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
-                       new TimestampDateTimeCompositeParser 
+                       new TimestampDateTimeCompositeParser
                        {
                            FieldName = "ConnectTimestamp",
                            DateTimeFieldName = "ConnectDateTime",
@@ -2272,8 +2282,8 @@ namespace Mediation.Runtime.DataParser
         }
         private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS()
         {
-            return new List<CompositeFieldsParser> 
-                    { 
+            return new List<CompositeFieldsParser>
+                    {
                          new TimestampDateTimeCompositeParser{
                          FieldName = "MessageTimestamp",
                             DateTimeFieldName = "MessageTime",
@@ -2281,7 +2291,7 @@ namespace Mediation.Runtime.DataParser
                          },
                         new GuidCompositeParser{FieldName="UniqueIdentifier"},
                         new FileNameCompositeParser{
-                         FieldName = "FileName" 
+                         FieldName = "FileName"
                         }
                     };
         }
@@ -3242,7 +3252,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_B4_FieldParsers_Ericsson()
                     },
                     RecordType = "GPRS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 2}
                     },
                     CompositeFieldsParsers = GetEricssonCompositeFieldsParser_GPRS()
@@ -3478,32 +3488,32 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             }
 
@@ -3524,32 +3534,32 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             }
 
@@ -3663,7 +3673,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A0_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
                             new ParsedRecordFieldConstantValue
                             {
@@ -3687,7 +3697,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A1_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
                             new ParsedRecordFieldConstantValue
                             {
@@ -3754,7 +3764,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A5_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
                             new ParsedRecordFieldConstantValue
                             {
@@ -3776,7 +3786,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A100_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
                             new ParsedRecordFieldConstantValue
                             {
@@ -3798,7 +3808,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A6_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "SMS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
                             new ParsedRecordFieldConstantValue
                             {
@@ -3820,7 +3830,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A7_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "SMS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
                             new ParsedRecordFieldConstantValue
                             {
@@ -3838,7 +3848,7 @@ namespace Mediation.Runtime.DataParser
 
         private List<CompositeFieldsParser> GetHuaweiIraqCompositeFieldsParser()
         {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> {
             new TimestampDateTimeCompositeParser
                     {
                         FieldName = "ConnectTimestamp",
@@ -3856,7 +3866,7 @@ namespace Mediation.Runtime.DataParser
                         FieldName = "UniqueIdentifier"
                     },
                      new FileNameCompositeParser{
-                         FieldName = "FileName" 
+                         FieldName = "FileName"
                         }
             };
 
@@ -3864,7 +3874,7 @@ namespace Mediation.Runtime.DataParser
         }
         private List<CompositeFieldsParser> GetHuaweiIraqCompositeFieldsParser_GPRS()
         {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> {
             new TimestampDateTimeCompositeParser
                     {
                         FieldName = "RecordOpeningTimestamp",
@@ -3882,7 +3892,7 @@ namespace Mediation.Runtime.DataParser
                         FieldName = "UniqueIdentifier"
                     },
                      new FileNameCompositeParser{
-                         FieldName = "FileName" 
+                         FieldName = "FileName"
                         }
             };
 
@@ -3890,7 +3900,7 @@ namespace Mediation.Runtime.DataParser
         }
         private List<CompositeFieldsParser> GetHuaweiIraqCompositeFieldsParser_SMS()
         {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> { 
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> {
             new TimestampDateTimeCompositeParser
                     {
                         FieldName = "MessageTimestamp",
@@ -3902,7 +3912,7 @@ namespace Mediation.Runtime.DataParser
                         FieldName = "UniqueIdentifier"
                     },
                      new FileNameCompositeParser{
-                         FieldName = "FileName" 
+                         FieldName = "FileName"
                         }
             };
 
@@ -3979,7 +3989,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Calling_First_CI",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -3988,7 +3998,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -4010,7 +4020,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Calling_Last_CI",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -4269,7 +4279,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Called_First_CI",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -4278,7 +4288,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -4300,7 +4310,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Called_Last_CI",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -5028,7 +5038,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "SAC",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -5037,7 +5047,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -5209,7 +5219,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "SAC",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -5218,7 +5228,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -5409,7 +5419,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Called_First_CI",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"80", new BinaryFieldParser
@@ -5418,7 +5428,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "LocationAreaCode",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -5440,7 +5450,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Called_Last_CI",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -5670,7 +5680,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_B4_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "GPRS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
                     },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser_GPRS()
@@ -5731,32 +5741,32 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "SGSN_Address"                                          
-                                     }                            
+                                          FieldName = "SGSN_Address"
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "SGSN_Address"                                          
-                                     }                            
+                                          FieldName = "SGSN_Address"
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "SGSN_Address"                                          
-                                     }                            
+                                          FieldName = "SGSN_Address"
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "SGSN_Address"                                          
-                                     }                            
+                                          FieldName = "SGSN_Address"
+                                     }
                                 }
                             }
 
@@ -5822,32 +5832,32 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GGSN_Address"                                          
-                                     }                            
+                                          FieldName = "GGSN_Address"
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GGSN_Address"                                          
-                                     }                            
+                                          FieldName = "GGSN_Address"
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GGSN_Address"                                          
-                                     }                            
+                                          FieldName = "GGSN_Address"
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GGSN_Address"                                          
-                                     }                            
+                                          FieldName = "GGSN_Address"
+                                     }
                                 }
                             }
 
@@ -5917,7 +5927,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "Diagnostics",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             }
                         }
@@ -6043,7 +6053,7 @@ namespace Mediation.Runtime.DataParser
                                                              Settings = new HexaParser
                                                              {
                                                                   FieldName = "QosRequested"
-                                                             }                            
+                                                             }
                                                         }
                                                     },
                                                     {"82", new BinaryFieldParser
@@ -6051,7 +6061,7 @@ namespace Mediation.Runtime.DataParser
                                                              Settings = new HexaParser
                                                              {
                                                                   FieldName = "QosNegotiated"
-                                                             }                            
+                                                             }
                                                         }
                                                     },
                                                      {"83", new BinaryFieldParser
@@ -6060,7 +6070,7 @@ namespace Mediation.Runtime.DataParser
                                                              {
                                                                   FieldName = "DataVolumeGPRSUplink",
                                                                   NumberType = NumberType.Int
-                                                             }                            
+                                                             }
                                                         }
                                                     },
                                                     {"84", new BinaryFieldParser
@@ -6069,7 +6079,7 @@ namespace Mediation.Runtime.DataParser
                                                              {
                                                                   FieldName = "DataVolumeGPRSDownlink",
                                                                   NumberType = NumberType.Int
-                                                             }                            
+                                                             }
                                                         }
                                                     },
                                                     {"85", new BinaryFieldParser
@@ -6078,7 +6088,7 @@ namespace Mediation.Runtime.DataParser
                                                              {
                                                                   FieldName = "ChangeCondition",
                                                                   NumberType = NumberType.Int
-                                                             }                            
+                                                             }
                                                         }
                                                     },
                                                     {"86", new BinaryFieldParser
@@ -6089,12 +6099,12 @@ namespace Mediation.Runtime.DataParser
                                                                   DateTimeParsingType = DateTimeParsingType.DateTime,
                                                                   WithOffset = true,
                                                                   IsBCD = true
-                                                             }                            
+                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }                           
+                                        }
                                 }
                             }
                         }
@@ -6115,7 +6125,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "SCFAddress"
-                                     }                            
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
@@ -6123,7 +6133,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "ServiceKey"
-                                     }                            
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
@@ -6132,7 +6142,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "DefaultTransactionHandling",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"84", new BinaryFieldParser
@@ -6140,7 +6150,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "CamelAccessPointNameNI"
-                                     }                            
+                                     }
                                 }
                             },
                             {"85", new BinaryFieldParser
@@ -6148,7 +6158,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "CamelAccessPointNameOI"
-                                     }                            
+                                     }
                                 }
                             },
                             {"86", new BinaryFieldParser
@@ -6157,7 +6167,7 @@ namespace Mediation.Runtime.DataParser
                                      {
                                           FieldName = "NumberOfDPEncountered",
                                           NumberType = NumberType.Int
-                                     }                            
+                                     }
                                 }
                             },
                             {"87", new BinaryFieldParser
@@ -6165,7 +6175,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new StringParser
                                      {
                                           FieldName = "LevelOfCamelService"
-                                     }                            
+                                     }
                                 }
                             },
                             {"88", new BinaryFieldParser
@@ -6173,7 +6183,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new HexaParser
                                      {
                                           FieldName = "FreeFormatData"
-                                     }                            
+                                     }
                                 }
                             },
                             {"89", new BinaryFieldParser
@@ -6181,7 +6191,7 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new BoolFieldParser
                                      {
                                           FieldName = "FFDAppendIndicator"
-                                     }                            
+                                     }
                                 }
                             }
 
@@ -6249,7 +6259,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_MOC_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 0
@@ -6276,7 +6286,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_MOT_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 1
@@ -6303,7 +6313,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_Forward_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 100
@@ -6329,7 +6339,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_Roaming_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 101
@@ -6407,7 +6417,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_PBX_Originated_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 19
@@ -6434,7 +6444,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_PBX_Terminated_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 21
@@ -6460,7 +6470,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_SMMO(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 6
@@ -6486,7 +6496,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_SMMT(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = 7
@@ -6511,8 +6521,8 @@ namespace Mediation.Runtime.DataParser
         }
         private List<CompositeFieldsParser> GetCompositeFieldParsers_Nokia()
         {
-            return new List<CompositeFieldsParser> 
-                    { 
+            return new List<CompositeFieldsParser>
+                    {
                     new TimestampDateTimeCompositeParser
                     {
                         FieldName = "ConnectTimestamp",
@@ -6535,14 +6545,14 @@ namespace Mediation.Runtime.DataParser
                      FieldName = "UniqueIdentifier"
                     },
                      new FileNameCompositeParser{
-                         FieldName = "FileName" 
+                         FieldName = "FileName"
                         }
                     };
         }
         private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS_Nokia()
         {
-            return new List<CompositeFieldsParser> 
-                    { 
+            return new List<CompositeFieldsParser>
+                    {
                     new TimestampDateTimeCompositeParser
                     {
                         FieldName = "MessageTimestamp",
@@ -6553,7 +6563,7 @@ namespace Mediation.Runtime.DataParser
                      FieldName = "UniqueIdentifier"
                     },
                      new FileNameCompositeParser{
-                         FieldName = "FileName" 
+                         FieldName = "FileName"
                         }
                     };
         }
@@ -8588,7 +8598,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_00_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "00"
@@ -8608,7 +8618,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_01_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "01"
@@ -8629,7 +8639,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_02_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "02"
@@ -8649,7 +8659,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "03"
@@ -8670,7 +8680,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "04"
@@ -8691,7 +8701,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "05"
@@ -8712,7 +8722,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new PositionedFieldsRecordParser
                 {
                     FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{
                       FieldName = "RecordType",
                       Value = "06"
@@ -11526,14 +11536,14 @@ namespace Mediation.Runtime.DataParser
                     RecordParser = new BinaryRecordParser
                     {
                         Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.RecordParsers.HuaweiRecordParser
-                         {
-                             HeaderLength = 9,
-                             RecordLengthPosition = 0,
-                             RecordByteLength = 2,
-                             RecordTypePosition = 4,
-                             RecordTypeByteLength = 2,
-                             SubRecordsParsersByRecordType = GetHuaweiIMSOgero_SubRecordsParsers()
-                         }
+                        {
+                            HeaderLength = 9,
+                            RecordLengthPosition = 0,
+                            RecordByteLength = 2,
+                            RecordTypePosition = 4,
+                            RecordTypeByteLength = 2,
+                            SubRecordsParsersByRecordType = GetHuaweiIMSOgero_SubRecordsParsers()
+                        }
                     }
                 }
             };
@@ -11564,8 +11574,8 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = GetHuaweiIMSOgero_ATS9900_FieldParsers()
                     },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> 
-                    { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
                         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
                     },
                     CompositeFieldsParsers = GetHuaweiOgeroCompositeFieldsParsers()
@@ -11581,8 +11591,8 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldParsersByTag = GetHuaweiIMSOgero_SCSCF_FieldParsers()
                     },
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> 
-                    { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
                         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
                     },
                     CompositeFieldsParsers = GetHuaweiOgeroCompositeFieldsParsers()
@@ -11627,14 +11637,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "DomainName"                                          
-                                        }                            
+                                             FieldName = "DomainName"
+                                        }
                                    }
                             }
                         }
@@ -11656,14 +11666,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "CallingPartyAddress"                                          
-                                        }                            
+                                             FieldName = "CallingPartyAddress"
+                                        }
                                    }
                             }
                         }
@@ -11677,14 +11687,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "CalledPartyAddress"                                          
-                                        }                            
+                                             FieldName = "CalledPartyAddress"
+                                        }
                                    }
                             }
                         }
@@ -11795,35 +11805,35 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"30", new BinaryFieldParser
                                    {
                                         Settings = new SequenceFieldParser
                                         {
                                             FieldParsers = new BinaryFieldParserCollection
                                             {
-                                                FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                { 
+                                                FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                {
                                                     {"80", new BinaryFieldParser
                                                            {
                                                                 Settings = new StringParser
                                                                 {
-                                                                     FieldName = "OriginatingIOI"                                          
-                                                                }                            
+                                                                     FieldName = "OriginatingIOI"
+                                                                }
                                                            }
                                                     },
                                                     {"81", new BinaryFieldParser
                                                            {
                                                                 Settings = new StringParser
                                                                 {
-                                                                     FieldName = "TerminatingIOI"                                          
-                                                                }                            
+                                                                     FieldName = "TerminatingIOI"
+                                                                }
                                                            }
                                                     }
                                                 }
                                             }
-                                        }                         
+                                        }
                                    }
                             }
                         }
@@ -11855,31 +11865,31 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                         Settings = new BoolFieldParser
                                         {
                                              FieldName = "ACRStartLost"
-                                          
-                                        }                            
+
+                                        }
                                    }
                             },
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new BoolFieldParser
                                         {
-                                             FieldName = "ACRInterimLost"                                          
-                                        }                            
+                                             FieldName = "ACRInterimLost"
+                                        }
                                    }
                             },
                             {"82", new BinaryFieldParser
                                    {
                                         Settings = new BoolFieldParser
                                         {
-                                             FieldName = "ACRStopLost"                                          
-                                        }                            
+                                             FieldName = "ACRStopLost"
+                                        }
                                    }
                             }
                         }
@@ -11901,20 +11911,20 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"30", new BinaryFieldParser
                                    {
                                          Settings = new SequenceFieldParser
                                          {
                                              FieldParsers = new BinaryFieldParserCollection
                                              {
-                                                 FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                 { 
+                                                 FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                 {
                                                      {"80", new BinaryFieldParser
                                                             {
                                                                  Settings = new DateTimeParser
-                                                                 {  
+                                                                 {
                                                                     IsBCD = true,
                                                                     FieldName = "SIPRequestTime",
                                                                     DateTimeParsingType = DateTimeParsingType.DateTime,
@@ -11927,7 +11937,7 @@ namespace Mediation.Runtime.DataParser
                                                                     TimeShiftIndicatorIndex = 6,
                                                                     HoursTimeShiftIndex = 7,
                                                                     MinutesTimeShiftIndex = 8
-                                                                 }                            
+                                                                 }
                                                             }
                                                      },
                                                      {"81", new BinaryFieldParser
@@ -11935,7 +11945,7 @@ namespace Mediation.Runtime.DataParser
                                                                  Settings = new DateTimeParser
                                                                  {
                                                                     IsBCD = true,
-                                                                    FieldName = "SIPResponseTime",                                    
+                                                                    FieldName = "SIPResponseTime",
                                                                     DateTimeParsingType = DateTimeParsingType.DateTime,
                                                                     YearIndex = 0,
                                                                     MonthIndex = 1,
@@ -11946,7 +11956,7 @@ namespace Mediation.Runtime.DataParser
                                                                     TimeShiftIndicatorIndex = 6,
                                                                     HoursTimeShiftIndex = 7,
                                                                     MinutesTimeShiftIndex = 8
-                                                                 }                            
+                                                                 }
                                                             }
                                                      },
                                                      {"A2", new BinaryFieldParser
@@ -11955,20 +11965,20 @@ namespace Mediation.Runtime.DataParser
                                                                 {
                                                                     FieldParsers = new BinaryFieldParserCollection
                                                                     {
-                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> { 
+                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> {
                                                                             {"30", new BinaryFieldParser
                                                                                    {
                                                                                         Settings = new SequenceFieldParser
                                                                                            {
                                                                                                FieldParsers = new BinaryFieldParserCollection
                                                                                                {
-                                                                                                   FieldParsersByTag = new Dictionary<string, BinaryFieldParser> { 
+                                                                                                   FieldParsersByTag = new Dictionary<string, BinaryFieldParser> {
                                                                                                        {"80", new BinaryFieldParser
                                                                                                               {
                                                                                                                    Settings = new StringParser
                                                                                                                    {
                                                                                                                         FieldName = "SDPMediaName"
-                                                                                                                   }                            
+                                                                                                                   }
                                                                                                               }
                                                                                                        },
                                                                                                        {"A1", new BinaryFieldParser
@@ -11977,29 +11987,29 @@ namespace Mediation.Runtime.DataParser
                                                                                                                    {
                                                                                                                        FieldParsers = new BinaryFieldParserCollection
                                                                                                                        {
-                                                                                                                           FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                                                                                           { 
+                                                                                                                           FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                                                                                           {
                                                                                                                                {"19", new BinaryFieldParser
                                                                                                                                       {
                                                                                                                                            Settings = new StringParser
                                                                                                                                            {
                                                                                                                                                 FieldName = "SDPMediaDescription"
-                                                                                                                                           }                            
+                                                                                                                                           }
                                                                                                                                       }
                                                                                                                                }
                                                                                                                            }
                                                                                                                        }
-                                                                                                                   }                           
+                                                                                                                   }
                                                                                                               }
                                                                                                        }
                                                                                                    }
                                                                                                }
-                                                                                           }                            
+                                                                                           }
                                                                                    }
                                                                             }
                                                                         }
                                                                     }
-                                                                } 
+                                                                }
                                                             }
                                                       },
                                                       {"A4", new BinaryFieldParser
@@ -12008,15 +12018,15 @@ namespace Mediation.Runtime.DataParser
                                                                 {
                                                                     FieldParsers = new BinaryFieldParserCollection
                                                                     {
-                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                                        { 
+                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                                        {
                                                                             {"19", new BinaryFieldParser
                                                                                    {
                                                                                        Settings = new StringParser
                                                                                        {
                                                                                            FieldName = "SDPSessionDescription"
-                                                                                   
-                                                                                       }                            
+
+                                                                                       }
                                                                                    }
                                                                             }
                                                                         }
@@ -12025,9 +12035,9 @@ namespace Mediation.Runtime.DataParser
                                                              }
                                                       }
                                                 }
-                                             }                           
+                                             }
                                          }
-                               }                            
+                               }
                             }
                         }
                     }
@@ -12040,22 +12050,22 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"30", new BinaryFieldParser
                                    {
                                          Settings = new SequenceFieldParser
                                          {
                                               FieldParsers = new BinaryFieldParserCollection
                                               {
-                                                  FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                  { 
+                                                  FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                  {
                                                       {"80", new BinaryFieldParser
                                                              {
                                                                   Settings = new StringParser
                                                                   {
                                                                        FieldName = "ContentType"
-                                                                  }                            
+                                                                  }
                                                              }
                                                       },
                                                       {"82", new BinaryFieldParser
@@ -12064,13 +12074,13 @@ namespace Mediation.Runtime.DataParser
                                                                   {
                                                                        FieldName = "ContentLength",
                                                                        NumberType = NumberType.Int
-                                                                  }                            
+                                                                  }
                                                              }
                                                       }
                                                   }
-                                              }                           
+                                              }
                                          }
-                                   }                            
+                                   }
                             }
                         }
                     }
@@ -12108,13 +12118,13 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "CalledAssertedIdentity"                                          
-                                        }                            
+                                             FieldName = "CalledAssertedIdentity"
+                                        }
                                    }
                             }
                         }
@@ -12137,14 +12147,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "DialledPartyAddress"                                          
-                                        }                            
+                                             FieldName = "DialledPartyAddress"
+                                        }
                                    }
                             }
                         }
@@ -12167,15 +12177,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"02", new BinaryFieldParser
                                    {
                                         Settings = new NumberFieldParser
                                         {
                                              FieldName = "ServiceIdentifier",
                                              NumberType = NumberType.Int
-                                        }                            
+                                        }
                                    }
                             }
                         }
@@ -12227,6 +12237,35 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("BF833E", new BinaryFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new BinaryFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
+                            {"83", new BinaryFieldParser
+                                   {
+                                        Settings = new StringParser
+                                        {
+                                             FieldName = "OutgoingRoute"
+                                        }
+                                   }
+                            },
+                            {"84", new BinaryFieldParser
+                                   {
+                                        Settings = new StringParser
+                                        {
+                                             FieldName = "IncomingRoute"
+                                        }
+                                   }
+                            }
+                        }
+                    }
+                }
+            });
+
             return parsers;
         }
         private Dictionary<string, BinaryFieldParser> GetHuaweiIMSOgero_SCSCF_FieldParsers()
@@ -12265,14 +12304,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "DomainName"                                          
-                                        }                            
+                                             FieldName = "DomainName"
+                                        }
                                    }
                             }
                         }
@@ -12294,14 +12333,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "CallingPartyAddress"                                          
-                                        }                            
+                                             FieldName = "CallingPartyAddress"
+                                        }
                                    }
                             }
                         }
@@ -12315,14 +12354,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "CalledPartyAddress"                                          
-                                        }                            
+                                             FieldName = "CalledPartyAddress"
+                                        }
                                    }
                             }
                         }
@@ -12431,35 +12470,35 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"30", new BinaryFieldParser
                                    {
                                         Settings = new SequenceFieldParser
                                         {
                                             FieldParsers = new BinaryFieldParserCollection
                                             {
-                                                FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                { 
+                                                FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                {
                                                     {"80", new BinaryFieldParser
                                                            {
                                                                 Settings = new StringParser
                                                                 {
-                                                                     FieldName = "OriginatingIOI"                                          
-                                                                }                            
+                                                                     FieldName = "OriginatingIOI"
+                                                                }
                                                            }
                                                     },
                                                     {"81", new BinaryFieldParser
                                                            {
                                                                 Settings = new StringParser
                                                                 {
-                                                                     FieldName = "TerminatingIOI"                                          
-                                                                }                            
+                                                                     FieldName = "TerminatingIOI"
+                                                                }
                                                            }
                                                     }
                                                 }
                                             }
-                                        }                         
+                                        }
                                    }
                             }
                         }
@@ -12491,31 +12530,31 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                         Settings = new BoolFieldParser
                                         {
                                              FieldName = "ACRStartLost"
-                                          
-                                        }                            
+
+                                        }
                                    }
                             },
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new BoolFieldParser
                                         {
-                                             FieldName = "ACRInterimLost"                                          
-                                        }                            
+                                             FieldName = "ACRInterimLost"
+                                        }
                                    }
                             },
                             {"82", new BinaryFieldParser
                                    {
                                         Settings = new BoolFieldParser
                                         {
-                                             FieldName = "ACRStopLost"                                          
-                                        }                            
+                                             FieldName = "ACRStopLost"
+                                        }
                                    }
                             }
                         }
@@ -12537,20 +12576,20 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"30", new BinaryFieldParser
                                    {
                                          Settings = new SequenceFieldParser
                                          {
                                              FieldParsers = new BinaryFieldParserCollection
                                              {
-                                                 FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                 { 
+                                                 FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                 {
                                                      {"80", new BinaryFieldParser
                                                             {
                                                                  Settings = new DateTimeParser
-                                                                 {  
+                                                                 {
                                                                     IsBCD = true,
                                                                     FieldName = "SIPRequestTime",
                                                                     DateTimeParsingType = DateTimeParsingType.DateTime,
@@ -12563,7 +12602,7 @@ namespace Mediation.Runtime.DataParser
                                                                     TimeShiftIndicatorIndex = 6,
                                                                     HoursTimeShiftIndex = 7,
                                                                     MinutesTimeShiftIndex = 8
-                                                                 }                            
+                                                                 }
                                                             }
                                                      },
                                                      {"81", new BinaryFieldParser
@@ -12571,7 +12610,7 @@ namespace Mediation.Runtime.DataParser
                                                                  Settings = new DateTimeParser
                                                                  {
                                                                     IsBCD = true,
-                                                                    FieldName = "SIPResponseTime",                                    
+                                                                    FieldName = "SIPResponseTime",
                                                                     DateTimeParsingType = DateTimeParsingType.DateTime,
                                                                     YearIndex = 0,
                                                                     MonthIndex = 1,
@@ -12582,7 +12621,7 @@ namespace Mediation.Runtime.DataParser
                                                                     TimeShiftIndicatorIndex = 6,
                                                                     HoursTimeShiftIndex = 7,
                                                                     MinutesTimeShiftIndex = 8
-                                                                 }                            
+                                                                 }
                                                             }
                                                      },
                                                      {"A2", new BinaryFieldParser
@@ -12591,22 +12630,22 @@ namespace Mediation.Runtime.DataParser
                                                                 {
                                                                     FieldParsers = new BinaryFieldParserCollection
                                                                     {
-                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                                        { 
+                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                                        {
                                                                             {"30", new BinaryFieldParser
                                                                                    {
                                                                                         Settings = new SequenceFieldParser
                                                                                            {
                                                                                                FieldParsers = new BinaryFieldParserCollection
                                                                                                {
-                                                                                                   FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                                                                   { 
+                                                                                                   FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                                                                   {
                                                                                                        {"80", new BinaryFieldParser
                                                                                                               {
                                                                                                                    Settings = new StringParser
                                                                                                                    {
                                                                                                                         FieldName = "SDPMediaName"
-                                                                                                                   }                            
+                                                                                                                   }
                                                                                                               }
                                                                                                        },
                                                                                                        {"A1", new BinaryFieldParser
@@ -12615,29 +12654,29 @@ namespace Mediation.Runtime.DataParser
                                                                                                                    {
                                                                                                                        FieldParsers = new BinaryFieldParserCollection
                                                                                                                        {
-                                                                                                                           FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                                                                                           { 
+                                                                                                                           FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                                                                                           {
                                                                                                                                {"19", new BinaryFieldParser
                                                                                                                                       {
                                                                                                                                            Settings = new StringParser
                                                                                                                                            {
                                                                                                                                                 FieldName = "SDPMediaDescription"
-                                                                                                                                           }                            
+                                                                                                                                           }
                                                                                                                                       }
                                                                                                                                }
                                                                                                                            }
                                                                                                                        }
-                                                                                                                   }                           
+                                                                                                                   }
                                                                                                               }
                                                                                                        }
                                                                                                    }
                                                                                                }
-                                                                                           }                            
+                                                                                           }
                                                                                    }
                                                                             }
                                                                         }
                                                                     }
-                                                                } 
+                                                                }
                                                             }
                                                       },
                                                       {"A4", new BinaryFieldParser
@@ -12646,15 +12685,15 @@ namespace Mediation.Runtime.DataParser
                                                                 {
                                                                     FieldParsers = new BinaryFieldParserCollection
                                                                     {
-                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                                        { 
+                                                                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                                        {
                                                                             {"19", new BinaryFieldParser
                                                                                    {
                                                                                        Settings = new StringParser
                                                                                        {
                                                                                            FieldName = "SDPSessionDescription"
-                                                                                   
-                                                                                       }                            
+
+                                                                                       }
                                                                                    }
                                                                             }
                                                                         }
@@ -12663,9 +12702,9 @@ namespace Mediation.Runtime.DataParser
                                                              }
                                                       }
                                                  }
-                                             }                           
+                                             }
                                          }
-                                   }                       
+                                   }
                             }
                         }
                     }
@@ -12678,22 +12717,22 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"30", new BinaryFieldParser
                                    {
                                          Settings = new SequenceFieldParser
                                          {
                                               FieldParsers = new BinaryFieldParserCollection
                                               {
-                                                  FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                                                  { 
+                                                  FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                                  {
                                                       {"80", new BinaryFieldParser
                                                              {
                                                                   Settings = new StringParser
                                                                   {
                                                                       FieldName = "ContentType"
-                                                                  }                            
+                                                                  }
                                                              }
                                                       },
                                                       {"82", new BinaryFieldParser
@@ -12702,13 +12741,13 @@ namespace Mediation.Runtime.DataParser
                                                                   {
                                                                        FieldName = "ContentLength",
                                                                        NumberType = NumberType.Int
-                                                                  }                            
+                                                                  }
                                                              }
                                                       }
                                                   }
-                                              }                           
+                                              }
                                          }
-                                   }                            
+                                   }
                             }
                         }
                     }
@@ -12746,14 +12785,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "CalledAssertedIdentity"                                          
-                                        }                            
+                                             FieldName = "CalledAssertedIdentity"
+                                        }
                                    }
                             }
                         }
@@ -12776,14 +12815,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "DialledPartyAddress"                                          
-                                        }                            
+                                             FieldName = "DialledPartyAddress"
+                                        }
                                    }
                             }
                         }
@@ -12806,15 +12845,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"02", new BinaryFieldParser
                                    {
                                         Settings = new NumberFieldParser
                                         {
                                              FieldName = "ServiceIdentifier",
                                              NumberType = NumberType.Int
-                                        }                            
+                                        }
                                    }
                             }
                         }
@@ -12898,7 +12937,7 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_B4_FieldParsers_Huawei_Ogero()
                     },
                     RecordType = "GPRS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 2}
                     }
                 }
@@ -13120,32 +13159,32 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "GWAddress"                                          
-                                     }                            
+                                          FieldName = "GWAddress"
+                                     }
                                 }
                             }
 
@@ -13166,32 +13205,32 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             },
                             {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             },
                             {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
-                                          FieldName = "ServingNodeAddress"                                          
-                                     }                            
+                                          FieldName = "ServingNodeAddress"
+                                     }
                                 }
                             },
                             {"83", new BinaryFieldParser
                                    {
                                         Settings = new IPv4Parser
                                         {
-                                             FieldName = "ServingNodeAddress"                                          
-                                        }                            
+                                             FieldName = "ServingNodeAddress"
+                                        }
                                    }
                             }
                         }
@@ -13213,10 +13252,10 @@ namespace Mediation.Runtime.DataParser
             {
                 RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.SplitByTagRecordParser
                 {
-                    SubRecordsParsersByTag = new Dictionary<string, BinaryRecordParser>() 
-                    { 
-                        {"30", new BinaryRecordParser() 
-                               { 
+                    SubRecordsParsersByTag = new Dictionary<string, BinaryRecordParser>()
+                    {
+                        {"30", new BinaryRecordParser()
+                               {
                                    Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.SplitByTagRecordParser()
                                    {
                                        SubRecordsParsersByTag = GetHuaweiMGCFOgero_SubRecordsParsers()
@@ -13354,14 +13393,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "MSCIncomingRoute"                                          
-                                        }                            
+                                             FieldName = "MSCIncomingRoute"
+                                        }
                                    }
                             }
                         }
@@ -13375,14 +13414,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "MSCOutgoingRoute"                                          
-                                        }                            
+                                             FieldName = "MSCOutgoingRoute"
+                                        }
                                    }
                             }
                         }
@@ -13431,15 +13470,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                         Settings = new NumberFieldParser
                                         {
                                              FieldName = "Diagnostics",
                                              NumberType = NumberType.Int
-                                        }                            
+                                        }
                                    }
                             }
                         }
@@ -13479,14 +13518,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"83", new BinaryFieldParser
                                    {
                                        Settings = new HexaParser
                                        {
                                            FieldName = "BasicService"
-                                       }                            
+                                       }
                                    }
                             }
                         }
@@ -13500,15 +13539,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                        Settings = new NumberFieldParser
                                        {
                                            FieldName = "AdditionalChgInfo",
                                            NumberType = NumberType.Int
-                                       }                            
+                                       }
                                    }
                             }
                         }
@@ -13831,14 +13870,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "MSCIncomingRoute"                                          
-                                        }                            
+                                             FieldName = "MSCIncomingRoute"
+                                        }
                                    }
                             }
                         }
@@ -13852,14 +13891,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "MSCOutgoingRoute"                                          
-                                        }                            
+                                             FieldName = "MSCOutgoingRoute"
+                                        }
                                    }
                             }
                         }
@@ -13908,15 +13947,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                         Settings = new NumberFieldParser
                                         {
                                              FieldName = "Diagnostics",
                                              NumberType = NumberType.Int
-                                        }                            
+                                        }
                                    }
                             }
                         }
@@ -13956,14 +13995,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"83", new BinaryFieldParser
                                    {
                                        Settings = new HexaParser
                                        {
                                            FieldName = "BasicService"
-                                       }                            
+                                       }
                                    }
                             }
                         }
@@ -13977,15 +14016,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                        Settings = new NumberFieldParser
                                        {
                                            FieldName = "AdditionalChgInfo",
                                            NumberType = NumberType.Int
-                                       }                            
+                                       }
                                    }
                             }
                         }
@@ -14286,14 +14325,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "MSCIncomingRoute"                                          
-                                        }                            
+                                             FieldName = "MSCIncomingRoute"
+                                        }
                                    }
                             }
                         }
@@ -14307,14 +14346,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"81", new BinaryFieldParser
                                    {
                                         Settings = new StringParser
                                         {
-                                             FieldName = "MSCOutgoingRoute"                                          
-                                        }                            
+                                             FieldName = "MSCOutgoingRoute"
+                                        }
                                    }
                             }
                         }
@@ -14385,15 +14424,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                         Settings = new NumberFieldParser
                                         {
                                              FieldName = "Diagnostics",
                                              NumberType = NumberType.Int
-                                        }                            
+                                        }
                                    }
                             }
                         }
@@ -14433,14 +14472,14 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"83", new BinaryFieldParser
                                    {
                                        Settings = new HexaParser
                                        {
                                            FieldName = "BasicService"
-                                       }                            
+                                       }
                                    }
                             }
                         }
@@ -14454,15 +14493,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldParsers = new BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser> 
-                        { 
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                        {
                             {"80", new BinaryFieldParser
                                    {
                                        Settings = new NumberFieldParser
                                        {
                                            FieldName = "AdditionalChgInfo",
                                            NumberType = NumberType.Int
-                                       }                            
+                                       }
                                    }
                             }
                         }
@@ -14752,21 +14791,21 @@ namespace Mediation.Runtime.DataParser
                 RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.SplitByTagRecordParser
                 {
                     SubRecordsParsersByTag = new Dictionary<string, BinaryRecordParser>()
-					{
-						{"BF4F", new BinaryRecordParser()
-							{
-								Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.CreateRecordRecordParser()
-								{
-									RecordType = "Ogero_HuaweiEPC_CDR",
-									FieldParsers = new BinaryFieldParserCollection()
-										{
-											FieldParsersByTag = GetHuaweiEPCOgero_FieldParsers(),
-										},
-									CompositeFieldsParsers = GetHuaweiEPCOgero_CompositeFieldsParsers()
-								}
-							}
-						}
-					}
+                    {
+                        {"BF4F", new BinaryRecordParser()
+                            {
+                                Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers.CreateRecordRecordParser()
+                                {
+                                    RecordType = "Ogero_HuaweiEPC_CDR",
+                                    FieldParsers = new BinaryFieldParserCollection()
+                                        {
+                                            FieldParsersByTag = GetHuaweiEPCOgero_FieldParsers(),
+                                        },
+                                    CompositeFieldsParsers = GetHuaweiEPCOgero_CompositeFieldsParsers()
+                                }
+                            }
+                        }
+                    }
                 }
             };
 
@@ -14816,16 +14855,16 @@ namespace Mediation.Runtime.DataParser
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-						{
-							{"80", new BinaryFieldParser
-								{
-									Settings = new IPv4Parser
-									{
-										FieldName = "PGWAddress"
-									}
-								}
-							}
-						}
+                        {
+                            {"80", new BinaryFieldParser
+                                {
+                                    Settings = new IPv4Parser
+                                    {
+                                        FieldName = "PGWAddress"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -14848,16 +14887,16 @@ namespace Mediation.Runtime.DataParser
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-						{
-							{"80", new BinaryFieldParser
-								{
-									Settings = new IPv4Parser
-									{
-										FieldName = "ServingNodeAddress"
-									}
-								}
-							}
-						}
+                        {
+                            {"80", new BinaryFieldParser
+                                {
+                                    Settings = new IPv4Parser
+                                    {
+                                        FieldName = "ServingNodeAddress"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -14879,29 +14918,29 @@ namespace Mediation.Runtime.DataParser
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-						{
-							{"A0", new BinaryFieldParser
-								{
-									Settings = new SequenceFieldParser
-									{
-										FieldParsers = new BinaryFieldParserCollection
-										{
-											FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-											{
-												{"80", new BinaryFieldParser
-													{
-														Settings = new IPv4Parser
-														{
-																FieldName = "ServedPDPPDNAddress"
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
+                        {
+                            {"A0", new BinaryFieldParser
+                                {
+                                    Settings = new SequenceFieldParser
+                                    {
+                                        FieldParsers = new BinaryFieldParserCollection
+                                        {
+                                            FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
+                                            {
+                                                {"80", new BinaryFieldParser
+                                                    {
+                                                        Settings = new IPv4Parser
+                                                        {
+                                                                FieldName = "ServedPDPPDNAddress"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -14923,19 +14962,19 @@ namespace Mediation.Runtime.DataParser
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-						{
-							{"30", new BinaryFieldParser
-								{
-									Settings =new SequenceFieldParser
-									{
-										FieldParsers = new BinaryFieldParserCollection()
-										{
-											FieldParsersByTag= GetChangeOfChar_FieldParsers()
-										}
-									}
-								}
-							}
-						}
+                        {
+                            {"30", new BinaryFieldParser
+                                {
+                                    Settings =new SequenceFieldParser
+                                    {
+                                        FieldParsers = new BinaryFieldParserCollection()
+                                        {
+                                            FieldParsersByTag= GetChangeOfChar_FieldParsers()
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -15075,19 +15114,19 @@ namespace Mediation.Runtime.DataParser
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-						{
-							{"30", new BinaryFieldParser
-								{
-									Settings =new SequenceFieldParser
-									{
-										FieldParsers = new BinaryFieldParserCollection()
-										{
-											FieldParsersByTag= GetChangeOfServiceConditions_FieldParsers()
-										}
-									}
-								}
-							}
-						}
+                        {
+                            {"30", new BinaryFieldParser
+                                {
+                                    Settings =new SequenceFieldParser
+                                    {
+                                        FieldParsers = new BinaryFieldParserCollection()
+                                        {
+                                            FieldParsersByTag= GetChangeOfServiceConditions_FieldParsers()
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -15101,17 +15140,17 @@ namespace Mediation.Runtime.DataParser
                     FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
-						{
-							{"0A", new BinaryFieldParser
-								   {
-										Settings = new NumberFieldParser
-										{
-											FieldName = "ServingNodeType",
-											NumberType = NumberType.Int
-										}
-								   }
-							}
-						}
+                        {
+                            {"0A", new BinaryFieldParser
+                                   {
+                                        Settings = new NumberFieldParser
+                                        {
+                                            FieldName = "ServingNodeType",
+                                            NumberType = NumberType.Int
+                                        }
+                                   }
+                            }
+                        }
                     }
                 }
             });
