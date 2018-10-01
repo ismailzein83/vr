@@ -180,7 +180,7 @@ namespace Vanrise.BusinessProcess.Business
                     if (dependantGroupBPSynchronisationItem.TaskIds != null && dependantGroupBPSynchronisationItem.TaskIds.Count > 0)
                     {
                         if (linkedProcessSynchronisationItems.TaskIds == null)
-                            linkedProcessSynchronisationItems.TaskIds = new HashSet<long>();
+                            linkedProcessSynchronisationItems.TaskIds = new HashSet<Guid>();
 
                         foreach (var taskId in dependantGroupBPSynchronisationItem.TaskIds)
                         {

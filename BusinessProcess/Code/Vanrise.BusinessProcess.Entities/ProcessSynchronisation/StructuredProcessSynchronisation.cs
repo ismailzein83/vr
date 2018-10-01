@@ -7,12 +7,12 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public LinkedProcessSynchronisationItems LinkedProcessSynchronisationItems { get; set; }
 
-        public Dictionary<long, LinkedProcessSynchronisationItems> LinkedProcessSynchronisationItemsByTaskId { get; set; }
+        public Dictionary<Guid, LinkedProcessSynchronisationItems> LinkedProcessSynchronisationItemsByTaskId { get; set; }
     }
 
     public class LinkedProcessSynchronisationItems
     {
-        public HashSet<long> TaskIds { get; set; }
+        public HashSet<Guid> TaskIds { get; set; }
 
         public HashSet<Guid> BPDefinitionIds { get; set; }
 

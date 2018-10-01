@@ -46,7 +46,7 @@ namespace Vanrise.BusinessProcess.Entities
     public class BPSynchronisationItem
     {
         public Guid BPDefinitionId { get; set; }
-        public List<long> TaskIds { get; set; }
+        public List<Guid> TaskIds { get; set; }
     }
 
     public class ExecutionFlowSynchronisationItem
