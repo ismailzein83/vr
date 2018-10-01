@@ -107,7 +107,7 @@
 					}
 				};
 				$scope.ctrl.onFocusDirective = function (e) {
-					if (ctrl.value && $attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name)
+					if (ctrl.value && typeof(ctrl.value) == "string" && $attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name)
 						ctrl.value = ctrl.value.replace(/,/g, '');
 				};
 			},
