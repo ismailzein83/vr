@@ -103,7 +103,7 @@
                     if (payload != undefined) {
                         payload.supplierId = supplierId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-                        payload.filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.All.value
+                        payload.filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.All.value;
                         payload.selectedIds = zoneIds;
                     }
                     else {
