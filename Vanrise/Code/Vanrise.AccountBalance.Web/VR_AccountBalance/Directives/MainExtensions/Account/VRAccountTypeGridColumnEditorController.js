@@ -71,7 +71,8 @@
                     SourceId: sourceSelectorAPI.getSelectedIds(),
                     FieldName: sourceFieldsSelectorAPI.getSelectedIds(),
                     GridColCSSValue: gridColCSSClassSelectorAPI.getSelectedIds(),
-                    UseEmptyHeader: $scope.scopeModel.useEmptyHeader
+                    UseEmptyHeader: $scope.scopeModel.useEmptyHeader,
+                    HeaderDescription: $scope.scopeModel.headerDescription
                 };
             }
 
@@ -105,6 +106,7 @@
                     if (gridColumnEntity != undefined) {
                         $scope.scopeModel.title = gridColumnEntity.Title;
                         $scope.scopeModel.useEmptyHeader = gridColumnEntity.UseEmptyHeader;
+                        $scope.scopeModel.headerDescription = gridColumnEntity.HeaderDescription;
                     }
                 }
                 function loadSourcesSelectorDirective() {

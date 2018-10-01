@@ -218,6 +218,7 @@ namespace Vanrise.AccountBalance.Business
                           //  gridAttribute.Field = matchField.Name;
                             gridAttribute.Tag = matchField.Name;
                             gridAttribute.HeaderText = column.UseEmptyHeader ? "" : column.Title;
+                            gridAttribute.HeaderDescription = column.HeaderDescription;
                             gridAttribute.GridColCSSClassValue = column.GridColCSSValue;
                             //if (column.GridColumnSettings != null)
                             //{

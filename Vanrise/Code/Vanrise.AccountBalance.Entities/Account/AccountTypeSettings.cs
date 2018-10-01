@@ -73,6 +73,7 @@ namespace Vanrise.AccountBalance.Entities
         public string Title { get; set; }
         public GridColCSSClassValue? GridColCSSValue { get; set; }
         public bool UseEmptyHeader { get; set; }
+        public string HeaderDescription { get; set; }
     }
     public class AccountBalanceFieldSource
     {

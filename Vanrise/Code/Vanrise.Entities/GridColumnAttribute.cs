@@ -20,6 +20,7 @@ namespace Vanrise.Entities
         public string Tag { get; set; }
         public bool? DisableSorting { get; set; }
         public string NumberPrecision { get; set; }
+        public string HeaderDescription { get; set; }
         public GridColCSSClassValue? GridColCSSClassValue { get; set; }
     }
 }
