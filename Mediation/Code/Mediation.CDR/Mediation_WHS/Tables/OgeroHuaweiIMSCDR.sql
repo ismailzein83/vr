@@ -41,9 +41,13 @@
     [VisitedNetworkId]          VARCHAR (500)    NULL,
     [SDPMediaDescription]       VARCHAR (MAX)    NULL,
     [SessionPriority]           INT              NULL,
+    [IncomingRoute]             VARCHAR (100)    NULL,
+    [OutgoingRoute]             VARCHAR (100)    NULL,
     [FileName]                  VARCHAR (100)    NULL,
     [DataSourceId]              UNIQUEIDENTIFIER NULL
 );
+
+
 
 
 

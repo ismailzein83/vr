@@ -41,8 +41,12 @@
     [OnlineChargingFlag]        INT              NULL,
     [VisitedNetworkId]          VARCHAR (500)    NULL,
     [SessionPriority]           INT              NULL,
+    [IncomingRoute]             VARCHAR (100)    NULL,
+    [OutgoingRoute]             VARCHAR (100)    NULL,
     [FileName]                  VARCHAR (100)    NULL,
     [DataSourceId]              UNIQUEIDENTIFIER NULL);
+
+
 
 
 
