@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("npIvswitchSupplierBackuprouteGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("npIvswitchSupplierBackuprouteGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService","NP_IVSwitch_EndPointStateEnum",
+function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService,NP_IVSwitch_EndPointStateEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -175,7 +175,9 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                         }
                         else {
                             var directivePayload = {
-                                SupplierIds: [dataItem.backupOptionSupplierDirctiveAPI.getSelectedIds()]
+                                filter: {
+                                    SupplierIds: [dataItem.backupOptionSupplierDirctiveAPI.getSelectedIds()],
+                                }
                             };
                             var modifiedByFieldSetLoader = function (value) { $scope.scopeModel.isModifiedBySelectorLoading = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.backupOptionRouteDirectiveAPI, directivePayload, modifiedByFieldSetLoader);

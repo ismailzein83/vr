@@ -27,6 +27,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
             $scope.scopeModel.routeOptions = [];
             $scope.scopeModel.routeTablesRT = [];
             $scope.scopeModel.menuActions = [];
+            $scope.scopeModel.name = '';
             $scope.scopeModel.limit = 100;
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -41,10 +42,17 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
                     if (payload != undefined) {
                         gridAPI.clearAll();
-                        gridAPI.retrieveData(payload);
+                        $scope.scopeModel.routeTablesRT.length = 0;
                     }
                     if (payload != undefined && payload.RouteTableViewType != undefined && payload.RouteTableId != undefined) {
                         routeTableViewType = payload.RouteTableViewType;
+                        if (routeTableViewType == 0)
+                            $scope.scopeModel.name = "ANumber";
+                        if (routeTableViewType == 1)
+                            $scope.scopeModel.name = "Whitelist";
+                        if (routeTableViewType == 2)
+                            $scope.scopeModel.name = "BNumber";
+                        gridAPI.retrieveData(payload);
                         routeTableId = payload.RouteTableId;
                     }
 
@@ -57,6 +65,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
                 api.onRouteTableRouteAdded = function () {
                     gridAPI.clearAll();
+                    $scope.scopeModel.routeTablesRT.length = 0;
                     return gridAPI.retrieveData(getFilter());
                 };
 
@@ -69,14 +78,14 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return NP_IVSwitch_RouteTableRouteAPIService.GetFilteredRouteTableRoutes(dataRetrievalInput).then(function (response) {
                     if (response != undefined && response.Data != undefined && response.Data.length > 0)
-                    for (var i = 0; i < response.Data.length; i++) {
-                        var item = response.Data[i];
-                        if ($scope.scopeModel.isANumber == true)
-                            var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, TechPrefix: item.TechPrefix, Options: item.RouteOptionsDetails };
-                        else
-                            var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, Options: item.RouteOptionsDetails };
-                        $scope.scopeModel.routeTablesRT.push(dataItem);
-                    }
+                        for (var i = 0; i < response.Data.length; i++) {
+                            var item = response.Data[i];
+                            if ($scope.scopeModel.isANumber == true)
+                                var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, TechPrefix: item.TechPrefix, Options: item.RouteOptionsDetails, Description: 'Origination Number' };
+                            else
+                                var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, Options: item.RouteOptionsDetails, Description: 'Destination Number' };
+                            $scope.scopeModel.routeTablesRT.push(dataItem);
+                        }
 
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -118,6 +127,7 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
             var onRouteTableUpdated = function (routeTable) {
                 $scope.scopeModel.routeTablesRT = [];
                 gridAPI.clearAll();
+                $scope.scopeModel.routeTablesRT.length = 0;
                 gridAPI.retrieveData(getFilter());
             };
             NP_IVSwitch_RouteTableRouteService.editRouteTableRoutes(routeTable, onRouteTableUpdated);

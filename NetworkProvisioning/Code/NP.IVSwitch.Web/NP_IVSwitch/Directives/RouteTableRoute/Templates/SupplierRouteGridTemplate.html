@@ -17,7 +17,7 @@
                      maxheight="400px"
                      showexpand="scopeModel.showExpand"
                      disablesorting="true"
-                     rowdeleteicontitle="Reset to LCR position"
+                     rowdeleteicontitle="Delete Option"
                      hidegridmenu disabledraggablecolumns>
             <vr-datagridcolumn headertext="'Supplier'">
                 <vr-whs-be-supplier-selector hidelabel on-ready="dataItem.onSuppliersDirectiveReady" onselectionchanged="dataItem.onSupplierSelectionChanged" isrequired="true"></vr-whs-be-supplier-selector>
@@ -28,7 +28,7 @@
                     </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percantage'">
-                <vr-textbox value="dataItem.percentage" isrequired="{{viewScope.scopeModel.showBackupTabs}}" type="number" minvalue="1" maxvalue="100" onvaluechanged="viewScope.scopeModel.onPercentageValueChangedItems" customvalidate="viewScope.scopeModel.onPercentageValueChanged()"></vr-textbox>
+                <vr-textbox value="dataItem.percentage" isrequired="{{viewScope.scopeModel.showBackupTabs}}" type="number" decimalprecision="0" minvalue="1" maxvalue="100" onvaluechanged="viewScope.scopeModel.onPercentageValueChangedItems" customvalidate="viewScope.scopeModel.onPercentageValueChanged()"></vr-textbox>
             </vr-datagridcolumn>
             <vr-datagridexpandablerow>
                 <np-ivswitch-supplier-backuproute-grid on-ready="dataItem.onBackupRouteGridDirectiveReady"></np-ivswitch-supplier-backuproute-grid>

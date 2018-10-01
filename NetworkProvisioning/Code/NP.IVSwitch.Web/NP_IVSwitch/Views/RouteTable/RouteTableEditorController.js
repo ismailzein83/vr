@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    routeTableEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteTableAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableViewTypeEnum'];
+    routeTableEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteTableAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableViewTypeEnum', 'NP_IVSwitch_EndPointStateEnum'];
 
-    function routeTableEditorController($scope, NP_IVSwitch_RouteTableAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableViewTypeEnum) {
+    function routeTableEditorController($scope, NP_IVSwitch_RouteTableAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum) {
 
         var isEditMode;
         var routeTableViewType;

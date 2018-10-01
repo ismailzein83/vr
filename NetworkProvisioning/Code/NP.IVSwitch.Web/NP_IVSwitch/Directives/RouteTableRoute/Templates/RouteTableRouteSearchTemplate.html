@@ -6,7 +6,9 @@
         <vr-textbox value="scopeModel.whiteListe" label="BNumber"> ></vr-textbox>
     </vr-columns>
     <vr-columns width="normal" ng-if="!scopeModel.isANumber">
-        <vr-textbox value="scopeModel.aNumber" label="BNumber"></vr-textbox>
+        <!--<vr-textbox value="scopeModel.aNumber" label="BNumber"></vr-textbox>-->
+        <vr-textbox value="scopeModel.whiteListe" label="{{scopeModel.name}}"> ></vr-textbox>
+
     </vr-columns>
     <vr-columns width="normal">
         <vr-whs-be-supplier-selector on-ready="scopeModel.onSuppliersDirectiveReady"

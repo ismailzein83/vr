@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("npIvswitchSupplierRouteGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("npIvswitchSupplierRouteGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService","NP_IVSwitch_EndPointStateEnum",
+function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService, NP_IVSwitch_EndPointStateEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -209,9 +209,9 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 };
 
                 supplierDirectiveDefferedReady.promise.then(function () {
-                        var directivePayload;
-                        VRUIUtilsService.callDirectiveLoad(gridItem.supplierDirctiveAPI, directivePayload, undefined);
-                        selectdSupplierDeffered = undefined;
+                    var directivePayload;
+                    VRUIUtilsService.callDirectiveLoad(gridItem.supplierDirctiveAPI, directivePayload, undefined);
+                    selectdSupplierDeffered = undefined;
                     });
 
                 $scope.scopeModel.columns.push(gridItem);
@@ -360,7 +360,6 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
                     if (gridItem.hasPercentage)
                     {
-                        console.log(gridItem.hasPercentage);
                         dataItem.onBackupRouteGridDirectiveReady = function (api) {
                             dataItem.backupRouteGridDirectiveAPI = api;
                             gridItem.backupRouteGridDirectiveReady.resolve();

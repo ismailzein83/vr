@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    routeTableManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum'];
+    routeTableManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum','NP_IVSwitch_EndPointStateEnum'];
 
-    function routeTableManagementController($scope, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum) {
+    function routeTableManagementController($scope, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum,NP_IVSwitch_EndPointStateEnum) {
         var gridApi;
         var GridDirectiveDefferedReady = UtilsService.createPromiseDeferred();
 

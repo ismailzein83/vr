@@ -98,7 +98,7 @@
                 if (isEditMode)
                     $scope.title = UtilsService.buildTitleForUpdateEditor($scope.scopeModel.routeTableRouteName, " Route Table Route");
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("New Route Table Route");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Route Table Route");
             }
 
             function loadSupplierRouteGrid()

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("npIvswitchRoutetableRouteSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'NP_IVSwitch_RouteTableRouteService', 'NP_IVSwitch_RouteTableViewTypeEnum',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, NP_IVSwitch_RouteTableRouteService, NP_IVSwitch_RouteTableViewTypeEnum) {
+app.directive("npIvswitchRoutetableRouteSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'NP_IVSwitch_RouteTableRouteService', 'NP_IVSwitch_RouteTableViewTypeEnum','NP_IVSwitch_EndPointStateEnum',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, NP_IVSwitch_RouteTableRouteService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum) {
 
     var directiveDefinitionObject = {
 
@@ -107,7 +107,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function load() {
 
             suppliersDirectiveDeferedReady.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(suppliersDirectiveAPI, undefined, undefined);
+                var directivePayload ;
+                VRUIUtilsService.callDirectiveLoad(suppliersDirectiveAPI, directivePayload, undefined);
                 selectedSupplierDeffered = undefined;
 
             });
@@ -120,6 +121,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 if (payload != undefined) {
                     routeTableId = payload.RouteTableId;
                     routeTableViewType = payload.RouteTableViewType;
+                    if (routeTableViewType == 0)
+                        $scope.scopeModel.name = "ANumber";
+                    if (routeTableViewType == 1)
+                        $scope.scopeModel.name = "Whitelist";
+                    if (routeTableViewType == 2)
+                        $scope.scopeModel.name = "BNumber";
                     $scope.scopeModel.isANumber = (NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value == routeTableViewType) ? true : false;
 
                 }

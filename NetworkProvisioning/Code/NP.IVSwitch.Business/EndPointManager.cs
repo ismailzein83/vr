@@ -218,23 +218,29 @@ namespace NP.IVSwitch.Business
                  InsertedObject = null
              };
             string mssg;
-            var carrierAccountManager = new CarrierAccountManager();
-            string carrierAccountName = carrierAccountManager.GetCarrierAccountName(endPointItem.CarrierAccountId);
-            int? profileId = carrierAccountManager.GetCarrierProfileId(endPointItem.CarrierAccountId);
+            if (endPointItem.Entity.RouteTableBasedRule == true)
+            {
+                var carrierAccountManager = new CarrierAccountManager();
+                string carrierAccountName = carrierAccountManager.GetCarrierAccountName(endPointItem.CarrierAccountId);
+                int? profileId = carrierAccountManager.GetCarrierProfileId(endPointItem.CarrierAccountId);
 
-            if (!profileId.HasValue)
-                return insertOperationOutput;
+                if (!profileId.HasValue)
+                    return insertOperationOutput;
 
-            var carrierProfileManager = new CarrierProfileManager();
-            AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value);
+                var carrierProfileManager = new CarrierProfileManager();
+                AccountCarrierProfileExtension accountExtended = carrierProfileManager.GetExtendedSettings<AccountCarrierProfileExtension>(profileId.Value);
 
-            IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
-            Helper.SetSwitchConfig(dataManager);
-            int globalTariffTableId = dataManager.GetGlobalTariffTableId();
+                IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
+                Helper.SetSwitchConfig(dataManager);
+                int globalTariffTableId = dataManager.GetGlobalTariffTableId();
 
-            return endPointItem.Entity.EndPointType == UserType.ACL
-                ? InsertAcl(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId, out mssg)
-                : InsertSip(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId);
+                return endPointItem.Entity.EndPointType == UserType.ACL
+    ? InsertAcl(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId, out mssg)
+    : InsertSip(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId);
+            }
+            else
+                insertOperationOutput.Message = " RouteTableBaseRule is false, you cannot add an EndPoint";
+            return insertOperationOutput;
         }
         public UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
@@ -640,7 +646,7 @@ namespace NP.IVSwitch.Business
             EndPointEntityInfo endPointEntityInfo = new EndPointEntityInfo
             {
                 EndPointId = endPoint.EndPointId,
-                Description = GetEndPointDescription(endPoint),
+                Description = GetEndPointDescription(endPoint)+Utilities.GetEnumDescription(endPoint.CurrentState),
                 AccountId = endPoint.AccountId,
                 CliRouting = endPoint.CliRouting,
                 DstRouting = endPoint.DstRouting
