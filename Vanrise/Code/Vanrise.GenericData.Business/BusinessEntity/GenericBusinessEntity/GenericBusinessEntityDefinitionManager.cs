@@ -58,7 +58,13 @@ namespace Vanrise.GenericData.Business
         }
         public Guid GetGenericBEDataRecordStorageId(Guid businessEntityDefinitionId)
         {
-            return GetGenericBEDefinitionSettings(businessEntityDefinitionId).DataRecordStorageId;
+            var genericBEDefinitionSettings =  GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+            if (genericBEDefinitionSettings.DataRecordStorageId==null)
+            {
+                throw new NullReferenceException("genericBEDefinitionSettings.DataRecordStorageId");
+            }
+            return genericBEDefinitionSettings.DataRecordStorageId.Value;
+
         }
         public DataRecordType GetGenericBEDataRecordType(Guid businessEntityDefinitionId)
         {
@@ -101,6 +107,13 @@ namespace Vanrise.GenericData.Business
                 gridColumns.Add(vrCaseGridColumnAttribute);
             }
             return gridColumns;
+        }
+        public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteGenericBEDefinitionInfo(RemoteGenericBEDefinitionInfoInput input)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(input.VRConnectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            return connectionSettings.Get<IEnumerable<BusinessEntityDefinitionInfo>>(string.Format("/api/VR_GenericData/BusinessEntityDefinition/GetBusinessEntityDefinitionsInfo?filter={0}", input.Filter));
         }
         public DataRecordField GetIdFieldTypeForGenericBE(Guid businessEntityDefinitionId)
         {
@@ -222,6 +235,12 @@ namespace Vanrise.GenericData.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<GenericBEOnBeforeInsertHandlerSettingsConfig>(GenericBEOnBeforeInsertHandlerSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<GenericBEOnBeforeGetFilteredHandlerSettingsConfig> GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericBEOnBeforeGetFilteredHandlerSettingsConfig>(GenericBEOnBeforeGetFilteredHandlerSettingsConfig.EXTENSION_TYPE);
+        }
+
         public IEnumerable<GenericBESaveConditionSettingsConfig> GetGenericBESaveConditionSettingsConfigs()
         {
             var extensionConfiguration = new ExtensionConfigurationManager();

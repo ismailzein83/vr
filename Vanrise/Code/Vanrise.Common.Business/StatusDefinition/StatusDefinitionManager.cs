@@ -115,6 +115,14 @@ namespace Vanrise.Common.Business
             return this.GetCachedStatusDefinitions().MapRecords(StatusDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
+        public IEnumerable<StatusDefinitionInfo> GetRemoteStatusDefinitionsInfo(Guid connectionId, string filter)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            return connectionSettings.Get<IEnumerable<StatusDefinitionInfo>>(string.Format("/api/VRCommon/StatusDefinition/GetStatusDefinitionsInfo?filter={0}", filter));
+        }
+
         public IEnumerable<StatusDefinition> GetFilteredStatusDefinitions(StatusDefinitionInfoFilter filter)
         {
             Func<StatusDefinition, bool> filterExpression = null;

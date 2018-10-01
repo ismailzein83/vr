@@ -127,10 +127,24 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs")]
+        public IEnumerable<GenericBEOnBeforeGetFilteredHandlerSettingsConfig> GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs()
+        {
+            return _manager.GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs();
+        }
+
+        [HttpGet]
         [Route("GetDataRecordTypeFields")]
         public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             return _manager.GetDataRecordTypeFields(dataRecordTypeId);
+        }
+
+        [HttpPost]
+        [Route("GetRemoteGenericBEDefinitionInfo")]
+        public IEnumerable<BusinessEntityDefinitionInfo> GetRemoteGenericBEDefinitionInfo(RemoteGenericBEDefinitionInfoInput input)
+        {
+            return _manager.GetRemoteGenericBEDefinitionInfo(input);
         }
     }
 }

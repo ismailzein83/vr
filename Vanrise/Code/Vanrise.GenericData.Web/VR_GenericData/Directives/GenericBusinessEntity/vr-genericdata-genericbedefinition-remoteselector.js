@@ -54,30 +54,42 @@ app.directive('vrGenericdataGenericbedefinitionRemoteselector', ['UtilsService',
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
-                    var filter;
                     var connectionId;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        filter = payload.filter;
                         connectionId = payload.connectionId;
                     }
+                    var filter = {
+                        Filters: [{
+                            $type: "Vanrise.GenericData.Business.GenericBusinessEntityDefinitionFilter, Vanrise.GenericData.Business"
+                        }]
+                    };
+                    if (connectionId != undefined) {
+                        var input = {
+                            VRConnectionId: connectionId,
+                            Filter: UtilsService.serializetoJson(filter)
+                        };
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetRemoteGenericBEDefinitionInfo(input).then(function (response) {
+                            if (response != null) {
+                                for (var i = 0; i < response.length; i++) {
+                                    ctrl.datasource.push(response[i]);
+                                }
 
-                    return VR_GenericData_GenericBEDefinitionAPIService.GetRemoteGenericBEDefinitionInfo(connectionId, UtilsService.serializetoJson(filter)).then(function (response) {
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                ctrl.datasource.push(response[i]);
+                                if (selectedIds != undefined) {
+                                    VRUIUtilsService.setSelectedValues(selectedIds, 'BusinessEntityDefinitionId', attrs, ctrl);
+                                }
                             }
-
-                            if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'DataRecordStorageId', attrs, ctrl);
-                            }
-                        }
-                    });
+                        });
+                    }
+                    else {
+                        ctrl.datasource.length = 0;
+                    }
+                 
                 };
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('DataRecordStorageId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('BusinessEntityDefinitionId', attrs, ctrl);
                 };
 
                 if (ctrl.onReady != null)
@@ -88,17 +100,17 @@ app.directive('vrGenericdataGenericbedefinitionRemoteselector', ['UtilsService',
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Remote Storage";
+            var label = "Remote Generic BE Definition";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Remote Storages";
+                label = "Remote Generic BE Definitions";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                        '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="DataRecordStorageId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
+                        '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="BusinessEntityDefinitionId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
                             + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '
                             + ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                         '</vr-select>' +

@@ -1,33 +1,59 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-columns width="1/2row">
-            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
+        <vr-columns width="1/3row">
+            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" label="Data Record Type" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
         </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordstorage-selector>
+        <vr-columns width="1/3row">
+            <vr-select datasource="scopeModel.genericBEDefinitionTypes"
+                       datavaluefield="value"
+                       datatextfield="description"
+                       selectedvalues="scopeModel.selectedGenericBEDefinitionType"
+                       label="Generic BE Type" 
+                       isrequired="true" 
+                       hideremoveicon
+                       onselectionchanged="scopeModel.onGenericBEDefinitionTypeSelectionChanged">
+            </vr-select>
         </vr-columns>
-        <vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
+        <span ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==1">
+            <vr-common-connection-selector on-ready="scopeModel.onVRConnectionSelectorReady"
+                                           normal-col-num="4"
+                                           isrequired="true"
+                                           onselectionchanged="scopeModel.onVRConnectionSelectionChanged"
+                                           selectedvalues="scopeModel.selectedVRConnection"
+                                           hideremoveicon="true"></vr-common-connection-selector>
+        </span>
+        <vr-columns width="1/3row" ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==0">
+            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" selectedvalues="scopeModel.selectedDataRecordStorage" isrequired="true"></vr-genericdata-datarecordstorage-selector>
+        </vr-columns>
+       
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingTitle">
             <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
         </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
-        </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-textbox label="Singular Title" value="scopeModel.selectorSingularTitle">
-         </vr-columns>
-        <vr-columns width="1/2row">
-            <vr-textbox label="Plural Title" value="scopeModel.selectorPluralTitle">
-       </vr-columns>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/3row">
             <vr-switch value="scopeModel.hideAddButton" label="Hide Add Button"></vr-switch>
         </vr-columns>
+        <span ng-if="scopeModel.selectedGenericBEDefinitionType!=undefined && scopeModel.selectedGenericBEDefinitionType.value==1">
+            <vr-genericdata-genericbedefinition-remoteselector on-ready="scopeModel.onGenericBEDefinitionRemoteSelectorReady" vr-loader="scopeModel.isLoadingGenericBEDefinitionRemoteSelector" normal-col-num="4" isrequired="true"></vr-genericdata-genericbedefinition-remoteselector>
+        </span>
     </vr-row>
-   
-    <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-extendedsettings>
-   
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox label="Singular Title" value="scopeModel.selectorSingularTitle">
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox label="Plural Title" value="scopeModel.selectorPluralTitle">
+        </vr-columns>
+    </vr-row>
+    <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="4"></vr-genericdata-genericbe-extendedsettings>
+        
 </vr-tab>
 
-<vr-tab header="'Action Defnition'">
+<vr-tab header="'Action Definition'">
     <vr-row>
         <vr-columns width="fullrow">
             <vr-genericdata-genericbe-actiondefinition-grid on-ready="scopeModel.onGenericBEActionDefinitionDirectiveReady"></vr-genericdata-genericbe-actiondefinition-grid>
@@ -55,7 +81,7 @@
     </vr-row>
 </vr-tab>
 
-<vr-tab header="'Editor Defnition'">
+<vr-tab header="'Editor Definition'">
     <vr-row>
         <vr-columns width="fullrow" haschildcolumns>
             <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-editordefinition-settings>
@@ -81,6 +107,11 @@
         <vr-columns width="fullrow">
             <vr-section header="After Save Handler" collapsible vr-loader="scopeModel.isLoadingAfterSave">
                 <vr-genericdata-genericbe-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-aftersavehandler-settings>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-section header="Before Get Filtered Handler" collapsible vr-loader="scopeModel.isLoadingBeforeGetFiltered">
+                <vr-genericdata-genericbe-beforegetfilteredhandler-settings on-ready="scopeModel.onGenericBEBeforeGetFilteredHandlerSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-beforegetfilteredhandler-settings>
             </vr-section>
         </vr-columns>
     </vr-row>

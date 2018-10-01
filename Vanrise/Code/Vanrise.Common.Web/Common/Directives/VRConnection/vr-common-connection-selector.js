@@ -52,8 +52,12 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 
                 label = "Connections";
                 multipleselection = "ismultipleselection";
             }
+            var hideremoveicon="";
+            if (attrs.hideremoveicon !=undefined) {
+                hideremoveicon="hideremoveicon";
+            }
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="VRConnectionId" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Connection" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="VRConnectionId" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Connection" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" '+ hideremoveicon+' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
         }
 
         function connectionCtor(ctrl, $scope, attrs) {

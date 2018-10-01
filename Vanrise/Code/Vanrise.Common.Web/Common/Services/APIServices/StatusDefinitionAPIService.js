@@ -40,6 +40,13 @@
             });
         }
 
+        function GetRemoteStatusDefinitionsInfo(connectionId, filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetRemoteStatusDefinitionsInfo"), {
+                connectionId: connectionId,
+                filter: filter
+            });
+        }
+
         return ({
             GetFilteredStatusDefinitions: GetFilteredStatusDefinitions,
             AddStatusDefinition: AddStatusDefinition,
@@ -48,6 +55,7 @@
             HasUpdateStatusDefinitionPermission: HasUpdateStatusDefinitionPermission,
             GetStatusDefinition: GetStatusDefinition,
             GetStatusDefinitionsInfo: GetStatusDefinitionsInfo,
+            GetRemoteStatusDefinitionsInfo: GetRemoteStatusDefinitionsInfo
         });
     }
 

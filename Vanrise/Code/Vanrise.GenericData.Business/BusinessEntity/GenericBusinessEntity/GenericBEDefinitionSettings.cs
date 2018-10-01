@@ -57,7 +57,7 @@ namespace Vanrise.GenericData.Business
        // public string FieldPath { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
         public Guid DataRecordTypeId { get; set; }
-        public Guid DataRecordStorageId { get; set; }
+        public Guid? DataRecordStorageId { get; set; }
         public string TitleFieldName { get; set; }
         public List<GenericBEAction> GenericBEActions{get;set;}
         public GenericBEGridDefinition GridDefinition { get; set; }
@@ -65,8 +65,9 @@ namespace Vanrise.GenericData.Business
         public GenericBEFilterDefinition FilterDefinition { get; set; }
         public GenericBEOnBeforeInsertHandler OnBeforeInsertHandler { get; set; }
         public GenericBEOnAfterSaveHandler OnAfterSaveHandler { get; set; }
+        public GenericBEOnBeforeGetFilteredHandler OnBeforeGetFilteredHandler { get; set; }
         public GenericBEExtendedSettings ExtendedSettings { get; set; }
- 
+     
     }
     public abstract class GenericBEExtendedSettings
     {
@@ -82,7 +83,51 @@ namespace Vanrise.GenericData.Business
         GenericBEDefinitionSettings DefinitionSettings { get;  }
         string InfoType { get; }
     }
-  
+
+    public abstract class GenericBEOnBeforeGetFilteredHandler
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract void PrepareQuery(IGenericBEOnBeforeGetFilteredHandlerPrepareQueryContext context);
+        public abstract void onBeforeAdd(IGenericBEOnBeforeAddHandlerContext context);
+        public abstract void onBeforeUpdate(IGenericBEOnBeforeUpdateHandlerContext context);
+
+    }
+
+    public interface IGenericBEOnBeforeAddHandlerContext
+    {
+        string AccountFieldName { get; set; }
+        object AccountFieldValue { get; set; }
+    }
+
+    public interface IGenericBEOnBeforeUpdateHandlerContext
+    {
+        string AccountFieldName { get; set; }
+        object AccountFieldValue { get; set; }
+    }
+
+    public interface IGenericBEOnBeforeGetFilteredHandlerPrepareQueryContext
+    {
+        Guid? VRConnectionId { get; }
+        GenericBusinessEntityQuery Query { get; set; }
+    }
+
+    public class GenericBEOnBeforeGetFilteredHandlerPrepareQueryContext : IGenericBEOnBeforeGetFilteredHandlerPrepareQueryContext
+    {
+        public Guid? VRConnectionId { get; set; }
+        public GenericBusinessEntityQuery Query { get; set; }
+    }
+
+    public class GenericBEOnBeforeAddHandlerContext : IGenericBEOnBeforeAddHandlerContext
+    {
+        public string AccountFieldName { get; set; }
+        public object AccountFieldValue { get; set; }
+    }
+
+    public class GenericBEOnBeforeUpdateHandlerContext : IGenericBEOnBeforeUpdateHandlerContext
+    {
+        public string AccountFieldName { get; set; }
+        public object AccountFieldValue { get; set; }
+    }
     public abstract class GenericBEOnBeforeInsertHandler
     {
         public abstract Guid ConfigId { get;  }

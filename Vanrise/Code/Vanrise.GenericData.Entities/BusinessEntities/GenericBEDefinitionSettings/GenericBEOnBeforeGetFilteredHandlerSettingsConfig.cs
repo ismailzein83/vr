@@ -7,8 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericBEOnBeforeGetFilteredHandlerSettingsConfig 
+    public class GenericBEOnBeforeGetFilteredHandlerSettingsConfig : ExtensionConfiguration
     {
- 
+        public const string EXTENSION_TYPE = "VR_GenericData_GenericBEOnBeforeGetFilteredHandlerSettings";
+        public string Editor { get; set; }
     }
 }
