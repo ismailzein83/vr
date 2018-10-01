@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
     <Content Include="Resources\RDB\MySQL.txt" />
   </ItemGroup>
   <ItemGroup>
