@@ -35,7 +35,7 @@
             <vr-row>
                 <vr-columns width="1/3row">
                     <vr-select label="CLI Pattern"
-                               datasource="scopeModel.CLITypes"
+                               datasource="scopeModel.cliTypes"
                                selectedvalues="scopeModel.selectedCLIType"
                                datatextfield="description"
                                datavaluefield="value"
@@ -56,7 +56,7 @@
                         </vr-select>
                     </vr-columns>
                     <vr-columns width="3/4row">
-                        <vr-textbox label="CLI" value="scopeModel.CLIPattern" isrequired></vr-textbox>
+                        <vr-textbox label="CLI" value="scopeModel.cliPattern" isrequired></vr-textbox>
                     </vr-columns>
                 </vr-columns>
             </vr-row>
@@ -66,7 +66,7 @@
                         <vr-textbox label="CLI Prefix" value="scopeModel.poolBasedCLISettingsPrefix" isrequired></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox label="Destination" value="scopeModel.poolBasedCLISettingsDestination"></vr-textbox>
+                        <vr-textbox label="Destination" value="scopeModel.poolBasedCLISettingsDestination" minvalue="0" type="number" decimalprecision="0"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -84,7 +84,7 @@
                     <vr-columns width="1/3row">
                         <vr-select label="CLI Type"
                                     on-ready="scopeModel.onCLISourceReady"
-                                    datasource="scopeModel.CLISources"
+                                    datasource="scopeModel.cliSources"
                                     selectedvalues="scopeModel.selectedCLISource"
                                     datatextfield="description"
                                     datavaluefield="value"
@@ -111,7 +111,7 @@
                     </div>
                 </vr-row>
                 <vr-row>
-                    <div ng-if="scopeModel.CLIPatterns.length>0">
+                    <div ng-if="scopeModel.cliPatterns.length>0">
                         <vr-columns colnum="12">
                             <a href="" ng-click="scopeModel.clearAllCLIPatterns()" class="pull-right">
                                 Clear all
@@ -124,7 +124,7 @@
                     <vr-columns width="fullrow">
                         <span vr-loader="scopeModel.isLoadingCLIPatterns">
                             <vr-validator validate="scopeModel.validateCLIPatterns()">
-                                <vr-datalist maxitemsperrow="4" datasource="scopeModel.CLIPatterns" onremoveitem="scopeModel.onRemoveCLIPattern">
+                                <vr-datalist maxitemsperrow="4" datasource="scopeModel.cliPatterns" onremoveitem="scopeModel.onRemoveCLIPattern">
                                     <vr-label>{{dataItem}}</vr-label>
                                 </vr-datalist>
                             </vr-validator>
