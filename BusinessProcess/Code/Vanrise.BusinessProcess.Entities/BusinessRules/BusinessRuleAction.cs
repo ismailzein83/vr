@@ -1,13 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
+using System.ComponentModel;
 
 namespace Vanrise.BusinessProcess.Entities
 {
-    public enum ActionSeverity { Information = 0, Warning = 1, Error = 2 };
+    public enum ActionSeverity {
+        [Description("Information")]
+        Information = 0,
+
+        [Description("Warning")]
+        Warning = 1,
+
+        [Description("Error")]
+        Error = 2
+    };
 
     public abstract class BusinessRuleAction
     {

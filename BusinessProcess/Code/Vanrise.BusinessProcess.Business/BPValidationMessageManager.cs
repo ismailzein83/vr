@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess
 {
@@ -57,11 +59,15 @@ namespace Vanrise.BusinessProcess
                 Data = bigResult.Data,
                 TotalCount = bigResult.TotalCount
             };
+            ResultProcessingHandler<BPValidationMessageDetail> handler = new ResultProcessingHandler<BPValidationMessageDetail>()
+            {
+                ExportExcelHandler = new BPValidationMessageDetailExportExcelHandler()
+            };
 
             if (bigResult.Data != null && bigResult.Data.Count() > 0)
                 bpValidationMessageBigResult.HasWarningMessages = bigResult.Data.Any(x => x.Entity.Severity == ActionSeverity.Warning);
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bpValidationMessageBigResult);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bpValidationMessageBigResult, handler);
         }
 
         private BPValidationMessageDetail BPValidationMessageDetailMapper(BPValidationMessage bpValidationMessage)
@@ -72,6 +78,37 @@ namespace Vanrise.BusinessProcess
             {
                 Entity = bpValidationMessage
             };
+        }
+
+        private class BPValidationMessageDetailExportExcelHandler : ExcelExportHandler<BPValidationMessageDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<BPValidationMessageDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Messages Validations",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message",Width=200 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Severity"});
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Message });
+                            row.Cells.Add(new ExportExcelCell { Value = Common.Utilities.GetEnumDescription(record.Entity.Severity) });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
     }
 }

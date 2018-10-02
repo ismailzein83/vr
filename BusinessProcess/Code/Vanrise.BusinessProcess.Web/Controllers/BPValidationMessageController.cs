@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Web.Http;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Web.Base;
@@ -29,7 +31,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public object GetFilteredBPValidationMessage(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input)
         {
             BPValidationMessageManager manager = new BPValidationMessageManager();
-            return GetWebResponse(input, manager.GetFilteredBPValidationMessage(input));
+            return GetWebResponse(input, manager.GetFilteredBPValidationMessage(input), "Messages Validations");
         }
     }
 }
