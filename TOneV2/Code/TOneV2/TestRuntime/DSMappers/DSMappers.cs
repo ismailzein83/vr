@@ -89,7 +89,7 @@ namespace TestRuntime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_MySQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_MySQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             //Retail.Runtime.Mappers.RingoMapper mapper = new Retail.Runtime.Mappers.RingoMapper();
             //return DSMappers.ImportingCDR_MySQL(data);
@@ -436,14 +436,14 @@ namespace TestRuntime
             Console.WriteLine(Message);
         }
 
-        public class mappedBatches
+        private class mappedBatches
         {
             public static void Add(string activatorName, object batch)
             {
             }
         }
 
-        public class Utils
+        private class Utils
         {
             public static T GetReaderValue<T>(IDataReader reader, string fieldName)
             {
