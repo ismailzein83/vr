@@ -93,7 +93,7 @@
             $scope.onSearchDirectiveReady = function (api) {
                 searchDirectiveAPI = api;
                 searchDirectiveReadyDeferred.resolve();
-            }
+            };
 
             $scope.addGenericRule = function () {
                 var onGenericRuleAdded = function (ruleObj) {
