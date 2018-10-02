@@ -18,7 +18,7 @@
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'To'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
-                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onDateChanged" customvalidate="dataItem.validateToDate()"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onDateChanged" customvalidate="dataItem.validateToDate()" applytimemax></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
 
