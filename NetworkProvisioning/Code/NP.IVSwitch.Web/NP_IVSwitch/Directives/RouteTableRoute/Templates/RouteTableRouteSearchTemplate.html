@@ -31,7 +31,7 @@
     <vr-columns width="normal" withemptyline>
         <div>
             <vr-button type="Search" standalone data-onclick="scopeModel.search" vr-disabled="scopeModel.canSearch()"></vr-button>
-            <vr-button type="Add" standalone data-onclick="scopeModel.addRouteTableRT"></vr-button>
+            <vr-button type="Add" standalone data-onclick="scopeModel.addRouteTableRT" haspermission="scopeModel.hadAddRouteTableRoutesPermission"></vr-button>
         </div>
 
     </vr-columns>

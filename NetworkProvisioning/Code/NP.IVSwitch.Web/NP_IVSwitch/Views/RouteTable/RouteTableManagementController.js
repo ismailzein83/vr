@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    routeTableManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum','NP_IVSwitch_EndPointStateEnum'];
+    routeTableManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum', 'NP_IVSwitch_EndPointStateEnum', 'NP_IVSwitch_RouteTableAPIService'];
 
-    function routeTableManagementController($scope, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum,NP_IVSwitch_EndPointStateEnum) {
+    function routeTableManagementController($scope, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum, NP_IVSwitch_RouteTableAPIService) {
         var gridApi;
         var GridDirectiveDefferedReady = UtilsService.createPromiseDeferred();
 
@@ -109,7 +109,9 @@
             $scope.scopeModel.search = function () {
                 return gridApi.load({ Filter: getFilter(), RouteTableViewType: routeTableViewType });
             };
-
+            $scope.scopeModel.hadAddRouteTablePermission = function () {
+                return NP_IVSwitch_RouteTableAPIService.HasAddRouteTablePermission();
+            };
             $scope.scopeModel.addRouteTable = function () {
                 var onRouteTableAdded = function (routeTable) {
                     if (gridApi != undefined) {

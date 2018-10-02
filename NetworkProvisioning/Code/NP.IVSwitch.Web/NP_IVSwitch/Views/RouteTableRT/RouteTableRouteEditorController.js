@@ -44,6 +44,13 @@
 
             };
 
+            $scope.scopeModel.hasSaveRouteTableRoutePermission = function () {
+                if (isEditMode)
+                    return NP_IVSwitch_RouteTableRouteAPIService.HasUpdateRouteTableRoutePermission();
+                else
+                    return NP_IVSwitch_RouteTableRouteAPIService.HasAddRouteTableRoutesPermission();
+            };
+
             $scope.scopeModel.saveRouteTableRT = function () {
                 if (isEditMode)
                     return updateRouteTableRT();

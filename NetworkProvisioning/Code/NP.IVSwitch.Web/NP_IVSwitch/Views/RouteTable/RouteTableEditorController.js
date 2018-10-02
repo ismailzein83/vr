@@ -39,7 +39,12 @@
                     return insertRouteTable();
 
             };
-
+            $scope.scopeModel.hasSaveRouteTablePermission = function () {
+                if (isEditMode)
+                    return NP_IVSwitch_RouteTableAPIService.HasUpdateRouteTablePermission();
+                else
+                    return NP_IVSwitch_RouteTableAPIService.HasAddRouteTablePermission();
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };

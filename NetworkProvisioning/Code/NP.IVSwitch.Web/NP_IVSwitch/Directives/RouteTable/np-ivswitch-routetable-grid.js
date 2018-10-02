@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("npIvswitchRoutetableGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "NP_IVSwitch_RouteTableViewTypeEnum",
-function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService, NP_IVSwitch_RouteTableViewTypeEnum) {
+app.directive("npIvswitchRoutetableGrid", ["UtilsService", "VRNotificationService", "NP_IVSwitch_RouteTableAPIService", "NP_IVSwitch_RouteTableService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "NP_IVSwitch_RouteTableViewTypeEnum", "NP_IVSwitch_RouteTableRouteAPIService",
+function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService, NP_IVSwitch_RouteTableService, VRUIUtilsService, VRCommon_ObjectTrackingService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_RouteTableRouteAPIService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -36,6 +36,9 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                     var drillDownDefinition = {};
                     drillDownDefinition.title = "Routes";
                     drillDownDefinition.directive = "np-ivswitch-routetable-route-search";
+                    drillDownDefinition.haspermission = function () {
+                        return NP_IVSwitch_RouteTableRouteAPIService.HasViewRouteTableRoutePermission();
+                    };
                     drillDownDefinition.dontLoad = true;
                     drillDownDefinition.loadDirective = function (directiveAPI, routeTableItem) {
                         var query = {
@@ -93,12 +96,22 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 menu.push({
                     name: 'Edit',
                     clicked: editRouteTable,
+                    haspermission: hasUpdateRouteTablePermission
                 });
+
+                function hasUpdateRouteTablePermission() {
+                    return NP_IVSwitch_RouteTableAPIService.HasUpdateRouteTablePermission();
+                }
+
                 menu.push({
                     name: "Delete",
                     clicked: deleteRoute,
+                    haspermission: HasDeleteRouteTablePermission
 
                 });
+                function HasDeleteRouteTablePermission() {
+                    return NP_IVSwitch_RouteTableAPIService.HasDeleteRouteTablePermission();
+                }
                 return menu;
             };
            

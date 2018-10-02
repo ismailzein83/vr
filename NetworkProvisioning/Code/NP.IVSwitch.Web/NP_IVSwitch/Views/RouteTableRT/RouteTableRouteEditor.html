@@ -28,7 +28,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteTableEditor" data-onclick="scopeModel.saveRouteTableRT"></vr-button>
+                <vr-button type="Save" formname="formRouteTableEditor" data-onclick="scopeModel.saveRouteTableRT" haspermission="scopeModel.hasSaveRouteTableRoutePermission"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

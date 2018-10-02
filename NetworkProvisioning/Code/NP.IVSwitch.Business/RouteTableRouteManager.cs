@@ -495,7 +495,7 @@ namespace NP.IVSwitch.Business
                 Helper.SetSwitchConfig(routeTableDataManager);
                 RouteManager routeManager = new RouteManager();
 
-                if (input.Query.SupplierIds != null && input.Query.SupplierIds.Count > 0)
+                if (input.Query.SupplierIds != null && input.Query.SupplierIds.Count > 0 && (input.Query.RouteIds == null || input.Query.RouteIds.Count==0))
                 {
                     input.Query.RouteIds = new List<int>();
 

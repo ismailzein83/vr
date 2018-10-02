@@ -110,12 +110,23 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
             $scope.scopeModel.gridMenuActions = [{
                 name: "Edit",
                 clicked: editRouteTableRoute,
-
+                haspermission: HasUpdateRouteTableRoutePermission
             }];
+
+            function HasUpdateRouteTableRoutePermission() {
+                return NP_IVSwitch_RouteTableRouteAPIService.HasUpdateRouteTableRoutePermission();
+            }
+
             $scope.scopeModel.gridMenuActions.push({
                 name: 'Delete',
                 clicked: deleteRouteTableRoute,
+                haspermission: HasDeleteRouteTableRoutePermission
             });
+
+            function HasDeleteRouteTableRoutePermission() {
+                return NP_IVSwitch_RouteTableRouteAPIService.HasDeleteRouteTableRoutePermission();
+            }
+
         }
 
         function editRouteTableRoute(routeTableEntity) {

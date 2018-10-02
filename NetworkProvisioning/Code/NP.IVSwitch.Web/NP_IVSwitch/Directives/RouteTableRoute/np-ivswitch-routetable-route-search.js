@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("npIvswitchRoutetableRouteSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'NP_IVSwitch_RouteTableRouteService', 'NP_IVSwitch_RouteTableViewTypeEnum','NP_IVSwitch_EndPointStateEnum',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, NP_IVSwitch_RouteTableRouteService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum) {
+app.directive("npIvswitchRoutetableRouteSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'NP_IVSwitch_RouteTableRouteService', 'NP_IVSwitch_RouteTableViewTypeEnum','NP_IVSwitch_EndPointStateEnum','NP_IVSwitch_RouteTableRouteAPIService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, NP_IVSwitch_RouteTableRouteService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum, NP_IVSwitch_RouteTableRouteAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -47,6 +47,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     return true;
                 return false;
 
+            };
+
+            $scope.scopeModel.hadAddRouteTableRoutesPermission = function () {
+                return NP_IVSwitch_RouteTableRouteAPIService.HasAddRouteTableRoutesPermission();
             };
 
             $scope.scopeModel.addRouteTableRT = function () {
