@@ -204,6 +204,7 @@
     <Content Include="Client\Javascripts\Directives\Tabs\Templates\TabsSelectorModalPopup.html" />
     <Content Include="Client\Javascripts\Services\NotificationService\vr-prompt-modal.html" />
     <Content Include="Client\Javascripts\Services\MobileService.js" />
+    <Content Include="Client\Javascripts\Services\RemoteFileAPIService.js" />
     <Content Include="Client\Javascripts\Services\vr-dragdrop-service.js" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
