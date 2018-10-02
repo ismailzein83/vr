@@ -120,8 +120,9 @@
                                          pagingtype="'PagingOnScroll'"
                                          idfield="Entity.Destination" enableautoexport="true">
                                 <vr-datagridcolumn headertext="'Destination'" type="'Text'" field="'Entity.Destination'" widthfactor="20"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Sys. Rate'" field="'Entity.SystemRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Rate'" field="'Entity.ProviderRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Currency'" field="'Entity.Currency'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Sys. Rate'" field="'Entity.SystemRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'{{scopeModel.partnerAbbreviationLabel}} Rate'" field="'Entity.ProviderRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="6"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'From'" field="'Entity.From'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Till'" field="'Entity.To'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
                                 <vr-datagridcolumn headertext="'Sys. Calls'" field="'Entity.SystemCalls'" type="'Number'" numberprecision="{{scopeModel.decimalDigits}}" widthfactor="10" cssclass="'bg-success'"></vr-datagridcolumn>

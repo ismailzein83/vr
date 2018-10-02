@@ -24,7 +24,7 @@ namespace TOne.WhS.Invoice.Business
         CurrencyManager _currencyManager = new CurrencyManager();
         public IDataRetrievalResult<InvoiceComparisonResultDetail> CompareInvoices(Vanrise.Entities.DataRetrievalInput<InvoiceComparisonInput> input)
         {
-            if(input.ResultKey == null)
+            if (input.ResultKey == null)
             {
                 ValidateCompareInvoices(input.Query);
             }
@@ -37,16 +37,16 @@ namespace TOne.WhS.Invoice.Business
             string description = null;
             string resultTooltipDescription = null;
 
-            switch(invoiceComparisonResult.Result)
+            switch (invoiceComparisonResult.Result)
             {
-                case ComparisonResult.Identical: 
-                    description = Utilities.GetEnumDescription(invoiceComparisonResult.Result); 
+                case ComparisonResult.Identical:
+                    description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
                     break;
-                case ComparisonResult.MajorDiff: 
+                case ComparisonResult.MajorDiff:
                     description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
                     resultTooltipDescription = "Difference greater than threshold.";
                     break;
-                case ComparisonResult.MinorDiff: 
+                case ComparisonResult.MinorDiff:
                     description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
                     resultTooltipDescription = "Difference less than threshold.";
                     break;
@@ -54,7 +54,7 @@ namespace TOne.WhS.Invoice.Business
                     description = string.Format("{0} {1}", Utilities.GetEnumDescription(invoiceComparisonResult.Result), compareInvoiceAction.PartnerLabel);
                     resultTooltipDescription = "Record doesn't exist for provider.";
                     break;
-                case ComparisonResult.MissingSystem: 
+                case ComparisonResult.MissingSystem:
                     description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
                     resultTooltipDescription = "Record doesn't exist for system.";
                     break;
@@ -67,7 +67,7 @@ namespace TOne.WhS.Invoice.Business
                 ResultTooltipDescription = resultTooltipDescription
             };
         }
-        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId,InvoiceCarrierType invoiceCarrierType)
+        public ComparisonInvoiceDetail GetInvoiceDetails(long invoiceId, InvoiceCarrierType invoiceCarrierType)
         {
 
             Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
@@ -99,7 +99,7 @@ namespace TOne.WhS.Invoice.Business
                     break;
 
             }
-          
+
 
             return new ComparisonInvoiceDetail()
             {
@@ -133,38 +133,38 @@ namespace TOne.WhS.Invoice.Business
                 VRFileManager vrFileManager = new VRFileManager();
                 foreach (var attachment in input.AttachementFiles)
                 {
-                    if (!vrFileManager.SetFileUsedAndUpdateSettings(attachment.FileId, new VRFileSettings { ExtendedSettings = new OriginalInvoiceDataFileSetting { InvoiceId = input.InvoiceId, InvoiceTypeId = invoice.InvoiceTypeId} }))
+                    if (!vrFileManager.SetFileUsedAndUpdateSettings(attachment.FileId, new VRFileSettings { ExtendedSettings = new OriginalInvoiceDataFileSetting { InvoiceId = input.InvoiceId, InvoiceTypeId = invoice.InvoiceTypeId } }))
                     {
                         return false;
                     }
                 }
             }
             InvoiceCarrierType invoiceCarrierType = input.invoiceCarrierType;
-           switch (invoiceCarrierType)
-           {
-               case InvoiceCarrierType.Customer:
-                      var customerInvoiceDetails = invoice.Details as CustomerInvoiceDetails;
-                      customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
-                      customerInvoiceDetails.AttachementFiles = input.AttachementFiles;
-                      customerInvoiceDetails.Reference = input.Reference;
-                      customerInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
-              
-                      invoice.Details = customerInvoiceDetails;
-                   break;
-               case InvoiceCarrierType.Supplier:
-                     var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
-                     supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
-                     supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
-                     supplierInvoiceDetails.Reference = input.Reference;
-                     supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
+            switch (invoiceCarrierType)
+            {
+                case InvoiceCarrierType.Customer:
+                    var customerInvoiceDetails = invoice.Details as CustomerInvoiceDetails;
+                    customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
+                    customerInvoiceDetails.AttachementFiles = input.AttachementFiles;
+                    customerInvoiceDetails.Reference = input.Reference;
+                    customerInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
 
-                     invoice.Details = supplierInvoiceDetails;
-                   break;
+                    invoice.Details = customerInvoiceDetails;
+                    break;
+                case InvoiceCarrierType.Supplier:
+                    var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
+                    supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+                    supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
+                    supplierInvoiceDetails.Reference = input.Reference;
+                    supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
 
-           }
-          
+                    invoice.Details = supplierInvoiceDetails;
+                    break;
 
-            
+            }
+
+
+
             return invoiceManager.TryUpdateInvoice(invoice);
         }
 
@@ -181,14 +181,14 @@ namespace TOne.WhS.Invoice.Business
             List<AttachementFile> attachementFiles = null;
             switch (invoiceCarrierType)
             {
-                 case InvoiceCarrierType.Customer :
+                case InvoiceCarrierType.Customer:
                     var customerInvoiceDetails = invoice.Details as CustomerInvoiceDetails;
                     customerInvoiceDetails.ThrowIfNull("customerInvoiceDetails");
                     reference = customerInvoiceDetails.Reference;
                     originalAmountByCurrency = customerInvoiceDetails.OriginalAmountByCurrency;
                     attachementFiles = customerInvoiceDetails.AttachementFiles;
 
-                   break;
+                    break;
 
                 case InvoiceCarrierType.Supplier:
                     var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
@@ -329,15 +329,15 @@ namespace TOne.WhS.Invoice.Business
             InvoiceItemGroupingManager invoiceItemGroupingManager = new InvoiceItemGroupingManager();
             var invoice = new Vanrise.Invoice.Business.InvoiceManager().GetInvoice(input.InvoiceId);
             invoice.ThrowIfNull("invoice", input.InvoiceId);
-         //   var currencyId = invoice.Details.GetType().GetProperty(invoiceType.Settings.CurrencyFieldName).GetValue(invoice.Details, null);
-          //  string currencySymbol = null;
-         //  if (currencyId != null)
-          //     currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
+            //   var currencyId = invoice.Details.GetType().GetProperty(invoiceType.Settings.CurrencyFieldName).GetValue(invoice.Details, null);
+            //  string currencySymbol = null;
+            //  if (currencyId != null)
+            //     currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
 
             List<Guid> dimensions = new List<Guid>();
             dimensions.Add(invoiceActionSettings.ZoneDimensionId);
-          //  dimensions.Add(invoiceActionSettings.FromDateDimensionId);
-          //  dimensions.Add(invoiceActionSettings.ToDateDimensionId);
+            //  dimensions.Add(invoiceActionSettings.FromDateDimensionId);
+            //  dimensions.Add(invoiceActionSettings.ToDateDimensionId);
             dimensions.Add(invoiceActionSettings.CurrencyDimensionId);
 
             dimensions.Add(invoiceActionSettings.RateDimensionId);
@@ -392,8 +392,9 @@ namespace TOne.WhS.Invoice.Business
                         Destination = invoiceComparisonResult.Destination,
                         From = invoiceComparisonResult.From.Date,
                         To = invoiceComparisonResult.To.Date,
+                        Currency = invoiceComparisonResult.Currency
                     };
-                   
+
                     InvoiceItemToCompare invoiceItemToCompare;
                     if (systemInvoiceItems.TryGetValue(comparisonKey, out invoiceItemToCompare))
                     {
@@ -407,9 +408,9 @@ namespace TOne.WhS.Invoice.Business
                         invoiceComparisonResult.ResultColor = resultLabelColor;
                         systemInvoiceItems.Remove(comparisonKey);
                     }
-                   else
+                    else
                     {
-                       // invoiceComparisonResult.Currency = currencySymbol;
+                        // invoiceComparisonResult.Currency = currencySymbol;
                         invoiceComparisonResult.Result = ComparisonResult.MissingSystem;
                         invoiceComparisonResult.ResultColor = LabelColor.Error;
                     }
@@ -617,7 +618,7 @@ namespace TOne.WhS.Invoice.Business
                     }
 
 
-                    invoiceItemToCompare.Rate = Math.Round(invoiceItemToCompare.Rate, longPrecision,MidpointRounding.AwayFromZero);
+                    invoiceItemToCompare.Rate = Math.Round(invoiceItemToCompare.Rate, longPrecision, MidpointRounding.AwayFromZero);
                     if (decimalDigits.HasValue)
                     {
                         invoiceItemToCompare.Amount = Math.Round(invoiceItemToCompare.Amount, decimalDigits.Value, MidpointRounding.AwayFromZero);
@@ -629,11 +630,13 @@ namespace TOne.WhS.Invoice.Business
                         Destination = invoiceItemToCompare.Destination,
                         From = invoiceItemToCompare.From.Date,
                         To = invoiceItemToCompare.To.Date,
+                        Currency = _currencyManager.GetCurrencySymbol(invoiceItemToCompare.CurrencyId)
                     };
                     if (!invoiceItemsToCompare.ContainsKey(comparisonKey))
                     {
                         invoiceItemsToCompare.Add(comparisonKey, invoiceItemToCompare);
-                    }else
+                    }
+                    else
                     {
                         throw new Exception(string.Format("Same Period Exist for {0} From: '{1}' To: '{2}'. ", invoiceItemToCompare.Destination, invoiceItemToCompare.From.Date, invoiceItemToCompare.To.Date));
                     }
@@ -654,7 +657,7 @@ namespace TOne.WhS.Invoice.Business
                         SystemCalls = item.Value.Calls,
                         SystemRate = item.Value.Rate,
                         SystemAmount = item.Value.Amount,
-                        Currency =_currencyManager.GetCurrencySymbol(item.Value.CurrencyId),
+                        Currency = _currencyManager.GetCurrencySymbol(item.Value.CurrencyId),
                         Destination = item.Value.Destination,
                         From = item.Value.From,
                         To = item.Value.To,
@@ -676,15 +679,24 @@ namespace TOne.WhS.Invoice.Business
                     throw new NullReferenceException("Mapped Zone cannot have a null value.");
                 invoiceComparisonResult.Destination = zoneField.FieldValue.ToString();
             };
+
+
             #endregion
 
+            ConvertedExcelField currency;
+            if (fields.TryGetValue("Currency", out currency))
+            {
+                if (currency.FieldValue == null || String.IsNullOrWhiteSpace(currency.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped Currency cannot have a null value.");
+                    invoiceComparisonResult.Currency = currency.FieldValue.ToString();                
+            };
             #region Fill FromDate
             ConvertedExcelField fromDateField;
             if (fields.TryGetValue("FromDate", out fromDateField))
             {
                 if (fromDateField.FieldValue == null || String.IsNullOrWhiteSpace(fromDateField.FieldValue.ToString()))
                     throw new NullReferenceException("Mapped from date cannot have a null value.");
-              
+
                 if (fromDateField.FieldValue is DateTime)
                 {
                     invoiceComparisonResult.From = Convert.ToDateTime(fromDateField.FieldValue).Date;
@@ -697,7 +709,7 @@ namespace TOne.WhS.Invoice.Business
                     else
                         throw new NullReferenceException("From date has an invalid format.");
                 }
-               
+
             };
             #endregion
 
@@ -708,7 +720,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 if (toDateField.FieldValue == null || String.IsNullOrWhiteSpace(toDateField.FieldValue.ToString()))
                     throw new NullReferenceException("Mapped to date cannot have a null value.");
-               
+
                 if (toDateField.FieldValue is DateTime)
                 {
                     invoiceComparisonResult.To = Convert.ToDateTime(toDateField.FieldValue).Date;
@@ -721,7 +733,7 @@ namespace TOne.WhS.Invoice.Business
                     else
                         throw new NullReferenceException("To date has an invalid format.");
                 }
-               
+
             };
             #endregion
 
@@ -732,7 +744,7 @@ namespace TOne.WhS.Invoice.Business
             {
                 if (rateField.FieldValue == null || String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
                     throw new NullReferenceException("Mapped rate cannot have a null value.");
-              
+
                 Decimal rate;
                 if (Decimal.TryParse(rateField.FieldValue.ToString(), out rate))
                 {
@@ -740,7 +752,7 @@ namespace TOne.WhS.Invoice.Business
                 }
                 else
                     throw new NullReferenceException("Rate has an invalid format.");
-               
+
             };
 
             #endregion
@@ -786,7 +798,7 @@ namespace TOne.WhS.Invoice.Business
                 }
                 else
                     throw new NullReferenceException("Amount has an invalid format.");
-               
+
             };
             #endregion
 
@@ -860,6 +872,7 @@ namespace TOne.WhS.Invoice.Business
             public string Destination { get; set; }
             public DateTime From { get; set; }
             public DateTime To { get; set; }
+            public string Currency { get; set; }
         }
         private class InvoiceItemToCompare
         {
@@ -867,7 +880,7 @@ namespace TOne.WhS.Invoice.Business
             public string Destination { get; set; }
             public DateTime From { get; set; }
             public DateTime To { get; set; }
-           // public string Currency { get; set; }
+            // public string Currency { get; set; }
             public Decimal Rate { get; set; }
             public Decimal Duration { get; set; }
             public Decimal Amount { get; set; }
@@ -939,12 +952,13 @@ namespace TOne.WhS.Invoice.Business
                 invoiceAction.ThrowIfNull("invoiceAction");
                 var invoiceActionSettings = invoiceAction.Settings as CompareInvoiceAction;
                 invoiceActionSettings.ThrowIfNull("invoiceActionSettings");
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
                     Title = "Destination",
                 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell{
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
                     Title = "From",
                     CellType = ExcelCellType.DateTime,
                     DateTimeType = DateTimeType.Date
@@ -963,50 +977,50 @@ namespace TOne.WhS.Invoice.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
                     Title = "Sys. Rate",
-                  });
+                });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
                     Title = string.Format("{0} Rate", invoiceActionSettings.PartnerLabel),
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                     Title = "Sys. Calls",
-                  });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                     Title = string.Format("{0} Calls", invoiceActionSettings.PartnerLabel),
-                   });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                     Title = "Diff. Calls %",
+                    Title = "Sys. Calls",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                     Title = "Sys. Duration",
-               });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                     Title = string.Format("{0} Duration", invoiceActionSettings.PartnerLabel),
-                 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                     Title = "Diff. Duration %",
+                    Title = string.Format("{0} Calls", invoiceActionSettings.PartnerLabel),
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                     Title = "Sys. Amount",
-                  });
+                    Title = "Diff. Calls %",
+                });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                     Title = string.Format("{0} Amount", invoiceActionSettings.PartnerLabel),
-                 });
+                    Title = "Sys. Duration",
+                });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                     Title = "Diff. Amount %",
-                  });
+                    Title = string.Format("{0} Duration", invoiceActionSettings.PartnerLabel),
+                });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                     Title = "Result",
+                    Title = "Diff. Duration %",
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
+                    Title = "Sys. Amount",
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
+                    Title = string.Format("{0} Amount", invoiceActionSettings.PartnerLabel),
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
+                    Title = "Diff. Amount %",
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
+                    Title = "Result",
                 });
 
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -1022,7 +1036,7 @@ namespace TOne.WhS.Invoice.Business
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.Destination });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.From });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.To });
-                          //  row.Cells.Add(new ExportExcelCell { Value =  item.Entity.Currency });
+                            //  row.Cells.Add(new ExportExcelCell { Value =  item.Entity.Currency });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemRate });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderRate });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemCalls });
@@ -1037,7 +1051,8 @@ namespace TOne.WhS.Invoice.Business
                             });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemDuration });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderDuration });
-                            row.Cells.Add(new ExportExcelCell { 
+                            row.Cells.Add(new ExportExcelCell
+                            {
                                 Value = item.Entity.DiffDuration,
                                 Style = new ExcelCellStyle
                                 {
@@ -1046,8 +1061,9 @@ namespace TOne.WhS.Invoice.Business
                             });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemAmount });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderAmount });
-                            row.Cells.Add(new ExportExcelCell { 
-                                Value = item.Entity.DiffAmount ,
+                            row.Cells.Add(new ExportExcelCell
+                            {
+                                Value = item.Entity.DiffAmount,
                                 Style = new ExcelCellStyle
                                 {
                                     Color = item.Entity.DiffAmountColor
