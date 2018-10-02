@@ -182,6 +182,18 @@ namespace NP.IVSwitch.Business
             return carrierAccount != null ? GetCarrierAccountEndPointIds(carrierAccount) : null;
         }
 
+        public List<int> GetCarrierAccountsEndPointIds(List<int> carrierAccountIds)
+        {
+            List<int> carrierEndPointIds = new List<int>();
+            foreach (var carrierId in carrierAccountIds)
+            {
+                List<int> EndPointIds = GetCarrierAccountEndPointIds(carrierId);
+                if (EndPointIds != null && EndPointIds.Count() > 0)
+                    carrierEndPointIds.AddRange(EndPointIds);
+            }
+            return carrierEndPointIds;
+        }
+
         public IDataRetrievalResult<EndPointDetail> GetFilteredEndPoints(DataRetrievalInput<EndPointQuery> input)
         {
             //Get Carrier by id

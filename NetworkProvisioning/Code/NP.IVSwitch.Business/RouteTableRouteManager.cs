@@ -493,7 +493,15 @@ namespace NP.IVSwitch.Business
             {
                 IRouteTableRouteDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
                 Helper.SetSwitchConfig(routeTableDataManager);
-                return  routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber);
+                RouteManager routeManager = new RouteManager();
+
+                if (input.Query.SupplierIds != null && input.Query.SupplierIds.Count > 0)
+                {
+                    input.Query.RouteIds = new List<int>();
+
+                    input.Query.RouteIds.AddRange(routeManager.GetCarrierAccountsRouteIds(input.Query.SupplierIds));
+                }
+                return  routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber, input.Query.RouteIds);
             }
         }
 

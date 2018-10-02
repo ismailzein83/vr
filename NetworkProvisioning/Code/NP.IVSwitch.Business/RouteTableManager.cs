@@ -49,6 +49,13 @@ namespace NP.IVSwitch.Business
 
                 if (input.Query.CustomerIds != null && input.Query.CustomerIds.Count > 0)
                 {
+                    if(input.Query.EndPoints==null || input.Query.EndPoints.Count==0)
+                    {
+                        input.Query.EndPoints = new List<int>();
+                        input.Query.EndPoints = endPointManager.GetCarrierAccountsEndPointIds(input.Query.CustomerIds);
+                        if (input.Query.EndPoints.Count == 0)
+                            return false;
+                    }
                     if (input.Query.EndPoints != null && input.Query.EndPoints.Count > 0)
                     {
                         var routTableEndPoints = allRouteTableEndPoints.GetRecord(routeTable.RouteTableId);

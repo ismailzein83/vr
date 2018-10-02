@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vanrise.Data.Postgres;
 using TOne.WhS.BusinessEntity.Entities;
 using System.Transactions;
+using Vanrise.Common;
 
 
 namespace NP.IVSwitch.Data.Postgres
@@ -109,24 +110,27 @@ namespace NP.IVSwitch.Data.Postgres
                             OWNER to {1};", table, IvSwitchSync.OwnerName);
             int tabl = ExecuteNonQueryText(cmdText, cmd => { });
         }
-        public List<RouteTableRoute> GetRouteTablesRoutes(int routeTableId, int limit, string aNumber, string bNumber)
+        public List<RouteTableRoute> GetRouteTablesRoutes(int routeTableId, int limit, string aNumber, string bNumber,List<int>routeIds)
         {
             string table = string.Format("rt{0}", routeTableId);
-            String cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%')and (tech_prefix is NULL or tech_prefix LIKE '%{3}%')) limit {1})
-            SELECT rt.destination,route_id,routing_mode,preference,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit, aNumber, bNumber);
+            String cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%') {4} and (tech_prefix is NULL or tech_prefix LIKE '%{3}%')) limit {1})
+            SELECT rt.destination,route_id,routing_mode,preference,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit, aNumber, bNumber,routeIds ==null?"": string.Format(" and route_id in({0})", string.Join<int>(",",routeIds)));
             List<RouteTableRoute> routeTablesRoutes = new List<RouteTableRoute>();
             RouteTableRoute routeTableRoute = new Entities.RouteTableRoute.RouteTableRoute();
             routeTableRoute.RouteOptions = new List<RouteTableRouteOption>();
             string destination = "";
             string techPrefix = "";
+            string preDestination = null;
+            string nextDestination = null;
             ExecuteReaderText(cmdText, (reader) =>
             {
                 while (reader.Read())
                 {
-
-                    if (GetReaderValue<string>(reader, "destination") != destination)
+                    nextDestination = GetReaderValue<string>(reader, "destination");
+                    if (nextDestination != destination)
                     {
-                        destination = GetReaderValue<string>(reader, "destination");
+                        preDestination = destination;
+                        destination = nextDestination;
                         techPrefix = GetReaderValue<string>(reader, "tech_prefix");
                         routeTableRoute = new RouteTableRoute()
                         {
@@ -136,7 +140,6 @@ namespace NP.IVSwitch.Data.Postgres
                         };
                         routeTablesRoutes.Add(routeTableRoute);
                     }
-
                     routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
                       {
 
@@ -149,10 +152,10 @@ namespace NP.IVSwitch.Data.Postgres
                           BKTTokens = GetReaderValue<int>(reader, "bkt_tokens"),
                           Percentage = GetReaderValue<decimal?>(reader, "flag_1")
                       });
-                }
+               }
 
             }, null);
-            return routeTablesRoutes;
+           return routeTablesRoutes;
         }
         public RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination)
         {

@@ -151,6 +151,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 ANumber: $scope.scopeModel.aNumber,
                 Bnumber: $scope.scopeModel.bNumber,
                 RouteTableViewType: routeTableViewType,
+                RouteIds: routesDirectiveAPI.getSelectedIds(),
+                SupplierIds:suppliersDirectiveAPI.getSelectedIds(),
                 Limit: $scope.scopeModel.limit
             };
             return filter;

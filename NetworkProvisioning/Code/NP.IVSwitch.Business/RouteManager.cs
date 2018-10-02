@@ -151,6 +151,19 @@ namespace NP.IVSwitch.Business
             return routes;
         }
 
+        public List<int> GetCarrierAccountsRouteIds(List<int> carrierAccountIds)
+        {
+            List<int> carrierRouteIds = new List<int>();
+            foreach (var carrierId in carrierAccountIds)
+            {
+                List<int> routeIds = GetCarrierAccountRouteIds(carrierId);
+                if (routeIds != null && routeIds.Count() > 0)
+                    carrierRouteIds.AddRange(GetCarrierAccountRouteIds(carrierId));
+            }
+
+            return carrierRouteIds;
+        }
+
         public List<int> GetCarrierAccountRouteIds(int carrierAccountId)
         {
             var carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
@@ -505,7 +518,7 @@ namespace NP.IVSwitch.Business
             RouteEntityInfo routeInfo = new RouteEntityInfo()
             {
                 RouteId = route.RouteId,
-                Description = GetRouteDescription(route)+Utilities.GetEnumDescription(route.CurrentState),
+                Description = GetRouteDescription(route) + Utilities.GetEnumDescription(route.CurrentState),
                 AccountId = route.AccountId
 
             };
