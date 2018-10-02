@@ -12,12 +12,12 @@
                 <span class="glyphicon glyphicon-wrench vr-grid-menu-h-dote hand-cursor"></span>
             </div>
             <ul class="vr-grid-menu out-div" ng-show="ctrl.showgmenu==true && ctrl.hideGridMenu == false " click-outside="ctrl.toggelGridMenu($event, false)" outside-if-not="out-div">
-                <li role="presentation" vr-disabled="ctrl.isExporting" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable">
-                    <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.onExportClicked()">Export</span>
+                <li role="presentation" class="hand-cursor" vr-disabled="ctrl.isExporting" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable" ng-click="ctrl.onExportClicked()">
+                    <span style="padding-left:4px;color:black;text-align:center" aria-hidden="true">Export</span>
                     <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="ctrl.isExporting" />
                 </li>
-                <li role="presentation" ng-repeat="menuAction in ctrl.getGridMenuActions()">
-                    <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.executeGridAction(menuAction)">{{menuAction.name}}</span>
+                <li role="presentation" ng-repeat="menuAction in ctrl.getGridMenuActions()" class="hand-cursor" ng-click="ctrl.executeGridAction(menuAction)">
+                    <span style="padding-left:4px;color:black;text-align:center" aria-hidden="true">{{menuAction.name}}</span>
                     <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="menuAction.isExecuting" />
                 </li>
                 <li role="separator" class="divider"></li>
