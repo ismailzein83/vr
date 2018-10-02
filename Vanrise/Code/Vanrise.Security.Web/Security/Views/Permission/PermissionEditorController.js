@@ -8,9 +8,10 @@
         var holderType;
         var holderId;
         var notificationResponseText;
+        var currentHolderPermission = [];
 
         var treeAPI;
-        
+
         defineScope();
         loadParameters();
         load();
@@ -88,7 +89,9 @@
                 return VR_Sec_PermissionAPIService.GetHolderPermissions(holderType, holderId).then(function (response) {
                     if (response) {
                         for (var i = 0; i < response.length; i++) {
+                            currentHolderPermission.push(UtilsService.cloneObject(response[i].Entity));
                             $scope.permissions.push(response[i].Entity);
+
                         }
                     }
                 });
@@ -193,12 +196,11 @@
         function savePermissions() {
             var saveDeferred = UtilsService.createPromiseDeferred();
             $scope.isLoading = true;
-
             if ($scope.permissions) {
                 var permissionObject = [];
 
                 for (var i = 0; i < $scope.permissions.length; i++) {
-                    if ($scope.permissions[i].isDirty) {
+                    if ($scope.permissions[i].isDirty && isPermissionFlagsChanged($scope.permissions[i])) {
                         permissionObject.push($scope.permissions[i]);
                     }
                 }
@@ -231,6 +233,28 @@
                 saveDeferred.resolve();
                 $scope.isLoading = false;
                 VRNotificationService.showInformation('No changes were made');
+            }
+        }
+
+        function isPermissionFlagsChanged(editedPermission) {
+
+            var currentPermission = UtilsService.getItemByVal(currentHolderPermission, editedPermission.EntityId, "EntityId");
+
+            if (currentPermission == null && editedPermission.PermissionFlags.length > 0)
+                return true;
+
+            if (currentPermission != null && editedPermission.PermissionFlags.length != currentPermission.PermissionFlags.length)
+                return true;
+            else {
+                var currentFlags = currentPermission && currentPermission.PermissionFlags || [];
+                var editedFlags = editedPermission.PermissionFlags;
+                for (var i = 0 ; i < currentFlags.length; i++) {
+                    var currentPermission = currentFlags[i];
+                    var updatedItem = UtilsService.getItemByVal(editedFlags, currentPermission.Name, "Name");
+                    if (updatedItem != null && updatedItem.Value != currentPermission.Value)
+                        return true;
+                }
+                return false;
             }
         }
     }
