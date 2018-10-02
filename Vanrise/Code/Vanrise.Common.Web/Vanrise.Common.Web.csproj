@@ -547,7 +547,6 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
-    <Content Include="Common\Services\APIServices\RemoteFileAPIService.js" />
     <Content Include="Common\Services\APIServices\VRCommentAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
