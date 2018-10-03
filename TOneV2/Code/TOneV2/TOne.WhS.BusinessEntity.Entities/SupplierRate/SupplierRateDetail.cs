@@ -15,5 +15,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public decimal DisplayedRate { get; set; }
 
         public string DisplayedCurrency { get; set; }
+        public int SupplierId { get; set; }
     }
 }

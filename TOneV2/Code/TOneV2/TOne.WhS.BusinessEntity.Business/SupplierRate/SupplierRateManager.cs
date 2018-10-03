@@ -210,6 +210,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new SupplierRateDetail
                 {
                     Entity = supplierRate,
+                    SupplierId=priceList.SupplierId,
                     SupplierZoneName = _supplierRateManager.GetSupplierZoneName(supplierRate.ZoneId),
                     DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyValueId),
                     DisplayedRate = (systemCurrencyId != null) ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, currencyValueId, effectiveOn) : supplierRate.Rate,
