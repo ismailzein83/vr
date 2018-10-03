@@ -363,7 +363,21 @@ namespace TOne.WhS.Analytics.Business
                 string colName = GetExcelColumnName(2 + numberOfMonths);
 
                 worksheet.Cells.SetColumnWidth(0, 4);
-                List<string> lstZones = listBusinessCaseStatus.GroupBy(x => x.ZoneId).Select(x => { var ret = x.First(); ret.Durations = x.Sum(xt => xt.Durations); return ret; }).OrderByDescending(x => x.Durations).Select(x => x.Zone).ToList<string>();
+                
+                List<string> lstZones = listBusinessCaseStatus.GroupBy(x => x.ZoneId).Select(x => 
+                {
+                    var firstItem = x.First();
+                    var ret = new BusinessCaseStatus
+                    {
+                        Zone = firstItem.Zone,
+                        ZoneId = firstItem.ZoneId,
+                        Month = firstItem.Month,
+                        MonthYear = firstItem.MonthYear,
+                        Year = firstItem.Year
+                    };
+                    ret.Durations = x.Sum(xt => xt.Durations); 
+                    return ret; 
+                }).OrderByDescending(x => x.Durations).Select(x => x.Zone).ToList<string>();
                 int listZonesCount = lstZones.Count;
                 int maxZoneLenght = 0;
                 for (int i = 0; i < listZonesCount; i++)
