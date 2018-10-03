@@ -28,8 +28,8 @@ app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNo
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
-                    if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
-                        return "You Should add at least one column.";
+                    //if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
+                    //    return "You should add at least one column.";
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
                         return "Name in each should be unique.";
 

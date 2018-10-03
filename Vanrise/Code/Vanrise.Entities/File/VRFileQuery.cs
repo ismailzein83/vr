@@ -10,5 +10,6 @@ namespace Vanrise.Entities
     {
         public string ModuleName { get; set; }
         public int UserId { get; set; }
+        public Guid? ConnectionId { get; set; }
     }
 }

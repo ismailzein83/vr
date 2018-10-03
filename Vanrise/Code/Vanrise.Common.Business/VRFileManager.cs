@@ -58,6 +58,26 @@ namespace Vanrise.Common.Business
             return _datamanager.GetFile(fileId);
         }
 
+        public VRRemoteFile GetRemoteFile(long fileId)
+        {
+            var file = GetFile(fileId);
+            if (file != null)
+            {
+                return new VRRemoteFile()
+                {
+                    Content = file.Content,
+                    CreatedTime = file.CreatedTime,
+                    Extension = file.Extension,
+                    FileId = file.FileId,
+                    FileUniqueId = file.FileUniqueId,
+                    IsTemp = file.IsTemp,
+                    ModuleName = file.ModuleName,
+                    Name = file.Name,
+                    UserId = file.UserId
+                };
+            }
+            return null;
+        }
         public VRFile GetFileByUniqueId(Guid fileUniqueId)
         {
             return _datamanager.GetFileByUniqueId(fileUniqueId);
@@ -80,6 +100,27 @@ namespace Vanrise.Common.Business
         {
             return _datamanager.GetFileInfo(fileId);
         }
+
+        public VRRemoteFileInfo GetRemoteFileInfo(long fileId)
+        {
+            var fileInfo = GetFileInfo(fileId);
+            if (fileInfo != null)
+            {
+                return new VRRemoteFileInfo()
+                {
+                    CreatedTime = fileInfo.CreatedTime,
+                    Extension = fileInfo.Extension,
+                    FileId = fileInfo.FileId,
+                    FileUniqueId = fileInfo.FileUniqueId,
+                    IsTemp = fileInfo.IsTemp,
+                    ModuleName = fileInfo.ModuleName,
+                    Name = fileInfo.Name,
+                    UserId = fileInfo.UserId
+                };
+            }
+            return null;
+        }
+
         public VRFileInfo GetFileInfoByUniqueId(Guid fileUniqueId)
         {
             return _datamanager.GetFileInfoByUniqueId(fileUniqueId);

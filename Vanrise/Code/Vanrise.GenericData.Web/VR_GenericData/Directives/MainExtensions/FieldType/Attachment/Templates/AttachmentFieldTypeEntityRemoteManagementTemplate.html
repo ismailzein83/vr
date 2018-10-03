@@ -1,1 +1,15 @@
-﻿
+﻿ <vr-button type="Add" data-onclick="scopeModel.addNewAttachementFieldType" standalone></vr-button>
+<vr-datagrid datasource="scopeModel.attachementFieldTypes"
+             ondeleterow="removerow"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             enableautoexport="true"
+             hidegridmenu>
+    <vr-datagridcolumn headertext="'File'" widthfactor="5"><vr-fileupload tempfile="true" value="dataItem.Entity.file" isrequired connectionid="7A2044F4-B42C-44AA-BFB8-6538904E8E4C"> </vr-fileupload></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Note'" widthfactor="5">
+        <vr-textbox value="dataItem.Entity.notes"></vr-textbox>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" field="'Entity.createdTime'" type="'Datetime'" widthfactor="5"></vr-datagridcolumn>
+</vr-datagrid>
+

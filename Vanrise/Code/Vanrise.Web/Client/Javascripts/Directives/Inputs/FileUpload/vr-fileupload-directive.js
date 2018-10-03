@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService','VRLocalizationService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService, VRLocalizationService) {
+app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', 'VRLocalizationService', 'RemoteFileAPIService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService, VRLocalizationService, RemoteFileAPIService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -11,7 +11,8 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             hint: '@',
             modulename: '@',
             tempfile: '@',
-            validationfunction: '='
+            validationfunction: '=',
+            connectionid: '@'
         },
         controller: function ($scope, $element, $attrs, $timeout) {
             $scope.$on("$destroy", function () {
@@ -58,14 +59,21 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             $scope.broken = false;
             $scope.isUploading = false;           
             var isInternalSetValue;
+            var uploadFileURI = "File/UploadFile";
+            if (ctrl.connectionid != undefined)
+                uploadFileURI = "RemoteFile/UploadRemoteFile";
             filecontrol.fileupload({
-                url: base + '/api/VRCommon/File/UploadFile',
+                url: base + '/api/VRCommon/' + uploadFileURI,
                 beforeSend: function (xhr, data) {
                     xhr.setRequestHeader('Auth-Token', SecurityService.getUserToken());
                     var moduleName = getModuleName();
                     if (moduleName != null) {
                         xhr.setRequestHeader('Module-Name', moduleName);
                     }                   
+                    var connectionId = getConnectionId();
+                    if (connectionId != null) {
+                        xhr.setRequestHeader('Connection-Id', connectionId);
+                    }
                     if (ctrl.tempfile != undefined && (ctrl.tempfile == "true" || ctrl.tempfile == true))
                         xhr.setRequestHeader('Temp-File', "true");
                 },
@@ -152,14 +160,26 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     return;
                 }
                 if (ctrl.value != null) {
+                    var connectionId = getConnectionId();
                     var input = {
-                        moduleName: getModuleName()
+                        moduleName: getModuleName(),
                     };
                     var url = "/api/VRCommon/File/";
+                    if (connectionId != undefined)
+                    {
+                        url = "/api/VRCommon/RemoteFile/";
+                        input.connectionId = connectionId;
+                    }
                     if (ctrl.value.fileUniqueId == undefined)
                     {
                         input.fileId = ctrl.value.fileId;
-                        url+="GetFileInfo";
+                        if (connectionId == undefined) {
+                            url += "GetFileInfo";
+                        }
+                        else {
+                            url += "GetRemoteFileInfo";
+                        }
+
                     } else {
                         input.fileUniqueId= ctrl.value.fileUniqueId;
                         url += "GetFileInfoByUniqueId";
@@ -196,10 +216,17 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             });
             ctrl.downloadFile = function () {
                 var id = ctrl.value.fileId;
-                FileAPIService.DownloadFile(id, getModuleName())
-                   .then(function (response) {
-                       UtilsService.downloadFile(response.data, response.headers);
-                   });
+                var connectionId = getConnectionId();
+                if (connectionId ==undefined) {
+                    FileAPIService.DownloadFile(id, getModuleName()).then(function(response) {
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+                }
+                else {
+                    RemoteFileAPIService.DownloadRemoteFile(connectionId, id, getModuleName()).then(function (response) { 
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+                }
             };
             if ($attrs.hint != undefined)
                 ctrl.hint = $attrs.hint;
@@ -230,6 +257,10 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
 
             function getModuleName() {
                 return (ctrl.modulename == undefined || ctrl.modulename == null) ? null : ctrl.modulename;
+            }
+
+            function getConnectionId() {
+                return (ctrl.connectionid == undefined || ctrl.connectionid == null) ? null : ctrl.connectionid;
             }
         },
         controllerAs: 'ctrl',

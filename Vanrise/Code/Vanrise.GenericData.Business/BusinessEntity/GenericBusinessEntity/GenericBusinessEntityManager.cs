@@ -423,6 +423,11 @@ namespace Vanrise.GenericData.Business
             }
 
         }
+        public string GenericBusinessEntityDefinitionTitle(Guid businessEntityDefinitionId)
+        {
+            BusinessEntityDefinitionManager _manager = new BusinessEntityDefinitionManager();
+            return _manager.GetBusinessEntityDefinition(businessEntityDefinitionId).Title;
+        }
         public InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntityToAdd)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId);

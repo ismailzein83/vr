@@ -23,9 +23,7 @@ namespace Vanrise.Common.Web
         [HttpPost]
         public FileUploadResult UploadFile()
         {
-            HttpResponseMessage result = null;
             var httpRequest = HttpContext.Current.Request;
-
             if (httpRequest.Files.Count > 0)
             {
                 HttpPostedFile postedFile = httpRequest.Files[0];
@@ -33,7 +31,6 @@ namespace Vanrise.Common.Web
 
                 string moduleName = httpRequest.Headers["Module-Name"];
                 bool isTempFile = httpRequest.Headers["Temp-File"] == "true";
-
                 VRFile file = new VRFile()
                 {
                     Content = ReadToEnd(postedFile.InputStream),
@@ -43,26 +40,28 @@ namespace Vanrise.Common.Web
                     IsTemp = isTempFile,
                     FileUniqueId = Guid.NewGuid()
                 };
-
-                // VRFileManager sets the UserId property via SecurityContext
-
-                VRFileManager manager = new VRFileManager(moduleName);
-                long id = manager.AddFile(file);
-
-
-                result = Request.CreateResponse(HttpStatusCode.Created);
-                return new FileUploadResult
-                {
-                    FileId = id,
-                    Name = postedFile.FileName,
-                    FileUniqueId = file.FileUniqueId
-                };
+                return UploadVRFile(file);
             }
             else
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
         }
+
+        [Route("UploadVRFile")]
+        [HttpPost]
+        public FileUploadResult UploadVRFile(VRFile file)
+        {
+            VRFileManager manager = new VRFileManager(file.ModuleName);
+            long id = manager.AddFile(file);
+            return new FileUploadResult
+            {
+                FileId = id,
+                Name = file.Name,
+                FileUniqueId = file.FileUniqueId
+            };
+        }
+
 
         [Route("DownloadFile")]
         [HttpGet]
@@ -146,6 +145,31 @@ namespace Vanrise.Common.Web
             {
                 return fileInfo;
             }
+        }
+
+        [Route("GetRemoteFileInfo")]
+        [HttpGet]
+        public VRRemoteFileInfo GetRemoteFileInfo(long fileId, string moduleName = null)
+        {
+            VRFileManager manager = new VRFileManager(moduleName);
+            return manager.GetRemoteFileInfo(fileId);
+           
+        }
+
+        [Route("GetFile")]
+        [HttpGet]
+        public VRFile GetFile(long fileId, string moduleName = null)
+        {
+            VRFileManager manager = new VRFileManager(moduleName);
+            return manager.GetFile(fileId);
+        }
+
+        [Route("GetRemoteFile")]
+        [HttpGet]
+        public VRRemoteFile GetRemoteFile(long fileId, string moduleName = null)
+        {
+            VRFileManager manager = new VRFileManager(moduleName);
+            return manager.GetRemoteFile(fileId);
         }
 
         [Route("GetFileInfoByUniqueId")]

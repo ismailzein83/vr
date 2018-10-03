@@ -21,7 +21,7 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             if (!_manager.DoesUserHaveViewAccess(input.Query.BusinessEntityDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredGenericBusinessEntities(input), GenericBusinessEntityDefinitionTitle(input.Query.BusinessEntityDefinitionId));
+            return GetWebResponse(input, _manager.GetFilteredGenericBusinessEntities(input), _manager.GenericBusinessEntityDefinitionTitle(input.Query.BusinessEntityDefinitionId));
         }
 
         [HttpGet]
@@ -106,11 +106,7 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.GetGenericBusinessEntityInfo(businessEntityDefinitionId, filter);
         }
 
-        string GenericBusinessEntityDefinitionTitle(Guid businessEntityDefinitionId)
-        {
-            BusinessEntityDefinitionManager _manager = new BusinessEntityDefinitionManager();
-            return _manager.GetBusinessEntityDefinition(businessEntityDefinitionId).Title;
-        }
+      
          
     }
 }
