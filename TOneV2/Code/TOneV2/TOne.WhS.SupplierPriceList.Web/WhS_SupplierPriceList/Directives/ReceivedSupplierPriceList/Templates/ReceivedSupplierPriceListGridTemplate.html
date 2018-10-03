@@ -12,7 +12,7 @@
     <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeDescription'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" type="'Text'">
-        <div ng-class="viewScope.getStatusColor(dataItem)" style="width:75%;display:inline-block;text-align:left">{{dataItem.StatusDescription}}</div>
+        <div ng-class="viewScope.getStatusColor(dataItem)" style="width:100%;display:inline-block;text-align:left">{{dataItem.StatusDescription}}</div>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Received Date'" field="'ReceivedPricelist.ReceivedDateTime'" type="'Datetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Processing Date'" field="'ReceivedPricelist.StartProcessingDateTime'" type="'Datetime'"></vr-datagridcolumn>
