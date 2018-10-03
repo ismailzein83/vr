@@ -98,8 +98,10 @@
 
                 $scope.scopeModel.getRowStyle = function (row) {
                     var rowStyle;
-                    if (row.DimensionSuffix == WhS_Analytics_VariationReportDimensionSuffixEnum.Total.value)
-                        rowStyle = { CssClass: 'vr-control-label' };
+                    if (row.DimensionSuffix == WhS_Analytics_VariationReportDimensionSuffixEnum.Total.value) {
+                        rowStyle = { CssClass: 'bold-label' };
+                    }
+
                     return rowStyle;
                 };
             }
