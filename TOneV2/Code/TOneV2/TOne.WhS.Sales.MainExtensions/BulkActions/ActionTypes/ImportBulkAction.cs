@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
-using Vanrise.Caching;
 using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
@@ -14,6 +12,8 @@ namespace TOne.WhS.Sales.MainExtensions
 	public class ImportBulkAction : BulkActionType
 	{
 		#region Fields / Constructors
+
+		private RoutingProductManager _routingProductManager = new RoutingProductManager();
 
 		private ImportBulkActionValidationCacheManager _cacheManager;
 
@@ -85,7 +85,7 @@ namespace TOne.WhS.Sales.MainExtensions
 			return cachedValidationData.ApplicableZoneIds.Contains(context.SaleZone.SaleZoneId);
 		}
 
-		public override Dictionary<int,DateTime> PreApplyBulkActionToZoneItem()
+		public override Dictionary<int, DateTime> PreApplyBulkActionToZoneItem()
 		{
 			ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
 			return cachedValidationData.AdditionalCountryBEDsByCountryId;
@@ -96,12 +96,58 @@ namespace TOne.WhS.Sales.MainExtensions
 			IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
 			DateTime? newOtherRateBED;
 			context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, out newOtherRateBED);
+			var zoneNewRoutingProduct = GetZoneNewRoutingProduct(context.ZoneItem.ZoneId);
+
+			if (zoneNewRoutingProduct != null)
+			{
+				if (zoneNewRoutingProduct.ZoneRoutingProductId == context.ZoneItem.CurrentRoutingProductId)
+				{
+					context.ZoneItem.ResetRoutingProduct = null;
+					context.ZoneItem.NewRoutingProduct = null;
+					context.ZoneItem.EffectiveRoutingProductId = null;
+					context.ZoneItem.EffectiveRoutingProductName = null;
+					context.ZoneItem.EffectiveServiceIds = null;
+
+				}
+				else
+				{
+					context.ZoneItem.ResetRoutingProduct = null;
+					context.ZoneItem.NewRoutingProduct = zoneNewRoutingProduct;
+					context.ZoneItem.EffectiveRoutingProductId = zoneNewRoutingProduct.ZoneRoutingProductId;
+					context.ZoneItem.EffectiveRoutingProductName = _routingProductManager.GetRoutingProductName(zoneNewRoutingProduct.ZoneRoutingProductId);
+					context.ZoneItem.EffectiveServiceIds = _routingProductManager.GetZoneServiceIds(zoneNewRoutingProduct.ZoneRoutingProductId, context.ZoneItem.ZoneId);
+				}
+			}
+			else if (context.ZoneDraft != null && context.ZoneDraft.NewRoutingProduct != null)
+			{
+				context.ZoneItem.ResetRoutingProduct = context.ZoneDraft.RoutingProductChange;
+				context.ZoneItem.NewRoutingProduct = context.ZoneDraft.NewRoutingProduct;
+				context.ZoneItem.EffectiveRoutingProductId = context.ZoneDraft.NewRoutingProduct.ZoneRoutingProductId;
+				context.ZoneItem.EffectiveRoutingProductName = _routingProductManager.GetRoutingProductName(context.ZoneDraft.NewRoutingProduct.ZoneRoutingProductId);
+				context.ZoneItem.EffectiveServiceIds = _routingProductManager.GetZoneServiceIds(context.ZoneDraft.NewRoutingProduct.ZoneRoutingProductId, context.ZoneItem.ZoneId);
+			}
 			if (newOtherRateBED != null)
 				context.ZoneItem.NewOtherRateBED = newOtherRateBED;
 		}
 
 		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
 		{
+			var zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
+			var zoneNewRoutingProduct = GetZoneNewRoutingProduct(context.ZoneDraft.ZoneId);
+			if (zoneNewRoutingProduct != null)
+			{
+				if (zoneNewRoutingProduct.ZoneRoutingProductId == zoneItem.CurrentRoutingProductId)
+				{
+					context.ZoneDraft.NewRoutingProduct = null;
+					context.ZoneDraft.RoutingProductChange = null;
+				}
+				else
+				{
+					context.ZoneDraft.NewRoutingProduct = zoneNewRoutingProduct;
+					context.ZoneDraft.RoutingProductChange = null;
+				}
+			}
+
 			DateTime? newOtherRateBED;
 			context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate, out newOtherRateBED);
 			if (newOtherRateBED != null)
@@ -111,6 +157,17 @@ namespace TOne.WhS.Sales.MainExtensions
 		#endregion
 
 		#region Private Methods
+
+
+		private DraftNewSaleZoneRoutingProduct GetZoneNewRoutingProduct(long zoneId)
+		{
+			ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+			ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+			if (importedRow == null || importedRow.RoutingProductId == null)
+				return null;
+
+			return new DraftNewSaleZoneRoutingProduct() { ZoneId = zoneId, ZoneRoutingProductId = importedRow.RoutingProductId.Value, BED = Convert.ToDateTime(importedRow.EffectiveDate), ApplyNewNormalRateBED = true };
+		}
 
 		private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, out DateTime? newOtherRateBED)
 		{

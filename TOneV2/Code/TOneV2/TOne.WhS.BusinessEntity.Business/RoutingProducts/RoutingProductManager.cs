@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -337,6 +335,16 @@ namespace TOne.WhS.BusinessEntity.Business
 					   }
 				   }
 				   return filteredSupplierIds;
+			   });
+		}
+
+		public Dictionary<string, RoutingProduct> GetAllRoutingProductsByName()
+		{
+			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingProductsByName",
+			   () =>
+			   {
+				   var allRoutingProducts = GetAllRoutingProducts().Values;
+				   return GetAllRoutingProducts().Values.ToDictionary(kvp => kvp.Name, kvp => kvp);
 			   });
 		}
 

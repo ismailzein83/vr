@@ -16,7 +16,11 @@ namespace TOne.WhS.Sales.Entities
 
         public List<ImportedOtherRate> OtherRates { get; set; }
 
-        public ImportedRowStatus Status { get; set; }
+		public string RoutingProductName { get; set; }
+
+		public int? RoutingProductId { get; set; }
+
+		public ImportedRowStatus Status { get; set; }
     }
     public class ImportedOtherRate
     {
