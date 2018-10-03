@@ -58,7 +58,7 @@
 
 
 .bold-label {
-    font-weight: bold;
+    font-weight: bold  !important;
 }
 
 .datepicker-custom button {
