@@ -32,20 +32,22 @@ namespace PartnerPortal.CustomerAccess.Business
         public UpdateOperationOutput<UserDetail> UpdateRetailAccountUser(RetailAccountToUpdate retailAccount)
         {
             UserManager userManager = new UserManager();
-           var user = userManager.GetUserbyId(retailAccount.UserId);
-           user.ThrowIfNull("User");
-           user.Name = retailAccount.Name;
-           user.Email = retailAccount.Email;
-            UserToUpdate userToUpdate = new UserToUpdate{
+            var user = userManager.GetUserbyId(retailAccount.UserId);
+            user.ThrowIfNull("User");
+            user.Name = retailAccount.Name;
+            user.Email = retailAccount.Email;
+            UserToUpdate userToUpdate = new UserToUpdate
+            {
                 UserId = user.UserId,
                 Name = user.Name,
                 Email = user.Email,
                 TenantId = user.TenantId,
                 Description = user.Description,
                 EnabledTill = user.EnabledTill,
-                ExtendedSettings = user.ExtendedSettings
+                ExtendedSettings = user.ExtendedSettings,
+                SecurityProviderId = user.SecurityProviderId
             };
-           return userManager.UpdateUser(userToUpdate);
+            return userManager.UpdateUser(userToUpdate);
         }
         public InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
@@ -60,6 +62,7 @@ namespace PartnerPortal.CustomerAccess.Business
                 EnabledTill = retailAccount.EnabledTill,
                 TenantId = retailAccount.TenantId,
                 ExtendedSettings = new Dictionary<string, object>(),
+                SecurityProviderId = new Vanrise.Security.Business.ConfigManager().GetDefaultSecurityProviderId()
             };
 
             string retailAccountSettingsFullName = typeof(RetailAccountSettings).FullName;

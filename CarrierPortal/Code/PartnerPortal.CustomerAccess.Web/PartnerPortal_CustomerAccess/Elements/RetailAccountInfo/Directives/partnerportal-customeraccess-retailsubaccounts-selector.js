@@ -68,6 +68,7 @@ app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerP
             this.initializeController = initializeController;
 
             var selectorAPI;
+            var datasourcePromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
@@ -97,6 +98,7 @@ app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerP
                                 if (selectedIds != undefined) {
                                     VRUIUtilsService.setSelectedValues(selectedIds, 'AccountId', $attrs, ctrl);
                                 }
+                                datasourcePromiseDeferred.resolve(ctrl.datasource.length);
                             }
                         });
                     }
@@ -105,6 +107,10 @@ app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerP
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('AccountId', $attrs, ctrl);
+                };
+
+                api.hasChildAccounts = function () {
+                    return datasourcePromiseDeferred.promise;
                 };
 
                 if (ctrl.onReady != null)
