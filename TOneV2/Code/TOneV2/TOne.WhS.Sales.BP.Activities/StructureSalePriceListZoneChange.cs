@@ -868,7 +868,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
 				var recentRate = context.RateChangeLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, rateToAdd.ZoneId);
 				if (recentRate == null)
-					throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToAdd.ZoneId));
+					throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", saleZoneManager.GetSaleZoneName(rateToAdd.ZoneId)));
 
 				var normalRate = rateToAdd.NormalRate;
 
@@ -918,7 +918,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
 				var newRate = context.RateChangeLocator.GetSellingProductZoneRate(context.CustomerInfo.SellingProductId, rateToClose.ZoneId);
 				if (newRate == null)
-					throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToClose.ZoneId));
+					throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", saleZoneManager.GetSaleZoneName(rateToClose.ZoneId)));
 
 				var recentRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, rateToClose.ZoneId);
 
