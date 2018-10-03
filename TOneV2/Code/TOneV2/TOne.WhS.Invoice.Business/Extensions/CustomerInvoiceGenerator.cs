@@ -37,8 +37,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
                     context.ErrorMessage = "There are unpriced CDRs during the selected period";
+                    return;
                 }
-                return;
             }
 
 
@@ -297,7 +297,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             CurrencyId = item.CurrencyId,
                             Amount = item.Amount,
                             TotalRecurringChargeAmount = item.AmountAfterTaxes,
-                            TotalTrafficAmount = 0  
+                            TotalTrafficAmount = 0
                         });
 
                     }
@@ -368,7 +368,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         }
                         customerInvoiceBySaleCurrencyItemDetails.TotalTrafficAmount = customerInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes;
 
-                        
+
                         customerInvoiceBySaleCurrencies.Add(customerInvoiceBySaleCurrencyItemDetails);
                     }
 
