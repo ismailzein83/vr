@@ -123,6 +123,27 @@ app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService
             function getDirectiveTabs() {
                 var directiveTabs = [];
 
+                if (!hideHistory) {
+                    var historyRatesTab = {
+                        title: "History",
+                        directive: "vr-whs-be-supplierrate-grid",
+                        loadDirective: function (directiveApi, rateDataItem) {
+                            rateDataItem.historygRateGridAPI = directiveApi;
+                            var historyRateGridPayload = {
+                                $type: "TOne.WhS.BusinessEntity.Business.SupplierRateHistoryQueryHandler,TOne.WhS.BusinessEntity.Business",
+                                IsSystemCurrency: isSystemCurrency,
+                                EffectiveOn: effectiveOn,
+                                Query: {
+                                    SupplierZoneName: rateDataItem.SupplierZoneName,
+                                    SupplierId: supplierId,
+                                    IsChild: true
+                                }
+                            };
+                            return rateDataItem.historygRateGridAPI.loadGrid(historyRateGridPayload);
+                        }
+                    };
+                    directiveTabs.push(historyRatesTab);
+                }
                 var otherRatesTab = {
                     title: "Other Rates",
                     directive: "vr-whs-be-supplierotherrate-grid",
@@ -145,35 +166,15 @@ app.directive("vrWhsBeSupplierrateGrid", ["UtilsService", "VRNotificationService
                         codeDataItem.codeGridAPI = directiveAPI;
                         var codeGridPayload = {
                             SupplierId: codeDataItem.SupplierId,
-                            ZoneIds: [codeDataItem.Entity.SupplierZoneId],
-                            EffectiveOn: codeDataItem.Entity.BED
+                            ZoneIds: [codeDataItem.Entity.ZoneId],
+                            EffectiveOn: effectiveOn
                         };
                         return codeDataItem.codeGridAPI.loadGrid(codeGridPayload);
                     }
                 };
                 directiveTabs.push(supplierCodeTab);
 
-                if (!hideHistory) {
-                    var historyRatesTab = {
-                        title: "History",
-                        directive: "vr-whs-be-supplierrate-grid",
-                        loadDirective: function (directiveApi, rateDataItem) {
-                            rateDataItem.historygRateGridAPI = directiveApi;
-                            var historyRateGridPayload = {
-                                $type: "TOne.WhS.BusinessEntity.Business.SupplierRateHistoryQueryHandler,TOne.WhS.BusinessEntity.Business",
-                                IsSystemCurrency: isSystemCurrency,
-                                EffectiveOn: effectiveOn,
-                                Query: {
-                                    SupplierZoneName: rateDataItem.SupplierZoneName,
-                                    SupplierId: supplierId,
-                                    IsChild: true
-                                }
-                            };
-                            return rateDataItem.historygRateGridAPI.loadGrid(historyRateGridPayload);
-                        }
-                    };
-                    directiveTabs.push(historyRatesTab);
-                }
+
                 return directiveTabs;
             }
         }

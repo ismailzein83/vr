@@ -153,6 +153,27 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                 }
             });
 
+            drillDownDefinitions.push({
+                title: 'Sale Codes',
+                directive: 'vr-whs-be-salecode-grid',
+                loadDirective: function (directiveAPI, saleCodes) {
+                    saleCodes.saleCodesGridAPI = directiveAPI;
+                    var queryHandler = {
+                        $type: "TOne.WhS.BusinessEntity.Business.SaleCodeQueryHandler, TOne.WhS.BusinessEntity.Business", 
+                        Query: {
+                            SellingNumberPlanId: gridQuery.SellingNumberPlanId,
+                            ZonesIds: [saleCodes.Entity.ZoneId],
+                            EffectiveOn: gridQuery.EffectiveOn,
+                            GetEffectiveAfter: false
+                        }
+                    };
+                    var saleCodeGridPayload = {
+                        queryHandler: queryHandler
+                    };
+                    return saleCodes.saleCodesGridAPI.loadGrid(saleCodeGridPayload);
+                }
+            });
+
             return drillDownDefinitions;
         }
 
