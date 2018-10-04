@@ -27,8 +27,8 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
                 if (timeFieldObj != null)
                     timeSpanField = (double)timeFieldObj;
             }
-
             timeSpanField = SubtractTime ? -timeSpanField : timeSpanField;
+
             var value = dateTimeField.AddSeconds(timeSpanField);
             if (!string.IsNullOrEmpty(this.SecondsToAddFieldName))
             {
