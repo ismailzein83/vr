@@ -10,4 +10,9 @@ namespace Vanrise.Runtime.Entities
     {
         bool IsMatched(SchedulerTask task);
     }
+
+    public class SchedulerTaskFilter
+    {
+        public List<ISchedulerTaskFilter> Filters { get; set; }
+    }
 }

@@ -58,41 +58,40 @@ namespace Vanrise.Runtime.Business
             return GetFilteredTasks(input);
         }
 
-        public List<SchedulerTaskInfo> GetMyTasksInfo()
+        public List<SchedulerTaskInfo> GetMyTasksInfo(SchedulerTaskFilter filter)
         {
-            var allScheduledTasks = GetCachedSchedulerTasks();
-            int ownerId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
-            Func<SchedulerTask, bool> filterExpression = (itm) =>
-                 itm.OwnerId == ownerId;
-
-            IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
-            if (tasks == null)
-                return null;
-
-            List<SchedulerTaskInfo> listTasksInfos = new List<SchedulerTaskInfo>();
-            foreach (SchedulerTask schedulerTask in tasks)
-            {
-                listTasksInfos.Add(
-                 new SchedulerTaskInfo()
-                {
-                    TaskId = schedulerTask.TaskId,
-                    Name = schedulerTask.Name
-                });
-            }
-            return listTasksInfos;
+            return GetTasksInfo(filter, Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId());
         }
-        
+
         public string GetSchedulerTaskName(SchedulerTask schedulerTask)
         {
             if (schedulerTask == null)
                 return null;
             return schedulerTask.Name;
         }
-        
-        public List<SchedulerTaskInfo> GetTasksInfo()
+
+        public List<SchedulerTaskInfo> GetTasksInfo(SchedulerTaskFilter filter, int? ownerId)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();
-            Func<SchedulerTask, bool> filterExpression = (itm) => (true);
+            Func<SchedulerTask, bool> filterExpression = (itm) =>
+            {
+                if (ownerId.HasValue && itm.OwnerId != ownerId.Value)
+                    return false;
+
+                if (filter != null)
+                {
+                    if (filter.Filters != null)
+                    {
+                        foreach (ISchedulerTaskFilter schedulerTaskFilter in filter.Filters)
+                        {
+                            if (!schedulerTaskFilter.IsMatched(itm))
+                                return false;
+                        }
+                    }
+                }
+
+                return true;
+            };
 
             IEnumerable<SchedulerTask> tasks = allScheduledTasks.FindAllRecords(filterExpression);
             if (tasks == null)
@@ -131,12 +130,12 @@ namespace Vanrise.Runtime.Business
                 _vrActionLogger.LogObjectViewed(SchedulerTaskLoggableEntity.Instance, task);
             return task;
         }
-        
+
         public Vanrise.Runtime.Entities.SchedulerTask GetTask(Guid taskId)
         {
             return GetTask(taskId, false);
         }
-        
+
         public List<SchedulerTask> GetTasksbyActionType(Guid actionType)
         {
             var allScheduledTasks = GetCachedSchedulerTasks();

@@ -46,19 +46,28 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
         var multipleselection = "";
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection";
+
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
+
+        var hidelabel = "";
+        if (attrs.hidelabel != undefined)
+            hidelabel = "hidelabel";
+
         return '<div  vr-loader="isLoadingDirective">'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TaskId" '
-            + required + ' label="Schedule" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="TaskId" on-ready="onSelectorReady"' 
+            + required + hidelabel + ' label="Schedule" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
             + '</div>';
     }
 
     function scheduleCtor(ctrl, $scope, $attrs) {
-
+        var selectorAPI;
         function initializeController() {
-            defineAPI();
+            $scope.onSelectorReady = function (api) {
+                selectorAPI = api;
+                defineAPI();
+            };
         }
 
         function fillDataSource(response, selectedIds) {
@@ -70,7 +79,6 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
             if ($attrs.ismultipleselection == undefined) {
                 ctrl.selectedvalues = response[0];
             }
-
             if (selectedIds != undefined)
                 VRUIUtilsService.setSelectedValues(selectedIds, 'TaskId', $attrs, ctrl);
         }
@@ -80,10 +88,12 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
                 return VRUIUtilsService.getIdSelectedIds('TaskId', $attrs, ctrl);
             };
             api.load = function (payload) {
-
+                selectorAPI.clearDataSource();
+                var filter;
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    filter = payload.filter;
                 }
 
                 var isMySchedule;
@@ -91,15 +101,19 @@ function (SchedulerTaskAPIService, UtilsService, $compile, VRUIUtilsService) {
                     isMySchedule = payload.isMySchedule;
                 }
 
-                if (isMySchedule == true) {
-                    return SchedulerTaskAPIService.GetMySchedulesInfo().then(function (response) {
-                        fillDataSource(response, selectedIds);
-                    });
-                }
-                else {
-                    return SchedulerTaskAPIService.GetSchedulesInfo().then(function (response) {
-                        fillDataSource(response, selectedIds);
-                    });
+                if (filter != undefined) {
+                    var serializedFilter = UtilsService.serializetoJson(filter);
+
+                    if (isMySchedule == true) {
+                        return SchedulerTaskAPIService.GetMySchedulesInfo(serializedFilter).then(function (response) {
+                            fillDataSource(response, selectedIds);
+                        });
+                    }
+                    else {
+                        return SchedulerTaskAPIService.GetSchedulesInfo(serializedFilter).then(function (response) {
+                            fillDataSource(response, selectedIds);
+                        });
+                    }
                 }
             };
 

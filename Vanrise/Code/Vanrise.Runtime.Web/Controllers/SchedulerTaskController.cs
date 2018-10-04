@@ -41,16 +41,18 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("GetSchedulesInfo")]
-        public List<SchedulerTaskInfo> GetSchedulesInfo()
+        public List<SchedulerTaskInfo> GetSchedulesInfo(string serializedFilter)
         {
-            return _schedulerTaskManager.GetTasksInfo();
+            SchedulerTaskFilter filter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<SchedulerTaskFilter>(serializedFilter) : null;
+            return _schedulerTaskManager.GetTasksInfo(filter, null);
         }
 
         [HttpGet]
         [Route("GetMySchedulesInfo")]
-        public List<SchedulerTaskInfo> GetMySchedulesInfo()
+        public List<SchedulerTaskInfo> GetMySchedulesInfo(string serializedFilter)
         {
-            return _schedulerTaskManager.GetMyTasksInfo();
+            SchedulerTaskFilter filter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<SchedulerTaskFilter>(serializedFilter) : null;
+            return _schedulerTaskManager.GetMyTasksInfo(filter);
         }
 
         [HttpGet]
@@ -145,7 +147,7 @@ namespace Vanrise.Runtime.Web.Controllers
                 return false;
             return _schedulerTaskManager.EnableAllTasks();
         }
-        
+
         [HttpGet]
         [Route("DisableAllTasks")]
         public bool DisableAllTasks()

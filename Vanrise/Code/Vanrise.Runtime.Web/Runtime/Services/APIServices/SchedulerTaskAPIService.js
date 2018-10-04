@@ -51,12 +51,12 @@
             });
         }
 
-        function GetSchedulesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulesInfo'));
+        function GetSchedulesInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulesInfo'), { serializedFilter: serializedFilter });
         }
 
-        function GetMySchedulesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetMySchedulesInfo'));
+        function GetMySchedulesInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetMySchedulesInfo'), { serializedFilter: serializedFilter });
         }
 
         function HasAddSchedulerTaskPermission() {
