@@ -202,8 +202,13 @@
 
             function customerDirective() {
                 return CustomerSelectorDirectiveDefferedReady.promise.then(function () {
-                    var directivePayload;
-                    VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, undefined, undefined);
+                    var directivePayload = {
+                        filter: {
+
+                            Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountEndPointFilter,NP.IVSwitch.Business" }]
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, directivePayload, undefined);
                 });
             }
 

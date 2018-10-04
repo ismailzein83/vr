@@ -81,9 +81,22 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
                         for (var i = 0; i < response.Data.length; i++) {
                             var item = response.Data[i];
                             if ($scope.scopeModel.isANumber == true)
-                                var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, TechPrefix: item.TechPrefix, Options: item.RouteOptionsDetails, Description: 'Origination Number' };
+                            var dataItem = {
+                                RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1),
+                                Destination: item.Destination,
+                                TechPrefix: item.TechPrefix,
+                                Options: item.RouteOptionsDetails,
+                                Description: 'Origination Number'
+                            };
+
                             else
-                                var dataItem = { RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1), Destination: item.Destination, Options: item.RouteOptionsDetails, Description: 'Destination Number' };
+                                var dataItem = {
+                                    RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1),
+                                    Destination: item.Destination,
+                                    Options: item.RouteOptionsDetails,
+                                    Description: 'Destination Number'
+                                };
+
                             $scope.scopeModel.routeTablesRT.push(dataItem);
                         }
 

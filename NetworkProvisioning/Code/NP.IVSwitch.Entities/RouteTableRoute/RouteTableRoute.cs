@@ -14,7 +14,6 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
     {
         public string Destination { get; set; }
         public string TechPrefix { get; set; }
-        public int RouteId { get; set; }
         public List<RouteTableRouteOption> RouteOptions { get; set; }
     }
     public class RouteTableRouteOption
@@ -28,6 +27,7 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
         public int BKTSerial { get; set; }
         public int BKTCapacity { get; set; }
         public int BKTTokens { get; set; }
+        public string Description { get; set; }
         public decimal? Percentage { get; set; }
     }
 

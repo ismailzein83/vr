@@ -20,10 +20,23 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
     }
     public class RouteTableRouteOptionDetails
     {
+
         public string SupplierName { get; set; }
         public string RouteName { get; set; }
         public decimal? Percentage { get; set; }
         public Int16 Preference { get; set; }
+        public List<BackupRouteOptionDetail> BackupsOptionsDetails { get; set; }
+
+    }
+
+    public class BackupRouteOptionDetail
+    {
+
+        public string SupplierName { get; set; }
+        public string RouteName { get; set; }
+        public decimal? Percentage { get; set; }
+        public Int16 Preference { get; set; }
+
     }
 
 

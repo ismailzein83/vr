@@ -23,6 +23,17 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
+                if (parameters.RouteTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value)
+                    $scope.scopeModel.labelName = "ANumber";
+
+                if (parameters.RouteTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value)
+                    $scope.scopeModel.labelName = "Whiltelist";
+
+                if (parameters.RouteTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value)
+                    $scope.scopeModel.labelName = "BNumber";
+
+
+
                 routeTableId = parameters.RouteTableId;
                 $scope.scopeModel.routeTableRouteName = parameters.Destination;
                 routeTableRouteName = parameters.Destination;
@@ -95,10 +106,10 @@
         function loadAllControls() {
             var promises = [];
             function codeListDirective() {
-                    return codeListDirectiveDefferedReady.promise.then(function () {
-                        var directivePayload;
-                        VRUIUtilsService.callDirectiveLoad(codeListDirectiveAPI, directivePayload, undefined);
-                    });
+                return codeListDirectiveDefferedReady.promise.then(function () {
+                    var directivePayload;
+                    VRUIUtilsService.callDirectiveLoad(codeListDirectiveAPI, directivePayload, undefined);
+                });
             }
 
             function setTitle() {
@@ -118,7 +129,7 @@
                     });
                     return supplierRouteGridAPILoadDeferred.promise;
                 }
-               
+
             }
 
 

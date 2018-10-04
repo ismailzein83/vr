@@ -87,8 +87,13 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 };
 
                 backupSupplierDirectiveDefferedReady.promise.then(function () {
-                    var directivePayload;
-                    var modifiedByFieldSetLoader = function (value) {  dataItem.isRouteSelectorLoading = value; };
+                    var directivePayload = {
+                        filter: {
+
+                            Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
+                        }
+                    };
+                    var modifiedByFieldSetLoader = function (value) { dataItem.isRouteSelectorLoading = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.Entity.backupOptionSupplierDirctiveAPI, directivePayload, modifiedByFieldSetLoader,undefined);
                     selectedBackupSupplierDefferedReady = undefined;
                 });
@@ -164,7 +169,13 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 gridItem.supplierBackUpReadyDeffered.promise.then(function () {
                     var directivePayload;
                     if (gridItem.payload.BackupOptionSupplierId != undefined)
-                        directivePayload = { selectedIds: gridItem.payload.BackupOptionSupplierId };
+                        directivePayload = {
+                            selectedIds: gridItem.payload.BackupOptionSupplierId,
+                            filter: {
+
+                                Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
+                            }
+                        };
                     VRUIUtilsService.callDirectiveLoad(dataItem.backupOptionSupplierDirctiveAPI, directivePayload, gridItem.supplierBackUpLoadDeffered);
                 });
 

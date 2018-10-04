@@ -209,7 +209,12 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 };
 
                 supplierDirectiveDefferedReady.promise.then(function () {
-                    var directivePayload;
+                    var directivePayload = {
+                        filter: {
+
+                            Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
+                        }
+                    };
                     VRUIUtilsService.callDirectiveLoad(gridItem.supplierDirctiveAPI, directivePayload, undefined);
                     selectdSupplierDeffered = undefined;
                     });
@@ -252,7 +257,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                                 routeReadyDeffered: UtilsService.createPromiseDeferred(),
                                 routeLoadDeffered: UtilsService.createPromiseDeferred(),
                                 hasPercentage: hasPercentage,
-                                backupRouteGridDirectiveReady: hasPercentage ? UtilsService.createPromiseDeferred() : undefined,
+                                backupRouteGridDirectiveReady: UtilsService.createPromiseDeferred(),
                                 backupRouteGridDirectiveLoad: hasPercentage ? UtilsService.createPromiseDeferred() : undefined,
                             };
                             promises.push(gridItem.supplierLoadDeffered.promise);
@@ -340,7 +345,13 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                     gridItem.supplierReadyDeffered.promise.then(function () {
                         var directivePayload;
                         if (gridItem.payload != undefined)
-                            directivePayload = { selectedIds: gridItem.payload.SupplierId != 0 ? gridItem.payload.SupplierId : undefined };
+                            directivePayload = {
+                                selectedIds: gridItem.payload.SupplierId != 0 ? gridItem.payload.SupplierId : undefined,
+                                filter: {
+
+                                    Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
+                                }
+                            };
                         VRUIUtilsService.callDirectiveLoad(dataItem.supplierDirctiveAPI, directivePayload, gridItem.supplierLoadDeffered);
                     });
 
@@ -357,13 +368,13 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                         VRUIUtilsService.callDirectiveLoad(dataItem.routeDirectiveAPI, directivePayload, gridItem.routeLoadDeffered);
                         selectedSupplierDeffered = undefined;
                     });
-
+                    dataItem.onBackupRouteGridDirectiveReady = function (api) {
+                        dataItem.backupRouteGridDirectiveAPI = api;
+                        gridItem.backupRouteGridDirectiveReady.resolve();
+                    };
                     if (gridItem.hasPercentage)
                     {
-                        dataItem.onBackupRouteGridDirectiveReady = function (api) {
-                            dataItem.backupRouteGridDirectiveAPI = api;
-                            gridItem.backupRouteGridDirectiveReady.resolve();
-                        };
+ 
 
                         gridItem.backupRouteGridDirectiveReady.promise.then(function () {
                             var directivePayload;

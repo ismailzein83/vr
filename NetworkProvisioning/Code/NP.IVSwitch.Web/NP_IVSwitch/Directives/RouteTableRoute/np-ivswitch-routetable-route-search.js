@@ -92,6 +92,11 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     }
                     
                 }
+                else
+                {
+
+                    routesDirectiveAPI.clearDataSource();
+                }
                 };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -111,7 +116,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function load() {
 
             suppliersDirectiveDeferedReady.promise.then(function () {
-                var directivePayload ;
+                var directivePayload = {
+                    filter: {
+
+                        Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
+                    }
+                };
                 VRUIUtilsService.callDirectiveLoad(suppliersDirectiveAPI, directivePayload, undefined);
                 selectedSupplierDeffered = undefined;
 
@@ -153,7 +163,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             var filter = {
                 RouteTableId: routeTableId,
                 ANumber: $scope.scopeModel.aNumber,
-                Bnumber: $scope.scopeModel.bNumber,
+                Bnumber: $scope.scopeModel.whiteListe,
                 RouteTableViewType: routeTableViewType,
                 RouteIds: routesDirectiveAPI.getSelectedIds(),
                 SupplierIds:suppliersDirectiveAPI.getSelectedIds(),

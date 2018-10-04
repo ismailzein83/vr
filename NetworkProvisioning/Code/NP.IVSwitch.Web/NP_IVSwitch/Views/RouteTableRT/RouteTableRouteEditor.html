@@ -5,7 +5,7 @@
                 <vr-tab header="'Criteria'">
                     <vr-row removeline>
                         <vr-columns width="1/2row" ng-show="!scopeModel.addMode">
-                            <vr-textbox readonly value="scopeModel.routeTableRouteName" label="ANumber"></vr-textbox>
+                            <vr-textbox readonly value="scopeModel.routeTableRouteName" label="{{scopeModel.labelName}}"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.bNumber" label="BNumber" ng-show="scopeModel.isANumber"></vr-textbox>
@@ -15,7 +15,7 @@
                         <whs-be-code-list-resolver on-ready="onCodeListDirectiveReady" isrequired="scopeModel.addMode"></whs-be-code-list-resolver>
                     </div>
                 </vr-tab>
-                <vr-tab header="'Options'">
+                <vr-tab header="'Settings'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <np-ivswitch-supplier-route-grid on-ready="onSupplierRouteGridDirectiveReady"></np-ivswitch-supplier-route-grid>

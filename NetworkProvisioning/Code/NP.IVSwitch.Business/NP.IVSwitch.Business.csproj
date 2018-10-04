@@ -103,6 +103,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarrierAccountEndPointFilter.cs" />
+    <Compile Include="CarrierAccountRouteFilter.cs" />
     <Compile Include="DomainManager.cs" />
     <Compile Include="EndPointManager.cs" />
     <Compile Include="AccountManager.cs" />

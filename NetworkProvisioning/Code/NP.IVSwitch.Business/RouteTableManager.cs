@@ -81,7 +81,20 @@ namespace NP.IVSwitch.Business
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             if (routeTableItem.RouteTableViewType == RouteTableViewType.ANumber)
-                routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_ANumber";
+            {
+                foreach (var item in routeTableItem.EndPoints)
+                {
+                    EndPoint endPoint = endPointManager.GetEndPoint(item.EndPointId); ;
+                    if (endPoint != null && endPoint.RouteTableBasedRule == false)
+                    {
+                        insertOperationOutput.Message = " An endPoint has RouteTableBaseRule false, you cannot add the Route Table";
+                        return insertOperationOutput;
+                    }
+                
+                
+                }
+                routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_ANumber"; 
+            }
             if (routeTableItem.RouteTableViewType == RouteTableViewType.Whitelist)
                 routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_Whitelist";
             int routeTableId = -1;
@@ -123,6 +136,27 @@ namespace NP.IVSwitch.Business
             updateOperationOutput.UpdatedObject = null;
             if (routeTableItem.RouteTableViewType != RouteTableViewType.BNumber)
             {
+
+                if (routeTableItem.RouteTableViewType == RouteTableViewType.ANumber)
+                {
+                    foreach (var item in routeTableItem.EndPoints)
+                    {
+                        EndPoint endPoint = endPointManager.GetEndPoint(item.EndPointId); ;
+                        if (endPoint != null && endPoint.RouteTableBasedRule == false)
+                        {
+                            updateOperationOutput.Message = " An endPoint has RouteTableBaseRule false, you cannot update the  Route Table";
+                            return updateOperationOutput;
+                        }
+
+
+                    }
+                    if(!routeTableItem.RouteTable.Name.Contains("_ANumber"))
+                    routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_ANumber"; }
+
+                if (routeTableItem.RouteTableViewType == RouteTableViewType.Whitelist && !routeTableItem.RouteTable.Name.Contains("_Whitelist"))
+                    routeTableItem.RouteTable.Name = routeTableItem.RouteTable.Name + "_Whitelist";
+
+
                 List<RouteTableEndPoint> endPointsToLink = new List<RouteTableEndPoint>();
                 List<RouteTableEndPoint> endPointsToUnlink = new List<RouteTableEndPoint>();
                 RuntimeEditorEntity runtimeEditorEntity = this.GetRouteTableById(routeTableItem.RouteTable.RouteTableId, routeTableItem.RouteTableViewType);

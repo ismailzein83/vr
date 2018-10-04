@@ -230,8 +230,6 @@ namespace NP.IVSwitch.Business
                  InsertedObject = null
              };
             string mssg;
-            if (endPointItem.Entity.RouteTableBasedRule == true)
-            {
                 var carrierAccountManager = new CarrierAccountManager();
                 string carrierAccountName = carrierAccountManager.GetCarrierAccountName(endPointItem.CarrierAccountId);
                 int? profileId = carrierAccountManager.GetCarrierProfileId(endPointItem.CarrierAccountId);
@@ -249,10 +247,6 @@ namespace NP.IVSwitch.Business
                 return endPointItem.Entity.EndPointType == UserType.ACL
     ? InsertAcl(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId, out mssg)
     : InsertSip(accountExtended, endPointItem, profileId.Value, carrierAccountName, globalTariffTableId);
-            }
-            else
-                insertOperationOutput.Message = " RouteTableBaseRule is false, you cannot add an EndPoint";
-            return insertOperationOutput;
         }
         public UpdateOperationOutput<EndPointDetail> UpdateEndPoint(EndPointToAdd endPointItem)
         {
@@ -658,7 +652,7 @@ namespace NP.IVSwitch.Business
             EndPointEntityInfo endPointEntityInfo = new EndPointEntityInfo
             {
                 EndPointId = endPoint.EndPointId,
-                Description = GetEndPointDescription(endPoint)+Utilities.GetEnumDescription(endPoint.CurrentState),
+                Description = string.Format("{0}  ({1})", GetEndPointDescription(endPoint),Utilities.GetEnumDescription(endPoint.CurrentState))  ,
                 AccountId = endPoint.AccountId,
                 CliRouting = endPoint.CliRouting,
                 DstRouting = endPoint.DstRouting
