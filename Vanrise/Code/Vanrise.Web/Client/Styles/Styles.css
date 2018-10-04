@@ -1843,7 +1843,7 @@ loader .outer-loader {
 .fieldset-vr {
     margin-top: 10px;
 }
-vr-fieldset[notopspase]>.fieldset-vr {
+vr-fieldset[notopspace]>.fieldset-vr {
     margin-top: unset;
 }
     .fieldset-vr > .panel-heading {
