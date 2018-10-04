@@ -895,7 +895,6 @@ namespace Mediation.Runtime
                 switch (parsedBatch.RecordType)
                 {
                     case "MobileCDR":
-
                         List<dynamic> multiLegRecords = new List<dynamic>();
                         List<dynamic> normalRecords = new List<dynamic>();
 
@@ -928,8 +927,6 @@ namespace Mediation.Runtime
                         mappedBatches.Add("SMSTransformationStage", batch);
                         break;
                 }
-
-
             });
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
