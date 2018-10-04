@@ -344,7 +344,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			   () =>
 			   {
 				   var allRoutingProducts = GetAllRoutingProducts().Values;
-				   return GetAllRoutingProducts().Values.ToDictionary(kvp => kvp.Name, kvp => kvp);
+				   return allRoutingProducts.ToDictionary(kvp => kvp.Name.ToLower(), kvp => kvp);
 			   });
 		}
 

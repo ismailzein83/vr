@@ -366,11 +366,12 @@ namespace TOne.WhS.Sales.Business
 
 			RoutingProductManager routingProductManager = new RoutingProductManager();
 			var routingProducts = routingProductManager.GetAllRoutingProductsByName();
-			var routingProduct = routingProducts.FindRecord(item => item.Name.Equals(routingProductName, StringComparison.OrdinalIgnoreCase));
-
+			RoutingProduct routingProduct;
+			routingProducts.TryGetValue(routingProductName.ToLower(), out routingProduct);
+			
 			if (routingProduct == null)
 			{
-				context.ErrorMessage = string.Format("There is no routing product with Name '{0}'.", routingProductName);
+				context.ErrorMessage = string.Format("There is no routing product with name '{0}'.", routingProductName);
 				return false;
 			}
 
@@ -378,13 +379,13 @@ namespace TOne.WhS.Sales.Business
 			{
 				if (routingProduct.Settings.Zones != null && !routingProduct.Settings.Zones.Any(item => item.ZoneId == context.ExistingZone.SaleZoneId))
 				{
-					context.ErrorMessage = string.Format("Routing product '{0}' can not be assigned for zone '{1}'", routingProductName, context.ExistingZone.Name);
+					context.ErrorMessage = string.Format("Routing product '{0}' can not be assigned for zone '{1}'.", routingProductName, context.ExistingZone.Name);
 					return false;
 				}
 
 				if (routingProduct.SellingNumberPlanId != context.ExistingZone.SellingNumberPlanId)
 				{
-					context.ErrorMessage = string.Format("Routing product is defined for selling product different than zone's selling product");
+					context.ErrorMessage = string.Format("Routing product is on another selling number plan.");
 					return false;
 				}
 				context.ImportedRow.RoutingProductId = routingProduct.RoutingProductId;
