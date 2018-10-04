@@ -2001,6 +2001,7 @@ namespace Mediation.Runtime.DataParser
         private Dictionary<string, BinaryRecordParser> Get_30_SplitRecordsParsersByTag_Iraq()
         {
             Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+
             subParser.Add("A1", new BinaryRecordParser
             {
                 Settings = new ExecuteTemplateRecordParser
@@ -2008,6 +2009,7 @@ namespace Mediation.Runtime.DataParser
                     RecordParserTemplateId = new Guid("E9FD1F21-4D0A-467B-8DC9-885543BE1E76")
                 }
             });
+
             return subParser;
         }
         private Dictionary<Guid, BinaryRecordParser> GetTemplates_Huawei_Iraq()
@@ -2055,59 +2057,47 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A1_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "MobileTerminated"
-                            }
-                    }
-                    ,
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+                        new ParsedRecordFieldConstantValue { FieldName = "RecordTypeName", Value = "MobileTerminated" }
+                    },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
                 }
             });
 
-            //parsers.Add("A3", new HexTLVRecordParser
+            //parsers.Add("A3", new BinaryRecordParser
             //{
             //    Settings = new CreateRecordRecordParser
             //    {
-            //        FieldParsers = new HexTLVFieldParserCollection
+            //        FieldParsers = new BinaryFieldParserCollection
             //        {
             //            FieldParsersByTag = Get_A3_FieldParsers_Huawei_Iraq()
             //        },
             //        RecordType = "MobileCDR",
-            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-            //         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-            //                new ParsedRecordFieldConstantValue
-            //                {
-            //                 FieldName = "RecordTypeName",
-            //                 Value = "IncomingGateway"
-            //                }
-            //        }
-            //        ,
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+            //        {
+            //            new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+            //            new ParsedRecordFieldConstantValue { FieldName = "RecordTypeName", Value = "IncomingGateway" }
+            //        },
             //        CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
             //    }
             //});
 
-            //parsers.Add("A4", new HexTLVRecordParser
+            //parsers.Add("A4", new BinaryRecordParser
             //{
             //    Settings = new CreateRecordRecordParser
             //    {
-            //        FieldParsers = new HexTLVFieldParserCollection
+            //        FieldParsers = new BinaryFieldParserCollection
             //        {
             //            FieldParsersByTag = Get_A4_FieldParsers_Huawei_Iraq()
             //        },
             //        RecordType = "MobileCDR",
-            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-            //         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-            //                new ParsedRecordFieldConstantValue
-            //                {
-            //                 FieldName = "RecordTypeName",
-            //                 Value = "OutgoingGateway"
-            //                }
-            //        }
-            //        ,
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+            //        {
+            //            new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+            //            new ParsedRecordFieldConstantValue { FieldName = "RecordTypeName", Value = "OutgoingGateway" }
+            //        },
             //        CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
             //    }
             //});
@@ -2121,15 +2111,11 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A5_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "Transit"
-                            }
-                    }
-                    ,
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+                        new ParsedRecordFieldConstantValue { FieldName = "RecordTypeName", Value = "Transit" }
+                    },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
                 }
             });
@@ -2143,15 +2129,11 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A100_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "CallForwarding"
-                            }
-                    }
-                    ,
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+                        new ParsedRecordFieldConstantValue { FieldName = "RecordTypeName", Value = "CallForwarding" }
+                    },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
                 }
             });
@@ -2165,17 +2147,13 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A6_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "SMS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "SMSOriginated"
-                            }
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+                        new ParsedRecordFieldConstantValue {  FieldName = "RecordTypeName", Value = "SMSOriginated" }
                     },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser_SMS()
                 }
-
             });
 
             parsers.Add("A7", new BinaryRecordParser
@@ -2187,69 +2165,41 @@ namespace Mediation.Runtime.DataParser
                         FieldParsersByTag = Get_A7_FieldParsers_Huawei_Iraq()
                     },
                     RecordType = "SMS",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> {
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "SMSTerminated"
-                            }
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue>
+                    {
+                        new ParsedRecordFieldConstantValue { FieldName = "SwitchId", Value = 5},
+                        new ParsedRecordFieldConstantValue { FieldName = "RecordTypeName", Value = "SMSTerminated" }
                     },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser_SMS()
                 }
-
             });
 
             return parsers;
         }
         private List<CompositeFieldsParser> GetHuaweiIraqCompositeFieldsParser()
         {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> {
-            new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "ConnectTimestamp",
-                        DateTimeFieldName = "ConnectDateTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                    new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "DisconnectTimestamp",
-                        DateTimeFieldName = "DisconnectDateTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                        new GuidCompositeParser
-                    {
-                        FieldName = "UniqueIdentifier"
-                    },
-                     new FileNameCompositeParser{
-                         FieldName = "FileName"
-                        }
-            };
-
-            return fieldParsers;
-        }
-        private List<CompositeFieldsParser> GetHuaweiIraqCompositeFieldsParser_GPRS()
-        {
-            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser> {
-            new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "RecordOpeningTimestamp",
-                        DateTimeFieldName = "RecordOpeningTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                    new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "ChangeTimestamp",
-                        DateTimeFieldName = "ChangeTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                        new GuidCompositeParser
-                    {
-                        FieldName = "UniqueIdentifier"
-                    },
-                     new FileNameCompositeParser{
-                         FieldName = "FileName"
-                        }
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser>
+            {
+                new GuidCompositeParser() { FieldName = "UniqueIdentifier" },
+                new FileNameCompositeParser() { FieldName = "FileName" },
+                new TimestampDateTimeCompositeParser()
+                {
+                    FieldName = "ConnectTimestamp",
+                    DateTimeFieldName = "ConnectDateTime",
+                    DateTimeShift = new DateTime(1970, 01, 01)
+                },
+                new TimestampDateTimeCompositeParser()
+                {
+                    FieldName = "DisconnectTimestamp",
+                    DateTimeFieldName = "DisconnectDateTime",
+                    DateTimeShift = new DateTime(1970, 01, 01)
+                },
+                new CopyFieldValueCompositeParser()
+                {
+                    SourceFieldName = "ConnectDateTime",
+                    TargetFieldName = "SetupTime",
+                    OverrideOnlyIfDefault = true
+                }
             };
 
             return fieldParsers;
@@ -4053,10 +4003,31 @@ namespace Mediation.Runtime.DataParser
                     },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser_GPRS()
                 }
-
             });
 
             return parsers;
+        }
+        private List<CompositeFieldsParser> GetHuaweiIraqCompositeFieldsParser_GPRS()
+        {
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser>
+            {
+                new TimestampDateTimeCompositeParser
+                {
+                    FieldName = "RecordOpeningTimestamp",
+                    DateTimeFieldName = "RecordOpeningTime",
+                    DateTimeShift = new DateTime(1970, 01, 01)
+                },
+                new TimestampDateTimeCompositeParser
+                {
+                    FieldName = "ChangeTimestamp",
+                    DateTimeFieldName = "ChangeTime",
+                    DateTimeShift = new DateTime(1970, 01, 01)
+                },
+                new GuidCompositeParser { FieldName = "UniqueIdentifier" },
+                new FileNameCompositeParser { FieldName = "FileName" }
+            };
+
+            return fieldParsers;
         }
         private Dictionary<string, BinaryFieldParser> Get_B4_FieldParsers_Huawei_Iraq()
         {
@@ -8745,17 +8716,16 @@ namespace Mediation.Runtime.DataParser
         private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS()
         {
             return new List<CompositeFieldsParser>
-                    {
-                         new TimestampDateTimeCompositeParser{
-                         FieldName = "MessageTimestamp",
+                   {
+                        new TimestampDateTimeCompositeParser
+                        {
+                            FieldName = "MessageTimestamp",
                             DateTimeFieldName = "MessageTime",
                             DateTimeShift = new DateTime(1970, 01, 01)
-                         },
-                        new GuidCompositeParser{FieldName="UniqueIdentifier"},
-                        new FileNameCompositeParser{
-                         FieldName = "FileName"
-                        }
-                    };
+                        },
+                        new GuidCompositeParser { FieldName="UniqueIdentifier" },
+                        new FileNameCompositeParser { FieldName = "FileName" }
+                   };
         }
         private Dictionary<string, BinaryFieldParser> Get_A0_Transit_FieldParsers()
         {
@@ -8869,7 +8839,6 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "IntermediateChargingIndicator"
                 }
             });
-
 
             parsers.Add("9F27", new BinaryFieldParser
             {
