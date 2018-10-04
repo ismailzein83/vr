@@ -1115,8 +1115,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            gridApi.itemAdded = function (item) {
 	                itemChanged(item, "Added");
 	                setUpdatedItemsViewVisible();
-                    if(ctrl.showexpand(item))
-	                    ctrl.expandRow(item);
+	                if (ctrl.showexpand != undefined && typeof (ctrl.showexpand) == 'function') {
+	                    if(ctrl.showexpand(item))
+	                        ctrl.expandRow(item); 
+	                }
 	            };
 
 	            gridApi.itemUpdated = function (item) {
