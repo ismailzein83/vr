@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (MultiTranscludeService, UtilsService) {
+app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', 'VRNotificationService', function (MultiTranscludeService, UtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -12,27 +12,23 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
             var ctrl = this;
             ctrl.selectedTabIndex = 0;
             ctrl.tabs = [];
-            var isAddingTab = false;
+            var isLock = false;
             var tempTabs = [];
+
             ctrl.addTab = function (tab) {
-                if (!isAddingTab) {
+                if (!isLock) {
                     if (tab.haspermission != undefined) {
-                        isAddingTab = true;
+                        isLock = true;
                         tab.haspermission(tab).then(function (isAllowed) {
-                            isAddingTab = false;
                             if (isAllowed) {
                                 addTabObject(tab);
                             }
-                            if (tempTabs.length > 0) {
-                                var nextTab = tempTabs[0];
-                                ctrl.addTab(nextTab);
-                                tempTabs.splice(0, 1);
-                            }
+                            addRemainingTabs();
                         });
                     }
                     else {
                         addTabObject(tab);
-                        isAddingTab = false;
+                        addRemainingTabs();
                     }
                 }
                 else {
@@ -40,6 +36,15 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                 }
             };
 
+            function addRemainingTabs()
+            {
+                isLock = false;
+                if (tempTabs.length > 0) {
+                    var nextTab = tempTabs[0];
+                    tempTabs.splice(0, 1);
+                    ctrl.addTab(nextTab);
+                }
+            }
             function addTabObject(tab) {
                 if (ctrl.tabs.length == 0) {
                     tab.isLoaded = true;
