@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Vanrise.Integration.Entities
 {
     public interface IImportedData
@@ -12,6 +13,7 @@ namespace Vanrise.Integration.Entities
         bool IsMultipleReadings { get; }
 
         bool IsEmpty { get; }
+
         bool IsFile { get; }
     }
 }

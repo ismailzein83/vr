@@ -9,6 +9,5 @@ namespace Vanrise.Integration.Entities
         public string BatchDescription { get; set; }
         public Guid DataSourceId { get; set; }
         public string DataSourceName { get; set; }
-
     }
 }
