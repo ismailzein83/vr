@@ -185,7 +185,8 @@ namespace Vanrise.BusinessProcess.Business
                 Status = BPInstanceStatus.New,
                 InputArgument = createProcessInput.InputArguments,
                 ViewRequiredPermissionSetId = viewInstanceRequiredPermissionSetId,
-                CompletionNotifier = createProcessInput.CompletionNotifier
+                CompletionNotifier = createProcessInput.CompletionNotifier,
+                TaskId = createProcessInput.TaskId
             };
 
             object handlerCustomData = null;
