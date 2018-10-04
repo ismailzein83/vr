@@ -85,5 +85,28 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public double TotalCost { get; set; }
         public double TotalProfit { get; set; }
         public string CurrencyDescription { get; set; }
+
+        public string TotalNetDuration { get; set; }
+
+        public string TotalNormalNet { get; set; }
+
+        public string TotalNormalDuration { get; set; }
+
+        public string TotalOffPeakDuration { get; set; }
+
+        public string TotalOffPeakNet { get; set; }
+
+        public string TotalWeekEndDuration { get; set; }
+
+        public string TotalWeekEndNet { get; set; }
+
+        public string GeneralTotalDuration { get; set; }
+
+        public string GeneralTotalAmount { get; set; }
+
+        public string TotalExtraCharges { get; set; }
+
+        public string GeneralTotalNetAmount { get; set; }
+
     }
 }

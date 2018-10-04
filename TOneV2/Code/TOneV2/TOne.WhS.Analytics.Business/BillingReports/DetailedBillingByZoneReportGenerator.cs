@@ -23,6 +23,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
             double service = 0;
 
+            decimal totalNetDuration = 0;
+            decimal totalNormalDuration = 0;
+            double totalNormalNet = 0.0;
+            decimal totalOffpeakDuration = 0;
+            double totalOffpeakNet = 0.0;
+            decimal totalWeekEndDuration = 0;
+            double totalWeekEndNet = 0;
+            decimal generalTotalDuration = 0;
+            double generalTotalAmount = 0;
+            double totalExtraCharges = 0;
+            double generalTotalNetAmount = 0;
+
+
             if (parameters.GroupBySupplier && parameters.IsCost)
                 listDimensions.Add("SupplierZone");
             else
@@ -260,9 +273,33 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                                                        detailedBillingByZone.OffPeakDurationInSeconds +
                                                        detailedBillingByZone.WeekEndDurationInSeconds);
 
+                        totalNetDuration += detailedBillingByZone.DurationNet.HasValue ? detailedBillingByZone.DurationNet.Value : 0;
+
+                        totalNormalDuration += detailedBillingByZone.DurationInSeconds.HasValue ? detailedBillingByZone.DurationInSeconds.Value : 0;
+
+                        totalNormalNet += detailedBillingByZone.Net.HasValue ? detailedBillingByZone.Net.Value : 0.0;
+
+                        totalOffpeakDuration += detailedBillingByZone.OffPeakDurationInSeconds.HasValue ? detailedBillingByZone.OffPeakDurationInSeconds.Value : 0;
+
+                        totalOffpeakNet += detailedBillingByZone.OffPeakNet.HasValue ? detailedBillingByZone.OffPeakNet.Value : 0.0;
+
+                        totalWeekEndDuration += detailedBillingByZone.WeekEndDurationInSeconds.HasValue ? detailedBillingByZone.WeekEndDurationInSeconds.Value : 0;
+
+                        totalWeekEndNet += detailedBillingByZone.WeekEndNet.HasValue ? detailedBillingByZone.WeekEndNet.Value : 0.0;
+
+                        totalExtraCharges += detailedBillingByZone.ExtraChargeValue.HasValue ? detailedBillingByZone.ExtraChargeValue.Value : 0.0;
+
+
                         listDetailedBillingByZone.Add(detailedBillingByZone);
                     }
                 }
+
+
+            generalTotalDuration = totalNormalDuration + totalOffpeakDuration + totalWeekEndDuration;
+
+            generalTotalAmount = totalNormalNet + totalOffpeakNet + totalWeekEndNet;
+
+            generalTotalNetAmount = generalTotalAmount + totalExtraCharges;
 
             decimal services = 0;
             if (parameters.IsCost)
@@ -270,6 +307,30 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     services = (decimal)service;
 
             parameters.ServicesForCustomer = services;
+
+            parameters.TotalNetDuration = ReportHelpers.FormatNormalNumberDigit(totalNetDuration);
+
+            parameters.TotalNormalDuration = ReportHelpers.FormatNormalNumberDigit(totalNormalDuration);
+
+            parameters.TotalNormalNet = ReportHelpers.FormatNormalNumberDigit(totalNormalNet);
+
+            parameters.TotalOffPeakDuration = ReportHelpers.FormatNormalNumberDigit(totalOffpeakDuration);
+
+            parameters.TotalOffPeakNet = ReportHelpers.FormatNormalNumberDigit(totalOffpeakNet);
+
+            parameters.TotalWeekEndDuration = ReportHelpers.FormatNormalNumberDigit(totalWeekEndDuration);
+
+            parameters.TotalWeekEndNet = ReportHelpers.FormatNormalNumberDigit(totalWeekEndNet);
+
+            parameters.GeneralTotalDuration = ReportHelpers.FormatNormalNumberDigit(generalTotalDuration);
+
+            parameters.GeneralTotalAmount = ReportHelpers.FormatNormalNumberDigit(generalTotalAmount);
+
+            parameters.TotalExtraCharges = ReportHelpers.FormatNormalNumberDigit(totalExtraCharges);
+
+            parameters.GeneralTotalNetAmount = ReportHelpers.FormatNormalNumberDigit(generalTotalNetAmount);
+
+            //parameters.NetDuration = 
 
             Dictionary<string, System.Collections.IEnumerable> dataSources = new Dictionary<string, System.Collections.IEnumerable>();
             dataSources.Add("ZoneSummaryDetailed", listDetailedBillingByZone);
@@ -289,16 +350,31 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             list.Add("Supplier", new RdlcParameter { Value = ReportHelpers.GetCarrierName(parameters.SuppliersId, "Suppliers"), IsVisible = true });
             list.Add("DigitRate", new RdlcParameter { Value = ReportHelpers.GetLongNumberDigit(), IsVisible = true });
             list.Add("Digit", new RdlcParameter { Value = ReportHelpers.GetNormalNumberDigit(), IsVisible = true });
-            list.Add("NormalNet", new RdlcParameter { Value = parameters.NormalNet.ToString(), IsVisible = true });
-            list.Add("NormalDuration", new RdlcParameter { Value = parameters.NormalDuration.ToString(), IsVisible = true });
-            list.Add("OffPeakNet", new RdlcParameter { Value = parameters.OffPeakNet.ToString(), IsVisible = true });
-            list.Add("OffPeakDuration", new RdlcParameter { Value = parameters.OffPeakDuration.ToString(), IsVisible = true });
+
+            list.Add("TotalNetDuration", new RdlcParameter { Value = parameters.TotalNetDuration.ToString(), IsVisible = true });
+            list.Add("TotalNormalDuration", new RdlcParameter { Value = parameters.TotalNormalDuration.ToString(), IsVisible = true });
+            list.Add("TotalNormalNet", new RdlcParameter { Value = parameters.TotalNormalNet.ToString(), IsVisible = true });
+
+            list.Add("TotalOffPeakDuration", new RdlcParameter { Value = parameters.TotalOffPeakDuration.ToString(), IsVisible = true });
+            list.Add("TotalOffPeakNet", new RdlcParameter { Value = parameters.TotalOffPeakNet.ToString(), IsVisible = true });
+
+            list.Add("TotalWeekEndDuration", new RdlcParameter { Value = parameters.TotalWeekEndDuration.ToString(), IsVisible = true });
+            list.Add("TotalWeekEndNet", new RdlcParameter { Value = parameters.TotalWeekEndNet.ToString(), IsVisible = true });
+
+            list.Add("GeneralTotalDuration", new RdlcParameter { Value = parameters.GeneralTotalDuration.ToString(), IsVisible = true });
+            list.Add("GeneralTotalAmount", new RdlcParameter { Value = parameters.GeneralTotalAmount.ToString(), IsVisible = true });
+
+            list.Add("TotalExtraCharges", new RdlcParameter { Value = parameters.TotalExtraCharges.ToString(), IsVisible = true });
+            list.Add("GeneralTotalNetAmount", new RdlcParameter { Value = parameters.GeneralTotalNetAmount.ToString(), IsVisible = true });
+
             list.Add("IsService", new RdlcParameter { Value = parameters.IsService.ToString(), IsVisible = true });
             list.Add("IsCommission", new RdlcParameter { Value = parameters.IsCommission.ToString(), IsVisible = true });
-            list.Add("TotalAmount", new RdlcParameter { Value = parameters.TotalAmount.ToString(), IsVisible = true });
+
             list.Add("ServicesForCustomer", new RdlcParameter { Value = parameters.ServicesForCustomer.ToString(), IsVisible = true });
             list.Add("IsCost", new RdlcParameter { Value = parameters.IsCost.ToString(), IsVisible = true });
             list.Add("GroupeBySupplier", new RdlcParameter { Value = parameters.GroupBySupplier.ToString(), IsVisible = true });
+
+
 
             return list;
         }

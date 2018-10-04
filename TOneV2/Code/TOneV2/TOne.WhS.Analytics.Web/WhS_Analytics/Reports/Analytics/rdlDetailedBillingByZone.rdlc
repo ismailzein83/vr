@@ -724,6 +724,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1929,14 +1930,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox59">
+                    <Textbox Name="Textbox22">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!DurationNet.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalNetDuration.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1947,7 +1948,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>44</ZIndex>
+                      <rd:DefaultName>Textbox22</rd:DefaultName>
                       <Style>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -1960,14 +1961,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox60">
+                    <Textbox Name="Textbox30">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Round(Fields!DurationInSeconds.Value,2)),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalNormalDuration.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1978,7 +1979,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>43</ZIndex>
+                      <rd:DefaultName>Textbox30</rd:DefaultName>
                       <Style>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2026,7 +2027,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!Net.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalNormalNet.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2057,7 +2058,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!OffPeakDurationInSeconds.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalOffPeakDuration.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2116,7 +2117,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!OffPeakNet.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalOffPeakNet.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2147,7 +2148,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!WeekEndDurationInSeconds.Value),2)</Value>
+                              <Value>=Parameters!TotalWeekEndDuration.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2199,14 +2200,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox69">
+                    <Textbox Name="Textbox33">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!WeekEndNet.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalWeekEndNet.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2217,7 +2218,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>35</ZIndex>
+                      <rd:DefaultName>Textbox33</rd:DefaultName>
                       <Style>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2237,8 +2238,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= FormatNumber(Sum(Round(Fields!DurationInSeconds.Value,2))+ Sum(Round(Fields!OffPeakDurationInSeconds.Value,2))+
-Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!GeneralTotalDuration.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2272,7 +2272,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= FormatNumber(Sum(Fields!Net.Value + Fields!OffPeakNet.Value + Fields!WeekEndNet.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!GeneralTotalAmount.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -2885,7 +2885,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!Net.Value)+Sum(Fields!OffPeakNet.Value)+Sum(Fields!WeekEndNet.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!GeneralTotalAmount.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2955,7 +2955,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!TotalExtraCharges.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3032,7 +3032,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber( (Sum(Fields!Net.Value) + Sum(Fields!OffPeakNet.Value) + Sum(Fields!WeekEndNet.Value) ) + Sum(Fields!ExtraChargeValue.Value) ,Parameters!Digit.Value)</Value>
+                              <Value>=Parameters!GeneralTotalNetAmount.Value</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3057,7 +3057,6 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
@@ -3883,7 +3882,7 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
       <AllowBlank>true</AllowBlank>
       <Prompt>IsCommission</Prompt>
     </ReportParameter>
-    <ReportParameter Name="TotalAmount">
+    <ReportParameter Name="GeneralTotalAmount">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>TotalAmount</Prompt>
@@ -3893,22 +3892,22 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
       <AllowBlank>true</AllowBlank>
       <Prompt>ServicesForCustomer</Prompt>
     </ReportParameter>
-    <ReportParameter Name="NormalNet">
+    <ReportParameter Name="TotalNormalNet">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>NormalNet</Prompt>
     </ReportParameter>
-    <ReportParameter Name="NormalDuration">
+    <ReportParameter Name="TotalNormalDuration">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>NormalDuration</Prompt>
     </ReportParameter>
-    <ReportParameter Name="OffPeakNet">
+    <ReportParameter Name="TotalOffPeakNet">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>OffPeakNet</Prompt>
     </ReportParameter>
-    <ReportParameter Name="OffPeakDuration">
+    <ReportParameter Name="TotalOffPeakDuration">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>OffPeakDuration</Prompt>
@@ -3938,6 +3937,36 @@ Sum(Round(Fields!WeekEndDurationInSeconds.Value,2)),Parameters!Digit.Value)</Val
     </ReportParameter>
     <ReportParameter Name="Digit">
       <DataType>Integer</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalNetDuration">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalWeekEndDuration">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalWeekEndNet">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalExtraCharges">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="GeneralTotalNetAmount">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="GeneralTotalDuration">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
