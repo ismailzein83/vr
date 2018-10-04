@@ -162,6 +162,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
                 sheet.Rows = new List<ExportExcelRow>();
 
+                string formatedDateString = Utilities.GetDateTimeFormat(DateTimeType.LongDateTime);
                 if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Any())
                 {
                     foreach (var record in context.BigResult.Data)
@@ -170,12 +171,30 @@ namespace TOne.WhS.SupplierPriceList.Business
                         row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
                         row.Cells.Add(new ExportExcelCell { Value = record.PriceListTypeDescription });
                         row.Cells.Add(new ExportExcelCell { Value = record.StatusDescription });
-                        row.Cells.Add(new ExportExcelCell { Value = record.ReceivedPricelist.ReceivedDateTime });
-                        row.Cells.Add(new ExportExcelCell { Value = record.ReceivedPricelist.StartProcessingDateTime });
-                        string messages = "";
-                        if (record.ReceivedPricelist.MessageDetails != null && record.ReceivedPricelist.MessageDetails.Count() > 0)
-                            messages = string.Join(" ", record.ReceivedPricelist.MessageDetails.Select(item => item.Message));
-                        row.Cells.Add(new ExportExcelCell { Value = messages });
+                        row.Cells.Add(new ExportExcelCell { Value = record.ReceivedPricelist.ReceivedDateTime.ToString(formatedDateString) });
+
+                        string startProcessingDateFormated = null;
+                        if (record.ReceivedPricelist.StartProcessingDateTime.HasValue)
+                            startProcessingDateFormated = record.ReceivedPricelist.StartProcessingDateTime.Value.ToString(formatedDateString);
+
+                        row.Cells.Add(new ExportExcelCell { Value = startProcessingDateFormated });
+
+                        StringBuilder messageStringBuilder = new StringBuilder();
+                        if (record.ReceivedPricelist.MessageDetails != null)
+                        {
+                            foreach (var message in record.ReceivedPricelist.MessageDetails)
+                            {
+                                if (string.IsNullOrEmpty(message.Message))
+                                    continue;
+
+                                if (messageStringBuilder.Length > 32000)
+                                    break;
+
+                                messageStringBuilder.AppendFormat(message.Message);
+                            }
+
+                        }
+                        row.Cells.Add(new ExportExcelCell { Value = messageStringBuilder.ToString() });
                         row.Cells.Add(new ExportExcelCell { Value = record.SentToSupplier });
 
                         sheet.Rows.Add(row);
