@@ -13,5 +13,9 @@ namespace Vanrise.BusinessProcess.Data
         bool UpdateProcessSynchronisation(ProcessSynchronisationToUpdate processSynchronisationToUpdate, int lastModifiedBy);
 
         bool AreProcessSynchronisationsUpdated(ref object updateHandle);
+
+        bool EnableProcessSynchronisation(Guid processSynchronisationId, int lastModifiedBy);
+
+        bool DisableProcessSynchronisation(Guid processSynchronisationId, int lastModifiedBy);
     }
 }

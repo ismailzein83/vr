@@ -35,18 +35,25 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetProcessSynchronisations")]
-        public IEnumerable<ProcessSynchronisation> GetProcessSynchronisations()
-        {
-            return manager.GetProcessSynchronisations();
-        }
-
-        [HttpGet]
         [Route("GetProcessSynchronisation")]
         public ProcessSynchronisation GetProcessSynchronisation(Guid processSynchronisationId)
         {
             return manager.GetProcessSynchronisation(processSynchronisationId);
         }
-       
+
+        [HttpGet]
+        [Route("EnableProcessSynchronisation")]
+        public object EnableProcessSynchronisation(Guid processSynchronisationId)
+        {
+            return manager.EnableProcessSynchronisation(processSynchronisationId);
+        }
+
+        [HttpGet]
+        [Route("DisableProcessSynchronisation")]
+        public object DisableProcessSynchronisation(Guid processSynchronisationId)
+        {
+            return manager.DisableProcessSynchronisation(processSynchronisationId);
+        }
+
     }
 }

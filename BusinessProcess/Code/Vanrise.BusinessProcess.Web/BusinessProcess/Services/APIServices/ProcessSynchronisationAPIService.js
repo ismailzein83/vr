@@ -18,10 +18,6 @@
             });
         }
 
-        function GetProcessSynchronisations() {
-            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetProcessSynchronisations"));
-        }
-
         function AddProcessSynchronisation(processSynchronisation) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, 'AddProcessSynchronisation'), processSynchronisation);
         }
@@ -38,14 +34,27 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, ['UpdateProcessSynchronisation']));
         }
 
+        function EnableProcessSynchronisation(processSynchronisationId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "EnableProcessSynchronisation"), {
+                processSynchronisationId: processSynchronisationId
+            });
+        }
+
+        function DisableProcessSynchronisation(processSynchronisationId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "DisableProcessSynchronisation"), {
+                processSynchronisationId: processSynchronisationId
+            });
+        }
+
         return ({
             GetFilteredProcessesSynchronisations: GetFilteredProcessesSynchronisations,
             GetProcessSynchronisation: GetProcessSynchronisation,
-            GetProcessSynchronisations: GetProcessSynchronisations,
             AddProcessSynchronisation: AddProcessSynchronisation,
             UpdateProcessSynchronisation: UpdateProcessSynchronisation,
             HasAddProcessSynchronisationPermission: HasAddProcessSynchronisationPermission,
-            HasUpdateProcessSynchronisationPermission: HasUpdateProcessSynchronisationPermission
+            HasUpdateProcessSynchronisationPermission: HasUpdateProcessSynchronisationPermission,
+            EnableProcessSynchronisation: EnableProcessSynchronisation,
+            DisableProcessSynchronisation: DisableProcessSynchronisation
         });
     }
 

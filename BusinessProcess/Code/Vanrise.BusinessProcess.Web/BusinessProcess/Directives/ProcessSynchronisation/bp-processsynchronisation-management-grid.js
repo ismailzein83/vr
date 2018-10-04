@@ -70,12 +70,31 @@ app.directive("businessprocessProcesssynchronisationManagementGrid", ["UtilsServ
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.gridMenuActions.push({
-                    name: 'Edit',
-                    clicked: editProcessSynchronisation,
-                    haspermission: HasUpdateProcessSynchronisationPermission
-                });
+                $scope.scopeModel.gridMenuActions = function (processSynchronisationItem) {
+                    var menuActions = [];
+
+                    menuActions.push({
+                        name: 'Edit',
+                        clicked: editProcessSynchronisation,
+                        haspermission: HasUpdateProcessSynchronisationPermission
+                    });
+                    if (processSynchronisationItem.IsEnabled) {
+                        menuActions.push({
+                            name: 'Disable',
+                            clicked: disableProcessSynchronisation
+                        });
+                    }
+                    else {
+                        menuActions.push({
+                            name: 'Enable',
+                            clicked: enableProcessSynchronisation
+                        });
+                    }
+
+                    return menuActions;
+                };
             }
+
             function editProcessSynchronisation(processSynchronisationItem) {
                 var onProcessSynchronisationUpdated = function (updatedProcessSynchronisation) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedProcessSynchronisation);
@@ -89,6 +108,45 @@ app.directive("businessprocessProcesssynchronisationManagementGrid", ["UtilsServ
                 return BusinessProcess_ProcessSynchronisationAPIService.HasUpdateProcessSynchronisationPermission();
             }
 
+            function enableProcessSynchronisation(processSynchronisationItem) {
+                var onProcessSynchronisationEnabled = function (updatedProcessSynchronisation) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedProcessSynchronisation);
+                    gridAPI.itemUpdated(updatedProcessSynchronisation);
+                    $scope.scopeModel.gridMenuActions(updatedProcessSynchronisation);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return BusinessProcess_ProcessSynchronisationAPIService.EnableProcessSynchronisation(processSynchronisationItem.ProcessSynchronisationId).then(function (response) {
+                            if (onProcessSynchronisationEnabled && typeof onProcessSynchronisationEnabled == 'function') {
+                                onProcessSynchronisationEnabled(response.UpdatedObject);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                });
+            }
+
+            function disableProcessSynchronisation(processSynchronisationItem) {
+                var onProcessSynchronisationDisabled = function (updatedProcessSynchronisation) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedProcessSynchronisation);
+                    gridAPI.itemUpdated(updatedProcessSynchronisation);
+                    $scope.scopeModel.gridMenuActions(updatedProcessSynchronisation);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return BusinessProcess_ProcessSynchronisationAPIService.DisableProcessSynchronisation(processSynchronisationItem.ProcessSynchronisationId).then(function (response) {
+                            if (onProcessSynchronisationDisabled && typeof onProcessSynchronisationDisabled == 'function') {
+                                onProcessSynchronisationDisabled(response.UpdatedObject);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                });
+            }
         }
 
         return directiveDefinitionObject;

@@ -5,13 +5,15 @@
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
                 </vr-columns>
+                <businessprocess-processsynchronisation-status-selector on-ready="scopeModel.onProcessSynchronisationStatusSelectorReady"
+                                                                        ismultipleselection normal-col-num="2"></businessprocess-processsynchronisation-status-selector>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.addClicked" haspermission="scopeModel.hasProcessSynchronisationPermission"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.addClicked" haspermission="scopeModel.hasAddProcessSynchronisationPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

@@ -7,11 +7,12 @@
                  ondeleterow="scopeModel.removeRow">
         <vr-datagridcolumn headertext="'Business Process'">
             <span vr-loader="dataItem.isBPDefinitionLoading">
-                <businessprocess-bp-definition-selector on-ready=" dataItem.onBPDefinitionSelectorReady" onselectionchanged="dataItem.onSelectionChanged" 
+                <businessprocess-bp-definition-selector on-ready=" dataItem.onBPDefinitionSelectorReady"
+                                                        onselectionchanged="dataItem.onSelectionChanged"
                                                         isrequired="true" hideremoveicon hidelabel></businessprocess-bp-definition-selector>
             </span>
         </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Scheduler Service'">
+        <vr-datagridcolumn headertext="'Scheduler Services'">
             <span vr-loader="dataItem.isBPTaskSelectorLoading">
                 <vr-runtime-schedulertask-selector on-ready="dataItem.onBPTaskSelectorReady" ismultipleselection hidelabel></vr-runtime-schedulertask-selector>
             </span>

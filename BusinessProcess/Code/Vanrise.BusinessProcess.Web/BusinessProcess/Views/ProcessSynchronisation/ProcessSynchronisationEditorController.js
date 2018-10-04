@@ -37,6 +37,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.isEnabled = true;
 
             $scope.scopeModel.onFirstProcessSynchronisationGroupGridReady = function (api) {
                 firstProcessSynchronisationGroupGridAPI = api;
@@ -109,8 +110,10 @@
             }
 
             function loadStaticData() {
-                if (processSynchronisationEntity != undefined)
+                if (processSynchronisationEntity != undefined) {
                     $scope.scopeModel.name = processSynchronisationEntity.Name;
+                    $scope.scopeModel.isEnabled = processSynchronisationEntity.IsEnabled;
+                }
             }
 
             function loadFirstProcessSynchronisationGroupGrid() {
@@ -174,7 +177,7 @@
         function addProcessSynchronisation() {
             $scope.scopeModel.isLoading = true;
             return BusinessProcess_ProcessSynchronisationAPIService.AddProcessSynchronisation(buildProcessSynchronisationObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('ProcessSynchronisation', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemAdded('Process Synchronisation', response, 'Name')) {
                     if ($scope.onProcessSynchronisationAdded != undefined) {
                         $scope.onProcessSynchronisationAdded(response.InsertedObject);
                     }
@@ -190,7 +193,7 @@
         function updateProcessSynchronisation() {
             $scope.scopeModel.isLoading = true;
             return BusinessProcess_ProcessSynchronisationAPIService.UpdateProcessSynchronisation(buildProcessSynchronisationObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('ProcessSynchronisation', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemUpdated('Process Synchronisation', response, 'Name')) {
                     if ($scope.onProcessSynchronisationUpdated != undefined) {
                         $scope.onProcessSynchronisationUpdated(response.UpdatedObject);
                     }
@@ -222,6 +225,7 @@
 
             var processSynchronisationObj = {
                 Name: $scope.scopeModel.name,
+                IsEnabled: $scope.scopeModel.isEnabled,
                 Settings: {
                     FirstProcessSynchronisationGroup: firstProcessSynchronisatinObj,
                     SecondProcessSynchronisationGroup: secondProcessSynchronisatinObj

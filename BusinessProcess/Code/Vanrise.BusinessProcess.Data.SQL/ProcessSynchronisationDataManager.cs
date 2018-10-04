@@ -24,18 +24,27 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public bool InsertProcessSynchronisation(Guid processSynchronisationId, ProcessSynchronisationToAdd processSynchronisationToAdd, int createdBy)
         {
             string serializedSettings = processSynchronisationToAdd.Settings != null ? Vanrise.Common.Serializer.Serialize(processSynchronisationToAdd.Settings) : null;
-            return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_Insert]", processSynchronisationId, processSynchronisationToAdd.Name, serializedSettings, createdBy) > 0;
+            return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_Insert]", processSynchronisationId, processSynchronisationToAdd.Name, processSynchronisationToAdd.IsEnabled, serializedSettings, createdBy) > 0;
         }
 
         public bool UpdateProcessSynchronisation(ProcessSynchronisationToUpdate processSynchronisationToUpdate, int lastModifiedBy)
         {
             string serializedSettings = processSynchronisationToUpdate.Settings != null ? Vanrise.Common.Serializer.Serialize(processSynchronisationToUpdate.Settings) : null;
-            return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_Update]", processSynchronisationToUpdate.ProcessSynchronisationId, processSynchronisationToUpdate.Name, serializedSettings, lastModifiedBy) > 0;
+            return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_Update]", processSynchronisationToUpdate.ProcessSynchronisationId, processSynchronisationToUpdate.Name, processSynchronisationToUpdate.IsEnabled, serializedSettings, lastModifiedBy) > 0;
         }
 
         public bool AreProcessSynchronisationsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[bp].[ProcessSynchronisation]", ref updateHandle);
+        }
+        public bool EnableProcessSynchronisation(Guid processSynchronisationId, int lastModifiedBy)
+        {
+            return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_SetEnable]", processSynchronisationId, lastModifiedBy) > 0;
+        }
+
+        public bool DisableProcessSynchronisation(Guid processSynchronisationId, int lastModifiedBy)
+        {
+            return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_SetDisable]", processSynchronisationId, lastModifiedBy) > 0;
         }
 
         #endregion
@@ -49,6 +58,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             {
                 ProcessSynchronisationId = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
+                IsEnabled = GetReaderValue<bool>(reader, "IsEnabled"),
                 Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<ProcessSynchronisationSettings>(settings) : null,
                 CreatedBy = GetReaderValue<int>(reader, "CreatedBy"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),

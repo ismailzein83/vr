@@ -6,6 +6,9 @@
              idfield="ProcessSynchronisationId">
     <vr-datagridcolumn headertext="'ID'" field="'ProcessSynchronisationId'" type="'Text'" widthfactor="3"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'" widthfactor="20"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'IsEnabled'" widthfactor="10">
+        <vr-icon icontype="dataItem.IsEnabled" tooltip="dataItem.IsEnabled ? 'Enabled': 'Disabled'"></vr-icon>
+    </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

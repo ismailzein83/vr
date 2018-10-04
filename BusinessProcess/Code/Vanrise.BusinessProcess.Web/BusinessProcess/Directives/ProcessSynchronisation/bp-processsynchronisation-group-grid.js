@@ -30,6 +30,8 @@
             var gridAPI;
             var shouldAddBPDefinition;
 
+            var isGridLoaded = false;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.datasource = [];
@@ -66,6 +68,27 @@
                 $scope.scopeModel.isValid = function () {
                     if (shouldAddBPDefinition && $scope.scopeModel.datasource.length == 0)
                         return 'At least one BP Definition should be added';
+
+                    if (isGridLoaded) {
+                        for (var i = 0 ; i < $scope.scopeModel.datasource.length ; i++) {
+                            if ($scope.scopeModel.datasource[i].bpDefinitionSelectorAPI == undefined)
+                                return null;
+
+                            var currentBPDefinitionID = $scope.scopeModel.datasource[i].bpDefinitionSelectorAPI.getSelectedIds();
+                            if (currentBPDefinitionID == undefined)
+                                continue;
+
+                            for (var j = i + 1 ; j < $scope.scopeModel.datasource.length ; j++) {
+                                if ($scope.scopeModel.datasource[j].bpDefinitionSelectorAPI == undefined)
+                                    return null;
+
+                                var dataItemBPDefinitionID = $scope.scopeModel.datasource[j].bpDefinitionSelectorAPI.getSelectedIds();
+                                if (currentBPDefinitionID == dataItemBPDefinitionID)
+                                    return 'It is not allowed to add same BP Definition more than once';
+                            }
+                        }
+                    }
+
                     return null;
                 };
 
@@ -157,7 +180,9 @@
                         $scope.scopeModel.datasource.push(dataItem);
                     }
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        isGridLoaded = true;
+                    });
                 };
 
                 api.getData = function () {
@@ -183,7 +208,7 @@
             function buildFilter(bpDefinitionId) {
                 return {
                     Filters: [{
-                        $type: "Vanrise.BusinessProcess.MainExtensions.SchedulerTask.BPDefinitionSchedulerTaskFilter,Vanrise.BusinessProcess.MainExtensions",
+                        $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskBPDefinitionFilter,Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
                         BPDefinitionId: bpDefinitionId
                     }]
                 };

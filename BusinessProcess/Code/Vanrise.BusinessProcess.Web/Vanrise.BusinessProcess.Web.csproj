@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BusinessProcess\Constants\BPActionSeverityEnum.js" />
+    <Content Include="BusinessProcess\Constants\BPProcessSynchronisationStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\BPTaskStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\BPInstanceStatusEnum.js" />
     <Content Include="BusinessProcess\Constants\CreateProcessResultEnum.js" />
@@ -259,6 +260,7 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowCustomClassTypeTemplate.html" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-management-grid.js" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-group-grid.js" />
+    <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-status-selector.js" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationGroupGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationManagementGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-containerv2.js" />

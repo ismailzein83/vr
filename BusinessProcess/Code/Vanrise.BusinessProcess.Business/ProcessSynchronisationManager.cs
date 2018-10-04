@@ -22,6 +22,15 @@ namespace Vanrise.BusinessProcess.Business
                 if (!string.IsNullOrEmpty(input.Query.Name) && !processSynchronisation.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
 
+                if (input.Query.Statuses != null)
+                {
+                    if (!input.Query.Statuses.Contains(ProcessSynchronisationStatus.Disabled) && !processSynchronisation.IsEnabled)
+                        return false;
+
+                    if (!input.Query.Statuses.Contains(ProcessSynchronisationStatus.Enabled) && processSynchronisation.IsEnabled)
+                        return false;
+                }
+
                 return true;
             };
             VRActionLogger.Current.LogGetFilteredAction(ProcessSynchronisationLoggableEntity.Instance, input);
@@ -105,6 +114,59 @@ namespace Vanrise.BusinessProcess.Business
             else
                 return null;
         }
+
+        public object EnableProcessSynchronisation(Guid processSynchronisationId)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ProcessSynchronisationDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IProcessSynchronisationDataManager dataManager = BPDataManagerFactory.GetDataManager<IProcessSynchronisationDataManager>();
+
+            var lastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
+
+            if (dataManager.EnableProcessSynchronisation(processSynchronisationId, lastModifiedBy))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var processSynchronisation = GetProcessSynchronisation(processSynchronisationId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(ProcessSynchronisationLoggableEntity.Instance, processSynchronisation);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = ProcessSynchronisationDetailMapper(processSynchronisation);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
+        }
+
+        public object DisableProcessSynchronisation(Guid processSynchronisationId)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<ProcessSynchronisationDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IProcessSynchronisationDataManager dataManager = BPDataManagerFactory.GetDataManager<IProcessSynchronisationDataManager>();
+
+            var lastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
+
+            if (dataManager.DisableProcessSynchronisation(processSynchronisationId, lastModifiedBy))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var processSynchronisation = GetProcessSynchronisation(processSynchronisationId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(ProcessSynchronisationLoggableEntity.Instance, processSynchronisation);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = ProcessSynchronisationDetailMapper(processSynchronisation);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
+        }
+
         #endregion
 
         #region Private Methods
@@ -274,7 +336,8 @@ namespace Vanrise.BusinessProcess.Business
             return new ProcessSynchronisationDetail()
             {
                 ProcessSynchronisationId = processSynchronisation.ProcessSynchronisationId,
-                Name = processSynchronisation.Name
+                Name = processSynchronisation.Name,
+                IsEnabled = processSynchronisation.IsEnabled
             };
         }
         #endregion

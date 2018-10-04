@@ -38,7 +38,7 @@
             return "BusinessProcess_ProcessSynchronisation";
         }
 
-        function registerObjectTrackingDrillDownToBPDefinition() {
+        function registerObjectTrackingDrillDownToProcessSynchronisation() {
             var drillDownDefinition = {};
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
@@ -46,9 +46,8 @@
             drillDownDefinition.loadDirective = function (directiveAPI, processSynchronisationItem) {
                 processSynchronisationItem.objectTrackingGridAPI = directiveAPI;
                 var query = {
-                    ObjectId: processSynchronisationItem.Entity.ProcessSynchronisationId,
+                    ObjectId: processSynchronisationItem.ProcessSynchronisationId,
                     EntityUniqueName: getEntityUniqueName(),
-
                 };
                 return processSynchronisationItem.objectTrackingGridAPI.load(query);
             };
@@ -57,7 +56,6 @@
         }
 
         function addDrillDownDefinition(drillDownDefinition) {
-
             drillDownDefinitions.push(drillDownDefinition);
         }
 
@@ -69,7 +67,7 @@
             addProcessSynchronisation: addProcessSynchronisation,
             editProcessSynchronisation: editProcessSynchronisation,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerObjectTrackingDrillDownToBPDefinition: registerObjectTrackingDrillDownToBPDefinition
+            registerObjectTrackingDrillDownToProcessSynchronisation: registerObjectTrackingDrillDownToProcessSynchronisation
         });
     }
 

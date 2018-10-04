@@ -7,5 +7,6 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public Guid ProcessSynchronisationId { get; set; }
         public string Name { get; set; }
+        public bool IsEnabled { get; set; }
     }
 }
