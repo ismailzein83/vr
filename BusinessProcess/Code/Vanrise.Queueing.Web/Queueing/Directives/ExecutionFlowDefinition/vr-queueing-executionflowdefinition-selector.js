@@ -67,9 +67,13 @@ app.directive('vrQueueingExecutionflowdefinitionSelector', ['VR_Queueing_Executi
                 addCliked = 'onaddclicked="addNewExecutionFlow"';
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
+
             return '<div>'
                 + '<vr-select ' + multipleselection + ' ' + hideremoveicon + '  datatextfield="Title" datavaluefield="ID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '" ' + hidelabel + addCliked + ' datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Execution Flow Definition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>';
         }
 

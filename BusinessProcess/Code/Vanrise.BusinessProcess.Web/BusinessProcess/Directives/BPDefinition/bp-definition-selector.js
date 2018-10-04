@@ -48,18 +48,27 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
 
             var multipleselection = "";
             var label = "Business Process";
+
             if (attrs.ismultipleselection != undefined) {
                 label = "Business Processes";
                 multipleselection = "ismultipleselection";
             }
 
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
+
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = 'hideremoveicon';
 
             var addCliked = '';
 
             // vr-disabled="ctrl.isdisabled"  is removed temporary
             return '<div vr-disabled="ctrl.isdisabled">'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPDefinitionID" isrequired="ctrl.isrequired"'
-                + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="BPDefinition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="BPDefinitionID" isrequired="ctrl.isrequired"' + hideremoveicon 
+                + ' label="' + label + '" ' + hidelabel + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"' 
+                + 'onselectionchanged="ctrl.onselectionchanged" entityName="BPDefinition" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>';
         }
 

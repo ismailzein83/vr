@@ -1,0 +1,20 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.onAddProcess" standalone></vr-button>
+
+<vr-validator validate="scopeModel.isValid()">
+    <vr-datagrid datasource="scopeModel.datasource"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="scopeModel.onGridReady"
+                 ondeleterow="scopeModel.removeRow">
+        <vr-datagridcolumn headertext="'Business Process'">
+            <span vr-loader="dataItem.isBPDefinitionLoading">
+                <businessprocess-bp-definition-selector on-ready=" dataItem.onBPDefinitionSelectorReady" onselectionchanged="dataItem.onSelectionChanged" 
+                                                        isrequired="true" hideremoveicon hidelabel></businessprocess-bp-definition-selector>
+            </span>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Scheduler Service'">
+            <span vr-loader="dataItem.isBPTaskSelectorLoading">
+                <vr-runtime-schedulertask-selector on-ready="dataItem.onBPTaskSelectorReady" ismultipleselection hidelabel></vr-runtime-schedulertask-selector>
+            </span>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

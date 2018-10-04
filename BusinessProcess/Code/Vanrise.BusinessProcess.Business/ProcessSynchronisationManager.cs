@@ -13,7 +13,7 @@ namespace Vanrise.BusinessProcess.Business
     public class ProcessSynchronisationManager
     {
         #region Public Methods
-        public Vanrise.Entities.IDataRetrievalResult<ProcessSynchronisationDetail> GetFilteredBPDefinitions(Vanrise.Entities.DataRetrievalInput<ProcessSynchronisationQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<ProcessSynchronisationDetail> GetFilteredProcessesSynchronisations(Vanrise.Entities.DataRetrievalInput<ProcessSynchronisationQuery> input)
         {
             var allProcessSynchronisations = GetCachedProcessSynchronisations();
 

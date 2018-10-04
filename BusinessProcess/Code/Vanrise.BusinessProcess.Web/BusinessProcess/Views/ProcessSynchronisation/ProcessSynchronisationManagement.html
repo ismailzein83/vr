@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="BusinessProcess_ProcessSynchronisationManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.addClicked" haspermission="scopeModel.hasProcessSynchronisationPermission"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <businessprocess-processsynchronisation-management-grid on-ready="scopeModel.onGridReady"></businessprocess-processsynchronisation-management-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

@@ -1,0 +1,52 @@
+﻿<div vr-modalcontent ng-controller="BusinessProcess_ProcessSynchronisationEditorController" size="xlarge">
+    <vr-modalbody>
+        <vr-form name="formEditProcessSynchronisation" vr-loader="scopeModel.isLoading">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-columns colnum="6">
+                            <vr-section title="First Group">
+                                <vr-fieldset header="Business Processes" notopspace>
+                                    <businessprocess-processsynchronisation-group-grid on-ready="scopeModel.onFirstProcessSynchronisationGroupGridReady"></businessprocess-processsynchronisation-group-grid>
+                                </vr-fieldset>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns colnum="6" haschildcolumns>
+                            <vr-validator validate="scopeModel.validateSecondGroup()">
+                                <vr-section title="Second Group">
+                                    <vr-columns colnum="12" haschildcolumns>
+                                        <vr-fieldset header="Business Processes" notopspace>
+                                            <businessprocess-processsynchronisation-group-grid on-ready="scopeModel.onSecondProcessSynchronisationGroupGridReady"></businessprocess-processsynchronisation-group-grid>
+                                        </vr-fieldset>
+                                    </vr-columns>
+                                    <vr-columns colnum="12" haschildcolumns>
+                                        <vr-fieldset header="Execution Flow">
+                                            <vr-columns colnum="6" haschildcolumns>
+                                                <vr-queueing-executionflowdefinition-selector on-ready="scopeModel.onExecutionFlowDefinitionSelectorReady" hidelabel></vr-queueing-executionflowdefinition-selector>
+                                            </vr-columns>
+                                        </vr-fieldset>
+                                    </vr-columns>
+                                </vr-section>
+                            </vr-validator>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.saveProcessSynchronisation" formname="formEditProcessSynchronisation"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

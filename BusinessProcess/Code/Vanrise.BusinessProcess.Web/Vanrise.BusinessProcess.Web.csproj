@@ -167,6 +167,7 @@
     <Compile Include="Controllers\BPInstanceTrackingController.cs" />
     <Compile Include="Controllers\BPInstanceController.cs" />
     <Compile Include="Controllers\BPDefinitionController.cs" />
+    <Compile Include="Controllers\ProcessSynchronisationController.cs" />
     <Compile Include="Controllers\VRWorkflowController.cs" />
     <Compile Include="ModelMappers\BPMappers.cs" />
     <Compile Include="Models\SchedulerTaskModel.cs" />
@@ -218,6 +219,7 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-log-search.js" />
+    <Content Include="BusinessProcess\Directives\BPTask\bp-task-selector.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\Templates\BPRegulatorRuntimeServiceTemplate.html" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\bp-regulator-runtimeservice.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-history-grid.js" />
@@ -255,6 +257,10 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivitySubprocessController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\bp-vr-workflow-customclasstype.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowCustomClassTypeTemplate.html" />
+    <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-management-grid.js" />
+    <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-group-grid.js" />
+    <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationGroupGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationManagementGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-containerv2.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowContainerV2Template.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variables-grid.js" />
@@ -298,6 +304,7 @@
     <Content Include="BusinessProcess\Services\APIServices\BPValidationMessageAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskTypeAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\ProcessSynchronisationAPIService.js" />
     <Content Include="BusinessProcess\Services\BPBusinessRuleSetService.js" />
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
     <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
@@ -306,6 +313,7 @@
     <Content Include="BusinessProcess\Services\BPValidationMessageService.js" />
     <Content Include="BusinessProcess\Services\BPTaskService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessLogService.js" />
+    <Content Include="BusinessProcess\Services\ProcessSynchronisationService.js" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagement.html" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetManagementController.js" />
     <Content Include="BusinessProcess\Views\BPBusinessRule\BPBusinessRuleSetEditor.html" />
@@ -331,6 +339,10 @@
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\vr-businessprocess-runtimeservice.js" />
+    <Content Include="BusinessProcess\Views\ProcessSynchronisation\ProcessSynchronisationEditor.html" />
+    <Content Include="BusinessProcess\Views\ProcessSynchronisation\ProcessSynchronisationEditorController.js" />
+    <Content Include="BusinessProcess\Views\ProcessSynchronisation\ProcessSynchronisationManagement.html" />
+    <Content Include="BusinessProcess\Views\ProcessSynchronisation\ProcessSynchronisationManagementController.js" />
     <Content Include="BusinessProcess\Views\VRWorkflow\ActivityVariablesEditor.html" />
     <Content Include="BusinessProcess\Views\VRWorkflow\ActivityVariablesEditorController.js" />
     <Content Include="BusinessProcess\Views\VRWorkflow\ExpressionBuilderEditor.html" />
