@@ -77,8 +77,11 @@
                 onDirectiveReady: function (api) {
                     dataItem.directiveAPI = api;
                     var payload = getPayload();
-                    var setLoader = function (value) {
-                        dataItem.isLoadingDirective = value;
+                    var setLoader = function (value) {                       
+                        setTimeout(function () {
+                            dataItem.isLoadingDirective = value;
+                            UtilsService.safeApply($scope);
+                        });
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                 }
