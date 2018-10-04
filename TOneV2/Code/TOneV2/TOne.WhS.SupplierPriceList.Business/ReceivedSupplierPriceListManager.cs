@@ -187,7 +187,8 @@ namespace TOne.WhS.SupplierPriceList.Business
                                 if (string.IsNullOrEmpty(message.Message))
                                     continue;
 
-                                if (messageStringBuilder.Length > 32000)
+                                int messageLength = messageStringBuilder.Length + message.Message.Length;
+                                if (messageLength > 32000)
                                     break;
 
                                 messageStringBuilder.AppendFormat(message.Message);
