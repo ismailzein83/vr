@@ -1838,10 +1838,14 @@ loader .outer-loader {
     text-transform: none;
 }
 
+
+
 .fieldset-vr {
     margin-top: 10px;
 }
-
+vr-fieldset[notopspase]>.fieldset-vr {
+    margin-top: unset;
+}
     .fieldset-vr > .panel-heading {
         font-weight: bold;
         font-size: 12px;
