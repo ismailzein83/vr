@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.BusinessProcess.Data;
-using Vanrise.Runtime;
-using Vanrise.Runtime.Entities;
-using Vanrise.Common;
-using Vanrise.BusinessProcess.Entities;
-using Vanrise.BusinessProcess.Business;
 using System.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Business;
+using Vanrise.BusinessProcess.Data;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
+using Vanrise.Runtime;
+using Vanrise.Runtime.Business;
+using Vanrise.Runtime.Entities;
 using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess
@@ -28,8 +31,12 @@ namespace Vanrise.BusinessProcess
         UserManager _userManager = new UserManager();
         BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
         BPInstanceManager _bpInstanceManager = new BPInstanceManager();
+        ProcessSynchronisationManager _processSynchronisationManager = new ProcessSynchronisationManager();
         RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
+        HoldRequestManager _holdRequestManager = new HoldRequestManager();
+        QueueExecutionFlowDefinitionManager _queueExecutionFlowDefinitionManager = new QueueExecutionFlowDefinitionManager();
         IBPEventDataManager _bpEventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
+        SchedulerTaskManager _schedulerTaskManager = new SchedulerTaskManager();
 
         static BPRegulatorRuntimeService()
         {
@@ -82,6 +89,8 @@ namespace Vanrise.BusinessProcess
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances)
         {
+            Dictionary<Guid, StructuredProcessSynchronisation> structuredProcessSynchronisations = _processSynchronisationManager.GetStructuredProcessSynchronisations();
+
             var pendingInstances = _bpInstanceManager.GetPendingInstancesInfo(s_pendingStatuses);
             if (pendingInstances != null && pendingInstances.Count > 0)
             {
@@ -95,6 +104,9 @@ namespace Vanrise.BusinessProcess
                         ServiceInstance = serviceInstance,
                         ItemsCountByBPDefinition = BuildItemsCountByBPDefinition(bpDefinitions)
                     });
+
+                HashSet<Guid> startedBPInstanceDefinitionIds = new HashSet<Guid>();
+                HashSet<Guid> startedBPInstanceTaskIds = new HashSet<Guid>();
                 List<BPInstance> startedBPInstances = new List<BPInstance>();
                 List<BPInstance> waitingAndNotPersistedInstances = new List<BPInstance>();
                 List<BPInstance> persistedInstances = new List<BPInstance>();
@@ -128,7 +140,7 @@ namespace Vanrise.BusinessProcess
                                 if (!instanceStopped && processInstanceIdsHavingEvents.Contains(pendingInstanceInfo.ProcessInstanceID))
                                     waitingAndNotPersistedInstances.Add(pendingInstanceInfo);
                             }
-                            startedBPInstances.Add(pendingInstanceInfo);
+                            AddStartedBPInstance(startedBPInstances, pendingInstanceInfo, startedBPInstanceDefinitionIds, startedBPInstanceTaskIds);
                         }
                         else//runtime service not alive
                         {
@@ -148,7 +160,7 @@ namespace Vanrise.BusinessProcess
                             {
                                 if (processInstanceIdsHavingEvents.Contains(pendingInstanceInfo.ProcessInstanceID))
                                     persistedInstances.Add(pendingInstanceInfo);
-                                startedBPInstances.Add(pendingInstanceInfo);
+                                AddStartedBPInstance(startedBPInstances, pendingInstanceInfo, startedBPInstanceDefinitionIds, startedBPInstanceTaskIds);
                             }
                         }
                     }
@@ -191,24 +203,27 @@ namespace Vanrise.BusinessProcess
                     BPDefinitionExtendedSettings definitionExtendedSettings;
                     var bpDefinition = FindBPDefinitionWithValidate(bpDefinitions, pendingInstanceInfo.DefinitionID, out definitionExtendedSettings);
                     var canRunBPInstanceContext = new BPDefinitionCanRunBPInstanceContext(pendingInstanceInfo, getStartedBPInstances);
-                    if (definitionExtendedSettings.CanRunBPInstance(canRunBPInstanceContext))
+
+                    string allowInstanceToRunOutputMessage = null;
+                    if (definitionExtendedSettings.CanRunBPInstance(canRunBPInstanceContext) && AllowInstanceToRun(pendingInstanceInfo, startedBPInstanceDefinitionIds, startedBPInstanceTaskIds, structuredProcessSynchronisations, out allowInstanceToRunOutputMessage))
                     {
                         if (TryAssignLeastBusyServiceToBPInstance(pendingInstanceInfo, servicesToAssign, pendingInstancesToUpdate))
-                            startedBPInstances.Add(pendingInstanceInfo);
+                            AddStartedBPInstance(startedBPInstances, pendingInstanceInfo, startedBPInstanceDefinitionIds, startedBPInstanceTaskIds);
                     }
                     else
                     {
-                        if (canRunBPInstanceContext.Reason != null && canRunBPInstanceContext.Reason != pendingInstanceInfo.LastMessage)
+                        string message = canRunBPInstanceContext.Reason != null ? canRunBPInstanceContext.Reason : allowInstanceToRunOutputMessage;
+                        if (message != null && message != pendingInstanceInfo.LastMessage)
                         {
                             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
                             {
                                 ProcessInstanceId = pendingInstanceInfo.ProcessInstanceID,
                                 ParentProcessId = pendingInstanceInfo.ParentProcessID,
                                 Severity = Vanrise.Entities.LogEntryType.Warning,
-                                TrackingMessage = canRunBPInstanceContext.Reason,
+                                TrackingMessage = message,
                                 EventTime = DateTime.Now
                             });
-                            _bpInstanceManager.UpdateInstanceLastMessage(pendingInstanceInfo.ProcessInstanceID, canRunBPInstanceContext.Reason);
+                            _bpInstanceManager.UpdateInstanceLastMessage(pendingInstanceInfo.ProcessInstanceID, message);
                         }
                         if (pendingInstanceInfo.Status != BPInstanceStatus.Postponed)
                         {
@@ -236,6 +251,111 @@ namespace Vanrise.BusinessProcess
                     }
                 }
             }
+        }
+
+        private void AddStartedBPInstance(List<BPInstance> startedBPInstances, BPInstance pendingInstanceInfo, HashSet<Guid> startedBPInstanceDefinitionIds, HashSet<Guid> startedBPInstanceTaskIds)
+        {
+            startedBPInstances.Add(pendingInstanceInfo);
+            startedBPInstanceDefinitionIds.Add(pendingInstanceInfo.DefinitionID);
+            if (pendingInstanceInfo.TaskId.HasValue)
+                startedBPInstanceTaskIds.Add(pendingInstanceInfo.TaskId.Value);
+        }
+
+        private bool AllowInstanceToRun(BPInstance pendingInstanceInfo, HashSet<Guid> startedBPInstanceDefinitionIds, HashSet<Guid> startedBPInstanceTaskIds,
+            Dictionary<Guid, StructuredProcessSynchronisation> structuredProcessSynchronisations, out string message)
+        {
+            message = null;
+
+            var structuredProcessSynchronisation = structuredProcessSynchronisations != null ? structuredProcessSynchronisations.GetRecord(pendingInstanceInfo.DefinitionID) : null;
+            if (structuredProcessSynchronisation == null)
+                return true;
+
+            bool isValid = true;
+
+            if (structuredProcessSynchronisation.LinkedProcessSynchronisationItems != null)
+            {
+                var linkedProcessSynchronisationItems = structuredProcessSynchronisation.LinkedProcessSynchronisationItems;
+                if (!IsValidToRun(pendingInstanceInfo, linkedProcessSynchronisationItems, startedBPInstanceDefinitionIds, startedBPInstanceTaskIds, ref message))
+                    isValid = false;
+            }
+
+            if (pendingInstanceInfo.TaskId.HasValue && structuredProcessSynchronisation.LinkedProcessSynchronisationItemsByTaskId != null)
+            {
+                var taskLinkedProcessSynchronisationItems = structuredProcessSynchronisation.LinkedProcessSynchronisationItemsByTaskId.GetRecord(pendingInstanceInfo.TaskId.Value);
+                if (taskLinkedProcessSynchronisationItems != null)
+                {
+                    if (!IsValidToRun(pendingInstanceInfo, taskLinkedProcessSynchronisationItems, startedBPInstanceDefinitionIds, startedBPInstanceTaskIds, ref message))
+                        isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        private bool IsValidToRun(BPInstance pendingInstanceInfo, LinkedProcessSynchronisationItems linkedProcessSynchronisationItems, HashSet<Guid> startedBPInstanceDefinitionIds,
+            HashSet<Guid> startedBPInstanceTaskIds, ref string message)
+        {
+            if (linkedProcessSynchronisationItems.TaskIds != null && linkedProcessSynchronisationItems.TaskIds.Count > 0)
+            {
+                foreach (Guid taskId in linkedProcessSynchronisationItems.TaskIds)
+                {
+                    if (startedBPInstanceTaskIds.Contains(taskId))
+                    {
+                        if (string.IsNullOrEmpty(message))
+                            message = string.Format("Waiting Scheduler Service '{0}'", _schedulerTaskManager.GetTask(taskId).Name);
+
+                        return false;
+                    }
+                }
+            }
+
+            if (linkedProcessSynchronisationItems.BPDefinitionIds != null && linkedProcessSynchronisationItems.BPDefinitionIds.Count > 0)
+            {
+                foreach (Guid bpDefinitionId in linkedProcessSynchronisationItems.BPDefinitionIds)
+                {
+                    if (startedBPInstanceDefinitionIds.Contains(bpDefinitionId))
+                    {
+                        if (string.IsNullOrEmpty(message))
+                            message = string.Format("Waiting Business Process '{0}'", _bpDefinitionManager.GetBPDefinition(bpDefinitionId).Title);
+
+                        return false;
+                    }
+                }
+            }
+
+            bool areHoldRequestsReady = true;
+            if (linkedProcessSynchronisationItems.ExecutionFlowDefinitionIds != null && linkedProcessSynchronisationItems.ExecutionFlowDefinitionIds.Count > 0)
+            {
+                DateTimeRange dateTimeRange = _holdRequestManager.GetDBDateTimeRange();
+
+                foreach (Guid executionFlowDefinitionId in linkedProcessSynchronisationItems.ExecutionFlowDefinitionIds)
+                {
+                    HoldRequest existingHoldRequest;
+                    Dictionary<Guid, HoldRequest> existingHoldRequests = _holdRequestManager.GetHoldRequestsExecutionFlowDefinition(pendingInstanceInfo.ProcessInstanceID);
+                    if (existingHoldRequests == null || existingHoldRequests.Count == 0 || !existingHoldRequests.TryGetValue(executionFlowDefinitionId, out existingHoldRequest))
+                    {
+                        var stageNames = _queueExecutionFlowDefinitionManager.GetFlowStagesName(executionFlowDefinitionId);
+                        _holdRequestManager.InsertHoldRequest(pendingInstanceInfo.ProcessInstanceID, executionFlowDefinitionId, dateTimeRange.From, dateTimeRange.To, stageNames, null, HoldRequestStatus.Pending);
+                        areHoldRequestsReady = false;
+
+                        if (string.IsNullOrEmpty(message))
+                            message = string.Format("Waiting Execution Flow Definition '{0}'", _queueExecutionFlowDefinitionManager.GetExecutionFlowDefinitionTitle(executionFlowDefinitionId));
+
+                    }
+                    else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
+                    {
+                        areHoldRequestsReady = false;
+
+                        if (string.IsNullOrEmpty(message))
+                            message = string.Format("Waiting Execution Flow Definition '{0}'", _queueExecutionFlowDefinitionManager.GetExecutionFlowDefinitionTitle(executionFlowDefinitionId));
+                    }
+                }
+            }
+
+            if (!areHoldRequestsReady)
+                return false;
+
+            return true;
         }
 
         private bool StopInstanceIfNeeded(BPInstance pendingInstanceInfo, Dictionary<long, BPInstance> pendingInstancesDict, List<BPInstanceCancellationRequestInfo> instanceCancellationRequests)
@@ -384,13 +504,13 @@ namespace Vanrise.BusinessProcess
         private void StopPendingInstance(BPInstance pendingInstanceInfo, Dictionary<long, BPInstance> pendingInstancesDict, bool isSuspend, bool notifyParentIfAny, string errorMessage)
         {
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
-                {
-                    ProcessInstanceId = pendingInstanceInfo.ProcessInstanceID,
-                    ParentProcessId = pendingInstanceInfo.ParentProcessID,
-                    Severity = Vanrise.Entities.LogEntryType.Error,
-                    TrackingMessage = errorMessage,
-                    EventTime = DateTime.Now
-                });
+            {
+                ProcessInstanceId = pendingInstanceInfo.ProcessInstanceID,
+                ParentProcessId = pendingInstanceInfo.ParentProcessID,
+                Severity = Vanrise.Entities.LogEntryType.Error,
+                TrackingMessage = errorMessage,
+                EventTime = DateTime.Now
+            });
             var status = isSuspend ? BPInstanceStatus.Suspended : BPInstanceStatus.Cancelled;
             BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID, status, BPInstanceAssignmentStatus.Free, errorMessage, null);
             pendingInstanceInfo.Status = status;

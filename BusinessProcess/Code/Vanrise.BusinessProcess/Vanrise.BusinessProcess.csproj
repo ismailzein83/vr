@@ -75,6 +75,10 @@
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
@@ -135,6 +139,10 @@
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{EB3CF5AA-EC32-4723-81E5-C4A0C0525D05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Queueing.Entities\Vanrise.Queueing.Entities.csproj">
+      <Project>{a511dce7-1fa4-46dc-b04e-01c4ccdd7f1c}</Project>
+      <Name>Vanrise.Queueing.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Queueing\Vanrise.Queueing.csproj">
       <Project>{28eb3790-0e19-43ab-8ecb-6137eb0e588a}</Project>

@@ -13,10 +13,12 @@ namespace Vanrise.Queueing.Data
 
         void Delete(long holdRequestId);
 
+        void DeleteHoldRequestByBPInstanceId(long bpInstanceId);
+
         void Insert(long BPInstanceID, Guid executionFlowDefinitionId, DateTime from, DateTime to, List<int> queuesToHold, List<int> queuesToProcess, HoldRequestStatus status);
 
         void UpdateStatus(long holdRequestId, HoldRequestStatus status);
 
-        DateTimeRange GetDBDateTimeRange(); 
+        DateTimeRange GetDBDateTimeRange();
     }
 }

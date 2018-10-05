@@ -9,6 +9,7 @@ using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
@@ -381,6 +382,8 @@ namespace Vanrise.BusinessProcess
             }
             BPDefinitionBPExecutionCompletedContext context = new BPDefinitionBPExecutionCompletedContext() { BPInstance = bpInstance };
             new BPDefinitionManager().GetBPDefinitionExtendedSettings(bpDefinition).OnBPExecutionCompleted(context);
+            new HoldRequestManager().DeleteHoldRequestByBPInstanceId(bpInstance.ProcessInstanceID);
+
             if (bpInstance.CompletionNotifier != null)
             {
                 var eventData = new Entities.ProcessCompletedEventPayload

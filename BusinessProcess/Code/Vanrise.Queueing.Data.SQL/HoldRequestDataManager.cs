@@ -25,6 +25,11 @@ namespace Vanrise.Queueing.Data.SQL
             ExecuteNonQuerySP("[queue].[sp_HoldRequest_Delete]", holdRequestId);
         }
 
+        public void DeleteHoldRequestByBPInstanceId(long bpInstanceId)
+        {
+            ExecuteNonQuerySP("[queue].[sp_HoldRequest_DeleteByBPInstanceId]", bpInstanceId);
+        }
+
         public void Insert(long BPInstanceID, Guid executionFlowDefinitionId, DateTime from, DateTime to, List<int> queuesToHold, List<int> queuesToProcess, HoldRequestStatus status)
         {
             string serializeQueuesToHold = queuesToHold != null ? Serializer.Serialize(queuesToHold) : null;
@@ -42,7 +47,7 @@ namespace Vanrise.Queueing.Data.SQL
             return base.IsDataUpdated("queue.HoldRequest", ref updateHandle);
         }
 
-        public DateTimeRange GetDBDateTimeRange() 
+        public DateTimeRange GetDBDateTimeRange()
         {
             return base.GetSQLDateTimeRange();
         }

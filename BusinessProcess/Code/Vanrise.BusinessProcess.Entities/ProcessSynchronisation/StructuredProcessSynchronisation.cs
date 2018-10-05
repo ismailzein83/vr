@@ -5,17 +5,28 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class StructuredProcessSynchronisation
     {
-        public LinkedProcessSynchronisationItems LinkedProcessSynchronisationItems { get; set; }
+        public LinkedProcessSynchronisationItems LinkedProcessSynchronisationItems { get; private set; }
+        public Dictionary<Guid, LinkedProcessSynchronisationItems> LinkedProcessSynchronisationItemsByTaskId { get; private set; }
 
-        public Dictionary<Guid, LinkedProcessSynchronisationItems> LinkedProcessSynchronisationItemsByTaskId { get; set; }
+        public StructuredProcessSynchronisation()
+        {
+            this.LinkedProcessSynchronisationItems = new LinkedProcessSynchronisationItems();
+            this.LinkedProcessSynchronisationItemsByTaskId = new Dictionary<Guid, LinkedProcessSynchronisationItems>();
+        }
     }
 
     public class LinkedProcessSynchronisationItems
     {
-        public HashSet<Guid> TaskIds { get; set; }
+        public LinkedProcessSynchronisationItems()
+        {
+            this.TaskIds = new HashSet<Guid>();
+            this.BPDefinitionIds = new HashSet<Guid>();
+            this.ExecutionFlowDefinitionIds = new HashSet<Guid>();
+        }
+        public HashSet<Guid> TaskIds { get; private set; }
 
-        public HashSet<Guid> BPDefinitionIds { get; set; }
+        public HashSet<Guid> BPDefinitionIds { get; private set; }
 
-        public HashSet<Guid> ExecutionFlowDefinitionIds { get; set; }
+        public HashSet<Guid> ExecutionFlowDefinitionIds { get; private set; }
     }
 }

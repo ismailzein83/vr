@@ -43,10 +43,43 @@ namespace Vanrise.Queueing
             return holdRequests.Values.FindAllRecords(itm => itm.Status == status);
         }
 
+        /// <summary>
+        /// This function should be used when the process could be dependant to more than one execution flow definition
+        /// </summary>
+        /// <param name="bpInstanceId"></param>
+        /// <returns></returns>
+        public List<HoldRequest> GetHoldRequests(long bpInstanceId)
+        {
+            var holdRequests = GetCachedHoldRequestsByInstance();
+            return holdRequests.GetRecord(bpInstanceId);
+        }
+
+        /// <summary>
+        /// This function should be used when the process is dependant to only one execution flow definition
+        /// </summary>
+        /// <param name="bpInstanceId"></param>
+        /// <returns></returns>
         public HoldRequest GetHoldRequest(long bpInstanceId)
         {
-            var holdRequests = GetCachedHoldRequests();
-            return holdRequests.GetRecord(bpInstanceId);
+            var holdRequests = GetHoldRequests(bpInstanceId);
+            if (holdRequests != null)
+            {
+                if (holdRequests.Count > 1)
+                    throw new VRBusinessException(string.Format("BPInstanceId '{0}' is dependant to more than one execution flow definition", bpInstanceId));
+
+                return holdRequests.FirstOrDefault();
+            }
+            return null;
+        }
+
+        public Dictionary<Guid, HoldRequest> GetHoldRequestsExecutionFlowDefinition(long bpInstanceId)
+        {
+            var holdRequests = GetCachedHoldRequestsByInstance();
+            var matchingHoldRequests = holdRequests.GetRecord(bpInstanceId);
+            if (matchingHoldRequests == null)
+                return null;
+
+            return matchingHoldRequests.ToDictionary(itm => itm.ExecutionFlowDefinitionId, itm => itm);
         }
 
         public void UpdateStatus(long holdRequestId, HoldRequestStatus status)
@@ -106,19 +139,38 @@ namespace Vanrise.Queueing
 
         public void DeleteHoldRequestByBPInstanceId(long bpInstanceId)
         {
-            HoldRequestManager holdRequestManager = new HoldRequestManager();
-            HoldRequest holdRequest = holdRequestManager.GetHoldRequest(bpInstanceId);
-            if (holdRequest != null)
-                DeleteHoldRequest(holdRequest.HoldRequestId);
-        } 
+            IHoldRequestDataManager dataManager = QDataManagerFactory.GetDataManager<IHoldRequestDataManager>();
+            dataManager.DeleteHoldRequestByBPInstanceId(bpInstanceId);
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+        }
 
         public DateTimeRange GetDBDateTimeRange()
         {
             IHoldRequestDataManager dataManager = QDataManagerFactory.GetDataManager<IHoldRequestDataManager>();
             return dataManager.GetDBDateTimeRange();
-        } 
+        }
 
         #region Private Methods
+
+        private Dictionary<long, List<HoldRequest>> GetCachedHoldRequestsByInstance()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedHoldRequestsByInstance",
+               () =>
+               {
+                   IHoldRequestDataManager dataManager = QDataManagerFactory.GetDataManager<IHoldRequestDataManager>();
+                   Dictionary<long, List<HoldRequest>> result = new Dictionary<long, List<HoldRequest>>();
+                   var holdRequests = dataManager.GetAllHoldRequests();
+                   if (holdRequests != null)
+                   {
+                       foreach (HoldRequest holdRequest in holdRequests)
+                       {
+                           List<HoldRequest> tempHoldRequests = result.GetOrCreateItem(holdRequest.BPInstanceId);
+                           tempHoldRequests.Add(holdRequest);
+                       }
+                   }
+                   return result;
+               });
+        }
 
         private Dictionary<long, HoldRequest> GetCachedHoldRequests()
         {
@@ -126,7 +178,7 @@ namespace Vanrise.Queueing
                () =>
                {
                    IHoldRequestDataManager dataManager = QDataManagerFactory.GetDataManager<IHoldRequestDataManager>();
-                   return dataManager.GetAllHoldRequests().ToDictionary(itm => itm.BPInstanceId, itm => itm);
+                   return dataManager.GetAllHoldRequests().ToDictionary(itm => itm.HoldRequestId, itm => itm);
                });
         }
 

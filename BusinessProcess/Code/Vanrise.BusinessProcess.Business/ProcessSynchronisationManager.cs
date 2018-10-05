@@ -106,13 +106,9 @@ namespace Vanrise.BusinessProcess.Business
                 return null;
         }
 
-        public StructuredProcessSynchronisation GetStructuredProcessSynchronisation(Guid bpDefinitionId)
+        public Dictionary<Guid, StructuredProcessSynchronisation> GetStructuredProcessSynchronisations()
         {
-            var cachedStructuredProcessSynchronisations = GetCachedStructuredProcessSynchronisationsByBPDefinition();
-            if (cachedStructuredProcessSynchronisations != null)
-                return cachedStructuredProcessSynchronisations.GetRecord(bpDefinitionId);
-            else
-                return null;
+            return GetCachedStructuredProcessSynchronisationsByBPDefinition();
         }
 
         public object EnableProcessSynchronisation(Guid processSynchronisationId)
@@ -193,6 +189,9 @@ namespace Vanrise.BusinessProcess.Business
                        foreach (var processSynchronisationKvp in cachedProcessSynchronisations)
                        {
                            ProcessSynchronisation currentProcessSynchronisation = processSynchronisationKvp.Value;
+                           if (!currentProcessSynchronisation.IsEnabled)
+                               continue;
+
                            ProcessSynchronisationSettings settings = currentProcessSynchronisation.Settings;
                            settings.ThrowIfNull("settings", processSynchronisationKvp.Key);
                            settings.FirstProcessSynchronisationGroup.ThrowIfNull("settings.FirstProcessSynchronisationGroup", processSynchronisationKvp.Key);
@@ -241,9 +240,6 @@ namespace Vanrise.BusinessProcess.Business
                 {
                     if (dependantGroupBPSynchronisationItem.TaskIds != null && dependantGroupBPSynchronisationItem.TaskIds.Count > 0)
                     {
-                        if (linkedProcessSynchronisationItems.TaskIds == null)
-                            linkedProcessSynchronisationItems.TaskIds = new HashSet<Guid>();
-
                         foreach (var taskId in dependantGroupBPSynchronisationItem.TaskIds)
                         {
                             linkedProcessSynchronisationItems.TaskIds.Add(taskId);
@@ -251,9 +247,6 @@ namespace Vanrise.BusinessProcess.Business
                     }
                     else
                     {
-                        if (linkedProcessSynchronisationItems.BPDefinitionIds == null)
-                            linkedProcessSynchronisationItems.BPDefinitionIds = new HashSet<Guid>();
-
                         linkedProcessSynchronisationItems.BPDefinitionIds.Add(dependantGroupBPSynchronisationItem.BPDefinitionId);
                     }
                 }
@@ -261,9 +254,6 @@ namespace Vanrise.BusinessProcess.Business
 
             if (dependantProcessSynchronisationGroup.ExecutionFlowSynchronisationItems != null && dependantProcessSynchronisationGroup.ExecutionFlowSynchronisationItems.Count > 0)
             {
-                if (linkedProcessSynchronisationItems.ExecutionFlowDefinitionIds == null)
-                    linkedProcessSynchronisationItems.ExecutionFlowDefinitionIds = new HashSet<Guid>();
-
                 foreach (var dependantGroupExecutionFlowSynchronisationItem in dependantProcessSynchronisationGroup.ExecutionFlowSynchronisationItems)
                 {
                     linkedProcessSynchronisationItems.ExecutionFlowDefinitionIds.Add(dependantGroupExecutionFlowSynchronisationItem.ExecutionFlowDefinitionId);

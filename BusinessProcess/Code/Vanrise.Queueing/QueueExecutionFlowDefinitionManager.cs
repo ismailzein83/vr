@@ -32,12 +32,12 @@ namespace Vanrise.Queueing
 
             Func<QueueExecutionFlowStage, bool> filterExpression = (stage) =>
             {
-                if(filter != null )
+                if (filter != null)
                 {
                     QueueExecutionFlowStageFilterContext filterContext = new QueueExecutionFlowStageFilterContext { Stage = stage };
                     if (filter.Filters != null && filter.Filters.Any(itm => !itm.IsMatch(filterContext)))
                         return false;
-                    if (filter.InculdesStageNames!=null  && !filter.InculdesStageNames.Contains(stage.StageName))
+                    if (filter.InculdesStageNames != null && !filter.InculdesStageNames.Contains(stage.StageName))
                         return false;
                 }
                 return true;
@@ -61,6 +61,14 @@ namespace Vanrise.Queueing
                 return cachedFlowDefinitions.Values.ToList();
             else
                 return null;
+        }
+
+        public List<string> GetFlowStagesName(Guid definitionId)
+        {
+            var flowStages = GetFlowStages(definitionId);
+            if (flowStages == null)
+                return null;
+            return flowStages.Keys.ToList();
         }
 
         public QueueExecutionFlowStagesByStageName GetFlowStages(Guid definitionId)
@@ -105,10 +113,10 @@ namespace Vanrise.Queueing
             return users.GetRecord(definitonID);
         }
 
-      public string   GetQueueExecutionFlowDefinitionName(QueueExecutionFlowDefinition queueExecutionFlowDefinition)
-      {
-          return (queueExecutionFlowDefinition != null) ? queueExecutionFlowDefinition.Name : null;
-      }
+        public string GetQueueExecutionFlowDefinitionName(QueueExecutionFlowDefinition queueExecutionFlowDefinition)
+        {
+            return (queueExecutionFlowDefinition != null) ? queueExecutionFlowDefinition.Name : null;
+        }
 
         public Vanrise.Entities.UpdateOperationOutput<QueueExecutionFlowDefinitionDetail> UpdateExecutionFlowDefinition(QueueExecutionFlowDefinition executionFlowDefinitionObject)
         {
@@ -164,7 +172,7 @@ namespace Vanrise.Queueing
 
         #endregion
 
-       
+
         #region Private Methods
 
         public Dictionary<Guid, QueueExecutionFlowDefinition> GetCachedExecutionFlowDefinitions()
@@ -179,7 +187,7 @@ namespace Vanrise.Queueing
         }
 
 
-       
+
 
         #endregion
 
