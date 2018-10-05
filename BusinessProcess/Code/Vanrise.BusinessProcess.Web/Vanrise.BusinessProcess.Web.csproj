@@ -258,11 +258,15 @@
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflowActivities\VRWorkflowActivitySubprocessController.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\bp-vr-workflow-customclasstype.js" />
     <Content Include="BusinessProcess\Directives\MainExtensions\VRWorkflow\Templates\VRWorkflowCustomClassTypeTemplate.html" />
+    <Content Include="BusinessProcess\Directives\ProcessInput\bp-databasejob-process.js" />
+    <Content Include="BusinessProcess\Directives\ProcessInput\Templates\DatabaseJobProcessTemplate.html" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-management-grid.js" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-group-grid.js" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\bp-processsynchronisation-status-selector.js" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationGroupGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationManagementGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\ScheduleTask\bp-databasejob-task.js" />
+    <Content Include="BusinessProcess\Directives\ScheduleTask\Templates\DatabaseJopProcessTaskTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-containerv2.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowContainerV2Template.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variables-grid.js" />

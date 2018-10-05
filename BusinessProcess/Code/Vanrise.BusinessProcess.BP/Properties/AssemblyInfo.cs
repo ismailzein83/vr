@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Vanrise.BusinessProcess.BP.Arguments")]
+[assembly: AssemblyTitle("Vanrise.BusinessProcess.BP")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Vanrise.BusinessProcess.BP.Arguments")]
+[assembly: AssemblyProduct("Vanrise.BusinessProcess.BP")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c611a0c7-11b6-4d0e-9d55-07ff959aff74")]
+[assembly: Guid("461f4032-7108-4b76-928f-c594879ab5bc")]
 
 // Version information for an assembly consists of the following four values:
 //

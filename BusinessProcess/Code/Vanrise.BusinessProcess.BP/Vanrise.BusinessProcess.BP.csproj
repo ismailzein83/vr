@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D63A37EC-272A-4814-8DFF-BD1553EED3DC}</ProjectGuid>
+    <ProjectGuid>{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vanrise.BusinessProcess.BP.Arguments</RootNamespace>
-    <AssemblyName>Vanrise.BusinessProcess.BP.Arguments</AssemblyName>
+    <RootNamespace>Vanrise.BusinessProcess.BP</RootNamespace>
+    <AssemblyName>Vanrise.BusinessProcess.BP</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,7 +35,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,16 +48,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VRWorkflowInputArgument.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.BusinessProcess.Business\Vanrise.BusinessProcess.Business.csproj">
-      <Project>{ce8a7fee-d6c7-43c6-851f-beba44b03b13}</Project>
-      <Name>Vanrise.BusinessProcess.Business</Name>
-    </ProjectReference>
+    <XamlAppDef Include="DatabaseJobProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.WFActivities\Vanrise.BusinessProcess.WFActivities.csproj">
+      <Project>{5c28c004-f7be-4f09-832f-ce8594b3231f}</Project>
+      <Name>Vanrise.BusinessProcess.WFActivities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess\Vanrise.BusinessProcess.csproj">
+      <Project>{a5ee3349-b642-4cc7-b575-7c338821d63d}</Project>
+      <Name>Vanrise.BusinessProcess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
