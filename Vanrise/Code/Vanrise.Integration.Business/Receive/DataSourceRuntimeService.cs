@@ -108,24 +108,12 @@ namespace Vanrise.Integration.Business
                 MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                 MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
 
-                ImportedBatchProcessingOutput batchProcessingOutput = new ImportedBatchProcessingOutput
-                {
-                    OutputResult = outputResult
-                };
-
-                if (SendErrorNotification(dataSource, data, outputResult))
-                {
-                    return batchProcessingOutput;
-                }
+                ImportedBatchProcessingOutput batchProcessingOutput = new ImportedBatchProcessingOutput { OutputResult = outputResult };
 
                 if (!data.IsMultipleReadings)
                     data.OnDisposed();
 
-                if (data.IsEmpty)
-                {
-                    logger.WriteInformation("Received Empty Batch");
-                    return null;
-                }
+                bool logImportedBatchEntry = true;
 
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                 importedBatchEntry.BatchSize = data.BatchSize;
@@ -167,15 +155,34 @@ namespace Vanrise.Integration.Business
                     }
                     else
                     {
-                        logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
+                        if (data.IsFile)
+                            logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
                     }
 
                     if (totalRecordsCount == 0)
+                    {
                         importedBatchEntry.Result = MappingResult.Empty;
+
+                        if (data.IsFile)
+                        {
+                            if (outputItems != null && outputItems.Count > 0)
+                                logger.WriteWarning("No mapped items to enqueue");
+                        }
+                        else
+                        {
+                            logger.WriteInformation("Received Empty Batch");
+                            logImportedBatchEntry = false;
+                        }
+                    }
 
                     importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
                     importedBatchEntry.RecordsCount = totalRecordsCount;
                 }
+
+                SendErrorNotification(dataSource, data, outputResult, importedBatchEntry);
+
+                if (!logImportedBatchEntry)
+                    return null;
 
                 long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
                 logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
@@ -209,23 +216,44 @@ namespace Vanrise.Integration.Business
             }
         }
 
-        private bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult, ImportedBatchEntry importedBatchEntry)
         {
             if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
             {
-                bool isEmptyFile = data.IsFile && (!data.BatchSize.HasValue || data.BatchSize.Value == 0);
-                if (isEmptyFile || outputResult.Result == MappingResult.Invalid)
+                bool isEmptyFile = false;
+                string emptyFileMessage = null;
+
+                if (data.IsFile)
                 {
-                    FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult);
-                    if (isEmptyFile)
+                    if (!data.BatchSize.HasValue || data.BatchSize.Value == 0)
                     {
-                        batchInfo.IsEmpty = true;
+                        isEmptyFile = true;
+                        emptyFileMessage = "File is empty";
                     }
-                    SendErrorNotification(dataSource, batchInfo);
-                    return true;
+                    else if (importedBatchEntry.Result == MappingResult.Empty)
+                    {
+                        isEmptyFile = true;
+                        emptyFileMessage = "No mapped items to enqueue";
+                    }
                 }
+
+                if (isEmptyFile || outputResult.Result == MappingResult.Invalid || outputResult.Result == MappingResult.PartialInvalid)
+                    SendErrorNotification(dataSource, data, outputResult, isEmptyFile, emptyFileMessage);
             }
-            return false;
+        }
+
+        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult, bool isEmptyFile, string emptyFileMessage)
+        {
+            FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult);
+            if (isEmptyFile)
+            {
+                batchInfo.IsEmpty = true;
+
+                if (!string.IsNullOrEmpty(emptyFileMessage))
+                    batchInfo.Message = emptyFileMessage;
+            }
+
+            SendErrorNotification(dataSource, batchInfo);
         }
 
         private void SendErrorNotification(DataSourceDetail dataSource, FailedBatchInfo batchInfo)
@@ -274,23 +302,33 @@ namespace Vanrise.Integration.Business
                 }
                 else
                 {
-                    int failedRecordIdentifiersNumber = failedRecordIdentifiers.Count;
-                    var totalRecordsNumber = outputItems.Sum(itm => (itm != null && itm.Item != null) ? itm.Item.GetRecordCount() : 0) + failedRecordIdentifiersNumber;
-                    string message;
-
-                    if (failedRecordIdentifiersNumber <= failedRecordIdentifiersThreshold)
+                    int mappedRecordsCount = outputItems.Sum(itm => (itm != null && itm.Item != null) ? itm.Item.GetRecordCount() : 0);
+                    if (mappedRecordsCount > 0)
                     {
-                        string concatenatedFailedRecordIdentifiers = string.Join<object>(", ", failedRecordIdentifiers);
-                        message = string.Format("{0} records failed out of {1} while mapping data. Failed records identifiers: {2}", failedRecordIdentifiersNumber, totalRecordsNumber, concatenatedFailedRecordIdentifiers);
+                        int failedRecordsCount = failedRecordIdentifiers.Count;
+                        var totalRecordsCount = mappedRecordsCount + failedRecordsCount;
+                        string message;
+
+                        if (failedRecordsCount <= failedRecordIdentifiersThreshold)
+                        {
+                            string concatenatedFailedRecordIdentifiers = string.Join<object>(", ", failedRecordIdentifiers);
+                            message = string.Format("{0} records failed out of {1} while mapping data. Failed records identifiers: {2}", failedRecordsCount, totalRecordsCount, concatenatedFailedRecordIdentifiers);
+                        }
+                        else
+                        {
+                            message = string.Format("More than {0} records failed while mapping data", failedRecordIdentifiersThreshold);
+                        }
+
+                        outputResult.Message = message;
+                        outputResult.Result = MappingResult.PartialInvalid;
+                        logger.WriteWarning("Batch mapped partially");
                     }
                     else
                     {
-                        message = string.Format("More than {0} records failed while mapping data", failedRecordIdentifiersThreshold);
+                        outputResult.Message = "All records mapping has failed";
+                        outputResult.Result = MappingResult.Invalid;
+                        logger.WriteError("All records mapping has failed");
                     }
-
-                    outputResult.Message = message;
-                    outputResult.Result = MappingResult.PartialInvalid;
-                    logger.WriteWarning("Batch mapped partially");
                 }
             }
             catch (Exception ex)
