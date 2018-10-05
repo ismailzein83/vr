@@ -110,7 +110,7 @@ namespace NP.IVSwitch.Business
                                                     BKTSerial = codeMainPreference - codePreference,
                                                     BKTCapacity = evaluatedPercentage,
                                                     BKTTokens = evaluatedPercentage,
-                                                    Percentage = optionAdd.Percentage.Value,
+                                                    Percentage = 0,
                                                     Huntstop = 0,
                                                     StateId = 1,
                                                     Description = description
@@ -235,7 +235,7 @@ namespace NP.IVSwitch.Business
                                         BKTSerial = mainPreference - preference,
                                         BKTCapacity = evaluatedPercentage,
                                         BKTTokens = evaluatedPercentage,
-                                        Percentage = optionEdit.Percentage.Value,
+                                        Percentage =0,
                                         Huntstop = 0,
                                         StateId = 1,
                                         Description = description

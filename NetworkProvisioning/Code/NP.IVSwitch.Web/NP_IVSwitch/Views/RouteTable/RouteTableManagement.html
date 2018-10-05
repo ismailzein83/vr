@@ -2,7 +2,7 @@
     <vr-form name="formFilter" vr-loader="scopeModel.isLoading">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
             <vr-row removeline>
-                <vr-columns width="normal" ng-show="scopeModel.routeTableViewType.length > 1">
+                <vr-columns width="normal" haschildcolumn ng-show="scopeModel.routeTableViewType.length > 1">
                     <vr-select on-ready="scopeModel.onRouteTableViewTypesReady"
                                datasource="scopeModel.routeTableViewType"
                                selectedvalues="scopeModel.selectedValue"
@@ -18,16 +18,16 @@
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorDirectiveReady"
-                                                 ismultipleselection
-                                                 selectedvalues="scopeModel.selectedCustomer"
-                                                 onselectionchanged="scopeModel.onCustomerSelectionChanged"
-                                                 hideselectall>
+                <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorDirectiveReady"
+                                             ismultipleselection
+                                             selectedvalues="scopeModel.selectedCustomer"
+                                             onselectionchanged="scopeModel.onCustomerSelectionChanged"
+                                             hideselectall
+                                             normal-col-num="2">
 
-                    </vr-whs-be-customer-selector>
-                </vr-columns>
-                <vr-columns width="normal" vr-loader="scopeModel.isModifiedBySelectorLoading">
+                </vr-whs-be-customer-selector>
+
+                <vr-columns width="normal" haschildcolumn vr-loader="scopeModel.isModifiedBySelectorLoading">
                     <np-ivswitch-endpoint-selector on-ready="scopeModel.onEndPointSelectorDirectiveReady"
                                                    label="End Points"
                                                    ismultipleselection
