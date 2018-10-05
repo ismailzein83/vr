@@ -966,22 +966,24 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
                     if (sheet.HeaderRows != null)
                     {
-                        bool isFirstRow = true;
+                        List<int> setColumns = new List<int>();
                         foreach (var headerRow in sheet.HeaderRows)
                         {
                             if (headerRow.Value.Cells != null)
                             {
                                 foreach (var headerCell in headerRow.Value.Cells)
                                 {
-                                    if (isFirstRow)
+                                    if(!setColumns.Contains(headerCell.Value.ColumnIndex))
+                                    {
+                                        setColumns.Add(headerCell.Value.ColumnIndex);
                                         worksheet.Cells.SetColumnWidth(headerCell.Value.ColumnIndex, 20);
+                                    }
 
                                     var cellField = worksheet.Cells[headerRow.Key, headerCell.Key];
                                     cellField.PutValue(headerCell.Value.Value);
                                     cellField.SetStyle(GetCellStyle(cellField.GetStyle(), headerCell.Value.Style.SetBorder, headerCell.Value.Style.FontSize, headerCell.Value.Style.IsBold, headerCell.Value.Style.Alignment));
                                 }
                             }
-                            isFirstRow = false;
                         }
 
                         foreach (var headerRow in sheet.HeaderRows)

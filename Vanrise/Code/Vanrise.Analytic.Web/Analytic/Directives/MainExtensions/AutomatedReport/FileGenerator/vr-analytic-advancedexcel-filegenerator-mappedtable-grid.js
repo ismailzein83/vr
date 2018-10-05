@@ -211,8 +211,8 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
         function getMappedCol(mappedColumn, sheetIndex, firstRowIndex, selectedField) {
             allFields = undefined;
 
-            var mappedCol = {};
-
+            var mappedCol = {
+        };
             mappedCol.onFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             mappedCol.onFirstRowDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
             mappedCol.onSubTableFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -317,7 +317,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                                                 description: matchingField.Title,
                                                 value: matchingField.Name,
                                                 source: VR_Analytic_AutomatedReportQuerySourceEnum.SubTable
-                                    });
+                                        });
                                     }
                                 }
                                }
@@ -422,7 +422,7 @@ function (VRUIUtilsService, UtilsService, VRNotificationService, VR_Analytic_Aut
                         }
                     }
                     mappedSubTable.SubTableName = mappedCol.selectedField.description;
-                    mappedSubTable.SubTableTitle = mappedCol.subTableTitle;
+                    mappedSubTable.SubTableTitle = mappedCol.subTableTitle != undefined && mappedCol.subTableTitle != "" ? mappedCol.subTableTitle : undefined;
                     mappedSubTable.SubTableId = mappedCol.selectedField.value;
                     mappedTable.mappedSubTables.push(mappedSubTable);
                 }
