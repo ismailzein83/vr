@@ -51,15 +51,15 @@ namespace Vanrise.Notification.Data.SQL
             return (affectedRecords > 0);
         }
 
-        public bool DisableAlertRule(long vrAlertRuleId)
+        public bool DisableAlertRule(long vrAlertRuleId, int lastModifiedBy)
         {
-            int recordesEffected = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_SetDisable", vrAlertRuleId);
+            int recordesEffected = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_SetDisable", vrAlertRuleId, lastModifiedBy);
             return (recordesEffected > 0);
         }
 
-        public bool EnableAlertRule(long vrAlertRuleId)
+        public bool EnableAlertRule(long vrAlertRuleId, int lastModifiedBy)
         {
-            int recordesEffected = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_SetEnable", vrAlertRuleId);
+            int recordesEffected = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_SetEnable", vrAlertRuleId, lastModifiedBy);
             return (recordesEffected > 0);
         }
 

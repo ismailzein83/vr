@@ -160,9 +160,10 @@ namespace Vanrise.Notification.Business
             var vrAlertRule = GetVRAlertRule(vrAlertRuleId);
             IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
 
-            vrAlertRule.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+            int currentUserId = SecurityContext.Current.GetLoggedInUserId();
+            vrAlertRule.LastModifiedBy = currentUserId;
 
-            if (dataManager.DisableAlertRule(vrAlertRuleId))
+            if (dataManager.DisableAlertRule(vrAlertRuleId, currentUserId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);
@@ -185,10 +186,10 @@ namespace Vanrise.Notification.Business
 
             var vrAlertRule = GetVRAlertRule(vrAlertRuleId);
             IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
+            int currentUserId = SecurityContext.Current.GetLoggedInUserId();
+            vrAlertRule.LastModifiedBy = currentUserId;
 
-            vrAlertRule.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
-
-            if (dataManager.EnableAlertRule(vrAlertRuleId))
+            if (dataManager.EnableAlertRule(vrAlertRuleId, currentUserId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);

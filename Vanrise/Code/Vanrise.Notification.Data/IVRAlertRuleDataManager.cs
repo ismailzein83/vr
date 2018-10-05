@@ -17,8 +17,8 @@ namespace Vanrise.Notification.Data
 
         bool Update(VRAlertRule VRAlertRuleTypeItem);
 
-        bool DisableAlertRule(long vrAlertRuleId);
+        bool DisableAlertRule(long vrAlertRuleId, int lastModifiedBy);
 
-        bool EnableAlertRule(long vrAlertRuleId);
+        bool EnableAlertRule(long vrAlertRuleId, int lastModifiedBy);
     }
 }
