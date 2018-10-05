@@ -518,7 +518,7 @@ namespace NP.IVSwitch.Business
             RouteEntityInfo routeInfo = new RouteEntityInfo()
             {
                 RouteId = route.RouteId,
-                Description = GetRouteDescription(route) + Utilities.GetEnumDescription(route.CurrentState),
+                Description = string.Format("{0}  ({1})", GetRouteDescription(route), Utilities.GetEnumDescription(route.CurrentState)),
                 AccountId = route.AccountId
 
             };
