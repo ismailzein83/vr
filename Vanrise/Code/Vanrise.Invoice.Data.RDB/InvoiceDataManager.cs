@@ -165,8 +165,8 @@ namespace Vanrise.Invoice.Data.RDB
             var where = selectQuery.Where();
             where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
             where.ListCondition(COL_PartnerID, RDBListConditionOperator.IN, partnerIds);
-            where.GreaterThanCondition(COL_FromDate).Value(fromDate);
-            where.LessThanCondition(COL_ToDate).Value(toDate);
+            where.LessThanCondition(COL_FromDate).Value(toDate);
+            where.GreaterThanCondition(COL_ToDate).Value(fromDate);
             AddConditionInvoiceNotDeleted(where);
 
             return queryContext.GetItems(InvoiceMapper);
@@ -209,7 +209,7 @@ namespace Vanrise.Invoice.Data.RDB
                 else
                     where.NullCondition(COL_PaidDate);
             }
-            if(query.IssueDate.HasValue)
+            if(query.IsSent.HasValue)
             {
                 if (query.IsSent.Value)
                     where.NotNullCondition(COL_SentDate);
