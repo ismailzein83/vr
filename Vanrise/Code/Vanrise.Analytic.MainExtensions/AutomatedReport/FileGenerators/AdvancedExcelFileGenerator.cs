@@ -96,7 +96,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             return new VRAutomatedReportGeneratedFile()
             {
                 FileContent = GenerateExcel(advancedExcelWorkBook),
-                FileExtension = "xls"
+                FileExtension = "xlsx"
             };
 
         }
@@ -1029,7 +1029,9 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 }
             }
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = tableDefinitionsWorkbook.SaveToStream();
+            tableDefinitionsWorkbook.Save(memoryStream, SaveFormat.Xlsx);         
+         
+
             return memoryStream.ToArray();
         }
         private Style GetCellStyle(Style style, bool setBorder, int fontSize, bool isBold, TextAlignmentType alignment)
