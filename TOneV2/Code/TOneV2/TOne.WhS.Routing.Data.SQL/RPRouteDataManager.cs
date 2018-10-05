@@ -633,7 +633,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                                     szd.[SupplierServiceWeight],
                                                                                     szd.[SupplierRateId],
                                                                                     szd.[SupplierRateEED],
-                                                                                    szd.[VersionNumber]
+                                                                                    szd.[VersionNumber],
+                                                                                    szd.[DealId]
                                                                                     FROM [dbo].[SupplierZoneDetail] szd 
                                                                                     JOIN #distinctSupplierZoneIds sz on sz.SupplierZoneID = szd.SupplierZoneId");
 
