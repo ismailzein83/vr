@@ -38,6 +38,8 @@ namespace Vanrise.RDB.Tests.Invoice
             public string Prop { get; set; }
         }
 
+        #endregion
+
         [TestMethod]
         public void SaveInvoicesAndGet()
         {
@@ -59,6 +61,8 @@ namespace Vanrise.RDB.Tests.Invoice
             TestSaveInvoicesAndGet(invoiceTypeId4);
         }
 
+        #region Private Methods
+
         private void TestSaveInvoicesAndGet(Guid invoiceTypeId)
         {
             List<GenerateInvoiceInputToSave> invoicesToSave = GenerateInvoicesToSave(invoiceTypeId);
@@ -66,25 +70,23 @@ namespace Vanrise.RDB.Tests.Invoice
             List<long> sqlInvoiceIds;
             List<long> rdbInvoiceIds;
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
-            TestGetInvoices(sqlInvoiceIds, rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
 
-            IEnumerable<string> itemSetNames = invoicesToSave.SelectMany(itm => itm.InvoiceItemSets.Select(itm2 => itm2.SetName)).Distinct();
-            if (itemSetNames.Count() > 0)
-            {
-                var rdbInvoiceItems = _rdbInvoiceItemDataManager.GetInvoiceItemsByItemSetNames(rdbInvoiceIds, itemSetNames, CompareOperator.Equal);
-                var sqlInvoiceItems = _sqlInvoiceItemDataManager.GetInvoiceItemsByItemSetNames(sqlInvoiceIds, itemSetNames, CompareOperator.Equal);
-                AssertInvoiceItemsAreSimilar(sqlInvoiceItems, rdbInvoiceItems);
-            }
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
             SaveInvoices(invoicesToSave, out sqlInvoiceIds, out rdbInvoiceIds);
+            TestGetMethods(invoiceTypeId, invoicesToSave);
 
-            TestGetFiltered(invoiceTypeId, invoicesToSave);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoicesToSave);
             TestSetInvoicePaid(invoiceTypeId, invoicesToSave);
             TestSetInvoicePaidById(invoiceTypeId, invoicesToSave);
             //TestSetInvoicePaidBySourceId(invoiceTypeId, invoicesToSave);
@@ -92,6 +94,8 @@ namespace Vanrise.RDB.Tests.Invoice
             TestSetInvoiceLocked(invoiceTypeId, invoicesToSave);
             TestUpdateInvoiceNotes(invoiceTypeId, invoicesToSave);
             TestUpdate(invoiceTypeId, invoicesToSave);
+            TestApproveInvoice(invoiceTypeId, invoicesToSave);
+            TestUpdateInvoiceSettings(invoiceTypeId, invoicesToSave);
         }
 
         private List<GenerateInvoiceInputToSave> GenerateInvoicesToSave(Guid invoiceTypeId)
@@ -409,52 +413,91 @@ namespace Vanrise.RDB.Tests.Invoice
             AssertAllTablesAreSimilar();
         }
 
-        private void TestGetInvoices(List<long> sqlInvoiceIds, List<long> rdbInvoiceIds)
+        #region Test Get
+
+        void TestGetMethods(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
         {
-            var rdbInvoices = _rdbDataManager.GetInvoices(rdbInvoiceIds);
-            var sqlInvoices = _sqlDataManager.GetInvoices(sqlInvoiceIds);
+            List<long> invoiceIds = invoicesToSave.Select(itm => itm.Invoice.InvoiceId).ToList();
+            TestGetInvoices(invoiceIds);
+            TestGetInvoices(null);
+            TestGetInvoices(new List<long>());
+            TestGetInvoiceItems(invoicesToSave, invoiceIds);
+            //TestGetFiltered(invoiceTypeId, invoicesToSave);
+            TestGetInvoicesCount(invoiceTypeId, invoicesToSave);
+            TestGetInvoicesBySerialNumbers(invoiceTypeId, invoicesToSave);
+            TestGetLastInvoicesByPartners(invoiceTypeId, invoicesToSave);
+            TestGetLastInvoice(invoiceTypeId, invoicesToSave);
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, invoicesToSave);
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, invoicesToSave);
+            TestGetLasInvoices(invoiceTypeId, invoicesToSave);
+            TestGetPartnerInvoicesByDate(invoiceTypeId, invoicesToSave);
+            TestGetUnPaidPartnerInvoices(invoiceTypeId, invoicesToSave);
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, invoicesToSave);
+            TestGetInvoiceBySourceId(invoiceTypeId, invoicesToSave);
+            TestLoadInvoices(invoiceTypeId, invoicesToSave);
+
+            TestCheckInvoiceOverlaping(invoiceTypeId, invoicesToSave);
+        }
+
+        private void TestGetInvoices(List<long> invoiceIds)
+        {
+            var rdbInvoices = _rdbDataManager.GetInvoices(invoiceIds);
+            var sqlInvoices = _sqlDataManager.GetInvoices(invoiceIds);
             AssertInvoicesAreSimilar(sqlInvoices, rdbInvoices);
         }
 
+        private void TestGetInvoiceItems(List<GenerateInvoiceInputToSave> invoicesToSave, List<long> invoiceIds)
+        {
+            IEnumerable<string> itemSetNames = invoicesToSave.SelectMany(itm => itm.InvoiceItemSets.Select(itm2 => itm2.SetName)).Distinct();
+            if (itemSetNames.Count() > 0)
+            {
+                var rdbInvoiceItems = _rdbInvoiceItemDataManager.GetInvoiceItemsByItemSetNames(invoiceIds, itemSetNames, CompareOperator.Equal);
+                var sqlInvoiceItems = _sqlInvoiceItemDataManager.GetInvoiceItemsByItemSetNames(invoiceIds, itemSetNames, CompareOperator.Equal);
+                AssertInvoiceItemsAreSimilar(sqlInvoiceItems, rdbInvoiceItems);
+            }
+        }
+       
+
         private void TestGetFiltered(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
         {
-            TestGetFiltered(invoiceTypeId, invoicesToSave, false);
-            TestGetFiltered(invoiceTypeId, invoicesToSave, true);
-        }
-
-        private void TestGetFiltered(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave, bool withSelectAll)
-        {
-            var query = new InvoiceQuery
+            List<List<string>> partnerIdList = new List<List<string>>
             {
-                InvoiceTypeId = invoiceTypeId,
-                FromTime = DateTime.Today.AddDays(-15),
-                IsSelectAll = withSelectAll
+                null,
+                new List<string>(),
+                new List<string>{"dfsdfgg", "y3rerygt43", invoicesToSave[0].Invoice.PartnerId },
+                new List<string> { invoicesToSave[0].Invoice.PartnerId, invoicesToSave[1].Invoice.PartnerId, invoicesToSave[2].Invoice.PartnerId }
             };
-            TestGetFiltered(query);
-            query.PartnerIds = new List<string>();
-            TestGetFiltered(query);
-            query.PartnerIds = new List<string> { invoicesToSave[0].Invoice.PartnerId };
-            TestGetFiltered(query);
-            query.PartnerIds = new List<string> { invoicesToSave[0].Invoice.PartnerId, invoicesToSave[1].Invoice.PartnerId };
-            TestGetFiltered(query);
-            query.PartnerIds = new List<string> { invoicesToSave[0].Invoice.PartnerId, invoicesToSave[1].Invoice.PartnerId, invoicesToSave[2].Invoice.PartnerId };
-            TestGetFiltered(query);
-            query.Status = VRAccountStatus.Active;
-            TestGetFiltered(query);
-            query.EffectiveDate = DateTime.Now;
-            TestGetFiltered(query);
-            query.IsEffectiveInFuture = true;
-            TestGetFiltered(query);
-            query.IncludeAllFields = true;
-            TestGetFiltered(query);
-            query.IsPaid = true;
-            TestGetFiltered(query);
-            query.IsSent = true;
-            TestGetFiltered(query);
-            query.IssueDate = DateTime.Today;
-            TestGetFiltered(query);
-            query.ToTime = DateTime.Today;
-            TestGetFiltered(query);
+            List<VRAccountStatus?> accountStatuses = new List<VRAccountStatus?> { null, VRAccountStatus.Active };
+            List<DateTime> fromDates = new List<DateTime> { DateTime.Now, DateTime.Now.AddDays(-5), DateTime.Now.AddDays(-15) };
+            List<DateTime?> toDates = new List<DateTime?> { null, DateTime.Now };
+            List<DateTime?> effectiveDates = new List<DateTime?> { null, DateTime.Now };
+            List<DateTime?> issueDates = new List<DateTime?> { null, invoicesToSave[0].Invoice.IssueDate};
+            List<bool> boolList = UTUtilities.GetBoolListForTesting();
+            List<bool?> nullableBoolList = UTUtilities.GetNullableBoolListForTesting();
+            List<bool?> isEffectiveInFutureList = new List<bool?> { null, true };
+            int counter = 0;
+            UTUtilities.CallActionIteratively(
+                (fromTime, toTime, partnerIds, accountStatus, effectiveDate, isEffectiveInFuture, nullableBool) =>
+                {
+                    counter++;
+                    var query = new InvoiceQuery
+                    {
+                        InvoiceTypeId = invoiceTypeId,
+                        FromTime = fromTime,
+                        ToTime = toTime,
+                        PartnerIds = partnerIds,
+                        Status = accountStatus,
+                        EffectiveDate = effectiveDate,
+                        IsEffectiveInFuture = isEffectiveInFuture,
+                        IsSelectAll = nullableBool,
+                        IsPaid = nullableBool,
+                        IsSent = nullableBool,
+                        //IssueDate = issueDate
+                    };
+                    TestGetFiltered(query);
+                },
+                fromDates, toDates, partnerIdList, accountStatuses,
+                effectiveDates, isEffectiveInFutureList, nullableBoolList);                
         }
 
         private void TestGetFiltered(InvoiceQuery query)
@@ -463,19 +506,285 @@ namespace Vanrise.RDB.Tests.Invoice
             AssertInvoicesAreSimilar(_sqlDataManager.GetFilteredInvoices(input), _rdbDataManager.GetFilteredInvoices(input));
         }
 
+
+        void TestGetInvoicesCount(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            var invoice = invoicesToSave[1].Invoice;
+            List<Guid> invoiceTypeIds = new List<Guid> { invoiceTypeId };
+            List<string> partnerIds = new List<string> { null, "", invoice.PartnerId };
+            UTUtilities.CallActionIteratively(TestGetInvoicesCount, invoiceTypeIds, partnerIds, UTUtilities.GetNullableDateTimeListsForTesting(), UTUtilities.GetNullableDateTimeListsForTesting());
+        }
+
+        void TestGetInvoicesCount(Guid invoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
+        {
+            UTAssert.ObjectsAreEqual(_sqlDataManager.GetInvoiceCount(invoiceTypeId, partnerId, fromDate, toDate),
+                _rdbDataManager.GetInvoiceCount(invoiceTypeId, partnerId, fromDate, toDate));
+            UTAssert.ObjectsAreEqual(_sqlDataManager.GetInvoiceCount(invoiceTypeId, null, fromDate, toDate),
+               _rdbDataManager.GetInvoiceCount(invoiceTypeId, null, fromDate, toDate));
+        }
+
+        void TestGetInvoicesBySerialNumbers(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestGetInvoicesBySerialNumbers(invoiceTypeId, new List<string>());
+            TestGetInvoicesBySerialNumbers(invoiceTypeId, new List<string> { "dfsgfdfgsgf", "gfsgfdhghter", invoicesToSave[0].Invoice.SerialNumber });
+            TestGetInvoicesBySerialNumbers(invoiceTypeId, invoicesToSave.Select(itm => itm.Invoice.SerialNumber));
+
+        }
+
+        void TestGetInvoicesBySerialNumbers(Guid invoiceTypeId, IEnumerable<string> serialNumbers)
+        {
+            AssertInvoicesAreSimilar(_sqlDataManager.GetInvoicesBySerialNumbers(invoiceTypeId, serialNumbers),
+                _rdbDataManager.GetInvoicesBySerialNumbers(invoiceTypeId, serialNumbers));
+        }
+
+        void TestGetLastInvoicesByPartners(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestGetLastInvoicesByPartners(new List<PartnerInvoiceType>());
+            TestGetLastInvoicesByPartners(new List<PartnerInvoiceType>
+            {
+                new PartnerInvoiceType
+                {
+                     InvoiceTypeId = invoiceTypeId,
+                      PartnerId = ""
+                },
+                new PartnerInvoiceType
+                {
+                     InvoiceTypeId = invoiceTypeId,
+                      PartnerId = "gdseryerytyterteruyterjh gfdsg"
+                },
+                new PartnerInvoiceType
+                {
+                     InvoiceTypeId = invoiceTypeId,
+                      PartnerId = invoicesToSave[1].Invoice.PartnerId
+                }
+            });
+            TestGetLastInvoicesByPartners(invoicesToSave.Select(itm => itm.Invoice.PartnerId).Distinct().Select(partnerId => new PartnerInvoiceType { InvoiceTypeId = invoiceTypeId, PartnerId = partnerId }).ToList());
+        }
+
+        void TestGetLastInvoicesByPartners(List<PartnerInvoiceType> input)
+        {
+            var rdbResponse = _rdbDataManager.GetLastInvoicesByPartners(input);
+            if (rdbResponse != null)
+                rdbResponse = rdbResponse.OrderBy(itm => itm.InvoiceTypeId).ThenBy(itm => itm.PartnerId);
+            var sqlResponse = _sqlDataManager.GetLastInvoicesByPartners(input);
+            if (sqlResponse != null)
+                sqlResponse = sqlResponse.OrderBy(itm => itm.InvoiceTypeId).ThenBy(itm => itm.PartnerId);
+
+            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
+        }
+
+        void TestGetLastInvoice(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestGetLastInvoice(invoiceTypeId, (string)null);
+            TestGetLastInvoice(invoiceTypeId, "");
+            TestGetLastInvoice(invoiceTypeId, "gdsgfdsg");
+            TestGetLastInvoice(invoiceTypeId, invoicesToSave[0].Invoice.PartnerId);
+            TestGetLastInvoice(invoiceTypeId, invoicesToSave[1].Invoice.PartnerId);
+            TestGetLastInvoice(invoiceTypeId, invoicesToSave[2].Invoice.PartnerId);
+        }
+
+        void TestGetLastInvoice(Guid invoiceTypeId, string partnerId)
+        {
+            var rdbResponse = _rdbDataManager.GetLastInvoice(invoiceTypeId, partnerId);
+            var sqlResponse = _sqlDataManager.GetLastInvoice(invoiceTypeId, partnerId);
+
+            AssertInvoiceIsSimilar(sqlResponse, rdbResponse);
+        }
+
+
+        void TestGetInvoicesPopulatedPeriod(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, (string)null);
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, "");
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, "gdsgfdsg");
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, invoicesToSave[0].Invoice.PartnerId);
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, invoicesToSave[1].Invoice.PartnerId);
+            TestGetInvoicesPopulatedPeriod(invoiceTypeId, invoicesToSave[2].Invoice.PartnerId);
+        }
+
+        void TestGetInvoicesPopulatedPeriod(Guid invoiceTypeId, string partnerId)
+        {
+            var rdbResponse = _rdbDataManager.GetInvoicesPopulatedPeriod(invoiceTypeId, partnerId);
+            var sqlResponse = _sqlDataManager.GetInvoicesPopulatedPeriod(invoiceTypeId, partnerId);
+
+            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
+
+        }
+
+        void TestCheckPartnerIfHasInvoices(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, (string)null);
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, "");
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, "gdsgfdsg");
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, invoicesToSave[0].Invoice.PartnerId);
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, invoicesToSave[1].Invoice.PartnerId);
+            TestCheckPartnerIfHasInvoices(invoiceTypeId, invoicesToSave[2].Invoice.PartnerId);
+        }
+
+        void TestCheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId)
+        {
+            var rdbResponse = _rdbDataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
+            var sqlResponse = _sqlDataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
+
+            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
+        }
+
+        void TestGetLasInvoices(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            List<Guid> invoiceTypeIds = new List<Guid> { invoiceTypeId };
+            List<string> partnerIds = new List<string> { null, "", "gdsgfdsg", invoicesToSave[0].Invoice.PartnerId, invoicesToSave[1].Invoice.PartnerId, invoicesToSave[2].Invoice.PartnerId };
+            List<int> invoiceIds = new List<int> { 0, 1, 10, 100, 1000 };
+            UTUtilities.CallActionIteratively(TestGetLasInvoices, invoiceTypeIds, partnerIds, UTUtilities.GetNullableDateTimeListsForTesting(), invoiceIds);
+        }
+
+        void TestGetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices)
+        {
+            var rdbResponse = _rdbDataManager.GetLasInvoices(invoiceTypeId, partnerId, beforeDate, lastInvoices);
+            var sqlResponse = _sqlDataManager.GetLasInvoices(invoiceTypeId, partnerId, beforeDate, lastInvoices);
+
+            AssertInvoicesAreSimilar(sqlResponse, rdbResponse);
+        }
+
+        void TestGetPartnerInvoicesByDate(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            List<Guid> invoiceTypeIds = new List<Guid> { invoiceTypeId };
+            List<List<string>> partnerIdLists = new List<List<string>>
+            {
+                null,
+                new List<string>(),
+                new List<string> { "gdsgfdsg", "gerytert", invoicesToSave[0].Invoice.PartnerId },
+                invoicesToSave.Select(itm => itm.Invoice.PartnerId).ToList()
+            };
+            List<DateTime> fromDates = new List<DateTime> { DateTime.Now, DateTime.Today, DateTime.Now.AddDays(-10), DateTime.Now.AddMonths(-4) };
+            List<DateTime> toDates = new List<DateTime> { DateTime.Now, DateTime.Today, DateTime.Now.AddDays(10), DateTime.Now.AddMonths(4) };
+            UTUtilities.CallActionIteratively(TestGetPartnerInvoicesByDate, invoiceTypeIds, partnerIdLists, fromDates, toDates);
+        }
+
+        void TestGetPartnerInvoicesByDate(Guid invoiceTypeId, List<string> partnerIds, DateTime fromDate, DateTime toDate)
+        {
+            var rdbResponse = _rdbDataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerIds, fromDate, toDate);
+            var sqlResponse = _sqlDataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerIds, fromDate, toDate);
+
+            AssertInvoicesAreSimilar(sqlResponse, rdbResponse);
+        }
+
+        void TestGetUnPaidPartnerInvoices(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestGetUnPaidPartnerInvoices(new List<PartnerInvoiceType>());
+            TestGetUnPaidPartnerInvoices(new List<PartnerInvoiceType>
+            {
+                new PartnerInvoiceType
+                {
+                     InvoiceTypeId = invoiceTypeId,
+                      PartnerId = ""
+                },
+                new PartnerInvoiceType
+                {
+                     InvoiceTypeId = invoiceTypeId,
+                      PartnerId = "gdseryerytyterteruyterjh gfdsg"
+                },
+                new PartnerInvoiceType
+                {
+                     InvoiceTypeId = invoiceTypeId,
+                      PartnerId = invoicesToSave[1].Invoice.PartnerId
+                }
+            });
+            TestGetUnPaidPartnerInvoices(invoicesToSave.Select(itm => itm.Invoice.PartnerId).Distinct().Select(partnerId => new PartnerInvoiceType { InvoiceTypeId = invoiceTypeId, PartnerId = partnerId }).ToList());
+        }
+
+        void TestGetUnPaidPartnerInvoices(List<PartnerInvoiceType> input)
+        {
+            var rdbResponse = _rdbDataManager.GetUnPaidPartnerInvoices(input);
+            if (rdbResponse != null)
+                rdbResponse = rdbResponse.OrderBy(inv => inv.InvoiceId);
+            var sqlResponse = _sqlDataManager.GetUnPaidPartnerInvoices(input);
+            if (sqlResponse != null)
+                sqlResponse = sqlResponse.OrderBy(inv => inv.InvoiceId);
+
+            AssertInvoicesAreSimilar(sqlResponse, rdbResponse);
+        }
+        void TestLoadInvoicesAfterImportedId(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, 0);
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, 10);
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, 100);
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, 1000);
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, invoicesToSave[0].Invoice.InvoiceId);
+            TestLoadInvoicesAfterImportedId(invoiceTypeId, invoicesToSave[1].Invoice.InvoiceId);
+        }
+
+        void TestLoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId)
+        {
+            List<Vanrise.Invoice.Entities.Invoice> rdbResponse = new List<Vanrise.Invoice.Entities.Invoice>();
+            List<Vanrise.Invoice.Entities.Invoice> sqlResponse = new List<Vanrise.Invoice.Entities.Invoice>();
+
+            _rdbDataManager.LoadInvoicesAfterImportedId(invoiceTypeId, lastImportedId, (inv) => rdbResponse.Add(inv));
+            _sqlDataManager.LoadInvoicesAfterImportedId(invoiceTypeId, lastImportedId, (inv) => sqlResponse.Add(inv));
+
+            AssertInvoicesAreSimilar(sqlResponse, rdbResponse);
+        }
+
+        void TestGetInvoiceBySourceId(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            TestGetInvoiceBySourceId(invoiceTypeId, (string)null);
+            TestGetInvoiceBySourceId(invoiceTypeId, "");
+            TestGetInvoiceBySourceId(invoiceTypeId, invoicesToSave.First(itm => itm.Invoice.SourceId != null).Invoice.SourceId);
+            TestGetInvoiceBySourceId(invoiceTypeId, invoicesToSave.Last(itm => itm.Invoice.SourceId != null).Invoice.SourceId);
+        }
+
+        void TestGetInvoiceBySourceId(Guid invoiceTypeId, string sourceId)
+        {
+            var rdbResponse = _rdbDataManager.GetInvoiceBySourceId(invoiceTypeId, sourceId);
+            var sqlResponse = _sqlDataManager.GetInvoiceBySourceId(invoiceTypeId, sourceId);
+
+            AssertInvoiceIsSimilar(sqlResponse, rdbResponse);
+        }
+
+        void TestLoadInvoices(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            List<Guid> invoiceTypeIds = new List<Guid> { invoiceTypeId };
+            List<DateTime?> froms = new List<DateTime?> { null, DateTime.Now, DateTime.Now.AddDays(-10), DateTime.Now.AddDays(-20), DateTime.Now.AddDays(-50), DateTime.Now.AddDays(-100), DateTime.Now.AddDays(-500) };
+            List<DateTime?> tos = new List<DateTime?> { null, DateTime.Now, DateTime.Now.AddDays(10), DateTime.Now.AddDays(20), DateTime.Now.AddDays(50), DateTime.Now.AddDays(100), DateTime.Now.AddDays(500) };
+            List<RecordFilterGroup> filterGroups = new List<RecordFilterGroup> { null };
+            var filterGroup1 = new RecordFilterGroup { Filters = new List<RecordFilter>() };
+            filterGroup1.Filters.Add(new StringRecordFilter { FieldName = "Partner", Value = invoicesToSave[0].Invoice.PartnerId, CompareOperator = StringRecordFilterOperator.Equals });
+            filterGroups.Add(filterGroup1);
+            var filterGroup2 = new RecordFilterGroup { Filters = new List<RecordFilter>() };
+            filterGroup2.Filters.Add(new StringRecordFilter { FieldName = "Partner", Value = invoicesToSave[0].Invoice.PartnerId.Substring(0, 3), CompareOperator = StringRecordFilterOperator.StartsWith });
+            filterGroups.Add(filterGroup2);
+            List<OrderDirection?> orderDirections = new List<OrderDirection?> { null, OrderDirection.Ascending, OrderDirection.Descending };
+            UTUtilities.CallActionIteratively(TestLoadInvoices, invoiceTypeIds, froms, tos, filterGroups, orderDirections);
+        }
+
+        void TestLoadInvoices(Guid invoiceTypeId, DateTime? from, DateTime? to, RecordFilterGroup filterGroup, OrderDirection? orderDirection)
+        {
+            var rdbResponse = new List<Vanrise.Invoice.Entities.Invoice>();
+            var sqlResponse = new List<Vanrise.Invoice.Entities.Invoice>();
+
+            _rdbDataManager.LoadInvoices(invoiceTypeId, from, to, filterGroup, orderDirection, () => false,
+                (inv) =>
+                {
+                    rdbResponse.Add(inv);
+                });
+
+            _sqlDataManager.LoadInvoices(invoiceTypeId, from, to, filterGroup, orderDirection, () => false,
+                (inv) =>
+                {
+                    sqlResponse.Add(inv);
+                });
+
+            AssertInvoicesAreSimilar(sqlResponse, rdbResponse);
+        }
+
         void TestCheckInvoiceOverlaping(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
         {
-            TestCheckInvoiceOverlaping(invoiceTypeId, null, DateTime.Now.AddDays(-4), DateTime.Now, null);
-            TestCheckInvoiceOverlaping(invoiceTypeId, "dsgfdsgfdrhgshhresat", DateTime.Now.AddDays(-4), DateTime.Now, null);
             var invoice = invoicesToSave[1].Invoice;
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.FromDate.AddDays(-20), invoice.FromDate.AddDays(-5), invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.FromDate.AddDays(-5), invoice.FromDate, invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.FromDate, invoice.FromDate.AddDays(1), invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.ToDate.AddDays(-3), invoice.ToDate.AddDays(-2), invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.ToDate.AddDays(-2), invoice.ToDate, invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.ToDate.AddDays(-2), invoice.ToDate.AddDays(5), invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.ToDate.AddDays(2), invoice.ToDate.AddDays(5), invoice.InvoiceId);
-            TestCheckInvoiceOverlaping(invoiceTypeId, invoice.PartnerId, invoice.FromDate.AddDays(-2), invoice.ToDate.AddDays(5), invoice.InvoiceId);
+            List<Guid> invoiceTypeIds = new List<Guid> { invoiceTypeId };
+            List<string> partnerIds = new List<string> { null, "", "dsgfdsgfdrhgshhresat", invoice.PartnerId };
+            List<DateTime> fromDates = new List<DateTime> { DateTime.Now, DateTime.Now.AddDays(-4), invoice.FromDate.AddDays(-20), invoice.FromDate.AddDays(-5), invoice.FromDate.AddDays(-2), invoice.FromDate, invoice.ToDate.AddDays(-3), invoice.ToDate.AddDays(-2), invoice.ToDate };
+            List<DateTime> toDates = new List<DateTime> { DateTime.Now, invoice.FromDate.AddDays(-5), invoice.FromDate , invoice.FromDate.AddDays(1), invoice.ToDate.AddDays(-2), invoice.ToDate, invoice.ToDate.AddDays(5) };
+            List<long?> invoiceIds = new List<long?> { null, invoice.InvoiceId, 3243256543 };
+            UTUtilities.CallActionIteratively(TestCheckInvoiceOverlaping, invoiceTypeIds, partnerIds, fromDates, toDates, invoiceIds);
         }
 
         void TestCheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId)
@@ -483,21 +792,54 @@ namespace Vanrise.RDB.Tests.Invoice
             var rdbResponse = _rdbDataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId, fromDate, toDate, invoiceId);
             var sqlResponse = _sqlDataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId, fromDate, toDate, invoiceId);
 
-            UTAssert.ObjectsAreEqual(sqlResponse, rdbResponse);
-
-            if(invoiceId.HasValue)
-            {
-                var rdbResponse2 = _rdbDataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId, fromDate, toDate, null);
-                var sqlResponse2 = _sqlDataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId, fromDate, toDate, null);
-
-                UTAssert.ObjectsAreEqual(sqlResponse2, rdbResponse2);
-            }
-
-            var rdbResponse3 = _rdbDataManager.CheckInvoiceOverlaping(invoiceTypeId, null, fromDate, toDate, invoiceId);
-            var sqlResponse3 = _sqlDataManager.CheckInvoiceOverlaping(invoiceTypeId, null, fromDate, toDate, invoiceId);
-
-            UTAssert.ObjectsAreEqual(sqlResponse3, rdbResponse3);
+            UTAssert.ObjectsAreEqual(sqlResponse, rdbResponse);            
         }
+
+        void AssertAllTablesAreSimilar()
+        {
+            AssertAllInvoicesAreSimilar();
+            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICEITEM);
+            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, InvoiceAccountDataManagerTests.DBTABLE_NAME_INVOICEACCOUNT);
+            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_ACCOUNTBALANCE, AccountBalance.BillingTransactionTypeDataManagerTests.DBTABLE_NAME_BILLINGTRANSACTION);
+        }
+
+        private static void AssertAllInvoicesAreSimilar()
+        {
+            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICE);
+        }
+
+        void AssertInvoiceIsSimilar(Vanrise.Invoice.Entities.Invoice sqlInvoice, Vanrise.Invoice.Entities.Invoice rdbInvoice)
+        {
+            if (sqlInvoice == null && rdbInvoice == null)
+                return;
+            AssertInvoicesAreSimilar(new List<Vanrise.Invoice.Entities.Invoice> { sqlInvoice }, new List<Vanrise.Invoice.Entities.Invoice> { rdbInvoice });
+        }
+
+        void AssertInvoicesAreSimilar(IEnumerable<Vanrise.Invoice.Entities.Invoice> sqlInvoices, IEnumerable<Vanrise.Invoice.Entities.Invoice> rdbInvoices)
+        {
+            if (sqlInvoices == null && rdbInvoices == null)
+                return;
+            foreach (var invoice in sqlInvoices)
+            {
+                invoice.CreatedTime = default(DateTime);
+            }
+            foreach (var invoice in rdbInvoices)
+            {
+                invoice.CreatedTime = default(DateTime);
+            }
+            UTAssert.ObjectsAreSimilar(sqlInvoices, rdbInvoices);
+        }
+
+        private void AssertInvoiceItemsAreSimilar(IEnumerable<InvoiceItem> sqlInvoiceItems, IEnumerable<InvoiceItem> rdbInvoiceItems)
+        {
+            sqlInvoiceItems = sqlInvoiceItems.OrderBy(itm => itm.InvoiceItemId);
+            rdbInvoiceItems = rdbInvoiceItems.OrderBy(itm => itm.InvoiceItemId);
+            UTAssert.ObjectsAreSimilar(sqlInvoiceItems, rdbInvoiceItems);
+        }
+
+        #endregion
+
+        #region Test Update
 
         void TestSetInvoicePaid(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
         {
@@ -583,6 +925,25 @@ namespace Vanrise.RDB.Tests.Invoice
             AssertAllInvoicesAreSimilar();
         }
 
+        void TestApproveInvoice(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            var invoice = invoicesToSave[1].Invoice;
+            TestApproveInvoice(invoice.InvoiceId, null, null, invoiceTypeId, invoicesToSave);
+            TestApproveInvoice(invoice.InvoiceId, DateTime.Now, 7, invoiceTypeId, invoicesToSave);
+            TestApproveInvoice(invoice.InvoiceId, null, 3, invoiceTypeId, invoicesToSave);
+            TestApproveInvoice(invoice.InvoiceId, DateTime.Now, null, invoiceTypeId, invoicesToSave);
+            TestApproveInvoice(invoice.InvoiceId, DateTime.Now, 2, invoiceTypeId, invoicesToSave);
+        }
+
+        void TestApproveInvoice(long invoiceId, DateTime? approveddDate, int? approvedBy, Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            _rdbDataManager.ApproveInvoice(invoiceId, approveddDate, approvedBy);
+            _sqlDataManager.ApproveInvoice(invoiceId, approveddDate, approvedBy);
+
+            TestGetFiltered(invoiceTypeId, invoicesToSave);
+            AssertAllInvoicesAreSimilar();
+        }
+
         void TestUpdateInvoiceNotes(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
         {
             var invoice = invoicesToSave[1].Invoice;
@@ -596,6 +957,24 @@ namespace Vanrise.RDB.Tests.Invoice
         {
             _rdbDataManager.UpdateInvoiceNote(invoiceId, notes);
             _sqlDataManager.UpdateInvoiceNote(invoiceId, notes);
+
+            TestGetFiltered(invoiceTypeId, invoicesToSave);
+            AssertAllInvoicesAreSimilar();
+        }
+
+        void TestUpdateInvoiceSettings(Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            var invoice = invoicesToSave[1].Invoice;
+            TestUpdateInvoiceSettings(invoice.InvoiceId, null, invoiceTypeId, invoicesToSave);
+            TestUpdateInvoiceSettings(invoice.InvoiceId, new InvoiceSettings { FileId = 5 }, invoiceTypeId, invoicesToSave);
+            TestUpdateInvoiceSettings(invoice.InvoiceId, null, invoiceTypeId, invoicesToSave);
+            TestUpdateInvoiceSettings(invoice.InvoiceId, new InvoiceSettings { FileId = 534 }, invoiceTypeId, invoicesToSave);
+        }
+
+        void TestUpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings, Guid invoiceTypeId, List<GenerateInvoiceInputToSave> invoicesToSave)
+        {
+            _rdbDataManager.UpdateInvoiceSettings(invoiceId, invoiceSettings);
+            _sqlDataManager.UpdateInvoiceSettings(invoiceId, invoiceSettings);
 
             TestGetFiltered(invoiceTypeId, invoicesToSave);
             AssertAllInvoicesAreSimilar();
@@ -640,518 +1019,7 @@ namespace Vanrise.RDB.Tests.Invoice
             AssertAllInvoicesAreSimilar();
         }
 
-        void AssertAllTablesAreSimilar()
-        {
-            AssertAllInvoicesAreSimilar();
-            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICEITEM);
-            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, InvoiceAccountDataManagerTests.DBTABLE_NAME_INVOICEACCOUNT);
-            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_ACCOUNTBALANCE, AccountBalance.BillingTransactionTypeDataManagerTests.DBTABLE_NAME_BILLINGTRANSACTION);
-        }
-
-        private static void AssertAllInvoicesAreSimilar()
-        {
-            UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICE);
-        }
-
-        void AssertInvoicesAreSimilar(IEnumerable<Vanrise.Invoice.Entities.Invoice> sqlInvoices, IEnumerable<Vanrise.Invoice.Entities.Invoice> rdbInvoices)
-        {
-            foreach(var invoice in sqlInvoices)
-            {
-                invoice.CreatedTime = default(DateTime);
-            }
-            foreach(var invoice in rdbInvoices)
-            {
-                invoice.CreatedTime = default(DateTime);
-            }
-            UTAssert.ObjectsAreSimilar(sqlInvoices, rdbInvoices);
-        }
-
-        private static void AssertInvoiceItemsAreSimilar(IEnumerable<InvoiceItem> sqlInvoiceItems, IEnumerable<InvoiceItem> rdbInvoiceItems)
-        {
-            sqlInvoiceItems = sqlInvoiceItems.OrderBy(itm => itm.InvoiceItemId);
-            rdbInvoiceItems = rdbInvoiceItems.OrderBy(itm => itm.InvoiceItemId);
-            UTAssert.ObjectsAreSimilar(sqlInvoiceItems, rdbInvoiceItems);
-        }
-
         #endregion
-        
-        [TestMethod]
-        public void GetPartnerInvoicesByDate()
-        {
-            GetPartnerInvoicesByDate(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), new List<string> { "uiotyuuyytu", "gfsdhg" }, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), new List<string> { "ygtjd", "ytruytu" }, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), new List<string>(), DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), new List<string>(), DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), null, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(Guid.NewGuid(), new List<string> { "uiotyuuyytu", "gfsdhg" }, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), new List<string> { "ygtjd", "ytruytu" }, DateTime.Now, DateTime.Now);
-            GetPartnerInvoicesByDate(Guid.NewGuid(), new List<string> { "fewew", "342" }, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(Guid.NewGuid(), null, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetPartnerInvoicesByDate(Guid.Empty, null, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-        }
-
-        void GetPartnerInvoicesByDate(Guid invoiceTypeId, List<string> partnerIds, DateTime fromDate, DateTime toDate)
-        {
-            var rdbResponse = _rdbDataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerIds, fromDate, toDate);
-            var sqlResponse = _sqlDataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerIds, fromDate, toDate);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-
-        [TestMethod]
-        public void GetInvoiceCount()
-        {
-            GetInvoiceCount(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), "uiotyuuyytu", DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), "uiotyuuyytu", DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), "uiotyuuyytu", DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), null, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(Guid.NewGuid(), "uiotyuuyytu", DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(new Guid("95B3D604-5C81-4CD2-9EB2-05A4BCC59A02"), "uiotyuuyytu", DateTime.Now, DateTime.Now);
-            GetInvoiceCount(Guid.NewGuid(), "uiotyuuyytu", DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(Guid.NewGuid(), null, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-            GetInvoiceCount(Guid.Empty, null, DateTime.Parse("2012-01-01"), DateTime.Parse("2020-01-01"));
-        }
-
-        void GetInvoiceCount(Guid invoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
-        {
-            var rdbResponse = _rdbDataManager.GetInvoiceCount(invoiceTypeId, partnerId, fromDate, toDate);
-            var sqlResponse = _sqlDataManager.GetInvoiceCount(invoiceTypeId, partnerId, fromDate, toDate);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-
-        [TestMethod]
-        public void GetInvoices()
-        {
-            GetInvoices(false, 2, 65, 7);
-            GetInvoices(false, 6, 435436, 8);
-            GetInvoices(false, 2, null, null);
-            GetInvoices(false, 2, 65, null);
-            GetInvoices(false, null, null, null);
-            GetInvoices(false, 2, null, 7);
-            GetInvoices(false, 4354366543, 554363465, 23432465436);
-            GetInvoices(true, 2, 65, 7);
-        }
-
-        void GetInvoices(bool nullInvoiceIds, long? invoiceId1, long? invoiceId2, long? invoiceId3)
-        {
-            List<long> invoiceIds;
-            if (nullInvoiceIds)
-            {
-                invoiceIds = null;
-            }
-            else
-            {
-                invoiceIds = new List<long>();
-                if (invoiceId1.HasValue)
-                    invoiceIds.Add(invoiceId1.Value);
-                if (invoiceId2.HasValue)
-                    invoiceIds.Add(invoiceId2.Value);
-                if (invoiceId3.HasValue)
-                    invoiceIds.Add(invoiceId3.Value);
-            }
-
-            var rdbResponse = _rdbDataManager.GetInvoices(invoiceIds);
-            var sqlResponse = _sqlDataManager.GetInvoices(invoiceIds);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-               
-
-        [TestMethod]
-        public void LoadInvoicesAfterImportedId()
-        {
-            LoadInvoicesAfterImportedId("26EE240A-0E05-4D07-BE86-EB0653E23141", 0);
-            LoadInvoicesAfterImportedId("26EE240A-0E05-4D07-BE86-EB0653E23141", 16);
-            LoadInvoicesAfterImportedId("26EE240A-0E05-4D07-BE86-EB0653E23141", 54765476547);
-            LoadInvoicesAfterImportedId("75710BDF-4846-4ABF-9B50-A75DB373FE70", 4);
-        }
-
-        void LoadInvoicesAfterImportedId(string invoiceTypeIdString, long lastImportedId)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-            List<Vanrise.Invoice.Entities.Invoice> rdbResponse = new List<Vanrise.Invoice.Entities.Invoice>();
-            List<Vanrise.Invoice.Entities.Invoice> sqlResponse = new List<Vanrise.Invoice.Entities.Invoice>();
-
-            _rdbDataManager.LoadInvoicesAfterImportedId(invoiceTypeId, lastImportedId, (inv) => rdbResponse.Add(inv));
-            _sqlDataManager.LoadInvoicesAfterImportedId(invoiceTypeId, lastImportedId, (inv) => sqlResponse.Add(inv));
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-
-        [TestMethod]
-        public void GetUnPaidPartnerInvoices()
-        {
-            List<List<PartnerInvoiceType>> inputs = new List<List<PartnerInvoiceType>>
-        {
-            new List<PartnerInvoiceType>
-            {
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("26EE240A-0E05-4D07-BE86-EB0653E23141"),
-                     PartnerId = "gfsdhg"
-                },
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("02F0FC12-CCF0-4D84-AD5A-4B41A3C18882"),
-                     PartnerId = "gfsdhg"
-                },
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("DEDE69B7-3967-48EE-B627-9768FD0134FD"),
-                     PartnerId = "gfsdhg"
-                }
-            },
-            new List<PartnerInvoiceType>
-            {
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("26EE240A-0E05-4D07-BE86-EB0653E23141"),
-                     PartnerId = "gfsdhg"
-                }
-            },
-            new List<PartnerInvoiceType>
-            {
-            }
-        };
-
-            foreach (var input in inputs)
-            {
-                GetUnPaidPartnerInvoices(input);
-            }
-        }
-
-        void GetUnPaidPartnerInvoices(List<PartnerInvoiceType> input)
-        {
-            var rdbResponse = _rdbDataManager.GetUnPaidPartnerInvoices(input);
-            if (rdbResponse != null)
-                rdbResponse = rdbResponse.OrderBy(inv => inv.InvoiceId);
-            var sqlResponse = _sqlDataManager.GetUnPaidPartnerInvoices(input);
-            if (sqlResponse != null)
-                sqlResponse = sqlResponse.OrderBy(inv => inv.InvoiceId);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-
-        [TestMethod]
-        public void GetLastInvoicesByPartners()
-        {
-            List<List<PartnerInvoiceType>> inputs = new List<List<PartnerInvoiceType>>
-        {
-            new List<PartnerInvoiceType>
-            {
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("26EE240A-0E05-4D07-BE86-EB0653E23141"),
-                     PartnerId = "gfsdhg"
-                },
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("02F0FC12-CCF0-4D84-AD5A-4B41A3C18882"),
-                     PartnerId = "gfsdhg"
-                },
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("DEDE69B7-3967-48EE-B627-9768FD0134FD"),
-                     PartnerId = "gfsdhg"
-                }
-            },
-            new List<PartnerInvoiceType>
-            {
-                new PartnerInvoiceType
-                {
-                     InvoiceTypeId = new Guid("26EE240A-0E05-4D07-BE86-EB0653E23141"),
-                     PartnerId = "gfsdhg"
-                }
-            },
-            new List<PartnerInvoiceType>
-            {
-            }
-        };
-
-            foreach (var input in inputs)
-            {
-                GetLastInvoicesByPartners(input);
-            }
-        }
-
-        void GetLastInvoicesByPartners(List<PartnerInvoiceType> input)
-        {
-            var rdbResponse = _rdbDataManager.GetLastInvoicesByPartners(input);
-            if (rdbResponse != null)
-                rdbResponse = rdbResponse.OrderBy(itm => itm.InvoiceTypeId).ThenBy(itm => itm.PartnerId);
-            var sqlResponse = _sqlDataManager.GetLastInvoicesByPartners(input);
-            if (sqlResponse != null)
-                sqlResponse = sqlResponse.OrderBy(itm => itm.InvoiceTypeId).ThenBy(itm => itm.PartnerId);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-        
-        [TestMethod]
-        public void GetInvoiceBySourceId()
-        {
-            GetInvoiceBySourceId("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "5435435");
-            GetInvoiceBySourceId("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "fsgtg");
-            GetInvoiceBySourceId("26EE240A-0E05-4D07-BE86-EB0653E23141", "gsfdg");
-            GetInvoiceBySourceId("75710BDF-4846-4ABF-9B50-A75DB373FE70", null);
-        }
-
-        void GetInvoiceBySourceId(string invoiceTypeIdString, string sourceId)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-
-            var rdbResponse = _rdbDataManager.GetInvoiceBySourceId(invoiceTypeId, sourceId);
-            var sqlResponse = _sqlDataManager.GetInvoiceBySourceId(invoiceTypeId, sourceId);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-
-        }
-
-        [TestMethod]
-        public void GetLastInvoice()
-        {
-            GetLastInvoice("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg");
-            GetLastInvoice("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "fsgtg");
-            GetLastInvoice("26EE240A-0E05-4D07-BE86-EB0653E23141", "gsfdg");
-            GetLastInvoice("75710BDF-4846-4ABF-9B50-A75DB373FE70", null);
-        }
-
-        void GetLastInvoice(string invoiceTypeIdString, string partnerId)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-
-            var rdbResponse = _rdbDataManager.GetLastInvoice(invoiceTypeId, partnerId);
-            var sqlResponse = _sqlDataManager.GetLastInvoice(invoiceTypeId, partnerId);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-
-        }
-
-        [TestMethod]
-        public void GetLasInvoices()
-        {
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg", DateTime.Now, 10);
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg", DateTime.Parse("2012-01-01"), 10);
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg", null, 10);
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", null, null, 10);
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", null, null, 0);
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg", DateTime.Parse("2012-01-01"), 1);
-            GetLasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg", DateTime.Parse("2012-01-01"), 0);
-        }
-
-        void GetLasInvoices(string invoiceTypeIdString, string partnerId, DateTime? beforeDate, int lastInvoices)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-            
-            var rdbResponse = _rdbDataManager.GetLasInvoices(invoiceTypeId, partnerId, beforeDate, lastInvoices);
-            var sqlResponse = _sqlDataManager.GetLasInvoices(invoiceTypeId, partnerId, beforeDate, lastInvoices);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-
-        [TestMethod]
-        public void GetInvoicesPopulatedPeriod()
-        {
-            GetInvoicesPopulatedPeriod("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg");
-            GetInvoicesPopulatedPeriod("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "fsgtg");
-            GetInvoicesPopulatedPeriod("26EE240A-0E05-4D07-BE86-EB0653E23141", "gsfdg");
-            GetInvoicesPopulatedPeriod("75710BDF-4846-4ABF-9B50-A75DB373FE70", null);
-        }
-
-        void GetInvoicesPopulatedPeriod(string invoiceTypeIdString, string partnerId)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-
-            var rdbResponse = _rdbDataManager.GetInvoicesPopulatedPeriod(invoiceTypeId, partnerId);
-            var sqlResponse = _sqlDataManager.GetInvoicesPopulatedPeriod(invoiceTypeId, partnerId);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-
-        }
-
-        [TestMethod]
-        public void CheckPartnerIfHasInvoices()
-        {
-            CheckPartnerIfHasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "gfsdhg");
-            CheckPartnerIfHasInvoices("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", "fsgtg");
-            CheckPartnerIfHasInvoices("26EE240A-0E05-4D07-BE86-EB0653E23141", "gsfdg");
-            CheckPartnerIfHasInvoices("75710BDF-4846-4ABF-9B50-A75DB373FE70", null);
-        }
-
-        void CheckPartnerIfHasInvoices(string invoiceTypeIdString, string partnerId)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-
-            var rdbResponse = _rdbDataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
-            var sqlResponse = _sqlDataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-
-        }
-
-        [TestMethod]
-        public void GetInvoicesBySerialNumbers()
-        {
-            GetInvoicesBySerialNumbers("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", new List<string> { "spodgtupoerwituj poierut9drsaiugf 9fdsa gdf9g iu", "spodgtupoerwituj poierut9drsaiugf 9fdsa gdf9g iu" });
-            GetInvoicesBySerialNumbers("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B", new List<string> { "spodgtupoerwituj poierut9drsaiugf 9fdsa gdf9g iu", "ghgehyterytryteryyter" });
-            GetInvoicesBySerialNumbers("26EE240A-0E05-4D07-BE86-EB0653E23141", new List<string> { "gterygeryter", "hgeyteryery" });
-            GetInvoicesBySerialNumbers("75710BDF-4846-4ABF-9B50-A75DB373FE70", new List<string>());
-        }
-
-        void GetInvoicesBySerialNumbers(string invoiceTypeIdString, List<string> serialNumbers)
-        {
-            Guid invoiceTypeId = new Guid(invoiceTypeIdString);
-            
-            var rdbResponse = _rdbDataManager.GetInvoicesBySerialNumbers(invoiceTypeId, serialNumbers);
-            var sqlResponse = _sqlDataManager.GetInvoicesBySerialNumbers(invoiceTypeId, serialNumbers);
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-
-        }
-        
-        [TestMethod]
-        public void UpdateInvoiceSettings()
-        {
-            Vanrise.Invoice.Entities.Invoice rdbInvoice;
-            Vanrise.Invoice.Entities.Invoice sqlInvoice;
-            CreateInvoicesToTestUpdate(out rdbInvoice, out sqlInvoice);
-
-            var invoiceSettings = new Vanrise.Invoice.Entities.InvoiceSettings { FileId = 43534 };
-            _rdbDataManager.UpdateInvoiceSettings(rdbInvoice.InvoiceId, invoiceSettings);
-            _sqlDataManager.UpdateInvoiceSettings(sqlInvoice.InvoiceId, invoiceSettings);
-
-            AssertInvoicesAreValidAfterInsertOrUpdate(rdbInvoice.InvoiceId, sqlInvoice.InvoiceId);
-        }
-
-
-        [TestMethod]
-        public void SetInvoiceSentDate()
-        {
-            SetInvoiceSentDate(DateTime.Now);
-            SetInvoiceSentDate(null);
-        }
-
-        void SetInvoiceSentDate(DateTime? sendDate)
-        {
-            Vanrise.Invoice.Entities.Invoice rdbInvoice;
-            Vanrise.Invoice.Entities.Invoice sqlInvoice;
-            CreateInvoicesToTestUpdate(out rdbInvoice, out sqlInvoice);
-            
-            _rdbDataManager.SetInvoiceSentDate(rdbInvoice.InvoiceId, sendDate);
-            _sqlDataManager.SetInvoiceSentDate(sqlInvoice.InvoiceId, sendDate);
-
-            AssertInvoicesAreValidAfterInsertOrUpdate(rdbInvoice.InvoiceId, sqlInvoice.InvoiceId);
-        }
-
-        [TestMethod]
-        public void ApproveInvoice()
-        {
-            ApproveInvoice(DateTime.Now);
-            ApproveInvoice(null);
-        }
-
-        void ApproveInvoice(DateTime? approvedDate)
-        {
-            Vanrise.Invoice.Entities.Invoice rdbInvoice;
-            Vanrise.Invoice.Entities.Invoice sqlInvoice;
-            CreateInvoicesToTestUpdate(out rdbInvoice, out sqlInvoice);
-
-            int? approvedBy = null;
-            if (approvedDate.HasValue)
-            {
-                approvedDate = DateTime.Now;
-                approvedBy = 5;
-            }
-
-            _rdbDataManager.ApproveInvoice(rdbInvoice.InvoiceId, approvedDate, approvedBy);
-            _sqlDataManager.ApproveInvoice(sqlInvoice.InvoiceId, approvedDate, approvedBy);
-
-            AssertInvoicesAreValidAfterInsertOrUpdate(rdbInvoice.InvoiceId, sqlInvoice.InvoiceId);
-        }
-        
-        [TestMethod]
-        public void LoadInvoices()
-        {
-            LoadInvoices(new Guid("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B"), null, null, null, null);
-            LoadInvoices(new Guid("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B"), DateTime.Parse("2012-01-01"), null, null, OrderDirection.Ascending);
-            LoadInvoices(new Guid("88EDCA6C-AD0A-40F1-8813-E6B965C9EE0B"), DateTime.Parse("2012-01-01"), DateTime.Parse("2012-01-01"), null, null);
-        }
-
-        void LoadInvoices(Guid invoiceTypeId, DateTime? from, DateTime? to, RecordFilterGroup filterGroup, OrderDirection? orderDirection)
-        {
-            var rdbResponse = new List<Vanrise.Invoice.Entities.Invoice>();
-            var sqlResponse = new List<Vanrise.Invoice.Entities.Invoice>();
-
-            _rdbDataManager.LoadInvoices(invoiceTypeId, from, to, filterGroup, orderDirection, () => false,
-                (inv) =>
-                {
-                    rdbResponse.Add(inv);
-                });
-
-            _sqlDataManager.LoadInvoices(invoiceTypeId, from, to, filterGroup, orderDirection, () => false,
-                (inv) =>
-                {
-                    sqlResponse.Add(inv);
-                });
-
-            UTAssert.ObjectsAreSimilar(sqlResponse, rdbResponse);
-        }
-
-        #region Private Methods
-
-        void CreateInvoicesToTestUpdate(out Vanrise.Invoice.Entities.Invoice rdbInvoice, out Vanrise.Invoice.Entities.Invoice sqlInvoice)
-        {
-            List<GenerateInvoiceInputToSave> invoicesToSave = new List<GenerateInvoiceInputToSave>();
-
-            GenerateInvoiceInputToSave invoiceToSave = new GenerateInvoiceInputToSave
-            {
-                Invoice = new Vanrise.Invoice.Entities.Invoice
-                {
-                    Details = new InvoiceDetail { Prop = "rewsrewr" },
-                    DueDate = DateTime.Now,
-                    FromDate = DateTime.Today.AddDays(-2),
-                    ToDate = DateTime.Today,
-                    InvoiceSettingId = Guid.NewGuid(),
-                    InvoiceTypeId = Guid.NewGuid(),
-                    IsAutomatic = true,
-                    IssueDate = DateTime.Today.AddDays(1),
-                    NeedApproval = true,
-                    PartnerId = "gfsdhg",
-                    SerialNumber = "spodgtupoerwituj poierut9drsaiugf 9fdsa gdf9g iu",
-                    Settings = new InvoiceSettings { FileId = 678 },
-                    SourceId = "5435435",
-                    UserId = 5
-                },
-                InvoiceItemSets = new List<GeneratedInvoiceItemSet>()
-            };
-            invoicesToSave.Add(invoiceToSave);
-            List<long> invoiceIds;
-            _rdbDataManager.SaveInvoices(invoicesToSave, out invoiceIds);
-            var rdbInvoiceId = invoiceIds[0];
-            _sqlDataManager.SaveInvoices(invoicesToSave, out invoiceIds);
-            var sqlInvoiceId = invoiceIds[0];
-
-            List<Vanrise.Invoice.Entities.Invoice> invoices = _rdbDataManager.GetInvoices(new List<long> { rdbInvoiceId, sqlInvoiceId });
-            rdbInvoice = invoices[0];
-            sqlInvoice = invoices[1];
-        }
-
-        void AssertInvoicesAreValidAfterInsertOrUpdate(long rdbInvoiceId, long sqlInvoiceId)
-        {
-            var invoices = _rdbDataManager.GetInvoices(new List<long> { rdbInvoiceId, sqlInvoiceId });
-            AssertInvoicesAreValidAfterInsertOrUpdate(invoices[0], invoices[1]);
-        }
-
-        void AssertInvoicesAreValidAfterInsertOrUpdate(Vanrise.Invoice.Entities.Invoice rdbInvoice, Vanrise.Invoice.Entities.Invoice sqlInvoice)
-        {
-            rdbInvoice.InvoiceId = default(long);
-            sqlInvoice.InvoiceId = default(long);
-            rdbInvoice.CreatedTime = default(DateTime);
-            sqlInvoice.CreatedTime = default(DateTime);
-            rdbInvoice.SplitInvoiceGroupId = null;
-            sqlInvoice.SplitInvoiceGroupId = null;
-            UTAssert.ObjectsAreSimilar(sqlInvoice, rdbInvoice);
-        }
 
         #endregion
     }
