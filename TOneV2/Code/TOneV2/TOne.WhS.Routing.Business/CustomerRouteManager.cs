@@ -311,8 +311,15 @@ namespace TOne.WhS.Routing.Business
                         }
                         else
                         {
-                            for (var optionNb = 1; optionNb <= maxNumberOfOptions; optionNb++)
+                            if (maxNumberOfOptions > 0)
+                            {
+                                for (var optionNb = 1; optionNb <= maxNumberOfOptions; optionNb++)
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                            }
+                            else
+                            {
                                 row.Cells.Add(new ExportExcelCell { Value = "" });
+                            }
                         }
 
                         sheet.Rows.Add(row);
