@@ -381,6 +381,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.BP">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.BP.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Business">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
     </Reference>
