@@ -11,7 +11,7 @@ namespace TestRuntime
         {
             LogVerbose("Started");
 
-            var cdrs = new List<dynamic>();
+            List<dynamic> cdrs = new List<dynamic>();
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
 
@@ -63,8 +63,6 @@ namespace TestRuntime
 
             }
 
-
-
             if (cdrs.Count > 0)
             {
                 long startingId;
@@ -81,7 +79,9 @@ namespace TestRuntime
                 mappedBatches.Add("Distribute Raw CDRs Stage", batch);
             }
             else
+            {
                 importedData.IsEmpty = true;
+            }
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
@@ -434,13 +434,6 @@ namespace TestRuntime
         private static void LogVerbose(string Message)
         {
             Console.WriteLine(Message);
-        }
-
-        private class mappedBatches
-        {
-            public static void Add(string activatorName, object batch)
-            {
-            }
         }
 
         private class Utils
