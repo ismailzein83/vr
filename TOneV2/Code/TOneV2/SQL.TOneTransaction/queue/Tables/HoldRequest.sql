@@ -12,3 +12,10 @@
     CONSTRAINT [PK_HoldRequest] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
+
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_HoldRequest_BPInstanceID_ExecutionFlowDefinitionId]
+    ON [queue].[HoldRequest]([BPInstanceID] ASC, [ExecutionFlowDefinitionId] ASC);
+

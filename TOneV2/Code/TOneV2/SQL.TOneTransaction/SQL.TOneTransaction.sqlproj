@@ -243,6 +243,7 @@
     <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_GetDue.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTimeSubscription_Delete.sql" />
     <Build Include="VRNotification\User Defined Types\EventKeysTable.sql" />
+    <Build Include="queue\Stored Procedures\sp_HoldRequest_DeleteByBPInstanceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
