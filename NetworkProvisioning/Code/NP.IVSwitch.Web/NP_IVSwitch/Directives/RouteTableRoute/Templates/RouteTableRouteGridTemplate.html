@@ -1,12 +1,12 @@
 ﻿<vr-row removeline>
-   <vr-columns width="fullrow">
+    <vr-columns width="fullrow">
         <vr-datagrid datasource="scopeModel.routeTablesRT"
                      on-ready="scopeModel.onGridReady"
                      dataretrievalfunction="scopeModel.dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
                      menuactions="scopeModel.gridMenuActions"
                      idfield="RouteOptionsDetailId"
-                     enableautoexport>  
+                     enableautoexport>
 
             <vr-datagridcolumn headertext="scopeModel.name" field="'Destination'" tooltipfield="'Description'" type="'text'" widthfactor="10" columnindex="'0'">
             </vr-datagridcolumn>
@@ -23,6 +23,19 @@
                         </span>
                         <span style="display: inline-block; width: 25px;">
                             <span ng-if="routeOption.Percentage">{{routeOption.Percentage}}%</span>
+                        </span>
+                        <span ng-if="routeOption.BackupsOptionsDetails != null && routeOption.BackupsOptionsDetails.length > 0" style="font-weight:bold;font-size:10px">
+                            &lt;
+                            <span ng-repeat="backup in routeOption.BackupsOptionsDetails">
+                                <span style="display: inline-block; width: 75px;font-weight: bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align: bottom;" title="{{backup.SupplierName}}">
+                                    {{backup.SupplierName}}
+                                </span>
+                                <span style="display: inline-block; width: 75px;font-weight:normal">
+                                    {{backup.RouteName}}
+                                </span>
+                                <span ng-if="!$last">,</span>
+                            </span>
+                            &gt;
                         </span>
                     </span>
                 </div>
