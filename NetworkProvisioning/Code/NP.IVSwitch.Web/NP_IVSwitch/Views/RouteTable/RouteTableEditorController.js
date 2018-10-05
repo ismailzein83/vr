@@ -128,7 +128,14 @@
                                 selectedCarrierAccounts.push(response.EndPointCarrierAccount[i].CarrierAccount);
                 if (selectedCarrierAccounts.length == 0)
                     selectedCarrierAccounts = undefined;
-                VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, { selectedIds: selectedCarrierAccounts }, undefined);
+                var directivePayload = {
+                    selectedIds: selectedCarrierAccounts,
+                    filter: {
+
+                        Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountEndPointFilter,NP.IVSwitch.Business" }]
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(customerSelectorDirectiveAPI, directivePayload, undefined);
                 routeTableEntity = response;
             });
         }
@@ -189,17 +196,17 @@
                 EndPoints: getEndPoints()
             };
             return scopeObject;
-           }
+        }
 
         function getEndPoints() {
-               var endPointsIds = [];
-               var endPoints = endPointSelectorDirectiveAPI.getSelectedIds();
-               for (var index = 0; index < endPoints.length; index++) {
-                   var itemTab = { EndPointId: endPoints[index] };
-                   endPointsIds.push(itemTab);
-               }
-               return endPointsIds;
-           }
+            var endPointsIds = [];
+            var endPoints = endPointSelectorDirectiveAPI.getSelectedIds();
+            for (var index = 0; index < endPoints.length; index++) {
+                var itemTab = { EndPointId: endPoints[index] };
+                endPointsIds.push(itemTab);
+            }
+            return endPointsIds;
+        }
 
         function insertRouteTable() {
             $scope.scopeModel.isLoading = true;
