@@ -25,7 +25,7 @@
                 };
             },
             templateUrl: function (element, attrs) {
-                return "/Client/Modules/BusinessProcess/Directives/ScheduleTask/Templates/DatabaseJopProcessTaskTemplate.html";
+                return "/Client/Modules/BusinessProcess/Directives/ScheduleTask/Templates/DatabaseJobTaskTemplate.html";
             }
         };
         function DirectiveConstructor($scope, ctrl) {

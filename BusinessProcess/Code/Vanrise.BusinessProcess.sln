@@ -77,11 +77,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Reprocess.Web", "Va
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Queueing.BP.Activities", "Vanrise.Queueing.BP.Activities\Vanrise.Queueing.BP.Activities.csproj", "{BE578171-1030-4486-A7E5-14DE0D13F98D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.BusinessProcess.BP", "Vanrise.BusinessProcess.BP\Vanrise.BusinessProcess.BP.csproj", "{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 32
+		SccNumberOfProjects = 31
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -205,10 +203,6 @@ Global
 		SccProjectTopLevelParentUniqueName30 = Vanrise.BusinessProcess.sln
 		SccProjectName30 = Vanrise.Queueing.BP.Activities
 		SccLocalPath30 = Vanrise.Queueing.BP.Activities
-		SccProjectUniqueName31 = Vanrise.BusinessProcess.BP\\Vanrise.BusinessProcess.BP.csproj
-		SccProjectTopLevelParentUniqueName31 = Vanrise.BusinessProcess.sln
-		SccProjectName31 = Vanrise.BusinessProcess.BP
-		SccLocalPath31 = Vanrise.BusinessProcess.BP
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -343,10 +337,6 @@ Global
 		{BE578171-1030-4486-A7E5-14DE0D13F98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE578171-1030-4486-A7E5-14DE0D13F98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE578171-1030-4486-A7E5-14DE0D13F98D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -386,6 +376,5 @@ Global
 		{6AD92330-3C2B-446A-A4DF-39B29C7E612B} = {9678D3AB-558B-42D9-A352-C819A02EC254}
 		{2F8CA1E1-EC76-4FC4-A7AB-F78CFC0F2B4B} = {9678D3AB-558B-42D9-A352-C819A02EC254}
 		{BE578171-1030-4486-A7E5-14DE0D13F98D} = {AA77692E-2A11-4668-8E05-3A50564EC28E}
-		{4E82729C-7363-4B0C-A0C3-7E0B9307FC4A} = {6DE7EC63-A773-4991-A8AE-3633C788DAD4}
 	EndGlobalSection
 EndGlobal

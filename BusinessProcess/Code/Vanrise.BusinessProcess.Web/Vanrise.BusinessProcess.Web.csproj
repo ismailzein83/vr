@@ -266,7 +266,7 @@
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationGroupGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\ProcessSynchronisation\Templates\ProcessSynchronisationManagementGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\ScheduleTask\bp-databasejob-task.js" />
-    <Content Include="BusinessProcess\Directives\ScheduleTask\Templates\DatabaseJopProcessTaskTemplate.html" />
+    <Content Include="BusinessProcess\Directives\ScheduleTask\Templates\DatabaseJobTaskTemplate.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\bp-vr-workflow-containerv2.js" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Templates\VRWorkflowContainerV2Template.html" />
     <Content Include="BusinessProcess\Directives\VRWorkflow\Variables\bp-vr-workflow-variables-grid.js" />

@@ -5,7 +5,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
-    public class ExecuteJobActivity : BaseCodeActivity
+    public class DatabaseJobTaskActivity : BaseCodeActivity
     {
         [RequiredArgument]
         public InArgument<string> ConnectionString { get; set; }

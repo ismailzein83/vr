@@ -81,7 +81,6 @@
     <Compile Include="GenerateDateTimeRanges.cs" />
     <Compile Include="GetDefinitionObjectState.cs" />
     <Compile Include="ParallelForEach.cs" />
-    <Compile Include="ExecuteJobActivity.cs" />
     <Compile Include="SaveDefinitionObjectState.cs" />
     <Compile Include="SplitListIntoGroups.cs" />
     <Compile Include="ExecuteRules.cs" />
