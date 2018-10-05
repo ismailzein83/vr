@@ -6,7 +6,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data.SQL
 {
-    class InvoiceGenerationDraftDataManager : BaseSQLDataManager, IInvoiceGenerationDraftDataManager
+    public class InvoiceGenerationDraftDataManager : BaseSQLDataManager, IInvoiceGenerationDraftDataManager
     {
         public InvoiceGenerationDraftDataManager()
             : base(GetConnectionStringName("InvoiceDBConnStringKey", "InvoiceDBConnString"))

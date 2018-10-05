@@ -9,6 +9,7 @@ namespace Vanrise.Data.RDB
 {
     public static class RDBDataProviderFactory
     {
+        static bool s_appendRDBToConnStringName = ConfigurationManager.AppSettings["RDB_AppendRDBToConnStringName"] == "true";
         public static BaseRDBDataProvider CreateProvider(string moduleName, string appSettingWithConnectionStringName, string defaultConnectionStringName)
         {
             return new DataProvider.Providers.MSSQLRDBDataProvider(GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName));
@@ -16,7 +17,7 @@ namespace Vanrise.Data.RDB
 
         public static BaseRDBDataProvider CreateProvider(string moduleName, string connectionStringName)
         {
-            return new DataProvider.Providers.MSSQLRDBDataProvider(ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString);
+            return new DataProvider.Providers.MSSQLRDBDataProvider(ConfigurationManager.ConnectionStrings[GetConnectionStringName(connectionStringName)].ConnectionString);
         }
 
         private static string GetConnectionString(string appSettingWithConnectionStringName, string defaultConnectionStringName)
@@ -28,7 +29,15 @@ namespace Vanrise.Data.RDB
 
             string connStringName = ConfigurationManager.AppSettings[appSettingWithConnectionStringName] ?? defaultConnectionStringName;
 
-            return ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
+            return ConfigurationManager.ConnectionStrings[GetConnectionStringName(connStringName)].ConnectionString;
+        }
+
+        private static string GetConnectionStringName(string origConnStringName)
+        {
+            if (s_appendRDBToConnStringName)
+                return string.Concat(origConnStringName, "_RDB");
+            else
+                return origConnStringName;
         }
     }
 }

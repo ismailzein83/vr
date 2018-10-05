@@ -164,8 +164,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             var where = selectQuery.Where();
             where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
-            if (partnerIds != null && partnerIds.Count() > 0)
-                where.ListCondition(COL_PartnerID, RDBListConditionOperator.IN, partnerIds);
+            where.ListCondition(COL_PartnerID, RDBListConditionOperator.IN, partnerIds);
             where.GreaterThanCondition(COL_FromDate).Value(fromDate);
             where.LessThanCondition(COL_ToDate).Value(toDate);
             AddConditionInvoiceNotDeleted(where);
@@ -500,6 +499,8 @@ namespace Vanrise.Invoice.Data.RDB
 
         public IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
         {
+            if (partnerInvoiceTypes == null || partnerInvoiceTypes.Count() == 0)
+                return null;
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
@@ -535,6 +536,8 @@ namespace Vanrise.Invoice.Data.RDB
 
         public IEnumerable<InvoiceByPartnerInfo> GetLastInvoicesByPartners(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
         {
+            if (partnerInvoiceTypes == null || partnerInvoiceTypes.Count() == 0)
+                return null;
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
@@ -571,9 +574,10 @@ namespace Vanrise.Invoice.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
 
             updateQuery.Column(COL_InvoiceTypeID).Value(invoice.InvoiceTypeId);
-            updateQuery.Column(COL_PartnerID).Value(invoice.InvoiceTypeId);
+            updateQuery.Column(COL_PartnerID).Value(invoice.PartnerId);
             updateQuery.Column(COL_SerialNumber).Value(invoice.SerialNumber);
             updateQuery.Column(COL_FromDate).Value(invoice.FromDate);
             updateQuery.Column(COL_ToDate).Value(invoice.ToDate);
@@ -824,9 +828,23 @@ namespace Vanrise.Invoice.Data.RDB
                         }
                     );
         }
-        public bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy)
+        public bool ApproveInvoice(long invoiceId, DateTime? approvedDate, int? approvedBy)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            if (approvedDate.HasValue)
+                updateQuery.Column(COL_ApprovedTime).Value(approvedDate.Value);
+            else
+                updateQuery.Column(COL_ApprovedTime).Null();
+
+            if (approvedBy.HasValue)
+                updateQuery.Column(COL_ApprovedBy).Value(approvedBy.Value);
+            else
+                updateQuery.Column(COL_ApprovedBy).Null();
+
+            updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceId);
+            return queryContext.ExecuteNonQuery() > 0;
         }
         #endregion
 

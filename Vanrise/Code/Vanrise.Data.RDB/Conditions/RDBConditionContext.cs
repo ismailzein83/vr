@@ -298,7 +298,7 @@ namespace Vanrise.Data.RDB
                 tableAlias,
                 columnName,
                 oper,
-                values.Select<string, BaseRDBExpression>(itm => new RDBFixedTextExpression { Value = itm }).ToList());
+                values == null ? null : values.Select<string, BaseRDBExpression>(itm => new RDBFixedTextExpression { Value = itm }).ToList());
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<string> values)
@@ -312,7 +312,7 @@ namespace Vanrise.Data.RDB
                 tableAlias,
                 columnName,
                 oper,
-                values.Select<int, BaseRDBExpression>(itm => new RDBFixedIntExpression { Value = itm }).ToList());
+                values == null ? null : values.Select<int, BaseRDBExpression>(itm => new RDBFixedIntExpression { Value = itm }).ToList());
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<int> values)
@@ -326,7 +326,7 @@ namespace Vanrise.Data.RDB
                 tableAlias,
                 columnName,
                 oper,
-                values.Select<long, BaseRDBExpression>(itm => new RDBFixedLongExpression { Value = itm }).ToList());
+                values == null ? null : values.Select<long, BaseRDBExpression>(itm => new RDBFixedLongExpression { Value = itm }).ToList());
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<long> values)
@@ -340,7 +340,7 @@ namespace Vanrise.Data.RDB
                 tableAlias,
                 columnName,
                 oper,
-                values.Select<decimal, BaseRDBExpression>(itm => new RDBFixedDecimalExpression { Value = itm }).ToList());
+                values == null ? null : values.Select<decimal, BaseRDBExpression>(itm => new RDBFixedDecimalExpression { Value = itm }).ToList());
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<decimal> values)
@@ -354,7 +354,7 @@ namespace Vanrise.Data.RDB
                 tableAlias,
                 columnName,
                 oper,
-                values.Select<DateTime, BaseRDBExpression>(itm => new RDBFixedDateTimeExpression { Value = itm }).ToList());
+                values == null ? null : values.Select<DateTime, BaseRDBExpression>(itm => new RDBFixedDateTimeExpression { Value = itm }).ToList());
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<DateTime> values)
@@ -368,7 +368,7 @@ namespace Vanrise.Data.RDB
                 tableAlias,
                 columnName,
                 oper,
-                values.Select<Guid, BaseRDBExpression>(itm => new RDBFixedGuidExpression { Value = itm }).ToList());
+                values == null ? null : values.Select<Guid, BaseRDBExpression>(itm => new RDBFixedGuidExpression { Value = itm }).ToList());
         }
 
         public void ListCondition(string columnName, RDBListConditionOperator oper, IEnumerable<Guid> values)

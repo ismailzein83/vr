@@ -504,8 +504,10 @@ namespace Vanrise.Data.RDB.DataProvider
                 colIndex++;
                 columnsQueryBuilder.AppendLine();
                 string columnDBName = RDBSchemaManager.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value.ColumnDefinition);
-
-                AppendTableColumnDefinition(columnsQueryBuilder, colDefEntry.Key, columnDBName, colDefEntry.Value.ColumnDefinition, false, false);
+                bool columnNotNullable = false;
+                if (colDefEntry.Value.IsPrimaryKey)
+                    columnNotNullable = true;
+                AppendTableColumnDefinition(columnsQueryBuilder, colDefEntry.Key, columnDBName, colDefEntry.Value.ColumnDefinition, columnNotNullable, false);
 
                 if(colDefEntry.Value.IsPrimaryKey)
                 {

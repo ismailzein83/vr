@@ -73,7 +73,7 @@ namespace Vanrise.Data.RDB
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
             if (this.Values == null || this.Values.Count() == 0)
-                return null;
+                return this.Operator == RDBListConditionOperator.IN ? " 0 = 1 " : null;
             var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             return String.Concat(this.Expression.ToDBQuery(expressionContext), this.Operator == RDBListConditionOperator.IN ? " IN (" : " NOT IN (", String.Join(",", this.Values.Select(itm => itm.ToDBQuery(expressionContext))), ")");
         }

@@ -131,7 +131,7 @@ namespace Vanrise.Invoice.Data.RDB
                 updateQuery.Column(COL_BED).Value(bed.Value);
             else
                 updateQuery.Column(COL_BED).Null();
-            if (bed.HasValue)
+            if (eed.HasValue)
                 updateQuery.Column(COL_EED).Value(eed.Value);
             else
                 updateQuery.Column(COL_EED).Null();
@@ -152,7 +152,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             var where = selectQuery.Where();
             where.EqualsCondition(COL_InvoiceTypeID).Value(invoiceTypeId);
-            if (partnerIds != null && partnerIds.Count() > 0)
+            if (partnerIds != null)
                 where.ListCondition(COL_PartnerID, RDBListConditionOperator.IN, partnerIds);
 
             return queryContext.GetItems(VRInvoiceAccountMapper);

@@ -468,8 +468,13 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             if (bed.HasValue)
                 updateQuery.Column(COL_BED).Value(bed.Value);
+            else
+                updateQuery.Column(COL_BED).Null();
+
             if (eed.HasValue)
                 updateQuery.Column(COL_EED).Value(eed.Value);
+            else
+                updateQuery.Column(COL_EED).Null();
 
             var where = updateQuery.Where();
             where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);

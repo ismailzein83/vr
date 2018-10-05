@@ -60,7 +60,7 @@ namespace Vanrise.Invoice.Data.SQL
             return new VRInvoiceAccount
             {
                 Status =  GetReaderValue<VRAccountStatus>(reader,"Status"),
-                BED= GetReaderValue<DateTime>(reader,"BED"),
+                BED= GetReaderValue<DateTime?>(reader,"BED"),
                 EED= GetReaderValue<DateTime?>(reader,"EED"),
                 InvoiceAccountId= GetReaderValue<long>(reader,"ID"),
                 InvoiceTypeId= GetReaderValue<Guid>(reader,"InvoiceTypeId"),

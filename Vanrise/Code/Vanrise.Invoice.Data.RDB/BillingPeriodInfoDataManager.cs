@@ -78,7 +78,7 @@ namespace Vanrise.Invoice.Data.RDB
         public void AddInsertOrUpdateBillingPeriodInfo(RDBQueryContext queryContext, Entities.BillingPeriodInfo billingPeriodInfo)
         {
             var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(BillingPeriodInfoDataManager.TABLE_NAME);
+            insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_InvoiceTypeId).Value(billingPeriodInfo.InvoiceTypeId);
             insertQuery.Column(COL_PartnerId).Value(billingPeriodInfo.PartnerId);
             insertQuery.Column(COL_NextPeriodStart).Value(billingPeriodInfo.NextPeriodStart);
@@ -88,7 +88,7 @@ namespace Vanrise.Invoice.Data.RDB
             notExistsCondition.EqualsCondition(COL_PartnerId).Value(billingPeriodInfo.PartnerId);
 
             var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(BillingPeriodInfoDataManager.TABLE_NAME);
+            updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_NextPeriodStart).Value(billingPeriodInfo.NextPeriodStart);
             var updateQueryAndCondition = updateQuery.Where();
             updateQueryAndCondition.EqualsCondition(COL_InvoiceTypeId).Value(billingPeriodInfo.InvoiceTypeId);
