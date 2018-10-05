@@ -85,9 +85,9 @@ namespace NP.IVSwitch.Business
                 foreach (var item in routeTableItem.EndPoints)
                 {
                     EndPoint endPoint = endPointManager.GetEndPoint(item.EndPointId); ;
-                    if (endPoint != null && endPoint.RouteTableBasedRule == false)
+                    if (endPoint != null && endPoint.RouteTableBasedRule == true)
                     {
-                        insertOperationOutput.Message = " An endPoint has RouteTableBaseRule false, you cannot add the Route Table";
+                        insertOperationOutput.Message = " An endPoint has RouteTableBaseRule true, you cannot add the Route Table";
                         return insertOperationOutput;
                     }
                 
@@ -142,9 +142,9 @@ namespace NP.IVSwitch.Business
                     foreach (var item in routeTableItem.EndPoints)
                     {
                         EndPoint endPoint = endPointManager.GetEndPoint(item.EndPointId); ;
-                        if (endPoint != null && endPoint.RouteTableBasedRule == false)
+                        if (endPoint != null && endPoint.RouteTableBasedRule == true)
                         {
-                            updateOperationOutput.Message = " An endPoint has RouteTableBaseRule false, you cannot update the  Route Table";
+                            updateOperationOutput.Message = " An endPoint has RouteTableBaseRule true, you cannot update the  Route Table";
                             return updateOperationOutput;
                         }
 
