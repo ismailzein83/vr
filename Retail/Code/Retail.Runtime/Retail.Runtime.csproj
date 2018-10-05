@@ -611,6 +611,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\DSMappers.cs" />
     <Compile Include="Mappers\MultinetMappers.cs" />
     <Compile Include="Mappers\ZajilMappers.cs" />
     <Compile Include="Tasks\AliAtouiTask.cs" />
