@@ -9,6 +9,7 @@ using Vanrise.Data.Postgres;
 using TOne.WhS.BusinessEntity.Entities;
 using System.Transactions;
 using Vanrise.Common;
+using NP.IVSwitch.Entities;
 
 
 namespace NP.IVSwitch.Data.Postgres
@@ -110,11 +111,16 @@ namespace NP.IVSwitch.Data.Postgres
                             OWNER to {1};", table, IvSwitchSync.OwnerName);
             int tabl = ExecuteNonQueryText(cmdText, cmd => { });
         }
-        public List<RouteTableRoute> GetRouteTablesRoutes(int routeTableId, int limit, string aNumber, string bNumber,List<int>routeIds)
+        public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType,int routeTableId, int limit, string aNumber, string bNumber,List<int>routeIds)
         {
             string table = string.Format("rt{0}", routeTableId);
-            String cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%') {4} and (tech_prefix is NULL or tech_prefix LIKE '%{3}%')) limit {1})
-            SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit, aNumber, bNumber,routeIds ==null?"": string.Format(" and route_id in({0})", string.Join<int>(",",routeIds)));
+            string cmdText = "";
+            if (routeTableViewType == RouteTableViewType.ANumber)
+            cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%') {4} and (tech_prefix is NULL or tech_prefix LIKE '%{3}%')) limit {1})
+            SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit, aNumber, bNumber,routeIds ==null?"": string.Format(" and route_id in({0})", string.Join<int>(",",routeIds)));            
+            else
+                 cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%') {3}) limit {1})
+            SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit,bNumber,routeIds ==null?"": string.Format(" and route_id in({0})", string.Join<int>(",",routeIds)));
             List<RouteTableRoute> routeTablesRoutes = new List<RouteTableRoute>();
             RouteTableRoute routeTableRoute = new Entities.RouteTableRoute.RouteTableRoute();
             routeTableRoute.RouteOptions = new List<RouteTableRouteOption>();

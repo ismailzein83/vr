@@ -524,11 +524,11 @@ namespace NP.IVSwitch.Business
             {
                 RouteManager _manager = new RouteManager();
                 RouteTableRouteDetail routeTableRouteDetail = new RouteTableRouteDetail
-            {
-                Destination = routeTableRoute.Destination,
-                TechPrefix = routeTableRoute.TechPrefix,
-                RouteOptionsDetails=new List<RouteTableRouteOptionDetails>()
-            };
+                {
+                    Destination = routeTableRoute.Destination,
+                    TechPrefix = routeTableRoute.TechPrefix,
+                    RouteOptionsDetails = new List<RouteTableRouteOptionDetails>()
+                };
                 bool firstBackup = true;
                 int blockedAccount;
                 int.TryParse(Helper.GetIvSwitchSync().BlockedAccountMapping, out blockedAccount);
@@ -540,43 +540,45 @@ namespace NP.IVSwitch.Business
                         if (routeOption.RouteId == blockedAccount)
                             break;
 
-                            if (routeOption.Huntstop == 0 && firstBackup)
-                            {
-                                routeTableRouteOptionDetails.SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId);
-                                routeTableRouteOptionDetails.RouteName = _manager.GetRouteDescription(routeOption.RouteId);
-                                routeTableRouteOptionDetails.Percentage = routeOption.Percentage;
-                                routeTableRouteOptionDetails.Preference = routeOption.Preference;
-                                routeTableRouteOptionDetails.BackupsOptionsDetails = new List<BackupRouteOptionDetail>();
-                                firstBackup = false;
-                            }
-                            else
-                                if (routeOption.Huntstop == 0)
-                                {
-                                    routeTableRouteOptionDetails.BackupsOptionsDetails.Add(new BackupRouteOptionDetail
-                                    {
-
-                                        SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
-                                        RouteName = _manager.GetRouteDescription(routeOption.RouteId),
-                                        Percentage = routeOption.Percentage,
-                                        Preference = routeOption.Preference,
-
-                                    });
-
-                                }
-
-                        if(routeOption.Huntstop == 1 &&firstBackup)
+                        if (routeOption.Huntstop == 0 && firstBackup)
                         {
-                            routeTableRouteDetail.RouteOptionsDetails.Add(new RouteTableRouteOptionDetails
+                            routeTableRouteOptionDetails = new RouteTableRouteOptionDetails();
+                            routeTableRouteOptionDetails.SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId);
+                            routeTableRouteOptionDetails.RouteName = _manager.GetRouteDescription(routeOption.RouteId);
+                            routeTableRouteOptionDetails.Percentage = routeOption.Percentage;
+                            routeTableRouteOptionDetails.Preference = routeOption.Preference;
+                            routeTableRouteOptionDetails.BackupsOptionsDetails = new List<BackupRouteOptionDetail>();
+                            firstBackup = false;
+                        }
+                        else
+                            if (routeOption.Huntstop == 0)
                             {
+                                routeTableRouteOptionDetails.BackupsOptionsDetails.Add(new BackupRouteOptionDetail
+                                {
+
+                                    SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
+                                    RouteName = _manager.GetRouteDescription(routeOption.RouteId),
+                                    Percentage = routeOption.Percentage,
+                                    Preference = routeOption.Preference,
+
+                                });
+
+                            }
+
+                        if (routeOption.Huntstop == 1 && firstBackup)
+                        {
+                            routeTableRouteOptionDetails = new RouteTableRouteOptionDetails {
 
                                 SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
                                 RouteName = _manager.GetRouteDescription(routeOption.RouteId),
                                 Percentage = routeOption.Percentage,
                                 Preference = routeOption.Preference,
+                            };
 
-                            });
+                            routeTableRouteDetail.RouteOptionsDetails.Add(routeTableRouteOptionDetails);
 
                         }
+                        else
                         if (routeOption.Huntstop == 1 && !firstBackup)
                         {
                             routeTableRouteOptionDetails.BackupsOptionsDetails.Add(new BackupRouteOptionDetail
@@ -591,7 +593,6 @@ namespace NP.IVSwitch.Business
                             });
                             routeTableRouteDetail.RouteOptionsDetails.Add(routeTableRouteOptionDetails);
                             firstBackup = true;
-                            routeTableRouteOptionDetails = new RouteTableRouteOptionDetails();
                         }
 
 
@@ -605,7 +606,6 @@ namespace NP.IVSwitch.Business
 
                 return routeTableRouteDetail;
             }
-
             public override IEnumerable<RouteTableRoute> RetrieveAllData(DataRetrievalInput<RouteTableRouteQuery> input)
             {
                 IRouteTableRouteDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
@@ -620,7 +620,7 @@ namespace NP.IVSwitch.Business
                         return null;
                     input.Query.RouteIds = routeIds;
                 }
-                return routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber, input.Query.RouteIds);
+                return routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableViewType,input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber, input.Query.RouteIds);
             }
         }
 

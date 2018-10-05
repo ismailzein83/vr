@@ -1,4 +1,5 @@
-﻿using NP.IVSwitch.Entities.RouteTableRoute;
+﻿using NP.IVSwitch.Entities;
+using NP.IVSwitch.Entities.RouteTableRoute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace NP.IVSwitch.Data
 {
    public interface IRouteTableRouteDataManager:IDataManager
    {
-       List<RouteTableRoute> GetRouteTablesRoutes(int routeTableId,int limit,string aNumber,string bNumber,List<int>routeIds);
+       List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType,int routeTableId, int limit, string aNumber, string bNumber, List<int> routeIds);
        bool Insert(List<RouteTableRoute> routeTableRoutes,int routeTableId ,bool IsBlockedAccount);
        RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination);
        bool Update(RouteTableRoute routeTableRoute, int routeTableId, bool IsBlockedAccount);
