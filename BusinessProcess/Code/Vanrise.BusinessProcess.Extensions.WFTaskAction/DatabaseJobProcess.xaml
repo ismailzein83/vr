@@ -8,10 +8,10 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbewa="clr-namespace:Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;assembly=Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(vbe:DatabaseJobProcessInput)" />
+    <x:Property Name="Input" Type="InArgument(vbewa:DatabaseJobProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.BusinessProcess.BP.DatabaseJobProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -23,6 +23,7 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Vanrise.BusinessProcess.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -66,13 +67,13 @@
           <mca:CSharpValue x:TypeArguments="x:String">Input.ConnectionStringName</mca:CSharpValue>
         </InArgument>
       </local:DatabaseJobTaskActivity.ConnectionStringName>
-      <local:DatabaseJobTaskActivity.CustomCode>
+      <local:DatabaseJobTaskActivity.Query>
         <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">Input.CustomCode</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:String">Input.Query</mca:CSharpValue>
         </InArgument>
-      </local:DatabaseJobTaskActivity.CustomCode>
+      </local:DatabaseJobTaskActivity.Query>
     </local:DatabaseJobTaskActivity>
-    <sads:DebugSymbol.Symbol>d2NDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5CdXNpbmVzc1Byb2Nlc3MuRXh0ZW5zaW9ucy5XRlRhc2tBY3Rpb25cRGF0YWJhc2VKb2JQcm9jZXNzLnhhbWwFOQNMDgIBAToFSiUCAQI9Cz1fAgEHRwtHWQIBBUILQmMCAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2NDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5CdXNpbmVzc1Byb2Nlc3MuRXh0ZW5zaW9ucy5XRlRhc2tBY3Rpb25cRGF0YWJhc2VKb2JQcm9jZXNzLnhhbWwFOgNNDgIBATsFSyUCAQI+Cz5fAgEHSAtIVAIBBUMLQ2MCAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

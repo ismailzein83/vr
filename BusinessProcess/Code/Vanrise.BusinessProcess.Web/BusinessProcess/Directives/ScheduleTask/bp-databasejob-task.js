@@ -67,10 +67,10 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.BusinessProcess.Entities.DatabaseJobProcessInput, Vanrise.BusinessProcess.Entities",
+                        $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.DatabaseJobProcessInput, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
                         ConnectionStringName: $scope.showConnectionStringName ? $scope.connectionStringName : undefined,
                         ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined,
-                        CustomCode: $scope.customCode
+                        Query: $scope.query
                     };
                 };
 
@@ -83,7 +83,7 @@
 
                         $scope.connectionStringName = payload.data.ConnectionStringName;
                         $scope.connectionString = payload.data.ConnectionString;
-                        $scope.customCode = payload.data.CustomCode;
+                        $scope.query = payload.data.Query;
 
                         if ($scope.connectionStringName != undefined) {
                             $scope.selectedConnectionStringType = connectionStringType.ConnectionStringName;

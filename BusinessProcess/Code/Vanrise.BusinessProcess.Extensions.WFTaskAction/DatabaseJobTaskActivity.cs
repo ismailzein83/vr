@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Activities;
 using System.Data.SqlClient;
+using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
+using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Runtime.Business;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -14,30 +18,36 @@ namespace Vanrise.BusinessProcess.WFActivities
         public InArgument<string> ConnectionStringName { get; set; }
 
         [RequiredArgument]
-        public InArgument<string> CustomCode { get; set; }
+        public InArgument<string> Query { get; set; }
 
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
-            var connectionStringName = this.ConnectionStringName.Get(context.ActivityContext);
+            var taskId = context.ActivityContext.GetSharedInstanceData().InstanceInfo.TaskId;
+            if (!taskId.HasValue)
+                throw new NullReferenceException("Task Id");
+
+            var databaseJobProcessInput = GetDatabaseJobProcessInput((Guid)taskId);
+
+            var connectionStringName = databaseJobProcessInput.ConnectionStringName;
 
             string connectionString;
             if (!String.IsNullOrWhiteSpace(connectionStringName))
                 connectionString = Vanrise.Common.Utilities.GetExposedConnectionString(connectionStringName);
             else
-                connectionString = this.ConnectionString.Get(context.ActivityContext);
+                connectionString = databaseJobProcessInput.ConnectionString;
 
             if (String.IsNullOrWhiteSpace(connectionString))
                 throw new NullReferenceException("connectionString");
 
-            var customCode = this.CustomCode.Get(context.ActivityContext);
+            var query = databaseJobProcessInput.Query;
 
-            if (!String.IsNullOrWhiteSpace(customCode))
+            if (!String.IsNullOrWhiteSpace(query))
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
 
-                    using (SqlCommand command = new SqlCommand(customCode, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         int executed = command.ExecuteNonQuery();
                         if (executed < 0)
@@ -47,6 +57,15 @@ namespace Vanrise.BusinessProcess.WFActivities
                     connection.Close();
                 }
             }
+        }
+
+        private DatabaseJobProcessInput GetDatabaseJobProcessInput(Guid taskId)
+        {
+            SchedulerTask task = new SchedulerTaskManager().GetTask(taskId);
+            WFTaskActionArgument wfTaskActionArgument = task.TaskSettings.TaskActionArgument.CastWithValidate<WFTaskActionArgument>("wfTaskActionArgument");
+            DatabaseJobProcessInput databaseJobProcessInput = wfTaskActionArgument.ProcessInputArguments.CastWithValidate<DatabaseJobProcessInput>("databaseJobProcessInput");
+
+            return databaseJobProcessInput;
         }
     }
 }
