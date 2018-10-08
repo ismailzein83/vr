@@ -3,7 +3,6 @@ using System.Activities;
 using System.Data.SqlClient;
 using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.Common;
-using Vanrise.Entities;
 using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
 
@@ -22,11 +21,12 @@ namespace Vanrise.BusinessProcess.WFActivities
 
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
+            context.ActivityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Executing query has started");
             var taskId = context.ActivityContext.GetSharedInstanceData().InstanceInfo.TaskId;
             if (!taskId.HasValue)
                 throw new NullReferenceException("Task Id");
 
-            var databaseJobProcessInput = GetDatabaseJobProcessInput((Guid)taskId);
+            var databaseJobProcessInput = GetDatabaseJobProcessInput(taskId.Value);
 
             var connectionStringName = databaseJobProcessInput.ConnectionStringName;
 
@@ -49,21 +49,20 @@ namespace Vanrise.BusinessProcess.WFActivities
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        int executed = command.ExecuteNonQuery();
-                        if (executed < 0)
-                            context.ActivityContext.WriteTrackingMessage(LogEntryType.Error, "Query failed to be executed");
+                        command.ExecuteNonQuery();
                     }
 
                     connection.Close();
                 }
             }
+            context.ActivityContext.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Executing query is done");
         }
 
         private DatabaseJobProcessInput GetDatabaseJobProcessInput(Guid taskId)
         {
             SchedulerTask task = new SchedulerTaskManager().GetTask(taskId);
-            WFTaskActionArgument wfTaskActionArgument = task.TaskSettings.TaskActionArgument.CastWithValidate<WFTaskActionArgument>("wfTaskActionArgument");
-            DatabaseJobProcessInput databaseJobProcessInput = wfTaskActionArgument.ProcessInputArguments.CastWithValidate<DatabaseJobProcessInput>("databaseJobProcessInput");
+            WFTaskActionArgument wfTaskActionArgument = task.TaskSettings.TaskActionArgument.CastWithValidate<WFTaskActionArgument>("wfTaskActionArgument", taskId);
+            DatabaseJobProcessInput databaseJobProcessInput = wfTaskActionArgument.ProcessInputArguments.CastWithValidate<DatabaseJobProcessInput>("databaseJobProcessInput", taskId);
 
             return databaseJobProcessInput;
         }
