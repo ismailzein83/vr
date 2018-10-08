@@ -231,6 +231,8 @@ when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
 
+--[sec].[BusinessEntityModule]--------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[ParentId],[BreakInheritance])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('475F9CED-6D87-4B16-B9D8-ED06F60F3465','Switch Manager','5A9E78AE-229E-41B9-9DBF-492997B42B61',0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[ParentId],[BreakInheritance]))merge	[sec].[BusinessEntityModule] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[ParentId] = s.[ParentId],[BreakInheritance] = s.[BreakInheritance]when not matched by target then	insert([ID],[Name],[ParentId],[BreakInheritance])	values(s.[ID],s.[Name],s.[ParentId],s.[BreakInheritance]);
+
 --[sec].[BusinessEntity]----------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
@@ -239,10 +241,8 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('BA7E48EB-E7CB-4C32-AE2D-47C9FCCBC7B6','NP_IVSwitch_CodecProfile','Codec Profile'			,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View", "Add", "Edit"]'),
 ('D2D07DBA-66EA-4B68-9F00-EBD66B00A740','NP_IVSwitch_TranslationRule','Translation Rule'	,'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',0,'["View", "Add", "Edit"]'),
-
 ('5437DC96-9CB1-44B2-B680-B1A51D6CA876','NP_IVSwitch_Firewall','Firewall'					,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',0,'["View", "Add", "Edit"]'),
-
-('4145E135-96B2-412D-9F4E-D3CEE79741F5','NP_IVSwitch_RouteTable','Route Table'					,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]')
+('4145E135-96B2-412D-9F4E-D3CEE79741F5','NP_IVSwitch_RouteTable','Route Table'				,'475F9CED-6D87-4B16-B9D8-ED06F60F3465',0,'["View","Add","Edit","Delete"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
