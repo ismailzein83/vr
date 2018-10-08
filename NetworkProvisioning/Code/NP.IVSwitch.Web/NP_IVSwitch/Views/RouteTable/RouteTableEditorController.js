@@ -67,7 +67,6 @@
                                 Filters: [{
                                     $type: "NP.IVSwitch.Business.EndPointViewFilter,NP.IVSwitch.Business",
                                     RouteTableId: routeTableId,
-                                    //RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
                                     RouteTableViewType: routeTableViewType,
 
                                 }]
@@ -121,11 +120,15 @@
             return NP_IVSwitch_RouteTableAPIService.GetRouteTableById(routeTableId, routeTableViewType).then(function (response) {
                 for (var i = 0; i < response.RouteTableInput.EndPoints.length; i++)
                     selectedEndPoints.push(response.RouteTableInput.EndPoints[i].EndPointId);
+                var endPointCarrierAccount;
                 if (response != undefined && response.EndPointCarrierAccount != undefined)
-                    for (var i = 0; i < response.EndPointCarrierAccount.length; i++)
-                        if (response.EndPointCarrierAccount[i].CarrierAccount != null)
-                            if (!selectedCarrierAccounts.includes(response.EndPointCarrierAccount[i].CarrierAccount))
-                                selectedCarrierAccounts.push(response.EndPointCarrierAccount[i].CarrierAccount);
+                    endPointCarrierAccount=response.EndPointCarrierAccount;
+                if (endPointCarrierAccount != undefined)
+                    for (var i = 0; i < endPointCarrierAccount.length; i++)
+                        if (endPointCarrierAccount[i].CarrierAccount != null)
+                            if (!selectedCarrierAccounts.includes(endPointCarrierAccount[i].CarrierAccount))
+                                selectedCarrierAccounts.push(endPointCarrierAccount[i].CarrierAccount);
+
                 if (selectedCarrierAccounts.length == 0)
                     selectedCarrierAccounts = undefined;
                 var directivePayload = {
@@ -184,7 +187,6 @@
 
         function buildParentObjectFromScope() {
             var scopeObject = {
-                //RouteTableViewType: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value,
                 RouteTableViewType: routeTableViewType ,
 
                 RouteTable: {

@@ -23,17 +23,21 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                if (parameters.RouteTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value)
-                    $scope.scopeModel.labelName = "ANumber";
+                var routeTableViewType=parameters.RouteTableViewType;
+                switch (routeTableViewType) {
+                    case NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value:
+                    $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.ANumber.description;
 
-                if (parameters.RouteTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value)
-                    $scope.scopeModel.labelName = "Whiltelist";
+                        break;
+                    case NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value:
+                    $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.description;
 
-                if (parameters.RouteTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value)
-                    $scope.scopeModel.labelName = "BNumber";
+                        break;
+                    case NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value:
+                    $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.BNumber.description;
 
-
-
+                        break;
+                }
                 routeTableId = parameters.RouteTableId;
                 $scope.scopeModel.routeTableRouteName = parameters.Destination;
                 routeTableRouteName = parameters.Destination;
@@ -71,12 +75,12 @@
                     if (response)
                     VRNotificationService.showConfirmation("An existing route on one or more codes will be overriden").then(function (result)
                     {
-                        if(result)
-                    return insertRouteTableRT();
+                      if(result)
+                       return insertRouteTableRT();
 
                     });
-                    else
-                     return insertRouteTableRT();
+                     else
+                      return insertRouteTableRT();
 
 
                     });
@@ -97,7 +101,7 @@
                 $scope.scopeModel.isLoading = true;
 
                 $scope.scopeModel.addMode = false;
-                getRouteTableOptions().then(function () {
+                getRouteTableRouteOptions().then(function () {
                     loadAllControls().finally(function () {
                         routeTableEntity = undefined;
                     });
@@ -112,7 +116,7 @@
             }
         }
 
-        function getRouteTableOptions() {
+        function getRouteTableRouteOptions() {
             return NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
                 routeTableRouteOptions = response;
                 $scope.scopeModel.bNumber = routeTableRouteOptions.TechPrefix;
@@ -205,17 +209,15 @@
             var routeOptionsToEdit = [];
             if (supplierRouteGridData != undefined) {
                 for (var i = 0; i < supplierRouteGridData.length; i++) {
+                    var item =supplierRouteGridData[i];
                     var routeOption = {
-                        RouteId: supplierRouteGridData[i].RouteId,
-                        Percentage: supplierRouteGridData[i].Percentage
+                        RouteId: item.RouteId,
+                        Percentage: item.Percentage
                     };
-                    if (supplierRouteGridData[i].BackupRouteIds != undefined)
-                        routeOption.BackupOptions = supplierRouteGridData[i].BackupRouteIds;
+                    if (item.BackupRouteIds != undefined)
+                        routeOption.BackupOptions = item.BackupRouteIds;
 
                     routeOptionsToEdit.push(routeOption);
-
-
-
                 }
             }
             var objectScopeForEdit = {
@@ -235,14 +237,14 @@
             var routeOptionsToAdd = [];
             if (supplierRouteGridData != undefined)
                 for (var i = 0; i < supplierRouteGridData.length; i++) {
-
+                    var item = supplierRouteGridData[i];
 
                     var routeOption = {
-                        RouteId: supplierRouteGridData[i].RouteId,
-                        Percentage:supplierRouteGridData[i].Percentage
+                            RouteId: item.RouteId,
+                        Percentage: item.Percentage
                     };
-                    if (supplierRouteGridData[i].BackupRouteIds !=undefined)
-                        routeOption.BackupOptions = supplierRouteGridData[i].BackupRouteIds;
+                    if (item.BackupRouteIds !=undefined)
+                        routeOption.BackupOptions = item.BackupRouteIds;
                     routeOptionsToAdd.push(routeOption);
                 }
             var objectScopeForAdd = {

@@ -135,12 +135,18 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 if (payload != undefined) {
                     routeTableId = payload.RouteTableId;
                     routeTableViewType = payload.RouteTableViewType;
-                    if (routeTableViewType == 0)
-                        $scope.scopeModel.name = "ANumber";
-                    if (routeTableViewType == 1)
-                        $scope.scopeModel.name = "Whitelist";
-                    if (routeTableViewType == 2)
-                        $scope.scopeModel.name = "BNumber";
+
+                    switch (routeTableViewType) {
+                    case NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value:
+                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.ANumber.description;
+                        break;
+                    case NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value:
+                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.description;
+                        break;
+                    case NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value:
+                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.BNumber.description;
+                        break;
+                        }
                     $scope.scopeModel.isANumber = (NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value == routeTableViewType) ? true : false;
 
                 }
