@@ -19,7 +19,7 @@ app.directive('vrWhsRoutingRouterulesettingsFilterService', ['UtilsService',
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/FilterByServiceDirective.html';

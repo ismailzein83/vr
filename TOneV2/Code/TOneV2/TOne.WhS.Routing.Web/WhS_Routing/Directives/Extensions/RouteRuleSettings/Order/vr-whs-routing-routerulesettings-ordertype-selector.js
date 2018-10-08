@@ -10,11 +10,8 @@ app.directive('vrWhsRoutingRouterulesettingsOrdertypeSelector', ['WhS_Routing_Or
                 ismultipleselection: '@',
                 selectedvalues: '=',
                 onselectionchanged: '=',
-                onselectitem: '=',
-                ondeselectitem: '=',
                 isrequired: '=',
                 hideremoveicon: '@',
-                normalColNum: '@',
                 customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -32,16 +29,31 @@ app.directive('vrWhsRoutingRouterulesettingsOrdertypeSelector', ['WhS_Routing_Or
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: function (element, attrs) {
-                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Order/Templates/RouteRuleOrderTypeSelector.html';;
+            template: function (element, attrs) {
+                return getTemplate(attrs);
             }
+
         };
+        function getTemplate(attrs) {
+            var label = 'Order Type';
+            if (attrs.ismultipleselection != undefined)
+                label = 'Order Types';
+
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = "hideremoveicon";
+
+            return '<vr-select on-ready="ctrl.onSelectorReady" datasource=" ctrl.datasource" datatextfield="description" datavaluefield="value" selectedvalues="ctrl.selectedvalues" '
+           + 'onselectionchanged="ctrl.onselectionchanged" customvalidate="ctrl.customvalidate" ' + hideremoveicon + ' isrequired="ctrl.isrequired" label="' + label + '"></vr-select>';
+
+        }
 
         function RouteRuleSettingsOrderTypeSelector(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
             var selectorAPI;
+            var OrderTypeEnumArray = UtilsService.getArrayEnum(WhS_Routing_OrderTypeEnum);
 
             function initializeController() {
                 ctrl.onSelectorReady = function (api) {
@@ -53,22 +65,24 @@ app.directive('vrWhsRoutingRouterulesettingsOrdertypeSelector', ['WhS_Routing_Or
                 var api = {};
 
                 api.load = function (payload) {
-                    selectorAPI.clearDataSource();
 
                     var selectedIds;
                     var filter;
+                    var criteriasLength;
+                    var selectedvalues = ctrl.selectedvalues;
+                    ctrl.datasource.length = 0;
+                    ctrl.selectedvalues = undefined;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                     }
 
-                    ctrl.datasource = UtilsService.getArrayEnum(WhS_Routing_OrderTypeEnum);
-                    //ctrl.selectedvalues = WhS_Routing_OrderTypeEnum.Percentage;
-
-                    if (selectedIds != undefined) {
-                        ctrl.selectedvalues = UtilsService.getEnum(WhS_Routing_OrderTypeEnum, 'value', selectedIds);
-                    }
+                    loadDataSource(filter);
+                    if (selectedIds != undefined)
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+                    else if (selectedvalues != undefined && ctrl.datasource.indexOf(selectedvalues) != -1)
+                        ctrl.selectedvalues = selectedvalues;
                 };
 
                 api.getSelectedIds = function () {
@@ -79,5 +93,14 @@ app.directive('vrWhsRoutingRouterulesettingsOrdertypeSelector', ['WhS_Routing_Or
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+            var loadDataSource = function (filter) {
+                if (filter != undefined) {
+                    for (var i = 0; i < OrderTypeEnumArray.length; i++) {
+                        if ((OrderTypeEnumArray[i].from == undefined || OrderTypeEnumArray[i].from <= filter.OrderOptionCriteriaLength) && (OrderTypeEnumArray[i].to == undefined || OrderTypeEnumArray[i].to >= filter.OrderOptionCriteriaLength))
+                            ctrl.datasource.push(OrderTypeEnumArray[i]);
+                    }
+                }
+            };
+
         }
     }]);

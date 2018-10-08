@@ -35,6 +35,7 @@ namespace TOne.WhS.Routing.Business
 
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode)
         {
+
             _carrierAccounts = new CarrierAccountManager().GetCachedCarrierAccounts();
 
             CodeGroupManager codeGroupeManager = new CodeGroupManager();
@@ -140,8 +141,9 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
-
             return customerRoutes;
+
+
         }
 
         private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager, List<CustomerRoute> customerRoutes,
@@ -289,6 +291,7 @@ namespace TOne.WhS.Routing.Business
 
             if (routeRule.Settings.UseOrderedExecution)
             {
+                List<RouteOptionRuleTarget> finalRouteOptionRuleTargets = new List<RouteOptionRuleTarget>();
                 List<RouteOptionRuleTarget> routeOptionRuleTargets = CloneRouteOptionRuleTargets(optionsByRules.GetOrCreateItem(routeRule, () =>
                 {
                     return routeRule.Settings.GetOrderedOptions(routeRuleExecutionContext, routeRuleTarget);
@@ -329,6 +332,7 @@ namespace TOne.WhS.Routing.Business
                             bool allItemsBlocked;
                             RouteOption routeOption = routeRuleExecutionContext.CreateOptionFromTarget(processedTargetOption, out allItemsBlocked);
                             route.Options.Add(routeOption);
+                            finalRouteOptionRuleTargets.Add(processedTargetOption);
 
                             if (!allItemsBlocked)
                                 optionsAdded++;
@@ -341,8 +345,14 @@ namespace TOne.WhS.Routing.Business
 
                 FinalizeRouteOptionContext finalizeRouteOptionContext = new FinalizeRouteOptionContext() { NumberOfOptionsInSettings = maxNumberOfOptions, RouteOptions = route.Options };
                 route.Options = routeRule.Settings.GetFinalOptions(finalizeRouteOptionContext);
-
-                routeRule.Settings.ApplyOptionsPercentage(route.Options);
+                RouteRuleApplyOptionsPercentageContext applyOptionsPercentageContext = new RouteRuleApplyOptionsPercentageContext()
+                {
+                    FinalRouteOptionRuleTargets = finalRouteOptionRuleTargets,
+                    Options = route.Options,
+                    RoutingDatabase = routingDatabase
+                };
+                routeRule.Settings.ApplyOptionsPercentage(applyOptionsPercentageContext);
+                route.Options = applyOptionsPercentageContext.Options;
             }
             else
             {

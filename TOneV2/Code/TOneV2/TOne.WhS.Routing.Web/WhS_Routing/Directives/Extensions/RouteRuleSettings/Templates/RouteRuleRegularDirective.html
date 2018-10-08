@@ -10,6 +10,13 @@
         </vr-columns>
     </vr-row>
 </vr-section>
+<vr-section title="Filter Settings">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-whs-routing-routerulesettings-filter on-ready="onOptionFilterSettingsGroupDirectiveReady" />
+        </vr-columns>
+    </vr-row>
+</vr-section>
 <vr-section title="Order Settings">
     <vr-row>
         <vr-columns width="fullrow">
@@ -17,14 +24,7 @@
         </vr-columns>
     </vr-row>
 </vr-section>
-<vr-section title="Filter Settings">
-    <vr-row>
-        <vr-columns width="fullrow">
-            <vr-whs-routing-routerulesettings-filter on-ready="onOptionFilterSettingsGroupDirectiveReady"/>
-        </vr-columns>
-    </vr-row>
-</vr-section>
-<vr-section title="Percentage Settings">
+<vr-section title="Percentage Settings" ng-if="scopeModel.showPercentageSettings">
     <vr-row>
         <vr-columns width="1/4row">
             <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" text="None"
@@ -37,4 +37,4 @@
     </vr-row>
 </vr-section>
 
-    
+

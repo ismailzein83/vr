@@ -34,13 +34,14 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
 
         var routeRuleSettingsOrderTypeSelectorAPI;
         var routeRuleSettingsOrderTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var context;
 
         ctrl.optionOrderSettingsGroupTemplates = [];
         ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
         ctrl.dragdropSetting = {
             groupCorrelation: ctrl.dragdropGroupCorrelation,
             canReceive: true,
-            onItemReceived: function (itemAdded, dataSource) {             
+            onItemReceived: function (itemAdded, dataSource) {
 
                 var dataItem = {
                     id: ctrl.datasource.length + 1,
@@ -52,17 +53,13 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
 
                 dataItem.onDirectiveReady = function (api) {
                     dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
                 };
-
-                for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
-                    if (ctrl.optionOrderSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
-                        existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
-                        ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
-                        break;
-                    }
+                var filter = {
+                    OrderOptionCriteriaLength: ctrl.datasource.length
                 }
+                loadOrderTypeSelector(filter);
                 return dataItem;
             },
             enableSorting: true
@@ -81,7 +78,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                 if (!$scope.scopeModel.selectedRouteRuleSettingsOrderType.hasCheckValidation)
                     return null;
 
-                if ($scope.scopeModel.selectedRouteRuleSettingsOrderType == WhS_Routing_OrderTypeEnum.Percentage) {
+                if ($scope.scopeModel.selectedRouteRuleSettingsOrderType == WhS_Routing_OrderTypeEnum.Percentage || $scope.scopeModel.selectedRouteRuleSettingsOrderType == WhS_Routing_OrderTypeEnum.OptionDistribution) {
                     var total = 0;
                     for (var x = 0; x < ctrl.datasource.length; x++) {
                         total += parseFloat(ctrl.datasource[x].percentageValue);
@@ -93,35 +90,42 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
             }
             return null;
         };
-      
+
         ctrl.removeOption = function (dataItem) {
-            var configId = dataItem.configId;
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
-            for (var x = 0; x < existingItems.length; x++) {
-                if (existingItems[x].ExtensionConfigurationId == configId) {
-                    ctrl.optionOrderSettingsGroupTemplates.push(existingItems[x]);
-                    existingItems.splice(x, 1);
-                    break;
-                }
+
+            var filter = {
+                OrderOptionCriteriaLength: ctrl.datasource.length
             }
+            loadOrderTypeSelector(filter);
         };
 
         function initializeController() {
 
             $scope.scopeModel = {};
-
+            $scope.scopeModel.isLoadingOrderType = false;
             $scope.scopeModel.onRouteRuleSettingsOrderTypeSelectorReady = function (api) {
                 routeRuleSettingsOrderTypeSelectorAPI = api;
                 routeRuleSettingsOrderTypeSelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.showPercentage = function () {
-
-                if (ctrl.datasource.length > 1 && $scope.scopeModel.selectedRouteRuleSettingsOrderType != undefined
-                    && $scope.scopeModel.selectedRouteRuleSettingsOrderType == WhS_Routing_OrderTypeEnum.Percentage)
-                    return true;
-
+                if (routeRuleSettingsOrderTypeSelectorAPI != undefined) {
+                    var selectedId = routeRuleSettingsOrderTypeSelectorAPI.getSelectedIds();
+                    var orderTypeObj = UtilsService.getEnum(WhS_Routing_OrderTypeEnum, 'value', selectedId);
+                    if (orderTypeObj) {
+                        return orderTypeObj.showPercentageColumn;
+                    }
+                }
                 return false;
+            };
+
+            $scope.scopeModel.onOrderTypeSelectionChange = function () {
+                var selectedId = routeRuleSettingsOrderTypeSelectorAPI.getSelectedIds();
+                var orderTypeObj = UtilsService.getEnum(WhS_Routing_OrderTypeEnum, 'value', selectedId);
+                if (orderTypeObj) {
+                    context.showPercentageSettings(orderTypeObj.showPercentageSettings);
+                }
             };
 
             defineAPI();
@@ -130,6 +134,9 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
             var api = {};
 
             api.load = function (payload) {
+                if (payload != undefined)
+                    context = payload.context;
+
                 return loadOrderOptionSection(payload);
             };
 
@@ -148,6 +155,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
 
                 var optionOrderSettings;
                 var orderType;
+                var filter;
 
                 if (payload != undefined) {
                     optionOrderSettings = payload.optionOrderSettings;
@@ -155,11 +163,16 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                 }
 
                 //loading RouteRuleSettingsOrderType Selector 
+                if (optionOrderSettings != undefined)
+                    filter = {
+                        OrderOptionCriteriaLength: optionOrderSettings.length
+                    }
                 var loadRouteRuleSettingsOrderTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 routeRuleSettingsOrderTypeSelectorReadyPromiseDeferred.promise.then(function () {
 
                     var payload = {
-                        selectedIds: orderType != undefined ? orderType : WhS_Routing_OrderTypeEnum.Percentage.value
+                        selectedIds: orderType,
+                        filter: filter
                     };
 
                     VRUIUtilsService.callDirectiveLoad(routeRuleSettingsOrderTypeSelectorAPI, payload, loadRouteRuleSettingsOrderTypeSelectorPromiseDeferred);
@@ -194,22 +207,6 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                         }
                     }
 
-                    if (ctrl.datasource.length > 0) {
-                        for (var x = 0; x < ctrl.datasource.length; x++) {
-                            var itemFound = false;
-                            for (var j = 0; j < ctrl.optionOrderSettingsGroupTemplates.length; j++) {
-                                if (ctrl.datasource[x].configId == ctrl.optionOrderSettingsGroupTemplates[j].ExtensionConfigurationId) {
-                                    existingItems.push(ctrl.optionOrderSettingsGroupTemplates[j]);
-                                    ctrl.optionOrderSettingsGroupTemplates.splice(j, 1);
-                                    itemFound = true;
-                                    break;
-                                }
-                            }
-                            if (itemFound) {
-                                continue;
-                            }
-                        }
-                    }
 
                     if (requiredItems.length > 0 && ctrl.optionOrderSettingsGroupTemplates.length > 0) {
                         for (var y = 0; y < requiredItems.length; y++) {
@@ -263,7 +260,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
 
                     var orderOption = dataItem.directiveAPI.getData();
                     orderOption.ConfigId = dataItem.configId;
-                    orderOption.PercentageValue = ctrl.datasource.length > 1 ? dataItem.percentageValue : undefined;
+                    orderOption.PercentageValue = ctrl.datasource.length > 1 && $scope.scopeModel.showPercentage() ? dataItem.percentageValue : undefined;
                     orderOptions.push(orderOption);
                 });
 
@@ -320,21 +317,21 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
 
             dataItem.onDirectiveReady = function (api) {
                 dataItem.directiveAPI = api;
-                var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
             };
 
-            for (var x = 0; x < ctrl.optionOrderSettingsGroupTemplates.length; x++) {
-                if (ctrl.optionOrderSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
-                    existingItems.push(ctrl.optionOrderSettingsGroupTemplates[x]);
-                    ctrl.optionOrderSettingsGroupTemplates.splice(x, 1);
-                    break;
-                }
-            }
 
             ctrl.datasource.push(dataItem);
         }
 
+        function loadOrderTypeSelector(filter) {
+            var payload = {
+                filter: filter
+            };
+            var setLoader = function (value) { $scope.scopeModel.isLoadingOrderType = value; };
+            routeRuleSettingsOrderTypeSelectorAPI.load(payload);
+        }
         this.initializeController = initializeController;
     }
 

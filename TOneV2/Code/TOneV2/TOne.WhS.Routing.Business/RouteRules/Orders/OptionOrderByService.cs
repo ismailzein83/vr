@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         public override Guid ConfigId { get { return new Guid("E9519598-354C-41D0-BB89-5371F26D0A5D"); } }
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
-            context.OrderDitection = OrderDirection.Descending;
+            context.OrderDirection = OrderDirection.Descending;
             foreach(IRouteOptionOrderTarget option in context.Options)
             {
                 option.OptionWeight = option.SupplierServiceWeight;

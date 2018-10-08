@@ -22,7 +22,7 @@ function (UtilsService, WhS_Routing_RateOptionTypeEnum, WhS_Routing_RateOptionEn
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/FilterByRateDirective.html';

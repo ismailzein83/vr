@@ -21,7 +21,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Filter/Templates/RouteRuleFilterDirective.html';
@@ -47,7 +47,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
 
                 dataItem.onDirectiveReady = function (api) {
                     dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
                 };
 

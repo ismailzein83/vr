@@ -14,7 +14,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
 
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {
-            context.OrderDitection = OrderDirection.Descending;
+            context.OrderDirection = OrderDirection.Descending;
 
             QualityConfigurationManager manager = new QualityConfigurationManager();
             List<IRouteOptionOrderTarget> suppliersNotFound = new List<IRouteOptionOrderTarget>();

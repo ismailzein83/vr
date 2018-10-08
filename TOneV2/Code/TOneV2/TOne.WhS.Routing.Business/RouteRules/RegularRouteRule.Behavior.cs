@@ -82,13 +82,48 @@ namespace TOne.WhS.Routing.Business
             FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option);
         }
 
-        public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
+        public override void ApplyOptionsPercentage(IRouteRuleApplyOptionsPercentageContext context)
         {
-            if (this.OptionPercentageSettings != null && options != null)
+            if (context.Options != null)
             {
-                var activeOptions = options.FindAllRecords(itm => !itm.IsBlocked);
-                if (activeOptions != null)
-                    this.ApplyOptionsPercentage<RouteOption>(activeOptions);
+                if (OrderType == Business.OrderType.OptionDistribution)
+                {
+                    if (context.FinalRouteOptionRuleTargets != null)
+                    {
+                        var optionsDictionary = context.Options.ToDictionary(x => x.SupplierId, x => x);
+                        List<RouteOptionRuleTarget> unblockedOptionsList = new List<RouteOptionRuleTarget>();
+                        List<RouteOptionRuleTarget> blockedOptionsList = new List<RouteOptionRuleTarget>();
+
+                        foreach (var finalRouteOptionRuleTarget in context.FinalRouteOptionRuleTargets)
+                        {
+                            if (finalRouteOptionRuleTarget.BlockOption)
+                                blockedOptionsList.Add(finalRouteOptionRuleTarget);
+                            else
+                                unblockedOptionsList.Add(finalRouteOptionRuleTarget);
+                        }
+                        var orderedUnblockedOptions = OrderOptionsByOptionDistribution<RouteOptionRuleTarget>(unblockedOptionsList, context.RoutingDatabase);
+                        if (orderedUnblockedOptions != null && orderedUnblockedOptions.Any())
+                        {
+                            orderedUnblockedOptions = orderedUnblockedOptions.ToList();
+                            foreach (var unblockedOption in orderedUnblockedOptions)
+                                optionsDictionary[unblockedOption.SupplierId].Percentage = unblockedOption.Percentage;
+                        }
+
+                        foreach (var blockedOption in blockedOptionsList)
+                            optionsDictionary[blockedOption.SupplierId].Percentage = null;
+
+                        context.Options = context.Options.OrderByDescending(itm => itm.Percentage).ThenBy(itm => itm.SupplierId).ToList();
+                    }
+                }
+                else
+                {
+                    if (this.OptionPercentageSettings != null)
+                    {
+                        var activeOptions = context.Options.FindAllRecords(itm => !itm.IsBlocked);
+                        if (activeOptions != null)
+                            this.ApplyOptionsPercentage<RouteOption>(activeOptions);
+                    }
+                }
             }
         }
 
@@ -149,20 +184,45 @@ namespace TOne.WhS.Routing.Business
 
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
-            options = ApplyOptionsOrder(options, context.RoutingDatabase);
-
-            if (this.OptionPercentageSettings != null && options != null)
+            if (options != null)
             {
-                var blockedOptions = options.FindAllRecords(itm => itm.SupplierStatus == SupplierStatus.Block);
-                if (blockedOptions != null)
+                List<RPRouteOption> unblockedOptions = new List<RPRouteOption>();
+                List<RPRouteOption> blockedOptions = new List<RPRouteOption>();
+
+                foreach (RPRouteOption rpRouteOption in options)
                 {
-                    foreach (var blockedOption in blockedOptions)
-                        blockedOption.Percentage = null;
+                    if (rpRouteOption.SupplierStatus != SupplierStatus.Block)
+                    {
+                        unblockedOptions.Add(rpRouteOption);
+                    }
+                    else
+                    {
+                        blockedOptions.Add(rpRouteOption);
+                        rpRouteOption.Percentage = null;
+                    }
                 }
 
-                var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
-                if (unblockedOptions != null)
-                    ApplyOptionsPercentage(unblockedOptions);
+                if (OrderType == Business.OrderType.OptionDistribution)
+                {
+                    List<RPRouteOption> result = ApplyOptionsOrder(unblockedOptions, context.RoutingDatabase);
+
+                    if (blockedOptions.Count > 0)
+                    {
+                        if (result == null)
+                            result = new List<RPRouteOption>();
+
+                        foreach (RPRouteOption rpRouteOption in blockedOptions)
+                            result.Add(rpRouteOption);
+                    }
+                    options = result;
+                }
+                else
+                {
+                    options = ApplyOptionsOrder(options, context.RoutingDatabase);
+
+                    if (this.OptionPercentageSettings != null && unblockedOptions.Count > 0)
+                        ApplyOptionsPercentage(unblockedOptions);
+                }
             }
         }
 
@@ -235,31 +295,34 @@ namespace TOne.WhS.Routing.Business
             return option;
         }
 
-        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
+        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget, IRouteOptionPercentageTarget
         {
             if (this.OptionOrderSettings != null && OptionOrderSettings.Count > 0)
             {
-                if (OptionOrderSettings.Count == 1)
+                switch (OrderType)
                 {
-                    RouteOptionOrderSettings optionOrderSettings = OptionOrderSettings[0];
-                    var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
-                    switch (optionOrderContext.OrderDitection)
-                    {
-                        case OrderDirection.Ascending: options = optionOrderContext.Options.OrderBy(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
-                        case OrderDirection.Descending: options = optionOrderContext.Options.OrderByDescending(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
-                    }
-                }
-                else
-                {
-                    switch (OrderType)
-                    {
-                        case Business.OrderType.Sequential: options = OrderOptionsBySequential<T>(options, routingDatabase); break;
-                        case Business.OrderType.Percentage: options = OrderOptionsByPercentage<T>(options, routingDatabase); break;
-                    }
+                    case Business.OrderType.Order: options = OrderOptionsByOrder<T>(options, routingDatabase); break;
+                    case Business.OrderType.Sequential: options = OrderOptionsBySequential<T>(options, routingDatabase); break;
+                    case Business.OrderType.Percentage: options = OrderOptionsByPercentage<T>(options, routingDatabase); break;
+                    case Business.OrderType.OptionDistribution: options = OrderOptionsByOptionDistribution<T>(options, routingDatabase); break;
                 }
             }
-            return options != null ? options.ToList() : null;
+            if (options != null && options.Any())
+                return options.ToList();
+            else return null;
         }
+        private IEnumerable<T> OrderOptionsByOrder<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
+        {
+            RouteOptionOrderSettings optionOrderSettings = OptionOrderSettings[0];
+            var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
+            switch (optionOrderContext.OrderDirection)
+            {
+                case OrderDirection.Ascending: options = optionOrderContext.Options.OrderBy(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
+                case OrderDirection.Descending: options = optionOrderContext.Options.OrderByDescending(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
+            }
+            return options;
+        }
+
 
         private IEnumerable<T> OrderOptionsBySequential<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
         {
@@ -271,11 +334,11 @@ namespace TOne.WhS.Routing.Business
             {
                 var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
 
-                switch (optionOrderContext.OrderDitection)
+                switch (optionOrderContext.OrderDirection)
                 {
                     case OrderDirection.Ascending: coefficient = 1; break;
                     case OrderDirection.Descending: coefficient = -1; break;
-                    default: throw new NotSupportedException("optionOrderContext.OrderDitection");
+                    default: throw new NotSupportedException("optionOrderContext.OrderDirection");
                 }
 
                 foreach (IRouteOptionOrderTarget option in optionOrderContext.Options)
@@ -334,7 +397,7 @@ namespace TOne.WhS.Routing.Business
                         result = new WeightResult();
                         orderValues.Add(option.SupplierId, result);
                     }
-                    switch (optionOrderContext.OrderDitection)
+                    switch (optionOrderContext.OrderDirection)
                     {
                         case OrderDirection.Ascending: result.Result += weightNormalized; break;
                         case OrderDirection.Descending: result.Result -= weightNormalized; break;
@@ -352,6 +415,121 @@ namespace TOne.WhS.Routing.Business
                 options = list;
             }
             return options;
+        }
+
+        private IEnumerable<T> OrderOptionsByOptionDistribution<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget, IRouteOptionPercentageTarget
+        {
+            if (options == null || !options.Any())
+                return null;
+
+            Dictionary<int, WeightResult> orderValues = new Dictionary<int, WeightResult>();
+
+            foreach (RouteOptionOrderSettings optionOrderSettings in OptionOrderSettings)
+            {
+                var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
+
+                Dictionary<int, Decimal> normalizedOptionWeightBySupplier = new Dictionary<int, Decimal>();
+                decimal bestWeight;
+
+                switch (optionOrderContext.OrderDirection)
+                {
+                    case OrderDirection.Ascending: bestWeight = optionOrderContext.Options.Min(itm => itm.OptionWeight); break;
+                    case OrderDirection.Descending: bestWeight = optionOrderContext.Options.Max(itm => itm.OptionWeight); break;
+                    default: throw new NotSupportedException("optionOrderContext.OrderDirection");
+                }
+
+                decimal sum = 0;
+
+                foreach (IRouteOptionOrderTarget option in optionOrderContext.Options)
+                {
+                    decimal newWeight;
+                    switch (optionOrderContext.OrderDirection)
+                    {
+                        case OrderDirection.Ascending:
+                            if (option.OptionWeight != 0)
+                                newWeight = bestWeight / option.OptionWeight;
+                            else
+                                newWeight = 1;
+                            break;
+
+                        case OrderDirection.Descending:
+                            if (bestWeight != 0)
+                                newWeight = option.OptionWeight / bestWeight;
+                            else //all values are = 0
+                                newWeight = 1;
+                            break;
+                        default: throw new NotSupportedException("optionOrderContext.OrderDirection");
+                    }
+                    sum += newWeight;
+                    normalizedOptionWeightBySupplier.Add(option.SupplierId, newWeight);
+                }
+
+                foreach (var normalizedOptionWeightKvp in normalizedOptionWeightBySupplier)
+                {
+                    int supplierId = normalizedOptionWeightKvp.Key;
+                    Decimal normalizedOptionWeight = normalizedOptionWeightKvp.Value;
+
+                    WeightResult result;
+                    if (!orderValues.TryGetValue(supplierId, out result))
+                    {
+                        result = new WeightResult();
+                        orderValues.Add(supplierId, result);
+                    }
+                    result.Result += (normalizedOptionWeight * optionOrderSettings.PercentageValue.Value) / sum;
+                }
+            }
+
+            if (orderValues.Count > 0)
+            {
+                List<T> list = new List<T>();
+                var resultOrdered = orderValues.OrderByDescending(itm => itm.Value.Result).ThenBy(itm => itm.Key);
+                int totalAssignedPercentages = 0;
+                foreach (KeyValuePair<int, WeightResult> item in resultOrdered)
+                {
+                    var optionToAdd = options.First(itm => itm.SupplierId == item.Key);
+                    int percentage = Convert.ToInt32(item.Value.Result);
+                    optionToAdd.Percentage = percentage;
+                    totalAssignedPercentages += percentage;
+
+                    list.Add(optionToAdd);
+                }
+                ReevaluatePercentageDistribution(list, totalAssignedPercentages);
+
+                options = list;
+            }
+            return options;
+        }
+
+        private void ReevaluatePercentageDistribution<T>(List<T> options, int totalAssignedPercentages) where T : IRouteOptionOrderTarget, IRouteOptionPercentageTarget
+        {
+            int percentageDiff = 100 - totalAssignedPercentages;
+            if (percentageDiff > 0)
+            {
+                options.First().Percentage += percentageDiff;
+            }
+            else if (percentageDiff < 0)
+            {
+                int remainingPercentage = Math.Abs(percentageDiff);
+                for (int i = options.Count - 1; i >= 0; i--)
+                {
+                    var currentItem = options[i];
+                    if (currentItem.Percentage > 0)
+                    {
+                        if (currentItem.Percentage >= remainingPercentage)
+                        {
+                            currentItem.Percentage -= remainingPercentage;
+                            remainingPercentage = 0;
+                        }
+                        else
+                        {
+                            remainingPercentage -= currentItem.Percentage.Value;
+                            currentItem.Percentage = 0;
+                        }
+                    }
+                    if (remainingPercentage == 0)
+                        break;
+                }
+            }
         }
 
         private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RoutingDatabase routingDatabase, RouteOptionOrderSettings optionOrderSettings)

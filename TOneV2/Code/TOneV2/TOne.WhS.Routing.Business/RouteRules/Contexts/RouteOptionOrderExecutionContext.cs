@@ -7,7 +7,7 @@ namespace TOne.WhS.Routing.Business
     {
         public IEnumerable<IRouteOptionOrderTarget> Options { get; set; }
 
-        public OrderDirection OrderDitection { get; set; }
+        public OrderDirection OrderDirection { get; set; }
 
         public RoutingDatabase RoutingDatabase { get; set; }
     }

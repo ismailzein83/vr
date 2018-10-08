@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.Entities
         {
         }
 
-        public virtual void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
+        public virtual void ApplyOptionsPercentage(IRouteRuleApplyOptionsPercentageContext context)
         {
 
         }
