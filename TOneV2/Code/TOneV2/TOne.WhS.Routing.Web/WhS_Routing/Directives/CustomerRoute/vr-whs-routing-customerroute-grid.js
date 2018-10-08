@@ -296,14 +296,14 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     return directiveAPI.load(payload);
                 };
                 return [drillDownDefinition];
-            };
+            }
 
             function buildContext() {
                 return {
                     isDatabaseTypeCurrent: isDatabaseTypeCurrent,
                     refreshGrid: function () { return gridAPI.refreshGrid(); }
                 };
-            };
+            }
         }
 
         return directiveDefinitionObject;
