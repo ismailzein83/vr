@@ -17,10 +17,10 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SwitchReleaseCauseManager
     {
-
         SwitchManager switchManager = new SwitchManager();
 
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<SwitchReleaseCauseDetail> GetFilteredSwitchReleaseCauses(Vanrise.Entities.DataRetrievalInput<SwitchReleaseCauseQuery> input)
         {
             var allSwitchReleaseCauses = this.GetCachedSwitchReleaseCauses();
@@ -34,6 +34,7 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SwitchReleaseCauseLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitchReleaseCauses.ToBigResult(input, filterExpression, SwitchReleaseCauseDetailMapper));
         }
+
         public Vanrise.Entities.InsertOperationOutput<SwitchReleaseCauseDetail> AddSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
             int switchReleaseCauseId = -1;
@@ -57,6 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
+
         public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId, bool isViewedFromUI)
         {
             var allSwitchReleaseCauses = this.GetCachedSwitchReleaseCauses();
@@ -65,10 +67,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 VRActionLogger.Current.LogObjectViewed(SwitchReleaseCauseLoggableEntity.Instance, switchReleaseCause);
             return switchReleaseCause;
         }
+
         public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId)
         {
             return GetSwitchReleaseCause(switchReleaseCauseId, false);
         }
+
         public Vanrise.Entities.UpdateOperationOutput<SwitchReleaseCauseDetail> UpdateSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
             UpdateOperationOutput<SwitchReleaseCauseDetail> updateOperationOutput = new UpdateOperationOutput<SwitchReleaseCauseDetail>();
@@ -91,6 +95,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+
         public string GetSwitchReleaseCauseName(int switchReleaseCauseId)
         {
             var switchReleaseCause = GetSwitchReleaseCause(switchReleaseCauseId);
@@ -98,6 +103,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return switchReleaseCause.ReleaseCode;
             return null;
         }
+
         public UploadSwitchReleaseCauseLog UploadSwitchReleaseCauses(int fileId, int switchId)
         {
             UploadSwitchReleaseCauseLog uploadSwitchReleaseCauseLog = new UploadSwitchReleaseCauseLog();
@@ -231,7 +237,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return file.Content;
         }
 
-
         public List<SwitchReleaseCauseDetail> GetReleaseCauseDetailsByCode(string code, List<int> switchIds)
         {
             List<SwitchReleaseCauseDetail> releaseCauses = new List<SwitchReleaseCauseDetail>();
@@ -240,7 +245,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
                 if (releaseCausesBySwitch != null)
                 {
-                    if (switchIds!=null && switchIds.Count > 0)
+                    if (switchIds != null && switchIds.Count > 0)
                     {
                         foreach (int sid in switchIds)
                         {
@@ -291,6 +296,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Classes
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
@@ -301,14 +307,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 return dataManager.AreSwitchReleaseCausesUpdated(ref _updateHandle);
             }
         }
+
         private class SwitchReleaseCauseLoggableEntity : VRLoggableEntityBase
         {
             public static SwitchReleaseCauseLoggableEntity Instance = new SwitchReleaseCauseLoggableEntity();
-
-            private SwitchReleaseCauseLoggableEntity()
-            {
-
-            }
 
             SwitchReleaseCauseManager switchReleaseCauseManager = new SwitchReleaseCauseManager();
 
@@ -343,10 +345,17 @@ namespace TOne.WhS.BusinessEntity.Business
                 SwitchReleaseCause switchReleaseCause = context.Object.CastWithValidate<SwitchReleaseCause>("context.Object");
                 return switchReleaseCauseManager.GetSwitchReleaseCauseName(switchReleaseCause.SwitchReleaseCauseId);
             }
+
+            private SwitchReleaseCauseLoggableEntity()
+            {
+
+            }
         }
+
         #endregion
 
         #region Mappers
+
         private SwitchReleaseCauseDetail SwitchReleaseCauseDetailMapper(SwitchReleaseCause switchReleaseCause)
         {
             var switchReleaseCauseDetail = new SwitchReleaseCauseDetail()
@@ -365,10 +374,12 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return switchReleaseCauseDetail;
         }
+
         #endregion
 
         #region Private Methods
-        Dictionary<int, SwitchReleaseCause> GetCachedSwitchReleaseCauses()
+
+        private Dictionary<int, SwitchReleaseCause> GetCachedSwitchReleaseCauses()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchReleaseCauses",
                () =>
@@ -379,7 +390,7 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        Dictionary<string, Dictionary<int, SwitchReleaseCause>> GetReleaseCausesByCodeThenSwitch()
+        private Dictionary<string, Dictionary<int, SwitchReleaseCause>> GetReleaseCausesByCodeThenSwitch()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetReleaseCausesByCodeThenSwitch",
                () =>
@@ -400,7 +411,5 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
-
-
     }
 }
