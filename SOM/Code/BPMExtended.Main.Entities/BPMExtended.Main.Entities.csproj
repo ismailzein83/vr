@@ -61,6 +61,7 @@
     <Compile Include="CustomerRequestType.cs" />
     <Compile Include="CustomerRequestTypeInfo.cs" />
     <Compile Include="DeviceItemDetail.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="InventoryItemDetail.cs" />
     <Compile Include="ISP.cs" />
     <Compile Include="LeasedLineContractDetail.cs" />

@@ -60,15 +60,15 @@ namespace BPMExtended.Main.Business
 
 
             //get services
-            var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
-            esqResult3.AddColumn("StServices");
-            var entity3 = esqResult3.GetEntity(connection, requestId);
-            object servicesJson = entity3.GetColumnValue("StServices");
+           // var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
+            //esqResult3.AddColumn("StServices");
+           // var entity3 = esqResult3.GetEntity(connection, requestId);
+           // object servicesJson = entity3.GetColumnValue("StServices");
 
-            List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
+            //List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
 
 
-            if (customerType.Equals("أجنبي") && sponsorNumber !=null && !sponsorNumber.ToString().Equals(""))
+            if (customerType.Equals("أجنبي") && sponsorNumber ==null && sponsorNumber.ToString().Equals(""))
             {
                 depositAmount = 15000;
                 isForeigner = true;

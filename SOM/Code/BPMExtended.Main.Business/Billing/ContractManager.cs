@@ -57,6 +57,22 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetTelephonyContractsInfo(customerId);
         }
 
+        public List<TelephonyContractInfo> GetMoveADSLTelephonyContractsInfo(string customerId , string phoneNumber)
+        {
+
+            Func<TelephonyContractDetail, bool> filterExpression = (item) =>
+            {
+
+                if (item.PhoneNumber == phoneNumber)
+                    return false;
+
+                return true;
+            };
+
+
+            return RatePlanMockDataGenerator.GetTelephonyContracts(customerId).MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
+        }
+
         public List<TelephonyContractInfo> GetNewPabxTelephonyContractsInfo(string customerId, string pilotContractId)
         {
             InventoryManager manager = new InventoryManager();
@@ -92,6 +108,20 @@ namespace BPMExtended.Main.Business
         }
 
         public bool ActivateADSLISPService(string contractId, string customerId, string ispId, string port)
+        {
+            //TODO: Activate service
+            return true;
+        }
+
+
+        public bool ActivateADSLLineMoving(string telephonyContractId, string customerId, string port)
+        {
+            //TODO: Activate service
+            return true;
+        }
+
+
+        public bool ActivateADSLLineTermination(string contractId , string reason , string phoneNumber)
         {
             //TODO: Activate service
             return true;

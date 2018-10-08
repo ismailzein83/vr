@@ -12,7 +12,7 @@ namespace BPMExtended.Main.Entities
 
     public class ADSLContractDetail : ContractDetail
     {
-
+        public string TelephonyContractId { get; set; }
     }
 
     public class TelephonyContractInfo : ContractInfo

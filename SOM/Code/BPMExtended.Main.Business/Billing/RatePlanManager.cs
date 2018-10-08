@@ -1,5 +1,6 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,81 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetCustomerCategories(customerType);
         }
 
-        public List<RatePlanInfo> GetRatePlanInfo(BPMCustomerType customerType, string customerCategoryId, OperationType operationType, string subType)
+        public List<RatePlanInfo> GetRatePlanInfo(BPMCustomerType customerType, string customerCategoryId, OperationType operationType, string subType , string filter = null)
         {
-            var lobAttr = Utilities.GetEnumAttribute<OperationType, SOM.Main.Entities.LineOfBusinessAttribute>(operationType);
-            var ratePlans = RatePlanMockDataGenerator.GetRatePlans(lobAttr.LOB, customerCategoryId, subType);
+            List<string> ratePlanIds = null;
 
-            return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
+            var lobAttr = Utilities.GetEnumAttribute<OperationType, SOM.Main.Entities.LineOfBusinessAttribute>(operationType);
+            List<SOM.Main.Entities.RatePlan> ratePlans = RatePlanMockDataGenerator.GetRatePlans(lobAttr.LOB, customerCategoryId, subType);
+
+
+            Func<SOM.Main.Entities.RatePlan, bool> filterExpression = (item) =>
+            {
+                if (ratePlanIds.Find(x => x == item.RatePlanId) != null)
+                    return false;
+
+
+                return true;
+            };
+
+            if (filter == null)
+            {
+                return ratePlans.MapRecords(RatePlanInfoMapper).ToList();
+
+            }
+            else
+            {
+                //deserialize filter
+                ratePlanIds = JsonConvert.DeserializeObject<Filter>(filter).ExcludedRatePlanIds;
+
+                return ratePlans.MapRecords(RatePlanInfoMapper, filterExpression).ToList();
+            }
+
+        }
+
+        public List<ServiceDetail> ValidateServices(string selectedRatePlanId , string oldRatePlanId)
+        {
+            var selectedRatePlan = RatePlanMockDataGenerator.GetRatePlan(selectedRatePlanId);
+            var services = new List<ServiceDetail>();
+
+            foreach (var pckg in selectedRatePlan.OptionalPackages)
+            {
+                services.AddRange(pckg.Services.MapRecords(ServiceMapper).ToList());
+            }
+
+
+            var ratePlan2 = RatePlanMockDataGenerator.GetRatePlan(oldRatePlanId);
+            var oldServices = new List<ServiceDetail>();
+
+            foreach (var pckg in ratePlan2.OptionalPackages)
+            {
+                oldServices.AddRange(pckg.Services.MapRecords(ServiceMapper).ToList());
+            }
+
+            var listOfServices = oldServices.Except(services).ToList();
+
+            return listOfServices;
+        }
+
+        public bool UpdateRatePlan(string contractId, string ratePlanId, string servicesIds)
+        {
+            if (servicesIds == null)
+            {
+                //update ratePlan
+            }
+            else
+            {
+                //change services
+
+                //update ratePlan
+            }
+            
+            return true;
+        }
+
+        public void ChangeServices(string contractId, string ratePlanId, string servicesIds)
+        {
+            
         }
 
         public List<ServiceDetail> GetCoreServices(string ratePlanId)

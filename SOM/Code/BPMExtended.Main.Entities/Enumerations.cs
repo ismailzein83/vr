@@ -35,5 +35,11 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         NewPabxOperation = 7,
 
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLLineMoving = 8,
+
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLLineTermination = 9,
+
     }
 }
