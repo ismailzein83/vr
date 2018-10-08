@@ -806,6 +806,12 @@
     <Build Include="common\Stored Procedures\sp_VRComment_GetFiltered.sql" />
     <Build Include="common\Stored Procedures\sp_VRComment_GetById.sql" />
     <Build Include="common\User Defined Types\VRCommentType.sql" />
+    <Build Include="bp\Tables\ProcessSynchronisation.sql" />
+    <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_Update.sql" />
+    <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_SetEnable.sql" />
+    <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_SetDisable.sql" />
+    <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_Insert.sql" />
+    <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

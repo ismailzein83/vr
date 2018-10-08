@@ -56,7 +56,8 @@ as (select * from (values
 --('B23B61C1-D5AE-44A9-BD6E-F3009166395B','My Tasks','Tasks','#/view/BusinessProcess/Views/BPTask/BPTaskMonitor'															,'B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/BPTask/GetMyUpdatedTasks',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
 ('3C53D6DC-BBE7-49CA-A222-8211AF25DD31','Business Rules','Business Rules','#/view/BusinessProcess/Views/BPBusinessRule/BPBusinessRuleSetManagement'							,'1C7569FA-43C9-4853-AE4C-1152746A34FD','BusinessProcess_BP/BPBusinessRuleSet/GetFilteredBPBusinessRuleSets',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',110),
 ('BEEEEB03-8CB2-44F4-9769-A95B46D4F40D','BP Technical Definitions','BP Technical Definitions','#/view/BusinessProcess/Views/BPDefinition/BPTechnicalDefinitionManagement'	,'FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','BusinessProcess_BP/BPDefinition/GetFilteredBPDefinitionsForTechnical',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1),
-('20CFA17A-1C79-4ABE-BF85-F40C42B03FAC','Workflows','Workflows','#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement','FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9'		,'BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2)
+('20CFA17A-1C79-4ABE-BF85-F40C42B03FAC','Workflows','Workflows','#/view/BusinessProcess/Views/VRWorkflow/VRWorkflowManagement','FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9'		,'BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
+('E32BCE53-6433-4AF1-B4C2-3F1CB2A21F1F','Processes Synchronisation','Processes Synchronisation','#/view/BusinessProcess/Views/ProcessSynchronisation/ProcessSynchronisationManagement','B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','BusinessProcess_BP/ProcessSynchronisation/GetFilteredProcessesSynchronisations',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -166,7 +167,11 @@ as (select * from (values
 ('BusinessProcess_BP/BPDefinition/AddBPDefinition','VR_SystemConfiguration: Add'),
 ('BusinessProcess_BP/VRWorkflow/UpdateVRWorkflow','VR_SystemConfiguration:Edit'),
 ('BusinessProcess_BP/VRWorkflow/InsertVRWorkflow','VR_SystemConfiguration:Add'),
-('BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows','VR_SystemConfiguration:View')
+('BusinessProcess_BP/VRWorkflow/GetFilteredVRWorkflows','VR_SystemConfiguration:View'),
+('BusinessProcess_BP/ProcessSynchronisation/GetFilteredProcessesSynchronisations','VR_System_Administration: View'),
+('BusinessProcess_BP/ProcessSynchronisation/AddProcessSynchronisation','VR_System_Administration: Manage'),
+('BusinessProcess_BP/ProcessSynchronisation/UpdateProcessSynchronisation','VR_System_Administration: Manage'),
+('BusinessProcess_BP/ProcessSynchronisation/GetProcessSynchronisation',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -188,7 +193,8 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('7A63FC63-F681-4189-9712-30E0D42A3A97','VR_BusinessProcess_BPDefinition','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_BusinessProcess_BPDefinition_ViewHistoryItem"}'),
-('00C0D416-3067-4E05-B7A5-DB710703F30D','BusinessProcess_VR_Workflow','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"BusinessProcess_BP_VRWorkflow_ViewHistoryItem"}')
+('00C0D416-3067-4E05-B7A5-DB710703F30D','BusinessProcess_VR_Workflow','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"BusinessProcess_BP_VRWorkflow_ViewHistoryItem"}'),
+('DEE7D636-CCB1-4FAF-A999-A92D81956E51','BusinessProcess_ProcessSynchronisatio','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"BusinessProcess_BP_ProcessSynchronisation_ViewHistoryItem"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[UniqueName],[Settings]))
 merge	[logging].[LoggableEntity] as t
