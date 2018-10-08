@@ -1,7 +1,7 @@
 ﻿<vr-section title="Included Code">
     <vr-row removeline ng-show="!ctrl.disableadding">
         <vr-columns colnum="6">
-            <vr-textbox value="addedCode" type="number" label="Add a code" minvalue="0" decimalprecision="0" vr-disabled="ctrl.disableadding"></vr-textbox>
+            <vr-textbox value="addedCode" type="number" label="Add a code" minvalue="0" maxlength="20" decimalprecision="0" vr-disabled="ctrl.disableadding"></vr-textbox>
         </vr-columns>
         <vr-columns colnum="2" withemptyline>
             <vr-button type="Add" data-onclick="addCode" standalone vr-disabled="ctrl.disableadding"></vr-button>
