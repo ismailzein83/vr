@@ -15,7 +15,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
 
         public override string GetTitle()
         {
-            throw new NotImplementedException();
+            return "Database Job";
         }
 
         public override void PrepareArgumentForExecutionFromTask(Entities.IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext context)
