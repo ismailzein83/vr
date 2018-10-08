@@ -87,7 +87,7 @@ namespace NP.IVSwitch.Business
                     EndPoint endPoint = endPointManager.GetEndPoint(item.EndPointId); ;
                     if (endPoint != null && endPoint.RouteTableBasedRule == true)
                     {
-                        insertOperationOutput.Message = " An endPoint has RouteTableBaseRule true, you cannot add the Route Table";
+                        insertOperationOutput.Message = "EndPoint with RouteTableBaseRule exist";
                         return insertOperationOutput;
                     }
 
@@ -144,7 +144,7 @@ namespace NP.IVSwitch.Business
                         EndPoint endPoint = endPointManager.GetEndPoint(item.EndPointId); ;
                         if (endPoint != null && endPoint.RouteTableBasedRule == true)
                         {
-                            updateOperationOutput.Message = " An endPoint has RouteTableBaseRule true, you cannot update the  Route Table";
+                            updateOperationOutput.Message = " EndPoint with RouteTableBaseRule exist";
                             return updateOperationOutput;
                         }
 

@@ -51,6 +51,12 @@ namespace NP.IVSwitch.Web.Controllers
 
             return _manager.GetRouteTableRoutesOptions(routeTableId, destination);
         }
+        [HttpPost]
+        [Route("CheckIfCodesExist")]
+        public bool CheckIfCodesExist(RouteTableRoutesToAdd routeTableRouteItems)
+        {
+            return _manager.CheckIfCodesExist(routeTableRouteItems);
+        }
 
     }
 }

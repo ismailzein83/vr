@@ -17,6 +17,7 @@ namespace NP.IVSwitch.Data
        bool Update(RouteTableRoute routeTableRoute, int routeTableId, bool IsBlockedAccount);
        bool DropRouteTableRoute(int routeTableId);
        bool DeleteRouteTableRoutes(int routeTableId, string destination);
+       bool CheckIfCodesExist(List<string> codes,int routeTableId);
        void CreateRouteTableRoute(int routeTableId);
 
 

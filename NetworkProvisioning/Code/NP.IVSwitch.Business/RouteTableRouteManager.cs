@@ -56,6 +56,13 @@ namespace NP.IVSwitch.Business
 
                     foreach (var code in codes)
                     {
+                        if(code.Length>20)
+                        {
+                            insertOperationOutput.Message = "The length of code must be less than 20";
+                            return insertOperationOutput;
+
+                        }
+
                         Int16 codePreference = preference;
                         Int16 codeMainPreference = preference;
                         var routeTableRoute = new RouteTableRoute
@@ -364,6 +371,14 @@ namespace NP.IVSwitch.Business
             return deleteOperationOutput;
 
         }
+         public bool CheckIfCodesExist(RouteTableRoutesToAdd routeTableRouteItems)
+        {
+            IRouteTableRouteDataManager routeTableRouteDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
+            Helper.SetSwitchConfig(routeTableRouteDataManager);
+            List<string> codes = routeTableRouteItems.CodeListResolver.Settings.GetCodeList(new CodeListResolverContext());
+
+            return routeTableRouteDataManager.CheckIfCodesExist(codes, routeTableRouteItems.RouteTableId);
+        }
         #endregion
 
 
@@ -485,41 +500,6 @@ namespace NP.IVSwitch.Business
 
         private class RouteTableRouteRequestHandler : BigDataRequestHandler<RouteTableRouteQuery, RouteTableRoute, RouteTableRouteDetail>
         {
-            //public override RouteTableRouteDetail EntityDetailMapper(RouteTableRoute routeTableRoute)
-            //{
-            //    RouteManager _manager = new RouteManager();
-            //        RouteTableRouteDetail routeTableRouteDetail = new RouteTableRouteDetail
-            //    {
-            //        Destination = routeTableRoute.Destination,
-            //        TechPrefix = routeTableRoute.TechPrefix
-            //    };
-
-            //    int blockedAccount;
-            //    int.TryParse(Helper.GetIvSwitchSync().BlockedAccountMapping, out blockedAccount);
-            //    if (routeTableRoute.RouteOptions!=null)
-            //    foreach (var routeOption in routeTableRoute.RouteOptions)
-            //    {
-            //        if (routeOption.RouteId == blockedAccount)
-            //            break;
-
-            //        if (routeTableRouteDetail.RouteOptionsDetails == null)
-            //            routeTableRouteDetail.RouteOptionsDetails = new List<RouteTableRouteOptionDetails>();
-            //        routeTableRouteDetail.RouteOptionsDetails.Add(new RouteTableRouteOptionDetails
-            //        {
-            //            SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
-            //            RouteName = _manager.GetRouteDescription(routeOption.RouteId),
-            //            Percentage = routeOption.Percentage,
-            //            Preference = routeOption.Preference,
-
-            //        });
-
-            //    }
-            //    if (routeTableRouteDetail.RouteOptionsDetails != null)
-            //        routeTableRouteDetail.RouteOptionsDetails = routeTableRouteDetail.RouteOptionsDetails.OrderByDescending(item => item.Preference).ToList();
-
-            //    return routeTableRouteDetail;
-            //}
-
             public override RouteTableRouteDetail EntityDetailMapper(RouteTableRoute routeTableRoute)
             {
                 RouteManager _manager = new RouteManager();
@@ -529,6 +509,7 @@ namespace NP.IVSwitch.Business
                     TechPrefix = routeTableRoute.TechPrefix,
                     RouteOptionsDetails = new List<RouteTableRouteOptionDetails>()
                 };
+                routeTableRoute.RouteOptions = routeTableRoute.RouteOptions.OrderByDescending(x => x.Preference).ToList();
                 bool firstBackup = true;
                 int blockedAccount;
                 int.TryParse(Helper.GetIvSwitchSync().BlockedAccountMapping, out blockedAccount);

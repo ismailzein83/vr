@@ -18,7 +18,7 @@
         }
 
         function AddRouteTableRoutes(RouteTableRTItem) {
-            
+
             return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'AddRouteTableRoutes'), RouteTableRTItem);
         }
         function HasAddRouteTableRoutesPermission() {
@@ -49,6 +49,9 @@
 
                 });
         }
+        function CheckIfCodesExist(RouteTableRTItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, 'CheckIfCodesExist'), RouteTableRTItem);
+        }
 
 
 
@@ -61,7 +64,8 @@
             HasUpdateRouteTableRoutePermission: HasUpdateRouteTableRoutePermission,
             DeleteRouteTableRoute: DeleteRouteTableRoute,
             HasDeleteRouteTableRoutePermission: HasDeleteRouteTableRoutePermission,
-            HasViewRouteTableRoutePermission: HasViewRouteTableRoutePermission
+            HasViewRouteTableRoutePermission: HasViewRouteTableRoutePermission,
+            CheckIfCodesExist: CheckIfCodesExist
 
 
 

@@ -65,8 +65,24 @@
             $scope.scopeModel.saveRouteTableRT = function () {
                 if (isEditMode)
                     return updateRouteTableRT();
-                else
+                else {
+                    var objToAdd = buildParentObjectFromScopeForAdd();
+                    NP_IVSwitch_RouteTableRouteAPIService.CheckIfCodesExist(objToAdd).then(function (response) {
+                    if (response)
+                    VRNotificationService.showConfirmation("An existing route on one or more codes will be overriden").then(function (result)
+                    {
+                        if(result)
                     return insertRouteTableRT();
+
+                    });
+                    else
+                     return insertRouteTableRT();
+
+
+                    });
+
+
+                }
 
             };
 
@@ -239,7 +255,7 @@
                 TechPrefix: $scope.scopeModel.bNumber
             };
             return objectScopeForAdd;
-        }
+    }
 
     }
     appControllers.controller('NP_IVSwitch_RouteTableRouteEditorController', routeTableRouteEditorController);

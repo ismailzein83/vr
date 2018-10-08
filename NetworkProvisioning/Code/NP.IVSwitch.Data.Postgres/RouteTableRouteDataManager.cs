@@ -111,16 +111,27 @@ namespace NP.IVSwitch.Data.Postgres
                             OWNER to {1};", table, IvSwitchSync.OwnerName);
             int tabl = ExecuteNonQueryText(cmdText, cmd => { });
         }
-        public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType,int routeTableId, int limit, string aNumber, string bNumber,List<int>routeIds)
+        public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType, int routeTableId, int limit, string aNumber, string bNumber, List<int> routeIds)
         {
             string table = string.Format("rt{0}", routeTableId);
             string cmdText = "";
-            if (routeTableViewType == RouteTableViewType.ANumber)
-            cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%') {4} and (tech_prefix is NULL or tech_prefix LIKE '%{3}%')) limit {1})
-            SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit, aNumber, bNumber,routeIds ==null?"": string.Format(" and route_id in({0})", string.Join<int>(",",routeIds)));            
-            else
-                 cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where ((destination is NULL or destination Like '%{2}%') {3}) limit {1})
-            SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit,bNumber,routeIds ==null?"": string.Format(" and route_id in({0})", string.Join<int>(",",routeIds)));
+            string search = "";
+            switch (routeTableViewType)
+            {
+                case RouteTableViewType.ANumber:
+                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1} and (tech_prefix is NULL or tech_prefix LIKE '%{2}%'))", aNumber, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)), bNumber);
+                    break;
+
+                case RouteTableViewType.Whitelist:
+
+                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1})",aNumber,bNumber);
+                    break;
+            }
+            cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where {2} limit {1})
+                     SELECT rt.destination,route_id,routing_mode,preference,huntstop,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,flag_1,tech_prefix from {0} rt Join codesTable ct on ct.destination = rt.destination order by rt.destination;", table, limit,search );
+
+
+
             List<RouteTableRoute> routeTablesRoutes = new List<RouteTableRoute>();
             RouteTableRoute routeTableRoute = new Entities.RouteTableRoute.RouteTableRoute();
             routeTableRoute.RouteOptions = new List<RouteTableRouteOption>();
@@ -159,10 +170,10 @@ namespace NP.IVSwitch.Data.Postgres
                           Percentage = GetReaderValue<decimal?>(reader, "flag_1"),
                           Huntstop=GetReaderValue<Int16>(reader,"huntstop")
                       });
-               }
+                }
 
             }, null);
-           return routeTablesRoutes;
+            return routeTablesRoutes;
         }
         public RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination)
         {
@@ -188,8 +199,9 @@ namespace NP.IVSwitch.Data.Postgres
                     Int16? huntstop = GetReaderValue<Int16?>(reader, "huntstop");
                     int routeId = GetReaderValue<int>(reader, "route_id");
                     if (!firstTechPrefixReaded)
-                    { routeTableRoutesEditor.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
-                    firstTechPrefixReaded = true;
+                    {
+                        routeTableRoutesEditor.TechPrefix = GetReaderValue<string>(reader, "tech_prefix");
+                        firstTechPrefixReaded = true;
                     }
                     if (!filledFirstItem)
                     {
@@ -379,7 +391,7 @@ namespace NP.IVSwitch.Data.Postgres
                             cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,state_id,description,tech_prefix)
                             VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@stateId,@description,@techPrefix);", table);
 
-                            rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) => 
+                            rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                             {
                                 cmd.Parameters.AddWithValue("@destination", routeTableRoute.Destination);
                                 cmd.Parameters.AddWithValue("@route_id", option.RouteId);
@@ -425,6 +437,18 @@ namespace NP.IVSwitch.Data.Postgres
 
 
 
+        }
+
+        public bool CheckIfCodesExist(List<string> codes, int routeTableId)
+        {
+            string table = string.Format("rt{0}", routeTableId);
+            string a = string.Format("('{0}')", string.Join<string>("','", codes));
+            string query = string.Format("SELECT count(*)  FROM {0} WHERE destination in {1}", table, string.Format("('{0}')", string.Join<string>("','", codes)));
+            object count = ExecuteScalarText(query, cmd =>
+            {
+            });
+            int result = Convert.ToInt32(count);
+            return result > 0;
         }
 
         #endregion
