@@ -130,6 +130,78 @@ namespace SOM.Main.Business
 
             return result;
         }
+        public List<PortItem> GetCabinetPrimaryPorts(string cabinetId)
+        {
+            List<PortItem> result = new List<PortItem>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<Port> data = connector.Get<List<Port>>("/TLDPrimaryPort/Get?id=" + cabinetId);
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new PortItem
+                    {
+                        Id = item.OBJECT_ID.ToString(),
+                        Name = item.PORT
+                    });
+                }
+            }
+
+            return result;
+        }
+        public List<PortItem> GetCabinetSecondaryPorts(string cabinetId)
+        {
+            List<PortItem> result = new List<PortItem>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<Port> data = connector.Get<List<Port>>("/TLDSecondaryPort/Get?id=" + cabinetId);
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new PortItem
+                    {
+                        Id = item.OBJECT_ID.ToString(),
+                        Name = item.PORT
+                    });
+                }
+            }
+
+            return result;
+        }
+        public List<DPPortItem> GetDPPorts(string dpId)
+        {
+            List<DPPortItem> result = new List<DPPortItem>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<DPPort> data = connector.Get<List<DPPort>>("/FreeDPPorts/Get?id=" + dpId);
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new DPPortItem
+                    {
+                        Id = item.DP_PORT_ID.ToString(),
+                        Name = item.DP_PORT_NAME
+                    });
+                }
+            }
+
+            return result;
+        }
         public List<PhoneNumberItem> GetAvailableNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
             List<PhoneNumberItem> phoneNumbers = new List<PhoneNumberItem>();
@@ -161,7 +233,7 @@ namespace SOM.Main.Business
             return data == null ? null : data.MapRecords(c => new DeviceItem
             {
                 Id = c.OBJECT_ID,
-                DeviceId = c.DEVICE_ID
+                DeviceId = c.PORT
             }).ToList();
         }
         public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
@@ -323,6 +395,23 @@ namespace SOM.Main.Business
             Random gen = new Random();
             int prob = gen.Next(100);
             return prob <= 50;
+        }
+        public string ReserveTelephonyNumber(string pathtype, string Pathname, string ObjectList, string connectors)
+        {
+            string result = "";
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+
+            string data = connector.Get<string>("/reservation/Get?pathtype=" + pathtype + "&Pathname=" + Pathname + "&ObjectList=" + ObjectList + "&connectors=" + connectors);
+
+            if (data != null)
+            {
+                result = data;
+            }
+            return result;
         }
     }
 

@@ -88,7 +88,11 @@ namespace SOM.Main.Business
         public string DP_PORT_NAME { get; set; }
     }
 
-
+    public class Port
+    {
+        public decimal OBJECT_ID { get; set; }
+        public string PORT { get; set; }
+    }
     public class AktavaraPhoneNumber
     {
         public string OBJECT_ID { get; set; }
@@ -98,7 +102,7 @@ namespace SOM.Main.Business
     public class AktavaraDevice
     {
         public string OBJECT_ID { get; set; }
-        public string DEVICE_ID { get; set; }
+        public string PORT { get; set; }
     }
 
     public class AktavaraPhoneStatusDetail

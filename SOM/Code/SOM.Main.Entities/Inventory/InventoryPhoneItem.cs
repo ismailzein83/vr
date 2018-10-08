@@ -66,6 +66,11 @@ namespace SOM.Main.Entities
         public string Id { get; set; }
         public string Name { get; set; }
     }
+    public class PortItem
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
 
     public class NewPhoneItemDetail
     {

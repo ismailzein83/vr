@@ -117,5 +117,33 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.IsManualSwitch(phoneNumber);
         }
+        [HttpGet]
+        [Route("GetCabinetPrimaryPorts")]
+        public List<PortItem> GetCabinetPrimaryPorts(string cabinetId)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetCabinetPrimaryPorts(cabinetId);
+        }
+        [HttpGet]
+        [Route("GetCabinetSecondaryPorts")]
+        public List<PortItem> GetCabinetSecondaryPorts(string cabinetId)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetCabinetSecondaryPorts(cabinetId);
+        }
+        [HttpGet]
+        [Route("GetDPPorts")]
+        public List<DPPortItem> GetDPPorts(string dpId)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetDPPorts(dpId);
+        }
+        [HttpGet]
+        [Route("ReserveTelephonyNumber")]
+        public string ReserveTelephonyNumber(string pathtype, string Pathname, string ObjectList, string connectors)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.ReserveTelephonyNumber(pathtype,Pathname,ObjectList,connectors);
+        }
     }
 }

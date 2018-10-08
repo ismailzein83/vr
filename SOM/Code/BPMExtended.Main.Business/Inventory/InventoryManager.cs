@@ -150,7 +150,48 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
         }
+        public List<PortItemDetail> GetCabinetPrimaryPorts(string cabinetId)
+        {
+            List<PortItem> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortItem>>(String.Format("api/SOM_Main/Inventory/GetCabinetPrimaryPorts?cabinetId={0}", cabinetId));
+            }
 
+            return apiResult == null ? null : apiResult.MapRecords(r => new PortItemDetail
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
+        public List<PortItemDetail> GetCabinetSecondaryPorts(string cabinetId)
+        {
+            List<PortItem> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortItem>>(String.Format("api/SOM_Main/Inventory/GetCabinetSecondaryPorts?cabinetId={0}", cabinetId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new PortItemDetail
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
+        public List<DPPortItemDetail> GetDPPorts(string dpPortId)
+        {
+            List<DPPortItem> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<DPPortItem>>(String.Format("api/SOM_Main/Inventory/GetDPPorts?dpId={0}", dpPortId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new DPPortItemDetail
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
         public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
             List<PhoneNumberDetail> result = new List<PhoneNumberDetail>();
@@ -289,7 +330,19 @@ namespace BPMExtended.Main.Business
             }
             return  item;
         }
+        public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
+        {
+            string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;
+            string pathname = pathType + "_" + phoneNumber;
+            string connectors = deviceID + "," + mDFPortID + ",COPPER_LINK|" + primaryPort + "," + secondaryPort + ",COPPER_LINK";
 
+            string  item = "";
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveTelephonyNumber?pathtype=" + pathType + "&Pathname=" + pathname + "&ObjectList=" + objectlist + "&connectors=" + connectors));
+            }
+            return item;
+        }
         public List<ISPInfo> GetISPs()
         {
             return RatePlanMockDataGenerator.GetAllISPInfo();

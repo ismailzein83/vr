@@ -49,7 +49,11 @@ namespace BPMExtended.Main.Entities
         public string Id { get; set; }
         public string Name { get; set; }
     }
-
+    public class PortItemDetail
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
     public class TechnicalReservationDetail
     {
         public string Switch { get; set; }
