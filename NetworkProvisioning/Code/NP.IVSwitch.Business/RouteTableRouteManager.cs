@@ -376,8 +376,9 @@ namespace NP.IVSwitch.Business
             IRouteTableRouteDataManager routeTableRouteDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
             Helper.SetSwitchConfig(routeTableRouteDataManager);
             List<string> codes = routeTableRouteItems.CodeListResolver.Settings.GetCodeList(new CodeListResolverContext());
-
+             if(codes!=null)
             return routeTableRouteDataManager.CheckIfCodesExist(codes, routeTableRouteItems.RouteTableId);
+             return false;
         }
         #endregion
 
