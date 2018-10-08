@@ -111,7 +111,7 @@ function (NP_IVSwitch_RouteAPIService, NP_IVSwitch_RouteService, VRNotificationS
             {
                 selectorApi.clearDataSource();
 
-            }
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
