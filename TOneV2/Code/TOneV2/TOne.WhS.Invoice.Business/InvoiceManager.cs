@@ -165,7 +165,13 @@ namespace TOne.WhS.Invoice.Business
 
 
 
-            return invoiceManager.TryUpdateInvoice(invoice);
+            if (invoiceManager.TryUpdateInvoice(invoice))
+            {
+                VRActionLogger.Current.LogObjectCustomAction(new Vanrise.Invoice.Business.InvoiceManager.InvoiceLoggableEntity(invoice.InvoiceTypeId), "Update", true, invoice, "Invoice original data updated");
+                return true;
+            }
+            return false;
+
         }
 
 
