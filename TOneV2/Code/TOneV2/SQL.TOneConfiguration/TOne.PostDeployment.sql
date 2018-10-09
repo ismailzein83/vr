@@ -266,7 +266,13 @@ as (select * from (values
 ('BA32DF95-FFE5-4C71-94FC-B02B841791F9','WhS_RouteSync_EricssonRORangeBranchRouteSettings','RO Range','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-rorange"}'),
 ('BEC60C47-A37F-4EED-B628-1E17EFD60A41','WhS_RouteSync_EricssonFreeTextBranchRouteSettings','Text','WhS_RouteSync_EricssonBranchRouteSettings','{"Editor":"whs-routesync-ericssonbranchroutesettings-freetext"}'),
 
-('3D4B738E-BF30-4F0C-8A92-D22356980503','WhS_BE_CostWithPercentageMargin','Cost With Percentage Margin','WhS_BE_PassThroughCustomerRateEvaluator','{"Editor":"vr-whs-be-costwithpercentagemarginrateevaluator"}')
+('3D4B738E-BF30-4F0C-8A92-D22356980503','WhS_BE_CostWithPercentageMargin','Cost With Percentage Margin','WhS_BE_PassThroughCustomerRateEvaluator','{"Editor":"vr-whs-be-costwithpercentagemarginrateevaluator"}'),
+
+('0904D57D-13B5-4F07-A0F5-05339FBFB2B3','ExcludedRanges','Ranges','WhS_BE_ExcludedDestinationsConfig'					,'{"Editor":"whs-be-specific-excluded-ranges"}'),
+('B0BBF520-A283-4051-912A-3B3DD3FCC1A2','SpecificCodeResolver','Code ','WhS_BE_CodeListResolverConfig'					,'{"Editor":"whs-be-specific-code-resolver"}'),
+('A3B95375-BB41-4843-A29D-532E402A2421','SpecificCountryCodeListResolver','Country','WhS_BE_CodeListResolverConfig'		,'{"Editor":"whs-be-specific-country-code-list-resolver"}'),
+('054B8A6C-1FFF-4BC6-8620-8A942A5980B6','SpecificSaleZoneCodeListResolver','Sale Zone','WhS_BE_CodeListResolverConfig'	,'{"Editor":"whs-be-specific-sale-zone-code-list-resolver"}'),
+('AA1911DF-E45F-4CF6-BCA5-ECDFDD246FEE','ExcludedCodes','Codes','WhS_BE_ExcludedDestinationsConfig'						,'{"Editor":"whs-be-specific-excluded-codes"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
