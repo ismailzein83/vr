@@ -64,6 +64,7 @@
     <Compile Include="DataRecordFieldFormulas\CompareToConstantFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\DateTimeRoundFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\EncryptedCalculatedFieldFormula.cs" />
+    <Compile Include="DataRecordFieldFormulas\IsDefaultSecurityProviderFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\NullToBooleanFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\ParentBusinessEntityFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\SingleMathOperationFieldFormula.cs" />
