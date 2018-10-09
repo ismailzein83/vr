@@ -1105,7 +1105,7 @@ namespace Vanrise.Invoice.Business
             {
                 get
                 {
-                    return s_invoiceTypeManager.GetInvoiceTypeName(_invoiceTypeId) + "Invoice";
+                    return s_invoiceTypeManager.GetInvoiceTypeName(_invoiceTypeId) + " Invoice";
                 }
             }
 
