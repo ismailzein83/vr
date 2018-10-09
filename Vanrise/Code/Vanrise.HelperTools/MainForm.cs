@@ -44,5 +44,10 @@ namespace Vanrise.HelperTools
         {
             OpenForm(new Packer());
         }
+
+        private void RDBGenerator_Click(object sender, EventArgs e)
+        {
+            OpenForm(new RDBGenerator());
+        }
     }
 }

@@ -32,6 +32,7 @@
             this.EncryptDecrypt = new System.Windows.Forms.Button();
             this.bcpCommand = new System.Windows.Forms.Button();
             this.CompressJS = new System.Windows.Forms.Button();
+            this.rdb_Generator = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -74,11 +75,22 @@
             this.CompressJS.UseVisualStyleBackColor = true;
             this.CompressJS.Click += new System.EventHandler(this.CompressJS_Click);
             // 
+            // rdb_Generator
+            // 
+            this.rdb_Generator.Location = new System.Drawing.Point(13, 220);
+            this.rdb_Generator.Name = "rdb_Generator";
+            this.rdb_Generator.Size = new System.Drawing.Size(140, 23);
+            this.rdb_Generator.TabIndex = 4;
+            this.rdb_Generator.Text = "Generate RDB ";
+            this.rdb_Generator.UseVisualStyleBackColor = true;
+            this.rdb_Generator.Click += new System.EventHandler(this.RDBGenerator_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.rdb_Generator);
             this.Controls.Add(this.CompressJS);
             this.Controls.Add(this.bcpCommand);
             this.Controls.Add(this.EncryptDecrypt);
@@ -95,6 +107,7 @@
         private System.Windows.Forms.Button EncryptDecrypt;
         private System.Windows.Forms.Button bcpCommand;
         private System.Windows.Forms.Button CompressJS;
+        private System.Windows.Forms.Button rdb_Generator;
     }
 }
 
