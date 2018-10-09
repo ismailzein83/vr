@@ -22,12 +22,13 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetCustomerBalance(customerId);
         }
 
-        public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId)
+        public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, OperationType operationType)
         {
             //After creating a contract with status on hold for this customer
             //Send to POS the list of services to pay with the contract id
 
             decimal depositAmount =0;
+            bool hasCallBaring =false;
             bool isForeigner = false;
             PaymentInfo payment = new PaymentInfo();
 
@@ -59,17 +60,34 @@ namespace BPMExtended.Main.Business
             object customerType = entity2.GetColumnValue("Name");
 
 
-            //get services
-           // var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
-            //esqResult3.AddColumn("StServices");
-           // var entity3 = esqResult3.GetEntity(connection, requestId);
-           // object servicesJson = entity3.GetColumnValue("StServices");
-
-            //List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
-
-
-            if (customerType.Equals("أجنبي") && sponsorNumber ==null && sponsorNumber.ToString().Equals(""))
+            if (operationType == OperationType.TelephonyLineSubscription)
             {
+
+                //get services
+                var esqResult3 = new EntitySchemaQuery(connection.EntitySchemaManager, "StLineSubscriptionRequest");
+                esqResult3.AddColumn("StServices");
+                var entity3 = esqResult3.GetEntity(connection, requestId);
+                object servicesJson = entity3.GetColumnValue("StServices");
+
+                List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
+
+                foreach (Service service in services)
+                {
+                    if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
+                    {
+                        hasCallBaring = true;
+                        break;
+                    }
+                }
+
+            }
+
+
+            if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
+            {
+                if (hasCallBaring) depositAmount = 15000;
+                else depositAmount = 20000;
+
                 depositAmount = 15000;
                 isForeigner = true;
             }
