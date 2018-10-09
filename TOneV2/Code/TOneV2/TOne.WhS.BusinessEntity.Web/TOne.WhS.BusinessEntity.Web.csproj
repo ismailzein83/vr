@@ -443,7 +443,9 @@
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectStaticEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-customobjectsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-staticeditor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\RecurringCharges\MainExtensions\Templates\MonthlyRecurringChargePeriodTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\RecurringCharges\MainExtensions\Templates\OnceAYearRecurringChargePeriodTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\RecurringCharges\MainExtensions\whs-be-recurringchargeperiodsettings-monthly.js" />
     <Content Include="WhS_BusinessEntity\Directives\RecurringCharges\MainExtensions\whs-be-recurringchargeperiodsettings-onceayear.js" />
     <Content Include="WhS_BusinessEntity\Directives\RecurringCharges\Templates\RecurringChargePeriodCustomObjectSettings.html" />
     <Content Include="WhS_BusinessEntity\Directives\RecurringCharges\Templates\RecurringChargePeriodTemplate.html" />
