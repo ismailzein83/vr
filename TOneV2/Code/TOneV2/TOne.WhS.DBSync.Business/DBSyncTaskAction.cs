@@ -103,7 +103,7 @@ namespace TOne.WhS.DBSync.Business
             FileDBSyncDataManager fileManager = new FileDBSyncDataManager(_context.UseTempTables);
             fileManager.InsertFiles(vrFiles);
 
-            if (_context.DBTables != null && _context.DBTables.ContainsKey(DBTableName.Rule))
+            if (_context.MigrationRequestedTables != null && _context.MigrationRequestedTables.Contains(DBTableName.Rule))
             {
                 RuleDBSyncDataManager ruleDBSyncDataManager = new RuleDBSyncDataManager();
                 ruleDBSyncDataManager.SyncRoutingProductRules(_context.UseTempTables);

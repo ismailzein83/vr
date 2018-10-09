@@ -22,6 +22,9 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void SyncRoutingProductRules(bool useTempTables)
         {
+            if (!useTempTables)
+                return;
+
             ExecuteNonQueryText(string.Format(@"Insert Into {0} ([TypeID], [RuleDetails], [BED], [EED], [SourceID], [IsDeleted], [CreatedTime], [CreatedBy], [LastModifiedTime], [LastModifiedBy])
                                                 SELECT [TypeID], [RuleDetails], [BED], [EED], [SourceID], [IsDeleted], [CreatedTime], [CreatedBy], [LastModifiedTime], [LastModifiedBy] FROM [rules].[Rule]
                                                 Where [RuleDetails] like '%""RoutingProductId"":%'", MigrationUtils.GetTableName(_schema, _tableName, useTempTables)), null);
