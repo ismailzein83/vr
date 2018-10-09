@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Data
     public interface IPartnerInvoiceSettingDataManager:IDataManager
     {
         List<PartnerInvoiceSetting> GetPartnerInvoiceSettings();
+        PartnerInvoiceSetting GetPartnerInvoiceSetting(Guid partnerInvoiceSettingId);
         bool ArePartnerInvoiceSettingsUpdated(ref object updateHandle);
         bool InsertPartnerInvoiceSetting(Guid invoicePartnerSettingId, Guid invoiceSettingId, string partnerId, PartnerInvoiceSettingDetails partnerInvoiceSettingDetails);
         bool UpdatePartnerInvoiceSetting(Guid partnerInvoiceSettingId, PartnerInvoiceSettingDetails partnerInvoiceSettingDetails);

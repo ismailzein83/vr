@@ -58,6 +58,11 @@ namespace Vanrise.Invoice.Data.SQL
             return (affectedRows > -1);
         }
 
+        public PartnerInvoiceSetting GetPartnerInvoiceSetting(Guid partnerInvoiceSettingId)
+        {
+            return GetItemSP("VR_Invoice.sp_PartnerInvoiceSetting_GetById", PartnerInvoiceSettingMapper, partnerInvoiceSettingId);
+        }
+
         #endregion
         
         #region Mappers

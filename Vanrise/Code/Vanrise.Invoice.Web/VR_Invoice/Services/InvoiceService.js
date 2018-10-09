@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'VR_Invoice_InvoiceActionService',
-    function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService) {
+app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'VR_Invoice_InvoiceActionService', 'VRCommon_ObjectTrackingService',
+    function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService, VRCommon_ObjectTrackingService) {
 
 
         function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings,context) {
@@ -18,7 +18,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                     addDrillDownTab(subSection);
                 }
             }
-
+            registerObjectTrackingDrillDown();
             setDrillDownTabs();
             setMenuActions();
 
@@ -123,6 +123,30 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                         }
                     });
                 }
+            }
+            function getEntityUniqueName(invoiceTypeId) {
+                return "VR_Invoice_Invoice_" + invoiceTypeId;
+            }
+            function registerObjectTrackingDrillDown() {
+                var drillDownDefinition = {};
+
+                drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+                drillDownDefinition.loadDirective = function (directiveAPI, invoiceItem) {
+                    invoiceItem.objectTrackingGridAPI = directiveAPI;
+                    var query = {
+                        ObjectId: invoiceItem.Entity.InvoiceId,
+                        EntityUniqueName: getEntityUniqueName(invoiceItem.Entity.InvoiceTypeId),
+                    };
+                    return invoiceItem.objectTrackingGridAPI.load(query);
+                };
+
+                addDrillDownDefinition(drillDownDefinition);
+
+            }
+            function addDrillDownDefinition(drillDownDefinition) {
+                drillDownTabs.push(drillDownDefinition);
             }
         }
 

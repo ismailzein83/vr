@@ -140,6 +140,11 @@ namespace Vanrise.Invoice.Data.RDB
             return true;
         }
 
+        public PartnerInvoiceSetting GetPartnerInvoiceSetting(Guid partnerInvoiceSettingId)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

@@ -44,10 +44,13 @@ app.service('VR_Invoice_PartnerInvoiceSettingService', ['VRModalService', 'Utils
                 }
             });
         }
+        function getEntityUniqueName(invoiceTypeId) {
+            return "VR_Invoice_PartnerInvoiceSetting_" + invoiceTypeId;
+        }
         return ({
             addPartnerInvoiceSetting: addPartnerInvoiceSetting,
             editPartnerInvoiceSetting: editPartnerInvoiceSetting,
             deletePartnerInvoiceSetting: deletePartnerInvoiceSetting,
-
+            getEntityUniqueName: getEntityUniqueName
         });
     }]);

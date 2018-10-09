@@ -9,6 +9,7 @@ using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Invoice.Business.Context;
+using Vanrise.Common.Business;
 namespace Vanrise.Invoice.Business
 {
     public class PartnerInvoiceSettingManager : IPartnerInvoiceSettingManager
@@ -50,7 +51,7 @@ namespace Vanrise.Invoice.Business
                     return true;
 
                 };
-
+            VRActionLogger.Current.LogGetFilteredAction(new PartnerInvoiceSettingLoggableEntity(input.Query.InvoiceSettingId), input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, PartnerInvoiceSettingDetailMapper));
         }
 
@@ -84,7 +85,15 @@ namespace Vanrise.Invoice.Business
                 IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
                 foreach(var partnerId in partnerInvoiceSettingToAdd.PartnerIds)
                 {
-                    dataManager.InsertPartnerInvoiceSetting(Guid.NewGuid(), partnerInvoiceSettingToAdd.InvoiceSettingID, partnerId, partnerInvoiceSettingToAdd.Details);
+                    Guid partnerInvoiceSettingId = Guid.NewGuid();
+                    bool insertionSuccess = dataManager.InsertPartnerInvoiceSetting(partnerInvoiceSettingId, partnerInvoiceSettingToAdd.InvoiceSettingID, partnerId, partnerInvoiceSettingToAdd.Details);
+                    if (insertionSuccess)
+                    {
+                        var partnerInvoiceSetting = dataManager.GetPartnerInvoiceSetting(partnerInvoiceSettingId);
+                        partnerInvoiceSetting.ThrowIfNull("partnerInvoiceSetting", partnerInvoiceSettingId);
+                        VRActionLogger.Current.TrackAndLogObjectAdded(new PartnerInvoiceSettingLoggableEntity(partnerInvoiceSettingToAdd.InvoiceSettingID), partnerInvoiceSetting);
+                    }
+                  
                 }
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -111,6 +120,7 @@ namespace Vanrise.Invoice.Business
                 if (dataManager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting.PartnerInvoiceSettingId, partnerInvoiceSettingToEdit.Details))
                 {
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(new PartnerInvoiceSettingLoggableEntity(partnerInvoiceSettingToEdit.InvoiceSettingID), partnerInvoiceSetting);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     updateOperationOutput.UpdatedObject = PartnerInvoiceSettingDetailMapper(GetPartnerInvoiceSetting(partnerInvoiceSettingToEdit.PartnerInvoiceSettingId));
                 }
@@ -221,7 +231,6 @@ namespace Vanrise.Invoice.Business
             var cachedPartnerInvoiceSettings = GetCachedPartnerInvoiceSettings();
             return cachedPartnerInvoiceSettings.Count(x => x.Value.InvoiceSettingID == invoiceSettingId);
         }
-
         #endregion
 
         #region Private Classes
@@ -234,6 +243,63 @@ namespace Vanrise.Invoice.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.ArePartnerInvoiceSettingsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class PartnerInvoiceSettingLoggableEntity : VRLoggableEntityBase
+        {
+            static InvoiceSettingManager s_invoiceSettingManager = new InvoiceSettingManager();
+            static InvoiceTypeManager s_invoiceTypeManager = new InvoiceTypeManager();
+            Guid _invoiceSettingId;
+            Guid _invoiceTypeId;
+            public PartnerInvoiceSettingLoggableEntity(Guid invoiceSettingId)
+            {
+                _invoiceSettingId = invoiceSettingId;
+                var invoiceSetting = s_invoiceSettingManager.GetInvoiceSetting(invoiceSettingId);
+                invoiceSetting.ThrowIfNull("invoiceSetting", invoiceSettingId);
+                _invoiceTypeId = invoiceSetting.InvoiceTypeId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return String.Format("VR_Invoice_PartnerInvoiceSetting_{0}", _invoiceTypeId); }
+            }
+
+            public override string EntityDisplayName
+            {
+                get
+                { return "Linked Partners"; }
+                    
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Invoice_PartnerInvoiceSetting_ViewHistoryItem"; }
+            }
+
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                var partnerInvoiceSetting = context.Object.CastWithValidate<PartnerInvoiceSetting>("context.Object");
+                return partnerInvoiceSetting.PartnerInvoiceSettingId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                var partnerInvoiceSetting = context.Object.CastWithValidate<PartnerInvoiceSetting>("context.Object");
+                var invoiceType = s_invoiceTypeManager.GetInvoiceType(_invoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", _invoiceTypeId);
+                var partnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+                partnerManager.ThrowIfNull("partnerManager");
+                return partnerManager.GetPartnerName(new PartnerNameManagerContext()
+                {
+                    PartnerId = partnerInvoiceSetting.PartnerId
+                });
+            }
+
+            public override string ModuleName
+            {
+                get { return "Invoice"; }
             }
         }
 

@@ -55,6 +55,7 @@ namespace Vanrise.Invoice.MainExtensions
             }
             vrMailManager.SendMail(input.EmailTemplate.From, input.EmailTemplate.To, input.EmailTemplate.CC, input.EmailTemplate.BCC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
             new InvoiceManager().SetInvoiceSentDate(input.InvoiceId, true);
+            VRActionLogger.Current.LogObjectCustomAction(new Vanrise.Invoice.Business.InvoiceManager.InvoiceLoggableEntity(invoice.InvoiceTypeId), "Send E-mail", true, invoice, string.Format("An e-mail concerning the invoice has been sent to {0}", input.EmailTemplate.To));
             return true;
         }
          public EmailTemplateRuntimeEditor GetEmailTemplate(long invoiceId, Guid invoiceMailTemplateId, Guid invoiceActionId)

@@ -56,6 +56,7 @@ namespace Vanrise.Invoice.Business
                         InvoiceDetailMapper2(invoice, invoiceType, invoiceAccount);
                     }
                 }
+                VRActionLogger.Current.LogGetFilteredAction(new InvoiceLoggableEntity(input.Query.InvoiceTypeId), input);
                 return bigResult;
             }
             return result;
@@ -167,6 +168,7 @@ namespace Vanrise.Invoice.Business
                 {
                     var insertedInvoiceId = insertedInvoiceIds.First();
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    VRActionLogger.Current.LogObjectCustomAction(new InvoiceLoggableEntity(invoice.InvoiceTypeId), "Regenerate", true, invoice, "Invoice regenerated");
                     var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
                     invoiceAccounts.ThrowIfNull("invoiceAccounts");
                     var invoiceAccount = invoiceAccounts.FirstOrDefault();
@@ -425,13 +427,31 @@ namespace Vanrise.Invoice.Business
             DateTime? paidDate = null;
             if (isInvoicePaid)
                 paidDate = DateTime.Now;
-            return dataManager.SetInvoicePaid(invoiceId, paidDate);
+           
+            if (dataManager.SetInvoicePaid(invoiceId, paidDate))
+            {
+                var invoice = GetInvoice(invoiceId);
+                invoice.ThrowIfNull("invoice", invoiceId);
+                string actionDescription = "Invoice set to paid";
+                if (!isInvoicePaid)
+                    actionDescription = "Invoice set to unpaid";
+                VRActionLogger.Current.LogObjectCustomAction(new InvoiceLoggableEntity(invoice.InvoiceTypeId), "Update", true, invoice, actionDescription);
+                return true;
+            }
+            return false;
         }
 
         public bool UpdateInvoiceNote(long invoiceId, string invoiceNote)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.UpdateInvoiceNote(invoiceId, invoiceNote);
+            if (dataManager.UpdateInvoiceNote(invoiceId, invoiceNote))
+            {
+                var invoice = GetInvoice(invoiceId);
+                invoice.ThrowIfNull("invoice", invoiceId);
+                VRActionLogger.Current.LogObjectCustomAction(new InvoiceLoggableEntity(invoice.InvoiceTypeId), "Update", true, invoice, "Invoice note updated");
+                return true;
+            }
+            return false;
         }
 
         public UpdateOperationOutput<InvoiceDetail> UpdateInvoice(Invoice.Entities.Invoice invoice)
@@ -450,6 +470,7 @@ namespace Vanrise.Invoice.Business
                 invoiceAccounts.ThrowIfNull("invoiceAccounts");
                 var invoiceAccount = invoiceAccounts.FirstOrDefault();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new InvoiceLoggableEntity(invoice.InvoiceTypeId), invoice);
                 updateOperationOutput.UpdatedObject = InvoiceDetailMapper(invoice, invoiceType, invoiceAccount, false);
             }
             else
@@ -472,7 +493,17 @@ namespace Vanrise.Invoice.Business
             DateTime? lockedDate = null;
             if (setLocked)
                 lockedDate = DateTime.Now;
-            return dataManager.SetInvoiceLocked(invoiceId, lockedDate);
+            if (dataManager.SetInvoiceLocked(invoiceId, lockedDate))
+            {
+                var invoice = GetInvoice(invoiceId);
+                invoice.ThrowIfNull("invoice", invoiceId);
+                string actionDescription = "Invoice set to locked";
+                if (!setLocked)
+                    actionDescription = "Invoice set to unlocked";
+                VRActionLogger.Current.LogObjectCustomAction(new InvoiceLoggableEntity(invoice.InvoiceTypeId), "Update", true, invoice, actionDescription);
+                return true;
+            }
+            return false;
         }
 
         public bool SetInvoiceSentDate(long invoiceId, bool isInvoiceSent)
@@ -1048,6 +1079,51 @@ namespace Vanrise.Invoice.Business
                 }
 
                 context.MainSheet = sheet;
+            }
+        }
+
+        public class InvoiceLoggableEntity : VRLoggableEntityBase
+        {
+            Guid _invoiceTypeId;
+            static InvoiceTypeManager s_invoiceTypeManager = new InvoiceTypeManager();
+            public InvoiceLoggableEntity(Guid invoiceTypeId)
+            {
+                _invoiceTypeId = invoiceTypeId;
+            }
+
+            public override string EntityUniqueName
+            {
+                get { return string.Format("VR_Invoice_Invoice_{0}", _invoiceTypeId); }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Invoice"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get
+                {
+                    return s_invoiceTypeManager.GetInvoiceTypeName(_invoiceTypeId) + "Invoice";
+                }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Entities.Invoice invoice = context.Object.CastWithValidate<Entities.Invoice>("context.Object");
+                return invoice.InvoiceId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Entities.Invoice invoice = context.Object.CastWithValidate<Entities.Invoice>("context.Object");
+                return invoice.SerialNumber;
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Invoice_Invoice_ViewHistoryItem"; }
             }
         }
 

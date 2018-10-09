@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_PartnerInvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_PartnerInvoiceSettingService",
-    function (UtilsService, VRNotificationService, VR_Invoice_PartnerInvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_PartnerInvoiceSettingService) {
+app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_PartnerInvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_PartnerInvoiceSettingService", 'VRCommon_ObjectTrackingService',
+    function (UtilsService, VRNotificationService, VR_Invoice_PartnerInvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_PartnerInvoiceSettingService, VRCommon_ObjectTrackingService) {
 
         var directiveDefinitionObject = {
 
@@ -30,6 +30,8 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
             var gridAPI;
             var invoiceSettingId;
             var invoiceTypeId;
+            var gridDrillDownTabsObj;
+            var drillDownDefinitions = [];
             var gridQuery;
             function initializeController() {
 
@@ -37,6 +39,20 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                 $scope.gridMenuActions = [];
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitionHistory = {};
+
+                    drillDownDefinitionHistory.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                    drillDownDefinitionHistory.directive = "vr-common-objecttracking-grid";
+                    drillDownDefinitionHistory.loadDirective = function (directiveAPI, partnerInvoiceSettingItem) {
+                        partnerInvoiceSettingItem.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: partnerInvoiceSettingItem.Entity.PartnerInvoiceSettingId,
+                            EntityUniqueName: VR_Invoice_PartnerInvoiceSettingService.getEntityUniqueName(invoiceTypeId)
+                        };
+                        return partnerInvoiceSettingItem.objectTrackingGridAPI.load(query);
+                    };
+                    drillDownDefinitions.push(drillDownDefinitionHistory);
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
@@ -67,6 +83,9 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                     return VR_Invoice_PartnerInvoiceSettingAPIService.GetFilteredPartnerInvoiceSettings(dataRetrievalInput)
                         .then(function (response) {
                             if (response.Data != undefined) {
+                                for (var i = 0; i < response.Data.length; i++) {
+                                    gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                }
                             }
                             onResponseReady(response);
                         })
@@ -100,9 +119,10 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
             }
             function editPartnerInvoiceSetting(dataItem) {
                 var onPartnerInvoiceSettingUpdated = function (invoiceSetting) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);
                     gridAPI.itemUpdated(invoiceSetting);
                 };
-                VR_Invoice_PartnerInvoiceSettingService.editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated, invoiceTypeId,dataItem.Entity.PartnerInvoiceSettingId)
+                VR_Invoice_PartnerInvoiceSettingService.editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated, invoiceTypeId, dataItem.Entity.PartnerInvoiceSettingId);
             }
             function deletePartnerInvoiceSetting(dataItem) {
                 var onPartnerInvoiceSettingDeleted = function () {
