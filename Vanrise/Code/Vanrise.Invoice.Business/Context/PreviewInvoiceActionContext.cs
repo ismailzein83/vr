@@ -33,7 +33,7 @@ namespace Vanrise.Invoice.Business
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
             if ((invoiceAccountData.BED.HasValue && this.FromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
-                throw new Exception("From date and To date should be within the effective date of invoice account.");
+                throw new InvoiceGenerationException("From date and To date should be within the effective date of invoice account.");
 
             PartnerManager partnerManager = new PartnerManager();
 
@@ -66,7 +66,7 @@ namespace Vanrise.Invoice.Business
                     break;
                 case GenerateInvoiceResult.Failed:
                 case GenerateInvoiceResult.NoData:
-                    throw new Exception(context.ErrorMessage != null ? context.ErrorMessage : "No data available between the selected period.");
+                    throw new InvoiceGenerationException(context.ErrorMessage != null ? context.ErrorMessage : "No data available between the selected period.");
             }
 
             this.GeneratedInvoice = context.Invoice;
