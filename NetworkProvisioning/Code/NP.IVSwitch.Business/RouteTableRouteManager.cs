@@ -602,7 +602,7 @@ namespace NP.IVSwitch.Business
                         return null;
                     input.Query.RouteIds = routeIds;
                 }
-                return routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableViewType,input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber, input.Query.RouteIds);
+                return routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableViewType,input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber,input.Query.Whitelist, input.Query.RouteIds);
             }
         }
 

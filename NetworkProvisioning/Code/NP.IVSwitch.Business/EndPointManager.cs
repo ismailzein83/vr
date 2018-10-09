@@ -369,7 +369,7 @@ namespace NP.IVSwitch.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public  class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IEndPointDataManager _dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
             protected override bool IsTimeExpirable { get { return true; } }
@@ -510,7 +510,10 @@ namespace NP.IVSwitch.Business
 
             bool succInsert = dataManager.Insert(endPointItem.Entity, globalTariffTableId, userEndPointInfoList, aclEndPointInfoList, out endPointId, carrierAccountName);
             if (!succInsert)
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
                 return insertOperationOutput;
+            }
 
             var accountManager = new AccountManager();
             accountManager.UpdateChannelLimit(endPointItem.Entity.AccountId);

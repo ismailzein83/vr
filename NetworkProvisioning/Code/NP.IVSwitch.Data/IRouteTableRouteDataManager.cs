@@ -11,7 +11,7 @@ namespace NP.IVSwitch.Data
 {
    public interface IRouteTableRouteDataManager:IDataManager
    {
-       List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType,int routeTableId, int limit, string aNumber, string bNumber, List<int> routeIds);
+       List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType,int routeTableId, int limit, string aNumber, string bNumber,string whitelist, List<int> routeIds);
        bool Insert(List<RouteTableRoute> routeTableRoutes,int routeTableId ,bool IsBlockedAccount);
        RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination);
        bool Update(RouteTableRoute routeTableRoute, int routeTableId, bool IsBlockedAccount);

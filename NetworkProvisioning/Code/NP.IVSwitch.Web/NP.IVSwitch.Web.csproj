@@ -265,8 +265,8 @@
     <Content Include="NP_IVSwitch\Views\Firewall\FirewallManagementController.js" />
     <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagement.html" />
     <Content Include="NP_IVSwitch\Views\LiveCdr\LiveCdrManagementController.js" />
-    <Content Include="NP_IVSwitch\Views\RouteTableRT\RouteTableRouteEditor.html" />
-    <Content Include="NP_IVSwitch\Views\RouteTableRT\RouteTableRouteEditorController.js" />
+    <Content Include="NP_IVSwitch\Views\RouteTableRoute\RouteTableRouteEditor.html" />
+    <Content Include="NP_IVSwitch\Views\RouteTableRoute\RouteTableRouteEditorController.js" />
     <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableEditor.html" />
     <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableEditorController.js" />
     <Content Include="NP_IVSwitch\Views\RouteTable\RouteTableManagement.html" />

@@ -268,8 +268,15 @@ namespace NP.IVSwitch.Business
         #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
+            DateTime? _EndPointLastCheck;
+
             protected override bool IsTimeExpirable { get { return true; } }
 
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<EndPointManager.CacheManager>().IsCacheExpired(ref _EndPointLastCheck);
+            }
         }
         #endregion
 

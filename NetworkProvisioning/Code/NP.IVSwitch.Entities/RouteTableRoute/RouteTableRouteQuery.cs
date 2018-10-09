@@ -11,6 +11,7 @@ namespace NP.IVSwitch.Entities.RouteTableRoute
         public int RouteTableId { get; set; }
         public string ANumber { get; set; }
         public string BNumber { get; set; }
+        public string Whitelist { get; set; }
         public int Limit { get; set; }
         public List<int> SupplierIds { get; set; }
         public List<int> RouteIds { get; set; }

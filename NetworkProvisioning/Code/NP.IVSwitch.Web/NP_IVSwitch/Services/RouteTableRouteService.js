@@ -16,7 +16,7 @@
                 modalScope.onRouteTableRTAdded = onRouteTableRTAdded;
 
             };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTableRT/RouteTableRouteEditor.html', parameters, settings);
+            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTableRoute/RouteTableRouteEditor.html', parameters, settings);
         }
 
         function editRouteTableRoutes(routeTableItem, onRouteTableUpdated) {
@@ -26,7 +26,7 @@
                 modalScope.onRouteTableUpdated = onRouteTableUpdated;
 
             };
-            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTableRT/RouteTableRouteEditor.html', parameters, settings);
+            NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/RouteTableRoute/RouteTableRouteEditor.html', parameters, settings);
         }
 
         function addDrillDownDefinition(drillDownDefinition) {

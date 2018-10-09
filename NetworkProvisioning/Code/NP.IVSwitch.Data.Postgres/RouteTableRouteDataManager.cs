@@ -111,7 +111,7 @@ namespace NP.IVSwitch.Data.Postgres
                             OWNER to {1};", table, IvSwitchSync.OwnerName);
             int tabl = ExecuteNonQueryText(cmdText, cmd => { });
         }
-        public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType, int routeTableId, int limit, string aNumber, string bNumber, List<int> routeIds)
+        public List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType, int routeTableId, int limit, string aNumber, string bNumber,string whitelist, List<int> routeIds)
         {
             string table = string.Format("rt{0}", routeTableId);
             string cmdText = "";
@@ -119,12 +119,13 @@ namespace NP.IVSwitch.Data.Postgres
             switch (routeTableViewType)
             {
                 case RouteTableViewType.ANumber:
-                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1} and (tech_prefix is NULL or tech_prefix LIKE '%{2}%'))", aNumber, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)), bNumber);
+                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1} and (tech_prefix is NULL or tech_prefix LIKE '%{2}%'))", aNumber, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)), whitelist);
                     break;
-
                 case RouteTableViewType.Whitelist:
-
-                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1})",aNumber,bNumber);
+                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1})", whitelist, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)));
+                    break;
+                case RouteTableViewType.BNumber:
+                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1})", bNumber, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)));
                     break;
             }
             cmdText = string.Format(@"WITH codesTable AS ( SELECT distinct destination FROM {0} where {2} limit {1})

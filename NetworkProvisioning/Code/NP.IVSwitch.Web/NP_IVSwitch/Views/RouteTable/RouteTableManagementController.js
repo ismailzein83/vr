@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    routeTableManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum', 'NP_IVSwitch_EndPointStateEnum', 'NP_IVSwitch_RouteTableAPIService'];
+    routeTableManagementController.$inject = ['$scope', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'NP_IVSwitch_RouteTableService', 'VRNavigationService', 'VR_Sec_ViewAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum', 'NP_IVSwitch_EndPointStateEnum', 'NP_IVSwitch_RouteTableAPIService'];
 
-    function routeTableManagementController($scope, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum, NP_IVSwitch_RouteTableAPIService) {
+    function routeTableManagementController($scope,VRNotificationService, UtilsService, VRUIUtilsService, NP_IVSwitch_RouteTableService, VRNavigationService, VR_Sec_ViewAPIService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_EndPointStateEnum, NP_IVSwitch_RouteTableAPIService) {
         var gridApi;
         var GridDirectiveDefferedReady = UtilsService.createPromiseDeferred();
 
@@ -121,7 +121,6 @@
                 NP_IVSwitch_RouteTableService.addRouteTable({ onRouteTableAdded: onRouteTableAdded, RouteTableViewType: routeTableViewType });
             };
         }
-
 
         function load() {
             $scope.scopeModel.isLoading = true;

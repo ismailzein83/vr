@@ -129,6 +129,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
 
         }
+
         function defineAPI() {
             var api = {};
             api.load = function (payload) {
@@ -137,17 +138,22 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     routeTableViewType = payload.RouteTableViewType;
 
                     switch (routeTableViewType) {
-                    case NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value:
-                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.ANumber.description;
+                        case NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value:
+                            $scope.scopeModel.isANumber =true;
+                            $scope.scopeModel.isBNumber =false;
+                            $scope.scopeModel.isWhitelist =false;
                         break;
                     case NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value:
-                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.description;
+                            $scope.scopeModel.isANumber =false;
+                            $scope.scopeModel.isBNumber =false;
+                            $scope.scopeModel.isWhitelist =true;
                         break;
                     case NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value:
-                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.BNumber.description;
+                            $scope.scopeModel.isANumber =false;
+                            $scope.scopeModel.isBNumber =true;
+                            $scope.scopeModel.isWhitelist =false;
                         break;
                         }
-                    $scope.scopeModel.isANumber = (NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value == routeTableViewType) ? true : false;
 
                 }
 
@@ -169,7 +175,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             var filter = {
                 RouteTableId: routeTableId,
                 ANumber: $scope.scopeModel.aNumber,
-                Bnumber: $scope.scopeModel.whiteListe,
+                Whitelist: $scope.scopeModel.whiteliste,
+                BNumber: $scope.scopeModel.bNumber,
                 RouteTableViewType: routeTableViewType,
                 RouteIds: routesDirectiveAPI.getSelectedIds(),
                 SupplierIds:suppliersDirectiveAPI.getSelectedIds(),
