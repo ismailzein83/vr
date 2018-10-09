@@ -39,6 +39,7 @@ namespace Vanrise.HelperTools
 
         private void GenerateRDBCode_Click(object sender, EventArgs e)
         {
+            GenerateRDBCode.Enabled = false;
             if (!string.IsNullOrEmpty(this.connectionString.Text))
             {
                 this.generatedCode.Text = string.Empty;
@@ -72,6 +73,7 @@ namespace Vanrise.HelperTools
                 }
 
                 this.generatedCode.Text = generatedCode.ToString();
+                GenerateRDBCode.Enabled = true;
             }
         }
 
