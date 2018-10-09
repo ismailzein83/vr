@@ -18,7 +18,11 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
 
             BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments.VRDeepCopy();
             if (evaluatedExpressions != null)
-                inputArguments.MapExpressionValues(evaluatedExpressions);
+            {
+                var clonedEvaluatedExpressions = Vanrise.Common.Utilities.CloneObject<Dictionary<string, object>>(evaluatedExpressions);
+                clonedEvaluatedExpressions.Add("TaskName", task.Name);
+                inputArguments.MapExpressionValues(clonedEvaluatedExpressions);
+            }
 
             inputArguments.PrepareArgumentForExecutionFromTask(null);
 

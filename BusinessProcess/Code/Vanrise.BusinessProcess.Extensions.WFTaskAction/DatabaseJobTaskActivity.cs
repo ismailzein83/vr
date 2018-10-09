@@ -49,6 +49,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
+                        command.CommandTimeout = 0;
                         command.ExecuteNonQuery();
                     }
 
