@@ -30,7 +30,7 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
             {
                 try
                 {
-                   
+
                     OpenRDLCReportActionManager openRDLCReportActionManager = new MainExtensions.OpenRDLCReportActionManager();
                     string actionIdString = Request.QueryString["actionId"];
                     Guid tempPayloadId;
@@ -50,14 +50,17 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                     if (!invoiceActionPayloadSettings.Context.DoesUserHaveAccess(actionId))
                         throw new UnauthorizedAccessException("you are not authorized to perform this request");
 
-
                     openRDLCReportActionManager.BuildRdlcReport(ReportViewer1, new ReportInput
                     {
                         ActionId = actionId,
                         Context = invoiceActionPayloadSettings.Context
                     });
                 }
-                catch(Exception error)
+                catch (InvoiceGenerationException error)
+                {
+                    labelError.Text = error.Message;
+                }
+                catch (Exception error)
                 {
                     LoggerFactory.GetExceptionLogger().WriteException(error);
                     labelError.Text = error.Message;
