@@ -1,1 +1,12 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-select on-ready="scopeModel.onNbOfDaysSelectorReady"
+                       label="Day"
+                       datasource="scopeModel.days"
+                       selectedvalues="scopeModel.selectedDay"
+                       datavaluefield="day"
+                       datatextfield="dayDescription"
+                       isrequired>
+        </vr-select>
+    </vr-columns>
+</vr-row>
