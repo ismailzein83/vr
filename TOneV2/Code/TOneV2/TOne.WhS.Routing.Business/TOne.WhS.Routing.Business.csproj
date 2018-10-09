@@ -112,6 +112,7 @@
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\TrafficStatisticQCDefinitionSettings.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\TrafficStatisticQualityConfigurationManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\TrafficStatisticQualityConfigurationSettings.cs" />
+    <Compile Include="RouteRules\Filters\QualityOptionFilter.cs" />
     <Compile Include="SupplierZoneDetailsManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\QualityConfigurationManager.cs" />
     <Compile Include="ConfigManager.cs" />
